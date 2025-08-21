@@ -25,6 +25,13 @@ class MetaSlider_Theme_Nexus extends MetaSlider_Theme_Base
     public function __construct()
     {
         parent::__construct( $this->id, $this->version );
+        add_filter( 'metaslider_flex_slider_responsive_arrows_enable', '__return_true' );
+        add_filter( 'metaslider_flex_slider_responsive_arrows_prev_class', function( $class ) {
+            return '.flex-nav-prev';
+        });
+        add_filter( 'metaslider_flex_slider_responsive_arrows_next_class', function( $class ) {
+            return '.flex-nav-next';
+        });
     }
 
     /**

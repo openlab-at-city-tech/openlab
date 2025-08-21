@@ -10,15 +10,16 @@ jQuery(window).on("load", function () {
             jQuery('#b2sModalPrivacyPolicy').modal('show');
         }
     }
-    
-    if(jQuery('#b2s-metrics-banner-show').val() == '0' && jQuery('.b2s-metrics-starting-modal').length == 0) {
-        jQuery('#b2s-metrics-banner-modal').modal('show');
-    }
-    
-    if(jQuery('#b2s-trial-seven-day-modal').length > 0) {
+
+    /* Temporarily closed since 8.4
+     * if (jQuery('#b2s-metrics-banner-show').val() == '0' && jQuery('.b2s-metrics-starting-modal').length == 0) {
+     jQuery('#b2s-metrics-banner-modal').modal('show');
+     }*/
+
+    if (jQuery('#b2s-trial-seven-day-modal').length > 0) {
         jQuery('#b2s-trial-seven-day-modal').modal('show');
     }
-    if(jQuery('#b2s-final-trail-modal').length > 0) {
+    if (jQuery('#b2s-final-trail-modal').length > 0) {
         jQuery('#b2s-final-trail-modal').modal('show');
     }
     if (jQuery('.b2s-changelog-body').length > 0) {
@@ -45,7 +46,8 @@ jQuery(document).on('click', '.b2s-send-trail-feedback', function () {
         cache: false,
         data: {
             'action': 'b2s_send_trail_feedback',
-            'feedback': jQuery('#b2s-trial_message').val()
+            'feedback': jQuery('#b2s-trial_message').val(),
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
         },
         error: function () {
             jQuery('.b2s-server-connection-fail').show();
@@ -115,7 +117,7 @@ jQuery(document).on('click', '.b2s-key-area-btn-submit', function () {
                 jQuery('.b2s-trail-premium-info-area').hide();
                 if (data.result == true) {
                     jQuery('.b2s-key-area-success').show();
-                    if(data.licenseName != false) {
+                    if (data.licenseName != false) {
                         jQuery('.b2s-key-area-key-name').html(data.licenseName);
                         jQuery('.b2s-key-name').html(data.licenseName);
                     }
@@ -123,7 +125,7 @@ jQuery(document).on('click', '.b2s-key-area-btn-submit', function () {
                     jQuery('#b2s-license-user-select').append(jQuery('<option value="0"></option>'));
                     jQuery('#b2s-license-user-select').trigger("chosen:updated");
                 } else {
-                    if(data.error == 'nonce') {
+                    if (data.error == 'nonce') {
                         jQuery('.b2s-nonce-check-fail').show();
                     }
                     if (data.reason != null && data.reason == 1) {
@@ -178,12 +180,41 @@ jQuery(document).on('heartbeat-send', function (e, data) {
 });
 
 jQuery(document).on('click', '.b2s-modal-close', function () {
+    if (jQuery(this).attr('data-modal-name') == ".b2s-metrics-feedback-modal") {
+        if (jQuery("#b2s-metrics-dont-show-again").is(":checked")) {
+            jQuery.ajax({
+                url: ajaxurl,
+                type: "POST",
+                dataType: "json",
+                cache: false,
+                data: {
+                    'action': 'b2s_metrics_feedback_close',
+                    'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+                },
+                error: function () {
+                    jQuery('.b2s-server-connection-fail').show();
+                    return false;
+                },
+                success: function (data) {
+                    if (data.result == false) {
+                        if (data.error == 'nonce') {
+                            jQuery('.b2s-nonce-check-fail').show();
+                        } else {
+                            jQuery('.b2s-server-connection-fail').show();
+                        }
+                    }
+                    return true;
+                }
+            });
+        }
+    }
     jQuery(jQuery(this).attr('data-modal-name')).modal('hide');
     jQuery(jQuery(this).attr('data-modal-name')).hide();
     jQuery('body').removeClass('modal-open');
     jQuery('body').removeAttr('style');
     return false;
 });
+
 
 jQuery(document).on('click', '.b2s-load-info-twitter-thread-modal', function () {
     jQuery('#b2sInfoTwitterThreads').modal('show');
@@ -250,7 +281,10 @@ jQuery(document).on("click", ".b2s-hide-premium-message", function (e) {
         type: "POST",
         dataType: "json",
         cache: false,
-        data: {action: 'b2s_hide_premium_message', 'b2s_security_nonce': jQuery('#b2s_security_nonce').val()}
+        data: {
+            action: 'b2s_hide_premium_message',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        }
     });
     jQuery(this).closest('.panel').remove();
 });
@@ -262,7 +296,10 @@ jQuery(document).on("click", ".b2s-hide-trail-message", function (e) {
         type: "POST",
         dataType: "json",
         cache: false,
-        data: {action: 'b2s_hide_trail_message', 'b2s_security_nonce': jQuery('#b2s_security_nonce').val()}
+        data: {
+            action: 'b2s_hide_trail_message',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        }
     });
     jQuery(this).closest('.panel').remove();
 });
@@ -274,7 +311,10 @@ jQuery(document).on("click", ".b2s-hide-trail-ended-modal", function (e) {
         type: "POST",
         dataType: "json",
         cache: false,
-        data: {action: 'b2s_hide_trail_ended_message', 'b2s_security_nonce': jQuery('#b2s_security_nonce').val()}
+        data: {
+            action: 'b2s_hide_trail_ended_message',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        }
     });
     jQuery(this).closest('.panel').remove();
 });
@@ -296,11 +336,11 @@ jQuery(document).on("click", ".b2s-scroll-modal-down", function (e) {
     return false;
 });
 
-jQuery(document).on('click', '.b2s-network-auth-info-close', function() {
+jQuery(document).on('click', '.b2s-network-auth-info-close', function () {
     jQuery(this).closest('.b2s-network-auth-info').hide();
 });
 
-jQuery(document).on('click', '.b2s-metrics-banner-close', function() {
+jQuery(document).on('click', '.b2s-metrics-banner-close', function () {
     jQuery('#b2s-metrics-banner-modal').modal('hide');
     jQuery.ajax({
         url: ajaxurl,
@@ -328,7 +368,7 @@ jQuery(document).on('click', '.b2s-metrics-banner-close', function() {
     });
 });
 
-jQuery(document).on('click', '.b2s-continue-trial-btn', function() {
+jQuery(document).on('click', '.b2s-continue-trial-btn', function () {
     jQuery('#b2s-trial-seven-day-modal').modal('hide');
     jQuery.ajax({
         url: ajaxurl,
@@ -356,7 +396,7 @@ jQuery(document).on('click', '.b2s-continue-trial-btn', function() {
     });
 });
 
-jQuery(document).on('click', '.b2s-hide-final-trial-btn', function() {
+jQuery(document).on('click', '.b2s-hide-final-trial-btn', function () {
     jQuery('#b2s-final-trail-modal').modal('hide');
     jQuery.ajax({
         url: ajaxurl,
@@ -378,6 +418,46 @@ jQuery(document).on('click', '.b2s-hide-final-trial-btn', function() {
                 } else {
                     jQuery('.b2s-server-connection-fail').show();
                 }
+            }
+            return true;
+        }
+    });
+});
+
+
+jQuery(document).on('click', '#b2s-debug-connection-btn', function () {
+    jQuery('.b2s-loading-area').show();
+    jQuery(this).hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_debug_connection',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-loading-area').hide();
+
+            if (data.result == false) {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                } else {
+                    jQuery('.b2s-debug-connection-result-area').show();
+                    jQuery('.b2s-debug-connection-result-code').hide();
+                    jQuery('.b2s-debug-connection-result-code-info').hide();
+                    jQuery('.b2s-debug-connection-result-error').show();
+                }
+            } else {
+                jQuery('.b2s-debug-connection-result-area').show();
+                jQuery('.b2s-debug-connection-result-code').html(data.output);
+                jQuery('.b2s-debug-connection-result-error').hide();
+
             }
             return true;
         }

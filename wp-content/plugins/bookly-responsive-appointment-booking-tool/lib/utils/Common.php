@@ -832,4 +832,34 @@ abstract class Common extends Lib\Base\Cache
             $oc && Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
         }
     }
+
+    /**
+     * @return array
+     */
+    public static function getAllStatuses()
+    {
+        if ( ! self::hasInCache( __FUNCTION__ ) ) {
+            $statuses = array(
+                array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_PENDING, 'busy' => true ),
+                array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_APPROVED, 'busy' => true ),
+                array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_CANCELLED, 'busy' => false ),
+                array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_REJECTED, 'busy' => false ),
+            );
+            if ( Lib\Config::waitingListActive() ) {
+                $statuses[] = array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_WAITLISTED, 'busy' => false );
+            }
+            $statuses[] = array( 'slug' => Lib\Entities\CustomerAppointment::STATUS_DONE, 'busy' => false );
+
+            foreach ( Lib\Proxy\CustomStatuses::getAll() as $status ) {
+                $statuses[] = array( 'slug' => $status->getSlug(), 'busy' => (bool) $status->getBusy() );
+            }
+            foreach ( $statuses as &$data ) {
+                $data['title'] = Lib\Entities\CustomerAppointment::statusToString( $data['slug'] );
+            }
+
+            self::putInCache( __FUNCTION__, $statuses );
+        }
+
+        return self::getFromCache( __FUNCTION__ );
+    }
 }

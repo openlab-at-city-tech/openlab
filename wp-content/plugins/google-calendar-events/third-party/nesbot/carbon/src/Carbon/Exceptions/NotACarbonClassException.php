@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
-/** @internal */
 class NotACarbonClassException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
@@ -32,14 +31,14 @@ class NotACarbonClassException extends BaseInvalidArgumentException implements I
     public function __construct($className, $code = 0, Throwable $previous = null)
     {
         $this->className = $className;
-        parent::__construct(\sprintf('Given class does not implement %s: %s', CarbonInterface::class, $className), $code, $previous);
+        parent::__construct(sprintf('Given class does not implement %s: %s', CarbonInterface::class, $className), $code, $previous);
     }
     /**
      * Get the className.
      *
      * @return string
      */
-    public function getClassName() : string
+    public function getClassName(): string
     {
         return $this->className;
     }

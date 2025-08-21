@@ -20,7 +20,6 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 use SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA;
 /**
  * Sign a string using a Service Account private key.
- * @internal
  */
 trait ServiceAccountSignerTrait
 {
@@ -36,19 +35,19 @@ trait ServiceAccountSignerTrait
     {
         $privateKey = $this->auth->getSigningKey();
         $signedString = '';
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA') && !$forceOpenssl) {
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA') && !$forceOpenssl) {
             $rsa = new RSA();
             $rsa->loadKey($privateKey);
             $rsa->setSignatureMode(RSA::SIGNATURE_PKCS1);
             $rsa->setHash('sha256');
             $signedString = $rsa->sign($stringToSign);
-        } elseif (\extension_loaded('openssl')) {
-            \openssl_sign($stringToSign, $signedString, $privateKey, 'sha256WithRSAEncryption');
+        } elseif (extension_loaded('openssl')) {
+            openssl_sign($stringToSign, $signedString, $privateKey, 'sha256WithRSAEncryption');
         } else {
             // @codeCoverageIgnoreStart
             throw new \RuntimeException('OpenSSL is not installed.');
         }
         // @codeCoverageIgnoreEnd
-        return \base64_encode($signedString);
+        return base64_encode($signedString);
     }
 }

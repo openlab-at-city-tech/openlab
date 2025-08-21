@@ -18,7 +18,6 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 	 * Register below header Configurations.
 	 */
 	class Astra_Header_Button_Component_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Button control for Header/Footer Customizer Configurations.
 		 *
@@ -28,8 +27,7 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 		 * @return Array Astra Customizer Configurations with updated configurations.
 		 */
 		public function register_configuration( $configurations, $wp_customize ) {
-			$configurations = astra_header_button_configuration( $configurations );
-			return $configurations;
+			return astra_header_button_configuration( $configurations );
 		}
 	}
 

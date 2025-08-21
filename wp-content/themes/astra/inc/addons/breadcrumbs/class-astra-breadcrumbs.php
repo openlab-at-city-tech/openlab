@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Breadcrumbs' ) ) {
 	 * @since 1.7.0
 	 */
 	class Astra_Breadcrumbs {
-
 		/**
 		 * Member Variable
 		 *

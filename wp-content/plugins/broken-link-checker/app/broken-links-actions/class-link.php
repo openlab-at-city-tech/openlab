@@ -55,6 +55,14 @@ class Link extends Base {
 	protected $link = null;
 
 	/**
+	 * The original link without trailing slash being stripped off.
+	 *
+	 * @since 2.4.4
+	 * @var string $original_link
+	 */
+	protected $original_link = null;
+
+	/**
 	 * The new link that will replace old one. When $this->type is `replace`.
 	 *
 	 * @since 2.1.0
@@ -142,7 +150,8 @@ class Link extends Base {
 				}
 			}
 
-			$this->link = stripslashes( untrailingslashit( $this->link ) );
+			$this->original_link = $this->link;
+			$this->link          = stripslashes( untrailingslashit( $this->link ) );
 		}
 	}
 
@@ -160,7 +169,7 @@ class Link extends Base {
 			if ( Queue::instance()->check_target_tables_complete() ) {
 				return array(
 					'completed' => true,
-					'link' => $this->link,
+					'link'      => $this->link,
 				);
 			}
 			$report = $this->execute_full_site();
@@ -201,11 +210,11 @@ class Link extends Base {
 	 */
 	public function execute_full_site() {
 
-		$handler = new Handlers\Full_Site_Handler( $this );
+		$handler  = new Handlers\Full_Site_Handler( $this );
 		$response = $handler->execute();
 
 		// Check if current table has been precessed.
-		if ( ! empty( $response[ 'table_completed' ] ) ) {
+		if ( ! empty( $response['table_completed'] ) ) {
 			// Move to process next target table.
 			Queue::instance()->move_to_next_target_table();
 			$this->offset = 0;
@@ -215,7 +224,7 @@ class Link extends Base {
 			if ( Queue::instance()->check_target_tables_complete() ) {
 				return array(
 					'completed' => true,
-					'link' => $this->link,
+					'link'      => $this->link,
 				);
 			}
 
@@ -244,8 +253,13 @@ class Link extends Base {
 		return intval( $this->limit );
 	}
 
-	public function get_link() {
-		return $this->link;
+	/**
+	 * Returns the link to be actioned.
+	 * @param bool $original_link
+	 * @return string|null
+	 */
+	public function get_link( bool $original_link = false ) {
+		return $original_link ? $this->original_link : $this->link;
 	}
 
 	public function get_new_link() {

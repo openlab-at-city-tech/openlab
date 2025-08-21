@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Astra_Builder_Admin.
  */
 final class Astra_Builder_Admin {
-
 	/**
 	 * Member Variable
 	 *
@@ -73,7 +72,7 @@ final class Astra_Builder_Admin {
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migrate = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$migrate = ( $migrate ) ? true : false;
+		$migrate = $migrate ? true : false;
 		/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migration_flag = astra_get_option( 'v3-option-migration', false );
 		astra_update_option( 'is-header-footer-builder', $migrate );
@@ -100,7 +99,7 @@ final class Astra_Builder_Admin {
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migrate = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$migrate = ( $migrate ) ? true : false;
+		$migrate = $migrate ? true : false;
 		astra_update_option( 'ast-disable-upgrade-notices', $migrate );
 
 		wp_send_json_success();

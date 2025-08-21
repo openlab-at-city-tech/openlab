@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
+if ( ! class_exists( 'Astra_Mobile_Header' ) ) {
 
 	/**
 	 * Astra_Mobile_Header
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
 	 * @since 1.4.0
 	 */
 	class Astra_Mobile_Header {
-
 		/**
 		 * Instance
 		 *
@@ -175,7 +174,6 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
 			);
 
 			return $html . $logo;
-
 		}
 
 		/**
@@ -225,4 +223,4 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
 	 */
 	Astra_Mobile_Header::get_instance();
 
-endif;
+}

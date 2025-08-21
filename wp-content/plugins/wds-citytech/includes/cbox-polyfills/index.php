@@ -617,6 +617,7 @@ add_filter(
  * @return array
  */
 function openlab_cboxol_site_templates_rest_api_restrict_visibility( $args, $request ) {
+	remove_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility' );
 	$member_type_meta_query = [
 		'relation'  => 'OR',
 		'all_types' => [
@@ -697,5 +698,4 @@ function openlab_cboxol_site_templates_rest_api_restrict_visibility( $args, $req
 
 	return $args;
 }
-add_filter( 'rest_cboxol_site_template_query', 'openlab_cboxol_site_templates_rest_api_restrict_visibility', 10, 2 );
-remove_filter( 'rest_cboxol_site_template_query', 'cboxol_site_templates_rest_api_restrict_visibility' );
+add_filter( 'rest_cboxol_site_template_query', 'openlab_cboxol_site_templates_rest_api_restrict_visibility', 5, 2 );

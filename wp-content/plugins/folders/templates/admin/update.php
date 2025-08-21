@@ -20,11 +20,11 @@ $email = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "playground.w
     <div class="updates-form-form-left">
         <div class="updates-form-form-left-text">premio</div>
         <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/wcupdate_email.svg") ?>" style="width: 230px;margin: 60px 0px 20px 0px;" />
-        <p><?php esc_html_e('Grow your WordPress or Shopify websites with our plugins', 'stars-testimonials'); ?></p>
+        <p><?php esc_html_e('Grow your WordPress or Shopify websites with our plugins', 'folders'); ?></p>
     </div>
     <div class="updates-form-form-right">
-        <div class="update-title"><?php esc_html_e('Be the first to know product updates, tips & discounts', 'stars-testimonials'); ?></div>
-        <p><?php esc_html_e('Be among the first to know about our latest features & what we’re working on. Plus insider offer & flash sales', 'stars-testimonials'); ?></p>
+        <div class="update-title"><?php esc_html_e('Be the first to know product updates, tips & discounts', 'folders'); ?></div>
+        <p><?php esc_html_e('Be among the first to know about our latest features & what we’re working on. Plus insider offer & flash sales', 'folders'); ?></p>
         <div class="updates-form">
             <div class="update-form-input">
                 <div class="mail-icon">
@@ -38,7 +38,7 @@ $email = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "playground.w
                     </svg>
                 </div>
                 <input id="folder_update_status" autocomplete="off" value="<?php echo esc_attr($email) ?>" placeholder="Email address">
-                <button href="javascript:;" class="button button-primary form-submit-btn yes befirst-btn"><?php esc_html_e('Sign Up', 'stars-testimonials'); ?></button>
+                <button href="javascript:;" class="button button-primary form-submit-btn yes befirst-btn"><?php esc_html_e('Sign Up', 'folders'); ?></button>
                 <p id="suggestion"></p>
             </div>
             <!--div class="update-form-skip-button">
@@ -46,10 +46,10 @@ $email = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "playground.w
             </div-->
         </div>
         <div class="update-notice-latter">
-            <span><a href="javascript:;" class="form-cancel-btn no"><?php esc_html_e('No, I will do it later', 'stars-testimonials'); ?></a></span>
+            <span><a href="javascript:;" class="form-cancel-btn no"><?php esc_html_e('No, I will do it later', 'folders'); ?></a></span>
         </div>
         <div class="update-notice">
-            <?php esc_html_e('You can remove yourself from the list whenever you want, no strings attached', 'stars-testimonials'); ?>
+            <?php esc_html_e('You can remove yourself from the list whenever you want, no strings attached', 'folders'); ?>
         </div>
     </div>
 </div>

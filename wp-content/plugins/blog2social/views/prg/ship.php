@@ -4,8 +4,8 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/PRG/Ship/Item.php';
 require_once B2S_PLUGIN_DIR . 'includes/PRG/Ship/Image.php';
 
-delete_option('B2S_PLUGIN_POST_CONTENT_' . (int) $_GET['postId']);
-$postData = get_post((int) $_GET['postId']);
+delete_option('B2S_PLUGIN_POST_CONTENT_' .  isset($_GET['postId'])? (int) $_GET['postId'] : 0);
+$postData = get_post(isset($_GET['postId'])? (int) $_GET['postId'] : 0);
 $userLang = strtolower(substr(get_locale(), 0, 2));
 $postUrl = (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
 $item = new PRG_Ship_Item();

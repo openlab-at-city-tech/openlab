@@ -80,7 +80,7 @@ $service_dropdown_data = Utils\Common::getServiceDataForDropDown( 's.type <> "pa
                             <?php foreach ( array_merge( range( 1, 24 ), range( 48, 336, 24 ), array( 504, 672 ) ) as $hour ) : ?>
                                 <option value="<?php echo esc_attr( $hour ) ?>"><?php echo esc_html( Utils\DateTime::secondsToInterval( $hour * HOUR_IN_SECONDS ) ) ?></option>
                             <?php endforeach ?>
-                            <option value="43200">30 <?php esc_html_e( 'days', 'bookly' ) ?></option>
+                            <option value="720"><?php echo esc_html( sprintf( _n( '%d day', '%d days', 30, 'bookly' ), 30 ) ) ?></option>
                         </select>
                     </div>
 

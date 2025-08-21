@@ -38,9 +38,14 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 	public function get_script_depends() {
 		return ['animate-circle'];
 	}
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 
     protected function register_controls() {
         /* 
@@ -389,7 +394,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => false,
 				'selectors' => [
-					'{{WRAPPER}} .ekit-btt__button' => 'color: {{VALUE}}; border-color: {{VALUE}}'
+					'{{WRAPPER}} .ekit-btt__button' => 'color: {{VALUE}}; fill: {{VALUE}}; border-color: {{VALUE}}'
 				],
 			]
 		);
@@ -421,8 +426,8 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => false,
 				'selectors' => [
-					'{{WRAPPER}} .ekit-btt__button:hover' => 'color: {{VALUE}}; border-color: {{VALUE}}',
-					'{{WRAPPER}} .ekit-btt__button:focus' => 'color: {{VALUE}}; border-color: {{VALUE}}'
+					'{{WRAPPER}} .ekit-btt__button:hover' => 'color: {{VALUE}}; fill: {{VALUE}}; border-color: {{VALUE}}',
+					'{{WRAPPER}} .ekit-btt__button:focus' => 'color: {{VALUE}}; fill: {{VALUE}}; border-color: {{VALUE}}'
 				],
 			]
 		);
@@ -464,7 +469,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 				'style' => $appearance,
 				'foreground' => $settings['ekit_button_prgoress_foreground'],
 				'background' => $settings['ekit_button_prgoress_background']
-		]
+		];
 		?>
 			<div class="ekit-back-to-top-container ekit-btt <?php echo esc_attr( $appearance ) ?>" data-settings="<?php echo esc_attr( wp_json_encode($args) ) ?>"> 
 				<span class="ekit-btt__button <?php echo esc_attr( $is_scroll ) ?>">
@@ -472,7 +477,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 					switch( $appearance ) {
 						// show icon style by default 
 						case 'icon_only':
-							Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] );
+							Icons_Manager::render_icon($settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ]);
 							break;
 						
 						// show text only style
@@ -484,7 +489,7 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 						case 'progress_indicator': ?>
 							<div class="progress_indicator" >
 								<canvas id="canvas-<?php echo esc_attr( $this->get_id()); ?>" class="canvas" data-canvas="<?php echo esc_attr( $this->get_id()); ?>"></canvas>
-								<span><?php Icons_Manager::render_icon( $settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ] ); ?></span>
+								<span><?php Icons_Manager::render_icon($settings['ekit_btn_icons'], [ 'aria-hidden' => 'true' ]); ?></span>
 							</div>
 							<?php break;
 					} ?>

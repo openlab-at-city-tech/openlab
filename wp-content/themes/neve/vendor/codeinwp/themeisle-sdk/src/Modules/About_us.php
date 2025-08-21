@@ -14,6 +14,7 @@
  *     'has_upgrade_menu'   => <condition>,
  *     'upgrade_link'       => <url>,
  *     'upgrade_text'       => 'Get Pro Version',
+ *     'review_link'        => false, // Leave it empty for default WPorg link or false to hide it.
  *  ]
  * }
  *
@@ -182,6 +183,8 @@ class About_Us extends Abstract_Module {
 		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/about/about.asset.php';
 		$deps       = array_merge( $asset_file['dependencies'], [ 'updates' ] );
 
+		do_action( 'themeisle_internal_page', $this->product->get_slug(), 'about_us' );
+
 		wp_register_script( $handle, $this->get_sdk_uri() . 'assets/js/build/about/about.js', $deps, $asset_file['version'], true );
 		wp_localize_script( $handle, 'tiSDKAboutData', $this->get_about_localization_data() );
 
@@ -228,6 +231,7 @@ class About_Us extends Abstract_Module {
 			],
 			'canInstallPlugins'  => current_user_can( 'install_plugins' ),
 			'canActivatePlugins' => current_user_can( 'activate_plugins' ),
+			'showReviewLink'     => ! ( isset( $this->about_data['review_link'] ) && false === $this->about_data['review_link'] ),
 		];
 	}
 
@@ -334,6 +338,9 @@ class About_Us extends Abstract_Module {
 				'description' => Loader::$labels['about_us']['others']['neve_desc'],
 				'icon'        => $this->get_sdk_uri() . 'assets/images/neve.png',
 			],
+			'learning-management-system'          => [
+				'name' => 'Masteriyo LMS',
+			],
 			'otter-blocks'                        => [
 				'name' => 'Otter',
 			],
@@ -379,7 +386,7 @@ class About_Us extends Abstract_Module {
 				'name' => 'Hyve Lite',
 			],
 			'wp-full-stripe-free'                 => [
-				'name' => 'Stripe Payment forms for WordPress Plugin – WP Full Pay',
+				'name' => 'WP Full Pay',
 			],
 		];
 

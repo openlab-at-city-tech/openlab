@@ -18,7 +18,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\LineFormatter;
  * Common syslog functionality
  *
  * @phpstan-import-type Level from \Monolog\Logger
- * @internal
  */
 abstract class AbstractSyslogHandler extends AbstractProcessingHandler
 {
@@ -41,7 +40,7 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
     public function __construct($facility = \LOG_USER, $level = Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->facilities['local0'] = \LOG_LOCAL0;
             $this->facilities['local1'] = \LOG_LOCAL1;
             $this->facilities['local2'] = \LOG_LOCAL2;
@@ -69,9 +68,9 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
             // LOG_LOCAL7
         }
         // convert textual description of facility to syslog constant
-        if (\is_string($facility) && \array_key_exists(\strtolower($facility), $this->facilities)) {
-            $facility = $this->facilities[\strtolower($facility)];
-        } elseif (!\in_array($facility, \array_values($this->facilities), \true)) {
+        if (is_string($facility) && array_key_exists(strtolower($facility), $this->facilities)) {
+            $facility = $this->facilities[strtolower($facility)];
+        } elseif (!in_array($facility, array_values($this->facilities), \true)) {
             throw new \UnexpectedValueException('Unknown facility value "' . $facility . '" given');
         }
         $this->facility = $facility;
@@ -79,7 +78,7 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
     }

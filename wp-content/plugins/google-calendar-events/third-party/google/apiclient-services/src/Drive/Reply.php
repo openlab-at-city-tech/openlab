@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class Reply extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -182,4 +181,4 @@ class Reply extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Reply::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Reply');
+class_alias(Reply::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Reply');

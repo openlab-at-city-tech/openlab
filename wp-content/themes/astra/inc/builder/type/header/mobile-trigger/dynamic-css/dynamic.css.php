@@ -26,7 +26,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_mobile_trigger_row_setting', 11 );
  */
 function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	if ( ! Astra_Builder_Helper::is_component_loaded( 'mobile-trigger', 'header', 'mobile' ) ) {
+	if ( ! Astra_Builder_Helper::is_component_loaded( 'mobile-trigger', 'header', 'mobile' ) && ! Astra_Builder_Helper::is_component_loaded( 'mobile-trigger', 'header', 'desktop' ) ) {
 		return $dynamic_css;
 	}
 
@@ -51,13 +51,13 @@ function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered =
 	$icon_color = astra_get_option( 'mobile-header-toggle-btn-color', $default );
 
 	// Border.
-	$trigger_border_width_top = ( isset( $trigger_border_width ) && isset( $trigger_border_width['top'] ) ) ? $trigger_border_width['top'] : 0;
+	$trigger_border_width_top = isset( $trigger_border_width ) && isset( $trigger_border_width['top'] ) ? $trigger_border_width['top'] : 0;
 
-	$trigger_border_width_bottom = ( isset( $trigger_border_width ) && isset( $trigger_border_width['bottom'] ) ) ? $trigger_border_width['bottom'] : 0;
+	$trigger_border_width_bottom = isset( $trigger_border_width ) && isset( $trigger_border_width['bottom'] ) ? $trigger_border_width['bottom'] : 0;
 
-	$trigger_border_width_right = ( isset( $trigger_border_width ) && isset( $trigger_border_width['right'] ) ) ? $trigger_border_width['right'] : 0;
+	$trigger_border_width_right = isset( $trigger_border_width ) && isset( $trigger_border_width['right'] ) ? $trigger_border_width['right'] : 0;
 
-	$trigger_border_width_left = ( isset( $trigger_border_width ) && isset( $trigger_border_width['left'] ) ) ? $trigger_border_width['left'] : 0;
+	$trigger_border_width_left = isset( $trigger_border_width ) && isset( $trigger_border_width['left'] ) ? $trigger_border_width['left'] : 0;
 
 	$margin          = astra_get_option( $_section . '-margin' );
 	$margin_selector = $selector . ' .ast-button-wrap .menu-toggle';
@@ -108,6 +108,7 @@ function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered =
 				break;
 			}
 
+			// no break
 		case 'fill': // phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
 			$css_output_fill        = array(
 				$selector . ' .ast-button-wrap .ast-mobile-menu-trigger-fill' => array(
@@ -144,6 +145,7 @@ function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered =
 				break;
 			}
 
+			// no break
 		case 'outline': // phpcs:ignore PSR2.ControlStructures.SwitchDeclaration.TerminatingComment
 			$css_output_outline        = array(
 				$selector . ' .ast-button-wrap .ast-mobile-menu-trigger-outline' => array(
@@ -184,6 +186,7 @@ function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered =
 				break;
 			}
 
+			// no break
 		default:
 			$dynamic_css .= '';
 			break;
@@ -218,7 +221,6 @@ function astra_mobile_trigger_row_setting( $dynamic_css, $dynamic_css_filtered =
 	$css_output  = astra_parse_css( $css_output );
 	$css_output .= astra_parse_css( $css_output_tablet, '', astra_get_tablet_breakpoint() );
 	$css_output .= astra_parse_css( $css_output_mobile, '', astra_get_mobile_breakpoint() );
-
 
 	$dynamic_css .= $css_output;
 

@@ -12,40 +12,27 @@
                 <p>Please consider sharing your experience by leaving a review. It helps us to continue our efforts in promoting this plugin.</p>
                 <a target="_blank" href="<?php echo $this->getOption( 'plugin-review-url' ); ?>">
                     <div class="btn button">
-                        <div class="dashicons dashicons-share-alt2"></div><span>Submit a review to WordPress.org</span>
+                        <div class="dashicons dashicons-share-alt2"></div><span> Submit a review to WordPress.org</span>
                     </div>
                 </a>
-
-                <hr>
+                <!--
+				<hr>
                 <h4>Enable PoweredBy Link</h4>
                 <p>Please help us spread a word about our plugin by leaving a discreet powered by link.</p>
                 <form action="" method="post">
-                    <input type="hidden" name="<?php echo $this->getPoweredByOption(); ?>" value="0"/>
-                    <input type="checkbox" name="<?php echo $this->getPoweredByOption(); ?>" value="1" <?php checked( 1, $this->isPoweredByEnabled() ); ?>/>
+                    <input type="hidden" name="<?php //echo $this->getPoweredByOption(); ?>" value="0"/>
+                    <input type="checkbox" name="<?php //echo $this->getPoweredByOption(); ?>" value="1" <?php //checked( 1, $this->isPoweredByEnabled() ); ?>/>
                     <input type="submit" name="cminds_poweredby_change" value="Change PoweredBy Setting" />
                 </form>
-
+				-->
             </div>
         </div>
 
         <div  class="postbox">
             <h3><span>About CreativeMinds</span></h3>
             <div class="inside">
-                <p>CreativeMinds offers <a href="<?php echo 'https://www.cminds.com/hire-us/'; ?>"  target="_blank">Custom WordPress Plugins</a> to suit your specific requirements and make your WordPress website stand out above the rest! Our team of expert developers can add <a href="<?php echo  'https://www.cminds.com/hire-us/'; ?>"  target="_blank">custom features</a> to modify our existing plugins in a way that best suits your needs, or create a totally unique plugin from scratch! <a href="<?php echo  'https://www.cminds.com/contact/'; ?>"  target="_blank">Contact us</a> to hear more.</p>
+                <p>CreativeMinds offers <a href="<?php echo 'https://www.cminds.com/wordpress-plugins/'; ?>"  target="_blank">Custom WordPress Plugins</a> to suit your specific requirements and make your WordPress website stand out above the rest! Our team of expert developers can add <a href="<?php echo  'https://www.cminds.com/hire-us/'; ?>"  target="_blank">custom features</a> to modify our existing plugins in a way that best suits your needs, or create a totally unique plugin from scratch! <a href="<?php echo  'https://www.cminds.com/contact/'; ?>"  target="_blank">Contact us</a> to hear more.</p>
                 <hr/>
-                <h4>Follow CreativeMinds</h4>
-                Twitter: <a href="https://twitter.com/CMPLUGINS" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true">Follow @CMPLUGINS</a>
-                <script>!function ( d, s, id ) {
-                        var js, fjs = d.getElementsByTagName( s )[0], p = /^http:/.test( d.location ) ? 'http' : 'https';
-                        if ( !d.getElementById( id ) ) {
-                            js = d.createElement( s );
-                            js.id = id;
-                            js.src = p + '://platform.twitter.com/widgets.js';
-                            fjs.parentNode.insertBefore( js, fjs );
-                        }
-                    }( document, 'script', 'twitter-wjs' );
-                </script>
-                <hr>
 
 
                 <div id="fb-root"></div>
@@ -407,10 +394,7 @@
 
             <div class="inside">
                 <h4>Plugin User Guide</h4>
-                <p>For more detailed explanations please visit the plugin <a href="<?php echo  $this->getUserguideUrl(); ?>"  target="_blank">online documentation</a>. We also have a <a href="<?php echo  $this->getOption( 'plugin-store-url' ); ?>"  target="_blank">detailed product page</a> for this plugin which includes demos and <a href="<?php echo  'https://www.cminds.com/cm-plugins-video-library/'; ?>"  target="_blank">video tutorials</a>. Please be aware that some documentation articles cover functionalities exclusive to the pro edition of the plugin.</p>
-                <hr/>
-                <h4>CSS Customizations</h4>
-                <p>To easily customize the CSS using live WYSIWYG you can use <a href="https://wordpress.org/plugins/yellow-pencil-visual-theme-customizer/"><strong>Visual Theme Customizer</strong></a> plugin. </p>
+                <p>For more detailed explanations please visit the plugin <a href="<?php echo  $this->getUserguideUrl(); ?>"  target="_blank">online documentation</a>. We also have a <a href="<?php echo  $this->getOption( 'plugin-store-url' ); ?>"  target="_blank">detailed product page</a> for this plugin which includes demos and <a href="<?php echo  'https://www.videolessonsplugin.com/video-lesson/lesson/tooltip-glossary-plugin/'; ?>"  target="_blank">video tutorials</a>. Please be aware that some documentation articles cover functionalities exclusive to the pro edition of the plugin.</p>
                 <?php
                 $videos = $this->getOption( 'plugin-guide-videos' );
                 $height = 280;
@@ -434,33 +418,6 @@
 						<?php
                             echo do_shortcode('[video src="https://player.vimeo.com/video/134692135" width="' . $width . '" height="' . $height . '"]');
 						?>
-                </div>
-            </div>
-        </div>
-
-               <div id="buy" class="buy postbox">
-            <h3> <span>Check our NEW Keyword Hound - Best WordPress SEO Tool Ever!</span></h3>
-            <div class="plugins">
-                <div class="list">
-                    <div class="plugins-table">
-                        <div class="plugins-img item">
-                            <a href="<?php echo  'https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress'.$currentPlugin->getOption('plugin-campign'); ?>" target="_blank">
-                                <img class="img" src="<?php echo plugin_dir_url( __FILE__ ); ?>SEOHoundIcon.png">
-                            </a>
-                        </div>
-
-                        <div class="plugins-price item">
-                            <span>$69</span>
-                        </div>
-
-                        <div class="plugins-body item">
-                            <p><strong>NEW:</strong> Streamline keyword management and boost the SEO of your website with this one-of-a-kind WordPress SEO plugin!</p>
-                        </div>
-
-                        <div class="plugins-action item">
-                            <a class="button-success" href="<?php echo  'https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress'.$currentPlugin->getOption('plugin-campign'); ?>" target="_blank" >More Info</a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -531,7 +488,7 @@
                         </div>
 
                         <div class="plugins-body item">
-                            <p><strong>CM Tooltip Glossary Pro</strong> - The best glossary managment tool for WordPress</p>
+                            <p><strong>CM Tooltip Glossary</strong> - The best glossary managment tool for WordPress</p>
                         </div>
 
                         <div class="plugins-action item">

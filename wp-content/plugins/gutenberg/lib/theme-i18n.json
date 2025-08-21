@@ -45,6 +45,13 @@
 				}
 			]
 		},
+		"shadow": {
+			"presets": [
+				{
+					"name": "Shadow name"
+				}
+			]
+		},
 		"blocks": {
 			"*": {
 				"typography": {
@@ -68,6 +75,18 @@
 					"gradients": [
 						{
 							"name": "Gradient name"
+						}
+					],
+					"duotone": [
+						{
+							"name": "Duotone name"
+						}
+					]
+				},
+				"dimensions": {
+					"aspectRatios": [
+						{
+							"name": "Aspect ratio name"
 						}
 					]
 				},

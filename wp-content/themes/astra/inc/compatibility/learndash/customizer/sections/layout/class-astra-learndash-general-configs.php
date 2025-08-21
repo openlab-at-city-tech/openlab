@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_Learndash_General_Configs' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Learndash_General_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register LearnDash General Layout settings.
 		 *
@@ -62,7 +61,6 @@ if ( ! class_exists( 'Astra_Learndash_General_Configs' ) ) {
 			);
 
 			return array_merge( $configurations, $_configs );
-
 		}
 	}
 }

@@ -236,7 +236,6 @@ use SimpleCalendar\plugin_deps\Psr\Clock\ClockInterface;
  * @method CarbonImmutable                                    yesterday($tz = null)                                                                                                        Create a Carbon instance for yesterday.
  *
  * </autodoc>
- * @internal
  */
 class FactoryImmutable extends Factory implements ClockInterface
 {
@@ -248,7 +247,7 @@ class FactoryImmutable extends Factory implements ClockInterface
      *
      * @return CarbonImmutable
      */
-    public function now($tz = null) : DateTimeImmutable
+    public function now($tz = null): DateTimeImmutable
     {
         $className = $this->className;
         return new $className(null, $tz);

@@ -1146,7 +1146,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_sticky_navigation_background', 'hover' ) ) );
 			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .mobile-toggle-open-container .menu-toggle-open:hover, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .mobile-toggle-open-container .menu-toggle-open:focus, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .search-toggle-open-container .search-toggle-open:hover, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .search-toggle-open-container .search-toggle-open:focus' );
 			$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_sticky_navigation_color', 'hover' ) ) );
-			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current-menu-item > a, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current_page_item > a' );
+			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current-menu-item > a, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current_page_item > a, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current_page_parent > a, #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start) .header-menu-container > ul > li.current_page_ancestor > a' );
 			$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_sticky_navigation_color', 'active' ) ) );
 			$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_sticky_navigation_background', 'active' ) ) );
 			// Sticky Button.
@@ -3047,6 +3047,26 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'tiktok'=> '#69C9D0',
 				'discord'=> '#7289DA',
                 'threads'=> '#000000',
+				'bookbub'=> '#f44336',
+				'flickr'=> '#0063dc',
+				'flipboard'=> '#E12828',
+				'fstoppers'=> '#000000',
+				'goodreads'=> '#372213',
+				'imgur' => '#1BB76E',
+				'line'=> '#00C300',
+				'mastodon'=> '#6364ff',
+				'mewe' => '#005dff',
+				'parler' => '#c6002b',
+				'quora' => '#b92b27',
+				'ravelry' => '#b11b2e',
+				'rumble' => '#69d531',
+				'snapchat'=> '#fffc00',
+				'steam'=> '#171a21',
+				'strava'=> '#fc4c02',
+				'twitch'=> '#9146ff',
+				'vero' => '#00bcd4',
+				'amazon' => '#ff9900',
+				'bluesky' => '#1188ed',
 			);
 			$socials_final = array();
 			if ( is_array( $items ) && ! empty( $items ) ) {
@@ -3255,6 +3275,37 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->render_background( kadence()->sub_option( 'above_title_background', 'desktop' ), $css, '--kad-editor-title-bg' );
 		$css->add_property( 'background', 'var(--kad-editor-content-bg, var(--kad-editor-body-bg, #fff))' );
 		$css->render_font( kadence()->option( 'base_font' ), $css );
+
+		// Add responsive font sizes for buttons
+		$css->start_media_query( $media_query['tablet'] );
+		$css->set_selector( '.editor-styles-wrapper .wp-block-button .wp-block-button__link, .editor-styles-wrapper .kt-button.kb-btn-global-inherit' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_typography' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_typography' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_typography' ), 'tablet' ) );
+		$css->stop_media_query();
+
+		$css->start_media_query( $media_query['mobile'] );
+		$css->set_selector( '.editor-styles-wrapper .wp-block-button .wp-block-button__link, .editor-styles-wrapper .kt-button.kb-btn-global-inherit' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_typography' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_typography' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_typography' ), 'mobile' ) );
+		$css->stop_media_query();
+
+		// Add responsive font sizes for base font
+		$css->start_media_query( $media_query['tablet'] );
+		$css->set_selector( '.block-editor-page .editor-styles-wrapper, body.editor-styles-wrapper' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'base_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'base_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'base_font' ), 'tablet' ) );
+		$css->stop_media_query();
+
+		$css->start_media_query( $media_query['mobile'] );
+		$css->set_selector( '.block-editor-page .editor-styles-wrapper, body.editor-styles-wrapper' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'base_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'base_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'base_font' ), 'mobile' ) );
+		$css->stop_media_query();
+
 		// FSE Specific.
 		$css->set_selector( 'body.editor-styles-wrapper' );
 		$css->add_property( '--kad-editor-title-overlay-bg', $css->render_color_or_gradient( kadence()->sub_option( 'above_title_overlay_color', 'color' ) ) );
@@ -3429,9 +3480,64 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->render_font( kadence()->option( 'h5_font' ), $css );
 		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
 		$css->render_font( kadence()->option( 'h6_font' ), $css );
+
+		// Add responsive font sizes for headings
+		$css->start_media_query( $media_query['tablet'] );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h1_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h1_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h1_font' ), 'tablet' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h2' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h2_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h2_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h2_font' ), 'tablet' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h3' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h3_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h3_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h3_font' ), 'tablet' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h4' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h4_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h4_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h4_font' ), 'tablet' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h5' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h5_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h5_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h5_font' ), 'tablet' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h6_font' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h6_font' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h6_font' ), 'tablet' ) );
+		$css->stop_media_query();
+
+		$css->start_media_query( $media_query['mobile'] );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h1_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h1_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h1_font' ), 'mobile' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h2' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h2_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h2_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h2_font' ), 'mobile' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h3' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h3_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h3_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h3_font' ), 'mobile' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h4' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h4_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h4_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h4_font' ), 'mobile' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h5' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h5_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h5_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h5_font' ), 'mobile' ) );
+		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h6_font' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h6_font' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h6_font' ), 'mobile' ) );
+		$css->stop_media_query();
+
 		self::$google_fonts = $css->fonts_output();
 		return $css->css_output();
-
 	}
 	/**
 	 * Generates the dynamic css based on customizer options.

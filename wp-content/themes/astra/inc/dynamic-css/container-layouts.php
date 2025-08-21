@@ -138,7 +138,7 @@ function astra_container_layout_css() {
 	}
 
 	$customizer_default_update = astra_check_is_structural_setup();
-	$page_title_header_padding = ( true === $customizer_default_update ) ? '2em' : '4em';
+	$page_title_header_padding = true === $customizer_default_update ? '2em' : '4em';
 	// Transparent Header.
 	$display_title = get_post_meta( absint( astra_get_post_id() ), 'site-post-title', true );
 	/** @psalm-suppress InvalidCast */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort

@@ -27,7 +27,7 @@ if ( apply_filters( 'astra_single_layout_one_banner_visibility', true ) ) {
 					array(
 						'class' => '',
 					)
-				) 
+				)
 			);
 			?>
 >

@@ -132,11 +132,7 @@ const getAddNewPageCommand = () => function useAddNewPageCommand() {
         throwOnError: true
       });
       if (page?.id) {
-        history.push({
-          postId: page.id,
-          postType: 'page',
-          canvas: 'edit'
-        });
+        history.navigate(`/page/${page.id}?canvas=edit`);
       }
     } catch (error) {
       const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : (0,external_wp_i18n_namespaceObject.__)('An error occurred while creating the item.');
@@ -415,16 +411,13 @@ const getNavigationCommandLoaderPerPostType = postType => function useNavigation
         callback: ({
           close
         }) => {
-          const args = {
-            postType,
-            postId: record.id,
-            canvas: 'edit'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate(`/${postType}/${record.id}?canvas=edit`);
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: `/${postType}/${record.id}`,
+              canvas: 'edit'
+            });
           }
           close();
         }
@@ -491,16 +484,13 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
         callback: ({
           close
         }) => {
-          const args = {
-            postType: templateType,
-            postId: record.id,
-            canvas: 'edit'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate(`/${templateType}/${record.id}?canvas=edit`);
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: `/${templateType}/${record.id}`,
+              canvas: 'edit'
+            });
           }
           close();
         }
@@ -514,15 +504,14 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_template_part',
-            categoryId: 'all-parts'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/pattern?postType=wp_template_part&categoryId=all-parts');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/pattern',
+              postType: 'wp_template_part',
+              categoryId: 'all-parts'
+            });
           }
           close();
         }
@@ -560,14 +549,12 @@ const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNa
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_navigation'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/navigation');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/navigation'
+            });
           }
           close();
         }
@@ -579,14 +566,12 @@ const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNa
         callback: ({
           close
         }) => {
-          const args = {
-            path: '/wp_global_styles'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/styles');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/styles'
+            });
           }
           close();
         }
@@ -598,14 +583,12 @@ const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNa
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'page'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/page');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/page'
+            });
           }
           close();
         }
@@ -617,14 +600,12 @@ const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNa
         callback: ({
           close
         }) => {
-          const args = {
-            postType: 'wp_template'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/template');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/template'
+            });
           }
           close();
         }
@@ -638,14 +619,12 @@ const getSiteEditorBasicNavigationCommands = () => function useSiteEditorBasicNa
         close
       }) => {
         if (canCreateTemplate) {
-          const args = {
-            postType: 'wp_block'
-          };
-          const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
           if (isSiteEditor) {
-            history.push(args);
+            history.navigate('/pattern');
           } else {
-            document.location = targetUrl;
+            document.location = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+              p: '/pattern'
+            });
           }
           close();
         } else {

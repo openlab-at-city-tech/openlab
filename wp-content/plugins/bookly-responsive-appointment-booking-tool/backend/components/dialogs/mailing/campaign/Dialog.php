@@ -63,8 +63,6 @@ class Dialog extends Lib\Base\Component
                 'doc_hint' => sprintf( __( 'Start typing "{" to see the available codes. For more information, see the <a href="%s" target="_blank">documentation</a> page', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-sms-campaigns' ),
             ),
         ) );
-
-        print '<div id="bookly-campaign-dialog"></div>';
     }
 
     /**

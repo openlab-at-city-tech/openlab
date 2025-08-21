@@ -63,7 +63,7 @@ class Authorize_Redirect {
 
 		if ( ! $dest_url || ( 0 === stripos( $dest_url, 'https://jetpack.com/' ) && 0 === stripos( $dest_url, 'https://wordpress.com/' ) ) ) {
 			// The destination URL is missing or invalid, nothing to do here.
-			exit;
+			exit( 0 );
 		}
 
 		// The user is either already connected, or finished the connection process.
@@ -73,12 +73,12 @@ class Authorize_Redirect {
 			}
 
 			wp_safe_redirect( $dest_url );
-			exit;
+			exit( 0 );
 		} elseif ( ! empty( $_GET['done'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			// The user decided not to proceed with setting up the connection.
 
 			wp_safe_redirect( Admin_Menu::get_top_level_menu_item_url() );
-			exit;
+			exit( 0 );
 		}
 
 		$redirect_args = array(
@@ -94,13 +94,14 @@ class Authorize_Redirect {
 		}
 
 		wp_safe_redirect( $this->build_authorize_url( add_query_arg( $redirect_args, admin_url( 'admin.php' ) ) ) );
-		exit;
+		exit( 0 );
 	}
 
 	/**
 	 * Create the Jetpack authorization URL.
 	 *
 	 * @since 2.7.6 Added optional $from and $raw parameters.
+	 * @since 6.8.0 Added optional $provider and $provider_args parameters.
 	 *
 	 * @param bool|string $redirect URL to redirect to.
 	 * @param bool|string $from     If not false, adds 'from=$from' param to the connect URL.
@@ -126,8 +127,8 @@ class Authorize_Redirect {
 		 * @since jetpack-8.9.0
 		 * @since 2.7.6 Added $raw parameter.
 		 *
-		 * @param string $url Connection URL.
-		 * @param bool   $raw If true, URL will not be escaped.
+		 * @param string      $url           Connection URL.
+		 * @param bool        $raw           If true, URL will not be escaped.
 		 */
 		return apply_filters( 'jetpack_build_authorize_url', $url, $raw );
 	}

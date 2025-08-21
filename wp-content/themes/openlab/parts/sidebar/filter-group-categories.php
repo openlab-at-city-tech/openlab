@@ -6,6 +6,17 @@ if ( 'not-archive' === $group_type ) {
 
 $group_terms = bpcgc_get_terms_by_group_type( $group_type );
 
+$group_terms = array_filter(
+	$group_terms,
+	function( $term ) {
+		if ( ! openlab_is_resources_directory() ) {
+			return true;
+		}
+
+		return ! in_array( $term->slug, [ 'resource' ], true );
+	}
+);
+
 $option_value_bpcgc = openlab_get_current_filter( 'cat' );
 ?>
 

@@ -1,5 +1,3 @@
-
-
 /* START OF BASIC ZOTPRESS CSS */
 
 div#zp-Zotpress select {
@@ -1109,6 +1107,10 @@ div#zp-Zotpress form#zp-Image div.zp-Success p {
 
 
 /* START OF HIDDEN URL CSS */
+
+.ZP_ATTR {
+    display: none;
+}
 
 span#ZOTPRESS_PLUGIN_URL {
     display: none;

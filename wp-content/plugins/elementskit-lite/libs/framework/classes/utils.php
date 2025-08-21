@@ -22,7 +22,7 @@ class Utils {
 	}
 
 	public function save_option( $key, $value = '' ) {
-		$data_all         = get_option( self::$key );
+		$data_all         = get_option( self::$key, array() );
 		$data_all[ $key ] = $value;
 		update_option( 'elementskit_options', $data_all );
 	}

@@ -75,7 +75,7 @@ class EPKB_Articles_CPT_Setup {
 		/** setup Category taxonomy */
 
 		/* translators: do NOT change this translation again. It will break links !!! */
-		$category_slug = empty( $kb_config['category_slug'] ) ? _x( 'category', 'taxonomy singular name', 'echo-knowledge-base' ) : $kb_config['category_slug'];
+		$category_slug = empty( $kb_config['category_slug'] ) || EPKB_Utilities::is_wpml_enabled( $kb_config ) ? _x( 'category', 'taxonomy singular name', 'echo-knowledge-base' ) : $kb_config['category_slug'];
 
 		$category_taxonomy_name = EPKB_KB_Handler::get_category_taxonomy_name( $kb_id );
 		$labels = [
@@ -111,6 +111,10 @@ class EPKB_Articles_CPT_Setup {
 		}
 
 		/** setup Tag taxonomy */
+
+		/* translators: do NOT change this translation again. It will break links !!! */
+		$tag_slug = empty( $kb_config['tag_slug'] ) || EPKB_Utilities::is_wpml_enabled( $kb_config ) ? _x( 'tag', 'taxonomy singular name', 'echo-knowledge-base' ) : $kb_config['tag_slug'];
+
 		$tag_taxonomy_name = EPKB_KB_Handler::get_tag_taxonomy_name( $kb_id );
 		$labels = [
 				'name'                       => _x( 'Tags', 'taxonomy general name', 'echo-knowledge-base' ),
@@ -138,8 +142,7 @@ class EPKB_Articles_CPT_Setup {
 				'query_var'             => $tag_taxonomy_name,
 				'show_in_rest'          => true,
 				'rewrite'               => [
-												/* translators: do NOT change this translation again. It will break links !!! */
-												'slug'         => $kb_articles_common_path . '/' . _x( 'tag', 'taxonomy singular name', 'echo-knowledge-base' ),
+												'slug'         => $kb_articles_common_path . '/' . $tag_slug,
 												'with_front'   => false,
 												'hierarchical' => false
 											],

@@ -4,7 +4,6 @@ namespace SimpleCalendar\plugin_deps\Psr\Log;
 
 /**
  * Describes a logger-aware instance.
- * @internal
  */
 interface LoggerAwareInterface
 {

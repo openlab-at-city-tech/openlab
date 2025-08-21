@@ -1235,8 +1235,8 @@ class Ajax extends Lib\Base\Ajax
         $defaults = Lib\Session::getFormVar( self::parameter( 'form_id' ), 'defaults' );
         if ( $defaults !== null ) {
             $service_id = $defaults['service_id'];
+            $service = Lib\Entities\Service::find( $defaults['service_id'] );
             if ( $defaults['staff_id'] == 0 ) {
-                $service = Lib\Entities\Service::find( $defaults['service_id'] );
                 if ( $service && $service->withSubServices() ) {
                     $sub_services = $service->getSubServices();
                     $service_id = reset( $sub_services )->getId();
@@ -1260,9 +1260,9 @@ class Ajax extends Lib\Base\Ajax
             $userData->chain->clear();
             $chain_item = new Lib\ChainItem();
             $chain_item
-                ->setNumberOfPersons( 1 )
+                ->setNumberOfPersons( $service ? $service->getCapacityMin() : 1 )
                 ->setQuantity( 1 )
-                ->setUnits( isset( $defaults['units'] ) && $defaults['units'] ? $defaults['units'] : 1 )
+                ->setUnits( isset( $defaults['units'] ) && $defaults['units'] ? $defaults['units'] : ( $service ? $service->getUnitsMin() : 1 ) )
                 ->setServiceId( $defaults['service_id'] )
                 ->setStaffIds( $staff_ids )
                 ->setLocationId( $defaults['location_id'] ?: null );

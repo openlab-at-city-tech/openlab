@@ -66,9 +66,6 @@ class EPKB_KB_Config_DB {
 			$kb_options_checked[$kb_id] = wp_parse_args( $config, EPKB_KB_Config_Specs::get_default_kb_config( $kb_id ) );
 			$kb_options_checked[$kb_id]['id'] = $kb_id;
 
-			// filter kb config for Editor
-			$kb_options_checked[$kb_id] = EPKB_Editor_Utilities::update_kb_from_editor_config( $kb_options_checked[$kb_id] );
-
 			// cached the settings for future use
 			$this->cached_settings[$kb_id] = $kb_options_checked[$kb_id];
 		}
@@ -77,7 +74,7 @@ class EPKB_KB_Config_DB {
 
 		// if no valid KB configuration found use default
 		if ( empty( $kb_options_checked ) || ! isset( $kb_options_checked[self::DEFAULT_KB_ID] ) ) {
-			$kb_options_checked[self::DEFAULT_KB_ID] = EPKB_KB_Config_Specs::get_default_kb_config( self::DEFAULT_KB_ID );
+			$kb_options_checked[self::DEFAULT_KB_ID] = EPKB_KB_Config_Specs::get_default_kb_config();
 		}
 
 		return $kb_options_checked;
@@ -96,7 +93,7 @@ class EPKB_KB_Config_DB {
 
 		// retrieve all KB option names for existing knowledge bases from WP Options table
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$kb_option_names = $wpdb->get_col( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '" . self::KB_CONFIG_PREFIX . "%'" );
+		$kb_option_names = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", self::KB_CONFIG_PREFIX . '%' ) );
 		if ( empty( $kb_option_names ) ) {
 			if ( ! $ignore_error ) {
 				EPKB_Logging::add_log( "Did not retrieve any kb config. Try to deactivate and active KB plugin to see if the issue will be fixed (11). Last error: " . $wpdb->last_error, $kb_option_names );
@@ -104,6 +101,7 @@ class EPKB_KB_Config_DB {
 		}
 
 		$kb_ids = array();
+		/** @disregard P1006 */
 		foreach ( $kb_option_names as $kb_option_name ) {
 
 			if ( empty( $kb_option_name ) ) {
@@ -136,7 +134,7 @@ class EPKB_KB_Config_DB {
 		// always return error if kb_id invalid. we don't want to override stored KB config if there is an internal error that causes this
 		$kb_id = ( $kb_id === self::DEFAULT_KB_ID ) ? $kb_id : EPKB_Utilities::sanitize_get_id( $kb_id );
 		if ( is_wp_error( $kb_id ) ) {
-			return $return_error ? $kb_id : EPKB_KB_Config_Specs::get_default_kb_config( self::DEFAULT_KB_ID );
+			return $return_error ? $kb_id : EPKB_KB_Config_Specs::get_default_kb_config();
 		}
 		/** @var int $kb_id */
 
@@ -144,8 +142,7 @@ class EPKB_KB_Config_DB {
 		if ( ! empty( $this->cached_settings[$kb_id] ) ) {
 			$config = wp_parse_args( $this->cached_settings[$kb_id], EPKB_KB_Config_Specs::get_default_kb_config( $kb_id ) );
 			$config['id'] = $kb_id;
-			// filter kb config for Editor 
-			return EPKB_Editor_Utilities::update_kb_from_editor_config( $config );
+			return $config;
 		}
 
 		$config = $this->get_wordpress_option( $kb_id );
@@ -153,15 +150,12 @@ class EPKB_KB_Config_DB {
 		// if KB configuration is missing then return error
 		if ( empty( $config ) || ! is_array( $config ) ) {
 			return $return_error ? new WP_Error('DB231', "Did not find KB configuration. Try to deactivate and reactivate KB plugin to see if this fixes the issue. " . EPKB_Utilities::contact_us_for_support() )
-								 : EPKB_KB_Config_Specs::get_default_kb_config( self::DEFAULT_KB_ID );
+								 : EPKB_KB_Config_Specs::get_default_kb_config();
 		}
 
 		// use defaults for missing or empty fields
 		$config = wp_parse_args( $config, EPKB_KB_Config_Specs::get_default_kb_config( $kb_id ) );
 		$config['id'] = $kb_id;
-
-		// filter kb config for Editor
-		$config = EPKB_Editor_Utilities::update_kb_from_editor_config( $config );
 
 		// cached the settings for future use
 		$this->cached_settings[$kb_id] = $config;
@@ -193,7 +187,7 @@ class EPKB_KB_Config_DB {
 
 		// fall back - retrieve KB settings directly from the database
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$config = $wpdb->get_var( "SELECT option_value FROM $wpdb->options WHERE option_name = '" . $option_name . "'" );
+		$config = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s", $option_name ) );
 		if ( empty( $config ) ) {
 			return [];
 		}
@@ -227,7 +221,7 @@ class EPKB_KB_Config_DB {
 		// get ID based on currently selected KB post type
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 		if ( empty( $kb_id ) ) {
-			return EPKB_KB_Config_Specs::get_default_kb_config( self::DEFAULT_KB_ID );
+			return EPKB_KB_Config_Specs::get_default_kb_config();
 		}
 
 		return self::get_kb_config( $kb_id );
@@ -249,13 +243,16 @@ class EPKB_KB_Config_DB {
 
 		$kb_config = empty( $kb_id ) ? $this->get_current_kb_configuration() : $this->get_kb_config( $kb_id );
 
-		if ( isset( $kb_config[$setting_name] ) ) {
-			return $kb_config[$setting_name];
+		// let FE apply layout changes for preview without saving the changes
+		$kb_config = EPKB_Frontend_Editor::fe_preview_config( $kb_config );
+
+		if ( ! is_wp_error( $kb_config ) && isset( $kb_config[ $setting_name ] ) ) {
+			return $kb_config[ $setting_name ];
 		}
 
-		$default_settings = EPKB_KB_Config_Specs::get_default_kb_config( self::DEFAULT_KB_ID );
+		$default_settings = EPKB_KB_Config_Specs::get_default_kb_config();
 
-		return isset( $default_settings[$setting_name] ) ? $default_settings[$setting_name] : $default;
+		return isset( $default_settings[ $setting_name ] ) ? $default_settings[ $setting_name ] : $default;
 	}
 
 	/**
@@ -349,11 +346,6 @@ class EPKB_KB_Config_DB {
 		$result = update_option( $option_name, $config );
 		if ( $result !== false ) {
 			return $config;
-		}
-
-		// return WP_Error on update_option() fail if WPML plugin or setting is active
-		if ( EPKB_Utilities::is_wpml_plugin_active() || EPKB_Utilities::is_wpml_enabled( $config ) ) {
-			return new WP_Error( 'save_kb_config', 'Configuration could not be saved' );
 		}
 
 		// add or update the option

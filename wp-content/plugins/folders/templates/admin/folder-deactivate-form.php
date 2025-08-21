@@ -57,9 +57,11 @@ if (! defined('ABSPATH')) {
 
                 $(document).on("click", ".folder-deactivate-button", function(e){
                     e.stopPropagation();
+                    $('.premio-help-button-wrap').show();
                     jQuery(".folder-popup-button-close").trigger("click");
-                    jQuery(".folder-help-btn").toggle();
-                    jQuery(".folder-help-form").toggleClass("active");
+                    jQuery(".contact-us-btn").trigger("click");
+                    jQuery(".premio-help-close-btn").addClass('show');
+                    jQuery(".premio-help-button").addClass('hide');
                     jQuery("#user_email").focus();
                 });
 
@@ -131,5 +133,4 @@ if (! defined('ABSPATH')) {
             });
 
         })(jQuery); // This invokes the function above and allows us to use '$' in place of 'jQuery' in our code.
-    </script>
-<?php require_once dirname(__FILE__)."/help.php";
+    </script> 

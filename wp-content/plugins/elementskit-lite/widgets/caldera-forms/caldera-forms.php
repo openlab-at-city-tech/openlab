@@ -34,9 +34,14 @@ class ElementsKit_Widget_Caldera_Forms extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/caldera-form/';
 	}
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 	
 	function elementskit_caldera_forms_options() {
 		if ( class_exists( 'Caldera_Forms' ) ) {

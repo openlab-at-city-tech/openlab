@@ -14,22 +14,21 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
- * @internal
  */
 class NullProvider implements ProviderInterface
 {
-    public function __toString() : string
+    public function __toString(): string
     {
         return 'null';
     }
-    public function write(TranslatorBagInterface $translatorBag, bool $override = \false) : void
+    public function write(TranslatorBagInterface $translatorBag, bool $override = \false): void
     {
     }
-    public function read(array $domains, array $locales) : TranslatorBag
+    public function read(array $domains, array $locales): TranslatorBag
     {
         return new TranslatorBag();
     }
-    public function delete(TranslatorBagInterface $translatorBag) : void
+    public function delete(TranslatorBagInterface $translatorBag): void
     {
     }
 }

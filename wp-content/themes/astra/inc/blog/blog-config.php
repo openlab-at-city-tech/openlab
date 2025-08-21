@@ -62,7 +62,7 @@ function astra_get_dynamic_taxonomy( $control_tax, $loop_count, $separator, $bad
 		$all_terms      = join( $join_separator, $term_links );
 		$output_str     = '<' . esc_attr( $html_tag ) . ' class="ast-terms-link">' . $all_terms . '</' . esc_attr( $html_tag ) . '>';
 
-		return ( 1 != $loop_count ) ? ' ' . $separator . ' ' . $output_str : $output_str;
+		return 1 !== $loop_count ? ' ' . $separator . ' ' . $output_str : $output_str;
 	}
 
 	return '';
@@ -151,7 +151,7 @@ if ( ! function_exists( 'astra_get_post_meta' ) ) {
 			switch ( $meta_value ) {
 
 				case 'author':
-					$output_str .= ( 1 != $loop_count && '' != $output_str ) ? ' ' . $separator . ' ' : '';
+					$output_str .= 1 !== $loop_count && '' !== $output_str ? ' ' . $separator . ' ' : '';
 					/** @psalm-suppress InvalidOperand */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 					$astra_post_author_html = '' . astra_post_author();
 					/** @psalm-suppress InvalidOperand */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -173,41 +173,41 @@ if ( ! function_exists( 'astra_get_post_meta' ) ) {
 								$get_author_id = get_the_author_meta( 'ID' );
 								/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 								$get_author_gravatar = get_avatar_url( $get_author_id, array( 'size' => astra_get_option( 'blog-meta-author-avatar-size', 25 ) ) );
-									/** @psalm-suppress PossiblyFalseOperand */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+								/** @psalm-suppress PossiblyFalseOperand */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 								$output_str .= '<img class=' . esc_attr( 'ast-author-image' ) . ' src="' . $get_author_gravatar . '" alt="' . get_the_title() . '" />';
 									/** @psalm-suppress PossiblyFalseOperand */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 							}
 						}
-						$output_str .= esc_html( astra_get_option( 'blog-meta-author-avatar-prefix-label' ) ) . $astra_post_author_html;
+						$output_str .= esc_html( astra_get_i18n_option( 'blog-meta-author-avatar-prefix-label', _x( '%astra%', 'Blogs: Author Prefix Label', 'astra' ) ) ) . $astra_post_author_html;
 					}
 					break;
 
 				case 'date':
-					$output_str .= ( 1 != $loop_count && '' != $output_str ) ? ' ' . $separator . ' ' : '';
+					$output_str .= 1 !== $loop_count && '' !== $output_str ? ' ' . $separator . ' ' : '';
 					$get_for     = 'related-posts' === $render_by ? 'related-post' : 'single-post';
 					$output_str .= astra_post_date( $get_for );
 					break;
 
 				case 'category':
 					$category = astra_post_categories( 'post_categories', 'blog-meta-category-style', false );
-					if ( '' != $category ) {
-						$output_str .= ( 1 != $loop_count && '' != $output_str ) ? ' ' . $separator . ' ' : '';
+					if ( '' !== $category ) {
+						$output_str .= 1 !== $loop_count && '' !== $output_str ? ' ' . $separator . ' ' : '';
 						$output_str .= $category;
 					}
 					break;
 
 				case 'tag':
 					$tags = astra_post_tags( 'post_tags', 'blog-meta-tag-style', false );
-					if ( '' != $tags ) {
-						$output_str .= ( 1 != $loop_count && '' != $output_str ) ? ' ' . $separator . ' ' : '';
+					if ( '' !== $tags ) {
+						$output_str .= 1 !== $loop_count && '' !== $output_str ? ' ' . $separator . ' ' : '';
 						$output_str .= $tags;
 					}
 					break;
 
 				case 'comments':
 					$comment = astra_post_comments();
-					if ( '' != $comment ) {
-						$output_str .= ( 1 != $loop_count && '' != $output_str ) ? ' ' . $separator . ' ' : '';
+					if ( '' !== $comment ) {
+						$output_str .= 1 !== $loop_count && '' !== $output_str ? ' ' . $separator . ' ' : '';
 						$output_str .= $comment;
 					}
 					break;
@@ -220,7 +220,7 @@ if ( ! function_exists( 'astra_get_post_meta' ) ) {
 				$output_str .= astra_get_dynamic_taxonomy( $meta_value, $loop_count, $separator, astra_get_option( $meta_value . '-style', '' ), 'span' );
 			}
 
-			$loop_count ++;
+			$loop_count++;
 		}
 
 		return $output_str;
@@ -240,12 +240,12 @@ function astra_get_dynamic_post_format( $get_for = 'single-post' ) {
 	if ( 'related-post' === $get_for ) {
 		$date_format_option = astra_get_option( 'related-posts-date-format', '' );
 		$date_type          = astra_get_option( 'related-posts-meta-date-type', 'published' );
-		$date_format        = apply_filters( 'astra_related_post_date_format', ( '' === $date_format_option ) ? get_option( 'date_format' ) : $date_format_option );
+		$date_format        = apply_filters( 'astra_related_post_date_format', '' === $date_format_option ? get_option( 'date_format' ) : $date_format_option );
 	} else {
 		$post_type          = strval( get_post_type() );
 		$date_format_option = $is_singular ? astra_get_option( 'ast-dynamic-single-' . esc_attr( $post_type ) . '-date-format', '' ) : astra_get_option( 'blog-meta-date-format', '' );
 		$date_type          = $is_singular ? astra_get_option( 'ast-dynamic-single-' . esc_attr( $post_type ) . '-meta-date-type', 'published' ) : astra_get_option( 'blog-meta-date-type', 'published' );
-		$date_format        = apply_filters( 'astra_post_date_format', ( '' === $date_format_option ) ? get_option( 'date_format' ) : $date_format_option );
+		$date_format        = apply_filters( 'astra_post_date_format', '' === $date_format_option ? get_option( 'date_format' ) : $date_format_option );
 	}
 
 	$published_date = strval( get_the_date( $date_format ) );
@@ -270,15 +270,15 @@ function astra_get_dynamic_post_format( $get_for = 'single-post' ) {
 	return sprintf( '<span class="%1$s" itemprop="%2$s"> %3$s </span>', $class, $itemprop, $date );
 }
 
-	/**
-	 * Get category List.
-	 *
-	 * @since 4.6.0
-	 * @param  string $filter_name Filter name.
-	 * @param  string $style_type_slug Style slug.
-	 * @param  bool   $post_meta Post meta.
-	 * @return mixed Markup.
-	 */
+/**
+ * Get category List.
+ *
+ * @since 4.6.0
+ * @param  string $filter_name Filter name.
+ * @param  string $style_type_slug Style slug.
+ * @param  bool   $post_meta Post meta.
+ * @return mixed Markup.
+ */
 function astra_get_category_list( $filter_name, $style_type_slug, $post_meta ) {
 	$style_type_class = '';
 	$separator        = ', ';
@@ -302,20 +302,20 @@ function astra_get_category_list( $filter_name, $style_type_slug, $post_meta ) {
 
 	if ( $categories_list ) {
 		return '<span class="' . $post_tax_class . 'ast-taxonomy-container cat-links' . $style_type_class . '">' . $categories_list . '</span>';
-	} else {
-		return '';
 	}
+
+	return '';
 }
 
-	/**
-	 * Get tag List.
-	 *
-	 * @since 4.6.0
-	 * @param  string $filter_name Filter name.
-	 * @param string $style_type_slug style type slug.
-	 * @param  bool   $post_meta Post meta.
-	 * @return mixed Markup.
-	 */
+/**
+ * Get tag List.
+ *
+ * @since 4.6.0
+ * @param  string $filter_name Filter name.
+ * @param string $style_type_slug style type slug.
+ * @param  bool   $post_meta Post meta.
+ * @return mixed Markup.
+ */
 function astra_get_tag_list( $filter_name, $style_type_slug, $post_meta ) {
 	$style_type_class = '';
 	$separator        = ', ';
@@ -341,9 +341,9 @@ function astra_get_tag_list( $filter_name, $style_type_slug, $post_meta ) {
 
 	if ( $tags_list ) {
 		return '<span class="' . $post_tax_class . 'ast-taxonomy-container tags-links' . $style_type_class . '">' . $tags_list . '</span>';
-	} else {
-		return '';
 	}
+
+	return '';
 }
 
 /**
@@ -386,7 +386,7 @@ function astra_post_author_name() {
 			$user_id = $post->post_author;
 			/** @psalm-suppress InvalidGlobal */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			global $authordata;
-				/** @psalm-suppress InvalidGlobal */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			/** @psalm-suppress InvalidGlobal */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$author_data = '';
 			if ( ! $authordata ) {
 				$author_data = get_userdata( $user_id );
@@ -520,7 +520,7 @@ if ( ! function_exists( 'astra_post_comments' ) ) {
 	 * Function to get Number of Comments of Post
 	 *
 	 * @param  string $output_filter Output filter.
-	 * @return html                Markup.
+	 * @return string                Markup.
 	 */
 	function astra_post_comments( $output_filter = '' ) {
 

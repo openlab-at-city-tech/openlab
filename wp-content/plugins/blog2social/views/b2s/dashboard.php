@@ -3,6 +3,7 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/');
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 ?>
+
 <div class="b2s-container">
     <div class="b2s-inbox">
         <div class="col-md-12 del-padding-left">
@@ -31,7 +32,7 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                     <div class="b2s-cal-sched-dashboard-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
                                     <div id="b2s-cal-sched-dashboard"></div>
                                     <div class="text-center">
-                                        <a href="admin.php?page=blog2social-calendar" class="btn btn-link b2s-color-green b2s-font-bold"><?php esc_html_e("Open calendar", "blog2social"); ?></a>
+                                        <a href="admin.php?page=blog2social-calendar" class="btn btn-block b2s-btn-dashboard-filled b2s-font-bold"><?php esc_html_e("Open calendar", "blog2social"); ?></a>
                                     </div>
                                 </div>
                             </div>
@@ -39,151 +40,196 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-md-12 del-padding-left del-padding-right">
-                        <div class="col-md-3 col-sm-6 hidden-xs">
-                            <div class="panel panel-default">
-                                <div class="panel-header text-center b2s-panel-header-addon b2s-font-color-green b2s-font-size-24 b2s-padding-top-20">
-                                    <span class="glyphicon glyphicon-star glyphicon-success"></span>
+                        <div class="col-md-8 col-sm-12 hidden-xs del-padding-left del-padding-right">
+                            <h2 class="padding-left-15"><?php esc_html_e("Upgrade Options", "blog2social"); ?></h2>
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right">
+                                <div class="panel panel-default">
+                                    <div class="panel-header text-center b2s-panel-header-addon b2s-font-color-green b2s-font-size-24 b2s-padding-top-20">
+                                        <span class="glyphicon glyphicon-lock glyphicon-success"></span>
+                                    </div>
+                                    <div class="panel-body b2s-panel-body-dashboard-premium b2s-panel-bg-body b2s-padding-0">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-margin-top-5 b2s-padding-left-10">
+                                            <?php esc_html_e("Upgrade", "blog2social"); ?></h3>
+                                        <p>
+                                        <ul class="b2s-list-dashboard">
+                                            <li><?php esc_html_e("20+ Social Platforms", "blog2social"); ?></li>
+                                            <li><?php esc_html_e("Auto-Posting", "blog2social"); ?></li>
+                                            <li><?php esc_html_e("Best Time Manager", "blog2social"); ?></li>
+                                            <li><?php esc_html_e("Social Media Calendar", "blog2social"); ?></li>
+                                            <li><?php esc_html_e("Customizable Post Templates", "blog2social"); ?></li>
+                                            <li><?php esc_html_e("Automatic Resharing", "blog2social"); ?></li>
+                                        </ul>
+                                        </p>
+                                    </div>
+                                    <div class="panel-footer text-center b2s-panel-bg-footer">
+                                        <?php if ((int) B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) { ?>
+                                            <a href="#" class="btn b2s-font-bold btn-block b2s-btn-dashboard-filled b2s-dashboard-premium-enterprise-version-btn"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                                        <?php } else { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')); ?>" target="_blank" class="btn b2s-font-bold btn-block b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                                        <?php } ?>
+                                    </div>
                                 </div>
-                                <div class="panel-body b2s-panel-body-dashboard-premium b2s-panel-bg-body">
-                                    <h3 class="b2s-font-color-green text-center b2s-font-bold b2s-margin-top-5">
-                                        <?php esc_html_e("Upgrade Blog2Social", "blog2social"); ?></h3>
-                                    <p>
-                                    <ul class="b2s-list-dashboard">
-                                        <li><?php esc_html_e("20+ Social Platforms", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Auto-Posting", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Best Time Manager", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Social Media Calendar", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Customizable Post Templates", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Automatic Resharing", "blog2social"); ?></li>
-                                    </ul>
-                                    </p>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right del-padding-left">
+                                <div class="panel panel-default">
+                                    <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                        <?php esc_html_e("Addon", "blog2social"); ?></div>
+                                    <div class="panel-body b2s-panel-body-dashboard">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-20"><?php esc_html_e("Video Posting", "blog2social"); ?></h3>
+                                        <p><?php esc_html_e("Share your video files on YouTube, Vimeo, TikTok, Facebook, Instagram, Pinterest and X (Twitter). Get 25 GB data volume, valid for one year, top-up at any time. ", "blog2social"); ?></p>
+                                        <p><a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('dashboard-video-posting-addon-info')); ?>"><?php esc_html_e("Discover the Video Posting feature", "blog2social") ?></a></p>
+                                    </div>
+                                    <div class="panel-footer text-center">
+                                        <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_video')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                    </div>
                                 </div>
-                                <div class="panel-footer text-center b2s-panel-bg-footer">
-                                    <?php if ((int) B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) { ?>
-                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-filled b2s-dashboard-premium-enterprise-version-btn"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
-                                    <?php } else { ?>
-                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
-                                    <?php } ?>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right del-padding-left">
+                                <div class="panel panel-default">
+                                    <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                        <?php esc_html_e("Addon", "blog2social"); ?></div>
+                                    <div class="panel-body b2s-panel-body-dashboard">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-20"><?php esc_html_e("X Integration", "blog2social"); ?></h3>
+                                        <p><?php esc_html_e("Connect your X (Twitter) profile with Blog2Social. Select a post volume that meets your posting needs. Monthly subscription. Choose the option that fits your posting frequency.", "blog2social"); ?></p>
+                                    </div>
+                                    <div class="panel-footer text-center">
+                                        <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
+                                        <?php } else { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_network_integration')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
+                                        <?php } ?>                        
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right">
+                                <div class="panel panel-default">
+                                    <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                        <?php esc_html_e("Addon", "blog2social"); ?></div>
+                                    <div class="panel-body b2s-panel-body-dashboard-small">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-20"><?php esc_html_e("Licenses User", "blog2social"); ?></h3>
+                                        <p><?php esc_html_e("Add more users to suit your growing social media demands - whether you're a business, team, or managing clients.", "blog2social"); ?></p>
+                                    </div>
+                                    <div class="panel-footer text-center">
+                                        <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                            <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline btn-block b2s-dashboard-addon-add-user-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                        <?php } else { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_user_licence')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right del-padding-left">
+                                <div class="panel panel-default">
+                                    <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                        <?php esc_html_e("Addon", "blog2social"); ?></div>
+                                    <div class="panel-body b2s-panel-body-dashboard-small">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-20"><?php esc_html_e("Social Accounts", "blog2social"); ?></h3>
+                                        <p><?php esc_html_e("Expand your social media management with extra accounts per network!", "blog2social"); ?></p>
+                                    </div>
+                                    <div class="panel-footer text-center">
+                                        <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                            <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline btn-block b2s-dashboard-addon-add-social-account-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                        <?php } else { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_social_account')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-sm-6 hidden-xs del-padding-right del-padding-left">
+                                <div class="panel panel-default">
+                                    <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                        <?php esc_html_e("Addon", "blog2social"); ?></div>
+                                    <div class="panel-body b2s-panel-body-dashboard-small">
+                                        <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-20"><?php esc_html_e("Telegram", "blog2social"); ?></h3>
+                                        <p><?php esc_html_e("Telegram is a messenger service with a variety of different themed channels.", "blog2social"); ?></p>
+                                    </div>
+                                    <div class="panel-footer text-center">
+                                        <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                            <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline btn-block b2s-dashboard-addon-add-telegram-integration-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                        <?php } else { ?>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_telegram')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
+                                        <?php } ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-3 col-sm-6 hidden-xs">
-                            <div class="panel panel-default">
-                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
-                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
 
-                                <div class="panel-body text-center b2s-panel-body-dashboard">
-                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Video Posting", "blog2social"); ?></h3>
-                                    <p><?php esc_html_e("Share your video files on YouTube, Vimeo, TikTok, Facebook, Instagram, Pinterest and X (Twitter). Get 25 GB data volume, valid for one year, top-up at any time. ", "blog2social"); ?></p>
-                                    <p><a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('dashboard-video-posting-addon-info')); ?>"><?php esc_html_e("Discover the Video Posting feature", "blog2social") ?></a></p>
-                                </div>
-                                <div class="panel-footer text-center">
-                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_video'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                        <div class="col-md-4 col-sm-12">
+                            <h2><?php esc_html_e("Your Activity", "blog2social"); ?></h2>
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-md-12 add-margin-top-10">
+                                        <h4><?php esc_html_e("Last shared on Social Media", "blog2social"); ?></h4>
+                                        <div class="b2s-dashboard-activity-publish-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
+                                        <div class="b2s-dashboard-activity-publish-case-1" style="display: none;">
+                                            <a href="admin.php?page=blog2social-post"><?php esc_html_e("Share your first post now!", "blog2social"); ?></a>
+                                        </div>
+                                        <ul class="b2s-timeline b2s-dashboard-activity-publish" style="display: none;"></ul>
+                                    </div>
+
+                                    <div class="col-md-12 add-margin-top-10">
+                                        <!--<div class="b2s-dashboard-activity-sched-loader b2s-loader-impulse b2s-loader-impulse-md"></div>-->
+                                        <div class="b2s-dashboard-activity-sched-case-1" style="display: none;">
+                                            <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                            <br>
+                                            <a class="btn btn-link b2s-padding-0" href="admin.php?page=blog2social-post"><?php esc_html_e("Schedule your first post", "blog2social"); ?> <span class="glyphicon glyphicon-arrow-right"></a>
+                                        </div>
+                                        <div class="b2s-dashboard-activity-sched-case-2" style="display: none;">
+                                            <h4 class="b2s-font-bold"><?php esc_html_e("Start your 30-day free trial with Blog2Social!", "blog2social"); ?></h4>                               
+                                            <p><?php esc_html_e("Discover the benefits of smart social media automation acrosson more than 20 platforms:", "blog2social"); ?></p>
+                                            <ul class="b2s-list-dashboard b2s-color-black">
+                                                <li><span class="b2s-font-bold"><?php esc_html_e("Advanced scheduling", "blog2social"); ?></span>: <?php esc_html_e("Post at the best times for maximum reach", "blog2social"); ?></li>
+                                                <li><span class="b2s-font-bold"><?php esc_html_e("Automated publishing", "blog2social"); ?></span>: <?php esc_html_e("Save time and maintain consistency", "blog2social"); ?></li>
+                                                <li><span class="b2s-font-bold"><?php esc_html_e("Customizable templates", "blog2social"); ?></span>: <?php esc_html_e("Tailored posts for every platform", "blog2social"); ?></li>
+                                                <li><span class="b2s-font-bold"><?php esc_html_e("Flexible settings", "blog2social"); ?></span>: <?php esc_html_e("Efficient management for teams and accounts", "blog2social"); ?></li>
+                                            </ul>
+                                            <p><?php esc_html_e("Get started now – free and without obligation!", "blog2social"); ?></p>
+                                            <br>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('trial')); ?>" class="btn b2s-font-bold btn-block b2s-btn-dashboard-filled"><?php esc_html_e("Start 30-day free trial", "blog2social"); ?></a>
+                                        </div>
+                                        <div class="b2s-dashboard-activity-sched-case-3" style="display: none;">
+                                            <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                            <br>
+                                            <a class="btn btn-link b2s-padding-0 b2s-dashboard-trial-expired-btn" href="#"><?php esc_html_e("Schedule your first post", "blog2social"); ?> <span class="glyphicon glyphicon-arrow-right"></a>
+                                        </div>
+                                        <div class="b2s-dashboard-activity-sched-case-4" style="display: none;">
+                                            <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                            <ul class="b2s-timeline b2s-dashboard-activity-sched"></ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-3 col-sm-6 hidden-xs">
-                            <div class="panel panel-default">
-                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
-                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
-
-                                <div class="panel-body text-center b2s-panel-body-dashboard">
-                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Licenses User", "blog2social"); ?></h3>
-                                    <p><?php esc_html_e("Add more users to suit your growing social media demands - whether you're a business, team, or managing clients.", "blog2social"); ?></p>
+                            <?php if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) { ?> 
+                                <div class="panel panel-default">
+                                    <div class="panel-body b2s-panel-body-border-success">
+                                        <h4 class="b2s-font-bold"><?php esc_html_e("Rate us", "blog2social"); ?></h4>                               
+                                        <span class="glyphicon glyphicon-star glyphicon-success b2s-font-size-18"></span> <span class="glyphicon glyphicon-star glyphicon-success b2s-font-size-18"></span> <span class="glyphicon glyphicon-star glyphicon-success b2s-font-size-18"></span> <span class="glyphicon glyphicon-star glyphicon-success b2s-font-size-18"></span> <span class="glyphicon glyphicon-star glyphicon-success b2s-font-size-18"></span>       
+                                        <span class="hidden-xs b2s-font-size-12 b2s-font-color-gray"><?php esc_html_e("based on over 2000 reviews", "blog2social"); ?></span>
+                                        <br>
+                                        <p class="b2s-padding-top-5"><?php esc_html_e("We are happy to hear from you. We appreciate every single review.", "blog2social"); ?></p>
+                                        <br>
+                                        <a class="btn btn-link b2s-padding-0" target="_blank" href="https://b2s.li/rate-blog2social-2024"><?php esc_html_e("Write a review", "blog2social"); ?> <span class="glyphicon glyphicon-arrow-right"></a>
+                                    </div>
                                 </div>
-                                <div class="panel-footer text-center">
-                                    <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
-                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline b2s-dashboard-addon-add-user-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
-                                    <?php } else { ?>
-                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_user_licence'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6 hidden-xs">
-                            <div class="panel panel-default">
-                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
-                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
-
-                                <div class="panel-body text-center b2s-panel-body-dashboard">
-                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Social Media Accounts", "blog2social"); ?></h3>
-                                    <p><?php esc_html_e("Expand your social media management with extra accounts per network!", "blog2social"); ?></p>
-                                </div>
-                                <div class="panel-footer text-center">
-                                    <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
-                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline b2s-dashboard-addon-add-social-account-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
-                                    <?php } else { ?>
-                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_social_account'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
-                                    <?php } ?>
-                                </div>
-                            </div>
+                            <?php } ?>
                         </div>
                     </div>
-                </div>
 
-
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3 class="b2s-font-bold"><?php esc_html_e("Your Activity", "blog2social"); ?></h3>  
-
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12 add-margin-top-10">
-                                <h4><?php esc_html_e("Last shared on Social Media", "blog2social"); ?></h4>
-
-                                <div class="b2s-dashboard-activity-publish-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
-
-                                <div class="b2s-dashboard-activity-publish-case-1" style="display: none;">
-                                    <a href="admin.php?page=blog2social-post"><?php esc_html_e("Share your first post now!", "blog2social"); ?></a>
-                                </div>
-
-                                <ul class="b2s-timeline b2s-dashboard-activity-publish" style="display: none;"></ul>
-
-                            </div>
-
-                            <div class="col-md-6 col-sm-12 add-margin-top-10">
-
-                                <div class="b2s-dashboard-activity-sched-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
-
-                                <div class="b2s-dashboard-activity-sched-case-1" style="display: none;">
-                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
-                                    <br>
-                                    <a href="admin.php?page=blog2social-post"><?php esc_html_e("Schedule your first post now!", "blog2social"); ?></a>
-                                </div>
-
-                                <div class="b2s-dashboard-activity-sched-case-2" style="display: none;">
-                                    <h4><?php esc_html_e("Start your 30-day free trial with Blog2Social!", "blog2social"); ?></h4>                               
-                                    <p><?php esc_html_e("Streamline your social media management across 20+ platforms with advanced features:", "blog2social"); ?></p>
-                                    <ul class="b2s-list-dashboard b2s-color-black">
-                                        <li><?php esc_html_e("Advanced scheduling capabilities for optimal posting times across multiple channels", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Automated posting and resharing to save time and maintain a consistent content stream", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Customizable templates for optimized social media presentation", "blog2social"); ?></li>
-                                        <li><?php esc_html_e("Flexible user and account settings and add-ons for efficient social media management", "blog2social"); ?></li>
-                                    </ul>
-                                    <p><?php esc_html_e("These exclusive features can help you reach more people in less time.", "blog2social"); ?></p>
-                                    <br>
-                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('trial'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Start your free trial now", "blog2social"); ?></a>
-                                </div>
-
-                                <div class="b2s-dashboard-activity-sched-case-3" style="display: none;">
-                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
-                                    <br>
-                                    <a class="b2s-dashboard-trial-expired-btn" href="#"><?php esc_html_e("Schedule your first post now!", "blog2social"); ?></a>
-                                </div>
-
-                                <div class="b2s-dashboard-activity-sched-case-4" style="display: none;">
-                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
-                                    <ul class="b2s-timeline b2s-dashboard-activity-sched"></ul>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> 
 
                 <div class="clearfix"></div>
                 <?php if (!B2S_System::isblockedArea('B2S_DASHBOARD_MODUL_NEWS_EMAIL ', B2S_PLUGIN_ADMIN)) { ?>
@@ -236,7 +282,7 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                         <br>
                         <p class="b2s-text-bold"><?php esc_html_e('Upgrade now to unlock additional users and powerful features for your social media management!', 'blog2social') ?></p>
                         <br>
-                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                        <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
                     </div>
                 </div>
             </div>
@@ -258,7 +304,7 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                         <br>
                         <p class="b2s-text-bold"><?php esc_html_e('Upgrade now to maximize your social media impact!', 'blog2social') ?></p>
                         <br>
-                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                        <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
                     </div>
                 </div>
             </div>

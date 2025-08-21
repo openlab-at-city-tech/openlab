@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class ContentRestriction extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -110,4 +109,4 @@ class ContentRestriction extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ContentRestriction::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_ContentRestriction');
+class_alias(ContentRestriction::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_ContentRestriction');

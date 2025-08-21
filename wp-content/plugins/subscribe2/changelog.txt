@@ -1,3 +1,7 @@
+= 10.44 (20th Jan, 2025) =
+
+* Fix: Security related issues.
+
 = 10.43 (06th June, 2024) =
 
 * Update: Appsero client library.

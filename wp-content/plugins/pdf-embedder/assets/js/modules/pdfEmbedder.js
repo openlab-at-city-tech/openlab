@@ -41,14 +41,14 @@ export function jQueryPDFEmbedder( cmapURL ) {
 		}
 
 		// Load PDF.
-		var initPdfDoc = function( pdfDoc, showIsSecure ) {
+		const initPdfDoc = function( pdfDoc, showIsSecure ) {
 
-			var pagesViewer = new window.PDFEMB_NS.pdfembPagesViewerUsable( pdfDoc, divContainer, showIsSecure );
+			const pagesViewer = new window.PDFEMB_NS.pdfembPagesViewerUsable( pdfDoc, divContainer, showIsSecure );
 
 			pagesViewer.setup();
 		};
 
-		var callback = function( pdf, showIsSecure ) {
+		const callback = function( pdf, showIsSecure ) {
 
 			/**
 			 * Asynchronously downloads PDF.
@@ -72,8 +72,12 @@ export function jQueryPDFEmbedder( cmapURL ) {
 
 			params.url = pdf;
 			params.cMapUrl = cmapURL;
+
 			// Do not allow scripts execution in FontMatrix used for rendering glyphs.
 			params.isEvalSupported = false;
+
+			// See https://github.com/mozilla/pdf.js/issues/3768
+			params.verbosity = 0;
 
 			var loadingTask = pdfjsLib.getDocument( params, cmapURL );
 
@@ -93,7 +97,7 @@ export function jQueryPDFEmbedder( cmapURL ) {
 							)
 							.append(
 								// TODO: this should come straight from PHP.
-								jQuery( '<a href="https://wp-pdf.com/kb/error-url-to-the-pdf-file-must-be-on-exactly-the-same-domain-as-the-current-web-page/?utm_campaign=liteplugin&utm_source=WordPress&utm_medium=Viewer&utm_content=Failed+to+fetch" target="_blank">'
+								jQuery( '<a href="https://wp-pdf.com/docs/error-url-to-the-pdf-file-must-be-on-exactly-the-same-domain-as-the-current-web-page/?utm_campaign=liteplugin&utm_source=WordPress&utm_medium=Viewer&utm_content=Failed+to+fetch" target="_blank">'
 									+ pdfemb_trans.objectL10n.clickhereinfo + '</a>' )
 							);
 					}
@@ -107,7 +111,13 @@ export function jQueryPDFEmbedder( cmapURL ) {
 			initPdfDoc( divContainer.data( 'pdfDoc' ), divContainer.data( 'showIsSecure' ) );
 		}
 		else {
-			var url = divContainer.data( 'pdf-url' );
+			let url = divContainer.data( 'pdf-url' );
+
+			// All locally stored PDFs are referenced with / at the beginning. Append the domain.
+			if ( url.indexOf( '/' ) === 0 ) {
+				url = window.location.origin + url;
+			}
+
 			window.PDFEMB_NS.pdfembGetPDF( url, callback );
 		}
 	} );

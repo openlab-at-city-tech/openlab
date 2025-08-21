@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2024  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2025  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,14 +21,14 @@ function osm_enqueue_scripts_styles() {
   wp_enqueue_style( 'Osm_OL_3_style', Osm_OL_3_CSS);
   wp_enqueue_style( 'Osm_OL_3_Ext_style', Osm_OL_3_Ext_CSS);
   wp_enqueue_style( 'osm_map_style', Osm_map_CSS);
-
-  wp_enqueue_script('Osm_OL_3',Osm_OL_3_LibraryLocation); 
+  
+   wp_enqueue_script('Osm_OL_3',Osm_OL_3_LibraryLocation); 
   wp_enqueue_script('Osm_OL_3ext',Osm_OL_3_Ext_LibraryLocation);  
   wp_enqueue_script('OSM_metabox_event_Script',Osm_OL_3_MetaboxEvents_LibraryLocation); 
   wp_enqueue_script('Osm_map_startup_3',Osm_map_startup_LibraryLocation);
   wp_enqueue_script('OSM_metabox-script',Osm_OL_3_Metabox_LibraryLocation, array('jquery') );
     
-  wp_enqueue_script('ajax-script', plugins_url( '/js/osm-plugin-lib.js', __FILE__ ), array('jquery') );
+  wp_enqueue_script('ajax-script', plugins_url( '/js/osm-plugin-lib.js', __FILE__ ), array('jquery'), null, true );
  
   wp_localize_script( 'ajax-script', 'osm_ajax_object',
             array( 'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -164,7 +164,8 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
     <div id="Marker_Div"><br/>
     <!-- marker info is printed here when clicking in the map -->
     </div><br/>
-        <a class="button" onClick="osm_savePostMarker(); osm_generateAddMarkerSC();"> <?php _e('Save marker and generate shortcode','OSM')?> </a><br/><br/>      
+        <a id="osm-save-marker-btn" class="button"> <?php _e('Save marker and generate shortcode','OSM') ?></a>
+    <br/><br/>      
 
  </div> <!-- id="tab_add_marker" -->
 
@@ -202,7 +203,10 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
     <?php endfor; ?>
     <br/><br/>
 
-    <input type="checkbox" name="show_selection_box" id="show_selection_box" value="show_selection_box" onclick="osm_showFileSCmap()"> <?php esc_html_e('Show track selection box under the map (only for two or more tracks)', 'OSM'); ?><br/><br/>
+    <input type="checkbox" name="show_selection_box" id="show_selection_box" value="show_selection_box">
+
+    
+    <?php esc_html_e('Show track selection box under the map (only for two or more tracks)', 'OSM'); ?><br/><br/>
 
     <b>5. <?php esc_html_e('Only if you enabled selection box you have to adjust the map manually.', 'OSM'); ?></b><br/><br/>
 
@@ -220,7 +224,8 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
     ?>
 
     <div id="File_Div"><br/></div><br/>
-    <a class="button" onClick="osm_generateFileSC();"> <?php esc_html_e('Generate shortcode for map with GPX/KML file', 'OSM'); ?> </a><br/>
+    <a id="osm-gen-file-sc-btn" class="button"> <?php esc_html_e('Generate shortcode for map with GPX/KML file', 'OSM'); ?></a> 
+    <br/>
 </div> <!-- id="tab_file_list" -->
 
 
@@ -244,11 +249,14 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
         <li>
             <?php esc_html_e('Marker style', 'OSM'); ?><br/>
             <label class="metabox-label">
-                <input type="radio" name="tagged_marker_style" id="tagged_marker_style" onclick="osm_showTaggedSCmap()" value="standard" checked="checked" />
+                <input type="radio" name="tagged_marker_style" id="tagged_marker_style_standard" value="standard" checked />
+                
+                
                 <?php echo '<img src="' . esc_url(OSM_PLUGIN_URL . '/images/marker_standard_01.png') . '" align="left" hspace="5" alt="' . esc_attr('marker_standard_01.png') . '">'; ?>
             </label>
             <label class="metabox-label">
-                <input type="radio" name="tagged_marker_style" id="tagged_marker_style" onclick="osm_showTaggedSCmap()" value="cluster" />
+                <input type="radio" name="tagged_marker_style" id="tagged_marker_style_cluster" value="cluster" />
+                
                 <?php echo '<img src="' . esc_url(OSM_PLUGIN_URL . '/images/marker_cluster_01.png') . '" align="left" hspace="5" alt="' . esc_attr('marker_cluster_01.png') . '">'; ?>
             </label>
         </li>
@@ -294,7 +302,8 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
         ]);
         ?>
         <li>
-            <a class="button" onClick="osm_generateTaggedPostsSC()"><?php esc_html_e('Generate shortcode', 'OSM'); ?></a><br/><br/>
+            <a id="osm-gen-tagged-post-sc-btn" class="button"><?php esc_html_e('Generate shortcode', 'OSM'); ?></a>            
+            <br/><br/>
             <?php esc_html_e('Copy the shortcode and paste it to your post/page', 'OSM'); ?><br/>
         </li>
     </ol>
@@ -322,7 +331,10 @@ At the top of this panel / metabox you find tabs which allow you to generate a s
     ?>
 
     <div id="Geotag_Div"><br/></div><br/>
-    <a class="button" onClick="osm_saveGeotag();"> <?php esc_html_e('Save', 'OSM'); ?> </a><br/><br/>
+    <a id="osm-save-geotag-btn" class="button"><?php _e('Save','OSM') ?>
+</a>
+    
+    <br/><br/>
 </div> <!-- class="tab_set_geotag" -->
    
    

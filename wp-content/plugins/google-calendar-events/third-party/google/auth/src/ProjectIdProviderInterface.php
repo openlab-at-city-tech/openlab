@@ -19,7 +19,6 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 
 /**
  * Describes a Credentials object which supports fetching the project ID.
- * @internal
  */
 interface ProjectIdProviderInterface
 {

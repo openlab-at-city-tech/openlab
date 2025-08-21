@@ -67,13 +67,13 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 
 	$layout = astra_get_option( 'hb-footer-layout' );
 
-	$desk_layout = ( isset( $layout['desktop'] ) ) ? $layout['desktop'] : 'full';
-	$tab_layout  = ( isset( $layout['tablet'] ) ) ? $layout['tablet'] : 'full';
-	$mob_layout  = ( isset( $layout['mobile'] ) ) ? $layout['mobile'] : 'full';
+	$desk_layout = isset( $layout['desktop'] ) ? $layout['desktop'] : 'full';
+	$tab_layout  = isset( $layout['tablet'] ) ? $layout['tablet'] : 'full';
+	$mob_layout  = isset( $layout['mobile'] ) ? $layout['mobile'] : 'full';
 
-	$inner_spacing_desktop = ( isset( $inner_spacing['desktop'] ) ) ? $inner_spacing['desktop'] : '';
-	$inner_spacing_tablet  = ( isset( $inner_spacing['tablet'] ) ) ? $inner_spacing['tablet'] : '';
-	$inner_spacing_mobile  = ( isset( $inner_spacing['mobile'] ) ) ? $inner_spacing['mobile'] : '';
+	$inner_spacing_desktop = isset( $inner_spacing['desktop'] ) ? $inner_spacing['desktop'] : '';
+	$inner_spacing_tablet  = isset( $inner_spacing['tablet'] ) ? $inner_spacing['tablet'] : '';
+	$inner_spacing_mobile  = isset( $inner_spacing['mobile'] ) ? $inner_spacing['mobile'] : '';
 
 	$css_output_desktop = array(
 		'.site-primary-footer-wrap'          => array(

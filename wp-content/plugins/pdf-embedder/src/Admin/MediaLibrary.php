@@ -42,9 +42,9 @@ class MediaLibrary {
 	 * @param array   $form_fields List of fields to display.
 	 * @param WP_Post $attachment  The WP_Post attachment object.
 	 */
-	public function attachment_fields_to_edit( array $form_fields, WP_Post $attachment ): array {
+	public function attachment_fields_to_edit( $form_fields, $attachment ): array {
 
-		if ( $attachment->post_mime_type !== 'application/pdf' ) {
+		if ( ! isset( $attachment->post_mime_type ) || $attachment->post_mime_type !== 'application/pdf' ) {
 			return $form_fields;
 		}
 
@@ -73,7 +73,7 @@ class MediaLibrary {
 					],
 				]
 			),
-			esc_url( pdf_embedder()->admin()->get_settings_url( 'secure' ) )
+			esc_url( pdf_embedder()->admin()->get_url( 'secure' ) )
 		);
 
 		if ( $is_secure ) {
@@ -97,7 +97,7 @@ class MediaLibrary {
 						],
 					]
 				),
-				esc_url( pdf_embedder()->admin()->get_settings_url() )
+				esc_url( pdf_embedder()->admin()->get_url() )
 			),
 			'input' => 'value',
 			'label' => __( 'PDF Downloads / Views', 'pdf-embedder' ),
@@ -155,7 +155,7 @@ class MediaLibrary {
 								],
 							]
 						),
-						esc_url( pdf_embedder()->admin()->get_settings_url( 'secure' ) )
+						esc_url( pdf_embedder()->admin()->get_url( 'secure' ) )
 					);
 				}
 				?>
@@ -190,7 +190,7 @@ class MediaLibrary {
 	 * @param array            $mimes Mime types keyed by the file extension regex corresponding to those types.
 	 * @param int|WP_User|null $user  User ID, User object or null if not provided (indicates current user).
 	 */
-	public function add_pdf_to_upload_mimes( array $mimes, $user ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	public function add_pdf_to_upload_mimes( $mimes, $user ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 		$mimes['pdf'] = 'application/pdf';
 
@@ -204,7 +204,7 @@ class MediaLibrary {
 	 *
 	 * @param array $post_mime_types Default list of post mime types.
 	 */
-	public function add_pdf_mime_type( array $post_mime_types ): array {
+	public function add_pdf_mime_type( $post_mime_types ): array {
 
 		$post_mime_types['application/pdf'] = [
 			__( 'PDFs', 'pdf-embedder' ),

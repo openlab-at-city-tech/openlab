@@ -10,14 +10,13 @@ use SimpleCalendar\plugin_deps\PHPUnit\Framework\TestCase;
  *
  * Implementors can extend the class and implement abstract methods to run this
  * as part of their test suite.
- * @internal
  */
 abstract class LoggerInterfaceTest extends TestCase
 {
     /**
      * @return LoggerInterface
      */
-    public abstract function getLogger();
+    abstract public function getLogger();
     /**
      * This must return the log messages in order.
      *
@@ -27,10 +26,10 @@ abstract class LoggerInterfaceTest extends TestCase
      *
      * @return string[]
      */
-    public abstract function getLogs();
+    abstract public function getLogs();
     public function testImplements()
     {
-        $this->assertInstanceOf('SimpleCalendar\\plugin_deps\\Psr\\Log\\LoggerInterface', $this->getLogger());
+        $this->assertInstanceOf('SimpleCalendar\plugin_deps\Psr\Log\LoggerInterface', $this->getLogger());
     }
     /**
      * @dataProvider provideLevelsAndMessages
@@ -64,10 +63,10 @@ abstract class LoggerInterfaceTest extends TestCase
     }
     public function testObjectCastToString()
     {
-        if (\method_exists($this, 'createPartialMock')) {
-            $dummy = $this->createPartialMock('SimpleCalendar\\plugin_deps\\Psr\\Log\\Test\\DummyTest', array('__toString'));
+        if (method_exists($this, 'createPartialMock')) {
+            $dummy = $this->createPartialMock('SimpleCalendar\plugin_deps\Psr\Log\Test\DummyTest', array('__toString'));
         } else {
-            $dummy = $this->getMock('SimpleCalendar\\plugin_deps\\Psr\\Log\\Test\\DummyTest', array('__toString'));
+            $dummy = $this->getMock('SimpleCalendar\plugin_deps\Psr\Log\Test\DummyTest', array('__toString'));
         }
         $dummy->expects($this->once())->method('__toString')->will($this->returnValue('DUMMY'));
         $this->getLogger()->warning($dummy);
@@ -76,9 +75,9 @@ abstract class LoggerInterfaceTest extends TestCase
     }
     public function testContextCanContainAnything()
     {
-        $closed = \fopen('php://memory', 'r');
-        \fclose($closed);
-        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new DummyTest()), 'object' => new \DateTime(), 'resource' => \fopen('php://memory', 'r'), 'closed' => $closed);
+        $closed = fopen('php://memory', 'r');
+        fclose($closed);
+        $context = array('bool' => \true, 'null' => null, 'string' => 'Foo', 'int' => 0, 'float' => 0.5, 'nested' => array('with object' => new DummyTest()), 'object' => new \DateTime(), 'resource' => fopen('php://memory', 'r'), 'closed' => $closed);
         $this->getLogger()->warning('Crazy context data', $context);
         $expected = array('warning Crazy context data');
         $this->assertEquals($expected, $this->getLogs());

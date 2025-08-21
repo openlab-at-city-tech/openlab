@@ -15,7 +15,7 @@ class MC4WP_Form_Listener
 
     public function add_hooks()
     {
-        add_action('init', array( $this, 'listen' ));
+        add_action('init', [ $this, 'listen' ]);
     }
 
     /**

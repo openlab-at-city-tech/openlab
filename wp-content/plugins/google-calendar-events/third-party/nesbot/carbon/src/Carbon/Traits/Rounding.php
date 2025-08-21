@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnknownUnitException;
  *
  * @method static copy()
  * @method static startOfWeek(int $weekStartsAt = null)
- * @internal
  */
 trait Rounding
 {
@@ -50,7 +49,7 @@ trait Rounding
             'millisecond' => [1000, 'microsecond'],
         ];
         $normalizedUnit = static::singularUnit($unit);
-        $ranges = \array_merge(static::getRangesByUnit($this->daysInMonth), [
+        $ranges = array_merge(static::getRangesByUnit($this->daysInMonth), [
             // @call roundUnit
             'microsecond' => [0, 999999],
         ]);
@@ -77,7 +76,7 @@ trait Rounding
             if ($normalizedUnit === $unit) {
                 $arguments = [$this->{$unit}, $minimum];
                 $initialValue = $this->{$unit};
-                $fraction = $precision - \floor($precision);
+                $fraction = $precision - floor($precision);
                 $found = \true;
                 continue;
             }
@@ -87,27 +86,27 @@ trait Rounding
                 $fraction *= $delta;
                 $inc = ($this->{$unit} - $minimum) * $factor;
                 if ($inc !== 0.0) {
-                    $minimumInc = $minimumInc ?? $arguments[0] / \pow(2, 52);
+                    $minimumInc = $minimumInc ?? $arguments[0] / pow(2, 52);
                     // If value is still the same when adding a non-zero increment/decrement,
                     // it means precision got lost in the addition
-                    if (\abs($inc) < $minimumInc) {
+                    if (abs($inc) < $minimumInc) {
                         $inc = $minimumInc * ($inc < 0 ? -1 : 1);
                     }
                     // If greater than $precision, assume precision loss caused an overflow
-                    if ($function !== 'floor' || \abs($arguments[0] + $inc - $initialValue) >= $precision) {
+                    if ($function !== 'floor' || abs($arguments[0] + $inc - $initialValue) >= $precision) {
                         $arguments[0] += $inc;
                     }
                 }
-                $changes[$unit] = \round($minimum + ($fraction ? $fraction * $function(($this->{$unit} - $minimum) / $fraction) : 0));
+                $changes[$unit] = round($minimum + ($fraction ? $fraction * $function(($this->{$unit} - $minimum) / $fraction) : 0));
                 // Cannot use modulo as it lose double precision
                 while ($changes[$unit] >= $delta) {
                     $changes[$unit] -= $delta;
                 }
-                $fraction -= \floor($fraction);
+                $fraction -= floor($fraction);
             }
         }
         [$value, $minimum] = $arguments;
-        $normalizedValue = \floor($function(($value - $minimum) / $precision) * $precision + $minimum);
+        $normalizedValue = floor($function(($value - $minimum) / $precision) * $precision + $minimum);
         /** @var CarbonInterface $result */
         $result = $this;
         foreach ($changes as $unit => $value) {

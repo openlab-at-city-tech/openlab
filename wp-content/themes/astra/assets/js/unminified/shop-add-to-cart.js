@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
             if (astra_shop_add_to_cart.elementor_preview_active) {
                 return;
             } else {
-                if ('slide_in_cart' === astra_shop_add_to_cart.shop_add_to_cart_action && slideInCart) {
+                if ('slide_in_cart' === astra_shop_add_to_cart.shop_add_to_cart_action && slideInCart.length > 0) {
                     slideInCart.addClass('active');
                     jQuery('html').addClass('ast-mobile-cart-active');
                 }

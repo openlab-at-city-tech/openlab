@@ -20,7 +20,6 @@ define( 'ASTRA_BUILDER_FOOTER_HTML_URI', ASTRA_THEME_URI . 'inc/builder/type/foo
  * @since 3.0.0
  */
 class Astra_Footer_Html_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */

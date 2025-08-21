@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * JsonFileDumper generates an json formatted string representation of a message catalogue.
  *
  * @author singles
- * @internal
  */
 class JsonFileDumper extends FileDumper
 {
@@ -25,7 +24,7 @@ class JsonFileDumper extends FileDumper
     public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
         $flags = $options['json_encoding'] ?? \JSON_PRETTY_PRINT;
-        return \json_encode($messages->all($domain), $flags);
+        return json_encode($messages->all($domain), $flags);
     }
     /**
      * {@inheritdoc}

@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Uplink\Messages;
 
@@ -13,7 +8,7 @@ class Unlicensed extends Message_Abstract {
 	 */
 	public function get(): string {
         $message  = '<div class="notice notice-warning"><p>';
-        $message .= esc_html__( 'No license entered.', '%TEXTDOMAIN%' );
+        $message .= esc_html__( 'No license entered.', 'tribe-common' );
         $message .= '</p></div>';
 
 		return $message;

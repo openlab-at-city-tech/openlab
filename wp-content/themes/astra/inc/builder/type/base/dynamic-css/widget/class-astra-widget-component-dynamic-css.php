@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Widget_Component_Dynamic_CSS {
-
 	/**
 	 * Dynamic CSS
 	 *
@@ -39,7 +38,7 @@ class Astra_Widget_Component_Dynamic_CSS {
 				continue;
 			}
 
-			$_section = ( ! astra_has_widgets_block_editor() ) ? 'sidebar-widgets-' . $builder_type . '-widget-' . $index : 'astra-sidebar-widgets-' . $builder_type . '-widget-' . $index;
+			$_section = ! astra_has_widgets_block_editor() ? 'sidebar-widgets-' . $builder_type . '-widget-' . $index : 'astra-sidebar-widgets-' . $builder_type . '-widget-' . $index;
 
 			$selector = '.' . $builder_type . '-widget-area[data-section="sidebar-widgets-' . $builder_type . '-widget-' . $index . '"]';
 
@@ -53,7 +52,6 @@ class Astra_Widget_Component_Dynamic_CSS {
 			} else {
 				$builder_widget_selector = $selector . ' .' . $builder_type . '-widget-area-inner';
 			}
-
 
 				$title_font_size   = astra_get_option( $builder_type . '-widget-' . $index . '-font-size' );
 				$content_font_size = astra_get_option( $builder_type . '-widget-' . $index . '-content-font-size' );

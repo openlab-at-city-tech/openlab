@@ -4,9 +4,9 @@ Author: FARAZFRANK
 Contributors: FARAZFRANK
 Tags: slider, responsive-slider, image-slider, carousel-slider, gallery-slider
 Requires at least: 5.0
-Tested up to: 6.7.2
+Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.5.16
+Stable tag: 3.5.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: ultimate-responsive-image-slider
@@ -108,7 +108,7 @@ Yes, you can use the shortcode within Elementor pages or Gutenberg blocks for se
 1. **Header Slider Example** – Showcase your sliders at the top of your page content
 2. **Inline Slider Within Content** – Embed sliders seamlessly within your posts or pages
 3. **Slider Below Content with Bullet Navigation** – Perfect for footers or below-the-fold content
-4. **Autoplay-Only Slider** – Ideal for automatic sliding without manual controls
+4. **AutoPay Slider** – Ideal for automatic sliding without manual controls
 5. **Custom Dimension Slider** – Fully adjustable height and width for any layout
 6. **Slider with Text Overlay** – Add captions or descriptions directly on your slides
 7. **Carousel with Thumbnail Navigation** – Navigate through slides using thumbnail previews
@@ -117,6 +117,15 @@ Yes, you can use the shortcode within Elementor pages or Gutenberg blocks for se
 10. **Easy Shortcode Generation** – Copy shortcodes directly from the dashboard
 
 == Changelog ==
+
+= 3.5.18 =
+* WP 6.8.1 compatibility checked.
+* Clone slider code bug fixed.
+
+= 3.5.17 =
+* WP 6.8 compatibility issue fixed
+* Few plugin check error fixed
+
 = 3.5.16 =
 * Dashboard XSS stored vulnerability fixed
 * Title and description position moved to bottom
@@ -148,12 +157,5 @@ Yes, you can use the shortcode within Elementor pages or Gutenberg blocks for se
 = 3.5.9 =
 * Plugin details and sub pages updated
 * Tested with latest WordPress
-
-= 3.5.7 + 3.5.8 =
-* Tested with latest WordPress
-
-= 3.5.6 =
-* Setting bug fixed: Distance Between Slide and Thumbnail Position
-* Latest WordPress version 5.9.1 compatibility checked
 
 **Note:** Keep this changelog updated with future releases to show ongoing development and maintenance.

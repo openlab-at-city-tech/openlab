@@ -19,7 +19,7 @@ $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == 
                                 <br>
                                 <p><?php esc_html_e("Discover how the AI text assistant Assistini can take your social media posts to the next level. Assistini AI provides you with creative ideas and optimizes your texts to improve the performance of your social media posts and the interaction with your followers. Whether you post on Instagram, Twitter, Facebook or LinkedIn - Assistini is your reliable creative partner.", "blog2social"); ?></p>
                                 <br>
-                                <a class="b2s-ass-register-btn text-center" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Connect with Assistini AI now', 'blog2Social'); ?></a>
+                                <a class="b2s-ass-register-btn text-center" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Connect with Assistini AI now', 'blog2social'); ?></a>
                             </div>
                             <div class="col-md-6 hidden-sm hidden-xs text-center">
                                 <img class="b2s-ass-img-welcome" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
@@ -99,7 +99,7 @@ $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == 
                         </div>
 
                         <div class="row text-center">
-                            <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('learn more', 'blog2Social'); ?></a>
+                            <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('learn more', 'blog2social'); ?></a>
                         </div>
 
 

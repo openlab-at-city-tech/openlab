@@ -15,7 +15,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Some methods that are common for all memory processors
  *
  * @author Rob Jensen
- * @internal
  */
 abstract class MemoryProcessor implements ProcessorInterface
 {
@@ -48,9 +47,9 @@ abstract class MemoryProcessor implements ProcessorInterface
             return $bytes;
         }
         if ($bytes > 1024 * 1024) {
-            return \round($bytes / 1024 / 1024, 2) . ' MB';
+            return round($bytes / 1024 / 1024, 2) . ' MB';
         } elseif ($bytes > 1024) {
-            return \round($bytes / 1024, 2) . ' KB';
+            return round($bytes / 1024, 2) . ' KB';
         }
         return $bytes . ' B';
     }

@@ -94,7 +94,7 @@ abstract class QM_Collector_Assets extends QM_DataCollector {
 		}
 
 		$this->data->is_ssl = is_ssl();
-		$this->data->full_host = wp_unslash( $_SERVER['HTTP_HOST'] );
+		$this->data->full_host = self::get_host();
 		$this->data->host = (string) parse_url( $this->data->full_host, PHP_URL_HOST );
 		$this->data->default_version = get_bloginfo( 'version' );
 		$this->data->port = (string) parse_url( $this->data->full_host, PHP_URL_PORT );
@@ -277,11 +277,6 @@ abstract class QM_Collector_Assets extends QM_DataCollector {
 		$modules = wp_script_modules();
 
 		if ( ! ( $modules instanceof \WP_Script_Modules ) ) {
-			return null;
-		}
-
-		// https://core.trac.wordpress.org/ticket/60596
-		if ( ! did_action( 'wp_head' ) ) {
 			return null;
 		}
 

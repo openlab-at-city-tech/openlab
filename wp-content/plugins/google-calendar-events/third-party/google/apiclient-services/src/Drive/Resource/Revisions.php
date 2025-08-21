@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\RevisionList;
  *   $driveService = new Google\Service\Drive(...);
  *   $revisions = $driveService->revisions;
  *  </code>
- * @internal
  */
 class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -43,7 +42,7 @@ class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($fileId, $revisionId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'revisionId' => $revisionId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -61,7 +60,7 @@ class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($fileId, $revisionId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'revisionId' => $revisionId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Revision::class);
     }
     /**
@@ -79,7 +78,7 @@ class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listRevisions($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], RevisionList::class);
     }
     /**
@@ -94,9 +93,9 @@ class Revisions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($fileId, $revisionId, Revision $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'revisionId' => $revisionId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Revision::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Revisions::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Revisions');
+class_alias(Revisions::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Revisions');

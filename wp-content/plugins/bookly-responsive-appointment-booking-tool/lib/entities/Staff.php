@@ -52,6 +52,8 @@ class Staff extends Lib\Base\Entity
 
     protected static $table = 'bookly_staff';
 
+    protected $loggable = true;
+
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'wp_user_id' => array( 'format' => '%d' ),
@@ -207,9 +209,9 @@ class Staff extends Lib\Base\Entity
     {
         $query = Holiday::query()
             ->whereRaw( '( DATE_FORMAT( date, %s ) = %s AND repeat_event = 1 ) OR date = %s', array( '%m-%d', $day->format( 'm-d' ), $day->format( 'Y-m-d' ) ) )
-            ->whereRaw( 'staff_id = %d OR staff_id IS NULL', array( $this->getId() ) )
+            ->where( 'staff_id', $this->getId() )
             ->limit( 1 );
-        $rows = $query->execute( Lib\Query::HYDRATE_NONE );
+        $rows = $query->execute();
 
         return $rows != 0;
     }
@@ -635,6 +637,7 @@ class Staff extends Lib\Base\Entity
 
         return $this;
     }
+
     /**
      * Gets zoom_oauth_token
      *
@@ -831,7 +834,13 @@ class Staff extends Lib\Base\Entity
         Lib\Proxy\Pro::revokeGoogleCalendarToken( $this );
         if ( $this->getMobileStaffCabinetToken() ) {
             $cloud = Lib\Cloud\API::getInstance();
-            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET )->revokeKeys( array ( $this->getMobileStaffCabinetToken() ) );
+            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET )->revokeKeys( array( $this->getMobileStaffCabinetToken() ) );
+        }
+
+        /** @var Appointment[] $app_list */
+        $app_list = Appointment::query()->where( 'staff_id', $this->getId() )->find();
+        foreach ( $app_list as $app ) {
+            $app->delete();
         }
 
         parent::delete();

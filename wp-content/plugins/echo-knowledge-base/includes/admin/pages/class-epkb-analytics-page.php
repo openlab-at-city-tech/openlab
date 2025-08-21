@@ -254,20 +254,20 @@ class EPKB_Analytics_Page {
 
 		return EPKB_HTML_Forms::advertisement_ad_box( array(
 			'icon'              => 'epkbfa-linode',
-			'title'             => esc_html__( 'Advanced Search Add-on', 'echo-knowledge-base' ),
+			'title'             => __( 'Advanced Search Add-on', 'echo-knowledge-base' ),
 			'img_url'           => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/10/advanced-search-analytics-example.jpg',
-			'desc'              => esc_html__( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
+			'desc'              => __( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
 			'list'              => array(
 				__( 'Access analytics for the most popular searches', 'echo-knowledge-base' ),
 				__( 'Discover analytics for no results searches', 'echo-knowledge-base' ),
 				__( 'Write articles for topics that are not covered', 'echo-knowledge-base' ),
 				__( 'Add missing search keywords to existing articles', 'echo-knowledge-base' )
 			),
-			'btn_text'          => esc_html__( 'Buy Now', 'echo-knowledge-base' ),
+			'btn_text'          => __( 'Buy Now', 'echo-knowledge-base' ),
 			'btn_url'           => 'https://www.echoknowledgebase.com/wordpress-plugin/advanced-search/',
 			'btn_color'         => 'green',
 
-			'more_info_text'    => esc_html__( 'More Information', 'echo-knowledge-base' ),
+			'more_info_text'    => __( 'More Information', 'echo-knowledge-base' ),
 			'more_info_url'     => 'https://www.echoknowledgebase.com/documentation/advanced-search-overview/',
 			'more_info_color'   => 'orange',
 			'box_type'			=> 'new-feature',

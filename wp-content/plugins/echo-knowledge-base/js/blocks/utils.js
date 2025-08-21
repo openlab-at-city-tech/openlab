@@ -45,3 +45,10 @@ export function unregister_block_for_non_page(wp, block_name) {
 		});
 	});
 }
+
+export function show_kb_block_page_template() {
+	const hiding_kb_blick_page_template_css = document.getElementById('echo-knowledge-base-block-editor-inline-css');
+	if (hiding_kb_blick_page_template_css) {
+		document.getElementById('echo-knowledge-base-block-editor-inline-css').remove();
+	}
+}

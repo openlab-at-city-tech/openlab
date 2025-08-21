@@ -28,7 +28,5 @@ class Dialog extends Lib\Base\Component
                 'close' => __( 'Close', 'bookly' ),
             ),
         ) );
-
-        print '<div id="bookly-testing-voice-dialog"></div>';
     }
 }

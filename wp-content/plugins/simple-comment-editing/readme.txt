@@ -2,8 +2,8 @@
 Contributors: ronalfy
 Tags: comment editing, comments ,edit comments, reviews,
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 3.0.31
+Tested up to: 6.8
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,7 @@ Features Include:
 
 > <a href="https://app.instawp.io/launch?t=dlx-plugins&d=v1">Launch a Live Demo on InstaWP</a>
 
+
 == Installation ==
 
 1. Just unzip and upload the "simple-comment-editing" folder to your '/wp-content/plugins/' directory
@@ -70,6 +71,10 @@ For advanced options, please see the <a href="https://sce.dlxplugins.com/">SCE F
 = What browsers have you tested this with? =
 Simple Comment Editing will work all the way back to IE10.
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/simple-comment-editing)
+
 == Screenshots ==
 
 1. Edit Button and Timer.
@@ -79,6 +84,18 @@ Simple Comment Editing will work all the way back to IE10.
 5. Light button theme.
 
 == Changelog ==
+
+= 3.1.0 =
+* Released 2025-01-08
+* Security fix: Resolving SSRF security vulnerability when retrieving Mailchimp data as reported by Patchstack.
+
+= 3.0.33 =
+* Released 2024-12-11
+* Fixing remaining translation warnings in WP 6.7.
+
+= 3.0.32 =
+* Released 2024-11-28
+* Fixing translation debug warning in WP 6.7 for loading translations to early.
 
 = 3.0.31 =
 * Released 2024-09-20
@@ -505,5 +522,5 @@ Simple Comment Editing will work all the way back to IE10.
 
 == Upgrade Notice ==
 
-= 3.0.31 =
-Fixing missing event for when there is no timer. Adding max-width to edit textarea for better styling.
+= 3.1.0 =
+* Security fix: Resolving SSRF security vulnerability when retrieving and submitting Mailchimp data as reported by Patchstack.

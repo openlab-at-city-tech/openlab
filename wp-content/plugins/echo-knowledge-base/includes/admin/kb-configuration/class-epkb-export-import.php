@@ -12,11 +12,11 @@ class EPKB_Export_Import {
 	//private $operation_log = array();
 	private $add_ons_info = array(
 										'Echo_Knowledge_Base' => 'epkb',
-										'Echo_Advanced_Search' => 'asea',
-										'Echo_Article_Rating_And_Feedback' => 'eprf', 
-										'Echo_Elegant_Layouts' => 'elay',
-										'Echo_Widgets' => 'widg',
-										'Echo_Article_Features' => 'eart',
+										'Echo_'.'Advanced_Search' => 'asea',
+										'Echo_'.'Article_Rating_And_Feedback' => 'eprf',
+										'Echo_'.'Elegant_Layouts' => 'elay',
+										'Echo_'.'Widgets' => 'widg',
+										'Echo_'.'Article_Features' => 'eart',
 										// FUTURE DODO Links Editor and MKB
 							);
 
@@ -203,13 +203,13 @@ class EPKB_Export_Import {
 			
 			// import data exists but plugin is not active
 			if ( isset( $import_data[$add_on_prefix] ) && ! class_exists( $add_on_class ) ) {
-				$this->message['error'] = esc_html__( 'Import failed because found import data for a plugin that is not active: ', 'echo-knowledge-base' ) . $plugin_name;
+				$this->message['error'] = esc_html__( 'Import failed because found import data for a plugin that is not active', 'echo-knowledge-base' ) . ': ' . $plugin_name;
 				return $this->message;
 			}
 
 			// plugin is active but import data does not exist
 			if ( ! isset( $import_data[$add_on_prefix] ) && class_exists( $add_on_class ) ) {
-				/* OK to import less $this->message['error'] = esc_html__( 'Import failed because found a plugin that is active with no corresponding import data: ', 'echo-knowledge-base' ) . $plugin_name;
+				/* OK to import less $this->message['error'] = esc_html__( 'Import failed because found a plugin that is active with no corresponding import data', 'echo-knowledge-base' ) ': ' . $plugin_name;
 				return $this->message; */
 				continue;
 			}
@@ -284,7 +284,7 @@ class EPKB_Export_Import {
 			// update add-on configuration
 			$add_on_config = $plugin_instance->kb_config_obj->update_kb_configuration( $kb_id, $add_on_config );
 			/** @var $add_on_config WP_Error */
-			if ( is_wp_error($add_on_config) ) {
+			if ( is_wp_error( $add_on_config ) ) {
 				$this->message['error'] =  'E36 (' . $plugin_name . ')' . $add_on_config->get_error_message();  // do not translate
 				return $this->message;
 			}
@@ -297,36 +297,30 @@ class EPKB_Export_Import {
 
 	private function upgrade_plugin_data( $add_on_prefix, &$plugin_config ) {
 
-		$import_plugin_version = empty($plugin_config['plugin_version']) ? '' : $plugin_config['plugin_version'];
+		$import_plugin_version = empty( $plugin_config['plugin_version'] ) ? '' : $plugin_config['plugin_version'];
 
 		switch ( $add_on_prefix ) {
 
 			case 'epkb':
-				$last_version = empty($import_plugin_version) ? '6.9.9' : $import_plugin_version;
+				$last_version = empty( $import_plugin_version ) ? '6.9.9' : $import_plugin_version;
 				if ( $last_version != Echo_Knowledge_Base::$version ) {
 					EPKB_Upgrades::run_upgrades( $plugin_config, $last_version );
 				}
 				break;
 
 			case 'asea':
-				$last_version = empty($import_plugin_version) ? '2.13.9' : $import_plugin_version;
-				if ( class_exists('Echo_Advanced_Search') && $last_version != Echo_Advanced_Search::$version && class_exists('ASEA_Upgrades') && is_callable(array('ASEA_Upgrades', 'run_upgrade')) ) {
-					ASEA_Upgrades::run_upgrade( $plugin_config, $last_version );
-				}
+				$last_version = empty( $import_plugin_version ) ? '2.13.9' : $import_plugin_version;
+				EPKB_Core_Utilities::run_asea_upgrade( $plugin_config, $last_version );
 				break;
 
 			case 'elay':
-				$last_version = empty($import_plugin_version) ? '2.5.4' : $import_plugin_version;
-				if ( class_exists('Echo_Elegant_Layouts') && $last_version != Echo_Elegant_Layouts::$version && class_exists('ELAY_Upgrades') && is_callable(array('ELAY_Upgrades', 'run_upgrade')) ) {
-					ELAY_Upgrades::run_upgrade( $plugin_config, $last_version );
-				}
+				$last_version = empty( $import_plugin_version ) ? '2.5.4' : $import_plugin_version;
+				EPKB_Core_Utilities::run_elay_upgrade( $plugin_config, $last_version );
 				break;
 
 			case 'eprf':
-				$last_version = empty($import_plugin_version) ? '1.4.0' : $import_plugin_version;
-				if ( class_exists('Echo_Article_Rating_And_Feedback') && $last_version != Echo_Article_Rating_And_Feedback::$version && class_exists('EPRF_Upgrades') && is_callable(array('EPRF_Upgrades', 'run_upgrade')) ) {
-					EPRF_Upgrades::run_upgrade( $plugin_config, $last_version );
-				}
+				$last_version = empty( $import_plugin_version ) ? '1.4.0' : $import_plugin_version;
+				EPKB_Core_Utilities::run_eprf_upgrade( $plugin_config, $last_version );
 				break;
 
 		}
@@ -346,19 +340,19 @@ class EPKB_Export_Import {
 
 		// get function
 		$add_on_function_name = $prefix . '_get_instance';
-		if ( ! function_exists($add_on_function_name) ) {
+		if ( ! function_exists( $add_on_function_name ) ) {
 			$this->message['error'] = 'E38 (' . $add_on_function_name . ')'; // do not translate
 			return null;
 		}
 
 		// get DB class instance
-		$instance = call_user_func($add_on_function_name);
+		$instance = call_user_func( $add_on_function_name );
 		if ( is_object($instance) ) {
 			return $instance;
 		}
 
-		$plugin_name = array_flip($this->add_ons_info);
-		$plugin_name = isset($plugin_name[$prefix]) ? $this->get_plugin_name($plugin_name[$prefix]) : 'Unknown plugin';
+		$plugin_name = array_flip( $this->add_ons_info );
+		$plugin_name = isset( $plugin_name[$prefix] ) ? $this->get_plugin_name( $plugin_name[$prefix] ) : 'Unknown plugin';
 
 		$this->message['error'] = $plugin_name . ' - ' . esc_html__( 'is the plugin active?', 'echo-knowledge-base' );
 

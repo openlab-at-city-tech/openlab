@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Register_Edd_Section extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Panels and Sections for Customizer.
 		 *
@@ -68,6 +67,5 @@ if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 		}
 	}
 }
-
 
 new Astra_Customizer_Register_Edd_Section();

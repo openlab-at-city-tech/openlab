@@ -269,7 +269,7 @@ class EPKB_HTML_Forms {
 				}
 
 				if ( ! empty( $args['html'] ) ) {
-                    echo wp_kses_post( $args['html'] );
+                    echo wp_kses( $args['html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );
 				}   ?>
 			</div>
 
@@ -302,7 +302,7 @@ class EPKB_HTML_Forms {
 					if ( ! empty( $error['error_str'] ) && strpos( $error['error_str'], $table_name ) !== false ) {
 						//LOG Only Access Manager Error
 						EPKB_Logging::add_log( 'Database error', $EZSQL_ERROR );
-						$message .= esc_html__( '. Database Error.', 'echo-knowledge-base' );
+						$message .= '. ' . esc_html__( 'Database Error', 'echo-knowledge-base' );
 					}
 				}
 			}
@@ -314,7 +314,7 @@ class EPKB_HTML_Forms {
 			"<div class='eckb-bottom-notice-message'>
 				<div class='contents'>
 					<span class='" . esc_attr( $type ) . "'>" .
-			( empty( $title ) ? '' : '<h4>' . esc_html( $title ) . '</h4>' ) . "
+						( empty( $title ) ? '' : '<h4>' . esc_html( $title ) . '</h4>' ) . "
 						<p> " . wp_kses_post( $message ) . "</p>
 					</span>
 				</div>

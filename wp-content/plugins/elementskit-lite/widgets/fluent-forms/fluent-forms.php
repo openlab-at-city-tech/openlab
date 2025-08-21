@@ -37,9 +37,14 @@ class ElementsKit_Widget_Fluent_Forms extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/fluent-forms/';
     }
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
     
     public static function getForms()
     {

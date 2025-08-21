@@ -115,6 +115,7 @@ abstract class Config
                 'recurrence_enabled' => (int) $row['recurrence_enabled'],
                 'recurrence_frequencies' => $row['recurrence_frequencies'],
                 'min_time_prior_booking' => array( (int) $min_time_prior_booking->format( 'Y' ), (int) $min_time_prior_booking->format( 'n' ) - 1, (int) $min_time_prior_booking->format( 'j' ), ),
+                'tags' => $row['tags'] ? json_decode( $row['tags'] ) : array(),
             );
 
             $result = Proxy\Shared::prepareCategoryService( $result, $row );
@@ -457,7 +458,26 @@ abstract class Config
      */
     public static function getTimeSlotLengthOptions()
     {
-        return array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 );
+        static $options;
+
+        if ( $options === null ) {
+            $default_options = array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 );
+            $advanced_time_slot_length = explode( ',', get_option( 'bookly_advanced_time_slot_length_minutes', '' ) );
+            $sort_required = false;
+            foreach ( $advanced_time_slot_length as $length ) {
+                $slot = (int) trim( $length );
+                if ( $slot > 0 && ! in_array( $slot, $default_options ) ) {
+                    $default_options[] = $slot;
+                    $sort_required = true;
+                }
+            }
+            if ( $sort_required ) {
+                asort( $default_options );
+            }
+            $options = $default_options;
+        }
+
+        return $options;
     }
 
     /**

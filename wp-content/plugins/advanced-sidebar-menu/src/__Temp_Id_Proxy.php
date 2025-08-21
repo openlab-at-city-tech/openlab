@@ -2,31 +2,31 @@
 
 namespace Advanced_Sidebar_Menu;
 
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget\Widget;
+use Advanced_Sidebar_Menu\Widget\WidgetId;
 
 /**
  * Temporary proxy to translate the `id` property to `id_base` and `number`.
  *
- * @todo Switch `Widget_Abstract` to `Widget` when minimum PRO version is 9.6.0+.
- * @todo Remove this class when the minimum PRO version is switched to `WidgetWithId` (TBD).
+ * @todo Remove this class when the minimum PRO version is 9.9.0+.
  *
  * @internal
  */
 class __Temp_Id_Proxy {
 	/**
-	 * @var Widget_Abstract<array{}, array{}>
+	 * @var Widget<array{}, array{}>
 	 */
-	protected Widget_Abstract $widget;
+	protected Widget $widget;
 
 
 	/**
 	 * Constructor.
 	 *
-	 * @phpstan-param Widget_Abstract<array{}, array{}> $widget
+	 * @phpstan-param Widget<array{}, array{}> $widget
 	 *
-	 * @param Widget_Abstract                           $widget - Widget instance.
+	 * @param Widget                           $widget - Widget instance.
 	 */
-	final protected function __construct( Widget_Abstract $widget ) {
+	final protected function __construct( Widget $widget ) {
 		$this->widget = $widget;
 	}
 
@@ -37,26 +37,24 @@ class __Temp_Id_Proxy {
 	 * @return string
 	 */
 	public function get_id_base(): string {
-		if ( $this->widget instanceof Widget\WidgetId ) {
+		if ( $this->widget instanceof WidgetId ) {
 			return $this->widget->get_id_base();
 		}
-		// @phpstan-ignore-next-line -- This is expected to always be true, but we'll be sure.
 		if ( $this->widget instanceof \WP_Widget ) {
 			return $this->widget->id_base;
 		}
-		// @phpstan-ignore-next-line -- Should never reach here, but want to be sure.
 		return '';
 	}
 
 
 	/**
-	 * @param Widget_Abstract $widget
+	 * @phpstan-param Widget<array{}, array{}> $widget
+	 *
+	 * @param Widget                           $widget - Widget to proxy.
 	 *
 	 * @return __Temp_Id_Proxy
 	 */
-	//phpcs:disable
-	// @phpstan-ignore-next-line -- Intentionally not adding generic values.
-	public static function factory( Widget_Abstract $widget ): __Temp_Id_Proxy {
+	public static function factory( Widget $widget ): __Temp_Id_Proxy {
 		return new static( $widget );
 	}
 }

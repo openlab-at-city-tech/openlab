@@ -232,6 +232,8 @@ class Request extends Lib\Base\Component
                         if ( $this->getCartInfo()->getPayNow() > 0 ) {
                             throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
                         }
+                    } elseif ( Lib\Config::wooCommerceEnabled() ) {
+                        $this->gateway = new Lib\Payment\ZeroGateway( $this );
                     } else {
                         throw new \Exception( 'There is no order, the payment may have been canceled by webhook' );
                     }

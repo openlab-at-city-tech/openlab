@@ -237,9 +237,9 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 			}
 		}
 
-		$disable_openai = EPKB_Utilities::post( 'disable_openai', 'on' ) == 'on';
+		$enable_legacy_open_ai = EPKB_Utilities::post( 'enable_legacy_open_ai', 'off' ) == 'on';
 
-		$result = EPKB_Core_Utilities::update_kb_flag( 'disable_openai', $disable_openai );
+		$result = EPKB_Core_Utilities::update_kb_flag( 'enable_legacy_open_ai', $enable_legacy_open_ai );
 		if ( is_wp_error( $result ) ) {
 			self::ajax_show_error_die( $result->get_error_message() );
 		}

@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Customizer WooCommerece store notice - customizer config initial setup.
  */
 class Astra_Woo_Store_Notice_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Astra-WooCommerce Shop Cart Layout Customizer Configurations.
 	 *

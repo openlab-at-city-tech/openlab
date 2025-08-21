@@ -93,7 +93,14 @@ class EPKB_Category_Archive_Setup {
 			return;
 		}
 
-		EPKB_Modular_Main_Page::search_module( $args['config'] );
+		// Use Article Page search if the main page has KB blocks or if the search source is set to article page
+		if ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $args['config'] ) || $args['config']['archive_search_source'] == 'article_page' ) {
+			// Use article page search settings
+			EPKB_KB_Search::get_search_form_output( $args['config'] );
+		} else {
+			// Default behavior - use main page search settings
+			EPKB_Modular_Main_Page::search_module( $args['config'] );
+		}
 	}
 
 
@@ -205,11 +212,18 @@ class EPKB_Category_Archive_Setup {
 
 				<div class="eckb-article-list-container eckb-article-list-container-columns-<?php echo esc_attr( $nof_columns . ' ' . $article_list_separator_classes ); ?>"> <?php
 
-					self::display_category_articles( $kb_config, $articles_list, $kb_config['archive_content_articles_nof_articles_displayed'] );
+					self::display_category_articles( $kb_config, $articles_list, $nof_articles_displayed );
 
 					if ( $total_articles > $nof_articles_displayed ) { ?>
 						<div class="eckb-article-list-show-more-container">
-							<div class="eckb-article-list-article-count">+ <?php echo esc_html( $total_articles - $nof_articles_displayed ) . ' ' . esc_html__( 'Articles', 'echo-knowledge-base' ); ?> </div>
+							<div class="eckb-article-list-article-count">+ <?php 
+								$remaining_articles = $total_articles - $nof_articles_displayed;
+								echo esc_html( $remaining_articles ) . ' ' . 
+									esc_html( $remaining_articles == 1 ? 
+										$kb_config['article_count_text'] : 
+										$kb_config['article_count_plural_text'] 
+									); 
+							?> </div>
 							<div class="eckb-article-list-show-all-link"><?php echo esc_html( $kb_config['show_all_articles_msg'] ); ?></div>
 						</div>  <?php
 					} ?>
@@ -266,6 +280,10 @@ class EPKB_Category_Archive_Setup {
 	private static function display_article( $kb_config, $article_id, $article_class ) {
 
 		$article = get_post( $article_id );
+		if ( empty( $article ) || ! isset( $article->post_title ) ) {
+			return;
+		}
+
 		$inline_style_escaped = EPKB_Utilities::get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing', $kb_config ); ?>
 
 		<div class="eckb-article-container<?php echo esc_attr( $article_class ); ?>" id="post-<?php echo esc_attr( $article_id ); ?>">
@@ -819,17 +837,17 @@ class EPKB_Category_Archive_Setup {
 		    #eckb-archive-page-container .eckb-category-archive-articles-list-title,
 		    #eckb-archive-page-container .eckb-category-archive-sub-category-list-title {
 		        color: ' . $kb_config['section_category_font_color'] . ';
-		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 6 ) . 'px;
+		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 6 ) . 'px !important;
 		    }';
 
 		// Main Category Articles
 		$output .= '
 		    #eckb-archive-page-container .eckb-article-list-container .eckb-article-container .epkb-article-inner { 
-				font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 2 ) . 'px;
+				font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 2 ) . 'px !important;
 		    }';
 		$output .= '
 		    #eckb-archive-page-container .eckb-article-list-container .eckb-article-container .epkb-article__icon { 
-		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 6 ) . 'px;
+		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 6 ) . 'px !important;
 		    }';
 
 		// Sub Categories
@@ -863,11 +881,11 @@ class EPKB_Category_Archive_Setup {
 		// Sub Category Articles
 		$output .= '
 		    #eckb-archive-page-container .eckb-sub-category-list-container .eckb-article-container .epkb-article-inner { 
-				font-size: ' .  $kb_config['article_typography']['font-size'] . 'px;
+				font-size: ' .  $kb_config['article_typography']['font-size'] . 'px !important;
 		    }';
 		$output .= '
 		    #eckb-archive-page-container .eckb-sub-category-list-container .eckb-article-container .epkb-article__icon { 
-		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 4 ) . 'px;
+		        font-size: ' . ( intval( $kb_config['article_typography']['font-size'] ) + 4 ) . 'px !important;
 		    }';
 
 		// Arrows

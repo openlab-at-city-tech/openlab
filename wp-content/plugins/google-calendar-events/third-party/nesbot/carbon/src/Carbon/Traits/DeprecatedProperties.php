@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Traits;
 
-/** @internal */
 trait DeprecatedProperties
 {
     /**

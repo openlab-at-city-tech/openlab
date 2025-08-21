@@ -59,7 +59,7 @@ jQuery(window).on("load", function () {
 //TOS Twitter 032018 - none multiple Accounts - User select once
 jQuery(document).on('change', '.b2s-network-tos-check', function () {
     var networkId = jQuery(this).attr('data-network-id');
-    if (networkId == 2) {
+    if (networkId == 2 || networkId == 45) {
         checkNetworkTos(networkId, false);
     }
     return false;

@@ -1114,22 +1114,21 @@ function openlab_member_header() {
 	<h1 class="entry-title profile-title clearfix">
 		<span class="profile-name"><?php bp_displayed_user_fullname(); ?>&rsquo;s Profile</span>
 		<span class="profile-type pull-right hidden-xs"><?php echo esc_html( $account_type ); ?></span>
-		<button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
 	</h1>
-	<?php if ( bp_is_user_activity() ) : ?>
-		<div class="clearfix hidden-xs">
+
+	<?php /* Last activity is visible only to super admins */ ?>
+	<?php if ( is_super_admin() ) : ?>
+		<?php if ( bp_is_user_activity() ) : ?>
+			<div class="clearfix hidden-xs">
+				<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
+			</div>
+		<?php endif; ?>
+		<div class="clearfix visible-xs">
+			<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
 			<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
 		</div>
 	<?php endif; ?>
-	<div class="clearfix visible-xs">
-		<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
-		<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
-	</div>
+
 	<?php
 }
 
@@ -2192,29 +2191,6 @@ function openlab_user_social_links_save( $user_id ) {
 add_action( 'xprofile_updated_profile', 'openlab_user_social_links_save' );
 
 /**
- * AJAX callback for 'openlab_portfolio_link_visibility'.
- *
- * @return void
- */
-function openlab_portfolio_link_visibility_ajax_cb() {
-	$verified = wp_verify_nonce( $_GET['nonce'], 'openlab_portfolio_link_visibility' );
-
-	if ( ! $verified ) {
-		wp_send_json_error( 'Invalid nonce' );
-	}
-
-	if ( ! is_user_logged_in() ) {
-		wp_send_json_error( 'Not logged in' );
-	}
-
-	$enabled = 'enabled' === $_GET['state'];
-	openlab_save_show_portfolio_link_on_user_profile( get_current_user_id(), $enabled );
-
-	wp_send_json_success();
-}
-add_action( 'wp_ajax_openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_ajax_cb' );
-
-/**
  * Determines whether a user's profile should have the noindex meta tag.
  *
  * @param int $user_id User ID.
@@ -2244,3 +2220,381 @@ function openlab_add_noindex_to_user_profile() {
 	}
 }
 add_action( 'wp_head', 'openlab_add_noindex_to_user_profile', 0 );
+
+/**
+ * Gets the 'My Dashboard' URL for a user.
+ *
+ * My Dashboard points to the my-sites.php Dashboard panel for this user.
+ * However, this panel only works if looking at a site where the user has
+ * Dashboard-level permissions. So we have to find a valid site for
+ * the logged in user.
+ *
+ * @return string
+ */
+function openlab_get_my_dashboard_url( $user_id ) {
+	$primary_site_id = get_user_meta( $user_id, 'primary_blog', true );
+	$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
+	return $primary_site_url . '/wp-admin/my-sites.php';
+}
+
+/**
+ * Gets the unread counts for a user.
+ *
+ * @param int $user_id User ID.
+ * @return array
+ */
+function openlab_get_user_unread_counts( $user_id ) {
+	static $counts;
+
+	if ( isset( $counts ) ) {
+		return $counts;
+	}
+
+	$user_unread_messages_count = bp_get_total_unread_messages_count();
+	$user_group_invites_count   = groups_get_invites_for_user();
+
+	$user_friend_requests      = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+	$user_friend_request_count = count( $user_friend_requests );
+
+	$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
+	if ( $user_groups ) {
+		$connection_invitations = \OpenLab\Connections\Invitation::get(
+			[
+				'invitee_group_id' => array_keys( $user_groups ),
+				'pending_only'     => true,
+			]
+		);
+
+		$user_connection_invites_count = count( $connection_invitations );
+	} else {
+		$user_connection_invites_count = 0;
+	}
+
+	$counts = [
+		'messages'           => $user_unread_messages_count,
+		'group_invites'      => $user_group_invites_count['total'],
+		'friend_requests'    => $user_friend_request_count,
+		'connection_invites' => $user_connection_invites_count,
+	];
+
+	return $counts;
+}
+
+/**
+ * Gets whether the user has any unread counts.
+ *
+ * @return bool
+ */
+function openlab_user_has_unread_counts() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	$has_any_unread = (
+		$user_unread_counts['messages'] > 0 ||
+		$user_unread_counts['friend_requests'] > 0 ||
+		$user_unread_counts['group_invites'] > 0
+	);
+
+	return $has_any_unread;
+}
+
+
+/**
+ * Gets a list of global nav links.
+ *
+ * These links ("About", etc) are shared between the top-level desktop
+ * navbar and the hamburger menu.
+ *
+ * @return array
+ */
+function openlab_get_global_nav_links() {
+	return [
+		'about' => [
+			'text' => 'About',
+			'url'  => home_url( 'about' ),
+		],
+		'people' => [
+			'text' => 'People',
+			'url'  => home_url( 'people' ),
+		],
+		'courses' => [
+			'text' => 'Courses',
+			'url'  => home_url( 'courses' ),
+		],
+		'projects' => [
+			'text' => 'Projects',
+			'url'  => home_url( 'projects' ),
+		],
+		'clubs' => [
+			'text' => 'Clubs',
+			'url'  => home_url( 'clubs' ),
+		],
+		'portfolios' => [
+			'text' => 'Portfolios',
+			'url'  => home_url( 'portfolios' ),
+		],
+		'resources' => [
+			'text' => 'Resources',
+			'url'  => home_url( 'resources' ),
+		],
+	];
+}
+
+/**
+ * Don't allow access to the /members/ page.
+ *
+ * @return void
+ */
+function openlab_restrict_members_page() {
+	if ( bp_is_directory() && bp_is_members_directory() ) {
+		wp_redirect( home_url( 'people' ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'openlab_restrict_members_page' );
+
+/**
+ * Adds 'Privacy Settings' to the 'My Settings' menu.
+ *
+ * @param array $settings Settings.
+ */
+function openlab_add_privacy_settings() {
+	$args = [
+		'name'            => 'Privacy Settings',
+		'slug'            => 'privacy',
+		'parent_slug'     => bp_get_settings_slug(),
+		'screen_function' => 'bp_settings_screen_general',
+		'position'        => 20,
+		'user_has_access' => bp_is_my_profile() || current_user_can( 'bp_moderate' ),
+	];
+
+	bp_core_new_subnav_item( $args );
+}
+add_filter( 'bp_setup_nav', 'openlab_add_privacy_settings', 30 );
+
+/**
+ * Save routine for the 'Privacy Settings' page.
+ *
+ * @return void
+ */
+function openlab_privacy_settings_save_cb() {
+	if ( ! bp_is_user_settings() || ! bp_is_current_action( 'privacy' ) ) {
+		return;
+	}
+
+	if ( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST ) ) {
+		return;
+	}
+
+	check_admin_referer( 'bp_settings_privacy' );
+
+	$profile_privacy_field_ids = ! empty( $_POST['profile-privacy-field-ids'] ) ? wp_parse_id_list( $_POST['profile-privacy-field-ids'] ) : [];
+	foreach ( $profile_privacy_field_ids as $profile_privacy_field_id ) {
+		$post_key = 'field_' . $profile_privacy_field_id . '_visibility' ;
+		$visibility = isset( $_POST[ $post_key ] ) ? sanitize_text_field( $_POST[ $post_key ] ) : '';
+		if ( ! $visibility ) {
+			continue;
+		}
+
+		xprofile_set_field_visibility_level( $profile_privacy_field_id, bp_displayed_user_id(), $visibility );
+	}
+
+	$portfolio_visibility = isset( $_POST['portfolio-visibility'] ) ? (bool) $_POST['portfolio-visibility'] : null;
+	if ( ! is_null( $portfolio_visibility ) ) {
+		openlab_save_show_portfolio_link_on_user_profile( bp_displayed_user_id(), $portfolio_visibility );
+	}
+
+	bp_core_add_message( 'Your privacy settings have been saved.', 'success' );
+	bp_core_redirect( bp_displayed_user_url( bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ) );
+	exit;
+}
+add_action( 'bp_actions', 'openlab_privacy_settings_save_cb' );
+
+/**
+ * Gets the submenu items for 'My Settings'.
+ *
+ * @return array
+ */
+function openlab_my_settings_submenu_items() {
+	return [
+		'edit-profile'          => [
+			'text'       => 'Edit Profile',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ),
+			'is_current' => bp_is_user_profile_edit(),
+		],
+		'change-avatar'          => [
+			'text'       => 'Change Avatar',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'change-avatar' ] ) ),
+			'is_current' => bp_is_user_change_avatar(),
+		],
+		'account-info'          => [
+			'text'       => 'Account Info',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'general' ),
+		],
+		'privacy-settings'      => [
+			'text'       => 'Privacy Settings',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'privacy' ),
+		],
+		'notification-settings' => [
+			'text'       => 'Notification Settings',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'notifications' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'notifications' ),
+		],
+		'data-export'           => [
+			'text'       => 'Data Export',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'data' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'data' ),
+		],
+		'delete-account'        => [
+			'text'       => 'Delete Account',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'delete-account' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'delete-account' ),
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Activity'.
+ *
+ * @return array
+ */
+function openlab_my_activity_submenu_items() {
+	$my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
+
+	$is_my_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
+
+	$current_type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
+
+	return [
+		'all'                         => [
+			'text'       => 'All',
+			'href'       => $my_activity_url,
+			'is_current' => $is_my_activity && ! $current_type,
+		],
+		'mine'                        => [
+			'text'       => 'Mine',
+			'href'       => add_query_arg( 'type', 'mine', $my_activity_url ),
+			'is_current' => $is_my_activity && 'mine' === $current_type,
+		],
+		'favorites'                   => [
+			'text'       => 'Favorites',
+			'href'       => add_query_arg( 'type', 'favorites', $my_activity_url ),
+			'is_current' => $is_my_activity && 'favorites' === $current_type,
+		],
+		'mentions'                    => [
+			'text'       => '@Mentions',
+			'href'       => add_query_arg( 'type', 'mentions', $my_activity_url ),
+			'is_current' => $is_my_activity && 'mentions' === $current_type,
+		],
+		'starred'                     => [
+			'text'       => 'Starred',
+			'href'       => add_query_arg( 'type', 'starred', $my_activity_url ),
+			'is_current' => $is_my_activity && 'starred' === $current_type,
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Friends'.
+ *
+ * @return array
+ */
+function openlab_my_friends_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	return [
+		'friend-list'                => [
+			'text'       => 'Friend List',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_friends() && ! bp_is_current_action( 'requests' ),
+		],
+		'friend-requests'            => [
+			'text'       => 'Requests Received',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
+			'class'      => $user_unread_counts['friend_requests'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_friends() && bp_is_current_action( 'requests' ),
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Messages'.
+ *
+ * @return array
+ */
+function openlab_my_messages_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	$items = [
+		'inbox'                       => [
+			'text'       => 'Inbox',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+			'class'      => $user_unread_counts['messages'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && ! bp_is_current_action( 'sentbox' ) && ! bp_is_current_action( 'compose' ),
+		],
+		'sent'                        => [
+			'text'       => 'Sent',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'sentbox' ),
+		],
+	];
+
+	if ( openlab_user_can_send_messages() ) {
+		$items['compose'] = [
+			'text'       => 'Compose',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'compose' ),
+		];
+	}
+
+	return $items;
+}
+
+/**
+ * Gets the submenu items for 'My Invitations'.
+ *
+ * @return array
+ */
+function openlab_my_invitations_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	return [
+		'received-invitations'           => [
+			'text'  => 'Invitations Received',
+			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'groups', 'invites' ] ) ),
+			'class' => $user_unread_counts['group_invites'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_groups() && bp_is_current_action( 'invites' ) && ! bp_is_current_action( 'invite-anyone' ),
+		],
+		'send-invitations'               => [
+			'text' => 'Invite New Members',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invite-anyone' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_current_component( 'invite-anyone' ) && ! bp_is_current_action( 'sent-invites' ),
+		],
+		'sent-invitations'               => [
+			'text' => 'Sent Invitations',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invite-anyone', 'sent-invites' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_current_action( 'sent-invites' ),
+		],
+	];
+}
+
+/**
+ * When a user cannot send messages, redirect away from Compose page.
+ */
+function openlab_redirect_from_compose() {
+	if ( ! bp_is_user_messages() || ! bp_is_current_action( 'compose' ) ) {
+		return;
+	}
+
+	if ( openlab_user_can_send_messages() ) {
+		return;
+	}
+
+	bp_core_redirect( bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ) );
+}
+add_action( 'bp_screens', 'openlab_redirect_from_compose', 5 );

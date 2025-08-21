@@ -19,7 +19,6 @@ define( 'ASTRA_RELATED_POSTS_DIR', ASTRA_THEME_DIR . 'inc/modules/related-posts/
  * @since 3.5.0
  */
 class Astra_Related_Posts {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 *

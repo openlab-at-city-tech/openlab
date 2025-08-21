@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterfac
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- * @internal
  */
 class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface, WarmableInterface
 {
@@ -31,7 +30,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     public function __construct(TranslatorInterface $translator)
     {
         if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
-            throw new InvalidArgumentException(\sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_debug_type($translator)));
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', get_debug_type($translator)));
         }
         $this->translator = $translator;
     }
@@ -68,7 +67,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     /**
      * {@inheritdoc}
      */
-    public function getCatalogues() : array
+    public function getCatalogues(): array
     {
         return $this->translator->getCatalogues();
     }
@@ -91,7 +90,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
      */
     public function getFallbackLocales()
     {
-        if ($this->translator instanceof Translator || \method_exists($this->translator, 'getFallbackLocales')) {
+        if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
             return $this->translator->getFallbackLocales();
         }
         return [];
@@ -133,6 +132,6 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
         } else {
             $state = self::MESSAGE_MISSING;
         }
-        $this->messages[] = ['locale' => $locale, 'fallbackLocale' => $fallbackLocale, 'domain' => $domain, 'id' => $id, 'translation' => $translation, 'parameters' => $parameters, 'state' => $state, 'transChoiceNumber' => isset($parameters['%count%']) && \is_numeric($parameters['%count%']) ? $parameters['%count%'] : null];
+        $this->messages[] = ['locale' => $locale, 'fallbackLocale' => $fallbackLocale, 'domain' => $domain, 'id' => $id, 'translation' => $translation, 'parameters' => $parameters, 'state' => $state, 'transChoiceNumber' => isset($parameters['%count%']) && is_numeric($parameters['%count%']) ? $parameters['%count%'] : null];
     }
 }

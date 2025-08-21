@@ -75,6 +75,10 @@ class Codes
                     'client_name' => array( 'description' => __( 'Full name of client', 'bookly' ) ),
                     'client_email' => array( 'description' => __( 'Email of client', 'bookly' ), 'if' => true ),
                     'client_phone' => array( 'description' => __( 'Phone of client', 'bookly' ), 'if' => true ),
+                    'company_address' => array( 'description' => __( 'Address of company', 'bookly' ), 'if' => true ),
+                    'company_name' => array( 'description' => __( 'Name of company', 'bookly' ), 'if' => true ),
+                    'company_phone' => array( 'description' => __( 'Company phone', 'bookly' ), 'if' => true ),
+                    'company_website' => array( 'description' => __( 'Company web-site address', 'bookly' ), 'if' => true ),
                 );
                 break;
             default:

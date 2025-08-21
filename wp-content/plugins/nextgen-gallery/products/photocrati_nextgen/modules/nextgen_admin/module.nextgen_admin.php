@@ -154,7 +154,12 @@ class M_NextGen_Admin extends C_Base_Module {
 		add_action( 'admin_footer', [ $this, 'custom_post_type_markup_bottom' ] );
 
 		// Requirements need to be registered with the notification manager *before* it's serve_ajax_request().
-		add_action( 'admin_init', [ \Imagely\NGG\Admin\RequirementsManager::get_instance(), 'create_notification' ], -10 );
+		add_action(
+			'after_setup_theme',
+			function () {
+				add_action( 'admin_init', [ \Imagely\NGG\Admin\RequirementsManager::get_instance(), 'create_notification' ], - 10 );
+			}
+		);
 
 		// Define routes.
 		add_action( 'ngg_routes', [ $this, 'define_routes' ] );

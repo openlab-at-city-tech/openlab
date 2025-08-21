@@ -81,6 +81,7 @@ class Hooks extends Service_Provider {
 		add_action( 'get_header', [ $this, 'print_single_json_ld' ] );
 		add_action( 'tribe_template_after_include:events/v2/components/after', [ $this, 'action_add_promo_banner' ], 10, 3 );
 		add_action( 'tribe_events_parse_query', [ $this, 'parse_query' ] );
+		add_action( 'template_redirect', [ $this, 'disabled_views_redirect' ] );
 		add_action( 'template_redirect', [ $this, 'action_initialize_legacy_views' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_customizer_in_block_editor' ] );
 		add_action( 'tec_events_views_v2_after_get_events', [ $this, 'action_set_title_events' ], 10, 2 );
@@ -196,6 +197,8 @@ class Hooks extends Service_Provider {
 		add_filter( 'tribe_events_views_v2_rest_params', [ $this, 'filter_url_date_conflicts' ], 12, 2 );
 		add_filter( 'tec_events_view_month_today_button_label', [ $this, 'filter_view_month_today_button_label' ], 10, 2 );
 		add_filter( 'tec_events_view_month_today_button_title', [ $this, 'filter_view_month_today_button_title' ], 10, 2 );
+
+		add_filter( 'wp_rest_cache/allowed_endpoints', [ $this, 'include_rest_for_caching' ], 10, 1 );
 	}
 
 	/**
@@ -215,7 +218,7 @@ class Hooks extends Service_Provider {
 		// Trim to what is shown (we add one sometimes for pagination links).
 		$cnt = $view->get_context()->get( 'events_per_page' );
 		if ( $cnt ) {
-			$events = array_slice( $events, 0, $cnt );
+			$events = array_slice( $events, 0, (int) $cnt );
 		}
 		$this->container->make( Title::class )->set_posts( $events );
 	}
@@ -310,6 +313,41 @@ class Hooks extends Service_Provider {
 	}
 
 	/**
+	 * Redirects to the default view if the current view is not enabled.
+	 *
+	 * @since 6.14.0
+	 *
+	 * @return void
+	 */
+	public function disabled_views_redirect() {
+		$context = tribe_context();
+
+		if ( ! ( $context->get( 'event_post_type' ) && is_archive( TEC::POSTTYPE ) ) ) {
+			return;
+		}
+
+		$view_slug = $context->get( 'event_display' );
+		if ( ! empty( $view_slug ) && 'default' !== $view_slug ) {
+			$public_views = $this->container->make( Manager::class )->get_publicly_visible_views();
+
+			if ( ! isset( $public_views[ $view_slug ] ) ) {
+				$default = tribe_events_get_url(
+					[
+						'eventDisplay'     => 'default',
+						'tribe_redirected' => 1,
+					]
+				);
+
+				add_filter( 'tribe_events_views_v2_redirected', '__return_true' );
+
+				// phpcs:ignore WordPressVIPMinimum.Security.ExitAfterRedirect, StellarWP.CodeAnalysis.RedirectAndDie
+				wp_safe_redirect( $default );
+				tribe_exit();
+			}
+		}
+	}
+
+	/**
 	 * Filters the template included file.
 	 *
 	 * @since 4.9.2
@@ -330,6 +368,20 @@ class Hooks extends Service_Provider {
 	 */
 	public function register_rest_endpoints() {
 		$this->container->make( Rest_Endpoint::class )->register();
+	}
+
+
+	/**
+	 * Include the REST endpoint so it will be cached.
+	 *
+	 * @since 6.11.1
+	 *
+	 * @param array[] $allowed_endpoints The allowed endpoints.
+	 *
+	 * @return array[] The allowed endpoints.
+	 */
+	public function include_rest_for_caching( $allowed_endpoints ): array {
+		return $this->container->make( Rest_Endpoint::class )->include_rest_for_caching( $allowed_endpoints );
 	}
 
 	/**
@@ -531,7 +583,12 @@ class Hooks extends Service_Provider {
 	 */
 	public function pre_get_document_title( $title ) {
 		$bootstrap = $this->container->make( Template_Bootstrap::class );
-		if ( ! $bootstrap->should_load() || $bootstrap->is_single_event() ) {
+		if (
+			! $bootstrap->should_load()
+			|| $bootstrap->is_single_event()
+			|| $bootstrap->is_single_organizer()
+			|| $bootstrap->is_single_venue()
+		) {
 			return $title;
 		}
 
@@ -1398,6 +1455,7 @@ class Hooks extends Service_Provider {
 		], 10, 3 );
 		remove_action( 'tribe_events_parse_query', [ $this, 'parse_query' ] );
 		remove_action( 'template_redirect', [ $this, 'action_initialize_legacy_views' ] );
+		remove_action( 'template_redirect', [ $this, 'disabled_views_redirect' ] );
 		remove_action( 'admin_enqueue_scripts', [ $this, 'enqueue_customizer_in_block_editor' ] );
 		remove_action( 'tec_events_views_v2_after_get_events', [ $this, 'action_set_title_events' ] );
 	}

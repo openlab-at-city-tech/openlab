@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class Revision extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -272,4 +271,4 @@ class Revision extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Revision::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Revision');
+class_alias(Revision::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Revision');

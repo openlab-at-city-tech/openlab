@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'boonebgorges/buddypress-docs',
-        'pretty_version' => '2.1.4',
-        'version' => '2.1.4.0',
+        'pretty_version' => '2.2.5',
+        'version' => '2.2.5.0',
         'reference' => null,
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
@@ -11,8 +11,8 @@
     ),
     'versions' => array(
         'boonebgorges/buddypress-docs' => array(
-            'pretty_version' => '2.1.4',
-            'version' => '2.1.4.0',
+            'pretty_version' => '2.2.5',
+            'version' => '2.2.5.0',
             'reference' => null,
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',

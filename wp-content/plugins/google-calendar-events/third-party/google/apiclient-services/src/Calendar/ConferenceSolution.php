@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class ConferenceSolution extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -74,4 +73,4 @@ class ConferenceSolution extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ConferenceSolution::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_ConferenceSolution');
+class_alias(ConferenceSolution::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceSolution');

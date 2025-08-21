@@ -78,7 +78,7 @@ function astra_header_mobile_trigger_configuration() {
 			),
 			'priority'          => 10,
 			'context'           => Astra_Builder_Helper::$general_tab,
-			'divider'           => array( 'ast_class' => 'ast-bottom-section-divider' ),
+			'divider'           => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider ast-inline' ),
 			'alt_layout'        => true,
 		),
 
@@ -169,8 +169,6 @@ function astra_header_mobile_trigger_configuration() {
 			'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
-
-
 		/**
 		 * Option: Toggle Button Bg Color
 		 */
@@ -248,8 +246,8 @@ function astra_header_mobile_trigger_configuration() {
 		),
 
 		/**
-		* Option: Button Radius Fields
-		*/
+		 * Option: Button Radius Fields
+		 */
 		array(
 			'name'              => ASTRA_THEME_SETTINGS . '[mobile-header-toggle-border-radius-fields]',
 			'default'           => astra_get_option( 'mobile-header-toggle-border-radius-fields' ),
@@ -280,7 +278,6 @@ function astra_header_mobile_trigger_configuration() {
 			),
 		),
 
-
 		/**
 		 * Option: Divider
 		 */
@@ -293,7 +290,7 @@ function astra_header_mobile_trigger_configuration() {
 			'priority' => 130,
 			'settings' => array(),
 			'context'  => Astra_Builder_Helper::$design_tab,
-			'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
 		/**
@@ -334,6 +331,7 @@ function astra_header_mobile_trigger_configuration() {
 				'default'   => astra_get_option( 'mobile-header-label-typography' ),
 				'type'      => 'control',
 				'control'   => 'ast-settings-group',
+				'is_font'   => true,
 				'title'     => __( 'Typography', 'astra' ),
 				'section'   => $_section,
 				'transport' => 'postMessage',
@@ -414,5 +412,5 @@ function astra_header_mobile_trigger_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_mobile_trigger_configuration();
+	add_action( 'init', 'astra_header_mobile_trigger_configuration' );
 }

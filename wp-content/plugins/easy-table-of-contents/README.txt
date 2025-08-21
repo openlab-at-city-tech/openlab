@@ -3,9 +3,9 @@ Contributors: magazine3
 Donate link: https://tocwp.com/
 Tags: table of contents, toc
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6.20
-Stable tag: 2.0.73
+Stable tag: 2.0.75
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,24 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 
 == Changelog ==
 
+= 2.0.75 30/06/2025 =
+* Bug: TOC is not working on ACF fields #878
+* Bug: Sticky TOC incorrectly adds 'ez-toc-section' span on Pages even when disabled for Page post type #884
+* Bug: Issue with Tasty recipe plugin #891
+* Bug : Error in recent update #886
+* Compatibility: Easy TOC not picking up heading in ACF flexible headings components #896
+* Improvement: option to hide the 'TOC' feature in the Classic Editor. #888
+
+= 2.0.74 05/05/2025 =
+* Bug: Accordion TOC disappears when clicking at the + / - icon #880
+* Bug: The post content is scrolled to the top while using Sticky Widget #879
+* Bug: Generatepress Elements not working #867
+* Compatibility: PMPRO - File deleted after upload when TOC plugin is activated #877
+* Compatibility: Blocksy child theme Compatibility #875
+* Improvement: Redundant Title Text in TOC Causing Accessibility Warning #868
+* New: Option to show/disable TOC on mobile/desktop on specific post/page #845
+* Test: Need to test with WordPress 6.8 #882
+
 = 2.0.73 12/03/2025 =
 * New: Added a Sitemap Feature #835
 * Tweak: Some TOC Headings Not Working When Added with Elementor Plugin #857
@@ -233,28 +251,6 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 * TWEAK: Write plugin name in subject of feedback form #731
 * New: Added to exclude heading from query loop feature #730
 
-= 2.0.64 28/03/2024 =
-* TWEAK: When clicked on copy shortcode, Page is shaking #695
-* TWEAK: Uncaught ReferenceError #693
-* TWEAK: Need to correct [initial_view='no'] shortcode in TOC #715
-* New: Exclude By Matching Url/String Option is not working for Sticky TOC #688
-* New: Added a new feature to set different positions on specific posts/pages #697
-* New: Added a new feature to Filter/Hook for Adding Custom Links Before and After Toc plugin-generated Links #718
-* Bug: Fatal Error: [ez-toc-widget-sticky] Shortcode and also Conflict with 'Internal Link Juicer (Pro)'. #704
-* Bug: Sidebar’s PHP Error Notices in TOC version 2.0.63 #716
-* Bug: Double invoice showing when sitenavigation schema option enabled #720
-* Compatibility: Tested with Wordpress 6.5 #723
-
-= 2.0.63 02/03/2024 =
-* TWEAK: Remove extra spaces added by the users to the option Exclude feature #687
-* TWEAK: HTML Validator Parse Error: Font-Size Issue #691
-* TWEAK: Proper enqueue method for sticky toc js. #696
-* Bug: Easy TOC conflicts with the Popular Post plugin. #680
-* Bug: A warning is appearing after the recent update #686
-* Bug: TOC not showing on MicrojobEngine theme #694
-* Bug: Warning appears in product widget sidebar #705
-* Bug: Function wp_specialchars is deprecated since version 2.8.0! #709
-* Bug: Add compatibility with pressbook theme #710
 
 Full changelog available at [changelog.txt](https://plugins.svn.wordpress.org/easy-table-of-contents/trunk/changelog.txt)
 

@@ -3,13 +3,13 @@ Contributors: fernandobt, zymeth25
 Donate Link: http://picandocodigo.net/programacion/wordpress/list-category-posts-wordpress-plugin-english/#support
 Tags: list, categories, posts, cms
 Requires at least: 3.3
-Tested up to: 6.4.3
+Tested up to: 6.8.1
 Requires PHP: 5.6
-Stable tag: 0.89.8
+Stable tag: 0.91.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-List Category Posts allows you to list posts by category and many other parameters in a post, page or widget. You use the [catlist] shortcode to select which posts to show and how. There's tons of customizations available.
+Very customizable plugin to list posts by category (or tag, author and more) in a post, page or widget. It uses the [catlist] shortcode to select posts.
 
 == Description ==
 
@@ -24,7 +24,7 @@ The shortcode accepts a category name or id, the order in which you want the pos
 The `[catlist]` shortcode can be used as many times as needed with different arguments on each post/page.
 `[catlist id=1 numberposts=10]`
 
-There's an options page with only one option -for the moment-, new options will be implemented on demand (as long as they make sense). Right now the only global option is the `numberposts` parameter, to define a default number of posts to show for each instance (you can override this value by using the `numberposts` parameter in your shortcode).
+There's an options page with a few options, new options will be implemented on demand (as long as they make sense).
 
 **[Read the instructions](https://github.com/picandocodigo/List-Category-Posts/wiki)** to learn which parameters are available and how to use them.
 
@@ -237,9 +237,35 @@ Template system has changed. Custom templates should be stored in WordPress them
 
 == Changelog ==
 
-= 0.89.7 =
+= 0.91.0 =
 
-* Fixes previous release not reporting correct version on Plugin Repository.
+* Addresses CVE-2025-47636, avoids Local File Inclusion for template system. The code will remove any occurrences of the string  '../' in the template parameter. Templates files must be php files located in a directory named `list-category-posts` under `wp-content/themes/your-theme-folder`.
+https://www.cve.org/CVERecord?id=CVE-2025-47636
+
+= 0.90.3 =
+
+* Hardens xss fix for script tag by checking case insensitive and using tag_escape.
+
+= 0.90.2 =
+
+* Updates fix for stored cross-site scripting from 0.90.0, now applied to all tags. From this version onwards, script is not available to use as a tag when setting an element's tag in the shortcode.
+
+= 0.90.1 =
+
+* Fix PHP 8.2 deprecation notices
+* Remove empty anchor tags from widget morelink
+
+= 0.90.0 =
+
+* Fixes a Stored Cross-Site Scripting issue using `excerpt_tag='script'`.
+
+= 0.89.9 =
+
+* Fix deprecation notices caused by tag_escape - https://wordpress.org/support/topic/php-deprecated-preg_replace-passing-null-to-parameter-3/
+
+= 0.89.8 =
+
+* Fixes previous release not reporting proper version number on Plugin Repository.
 
 = 0.89.7 =
 

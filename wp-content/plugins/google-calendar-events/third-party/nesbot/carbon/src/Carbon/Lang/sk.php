@@ -39,8 +39,8 @@ $fromNow = function ($time) {
     return 'o ' . \strtr($time, ['hodina' => 'hodinu', 'minúta' => 'minútu', 'sekunda' => 'sekundu']);
 };
 $ago = function ($time) {
-    $replacements = ['/\\bhodina\\b/' => 'hodinou', '/\\bminúta\\b/' => 'minútou', '/\\bsekunda\\b/' => 'sekundou', '/\\bdeň\\b/u' => 'dňom', '/\\btýždeň\\b/u' => 'týždňom', '/\\bmesiac\\b/' => 'mesiacom', '/\\brok\\b/' => 'rokom'];
-    $replacementsPlural = ['/\\bhodiny\\b/' => 'hodinami', '/\\bminúty\\b/' => 'minútami', '/\\bsekundy\\b/' => 'sekundami', '/\\bdni\\b/' => 'dňami', '/\\btýždne\\b/' => 'týždňami', '/\\bmesiace\\b/' => 'mesiacmi', '/\\broky\\b/' => 'rokmi'];
+    $replacements = ['/\bhodina\b/' => 'hodinou', '/\bminúta\b/' => 'minútou', '/\bsekunda\b/' => 'sekundou', '/\bdeň\b/u' => 'dňom', '/\btýždeň\b/u' => 'týždňom', '/\bmesiac\b/' => 'mesiacom', '/\brok\b/' => 'rokom'];
+    $replacementsPlural = ['/\bhodiny\b/' => 'hodinami', '/\bminúty\b/' => 'minútami', '/\bsekundy\b/' => 'sekundami', '/\bdni\b/' => 'dňami', '/\btýždne\b/' => 'týždňami', '/\bmesiace\b/' => 'mesiacmi', '/\broky\b/' => 'rokmi'];
     foreach ($replacements + $replacementsPlural as $pattern => $replacement) {
         $time = \preg_replace($pattern, $replacement, $time);
     }

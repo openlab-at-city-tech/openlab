@@ -26,7 +26,7 @@ class Schema {
 	 *
 	 * @return array An array containing Schema.
 	 */
-	public static function get_schema( string $action = null, array $args = array() ) {
+	public static function get_schema( ?string $action = null, array $args = array() ) {
 		if ( \is_null( $action ) ) {
 			return array();
 		}

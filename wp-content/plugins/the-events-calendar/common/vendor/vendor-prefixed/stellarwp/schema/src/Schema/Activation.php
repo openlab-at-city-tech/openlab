@@ -5,9 +5,6 @@
  * @since   1.0.0
  *
  * @package StellarWP\WPTables
- *
- * @license GPL-2.0
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Schema;

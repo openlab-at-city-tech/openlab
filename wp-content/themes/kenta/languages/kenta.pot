@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Kenta 1.4.6\n"
+"Project-Id-Version: Kenta 1.4.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/kenta\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-24T13:07:38+00:00\n"
+"POT-Creation-Date: 2025-04-28T03:15:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: kenta\n"
@@ -127,7 +127,7 @@ msgid "Enable Scroll Reveal"
 msgstr ""
 
 #: inc/builder/class-builder-column.php:149
-#: inc/elements/class-menu-element.php:85
+#: inc/elements/class-menu-element.php:83
 msgid "Direction"
 msgstr ""
 
@@ -237,7 +237,7 @@ msgstr ""
 #: inc/builder/class-header-row.php:228
 #: inc/customizer/class-archive-section.php:327
 #: inc/customizer/class-header-section.php:63
-#: inc/elements/class-menu-element.php:201
+#: inc/elements/class-menu-element.php:199
 msgid "General"
 msgstr ""
 
@@ -274,9 +274,9 @@ msgstr ""
 #: inc/elements/class-breadcrumbs-element.php:36
 #: inc/elements/class-button-element.php:61
 #: inc/elements/class-cart-element.php:73
-#: inc/elements/class-collapsable-menu-element.php:103
+#: inc/elements/class-collapsable-menu-element.php:101
 #: inc/elements/class-logo-element.php:119
-#: inc/elements/class-menu-element.php:202
+#: inc/elements/class-menu-element.php:200
 #: inc/elements/class-search-element.php:82
 #: inc/elements/class-trigger-element.php:48
 #: inc/extensions/class-related-posts-extension.php:164
@@ -298,7 +298,7 @@ msgstr ""
 #: inc/builder/class-footer-row.php:180
 #: inc/builder/class-header-row.php:175
 #: inc/customizer/class-header-section.php:172
-#: inc/elements/class-menu-element.php:53
+#: inc/elements/class-menu-element.php:51
 #: inc/extensions/class-sticky-extension.php:66
 msgid "Top Border"
 msgstr ""
@@ -376,7 +376,7 @@ msgstr ""
 
 #: inc/builder/class-header-row.php:187
 #: inc/customizer/class-header-section.php:185
-#: inc/elements/class-menu-element.php:52
+#: inc/elements/class-menu-element.php:50
 #: inc/extensions/class-sticky-extension.php:73
 msgid "Bottom Border"
 msgstr ""
@@ -394,7 +394,7 @@ msgstr ""
 #: inc/customizer/class-store-catalog-section.php:100
 #: inc/elements/class-breadcrumbs-element.php:35
 #: inc/elements/class-button-element.php:42
-#: inc/elements/class-collapsable-menu-element.php:65
+#: inc/elements/class-collapsable-menu-element.php:63
 #: inc/elements/class-logo-element.php:38
 #: inc/extensions/class-related-posts-extension.php:162
 #: inc/extensions/class-scroll-top-extension.php:113
@@ -418,7 +418,7 @@ msgstr ""
 #: inc/customizer/class-header-section.php:161
 #: inc/customizer/class-header-section.php:167
 #: inc/customizer/class-single-post-section.php:284
-#: inc/elements/class-collapsable-menu-element.php:117
+#: inc/elements/class-collapsable-menu-element.php:115
 #: inc/elements/class-copyright-element.php:48
 #: inc/elements/class-logo-element.php:138
 #: inc/elements/class-logo-element.php:160
@@ -434,7 +434,7 @@ msgstr ""
 #: inc/customizer/class-header-section.php:162
 #: inc/customizer/class-header-section.php:168
 #: inc/customizer/class-single-post-section.php:285
-#: inc/elements/class-collapsable-menu-element.php:118
+#: inc/elements/class-collapsable-menu-element.php:116
 #: inc/elements/class-copyright-element.php:49
 #: inc/elements/class-logo-element.php:140
 #: inc/traits/trait-socials-controls.php:146
@@ -475,7 +475,7 @@ msgstr ""
 #: inc/customizer/class-single-post-section.php:211
 #: inc/elements/class-logo-element.php:65
 #: inc/elements/class-logo-element.php:113
-#: inc/elements/class-menu-element.php:90
+#: inc/elements/class-menu-element.php:88
 #: inc/extensions/class-scroll-top-extension.php:164
 #: inc/traits/trait-article-controls.php:174
 #: inc/traits/trait-button-controls.php:75
@@ -488,7 +488,7 @@ msgstr ""
 #: inc/customizer/class-single-post-section.php:213
 #: inc/elements/class-logo-element.php:66
 #: inc/elements/class-logo-element.php:115
-#: inc/elements/class-menu-element.php:91
+#: inc/elements/class-menu-element.php:89
 #: inc/extensions/class-scroll-top-extension.php:165
 #: inc/traits/trait-article-controls.php:182
 #: inc/traits/trait-button-controls.php:76
@@ -764,7 +764,7 @@ msgstr ""
 #: inc/customizer/class-archive-section.php:480
 #: inc/customizer/class-content-section.php:36
 #: inc/customizer/class-content-section.php:214
-#: inc/elements/class-collapsable-menu-element.php:105
+#: inc/elements/class-collapsable-menu-element.php:103
 #: inc/elements/class-copyright-element.php:30
 msgid "Typography"
 msgstr ""
@@ -933,7 +933,7 @@ msgstr ""
 #: inc/customizer/class-header-section.php:136
 #: inc/customizer/class-header-section.php:142
 #: inc/customizer/class-header-section.php:149
-#: inc/elements/class-collapsable-menu-element.php:119
+#: inc/elements/class-collapsable-menu-element.php:117
 #: inc/template-tags.php:1049
 #: inc/traits/trait-global-color-controls.php:47
 #: inc/traits/trait-global-color-controls.php:58
@@ -945,8 +945,8 @@ msgid "Buttons"
 msgstr ""
 
 #: inc/customizer/class-content-section.php:50
-#: inc/elements/class-menu-element.php:51
-#: inc/elements/class-menu-element.php:129
+#: inc/elements/class-menu-element.php:49
+#: inc/elements/class-menu-element.php:127
 #: inc/template-tags.php:1041
 #: inc/traits/trait-button-controls.php:105
 #: inc/traits/trait-icon-button-controls.php:71
@@ -959,7 +959,7 @@ msgid "Outline"
 msgstr ""
 
 #: inc/customizer/class-content-section.php:52
-#: inc/elements/class-menu-element.php:131
+#: inc/elements/class-menu-element.php:129
 #: inc/traits/trait-button-controls.php:106
 msgid "Solid"
 msgstr ""
@@ -976,8 +976,8 @@ msgid "Primary"
 msgstr ""
 
 #: inc/customizer/class-content-section.php:56
-#: inc/elements/class-menu-element.php:56
-#: inc/elements/class-menu-element.php:133
+#: inc/elements/class-menu-element.php:54
+#: inc/elements/class-menu-element.php:131
 #: inc/template-tags.php:1050
 #: inc/traits/trait-button-controls.php:111
 #: inc/traits/trait-icon-button-controls.php:76
@@ -1405,57 +1405,57 @@ msgstr ""
 msgid "No Follow"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:49
-#: inc/elements/class-menu-element.php:149
+#: inc/elements/class-collapsable-menu-element.php:47
+#: inc/elements/class-menu-element.php:147
 msgid "Edit Menu Locations"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:54
-#: inc/elements/class-menu-element.php:154
+#: inc/elements/class-collapsable-menu-element.php:52
+#: inc/elements/class-menu-element.php:152
 msgid "Menu Depth"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:55
-#: inc/elements/class-menu-element.php:155
+#: inc/elements/class-collapsable-menu-element.php:53
+#: inc/elements/class-menu-element.php:153
 msgid "\"0\" meas no limit."
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:67
+#: inc/elements/class-collapsable-menu-element.php:65
 msgid "Collapsable"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:68
+#: inc/elements/class-collapsable-menu-element.php:66
 msgid "This option will collapse/expand the sub menu items on click/touch."
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:74
-#: inc/elements/class-menu-element.php:176
+#: inc/elements/class-collapsable-menu-element.php:72
+#: inc/elements/class-menu-element.php:174
 msgid "Toggle Icon"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:83
+#: inc/elements/class-collapsable-menu-element.php:81
 msgid "Toggle Style"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:88
+#: inc/elements/class-collapsable-menu-element.php:86
 msgid "Simple"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:89
+#: inc/elements/class-collapsable-menu-element.php:87
 #: inc/template-tags.php:1043
 msgid "Bordered"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:96
+#: inc/elements/class-collapsable-menu-element.php:94
 msgid "Toggle Border"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:115
+#: inc/elements/class-collapsable-menu-element.php:113
 #: inc/elements/class-copyright-element.php:40
 msgid "Color"
 msgstr ""
 
-#: inc/elements/class-collapsable-menu-element.php:123
+#: inc/elements/class-collapsable-menu-element.php:121
 msgid "Items Divider"
 msgstr ""
 
@@ -1517,55 +1517,55 @@ msgstr ""
 msgid "Site Tagline Color"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:47
+#: inc/elements/class-menu-element.php:45
 msgid "Top Level Preset"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:54
+#: inc/elements/class-menu-element.php:52
 msgid "Both Border"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:55
+#: inc/elements/class-menu-element.php:53
 msgid "Pill"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:60
+#: inc/elements/class-menu-element.php:58
 msgid "Items Height"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:78
+#: inc/elements/class-menu-element.php:76
 msgid "Min Width"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:96
+#: inc/elements/class-menu-element.php:94
 msgid "Items Padding"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:107
+#: inc/elements/class-menu-element.php:105
 msgid "Dropdown Border Radius"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:125
+#: inc/elements/class-menu-element.php:123
 msgid "Dropdown Preset"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:130
+#: inc/elements/class-menu-element.php:128
 msgid "Ghost Dark"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:132
+#: inc/elements/class-menu-element.php:130
 msgid "Solid Dark"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:168
+#: inc/elements/class-menu-element.php:166
 msgid "Sub Menu Toggle Icon"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:188
+#: inc/elements/class-menu-element.php:186
 msgid "Top Level Options"
 msgstr ""
 
-#: inc/elements/class-menu-element.php:197
+#: inc/elements/class-menu-element.php:195
 msgid "Dropdown Options"
 msgstr ""
 
@@ -1879,15 +1879,15 @@ msgstr ""
 msgid "Learn More"
 msgstr ""
 
-#: inc/template-functions.php:584
+#: inc/template-functions.php:588
 msgid "Previous Post"
 msgstr ""
 
-#: inc/template-functions.php:585
+#: inc/template-functions.php:589
 msgid "Next Post"
 msgstr ""
 
-#: inc/template-functions.php:586
+#: inc/template-functions.php:590
 msgid "Page"
 msgstr ""
 

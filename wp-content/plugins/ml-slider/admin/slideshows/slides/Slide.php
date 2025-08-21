@@ -277,7 +277,7 @@ self::$instance = new self($slideshow_id);
     {
         $images = !empty($images) ? $images : Metaslider_Image::instance()->get_theme_images($theme_id);
         if (is_wp_error($images)) {
-return $images;
+            return $images;
         }
 
         $image_ids = array();

@@ -66,6 +66,7 @@ class Page extends Lib\Base\Component
                     'zeroRecordsAlt' => __( 'No matching records found', 'bookly' ),
                     'noResults' => __( 'No records.', 'bookly' ),
                     'emptyTable' => __( 'No data available in table', 'bookly' ),
+                    'loadingRecords' => __( 'Loading...', 'bookly' ),
                     'quick_search' => __( 'Quick search', 'bookly' ),
                     'processing' => __( 'Processing...', 'bookly' ),
                     'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),

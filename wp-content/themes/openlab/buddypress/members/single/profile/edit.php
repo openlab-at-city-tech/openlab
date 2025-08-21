@@ -62,7 +62,10 @@ $social_fields = openlab_social_media_fields();
                         <p class="description">
 							<?php echo openlab_get_profile_field_helper_text( 'display_name' ); ?>
 						</p>
+
                     </div>
+
+					<p>Want to choose who can see the information below? Go to <a href="<?php echo bp_members_get_user_url( bp_displayed_user_id(), bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ); ?>">Privacy Settings</a>.</p>
                     <?php $display_name_shown = true ?>
                 <?php } ?>
 
@@ -240,7 +243,8 @@ $social_fields = openlab_social_media_fields();
 
                             <?php do_action('bp_custom_profile_edit_fields') ?>
 
-							<?php openlab_xprofile_field_visibility_selector(); ?>
+							<?php /* Required to prevent the visibility setting from being reset. */ ?>
+							<input type="hidden" name="field_<?php bp_the_profile_field_id(); ?>_visibility" id="field_<?php bp_the_profile_field_id(); ?>_visibility" value="<?php echo esc_attr( xprofile_get_field_visibility_level( bp_get_the_profile_field_id(), bp_displayed_user_id() ) ); ?>" />
 
                             <p class="description"><?php bp_the_profile_field_description() ?></p>
                         </div>

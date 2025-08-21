@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 	 * @since 1.0.0
 	 */
 	class Astra_Customizer {
-
 		/**
 		 * Contexts.
 		 *
@@ -120,7 +119,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 		/**
 		 * Check if the current customizer request belongs to Astra theme.
-		 * 
+		 *
 		 * @return bool True if it is Astra customizer, false otherwise.
 		 *
 		 * @since 4.8.3
@@ -128,12 +127,22 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 		public static function is_astra_customizer() {
 
 			// Bail early if it is the Kadence WooCommerce Email Designer plugin customizer.
-			if ( class_exists( 'Kadence_Woomail_Designer' ) ) {
-				if ( Kadence_Woomail_Designer::is_own_customizer_request() || Kadence_Woomail_Designer::is_own_preview_request() ) {
-					return false;
-				}
+			if (
+				class_exists( 'Kadence_Woomail_Designer' ) &&
+				( Kadence_Woomail_Designer::is_own_customizer_request() || Kadence_Woomail_Designer::is_own_preview_request() )
+			) {
+				return false;
 			}
 
+			// Bail early if it is the Decorator - WooCommerce Email Customizer plugin customizer.
+			if (
+				class_exists( 'RP_Decorator' ) &&
+				( RP_Decorator::is_own_customizer_request() || RP_Decorator::is_own_preview_request() )
+			) {
+				return false;
+			}
+
+			// Default to Astra customizer.
 			return true;
 		}
 		/**
@@ -146,9 +155,10 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			// Hooks that are necessary even if it is not Astra's customizer.
 			if ( is_admin() || is_customize_preview() ) {
 				add_action( 'customize_register', array( $this, 'include_configurations' ), 2 );
+				add_action( 'customize_register', array( $this, 'astra_pro_upgrade_configurations' ), 2 );
 			}
 			add_action( 'customize_register', array( $this, 'customize_register_panel' ), 2 );
-			
+
 			// Bail early if it is not astra customizer.
 			if ( ! self::is_astra_customizer() ) {
 				return;
@@ -161,7 +171,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 			if ( is_admin() || is_customize_preview() ) {
 				add_action( 'customize_register', array( $this, 'prepare_customizer_javascript_configs' ) );
-				add_action( 'customize_register', array( $this, 'astra_pro_upgrade_configurations' ), 2 );
 				add_action( 'customize_register', array( $this, 'prepare_group_configs' ), 9 );
 
 				add_filter( 'customize_dynamic_setting_args', array( $this, 'filter_dynamic_setting_args' ), 10, 2 );
@@ -187,6 +196,9 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			add_action( 'wp_ajax_astra_regenerate_fonts_folder', array( $this, 'regenerate_astra_fonts_folder' ) );
 
 			add_action( 'wp_footer', array( $this, 'style_guide_template' ) );
+
+			// Handles the AJAX request for astra SVG icons.
+			add_action( 'wp_ajax_astra_logo_svg_icons', array( $this, 'logo_svg_icons' ) );
 		}
 
 		/**
@@ -316,11 +328,11 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			return $setting_args;
 		}
 
-			/**
-			 * Prepare Contexts and choices.
-			 *
-			 * @since 3.0.0
-			 */
+		/**
+		 * Prepare Contexts and choices.
+		 *
+		 * @since 3.0.0
+		 */
 		public function prepare_customizer_javascript_configs() {
 
 			global $wp_customize;
@@ -336,7 +348,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 			$defaults = $this->get_astra_customizer_configuration_defaults();
 
-			foreach ( $configurations as $key => $configuration ) {
+			foreach ( $configurations as $configuration ) {
 
 				$config = wp_parse_args( $configuration, $defaults );
 
@@ -373,7 +385,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			}
 
 			update_option( 'astra_partials_config_cache', self::$dynamic_options, false );
-
 		}
 
 		/**
@@ -408,7 +419,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					array_push( self::$tabbed_sections, $section_id );
 				}
 			}
-
 		}
 
 		/**
@@ -430,7 +440,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 	                    			return \'&#\'+i.charCodeAt(0)+\';\';
 								});
 	                    	desc.remove();
-	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'data-title=\'" + tooltip +"\'></i><span class=\'ast-dashicons-custom-tooltip\'data-title=\'" + tooltip + "\'><span>");
+	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'data-title=\'" + tooltip +"\'></i><span class=\'ast-tooltip\'data-title=\'" + tooltip + "\'><span>");
 	                	}
 	            	});
 	        	});';
@@ -459,7 +469,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 				Astra_Builder_Helper::$general_tab_config,
 
 			);
-
 		}
 
 		/**
@@ -536,7 +545,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 						$configuration['inputAttrs'] = '';
 						$configuration['labelStyle'] = '';
-							/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 						foreach ( $configuration['input_attrs'] as $attr => $value ) {
 							/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 							if ( 'style' !== $attr ) {
@@ -576,13 +585,13 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 					break;
 				case 'ast-settings-group':
+				case 'ast-multiselect-checkbox-group':
 					$config = array();
 
 					if ( isset( self::$group_configs[ $configuration['name'] ]['tabs'] ) ) {
 						$tab = array_keys( self::$group_configs[ $configuration['name'] ]['tabs'] );
 						rsort( $tab );
-						foreach ( $tab as $key => $value ) {
-
+						foreach ( $tab as $value ) {
 							$config['tabs'][ $value ] = wp_list_sort( self::$group_configs[ $configuration['name'] ]['tabs'][ $value ], 'priority' );
 						}
 					} else {
@@ -644,8 +653,17 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					} else {
 						$configuration['value'] = $val;
 					}
+					break;
 
-					$configuration['ast_all_svg_icons'] = function_exists( 'astra_get_logo_svg_icons_array' ) ? astra_get_logo_svg_icons_array() : array();
+				case 'ast-svg-icon-selector':
+					if ( ! isset( $val['type'] ) ) {
+						$configuration['value'] = array(
+							'type'  => '',
+							'value' => '',
+						);
+					} else {
+						$configuration['value'] = $val;
+					}
 					break;
 
 			} // Switch End.
@@ -670,6 +688,30 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			}
 
 			return $configuration;
+		}
+
+		/**
+		 * Handles the AJAX request for logo SVG icons.
+		 * The main purpose of handling this via AJAX is to improve Customizer performance.
+		 *
+		 * @return array The array of logo SVG icons.
+		 */
+		public function logo_svg_icons() {
+			// Check if the current user has the capability to edit theme options.
+			if ( ! current_user_can( 'edit_theme_options' ) ) {
+				wp_send_json_error( __( 'You are not allowed to access this resource.', 'astra' ) );
+			}
+
+			// Check if the current request is an AJAX request and if it is being done in the Customizer screen.
+			if ( ! is_admin() || ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
+				wp_send_json_error( __( 'This request is only allowed in the Customizer screen.', 'astra' ) );
+			}
+
+			wp_send_json_success(
+				array(
+					'icons' => function_exists( 'astra_get_logo_svg_icons_array' ) ? astra_get_logo_svg_icons_array() : array(),
+				)
+			);
 		}
 
 		/**
@@ -735,9 +777,17 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			$parent           = astra_get_prop( $config, 'parent' );
 			$sub_control_name = ASTRA_THEME_SETTINGS . '[' . $name . ']';
 
-			$ignore_controls = array( 'ast-settings-group', 'ast-sortable', 'ast-radio-image', 'ast-slider', 'ast-responsive-slider', 'ast-section-toggle' );
+			$ignore_controls = array(
+				'ast-settings-group',
+				'ast-multiselect-checkbox-group',
+				'ast-sortable',
+				'ast-radio-image',
+				'ast-slider',
+				'ast-responsive-slider',
+				'ast-section-toggle',
+			);
 
-			$sanitize_callback = ( in_array( $config['control'], $ignore_controls, true ) ) ? false : astra_get_prop( $config, 'sanitize_callback', Astra_Customizer_Control_Base::get_sanitize_call( astra_get_prop( $config, 'control' ) ) );
+			$sanitize_callback = in_array( $config['control'], $ignore_controls, true ) ? false : astra_get_prop( $config, 'sanitize_callback', Astra_Customizer_Control_Base::get_sanitize_call( astra_get_prop( $config, 'control' ) ) );
 
 			if ( ! $sanitize_callback ) {
 				$config = $this->sanitize_control( $config );
@@ -791,9 +841,8 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 		public static function get_control_link( $id ) {
 			if ( isset( $id ) ) {
 				return 'data-customize-setting-link="' . $id . '"';
-			} else {
-				return 'data-customize-setting-key-link="default"';
 			}
+				return 'data-customize-setting-key-link="default"';
 		}
 
 		/**
@@ -808,14 +857,21 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			unset( $config['type'] );
 			$name = astra_get_prop( $config, 'name' );
 
-			$ignore_controls = array( 'ast-settings-group', 'ast-sortable', 'ast-radio-image', 'ast-slider', 'ast-responsive-slider', 'ast-section-toggle' );
+			$ignore_controls = array(
+				'ast-settings-group',
+				'ast-multiselect-checkbox-group',
+				'ast-sortable',
+				'ast-radio-image',
+				'ast-slider',
+				'ast-responsive-slider',
+				'ast-section-toggle',
+			);
 
 			if ( ! isset( $config['control'] ) ) {
 				return;
 			}
 
-			$sanitize_callback = ( in_array( $config['control'], $ignore_controls, true ) ) ? false : astra_get_prop( $config, 'sanitize_callback', Astra_Customizer_Control_Base::get_sanitize_call( astra_get_prop( $config, 'control' ) ) );
-
+			$sanitize_callback = in_array( $config['control'], $ignore_controls, true ) ? false : astra_get_prop( $config, 'sanitize_callback', Astra_Customizer_Control_Base::get_sanitize_call( astra_get_prop( $config, 'control' ) ) );
 
 			if ( ! $sanitize_callback ) {
 				$config = $this->sanitize_control( $config );
@@ -918,7 +974,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			}
 
 			return $config;
-
 		}
 
 		/**
@@ -973,7 +1028,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			$configurations = $this->get_customizer_configurations();
 			$defaults       = $this->get_astra_customizer_configuration_defaults();
 
-			foreach ( $configurations as $key => $configuration ) {
+			foreach ( $configurations as $configuration ) {
 				$config = wp_parse_args( $configuration, $defaults );
 				if ( 'sub-control' === $config['type'] ) {
 					unset( $config['type'] );
@@ -1083,7 +1138,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			}
 
 			return $defaults;
-
 		}
 
 		/**
@@ -1109,18 +1163,20 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					'googleFonts'             => Astra_Font_Families::get_google_fonts(),
 					'variantLabels'           => Astra_Font_Families::font_variant_labels(),
 					'upgradeUrl'              => array(
-						'default'        => ASTRA_PRO_CUSTOMIZER_UPGRADE_URL,
-						'global'         => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'global' ),
-						'header-builder' => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'header-builder' ),
-						'footer-builder' => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'footer-builder' ),
-						'sidebar'        => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'sidebar' ),
-						'woocommerce'    => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'woocommerce' ),
-						'blog-single'    => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'blog-single' ),
-						'blog-archive'   => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'blog-archive' ),
+						'default'        => astra_get_upgrade_url( 'customizer' ),
+						'global'         => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'global' ),
+						'header-builder' => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'header-builder' ),
+						'footer-builder' => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'footer-builder' ),
+						'sidebar'        => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'sidebar' ),
+						'woocommerce'    => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'woocommerce' ),
+						'blog-single'    => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'blog-single' ),
+						'blog-archive'   => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'blog-archive' ),
+						'hfb-pro-widget' => astra_get_pro_url( '/pricing/', 'free-theme', 'astra-header-footer', 'unlock-pro-widget' ),
 					),
 					/** @psalm-suppress RedundantCondition */
 					'is_woo_market_zip'       => ! ASTRA_THEME_ORG_VERSION,
-					/** @psalm-suppress RedundantCondition */
+					'pro_active'              => defined( 'ASTRA_EXT_VER' ),
+				/** @psalm-suppress RedundantCondition */
 				)
 			);
 
@@ -1158,7 +1214,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 		 */
 		public function starts_with( $string, $start_string ) {
 			$len = strlen( $start_string );
-			return ( substr( $string, 0, $len ) === $start_string );
+			return substr( $string, 0, $len ) === $start_string;
 		}
 
 		/**
@@ -1279,7 +1335,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			if ( ! defined( 'ASTRA_EXT_VER' ) ) {
 				$wp_customize->register_section_type( 'Astra_Pro_Customizer' );
 			}
-
 
 			// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			require ASTRA_THEME_DIR . 'inc/customizer/extend-customizer/class-astra-wp-customize-panel.php';
@@ -1477,7 +1532,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 							'group_modal_tmpl'    => $template,
 							'sortable_modal_tmpl' => $sortable_subcontrol_template,
 							'is_pro'              => defined( 'ASTRA_EXT_VER' ),
-							'show_upgrade_notice' => ( astra_showcase_upgrade_notices() ) ? true : false,
+							'show_upgrade_notice' => astra_showcase_upgrade_notices() ? true : false,
 							'upgrade_link'        => esc_url( astra_get_upgrade_url( 'pricing' ) ),
 							'is_block_widget'     => astra_has_widgets_block_editor(),
 						),
@@ -1719,8 +1774,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					</div>
 				</div>
 			<?php
-			$navigation_markup = ob_get_clean();
-			return $navigation_markup;
+			return ob_get_clean();
 		}
 
 		/**
@@ -1785,9 +1839,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			<optgroup label="Google">
 				<?php
 				foreach ( $google_fonts as $name => $single_font ) {
-					$variants = astra_get_prop( $single_font, '0' );
 					$category = astra_get_prop( $single_font, '1' );
-
 					?>
 					<option value="<?php echo "'" . esc_attr( $name ) . "', " . esc_attr( $category ); ?>"><?php echo esc_html( $name ); ?></option>
 					<?php
@@ -1841,11 +1893,12 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 				'updated_gb_outline_button_patterns'   => astra_button_default_padding_updated(),
 				'apply_content_bg_fullwidth_layouts'   => astra_get_option( 'apply-content-background-fullwidth-layouts', true ),
 				'astra_woo_btn_global_compatibility'   => is_callable( 'Astra_Dynamic_CSS::astra_woo_support_global_settings' ) ? Astra_Dynamic_CSS::astra_woo_support_global_settings() : false,
-				'v4_2_2_core_form_btns_styling'        => ( true === Astra_Dynamic_CSS::astra_core_form_btns_styling() ) ? ', #comments .submit, .search .search-submit' : '',
+				'v4_2_2_core_form_btns_styling'        => true === Astra_Dynamic_CSS::astra_core_form_btns_styling() ? ', #comments .submit, .search .search-submit' : '',
 				'isLifterLMS'                          => class_exists( 'LifterLMS' ),
 				'improved_button_selector'             => Astra_Dynamic_CSS::astra_4_6_4_compatibility() ? ', .ast-single-post .entry-content .wp-block-button .wp-block-button__link, .ast-single-post .entry-content .wp-block-search .wp-block-search__button, body .entry-content .wp-block-file .wp-block-file__button' : '',
 				'tablet_breakpoint'                    => astra_get_tablet_breakpoint(),
 				'mobile_breakpoint'                    => astra_get_mobile_breakpoint(),
+				'is_dark_palette'                      => Astra_Global_Palette::is_dark_palette(),
 			);
 
 			wp_localize_script( 'astra-customizer-preview-js', 'astraCustomizer', $localize_array );
@@ -1879,7 +1932,6 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			}
 
 			do_action( 'astra_customizer_save' );
-
 		}
 
 		/**
@@ -1947,15 +1999,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 		 */
 		public function preview_styles() {
 			if ( is_customize_preview() ) {
-				/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$is_script_debug = SCRIPT_DEBUG ? true : false;
-				/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$js_prefix = '.min.js';
-				if ( $is_script_debug ) {
-					$js_prefix = '.js';
-				}
-
-				$rtl = ( is_rtl() ) ? '-rtl' : '';
+				$rtl = is_rtl() ? '-rtl' : '';
 
 				wp_enqueue_style( 'astra-style-guide-css', ASTRA_THEME_URI . 'assets/css/minified/style-guide' . $rtl . '.min.css', array(), ASTRA_THEME_VERSION );
 

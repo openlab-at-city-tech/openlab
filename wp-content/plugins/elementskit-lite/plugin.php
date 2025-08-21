@@ -175,7 +175,7 @@ class Plugin {
 			->set_plugin_action_link( 'Settings', admin_url() . 'admin.php?page=elementskit' )
 			->set_plugin_action_link(
 				( $is_pro_active ? '' : 'Go Premium' ),
-				'https://wpmet.com/plugin/elementskit',
+				'https://wpmet.com/elementskit-pricing',
 				array(
 					'target' => '_blank',
 					'style'  => 'color: #FCB214; font-weight: bold;',
@@ -213,13 +213,6 @@ class Plugin {
 					'desc' => esc_html__('Your personal AI assistant for content and SEO. Write content that ranks on Google with NLP keywords and SERP analysis data.', 'elementskit-lite'),
 					'docs' => 'https://getgenie.ai/docs/',
 				],
-				'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => [
-					'name' => esc_html__('GutenKit', 'elementskit-lite'),
-					'url'  => 'https://wordpress.org/plugins/gutenkit-blocks-addon/',
-					'icon' => 'https://ps.w.org/gutenkit-blocks-addon/assets/icon-256x256.png?rev=3044956',
-					'desc' => esc_html__('Gutenberg blocks, patterns, and templates that extend the page-building experience using the WordPress block editor.', 'elementskit-lite'),
-					'docs' => 'https://wpmet.com/docs/gutenkit/',
-				],
 				'shopengine/shopengine.php' => [
 					'name' => esc_html__('ShopEngine', 'elementskit-lite'),
 					'url'  => 'https://wordpress.org/plugins/shopengine/',
@@ -240,6 +233,27 @@ class Plugin {
 					'icon' => 'https://ps.w.org/emailkit/assets/icon-256x256.png?rev=3003571',
 					'desc' => esc_html__('Advanced email customizer for WooCommerce and WordPress. Build, customize, and send emails from WordPress to boost your sales!', 'elementskit-lite'),
 					'docs' => 'https://wpmet.com/doc/emailkit/',
+				],
+				'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => [
+					'name' => esc_html__('GutenKit', 'elementskit-lite'),
+					'url'  => 'https://wordpress.org/plugins/gutenkit-blocks-addon/',
+					'icon' => 'https://ps.w.org/gutenkit-blocks-addon/assets/icon-256x256.gif?rev=3044956',
+					'desc' => esc_html__('Gutenberg blocks, patterns, and templates that extend the page-building experience using the WordPress block editor.', 'elementskit-lite'),
+					'docs' => 'https://wpmet.com/docs/gutenkit/',
+				],
+				'popup-builder-block/popup-builder-block.php' => [
+					'name' => esc_html__('PopupKit', 'elementskit-lite'),
+					'url'  => 'https://wordpress.org/plugins/popup-builder-block/',
+					'icon' => 'https://ps.w.org/popup-builder-block/assets/icon-256x256.png?rev=3187075',
+					'desc' => esc_html__('Design popups that convert, right in your WordPress dashboard.', 'elementskit-lite'),
+					'docs' => 'https://wpmet.com/docs/gutenkit/',
+				],
+				'table-builder-block/table-builder-block.php' => [
+					'name' => esc_html__('TableKit', 'elementskit-lite'),
+					'url'  => 'https://wordpress.org/plugins/table-builder-block/',
+					'icon' => 'https://ps.w.org/table-builder-block/assets/icon-256x256.jpg?rev=3168211',
+					'desc' => esc_html__('Fully Customizable. Multi-Media Integration. Synch Any Data Files. All Within Block Editor.', 'elementskit-lite'),
+					'docs' => 'https://wpmet.com/docs/gutenkit/',
 				],
 				'wp-social/wp-social.php' => [
 					'name' => esc_html__('WP Social', 'elementskit-lite'),

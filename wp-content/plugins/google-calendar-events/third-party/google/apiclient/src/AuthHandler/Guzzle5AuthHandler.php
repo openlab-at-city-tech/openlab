@@ -13,7 +13,6 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * This supports Guzzle 5
- * @internal
  */
 class Guzzle5AuthHandler
 {
@@ -46,7 +45,7 @@ class Guzzle5AuthHandler
     }
     public function attachToken(ClientInterface $http, array $token, array $scopes)
     {
-        $tokenFunc = function ($scopes) use($token) {
+        $tokenFunc = function ($scopes) use ($token) {
             return $token['access_token'];
         };
         $subscriber = new ScopedAccessTokenSubscriber($tokenFunc, $scopes, $this->cacheConfig, $this->cache);

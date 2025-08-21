@@ -1,13 +1,13 @@
 === Name Directory ===
-Contributors: jeroenpeters1986, mpmarinov, mastababa
+Contributors: jeroenpeters1986
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://ko-fi.com/jeroenpeters
 Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 6.7
-Stable tag: 1.29.2
+Tested up to: 6.8
+Stable tag: 1.30.1
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -186,7 +186,6 @@ Since v1.8, yes you can! This export is also compatible with the import-function
 Yes, every now and then I come across an installed version of the plugin. Here is an incomplete list.
 
 1. [Dutch Budgie website - How to name your bird](https://www.parkietenvilla.nl/namenlijst/)
-1. [Dutch website - How to name your pet rat](http://ratten.nl/fun/namenlijst/)
 1. [Alabama Orthopaedic Society - Member list](https://aosdocs.com/find-an-orthopaedist/)
 1. [Convertus - Paid Search Terms](https://www.convertus.com/search-glossary/)
 1. [SBS ShopRI - Vendor List](http://sbsshopri.com/vendors/vendor-listing-2018/)
@@ -264,6 +263,17 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.30.1 | April 11, 2025 =
+ * Enhancement: Use admin-ajax as JS variable
+ * Enhancement: Use nonces when switching name-status (ajax calls)
+ * Enhancement: Updated the javascript a bit
+
+= 1.30.0 | April 6, 2025 =
+ * Feature: Pagination (finally?) in the WP-admin (as proposed by @boomlab)
+ * Enhancement: WP-admin aligned styling
+ * Enhancement: Removed calls to deprecated load_plugin_textdomain() to prevent warnings
+ * Enhancement: Tested with WordPress 6.8
 
 = 1.29.2 | November 9, 2024 =
  * Enhancement: Tested with WordPress 6.7

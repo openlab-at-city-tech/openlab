@@ -393,12 +393,13 @@ abstract class Settings {
                 .onlyinpro.hide {
                     display: none !important;
                 }
+				.onlyinpro_empty.show { display: block !important; }
             </style>
             <?php
             $renderOnce = 1;
         endif;
         ?>
-        <div class="onlyinpro">Available in <?php echo esc_attr($onlyin); ?> version and above. <a href="<?php echo admin_url('admin.php?page=' . static::abbrev('_pro')); ?>" target="">UPGRADE NOW&nbsp;➤</a></div>
+        <div class="onlyinpro">Available in <?php echo esc_attr($onlyin); ?> version and above.</div>
         <?php
         $content = ob_get_clean();
         return $content;

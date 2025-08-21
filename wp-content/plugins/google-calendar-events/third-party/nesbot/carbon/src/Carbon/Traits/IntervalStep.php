@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use Closure;
 use DateTimeImmutable;
 use DateTimeInterface;
-/** @internal */
 trait IntervalStep
 {
     /**
@@ -30,7 +29,7 @@ trait IntervalStep
      *
      * @return Closure
      */
-    public function getStep() : ?Closure
+    public function getStep(): ?Closure
     {
         return $this->step;
     }
@@ -41,7 +40,7 @@ trait IntervalStep
      *
      * @param Closure|null $step
      */
-    public function setStep(?Closure $step) : void
+    public function setStep(?Closure $step): void
     {
         $this->step = $step;
     }
@@ -55,7 +54,7 @@ trait IntervalStep
      *
      * @return CarbonInterface
      */
-    public function convertDate(DateTimeInterface $dateTime, bool $negated = \false) : CarbonInterface
+    public function convertDate(DateTimeInterface $dateTime, bool $negated = \false): CarbonInterface
     {
         /** @var CarbonInterface $carbonDate */
         $carbonDate = $dateTime instanceof CarbonInterface ? $dateTime : $this->resolveCarbon($dateTime);

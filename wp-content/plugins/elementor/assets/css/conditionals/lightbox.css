@@ -58,8 +58,7 @@
 .elementor-lightbox .elementor-swiper-button:hover svg {
   fill: var(--lightbox-ui-color-hover);
 }
-.elementor-lightbox .swiper,
-.elementor-lightbox .swiper-container {
+.elementor-lightbox .swiper {
   height: 100%;
 }
 .elementor-lightbox .elementor-lightbox-item {
@@ -72,7 +71,7 @@
   height: 100%;
   margin: auto;
 }
-@media (max-width: ELEMENTOR_SCREEN_MOBILE_MAX) {
+@media (max-width: 767px) {
   .elementor-lightbox .elementor-lightbox-item {
     padding: 70px 0;
   }
@@ -118,28 +117,6 @@
 .elementor-lightbox .elementor-video-container .elementor-video-portrait video {
   aspect-ratio: var(--video-aspect-ratio, 1.77777);
 }
-@supports not (aspect-ratio: 1/1) {
-  .elementor-lightbox .elementor-video-container .elementor-video-square,
-  .elementor-lightbox .elementor-video-container .elementor-video-landscape,
-  .elementor-lightbox .elementor-video-container .elementor-video-portrait {
-    position: relative;
-    overflow: hidden;
-    height: 0;
-    padding-bottom: calc(100% / var(--video-aspect-ratio, 1.77777));
-  }
-  .elementor-lightbox .elementor-video-container .elementor-video-square iframe,
-  .elementor-lightbox .elementor-video-container .elementor-video-square video,
-  .elementor-lightbox .elementor-video-container .elementor-video-landscape iframe,
-  .elementor-lightbox .elementor-video-container .elementor-video-landscape video,
-  .elementor-lightbox .elementor-video-container .elementor-video-portrait iframe,
-  .elementor-lightbox .elementor-video-container .elementor-video-portrait video {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-}
 .elementor-lightbox .elementor-video-container .elementor-video-square iframe,
 .elementor-lightbox .elementor-video-container .elementor-video-square video {
   width: min(90vh, 90vw);
@@ -156,7 +133,7 @@
   height: 100%;
   max-width: 90vw;
 }
-@media (min-width: ELEMENTOR_SCREEN_TABLET_NEXT) {
+@media (min-width: 1025px) {
   .elementor-lightbox .elementor-video-container .elementor-video-landscape {
     width: 85vw;
     max-height: 85vh;
@@ -166,7 +143,7 @@
     max-width: 85vw;
   }
 }
-@media (max-width: ELEMENTOR_SCREEN_TABLET_MAX) {
+@media (max-width: 1024px) {
   .elementor-lightbox .elementor-video-container .elementor-video-landscape {
     width: 95vw;
     max-height: 95vh;
@@ -176,16 +153,13 @@
     max-width: 95vw;
   }
 }
-.elementor-lightbox .swiper .elementor-swiper-button-prev,
-.elementor-lightbox .swiper-container .elementor-swiper-button-prev {
+.elementor-lightbox .swiper .elementor-swiper-button-prev {
   left: 0;
 }
-.elementor-lightbox .swiper .elementor-swiper-button-next,
-.elementor-lightbox .swiper-container .elementor-swiper-button-next {
+.elementor-lightbox .swiper .elementor-swiper-button-next {
   right: 0;
 }
-.elementor-lightbox .swiper .swiper-pagination-fraction,
-.elementor-lightbox .swiper-container .swiper-pagination-fraction {
+.elementor-lightbox .swiper .swiper-pagination-fraction {
   width: max-content;
   color: #ffffff;
 }
@@ -200,15 +174,47 @@
   justify-content: center;
   font-size: var(--lightbox-navigation-icons-size);
 }
-@media (max-width: ELEMENTOR_SCREEN_MOBILE_MAX) {
+@media (max-width: 1024px) {
+  .elementor-lightbox .elementor-swiper-button-prev:active, .elementor-lightbox .elementor-swiper-button-next:active {
+    -webkit-tap-highlight-color: transparent; /* fallback for some Androids */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  .elementor-lightbox .elementor-swiper-button-prev svg,
+  .elementor-lightbox .elementor-swiper-button-prev i, .elementor-lightbox .elementor-swiper-button-next svg,
+  .elementor-lightbox .elementor-swiper-button-next i {
+    cursor: pointer;
+  }
+  .elementor-lightbox .elementor-swiper-button-prev svg:active,
+  .elementor-lightbox .elementor-swiper-button-prev i:active, .elementor-lightbox .elementor-swiper-button-next svg:active,
+  .elementor-lightbox .elementor-swiper-button-next i:active {
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+@media (max-width: 767px) {
   .elementor-lightbox .elementor-swiper-button:focus {
     outline: none;
   }
   .elementor-lightbox .elementor-swiper-button-prev, .elementor-lightbox .elementor-swiper-button-next {
     width: 20%;
   }
+  .elementor-lightbox .elementor-swiper-button-prev:active, .elementor-lightbox .elementor-swiper-button-next:active {
+    -webkit-tap-highlight-color: transparent; /* fallback for some Androids */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
   .elementor-lightbox .elementor-swiper-button-prev i, .elementor-lightbox .elementor-swiper-button-next i {
     padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .elementor-lightbox .elementor-swiper-button-prev svg,
+  .elementor-lightbox .elementor-swiper-button-prev i, .elementor-lightbox .elementor-swiper-button-next svg,
+  .elementor-lightbox .elementor-swiper-button-next i {
+    cursor: pointer;
+  }
+  .elementor-lightbox .elementor-swiper-button-prev svg:active,
+  .elementor-lightbox .elementor-swiper-button-prev i:active, .elementor-lightbox .elementor-swiper-button-next svg:active,
+  .elementor-lightbox .elementor-swiper-button-next i:active {
+    outline: none;
     background-color: rgba(0, 0, 0, 0.5);
   }
   .elementor-lightbox .elementor-swiper-button-prev {

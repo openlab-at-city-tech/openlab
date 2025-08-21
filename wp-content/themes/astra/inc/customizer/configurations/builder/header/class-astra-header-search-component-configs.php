@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * @since 3.0.0
  */
 class Astra_Header_Search_Component_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Builder Customizer Configurations.
 	 *
@@ -42,4 +41,3 @@ class Astra_Header_Search_Component_Configs extends Astra_Customizer_Config_Base
  */
 
 new Astra_Header_Search_Component_Configs();
-

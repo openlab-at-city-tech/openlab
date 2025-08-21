@@ -13,6 +13,7 @@
 		"contact-info",
 		"donations",
 		"eventbrite",
+		"field-file",
 		"gif",
 		"google-calendar",
 		"image-compare",
@@ -27,7 +28,6 @@
 		"pinterest",
 		"podcast-player",
 		"premium-content",
-		"publicize",
 		"rating-star",
 		"recurring-payments",
 		"related-posts",
@@ -39,7 +39,6 @@
 		"shortlinks",
 		"simple-payments",
 		"slideshow",
-		"social-previews",
 		"story",
 		"subscriber-login",
 		"subscriptions",
@@ -71,14 +70,18 @@
 		"ai-general-purpose-image-generator",
 		"ai-proofread-breve",
 		"ai-assistant-site-logo-support",
-		"ai-title-optimization-keywords-support"
+		"ai-title-optimization-keywords-support",
+		"ai-response-feedback",
+		"ai-assistant-image-extension",
+		"ai-seo-enhancer"
 	],
 	"beta": [
 		"google-docs-embed",
 		"recipe",
 		"v6-video-frame-poster",
 		"videopress/video-chapters",
-		"ai-assistant-backend-prompts"
+		"ai-assistant-backend-prompts",
+		"ai-list-to-table-transform"
 	],
 	"experimental": [],
 	"no-post-editor": [

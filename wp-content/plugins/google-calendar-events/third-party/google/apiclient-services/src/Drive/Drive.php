@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class Drive extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $backgroundImageFileType = DriveBackgroundImageFile::class;
@@ -232,4 +231,4 @@ class Drive extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Drive::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Drive');
+class_alias(Drive::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Drive');

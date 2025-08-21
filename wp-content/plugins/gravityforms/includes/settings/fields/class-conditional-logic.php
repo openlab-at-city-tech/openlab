@@ -41,7 +41,7 @@ class Conditional_Logic extends Base {
 		parent::__construct( $props, $settings );
 
 		// Populate default instructions.
-		if ( $this->object_type === 'feed_condition' && ! rgobj( $this, 'instructions' ) ) {
+		if ( $this->object_type === 'feed_condition' && ! isset( $this->instructions ) ) {
 			$this->instructions = esc_html__( 'Process this feed if', 'gravityforms' );
 		}
 
@@ -129,6 +129,8 @@ class Conditional_Logic extends Base {
 		}
 
 		$html .= $this->get_error_icon();
+
+		$html .= $this->after_input;
 
 		return $html;
 

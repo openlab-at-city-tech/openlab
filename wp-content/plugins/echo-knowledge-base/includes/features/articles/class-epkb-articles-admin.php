@@ -300,7 +300,7 @@ class EPKB_Articles_Admin {
 	 */
 	public function add_category_filter( $post_type, $which ) {
 
-	    if ( empty( $post_type ) || ! EPKB_KB_Handler::is_kb_post_type( $post_type ) || ! is_admin() ) {
+	    if ( empty( $post_type ) || ! EPKB_KB_Handler::is_kb_post_type( $post_type ) || ! is_admin() || EPKB_Utilities::is_amag_on() ) {
             return;
         }
 

@@ -326,7 +326,7 @@ class TRP_Url_Converter {
             $trp_link_is_processed = '';
         }
 
-        if ( $this->is_sitemap_path('') ){
+        if ( $this->is_sitemap_path($url_obj->getPath()) ){
             trp_bulk_debug( $debug, array( 'url' => $url, 'abort' => 'is file' ) );
 
             wp_cache_set($cache_key . $hash, $url . $trp_link_is_processed, 'trp');
@@ -529,7 +529,7 @@ class TRP_Url_Converter {
                 $path = trailingslashit( ABSPATH ) . str_replace( untrailingslashit( $this->get_abs_home() ), '', $url );
 
                 if(apply_filters('trp_is_file', true, $path)) {
-                    $return = is_file( $path );
+                    $return = @is_file( $path );
                 }else{
                     $return = true;
                 }
@@ -647,7 +647,7 @@ class TRP_Url_Converter {
      * Uses current url if none given.
      *
      * @param string $url       Url.
-     * @return string           Language code.
+     * @return string|null      Language code or null if not found
      */
     public function get_lang_from_url_string( $url = null ) {
         if ( ! $url ){

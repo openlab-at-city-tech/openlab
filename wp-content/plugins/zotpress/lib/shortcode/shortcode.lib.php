@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
 
 require(__DIR__ . '/shortcode.class.lib.php');
@@ -75,17 +75,17 @@ function Zotpress_zotpressLib( $atts )
 
     // // Filter by collection
     // if ($collection_id) {
-    //     $collection_id = zp_clean_param( $collection_id );
+    //     $collection_id = zotpress_clean_param( $collection_id );
     // } elseif ($collection) {
-    //     $collection_id = zp_clean_param( $collection );
+    //     $collection_id = zotpress_clean_param( $collection );
     // } elseif ($collections) {
-    //     $collection_id = zp_clean_param( $collections );
+    //     $collection_id = zotpress_clean_param( $collections );
     // } elseif (isset($_GET['collection_id'])
     //         && preg_match("/^[a-zA-Z0-9]+$/", $_GET['collection_id'])) {
-    //     $collection_id = zp_clean_param( $_GET['collection_id'] );
+    //     $collection_id = zotpress_clean_param( $_GET['collection_id'] );
     // } elseif (isset($_GET['subcollection_id'])
     //         && preg_match("/^[a-zA-Z0-9]+$/", $_GET['subcollection_id'])) {
-    //     $collection_id = zp_clean_param( $_GET['subcollection_id'] );
+    //     $collection_id = zotpress_clean_param( $_GET['subcollection_id'] );
     // }
 
 	// // Filters
@@ -201,8 +201,8 @@ function Zotpress_zotpressLib( $atts )
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE nickname='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `nickname`=%s
                 ",
                 array( $zpr['nickname'] )
             ), OBJECT
@@ -217,8 +217,8 @@ function Zotpress_zotpressLib( $atts )
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE api_user_id='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `api_user_id`=%s
                 ",
                 array( $zpr["api_user_id"] )
             ), OBJECT
@@ -238,8 +238,8 @@ function Zotpress_zotpressLib( $atts )
             $zp_account = $wpdb->get_row(
                 $wpdb->prepare(
                     "
-                    SELECT * FROM ".$wpdb->prefix."zotpress 
-                    WHERE api_user_id='%s'
+                    SELECT * FROM `".$wpdb->prefix."zotpress` 
+                    WHERE `api_user_id`=%s
                     ",
                     array( $api_user_id )
                 ), OBJECT
@@ -276,7 +276,6 @@ function Zotpress_zotpressLib( $atts )
     $zpLib->setTopLevel($zpr['toplevel']);
     $zpLib->setTarget($zpr['target']);
     $zpLib->setBrowseBar($zpr['browsebar']);
-    // var_dump($zpr); exit;
 
 	// Show theme scripts
     $GLOBALS['zp_is_shortcode_displayed'] = true;

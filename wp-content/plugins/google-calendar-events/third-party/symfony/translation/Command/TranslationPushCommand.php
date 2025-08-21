@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Reader\TranslationR
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
- * @internal
  */
 final class TranslationPushCommand extends Command
 {
@@ -44,7 +43,7 @@ final class TranslationPushCommand extends Command
         $this->enabledLocales = $enabledLocales;
         parent::__construct();
     }
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         if ($input->mustSuggestArgumentValuesFor('provider')) {
             $suggestions->suggestValues($this->providers->keys());
@@ -52,7 +51,7 @@ final class TranslationPushCommand extends Command
         }
         if ($input->mustSuggestOptionValuesFor('domains')) {
             $provider = $this->providers->get($input->getArgument('provider'));
-            if ($provider && \method_exists($provider, 'getDomains')) {
+            if ($provider && method_exists($provider, 'getDomains')) {
                 $domains = $provider->getDomains();
                 $suggestions->suggestValues($domains);
             }
@@ -94,11 +93,11 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $provider = $this->providers->get($input->getArgument('provider'));
         if (!$this->enabledLocales) {
-            throw new InvalidArgumentException(\sprintf('You must define "framework.translator.enabled_locales" or "framework.translator.providers.%s.locales" config key in order to work with translation providers.', \parse_url($provider, \PHP_URL_SCHEME)));
+            throw new InvalidArgumentException(sprintf('You must define "framework.translator.enabled_locales" or "framework.translator.providers.%s.locales" config key in order to work with translation providers.', parse_url($provider, \PHP_URL_SCHEME)));
         }
         $io = new SymfonyStyle($input, $output);
         $domains = $input->getOption('domains');
@@ -116,13 +115,13 @@ EOF
         }
         if (!$deleteMissing && $force) {
             $provider->write($localTranslations);
-            $io->success(\sprintf('All local translations has been sent to "%s" (for "%s" locale(s), and "%s" domain(s)).', \parse_url($provider, \PHP_URL_SCHEME), \implode(', ', $locales), \implode(', ', $domains)));
+            $io->success(sprintf('All local translations has been sent to "%s" (for "%s" locale(s), and "%s" domain(s)).', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
             return 0;
         }
         $providerTranslations = $provider->read($domains, $locales);
         if ($deleteMissing) {
             $provider->delete($providerTranslations->diff($localTranslations));
-            $io->success(\sprintf('Missing translations on "%s" has been deleted (for "%s" locale(s), and "%s" domain(s)).', \parse_url($provider, \PHP_URL_SCHEME), \implode(', ', $locales), \implode(', ', $domains)));
+            $io->success(sprintf('Missing translations on "%s" has been deleted (for "%s" locale(s), and "%s" domain(s)).', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
             // Read provider translations again, after missing translations deletion,
             // to avoid push freshly deleted translations.
             $providerTranslations = $provider->read($domains, $locales);
@@ -132,15 +131,15 @@ EOF
             $translationsToWrite->addBag($localTranslations->intersect($providerTranslations));
         }
         $provider->write($translationsToWrite);
-        $io->success(\sprintf('%s local translations has been sent to "%s" (for "%s" locale(s), and "%s" domain(s)).', $force ? 'All' : 'New', \parse_url($provider, \PHP_URL_SCHEME), \implode(', ', $locales), \implode(', ', $domains)));
+        $io->success(sprintf('%s local translations has been sent to "%s" (for "%s" locale(s), and "%s" domain(s)).', $force ? 'All' : 'New', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
         return 0;
     }
-    private function getDomainsFromTranslatorBag(TranslatorBag $translatorBag) : array
+    private function getDomainsFromTranslatorBag(TranslatorBag $translatorBag): array
     {
         $domains = [];
         foreach ($translatorBag->getCatalogues() as $catalogue) {
             $domains += $catalogue->getDomains();
         }
-        return \array_unique($domains);
+        return array_unique($domains);
     }
 }

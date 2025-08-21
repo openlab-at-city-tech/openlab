@@ -22,7 +22,6 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Middleware;
-/** @internal */
 class HttpHandlerFactory
 {
     /**
@@ -34,9 +33,9 @@ class HttpHandlerFactory
      */
     public static function build(ClientInterface $client = null)
     {
-        if (\is_null($client)) {
+        if (is_null($client)) {
             $stack = null;
-            if (\class_exists(BodySummarizer::class)) {
+            if (class_exists(BodySummarizer::class)) {
                 // double the # of characters before truncation by default
                 $bodySummarizer = new BodySummarizer(240);
                 $stack = HandlerStack::create();
@@ -46,10 +45,10 @@ class HttpHandlerFactory
             $client = new Client(['handler' => $stack]);
         }
         $version = null;
-        if (\defined('SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
+        if (defined('SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
             $version = ClientInterface::MAJOR_VERSION;
-        } elseif (\defined('SimpleCalendar\\plugin_deps\\GuzzleHttp\\ClientInterface::VERSION')) {
-            $version = (int) \substr(ClientInterface::VERSION, 0, 1);
+        } elseif (defined('SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface::VERSION')) {
+            $version = (int) substr(ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
             case 5:

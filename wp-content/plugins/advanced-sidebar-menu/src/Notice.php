@@ -6,7 +6,7 @@ use Advanced_Sidebar_Menu\Traits\Singleton;
 use Advanced_Sidebar_Menu\Widget\Category;
 
 /**
- * Various notice handling for the admin and widgets.
+ * Various notice handlers for the admin and widgets.
  *
  * @author OnPoint Plugins
  * @since  8.1.0
@@ -41,14 +41,26 @@ class Notice {
 	 * @return bool
 	 */
 	public function is_conflicting_pro_version() {
-		return \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) && version_compare( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION, ADVANCED_SIDEBAR_MENU_PRO_VERSION, '>' );
+		return null !== $this->get_pro_version() && version_compare( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION, $this->get_pro_version(), '>' );
+	}
+
+
+	/**
+	 * Is the PRO version installed?
+	 *
+	 * @since 9.7.0
+	 *
+	 * @return ?string
+	 */
+	public function get_pro_version(): ?string {
+		return \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ? ADVANCED_SIDEBAR_MENU_PRO_VERSION : null;
 	}
 
 
 	/**
 	 * Display a warning if we don't have the required PRO version installed.
 	 *
-	 * @param bool $no_banner - Display as "message" banner.
+	 * @param bool $no_banner - Display as a "message" banner.
 	 */
 	public function pro_version_warning( $no_banner = false ) {
 		?>
@@ -62,14 +74,14 @@ class Notice {
 
 
 	/**
-	 * Get message to display in various admin locations if
-	 * basic version of the plugin is unsupported.
+	 * Get a message to display in various admin locations if
+	 * the PRO version of the plugin is unsupported.
 	 *
 	 * @return string
 	 */
 	public function get_pro_version_warning_message() {
 		/* translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>] */
-		return sprintf( esc_html_x( 'Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version %3$s+. Please update or deactivate the PRO version.', '{<a>}{</a>}', 'advanced-sidebar-menu' ), '<a target="_blank" rel="noreferrer noopener" href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">', '</a>', esc_attr( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION ) );
+		return \sprintf( esc_html_x( 'Advanced Sidebar Menu requires %1$sAdvanced Sidebar Menu PRO%2$s version %3$s+. Please update or deactivate the PRO version.', '{<a>}{</a>}', 'advanced-sidebar-menu' ), '<a target="_blank" rel="noreferrer noopener" href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">', '</a>', esc_attr( ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION ) );
 	}
 
 
@@ -91,7 +103,7 @@ class Notice {
 			</div>
 			<?php
 		}
-		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+		if ( null !== $this->get_pro_version() ) {
 			return;
 		}
 
@@ -145,11 +157,11 @@ class Notice {
 	 *
 	 * @phpstan-param PAGE_SETTINGS|CATEGORY_SETTINGS     $instance
 	 *
-	 * @param array      $instance - Widgets settings.
-	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget - Widget class.
+	 * @param array                                       $instance - Widgets settings.
+	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget   - Widget class.
 	 */
 	public function preview( array $instance, \WP_Widget $widget ) {
-		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
+		if ( null !== $this->get_pro_version() ) {
 			return;
 		}
 		$src = 'pages-widget-min.webp?version=' . ADVANCED_SIDEBAR_MENU_BASIC_VERSION;
@@ -173,15 +185,15 @@ class Notice {
 
 
 	/**
-	 * Display a "Go PRO" action link in plugins list.
+	 * Display a "Go PRO" action link in the plugins' list.
 	 *
 	 * @param array $actions - Array of actions and their link.
 	 *
 	 * @return array
 	 */
 	public function plugin_action_link( array $actions ) {
-		if ( ! \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
-			$actions['go-pro'] = sprintf( '<a href="%1$s" target="_blank" style="color:#3db634;font-weight:700;">%2$s</a>', 'https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=wp-plugins&utm_campaign=gopro&utm_medium=wp-dash', __( 'Go PRO', 'advanced-sidebar-menu' ) );
+		if ( null === static::instance()->get_pro_version() ) {
+			$actions['go-pro'] = \sprintf( '<a href="%1$s" target="_blank" style="color:#3db634;font-weight:700;">%2$s</a>', 'https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=wp-plugins&utm_campaign=gopro&utm_medium=wp-dash', __( 'Go PRO', 'advanced-sidebar-menu' ) );
 		}
 		return $actions;
 	}

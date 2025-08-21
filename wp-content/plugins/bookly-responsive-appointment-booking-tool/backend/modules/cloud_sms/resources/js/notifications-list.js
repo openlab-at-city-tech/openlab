@@ -90,7 +90,10 @@ jQuery(function ($) {
             },
             columns: columns,
             language: {
-                zeroRecords: BooklyL10n.zeroRecordsAlt
+                zeroRecords: BooklyL10n.zeroRecordsAlt,
+                emptyTable: BooklyL10n.emptyTable,
+                processing: BooklyL10n.processing,
+                loadingRecords: BooklyL10n.loadingRecords
             },
             row_with_checkbox: true
         }).on('click', '[data-action=toggle-active]', function (e) {

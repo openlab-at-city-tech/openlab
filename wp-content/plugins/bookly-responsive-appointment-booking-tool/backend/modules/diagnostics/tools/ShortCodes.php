@@ -23,6 +23,7 @@ class ShortCodes extends Tool
             array( 'name' => 'Search form', 'code' => '[bookly-search-form' ),
             array( 'name' => 'Services form', 'code' => '[bookly-services-form' ),
             array( 'name' => 'Staff form', 'code' => '[bookly-staff-form' ),
+            array( 'name' => 'Tags form', 'code' => '[bookly-tags-form' ),
             array( 'name' => 'Staff Cabinet - Advanced', 'code' => '[bookly-staff-advanced' ),
             array( 'name' => 'Staff Cabinet - Calendar', 'code' => '[bookly-staff-calendar' ),
             array( 'name' => 'Staff Cabinet - Days off', 'code' => '[bookly-staff-days-off' ),

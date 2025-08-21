@@ -97,7 +97,7 @@ function astra_theme_background_updater_4_0_0() {
 			),
 		);
 		// Single post structure.
-		foreach ( $post_types as $index => $post_type ) {
+		foreach ( $post_types as $post_type ) {
 			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$single_post_structure = isset( $theme_options['blog-single-post-structure'] ) ? $theme_options['blog-single-post-structure'] : array( 'single-image', 'single-title-meta' );
 			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -170,11 +170,11 @@ function astra_theme_background_updater_4_0_0() {
 			}
 
 			// Archive layout compatibilities.
-			$archive_banner_layout = ( class_exists( 'WooCommerce' ) && 'product' === $post_type ) ? false : true; // Setting WooCommerce archive option disabled as WC already added their header content on archive.
+			$archive_banner_layout = class_exists( 'WooCommerce' ) && 'product' === $post_type ? false : true; // Setting WooCommerce archive option disabled as WC already added their header content on archive.
 			$theme_options[ 'ast-archive-' . esc_attr( $post_type ) . '-title' ] = $archive_banner_layout;
 
 			// Single layout compatibilities.
-			$single_banner_layout = ( class_exists( 'WooCommerce' ) && 'product' === $post_type ) ? false : true; // Setting WC single option disabled as there is no any header set from default WooCommerce.
+			$single_banner_layout = class_exists( 'WooCommerce' ) && 'product' === $post_type ? false : true; // Setting WC single option disabled as there is no any header set from default WooCommerce.
 			$theme_options[ 'ast-single-' . esc_attr( $post_type ) . '-title' ] = $single_banner_layout;
 
 			// BG color support.
@@ -428,13 +428,11 @@ function astra_theme_background_updater_4_1_0() {
 		) : '';
 
 		if ( $current_payment_list ) {
-			$theme_options['single-product-payment-list'] =
-			array(
-				'items' =>
-					array_merge(
-						$current_payment_list,
-						$old_payment_list
-					),
+			$theme_options['single-product-payment-list'] = array(
+				'items' => array_merge(
+					$current_payment_list,
+					$old_payment_list
+				),
 			);
 
 			update_option( 'astra-settings', $theme_options );
@@ -447,7 +445,7 @@ function astra_theme_background_updater_4_1_0() {
 
 		if ( isset( $theme_options['theme-dynamic-customizer-support'] ) ) {
 			$post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
-			foreach ( $post_types as $index => $post_type ) {
+			foreach ( $post_types as $post_type ) {
 				$theme_options[ 'ast-dynamic-single-' . esc_attr( $post_type ) . '-title-font-extras' ]['text-transform'] = '';
 			}
 			update_option( 'astra-settings', $theme_options );
@@ -472,7 +470,7 @@ function astra_theme_background_updater_4_1_4() {
 			'footer-bg-obj',
 		);
 
-		foreach ( $ast_bg_control_options as $key => $bg_option ) {
+		foreach ( $ast_bg_control_options as $bg_option ) {
 			if ( isset( $theme_options[ $bg_option ] ) && ! isset( $theme_options[ $bg_option ]['overlay-type'] ) ) {
 				$bg_type = isset( $theme_options[ $bg_option ]['background-type'] ) ? $theme_options[ $bg_option ]['background-type'] : '';
 
@@ -521,7 +519,7 @@ function astra_theme_background_updater_4_1_4() {
 			$ast_resp_bg_control_options[] = 'header-' . $_prefix . '-bg-obj-responsive';
 		}
 
-		foreach ( $ast_resp_bg_control_options as $key => $resp_bg_option ) {
+		foreach ( $ast_resp_bg_control_options as $resp_bg_option ) {
 			// Desktop version.
 			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			if ( isset( $theme_options[ $resp_bg_option ]['desktop'] ) && is_array( $theme_options[ $resp_bg_option ]['desktop'] ) && ! isset( $theme_options[ $resp_bg_option ]['desktop']['overlay-type'] ) ) {
@@ -568,7 +566,6 @@ function astra_theme_background_updater_4_1_4() {
 					}
 				}
 			}
-
 
 			// Mobile version.
 			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -655,8 +652,8 @@ function astra_theme_background_updater_4_2_0() {
 		}
 
 		// Single, archive.
-		foreach ( $blog_types as $index => $blog_type ) {
-			foreach ( $post_types as $index => $post_type ) {
+		foreach ( $blog_types as $blog_type ) {
+			foreach ( $post_types as $post_type ) {
 				$old_layout    = $blog_type . '-' . esc_attr( $post_type ) . '-content-layout';
 				$new_layout    = $blog_type . '-' . esc_attr( $post_type ) . '-ast-content-layout';
 				$content_style = $blog_type . '-' . esc_attr( $post_type ) . '-content-style';
@@ -669,7 +666,7 @@ function astra_theme_background_updater_4_2_0() {
 		}
 
 		// Third party existing layout migrations to new layout options.
-		foreach ( $third_party_layouts as $index => $layout ) {
+		foreach ( $third_party_layouts as $layout ) {
 			$old_layout    = $layout . '-content-layout';
 			$new_layout    = $layout . '-ast-content-layout';
 			$content_style = $layout . '-content-style';
@@ -799,7 +796,7 @@ function astra_theme_background_updater_4_4_0() {
 
 		// Single - Article Featured Image visibility migration.
 		$post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
-		foreach ( $post_types as $index => $post_type ) {
+		foreach ( $post_types as $post_type ) {
 			$theme_options[ 'ast-dynamic-single-' . esc_attr( $post_type ) . '-article-featured-image-position-layout-1' ] = 'none';
 			$theme_options[ 'ast-dynamic-single-' . esc_attr( $post_type ) . '-article-featured-image-position-layout-2' ] = 'none';
 			$theme_options[ 'ast-dynamic-single-' . esc_attr( $post_type ) . '-article-featured-image-ratio-type' ]        = 'default';
@@ -1030,7 +1027,6 @@ function astra_theme_background_updater_4_6_11() {
 	$theme_options['global-headings-line-height-update'] = true;
 
 	update_option( 'astra-settings', $theme_options );
-
 }
 
 /**
@@ -1120,7 +1116,6 @@ function astra_theme_background_updater_4_7_1() {
 	}
 }
 
-
 /**
  * Handle backward compatibility Spectra Heading max-width with Astra when fullwidth layout is selected.
  *
@@ -1135,8 +1130,6 @@ function astra_theme_background_updater_4_8_0() {
 		update_option( 'astra-settings', $theme_options );
 	}
 }
-
-
 
 /**
  * Handle backward compatibility Single post outside spacing issue.
@@ -1181,5 +1174,92 @@ function astra_theme_background_updater_4_8_4() {
  * @return void
  */
 function astra_theme_background_updater_4_8_7() {
-	update_option( 'astra_nps_show', true);
+
+	// Bail early if the starter template is being imported.
+	if ( get_option( 'astra_sites_import_started' ) === 'yes' ) {
+		return;
+	}
+
+	update_option( 'astra_nps_show', true );
+}
+
+/**
+ * Handle backward compatibility on version 4.8.9.
+ * 1. Reorganizing color palettes.
+ *
+ * @since 4.8.9
+ * @return void
+ */
+function astra_theme_background_updater_4_8_9() {
+	// Bail early if the starter template is being imported.
+	if ( get_option( 'astra_sites_import_started' ) === 'yes' || astra_get_option( 'new-color-labels' ) ) {
+		astra_update_option( 'new-color-labels', true );
+	}
+
+	$theme_options = get_option( 'astra-settings', array() );
+	if ( ! isset( $theme_options['enable-4-8-9-compatibility'] ) ) {
+		$theme_options['enable-4-8-9-compatibility'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+
+	// Enable off canvas move body option for existing users.
+	if ( ! isset( $theme_options['off-canvas-move-body'] ) ) {
+		$theme_options['off-canvas-move-body'] = true;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility on version 4.8.10.
+ *
+ * @since 4.8.10
+ * @return void
+ */
+function astra_theme_background_updater_4_8_10() {
+	$theme_options = get_option( 'astra-settings', array() );
+	/**
+	 * Enable star rating compatibility for existing users, excluding template import scenarios.
+	 */
+	if ( get_option( 'astra_sites_import_started' ) !== 'yes' ) {
+		$theme_options['star-rating-comp'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility for dark palette.
+ * Dark palette backward compatibility for some cases default option .
+ *
+ * @since 4.9.0
+ * @return void
+ */
+function astra_theme_background_updater_4_9_0() {
+
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['v4-9-0-backward-option'] ) ) {
+		$theme_options['v4-9-0-backward-option'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Background updater function for theme v4.10.0
+ *
+ * @since 4.10.0
+ * @return void
+ */
+function astra_theme_background_updater_4_10_0() {
+	// Retrieve the installed time and optin status of BSF Analytics and update it as per product specific key.
+	$analytics_options = array(
+		'bsf_analytics_installed_time' => 'astra_analytics_installed_time',
+		'bsf_analytics_optin'          => 'astra_analytics_optin',
+	);
+
+	foreach ( $analytics_options as $source => $target ) {
+		$status = get_site_option( $source );
+		if ( ! get_site_option( $target ) && $status ) {
+			update_option( $target, $status );
+		}
+	}
 }

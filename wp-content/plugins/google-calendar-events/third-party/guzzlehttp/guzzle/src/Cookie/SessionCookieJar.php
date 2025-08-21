@@ -4,7 +4,6 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Cookie;
 
 /**
  * Persists cookies in the client session
- * @internal
  */
 class SessionCookieJar extends CookieJar
 {
@@ -41,7 +40,7 @@ class SessionCookieJar extends CookieJar
     /**
      * Save cookies to the client session
      */
-    public function save() : void
+    public function save(): void
     {
         $json = [];
         /** @var SetCookie $cookie */
@@ -55,7 +54,7 @@ class SessionCookieJar extends CookieJar
     /**
      * Load the contents of the client session into the data array
      */
-    protected function load() : void
+    protected function load(): void
     {
         if (!isset($_SESSION[$this->sessionKey])) {
             return;

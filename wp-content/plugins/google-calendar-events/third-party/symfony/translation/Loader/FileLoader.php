@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\NotFoundResourceException;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- * @internal
  */
 abstract class FileLoader extends ArrayLoader
 {
@@ -24,11 +23,11 @@ abstract class FileLoader extends ArrayLoader
      */
     public function load($resource, string $locale, string $domain = 'messages')
     {
-        if (!\stream_is_local($resource)) {
-            throw new InvalidResourceException(\sprintf('This is not a local file "%s".', $resource));
+        if (!stream_is_local($resource)) {
+            throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
-        if (!\file_exists($resource)) {
-            throw new NotFoundResourceException(\sprintf('File "%s" not found.', $resource));
+        if (!file_exists($resource)) {
+            throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
         $messages = $this->loadResource($resource);
         // empty resource
@@ -37,10 +36,10 @@ abstract class FileLoader extends ArrayLoader
         }
         // not an array
         if (!\is_array($messages)) {
-            throw new InvalidResourceException(\sprintf('Unable to load file "%s".', $resource));
+            throw new InvalidResourceException(sprintf('Unable to load file "%s".', $resource));
         }
         $catalogue = parent::load($messages, $locale, $domain);
-        if (\class_exists(FileResource::class)) {
+        if (class_exists(FileResource::class)) {
             $catalogue->addResource(new FileResource($resource));
         }
         return $catalogue;
@@ -50,5 +49,5 @@ abstract class FileLoader extends ArrayLoader
      *
      * @throws InvalidResourceException if stream content has an invalid format
      */
-    protected abstract function loadResource(string $resource);
+    abstract protected function loadResource(string $resource);
 }

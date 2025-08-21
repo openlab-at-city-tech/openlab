@@ -65,14 +65,18 @@ ed11yInit.getOptions = function() {
     ed11yInit.options['editableContent'] = ed11yInit.scrollRoot;
   }
   //ed11yInit.options['ignoreByKey'] = { img: '' }; Restore default ignores.
+  ed11yInit.options['ignoreByKey'] = {
+    table: '.is-selected.wp-block-table table, [role="presentation"]',
+  };
   ed11yInit.options['headingsOnlyFromCheckRoots'] = true;
-  ed11yInit.options['ignoreAriaOnElements'] = 'h1,h2,h3,h4,h5,h6';
+  ed11yInit.options['ignoreAriaOnElements'] = 'h1,h2,h3,h4,h5,h6,.wp-element-button,.block-editor-rich-text__editable,.wp-block-table';
   ed11yInit.options['altPlaceholder'] = 'This image has an empty alt attribute;';
 
   // WordPress does not render empty post titles, so we don't need to flag them.
 
   ed11yInit.options['showResults'] = true;
   ed11yInit.options['buttonZIndex'] = 99999;
+  ed11yInit.options['customTests'] = 1;
   ed11yInit.options['alertMode'] = ed11yInit.options['liveCheck'] &&  ed11yInit.options['liveCheck'] === 'errors' ? 'userPreference' : 'active';
   ed11yInit.options['editorHeadingLevel'] = [{
     selector: '.editor-styles-wrapper > .is-root-container',
@@ -159,6 +163,149 @@ document.addEventListener('ed11yPop', (e) => {
   }
   e.detail.tip.dataset.alreadyDecorated = 'true';
 });
+document.addEventListener('ed11yRunCustomTests', function() {
+
+  Ed11y.findElements('wpButtonBlock','.wp-element-button:not(.is-selected .wp-element-button)');
+
+  Ed11y.elements.wpButtonBlock?.forEach((el) => {
+    // Straight copy of link test checks as of library 2.2.13
+    // Todo: not needed if the library exposes a parameter for link selector.
+    let linkText = Ed11y.computeText(el, 0, !!Ed11y.options.linkIgnoreSelector);
+    let img = el.querySelectorAll('img');
+    let hasImg = img.length > 0;
+    let document = el.matches(Ed11y.options.documentLinks);
+
+    if (el?.getAttribute('target') === '_blank') {
+      // Nothing was stripped AND we weren't warned.
+      if (
+        !(
+          (Ed11y.options.linkIgnoreSelector &&
+            el?.querySelector(Ed11y.options.linkIgnoreSelector))
+          || linkText.toLowerCase().match(Ed11y.options.linkStringsNewWindows)
+        )
+      ) {
+        let dismissKey = Ed11y.dismissalKey(linkText);
+        Ed11y.results.push({
+          element: el,
+          test: 'linkNewWindow',
+          content: Ed11y.M.linkNewWindow.tip(),
+          position: 'beforebegin',
+          dismissalKey: dismissKey,
+        });
+      }
+    }
+
+    // Todo: add test for title === textContent. Don't use computedText().
+
+    // Tests to see if this link is empty
+    if (
+      linkText.replace(/"|'|\?|\.|-|\s+/g, '').length === 0 &&
+      !( Ed11y.options.linkIgnoreSelector &&
+        el.querySelector(Ed11y.options.linkIgnoreSelector)
+      )
+    ) {
+      // Link with no text at all.
+      if (hasImg === false) {
+        Ed11y.results.push({
+          element: el,
+          test: 'linkNoText',
+          content: Ed11y.M.linkNoText.tip(),
+          position: 'beforebegin',
+          dismissalKey: false,
+        });
+      } else {
+        Ed11y.results.push({
+          element: el,
+          test: 'altEmptyLinked',
+          content: Ed11y.M.altEmptyLinked.tip(),
+          position: 'beforebegin',
+          dismissalKey: false,
+        });
+      }
+    }
+    else {
+      let linkTextCheck = function (textContent) {
+        // Checks if link text is not descriptive.
+        let linkStrippedText = textContent.toLowerCase();
+        // Create version of text without "open in new window" warnings.
+
+        if (Ed11y.options.linkStringsNewWindows &&
+          Ed11y.options.linkStringsNewWindows !== Ed11y.M.linkStringsNewWindows) {
+          // don't strip on the default, which is loose.
+          linkStrippedText = linkStrippedText.replace(Ed11y.options.linkIgnoreStrings, '');
+        }
+        if (Ed11y.options.linkIgnoreStrings) {
+          linkStrippedText = Ed11y.options.linkIgnoreStrings ?
+            linkStrippedText.replace(Ed11y.options.linkIgnoreStrings, '')
+            : linkStrippedText;
+        }
+        if (linkStrippedText.replace(/"|'|\?|\.|-|\s+/g, '').length === 0) {
+          // No Text because of stripping out ignoreStrings.
+          return 'generic';
+        }
+
+        // todo later: use regex to find any three-letter TLD followed by a slash.
+        // todo later: parameterize TLD list
+        let linksUrls = Ed11y.options.linksUrls ? Ed11y.options.linksUrls : Ed11y.M.linksUrls;
+        let linksMeaningless = Ed11y.options.linksMeaningless ? Ed11y.options.linksMeaningless : Ed11y.M.linksMeaningless;
+        let hit = 'none';
+
+        if (linkStrippedText.replace(linksMeaningless, '').length === 0) {
+          // If no partial words were found, then check for total words.
+          hit = 'generic';
+        }
+        else {
+          for (let i = 0; i < linksUrls.length; i++) {
+            if (textContent.indexOf(linksUrls[i]) > -1) {
+              hit = 'url';
+              break;
+            }
+          }
+        }
+        return hit;
+      };
+      let textCheck = linkTextCheck(linkText);
+      if (textCheck !== 'none') {
+        let error = false;
+        if (!hasImg && textCheck === 'url') {
+          // Images test will pick this up.
+          error = 'linkTextIsURL';
+        }
+        if (textCheck === 'generic') {
+          error = 'linkTextIsGeneric';
+          if (linkText.length < 4) {
+            // Reinsert ignored link strings.
+            linkText = Ed11y.computeText(el, 0);
+          }
+        }
+        if (error) {
+          Ed11y.results.push({
+            element: el,
+            test: error,
+            content: Ed11y.M[error].tip(Ed11y.sanitizeForHTML(linkText)),
+            position: 'beforebegin',
+            dismissalKey: Ed11y.dismissalKey(linkText),
+          });
+        }
+      }
+    }
+    // Warning: Find all PDFs.
+    if ( document ) {
+      let dismissKey = Ed11y.dismissalKey(el?.getAttribute('href'));
+      Ed11y.results.push(
+        {
+          element: el,
+          test: 'linkDocument',
+          content: Ed11y.M.linkDocument.tip(),
+          position: 'beforebegin',
+          dismissalKey: dismissKey,
+        });
+    }
+  });
+
+  let allDone = new CustomEvent('ed11yResume');
+  document.dispatchEvent(allDone);
+});
 
 ed11yInit.interaction = false;
 
@@ -236,53 +383,6 @@ ed11yInit.ed11yOuterInit = function() {
   };
   ed11yInit.outerWorker.port.start();
 };
-
-/*
-// Classic editor watching failed.
-// The Tiny MCE iframe has editable elements touching <body>.
-// In theory I could bring back the outlines.
-// Leaving code in case I get any bright ideas down the road.
-const ed11yClassicInsertScripts = function() {
-  //"https://editoria11y-wp.ddev.site/wp-content/plugins/editoria11y-wp/assets/lib/editoria11y.min.css"
-  const library = document.createElement('script');
-  library.src = ed11yInit.options.cssLocation.replace('editoria11y.min.css', 'editoria11y.min.js');
-  const editorInit = document.createElement('script');
-  const varPile = document.createElement('script');
-  varPile.setAttribute('id', 'ed11yVarPile');
-  varPile.innerHTML = 'var ed11yInit = ' + JSON.stringify({
-    options: ed11yInit.options,
-    worker: workerURL,
-  });
-  editorInit.src = ed11yInit.options.cssLocation.replace('lib/editoria11y.min.css', 'js/editoria11y-editor.js');
-  const workerScript = document.createElement('script');
-  workerScript.src = ed11yInit.options.cssLocation.replace('lib/editoria11y.min.css', 'js/editoria11y-editor-worker.js');
-  const style = document.createElement('link');
-  style.rel = 'stylesheet';
-  style.href = ed11yInit.options.cssLocation;
-  const iframe = document.getElementById('content_ifr');
-   // Check if the iframe has loaded
-  if (iframe.contentDocument) {
-      // Access the iframe's document object
-    const iframeDoc = iframe.contentDocument;
-    // Insert content into the iframe
-    iframeDoc.head.append(library);
-    iframeDoc.head.append(varPile);
-    iframeDoc.head.append(style);
-    iframeDoc.head.append(workerScript);
-    iframeDoc.head.append(editorInit);
-  } else {
-    // Wait for the iframe to load
-    iframe.addEventListener('load', () => {
-      console.log('later');
-      const iframeDoc = iframe.contentDocument;
-      iframeDoc.head.append(library);
-      iframeDoc.head.append(varPile);
-      iframeDoc.head.append(style);
-      iframeDoc.head.append(workerScript);
-      iframeDoc.head.append(editorInit);
-    });
-  }
-}*/
 
 // Initiate Editoria11y create alert link, initiate content change watcher.
 ed11yInit.ed11yPageInit = function () {

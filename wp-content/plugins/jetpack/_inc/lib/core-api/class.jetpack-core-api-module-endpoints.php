@@ -499,6 +499,11 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 
 		$response['akismet'] = is_plugin_active( 'akismet/akismet.php' );
 
+		require_once JETPACK__PLUGIN_DIR . '/modules/memberships/class-jetpack-memberships.php';
+		if ( class_exists( 'Jetpack_Memberships' ) ) {
+			$response['newsletter_has_active_plan'] = count( Jetpack_Memberships::get_all_newsletter_plan_ids( false ) ) > 0;
+		}
+
 		return rest_ensure_response( $response );
 	}
 
@@ -633,6 +638,11 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 				// The module was not toggled.
 				if ( ! $updated ) {
 					$not_updated[ $option ] = $error;
+				}
+
+				if ( $updated ) {
+					// Return the module state.
+					$response[ $option ] = $value;
 				}
 
 				// Remove module from list so we don't go through it again.
@@ -1009,7 +1019,13 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 							$value = wp_kses(
 								$value,
 								array(
-									'a' => array(
+									'ul'     => array(),
+									'li'     => array(),
+									'p'      => array(),
+									'strong' => array(),
+									'ol'     => array(),
+									'em'     => array(),
+									'a'      => array(
 										'href' => array(),
 									),
 								)

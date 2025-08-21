@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Astra_Nps_Survey' ) ) :
+if ( ! class_exists( 'Astra_Nps_Survey' ) ) {
 
 	/**
 	 * Admin
@@ -45,6 +45,12 @@ if ( ! class_exists( 'Astra_Nps_Survey' ) ) :
 		 * @since 1.0.0
 		 */
 		private function __construct() {
+
+			// Allow users to disable NPS survey via a filter.
+			if ( apply_filters( 'astra_nps_survey_disable', false ) ) {
+				return;
+			}
+
 			$this->version_check();
 			add_action( 'init', array( $this, 'load' ), 999 );
 		}
@@ -74,7 +80,7 @@ if ( ! class_exists( 'Astra_Nps_Survey' ) ) :
 				// Compare versions.
 				if ( version_compare( $version, $nps_survey_version, '>=' ) ) {
 					$nps_survey_version = $version;
-					$nps_survey_init = $path;
+					$nps_survey_init    = $path;
 				}
 			}
 		}
@@ -98,4 +104,4 @@ if ( ! class_exists( 'Astra_Nps_Survey' ) ) :
 	 */
 	Astra_Nps_Survey::get_instance();
 
-endif;
+}

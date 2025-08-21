@@ -24,7 +24,7 @@ return ['year' => ':count ano|:count anos', 'a_year' => 'un ano|:count anos', 'y
         return "n{$time}";
     }
     return "en {$time}";
-}, 'diff_now' => 'agora', 'diff_today' => 'hoxe', 'diff_today_regexp' => 'hoxe(?:\\s+ás)?', 'diff_yesterday' => 'onte', 'diff_yesterday_regexp' => 'onte(?:\\s+á)?', 'diff_tomorrow' => 'mañá', 'diff_tomorrow_regexp' => 'mañá(?:\\s+ás)?', 'after' => ':time despois', 'before' => ':time antes', 'formats' => ['LT' => 'H:mm', 'LTS' => 'H:mm:ss', 'L' => 'DD/MM/YYYY', 'LL' => 'D [de] MMMM [de] YYYY', 'LLL' => 'D [de] MMMM [de] YYYY H:mm', 'LLLL' => 'dddd, D [de] MMMM [de] YYYY H:mm'], 'calendar' => ['sameDay' => function (CarbonInterface $current) {
+}, 'diff_now' => 'agora', 'diff_today' => 'hoxe', 'diff_today_regexp' => 'hoxe(?:\s+ás)?', 'diff_yesterday' => 'onte', 'diff_yesterday_regexp' => 'onte(?:\s+á)?', 'diff_tomorrow' => 'mañá', 'diff_tomorrow_regexp' => 'mañá(?:\s+ás)?', 'after' => ':time despois', 'before' => ':time antes', 'formats' => ['LT' => 'H:mm', 'LTS' => 'H:mm:ss', 'L' => 'DD/MM/YYYY', 'LL' => 'D [de] MMMM [de] YYYY', 'LLL' => 'D [de] MMMM [de] YYYY H:mm', 'LLLL' => 'dddd, D [de] MMMM [de] YYYY H:mm'], 'calendar' => ['sameDay' => function (CarbonInterface $current) {
     return '[hoxe ' . ($current->hour !== 1 ? 'ás' : 'á') . '] LT';
 }, 'nextDay' => function (CarbonInterface $current) {
     return '[mañá ' . ($current->hour !== 1 ? 'ás' : 'á') . '] LT';

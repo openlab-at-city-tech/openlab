@@ -21,7 +21,7 @@ class Dialog extends Lib\Base\Component
             array( -92, sprintf( _n( '%d month', '%d months', 3, 'bookly' ), 3 ) . ' ' . __( 'ago', 'bookly' ) ),
             array( -61, sprintf( _n( '%d month', '%d months', 2, 'bookly' ), 2 ) . ' ' . __( 'ago', 'bookly' ) ),
         );
-        foreach ( array_merge( array( - 28, - 21 ), range( - 14, - 1 ) ) as $days ) {
+        foreach ( array_merge( array( -28, -21 ), range( -14, -1 ) ) as $days ) {
             $range[] = array( $days, Lib\Utils\DateTime::secondsToInterval( abs( $days ) * DAY_IN_SECONDS ) . ' ' . __( 'ago', 'bookly' ) );
         }
         $range[] = array( 0, __( 'Any', 'bookly' ) );
@@ -58,8 +58,6 @@ class Dialog extends Lib\Base\Component
                 'custom' => __( 'Custom', 'bookly' ),
             ),
         ) );
-
-        print '<div id="bookly-add-recipients-dialog"></div>';
     }
 
     /**

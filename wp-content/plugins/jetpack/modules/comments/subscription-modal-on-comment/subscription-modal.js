@@ -1,3 +1,4 @@
+/* global subscriptionData */
 document.addEventListener( 'DOMContentLoaded', function () {
 	const modal = document.getElementsByClassName( 'jetpack-subscription-modal' )[ 0 ];
 
@@ -23,10 +24,13 @@ document.addEventListener( 'DOMContentLoaded', function () {
 				'jetpack-subscription-modal-on-comment-scroll-to',
 				destinationUrl.hash
 			);
-			// eslint-disable-next-line no-empty
-		} catch ( e ) {}
+		} catch {
+			// Ok if we can't set it.
+		}
 
-		window.location = destinationUrl.toString();
+		// Add cache-busting parameter
+		destinationUrl.searchParams.set( '_ctn', Date.now() );
+		window.location.href = destinationUrl.toString();
 	}
 
 	function JetpackSubscriptionModalOnCommentMessageListener( event ) {
@@ -34,7 +38,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		if ( typeof message === 'string' ) {
 			try {
 				message = JSON.parse( message );
-			} catch ( err ) {
+			} catch {
 				return;
 			}
 		}
@@ -46,13 +50,13 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			return;
 		}
 
-		if ( ! event.origin.includes( window.location.host ) ) {
+		if ( subscriptionData.homeUrl !== event.origin ) {
 			return;
 		}
 
 		if ( data.email ) {
 			const emailInput = document.querySelector(
-				'.jetpack-subscription-modal__modal-content input[type=email]'
+				'.jetpack-subscription-modal__modal-content input[type="email"]'
 			);
 			if ( ! emailInput ) {
 				reloadOnCloseSubscriptionModal( data.url );
@@ -60,7 +64,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			}
 
 			const appSource = document.querySelector(
-				'.jetpack-subscription-modal__modal-content input[name=app_source]'
+				'.jetpack-subscription-modal__modal-content input[name="app_source"]'
 			);
 			if ( ! appSource ) {
 				reloadOnCloseSubscriptionModal( data.url );
@@ -91,8 +95,9 @@ document.addEventListener( 'DOMContentLoaded', function () {
 					reloadOnCloseSubscriptionModal( data.url );
 					return;
 				}
-				// eslint-disable-next-line no-empty
-			} catch ( e ) {}
+			} catch {
+				// Ignore any errors.
+			}
 
 			new Image().src =
 				document.location.protocol +
@@ -102,7 +107,6 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			modal.classList.toggle( 'open' );
 			hasLoaded = true;
 			redirectUrl = data.url;
-			return;
 		}
 	}
 

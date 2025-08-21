@@ -10,38 +10,38 @@ class MC4WP_Debug_Log
     /**
      * Detailed debug information
      */
-    const DEBUG = 100;
+    public const DEBUG = 100;
 
     /**
      * Interesting events
      *
      * Examples: Visitor subscribed
      */
-    const INFO = 200;
+    public const INFO = 200;
 
     /**
      * Exceptional occurrences that are not errors
      *
      * Examples: User already subscribed
      */
-    const WARNING = 300;
+    public const WARNING = 300;
 
     /**
      * Runtime errors
      */
-    const ERROR = 400;
+    public const ERROR = 400;
 
     /**
      * Logging levels from syslog protocol defined in RFC 5424
      *
      * @var array $levels Logging levels
      */
-    protected static $levels = array(
+    protected static $levels = [
         self::DEBUG   => 'DEBUG',
         self::INFO    => 'INFO',
         self::WARNING => 'WARNING',
         self::ERROR   => 'ERROR',
-    );
+    ];
 
     /**
      * @var string The file to which messages should be written.

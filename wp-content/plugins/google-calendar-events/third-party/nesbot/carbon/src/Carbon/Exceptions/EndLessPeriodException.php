@@ -11,7 +11,6 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use RuntimeException as BaseRuntimeException;
-/** @internal */
 final class EndLessPeriodException extends BaseRuntimeException implements RuntimeException
 {
     //

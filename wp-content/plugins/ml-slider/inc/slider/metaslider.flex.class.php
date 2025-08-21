@@ -29,21 +29,27 @@ class MetaFlexSlider extends MetaSlider
         parent::__construct($id, $shortcode_settings);
 
         add_filter('metaslider_flex_slider_parameters', array( $this, 'enable_carousel_mode' ), 10, 2);
-        add_filter('metaslider_flex_slider_parameters', array( $this, 'enable_pause_play'), 10, 2);
         add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_easing' ), 10, 2);
         add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_tabindex' ), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_aria_hidden_accessibility' ), 99, 3);
         add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_aria_current' ), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_progress_bar' ), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_tabbed_slider' ), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_pausePlay_button' ), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array( $this, 'manage_dots_onhover' ), 10, 3);
 
         if(metaslider_pro_is_active() == false) {
             add_filter('metaslider_flex_slider_parameters', array( $this, 'metaslider_flex_loop'), 99, 3);
         }
 
         if( metaslider_pro_is_active() ) {
-            add_filter( 'metaslider_flex_slider_parameters', array( $this, 'custom_delay_per_slide' ), 10, 3 );
+            add_filter( 'metaslider_flex_slider_parameters', array( $this, 'custom_delay_per_slide' ), 99, 3 );
         }
 
         add_filter('metaslider_css', array( $this, 'get_carousel_css' ), 11, 3);
         add_filter('metaslider_css', array( $this, 'hide_for_mobile' ), 11, 3);
+        add_filter('metaslider_css', array( $this, 'show_hide_play_text' ), 11, 3);
+        add_filter('metaslider_css', array( $this, 'show_hide_play_button' ), 11, 3);
         add_filter('metaslider_css_classes', array( $this, 'remove_bottom_margin' ), 11, 3);
 
         $global_settings = get_option( 'metaslider_global_settings' );
@@ -55,7 +61,6 @@ class MetaFlexSlider extends MetaSlider
                 add_filter("metaslider_flex_slider_javascript_before", array( $this, 'manage_responsive' ), 10, 3);
             }
         }
-        
     }
 
     /**
@@ -72,7 +77,7 @@ class MetaFlexSlider extends MetaSlider
                 $options["itemWidth"] = $this->get_setting('width');
                 $options["animation"] = "'slide'";
                 $options["direction"] = "'horizontal'";
-                $options["minItems"] = 1;
+                $options["minItems"] = $this->get_setting('minItems');
                 $options["move"] = 1;
                 $options["itemMargin"] = apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id);
                 //activate infinite loop when carousel is set to 'continously' and 'autoplay'
@@ -85,39 +90,28 @@ class MetaFlexSlider extends MetaSlider
                         var ul = $('#metaslider_" . $slider_id . " .slides');
                         ul.find('li').clone(true).appendTo(ul);
                     "));
-                }                
+                }
+                
+                if ( (int) $options['minItems'] > 1 && $this->get_setting('forceHeight') == 'true' ) {
+                    $options['init'] = isset( $options['init'] ) ? $options['init'] : array();
+                    $options['init'] = array_merge( $options['init'], array("
+                        var container = $('#metaslider-id-" . $slider_id . "');
+                        var height = container.attr('data-height') || false;
+
+                        if (height) {
+                            container.addClass('ms-carousel-force-height');
+                            container.find('.slides > li').each(function () {
+                                $(this).css({height: height + 'px'});
+                            });
+                        }
+                    "));
+                }
             }
             unset($options["carouselMode"]);
         }
 
         // we don't want this filter hanging around if there's more than one slideshow on the page
         remove_filter('metaslider_flex_slider_parameters', array( $this, 'enable_carousel_mode' ), 10, 2);
-        return $options;
-    }
-
-    /**
-     * Adjust the slider parameters to enable pausePlay if both autoPlay (slideshow) or pausePlay are enabled
-     *
-     * @since 3.90
-     * 
-     * @param array   $options   Slider options
-     * @param integer $slider_id Slider ID
-     * @return array $options
-     */
-    public function enable_pause_play($options, $slider_id)
-    {
-        if (isset($options['pausePlay']) && $options['pausePlay'] == 'true') { 
-            // Check if auto play is enabled 
-            if (isset($options['slideshow']) && $options['slideshow'] == 'true') {
-                $options['pausePlay'] = "true";
-            } else {
-                unset($options['pausePlay']);
-            }
-        }
-
-        // We don't want this filter hanging around if there's more than one slideshow on the page
-        remove_filter('metaslider_flex_slider_parameters', array( $this, 'enable_pause_play' ), 10, 2);
-
         return $options;
     }
 
@@ -279,6 +273,43 @@ class MetaFlexSlider extends MetaSlider
     }
 
     /**
+     * Show/Hide Play Button Text
+     */
+    public function show_hide_play_text($css, $settings, $slider_id)
+    {
+        if (isset($settings['showPlayText']) && $settings['showPlayText'] == 'true') {
+            $css .= "\n 
+            #metaslider_{$slider_id}.flexslider .flex-pauseplay .flex-play,
+            #metaslider_{$slider_id}.flexslider .flex-pauseplay .flex-pause {
+               width: auto;
+               height: auto;
+            }
+            #metaslider_{$slider_id}.flexslider .flex-pauseplay .flex-play::before,
+            #metaslider_{$slider_id}.flexslider .flex-pauseplay .flex-pause::before {
+                margin-right: 5px;
+            }";
+            
+        }
+        remove_filter('metaslider_css', array( $this, 'show_hide_play_text' ), 11, 3);
+        return $css;
+    }
+
+    /**
+     * Show/Hide Play Button When Infinite Loop is enabled
+     */
+    public function show_hide_play_button($css, $settings, $slider_id)
+    {
+        if (isset($settings['infiniteLoop']) && $settings['infiniteLoop'] == 'true') {
+            $css .= "\n 
+            #metaslider_{$slider_id}.flexslider .flex-pauseplay {
+               display: none;
+            }"; 
+        }
+        remove_filter('metaslider_css', array( $this, 'show_hide_play_text' ), 11, 3);
+        return $css;
+    }
+
+    /**
      * Enable the parameters that are accepted by the slider
      *
      * @param  string $param Parameters
@@ -304,7 +335,10 @@ class MetaFlexSlider extends MetaSlider
             'autoPlay' => 'slideshow',
             'firstSlideFadeIn' => 'fadeFirstSlide',
             'smoothHeight' => 'smoothHeight',
-            'pausePlay' => 'pausePlay'
+            'pausePlay' => 'pausePlay',
+            'showPlayText' => 'showPlayText',
+            'playText' => 'playText',
+            'pauseText' => 'pauseText'
         );
         return isset($params[$param]) ? $params[$param] : false;
     }
@@ -359,6 +393,14 @@ class MetaFlexSlider extends MetaSlider
         }
 
         $return_value .= "\n            </ul>";
+
+        if ($this->get_setting('autoPlay') == 'true' 
+            && $this->get_setting('progressBar') == 'true' 
+            && ($this->get_setting('infiniteLoop') == 'false' || $this->get_setting('carouselMode') == 'false')
+        ) {
+            $return_value .= "\n        <div class='flex-progress-bar'></div>";
+        }
+
         $return_value .= "\n        </div>";
 
         // show the first slide
@@ -417,8 +459,67 @@ class MetaFlexSlider extends MetaSlider
                 $options['start'],
                 array(
                     "
-                    $('#metaslider_" . $slider_id . " .flex-control-nav').attr('role', 'tablist');
-                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                    // Wait for DOM to be ready and FlexSlider to render controls
+                    setTimeout(function() {
+                        var nav = $('#metaslider_" . $slider_id . " .flex-control-nav');
+                        if (nav.length) {
+                            nav.attr('role', 'tablist');
+                        }
+
+                        function updateSliderTabindex() {
+                            var slider = $('#metaslider_" . $slider_id . "');
+                            var isSliderHidden = slider.closest('[aria-hidden=\"true\"]').length > 0 || 
+                                                slider.is('[aria-hidden=\"true\"]') || 
+                                                !slider.is(':visible');
+                            
+                            if (isSliderHidden) {
+                                slider.find('a, button, [tabindex]').attr('tabindex', '-1');
+                            } else {
+                                slider.find('.slides li[aria-hidden=\"true\"] a, .slides li[aria-hidden=\"true\"] button, .slides li[aria-hidden=\"true\"] [tabindex]').attr('tabindex', '-1');
+                                slider.find('.slides li.clone a, .slides li.clone button, .slides li.clone [tabindex]').attr('tabindex', '-1');
+                                slider.find('.flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                                slider.find('.flex-control-nav a.flex-active').removeAttr('tabindex');
+                                slider.find('.slides li:not(.flex-active-slide):not([aria-hidden=\"true\"]):not(.clone) a').attr('tabindex', '-1');
+                                slider.find('.slides li.flex-active-slide:not([aria-hidden=\"true\"]):not(.clone) a').removeAttr('tabindex');
+                            }
+                        }
+
+                        updateSliderTabindex();
+
+                        if (typeof MutationObserver !== 'undefined') {
+                            var observer = new MutationObserver(function(mutations) {
+                                var shouldUpdate = false;
+                                mutations.forEach(function(mutation) {
+                                    if (mutation.type === 'attributes' &&
+                                        (mutation.attributeName === 'aria-hidden' || mutation.attributeName === 'style' || mutation.attributeName === 'class')) {
+                                        shouldUpdate = true;
+                                    }
+                                    if (mutation.type === 'childList') {
+                                        shouldUpdate = true;
+                                    }
+                                });
+                                if (shouldUpdate) {
+                                    updateSliderTabindex();
+                                }
+                            });
+
+                            var targetNode = $('#metaslider_" . $slider_id . "')[0];
+                            if (targetNode) {
+                                observer.observe(targetNode, { 
+                                    attributes: true, 
+                                    attributeFilter: ['aria-hidden', 'style', 'class'],
+                                    childList: true,
+                                    subtree: true
+                                });
+
+                                var parent = targetNode.parentNode;
+                                while (parent && parent !== document.body) {
+                                    observer.observe(parent, { attributes: true, attributeFilter: ['aria-hidden', 'style'] });
+                                    parent = parent.parentNode;
+                                }
+                            }
+                        }
+                    }, 0);
                     "
                 )
             );
@@ -428,12 +529,119 @@ class MetaFlexSlider extends MetaSlider
                 $options['after'],
                 array(
                     "
-                    $('#metaslider_" . $slider_id . " .flex-control-nav a.flex-active').removeAttr('tabindex');
-                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                    // Update tabindex after slide change, respecting aria-hidden state
+                    var slider = $('#metaslider_" . $slider_id . "');
+                    var isSliderHidden = slider.closest('[aria-hidden=\"true\"]').length > 0 || 
+                                       slider.is('[aria-hidden=\"true\"]') || 
+                                       !slider.is(':visible');
+                    
+                    if (!isSliderHidden) {
+                        // Disable focusable elements in slides with aria-hidden='true'
+                        slider.find('.slides li[aria-hidden=\"true\"] a, .slides li[aria-hidden=\"true\"] button, .slides li[aria-hidden=\"true\"] [tabindex]').attr('tabindex', '-1');
+                        
+                        // Disable focusable elements in cloned slides
+                        slider.find('.slides li.clone a, .slides li.clone button, .slides li.clone [tabindex]').attr('tabindex', '-1');
+                        
+                        // Normal focus management for navigation
+                        slider.find('.flex-control-nav a.flex-active').removeAttr('tabindex');
+                        slider.find('.flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                        
+                        // Only allow focus on active slide that's not aria-hidden or cloned
+                        slider.find('.slides li:not(.flex-active-slide):not([aria-hidden=\"true\"]):not(.clone) a').attr('tabindex', '-1');
+                        slider.find('.slides li.flex-active-slide:not([aria-hidden=\"true\"]):not(.clone) a').removeAttr('tabindex');
+                    }
                     "
                 )
             );
         }
+
+        return $options;
+    }
+
+    /**
+     * Fix accessibility issues with aria-hidden elements containing focusable descendants
+     *
+     * @param array $options SLide options
+     * @param integer $slider_id Slider ID
+     * @param array $settings Slide settings
+     * @return array
+     */
+    public function manage_aria_hidden_accessibility($options, $slider_id, $settings)
+    {
+        $options['start'] = isset($options['start']) ? $options['start'] : array();
+        $options['start'] = array_merge(
+            $options['start'],
+            array(
+                "
+                // Function to disable focusable elements in aria-hidden slides
+                function disableAriaHiddenFocusableElements() {
+                    var slider = $('#metaslider_" . $slider_id . "');
+                    
+                    // Disable focusable elements in slides with aria-hidden='true'
+                    slider.find('.slides li[aria-hidden=\"true\"] a, .slides li[aria-hidden=\"true\"] button, .slides li[aria-hidden=\"true\"] input, .slides li[aria-hidden=\"true\"] select, .slides li[aria-hidden=\"true\"] textarea, .slides li[aria-hidden=\"true\"] [tabindex]:not([tabindex=\"-1\"])').attr('tabindex', '-1');
+                    
+                    // Disable focusable elements in cloned slides (these should never be focusable)
+                    slider.find('.slides li.clone a, .slides li.clone button, .slides li.clone input, .slides li.clone select, .slides li.clone textarea, .slides li.clone [tabindex]:not([tabindex=\"-1\"])').attr('tabindex', '-1');
+                }
+                
+                // Initial setup
+                disableAriaHiddenFocusableElements();
+                
+                // Observer for aria-hidden and clone changes
+                if (typeof MutationObserver !== 'undefined') {
+                    var ariaObserver = new MutationObserver(function(mutations) {
+                        var shouldUpdate = false;
+                        mutations.forEach(function(mutation) {
+                            if (mutation.type === 'attributes' && mutation.attributeName === 'aria-hidden') {
+                                shouldUpdate = true;
+                            }
+                            if (mutation.type === 'childList') {
+                                // Check if cloned slides were added/removed
+                                for (var i = 0; i < mutation.addedNodes.length; i++) {
+                                    if (mutation.addedNodes[i].nodeType === 1 && 
+                                        (mutation.addedNodes[i].classList.contains('clone') || 
+                                         mutation.addedNodes[i].querySelector && mutation.addedNodes[i].querySelector('.clone'))) {
+                                        shouldUpdate = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                        if (shouldUpdate) {
+                            setTimeout(disableAriaHiddenFocusableElements, 10);
+                        }
+                    });
+                    
+                    var targetNode = $('#metaslider_" . $slider_id . "')[0];
+                    if (targetNode) {
+                        ariaObserver.observe(targetNode, { 
+                            attributes: true, 
+                            attributeFilter: ['aria-hidden'],
+                            childList: true,
+                            subtree: true
+                        });
+                    }
+                }
+                "
+            )
+        );
+
+        $options['after'] = isset($options['after']) ? $options['after'] : array();
+        $options['after'] = array_merge(
+            $options['after'],
+            array(
+                "
+                // Re-disable focusable elements after slide transitions
+                var slider = $('#metaslider_" . $slider_id . "');
+                
+                // Disable focusable elements in slides with aria-hidden='true'
+                slider.find('.slides li[aria-hidden=\"true\"] a, .slides li[aria-hidden=\"true\"] button, .slides li[aria-hidden=\"true\"] input, .slides li[aria-hidden=\"true\"] select, .slides li[aria-hidden=\"true\"] textarea, .slides li[aria-hidden=\"true\"] [tabindex]:not([tabindex=\"-1\"])').attr('tabindex', '-1');
+                
+                // Disable focusable elements in cloned slides
+                slider.find('.slides li.clone a, .slides li.clone button, .slides li.clone input, .slides li.clone select, .slides li.clone textarea, .slides li.clone [tabindex]:not([tabindex=\"-1\"])').attr('tabindex', '-1');
+                "
+            )
+        );
 
         return $options;
     }
@@ -473,4 +681,131 @@ class MetaFlexSlider extends MetaSlider
         }
         return $options;
     }
+
+    /**
+     * Add JavaScript for progressBar
+     *
+     * @param array $options SLide options
+     * @param integer $slider_id Slider ID
+     * @param array $settings Slide settings
+     * @return array
+     */
+    public function manage_progress_bar($options, $slider_id, $settings)
+    {
+        if (isset($settings['progressBar']) 
+            && $settings['progressBar'] == 'true'
+            && $settings['autoPlay'] == 'true' 
+            && ($settings['infiniteLoop'] == 'false' || $settings['carouselMode'] == 'false')
+        ) {
+            $options['start'] = isset($options['start']) ? $options['start'] : array();
+            $totalTime = $settings['delay'] - $settings['animationSpeed'];
+            $options['start'] = array_merge(
+                $options['start'],
+                array(
+                    "
+                    $('#metaslider_" . $slider_id . " .flex-progress-bar')[0].offsetWidth;
+                    $('#metaslider_" . $slider_id . " .flex-progress-bar').css({
+                        width: '100%',
+                        transition: `width " . $totalTime . "ms linear`
+                    });
+                    "
+                )
+                
+            );
+            $options['before'] = isset($options['before']) ? $options['before'] : array();
+            $options['before'] = array_merge(
+                $options['before'],
+                array(
+                    "
+                    $('#metaslider_" . $slider_id . " .flex-progress-bar').css({width: '0%',transition: 'none'});
+                    "
+                )
+            );
+            $options['after'] = isset($options['after']) ? $options['after'] : array();
+            $options['after'] = array_merge(
+                $options['after'],
+                array(
+                    "
+                    $('#metaslider_" . $slider_id . " .flex-progress-bar')[0].offsetWidth;
+                    $('#metaslider_" . $slider_id . " .flex-progress-bar').css({
+                        width: '100%',
+                        transition: `width " . $totalTime . "ms linear`
+                    });
+                    "
+                )
+            );
+        }
+
+        return $options;
+    }
+
+    /**
+     * Trigger resize when slideshow is inside a tab
+     */
+    public function manage_tabbed_slider($options, $slider_id, $settings)
+    {
+        if ($settings['effect'] == 'slide') {
+            $options['start'] = isset( $options['start'] ) ? $options['start'] : array();
+            $options['start'] = array_merge(
+                $options['start'],
+                array(
+                    "document.addEventListener('click', function (event) {
+                        if (event.target.closest('[role=\'tab\']')) {
+                            $('#metaslider_" . $slider_id . "').resize();
+                        }
+                    });"
+                )  
+            );
+        }
+        return $options;
+    }
+
+    /**
+     * Change button to play icon when autoplay is disabled
+     */
+    public function manage_pausePlay_button($options, $slider_id, $settings)
+    {
+        if (isset($settings['pausePlay']) && $settings['pausePlay'] === 'true' && $settings['autoPlay'] === 'false') {
+            $script = "$('.flex-pauseplay a').removeClass('flex-pause').addClass('flex-play');";
+        
+            if (isset($settings['showPlayText']) && $settings['showPlayText'] === 'true' && !empty($settings['playText'])) {
+                $script .= "$('.flex-pauseplay a').text('" . addslashes($settings['playText']) . "');";
+            }
+        
+            $options['start'] = isset($options['start']) ? $options['start'] : array();
+            $options['start'] = array_merge($options['start'], [$script]);
+        }
+        /* @since 3.97 - disable hover on pause when play button is enabled */
+        if (isset($settings['pausePlay']) && $settings['pausePlay'] === 'true') {
+            unset($options['pauseOnHover']);
+        }
+        
+        return $options;
+    }
+
+    /**
+     * Modify the JavaScript parameters to delay the navigation fade out
+     *
+     * @since 2.46
+     * 
+     * @param array $options - javascript parameters
+     * @param integer $slider_id - slideshow ID
+     * @param array $settings - slideshow settings
+     *
+     * @return array modified javascript parameters
+     */
+    public function manage_dots_onhover( $options, $slider_id, $settings )
+    {
+        if ( 'dots_onhover' === $settings['navigation'] ) {
+            $options['start'] = isset( $options['start'] ) ? $options['start'] : array();
+            $options['start'] = array_merge( $options['start'], array(
+                "setTimeout(function() {
+                    slider.find('.flex-control-paging').css('opacity', '0');
+                }, 2000);"
+            ));
+        }
+
+        return $options;
+    }
 }
+

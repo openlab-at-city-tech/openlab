@@ -26,18 +26,9 @@
 			&:not(.flex-control-thumbs) {
 				background: transparent;
 				bottom: 30px;
-				-webkit-box-pack: center;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-ms-flex-pack: center;
-				-ms-flex-wrap: wrap;
-				flex-wrap: wrap;
-				justify-content: center;
-				justify-content: center;
 				line-height: 1.2;
 				margin: 0;
-				padding: 0 !important;
+				padding: 0;
 				position: absolute;
 				-webkit-transition: top 0.2s;
 				transition: top 0.2s;
@@ -113,10 +104,8 @@
 					transition: all 0.2s ease-in-out;
 					width: 70px;
 					&::before {
-                        mask-image: url("images/arrow.svg");
                         mask-size: 23px auto;
                         mask-repeat: no-repeat;
-                        mask-position: 3px 1px;
                         background-color: #6c6c6c;
                         background-image: none;
                         content: "" !important;
@@ -132,14 +121,16 @@
 				}
 				a.flex-prev {
 					left: 2% !important;
+					&:before {
+						mask-image: url("images/arrow-left.svg");
+						mask-position: 3px 1px;
+					}
 				}
 				a.flex-next {
 					right: 2% !important;
 					&:before {
-						-webkit-transform: rotate(180deg);
-	                    transform: rotate(180deg);
-                        left: 34%;
-                        top: 34%;
+						mask-image: url("images/arrow-right.svg");
+						mask-position: -3px 1px;
 					}
 				}
 			}
@@ -185,6 +176,7 @@
 					bottom: 100px;
 					color: #fff;
 					font-size: 0.9rem;
+					line-height: 1.2rem;
 					left: 50%;
 					padding: 0;
 					position: absolute;

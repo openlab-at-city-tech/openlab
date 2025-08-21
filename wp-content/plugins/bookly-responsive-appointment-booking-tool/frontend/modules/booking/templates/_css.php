@@ -7,6 +7,7 @@ $custom_css = trim( get_option( 'bookly_app_custom_styles' ) );
 <style type="text/css">
     :root {
         --bookly-main-color: <?php echo esc_attr( $color ) ?> !important;
+        --bookly-color: <?php echo esc_attr( $color ) ?> !important;
     }
 
     <?php if ( $custom_css != '' ) : ?>

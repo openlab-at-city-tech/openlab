@@ -15,7 +15,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * Encodes message information into JSON in a format compatible with Logmatic.
  *
  * @author Julien Breux <julien.breux@gmail.com>
- * @internal
  */
 class LogmaticFormatter extends JsonFormatter
 {
@@ -28,12 +27,12 @@ class LogmaticFormatter extends JsonFormatter
      * @var string
      */
     protected $appname = '';
-    public function setHostname(string $hostname) : self
+    public function setHostname(string $hostname): self
     {
         $this->hostname = $hostname;
         return $this;
     }
-    public function setAppname(string $appname) : self
+    public function setAppname(string $appname): self
     {
         $this->appname = $appname;
         return $this;
@@ -44,7 +43,7 @@ class LogmaticFormatter extends JsonFormatter
      * @see http://doc.logmatic.io/docs/basics-to-send-data
      * @see \Monolog\Formatter\JsonFormatter::format()
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         if (!empty($this->hostname)) {
             $record["hostname"] = $this->hostname;

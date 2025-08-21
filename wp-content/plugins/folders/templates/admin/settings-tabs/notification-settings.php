@@ -145,13 +145,13 @@ if($setting_page == "notification-settings") {
 
                                         <?php if(isset($setting['email']) && 0) { ?>
                                             <div class="mail-field">
-                                                <label><?php esc_html_e("Mail Subject"); ?></label>
+                                                <label><?php esc_html_e("Mail Subject", 'folders'); ?></label>
                                                 <div class="mail-field-input">
                                                     <input type="text" name="notification_setting[mail_setting][<?php echo esc_attr($key) ?>][email][subject]" value="<?php echo esc_attr($setting['email']['subject']) ?>">
                                                 </div>
                                             </div>
                                             <div class="mail-field">
-                                                <label><?php esc_html_e("Mail Content"); ?></label>
+                                                <label><?php esc_html_e("Mail Content", 'folders'); ?></label>
                                                 <div class="mail-field-input">
                                                     <textarea name="notification_setting[mail_setting][<?php echo esc_attr($key) ?>][email][content]"><?php echo esc_attr($setting['email']['content']) ?></textarea>
                                                 </div>
@@ -167,7 +167,7 @@ if($setting_page == "notification-settings") {
                             <?php }
                         } ?>
                     </div>
-                    <div class="submit-button">
+                    <div class="submit-button sr-only">
                         <p>
                             <input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
                         </p>

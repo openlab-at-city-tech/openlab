@@ -29,6 +29,10 @@ if ( ! class_exists( 'blcLinkQuery' ) ) {
 	include_once BLC_DIRECTORY_LEGACY . '/includes/link-query.php';
 }
 
+if ( ! class_exists( 'blcIntegrations' ) ) {
+	include_once BLC_DIRECTORY_LEGACY . '/integrations/integrations.php';
+}
+
 if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 
 	/**
@@ -176,6 +180,17 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 * @return void
 		 */
 		public function admin_footer() {
+			/*
+			Don't run the script if the user doesn't have the right capabilities to avoid abuse of overloading the server with requests.
+			Remove chances of unnecessary resource usage. Having every logged-in user spawn AJAX jobs is wasteful, especially on busy sites.
+			Malicious logged-in users could:
+			- Reduce the interval time eg from browser's (DoS risk).
+			- Open multiple tabs and flood server with AJAX calls (Logged-in attackers bypass most of rate-limiters and are harder to detect if they blend in).
+			*/
+			if ( ! current_user_can( 'edit_others_posts' ) ) {
+				return;
+			}
+
 			$fix = filter_input( INPUT_GET, 'fix-install-button', FILTER_VALIDATE_BOOLEAN );
 			$tab = ! empty( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
 
@@ -251,9 +266,10 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
                         $.getJSON(
                             "<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>",
                             {
-                                'action': 'blc_dashboard_status',
-                                'random': Math.random()
-                            },
+							'action': 'blc_dashboard_status',
+							'random': Math.random(),
+							'nonce' : '<?php echo esc_js( wp_create_nonce( 'blc_full_status' ) ); ?>'
+							},
                             function (data) {
                                 if (data && (typeof (data.text) != 'undefined')) {
                                     $('#wsblc_activity_box').html(data.text);
@@ -3270,6 +3286,17 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 * @return void
 		 */
 		function ajax_full_status() {
+			if ( ! current_user_can( 'edit_others_posts' ) || ! check_ajax_referer( 'blc_full_status', 'nonce', false ) ) {
+				wp_die(
+				json_encode(
+						array(
+							'error' => __( "You're not allowed to do that!", 'broken-link-checker' ),
+						)
+					),
+					403
+				);
+			}
+			
 			$status = $this->get_status();
 			$text   = $this->status_text( $status );
 
@@ -3368,6 +3395,17 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 * @return void
 		 */
 		function ajax_current_load() {
+			if ( ! current_user_can( 'edit_others_posts' ) || ! check_ajax_referer( 'blc_current_load', 'nonce', false ) ) {
+				wp_die(
+				json_encode(
+						array(
+							'error' => __( "You're not allowed to do that!", 'broken-link-checker' ),
+						)
+					),
+					403
+				);
+			}
+
 			$load = blcUtility::get_server_load();
 			if ( empty( $load ) ) {
 				die( _x( 'Unknown', 'current load', 'broken-link-checker' ) );
@@ -3414,6 +3452,10 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 
 		function ajax_work() {
 			check_ajax_referer( 'blc_work' );
+
+			if ( ! current_user_can( 'edit_others_posts' ) ) {
+				die( __( "You're not allowed to do that!", 'broken-link-checker' ) );
+			}
 
 			//Run the worker function
 			$this->work();

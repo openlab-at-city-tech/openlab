@@ -489,7 +489,7 @@ module.exports = function equal(a, b) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -577,8 +577,11 @@ __webpack_require__.d(private_selectors_namespaceObject, {
   getBlockPatternsForPostType: () => (getBlockPatternsForPostType),
   getEntityRecordPermissions: () => (getEntityRecordPermissions),
   getEntityRecordsPermissions: () => (getEntityRecordsPermissions),
+  getHomePage: () => (getHomePage),
   getNavigationFallbackId: () => (getNavigationFallbackId),
+  getPostsPageId: () => (getPostsPageId),
   getRegisteredPostMeta: () => (getRegisteredPostMeta),
+  getTemplateId: () => (getTemplateId),
   getUndoManager: () => (getUndoManager)
 });
 
@@ -1493,7 +1496,7 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     // Please also change the preload path when changing this.
     // @see lib/compat/wordpress-6.8/preload.php
-    _fields: ['description', 'gmt_offset', 'home', 'name', 'site_icon', 'site_icon_url', 'site_logo', 'timezone_string', 'url'].join(',')
+    _fields: ['description', 'gmt_offset', 'home', 'name', 'site_icon', 'site_icon_url', 'site_logo', 'timezone_string', 'url', 'page_for_posts', 'page_on_front', 'show_on_front'].join(',')
   },
   // The entity doesn't support selecting multiple records.
   // The property is maintained for backward compatibility.
@@ -1659,7 +1662,7 @@ const rootEntitiesConfig = [{
   },
   plural: 'globalStylesVariations',
   // Should be different from name.
-  getTitle: record => record?.title?.rendered || record?.title,
+  getTitle: () => (0,external_wp_i18n_namespaceObject.__)('Custom Styles'),
   getRevisionsUrl: (parentId, revisionId) => `/wp/v2/global-styles/${parentId}/revisions${revisionId ? '/' + revisionId : ''}`,
   supportsPagination: true
 }, {
@@ -3349,7 +3352,7 @@ function getEntityConfig(state, kind, name) {
  * @param state State tree
  * @param kind  Entity kind.
  * @param name  Entity name.
- * @param key   Record's key
+ * @param key   Optional record's key. If requesting a global record (e.g. site settings), the key can be omitted. If requesting a specific item, the key must always be included.
  * @param query Optional query. If requesting specific
  *              fields, fields must always include the ID. For valid query parameters see the [Reference](https://developer.wordpress.org/rest-api/reference/) in the REST API Handbook and select the entity kind. Then see the arguments available "Retrieve a [Entity kind]".
  *
@@ -3435,11 +3438,10 @@ const getRawEntityRecord = (0,external_wp_data_namespaceObject.createSelector)((
   const record = getEntityRecord(state, kind, name, key);
   return record && Object.keys(record).reduce((accumulator, _key) => {
     if (isRawAttribute(getEntityConfig(state, kind, name), _key)) {
-      var _record$_key$raw;
       // Because edits are the "raw" attribute values,
       // we return those from record selectors to make rendering,
       // comparisons, and joins with edits easier.
-      accumulator[_key] = (_record$_key$raw = record[_key]?.raw) !== null && _record$_key$raw !== void 0 ? _record$_key$raw : record[_key];
+      accumulator[_key] = record[_key]?.raw !== undefined ? record[_key]?.raw : record[_key];
     } else {
       accumulator[_key] = record[_key];
     }
@@ -4211,6 +4213,18 @@ const getRevision = (0,external_wp_data_namespaceObject.createSelector)((state, 
   return [state.entities.records?.[kind]?.[name]?.revisions?.[recordKey]?.items?.[context]?.[revisionKey], state.entities.records?.[kind]?.[name]?.revisions?.[recordKey]?.itemIsComplete?.[context]?.[revisionKey]];
 });
 
+;// external ["wp","privateApis"]
+const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// ./packages/core-data/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-data');
+
 ;// ./packages/core-data/build-module/private-selectors.js
 /**
  * WordPress dependencies
@@ -4220,6 +4234,7 @@ const getRevision = (0,external_wp_data_namespaceObject.createSelector)((state, 
 /**
  * Internal dependencies
  */
+
 
 
 /**
@@ -4292,6 +4307,114 @@ function getRegisteredPostMeta(state, postType) {
   var _state$registeredPost;
   return (_state$registeredPost = state.registeredPostMeta?.[postType]) !== null && _state$registeredPost !== void 0 ? _state$registeredPost : {};
 }
+function normalizePageId(value) {
+  if (!value || !['number', 'string'].includes(typeof value)) {
+    return null;
+  }
+
+  // We also need to check if it's not zero (`'0'`).
+  if (Number(value) === 0) {
+    return null;
+  }
+  return value.toString();
+}
+const getHomePage = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(() => {
+  const siteData = select(STORE_NAME).getEntityRecord('root', '__unstableBase');
+  // Still resolving getEntityRecord.
+  if (!siteData) {
+    return null;
+  }
+  const homepageId = siteData?.show_on_front === 'page' ? normalizePageId(siteData.page_on_front) : null;
+  if (homepageId) {
+    return {
+      postType: 'page',
+      postId: homepageId
+    };
+  }
+  const frontPageTemplateId = select(STORE_NAME).getDefaultTemplateId({
+    slug: 'front-page'
+  });
+  // Still resolving getDefaultTemplateId.
+  if (!frontPageTemplateId) {
+    return null;
+  }
+  return {
+    postType: 'wp_template',
+    postId: frontPageTemplateId
+  };
+}, state => [getEntityRecord(state, 'root', '__unstableBase'), getDefaultTemplateId(state, {
+  slug: 'front-page'
+})]));
+const getPostsPageId = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => () => {
+  const siteData = select(STORE_NAME).getEntityRecord('root', '__unstableBase');
+  return siteData?.show_on_front === 'page' ? normalizePageId(siteData.page_for_posts) : null;
+});
+const getTemplateId = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (state, postType, postId) => {
+  const homepage = unlock(select(STORE_NAME)).getHomePage();
+  if (!homepage) {
+    return;
+  }
+
+  // For the front page, we always use the front page template if existing.
+  if (postType === 'page' && postType === homepage?.postType && postId.toString() === homepage?.postId) {
+    // The /lookup endpoint cannot currently handle a lookup
+    // when a page is set as the front page, so specifically in
+    // that case, we want to check if there is a front page
+    // template, and instead of falling back to the home
+    // template, we want to fall back to the page template.
+    const templates = select(STORE_NAME).getEntityRecords('postType', 'wp_template', {
+      per_page: -1
+    });
+    if (!templates) {
+      return;
+    }
+    const id = templates.find(({
+      slug
+    }) => slug === 'front-page')?.id;
+    if (id) {
+      return id;
+    }
+    // If no front page template is found, continue with the
+    // logic below (fetching the page template).
+  }
+  const editedEntity = select(STORE_NAME).getEditedEntityRecord('postType', postType, postId);
+  if (!editedEntity) {
+    return;
+  }
+  const postsPageId = unlock(select(STORE_NAME)).getPostsPageId();
+  // Check if the current page is the posts page.
+  if (postType === 'page' && postsPageId === postId.toString()) {
+    return select(STORE_NAME).getDefaultTemplateId({
+      slug: 'home'
+    });
+  }
+  // First see if the post/page has an assigned template and fetch it.
+  const currentTemplateSlug = editedEntity.template;
+  if (currentTemplateSlug) {
+    const currentTemplate = select(STORE_NAME).getEntityRecords('postType', 'wp_template', {
+      per_page: -1
+    })?.find(({
+      slug
+    }) => slug === currentTemplateSlug);
+    if (currentTemplate) {
+      return currentTemplate.id;
+    }
+  }
+  // If no template is assigned, use the default template.
+  let slugToCheck;
+  // In `draft` status we might not have a slug available, so we use the `single`
+  // post type templates slug(ex page, single-post, single-product etc..).
+  // Pages do not need the `single` prefix in the slug to be prioritized
+  // through template hierarchy.
+  if (editedEntity.slug) {
+    slugToCheck = postType === 'page' ? `${postType}-${editedEntity.slug}` : `single-${postType}-${editedEntity.slug}`;
+  } else {
+    slugToCheck = postType === 'page' ? 'page' : `single-${postType}`;
+  }
+  return select(STORE_NAME).getDefaultTemplateId({
+    slug: slugToCheck
+  });
+});
 
 ;// ./packages/core-data/node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
@@ -4540,7 +4663,6 @@ async function defaultProcessor(requests) {
 }
 
 ;// ./packages/core-data/build-module/batch/create-batch.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -4590,7 +4712,7 @@ function createBatch(processor = defaultProcessor) {
      * rejected when the input is processed by `batch.run()`.
      *
      * You may also pass a thunk which allows inputs to be added
-     * asychronously.
+     * asynchronously.
      *
      * ```
      * // Both are allowed:
@@ -18990,7 +19112,7 @@ const createSyncProvider = (connectLocal, connectRemote) => {
   const docs = {};
 
   /**
-   * Registeres an object type.
+   * Registers an object type.
    *
    * @param {ObjectType}   objectType   Object type to register.
    * @param {ObjectConfig} objectConfig Object config.
@@ -21874,7 +21996,7 @@ const undo = () => ({
 };
 
 /**
- * Action triggered to redo the last undoed
+ * Action triggered to redo the last undone
  * edit to an entity record, if any.
  */
 const redo = () => ({
@@ -22534,8 +22656,16 @@ function sortResults(results, search) {
   for (const result of results) {
     if (result.title) {
       const titleTokens = tokenize(result.title);
-      const matchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken.includes(searchToken)));
-      scores[result.id] = matchingTokens.length / titleTokens.length;
+      const exactMatchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken === searchToken));
+      const subMatchingTokens = titleTokens.filter(titleToken => searchTokens.some(searchToken => titleToken !== searchToken && titleToken.includes(searchToken)));
+
+      // The score is a combination of exact matches and sub-matches.
+      // More weight is given to exact matches, as they are more relevant (e.g. "cat" vs "caterpillar").
+      // Diving by the total number of tokens in the title normalizes the score and skews
+      // the results towards shorter titles.
+      const exactMatchScore = exactMatchingTokens.length / titleTokens.length * 10;
+      const subMatchScore = subMatchingTokens.length / titleTokens.length;
+      scores[result.id] = exactMatchScore + subMatchScore;
     } else {
       scores[result.id] = 0;
     }
@@ -22582,7 +22712,7 @@ const CACHE = new Map();
  *
  * @async
  * @param {string}  url     the URL to request details from.
- * @param {Object?} options any options to pass to the underlying fetch.
+ * @param {?Object} options any options to pass to the underlying fetch.
  * @example
  * ```js
  * import { __experimentalFetchUrlData as fetchUrlData } from '@wordpress/core-data';
@@ -22648,7 +22778,6 @@ async function fetchBlockPatterns() {
 }
 
 ;// ./packages/core-data/build-module/resolvers.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -22734,7 +22863,7 @@ const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
           dispatch.receiveEntityRecords(kind, name, record, query);
         });
 
-        // Boostraps the edited document as well (and load from peers).
+        // Bootstraps the edited document as well (and load from peers).
         await getSyncProvider().bootstrap(entityConfig.syncObjectType + '--edit', objectId, record => {
           dispatch({
             type: 'EDIT_ENTITY_RECORD',
@@ -22830,7 +22959,7 @@ const resolvers_getEditedEntityRecord = forward_resolver('getEntityRecord');
  *
  * @param {string}  kind  Entity kind.
  * @param {string}  name  Entity name.
- * @param {Object?} query Query Object. If requesting specific fields, fields
+ * @param {?Object} query Query Object. If requesting specific fields, fields
  *                        must always include the ID.
  */
 const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
@@ -23110,8 +23239,12 @@ const resolvers_getAutosaves = (postType, postId) => async ({
 }) => {
   const {
     rest_base: restBase,
-    rest_namespace: restNamespace = 'wp/v2'
+    rest_namespace: restNamespace = 'wp/v2',
+    supports
   } = await resolveSelect.getPostType(postType);
+  if (!supports?.autosave) {
+    return;
+  }
   const autosaves = await external_wp_apiFetch_default()({
     path: `/${restNamespace}/${restBase}/${postId}/autosaves?context=edit`
   });
@@ -23719,17 +23852,34 @@ function createLocksActions() {
   };
 }
 
-;// external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// ./packages/core-data/build-module/lock-unlock.js
+;// ./packages/core-data/build-module/dynamic-entities.js
 /**
- * WordPress dependencies
+ * Internal dependencies
  */
 
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/core-data');
+/**
+ * A simple utility that pluralizes a string.
+ * Converts:
+ * - "post" to "posts"
+ * - "taxonomy" to "taxonomies"
+ * - "media" to "mediaItems"
+ * - "status" to "statuses"
+ *
+ * It does not pluralize "GlobalStyles" due to lack of clarity about it at time of writing.
+ */
+
+/**
+ * A simple utility that singularizes a string.
+ *
+ * Converts:
+ * - "posts" to "post"
+ * - "taxonomies" to "taxonomy"
+ * - "mediaItems" to "media"
+ * - "statuses" to "status"
+ */
+
+let dynamicActions;
+let dynamicSelectors;
 
 ;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
@@ -24156,6 +24306,8 @@ const use_entity_record_EMPTY_OBJECT = {};
  * 	return (
  * 		<form onSubmit={ onRename }>
  * 			<TextControl
+ *				__nextHasNoMarginBottom
+ *				__next40pxDefaultSize
  * 				label={ __( 'Name' ) }
  * 				value={ page.editedRecord.title }
  * 				onChange={ setTitle }
@@ -24824,7 +24976,7 @@ function useEntityBlockEditor(kind, name, {
     }
 
     // If there's an edit, cache the parsed blocks by the edit.
-    // If not, cache by the original enity record.
+    // If not, cache by the original entity record.
     const edits = getEntityRecordEdits(kind, name, id);
     const isUnedited = !edits || !Object.keys(edits).length;
     const cackeKey = isUnedited ? getEntityRecord(kind, name, id) : edits;
@@ -24978,6 +25130,7 @@ lock(privateApis, {
 
 
 
+
 // The entity selectors/resolvers and actions are shortcuts to their generic equivalents
 // (getEntityRecord, getEntityRecords, updateEntityRecord, updateEntityRecords)
 // Instead of getEntityRecord, the consumer could use more user-friendly named selector: getPostType, getTaxonomy...
@@ -25021,11 +25174,13 @@ const entityActions = build_module_entitiesConfig.reduce((result, entity) => {
 const storeConfig = () => ({
   reducer: build_module_reducer,
   actions: {
+    ...dynamicActions,
     ...build_module_actions_namespaceObject,
     ...entityActions,
     ...createLocksActions()
   },
   selectors: {
+    ...dynamicSelectors,
     ...build_module_selectors_namespaceObject,
     ...entitySelectors
   },

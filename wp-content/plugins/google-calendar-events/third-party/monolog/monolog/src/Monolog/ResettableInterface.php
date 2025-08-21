@@ -24,7 +24,6 @@ namespace SimpleCalendar\plugin_deps\Monolog;
  * in one process.
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
- * @internal
  */
 interface ResettableInterface
 {

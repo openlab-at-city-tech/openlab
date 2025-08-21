@@ -17,7 +17,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * LoaderInterface is the interface implemented by all translation loaders.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- * @internal
  */
 interface LoaderInterface
 {

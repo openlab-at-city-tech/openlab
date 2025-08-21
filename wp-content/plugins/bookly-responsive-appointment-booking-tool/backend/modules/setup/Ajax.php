@@ -97,6 +97,8 @@ class Ajax extends Lib\Base\Ajax
 
                 // Save currency
                 update_option( 'bookly_pmt_currency', self::parameter( 'currency' ) );
+                $currencies = Lib\Utils\Price::getCurrencies();
+                do_action( 'wpml_register_single_string', 'bookly', 'currency_' . self::parameter( 'currency' ), $currencies[ self::parameter( 'currency' ) ]['symbol'] );
                 break;
             case 3:
                 $existing_staff = array();

@@ -1,0 +1,443 @@
+:root {
+  --premio-help-primary-color: #FA166B;
+  --premio-help-hover-color: #E11460; 
+}
+
+/* Old CSS */
+/* Help btn */
+#wpfooter {
+    display: none;
+}
+.plugins-php .premio-help-wrap, .plugins-php .premio-help-button-wrap{
+    display: none;
+}
+.plugins-php #wpfooter {
+    display: block;
+}
+
+.premio-help-form {
+    position: fixed;
+    right: 25px;
+    border: 1px solid #e9edf0;
+    bottom: 100px;
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    width: 320px;
+    z-index: 1001;
+    direction: ltr;
+    visibility: hidden;
+    opacity: 0;
+    transition: .4s;
+    -webkit-transition: .4s;
+    -moz-transition: .4s
+}
+
+.premio-help-form.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: inherit
+}
+
+.premio-help-header {
+    background: #f4f4f4;
+    border-bottom: solid 1px #e9edf0;
+    padding: 5px 20px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px 10px 0 0;
+    font-size: 16px;
+    text-align: right
+}
+
+.premio-help-header b {
+    float: left
+}
+
+.premio-help-content {
+    margin-bottom: 10px;
+    padding: 20px 20px 10px
+}
+
+.premio-help-form p {
+    margin: 0 0 1em
+}
+
+.premio-form-field {
+    margin-bottom: 10px
+}
+
+.premio-form-field input,
+.premio-form-field textarea {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #c5c5c5
+}
+
+.premio-form-field textarea {
+    height: 70px
+}
+
+.premio-help-button-submit {
+    border: none;
+    padding: 8px 0;
+    width: 100%;
+    background-color: var(--premio-help-primary-color);
+    color: #fff;
+    border-radius: 18px;
+    transition: 0.4s;
+}
+.premio-help-button-submit:hover{
+    background-color: var(--premio-help-hover-color);
+}
+
+.premio-help-form .error-message {
+    font-weight: 400;
+    font-size: 14px
+}
+
+.premio-help-form input.input-error,
+.premio-help-form textarea.input-error {
+    border-color: #dc3232
+}
+
+p.error-p,
+p.success-p {
+    margin: 0;
+    font-size: 14px;
+    text-align: center
+}
+
+/* Help From */
+p.success-p {
+    color: green
+}
+
+p.error-p {
+    color: #dc3232
+}
+
+html[dir=rtl] .premio-help-button {
+    left: 20px;
+    right: auto
+}
+
+html[dir=rtl] .premio-help-form {
+    left: 85px;
+    right: auto
+}
+
+/* Old CSS */
+
+.premio-footer-help {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 80px;
+    color: #50575e;
+    margin-top: 50px;
+}
+
+.premio-footer-help * {
+    box-sizing: border-box
+}
+
+.premio-help-wrap {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 180px;
+    height: 60px;
+}
+
+.premio-help-menu {
+    display: flex;
+    gap: 24px;
+    padding: 20px 20px 10px;
+}
+
+.premio-help-menu a {
+    color: var(--premio-help-primary-color);
+    text-align: center;
+    /* font-family: Poppins; */
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 140%;
+    text-decoration: none;
+}
+.premio-help-menu a:hover {
+    color: var(--premio-help-hover-color);
+}
+
+.premio-help-menu a:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.premio-help-content p {
+    color: #83A1B7;
+    text-align: center;
+    /* font-family: Poppins; */
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+    margin: 0 !important;
+}
+
+.premio-help-content p a {
+    color: var(--premio-help-primary-color);
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.4s;
+}
+.premio-help-content p a:hover{
+    color: var(--premio-help-hover-color);
+}
+
+.premio-help-button-wrap {
+    height: 64px;
+    width: 64px;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+}
+
+.premio-help-button-wrap img {
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.premio-help-button,
+.premio-help-close-btn {
+    background-color: var(--premio-help-primary-color);
+    display: inline-block;
+    height: 64px;
+    width: 64px;
+    padding: 11px;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+.premio-help-button:hover {
+    background-color: var(--premio-help-hover-color);
+}
+
+.premio-help-button.hide {
+    display: none;
+}
+
+.premio-help-close-btn {
+    background-color: #000 !important;
+    padding: 16px;
+    display: none;
+}
+
+.premio-help-close-btn.show {
+    display: inline-block;
+}
+
+.premio-help-button-wrap span.tooltiptext {
+    position: absolute;
+    background: #000;
+    font-size: 12px;
+    color: #fff;
+    top: -40px;
+    max-width: 140%;
+    text-align: center;
+    left: -14%;
+    border-radius: 5px;
+    direction: ltr;
+    visibility: visible;
+    opacity: 1;
+    padding: 8px 12px;
+    font-weight: 600;
+}
+
+.premio-help-button-wrap span.tooltiptext:after {
+    bottom: -9px;
+    content: "";
+    transform: translateX(-50%);
+    border-width: 10px 5px 0;
+    border-style: solid;
+    border-color: #000 transparent transparent;
+    left: 75%;
+    position: absolute;
+}
+
+.premio-form-field input,
+.premio-form-field textarea {
+    min-height: 1px;
+    line-height: 1.4;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #c5c5c5;
+}
+
+.help-form-footer {
+    text-align: center;
+}
+
+.help-form-footer p {
+    margin: 0;
+    padding: 0;
+}
+
+.help-form-footer p+p {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.premio-help-form input.input-error,
+.premio-help-form textarea.input-error {
+    border-color: #dc3232;
+}
+
+
+.premio-help-absulate-content {
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    width: 200px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    /* optional slide effect */
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    /* prevent interaction when hidden */
+}
+
+/* .premio-help-button-wrap:hover .premio-help-absulate-content, */
+.premio-help-absulate-content.active {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.premio-help-absulate-content-single {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(20px);
+    text-decoration: none !important;
+}
+.premio-help-absulate-content-single:focus {
+	box-shadow: none;
+}
+
+.premio-help-absulate-content.active .premio-help-absulate-content-single {
+    animation: slideInBottom 0.4s forwards ease;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.premio-help-absulate-content.hide .premio-help-absulate-content-single {
+    animation: slideOutTop 0.4s forwards ease;
+}
+
+@keyframes slideInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+}
+
+@keyframes slideOutTop {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+        visibility: hidden;
+    }
+}
+
+.premio-help-absulate-content a {
+    display: flex;
+    justify-content: end;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.premio-help-absulate-content-single span {
+    background-color: var(--premio-help-primary-color);
+    color: #fff;
+    transition: 0.4s;
+}
+
+.premio-help-absulate-content-single:hover span{
+    background-color: var(--premio-help-hover-color);
+}
+.premio-help-absulate-content-single .icon-img {
+    padding: 16px;
+    height: 64px;
+    width: 64px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.premio-help-absulate-content-single .icon-img.pro {
+    background: var(--Main-gradient, linear-gradient(180deg, #F69D01 0%, #F65901 100%));
+}
+
+.premio-help-absulate-content-single .text {
+    padding: 8px 16px;
+    border-radius: 8px;
+    box-shadow: 0px 12px 16px -4px rgba(10, 13, 18, 0.08), 0px 4px 6px -2px rgba(10, 13, 18, 0.03);
+}
+
+.premio-form-response p {
+    margin: 10px 0;
+}
+
+@media (max-width: 960px) {
+    .premio-help-wrap {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .premio-help-menu {
+        gap: 8px;
+        padding: 0;
+    }
+
+    .premio-help-content {
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .premio-help-menu {
+        display: none;
+    }
+}
+
+
+ 

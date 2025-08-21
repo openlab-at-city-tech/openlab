@@ -30,8 +30,8 @@ $checkbox_prefix = 'bookly-week-day-' . $form_id . '-';
                         <label for="bookly-available-after-<?php echo esc_attr( $form_id ) ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_select_date' ) ?></label>
                         <div>
                             <input id="bookly-available-after-<?php echo esc_attr( $form_id ) ?>" class="bookly-date-from bookly-js-date-from" type="text" value="" data-value="<?php echo esc_attr( $userData->getDateFrom() ) ?>"/>
-                            <div class="bookly-relative bookly-w-full bookly-z-10 bookly-js-datepicker-container">
-                                <div class="bookly-absolute bookly-top-1 bookly-w-72 bookly-p-0 bookly-bg-white bookly-js-datepicker-calendar bookly-min-w-[200px] bookly-rounded"></div>
+                            <div class="bookly:relative bookly:w-full bookly:z-10 bookly-js-datepicker-container">
+                                <div class="bookly:absolute bookly:top-1 bookly:w-72 bookly-p-0 bookly:bg-white bookly-js-datepicker-calendar bookly:min-w-[200px] bookly:rounded"></div>
                             </div>
                         </div>
                     </div>

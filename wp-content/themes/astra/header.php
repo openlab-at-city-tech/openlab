@@ -26,7 +26,7 @@ if ( apply_filters( 'astra_header_profile_gmpg_link', true ) ) {
 	?>
 	<link rel="profile" href="https://gmpg.org/xfn/11"> 
 	<?php
-} 
+}
 ?>
 <?php wp_head(); ?>
 <?php astra_head_bottom(); ?>
@@ -52,7 +52,7 @@ if ( apply_filters( 'astra_header_profile_gmpg_link', true ) ) {
 				'id'    => 'page',
 				'class' => 'hfeed site',
 			)
-		) 
+		)
 	);
 	?>
 >

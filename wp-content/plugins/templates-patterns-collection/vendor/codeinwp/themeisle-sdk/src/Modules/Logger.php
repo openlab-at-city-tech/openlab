@@ -79,12 +79,18 @@ class Logger extends Abstract_Module {
 		if ( ! $this->is_logger_active() ) {
 			return;
 		}
+		
+		add_action(
+			'admin_enqueue_scripts',
+			function() {
+				if ( ! apply_filters( 'themeisle_sdk_enable_telemetry', false ) ) {
+					return;
+				}
 
-		$can_load_telemetry = apply_filters( 'themeisle_sdk_enable_telemetry', false );
-
-		if ( $can_load_telemetry ) {
-			add_action( 'admin_enqueue_scripts', array( $this, 'load_telemetry' ) );
-		}
+				$this->load_telemetry();
+			},
+			PHP_INT_MAX 
+		);
 
 		$action_key = $this->product->get_key() . '_log_activity';
 		if ( ! wp_next_scheduled( $action_key ) ) {

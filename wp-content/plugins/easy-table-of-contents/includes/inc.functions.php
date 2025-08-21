@@ -326,15 +326,19 @@ add_filter('eztoc_wordpress_final_output', function($content){
    //Device Eligibility
   //@since 2.0.60
 function ez_toc_auto_device_target_status(){
-        $status = true;      
-        if(ezTOC_Option::get( 'device_target' ) == 'mobile'){
+        global $post;
+        $status = true;
+        $global_target = ezTOC_Option::get( 'device_target' );
+        $post_target = get_post_meta( $post->ID, '_ez-toc-device-target', true );
+        $target = $post_target ? $post_target : $global_target;   
+        if($target == 'mobile'){
             if(function_exists('wp_is_mobile') && wp_is_mobile()){                
                 $status = true;      
             }else{                
                 $status = false;      
             }
         }
-        if(ezTOC_Option::get( 'device_target' ) == 'desktop'){
+        if($target == 'desktop'){
             if(function_exists('wp_is_mobile') && wp_is_mobile()){                
                 $status = false;      			
             }else{                
@@ -644,7 +648,7 @@ function ez_toc_wp_strip_all_tags( $text, $remove_breaks = false ) {
 			'',
 			sprintf(
 				/* translators: 1: The function name, 2: The argument number, 3: The argument name, 4: The expected type, 5: The provided type. */
-				__( 'Warning: %1$s expects parameter %2$s (%3$s) to be a %4$s, %5$s given.' ),
+				__( 'Warning: %1$s expects parameter %2$s (%3$s) to be a %4$s, %5$s given.', 'easy-table-of-contents' ),
 				__FUNCTION__,
 				'#1',
 				'$text',

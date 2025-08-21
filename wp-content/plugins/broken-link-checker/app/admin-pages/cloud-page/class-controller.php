@@ -281,6 +281,7 @@ class Controller extends Admin_Page {
 				'hub_scan_url'           => ! empty( Utilities::hub_scan_url() ) ? esc_url( Utilities::hub_scan_url() ) : '',
 				'hub_signup_url'         => $signup_url,
 				'hub_account_url'        => ! empty( Utilities::hub_account_url() ) ? esc_url( Utilities::hub_account_url() ) : '',
+				'bub_blc_page_url'       => ! empty( Utilities::hub_blc_page_url() ) ? esc_url( Utilities::hub_blc_page_url() ) : '',
 				'limit_campaign_url'     => $limit_campaign_url,
 				'scan_results'           => $this->escape_array_fixed( Dash_Model::get_scan_results() ),
 				'scan_in_progress'       => $this->show_scan_in_progress(),

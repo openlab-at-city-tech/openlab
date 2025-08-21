@@ -22,10 +22,6 @@ function astra_header_menu_configuration() {
 
 	$component_limit = defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_header_menu;
 
-	/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-	$custom_req_divider = array( 'ast_class' => ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'colors-and-background' ) ) ? 'ast-bottom-dotted-divider' : '' );
-	/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-
 	for ( $index = 1; $index <= $component_limit; $index++ ) {
 
 		$_section = 'section-hb-menu-' . $index;
@@ -120,7 +116,7 @@ function astra_header_menu_configuration() {
 				'settings' => array(),
 				'priority' => 30,
 				'context'  => Astra_Builder_Helper::$general_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			),
 
 			/**
@@ -142,7 +138,7 @@ function astra_header_menu_configuration() {
 					'max'  => 1920,
 				),
 				'transport'   => 'postMessage',
-				'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
+				'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
 			),
 
 			/**
@@ -166,7 +162,7 @@ function astra_header_menu_configuration() {
 				'transport'  => 'postMessage',
 				'responsive' => false,
 				'renderAs'   => 'text',
-				'divider'    => array( 'ast_class' => 'ast-bottom-section-divider' ),
+				'divider'    => array( 'ast_class' => 'ast-bottom-divider ast-top-section-divider' ),
 			),
 
 			// Option: Submenu Container Divider.
@@ -179,7 +175,7 @@ function astra_header_menu_configuration() {
 				'priority' => 20,
 				'settings' => array(),
 				'context'  => Astra_Builder_Helper::$design_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			),
 
 			// Option: Submenu Divider Size.
@@ -228,7 +224,7 @@ function astra_header_menu_configuration() {
 						'value'    => true,
 					),
 				),
-				'divider'           => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+				'divider'           => array( 'ast_class' => 'ast-bottom-divider' ),
 			),
 
 			/**
@@ -250,7 +246,6 @@ function astra_header_menu_configuration() {
 					'step' => 1,
 					'max'  => 200,
 				),
-				'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
 			),
 
 			// Option: Sub-Menu Border.
@@ -271,7 +266,7 @@ function astra_header_menu_configuration() {
 					'bottom' => __( 'Bottom', 'astra' ),
 					'left'   => __( 'Left', 'astra' ),
 				),
-				'divider'        => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+				'divider'        => array( 'ast_class' => 'ast-bottom-divider' ),
 			),
 
 			// Option: Submenu Container Border Color.
@@ -287,12 +282,12 @@ function astra_header_menu_configuration() {
 				'section'           => $_section,
 				'priority'          => 23,
 				'context'           => Astra_Builder_Helper::$design_tab,
-				'divider'           => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+				'divider'           => array( 'ast_class' => 'ast-bottom-divider' ),
 			),
 
 			/**
-			* Option: Button Radius Fields
-			*/
+			 * Option: Button Radius Fields
+			 */
 			array(
 				'name'              => ASTRA_THEME_SETTINGS . '[header-' . $_prefix . '-submenu-border-radius-fields]',
 				'default'           => astra_get_option( 'header-' . $_prefix . '-submenu-border-radius-fields' ),
@@ -327,6 +322,8 @@ function astra_header_menu_configuration() {
 				'title'     => __( 'Item Divider', 'astra' ),
 				'context'   => Astra_Builder_Helper::$general_tab,
 				'transport' => 'postMessage',
+				'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+
 			),
 
 			// Option: Menu Stack on Mobile Checkbox.
@@ -365,7 +362,7 @@ function astra_header_menu_configuration() {
 					'left'   => __( 'Left', 'astra' ),
 				),
 				'context'           => Astra_Builder_Helper::$design_tab,
-				'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
+				'divider'           => array( 'ast_class' => 'ast-top-divider' ),
 			),
 
 			// Option Group: Menu Color.
@@ -393,7 +390,6 @@ function astra_header_menu_configuration() {
 				'priority'   => 90,
 				'context'    => Astra_Builder_Helper::$design_tab,
 				'responsive' => true,
-				'divider'    => $custom_req_divider,
 			),
 
 			// Option: Menu Color.
@@ -507,7 +503,7 @@ function astra_header_menu_configuration() {
 				'settings' => array(),
 				'priority' => 120,
 				'context'  => Astra_Builder_Helper::$design_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			),
 
 			// Option Group: Menu Typography.
@@ -517,11 +513,11 @@ function astra_header_menu_configuration() {
 				'type'      => 'control',
 				'control'   => 'ast-settings-group',
 				'title'     => __( 'Menu Font', 'astra' ),
+				'is_font'   => true,
 				'section'   => $_section,
 				'transport' => 'postMessage',
 				'priority'  => 120,
 				'context'   => Astra_Builder_Helper::$design_tab,
-				'divider'   => array( 'ast_class' => 'ast-section-spacing' ),
 			),
 
 			// Option: Menu Font Family.
@@ -538,7 +534,7 @@ function astra_header_menu_configuration() {
 				'priority'  => 22,
 				'connect'   => 'header-' . $_prefix . '-font-weight',
 				'context'   => Astra_Builder_Helper::$general_tab,
-				'divider'   => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
+				'divider'   => array( 'ast_class' => 'ast-sub-bottom-divider' ),
 			),
 
 			// Option: Menu Font Weight.
@@ -556,9 +552,8 @@ function astra_header_menu_configuration() {
 				'priority'          => 23,
 				'connect'           => 'header-' . $_prefix . '-font-family',
 				'context'           => Astra_Builder_Helper::$general_tab,
-				'divider'           => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
+				'divider'           => array( 'ast_class' => 'ast-sub-bottom-divider' ),
 			),
-
 
 			// Option: Menu Font Size.
 			array(
@@ -598,7 +593,6 @@ function astra_header_menu_configuration() {
 				),
 			),
 
-
 			/**
 			 * Option: Primary Menu Font Extras
 			 */
@@ -613,10 +607,9 @@ function astra_header_menu_configuration() {
 				'title'    => __( 'Font Extras', 'astra' ),
 			),
 
-
 			/**
-			* Option: Spacing Divider
-			*/
+			 * Option: Spacing Divider
+			 */
 			array(
 				'name'     => ASTRA_THEME_SETTINGS . '[header-' . $index . '-spacing-divider]',
 				'type'     => 'control',
@@ -626,9 +619,8 @@ function astra_header_menu_configuration() {
 				'settings' => array(),
 				'priority' => 150,
 				'context'  => Astra_Builder_Helper::$design_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			),
-
 
 			// Option - Menu Space.
 			array(
@@ -668,5 +660,5 @@ function astra_header_menu_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_menu_configuration();
+	add_action( 'init', 'astra_header_menu_configuration' );
 }

@@ -161,6 +161,7 @@ jQuery(document).ready(function()
 			// }
 			// zp_params = JSON.stringify(zp_params);
 		});
+
 	} // Zotpress Bibliography
 
 
@@ -229,10 +230,6 @@ jQuery(document).ready(function()
 			{
 				var zp_items = jQuery.parseJSON( data );
 				
-				zp_totalItems += zp_items.data.length;
-				if ( update ) console.log("zp: running update for items:",zp_totalItems,"->",zp_items.data.length);
-				else console.log("zp: adding items:",zp_totalItems,"->",zp_items.data.length);
-
 				// Account for Zotero errors
 				// QUESTION: Did something change? Now have to ref [0]
 				// 7.3.10: CHECK: Added 'error' status check
@@ -267,6 +264,16 @@ jQuery(document).ready(function()
 				// Success! Process as items
 				else
 				{
+					// 7.4: Major change to passing and parsing bib HTML
+					jQuery.each( zp_items.data, function (i, ic) {
+						var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+						zp_items.data[i].bib = ic_decode.documentElement.textContent;
+					});
+					
+					zp_totalItems += zp_items.data.length;
+					if ( update ) console.log("zp: running update for items:",zp_totalItems,"->",zp_items.data.length);
+					else console.log("zp: adding items:",zp_totalItems,"->",zp_items.data.length);
+
 					// First, remove any PHP SEO items that exist
 					jQuery("#"+zp_items.instance+" .zp-SEO-Content").remove();
 
@@ -738,6 +745,5 @@ jQuery(document).ready(function()
 				}).detach().appendTo( '#'+zp_items.instance+' .zp-List' );
 		}
 	}
-
 
 });

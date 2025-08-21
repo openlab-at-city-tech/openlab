@@ -31,9 +31,9 @@ function astra_comments_css( $dynamic_css ) {
 		$border_color   = astra_get_option( 'border-color' );
 
 		if ( is_array( $body_font_size ) ) {
-			$body_font_size_desktop = ( isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ) ? $body_font_size['desktop'] : 15;
+			$body_font_size_desktop = isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ? $body_font_size['desktop'] : 15;
 		} else {
-			$body_font_size_desktop = ( '' != $body_font_size ) ? $body_font_size : 15;
+			$body_font_size_desktop = '' != $body_font_size ? $body_font_size : 15;
 		}
 
 		$desktop_comment_global = array(
@@ -52,7 +52,7 @@ function astra_comments_css( $dynamic_css ) {
 		);
 		$dynamic_css .= astra_parse_css( $desktop_comment_global );
 
-		$update_customizer_defaults = ( true === astra_check_is_structural_setup() );
+		$update_customizer_defaults = true === astra_check_is_structural_setup();
 		$padding_comment_title      = $update_customizer_defaults ? '1em 0 0' : '2em 0';
 		$padding_ast_comment        = $update_customizer_defaults ? '2em 0' : '1em 0';
 		$padding_ast_comment_list   = $update_customizer_defaults ? '0' : '0.5em';

@@ -1,3 +1,5 @@
+/*! @elementor/editor-current-user */
+
 /*! @elementor/editor-v1-adapters */
 
 /*! @elementor/locations */
@@ -45,6 +47,10 @@
 /*!***************************************************!*\
   !*** external ["elementorV2","editorV1Adapters"] ***!
   \***************************************************/
+
+/*!****************************************************!*\
+  !*** external ["elementorV2","editorCurrentUser"] ***!
+  \****************************************************/
 
 /*!*******************************************************!*\
   !*** ./node_modules/@elementor/editor/dist/index.mjs ***!

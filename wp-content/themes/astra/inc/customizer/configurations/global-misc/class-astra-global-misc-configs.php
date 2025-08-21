@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Register Astra Global Misc Configurations.
  */
 class Astra_Global_Misc_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Astra Global Misc  Configurations.
 	 *

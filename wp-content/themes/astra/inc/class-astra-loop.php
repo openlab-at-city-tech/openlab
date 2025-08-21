@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'Astra_Loop' ) ) :
+if ( ! class_exists( 'Astra_Loop' ) ) {
 
 	/**
 	 * Astra_Loop
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 	 * @since 1.2.7
 	 */
 	class Astra_Loop {
-
 		/**
 		 * Instance
 		 *
@@ -143,9 +142,9 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 		public function template_parts_comments() {
 			if ( is_single() || is_page() ) {
 				// If comments are open or we have at least one comment, load up the comment template.
-				if ( comments_open() || get_comments_number() ) :
+				if ( comments_open() || get_comments_number() ) {
 					comments_template();
-				endif;
+				}
 			}
 		}
 
@@ -178,7 +177,7 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 		/**
 		 * Template part loop
 		 *
-		 * @param  boolean $is_page Loop outputs different content action for content page and default content.
+		 * @param  bool $is_page Loop outputs different content action for content page and default content.
 		 *         if is_page is set to true - do_action( 'astra_page_template_parts_content' ); is added
 		 *         if is_page is false - do_action( 'astra_template_parts_content' ); is added.
 		 * @since 1.2.7
@@ -188,10 +187,10 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 			?>
 			<main id="main" class="site-main">
 				<?php
-				if ( have_posts() ) :
+				if ( have_posts() ) {
 					do_action( 'astra_template_parts_content_top' );
 
-					while ( have_posts() ) :
+					while ( have_posts() ) {
 						the_post();
 
 						if ( true === $is_page ) {
@@ -199,13 +198,12 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 						} else {
 							do_action( 'astra_template_parts_content' );
 						}
-
-						endwhile;
+					}
 					do_action( 'astra_template_parts_content_bottom' );
-					else :
-						do_action( 'astra_template_parts_content_none' );
-					endif;
-					?>
+				} else {
+					do_action( 'astra_template_parts_content_none' );
+				}
+				?>
 			</main><!-- #main -->
 			<?php
 		}
@@ -266,7 +264,7 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 		 */
 		public function comment_layout_adjustments() {
 			// Bail early if it is the WooCommerce product page, as on the WooCommerce product page reviews are shown in tabs.
-			if ( class_exists( 'WooCommerce' ) && 'product' == get_post_type() ) {
+			if ( class_exists( 'WooCommerce' ) && 'product' === get_post_type() ) {
 				return;
 			}
 			$comments_section_placement = astra_get_option( 'comments-box-placement', '' );
@@ -290,4 +288,4 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 	 */
 	Astra_Loop::get_instance();
 
-endif;
+}

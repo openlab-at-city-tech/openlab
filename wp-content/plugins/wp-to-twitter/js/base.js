@@ -32,6 +32,9 @@
 	});
 	$('#wpt_custom_tweet, #wpt_custom_update, #wpt_retweet_0, #wpt_retweet_1, #wpt_retweet_3').charCount({
 		allowed: wptSettings.allowed,
+		x_limit: wptSettings.x_limit,
+		mastodon_limit: wptSettings.mastodon_limit,
+		bluesky_limit: wptSettings.bluesky_limit,
 		counterText: wptSettings.text
 	});
 

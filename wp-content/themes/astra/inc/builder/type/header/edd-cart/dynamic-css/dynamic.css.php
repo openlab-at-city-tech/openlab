@@ -67,37 +67,37 @@ function astra_hb_edd_cart_dynamic_css( $dynamic_css, $dynamic_css_filtered = ''
 	$checkout_button_bg_h_color   = astra_get_option( 'header-edd-checkout-btn-bg-hover-color', $btn_bg_color );
 
 	$header_cart_icon        = '';
-	$cart_text_color_desktop = ( ! empty( $cart_text_color['desktop'] ) ) ? $cart_text_color['desktop'] : '';
-	$cart_text_color_mobile  = ( ! empty( $cart_text_color['mobile'] ) ) ? $cart_text_color['mobile'] : '';
-	$cart_text_color_tablet  = ( ! empty( $cart_text_color['tablet'] ) ) ? $cart_text_color['tablet'] : '';
+	$cart_text_color_desktop = ! empty( $cart_text_color['desktop'] ) ? $cart_text_color['desktop'] : '';
+	$cart_text_color_mobile  = ! empty( $cart_text_color['mobile'] ) ? $cart_text_color['mobile'] : '';
+	$cart_text_color_tablet  = ! empty( $cart_text_color['tablet'] ) ? $cart_text_color['tablet'] : '';
 
-	$cart_bg_color_desktop = ( ! empty( $cart_bg_color['desktop'] ) ) ? $cart_bg_color['desktop'] : '';
-	$cart_bg_color_mobile  = ( ! empty( $cart_bg_color['mobile'] ) ) ? $cart_bg_color['mobile'] : '';
-	$cart_bg_color_tablet  = ( ! empty( $cart_bg_color['tablet'] ) ) ? $cart_bg_color['tablet'] : '';
+	$cart_bg_color_desktop = ! empty( $cart_bg_color['desktop'] ) ? $cart_bg_color['desktop'] : '';
+	$cart_bg_color_mobile  = ! empty( $cart_bg_color['mobile'] ) ? $cart_bg_color['mobile'] : '';
+	$cart_bg_color_tablet  = ! empty( $cart_bg_color['tablet'] ) ? $cart_bg_color['tablet'] : '';
 
-	$cart_link_color_desktop = ( ! empty( $cart_link_color['desktop'] ) ) ? $cart_link_color['desktop'] : '';
-	$cart_link_color_mobile  = ( ! empty( $cart_link_color['mobile'] ) ) ? $cart_link_color['mobile'] : '';
-	$cart_link_color_tablet  = ( ! empty( $cart_link_color['tablet'] ) ) ? $cart_link_color['tablet'] : '';
+	$cart_link_color_desktop = ! empty( $cart_link_color['desktop'] ) ? $cart_link_color['desktop'] : '';
+	$cart_link_color_mobile  = ! empty( $cart_link_color['mobile'] ) ? $cart_link_color['mobile'] : '';
+	$cart_link_color_tablet  = ! empty( $cart_link_color['tablet'] ) ? $cart_link_color['tablet'] : '';
 
-	$cart_separator_color_desktop = ( ! empty( $cart_separator_color['desktop'] ) ) ? $cart_separator_color['desktop'] : '';
-	$cart_separator_color_mobile  = ( ! empty( $cart_separator_color['mobile'] ) ) ? $cart_separator_color['mobile'] : '';
-	$cart_separator_color_tablet  = ( ! empty( $cart_separator_color['tablet'] ) ) ? $cart_separator_color['tablet'] : '';
+	$cart_separator_color_desktop = ! empty( $cart_separator_color['desktop'] ) ? $cart_separator_color['desktop'] : '';
+	$cart_separator_color_mobile  = ! empty( $cart_separator_color['mobile'] ) ? $cart_separator_color['mobile'] : '';
+	$cart_separator_color_tablet  = ! empty( $cart_separator_color['tablet'] ) ? $cart_separator_color['tablet'] : '';
 
-	$checkout_button_text_color_desktop = ( ! empty( $checkout_button_text_color['desktop'] ) ) ? $checkout_button_text_color['desktop'] : '';
-	$checkout_button_text_color_mobile  = ( ! empty( $checkout_button_text_color['mobile'] ) ) ? $checkout_button_text_color['mobile'] : '';
-	$checkout_button_text_color_tablet  = ( ! empty( $checkout_button_text_color['tablet'] ) ) ? $checkout_button_text_color['tablet'] : '';
+	$checkout_button_text_color_desktop = ! empty( $checkout_button_text_color['desktop'] ) ? $checkout_button_text_color['desktop'] : '';
+	$checkout_button_text_color_mobile  = ! empty( $checkout_button_text_color['mobile'] ) ? $checkout_button_text_color['mobile'] : '';
+	$checkout_button_text_color_tablet  = ! empty( $checkout_button_text_color['tablet'] ) ? $checkout_button_text_color['tablet'] : '';
 
-	$checkout_button_bg_color_desktop = ( ! empty( $checkout_button_bg_color['desktop'] ) ) ? $checkout_button_bg_color['desktop'] : '';
-	$checkout_button_bg_color_mobile  = ( ! empty( $checkout_button_bg_color['mobile'] ) ) ? $checkout_button_bg_color['mobile'] : '';
-	$checkout_button_bg_color_tablet  = ( ! empty( $checkout_button_bg_color['tablet'] ) ) ? $checkout_button_bg_color['tablet'] : '';
+	$checkout_button_bg_color_desktop = ! empty( $checkout_button_bg_color['desktop'] ) ? $checkout_button_bg_color['desktop'] : '';
+	$checkout_button_bg_color_mobile  = ! empty( $checkout_button_bg_color['mobile'] ) ? $checkout_button_bg_color['mobile'] : '';
+	$checkout_button_bg_color_tablet  = ! empty( $checkout_button_bg_color['tablet'] ) ? $checkout_button_bg_color['tablet'] : '';
 
-	$checkout_button_text_h_color_desktop = ( ! empty( $checkout_button_text_h_color['desktop'] ) ) ? $checkout_button_text_h_color['desktop'] : '';
-	$checkout_button_text_h_color_mobile  = ( ! empty( $checkout_button_text_h_color['mobile'] ) ) ? $checkout_button_text_h_color['mobile'] : '';
-	$checkout_button_text_h_color_tablet  = ( ! empty( $checkout_button_text_h_color['tablet'] ) ) ? $checkout_button_text_h_color['tablet'] : '';
+	$checkout_button_text_h_color_desktop = ! empty( $checkout_button_text_h_color['desktop'] ) ? $checkout_button_text_h_color['desktop'] : '';
+	$checkout_button_text_h_color_mobile  = ! empty( $checkout_button_text_h_color['mobile'] ) ? $checkout_button_text_h_color['mobile'] : '';
+	$checkout_button_text_h_color_tablet  = ! empty( $checkout_button_text_h_color['tablet'] ) ? $checkout_button_text_h_color['tablet'] : '';
 
-	$checkout_button_bg_h_color_desktop = ( ! empty( $checkout_button_bg_h_color['desktop'] ) ) ? $checkout_button_bg_h_color['desktop'] : '';
-	$checkout_button_bg_h_color_mobile  = ( ! empty( $checkout_button_bg_h_color['mobile'] ) ) ? $checkout_button_bg_h_color['mobile'] : '';
-	$checkout_button_bg_h_color_tablet  = ( ! empty( $checkout_button_bg_h_color['tablet'] ) ) ? $checkout_button_bg_h_color['tablet'] : '';
+	$checkout_button_bg_h_color_desktop = ! empty( $checkout_button_bg_h_color['desktop'] ) ? $checkout_button_bg_h_color['desktop'] : '';
+	$checkout_button_bg_h_color_mobile  = ! empty( $checkout_button_bg_h_color['mobile'] ) ? $checkout_button_bg_h_color['mobile'] : '';
+	$checkout_button_bg_h_color_tablet  = ! empty( $checkout_button_bg_h_color['tablet'] ) ? $checkout_button_bg_h_color['tablet'] : '';
 
 	/**
 	 * EDD Cart CSS.

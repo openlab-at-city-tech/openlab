@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 
 /**
@@ -10,7 +10,7 @@
  *
  * @return str $clean_param The clean parameter.
  */
-function zp_clean_param( $param ) {
+function zotpress_clean_param( $param ) {
 
 	// Thanks to Emerson@StackOverflow
 	$search = array(
@@ -47,7 +47,7 @@ function zp_clean_param( $param ) {
  *
  * @return str $date_return The year found or blank/n.d. if not found.
  */
-function zp_get_year( $date, $yesnd=false ) {
+function zotpress_get_year( $date, $yesnd=false ) {
 
 	$date_return = false;
 
@@ -73,7 +73,7 @@ function zp_get_year( $date, $yesnd=false ) {
  *
  * @return arr $item_arr The newly sorted array of items.
  */
-function subval_sort( $item_arr, $sortby, $order ) {
+function zotpress_subval_sort( $item_arr, $sortby, $order ) {
 
 	// Format sort order
 	$order = strtolower($order) == "desc" ? SORT_DESC : SORT_ASC;
@@ -88,7 +88,7 @@ function subval_sort( $item_arr, $sortby, $order ) {
 
    			$zpdate = ""; $zpdate = isset( $val["zpdate"] ) ? $val["zpdate"] : $val["date"];
 
-   			$date[$key] = zp_date_format($zpdate);
+   			$date[$key] = zotpress_date_format($zpdate);
 		}
 
 	} elseif ( $sortby == "title" ) {
@@ -122,13 +122,13 @@ function subval_sort( $item_arr, $sortby, $order ) {
  *  - yyyy mmmm, yyyy mmm (and the reverse)
  *  - mm-mm yyyy
  *
- * Used by: subval_sort
+ * Used by: zotpress_subval_sort
  *
  * @param str $date The date to format.
  *
  * @return str The formatted date, or the original if formatting fails.
  */
-function zp_date_format ($date) {
+function zotpress_date_format ($date) {
 
 	// Set up search lists
 	$list_month_long = array ( "01" => "January", "02" => "February", "03" => "March", "04" => "April", "05" => "May", "06" => "June", "07" => "July", "08" => "August", "09" => "September", "10" => "October", "11" => "November", "12" => "December" );
@@ -298,7 +298,7 @@ function zp_date_format ($date) {
 /**
  * Processes the WP AJAX Zotero request variables.
  * We need to make sure user input is checked.
- * For complex strings inc. non-English chars: strip_tags()
+ * For complex strings inc. non-English chars: wp_strip_all_tags()
  * For all else: sanitize_text_field()
  *
  * Used by: shortcode.php, shortcode.intextbib.php
@@ -311,7 +311,6 @@ function zp_date_format ($date) {
  */
 function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
-	// var_dump($atts);exit;
 	$zpr = array();
 
 	// Deal with empty atts, assume $_GET
@@ -320,11 +319,14 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
 	$zpr["api_user_id"] = false;
 	if ( isset($atts['api_user_id']) && $atts['api_user_id'] !== false )
-		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['api_user_id'] )));
+		$zpr["api_user_id"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['api_user_id'] )));
 	elseif ( isset($atts['user_id']) && $atts['user_id'] !== false )
-		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['user_id'] )));
+		$zpr["api_user_id"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['user_id'] )));
 	elseif ( isset($atts['userid']) && $atts['userid'] !== false )
-		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['userid'] )));
+		$zpr["api_user_id"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['userid'] )));
+	// 7.4: Unofficial re-support of user
+	elseif ( isset($atts['user']) && $atts['user'] !== false )
+		$zpr["api_user_id"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['user'] )));
 
 	// 7.3.13: We don't want to set a default at this stage ...
 	// // 7.3.12: Did something change with how WP hands shortcode atts? Doesn't remember defaults
@@ -341,9 +343,9 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
 	$zpr['nickname'] = false;
 	if ( isset($atts['nickname']) && $atts['nickname'] !== false )
-		$zpr["nickname"] = zp_clean_param(zp_clean_param( $atts['nickname'] ));
+		$zpr["nickname"] = zotpress_clean_param(zotpress_clean_param( $atts['nickname'] ));
     else if ( isset($atts['nick']) && $atts['nick'] !== false )
-		$zpr["nickname"] = zp_clean_param(zp_clean_param( $atts['nick'] ));
+		$zpr["nickname"] = zotpress_clean_param(zotpress_clean_param( $atts['nick'] ));
 
 	$zpr["limit"] = 50; // max 100, 22 seconds
 	$zpr["overwrite_request"] = false;
@@ -409,13 +411,13 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["item_key"] = false;
 	if ( isset($atts['item_key'])
 			&& ( $atts['item_key'] != "false" && $atts['item_key'] !== false ) )
-		$zpr["item_key"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['item_key'])));
+		$zpr["item_key"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['item_key'])));
 	elseif ( isset($atts['items'])
 			&& ( $atts['items'] != "false" && $atts['items'] !== false ) )
-		$zpr["item_key"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['items'])));
+		$zpr["item_key"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['items'])));
 	elseif ( isset($atts['item'])
 			&& ( $atts['item'] != "false" && $atts['item'] !== false ) )
-		$zpr["item_key"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['item'])));
+		$zpr["item_key"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['item'])));
 
 	// Deal with multiple items
 	// if ( strpos($zpr["item_key"], ", ") > 0 )
@@ -447,18 +449,17 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
 		$zpr["item_key"] = rtrim( $temp_reformatted, ',' );
 	}
-	// var_dump($zpr["item_key"]);exit;
 
 	$zpr["itemtype"] = false;
 	if ( isset($atts['itemtype'])
 			&& ( $atts['itemtype'] != "false" && $atts['itemtype'] !== false && $atts['itemtype'] !== '' ) )
-		$zpr["itemtype"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['itemtype'] )));
+		$zpr["itemtype"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['itemtype'] )));
 	elseif ( isset($atts['item_type'])
 			&& ( $atts['item_type'] != "false" && $atts['item_type'] !== false && $atts['item_type'] !== '' ) )
-		$zpr["itemtype"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['item_type'] )));
+		$zpr["itemtype"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['item_type'] )));
 	elseif ( isset($atts['data_type'])
 			&& ( $atts['data_type'] != "false" && $atts['data_type'] !== false && $atts['data_type'] !== '' ) )
-		$zpr["itemtype"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['data_type'] )));
+		$zpr["itemtype"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['data_type'] )));
 	
 	// Filter by itemtype
     // TODO: Allow for multiple itemtypes in one shortcode?
@@ -531,7 +532,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	elseif ( isset($_GET['subcollection_id'])
 			&& ( $_GET['subcollection_id'] != "false" && $_GET['subcollection_id'] !== false && $_GET['subcollection_id'] !== '' ) )
 	// && preg_match("/^[a-zA-Z0-9]+$/", $_GET['subcollection_id']) )
-		$zpr["collection_id"] = zp_clean_param( $_GET['subcollection_id'] );
+		$zpr["collection_id"] = zotpress_clean_param( sanitize_text_field(wp_unslash($_GET['subcollection_id'])) );
 
 	// $collection_id = str_replace(" ", "", $collection_id );
 
@@ -565,7 +566,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['zptag']));
 	elseif ( isset($_GET['lib_tag'])
 			&& ( $_GET['lib_tag'] != "false" && $_GET['lib_tag'] !== false && $_GET['lib_tag'] !== '' ) )
-		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($_GET['lib_tag']));
+		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags(wp_unslash($_GET['lib_tag'])));
 
 	// Deal with plus sign as space
 	if ( $zpr["tag_id"] !== false )
@@ -581,10 +582,10 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["author"] = false;
 	if ( isset($atts['author']) 
 			&& $atts['author'] != "false" && $atts['author'] != "" )
-		$zpr["author"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['author'])));
+		$zpr["author"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['author'])));
 	elseif ( isset($atts['authors']) 
 			&& $atts['authors'] != "false" && $atts['authors'] != "" )
-		$zpr["author"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['authors'])));
+		$zpr["author"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['authors'])));
 
 	// TESTING: urldecode
 	// CHECK: Is this a test ..? Removing for now ...
@@ -595,21 +596,21 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["year"] = false;
 	if ( isset($atts['year']) 
 			&& $atts['year'] != "false" && $atts['year'] != "" )
-		$zpr["year"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['year'] )));
+		$zpr["year"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['year'] )));
 	elseif ( isset($atts['years']) 
 			&& $atts['years'] != "false" && $atts['years'] != "" )
-		$zpr["year"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['years'] )));
+		$zpr["year"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['years'] )));
 	
 	// Deal with multiple years:
 	if ( strpos($zpr["year"], ",") > 0 )
 		$zpr["year"] = explode(",", $zpr["year"]);
 
-	$zpr["style"] = zp_Get_Default_Style();
+	$zpr["style"] = zotpress_get_default_style();
 	if ( isset($atts['style']) 
 			&& $atts['style'] != "false" && $atts['style'] != "" && $atts['style'] != "default" )
 		// $zpr["style"] = sanitize_text_field(wp_strip_all_tags($atts['style']));
 		// 7.3.14: Need to remove any special quotes, etc.
-		$zpr["style"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['style'])));
+		$zpr["style"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags($atts['style'])));
 
 	// NOTE: With PHP 8, watch for URL params that are strings but need to be ints
 	// 7.3.10: CHECK: Ignore if 50
@@ -645,7 +646,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	// Term, filter
 	$zpr["term"] = false;
 	if ( isset($atts['term']) )
-		$zpr["term"] = strip_tags($atts['term']);
+		$zpr["term"] = wp_strip_all_tags($atts['term']);
 
 	$zpr["filter"] = false;
 	if ( isset($atts['filter']) )
@@ -774,7 +775,7 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 			&& $atts['highlight'] !== false
 			&& $atts['highlight'] !== 0
 		 	&& $atts['highlight'] !== "false" )
-		$zpr["highlight"] = trim( htmlentities( zp_clean_param( sanitize_text_field(wp_strip_all_tags( $atts['highlight'] ))) ));
+		$zpr["highlight"] = trim( htmlentities( zotpress_clean_param( sanitize_text_field(wp_strip_all_tags( $atts['highlight'] ))) ));
 
 	$zpr["forcenumber"] = false;
 	if ( isset($atts['forcenumber'])
@@ -799,22 +800,22 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["searchby"] = false;
 	if ( isset($atts['searchby']) 
 			&& $atts['searchby'] != "false" && $atts['searchby'] != "" )
-		$zpr["searchby"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
+		$zpr["searchby"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
 
 	$zpr["minlength"] = 3;
 	if ( isset($atts['minlength']) 
 			&& $atts['minlength'] != "false" && $atts['minlength'] != "" )
-		$zpr["minlength"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['minlength'] )));
+		$zpr["minlength"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['minlength'] )));
 
 	$zpr["maxperpage"] = 10;
 	if ( isset($atts['maxperpage']) 
 			&& $atts['maxperpage'] != "false" && $atts['maxperpage'] != "" )
-		$zpr["maxperpage"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['maxperpage'] )));
+		$zpr["maxperpage"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['maxperpage'] )));
 
 	$zpr["searchby"] = false;
 	if ( isset($atts['searchby']) 
 			&& $atts['searchby'] != "false" && $atts['searchby'] != "" )
-		$zpr["searchby"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
+		$zpr["searchby"] = zotpress_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
 
 	// Note: Default is true
 	$zpr["browsebar"] = true;
@@ -862,12 +863,12 @@ function Zotpress_prep_request_URL( $wpdb, $zpr, $zp_request_queue, $api_user_id
 
 	// Get account and $api_user_id
 	if ( $api_user_id ) {
-		$zp_account = zp_get_account( $wpdb, $api_user_id );
+		$zp_account = zotpress_get_account( $wpdb, $api_user_id );
 	} elseif ( $zpr["api_user_id"] ) {
-		$zp_account = zp_get_account( $wpdb, $zpr["api_user_id"] );
+		$zp_account = zotpress_get_account( $wpdb, $zpr["api_user_id"] );
 		$api_user_id = $zpr["api_user_id"];
 	} else {
-		$zp_account = zp_get_account( $wpdb );
+		$zp_account = zotpress_get_account( $wpdb );
 		$api_user_id = $zp_account[0]->api_user_id;
 	}
 

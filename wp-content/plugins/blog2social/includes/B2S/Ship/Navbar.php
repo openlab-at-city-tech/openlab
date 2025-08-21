@@ -38,6 +38,9 @@ class B2S_Ship_Navbar {
             $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
             if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
                 $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $result->licence_condition;
+                if (isset($result->network_condition)) {
+                    $versionDetails['B2S_PLUGIN_NETWORK_CONDITION'] = (array) $result->network_condition;
+                }
                 update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
             }
         }
@@ -82,7 +85,7 @@ class B2S_Ship_Navbar {
         if ($data->networkId == 6 && $data->networkType == 0) {
             $chooseData = 'page';
         }
-        $onclick = ($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? ' onclick="wop(\'' . $b2sAuthUrl . '&choose=' . $chooseData . '&update=' . $data->networkAuthId . '\', \'Blog2Social Network\'); return false;"' : '';
+        $onclick = ($data->expiredDate != '0000-00-00' && $data->expiredDate <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? ' onclick="wop(\'' . $b2sAuthUrl . '&choose=' . $chooseData . '&update=' . $data->networkAuthId . '\', \'Blog2Social Network\'); return false;"' : '';
 
         $mandantIds = array();
         global $wpdb;
@@ -117,7 +120,7 @@ class B2S_Ship_Navbar {
             $schedule_end_date = strtotime("+ " . $schedInDays . " days") . "000";
         }
 
-        $content .= '<div class="b2s-network-select-btn ' . (($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? 'b2s-network-select-btn-deactivate" ' . $onclick : '"') . ' data-instant-sharing="' . esc_attr((isset($data->instant_sharing) ? (int) $data->instant_sharing : 0)) . '" data-max-sched-date="' . esc_attr($schedule_end_date) . '" data-network-auth-id="' . esc_attr($data->networkAuthId) . '" data-network-type="' . esc_attr($data->networkType) . '" data-network-kind="' . esc_attr($data->networkKind) . '" data-network-id = "' . esc_attr($data->networkId) . '"  data-network-tos-group-id="' . esc_attr($data->networkTosGroupId) . '" data-network-display-name="' . esc_attr(strtolower(B2S_Util::remove4byte($data->networkUserName))) . '" ' . (in_array($data->networkId, array(1, 3, 15, 19, 17)) ? 'data-meta-type="og"' : (in_array($data->networkId, array(2, 24)) ? 'data-meta-type="card"' : '')) . '>';
+        $content .= '<div class="b2s-network-select-btn ' . (($data->expiredDate != '0000-00-00' && $data->expiredDate <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? 'b2s-network-select-btn-deactivate" ' . $onclick : '"') . ' data-instant-sharing="' . esc_attr((isset($data->instant_sharing) ? (int) $data->instant_sharing : 0)) . '" data-max-sched-date="' . esc_attr($schedule_end_date) . '" data-network-auth-id="' . esc_attr($data->networkAuthId) . '" data-network-type="' . esc_attr($data->networkType) . '" data-network-kind="' . esc_attr($data->networkKind) . '" data-network-id = "' . esc_attr($data->networkId) . '"  data-network-tos-group-id="' . esc_attr($data->networkTosGroupId) . '" data-network-display-name="' . esc_attr(strtolower(B2S_Util::remove4byte($data->networkUserName))) . '" ' . (in_array($data->networkId, array(1, 3, 15, 19, 17)) ? 'data-meta-type="og"' : (in_array($data->networkId, array(2, 24)) ? 'data-meta-type="card"' : '')) . '>';
         $content .= '<div class="b2s-network-list">';
         $content .= '<div class="b2s-network-thumb">';
         $content .= '<img alt="" src="' . esc_url(plugins_url('/assets/images/portale/' . $data->networkId . '_flat.png', B2S_PLUGIN_FILE)) . '">';
@@ -140,7 +143,7 @@ class B2S_Ship_Navbar {
         $content .= '<span class="b2s-network-hide b2s-network-status-img glyphicon glyphicon-ok glyphicon-success"></span>';
         $content .= '<span class="b2s-network-status-no-img glyphicon glyphicon-danger glyphicon-ban-circle" data-network-auth-id="' . esc_attr($data->networkAuthId) . '" data-network-id="' . esc_attr($data->networkId) . '" style="display:none"></span>';
         $content .= '<span class="b2s-network-status-invalid-video glyphicon glyphicon-danger glyphicon-ban-circle" data-network-auth-id="' . esc_attr($data->networkAuthId) . '" data-network-id="' . esc_attr($data->networkId) . '" style="display:none"></span>';
-        $content .= ($data->expiredDate != '0000-00-00' && $data->expiredDate <= date('Y-m-d')) ? '<span class="b2s-network-status-expiredDate glyphicon glyphicon-danger glyphicon-refresh" data-network-auth-id="' . esc_attr($data->networkAuthId) . '"></span>' : '';
+        $content .= ($data->expiredDate != '0000-00-00' && $data->expiredDate <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? '<span class="b2s-network-status-expiredDate glyphicon glyphicon-danger glyphicon-refresh" data-network-auth-id="' . esc_attr($data->networkAuthId) . '"></span>' : '';
         $content .= '<div style="display:none;" class="b2s-network-status-img-loading b2s-loader-impulse b2s-loader-impulse-sm" data-network-auth-id="' . esc_attr($data->networkAuthId) . '"></div>';
         $content .= '</div>';
         $content .= '</div>';

@@ -5,10 +5,10 @@
  *
  * Plugin Name:       Editoria11y Accessibility Checker
  * Plugin URI:        https://wordpress.org/plugins/editoria11y-accessibility-checker/
- * Version:           2.0.11
+ * Version:           2.0.12
  * Requires PHP:      7.2
  * Requires at least: 6.0
- * Tested up to:      6.8
+ * Tested up to:      6.9
  * Author:            Princeton University, WDS
  * Author URI:        https://wds.princeton.edu/team
  * License:           GPL v2 or later
@@ -20,7 +20,7 @@
  * @package         Editoria11y
  * @link            https://wordpress.org/plugins/editoria11y-accessibility-checker/
  * @author          John Jameson, Princeton University
- * @copyright       2024 The Trustees of Princeton University
+ * @copyright       2025 The Trustees of Princeton University
  * @license         GPL v2 or later
  */
 
@@ -31,7 +31,7 @@
  */
 class Editoria11y {
 	// Library version; used as cache buster.
-	const ED11Y_VERSION = '2.0.11';
+	const ED11Y_VERSION = '2.0.12';
 
 	/**
 	 * Attachs functions to loop.

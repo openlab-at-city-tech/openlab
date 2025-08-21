@@ -267,6 +267,10 @@ class blcCurlHttp extends blcHttpCheckerBase {
 			curl_setopt( $ch, CURLINFO_HEADER_OUT, true );
 		}
 
+		if (  apply_filters( 'wpmudev_blc_local_accept_encoding_header', true ) ) {
+			curl_setopt( $ch, CURLOPT_ENCODING, '' );
+		}
+
 		// Apply filter for additional options
 		curl_setopt_array( $ch, apply_filters( 'broken-link-checker-curl-options', array() ) );
 

@@ -240,8 +240,21 @@ function DefaultErrorResponsePlaceholder({
 }
 function DefaultLoadingResponsePlaceholder({
   children,
-  showLoader
+  isLoading
 }) {
+  const [showLoader, setShowLoader] = (0,external_wp_element_namespaceObject.useState)(false);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!isLoading) {
+      setShowLoader(false);
+      return;
+    }
+
+    // Schedule showing the Spinner after 1 second.
+    const timeout = setTimeout(() => {
+      setShowLoader(true);
+    }, 1000);
+    return () => clearTimeout(timeout);
+  }, [isLoading]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     style: {
       position: 'relative'
@@ -265,33 +278,33 @@ function DefaultLoadingResponsePlaceholder({
 }
 function ServerSideRender(props) {
   const {
-    attributes,
-    block,
     className,
-    httpMethod = 'GET',
-    urlQueryArgs,
-    skipBlockSupportAttributes = false,
     EmptyResponsePlaceholder = DefaultEmptyResponsePlaceholder,
     ErrorResponsePlaceholder = DefaultErrorResponsePlaceholder,
     LoadingResponsePlaceholder = DefaultLoadingResponsePlaceholder
   } = props;
   const isMountedRef = (0,external_wp_element_namespaceObject.useRef)(false);
-  const [showLoader, setShowLoader] = (0,external_wp_element_namespaceObject.useState)(false);
   const fetchRequestRef = (0,external_wp_element_namespaceObject.useRef)();
   const [response, setResponse] = (0,external_wp_element_namespaceObject.useState)(null);
   const prevProps = (0,external_wp_compose_namespaceObject.usePrevious)(props);
   const [isLoading, setIsLoading] = (0,external_wp_element_namespaceObject.useState)(false);
-  function fetchData() {
+  const latestPropsRef = (0,external_wp_element_namespaceObject.useRef)(props);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    latestPropsRef.current = props;
+  }, [props]);
+  const fetchData = (0,external_wp_element_namespaceObject.useCallback)(() => {
     var _sanitizedAttributes, _sanitizedAttributes2;
     if (!isMountedRef.current) {
       return;
     }
+    const {
+      attributes,
+      block,
+      skipBlockSupportAttributes = false,
+      httpMethod = 'GET',
+      urlQueryArgs
+    } = latestPropsRef.current;
     setIsLoading(true);
-
-    // Schedule showing the Spinner after 1 second.
-    const timeout = setTimeout(() => {
-      setShowLoader(true);
-    }, 1000);
     let sanitizedAttributes = attributes && (0,external_wp_blocks_namespaceObject.__experimentalSanitizeBlockAttributes)(block, attributes);
     if (skipBlockSupportAttributes) {
       sanitizedAttributes = removeBlockSupportAttributes(sanitizedAttributes);
@@ -326,13 +339,10 @@ function ServerSideRender(props) {
     }).finally(() => {
       if (isMountedRef.current && fetchRequest === fetchRequestRef.current) {
         setIsLoading(false);
-        // Cancel the timeout to show the Spinner.
-        setShowLoader(false);
-        clearTimeout(timeout);
       }
     });
     return fetchRequest;
-  }
+  }, []);
   const debouncedFetchData = (0,external_wp_compose_namespaceObject.useDebounce)(fetchData, 500);
 
   // When the component unmounts, set isMountedRef to false. This will
@@ -354,12 +364,12 @@ function ServerSideRender(props) {
   });
   const hasResponse = !!response;
   const hasEmptyResponse = response === '';
-  const hasError = response?.error;
+  const hasError = !!response?.error;
   if (isLoading) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LoadingResponsePlaceholder, {
       ...props,
-      showLoader: showLoader,
-      children: hasResponse && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.RawHTML, {
+      isLoading: isLoading,
+      children: hasResponse && !hasError && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_element_namespaceObject.RawHTML, {
         className: className,
         children: response
       })

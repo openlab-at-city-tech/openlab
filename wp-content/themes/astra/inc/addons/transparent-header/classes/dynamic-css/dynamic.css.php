@@ -20,7 +20,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_ext_transparent_header_dynamic_css
  * @since 4.4.0
  */
 function astra_has_submenu_transperent_styling() {
-	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings = astra_get_options();
 	return apply_filters( 'astra_submenu_anchor_transperent_style', isset( $astra_settings['v4-3-2-anchor_transperent_style'] ) ? false : true );
 }
 
@@ -76,17 +76,17 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 
 	$transparent_bg_color_desktop = astra_get_prop( astra_get_option( 'transparent-header-bg-color-responsive' ), 'desktop' );
 	$transparent_bg_color_tablet  = astra_get_prop( astra_get_option( 'transparent-header-bg-color-responsive' ), 'tablet', $transparent_bg_color_desktop );
-	$transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'transparent-header-bg-color-responsive' ), 'mobile', ( $transparent_bg_color_tablet ) ? $transparent_bg_color_tablet : $transparent_bg_color_desktop );
+	$transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'transparent-header-bg-color-responsive' ), 'mobile', $transparent_bg_color_tablet ? $transparent_bg_color_tablet : $transparent_bg_color_desktop );
 
 	// Above transparent header background color.
 	$above_transparent_bg_color_desktop = astra_get_prop( astra_get_option( 'hba-transparent-header-bg-color-responsive' ), 'desktop' );
 	$above_transparent_bg_color_tablet  = astra_get_prop( astra_get_option( 'hba-transparent-header-bg-color-responsive' ), 'tablet', $above_transparent_bg_color_desktop );
-	$above_transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'hba-transparent-header-bg-color-responsive' ), 'mobile', ( $above_transparent_bg_color_tablet ) ? $above_transparent_bg_color_tablet : $above_transparent_bg_color_desktop );
+	$above_transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'hba-transparent-header-bg-color-responsive' ), 'mobile', $above_transparent_bg_color_tablet ? $above_transparent_bg_color_tablet : $above_transparent_bg_color_desktop );
 
 	// Below transparent header background color.
 	$below_transparent_bg_color_desktop = astra_get_prop( astra_get_option( 'hbb-transparent-header-bg-color-responsive' ), 'desktop' );
 	$below_transparent_bg_color_tablet  = astra_get_prop( astra_get_option( 'hbb-transparent-header-bg-color-responsive' ), 'tablet', $below_transparent_bg_color_desktop );
-	$below_transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'hbb-transparent-header-bg-color-responsive' ), 'mobile', ( $below_transparent_bg_color_tablet ) ? $below_transparent_bg_color_tablet : $below_transparent_bg_color_desktop );
+	$below_transparent_bg_color_mobile  = astra_get_prop( astra_get_option( 'hbb-transparent-header-bg-color-responsive' ), 'mobile', $below_transparent_bg_color_tablet ? $below_transparent_bg_color_tablet : $below_transparent_bg_color_desktop );
 
 	$transparent_color_site_title_desktop = astra_get_prop( astra_get_option( 'transparent-header-color-site-title-responsive' ), 'desktop' );
 	$transparent_color_site_title_tablet  = astra_get_prop( astra_get_option( 'transparent-header-color-site-title-responsive' ), 'tablet' );
@@ -148,44 +148,43 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 		);
 		$css       .= astra_parse_css( $css_output );
 	}
-	
+
 	// Handle style guide logo background cases inside the customizer.
 	if ( is_customize_preview() ) {
 		if ( Astra_Ext_Transparent_Header_Markup::is_transparent_header() ) {
 			// Fetch the header items
 			$header_items = astra_get_option( 'header-desktop-items', array() );
-	
+
 			$transparent_bg_colors = array(
 				'above'   => $above_transparent_bg_color_desktop,
 				'primary' => $transparent_bg_color_desktop,
 				'below'   => $below_transparent_bg_color_desktop,
 			);
-	
+
 			$transparent_bg_color = ! empty( $transparent_bg_color_desktop ) ? esc_attr( $transparent_bg_color_desktop ) : 'black';
-	
+
 			foreach ( $transparent_bg_colors as $section => $bg_color ) {
 				if ( isset( $header_items[ $section ] ) && astra_is_logo_in_section( $header_items[ $section ] ) ) {
 					$transparent_bg_color = ! empty( $bg_color ) ? esc_attr( $bg_color ) : '#d1d5db';
 					break;
 				}
 			}
-	
+
 			$transparent_header_desktop_bg = array(
 				'.ast-theme-transparent-header .ast-sg-element-wrap.ast-sg-logo-section' => array(
 					'background-color' => $transparent_bg_color,
 				),
 			);
-	
+
 			$css .= astra_parse_css( $transparent_header_desktop_bg );
 		}
 	}
-	
 
 	// Desktop Transparent Heder Logo Width.
 	$css_output = array(
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo .astra-logo-svg' => array(
 			'width'  => astra_get_css_value( $transparent_header_logo_width['desktop'], 'px' ),
-			'height' => astra_get_css_value( ( ! empty( $transparent_header_logo_width['desktop-svg-height'] ) && ! is_customize_preview() ) ? $transparent_header_logo_width['desktop-svg-height'] : '', 'px' ),
+			'height' => astra_get_css_value( ! empty( $transparent_header_logo_width['desktop-svg-height'] ) && ! is_customize_preview() ? $transparent_header_logo_width['desktop-svg-height'] : '', 'px' ),
 		),
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo img' => array(
 			' max-width' => astra_get_css_value( $transparent_header_logo_width['desktop'], 'px' ),
@@ -198,7 +197,7 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 	$tablet_css_output = array(
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo .astra-logo-svg' => array(
 			'width'  => astra_get_css_value( $transparent_header_logo_width['tablet'], 'px' ),
-			'height' => astra_get_css_value( ( ! empty( $transparent_header_logo_width['tablet-svg-height'] ) && ! is_customize_preview() ) ? $transparent_header_logo_width['tablet-svg-height'] : '', 'px' ),
+			'height' => astra_get_css_value( ! empty( $transparent_header_logo_width['tablet-svg-height'] ) && ! is_customize_preview() ? $transparent_header_logo_width['tablet-svg-height'] : '', 'px' ),
 		),
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo img' => array(
 			' max-width' => astra_get_css_value( $transparent_header_logo_width['tablet'], 'px' ),
@@ -211,7 +210,7 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 	$mobile_css_output = array(
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo .astra-logo-svg' => array(
 			'width'  => astra_get_css_value( $transparent_header_logo_width['mobile'], 'px' ),
-			'height' => astra_get_css_value( ( ! empty( $transparent_header_logo_width['mobile-svg-height'] ) && ! is_customize_preview() ) ? $transparent_header_logo_width['mobile-svg-height'] : '', 'px' ),
+			'height' => astra_get_css_value( ! empty( $transparent_header_logo_width['mobile-svg-height'] ) && ! is_customize_preview() ? $transparent_header_logo_width['mobile-svg-height'] : '', 'px' ),
 		),
 		'.ast-theme-transparent-header #masthead .site-logo-img .transparent-custom-logo img' => array(
 			' max-width' => astra_get_css_value( $transparent_header_logo_width['mobile'], 'px' ),
@@ -524,7 +523,7 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 			$responsive_selector = astra_get_transparent_header_last_active_row( 'mobile' );
 
 			// Join $desktop_selector & $responsive_selector.
-			$selector = ( ! empty( $desktop_selector ) && ! empty( $responsive_selector ) ) ? $desktop_selector . ', ' . $responsive_selector : $desktop_selector . $responsive_selector;
+			$selector = ! empty( $desktop_selector ) && ! empty( $responsive_selector ) ? $desktop_selector . ', ' . $responsive_selector : $desktop_selector . $responsive_selector;
 		} else {
 			$selector = '.ast-theme-transparent-header .main-header-bar, .ast-theme-transparent-header.ast-header-break-point .main-header-bar';
 		}

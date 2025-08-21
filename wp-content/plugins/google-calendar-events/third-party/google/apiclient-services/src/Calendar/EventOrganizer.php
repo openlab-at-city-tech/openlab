@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class EventOrganizer extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -94,4 +93,4 @@ class EventOrganizer extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(EventOrganizer::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_EventOrganizer');
+class_alias(EventOrganizer::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventOrganizer');

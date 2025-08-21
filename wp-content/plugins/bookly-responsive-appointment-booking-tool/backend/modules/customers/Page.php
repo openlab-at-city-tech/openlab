@@ -33,6 +33,8 @@ class Page extends Lib\Base\Component
             'wp_users' => get_users( array( 'fields' => array( 'ID', 'display_name' ), 'orderby' => 'display_name' ) ),
             'zeroRecords' => __( 'No customers found.', 'bookly' ),
             'processing' => __( 'Processing...', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'edit_customer' => __( 'Edit customer', 'bookly' ),
             'new_customer' => __( 'New customer', 'bookly' ),
             'create_customer' => __( 'Create customer', 'bookly' ),

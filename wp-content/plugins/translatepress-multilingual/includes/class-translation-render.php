@@ -294,14 +294,16 @@ class TRP_Translation_Render{
      * @return bool
      */
     public function check_children_for_tags( $row, $tags ){
-        foreach( $row->children as $child ){
-            if( in_array( $child->tag, $tags ) ){
+        foreach ( $row->children as $child ) {
+            if ( in_array( $child->tag, $tags ) ) {
                 return true;
-            }
-            else{
-                $this->check_children_for_tags( $child, $tags );
+            } else {
+                if ( $this->check_children_for_tags( $child, $tags ) ) {
+                    return true;
+                }
             }
         }
+        return false;
     }
 
 	/**
@@ -365,18 +367,38 @@ class TRP_Translation_Render{
      */
     public function handle_rest_api_translations($response){
     	if ( isset( $response->data ) ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            $url_converter = $trp->get_component( 'url_converter' );
+            $language = $url_converter->get_lang_from_url_string( $url_converter->cur_page_url() );
+
+            if ( $language == $this->settings['default-language'] || $language == null) {
+                return $response; // exit early in default language.
+            }
+
             if ( isset( $response->data['name'] ) ){
                 $response->data['name'] = $this->translate_page( $response->data['name'] );
             }
-		    if ( isset( $response->data['title'] ) && isset( $response->data['title']['rendered'] ) ) {
+		    if (isset($response->data['title']['rendered'])) {
 			    $response->data['title']['rendered'] = $this->translate_page( $response->data['title']['rendered'] );
 		    }
-		    if ( isset( $response->data['excerpt'] ) && isset( $response->data['excerpt']['rendered'] ) ) {
+		    if (isset($response->data['excerpt']['rendered'])) {
 			    $response->data['excerpt']['rendered'] = $this->translate_page( $response->data['excerpt']['rendered'] );
 		    }
-		    if ( isset( $response->data['content'] ) && isset( $response->data['content']['rendered'] ) ) {
+		    if (isset($response->data['content']['rendered'])) {
 			    $response->data['content']['rendered'] = $this->translate_page( $response->data['content']['rendered'] );
 		    }
+            if ( isset( $response->data['description'] ) ) {
+			    $response->data['description'] = $this->translate_page( $response->data['description'] );
+		    }
+            if ( isset( $response->data['slug'] ) && class_exists( 'TRP_Slug_Query' ) ) {
+                $trp_slug_query = new TRP_Slug_Query();
+                $slug_array = array( $response->data['slug'] );
+                $translated_slugs = $trp_slug_query->get_translated_slugs_from_original( $slug_array, $language );
+
+                if ( !empty( $translated_slugs ) && isset( $translated_slugs[$response->data['slug']] ) ) {
+                    $response->data['slug'] = $translated_slugs[$response->data['slug']];
+                }
+            }
 	    }
         return $response;
     }
@@ -385,7 +407,7 @@ class TRP_Translation_Render{
 	 * Apply translation filters for REST API response
 	 */
 	public function add_callbacks_for_translating_rest_api(){
-        $post_types = array_merge(["comment", "category"],get_post_types());
+        $post_types = array_merge(["comment"], get_post_types(), get_taxonomies());
 		foreach ( $post_types as $post_type ) {
 			add_filter( 'rest_prepare_'. $post_type, array( $this, 'handle_rest_api_translations' ) );
 		}
@@ -415,7 +437,7 @@ class TRP_Translation_Render{
 
         $output = apply_filters('trp_before_translate_content', $output);
 
-        if ( strlen( $output ) < 1 || $output == false ){
+        if ( $output == false || !is_string( $output ) || strlen( $output ) < 1 ) {
             return $output;
         }
 
@@ -488,16 +510,8 @@ class TRP_Translation_Render{
          * Tries to fix the HTML document. It is off by default. Use at own risk.
          * Solves the problem where a duplicate attribute inside a tag causes the plugin to remove the duplicated attribute and all the other attributes to the right of the it.
          */
-        if( apply_filters( 'trp_try_fixing_invalid_html', false ) ) {
-            if( class_exists('DOMDocument') ) {
-                $dom = new DOMDocument();
-                $dom->encoding = 'utf-8';
 
-                libxml_use_internal_errors(true);//so no warnings will show up for invalid html
-                $dom->loadHTML(utf8_decode($output), LIBXML_NOWARNING | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
-                $output = $dom->saveHTML();
-            }
-        }
+        $output = apply_filters( 'trp_pre_translating_html', $output );
 
         $no_translate_attribute      = 'data-no-translation';
         $no_auto_translate_attribute = 'data-no-auto-translation';
@@ -1576,7 +1590,13 @@ class TRP_Translation_Render{
 
                 $new_strings[ $i ] = $translateable_strings[ $i ];
                 // if the string is not a url then allow machine translation for it
-                if ( $machine_translation_available && !$skip_string && filter_var( $new_strings[ $i ], FILTER_VALIDATE_URL ) === false ) {
+
+                if ( !$this->url_converter ){
+                    $trp = TRP_Translate_Press::get_trp_instance();
+                    $this->url_converter = $trp->get_component('url_converter');
+                }
+
+                if ( $machine_translation_available && !$skip_string && filter_var( $new_strings[ $i ], FILTER_VALIDATE_URL ) === false && !$this->url_converter->url_is_extra( $new_strings[ $i ] ) ) {
                     $machine_translatable_strings[ $i ] = $new_strings[ $i ];
                 }
             }

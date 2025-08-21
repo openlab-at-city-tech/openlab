@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class ConferenceParameters extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $addOnParametersType = ConferenceParametersAddOnParameters::class;
@@ -38,4 +37,4 @@ class ConferenceParameters extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ConferenceParameters::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_ConferenceParameters');
+class_alias(ConferenceParameters::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_ConferenceParameters');

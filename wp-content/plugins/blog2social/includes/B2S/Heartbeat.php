@@ -12,13 +12,14 @@ class B2S_Heartbeat {
     }
 
     public function init($response, $data) {
-
+       
         if (isset($data['b2s_heartbeat']) && $data['b2s_heartbeat'] == 'b2s_listener') {
             if (isset($data['b2s_heartbeat_action']) && ($data['b2s_heartbeat_action'] == 'b2s_auto_posting' || $data['b2s_heartbeat_action'] == 'b2s_repost')) {
                 $this->postSchedToServer();
             } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_delete_sched_post') {
                 $this->deleteUserSchedPost();
             } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_metrics') {
+
                 $this->updateInsights();
             } else if (isset($data['b2s_heartbeat_action']) && $data['b2s_heartbeat_action'] == 'b2s_video_upload') {
                 $this->uploadVideo();
@@ -54,14 +55,13 @@ class B2S_Heartbeat {
     private function postSchedToServer() {
         global $wpdb;
         $sendData = array();
-        $sql = "SELECT post.id,post.post_id,post.blog_user_id,post.user_timezone,post.sched_type,post.sched_date,post.sched_date_utc,post.relay_primary_post_id,post.post_for_relay,schedDetails.sched_data, schedDetails.image_url,network.network_id, network.network_type,network.network_auth_id,user.token "
+        $postData = $wpdb->get_results($wpdb->prepare("SELECT post.id,post.post_id,post.blog_user_id,post.user_timezone,post.sched_type,post.sched_date,post.sched_date_utc,post.relay_primary_post_id,post.post_for_relay,schedDetails.sched_data, schedDetails.image_url,network.network_id, network.network_type,network.network_auth_id,user.token "
                 . "FROM {$wpdb->prefix}b2s_posts AS post "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_network_details AS network on post.network_details_id = network.id "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS schedDetails on post.sched_details_id = schedDetails.id "
                 . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on post.blog_user_id = user.blog_user_id "
-                . "WHERE sched_date !='0000-00-00 00:00:00' AND sched_date_utc !='0000-00-00 00:00:00' AND post.hook_action= %d AND post.hide=%d AND post.post_for_approve= %d LIMIT 100";
-        $postData = $wpdb->get_results($wpdb->prepare($sql, 1, 0, 0), ARRAY_A);
-
+                . "WHERE sched_date !='0000-00-00 00:00:00' AND sched_date_utc !='0000-00-00 00:00:00' AND post.hook_action= %d AND post.hide=%d AND post.post_for_approve= %d LIMIT 100", 1, 0, 0), ARRAY_A);
+ 
         foreach ($postData as $k => $value) {
             $data = array('hook_action' => '0');
             $where = array('id' => $value['id']);
@@ -103,11 +103,10 @@ class B2S_Heartbeat {
         $networkTypeAllow = array('profil', 'page', 'group');
         $networkTypeData = array('profil' => 0, 'page' => 1, 'group' => 2);
         global $wpdb;
-        $sql = "SELECT posts.id, posts.user_timezone, posts.sched_date, posts.sched_date_utc, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE posts.sched_date_utc != %s AND posts.sched_date_utc <= %s AND posts.hide=%d AND posts.post_for_approve = %d LIMIT 500"; //AND posts.publish_date = %s
-        $select = $wpdb->prepare($sql, '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 0, 0); //,'0000-00-00 00:00:00'
-        $sendData = $wpdb->get_results($select, ARRAY_A);
-
+   
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT posts.id, posts.user_timezone, posts.sched_date, posts.sched_date_utc, posts.v2_id, user.token FROM {$wpdb->prefix}b2s_posts as posts "
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE posts.sched_date_utc != %s AND posts.sched_date_utc <= %s AND posts.hide=%d AND posts.post_for_approve = %d LIMIT 500", '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 0, 0), ARRAY_A);
+ 
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             $tempData = array('action' => 'getSchedData', 'data' => serialize($sendData));
             $schedResult = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $tempData, 90));
@@ -122,9 +121,8 @@ class B2S_Heartbeat {
                                 //DELETE
                                 $post_id = 0;
                                 $blog_user_id = 0;
-                                $sql = "SELECT id,post_id,blog_user_id,network_details_id,sched_details_id FROM b2s_posts WHERE v2_id = %d";
-                                $select = $wpdb->prepare($sql, $v->v2_id);
-                                $deleteData = $wpdb->get_results($select);
+                            
+                                $deleteData = $wpdb->get_results($wpdb->prepare("SELECT id,post_id,blog_user_id,network_details_id,sched_details_id FROM b2s_posts WHERE v2_id = %d", $v->v2_id));
                                 if (is_array($deleteData) && !empty($deleteData)) {
                                     foreach ($deleteData as $kdv2 => $vdv2) {
                                         $post_id = $vdv2->post_id;
@@ -162,7 +160,7 @@ class B2S_Heartbeat {
                                                 'sched_type' => '0',
                                                 'sched_date' => '0000-00-00 00:00:00',
                                                 'sched_date_utc' => '0000-00-00 00:00:00',
-                                                'publish_date' => date('Y-m-d H:i:s', $publishTime),
+                                                'publish_date' =>  wp_date('Y-m-d H:i:s', $publishTime, new DateTimeZone(date_default_timezone_get())),
                                                 'publish_link' => isset($vpv2['publishUrl']) ? stripslashes($vpv2['publishUrl']) : '',
                                                 'publish_error_code' => (!isset($vpv2['error']) || (int) $vpv2['error'] == 0) ? '' : 'DEFAULT',
                                                 'network_details_id' => $networkDetailsId,
@@ -178,7 +176,7 @@ class B2S_Heartbeat {
                                                     'blog_user_id' => $blog_user_id,
                                                     'b2s_posts_id' => (int) $post_id,
                                                     'b2s_posts_network_details_id' => $networkDetailsId,
-                                                    'last_update' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day')),
+                                                    'last_update' =>  wp_date('Y-m-d H:i:s', strtotime( wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())) . ' -1 day'), new DateTimeZone(date_default_timezone_get())),
                                                     'active' => 1,
                                                     'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
                                                 );
@@ -197,7 +195,7 @@ class B2S_Heartbeat {
                                 $updateData = array(
                                     'sched_date' => '0000-00-00 00:00:00',
                                     'sched_date_utc' => '0000-00-00 00:00:00',
-                                    'publish_date' => date('Y-m-d H:i:s', $publishTime),
+                                    'publish_date' =>  wp_date('Y-m-d H:i:s', $publishTime, new DateTimeZone(date_default_timezone_get())),
                                     'publish_link' => sanitize_text_field($v->publish_link),
                                     'publish_error_code' => sanitize_text_field($v->publish_error_code),
                                     'hook_action' => 0);
@@ -227,7 +225,7 @@ class B2S_Heartbeat {
                             $updateData = array(
                                 'sched_date' => '0000-00-00 00:00:00',
                                 'sched_date_utc' => '0000-00-00 00:00:00',
-                                'publish_date' => date('Y-m-d H:i:s', $publishTime),
+                                'publish_date' =>  wp_date('Y-m-d H:i:s', $publishTime, new DateTimeZone(date_default_timezone_get())),
                                 'publish_link' => (($shareApprove == 0) ? sanitize_text_field($v->publish_link) : ''),
                                 'publish_error_code' => (($shareApprove == 0) ? sanitize_text_field($v->publish_error_code) : ''),
                                 'post_for_approve' => (int) $shareApprove,
@@ -243,7 +241,7 @@ class B2S_Heartbeat {
                                         'blog_user_id' => (int) $networkDetailsData[0]['blog_user_id'],
                                         'b2s_posts_id' => (int) $v->id,
                                         'b2s_posts_network_details_id' => (int) $networkDetailsData[0]['network_details_id'],
-                                        'last_update' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day')),
+                                        'last_update' =>  wp_date('Y-m-d H:i:s', strtotime( wp_date('Y-m-d H:i:s', null,new DateTimeZone(date_default_timezone_get())) . ' -1 day'), new DateTimeZone(date_default_timezone_get())),
                                         'active' => 1
                                     );
                                     $wpdb->insert($wpdb->prefix . 'b2s_posts_insights', $insightData, array('%s', '%s', '%d', '%d', '%d', '%s', '%d'));
@@ -259,9 +257,8 @@ class B2S_Heartbeat {
     //since V.4.8.0 for relay posts 
     private function updateUserSchedTimePost() {
         global $wpdb;
-        $sql = "SELECT posts.id, posts.sched_date, posts.sched_date_utc, user.token FROM {$wpdb->prefix}b2s_posts as posts "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d LIMIT 100";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 2), ARRAY_A);
+        $sendData = $wpdb->get_results($wpdb->prepare( "SELECT posts.id, posts.sched_date, posts.sched_date_utc, user.token FROM {$wpdb->prefix}b2s_posts as posts "
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d LIMIT 100", 2), ARRAY_A);
 
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
@@ -285,10 +282,9 @@ class B2S_Heartbeat {
 
     private function updateUserSchedPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, posts.sched_date, posts.sched_date_utc,schedDetails.sched_data, schedDetails.image_url,user.token FROM {$wpdb->prefix}b2s_posts as posts "
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT posts.id, posts.sched_date, posts.sched_date_utc,schedDetails.sched_data, schedDetails.image_url,user.token FROM {$wpdb->prefix}b2s_posts as posts "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details AS schedDetails on posts.sched_details_id = schedDetails.id "
-                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 100";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 5, 0), ARRAY_A);
+                . "LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 100", 5, 0), ARRAY_A);
 
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
@@ -312,8 +308,8 @@ class B2S_Heartbeat {
 
     private function deleteUserSchedPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, posts.v2_id, user.token, posts.post_format, posts.upload_video_token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d LIMIT 500";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 3, 0), ARRAY_A);
+
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT posts.id, posts.v2_id, user.token, posts.post_format, posts.upload_video_token FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND  post_for_approve = %d LIMIT 500", 3, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
                 $data = array('hook_action' => '0');
@@ -336,8 +332,7 @@ class B2S_Heartbeat {
 
     private function deleteUserPublishPost() {
         global $wpdb;
-        $sql = "SELECT posts.id, user.token, posts.sched_details_id, posts.hide FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 500";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 4, 0), ARRAY_A);
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT posts.id, user.token, posts.sched_details_id, posts.hide FROM {$wpdb->prefix}b2s_posts as posts LEFT JOIN {$wpdb->prefix}b2s_user AS user on posts.blog_user_id = user.blog_user_id WHERE hook_action = %d AND post_for_approve = %d LIMIT 500", 4, 0), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             foreach ($sendData as $k => $value) {
                 $data = array('hook_action' => '0');
@@ -369,8 +364,7 @@ class B2S_Heartbeat {
 
     private function updateInsights() {
         global $wpdb;
-        $sql = "SELECT user.token, insights.network_post_id, insights.insight, network_details.network_auth_id, network_details.network_id, network_details.network_type FROM {$wpdb->prefix}b2s_posts_insights as insights LEFT JOIN {$wpdb->prefix}b2s_user AS user on insights.blog_user_id = user.blog_user_id LEFT JOIN {$wpdb->prefix}b2s_posts_network_details AS network_details on insights.b2s_posts_network_details_id = network_details.id WHERE insights.active = %d AND insights.last_update < %s LIMIT 50";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 1, date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -1 day'))), ARRAY_A);
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT user.token, insights.network_post_id, insights.insight, network_details.network_auth_id, network_details.network_id, network_details.network_type FROM {$wpdb->prefix}b2s_posts_insights as insights LEFT JOIN {$wpdb->prefix}b2s_user AS user on insights.blog_user_id = user.blog_user_id LEFT JOIN {$wpdb->prefix}b2s_posts_network_details AS network_details on insights.b2s_posts_network_details_id = network_details.id WHERE insights.active = %d AND insights.last_update < %s LIMIT 50", 1,  wp_date('Y-m-d H:i:s', strtotime( wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())) . ' -1 day'), new DateTimeZone(date_default_timezone_get()))), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             $tempData = array('action' => 'updateInsights', 'data' => $sendData);
             $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $tempData, 45), true);
@@ -379,12 +373,12 @@ class B2S_Heartbeat {
                     $insights = $value;
                     if ($insights !== false && is_array($insights) && !empty($insights) && isset($insights['extern_post_id']) && !empty($insights['extern_post_id'])) {
                         if (isset($insights['insights']) && !empty($insights['insights'])) {
-                            $sql = "SELECT insights.insight, insights.b2s_posts_network_details_id, networkDetails.network_auth_id, networkDetails.id as b2sNetworkDetailsId FROM {$wpdb->prefix}b2s_posts_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as networkDetails ON insights.b2s_posts_network_details_id = networkDetails.id WHERE insights.network_post_id = %s";
-                            $externPostData = $wpdb->get_results($wpdb->prepare($sql, $insights['extern_post_id']), ARRAY_A);
+                       
+                            $externPostData = $wpdb->get_results($wpdb->prepare("SELECT insights.insight, insights.b2s_posts_network_details_id, networkDetails.network_auth_id, networkDetails.id as b2sNetworkDetailsId FROM {$wpdb->prefix}b2s_posts_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as networkDetails ON insights.b2s_posts_network_details_id = networkDetails.id WHERE insights.network_post_id = %s", $insights['extern_post_id']), ARRAY_A);
                             if (strlen($externPostData[0]['insight']) > $insights) {
                                 continue; // no new insights data
                             }
-                            $wpdb->update($wpdb->prefix . 'b2s_posts_insights', array('insight' => json_encode($insights), 'last_update' => date('Y-m-d H:i:s')), array('network_post_id' => $insights['extern_post_id']), array('%s', '%s'), array('%s'));
+                            $wpdb->update($wpdb->prefix . 'b2s_posts_insights', array('insight' => json_encode($insights), 'last_update' =>  wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get()))), array('network_post_id' => $insights['extern_post_id']), array('%s', '%s'), array('%s'));
 
                             if (is_array($externPostData) && !empty($externPostData) && isset($externPostData[0])) {
                                 //update & compare
@@ -410,8 +404,8 @@ class B2S_Heartbeat {
                                             }
 
                                             if (!$dataForDateExist || ($dataForDateExist && !$dataForDateIsSame)) {
-                                                $sql = "SELECT insight FROM {$wpdb->prefix}b2s_posts_insights WHERE b2s_posts_network_details_id = %d";
-                                                $postInsightsData = $wpdb->get_results($wpdb->prepare($sql, (int) $externPostData[0]['b2sNetworkDetailsId']), ARRAY_A);
+                                               
+                                                $postInsightsData = $wpdb->get_results($wpdb->prepare("SELECT insight FROM {$wpdb->prefix}b2s_posts_insights WHERE b2s_posts_network_details_id = %d", (int) $externPostData[0]['b2sNetworkDetailsId']), ARRAY_A);
 
                                                 $totalData = array('likes' => 0, 'comments' => 0, 'reshares' => 0, 'impressions' => 0);
                                                 if (is_array($postInsightsData) && !empty($postInsightsData)) {
@@ -429,8 +423,8 @@ class B2S_Heartbeat {
                                                         }
                                                     }
                                                 }
-                                                $sql = "SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s";
-                                                $networkInsightsData = $wpdb->get_results($wpdb->prepare($sql, (int) $externPostData[0]['b2sNetworkDetailsId'], substr($newDate, 0, 10)), ARRAY_A);
+                                               
+                                                $networkInsightsData = $wpdb->get_results($wpdb->prepare("SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s", (int) $externPostData[0]['b2sNetworkDetailsId'], substr($newDate, 0, 10)), ARRAY_A);
 
                                                 if (is_array($networkInsightsData) && !empty($networkInsightsData) && isset($networkInsightsData[0])) {
                                                     //update
@@ -444,8 +438,8 @@ class B2S_Heartbeat {
                                                             ), array('%d', '%s', '%s'));
                                                 }
                                             } else {
-                                                $sql = "SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s";
-                                                $networkInsightsData = $wpdb->get_results($wpdb->prepare($sql, (int) $externPostData[0]['b2sNetworkDetailsId'], substr($newDate, 0, 10)), ARRAY_A);
+                                              
+                                                $networkInsightsData = $wpdb->get_results($wpdb->prepare("SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s", (int) $externPostData[0]['b2sNetworkDetailsId'], substr($newDate, 0, 10)), ARRAY_A);
                                                 if (is_array($networkInsightsData) && !empty($networkInsightsData) && isset($networkInsightsData[0])) {
                                                     //update
                                                     $wpdb->update($wpdb->prefix . 'b2s_network_insights', array('insight' => json_encode($newTotalData)), array('id' => $networkInsightsData[0]['id']), array('%s'), array('%d'));
@@ -465,8 +459,8 @@ class B2S_Heartbeat {
                                 //new entry
                                 if (isset($insights['data']['insights']['likes']) && !empty($insights['data']['insights']['likes'])) {
                                     foreach ($insights['data']['insights']['likes'] as $newDate => $newCount) {
-                                        $sql = "SELECT insight FROM {$wpdb->prefix}b2s_posts_insights WHERE b2s_posts_network_details_id = %d";
-                                        $postInsightsData = $wpdb->get_results($wpdb->prepare($sql, (int) $externPostData['b2s_posts_network_details_id']), ARRAY_A);
+                                        
+                                        $postInsightsData = $wpdb->get_results($wpdb->prepare("SELECT insight FROM {$wpdb->prefix}b2s_posts_insights WHERE b2s_posts_network_details_id = %d", (int) $externPostData['b2s_posts_network_details_id']), ARRAY_A);
 
                                         $totalData = array('likes' => 0, 'comments' => 0, 'reshares' => 0, 'impressions' => 0);
                                         if (is_array($postInsightsData) && !empty($postInsightsData)) {
@@ -485,8 +479,7 @@ class B2S_Heartbeat {
                                             }
                                         }
 
-                                        $sql = "SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s";
-                                        $networkInsightsData = $wpdb->get_results($wpdb->prepare($sql, (int) $externPostData['b2s_posts_network_details_id'], substr($newDate, 0, 10)), ARRAY_A);
+                                        $networkInsightsData = $wpdb->get_results($wpdb->prepare("SELECT id, insight FROM {$wpdb->prefix}b2s_network_insights WHERE b2s_posts_network_details_id = %d AND create_date = %s", (int) $externPostData['b2s_posts_network_details_id'], substr($newDate, 0, 10)), ARRAY_A);
 
                                         if (is_array($networkInsightsData) && !empty($networkInsightsData) && isset($networkInsightsData[0])) {
                                             //update
@@ -504,7 +497,7 @@ class B2S_Heartbeat {
                             }
                             //is deactivated   
                         } else {
-                            $wpdb->update($wpdb->prefix . 'b2s_posts_insights', array('last_update' => date('Y-m-d H:i:s'), 'active' => 0), array('network_post_id' => $insights['extern_post_id']), array('%s', '%d'), array('%s'));
+                            $wpdb->update($wpdb->prefix . 'b2s_posts_insights', array('last_update' =>  wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())), 'active' => 0), array('network_post_id' => $insights['extern_post_id']), array('%s', '%d'), array('%s'));
                         }
                     }
                 }
@@ -514,13 +507,14 @@ class B2S_Heartbeat {
 
     private function uploadVideo() {
         global $wpdb;
-        $sql = "SELECT post_id,upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 1";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 6), ARRAY_A);
+     
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT post_id,upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 1", 6), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             if (isset($sendData[0]['post_id']) && (int) $sendData[0]['post_id'] > 0 && isset($sendData[0]['upload_video_token']) && $sendData[0]['upload_video_token'] != '') {
                 require_once (B2S_PLUGIN_DIR . '/includes/B2S/Video/Upload.php');
                 $upload = new B2S_Video_Upload();
-                $result = $upload->uploadVideo($sendData[0]['post_id'], $sendData[0]['upload_video_token']);
+                //$result = $upload->uploadVideo($sendData[0]['post_id'], $sendData[0]['upload_video_token']);
+                $result= $upload->uploadVideo($sendData[0]['post_id'], $sendData[0]['upload_video_token']);
                 if (is_array($result) && !empty($result) && isset($result['upload'])) {
                     if ($result['upload'] !== false) {
                         $data = array('hook_action' => 7);
@@ -538,14 +532,23 @@ class B2S_Heartbeat {
 
     private function getVideoResultfromServer() {
         global $wpdb;
-        $sql = "SELECT DISTINCT upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 15";
-        $sendData = $wpdb->get_results($wpdb->prepare($sql, 7), ARRAY_A);
+     
+        $sendData = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 15", 7), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             $videoToken = array();
             foreach ($sendData as $k => $value) {
                 array_push($videoToken, trim($value['upload_video_token']));
             }
             if (!empty($videoToken)) {
+
+                $wpVersion = get_bloginfo('version');
+                $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
+                $ua = sprintf(
+                        'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
+                        $wpVersion,
+                        $pluginVersion
+                );
+
                 $args = array(
                     'method' => 'POST',
                     'body' => array(
@@ -553,7 +556,7 @@ class B2S_Heartbeat {
                     ),
                     'timeout' => 20,
                     'redirection' => '5',
-                    'user-agent' => "Blog2Social/" . B2S_PLUGIN_VERSION . " (Wordpress/Plugin)",
+                    'user-agent' => $ua,
                 );
                 $result = wp_remote_retrieve_body(wp_remote_post(B2S_PLUGIN_API_VIDEO_UPLOAD_ENDPOINT . 'video/check', $args));
                 if (!empty($result)) {
@@ -573,7 +576,7 @@ class B2S_Heartbeat {
                                                 'publish_error_code' => '',
                                                 'sched_date' => '0000-00-00 00:00:00',
                                                 'sched_date_utc' => '0000-00-00 00:00:00',
-                                                'publish_date' => date('Y-m-d H:i:s', $publish_date),
+                                                'publish_date' =>  wp_date('Y-m-d H:i:s', $publish_date, new DateTimeZone(date_default_timezone_get())),
                                             );
 
                                             $where = array('id' => (int) $res['post_id'], 'upload_video_token' => $token);
@@ -611,5 +614,4 @@ class B2S_Heartbeat {
             }
         }
     }
-
 }

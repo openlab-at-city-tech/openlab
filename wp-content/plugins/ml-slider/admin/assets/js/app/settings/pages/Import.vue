@@ -22,25 +22,26 @@
 	</split-layout>
 	<split-layout
 		v-if="Object.keys(slideshowsList).length"
-		:loading="importing || processing">
+		:loading="importing || processing"
+		class="missing-image-wrap"
+		>
 		<template slot="header">{{ __('Slideshows', 'ml-slider') }}</template>
 		<template slot="description">
-			<pre>
-{{ sprintf(__('Date: %s', 'ml-slider'), fileDate()) }}
-{{ sprintf(__('Version: v%s', 'ml-slider'), metadata.version) }}
-			</pre>
 				<div v-if="!procesingImages && !missingImages.length">
 					{{ __('All images required to import are accounted for.', 'ml-slider') }}
 				</div>
 			<transition name="settings-fade" mode="in-out">
 				<div v-if="!procesingImages && missingImages.length">
-					<h4>{{ __('The following images were not found:', 'ml-slider') }}</h4>
+					<h4 class="import-subheader">{{ __('The following images were not found:', 'ml-slider') }}</h4>
+					<div class="import-note" v-if="!procesingImages && missingImages.length">
+						{{ __('Note: You can still import slideshows that contain missing images. You will just need to manually update or delete these slides from their individual slideshow edit pages.', 'ml-slider') }}
+					</div>
 					<div>
 						<div v-for="slideshow in missingImages" :key="slideshow">
-							<p class="font-bold underline mb-1">
-								{{ slideshowsList[slideshow].title }}
+							<p class="font-bold mb-1" style="color: #DD6923;">
+								{{ __('Slideshow Title: ', 'ml-slider') }} {{ slideshowsList[slideshow].title }}
 							</p>
-							<ul class="mb-4">
+							<ul class="mb-4 missing-images">
 								<li
 									v-for="slide in slidesMissingImages(slideshow)"
 									:key="slide.original_id"
@@ -53,20 +54,13 @@
 				</div>
 			</transition>
 		</template>
-		<template slot="description3">
-			<transition name="settings-fade" mode="in-out">
-				<div v-if="!procesingImages && missingImages.length">
-					{{ __('Note: You can still import slideshows that contain missing images. You will just need to manually update or delete these slides from their individual slideshow edit pages.', 'ml-slider') }}
-				</div>
-			</transition>
-		</template>
 		<template slot="fields">
 			<div class="mb-10">
 				<action-button
 					@click="importSlideshows"
 					:disabled="!slideshowsToImport.length">
 					<template slot="header">{{ sprintf(__('Import %s slideshows', 'ml-slider'), slideshowsToImport.length) }}</template>
-					<template slot="description">{{ __('Select the slideshows you wish to import below, then press here to import them.', 'ml-slider') }}</template>
+					<template slot="description">{{ __('Select the slideshows you wish to import below. Then click here to import them.', 'ml-slider') }}</template>
 					<template slot="button">{{ __('Import', 'ml-slider') }}</template>
 				</action-button>
 				<switch-single-input

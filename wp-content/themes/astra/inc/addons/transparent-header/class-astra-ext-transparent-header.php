@@ -20,7 +20,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header' ) ) {
 	 * @since 1.0.0
 	 */
 	class Astra_Ext_Transparent_Header {
-
 		/**
 		 * Member Variable
 		 *

@@ -59,6 +59,7 @@ add_action(
 			case 'hemingway':
 			case 'lingonberry':
 			case 'koji':
+			case 'neve':
 			case 'pilcrow':
 			case 'sliding-door':
 			case 'typology':

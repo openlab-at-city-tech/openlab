@@ -28,15 +28,12 @@ function wpt_ajax_tweet() {
 		$acct     = $current_user->ID;
 		$verified = wpt_check_connections( $acct );
 		if ( $verified ) {
-			$auth    = $current_user->ID;
-			$user_ID = $current_user->ID;
+			$auth = $current_user->ID;
 		} else {
-			$auth    = false;
-			$user_ID = $current_user->ID;
+			$auth = false;
 		}
 	} else {
-		$auth    = false;
-		$user_ID = $current_user->ID;
+		$auth = false;
 	}
 	$authors = ( is_array( $authors ) && ! empty( $authors ) ) ? $authors : array( $auth );
 

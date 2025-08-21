@@ -14,7 +14,6 @@ if ( apply_filters( 'astra_improvise_single_post_design', Astra_Dynamic_CSS::ast
 	add_filter( 'astra_dynamic_theme_css', 'astra_single_post_css', 11 );
 }
 
-
 /**
  * Single Post UI Improvement - Dynamic CSS
  *

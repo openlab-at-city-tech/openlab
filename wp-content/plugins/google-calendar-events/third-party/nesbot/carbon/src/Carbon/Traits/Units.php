@@ -16,13 +16,12 @@ use SimpleCalendar\plugin_deps\Carbon\CarbonInterval;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnitException;
 use Closure;
 use DateInterval;
-use SimpleCalendar\plugin_deps\DateMalformedStringException;
+use DateMalformedStringException;
 use ReturnTypeWillChange;
 /**
  * Trait Units.
  *
  * Add, subtract and set units.
- * @internal
  */
 trait Units
 {
@@ -45,10 +44,10 @@ trait Units
                 /* @var CarbonInterface $this */
                 $diff = $this->microsecond + $value;
                 $time = $this->getTimestamp();
-                $seconds = (int) \floor($diff / static::MICROSECONDS_PER_SECOND);
+                $seconds = (int) floor($diff / static::MICROSECONDS_PER_SECOND);
                 $time += $seconds;
                 $diff -= $seconds * static::MICROSECONDS_PER_SECOND;
-                $microtime = \str_pad((string) $diff, 6, '0', \STR_PAD_LEFT);
+                $microtime = str_pad((string) $diff, 6, '0', \STR_PAD_LEFT);
                 $tz = $this->tz;
                 return $this->tz('UTC')->modify("@{$time}.{$microtime}")->tz($tz);
             // @call addRealUnit
@@ -176,7 +175,7 @@ trait Units
         if ($unit instanceof DateInterval) {
             return parent::add($unit);
         }
-        if (\is_numeric($unit)) {
+        if (is_numeric($unit)) {
             [$value, $unit] = [$unit, $value];
         }
         return $this->addUnit($unit, $value, $overflow);
@@ -194,7 +193,7 @@ trait Units
     {
         $originalArgs = \func_get_args();
         $date = $this;
-        if (!\is_numeric($value) || !(float) $value) {
+        if (!is_numeric($value) || !(float) $value) {
             return $date->isMutable() ? $date : $date->avoidMutation();
         }
         $unit = self::singularUnit($unit);
@@ -206,10 +205,10 @@ trait Units
         if ($unit === 'weekday') {
             $weekendDays = static::getWeekendDays();
             if ($weekendDays !== [static::SATURDAY, static::SUNDAY]) {
-                $absoluteValue = \abs($value);
-                $sign = $value / \max(1, $absoluteValue);
-                $weekDaysCount = 7 - \min(6, \count(\array_unique($weekendDays)));
-                $weeks = \floor($absoluteValue / $weekDaysCount);
+                $absoluteValue = abs($value);
+                $sign = $value / max(1, $absoluteValue);
+                $weekDaysCount = 7 - min(6, \count(array_unique($weekendDays)));
+                $weeks = floor($absoluteValue / $weekDaysCount);
                 for ($diff = $absoluteValue % $weekDaysCount; $diff; $diff--) {
                     /** @var static $date */
                     $date = $date->addDays($sign);
@@ -221,7 +220,7 @@ trait Units
                 $unit = 'week';
             }
             $timeString = $date->toTimeString();
-        } elseif ($canOverflow = \in_array($unit, ['month', 'year']) && ($overflow === \false || $overflow === null && ($ucUnit = \ucfirst($unit) . 's') && !($this->{'local' . $ucUnit . 'Overflow'} ?? static::{'shouldOverflow' . $ucUnit}()))) {
+        } elseif ($canOverflow = \in_array($unit, ['month', 'year']) && ($overflow === \false || $overflow === null && ($ucUnit = ucfirst($unit) . 's') && !($this->{'local' . $ucUnit . 'Overflow'} ?? static::{'shouldOverflow' . $ucUnit}()))) {
             $day = $date->day;
         }
         $value = (int) $value;
@@ -232,7 +231,7 @@ trait Units
         // Work-around for bug https://bugs.php.net/bug.php?id=75642
         if ($unit === 'micro' || $unit === 'microsecond') {
             $microseconds = $this->micro + $value;
-            $second = (int) \floor($microseconds / static::MICROSECONDS_PER_SECOND);
+            $second = (int) floor($microseconds / static::MICROSECONDS_PER_SECOND);
             $microseconds %= static::MICROSECONDS_PER_SECOND;
             if ($microseconds < 0) {
                 $microseconds += static::MICROSECONDS_PER_SECOND;
@@ -254,7 +253,7 @@ trait Units
             // @codeCoverageIgnore
         }
         if (!$date) {
-            throw new UnitException('Unable to add unit ' . \var_export($originalArgs, \true));
+            throw new UnitException('Unable to add unit ' . var_export($originalArgs, \true));
         }
         return $date;
     }
@@ -310,7 +309,7 @@ trait Units
         if ($unit instanceof DateInterval) {
             return parent::sub($unit);
         }
-        if (\is_numeric($unit)) {
+        if (is_numeric($unit)) {
             [$value, $unit] = [$unit, $value];
         }
         return $this->addUnit($unit, -(float) $value, $overflow);

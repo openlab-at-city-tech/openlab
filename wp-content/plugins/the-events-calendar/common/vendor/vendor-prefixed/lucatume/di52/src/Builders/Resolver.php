@@ -3,9 +3,6 @@
  * Resolves ids (string, class names or mixed values) to values with auto-wiring.
  *
  * @package TEC\Common\lucatume\DI52\Builders
- *
- * @license GPL-3.0
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\lucatume\DI52\Builders;

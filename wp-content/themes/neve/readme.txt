@@ -11,13 +11,98 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Neve is a super fast, easily customizable, multi-purpose theme. Perfect for blogs, small business, startups, agencies, firms & e-commerce shops.
 
 == Description ==
-Neve is a super fast, easily customizable, multi-purpose theme. It’s perfect for blogs, small business, startups, agencies, firms, e-commerce shops (WooCommerce storefront) as well as personal portfolio sites and most types of projects. A fully AMP optimized and responsive theme, Neve will load in mere seconds and adapt perfectly on any viewing device. While it is lightweight and has a minimalist design, the theme is highly extendable, it has a highly SEO optimized code, resulting in top rankings in Google search results. Neve works perfectly with Gutenberg and the most popular page builders (Elementor, Brizy, Beaver Builder, Visual Composer, SiteOrigin, Divi). Neve is also WooCommerce ready, responsive, RTL & translation ready. Look no further. Neve is the perfect theme for you!
+Neve is a next-generation, ultra-fast WordPress theme designed for top performance, SEO, and Core Web Vitals. Its lightweight codebase and small size ensure minimal overhead and lightning-fast load times. Fully compatible with the block editor, popular page builders (Elementor, Bricks, Oxygen etc), and WooCommerce, it’s perfect for blogs, small businesses, agencies, portfolios, and online stores. With responsive design, multilingual translations, and easy customization options, Neve empowers you to create a future-proof, high-ranking online presence. Discover everything Neve has to offer and explore our powerful premium version at https://themeisle.com/themes/neve/.
 
 == Copyright ==
 Neve WordPress theme, Copyright 2018 Themeisle
 Neve is distributed under the terms of the GNU GPLv2 or later
 
 == Changelog ==
+
+##### [Version 4.1.2](https://github.com/Codeinwp/neve/compare/v4.1.1...v4.1.2) (2025-05-30)
+
+- Fixed styling options of the Menu Icon
+- Updated dependencies
+
+
+
+
+##### [Version 4.1.1](https://github.com/Codeinwp/neve/compare/v4.1.0...v4.1.1) (2025-05-22)
+
+- [Fix] Tested up to notice appearing when used with Pro version above 4.1
+- [Fix] Clicking the dots in the top right of the editor throws an error
+
+
+
+
+#### [Version 4.1.0](https://github.com/Codeinwp/neve/compare/v4.0.1...v4.1.0) (2025-05-22)
+
+- [Feat] Style WordPress core login block
+- [Feat] Improved WooCommerce My Account page styling
+- [Feat] Adds color setting for headings
+- [Feat] Adds image size options to single post thumbnail
+- [Feat] Improve footer builder UX
+- [Feat] Mobile footer inherits desktop components by default if layout is empty
+- [Feat] Sparks integration improvements
+- [Feat] Rework Menu Icon component options
+- [Feat] Improve styling and UX for onboarding notice
+- [Fix] Mobile navigation sidebar not working when no Navigation menu is added in header
+- [Fix] Starter sites broken link redirection
+- [Fix] Blog pagination page number input styling
+- [Fix] Quote block styling inconsistency between editor & frontend
+- [Fix] Navigation dropdown caret icon size control not working on mobile/tablet
+- [Fix] License card UI
+- [Fix] Gallery for WooCommerce plugin conflict
+- [Fix] Center Footer Copyright position on mobile
+- [Fix] Edge-case in WooCommerce checkout when session is not set and throwing a fatal error
+- [Fix] Elementor Pro Header & Footer builder breaking theme markup
+- [Fix] Deprecated notice when using PHP 8.4
+- [Fix] Edge-case where modal is going off-screen in the dashboard
+- [Fix] Starter content issue causing footer builder problems and missing components on mobile
+- Improve WooCommerce single product layout styling
+- Adds shortcut to clarify header background controls
+- Adds description to the Neve editor options panel to clarify that settings override customizer options
+- Small customizer UX improvements
+- Update dependencies
+
+
+
+
+##### [Version 4.0.1](https://github.com/Codeinwp/neve/compare/v4.0.0...v4.0.1) (2025-02-03)
+
+- [Feat] Reorganised main customizer panels for better UX
+- [Fix] hide Super Page Cache plugin from dashboard if its pro version is installed
+- Improved UI/UX for the Get Started section in the dashboard page
+- Improved style of customizer sections
+- Updated starter content to use theme defaults for H2 typography
+- Updated Google Fonts and dependencies
+
+
+
+
+#### [Version 4.0.0](https://github.com/Codeinwp/neve/compare/v3.8.16...v4.0.0) (2025-01-30)
+
+- [Feat] Redesigned theme dashboard with a modern interface and intuitive organization for easier site customization
+- [Feat] Enhanced blog design and customization with new features and better-organized settings
+- [Feat] Reviewed and improved all starter sites in our library for better quality and performance
+- [Feat] New streamlined onboarding experience to help you build your site faster
+- [Feat] Restructured theme options for better clarity and ease of use
+- [Feat] Added informative notices to help identify starter content vs your content
+- Improved customizer ordering controls UX
+- Improved customizer performance
+- Update theme description to reflect current capabilities better
+
+
+
+
+##### [Version 3.8.16](https://github.com/Codeinwp/neve/compare/v3.8.15...v3.8.16) (2024-12-06)
+
+- Added a NEW Online Course starter site [PRO]
+- Fixed issue with background color and text color
+- Fixed the customizer broken layout introduced by the LearnPress plugin
+
+
+
 
 ##### [Version 3.8.15](https://github.com/Codeinwp/neve/compare/v3.8.14...v3.8.15) (2024-11-22)
 

@@ -1,7 +1,9 @@
 <?php
 $image = new B2S_Ship_Image($view = 'modal');
+// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified in Caller
 if (!empty($_POST['image_url'])) {
-    $image->setImageData(array(array(sanitize_text_field($_POST['image_url']))));
+    // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified in Caller
+    $image->setImageData(array(array(sanitize_text_field(wp_unslash($_POST['image_url'])))));
 }
 echo wp_kses($image->getItemHtml($postData->ID, $postData->post_content, $postUrl, substr(B2S_LANGUAGE, 0, 2)), array(
     'div' => array(

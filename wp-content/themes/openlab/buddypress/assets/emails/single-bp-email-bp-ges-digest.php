@@ -120,8 +120,6 @@ $settings = bp_email_get_appearance_settings();
 
 									<p>{{{ges.digest_intro}}}</p>
 
-									<ul>{{{ges.summary_body}}}</ul>
-
 									<br />
 
 									{{{usermessage}}}

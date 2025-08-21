@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if (!current_user_can('upload_files'))
-    wp_die(esc_html__('You do not have permission to upload files.', 'enable-media-replace'));
+    wp_die(esc_html__('You do not have permission to upload files.', 'folders'));
 
 global $wpdb;
 

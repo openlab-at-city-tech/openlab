@@ -2,12 +2,12 @@
 /**
  * Plugin Name: Password Policy Manager
  * Description: This plugin enables configurable password policies for the Stronger passwords. We Support Password expiration, Enforce strong password for all Users in the free version of the plugin.
- * Version: 2.0.2
+ * Version: 2.0.5
  * Author: miniOrange
  * Author URI: https://miniorange.com
  * Text Domain: password-policy-manager
- * License: MIT/Expat
- * License URI: https://docs.miniorange.com/mit-license
+ * License: Expat
+ * License URI: https://plugins.miniorange.com/mit-license
  * Domain Path: /lang
  *
  * @package password-policy-manager
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 	define( 'MOPPM_HOST_NAME', 'https://login.xecurify.com' );
-	define( 'MOPPM_VERSION', '2.0.2' );
+	define( 'MOPPM_VERSION', '2.0.5' );
 	define( 'MOPPM_TEST_MODE', false );
 	global $moppm_dir,$moppm_directory_url;
 	$moppm_dir           = plugin_dir_url( __FILE__ );

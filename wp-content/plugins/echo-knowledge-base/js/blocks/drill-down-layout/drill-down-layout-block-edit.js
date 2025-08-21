@@ -13,7 +13,7 @@
  *
  * @return {WPElement} Element to render.
  */
-import showInspectorControls from '../components';
+import EpkbInspectorControls from '../components';
 
 export default function DrillDownLayoutBlockEdit({ attributes, setAttributes, name }) {
 
@@ -27,5 +27,12 @@ export default function DrillDownLayoutBlockEdit({ attributes, setAttributes, na
 		);
 	}
 
-	return showInspectorControls(epkb_drill_down_layout_block_ui_config, attributes, setAttributes, name);
+	return (
+		<EpkbInspectorControls
+			block_ui_config={epkb_drill_down_layout_block_ui_config}
+			attributes={attributes}
+			setAttributes={setAttributes}
+			blockName={name}
+		/>
+	);
 }

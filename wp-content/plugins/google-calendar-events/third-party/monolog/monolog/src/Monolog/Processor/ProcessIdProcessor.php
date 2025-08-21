@@ -15,16 +15,15 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * Adds value of getmypid into records
  *
  * @author Andreas Hörnicke
- * @internal
  */
 class ProcessIdProcessor implements ProcessorInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
-        $record['extra']['process_id'] = \getmypid();
+        $record['extra']['process_id'] = getmypid();
         return $record;
     }
 }

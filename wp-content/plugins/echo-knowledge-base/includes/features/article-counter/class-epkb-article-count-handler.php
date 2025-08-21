@@ -15,7 +15,15 @@ class EPKB_Article_Count_Handler {
 	 * @return void
 	 */
 	public function __construct() {
+		add_action( 'admin_init', [ $this, 'init' ] );
+	}
 
+	/**
+	 * Initialize article counter functionality.
+	 *
+	 * @return void
+	 */
+	public function init() {
 		$this->kb_id = EPKB_KB_Handler::get_current_kb_id();
 		if ( empty( $this->kb_id ) ) {
 			return;

@@ -22,6 +22,15 @@
 }
 
 .component-attributions-modal {
+	--component-top-offset: 120px; /* Below inline toolbar */
+	--component-bottom-offset: 32px;
+	position: fixed !important;
+	top: var(--component-top-offset) !important;
+	bottom: var(--component-bottom-offset) !important;
+	left: 50% !important;
+	transform: translateX(-50%) !important;
+	max-height: calc(100vh - var(--component-top-offset) - var(--component-bottom-offset)) !important;
+
 	.form-row {
 		display: flex;
 		flex-wrap: wrap;
@@ -250,6 +259,7 @@
 		padding: 32px;
 		background-color: #fff;
 		height: 536px;
+		max-height: calc(100vh - 300px);
 		overflow-y: auto;
 		overflow-x: hidden;
 

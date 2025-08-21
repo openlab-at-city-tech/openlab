@@ -1,17 +1,17 @@
-# Copyright (C) 2023 Boone Gorges
+# Copyright (C) 2025 Boone Gorges
 # This file is distributed under the same license as the WP Grade Comments plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Grade Comments 1.5.0\n"
+"Project-Id-Version: WP Grade Comments 1.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-grade-comments\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-28T11:58:39-05:00\n"
+"POT-Creation-Date: 2025-07-01T10:06:39-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: wp-grade-comments\n"
 
 #. Plugin Name of the plugin

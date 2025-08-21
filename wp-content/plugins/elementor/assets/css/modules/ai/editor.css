@@ -24,19 +24,14 @@
   margin-inline-start: auto;
 }
 
-.elementor-context-menu-list__item__ai-badge {
-  background-color: #524CFF;
-  border-radius: 25px;
+.e-ai-border-button {
+  border-radius: var(--e-a-border-radius);
+  border: var(--e-a-border-bold);
   display: flex;
+  align-items: center;
   justify-content: center;
-  padding: 4px;
-}
-.elementor-context-menu-list__item__ai-badge svg {
-  width: 12px;
-  height: 12px;
-}
-.elementor-context-menu-list__item__ai-badge svg path {
-  fill: #ffffff;
+  width: 27px;
+  height: 27px;
 }
 
 /*# sourceMappingURL=editor.css.map */

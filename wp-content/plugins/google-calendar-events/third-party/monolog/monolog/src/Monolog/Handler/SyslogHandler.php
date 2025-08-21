@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *   $log->pushHandler($syslog);
  *
  * @author Sven Paulus <sven@karlsruhe.org>
- * @internal
  */
 class SyslogHandler extends AbstractSyslogHandler
 {
@@ -47,18 +46,18 @@ class SyslogHandler extends AbstractSyslogHandler
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
-        \closelog();
+        closelog();
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
-        if (!\openlog($this->ident, $this->logopts, $this->facility)) {
+        if (!openlog($this->ident, $this->logopts, $this->facility)) {
             throw new \LogicException('Can\'t open syslog for ident "' . $this->ident . '" and facility "' . $this->facility . '"' . Utils::getRecordMessageForException($record));
         }
-        \syslog($this->logLevels[$record['level']], (string) $record['formatted']);
+        syslog($this->logLevels[$record['level']], (string) $record['formatted']);
     }
 }

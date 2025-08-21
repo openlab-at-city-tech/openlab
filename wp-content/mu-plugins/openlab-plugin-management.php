@@ -59,6 +59,7 @@ function openlab_get_hidden_plugins() {
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
+		'git-it-write/git-it-write.php', // #3511
 		'google-document-embedder/gviewer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'gp-media-library/gp-media-library.php',
@@ -87,6 +88,7 @@ function openlab_get_hidden_plugins() {
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
 		'rederly.php',
+		'redux-framework/redux-framework.php', // #3526
 		'setmore-plus/setmore-plus.php', // #3438
 		'share-this/sharethis.php', // #3438
 		'simple-drop-cap/simple-drop-cap.php',

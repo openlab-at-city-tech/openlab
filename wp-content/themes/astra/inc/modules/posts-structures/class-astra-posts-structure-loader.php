@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Astra_Posts_Structure_Loader {
-
 	/**
 	 * Instance
 	 *
@@ -183,7 +182,7 @@ class Astra_Posts_Structure_Loader {
 	 */
 	public function add_fonts() {
 		$post_types = self::get_supported_post_types();
-		foreach ( $post_types as $index => $post_type ) {
+		foreach ( $post_types as $post_type ) {
 			// Single Banner - Font Support.
 			$title_section = 'ast-dynamic-single-' . $post_type;
 
@@ -211,7 +210,7 @@ class Astra_Posts_Structure_Loader {
 			Astra_Fonts::add_font( $archive_title_font_family, $archive_title_font_weight );
 		}
 
-		foreach ( self::get_special_page_types() as $index => $special_type ) {
+		foreach ( self::get_special_page_types() as $special_type ) {
 			$title_section = 'section-' . $special_type . '-page-title';
 
 			$instance_text_font_family = astra_get_option( $title_section . '-text-font-family' );
@@ -253,6 +252,11 @@ class Astra_Posts_Structure_Loader {
 	public static function get_supported_post_types() {
 		if ( empty( self::$supported_post_types ) || is_customize_preview() ) {
 			self::$supported_post_types = astra_get_queried_post_types();
+
+			// If Elementor is active, reindex the array.
+			if ( defined( 'ELEMENTOR_VERSION' ) ) {
+				self::$supported_post_types = array_values( self::$supported_post_types );
+			}
 		}
 
 		return apply_filters( 'astra_dynamic_post_structure_posttypes', self::$supported_post_types );
@@ -279,11 +283,11 @@ class Astra_Posts_Structure_Loader {
 	 */
 	public function preview_scripts() {
 		/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$dir_name = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
+		$dir_name = SCRIPT_DEBUG ? 'unminified' : 'minified';
 		/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 		/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+		$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 		/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 		wp_enqueue_script( 'astra-post-strctures-customizer-preview', ASTRA_THEME_POST_STRUCTURE_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );

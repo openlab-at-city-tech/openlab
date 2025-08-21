@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps;
 # with this source code.
 #
 #
-/** @internal */
 class Parsedown
 {
     # ~
@@ -106,10 +105,8 @@ class Parsedown
                 if (isset($Block)) {
                     $CurrentBlock = $Block;
                     continue;
-                } else {
-                    if ($this->isBlockCompletable($CurrentBlock['type'])) {
-                        $CurrentBlock = $this->{'block' . $CurrentBlock['type'] . 'Complete'}($CurrentBlock);
-                    }
+                } else if ($this->isBlockCompletable($CurrentBlock['type'])) {
+                    $CurrentBlock = $this->{'block' . $CurrentBlock['type'] . 'Complete'}($CurrentBlock);
                 }
             }
             # ~
@@ -387,7 +384,7 @@ class Parsedown
     # Rule
     protected function blockRule($Line)
     {
-        if (\preg_match('/^([' . $Line['text'][0] . '])([ ]*\\1){2,}[ ]*$/', $Line['text'])) {
+        if (\preg_match('/^([' . $Line['text'][0] . '])([ ]*\1){2,}[ ]*$/', $Line['text'])) {
             $Block = array('element' => array('name' => 'hr'));
             return $Block;
         }
@@ -411,7 +408,7 @@ class Parsedown
         if ($this->markupEscaped or $this->safeMode) {
             return;
         }
-        if (\preg_match('/^<(\\w[\\w-]*)(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*(\\/)?>/', $Line['text'], $matches)) {
+        if (\preg_match('/^<(\w[\w-]*)(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*(\/)?>/', $Line['text'], $matches)) {
             $element = \strtolower($matches[1]);
             if (\in_array($element, $this->textLevelElements)) {
                 return;
@@ -428,7 +425,7 @@ class Parsedown
                 if (isset($matches[2]) or \in_array($matches[1], $this->voidElements)) {
                     return;
                 }
-                if (\preg_match('/<\\/' . $matches[1] . '>[ ]*$/i', $remainder)) {
+                if (\preg_match('/<\/' . $matches[1] . '>[ ]*$/i', $remainder)) {
                     $Block['closed'] = \true;
                 }
             }
@@ -441,11 +438,9 @@ class Parsedown
             return;
         }
         if (\preg_match('/^<' . $Block['name'] . '(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*>/i', $Line['text'])) {
-            # open
             $Block['depth']++;
         }
-        if (\preg_match('/(.*?)<\\/' . $Block['name'] . '>[ ]*$/i', $Line['text'], $matches)) {
-            # close
+        if (\preg_match('/(.*?)<\/' . $Block['name'] . '>[ ]*$/i', $Line['text'], $matches)) {
             if ($Block['depth'] > 0) {
                 $Block['depth']--;
             } else {
@@ -463,7 +458,7 @@ class Parsedown
     # Reference
     protected function blockReference($Line)
     {
-        if (\preg_match('/^\\[(.+?)\\]:[ ]*<?(\\S+?)>?(?:[ ]+["\'(](.+)["\')])?[ ]*$/', $Line['text'], $matches)) {
+        if (\preg_match('/^\[(.+?)\]:[ ]*<?(\S+?)>?(?:[ ]+["\'(](.+)["\')])?[ ]*$/', $Line['text'], $matches)) {
             $id = \strtolower($matches[1]);
             $Data = array('url' => $matches[2], 'title' => null);
             if (isset($matches[3])) {
@@ -618,7 +613,7 @@ class Parsedown
     protected function inlineCode($Excerpt)
     {
         $marker = $Excerpt['text'][0];
-        if (\preg_match('/^(' . $marker . '+)[ ]*(.+?)[ ]*(?<!' . $marker . ')\\1(?!' . $marker . ')/s', $Excerpt['text'], $matches)) {
+        if (\preg_match('/^(' . $marker . '+)[ ]*(.+?)[ ]*(?<!' . $marker . ')\1(?!' . $marker . ')/s', $Excerpt['text'], $matches)) {
             $text = $matches[2];
             $text = \preg_replace("/[ ]*\n/", ' ', $text);
             return array('extent' => \strlen($matches[0]), 'element' => array('name' => 'code', 'text' => $text));
@@ -626,7 +621,7 @@ class Parsedown
     }
     protected function inlineEmailTag($Excerpt)
     {
-        if (\strpos($Excerpt['text'], '>') !== \false and \preg_match('/^<((mailto:)?\\S+?@\\S+?)>/i', $Excerpt['text'], $matches)) {
+        if (\strpos($Excerpt['text'], '>') !== \false and \preg_match('/^<((mailto:)?\S+?@\S+?)>/i', $Excerpt['text'], $matches)) {
             $url = $matches[1];
             if (!isset($matches[2])) {
                 $url = 'mailto:' . $url;
@@ -675,21 +670,21 @@ class Parsedown
         $Element = array('name' => 'a', 'handler' => 'line', 'nonNestables' => array('Url', 'Link'), 'text' => null, 'attributes' => array('href' => null, 'title' => null));
         $extent = 0;
         $remainder = $Excerpt['text'];
-        if (\preg_match('/\\[((?:[^][]++|(?R))*+)\\]/', $remainder, $matches)) {
+        if (\preg_match('/\[((?:[^][]++|(?R))*+)\]/', $remainder, $matches)) {
             $Element['text'] = $matches[1];
             $extent += \strlen($matches[0]);
             $remainder = \substr($remainder, $extent);
         } else {
             return;
         }
-        if (\preg_match('/^[(]\\s*+((?:[^ ()]++|[(][^ )]+[)])++)(?:[ ]+("[^"]*"|\'[^\']*\'))?\\s*[)]/', $remainder, $matches)) {
+        if (\preg_match('/^[(]\s*+((?:[^ ()]++|[(][^ )]+[)])++)(?:[ ]+("[^"]*"|\'[^\']*\'))?\s*[)]/', $remainder, $matches)) {
             $Element['attributes']['href'] = $matches[1];
             if (isset($matches[2])) {
                 $Element['attributes']['title'] = \substr($matches[2], 1, -1);
             }
             $extent += \strlen($matches[0]);
         } else {
-            if (\preg_match('/^\\s*\\[(.*?)\\]/', $remainder, $matches)) {
+            if (\preg_match('/^\s*\[(.*?)\]/', $remainder, $matches)) {
                 $definition = \strlen($matches[1]) ? $matches[1] : $Element['text'];
                 $definition = \strtolower($definition);
                 $extent += \strlen($matches[0]);
@@ -710,19 +705,19 @@ class Parsedown
         if ($this->markupEscaped or $this->safeMode or \strpos($Excerpt['text'], '>') === \false) {
             return;
         }
-        if ($Excerpt['text'][1] === '/' and \preg_match('/^<\\/\\w[\\w-]*[ ]*>/s', $Excerpt['text'], $matches)) {
+        if ($Excerpt['text'][1] === '/' and \preg_match('/^<\/\w[\w-]*[ ]*>/s', $Excerpt['text'], $matches)) {
             return array('markup' => $matches[0], 'extent' => \strlen($matches[0]));
         }
         if ($Excerpt['text'][1] === '!' and \preg_match('/^<!---?[^>-](?:-?[^-])*-->/s', $Excerpt['text'], $matches)) {
             return array('markup' => $matches[0], 'extent' => \strlen($matches[0]));
         }
-        if ($Excerpt['text'][1] !== ' ' and \preg_match('/^<\\w[\\w-]*(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*\\/?>/s', $Excerpt['text'], $matches)) {
+        if ($Excerpt['text'][1] !== ' ' and \preg_match('/^<\w[\w-]*(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*\/?>/s', $Excerpt['text'], $matches)) {
             return array('markup' => $matches[0], 'extent' => \strlen($matches[0]));
         }
     }
     protected function inlineSpecialCharacter($Excerpt)
     {
-        if ($Excerpt['text'][0] === '&' and !\preg_match('/^&#?\\w+;/', $Excerpt['text'])) {
+        if ($Excerpt['text'][0] === '&' and !\preg_match('/^&#?\w+;/', $Excerpt['text'])) {
             return array('markup' => '&amp;', 'extent' => 1);
         }
         $SpecialCharacter = array('>' => 'gt', '<' => 'lt', '"' => 'quot');
@@ -735,7 +730,7 @@ class Parsedown
         if (!isset($Excerpt['text'][1])) {
             return;
         }
-        if ($Excerpt['text'][1] === '~' and \preg_match('/^~~(?=\\S)(.+?)(?<=\\S)~~/', $Excerpt['text'], $matches)) {
+        if ($Excerpt['text'][1] === '~' and \preg_match('/^~~(?=\S)(.+?)(?<=\S)~~/', $Excerpt['text'], $matches)) {
             return array('extent' => \strlen($matches[0]), 'element' => array('name' => 'del', 'text' => $matches[1], 'handler' => 'line'));
         }
     }
@@ -744,7 +739,7 @@ class Parsedown
         if ($this->urlsLinked !== \true or !isset($Excerpt['text'][2]) or $Excerpt['text'][2] !== '/') {
             return;
         }
-        if (\preg_match('/\\bhttps?:[\\/]{2}[^\\s<]+\\b\\/*/ui', $Excerpt['context'], $matches, \PREG_OFFSET_CAPTURE)) {
+        if (\preg_match('/\bhttps?:[\/]{2}[^\s<]+\b\/*/ui', $Excerpt['context'], $matches, \PREG_OFFSET_CAPTURE)) {
             $url = $matches[0][0];
             $Inline = array('extent' => \strlen($matches[0][0]), 'position' => $matches[0][1], 'element' => array('name' => 'a', 'text' => $url, 'attributes' => array('href' => $url)));
             return $Inline;
@@ -752,7 +747,7 @@ class Parsedown
     }
     protected function inlineUrlTag($Excerpt)
     {
-        if (\strpos($Excerpt['text'], '>') !== \false and \preg_match('/^<(\\w+:\\/{2}[^ >]+)>/i', $Excerpt['text'], $matches)) {
+        if (\strpos($Excerpt['text'], '>') !== \false and \preg_match('/^<(\w+:\/{2}[^ >]+)>/i', $Excerpt['text'], $matches)) {
             $url = $matches[1];
             return array('extent' => \strlen($matches[0]), 'element' => array('name' => 'a', 'text' => $url, 'attributes' => array('href' => $url)));
         }
@@ -761,9 +756,9 @@ class Parsedown
     protected function unmarkedText($text)
     {
         if ($this->breaksEnabled) {
-            $text = \preg_replace('/[ ]*\\n/', "<br />\n", $text);
+            $text = \preg_replace('/[ ]*\n/', "<br />\n", $text);
         } else {
-            $text = \preg_replace('/(?:[ ][ ]+|[ ]*\\\\)\\n/', "<br />\n", $text);
+            $text = \preg_replace('/(?:[ ][ ]+|[ ]*\\\\)\n/', "<br />\n", $text);
             $text = \str_replace(" \n", "\n", $text);
         }
         return $text;
@@ -904,8 +899,8 @@ class Parsedown
     # Read-Only
     protected $specialCharacters = array('\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!', '|');
     protected $StrongRegex = array('*' => '/^[*]{2}((?:\\\\\\*|[^*]|[*][^*]*[*])+?)[*]{2}(?![*])/s', '_' => '/^__((?:\\\\_|[^_]|_[^_]*_)+?)__(?!_)/us');
-    protected $EmRegex = array('*' => '/^[*]((?:\\\\\\*|[^*]|[*][*][^*]+?[*][*])+?)[*](?![*])/s', '_' => '/^_((?:\\\\_|[^_]|__[^_]*__)+?)_(?!_)\\b/us');
-    protected $regexHtmlAttribute = '[a-zA-Z_:][\\w:.-]*(?:\\s*=\\s*(?:[^"\'=<>`\\s]+|"[^"]*"|\'[^\']*\'))?';
+    protected $EmRegex = array('*' => '/^[*]((?:\\\\\\*|[^*]|[*][*][^*]+?[*][*])+?)[*](?![*])/s', '_' => '/^_((?:\\\\_|[^_]|__[^_]*__)+?)_(?!_)\b/us');
+    protected $regexHtmlAttribute = '[a-zA-Z_:][\w:.-]*(?:\s*=\s*(?:[^"\'=<>`\s]+|"[^"]*"|\'[^\']*\'))?';
     protected $voidElements = array('area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source');
     protected $textLevelElements = array('a', 'br', 'bdo', 'abbr', 'blink', 'nextid', 'acronym', 'basefont', 'b', 'em', 'big', 'cite', 'small', 'spacer', 'listing', 'i', 'rp', 'del', 'code', 'strike', 'marquee', 'q', 'rt', 'ins', 'font', 'strong', 's', 'tt', 'kbd', 'mark', 'u', 'xm', 'sub', 'nobr', 'sup', 'ruby', 'var', 'span', 'wbr', 'time');
 }
@@ -921,5 +916,4 @@ class Parsedown
 # with this source code.
 #
 #
-/** @internal */
-\class_alias('SimpleCalendar\\plugin_deps\\Parsedown', 'Parsedown', \false);
+\class_alias('SimpleCalendar\plugin_deps\Parsedown', 'Parsedown', \false);

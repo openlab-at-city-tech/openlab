@@ -21,7 +21,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Util;
  *     bar2: test2.
  *
  * @author Gennady Telegin <gtelegin@gmail.com>
- * @internal
  */
 class ArrayConverter
 {
@@ -56,7 +55,7 @@ class ArrayConverter
                  * $tree['foo'] was string before we found array {bar: test2}.
                  *  Treat new element as string too, e.g. add $tree['foo.bar'] = 'test2';
                  */
-                $elem =& $elem[\implode('.', \array_slice($parts, $i))];
+                $elem =& $elem[implode('.', \array_slice($parts, $i))];
                 break;
             }
             $parentOfElem =& $elem;
@@ -89,9 +88,9 @@ class ArrayConverter
     /**
      * @return string[]
      */
-    private static function getKeyParts(string $key) : array
+    private static function getKeyParts(string $key): array
     {
-        $parts = \explode('.', $key);
+        $parts = explode('.', $key);
         $partsCount = \count($parts);
         $result = [];
         $buffer = '';

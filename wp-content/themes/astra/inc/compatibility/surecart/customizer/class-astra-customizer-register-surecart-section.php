@@ -18,7 +18,6 @@ if ( ! class_exists( 'Astra_Customizer_Register_Surecart_Section' ) ) {
 	 * Register SureCart CPT Customizer Configurations.
 	 */
 	class Astra_Customizer_Register_Surecart_Section extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Panels and Sections for Customizer.
 		 *
@@ -62,9 +61,7 @@ if ( ! class_exists( 'Astra_Customizer_Register_Surecart_Section' ) ) {
 					),
 				);
 
-				$configurations = array_merge( $configurations, $_configs, array_values( $surecart_post_types ) );
-
-				return $configurations;
+				return array_merge( $configurations, $_configs, array_values( $surecart_post_types ) );
 		}
 	}
 }

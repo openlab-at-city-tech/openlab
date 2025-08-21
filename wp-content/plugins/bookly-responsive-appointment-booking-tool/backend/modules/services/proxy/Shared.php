@@ -7,6 +7,8 @@ use Bookly\Lib;
  * @method static void  duplicateService( int $source_id, int $target_id ) Duplicate service.
  * @method static array prepareServiceIcons( array $icons ) Prepare service icons.
  * @method static array prepareServiceTypes( array $types ) Prepare service types.
+ * @method static void  renderAddOnsComponents() Render addon components.
+ * @method static void  renderTopButtons() Render top buttons.
  * @method static array serviceCreated( Lib\Entities\Service $service ) Service created.
  * @method static void  serviceDeleted( Lib\Entities\Service $service ) Service deleted.
  */

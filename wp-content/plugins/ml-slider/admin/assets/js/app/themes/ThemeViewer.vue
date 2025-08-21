@@ -6,7 +6,18 @@
 		:class="{'unsupported': unsupportedSliderType}"
 		class="theme-select-module">
 		<p v-if="hasThemeSet">
-			{{ __('Slideshow Theme', 'ml-slider') }}<span>: {{ current.theme.title }}</span>
+			{{ __('Slideshow Theme', 'ml-slider') }}: 
+				<template v-if="'custom' == current.theme.type">
+					<span v-if="current.theme.version === 'v2'">
+						{{ current.theme.base_title }}
+					</span>
+					<span v-else>
+						{{ current.theme.title }}
+					</span>
+				</template>
+				<template v-else>
+					<span>{{ current.theme.title }}</span>
+				</template>
 		</p>
 		<div
 			:class="{'ms-modal-open': is_open}"
@@ -16,10 +27,7 @@
 			<p
 				v-if="(hasThemeSet && unsupportedSliderType)"
 				class="slider-not-supported-warning">
-                <svg class="inline w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-				{{ __('This theme is not officially supported by the slider you chose. Your results might vary.', 'ml-slider') }}
+				{{ __('This theme was designed for FlexSlider. Please choose the FlexSlider option for the best display.', 'ml-slider') }}
 			</p>
 
 			<!-- If there's a theme already set -->
@@ -33,11 +41,32 @@
 					@click="openModal">
 					<div
 						v-if="'custom' == current.theme.type"
-						class="custom-theme-single">
-						<span class="custom-subtitle">
-							{{ __('Custom theme', 'ml-slider') }}
-						</span>
-						{{ current.theme.title }}
+						class="custom-theme-single p-0">
+						<template v-if="current.theme.version === 'v2'">
+							<div class="theme-label-info-v2">
+								<div class="custom-subtitle">
+									{{ current.theme.base_title + ' ' + __('theme', 'ml-slider') }}
+								</div>
+								{{ current.theme.title }}
+							</div>
+							<div class="theme-image-wrapper">
+								<img 
+									:src="themeDirectoryUrl + current.theme.base + '/screenshot.png'"
+									:alt="current.theme.title"
+									class="theme-image-v2"> 
+							</div>
+						</template>
+						<template v-else>
+							<div class="theme-label-info-legacy">
+								{{ __('Legacy', 'ml-slider') }}
+							</div>
+							<div class="custom-theme-single">
+								<div class="custom-subtitle">
+									{{ __('Custom theme', 'ml-slider') }}
+								</div>
+								{{ current.theme.title }}
+							</div>
+						</template>
 					</div>
 					<div v-else>
 						<img
@@ -61,39 +90,13 @@
 					@click="openModal">{{ __('Change', 'ml-slider') }}
 				</button>
 				<!-- Customize theme design (optional) -->
-				<div class="static-theme-customize" v-if="theme_customize.length">
-					<table>
-						<tr v-for="(row_item, row_index) in theme_customize" 
-							:key="row_index" 
-							:class="row_item.dependencies ? 'customizer-' + row_item.dependencies : ''">
-							<td>
-								{{ row_item.label }}
-							</td>
-							<td>
-								<div v-for="(field_item, field_index) in row_item.fields" 
-									:key="field_index"
-									class="ms-color-tooltip-wrapper">
-									<input 
-										type="text" 
-										class="colorpicker"
-										:name="`settings[theme_customize][${field_item.name}]`" 
-										v-model="field_item.value"
-										data-alpha-enabled="true"
-									>
-									<span class="ms-color-tooltip">
-										{{ field_item.label }}
-									</span>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+				<theme-customize :manifest="theme_customize"></theme-customize>
 			</div>
 
 			<!-- If no theme then we render the theme select button -->
 			<div v-else>
 				<p>
-					{{ __('Change the design your slideshow with a stylish MetaSlider theme!', 'ml-slider') }}
+					{{ __('Change the design of your slideshow with a stylish MetaSlider theme!', 'ml-slider') }}
 				</p>
 				<button
 					v-if="Object.keys(themes).length || Object.keys(customThemes).length"
@@ -172,9 +175,28 @@
 											@mouseout="hoveredTheme = selectedTheme"
 											@click="selectTheme(theme)">
 											<span>
-												<div class="custom-theme-single">
-													{{ theme.title }}
-												</div>
+												<template v-if="theme.version === 'v2'">
+													<div class="theme-label-info-v2">
+														<div class="custom-subtitle">
+															{{ theme.base_title + ' ' + __('theme', 'ml-slider') }}
+														</div>
+														{{ theme.title }}
+													</div>
+													<div class="theme-image-wrapper">
+														<img 
+															:src="themeDirectoryUrl + theme.base + '/screenshot.png'"
+															:alt="theme.title"
+															class="theme-image-v2"> 
+													</div>
+												</template>
+												<template v-else>
+													<div class="theme-label-info-legacy">
+														{{ __('Legacy', 'ml-slider') }}
+													</div>
+													<div class="custom-theme-single">
+														{{ theme.title }}
+													</div>
+												</template>
 											</span>
 										</li>
 									</template>
@@ -238,11 +260,23 @@
 								</template>
 								<template v-else-if="hoveredTheme.type === 'custom'">
 									<div>
-										<h1 class="metaslider-theme-title">{{ hoveredTheme.title }}</h1>
+										<h1 class="metaslider-theme-title">
+											 <template v-if="hoveredTheme.version === 'v2'">
+												{{ hoveredTheme.base_title }}
+											 </template>
+											<template v-else>
+												{{ hoveredTheme.title }}
+											</template>
+										</h1>
 										<div class="ms-theme-description">
-											<h2>{{ __('Theme Details', 'ml-slider') }}</h2>
-											<p>{{ __('This theme was created through the theme editor.', 'ml-slider') }}</p>
-											<p>{{ __('If no theme is selected we will use the default theme provided by the slider plugin', 'ml-slider') }}</p>
+											<template v-if="hoveredTheme.version === 'v2'">
+												<h2>{{ __('Style Details', 'ml-slider') }}</h2>
+												<p>{{ __('This style was created with the Theme Editor.', 'ml-slider') }}</p>
+											</template>
+											<template v-else>
+												<h2>{{ __('Theme Details', 'ml-slider') }}</h2>
+												<p>{{ __('This theme was created through the theme editor.', 'ml-slider') }}</p>
+											</template>
 										</div>
 									</div>
 								</template>
@@ -252,7 +286,6 @@
 											<div>
 												<h1 class="metaslider-theme-title">{{ __('How To Use', 'ml-slider') }}</h1>
 												<p>{{ __('Select a theme on the left to use on this slideshow. Click the theme for more details.', 'ml-slider') }}</p>
-												<p>{{ __('If no theme is selected we will use the default theme provided by the slider plugin', 'ml-slider') }}</p>
 											</div>
 										</div>
 									</template>
@@ -278,10 +311,7 @@
 						<span
 							v-if="sliderTypeNotSupported"
 							class="slider-not-supported-warning">
-                            <svg class="inline w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-							{{ __('This theme is not officially supported by the slider you chose. Your results might vary.', 'ml-slider') }}</span>
+							{{ __('This theme was designed for FlexSlider. Please choose the FlexSlider option for the best display.', 'ml-slider') }}</span>
 					</div>
 					<div class="flex items-center">
 						<button
@@ -311,8 +341,12 @@ import { Axios } from '../api'
 import './components'
 import { mapGetters } from 'vuex'
 import QS from 'qs'
+import { default as ThemeCustomize } from './includes/ThemeCustomize'
 
 export default {
+	components: {
+		'theme-customize' : ThemeCustomize
+	},
 	props: {
 		themeDirectoryUrl: {
 			type: [String],
@@ -330,7 +364,8 @@ export default {
 			hoveredTheme: {},
 			is_open: false,
 			revealThemeAd: null,
-			theme_customize: []
+			theme_customize: [], // @TODO Maybe declare as {} ?
+			theme_edit_settings: {}
 		}
 	},
 	watch: {
@@ -363,25 +398,46 @@ export default {
 					// Assign defaults from manifest, including default values
 					this.theme_customize = customize_data.manifest || [];
 
-					// Iterate each settings row
-					this.theme_customize.forEach((row_item, row_index) => {
+					// Iterate each section that has 'status' key
+					this.theme_customize.forEach((section_item, section_index) => {
 
-						// Replace default values with the saved ones
-						for (let i = 0; i < row_item.fields.length; i++) {
-							// The 'name' in theme_customize should match keys in saved_settings
-							const name = row_item.fields[i].name; 
-							
-							// Check if saved_settings contains the key matching 'name'
-							if (customize_data.saved_settings 
-								&& customize_data.saved_settings.hasOwnProperty(name)
-								&& typeof customize_data.saved_settings[name] !== 'undefined') {
-								this.theme_customize[row_index].fields[i].value = customize_data.saved_settings[name];
+						// Loop each section 'settings' key
+						section_item.settings.forEach((row_item, row_index) => {
+							if (row_item.type === 'fields' && typeof row_item.fields !== 'undefined') {
+								// Replace default values with the saved ones
+								for (let i = 0; i < row_item.fields.length; i++) {
+									// The 'name' in theme_customize should match keys in saved_settings
+									const name = row_item.fields[i].name; 
+									const manifest_fields = this.theme_customize[section_index].settings[row_index].fields[i];
+
+									// Check if saved_settings contains the key matching 'name'
+									if (customize_data.saved_settings 
+										&& customize_data.saved_settings.hasOwnProperty(name)
+										&& typeof customize_data.saved_settings[name] !== 'undefined') {
+											manifest_fields.value = customize_data.saved_settings[name];
+									} else {
+										// Use default value if saved setting for this name doesn't exist
+										manifest_fields.value = manifest_fields.default;
+									}
+								}
 							} else {
-								// Use default value if saved setting for this name doesn't exist
-								this.theme_customize[row_index].fields[i].value = this.theme_customize[row_index].fields[i].default;
+								// The 'name' in theme_customize should match keys in saved_settings
+								const name = row_item.name;
+								const manifest_data = this.theme_customize[section_index].settings[row_index];
+
+								// Check if saved_settings contains the key matching 'name'
+								if (customize_data.saved_settings 
+									&& customize_data.saved_settings.hasOwnProperty(name)
+									&& typeof customize_data.saved_settings[name] !== 'undefined') {
+									manifest_data.value = customize_data.saved_settings[name];
+								} else {
+									// Use default value if saved setting for this name doesn't exist
+									manifest_data.value = manifest_data.default;
+								}
 							}
-						}
+						});
 					});
+
 					this.updateColorPicker();
 				}).catch(error => {
 					this.notifyError('metaslider/theme-error', error, true)
@@ -495,21 +551,41 @@ export default {
 					theme: this.selectedTheme
 				})).then(response => {
 					this.theme_customize = this.selectedTheme.customize || [];
-					
-					this.theme_customize.forEach((row_item, row_index) => {
-						// Add value property by copying default property value
-						for (let i = 0; i < row_item.fields.length; i++) {
-							this.theme_customize[row_index].fields[i].value = this.theme_customize[row_index].fields[i].default;
-						}
+
+					// Iterate each section that has 'status' key
+					this.theme_customize.forEach((section_item, section_index) => {
+						
+						// Loop each section 'settings' key
+						section_item.settings.forEach((row_item, row_index) => {
+
+							if (row_item.type === 'fields' && typeof row_item.fields !== 'undefined') {
+								// Add value property by copying default property value
+								for (let i = 0; i < row_item.fields.length; i++) {
+									const manifest_fields = this.theme_customize[section_index].settings[row_index].fields[i];
+
+									manifest_fields.value = manifest_fields.default;
+								}
+							} else {
+								const manifest_data = this.theme_customize[section_index].settings[row_index];
+
+								manifest_data.value = manifest_data.default;
+							}
+						});
 					});
 
 					this.updateColorPicker();
 
 					setTimeout(() => {
+						// @TODO - Maybe move to admin.js under window.metaslider.app.EventManager.$on("metaslider/theme-updated", function () {});
 						this.showHideColorPicker();  //delay to load all picker first
 					}, 1000);
 
 					this.notifySuccess('metaslider/theme-updated', this.__('Theme saved', 'ml-slider'), true)
+
+					if (typeof metaslider.autoThemeConfig !== 'undefined' && parseInt(metaslider.autoThemeConfig, 10)) {
+						this.theme_edit_settings = this.selectedTheme.edit_settings ?? {};
+						this.updateEditSettings();
+					}
 				}).catch(error => {
 					this.notifyError('metaslider/theme-error', error, true)
 				})
@@ -530,6 +606,12 @@ export default {
 			
 						btn.trigger('change');
 					}
+				}).promise().done(function() {
+					var text = typeof metaslider !== 'undefined' ? metaslider : null;
+					if (text) {
+						$(this).parents('.wp-picker-container').find('.iris-strip').eq(0).prepend(`<span class="ms-color-tooltip">${text.tone}</span>`);
+						$(this).parents('.wp-picker-container').find('.iris-strip').eq(1).prepend(`<span class="ms-color-tooltip">${text.opacity}</span>`);
+					}
 				});
 			});
 		},
@@ -544,6 +626,41 @@ export default {
 						$(this).wpColorPicker('color', newColor);
 					}
 				});
+			});
+		},
+		updateEditSettings() {
+			this.$nextTick( function () {
+
+				if (Object.keys(this.theme_edit_settings).length > 0) {
+					var $ = window.jQuery;
+
+					for (const [key,value] of Object.entries(this.theme_edit_settings)) {
+						const field = $(`#metaslider_configuration [name="settings[${key}]"]`);
+
+						if (field.length == 1) {
+							if (field.is('select')) {
+								// select
+								if (field.find(`option[value="${value}"]`).length) {
+									field.val(value).trigger('change');
+								}
+							} else if (field.is(':checkbox')) {
+								// checkbox
+								field.prop('checked', value).trigger('change');
+							} else if (field.is('input')) {
+								// input
+								const fieldType = field.attr('type');
+								if (fieldType === 'text' || fieldType === 'number') {
+									field.val(value).trigger('change');
+								}
+							}
+							field.attr('data-edit-setting', true); // Not requied. We add it just for reference
+						}
+					}
+
+					setTimeout(function () {
+						EventManager.$emit('metaslider/save');
+					}, 1000);
+				}
 			});
 		},
 		openModal() {
@@ -595,17 +712,11 @@ export default {
 			this.$nextTick( function () {
 				var $ = window.jQuery;
 				$('.static-theme-customize tr').show();
-
-				if ($('.ms-settings-table input[name="settings[autoPlay]"]').is(':checked')) {
-					if ($('.ms-settings-table input[name="settings[pausePlay]"]').is(':checked')) {
-						$('tr.customizer-pausePlay').show();
-					} else {
-						$('tr.customizer-pausePlay').hide();
-					}
+				if ($('.ms-settings-table input[name="settings[pausePlay]"]').is(':checked')) {
+					$('tr.customizer-pausePlay').show();
 				} else {
-					$('tr.customizer-pausePlay').hide(); 
+					$('tr.customizer-pausePlay').hide();
 				}
-
 				if ($('.ms-settings-table select[name="settings[links]"]').val() === 'false') {
 					$('tr.customizer-links').hide();
 				} else {
@@ -627,6 +738,53 @@ export default {
 	@import '../assets/styles/globals.scss';
 	@import '../assets/styles/mixins.scss';
 
+	@mixin custom-theme-box() {
+		.theme-image-wrapper {
+			background: #2271b1;
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+		.theme-label-info-v2 {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			color: #fff;
+			font-size: 1.3rem;
+			font-weight: bold;
+			z-index: 1;
+			text-shadow: 0 0px 10px #000;
+			width: 100%;
+			transform: translateY(-50%);
+			text-align: center;
+			padding-left: 1rem;
+			padding-right: 1rem;
+
+			.custom-subtitle {
+				color: #fff;
+				font-size: 12px;
+				font-weight: 300;
+				margin-bottom: .1em;
+				text-transform: uppercase;
+			}
+		}
+		.theme-image-v2 {
+			opacity: 0.6;
+		}
+		.theme-label-info-legacy {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			background: rgba(255,255,255,1);
+			color: #2271b1;
+			font-size: 0.7em;
+			font-weight: normal;
+			padding: 3px 7px;
+			border-radius: 4px;
+			z-index: 1;
+			opacity: 0.5;
+		}
+	}
 	#metaslider-ui .metaslider-theme-viewer {
 		p {
 			margin-top: 0;
@@ -781,7 +939,9 @@ export default {
 				height: 100%;
 				display: block;
 				padding: 2px;
+				position: relative;
 			}
+			@include custom-theme-box();
 			&:hover span {
 				border-color: #ccc;
 			}
@@ -836,7 +996,10 @@ export default {
 		color: $brand;
 	}
 	#metaslider-ui .theme-select-module .slider-not-supported-warning {
+		background-color: #f9edc9;
+		border: 1px solid #f2a561;
 		margin-bottom: 1em;
+		padding: 10px 15px;
 		svg {
 			color: $red !important;
 		}
@@ -851,15 +1014,18 @@ export default {
 			width: 100%;
 		}
 	}
-	#metaslider-ui .ms-current-theme .custom-theme-single {
-		min-height: 0;
-		height: 177px;
+	#metaslider-ui .ms-current-theme {
+		@include custom-theme-box();
+
+		.custom-theme-single {
+			min-height: 177px;
+		}
 	}
 	#metaslider-ui .ms-current-theme .custom-theme-single .custom-subtitle {
 		font-size: 12px;
 		font-weight: 300;
 		text-transform: uppercase;
-		color: darken(white, 15%);
+		color: #fff;
 		margin-bottom: 0.1em;
 	}
 	#metaslider-ui .custom-theme-single {
@@ -871,8 +1037,8 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		font-size: 24px;
-		font-weight: 600;
+		font-size: 1.3rem;
+		font-weight: bold;
 		background-color: #2271b1;
 		color: white;
 		padding: 1rem;

@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\StartPageToken;
  *   $driveService = new Google\Service\Drive(...);
  *   $changes = $driveService->changes;
  *  </code>
- * @internal
  */
 class Changes extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -48,7 +47,7 @@ class Changes extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function getStartPageToken($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('getStartPageToken', [$params], StartPageToken::class);
     }
     /**
@@ -93,7 +92,7 @@ class Changes extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listChanges($pageToken, $optParams = [])
     {
         $params = ['pageToken' => $pageToken];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], ChangeList::class);
     }
     /**
@@ -140,9 +139,9 @@ class Changes extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch($pageToken, Channel $postBody, $optParams = [])
     {
         $params = ['pageToken' => $pageToken, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Changes::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Changes');
+class_alias(Changes::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Changes');

@@ -34,7 +34,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
  * It primary supports
  * - service account authorization
  * - authorization where a user already has an access token
- * @internal
  */
 class OAuth2 implements FetchAuthTokenInterface
 {
@@ -300,7 +299,7 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function __construct(array $config)
     {
-        $opts = \array_merge(['expiry' => self::DEFAULT_EXPIRY_SECONDS, 'extensionParams' => [], 'authorizationUri' => null, 'redirectUri' => null, 'tokenCredentialUri' => null, 'state' => null, 'username' => null, 'password' => null, 'clientId' => null, 'clientSecret' => null, 'issuer' => null, 'sub' => null, 'audience' => null, 'signingKey' => null, 'signingKeyId' => null, 'signingAlgorithm' => null, 'scope' => null, 'additionalClaims' => []], $config);
+        $opts = array_merge(['expiry' => self::DEFAULT_EXPIRY_SECONDS, 'extensionParams' => [], 'authorizationUri' => null, 'redirectUri' => null, 'tokenCredentialUri' => null, 'state' => null, 'username' => null, 'password' => null, 'clientId' => null, 'clientSecret' => null, 'issuer' => null, 'sub' => null, 'audience' => null, 'signingKey' => null, 'signingKeyId' => null, 'signingAlgorithm' => null, 'scope' => null, 'additionalClaims' => []], $config);
         $this->setAuthorizationUri($opts['authorizationUri']);
         $this->setRedirectUri($opts['redirectUri']);
         $this->setTokenCredentialUri($opts['tokenCredentialUri']);
@@ -349,11 +348,11 @@ class OAuth2 implements FetchAuthTokenInterface
     public function verifyIdToken($publicKey = null, $allowed_algs = [])
     {
         $idToken = $this->getIdToken();
-        if (\is_null($idToken)) {
+        if (is_null($idToken)) {
             return null;
         }
         $resp = $this->jwtDecode($idToken, $publicKey, $allowed_algs);
-        if (!\property_exists($resp, 'aud')) {
+        if (!property_exists($resp, 'aud')) {
             throw new \DomainException('No audience found the id token');
         }
         if ($resp->aud != $this->getAudience()) {
@@ -369,30 +368,30 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function toJwt(array $config = [])
     {
-        if (\is_null($this->getSigningKey())) {
+        if (is_null($this->getSigningKey())) {
             throw new \DomainException('No signing key available');
         }
-        if (\is_null($this->getSigningAlgorithm())) {
+        if (is_null($this->getSigningAlgorithm())) {
             throw new \DomainException('No signing algorithm specified');
         }
-        $now = \time();
-        $opts = \array_merge(['skew' => self::DEFAULT_SKEW_SECONDS], $config);
+        $now = time();
+        $opts = array_merge(['skew' => self::DEFAULT_SKEW_SECONDS], $config);
         $assertion = ['iss' => $this->getIssuer(), 'exp' => $now + $this->getExpiry(), 'iat' => $now - $opts['skew']];
         foreach ($assertion as $k => $v) {
-            if (\is_null($v)) {
+            if (is_null($v)) {
                 throw new \DomainException($k . ' should not be null');
             }
         }
-        if (!\is_null($this->getAudience())) {
+        if (!is_null($this->getAudience())) {
             $assertion['aud'] = $this->getAudience();
         }
-        if (!\is_null($this->getScope())) {
+        if (!is_null($this->getScope())) {
             $assertion['scope'] = $this->getScope();
         }
         if (empty($assertion['scope']) && empty($assertion['aud'])) {
             throw new \DomainException('one of scope or aud should not be null');
         }
-        if (!\is_null($this->getSub())) {
+        if (!is_null($this->getSub())) {
             $assertion['sub'] = $this->getSub();
         }
         $assertion += $this->getAdditionalClaims();
@@ -406,7 +405,7 @@ class OAuth2 implements FetchAuthTokenInterface
     public function generateCredentialsRequest()
     {
         $uri = $this->getTokenCredentialUri();
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             throw new \DomainException('No token credential URI was set.');
         }
         $grantType = $this->getGrantType();
@@ -430,16 +429,16 @@ class OAuth2 implements FetchAuthTokenInterface
                 $params['assertion'] = $this->toJwt();
                 break;
             default:
-                if (!\is_null($this->getRedirectUri())) {
+                if (!is_null($this->getRedirectUri())) {
                     # Grant type was supposed to be 'authorization_code', as there
                     # is a redirect URI.
                     throw new \DomainException('Missing authorization code');
                 }
                 unset($params['grant_type']);
-                if (!\is_null($grantType)) {
+                if (!is_null($grantType)) {
                     $params['grant_type'] = $grantType;
                 }
-                $params = \array_merge($params, $this->getExtensionParams());
+                $params = array_merge($params, $this->getExtensionParams());
         }
         $headers = ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'];
         return new Request('POST', $uri, $headers, Query::build($params));
@@ -452,7 +451,7 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function fetchAuthToken(callable $httpHandler = null)
     {
-        if (\is_null($httpHandler)) {
+        if (is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build(HttpClientCache::getHttpClient());
         }
         $response = $httpHandler($this->generateCredentialsRequest());
@@ -472,8 +471,8 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function getCacheKey()
     {
-        if (\is_array($this->scope)) {
-            return \implode(':', $this->scope);
+        if (is_array($this->scope)) {
+            return implode(':', $this->scope);
         }
         if ($this->audience) {
             return $this->audience;
@@ -493,11 +492,11 @@ class OAuth2 implements FetchAuthTokenInterface
         $body = (string) $resp->getBody();
         if ($resp->hasHeader('Content-Type') && $resp->getHeaderLine('Content-Type') == 'application/x-www-form-urlencoded') {
             $res = [];
-            \parse_str($body, $res);
+            parse_str($body, $res);
             return $res;
         }
         // Assume it's JSON; if it's not throw an exception
-        if (null === ($res = \json_decode($body, \true))) {
+        if (null === $res = json_decode($body, \true)) {
             throw new \Exception('Invalid JSON response');
         }
         return $res;
@@ -539,12 +538,12 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function updateToken(array $config)
     {
-        $opts = \array_merge(['extensionParams' => [], 'access_token' => null, 'id_token' => null, 'expires_in' => null, 'expires_at' => null, 'issued_at' => null, 'scope' => null], $config);
+        $opts = array_merge(['extensionParams' => [], 'access_token' => null, 'id_token' => null, 'expires_in' => null, 'expires_at' => null, 'issued_at' => null, 'scope' => null], $config);
         $this->setExpiresAt($opts['expires_at']);
         $this->setExpiresIn($opts['expires_in']);
         // By default, the token is issued at `Time.now` when `expiresIn` is set,
         // but this can be used to supply a more precise time.
-        if (!\is_null($opts['issued_at'])) {
+        if (!is_null($opts['issued_at'])) {
             $this->setIssuedAt($opts['issued_at']);
         }
         $this->setAccessToken($opts['access_token']);
@@ -552,7 +551,7 @@ class OAuth2 implements FetchAuthTokenInterface
         // The refresh token should only be updated if a value is explicitly
         // passed in, as some access token responses do not include a refresh
         // token.
-        if (\array_key_exists('refresh_token', $opts)) {
+        if (array_key_exists('refresh_token', $opts)) {
             $this->setRefreshToken($opts['refresh_token']);
         }
     }
@@ -565,15 +564,15 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function buildFullAuthorizationUri(array $config = [])
     {
-        if (\is_null($this->getAuthorizationUri())) {
+        if (is_null($this->getAuthorizationUri())) {
             throw new InvalidArgumentException('requires an authorizationUri to have been set');
         }
-        $params = \array_merge(['response_type' => 'code', 'access_type' => 'offline', 'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUri, 'state' => $this->state, 'scope' => $this->getScope()], $config);
+        $params = array_merge(['response_type' => 'code', 'access_type' => 'offline', 'client_id' => $this->clientId, 'redirect_uri' => $this->redirectUri, 'state' => $this->state, 'scope' => $this->getScope()], $config);
         // Validate the auth_params
-        if (\is_null($params['client_id'])) {
+        if (is_null($params['client_id'])) {
             throw new InvalidArgumentException('missing the required client identifier');
         }
-        if (\is_null($params['redirect_uri'])) {
+        if (is_null($params['redirect_uri'])) {
             throw new InvalidArgumentException('missing the required redirect URI');
         }
         if (!empty($params['prompt']) && !empty($params['approval_prompt'])) {
@@ -582,7 +581,7 @@ class OAuth2 implements FetchAuthTokenInterface
         // Construct the uri object; return it if it is valid.
         $result = clone $this->authorizationUri;
         $existingParams = Query::parse($result->getQuery());
-        $result = $result->withQuery(Query::build(\array_merge($existingParams, $params)));
+        $result = $result->withQuery(Query::build(array_merge($existingParams, $params)));
         if ($result->getScheme() != 'https') {
             throw new InvalidArgumentException('Authorization endpoint must be protected by TLS');
         }
@@ -647,7 +646,7 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function setRedirectUri($uri)
     {
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             $this->redirectUri = null;
             return;
         }
@@ -668,10 +667,10 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function getScope()
     {
-        if (\is_null($this->scope)) {
+        if (is_null($this->scope)) {
             return $this->scope;
         }
-        return \implode(' ', $this->scope);
+        return implode(' ', $this->scope);
     }
     /**
      * Sets the scope of the access request, expressed either as an Array or as
@@ -683,13 +682,13 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function setScope($scope)
     {
-        if (\is_null($scope)) {
+        if (is_null($scope)) {
             $this->scope = null;
-        } elseif (\is_string($scope)) {
-            $this->scope = \explode(' ', $scope);
-        } elseif (\is_array($scope)) {
+        } elseif (is_string($scope)) {
+            $this->scope = explode(' ', $scope);
+        } elseif (is_array($scope)) {
             foreach ($scope as $s) {
-                $pos = \strpos($s, ' ');
+                $pos = strpos($s, ' ');
                 if ($pos !== \false) {
                     throw new InvalidArgumentException('array scope values should not contain spaces');
                 }
@@ -706,21 +705,21 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function getGrantType()
     {
-        if (!\is_null($this->grantType)) {
+        if (!is_null($this->grantType)) {
             return $this->grantType;
         }
         // Returns the inferred grant type, based on the current object instance
         // state.
-        if (!\is_null($this->code)) {
+        if (!is_null($this->code)) {
             return 'authorization_code';
         }
-        if (!\is_null($this->refreshToken)) {
+        if (!is_null($this->refreshToken)) {
             return 'refresh_token';
         }
-        if (!\is_null($this->username) && !\is_null($this->password)) {
+        if (!is_null($this->username) && !is_null($this->password)) {
             return 'password';
         }
-        if (!\is_null($this->issuer) && !\is_null($this->signingKey)) {
+        if (!is_null($this->issuer) && !is_null($this->signingKey)) {
             return self::JWT_URN;
         }
         return null;
@@ -734,7 +733,7 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function setGrantType($grantType)
     {
-        if (\in_array($grantType, self::$knownGrantTypes)) {
+        if (in_array($grantType, self::$knownGrantTypes)) {
             $this->grantType = $grantType;
         } else {
             // validate URI
@@ -974,9 +973,9 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function setSigningAlgorithm($signingAlgorithm)
     {
-        if (\is_null($signingAlgorithm)) {
+        if (is_null($signingAlgorithm)) {
             $this->signingAlgorithm = null;
-        } elseif (!\in_array($signingAlgorithm, self::$knownSigningAlgorithms)) {
+        } elseif (!in_array($signingAlgorithm, self::$knownSigningAlgorithms)) {
             throw new InvalidArgumentException('unknown signing algorithm');
         } else {
             $this->signingAlgorithm = $signingAlgorithm;
@@ -1039,11 +1038,11 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function setExpiresIn($expiresIn)
     {
-        if (\is_null($expiresIn)) {
+        if (is_null($expiresIn)) {
             $this->expiresIn = null;
             $this->issuedAt = null;
         } else {
-            $this->issuedAt = \time();
+            $this->issuedAt = time();
             $this->expiresIn = (int) $expiresIn;
         }
     }
@@ -1054,10 +1053,10 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     public function getExpiresAt()
     {
-        if (!\is_null($this->expiresAt)) {
+        if (!is_null($this->expiresAt)) {
             return $this->expiresAt;
         }
-        if (!\is_null($this->issuedAt) && !\is_null($this->expiresIn)) {
+        if (!is_null($this->issuedAt) && !is_null($this->expiresIn)) {
             return $this->issuedAt + $this->expiresIn;
         }
         return null;
@@ -1070,8 +1069,8 @@ class OAuth2 implements FetchAuthTokenInterface
     public function isExpired()
     {
         $expiration = $this->getExpiresAt();
-        $now = \time();
-        return !\is_null($expiration) && $now >= $expiration;
+        $now = time();
+        return !is_null($expiration) && $now >= $expiration;
     }
     /**
      * Sets the time the current access token expires at.
@@ -1244,7 +1243,7 @@ class OAuth2 implements FetchAuthTokenInterface
      */
     private function coerceUri($uri)
     {
-        if (\is_null($uri)) {
+        if (is_null($uri)) {
             return null;
         }
         return Utils::uriFor($uri);
@@ -1287,24 +1286,24 @@ class OAuth2 implements FetchAuthTokenInterface
             $keys = [];
             foreach ((array) $publicKey as $kid => $pubKey) {
                 if (!$pubKey instanceof Key) {
-                    throw new \InvalidArgumentException(\sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', Key::class, Key::class));
+                    throw new \InvalidArgumentException(sprintf('When allowed algorithms is empty, the public key must' . 'be an instance of %s or an array of %s objects', Key::class, Key::class));
                 }
                 $keys[$kid] = $pubKey;
             }
             return $keys;
         }
         $allowedAlg = null;
-        if (\is_string($allowedAlgs)) {
+        if (is_string($allowedAlgs)) {
             $allowedAlg = $allowedAlg;
-        } elseif (\is_array($allowedAlgs)) {
-            if (\count($allowedAlgs) > 1) {
-                throw new \InvalidArgumentException('To have multiple allowed algorithms, You must provide an' . ' array of Firebase\\JWT\\Key objects.' . ' See https://github.com/firebase/php-jwt for more information.');
+        } elseif (is_array($allowedAlgs)) {
+            if (count($allowedAlgs) > 1) {
+                throw new \InvalidArgumentException('To have multiple allowed algorithms, You must provide an' . ' array of Firebase\JWT\Key objects.' . ' See https://github.com/firebase/php-jwt for more information.');
             }
-            $allowedAlg = \array_pop($allowedAlgs);
+            $allowedAlg = array_pop($allowedAlgs);
         } else {
             throw new \InvalidArgumentException('allowed algorithms must be a string or array.');
         }
-        if (\is_array($publicKey)) {
+        if (is_array($publicKey)) {
             // When publicKey is greater than 1, create keys with the single alg.
             $keys = [];
             foreach ($publicKey as $kid => $pubKey) {

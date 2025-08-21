@@ -15,7 +15,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_old_header_custom_menu_css' );
 /**
  * Old Header Menu Last Item - Dynamic CSS.
  *
- * @param string $dynamic_css 
+ * @param string $dynamic_css
  * @since 3.5.0
  */
 function astra_old_header_custom_menu_css( $dynamic_css ) {
@@ -23,7 +23,7 @@ function astra_old_header_custom_menu_css( $dynamic_css ) {
 	$menu_item = astra_get_option( 'header-main-rt-section' );
 	if ( false === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 		$static_css = '';
-		if ( 'widget' == $menu_item ) {
+		if ( 'widget' === $menu_item ) {
 
 			$static_css .= '
             .ast-header-widget-area {
@@ -71,7 +71,7 @@ function astra_old_header_custom_menu_css( $dynamic_css ) {
                 display: block;
             }';
 		}
-		if ( 'button' == $menu_item ) {
+		if ( 'button' === $menu_item ) {
 			$static_css .= '
             .ast-header-break-point .main-navigation ul .button-custom-menu-item .menu-link {
                 padding: 0 20px;
@@ -90,13 +90,13 @@ function astra_old_header_custom_menu_css( $dynamic_css ) {
                 transition: all 0.1s ease-in-out;
             }';
 
-		}  
+		}
 
 		$search_box_type = astra_get_option( 'header-main-rt-section-search-box-type' );
 		$show_icon       = 'full-screen' === $search_box_type || 'header-cover' === $search_box_type ? 'block' : 'none';
 		$static_css     .= "
         .ast-header-break-point.ast-header-custom-item-inside .main-header-bar .main-header-bar-navigation .ast-search-icon {
-            display: $show_icon;
+            display: {$show_icon};
         }
         .ast-header-break-point.ast-header-custom-item-inside .main-header-bar .ast-search-menu-icon .search-form {
             padding: 0;

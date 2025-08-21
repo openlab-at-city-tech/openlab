@@ -16,14 +16,12 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 	 * Class Astra_Builder_Base_Dynamic_CSS.
 	 */
 	final class Astra_Builder_Base_Dynamic_CSS {
-
 		/**
 		 * Member Variable
 		 *
 		 * @var mixed instance
 		 */
 		private static $instance = null;
-
 
 		/**
 		 *  Initiator
@@ -345,7 +343,7 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 			$css_output_mobile  = array();
 
 			// For Mobile/Tablet we need display grid property to display elements centered alignment.
-			$mobile_tablet_default = ( $mobile_tablet_default ) ? $mobile_tablet_default : $default_property;
+			$mobile_tablet_default = $mobile_tablet_default ? $mobile_tablet_default : $default_property;
 
 			$parent_visibility = astra_get_option(
 				$section_id . '-visibility-responsive',
@@ -356,9 +354,9 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 				)
 			);
 
-			$hide_desktop = ( $parent_visibility['desktop'] ) ? $default_property : 'none';
-			$hide_tablet  = ( $parent_visibility['tablet'] ) ? $mobile_tablet_default : 'none';
-			$hide_mobile  = ( $parent_visibility['mobile'] ) ? $mobile_tablet_default : 'none';
+			$hide_desktop = $parent_visibility['desktop'] ? $default_property : 'none';
+			$hide_tablet  = $parent_visibility['tablet'] ? $mobile_tablet_default : 'none';
+			$hide_mobile  = $parent_visibility['mobile'] ? $mobile_tablet_default : 'none';
 
 			$css_output_desktop = array(
 				$selector => array(

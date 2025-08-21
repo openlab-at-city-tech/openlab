@@ -3,7 +3,6 @@
 namespace SimpleCalendar\plugin_deps\GuzzleHttp;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\MessageInterface;
-/** @internal */
 final class BodySummarizer implements BodySummarizerInterface
 {
     /**
@@ -17,7 +16,7 @@ final class BodySummarizer implements BodySummarizerInterface
     /**
      * Returns a summarized message body.
      */
-    public function summarize(MessageInterface $message) : ?string
+    public function summarize(MessageInterface $message): ?string
     {
         return $this->truncateAt === null ? Psr7\Message::bodySummary($message) : Psr7\Message::bodySummary($message, $this->truncateAt);
     }

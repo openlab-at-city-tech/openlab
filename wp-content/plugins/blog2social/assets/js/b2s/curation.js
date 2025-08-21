@@ -1,12 +1,14 @@
 jQuery.noConflict();
 
-if (typeof wp.heartbeat !== "undefined") {
-    jQuery(document).on('heartbeat-send', function (e, data) {
-        data['b2s_heartbeat'] = 'b2s_listener';
-    });
-    wp.heartbeat.connectNow();
-}
 jQuery(window).on("load", function () {
+
+    if (typeof wp.heartbeat !== "undefined") {
+        jQuery(document).on('heartbeat-send', function (e, data) {
+            data['b2s_heartbeat'] = 'b2s_listener';
+        });
+        wp.heartbeat.connectNow();
+    }
+
     var url_string = window.location.href;
     var url_param = new URL(url_string);
     var type = url_param.searchParams.get("type");
@@ -138,7 +140,7 @@ jQuery(document).on('change', '#b2s-post-curation-ship-type', function () {
         if (jQuery('#b2s-post-curation-ship-date').attr('data-language') == 'de') {
             setTodayDate = padDate(today.getDate()) + '.' + (padDate(today.getMonth() + 1)) + '.' + today.getFullYear() + ' ' + padDate(today.getHours()) + ':' + padDate(today.getMinutes());
         }
-        
+
         //MaxSchedDate
         var maxDate = new Date(jQuery('#b2sMaxSchedDate').val());
         jQuery('#b2s-post-curation-ship-date').b2sdatepicker({'autoClose': true, 'toggleSelected': false, 'minutesStep': 15, 'minDate': new Date(), 'maxDate': maxDate, 'startDate': today, 'todayButton': new Date(), 'position': 'top left'});
@@ -304,7 +306,6 @@ jQuery(document).on('click', '#b2s-btn-curation-share', function () {
             return false;
         }
     }
-
     var noContent = false;
     if (jQuery('#b2s-curation-post-format').val() == '0') {
         if (jQuery('#b2s-post-curation-preview-title').val().length === 0) {
@@ -367,6 +368,15 @@ jQuery(document).on('click', '#b2s-btn-curation-share', function () {
                 if (data.currenOpenDailyLimit <= 0) {
                     jQuery('.b2s-current-licence-open-daily-post-quota-sidebar-info').show();
                 }
+
+                //Network Condition
+                jQuery('#current_network_open_sched_post_quota').html(data.currentNetwork45OpenSchedLimit);
+                jQuery('#current_network_open_daily_post_quota').val(data.currentNetwork45OpenDailyLimit);
+
+                if (data.currentNetwork45OpenDailyLimit <= 0) {
+                    jQuery('.b2s-current-network-open-daily-post-quota-sidebar-info').show();
+                }
+
             } else {
                 jQuery('.b2s-loading-area').hide();
                 jQuery('.b2s-curation-post-list-area').hide();
@@ -925,9 +935,16 @@ jQuery(document).on('click', '.b2s-post-item-details-url-image', function () {
 });
 
 jQuery(document).on('click', '.b2s-select-image-modal-open', function () {
+
+    //disable to pick no image or default image
+    if(!(jQuery(".b2s-image-choose-area").find(".b2s-image-item").length)){
+        jQuery(".b2s-image-change-apply").prop("disabled", true);
+    }  
+  
     jQuery('#b2s-network-select-image').modal('show');
     return false;
 });
+
 
 jQuery(document).on('click', '.b2s-network-info-modal-btn', function () {
     if (jQuery('#b2s-curation-post-format').val() == "2") {
@@ -955,6 +972,10 @@ jQuery(document).on('click', '.b2s-upload-image', function () {
             count = count + 1;
             jQuery('.b2s-choose-image-count').val(count);
             var attachment = wpMedia.state().get('selection').first().toJSON();
+            if(attachment.url!=undefined && attachment.url!=null && attachment.url!= ""){
+
+                jQuery('.b2s-image-change-apply').prop('disabled', false);
+            }
             var content = '<div class="b2s-image-item">' +
                     '<div class="b2s-image-item-thumb">' +
                     '<label for="b2s-image-count-' + count + '">' +
@@ -1060,8 +1081,8 @@ jQuery(document).on('click', '.b2s-re-share-btn', function () {
     } else {
         jQuery('.b2s-curation-image-area').show();
     }
-    
-    
+
+
 });
 
 function loadDraftShipData() {

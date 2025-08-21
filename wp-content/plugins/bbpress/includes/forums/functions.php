@@ -315,8 +315,8 @@ function bbp_new_forum_handler( $action = '' ) {
 
 		do_action( 'bbp_new_forum', array(
 			'forum_id'           => $forum_id,
-			'post_parent'        => $forum_parent_id,
-			'forum_author'       => $forum_author,
+			'post_parent'        => $forum_data['post_parent'],
+			'forum_author'       => $forum_data['post_author'],
 			'last_topic_id'      => 0,
 			'last_reply_id'      => 0,
 			'last_active_id'     => 0,
@@ -383,7 +383,7 @@ function bbp_edit_forum_handler( $action = '' ) {
 
 	// Define local variable(s)
 	$anonymous_data = array();
-	$forum = $forum_id = $forum_parent_id = 0;
+	$forum = $forum_id = $forum_author = $forum_parent_id = 0;
 	$forum_title = $forum_content = $forum_edit_reason = '';
 
 	/** Forum *****************************************************************/
@@ -421,6 +421,9 @@ function bbp_edit_forum_handler( $action = '' ) {
 		remove_filter( 'bbp_edit_forum_pre_content', 'bbp_encode_bad',  10 );
 		remove_filter( 'bbp_edit_forum_pre_content', 'bbp_filter_kses', 30 );
 	}
+
+	// Get forum author
+	$forum_author = bbp_get_forum_author_id( $forum_id );
 
 	/** Forum Parent ***********************************************************/
 
@@ -518,7 +521,8 @@ function bbp_edit_forum_handler( $action = '' ) {
 		'post_title'   => $forum_title,
 		'post_content' => $forum_content,
 		'post_status'  => $forum_status,
-		'post_parent'  => $forum_parent_id
+		'post_parent'  => $forum_parent_id,
+		'post_author'  => $forum_author
 	) );
 
 	// Insert forum
@@ -531,8 +535,8 @@ function bbp_edit_forum_handler( $action = '' ) {
 		// Update counts, etc...
 		do_action( 'bbp_edit_forum', array(
 			'forum_id'           => $forum_id,
-			'post_parent'        => $forum_parent_id,
-			'forum_author'       => $forum->post_author,
+			'post_parent'        => $forum_data['post_parent'],
+			'forum_author'       => $forum_data['post_author'],
 			'last_topic_id'      => 0,
 			'last_reply_id'      => 0,
 			'last_active_id'     => 0,
@@ -2321,10 +2325,16 @@ function bbp_pre_get_posts_normalize_forum_visibility( $posts_query = null ) {
 		return;
 	}
 
+	// Compare queried post-types to supported post-types
+	$bbp_post_types = array_diff( $post_types, bbp_get_post_types() );
+
+	// Bail if not a bbPress post type
+	if ( ! empty( $bbp_post_types ) ) {
+		return;
+	}
+
 	// Forums
 	if ( in_array( bbp_get_forum_post_type(), $post_types, true ) ) {
-
-		/** Default ***********************************************************/
 
 		// Add all supported forum visibilities
 		$posts_query->set( 'post_status', array_keys( bbp_get_forum_visibilities() ) );
@@ -2336,7 +2346,7 @@ function bbp_pre_get_posts_normalize_forum_visibility( $posts_query = null ) {
 		if ( ! empty( $forum_ids ) ) {
 
 			// Get any existing not-in queries
-			$not_in = $posts_query->get( 'post__not_in', array() );
+			$not_in = (array) $posts_query->get( 'post__not_in', array() );
 
 			// Add our not-in to existing
 			$not_in = array_unique( array_merge( $not_in, $forum_ids ) );
@@ -2346,24 +2356,20 @@ function bbp_pre_get_posts_normalize_forum_visibility( $posts_query = null ) {
 		}
 	}
 
-	// Any bbPress post type
-	if ( ! array_diff( $post_types, bbp_get_post_types() ) ) {
+	// Get forums to exclude
+	$forum_ids = bbp_exclude_forum_ids( 'meta_query' );
 
-		// Get forums to exclude
-		$forum_ids = bbp_exclude_forum_ids( 'meta_query' );
+	// Excluding some forums
+	if ( ! empty( $forum_ids ) ) {
 
-		// Excluding some forums
-		if ( ! empty( $forum_ids ) ) {
+		// Get any existing meta queries
+		$meta_query   = (array) $posts_query->get( 'meta_query', array() );
 
-			// Get any existing meta queries
-			$meta_query   = (array) $posts_query->get( 'meta_query', array() );
+		// Add our meta query to existing
+		$meta_query[] = $forum_ids;
 
-			// Add our meta query to existing
-			$meta_query[] = $forum_ids;
-
-			// Set the new meta_query val
-			$posts_query->set( 'meta_query', $meta_query );
-		}
+		// Set the new meta_query val
+		$posts_query->set( 'meta_query', $meta_query );
 	}
 }
 

@@ -249,19 +249,20 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 	 * @param $box_sub_category_list
 	 * @param $categories_icons
 	 */
-	private function display_box_sub_categories( $box_sub_category_list, $categories_icons ) {     	?>
+	private function display_box_sub_categories( $box_sub_category_list, $categories_icons ) {
 
-		<ul class="epkb-sub-category eckb-sub-category-ordering"> <?php
+		$sub_category_styles = is_rtl() ? 'padding-right:: article_list_margin' : 'padding-left:: article_list_margin'; ?>
+
+		<ul class="epkb-sub-category eckb-sub-category-ordering" <?php echo $this->get_inline_style( $sub_category_styles ); ?>> <?php
 
 			/** DISPLAY SUB-CATEGORIES */
 			foreach ( $box_sub_category_list as $box_sub_category_id => $box_sub_sub_category_list ) {
 
 				$category_count = EPKB_Categories_DB::get_category_count( $this->kb_config['id'], $box_sub_category_id );
 
-				$category_name = isset($this->articles_seq_data[$box_sub_category_id][0]) ?
+				$category_name = isset( $this->articles_seq_data[$box_sub_category_id][0] ) ?
 											$this->articles_seq_data[$box_sub_category_id][0] : _x( 'Category', 'taxonomy singular name' );
 
-				$default_icon_name = $this->kb_config['expand_articles_icon'];
 				$category_icon = EPKB_KB_Config_Category::get_category_icon( $box_sub_category_id, $categories_icons );
 				$style1_escaped = $this->get_inline_style( 'color:: section_category_icon_color' );
 				$style2_escaped = $this->get_inline_style( 'color:: section_category_font_color' ); 	?>
@@ -328,7 +329,6 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 		$sub_category_styles = is_rtl() ? 'padding-right:: article_list_margin' : 'padding-left:: article_list_margin';
 		if ( $level == 1 ) {
 			$data_kb_type = 'article';
-			$sub_category_styles = '';
 		} else if ( $level == 2 ) {
 			$data_kb_type = 'sub-article';
 		} else {

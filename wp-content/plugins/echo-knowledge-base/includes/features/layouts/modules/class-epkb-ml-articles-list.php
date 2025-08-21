@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Outputs the Articles List module for Modular Main Page.
+ *  Outputs the Featured Articles module for Modular Main Page.
  *
  * @copyright   Copyright (C) 2018, Echo Plugins
  */
@@ -29,7 +29,7 @@ class EPKB_ML_Articles_List {
 
 			<div class="epkb-ml-articles-list__row"> <?php
 
-				// Articles list Position 1
+				// Featured Articles Position 1
 				switch ( $this->kb_config['ml_articles_list_column_1'] ) {
 
 					case 'popular_articles':
@@ -47,7 +47,7 @@ class EPKB_ML_Articles_List {
 					default: break;
 				}
 
-				// Articles list Position 2
+				// Featured Articles Position 2
 				switch ( $this->kb_config['ml_articles_list_column_2'] ) {
 
 					case 'popular_articles':
@@ -65,7 +65,7 @@ class EPKB_ML_Articles_List {
 					default: break;
 				}
 
-				// Articles list Position 3
+				// Featured Articles Position 3
 				switch ( $this->kb_config['ml_articles_list_column_3'] ) {
 
 					case 'popular_articles':
@@ -89,14 +89,20 @@ class EPKB_ML_Articles_List {
 	}
 
 	/**
-	 * Display Popular Articles list
+	 * Display Popular Featured Articles
 	 */
 	private function display_popular_articles_list() {
 
-		$popular_articles = $this->execute_search( 'meta_value_num', 'epkb-article-views' );	?>
+		$popular_articles = $this->execute_search( 'meta_value_num', 'epkb-article-views' );
+		
+		// Get shadow class from configuration
+		$shadow_class = '';
+		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
+			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+		}	?>
 
 		<!-- Popular Articles -->
-		<section id="epkb-ml-popular-articles" class="epkb-ml-article-section">
+		<section id="epkb-ml-popular-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
 			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_popular_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
@@ -115,14 +121,20 @@ class EPKB_ML_Articles_List {
 	}
 
 	/**
-	 * Display Newest Articles list
+	 * Display Newest Featured Articles
 	 */
 	private function display_newest_articles_list() {
 
-		$newest_articles = $this->execute_search( 'date' ); ?>
+		$newest_articles = $this->execute_search( 'date' );
+		
+		// Get shadow class from configuration
+		$shadow_class = '';
+		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
+			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+		}	?>
 
 		<!-- Newest Articles -->
-		<section id="epkb-ml-newest-articles" class="epkb-ml-article-section">
+		<section id="epkb-ml-newest-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
 			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_newest_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
@@ -138,14 +150,20 @@ class EPKB_ML_Articles_List {
 	}
 
 	/**
-	 * Display Recent Articles list
+	 * Display Recent Featured Articles
 	 */
 	private function display_recent_articles_list() {
 
-		$recent_articles = $this->execute_search( 'modified' ); ?>
+		$recent_articles = $this->execute_search( 'modified' );
+		
+		// Get shadow class from configuration
+		$shadow_class = '';
+		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
+			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+		}	?>
 
 		<!-- Recent Articles -->
-		<section id="epkb-ml-recent-articles" class="epkb-ml-article-section">
+		<section id="epkb-ml-recent-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
 			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_recent_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
@@ -168,14 +186,14 @@ class EPKB_ML_Articles_List {
 	 */
 	public function execute_search( $order_by, $meta_key='', $order_type='DESC' ) {
 
-		$result = array();
 		$search_params = array(
 			'post_type'             => EPKB_KB_Handler::get_post_type( $this->kb_config['id'] ),
 			'ignore_sticky_posts'   => true,    // sticky posts will not show at the top
 			'posts_per_page'        => EPKB_Utilities::is_amag_on() ? 200 : $this->kb_config['ml_articles_list_nof_articles_displayed'],  // limit search results
 			'no_found_rows'         => true,    // query only posts_per_page rather than finding total nof posts for pagination etc.
 			'orderby'               => $order_by,
-			'order'                 => $order_type
+			'order'                 => $order_type,
+			'perm'                  => 'readable'  // only show posts that are readable by the current user
 		);
 
 		// add meta_key for custom sorting by meta value
@@ -189,13 +207,14 @@ class EPKB_ML_Articles_List {
 			$search_params['post_status'] = array( 'publish', 'private' );
 		}
 
+		$result = array();
 		$found_posts_obj = new WP_Query( $search_params );
 		if ( ! empty( $found_posts_obj->posts ) ) {
 			$result = $found_posts_obj->posts;
 			wp_reset_postdata();
 		}
 
-		// limit the number of articles by config settings
+		// for Access Manager, limit the number of articles here rather than in query above
 		if ( EPKB_Utilities::is_amag_on() && count( $result ) > $this->kb_config['ml_articles_list_nof_articles_displayed'] ) {
 			$result = array_splice( $result, 0, $this->kb_config['ml_articles_list_nof_articles_displayed'] );
 		}
@@ -204,7 +223,7 @@ class EPKB_ML_Articles_List {
 	}
 
 	/**
-	 * Returns inline styles for Articles List Module
+	 * Returns inline styles for Featured Articles Module
 	 *
 	 * @param $kb_config
 	 * @return string
@@ -231,6 +250,7 @@ class EPKB_ML_Articles_List {
 		$article_typography_setting_name = $setting_names['article_typography'];
 		$border_setting_prefix = $setting_names['border_prefix'];
 		$head_font_color_setting_name = $setting_names['head_font_color'];
+		$title_font_color_setting_name = $setting_names['ml_articles_list_title_color'];
 		$article_font_color_setting_name = $setting_names['article_font_color'];
 		$article_icon_color_setting_name = $setting_names['article_icon_color'];
 
@@ -281,6 +301,11 @@ class EPKB_ML_Articles_List {
 			$container_shadow .
 			$container_background .
 		'}';
+
+		$output .= '
+		#epkb-ml__module-articles-list .epkb-ml-articles-list__title span {
+			color: ' . $kb_config[$title_font_color_setting_name] . ' !important;
+		}';
 
 		// Headings Typography -----------------------------------------/
 		if ( in_array( $kb_config['kb_main_page_layout'], $legacy_layouts ) ) {

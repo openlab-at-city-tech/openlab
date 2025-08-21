@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\FreeBusyResponse;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $freebusy = $calendarService->freebusy;
  *  </code>
- * @internal
  */
 class Freebusy extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -40,9 +39,9 @@ class Freebusy extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function query(FreeBusyRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('query', [$params], FreeBusyResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Freebusy::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_Freebusy');
+class_alias(Freebusy::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_Freebusy');

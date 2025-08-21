@@ -35,6 +35,11 @@ table.name-directory td.post-title.page-title.column-title strong span {
     cursor: pointer;
 }
 
+.page-numbers.button.current {
+    color: #3c434a;
+    border-color: #3c434a;
+}
+
 
 
 

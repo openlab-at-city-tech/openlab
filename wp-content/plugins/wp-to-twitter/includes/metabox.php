@@ -374,6 +374,13 @@ function wpt_meta_box_support( $is_pro = 'free' ) {
 		<?php
 	} else {
 		?>
+		<h3>Premium Features</h3>
+		<ul>
+			<li><?php esc_html_e( 'Schedule updates for later', 'wp-to-twitter' ); ?></li>
+			<li><?php esc_html_e( 'Schedule re-posted updates', 'wp-to-twitter' ); ?></li>
+			<li><?php esc_html_e( 'Add an image with your update', 'wp-to-twitter' ); ?></li>
+			<li><?php esc_html_e( 'Post to multiple accounts', 'wp-to-twitter' ); ?></li>
+		</ul>
 		<p class="link-highlight">
 			<a href="https://xposterpro.com/awesome/xposter-pro/"><?php esc_html_e( 'Buy XPoster Pro', 'wp-to-twitter' ); ?></a>
 		</p>

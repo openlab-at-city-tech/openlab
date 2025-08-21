@@ -41,7 +41,7 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 					$layout = astra_get_option( 'single-' . $post_type . '-sidebar-layout' );
 				}
 
-				if ( 'default' == $layout || empty( $layout ) ) {
+				if ( 'default' === $layout || empty( $layout ) ) {
 
 					// Get the global sidebar value.
 					// NOTE: Here not used `true` in the below function call.
@@ -58,7 +58,7 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 				$search_sidebar_layout = astra_get_option( 'ast-search-sidebar-layout', 'default' );
 				$layout                = 'default' !== $search_sidebar_layout ? $search_sidebar_layout : $layout;
 
-				if ( 'default' == $layout || empty( $layout ) ) {
+				if ( 'default' === $layout || empty( $layout ) ) {
 
 					// Get the global sidebar value.
 					// NOTE: Here not used `true` in the below function call.
@@ -73,7 +73,7 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 					$layout = astra_get_option( 'archive-' . $post_type . '-sidebar-layout' );
 				}
 
-				if ( 'default' == $layout || empty( $layout ) ) {
+				if ( 'default' === $layout || empty( $layout ) ) {
 
 					// Get the global sidebar value.
 					// NOTE: Here not used `true` in the below function call.

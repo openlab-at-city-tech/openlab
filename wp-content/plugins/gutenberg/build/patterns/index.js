@@ -191,7 +191,7 @@ const convertSyncedPatternToStatic = clientId => ({
         delete metadata.bindings;
         // Use overridden values of the pattern block if they exist.
         if (existingOverrides?.[metadata.name]) {
-          // Iterate over each overriden attribute.
+          // Iterate over each overridden attribute.
           for (const [attributeName, value] of Object.entries(existingOverrides[metadata.name])) {
             // Skip if the attribute does not exist in the block type.
             if (!(0,external_wp_blocks_namespaceObject.getBlockType)(block.name)?.attributes[attributeName]) {
@@ -684,7 +684,7 @@ function getTermLabels(pattern, categories) {
   if (pattern.type !== PATTERN_TYPES.user) {
     return categories.core?.filter(category => pattern.categories?.includes(category.name)).map(category => category.label);
   }
-  return categories.user?.filter(category => pattern.wp_pattern_category.includes(category.id)).map(category => category.label);
+  return categories.user?.filter(category => pattern.wp_pattern_category?.includes(category.id)).map(category => category.label);
 }
 function useDuplicatePatternProps({
   pattern,
@@ -928,6 +928,15 @@ function PatternConvertButton({
     } = select(external_wp_blockEditor_namespaceObject.store);
     const rootId = rootClientId || (clientIds.length > 0 ? getBlockRootClientId(clientIds[0]) : undefined);
     const blocks = (_getBlocksByClientId = getBlocksByClientId(clientIds)) !== null && _getBlocksByClientId !== void 0 ? _getBlocksByClientId : [];
+
+    // Check if the block has reusable support defined.
+    const hasReusableBlockSupport = blockName => {
+      const blockType = (0,external_wp_blocks_namespaceObject.getBlockType)(blockName);
+      const hasParent = blockType && 'parent' in blockType;
+
+      // If the block has a parent, check with false as default, otherwise with true.
+      return (0,external_wp_blocks_namespaceObject.hasBlockSupport)(blockName, 'reusable', !hasParent);
+    };
     const isReusable = blocks.length === 1 && blocks[0] && (0,external_wp_blocks_namespaceObject.isReusableBlock)(blocks[0]) && !!select(external_wp_coreData_namespaceObject.store).getEntityRecord('postType', 'wp_block', blocks[0].attributes.ref);
     const _canConvert =
     // Hide when this is already a synced pattern.
@@ -939,7 +948,7 @@ function PatternConvertButton({
     // Hide on invalid blocks.
     block.isValid &&
     // Hide when block doesn't support being made into a pattern.
-    (0,external_wp_blocks_namespaceObject.hasBlockSupport)(block.name, 'reusable', true)) &&
+    hasReusableBlockSupport(block.name)) &&
     // Hide when current doesn't have permission to do that.
     // Blocks refers to the wp_block post type, this checks the ability to create a post of that type.
     !!canUser('create', {
@@ -1028,8 +1037,7 @@ function PatternsManageButton({
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getBlock,
-      canRemoveBlock,
-      getBlockCount
+      canRemoveBlock
     } = select(external_wp_blockEditor_namespaceObject.store);
     const {
       canUser
@@ -1042,7 +1050,6 @@ function PatternsManageButton({
         name: 'wp_block',
         id: reusableBlock.attributes.ref
       }),
-      innerBlockCount: getBlockCount(clientId),
       // The site editor and templates both check whether the user
       // has edit_theme_options capabilities. We can leverage that here
       // and omit the manage patterns link if the user can't access it.
@@ -1050,7 +1057,7 @@ function PatternsManageButton({
         kind: 'postType',
         name: 'wp_template'
       }) ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
-        path: '/patterns'
+        p: '/pattern'
       }) : (0,external_wp_url_namespaceObject.addQueryArgs)('edit.php', {
         post_type: 'wp_block'
       })
@@ -1485,7 +1492,7 @@ const CONTENT = 'content';
 function ResetOverridesControl(props) {
   const name = props.attributes.metadata?.name;
   const registry = (0,external_wp_data_namespaceObject.useRegistry)();
-  const isOverriden = (0,external_wp_data_namespaceObject.useSelect)(select => {
+  const isOverridden = (0,external_wp_data_namespaceObject.useSelect)(select => {
     if (!name) {
       return;
     }
@@ -1536,7 +1543,7 @@ function ResetOverridesControl(props) {
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarGroup, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToolbarButton, {
         onClick: onClick,
-        disabled: !isOverriden,
+        disabled: !isOverridden,
         children: (0,external_wp_i18n_namespaceObject.__)('Reset')
       })
     })
@@ -1561,7 +1568,6 @@ const copy = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exter
 /* harmony default export */ const library_copy = (copy);
 
 ;// ./packages/patterns/build-module/components/pattern-overrides-block-controls.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */

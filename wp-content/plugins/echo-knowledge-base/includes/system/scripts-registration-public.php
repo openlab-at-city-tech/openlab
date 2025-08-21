@@ -16,12 +16,33 @@ function epkb_load_public_resources() {
     // always register KB resources for possible add-ons usage or KB shortcodes outside KB pages - enqueue only if needed
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
+	// on public frontend the WordPress color-picker is not registered by default
+	if ( ! wp_script_is( 'wp-polyfill', 'registered' ) ) {
+		wp_register_script( 'wp-polyfill', includes_url( 'js/dist/vendor/wp-polyfill.min.js' ), array(), false, true );
+	}
+	if ( ! wp_script_is( 'wp-hooks', 'registered' ) ) {
+		wp_register_script( 'wp-hooks', includes_url( 'js/dist/hooks.min.js' ), array( 'wp-polyfill' ), false, true );
+	}
+	if ( ! wp_script_is( 'wp-i18n', 'registered' ) ) {
+		wp_register_script( 'wp-i18n', includes_url( 'js/dist/i18n.min.js' ), array( 'wp-hooks' ), false, true );
+	}
+	if ( ! wp_script_is( 'iris', 'registered' ) ) {
+		wp_register_script( 'iris', admin_url( 'js/iris.min.js' ), array( 'jquery', 'jquery-ui-widget', 'jquery-ui-draggable', 'jquery-ui-slider' ), false, true );
+	}
+	if ( ! wp_style_is( 'wp-color-picker', 'registered' ) ) {
+		wp_register_style( 'wp-color-picker', admin_url( 'css/color-picker.css' ), array( 'jquery', 'iris', 'wp-i18n', 'jquery-ui-widget', 'jquery-ui-draggable', 'jquery-ui-slider' ), false, true );
+	}
+	if ( ! wp_script_is( 'wp-color-picker', 'registered' ) ) {
+		wp_register_script( 'wp-color-picker', admin_url( 'js/color-picker.min.js' ), array( 'jquery', 'iris', 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-ui-widget', 'wp-i18n' ), false, true );
+	}
+
 	wp_register_style( 'epkb-icon-fonts', Echo_Knowledge_Base::$plugin_url . 'css/epkb-icon-fonts' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
 	wp_register_style( 'epkb-shortcodes', Echo_Knowledge_Base::$plugin_url . 'css/shortcodes' . $suffix . '.css', array( 'epkb-icon-fonts' ), Echo_Knowledge_Base::$version );
-	wp_register_style( 'epkb-frontend-visual-helper', Echo_Knowledge_Base::$plugin_url . 'css/frontend-visual-helper' . $suffix . '.css', array( 'epkb-icon-fonts' ), Echo_Knowledge_Base::$version );
+	wp_register_style( 'epkb-frontend-editor', Echo_Knowledge_Base::$plugin_url . 'css/frontend-editor' . $suffix . '.css', array('wp-color-picker'), Echo_Knowledge_Base::$version );
 	wp_register_script( 'epkb-public-scripts', Echo_Knowledge_Base::$plugin_url . 'js/public-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
 	wp_register_script( 'epkb-faq-shortcode-scripts', Echo_Knowledge_Base::$plugin_url . 'js/faq-shortcode-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
-	wp_register_script( 'epkb-frontend-visual-helper', Echo_Knowledge_Base::$plugin_url . 'js/frontend-visual-helper' . $suffix . '.js', array('jquery', 'epkb-public-scripts'), Echo_Knowledge_Base::$version );
+	wp_register_script( 'epkb-admin-form-controls-scripts', Echo_Knowledge_Base::$plugin_url . 'js/admin-form-controls' . $suffix . '.js', array('jquery', 'jquery-ui-core','jquery-ui-dialog','jquery-effects-core','jquery-effects-bounce', 'jquery-ui-sortable'), Echo_Knowledge_Base::$version );
+	wp_register_script( 'epkb-frontend-editor', Echo_Knowledge_Base::$plugin_url . 'js/frontend-editor' . $suffix . '.js', array('jquery', 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-ui-widget', 'wp-i18n', 'iris', 'wp-color-picker'), Echo_Knowledge_Base::$version, true );
 
 	$epkb_vars = array(
 		'ajaxurl'                       => admin_url( 'admin-ajax.php', 'relative' ),
@@ -35,7 +56,13 @@ function epkb_load_public_resources() {
 		'nonce'                         => wp_create_nonce( "_wpnonce_epkb_ajax_action" ),
 		'toc_editor_msg'                => esc_html__( 'The TOC is not displayed because there are no matching headers in the article.', 'echo-knowledge-base' ),
 		'toc_aria_label'                => esc_html__( 'Article outline', 'echo-knowledge-base' ),
-		'creating_demo_data'            => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' )
+		'creating_demo_data'            => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' ),
+		'fe_report_error_title'			=> esc_html__( 'Frontend Editor encountered an error.', 'echo-knowledge-base' ),
+		'fe_report_error_desc'   		=> esc_html__( 'We have detected an error. Please report the issue so that we can help you resolve it.', 'echo-knowledge-base' ),
+		'fe_sending_error_report' 		=> esc_html__( 'Sending, please wait', 'echo-knowledge-base' ),
+		'fe_send_report_error' 	    	=> esc_html__( 'Could not submit the error.', 'echo-knowledge-base' ) . EPKB_Utilities::contact_us_for_support(),
+		'fe_update_preview_error'		=> esc_html( 'Frontend Editor AJAX error: failed to update setting preview' ),	// do not translate reporting error
+		'fe_save_settings_error'		=> esc_html( 'Frontend Editor AJAX error: failed to save setting' ),	// do not translate reporting error
 	);
 
 	// add article views counter method only for KB article pages
@@ -62,17 +89,22 @@ function epkb_load_public_resources() {
 	// CASE: KB Category Archive page
 	$current_css_file_slug = '';
 	if ( is_archive() ) {
+		$page_type = 'archive';
 		$current_css_file_slug = 'cp-frontend-layout';
 
 		if ( EPKB_KB_Handler::is_kb_tag_taxonomy( $GLOBALS['taxonomy'] ) ) {
 			$current_css_file_slug = 'tp-frontend-layout';
         }
 
+		add_action( 'admin_bar_menu', 'epkb_add_admin_bar_fe_page_button', 1000 );
+
 	// CASE: KB Main Page
 	} else if ( EPKB_Utilities::is_kb_main_page() ) {
-
 		$search_query_param = '';
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $eckb_kb_id );
+
+		// let FE apply layout changes for preview without saving the changes
+		$kb_config = EPKB_Frontend_Editor::fe_preview_config( $kb_config );
 
 		// Search Page
 		if ( EPKB_Utilities::is_advanced_search_enabled() ) {
@@ -104,10 +136,13 @@ function epkb_load_public_resources() {
 			}
 		}
 
+		add_action( 'admin_bar_menu', 'epkb_add_admin_bar_fe_main_page_button', 1000 );
+
 	// CASE: KB Article
 	} else if ( ! empty( $post ) && EPKB_KB_Handler::is_kb_post_type( $post->post_type ) ) {
 		$current_css_file_slug = 'ap-frontend-layout';
 		$has_vital_css_flag = true;
+		add_action( 'admin_bar_menu', 'epkb_add_admin_bar_fe_page_button', 1000 );
 	}
 
 	if ( ! empty( $current_css_file_slug ) ) {
@@ -122,9 +157,6 @@ function epkb_load_public_resources() {
 		}
 	}
 
-	// if user has enough capability, then add Frontend Editor button to the admin panel but only for KB Main Page, KB Article Pages and Category Archive page that has at least one article
-	add_action( 'admin_bar_menu', 'epkb_add_admin_bar_button', 1000 );
-
 	epkb_enqueue_public_resources();
 }
 add_action( 'wp_enqueue_scripts', 'epkb_load_public_resources', 500 );
@@ -137,7 +169,7 @@ add_action( 'wp_enqueue_scripts', 'epkb_load_public_resources', 500 );
 function epkb_enqueue_public_resources( $kb_id=0 ) {
 
 	// KB blocks handle their styles and scripts themselves
-	if ( EPKB_Block_Utilities::current_post_has_kb_layout_blocks() ) {
+	if ( EPKB_Block_Utilities::current_post_has_kb_blocks() ) {
 		return;
 	}
 
@@ -149,6 +181,9 @@ function epkb_enqueue_public_resources( $kb_id=0 ) {
 
 	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
 	$kb_config = apply_filters( 'eckb_kb_config', $kb_config );
+
+	// handle FE page reload
+	$kb_config = EPKB_Frontend_Editor::fe_preview_config( $kb_config );
 
 	$css_slugs = [
 		'cp-frontend-layout',
@@ -344,11 +379,7 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 	// Article Page CSS and Sidebar Layout Main Page CSS
 	if ( in_array( $css_file_slug, ['ap-frontend-layout', 'mp-frontend-sidebar-layout'] ) ) {
 		$output .= EPKB_Articles_Setup::generate_article_structure_css_v2( $kb_config );
-
-		// Elegant Layout outputs its own Sidebar and CSS - Elegant Layout version 2.15.3 and earlier does not have method get_inline_styles() and outputs the inline CSS directly itself
-		if ( EPKB_Utilities::is_elegant_layouts_enabled() && class_exists( 'ELAY_Layout_Sidebar_v2' ) && method_exists( 'ELAY_Layout_Sidebar_v2', 'get_inline_styles' ) ) {
-			$output .= ELAY_Layout_Sidebar_v2::get_inline_styles( $output, $kb_config );
-		}
+		$output .= EPKB_Core_Utilities::get_elay_styles( $output, $kb_config );
 
 		// KB Core Article Page Sidebar CSS
 		if ( ! in_array( $css_file_slug, ['mp-frontend-sidebar-layout'] ) ) {
@@ -496,36 +527,38 @@ function epkb_enqueue_font() {
 add_action( 'epkb_enqueue_font_scripts', 'epkb_enqueue_font' ); // use this action in any place to add scripts $kb_id as a parameter
 
 /**
- * Load TOC classes to counter theme issues
+ * Load frontend classes to counter theme issues
+ * Add CSS class to body tag for Theme adjustments - some Themes may wrap KB template in parent containers with extra margin, padding, or limited width
+ *
  * @param $classes
  * @return array
  */
 function epkb_front_end_body_classes( $classes ) {
 
-	if ( EPKB_Utilities::is_kb_main_page() ) {
-		return $classes;
-	}
-
 	$kb_id = EPKB_Utilities::get_eckb_kb_id( '' );
 
-	// load only on article pages
+	// load only on KB pages
 	if ( empty( $kb_id ) )  {
 		return $classes;
 	}
 
+	// adjust for KB Pages
+	$is_kb_main_page = EPKB_Utilities::is_kb_main_page();
 	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+	if ( $kb_config['templates_for_kb'] == 'kb_templates' ) {
+		$classes[] = 'eckb-kb-template-active';
+	}
 
-	// load only if TOC is active
-	if ( 'on' != $kb_config['article_toc_enable'] ) {
+	if ( $is_kb_main_page ) {
 		return $classes;
 	}
 
-	// get current post
 	$post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : '';
 	if ( empty( $post ) || ! $post instanceof WP_Post ) {
 		return $classes;
 	}
 
+	// adjust TOC for Article and Category Archive Pages
 	$classes[] = 'eckb-front-end-body';
 
 	return $classes;
@@ -601,3 +634,47 @@ function epkb_preload_fonts() {
 	<link rel="preload" as="font" href="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'css/fonts/font-awesome/fontawesome-webfont.woff2?v=' . $font_awesome_version ); ?>" type="font/woff2" crossorigin="anonymous">  <?php
 }
 add_action( 'wp_head', 'epkb_preload_fonts', 1 );
+
+
+/**************  Frontend Editor  *****************/
+
+/**
+ * Add Frontend Editor option in the WordPress admin bar for KB Main Page.
+ * Fired by `admin_bar_menu` filter.
+ * @param WP_Admin_Bar $wp_admin_bar
+ */
+function epkb_add_admin_bar_fe_main_page_button( WP_Admin_Bar $wp_admin_bar ) {
+
+	if ( !EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
+		return;
+	}
+
+	$found_post = EPKB_Core_Utilities::get_current_post();
+	if ( ! $found_post || empty( $found_post->post_content ) ) {
+		return;
+	}
+
+	// do not load FE Editor link if page doesn't have KB shortcode and doesn't have KB blocks
+	if ( ! EPKB_KB_Handler::get_shortcode_custom( $found_post->post_content ) && ! EPKB_Block_Utilities::current_post_has_kb_blocks() ) {
+		return;
+	}
+
+	// show the Frontend Editor link on KB Main Page, KB Article Pages, Category Archive Pages
+	epkb_add_admin_bar_fe_page_button( $wp_admin_bar );
+}
+
+function epkb_add_admin_bar_fe_page_button( WP_Admin_Bar $wp_admin_bar ) {
+
+	if ( !EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
+		return;
+	}
+	
+	// show the Frontend Editor link on KB Main Page, KB Article Pages, Category Archive Pages
+	$url = add_query_arg( ['action' => 'epkb_load_editor'] );
+	$label = '<span class="ab-label">' . esc_html__( 'Open KB Frontend Editor', 'echo-knowledge-base' ) . '</span>';
+	$wp_admin_bar->add_menu( array(
+	    'id'    => 'epkb-edit-mode-button',
+	    'title' => $label,
+	    'href'  => $url
+	) );
+}

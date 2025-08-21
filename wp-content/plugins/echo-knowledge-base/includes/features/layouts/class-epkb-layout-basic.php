@@ -21,7 +21,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 
 		<div id="epkb-ml-basic-layout" role="main" aria-labelledby="epkb-ml-basic-layout" class="epkb-layout-container epkb-css-full-reset epkb-basic-template">
 			<div id="epkb-content-container">
-				<div class="epkb-section-container">	<?php
+				<div class="epkb-section-container">	<?php // TODO: add setting for effect ( example:epkb-categories-articles--effect-2 )
 					$this->display_main_page_content(); ?>
 				</div>
 			</div>
@@ -75,7 +75,8 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 
 		$class_section_head_escaped = $this->get_css_class( 'section-head' . ( $this->kb_config[ 'section_divider' ] == 'on' ? ', section_divider' : '' ) );
 		$style_section_head_escaped = $this->get_inline_style(
-					'border-bottom-width:: section_divider_thickness,
+			  		'--section-head-bg:: section_head_background_color,
+					border-bottom-width:: section_divider_thickness,
 					background-color:: section_head_background_color, ' .
 					'border-top-left-radius:: section_border_radius,
 					border-top-right-radius:: section_border_radius,
@@ -203,7 +204,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 					<!-- Section Body -->
 					<div class="epkb-section-body" <?php echo $this->get_inline_style( $style5 ); ?> >						<?php 
 						/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-						if (  $this->kb_config['show_articles_before_categories'] != 'off' ) {
+						if ( $this->kb_config['show_articles_before_categories'] != 'off' ) {
 							$this->display_articles_list( 1, $box_category_id, ! empty( $box_sub_categories ) );
 						}
 						
@@ -212,7 +213,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 						}
 						
 						/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-						if (  $this->kb_config['show_articles_before_categories'] == 'off' ) {
+						if ( $this->kb_config['show_articles_before_categories'] == 'off' ) {
 							$this->display_articles_list( 1, $box_category_id, ! empty( $box_sub_categories ) );
 						}                      ?>
 
@@ -259,7 +260,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 					</div>    <?php
 					
 					/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-					if (  $this->kb_config['show_articles_before_categories'] != 'off' ) {
+					if ( $this->kb_config['show_articles_before_categories'] != 'off' ) {
 						$this->display_articles_list( 2, $box_sub_category_id, ! empty( $box_sub_sub_category_list ) );
 					}
 						
@@ -269,7 +270,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 					}
 					
 					/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-					if (  $this->kb_config['show_articles_before_categories'] == 'off' ) {
+					if ( $this->kb_config['show_articles_before_categories'] == 'off' ) {
 						$this->display_articles_list( 2, $box_sub_category_id, ! empty( $box_sub_sub_category_list ) );
 					}					?>
 				</li>  <?php
@@ -307,7 +308,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 					</div>    <?php
 
 					/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-					if (  $this->kb_config['show_articles_before_categories'] != 'off' ) {
+					if ( $this->kb_config['show_articles_before_categories'] != 'off' ) {
 						$this->display_articles_list( $level_num, $box_sub_sub_category_id, ! empty($box_sub_sub_sub_category_list), $level_name );
 					}
 
@@ -318,7 +319,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 					}
 					
 					/** DISPLAY TOP-CATEGORY ARTICLES LIST */
-					if (  $this->kb_config['show_articles_before_categories'] == 'off' ) {
+					if ( $this->kb_config['show_articles_before_categories'] == 'off' ) {
 						$this->display_articles_list( $level_num, $box_sub_sub_category_id, ! empty($box_sub_sub_sub_category_list), $level_name );
 					}    ?>
 				</li>  <?php
@@ -418,7 +419,7 @@ class EPKB_Layout_Basic extends EPKB_Layout {
 			$output .= '
 				#epkb-content-container {
 					padding: 20px!important;
-					background-color: ' . sanitize_hex_color( $kb_config['background_color'] ) . '!important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['background_color'] ) . '!important;
 				}';
 		}
 

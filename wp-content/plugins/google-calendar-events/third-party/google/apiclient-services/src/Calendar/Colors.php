@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class Colors extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $calendarType = ColorDefinition::class;
@@ -90,4 +89,4 @@ class Colors extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Colors::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Colors');
+class_alias(Colors::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Colors');

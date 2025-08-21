@@ -26,11 +26,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 		return Handler::get_name();
 	}
 
-
 	public function get_title() {
 		return Handler::get_title();
 	}
-
 
 	public function get_icon() {
 		return Handler::get_icon();
@@ -47,9 +45,14 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/funfact/';
     }
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 
 	protected function register_controls() {
 

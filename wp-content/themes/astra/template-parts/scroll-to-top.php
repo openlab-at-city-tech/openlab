@@ -6,6 +6,11 @@
  * @since 4.0.0
  */
 
+// Bail early if it is not astra customizer.
+if ( is_customize_preview() && ! Astra_Customizer::is_astra_customizer() ) {
+	return;
+}
+
 $astra_addon_scroll_top_alignment = astra_get_option( 'scroll-to-top-icon-position' );
 $astra_addon_scroll_top_devices   = astra_get_option( 'scroll-to-top-on-devices' );
 ?>

@@ -37,7 +37,6 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
  *
- * @internal
  */
 class Verify
 {
@@ -95,14 +94,14 @@ class Verify
             try {
                 $args = [$idToken];
                 $publicKey = $this->getPublicKey($cert);
-                if (\class_exists(Key::class)) {
+                if (class_exists(Key::class)) {
                     $args[] = new Key($publicKey, 'RS256');
                 } else {
                     $args[] = $publicKey;
                     $args[] = ['RS256'];
                 }
                 $payload = \call_user_func_array([$this->jwt, 'decode'], $args);
-                if (\property_exists($payload, 'aud')) {
+                if (property_exists($payload, 'aud')) {
                     if ($audience && $payload->aud != $audience) {
                         return \false;
                     }
@@ -110,7 +109,7 @@ class Verify
                 // support HTTP and HTTPS issuers
                 // @see https://developers.google.com/identity/sign-in/web/backend-auth
                 $issuers = [self::OAUTH2_ISSUER, self::OAUTH2_ISSUER_HTTPS];
-                if (!isset($payload->iss) || !\in_array($payload->iss, $issuers)) {
+                if (!isset($payload->iss) || !in_array($payload->iss, $issuers)) {
                     return \false;
                 }
                 return (array) $payload;
@@ -141,18 +140,18 @@ class Verify
     private function retrieveCertsFromLocation($url)
     {
         // If we're retrieving a local file, just grab it.
-        if (0 !== \strpos($url, 'http')) {
-            if (!($file = \file_get_contents($url))) {
+        if (0 !== strpos($url, 'http')) {
+            if (!$file = file_get_contents($url)) {
                 throw new GoogleException("Failed to retrieve verification certificates: '" . $url . "'.");
             }
-            return \json_decode($file, \true);
+            return json_decode($file, \true);
         }
         // @phpstan-ignore-next-line
         $response = $this->http->get($url);
         if ($response->getStatusCode() == 200) {
-            return \json_decode((string) $response->getBody(), \true);
+            return json_decode((string) $response->getBody(), \true);
         }
-        throw new GoogleException(\sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
+        throw new GoogleException(sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
     }
     // Gets federated sign-on certificates to use for verifying identity tokens.
     // Returns certs as array structure, where keys are key ids, and values
@@ -180,10 +179,10 @@ class Verify
     private function getJwtService()
     {
         $jwtClass = 'JWT';
-        if (\class_exists('SimpleCalendar\\plugin_deps\\Firebase\\JWT\\JWT')) {
-            $jwtClass = 'SimpleCalendar\\plugin_deps\\Firebase\\JWT\\JWT';
+        if (class_exists('SimpleCalendar\plugin_deps\Firebase\JWT\JWT')) {
+            $jwtClass = 'SimpleCalendar\plugin_deps\Firebase\JWT\JWT';
         }
-        if (\property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
+        if (property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
             $jwtClass::$leeway = 1;
@@ -197,7 +196,7 @@ class Verify
         $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
         $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\RSA\\PublicKey')) {
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA\PublicKey')) {
             /** @var PublicKey $loader */
             $loader = PublicKeyLoader::load($component);
             return $loader->toString('PKCS8');
@@ -209,33 +208,33 @@ class Verify
     }
     private function getRsaClass()
     {
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\RSA')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\RSA';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib3\Crypt\RSA';
         }
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA';
         }
         return 'Crypt_RSA';
     }
     private function getBigIntClass()
     {
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Math\\BigInteger')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib3\\Math\\BigInteger';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Math\BigInteger')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib3\Math\BigInteger';
         }
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib\\Math\\BigInteger')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib\\Math\\BigInteger';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Math\BigInteger')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib\Math\BigInteger';
         }
         return 'Math_BigInteger';
     }
     private function getOpenSslConstant()
     {
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\AES')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib3\Crypt\AES')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib3\Crypt\AES::ENGINE_OPENSSL';
         }
-        if (\class_exists('SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA')) {
-            return 'SimpleCalendar\\plugin_deps\\phpseclib\\Crypt\\RSA::MODE_OPENSSL';
+        if (class_exists('SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA')) {
+            return 'SimpleCalendar\plugin_deps\phpseclib\Crypt\RSA::MODE_OPENSSL';
         }
-        if (\class_exists('SimpleCalendar\\plugin_deps\\Crypt_RSA')) {
+        if (class_exists('SimpleCalendar\plugin_deps\Crypt_RSA')) {
             return 'CRYPT_RSA_MODE_OPENSSL';
         }
         throw new Exception('Cannot find RSA class');
@@ -250,12 +249,12 @@ class Verify
      */
     private function setPhpsecConstants()
     {
-        if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
-            if (!\defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-                \define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
+        if (filter_var(getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
+            if (!defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
+                define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
-            if (!\defined('CRYPT_RSA_MODE')) {
-                \define('CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
+            if (!defined('CRYPT_RSA_MODE')) {
+                define('CRYPT_RSA_MODE', constant($this->getOpenSslConstant()));
             }
         }
     }

@@ -35,7 +35,6 @@ require_once( $stylesheet_path . '/lib/post-types.php' );
 require_once( $stylesheet_path . '/lib/menus.php' );
 require_once( $stylesheet_path . '/lib/content-processing.php' );
 require_once( $stylesheet_path . '/lib/nav.php' );
-require_once( $stylesheet_path . '/lib/breadcrumbs.php' );
 require_once( $stylesheet_path . '/lib/shortcodes.php' );
 require_once( $stylesheet_path . '/lib/media-funcs.php' );
 require_once( $stylesheet_path . '/lib/group-funcs.php' );
@@ -270,6 +269,7 @@ function enqueue_less_styles($tag, $handle) {
 
 add_filter('style_loader_tag', 'enqueue_less_styles', 5, 2);
 
+
 /**
  * Get content with formatting in place
  * @param type $more_link_text
@@ -424,9 +424,10 @@ function openlab_get_xprofile_visibility_levels() {
 /**
  * Generates the markup for xprofile field visibility selector.
  *
- * @param int $field_id The ID of the field.
+ * @param int  $field_id       The ID of the field.
+ * @param bool $include_labels Whether to include labels. Defaults to true.
  */
-function openlab_xprofile_field_visibility_selector( $field_id = null ) {
+function openlab_xprofile_field_visibility_selector( $field_id = null, $include_labels = true) {
 	if ( ! $field_id ) {
 		$field_id = bp_get_the_profile_field_id();
 	}
@@ -435,9 +436,11 @@ function openlab_xprofile_field_visibility_selector( $field_id = null ) {
 
 	$selected_value = bp_is_register_page() ? '' : xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
 
-	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility', $field_id ) ) : ?>
+	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
 		<div class="field-visibility-settings" id="field-visibility-settings-<?php echo esc_attr( $field_id ); ?>">
-			<label for="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">Who can see this?</label>
+			<?php if ( $include_labels ) : ?>
+				<label for="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">Who can see this?</label>
+			<?php endif; ?>
 
 			<select name="<?php echo esc_attr( 'field_' . $field_id . '_visibility' ); ?>" id="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">
 				<?php if ( bp_is_register_page() ) : ?>
@@ -471,4 +474,45 @@ function openlab_render_collapsible_definition( $type, $label, $content ) {
 		</div>
 	</div>
 	<?php
+}
+
+/**
+ * Never show admin bar on front end of main site.
+ */
+function openlab_remove_admin_bar( $show ) {
+	if ( ! is_admin() ) {
+		return false;
+	}
+
+	return $show;
+}
+add_filter( 'show_admin_bar', 'openlab_remove_admin_bar' );
+
+/**
+ * Is this the Resources page?
+ */
+function openlab_is_resources_directory() {
+	return is_page( 'resources' );
+}
+
+/**
+ * Whether to show a noindex meta tag for the current page.
+ *
+ * @return bool
+ */
+function openlab_show_noindex_meta_tag() {
+	$show = false;
+
+	if ( bp_displayed_user_id() ) {
+		$displayed_user_type = openlab_get_user_member_type( bp_displayed_user_id() );
+		if ( ! in_array( $displayed_user_type, [ 'faculty', 'staff' ], true ) ) {
+			$show = true;
+		}
+	}
+
+	if ( bp_is_group() ) {
+		$show = (bool) groups_get_groupmeta( bp_get_current_group_id(), 'show_noindex_meta_tag' );
+	}
+
+	return $show;
 }

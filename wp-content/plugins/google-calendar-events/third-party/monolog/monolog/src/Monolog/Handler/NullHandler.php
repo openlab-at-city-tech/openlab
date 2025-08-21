@@ -23,7 +23,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
- * @internal
  */
 class NullHandler extends Handler
 {
@@ -43,14 +42,14 @@ class NullHandler extends Handler
     /**
      * {@inheritDoc}
      */
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return $record['level'] >= $this->level;
     }
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         return $record['level'] >= $this->level;
     }

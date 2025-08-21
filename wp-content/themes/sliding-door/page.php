@@ -33,7 +33,13 @@ get_header(); ?>
 					</div><!-- .entry-content -->
 				</div><!-- #post-## -->
 
-				<?php comments_template( '', true ); ?>
+
+	<?php 
+		// Display comments if allowed or if there are comments
+		if (comments_open() || get_comments_number()) {
+			comments_template(); 
+		}
+	?>
 
 <?php endwhile; ?>
 

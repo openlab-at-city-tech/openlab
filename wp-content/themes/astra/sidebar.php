@@ -22,7 +22,7 @@ echo '<div ';
 				'id'    => 'secondary',
 				'class' => join( ' ', astra_get_secondary_class() ),
 			)
-		) 
+		)
 	);
 	echo '>';
 	?>
@@ -32,9 +32,9 @@ echo '<div ';
 
 		<?php
 
-		if ( is_active_sidebar( $astra_sidebar ) ) :
+		if ( is_active_sidebar( $astra_sidebar ) ) {
 				dynamic_sidebar( $astra_sidebar );
-		endif;
+		}
 
 		astra_sidebars_after();
 		?>

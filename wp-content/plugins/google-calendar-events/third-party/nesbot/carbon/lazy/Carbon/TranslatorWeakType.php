@@ -10,8 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon;
 
-if (!\class_exists(LazyTranslator::class, \false)) {
-    /** @internal */
+if (!class_exists(LazyTranslator::class, \false)) {
     class LazyTranslator extends AbstractTranslator
     {
         /**

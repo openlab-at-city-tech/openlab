@@ -1,4 +1,5 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
 
 /**
  *
@@ -25,7 +26,7 @@ if ( ! class_exists('ZotpressRequest') )
         // REVIEW: This was causing problems for some people ...
         // Could it be how the database is set up?
         // e.g., https://stackoverflow.com/questions/36028844/warning-gzdecode-data-error-in-php
-        function zp_gzdecode( $data )
+        function zotpress_gzdecode( $data )
         {
             if ( ! is_null( $data ) )
                 // Thanks to Waynn Lue (StackOverflow)
@@ -118,7 +119,8 @@ if ( ! class_exists('ZotpressRequest') )
         function check_time( $last_time )
         {
             // Set time zone based on WP installation
-            date_default_timezone_set( wp_timezone_string() );
+            // 7.4: Removing to rely on WP
+            // date_default_timezone_set( wp_timezone_string() );
 
             // Set up the dates to compare
             $last_time = date_create($last_time);
@@ -158,8 +160,8 @@ if ( ! class_exists('ZotpressRequest') )
                     "
                     SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                     FROM ".$wpdb->prefix."zotpress_cache
-                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
-                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = %s
+                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = %s
                     ",
                     array( md5($url), $this->api_user_id )
                 ), OBJECT
@@ -176,14 +178,15 @@ if ( ! class_exists('ZotpressRequest') )
                     $updateneeded = true;
 
                 // Use the cache:
-                $json = $this->zp_gzdecode( $zp_results[0]->json );
-                $tags = $this->zp_gzdecode( $zp_results[0]->tags );
+                $json = $this->zotpress_gzdecode( $zp_results[0]->json );
+                $tags = $this->zotpress_gzdecode( $zp_results[0]->tags );
                 $headers = $zp_results[0]->headers;
             }
 
             else // No cache
             {
-                $json = json_encode( array('status' => 'No Cache') );
+                // $json = json_encode( array('status' => 'No Cache') );
+                $json = wp_json_encode( array('status' => 'No Cache') );
                 $tags = false;
                 $headers = false;
             }
@@ -220,8 +223,8 @@ if ( ! class_exists('ZotpressRequest') )
                         "
                         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                         FROM ".$wpdb->prefix."zotpress_cache
-                        WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
-                        AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                        WHERE ".$wpdb->prefix."zotpress_cache.request_id = %s
+                        AND ".$wpdb->prefix."zotpress_cache.api_user_id = %s
                         ",
                         array( md5($url), $this->api_user_id )
                     ), OBJECT
@@ -230,8 +233,8 @@ if ( ! class_exists('ZotpressRequest') )
                 // Cache exists
                 if ( count($zp_results) > 0 )
                 {
-                    $json = $this->zp_gzdecode($zp_results[0]->json);
-                    $tags = $this->zp_gzdecode($zp_results[0]->tags);
+                    $json = $this->zotpress_gzdecode($zp_results[0]->json);
+                    $tags = $this->zotpress_gzdecode($zp_results[0]->tags);
                     $headers = $zp_results[0]->headers;
                 }
 
@@ -279,8 +282,8 @@ if ( ! class_exists('ZotpressRequest') )
                     "
                     SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
                     FROM ".$wpdb->prefix."zotpress_cache
-                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = '%s'
-                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = '%s'
+                    WHERE ".$wpdb->prefix."zotpress_cache.request_id = %s
+                    AND ".$wpdb->prefix."zotpress_cache.api_user_id = %s
                     ",
                     array( md5($url), $this->api_user_id )
                 ), OBJECT
@@ -312,7 +315,8 @@ if ( ! class_exists('ZotpressRequest') )
                         || $response["body"] == "Tag not found" )
                     $this->request_error = $response["body"];
                 else
-                    $headers = json_encode( wp_remote_retrieve_headers( $response )->getAll() );
+                    // $headers = json_encode( wp_remote_retrieve_headers( $response )->getAll() );
+                    $headers = wp_json_encode( wp_remote_retrieve_headers( $response )->getAll() );
             }
 
             if ( ! $this->request_error )
@@ -428,7 +432,10 @@ if ( ! class_exists('ZotpressRequest') )
                                 // due to possibily large quantities and the
                                 // limits of blob; so we always save now
                                 // REVIEW: Do we need the account, too?
-                                $tags[$item->key] = "";
+                                
+                                // 7.4 Update: Might not exist
+                                if ( isset($item->key) )
+                                    $tags[$item->key] = "";
 
                                 if ( property_exists($data[$id], 'data')
                                         && property_exists($data[$id]->data, 'tags') )
@@ -438,8 +445,10 @@ if ( ! class_exists('ZotpressRequest') )
                                 }
                             }
 
-                            $json = json_encode($data);
-                            $tags = json_encode($tags);
+                            $json = wp_json_encode($data);
+                            $tags = wp_json_encode($tags);
+                            // $json = json_encode($data);
+                            // $tags = json_encode($tags);
 
                             $wpdb->query(
                                 $wpdb->prepare(
@@ -462,7 +471,7 @@ if ( ! class_exists('ZotpressRequest') )
                                     gzencode($tags), // 7.1.4: separated from $data
                                     $headers,
                                     $response["headers"]["last-modified-version"],
-                                    date('m/d/Y h:i:s a')
+                                    gmdate('m/d/Y h:i:s a')
                                 ))
                             );
                         }
@@ -503,12 +512,12 @@ if ( ! class_exists('ZotpressRequest') )
                         (
                             md5( $url ),
                             $this->api_user_id,
-                            date('m/d/Y h:i:s a')
+                            gmdate('m/d/Y h:i:s a')
                         ))
                     );
 
-                    $json = $this->zp_gzdecode($zp_results[0]->json);
-                    $tags = $this->zp_gzdecode($zp_results[0]->tags);
+                    $json = $this->zotpress_gzdecode($zp_results[0]->json);
+                    $tags = $this->zotpress_gzdecode($zp_results[0]->tags);
                     $headers = $zp_results[0]->headers;
                 }
             }

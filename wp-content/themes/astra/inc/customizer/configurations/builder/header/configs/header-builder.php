@@ -34,8 +34,8 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 		}
 
 		$item = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_header_button ) ? 'Button' : 'Button ' . $index,
-			'icon'    => 'admin-links',
+			'name'    => 1 === Astra_Builder_Helper::$num_of_header_button ? 'Button' : 'Button ' . $index,
+			'icon'    => 'button',
 			'section' => $header_button_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'button',
@@ -57,8 +57,8 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 		}
 
 		$item = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_header_html ) ? 'HTML' : 'HTML ' . $index,
-			'icon'    => 'text',
+			'name'    => 1 === Astra_Builder_Helper::$num_of_header_html ? 'HTML' : 'HTML ' . $index,
+			'icon'    => 'editor-code',
 			'section' => $header_html_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'html',
@@ -80,8 +80,8 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 		}
 
 		$item = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_header_widgets ) ? 'Widget' : 'Widget ' . $index,
-			'icon'    => 'wordpress',
+			'name'    => 1 === Astra_Builder_Helper::$num_of_header_widgets ? 'Widget' : 'Widget ' . $index,
+			'icon'    => 'screenoptions',
 			'section' => $header_widget_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'widget',
@@ -144,7 +144,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 		}
 
 		$item = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_header_social_icons ) ? 'Social' : 'Social ' . $index,
+			'name'    => 1 === Astra_Builder_Helper::$num_of_header_social_icons ? 'Social' : 'Social ' . $index,
 			'icon'    => 'share',
 			'section' => $header_social_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
@@ -217,7 +217,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'priority'    => 40,
 			'description' => '',
 			'context'     => array(),
-			'divider'     => ( astra_showcase_upgrade_notices() ) ? array() : array( 'ast_class' => 'ast-pro-available' ),
+			'divider'     => astra_showcase_upgrade_notices() ? array() : array( 'ast_class' => 'ast-pro-available' ),
 		),
 
 		/**
@@ -527,33 +527,27 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'transport'   => 'refresh',
 			'input_attrs' => array(
 				'group'  => ASTRA_THEME_SETTINGS . '[header-mobile-items]',
-				'rows'   =>
-					array( 'popup', 'above', 'primary', 'below' ),
-				'zones'  =>
-					array(
-						'popup'   =>
-							array(
-								'popup_content' => 'Popup Content',
-							),
-						'above'   =>
-							array(
-								'above_left'   => 'Top - Left',
-								'above_center' => 'Top - Center',
-								'above_right'  => 'Top - Right',
-							),
-						'primary' =>
-							array(
-								'primary_left'   => 'Main - Left',
-								'primary_center' => 'Main - Center',
-								'primary_right'  => 'Main - Right',
-							),
-						'below'   =>
-							array(
-								'below_left'   => 'Bottom - Left',
-								'below_center' => 'Bottom - Center',
-								'below_right'  => 'Bottom - Right',
-							),
+				'rows'   => array( 'popup', 'above', 'primary', 'below' ),
+				'zones'  => array(
+					'popup'   => array(
+						'popup_content' => 'Popup Content',
 					),
+					'above'   => array(
+						'above_left'   => 'Top - Left',
+						'above_center' => 'Top - Center',
+						'above_right'  => 'Top - Right',
+					),
+					'primary' => array(
+						'primary_left'   => 'Main - Left',
+						'primary_center' => 'Main - Center',
+						'primary_right'  => 'Main - Right',
+					),
+					'below'   => array(
+						'below_left'   => 'Bottom - Left',
+						'below_center' => 'Bottom - Center',
+						'below_right'  => 'Bottom - Right',
+					),
+				),
 				'status' => array(
 					'above'   => true,
 					'primary' => true,
@@ -620,7 +614,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'priority' => 44,
 			'settings' => array(),
 			'context'  => Astra_Builder_Helper::$general_tab,
-			'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+			'divider'  => array( 'ast_class' => 'ast-top-section-divider header-builder-item' ),
 		),
 
 		/**
@@ -638,7 +632,6 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'priority'    => 45,
 			'context'     => Astra_Builder_Helper::$general_tab,
 			'settings'    => false,
-			'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
 		),
 
 		// Option: Header Width.
@@ -667,7 +660,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'transport'  => 'postMessage',
 			'renderAs'   => 'text',
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		array(
@@ -702,7 +695,6 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'type'     => 'control',
 			'control'  => 'ast-upgrade',
 			'campaign' => 'header-builder',
-			'renderAs' => 'list',
 			'choices'  => array(
 				'one'   => array(
 					'title' => __( 'Sticky header', 'astra' ),
@@ -711,16 +703,13 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 					'title' => __( 'Divider element', 'astra' ),
 				),
 				'three' => array(
-					'title' => __( 'Language Switcher element', 'astra' ),
+					'title' => __( 'Language Switcher', 'astra' ),
 				),
 				'four'  => array(
 					'title' => __( 'Toggle Button element', 'astra' ),
 				),
 				'five'  => array(
-					'title' => __( 'Clone, Delete element options', 'astra' ),
-				),
-				'six'   => array(
-					'title' => __( 'Increased element count', 'astra' ),
+					'title' => __( 'Clone, Delete options', 'astra' ),
 				),
 				'seven' => array(
 					'title' => __( 'More design options', 'astra' ),
@@ -766,5 +755,5 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_header_builder_configuration();
+	add_action( 'init', 'astra_header_header_builder_configuration', 10, 0 );
 }

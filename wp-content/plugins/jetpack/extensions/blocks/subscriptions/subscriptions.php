@@ -10,8 +10,9 @@ namespace Automattic\Jetpack\Extensions\Subscriptions;
 use Automattic\Jetpack\Blocks;
 use Automattic\Jetpack\Extensions\Premium_Content\Subscription_Service\Abstract_Token_Subscription_Service;
 use Automattic\Jetpack\Extensions\Premium_Content\Subscription_Service\Jetpack_Token_Subscription_Service;
+use Automattic\Jetpack\Modules;
 use Automattic\Jetpack\Status\Host;
-use Jetpack;
+use Automattic\Jetpack\Status\Request;
 use Jetpack_Gutenberg;
 use Jetpack_Memberships;
 use Jetpack_Subscriptions_Widget;
@@ -28,6 +29,7 @@ const DEFAULT_BORDER_WEIGHT_VALUE = 1;
 const DEFAULT_FONTSIZE_VALUE      = '16px';
 const DEFAULT_PADDING_VALUE       = 15;
 const DEFAULT_SPACING_VALUE       = 10;
+const DEFAULT_BUTTON_WIDTH        = 'auto';
 
 /**
  * Registers the block for use in Gutenberg
@@ -43,9 +45,16 @@ function register_block() {
 		return;
 	}
 
-	require_once JETPACK__PLUGIN_DIR . '/modules/memberships/class-jetpack-memberships.php';
-	if ( \Jetpack_Memberships::should_enable_monetize_blocks_in_editor() ) {
+	/*
+	 * Do not proceed if the newsletter feature (Subscriptions module) is not enabled
+	 */
+	if ( ! ( new Modules() )->is_active( 'subscriptions' ) ) {
+		return;
+	}
 
+	require_once JETPACK__PLUGIN_DIR . '/modules/memberships/class-jetpack-memberships.php';
+
+	if ( \Jetpack_Memberships::should_enable_monetize_blocks_in_editor() ) {
 		Blocks::jetpack_register_block(
 			__DIR__,
 			array(
@@ -59,22 +68,6 @@ function register_block() {
 				),
 			)
 		);
-	}
-
-	/*
-	 * If the Subscriptions module is not active,
-	 * do not make any further changes on the site.
-	 */
-	if ( ! Jetpack::is_module_active( 'subscriptions' ) ) {
-		return;
-	}
-
-	/**
-	 * Do not proceed if the newsletter feature is not enabled
-	 * or if the 'Jetpack_Memberships' class does not exists.
-	 */
-	if ( ! class_exists( '\Jetpack_Memberships' ) ) {
-		return;
 	}
 
 	register_post_meta(
@@ -181,7 +174,7 @@ function register_block() {
 	);
 
 	// If called via REST API, we need to register later in the lifecycle
-	if ( ( new Host() )->is_wpcom_platform() && ! jetpack_is_frontend() ) {
+	if ( ( new Host() )->is_wpcom_platform() && ! Request::is_frontend() ) {
 		add_action(
 			'restapi_theme_init',
 			function () {
@@ -287,9 +280,9 @@ function newsletter_access_column_styles() {
 }
 
 /**
- * Determine the amount of folks currently subscribed to the blog, splitted out in email_subscribers & social_followers & paid_subscribers
+ * Determine the amount of folks currently subscribed to the blog, splitted out in total_subscribers, email_subscribers, social_followers & paid_subscribers.
  *
- * @return array containing ['value' => ['email_subscribers' => 0, 'paid_subscribers' => 0, 'social_followers' => 0]]
+ * @return array containing ['value' => ['total_subscribers' => 0, 'email_subscribers' => 0, 'paid_subscribers' => 0, 'social_followers' => 0]]
  */
 function fetch_subscriber_counts() {
 	$subs_count = 0;
@@ -310,6 +303,7 @@ function fetch_subscriber_counts() {
 					'code'    => $xml->getErrorCode(),
 					'message' => $xml->getErrorMessage(),
 					'value'   => ( isset( $subs_count['value'] ) ) ? $subs_count['value'] : array(
+						'total_subscribers' => 0,
 						'email_subscribers' => 0,
 						'social_followers'  => 0,
 						'paid_subscribers'  => 0,
@@ -337,9 +331,9 @@ function get_subscriber_count( $include_social_followers ) {
 	$counts = fetch_subscriber_counts();
 
 	if ( $include_social_followers ) {
-		$subscriber_count = $counts['value']['email_subscribers'] + $counts['value']['social_followers'];
+		$subscriber_count = $counts['value']['total_subscribers'] + $counts['value']['social_followers'];
 	} else {
-		$subscriber_count = $counts['value']['email_subscribers'];
+		$subscriber_count = $counts['value']['total_subscribers'];
 	}
 	return $subscriber_count;
 }
@@ -487,13 +481,13 @@ function get_element_styles_from_attributes( $attributes ) {
 	}
 
 	if ( has_attribute( $attributes, 'buttonWidth' ) ) {
-		$submit_button_wrapper_styles .= sprintf( 'width: %s;', get_attribute( $attributes, 'buttonWidth' ) );
+		$submit_button_wrapper_styles .= sprintf( 'width: %s;', get_attribute( $attributes, 'buttonWidth', DEFAULT_BUTTON_WIDTH ) );
 		$submit_button_wrapper_styles .= 'max-width: 100%;';
 
 		// Account for custom margins on inline forms.
 		$submit_button_styles .= true === get_attribute( $attributes, 'buttonOnNewLine' )
-			? sprintf( 'width: calc(100%% - %dpx);', get_attribute( $attributes, 'spacing', DEFAULT_SPACING_VALUE ) )
-			: 'width: 100%;';
+			? 'width: 100%;'
+			: sprintf( 'width: calc(100%% - %dpx);', get_attribute( $attributes, 'spacing', DEFAULT_SPACING_VALUE ) );
 	}
 
 	$font_size = get_attribute( $attributes, 'customFontSize', DEFAULT_FONTSIZE_VALUE );
@@ -508,7 +502,6 @@ function get_element_styles_from_attributes( $attributes ) {
 	$submit_button_styles .= $style;
 	$email_field_styles   .= $style;
 
-	$button_spacing = get_attribute( $attributes, 'spacing', DEFAULT_SPACING_VALUE );
 	if ( ! $is_button_only_style ) {
 		$button_spacing = get_attribute( $attributes, 'spacing', DEFAULT_SPACING_VALUE );
 		if ( true === get_attribute( $attributes, 'buttonOnNewLine' ) ) {
@@ -540,7 +533,7 @@ function get_element_styles_from_attributes( $attributes ) {
 		$email_field_styles   .= $style;
 	}
 
-	if ( ! jetpack_is_frontend() ) {
+	if ( ! Request::is_frontend() ) {
 		$background_color_style = get_attribute_color( 'buttonBackgroundColor', $attributes, '#113AF5' /* default lettre theme color */ );
 		$text_color_style       = get_attribute_color( 'textColor', $attributes, '#FFFFFF' );
 		$submit_button_styles  .= sprintf( ' background-color: %s; color: %s;', $background_color_style, $text_color_style );
@@ -627,6 +620,13 @@ function get_color_from_slug( $slug ) {
 }
 
 /**
+ * Is the Jetpack_Memberships class loaded.
+ */
+function is_jetpack_memberships_loaded(): bool {
+	return class_exists( '\Jetpack_Memberships' );
+}
+
+/**
  * Subscriptions block render callback.
  *
  * @param array $attributes Array containing the block attributes.
@@ -635,11 +635,11 @@ function get_color_from_slug( $slug ) {
  */
 function render_block( $attributes ) {
 	// If the Subscriptions module is not active, don't render the block.
-	if ( ! Jetpack::is_module_active( 'subscriptions' ) ) {
+	if ( ! ( new Modules() )->is_active( 'subscriptions' ) ) {
 		return '';
 	}
 
-	if ( class_exists( '\Jetpack_Memberships' ) ) {
+	if ( is_jetpack_memberships_loaded() ) {
 		// We only want the sites that have newsletter feature enabled to be graced by this JavaScript.
 		Jetpack_Gutenberg::load_assets_as_required( __DIR__ );
 	} else {
@@ -650,10 +650,11 @@ function render_block( $attributes ) {
 		return '';
 	}
 
+	// Prefill the email field with the current user's email if they are logged in via Memberships premium content token
 	$subscribe_email = Jetpack_Memberships::get_current_user_email();
 
-	/** This filter is documented in \Automattic\Jetpack\Forms\ContactForm\Contact_Form */
-	if ( is_wpcom() || false !== apply_filters( 'jetpack_auto_fill_logged_in_user', false ) ) {
+	// If no email, then prefill the email field with the current user's email if they are logged in
+	if ( empty( $subscribe_email ) ) {
 		$current_user = wp_get_current_user();
 		if ( ! empty( $current_user->user_email ) ) {
 			$subscribe_email = $current_user->user_email;
@@ -674,35 +675,42 @@ function render_block( $attributes ) {
 	$include_social_followers = isset( $attributes['includeSocialFollowers'] ) ? (bool) get_attribute( $attributes, 'includeSocialFollowers' ) : true;
 
 	$data = array(
-		'widget_id'                     => Jetpack_Subscriptions_Widget::$instance_count,
-		'subscribe_email'               => $subscribe_email,
-		'is_paid_subscriber'            => get_attribute( $attributes, 'isPaidSubscriber', false ),
-		'wrapper_attributes'            => get_block_wrapper_attributes(
+		'widget_id'                         => Jetpack_Subscriptions_Widget::$instance_count,
+		'subscribe_email'                   => $subscribe_email,
+		'is_paid_subscriber'                => get_attribute( $attributes, 'isPaidSubscriber', false ),
+		'wrapper_attributes'                => get_block_wrapper_attributes(
 			array(
 				'class' => $classes['block_wrapper'],
 			)
 		),
-		'subscribe_placeholder'         => get_attribute( $attributes, 'subscribePlaceholder', __( 'Type your email…', 'jetpack' ) ),
-		'submit_button_text'            => get_attribute( $attributes, 'submitButtonText', __( 'Subscribe', 'jetpack' ) ),
-		'submit_button_text_subscribed' => get_attribute( $attributes, 'submitButtonTextSubscribed', __( 'Subscribed', 'jetpack' ) ),
-		'submit_button_text_upgrade'    => get_attribute( $attributes, 'submitButtonTextUpgrade', __( 'Upgrade subscription', 'jetpack' ) ),
-		'success_message'               => get_attribute(
+		'subscribe_placeholder'             => get_attribute( $attributes, 'subscribePlaceholder', __( 'Type your email…', 'jetpack' ) ),
+		'submit_button_text'                => get_attribute( $attributes, 'submitButtonText', __( 'Subscribe', 'jetpack' ) ),
+		'submit_button_text_subscribed'     => get_attribute( $attributes, 'submitButtonTextSubscribed', __( 'Subscribed', 'jetpack' ) ),
+		'submit_button_text_upgrade'        => get_attribute( $attributes, 'submitButtonTextUpgrade', __( 'Upgrade subscription', 'jetpack' ) ),
+		'success_message'                   => get_attribute(
 			$attributes,
 			'successMessage',
 			esc_html__( "Success! An email was just sent to confirm your subscription. Please find the email now and click 'Confirm' to start subscribing.", 'jetpack' )
 		),
-		'show_subscribers_total'        => (bool) get_attribute( $attributes, 'showSubscribersTotal' ),
-		'subscribers_total'             => get_attribute( $attributes, 'showSubscribersTotal' ) ? get_subscriber_count( $include_social_followers ) : 0,
-		'referer'                       => esc_url_raw(
+		'show_subscribers_total'            => (bool) get_attribute( $attributes, 'showSubscribersTotal' ),
+		'subscribers_total'                 => get_attribute( $attributes, 'showSubscribersTotal' ) ? get_subscriber_count( $include_social_followers ) : 0,
+		'referer'                           => esc_url_raw(
 			( is_ssl() ? 'https' : 'http' ) . '://' . ( isset( $_SERVER['HTTP_HOST'] ) ? wp_unslash( $_SERVER['HTTP_HOST'] ) : '' ) .
 			( isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '' )
 		),
-		'source'                        => 'subscribe-block',
-		'app_source'                    => get_attribute( $attributes, 'appSource', null ),
-		'class_name'                    => get_attribute( $attributes, 'className' ),
+		'source'                            => 'subscribe-block',
+		'app_source'                        => get_attribute( $attributes, 'appSource', null ),
+		'class_name'                        => get_attribute( $attributes, 'className' ),
+		'selected_newsletter_categories'    => get_attribute( $attributes, 'selectedNewsletterCategoryIds', array() ),
+		'preselected_newsletter_categories' => get_attribute( $attributes, 'preselectNewsletterCategories', false ),
 	);
 
-	if ( ! jetpack_is_frontend() ) {
+	// Only render the email version in non-frontend contexts.
+	if ( is_feed() || wp_is_xml_request() ||
+		( defined( 'REST_REQUEST' ) && REST_REQUEST && ! wp_is_json_request() ) ||
+		( defined( 'REST_API_REQUEST' ) && REST_API_REQUEST ) ||
+		( defined( 'WP_CLI' ) && WP_CLI ) ||
+		wp_is_jsonp_request() ) {
 		return render_for_email( $data, $styles );
 	}
 
@@ -774,7 +782,7 @@ function render_for_website( $data, $classes, $styles ) {
 					<?php endif; ?>
 				>
 						<a
-							href="<?php echo esc_url( 'https://wordpress.com/read/site/subscription/' . $blog_id ); ?>"
+							href="<?php echo esc_url( 'https://wordpress.com/reader/site/subscription/' . $blog_id ); ?>"
 							<?php if ( ! empty( $classes['submit_button'] ) ) : ?>
 								class="<?php echo esc_attr( $classes['submit_button'] ); ?>"
 							<?php endif; ?>
@@ -858,6 +866,10 @@ function render_for_website( $data, $classes, $styles ) {
 
 							if ( ! empty( $tier_id ) ) {
 								echo '<input type="hidden" name="tier_id" value="' . esc_attr( $tier_id ) . '"/>';
+							}
+
+							if ( $data['preselected_newsletter_categories'] && ! empty( $data['selected_newsletter_categories'] ) ) {
+								echo '<input type="hidden" name="selected_newsletter_categories" value="' . esc_attr( implode( ',', $data['selected_newsletter_categories'] ) ) . '"/>';
 							}
 							?>
 							<button type="submit"
@@ -958,7 +970,7 @@ function add_paywall( $the_content ) {
 		return $the_content;
 	}
 
-	$paywalled_content = get_paywall_content( $post_access_level ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$paywalled_content = get_paywall_content();
 
 	if ( has_block( \Automattic\Jetpack\Extensions\Paywall\BLOCK_NAME ) ) {
 		if ( strpos( $the_content, \Automattic\Jetpack\Extensions\Paywall\BLOCK_HTML ) ) {
@@ -1039,17 +1051,16 @@ function maybe_prevent_super_cache_caching() {
 /**
  * Returns paywall content blocks
  *
- * @param string $post_access_level The newsletter access level.
  * @return string
  */
-function get_paywall_content( $post_access_level ) {
+function get_paywall_content() {
 	if ( Jetpack_Memberships::user_is_pending_subscriber() ) {
 		return get_paywall_blocks_subscribe_pending();
 	}
 	if ( doing_filter( 'get_the_excerpt' ) ) {
 		return '';
 	}
-	return get_paywall_blocks( $post_access_level );
+	return get_paywall_blocks();
 }
 
 /**
@@ -1133,20 +1144,20 @@ function sanitize_submit_text( $text ) {
 /**
  * Returns paywall content blocks if user is not authenticated
  *
- * @param string $newsletter_access_level The newsletter access level.
  * @return string
  */
-function get_paywall_blocks( $newsletter_access_level ) {
+function get_paywall_blocks() {
 	$custom_paywall = apply_filters( 'jetpack_custom_paywall_blocks', false );
 	if ( ! empty( $custom_paywall ) ) {
 		return $custom_paywall;
 	}
-	if ( ! jetpack_is_frontend() ) { // emails
+
+	if ( ! Request::is_frontend() ) { // emails
 		return get_paywall_simple();
 	}
+
 	require_once JETPACK__PLUGIN_DIR . 'modules/memberships/class-jetpack-memberships.php';
-	// Only display paid texts when Stripe is connected and the post is marked for paid subscribers
-	$is_paid_post       = $newsletter_access_level === 'paid_subscribers' && Jetpack_Memberships::has_connected_account();
+	$is_paid_post       = is_paid_post();
 	$is_paid_subscriber = Jetpack_Memberships::user_is_paid_subscriber();
 
 	$access_heading = $is_paid_subscriber
@@ -1155,9 +1166,11 @@ function get_paywall_blocks( $newsletter_access_level ) {
 
 	$subscribe_text = $is_paid_post
 		// translators: %s is the name of the site.
-		? $is_paid_subscriber
-		? esc_html__( 'Upgrade to get access to the rest of this post and other exclusive content.', 'jetpack' )
-		: esc_html__( 'Become a paid subscriber to get access to the rest of this post and other exclusive content.', 'jetpack' )
+		? (
+			$is_paid_subscriber
+				? esc_html__( 'Upgrade to get access to the rest of this post and other exclusive content.', 'jetpack' )
+				: esc_html__( 'Become a paid subscriber to get access to the rest of this post and other exclusive content.', 'jetpack' )
+		)
 		// translators: %s is the name of the site.
 		: esc_html__( 'Subscribe to get access to the rest of this post and other subscriber-only content.', 'jetpack' );
 
@@ -1235,6 +1248,34 @@ function is_user_auth(): bool {
 }
 
 /**
+ * Returns `true` if the post is a paid post.
+ */
+function is_paid_post(): bool {
+	require_once JETPACK__PLUGIN_DIR . 'modules/memberships/class-jetpack-memberships.php';
+
+	// Make sure Stripe is connected and the post is marked for paid subscribers.
+	if ( Jetpack_Memberships::has_connected_account() && is_jetpack_token_subscription_service_loaded() ) {
+		return Jetpack_Memberships::get_post_access_level() === Jetpack_Token_Subscription_Service::POST_ACCESS_LEVEL_PAID_SUBSCRIBERS;
+	}
+
+	return false;
+}
+
+/**
+ * Returns true if the post is a subscribers post.
+ */
+function is_subscribers_post(): bool {
+	require_once JETPACK__PLUGIN_DIR . 'modules/memberships/class-jetpack-memberships.php';
+
+	// Make sure Stripe is connected and the post is marked for paid subscribers.
+	if ( Jetpack_Memberships::has_connected_account() && is_jetpack_token_subscription_service_loaded() ) {
+		return Jetpack_Memberships::get_post_access_level() === Jetpack_Token_Subscription_Service::POST_ACCESS_LEVEL_SUBSCRIBERS;
+	}
+
+	return false;
+}
+
+/**
  * Returns paywall content blocks when email confirmation is pending
  *
  * @return string
@@ -1277,20 +1318,35 @@ function get_paywall_blocks_subscribe_pending() {
 }
 
 /**
- * Return content for non frontend views like emails.
- *
- * @return string
+ * Return content for non frontend views like Reader, emails.
  */
-function get_paywall_simple() {
-	$access_heading = esc_html__( "You're currently a free subscriber. Upgrade your subscription to get access to the rest of this post and other paid-subscriber only content.", 'jetpack' );
+function get_paywall_simple(): string {
+	$is_paid_post        = is_paid_post();
+	$is_subscribers_post = is_subscribers_post();
+	$is_subscriber       = is_jetpack_memberships_loaded() && Jetpack_Memberships::is_current_user_subscribed();
+	$paywall_heading     = esc_html__( 'Subscribe to keep reading', 'jetpack' );
 
-	$subscribe_text = esc_html__( 'Upgrade subscription', 'jetpack' );
+	if ( $is_subscribers_post && ! $is_subscriber ) {
+		$paywall_description = esc_html__( "It's a subscribers only post. Subscribe to get access to the rest of this post and other subscriber-only content.", 'jetpack' );
+		$paywall_action_btn  = esc_html__( 'Subscribe', 'jetpack' );
+	} elseif ( $is_paid_post && $is_subscriber ) {
+		$paywall_description = esc_html__( "You're currently a free subscriber. Upgrade your subscription to get access to the rest of this post and other paid-subscriber only content.", 'jetpack' );
+		$paywall_action_btn  = esc_html__( 'Upgrade subscription', 'jetpack' );
+	} else {
+		// - For paid post when the user is not a subscriber.
+		// - Default for all other cases.
+		$paywall_description = esc_html__( 'Become a paid subscriber to get access to the rest of this post and other exclusive content.', 'jetpack' );
+		$paywall_action_btn  = esc_html__( 'Subscribe', 'jetpack' );
+	}
 
 	return '
 <!-- wp:columns -->
-<div class="wp-block-columns" style="display: inline-block; width: 90%">
+<div class="wp-block-columns jetpack-paywall-simple" style="display: inline-block; width: 90%">
     <!-- wp:column -->
     <div class="wp-block-column" style="background-color: #F6F7F7; padding: 32px; 24px;">
+        <!-- wp:heading -->
+        <h2 class="has-text-align-center" style="margin: 0 0 12px; font-weight: 600;">' . $paywall_heading . '</h2>
+        <!-- /wp:heading -->
         <!-- wp:paragraph -->
         <p class="has-text-align-center"
            style="text-align: center;
@@ -1299,25 +1355,25 @@ function get_paywall_simple() {
                   font-size: 16px;
                   font-family: \'SF Pro Text\', sans-serif;
                   line-height: 28.8px;">
-        ' . $access_heading . '
+        ' . $paywall_description . '
         </p>
         <!-- /wp:paragraph -->
         <!-- wp:buttons -->
         <div class="wp-block-buttons" style="text-align: center;">
             <!-- wp:button -->
-            <div class="wp-block-button" style="display: inline-block; margin: 10px 0;">
+            <div class="wp-block-button" style="display: inline-block; margin: 10px 0; border-style: none; padding: 0;">
                 <a href="' . esc_url( get_post_permalink() ) . '" class="wp-block-button__link wp-element-button"
                    data-wpcom-track data-tracks-link-desc="paywall-email-click"
                    style="display: inline-block;
-                          padding: 15px 20px;
-                          background-color: #0675C4;
+                          padding: 12px 15px;
+                          background-color: #3858e9;
                           color: #FFFFFF;
                           text-decoration: none;
                           border-radius: 5px;
                           font-family: \'SF Pro Display\', sans-serif;
                           font-weight: 500;
                           font-size: 16px;
-                          text-align: center;">' . $subscribe_text . '</a>
+                          text-align: center;">' . $paywall_action_btn . '</a>
             </div>
             <!-- /wp:button -->
         </div>

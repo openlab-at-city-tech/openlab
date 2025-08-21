@@ -608,7 +608,7 @@ function generateBoxRules(style, options, path, ruleKeys, individualProperties =
     rules.push({
       selector: options?.selector,
       key: ruleKeys.default,
-      value: boxStyle
+      value: getCSSValueFromRawStyle(boxStyle)
     });
   } else {
     const sideRules = individualProperties.reduce((acc, side) => {

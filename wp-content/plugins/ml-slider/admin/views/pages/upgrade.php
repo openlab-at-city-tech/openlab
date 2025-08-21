@@ -107,6 +107,14 @@
             </tr>
             <tr>
                 <td>
+                    <h4><?php esc_html_e('Add Custom HTML slides', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Design slides using images, HTML and CSS', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
                     <h4><?php esc_html_e('Add custom CSS', 'ml-slider');?></h4>
                     <p><?php esc_html_e('Customize your slideshows to fit with your website.', 'ml-slider');?></p>
                 </td>

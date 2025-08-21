@@ -7,7 +7,7 @@
  * @since       Astra 3.7.0
  */
 
-/** @psalm-suppress ParadoxicalCondition **/ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+/** @psalm-suppress ParadoxicalCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Customizer Sanitizes Initial setup
  */
 class Astra_Global_Typo_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Body Typography Customizer Configurations.
 	 *
@@ -475,7 +474,7 @@ class Astra_Global_Typo_Configs extends Astra_Customizer_Config_Base {
 				'transport' => 'postMessage',
 				'priority'  => 5,
 				'title'     => __( 'Presets', 'astra' ),
-				'divider'   => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'   => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
 			),
 
 		);

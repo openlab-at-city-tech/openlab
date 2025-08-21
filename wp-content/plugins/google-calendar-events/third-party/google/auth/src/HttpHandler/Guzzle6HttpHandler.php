@@ -20,7 +20,6 @@ namespace SimpleCalendar\plugin_deps\Google\Auth\HttpHandler;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
-/** @internal */
 class Guzzle6HttpHandler
 {
     /**

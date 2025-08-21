@@ -31,8 +31,8 @@
 
 <!-- wp:column {"verticalAlignment":"center","width":"20%","className":"header-btn"} -->
 <div class="wp-block-column is-vertically-aligned-center header-btn" style="flex-basis:20%"><!-- wp:buttons {"className":"is-style-btn","layout":{"type":"flex","justifyContent":"right"}} -->
-<div class="wp-block-buttons is-style-btn"><!-- wp:button {"backgroundColor":"primary","textColor":"white","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|60","right":"var:preset|spacing|60","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"className":"is-style-fill","fontSize":"small","fontFamily":"poppins"} -->
-<div class="wp-block-button has-custom-font-size is-style-fill has-poppins-font-family has-small-font-size"><a class="wp-block-button__link has-white-color has-primary-background-color has-text-color has-background has-link-color wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--60)"><?php esc_html_e('CONNECT','fse-freelancer-portfolio'); ?></a></div>
+<div class="wp-block-buttons is-style-btn"><!-- wp:button {"className":"is-style-fill","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|60","right":"var:preset|spacing|60","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"fontSize":"small"} -->
+<div class="wp-block-button has-custom-font-size is-style-fill has-small-font-size"><a class="wp-block-button__link wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--60)"><?php esc_html_e('CONNECT','fse-freelancer-portfolio'); ?></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:column --></div>

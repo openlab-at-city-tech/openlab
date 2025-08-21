@@ -294,7 +294,8 @@ const modifiers = {
  * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to raw
  *                                                 shortcuts.
  */
-const rawShortcut = mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
+const rawShortcut = /* @__PURE__ */
+mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
   return /** @type {WPKeyHandler<string>} */(character, _isApple = isAppleOS) => {
     return [...modifier(_isApple), character.toLowerCase()].join('+');
   };
@@ -313,7 +314,8 @@ const rawShortcut = mapValues(modifiers, (/** @type {WPModifier} */modifier) => 
  * @type {WPModifierHandler<WPKeyHandler<string[]>>} Keyed map of functions to
  *                                                   shortcut sequences.
  */
-const displayShortcutList = mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
+const displayShortcutList = /* @__PURE__ */
+mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
   return /** @type {WPKeyHandler<string[]>} */(character, _isApple = isAppleOS) => {
     const isApple = _isApple();
     const replacementKeyMap = {
@@ -349,7 +351,8 @@ const displayShortcutList = mapValues(modifiers, (/** @type {WPModifier} */modif
  * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to
  *                                                 display shortcuts.
  */
-const displayShortcut = mapValues(displayShortcutList, (/** @type {WPKeyHandler<string[]>} */shortcutList) => {
+const displayShortcut = /* @__PURE__ */
+mapValues(displayShortcutList, (/** @type {WPKeyHandler<string[]>} */shortcutList) => {
   return /** @type {WPKeyHandler<string>} */(character, _isApple = isAppleOS) => shortcutList(character, _isApple).join('');
 });
 
@@ -367,7 +370,8 @@ const displayShortcut = mapValues(displayShortcutList, (/** @type {WPKeyHandler<
  * @type {WPModifierHandler<WPKeyHandler<string>>} Keyed map of functions to
  *                                                 shortcut ARIA labels.
  */
-const shortcutAriaLabel = mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
+const shortcutAriaLabel = /* @__PURE__ */
+mapValues(modifiers, (/** @type {WPModifier} */modifier) => {
   return /** @type {WPKeyHandler<string>} */(character, _isApple = isAppleOS) => {
     const isApple = _isApple();
     /** @type {Record<string,string>} */
@@ -419,7 +423,8 @@ function getEventModifiers(event) {
  * @type {WPModifierHandler<WPEventKeyHandler>} Keyed map of functions
  *                                                       to match events.
  */
-const isKeyboardEvent = mapValues(modifiers, (/** @type {WPModifier} */getModifiers) => {
+const isKeyboardEvent = /* @__PURE__ */
+mapValues(modifiers, (/** @type {WPModifier} */getModifiers) => {
   return /** @type {WPEventKeyHandler} */(event, character, _isApple = isAppleOS) => {
     const mods = getModifiers(_isApple);
     const eventMods = getEventModifiers(event);

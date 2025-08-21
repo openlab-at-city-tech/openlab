@@ -978,7 +978,14 @@ class WP_DLM {
 	 */
 	public function set_no_access_session() {
 		$no_access_page = get_option( 'dlm_no_access_page', 0 );
-		if ( $no_access_page && ! isset( $_SESSION ) ) {
+		if ( apply_filters( 'dlm_set_no_access_session', $no_access_page ) && ! isset( $_SESSION ) ) {
+			$is_https = ( ! empty( $_SERVER['HTTPS'] ) && 'off' !== $_SERVER['HTTPS'] ) || ( isset( $_SERVER['SERVER_PORT'] ) && 443 === $_SERVER['SERVER_PORT'] );
+			$params   = array(
+				'secure'   => $is_https,
+				'httponly' => true,
+				'samesite' => 'Lax',
+			);
+			session_set_cookie_params( apply_filters( 'dlm_set_session_params', $params ) );
 			session_start();
 		}
 	}

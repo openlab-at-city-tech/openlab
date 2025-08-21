@@ -5,9 +5,6 @@
  * @since 1.0.0
  *
  * @package StellarWP\Telemetry
- *
- * @license GPL-2.0-or-later
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Telemetry\Opt_In;
@@ -133,6 +130,22 @@ class Opt_In_Template implements Template_Interface {
 	public function get_option_name( string $stellar_slug ) {
 		$option_name = sprintf(
 			'stellarwp_telemetry_%s_show_optin',
+			$stellar_slug
+		);
+
+		/**
+		 * Filters the name of the option stored in the options table.
+		 * This filter can be used to apply a generic option name.
+		 * Usage of this filter is highly discouraged.
+		 *
+		 * @since 2.3
+		 *
+		 * @param string $option_name
+		 * @param string $stellar_slug The current stellar slug.
+		 */
+		$option_name = apply_filters(
+			'stellarwp/telemetry/show_optin_option_name',
+			$option_name,
 			$stellar_slug
 		);
 

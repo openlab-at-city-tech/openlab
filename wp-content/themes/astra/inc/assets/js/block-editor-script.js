@@ -3,13 +3,17 @@ window.addEventListener( 'load', function(e) {
 	astra_onload_function();
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+	if ( astraColors?.is_dark_palette ) {
+		document.documentElement.classList.add('astra-dark-mode-enable');
+	}
+});
+
 // Function to add block editor dynamic styles. 
 function blockEditorDynamicStyles() {
 	setTimeout(() => {
 		const iframes = document.getElementsByTagName('iframe');
-		if (!iframes?.length) {
-			return;
-		}
+		if (!iframes?.length) return;
 
 		const cloneLinkElement = (id) => {
 			const element = document.getElementById(id);
@@ -19,19 +23,17 @@ function blockEditorDynamicStyles() {
 		const googleFontsStyle = cloneLinkElement('astra-google-fonts-css');
 
 		const appendLinkIfNotExists = (iframeDoc, clonedLink, linkId) => {
-			if (!clonedLink) return;
-			const existingLink = iframeDoc.getElementById(linkId);
-			if (existingLink) return;
-			iframeDoc.head.appendChild(clonedLink);
+			if (clonedLink && !iframeDoc.getElementById(linkId)) {
+				iframeDoc.head.appendChild(clonedLink);
+			}
 		}
 
 		for (const iframe of iframes) {
 			try {
 				const iframeDoc = iframe?.contentWindow?.document || iframe?.contentDocument;
-				if (!iframeDoc?.head) {
-					continue;
+				if (iframeDoc?.head) {
+					appendLinkIfNotExists(iframeDoc, googleFontsStyle, 'astra-google-fonts-css');
 				}
-				appendLinkIfNotExists(iframeDoc, googleFontsStyle, 'astra-google-fonts-css');
 			} catch {
 				// Access denied to iframe document.
 			}

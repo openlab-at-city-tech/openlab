@@ -19,9 +19,9 @@ use Advanced_Sidebar_Menu\Utils;
  * @formatter:on
  *
  * @implements WidgetWithId<PAGE_SETTINGS, DEFAULTS>
- * @extends Widget_Abstract<PAGE_SETTINGS, DEFAULTS>
+ * @extends \WP_Widget<PAGE_SETTINGS>
  */
-class Page extends Widget_Abstract implements WidgetWithId {
+class Page extends \WP_Widget implements WidgetWithId {
 	/**
 	 * @use Checkbox<PAGE_SETTINGS>
 	 */
@@ -46,6 +46,10 @@ class Page extends Widget_Abstract implements WidgetWithId {
 	public const DISPLAY_ALL              = Menu_Abstract::DISPLAY_ALL;
 	public const LEVELS                   = Menu_Abstract::LEVELS;
 
+	public const ORDER_BY_MENU_ORDER = 'menu_order';
+	public const ORDER_BY_POST_TITLE = 'post_title';
+	public const ORDER_BY_POST_DATE  = 'post_date';
+
 	/**
 	 * Default values for the widget.
 	 *
@@ -55,7 +59,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 		self::TITLE                    => '',
 		self::INCLUDE_PARENT           => '',
 		self::INCLUDE_CHILDLESS_PARENT => '',
-		self::ORDER_BY                 => 'menu_order',
+		self::ORDER_BY                 => self::ORDER_BY_MENU_ORDER,
 		self::EXCLUDE                  => '',
 		self::DISPLAY_ALL              => '',
 		self::LEVELS                   => '100',
@@ -129,14 +133,11 @@ class Page extends Widget_Abstract implements WidgetWithId {
 	 * @return array<string, string>
 	 */
 	public static function get_order_by_options() {
-		return (array) apply_filters(
-			'advanced-sidebar-menu/widget/page/order-by-options',
-			[
-				'menu_order' => __( 'Page Order', 'advanced-sidebar-menu' ),
-				'post_title' => __( 'Title', 'advanced-sidebar-menu' ),
-				'post_date'  => __( 'Published Date', 'advanced-sidebar-menu' ),
-			]
-		);
+		return (array) apply_filters( 'advanced-sidebar-menu/widget/page/order-by-options', [
+			self::ORDER_BY_MENU_ORDER => __( 'Page Order', 'advanced-sidebar-menu' ),
+			self::ORDER_BY_POST_TITLE => __( 'Title', 'advanced-sidebar-menu' ),
+			self::ORDER_BY_POST_DATE  => __( 'Published Date', 'advanced-sidebar-menu' ),
+		] );
 	}
 
 
@@ -159,7 +160,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 				<label>
 					<?php
 					/* translators: Selected post type single label */
-					printf( esc_html__( 'Display highest level parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings ) ) ) );
+					\printf( esc_html__( 'Display highest level parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings ) ) ) );
 					?>
 				</label>
 			</p>
@@ -169,7 +170,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 				<label>
 					<?php
 					/* translators: Selected post type single label */
-					printf( esc_html__( 'Display menu when there is only the parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings ) ) ) );
+					\printf( esc_html__( 'Display menu when there is only the parent %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings ) ) ) );
 					?>
 				</label>
 			</p>
@@ -179,7 +180,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 				<label>
 					<?php
 					/* translators: Selected post type plural label */
-					printf( esc_html__( 'Always display child %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings, false ) ) ) );
+					\printf( esc_html__( 'Always display child %s', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_post_type_label( $settings, false ) ) ) );
 					?>
 				</label>
 			</p>
@@ -194,11 +195,12 @@ class Page extends Widget_Abstract implements WidgetWithId {
 				<p>
 					<label for="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>">
 						<?php
-						ob_start();
+						\ob_start();
 						?>
 						<select
 							id="<?php echo esc_attr( $widget->get_field_id( self::LEVELS ) ); ?>"
-							name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>">
+							name="<?php echo esc_attr( $widget->get_field_name( self::LEVELS ) ); ?>"
+						>
 							<option value="100">
 								<?php esc_html_e( '- All -', 'advanced-sidebar-menu' ); ?>
 							</option>
@@ -214,7 +216,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 						</select>
 						<?php
 						/* translators: {select html input}, {Selected post type plural label} */
-						printf( esc_html__( 'Display %1$s levels of child %2$s', 'advanced-sidebar-menu' ), ob_get_clean(), esc_html( strtolower( $this->get_post_type_label( $settings, false ) ) ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						\printf( esc_html__( 'Display %1$s levels of child %2$s', 'advanced-sidebar-menu' ), \ob_get_clean(), esc_html( \strtolower( $this->get_post_type_label( $settings, false ) ) ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
 					</label>
 				</p>
@@ -278,7 +280,7 @@ class Page extends Widget_Abstract implements WidgetWithId {
 				<label for="<?php echo esc_attr( $widget->get_field_id( self::EXCLUDE ) ); ?>">
 					<?php
 					/* translators: Selected post type plural label */
-					printf( esc_html__( '%s to exclude (ids, comma separated)', 'advanced-sidebar-menu' ), esc_html( $this->get_post_type_label( $instance, false ) ) );
+					\printf( esc_html__( '%s to exclude (ids, comma separated)', 'advanced-sidebar-menu' ), esc_html( $this->get_post_type_label( $instance, false ) ) );
 					?>
 				</label>
 				<input
@@ -286,7 +288,8 @@ class Page extends Widget_Abstract implements WidgetWithId {
 					name="<?php echo esc_attr( $widget->get_field_name( self::EXCLUDE ) ); ?>"
 					class="widefat advanced-sidebar-menu-block-field"
 					type="text"
-					value="<?php echo esc_attr( $instance[ self::EXCLUDE ] ); ?>" />
+					value="<?php echo esc_attr( $instance[ self::EXCLUDE ] ); ?>"
+				/>
 				<?php
 				do_action( 'advanced-sidebar-menu/widget/page/exclude-box', $instance, $widget );
 				?>

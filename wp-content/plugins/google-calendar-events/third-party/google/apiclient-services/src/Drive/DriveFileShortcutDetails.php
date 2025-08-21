@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class DriveFileShortcutDetails extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -76,4 +75,4 @@ class DriveFileShortcutDetails extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(DriveFileShortcutDetails::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_DriveFileShortcutDetails');
+class_alias(DriveFileShortcutDetails::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileShortcutDetails');

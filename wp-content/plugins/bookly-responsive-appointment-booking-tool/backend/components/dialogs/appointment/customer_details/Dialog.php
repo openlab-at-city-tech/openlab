@@ -43,7 +43,5 @@ class Dialog extends Lib\Base\Component
                 'areYouSure' => __( 'Are you sure?', 'bookly' ),
             ),
         ) ) );
-
-        print '<div id="bookly-customer-details-dialog"></div>';
     }
 }

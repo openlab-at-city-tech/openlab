@@ -19,14 +19,13 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\HtmlFormatter;
  * @author Gyula Sallai
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 abstract class MailHandler extends AbstractProcessingHandler
 {
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         $messages = [];
         foreach ($records as $record) {
@@ -49,11 +48,11 @@ abstract class MailHandler extends AbstractProcessingHandler
      *
      * @phpstan-param Record[] $records
      */
-    protected abstract function send(string $content, array $records) : void;
+    abstract protected function send(string $content, array $records): void;
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->send((string) $record['formatted'], [$record]);
     }
@@ -61,7 +60,7 @@ abstract class MailHandler extends AbstractProcessingHandler
      * @phpstan-param non-empty-array<Record> $records
      * @phpstan-return Record
      */
-    protected function getHighestRecord(array $records) : array
+    protected function getHighestRecord(array $records): array
     {
         $highestRecord = null;
         foreach ($records as $record) {
@@ -71,7 +70,7 @@ abstract class MailHandler extends AbstractProcessingHandler
         }
         return $highestRecord;
     }
-    protected function isHtmlBody(string $body) : bool
+    protected function isHtmlBody(string $body): bool
     {
         return ($body[0] ?? null) === '<';
     }
@@ -80,7 +79,7 @@ abstract class MailHandler extends AbstractProcessingHandler
      *
      * @return FormatterInterface
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new HtmlFormatter();
     }

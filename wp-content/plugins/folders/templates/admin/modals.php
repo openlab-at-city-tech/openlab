@@ -278,7 +278,7 @@ if (! defined('ABSPATH')) {
     if($upgrade_popup_status != "hide") { ?>
         <div class="folder-popup-form" id="upgrade-modal-popup">
             <div class="popup-form-content upgrade-modal">
-                <div class="popup-content" style="position: relative;">
+                <div class="folder-modal-content" style="position: relative;">
                     <div class="close-popup-button">
                         <a class="upgrade-model-button" href="javascript:;"><span></span></a>
                     </div>
@@ -311,7 +311,7 @@ if (! defined('ABSPATH')) {
         ?>
         <div class="folder-popup-form" id="rating-modal-popup" >
             <div class="popup-form-content upgrade-modal rating-modal">
-                <div class="popup-content" style="position: relative;">
+                <div class="folder-modal-content" style="position: relative;">
                     <div class="close-popup-button">
                         <a class="hide-upgrade-modal" href="javascript:;" ><span></span></a>
                     </div>
@@ -371,13 +371,13 @@ if (! defined('ABSPATH')) {
     <?php } ?>
 
     <div class="folder-popup-form" id="keyboard-shortcut">
-        <div class="popup-form-content">
-            <div class="popup-content" style="position: relative;">
-                <div class="close-popup-button">
+        <div class="popup-form-content" style="padding: 20px 0 0;">
+            <div class="folder-modal-content" style="position: relative;">
+                <div class="close-popup-button" style="padding: 0 20px;">
                     <a class="" href="javascript:;"><span></span></a>
                 </div>
                 <div class="import-plugin-title" style="font-weight: bold; padding: 0 0 20px 0; font-size: 16px;"><?php esc_html_e("Keyboard shortcuts (Ctrl+K)", 'folders'); ?></div>
-                <div class="plugin-import-table">
+                <div class="plugin-import-table" style="padding: 0 20px 10px; max-height: calc(100vh - 160px); overflow-y: auto;">
                     <table class="keyboard-shortcut">
                         <tr>
                             <th><?php esc_html_e("Create New Folder", "folders") ?></th>

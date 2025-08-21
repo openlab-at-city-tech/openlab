@@ -54,7 +54,7 @@ __webpack_require__.d(__webpack_exports__, {
 /**
  * The list of core modules allowed to opt-in to the private APIs.
  */
-const CORE_MODULES_USING_PRIVATE_APIS = ['@wordpress/block-directory', '@wordpress/block-editor', '@wordpress/block-library', '@wordpress/blocks', '@wordpress/commands', '@wordpress/components', '@wordpress/core-commands', '@wordpress/core-data', '@wordpress/customize-widgets', '@wordpress/data', '@wordpress/edit-post', '@wordpress/edit-site', '@wordpress/edit-widgets', '@wordpress/editor', '@wordpress/format-library', '@wordpress/patterns', '@wordpress/preferences', '@wordpress/reusable-blocks', '@wordpress/router', '@wordpress/dataviews', '@wordpress/fields', '@wordpress/media-utils'];
+const CORE_MODULES_USING_PRIVATE_APIS = ['@wordpress/block-directory', '@wordpress/block-editor', '@wordpress/block-library', '@wordpress/blocks', '@wordpress/commands', '@wordpress/components', '@wordpress/core-commands', '@wordpress/core-data', '@wordpress/customize-widgets', '@wordpress/data', '@wordpress/edit-post', '@wordpress/edit-site', '@wordpress/edit-widgets', '@wordpress/editor', '@wordpress/format-library', '@wordpress/patterns', '@wordpress/preferences', '@wordpress/reusable-blocks', '@wordpress/router', '@wordpress/dataviews', '@wordpress/fields', '@wordpress/media-utils', '@wordpress/upload-media'];
 
 /**
  * A list of core modules that already opted-in to
@@ -137,10 +137,11 @@ function lock(object, privateData) {
   if (!object) {
     throw new Error('Cannot lock an undefined object.');
   }
-  if (!(__private in object)) {
-    object[__private] = {};
+  const _object = object;
+  if (!(__private in _object)) {
+    _object[__private] = {};
   }
-  lockedData.set(object[__private], privateData);
+  lockedData.set(_object[__private], privateData);
 }
 
 /**
@@ -170,10 +171,11 @@ function unlock(object) {
   if (!object) {
     throw new Error('Cannot unlock an undefined object.');
   }
-  if (!(__private in object)) {
+  const _object = object;
+  if (!(__private in _object)) {
     throw new Error('Cannot unlock an object that was not locked before. ');
   }
-  return lockedData.get(object[__private]);
+  return lockedData.get(_object[__private]);
 }
 const lockedData = new WeakMap();
 

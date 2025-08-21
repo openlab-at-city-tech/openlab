@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Social_Component_Dynamic_CSS {
-
 	/**
 	 * Dynamic CSS
 	 *
@@ -32,7 +31,7 @@ class Astra_Social_Component_Dynamic_CSS {
 		$generated_css   = '';
 		$social_css_flag = false;
 
-		$number_of_social_icons = ( 'header' === $builder_type ) ? Astra_Builder_Helper::$num_of_header_social_icons : Astra_Builder_Helper::$num_of_footer_social_icons;
+		$number_of_social_icons = 'header' === $builder_type ? Astra_Builder_Helper::$num_of_header_social_icons : Astra_Builder_Helper::$num_of_footer_social_icons;
 
 		for ( $index = 1; $index <= $number_of_social_icons; $index++ ) {
 
@@ -41,22 +40,22 @@ class Astra_Social_Component_Dynamic_CSS {
 			}
 			$social_css_flag = true;
 			$selector        = '.ast-' . $builder_type . '-social-' . $index . '-wrap';
-			$_section        = ( 'header' === $builder_type ) ? 'section-hb-social-icons-' . $index : 'section-fb-social-icons-' . $index;
+			$_section        = 'header' === $builder_type ? 'section-hb-social-icons-' . $index : 'section-fb-social-icons-' . $index;
 
 			$icon_spacing       = astra_get_option( $builder_type . '-social-' . $index . '-space' );
 			$icon_bg_spacing    = astra_get_option( $builder_type . '-social-' . $index . '-bg-space' );
 			$icon_size          = astra_get_option( $builder_type . '-social-' . $index . '-size' );
 			$icon_radius_fields = astra_get_option( $builder_type . '-social-' . $index . '-radius-fields' );
 
-			$icon_spacing_desktop = ( isset( $icon_spacing['desktop'] ) && '' !== $icon_spacing['desktop'] ) ? (int) $icon_spacing['desktop'] / 2 : '';
-			$icon_spacing_tablet  = ( isset( $icon_spacing['tablet'] ) && '' !== $icon_spacing['tablet'] ) ? (int) $icon_spacing['tablet'] / 2 : '';
-			$icon_spacing_mobile  = ( isset( $icon_spacing['mobile'] ) && '' !== $icon_spacing['mobile'] ) ? (int) $icon_spacing['mobile'] / 2 : '';
+			$icon_spacing_desktop = isset( $icon_spacing['desktop'] ) && '' !== $icon_spacing['desktop'] ? (int) $icon_spacing['desktop'] / 2 : '';
+			$icon_spacing_tablet  = isset( $icon_spacing['tablet'] ) && '' !== $icon_spacing['tablet'] ? (int) $icon_spacing['tablet'] / 2 : '';
+			$icon_spacing_mobile  = isset( $icon_spacing['mobile'] ) && '' !== $icon_spacing['mobile'] ? (int) $icon_spacing['mobile'] / 2 : '';
 
-			$icon_size_desktop = ( isset( $icon_size['desktop'] ) && '' !== $icon_size['desktop'] ) ? (int) $icon_size['desktop'] : '';
-			$icon_size_tablet  = ( isset( $icon_size['tablet'] ) && '' !== $icon_size['tablet'] ) ? (int) $icon_size['tablet'] : '';
-			$icon_size_mobile  = ( isset( $icon_size['mobile'] ) && '' !== $icon_size['mobile'] ) ? (int) $icon_size['mobile'] : '';
+			$icon_size_desktop = isset( $icon_size['desktop'] ) && '' !== $icon_size['desktop'] ? (int) $icon_size['desktop'] : '';
+			$icon_size_tablet  = isset( $icon_size['tablet'] ) && '' !== $icon_size['tablet'] ? (int) $icon_size['tablet'] : '';
+			$icon_size_mobile  = isset( $icon_size['mobile'] ) && '' !== $icon_size['mobile'] ? (int) $icon_size['mobile'] : '';
 
-			$icon_bg_spacing = ( isset( $icon_bg_spacing ) && '' !== $icon_bg_spacing ) ? (int) $icon_bg_spacing : '';
+			$icon_bg_spacing = isset( $icon_bg_spacing ) && '' !== $icon_bg_spacing ? (int) $icon_bg_spacing : '';
 
 			// Normal Responsive Colors.
 			$color_type                       = astra_get_option( $builder_type . '-social-' . $index . '-color-type' );
@@ -97,7 +96,6 @@ class Astra_Social_Component_Dynamic_CSS {
 			$social_icons_label_h_color_desktop = astra_get_prop( astra_get_option( $builder_type . '-social-' . $index . '-label-h-color' ), 'desktop' );
 			$social_icons_label_h_color_tablet  = astra_get_prop( astra_get_option( $builder_type . '-social-' . $index . '-label-h-color' ), 'tablet' );
 			$social_icons_label_h_color_mobile  = astra_get_prop( astra_get_option( $builder_type . '-social-' . $index . '-label-h-color' ), 'mobile' );
-
 
 			$margin = astra_get_option( $_section . '-margin' );
 
@@ -166,7 +164,6 @@ class Astra_Social_Component_Dynamic_CSS {
 				}
 			}
 
-
 			if ( 'official' === $color_type && false === $toggle_brand_hover ) {
 				$css_output_desktop['.ast-social-color-type-official .ast-builder-social-element, .ast-social-color-type-official .social-item-label'] = array(
 					'color'            => 'var(--color)',
@@ -188,7 +185,7 @@ class Astra_Social_Component_Dynamic_CSS {
 					'fill' => 'currentColor',
 				);
 
-				$css_output_desktop[ $selector . ' .ast-social-color-type-official svg' ]['fill'] = $social_icons_brand_color_desktop;
+				$css_output_desktop[ $selector . ' .ast-social-color-type-official .ast-builder-social-element svg' ]['fill'] = $social_icons_brand_color_desktop;
 
 				if ( isset( $social_label_brand_color_desktop ) && ! empty( $social_label_brand_color_desktop ) ) {
 					$css_output_desktop[ $selector . ' .ast-social-color-type-official .social-item-label' ]['color'] = $social_label_brand_color_desktop;
@@ -263,8 +260,6 @@ class Astra_Social_Component_Dynamic_CSS {
 				}
 			}
 
-
-
 			/**
 			 * Social_icons CSS.
 			 */
@@ -336,9 +331,9 @@ class Astra_Social_Component_Dynamic_CSS {
 				// Footer Social Alignment CSS.
 				$alignment = astra_get_option( 'footer-social-' . $index . '-alignment' );
 
-				$desktop_alignment = ( isset( $alignment['desktop'] ) ) ? $alignment['desktop'] : '';
-				$tablet_alignment  = ( isset( $alignment['tablet'] ) ) ? $alignment['tablet'] : '';
-				$mobile_alignment  = ( isset( $alignment['mobile'] ) ) ? $alignment['mobile'] : '';
+				$desktop_alignment = isset( $alignment['desktop'] ) ? $alignment['desktop'] : '';
+				$tablet_alignment  = isset( $alignment['tablet'] ) ? $alignment['tablet'] : '';
+				$mobile_alignment  = isset( $alignment['mobile'] ) ? $alignment['mobile'] : '';
 
 				$css_output_desktop[ '[data-section="section-fb-social-icons-' . $index . '"] .footer-social-inner-wrap' ] = array(
 					'text-align' => $desktop_alignment,
@@ -449,18 +444,7 @@ class Astra_Social_Component_Dynamic_CSS {
 			}
 			.ast-builder-social-element {
 				line-height: 1;
-				color: #3a3a3a;
-				background: transparent;
-				vertical-align: middle;
-				transition: all 0.01s;
-				margin-left: 6px;
-				margin-right: 6px;
-				justify-content: center;
-				align-items: center;
-			}
-			.ast-builder-social-element {
-				line-height: 1;
-				color: #3a3a3a;
+				color: var(--ast-global-color-2);
 				background: transparent;
 				vertical-align: middle;
 				transition: all 0.01s;

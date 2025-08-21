@@ -1,11 +1,8 @@
 <?php
-/**
- * @license GPL-2.0
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Assets;
+
+use InvalidArgumentException;
 
 class Assets {
 	/**
@@ -681,8 +678,9 @@ class Assets {
 	 * Register the Assets on the correct hooks.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.5 Ensure the method accepts only `null` or an `Asset` instance or an array of `Asset[]` instances.
 	 *
-	 * @param array|Asset|null $assets Array of asset objects, single asset object, or null.
+	 * @param Asset[]|Asset|null $assets Array of asset objects, single asset object, or null.
 	 *
 	 * @return void
 	 */
@@ -693,18 +691,27 @@ class Assets {
 		)
 		) {
 			// Registering the asset now would trigger a doing_it_wrong notice: queue the assets to be registered later.
+			if ( $assets === null || empty( $assets ) ) {
+				return;
+			}
 
 			if ( ! is_array( $assets ) ) {
 				$assets = [ $assets ];
 			}
 
-			// Register later, avoid the doing_it_wrong notice.
-			$this->assets = array_merge( $this->assets, $assets );
+			foreach ( $assets as $asset ) {
+				if ( ! $asset instanceof Asset ) {
+					throw new InvalidArgumentException( 'Assets in register_in_wp() must be of type Asset' );
+				}
+
+				// Register later, avoid the doing_it_wrong notice.
+				$this->assets[ $asset->get_slug() ] = $asset;
+			}
 
 			return;
 		}
 
-		if ( is_null( $assets ) ) {
+		if ( null === $assets ) {
 			$assets = $this->get();
 		}
 
@@ -712,7 +719,15 @@ class Assets {
 			$assets = [ $assets ];
 		}
 
+		if ( empty( $assets ) ) {
+			return;
+		}
+
 		foreach ( $assets as $asset ) {
+			if ( ! $asset instanceof Asset ) {
+				throw new InvalidArgumentException( 'Assets in register_in_wp() must be of type Asset' );
+			}
+
 			// Asset is already registered.
 			if ( $asset->is_registered() ) {
 				continue;

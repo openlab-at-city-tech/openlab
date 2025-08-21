@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink;
 
@@ -25,7 +20,7 @@ class Uplink {
 	public static function init(): void {
 		if ( ! Config::has_container() ) {
 			throw new RuntimeException(
-				__( 'You must call StellarWP\Uplink\Config::set_container() before calling StellarWP\Uplink::init().', '%TEXTDOMAIN%' )
+				__( 'You must call StellarWP\Uplink\Config::set_container() before calling StellarWP\Uplink::init().', 'tribe-common' )
 			);
 		}
 

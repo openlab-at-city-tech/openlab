@@ -31,9 +31,9 @@ function astra_comments_css( $dynamic_css ) {
 		$reply_title_space_threshold = Astra_Dynamic_CSS::astra_4_4_0_compatibility() ? 1.3 : 1.66666;
 
 		if ( is_array( $body_font_size ) ) {
-			$body_font_size_desktop = ( isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ) ? $body_font_size['desktop'] : 15;
+			$body_font_size_desktop = isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ? $body_font_size['desktop'] : 15;
 		} else {
-			$body_font_size_desktop = ( '' != $body_font_size ) ? $body_font_size : 15;
+			$body_font_size_desktop = '' != $body_font_size ? $body_font_size : 15;
 		}
 
 		$desktop_comment_global = array(
@@ -52,11 +52,10 @@ function astra_comments_css( $dynamic_css ) {
 		);
 		$dynamic_css .= astra_parse_css( $desktop_comment_global );
 
-		$update_customizer_strctural_defaults = ( true === astra_check_is_structural_setup() );
+		$update_customizer_strctural_defaults = true === astra_check_is_structural_setup();
 		$padding_comment_title                = $update_customizer_strctural_defaults ? '1em 0 0' : '2em 0';
 		$padding_ast_comment                  = $update_customizer_strctural_defaults ? '0' : '1em 0';
 		$padding_ast_comment_list             = $update_customizer_strctural_defaults ? '0' : '0.5em';
-		$border_color                         = astra_get_option( 'border-color' );
 		$blog_improvements                    = Astra_Dynamic_CSS::astra_4_6_0_compatibility();
 		$comments_title_css                   = $blog_improvements ? 'font-weight: 600; padding-bottom: 1em;' : 'font-weight: normal;';
 
@@ -272,7 +271,7 @@ function astra_comments_css( $dynamic_css ) {
 		$is_boxed         = astra_is_content_style_boxed();
 		$is_sidebar_boxed = astra_is_sidebar_style_boxed();
 		$content_layout   = astra_apply_boxed_layouts( $content_layout, $is_boxed, $is_sidebar_boxed );
-		if ( 'page-builder' == $content_layout || 'plain-container' == $content_layout ) {
+		if ( 'page-builder' === $content_layout || 'plain-container' === $content_layout ) {
 			$single_post_comment_css .= '
 				.ast-page-builder-template .comment-respond {
 					border-top: none;
@@ -602,7 +601,7 @@ function astra_comments_css( $dynamic_css ) {
 					flex: 1;
 				}
 				.comments-area {
-					border-top: 1px solid var(--ast-global-color-6);
+					border-top: 1px solid var(--ast-global-color-subtle-background, var(--ast-global-color-6));
 					margin-top: 2em;
 				}
 				.ast-separate-container .comments-area {

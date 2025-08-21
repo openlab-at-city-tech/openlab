@@ -4,7 +4,7 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Settings/Item.php';
-$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim(sanitize_text_field($_GET['b2sShowByDate']))) ? trim(sanitize_text_field($_GET['b2sShowByDate'])) : "") : ""; //YYYY-mm-dd
+$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim(sanitize_text_field(wp_unslash($_GET['b2sShowByDate'])))) ? trim(sanitize_text_field(wp_unslash($_GET['b2sShowByDate']))) : "") : ""; //YYYY-mm-dd
 $b2sUserAuthId = isset($_GET['b2sUserAuthId']) ? (int) $_GET['b2sUserAuthId'] : 0;
 $b2sPostBlogId = isset($_GET['b2sPostBlogId']) ? (int) $_GET['b2sPostBlogId'] : 0;
 $b2sShowByNetwork = isset($_GET['b2sShowByNetwork']) ? (int) $_GET['b2sShowByNetwork'] : 0;
@@ -280,7 +280,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2sAnimateGif" value='<?php echo esc_attr(B2S_PLUGIN_NETWORK_ANIMATE_GIF); ?>'>
 <input type="hidden" id="ogMetaNetworks" value="<?php echo esc_attr(implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og'])); ?>">
 <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
-<input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(date(strtotime("+ 3 years"))); ?>000">
+<input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(wp_date(strtotime("+ 3 years"), null,  new DateTimeZone(date_default_timezone_get()))); ?>000">
 
 
 <script>

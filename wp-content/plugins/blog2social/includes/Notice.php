@@ -10,7 +10,7 @@ class B2S_Notice {
                     global $wpdb;
                     $userResult = $wpdb->get_row($wpdb->prepare('SELECT feature,register_date FROM ' . $wpdb->prefix . 'b2s_user WHERE blog_user_id =%d', B2S_PLUGIN_BLOG_USER_ID));
                     if ($userResult->register_date == '0000-00-00 00:00:00') {
-                        $wpdb->update('b2s_user', array('register_date' => date('Y-m-d H:i:s')), array('blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('%s'), array('%d'));
+                        $wpdb->update('b2s_user', array('register_date' => wp_date('Y-m-d H:i:s', null,  new DateTimeZone(date_default_timezone_get()))), array('blog_user_id' => B2S_PLUGIN_BLOG_USER_ID), array('%s'), array('%d'));
                     } else if ($userResult->feature == 0 && strtotime($userResult->register_date) < strtotime('-6 days')) {
                         wp_enqueue_style('B2SNOTICECSS');
                         echo '<div class="updated b2s-notice-rate">
@@ -38,7 +38,8 @@ class B2S_Notice {
     }
 
     public static function getBlogEntries($lang = 'en') {
-        return json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getBlogEntries', 'lang' => $lang, 'token' => B2S_PLUGIN_TOKEN)));
+        $res = B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getBlogEntries', 'lang' => $lang, 'token' => B2S_PLUGIN_TOKEN));
+        return json_decode($res);
     }
 
     public static function getCalEvent($lang = 'en') {
@@ -47,16 +48,16 @@ class B2S_Notice {
         if (current_user_can('read')) {
             $option = get_option('B2S_CAL_EVENT_' . strtoupper($lang));
             if ($option !== false) {
-                if (is_array($option) && isset($option['last_call_date']) && isset($option['content']) && !empty($option['content']) && $option['last_call_date'] == date('Y-m-d')) {
+                if (is_array($option) && isset($option['last_call_date']) && isset($option['content']) && !empty($option['content']) && $option['last_call_date'] == wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {
                     $content = $option['content'];
                 }
             }
             if (empty($content)) {
-                $data = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getCalEvent', 'lang' => $lang, 'currentDate' => date('Y-m-d'), 'token' => B2S_PLUGIN_TOKEN)));
+                $data = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getCalEvent', 'lang' => $lang, 'currentDate' => wp_date('Y-m-d', null , new DateTimeZone(date_default_timezone_get())), 'token' => B2S_PLUGIN_TOKEN)));
                 if (isset($data->result) && (int) $data->result == 1 && isset($data->content) && !empty($data->content)) {
                     $content = $data->content;
                 }
-                update_option('B2S_CAL_EVENT_' . strtoupper($lang), array("last_call_date" => date("Y-m-d"), "content" => $content), false);
+                update_option('B2S_CAL_EVENT_' . strtoupper($lang), array("last_call_date" => wp_date("Y-m-d", null, new DateTimeZone(date_default_timezone_get())), "content" => $content), false);
             }
             if (!empty($content)) {
                 $arr = array();
@@ -70,10 +71,10 @@ class B2S_Notice {
                             ' . esc_html__("Today's Content Calendar Tips", "blog2social") . '
                             </div></div></div>';
                     foreach ($arr as $c => $v) {
-                        $isCurrentDate = (date('Y-m-d') == $c) ? 'row-striped' : '';
+                        $isCurrentDate = (wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get())) == $c) ? 'row-striped' : '';
                         $output .= '<div class="row ' . $isCurrentDate . ' b2s-cal-padding-10">
                                     <div class="text-left">
-                                    <div class="b2s-font-size-18"><span class="badge b2s-cal-badge b2s-cal-badge-today">' . date('d', strtotime($c)) . '</span> ' . $lc->get_month(date('n', strtotime($c))) . '</div>
+                                    <div class="b2s-font-size-18"><span class="badge b2s-cal-badge b2s-cal-badge-today">' . wp_date('d', strtotime($c), new DateTimeZone(date_default_timezone_get())) . '</span> ' . $lc->get_month(wp_date('n', strtotime($c),new DateTimeZone(date_default_timezone_get()) )) . '</div>
                                     </div>';
                         $countItem = 0;
                         foreach ($v as $event) {

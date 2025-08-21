@@ -8,6 +8,8 @@
 namespace Automattic\Jetpack\Assets;
 
 use Automattic\Jetpack\Assets;
+use Automattic\Jetpack\Status;
+use Automattic\Jetpack\Status\Host;
 
 /**
  * Class script data
@@ -48,6 +50,7 @@ class Script_Data {
 		$hook = is_admin() ? 'admin_print_scripts' : 'wp_print_scripts';
 		add_action( $hook, array( self::class, 'render_script_data' ), 1 );
 		add_action( 'enqueue_block_editor_assets', array( self::class, 'render_script_data' ), 1 );
+		add_action( 'wp_enqueue_scripts', array( self::class, 'render_script_data' ), 1 );
 	}
 
 	/**
@@ -84,17 +87,18 @@ class Script_Data {
 		self::$did_render_script_data = true;
 
 		$script_data = is_admin() ? self::get_admin_script_data() : self::get_public_script_data();
-
 		$script_data = wp_json_encode(
 			$script_data,
 			JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE
 		);
 
-		wp_add_inline_script(
-			self::SCRIPT_HANDLE,
-			sprintf( 'window.JetpackScriptData = %s;', $script_data ),
-			'before'
-		);
+		if ( is_admin() || did_action( 'enqueue_block_editor_assets' ) ) {
+			// For admin/editor contexts (including P2 frontend editing), use wp_add_inline_script with the existing script
+			wp_add_inline_script( self::SCRIPT_HANDLE, sprintf( 'window.JetpackScriptData = %s;', $script_data ), 'before' );
+		} else {
+			// For public pages, we directly print the script tag.
+			wp_print_inline_script_tag( sprintf( 'window.JetpackScriptData = %s;', $script_data ) );
+		}
 	}
 
 	/**
@@ -108,20 +112,22 @@ class Script_Data {
 
 		$data = array(
 			'site' => array(
-				'admin_url'    => esc_url_raw( admin_url() ),
-				'date_format'  => get_option( 'date_format' ),
-				'icon'         => self::get_site_icon(),
-				'is_multisite' => is_multisite(),
-				'plan'         => array(
+				'admin_url'         => esc_url_raw( admin_url() ),
+				'date_format'       => get_option( 'date_format' ),
+				'icon'              => self::get_site_icon(),
+				'is_multisite'      => is_multisite(),
+				'is_wpcom_platform' => ( new Host() )->is_wpcom_platform(),
+				'plan'              => array(
 					// The properties here should be updated by the consumer package/plugin.
 					// It includes properties like 'product_slug', 'features', etc.
 					'product_slug' => '',
 				),
-				'rest_nonce'   => wp_create_nonce( 'wp_rest' ),
-				'rest_root'    => esc_url_raw( rest_url() ),
-				'title'        => self::get_site_title(),
-				'wp_version'   => $wp_version,
-				'wpcom'        => array(
+				'rest_nonce'        => wp_create_nonce( 'wp_rest' ),
+				'rest_root'         => esc_url_raw( rest_url() ),
+				'suffix'            => ( new Status() )->get_site_suffix(),
+				'title'             => self::get_site_title(),
+				'wp_version'        => $wp_version,
+				'wpcom'             => array(
 					// This should contain the connected site details like blog_id, is_atomic etc.
 					'blog_id' => 0,
 				),
@@ -155,8 +161,10 @@ class Script_Data {
 
 		$data = array(
 			'site' => array(
-				'icon'  => self::get_site_icon(),
-				'title' => self::get_site_title(),
+				'icon'              => self::get_site_icon(),
+				'title'             => self::get_site_title(),
+				'host'              => ( new Host() )->get_known_host_guess(),
+				'is_wpcom_platform' => ( new Host() )->is_wpcom_platform(),
 			),
 		);
 
@@ -215,6 +223,10 @@ class Script_Data {
 		return array(
 			'display_name' => $current_user->display_name,
 			'id'           => $current_user->ID,
+			'capabilities' => array(
+				'manage_options' => current_user_can( 'manage_options' ),
+				'manage_modules' => current_user_can( 'jetpack_manage_modules' ),
+			),
 		);
 	}
 }

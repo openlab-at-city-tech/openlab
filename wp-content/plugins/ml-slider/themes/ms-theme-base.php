@@ -63,7 +63,7 @@ class MetaSlider_Theme_Base
         $this->init();
 
         // Customize theme design
-        add_filter('metaslider_css', array($this, 'theme_customize'), 10, 3);
+        add_filter('metaslider_theme_css', array($this, 'theme_customize'), 10, 3);
     }
 
     /**
@@ -79,6 +79,7 @@ class MetaSlider_Theme_Base
         add_filter('metaslider_responsive_slider_parameters', array($this, 'update_parameters'), 99, 3);
         add_filter('metaslider_nivo_slider_parameters', array($this, 'update_parameters'), 99, 3);
         add_filter('metaslider_coin_slider_parameters', array($this, 'update_parameters'), 99, 3);
+        add_filter('metaslider_flex_slider_parameters', array($this, 'responsive_arrows'), 99, 3);
 
         // Pro - override the arrows markup for the filmstrip
         add_filter('metaslider_flex_slider_filmstrip_parameters', array($this, 'update_parameters'), 99, 3);
@@ -123,6 +124,65 @@ class MetaSlider_Theme_Base
                 wp_enqueue_script('metaslider_' . $this->id . '_theme_script', METASLIDER_THEMES_URL . $this->id . $asset['file'], isset($asset['dependencies']) ? $asset['dependencies'] : array(), $this->version, isset($asset['in_footer']) ? $asset['in_footer'] : true);
             }
         }
+    }
+
+    /**
+     * Adjust arrows in mobile when negative value is in place to avoid horizontal scrollbar
+     *
+     * @since 3.98
+     * 
+     * @param array      $options      The slider plugin options
+     * @param int|string $slideshow_id The slideshow options
+     * @param array      $settings     The slideshow settings
+     */
+    public function responsive_arrows( $options, $slideshow_id, $settings ) {
+        $enable     = apply_filters( 'metaslider_flex_slider_responsive_arrows_enable', false );
+        $prev_class = apply_filters( 'metaslider_flex_slider_responsive_arrows_prev_class', '.flex-prev' );
+        $next_class = apply_filters( 'metaslider_flex_slider_responsive_arrows_next_class', '.flex-next' );
+        
+        if ( ! is_admin() && $enable ) {
+            $options['start'] = isset( $options['start'] ) ? $options['start'] : array();
+            $options['start'] = array_merge( $options['start'], array(
+                "function responsive_arrows__slide_width() {
+                    var width = parseInt($('#metaslider_{$slideshow_id}').width());
+                    if ( width > 0 ) {
+                        return width;
+                    }
+                    return $('#metaslider-id-{$slideshow_id}').attr('data-width');
+                }
+                function responsive_arrows__adjust_arrows(prevStartVal, nextStartVal) {
+                    if ( ! prevStartVal || ! nextStartVal) {
+                        return;
+                    }
+
+                    var screenWidth = $(window).innerWidth();
+                    var parentContainer = $('#metaslider_container_{$slideshow_id}');
+                    var liWidth = responsive_arrows__slide_width();
+                    var prev = parentContainer.find('{$prev_class}');
+                    var next = parentContainer.find('{$next_class}');
+
+                    /* 200 = give some breathe considering arrow size and position from edge */
+                    if ((screenWidth - 200) < liWidth && (parseInt(prevStartVal, 10) < 0 || parseInt(nextStartVal, 10) < 0)) {
+                        prev.css('left', '10px');
+                        next.css('right', '10px');
+                    } else {
+                        prev.css('left', prevStartVal);
+                        next.css('right', nextStartVal);
+                    }
+                }
+                    
+                var parentContainer = $('#metaslider_container_{$slideshow_id}');
+                var prevStartVal = parentContainer.find('{$prev_class}').css('left') || null;
+                var nextStartVal = parentContainer.find('{$next_class}').css('right') || null;
+                responsive_arrows__adjust_arrows(prevStartVal, nextStartVal);
+
+                $(window).on('resize', function() {
+                    responsive_arrows__adjust_arrows(prevStartVal, nextStartVal);
+                });"
+            ));
+        }
+
+        return $options;
     }
 
     /**
@@ -178,7 +238,7 @@ return $options;
 
         // Only enable this for dots nav
         if ('true' === $settings['navigation'] && 'false' === $settings['carouselMode']) {
-            $nav .= "<ol class='flex-control-nav titleNav-%s'>";
+            $nav .= "<ol class='flex-control-nav titleNav-{$slideshow_id}'>";
             foreach ($this->get_slides($slideshow_id) as $count => $slide) {
                 // Check if the title is inherited or manually set
                 if ((bool) get_post_meta($slide->ID, 'ml-slider_inherit_image_title', true)) {
@@ -234,6 +294,11 @@ return $options;
             $type = get_post_meta($slide->ID, 'ml-slider_type', true);
             $type = $type ? $type : 'image'; // Default ot image
 
+            // @since 3.96 - Skip slide if is an image type but doesn't have an actual image (invisible slide in admin)
+            if ( $type == 'image' && get_post_meta( $slide->ID, '_thumbnail_id', true ) == false ) {
+                continue;
+            }
+            
             $is_hidden = get_post_meta($slide->ID, '_meta_slider_slide_is_hidden', true);
             if($is_hidden != true){
                 // If this filter exists, that means the slide type is available (i.e. pro slides)
@@ -259,77 +324,25 @@ return $options;
      */
     public function theme_customize_css($theme, $settings, $slideshow_id)
     {
-        // This CSS only works with Flexslider
-        if ($settings['type'] !== 'flex' || ! isset($settings['theme_customize'])) {
-            return "";
-        }
+        $theme_settings = get_post_meta($slideshow_id, 'metaslider_slideshow_theme', true);
 
-        $theme_settings = get_post_meta($slideshow_id, 'metaslider_slideshow_theme');
-
-        $manifest   = array();
-        $type       = isset($theme_settings[0]['type']) && isset($theme_settings[0]) ? $theme_settings[0]['type'] : 'free';
-
-        // If is not a free theme, maybe override $manifest path
-        if ($type !== 'free') {
-            /**
-             * Check if we have extra themes/ folders added from external sources,
-             * including MetaSlider Pro 
-             * 
-             * e.g. 
-             * array(
-             *  '/path/to/wp-content/plugins/ml-slider-pro/themes/',
-             *  '/path/to/wp-content/themes/my-theme/ms-themes/'
-             * )
-             */
-            $extra_themes = apply_filters('metaslider_extra_themes', array());
-
-            foreach ($extra_themes as $location) {
-                // Check if customize.php file that belongs to $theme as theme name (lowercase) exists
-                if (file_exists($customize_file = trailingslashit($location) . trailingslashit($theme) . 'customize.php')) {
-                    // Get the data from customize.php files
-                    $manifest = MetaSlider_Themes::get_instance()->add_base_customize_settings_single(
-                        $theme, $customize_file
-                    );
-                    break;
-                }
-            }
+        // @since 3.94 - Are we using this core theme through a custom theme v2?
+        if (isset($theme_settings['folder']) && '_theme_v2' === substr($theme_settings['folder'], 0, 9)) {
+            $custom_themes  = get_option('metaslider-themes');
+            $stored_data    = isset($custom_themes[$theme_settings['folder']]) && isset($custom_themes[$theme_settings['folder']]['customize']) 
+                            ? $custom_themes[$theme_settings['folder']]['customize']
+                            : array();
         } else {
-            // Get data from themes/$theme/customize.php
-            $manifest = MetaSlider_Themes::get_instance()->add_base_customize_settings_single($theme);
+            // Is a core theme - customization settings are stored in ml-slider_settings postmeta db
+            $stored_data = $settings['theme_customize'];
         }
 
-        $output = "";
+        $themes_class = MetaSlider_Themes::get_instance();
 
-        // Loop each theme customize setting from customize.php 
-        foreach ($manifest as $row_item) {
+        $type       = isset($theme_settings['type']) ? $theme_settings['type'] : 'free';
+        $manifest   = $themes_class->get_theme_manifest( $theme, $type );
 
-            foreach ($row_item['fields'] as $field_item) {
-
-                // Check if setting from manifest exists in db
-                if (isset($settings['theme_customize'][$field_item['name']])
-                    && isset($field_item['css'])
-                ) {
-                    if (is_array($field_item['css'])) {
-                        // CSS is an array of strings
-                        foreach ($field_item['css'] as $css_item) {
-
-                            $output .= sprintf(
-                                $css_item, 
-                                "#metaslider-id-{$slideshow_id}", 
-                                $settings['theme_customize'][$field_item['name']]
-                            ) . "\n";
-                        }
-                    } else {
-                        // CSS is a single string
-                        $output .= sprintf(
-                            $field_item['css'], 
-                            "#metaslider-id-{$slideshow_id}", 
-                            $settings['theme_customize'][$field_item['name']]
-                        ) . "\n";
-                    }
-                }
-            }
-        }
+        $output = $themes_class->build_customize_css($manifest, $stored_data, $slideshow_id);
 
         return $output;
     }
@@ -341,7 +354,28 @@ return $options;
      */
     public function theme_customize($css, $settings, $slideshow_id)
     {
-        $css .= $this->theme_customize_css(
+        // @since 3.98 - Reset css to avoid including css from a previous slideshow's instance
+        $css = '';
+
+        // /wp-admin/admin.php?page=metaslider-theme-editor&theme_slug=<slug>1&version=v2
+        $is_theme_editor_screen = is_admin() 
+            && function_exists('get_current_screen') 
+            && ($screen = get_current_screen())
+            && 'metaslider-pro_page_metaslider-theme-editor' === $screen->id 
+            && isset($_GET['version']) 
+            && $_GET['version'] == 'v2';
+
+        /* This CSS only works with Flexslider
+         * Important: even if is empty, 'theme_customize' is required in 'ml-slider_settings' postmeta db 
+         * for themes created with v2 theme editor */
+        $doesnt_use_customize = $settings['type'] !== 'flex' || ! isset($settings['theme_customize']);
+
+        
+        if ($is_theme_editor_screen || $doesnt_use_customize) {
+            return $css;
+        }
+
+        $css = $this->theme_customize_css(
             $this->id,
             $settings,
             $slideshow_id

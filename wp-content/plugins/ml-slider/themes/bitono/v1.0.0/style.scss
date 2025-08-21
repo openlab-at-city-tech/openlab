@@ -39,6 +39,8 @@
 			background:  linear-gradient(to bottom, rgba(0,0,0,0), #016fb9);
 			opacity: 1;
 			height: 100%;
+			bottom: 0;
+			transform: translateY(0);
 
 			.caption {
 				padding: 20px 70px;
@@ -80,6 +82,8 @@
 				background-image: none;
 				box-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
 				border-radius: 4px;
+				top: calc(50% + 20px);
+				transform: translateY(-50%);
 				
 				&:focus {
 					background-color: #dd6923;
@@ -104,7 +108,7 @@
 
 					&:after {
 						mask-image: url(images/left.svg);
-						mask-position: 12px center;
+						mask-position: center center;
 					}
 				}
 
@@ -113,12 +117,17 @@
 
 					&:after {
 						mask-image: url(images/right.svg);
-						mask-position: 14px center;
 					}
 				}
 			}
 		}
 
+		.flex-control-paging li a {
+			font-size: 0;
+			text-indent: 99999px;
+			overflow: hidden;
+		}
+		
 		.flex-control-nav {
 			bottom: 20px;
 	
@@ -138,6 +147,11 @@
 					background: #fff;
 				}
 			}
+		}
+
+		.flex-pauseplay a {
+			left: 20px;
+  			bottom: 10px;
 		}
 	}
 

@@ -31,22 +31,22 @@ export default {
                 helper: metaslider_sortable_helper,
                 handle: "td.col-1",
                 start: (e, ui) => {
-                    $('#metaslider-slides-list').find('textarea.wysiwyg').each(function() {
-                        tinymce.get($(this).attr('id')).destroy();
-                        $(this).attr('disabled', true);
-                    });
+                    if (typeof tinymce !== 'undefined') {
+                        $('#metaslider-slides-list').find('textarea.wysiwyg, textarea[class^="wysiwyg-"]').each(function() {
+                            tinymce.get($(this).attr('id')).destroy();
+                            $(this).attr('disabled', true);
+                        });
+                    }
                 },
                 stop: (e, ui) => {
-                    $('#metaslider-slides-list').find('textarea.wysiwyg').each(function() {
+                    $('#metaslider-slides-list').find('textarea.wysiwyg, textarea[class^="wysiwyg-"]').each(function() {
                         const slide_type = $(this).data('type');
                         const slide_id = $(this).attr('id');
 
                         if (slide_type.length && slide_id.length) {
                             const tinymce_data = metaslider.tinymce.find(obj => obj.type === slide_type);
 
-                            if (typeof tinymce_data === 'undefined') {
-                                console.log(`${slide_type} was not found in metaslider.tinymce object or is disabled in MetaSlider settings!`);
-                            } else {
+                            if (typeof tinymce_data !== 'undefined') {
                                 $(this).attr('disabled', false);
                                 tinymce.init({ 
                                     ...{ selector: `#${slide_id}` },

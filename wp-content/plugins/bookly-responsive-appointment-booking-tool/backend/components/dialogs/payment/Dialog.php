@@ -74,7 +74,5 @@ class Dialog extends Lib\Base\Component
                 'are_you_sure_want_refund' => __( 'Are you sure you want to approve refund? This action cannot be undone.', 'bookly' )
             ),
         ) );
-
-        print '<div id="bookly-payment-details-dialog"></div>';
     }
 }

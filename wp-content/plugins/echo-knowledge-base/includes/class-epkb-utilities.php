@@ -500,6 +500,36 @@ class EPKB_Utilities {
 	}
 
 	/**
+	 * Sanitizes a hex color. Returns either '', a 3, or 6, or 8 digit hex color (with #), or nothing (the WordPress sanitize_hex_color() does not handle 8 digits HEX with alpha channel, so KB has its own method to sanitize HEX)
+	 * @param $color
+	 * @return string
+	 */
+	public static function sanitize_hex_color( $color ) {
+
+		// if the color is an empty string, return it as-is
+		if ( '' === $color || ! is_string( $color ) ) {
+			return '';
+		}
+
+		// This regex pattern checks for:
+		// - A leading '#'
+		// - Either 3, 6, or 8 hexadecimal digits following the '#'
+		//
+		// Explanation:
+		// ^#                       Start with '#'
+		// (?:[A-Fa-f0-9]{3}        Matches exactly 3 hex chars
+		//   |[A-Fa-f0-9]{6}        OR matches exactly 6 hex chars
+		//   |[A-Fa-f0-9]{8})       OR matches exactly 8 hex chars (including alpha)
+		// $                        End of string
+		if ( preg_match( '/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/', $color ) ) {
+			return $color;
+		}
+
+		// If the input doesn't match any of the valid formats, return default gray color.
+		return '#a3a3a3';
+	}
+
+	/**
 	 * Retrieve ID or return error. Used for IDs.
 	 *
 	 * @param mixed $id is either $id number or array with 'id' index
@@ -585,7 +615,7 @@ class EPKB_Utilities {
 		$sanitized_fields = array();
 		foreach( $submitted_fields as $submitted_key => $submitted_value ) {
 
-			$field_type = empty($all_fields_specs[$submitted_key]['type']) ? '' : $all_fields_specs[$submitted_key]['type'];
+			$field_type = empty( $all_fields_specs[$submitted_key]['type'] ) ? '' : $all_fields_specs[$submitted_key]['type'];
 
 			if ( $field_type == EPKB_Input_Filter::WP_EDITOR ) {
 				$sanitized_fields[$submitted_key] = wp_kses( $submitted_value, self::get_extended_html_tags() );
@@ -593,7 +623,7 @@ class EPKB_Utilities {
 			} elseif ( $field_type == EPKB_Input_Filter::TYPOGRAPHY ) {
 				$sanitized_fields[$submitted_key] = EPKB_Input_Filter::sanitize_typography( $submitted_value );
 
-			} elseif ( $field_type == EPKB_Input_Filter::TEXT && ! empty($all_fields_specs[$submitted_key]['allowed_tags']) ) {
+			} elseif ( $field_type == EPKB_Input_Filter::TEXT && ! empty( $all_fields_specs[$submitted_key]['allowed_tags'] ) ) {
 				// text input with allowed tags 
 				$sanitized_fields[$submitted_key] = wp_kses( $submitted_value, $all_fields_specs[$submitted_key]['allowed_tags'] );
 
@@ -641,6 +671,7 @@ class EPKB_Utilities {
 			return self::post_sanitize( $key, $default, $value_type, $max_length );
 		}
 
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET[$key] ) ) {
 			return self::get_sanitize( $key, $default, $value_type, $max_length );
 		}
@@ -672,7 +703,7 @@ class EPKB_Utilities {
 
 		// config is sanitizing with its own specs separately
 		if ( $value_type == 'db-config-json' ) {
-			$decoded_value = $key == 'epkb_article_views_counter' ? json_decode( stripslashes( $_COOKIE[$key] ), true ) : json_decode( stripcslashes( $_POST[$key] ), true );
+			$decoded_value = $key == 'epkb_article_views_counter' ? json_decode( stripslashes( (string)$_COOKIE[$key] ), true ) : json_decode( stripcslashes( $_POST[$key] ), true );
 			return empty( $decoded_value ) ? $default : $decoded_value;
 		}
 
@@ -681,7 +712,7 @@ class EPKB_Utilities {
 		}
 
 		if ( $value_type == 'text-area' ) {
-			$value = sanitize_textarea_field( stripslashes( $_POST[$key] ) );  // do not strip line breaks
+			$value = sanitize_textarea_field( stripslashes( (string)$_POST[$key] ) );  // do not strip line breaks
 		} else if ( $value_type == 'email' ) {
 			$value = sanitize_email( $_POST[$key] );  // strips out all characters that are not allowable in an email
 		} else if ( $value_type == 'url' ) {
@@ -689,7 +720,7 @@ class EPKB_Utilities {
 		} else if ( $value_type == 'wp_editor' ) {
 			$value = wp_kses( $_POST[$key], self::get_extended_html_tags() );
 		} else {
-			$value = sanitize_text_field( stripslashes( $_POST[$key] ) );
+			$value = sanitize_text_field( stripslashes( (string)$_POST[$key] ) );
 		}
 
 		// optionally limit the value by length
@@ -765,7 +796,7 @@ class EPKB_Utilities {
 		}
 
 		if ( $value_type == 'text-area' ) {
-			$value = sanitize_textarea_field( stripslashes( $_GET[$key] ) );  // do not strip line breaks
+			$value = sanitize_textarea_field( stripslashes( (string)$_GET[$key] ) );  // do not strip line breaks
 		} else if ( $value_type == 'email' ) {
 			$value = sanitize_email( $_GET[$key] );  // strips out all characters that are not allowable in an email
 		} else if ( $value_type == 'url' ) {
@@ -773,7 +804,7 @@ class EPKB_Utilities {
 		} else if ( $value_type == 'wp_editor' ) {
 			$value = wp_kses( $_GET[$key], self::get_extended_html_tags() );
 		} else {
-			$value = sanitize_text_field( stripslashes( $_GET[$key] ) );
+			$value = sanitize_text_field( stripslashes( (string)$_GET[$key] ) );
 		}
 
 		// optionally limit value by length
@@ -796,11 +827,11 @@ class EPKB_Utilities {
 				}
 
 				foreach ( $val as $key_2 => $val_2 ) {
-					$result[ $key ][ $key_2 ] = sanitize_text_field( stripslashes( $val_2 ) );
+					$result[ $key ][ $key_2 ] = sanitize_text_field( stripslashes( (string)$val_2 ) );
 				}
 
 			} else {
-				$result[ $key ] = sanitize_text_field( stripslashes( $val ) );
+				$result[ $key ] = sanitize_text_field( stripslashes( (string)$val ) );
 			}
 		}
 
@@ -869,7 +900,7 @@ class EPKB_Utilities {
 		if ( $return_error && $option === null && ! empty( $wpdb->last_error ) ) {
 			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
 			EPKB_Logging::add_log( "DB failure: " . $wpdb_last_error, 'Option Name: ' . $option_name );
-			return new WP_Error( __( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error );
+			return new WP_Error( esc_html__( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error );
 		}
 
 		// if WP option is missing then return defaults
@@ -1294,12 +1325,12 @@ class EPKB_Utilities {
 	/**
 	 * Check first installed version. Return true if $version less or equal than first installed version.
 	 * @param $kb_config
-	 * @param $version
+	 * @param $starting_version_of_new_user
 	 * @return bool
 	 */
-	public static function is_new_user( $kb_config, $version ) {
+	public static function is_new_user( $kb_config, $starting_version_of_new_user ) {
 		$plugin_first_version = empty( $kb_config['first_plugin_version'] ) ? '11.30.0' : $kb_config['first_plugin_version'];
-		return ! version_compare( $plugin_first_version, $version, '<' );
+		return ! version_compare( $plugin_first_version, $starting_version_of_new_user, '<' );
 	}
 
 	/**
@@ -1500,6 +1531,9 @@ class EPKB_Utilities {
 
 	public static function get_single_article_link( $kb_config, $title, $article_id, $type, $seq_no='' ) {
 		static $epkb_single_article_link = null;
+		static $epkb_block_name = null;
+
+		global $epkb_frontend_editor_preview;
 
 		$title_style_escaped = '';
 
@@ -1555,7 +1589,11 @@ class EPKB_Utilities {
 		$link = '';
 		if ( has_filter( 'eckb_single_article_filter' ) ) {
 
-			$result = apply_filters( 'eckb_single_article_filter', $article_id, array( $kb_config['id'], $title, $outer_span, $article_color_escaped, $icon_color_escaped ) );
+			// let blocks to pass their own values into article filter
+			$kb_main_page_layout = isset( $kb_config['kb_id'] ) && ! empty( $kb_config['kb_main_page_layout'] ) ? $kb_config['kb_main_page_layout'] : '';
+			$article_icon_toggle = isset( $kb_config['kb_id'] ) && ! empty( $kb_config['article_icon_toggle'] ) ? $kb_config['article_icon_toggle'] : '';
+
+			$result = apply_filters( 'eckb_single_article_filter', $article_id, array( $kb_config['id'], $title, $outer_span, $article_color_escaped, $icon_color_escaped, $kb_main_page_layout, $article_icon_toggle ) );
 
 			// keep for old compatibility for links to output separately
 			if ( ! empty( $result ) && $result === true ) {
@@ -1573,9 +1611,14 @@ class EPKB_Utilities {
 		// custom article list icon
 		if ( empty( $link ) && EPKB_Utilities::is_elegant_layouts_enabled() && has_filter( 'eckb_article_list_icon_filter' ) ) {
 
-			if ( empty( $epkb_single_article_link ) ) {
+			if ( empty( $epkb_single_article_link ) || ( isset( $kb_config['block_name'] ) && $kb_config['block_name'] != $epkb_block_name ) ) {
+				$epkb_block_name = isset( $kb_config['block_name'] ) ? $kb_config['block_name'] : null;
 
-				$result = apply_filters( 'eckb_article_list_icon_filter', $article_id, array( $kb_config['id'], $type) );
+				// blocks pass their own icon value (storing in the block attributes)
+				$result = isset( $kb_config['block_name'] ) && isset( $kb_config['elay_article_icon'] ) || $epkb_frontend_editor_preview
+					? apply_filters( 'eckb_article_list_icon_filter', $article_id, array( $kb_config['id'], $type, $kb_config['elay_article_icon'] ) )
+					: apply_filters( 'eckb_article_list_icon_filter', $article_id, array( $kb_config['id'], $type ) );
+
 				if ( ! empty( $result['icon'] ) ) {
 					$icon_class = $result['icon'];
 					$epkb_single_article_link = $icon_class;
@@ -1677,11 +1720,11 @@ class EPKB_Utilities {
 	/**
 	 * Is WPML enabled?
 	 *
-	 * @param array $config
+	 * @param array $kb_config
 	 * @return bool
 	 */
-	public static function is_wpml_enabled( $config=array() ) {
-		return ! empty( $config['wpml_is_enabled'] ) && $config['wpml_is_enabled'] === 'on' && ! defined( 'AMAG_PLUGIN_NAME' );
+	public static function is_wpml_enabled( $kb_config=array() ) {
+		return ! empty( $kb_config['wpml_is_enabled'] ) && $kb_config['wpml_is_enabled'] === 'on' && ! defined( 'AMAG_PLUGIN_NAME' );
 	}
 
 	/**
@@ -1763,6 +1806,10 @@ class EPKB_Utilities {
 		return ! empty($post->post_mime_type) && ( $post->post_mime_type == 'kb_link' or $post->post_mime_type == 'kblink' );
 	}
 
+	public static function is_ai_engine_enabled() {
+		return defined( 'MWAI_VERSION' );
+	}
+
 	/**
 	 * Check if certain KB's plugin is enabled
 	 *
@@ -1795,31 +1842,6 @@ class EPKB_Utilities {
 	 * By KAGG Design
 	 * @return bool
 	 */
-	public static function is_block_editor_active() {
-		// Gutenberg plugin is installed and activated.
-		$gutenberg = ! ( false === has_filter( 'replace_editor', 'gutenberg_init' ) );
-
-		// Block editor since 5.0.
-		$block_editor = version_compare( $GLOBALS['wp_version'], '5.0-beta', '>' );
-
-		if ( ! $gutenberg && ! $block_editor ) {
-			return false;
-		}
-
-		if ( self::is_classic_editor_plugin_active() ) {
-			$editor_option       = get_option( 'classic-editor-replace' );
-			$block_editor_active = array( 'no-replace', 'block' );
-			return in_array( $editor_option, $block_editor_active, true );
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check if Classic Editor plugin is active.
-	 * By KAGG Design
-	 * @return bool
-	 */
 	public static function is_classic_editor_plugin_active() {
 		if ( ! function_exists( 'is_plugin_active' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -1833,18 +1855,24 @@ class EPKB_Utilities {
 		return isset( $eckb_is_kb_main_page ) && $eckb_is_kb_main_page;
 	}
 
+	public static function is_frontend() {
+		global $pagenow;
+		
+		return self::post( 'action' ) != 'edit' && $pagenow != 'post-new.php';
+	}
+
 	/**
 	 * Send email using WordPress email facility.
 	 *
 	 * @param $message
-	 * @param string $to_support_email - usually admin or support
+	 * @param string $to_email - usually admin or support
 	 * @param string $reply_to_email - usually customer email
 	 * @param string $reply_to_name - usually customer name
 	 * @param string $subject - which functionality is this email coming from
 	 *
 	 * @return string - return '' if email sent otherwise return error message
 	 */
-	public static function send_email( $message, $is_message_html, $to_support_email='', $reply_to_email='', $reply_to_name='', $subject='' ) {
+	public static function send_email( $message, $is_message_html, $to_email='', $reply_to_email='', $reply_to_name='', $subject='' ) {
 
 		// validate MESSAGE
 		if ( empty( $message ) || strlen( $message ) > 5000 ) {
@@ -1855,16 +1883,16 @@ class EPKB_Utilities {
 		$message = wp_kses_post( $message );
 
 		// validate TO email
-		if ( empty( $to_support_email ) ) { // send to admin if empty
-			$to_support_email = get_option( 'admin_email' );
+		if ( empty( $to_email ) ) { // send to admin if empty
+			$to_email = get_option( 'admin_email' );
 		}
 
-		$to_support_email = sanitize_email( $to_support_email );
-		if ( empty( $to_support_email ) || strlen( $to_support_email) > 100 ) {
+		$to_email = sanitize_email( $to_email );
+		if ( empty( $to_email ) || strlen( $to_email) > 100 ) {
 			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (1)';
 		}
 
-		if ( ! is_email( $to_support_email ) ) {
+		if ( ! is_email( $to_email ) ) {
 			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (2)';
 		}
 
@@ -1936,7 +1964,7 @@ class EPKB_Utilities {
 		add_filter( 'wp_mail_content_type', array( 'EPKB_Utilities', 'set_html_content_type' ), 999 );
 
 		// send email
-		$result = wp_mail( $to_support_email, $subject, $message, $headers );
+		$result = wp_mail( $to_email, $subject, $message, $headers );
 
 		// remove filter that allows HTML in the email content
 		remove_filter( 'wp_mail_content_type', array( 'EPKB_Utilities', 'set_html_content_type' ), 999 );
@@ -2171,6 +2199,14 @@ class EPKB_Utilities {
 			return false;
 		}
 
+		// external plugins can override this check; we do not provide support for issues arising from custom implementations using this hook.
+		if ( has_filter( 'eckb_is_article_allowed_for_current_user' ) ) {
+			$is_article_allowed = apply_filters( 'eckb_is_article_allowed_for_current_user', false, $article );
+			if ( is_bool( $is_article_allowed ) ) {
+				return $is_article_allowed;
+			}
+		}
+
 		// only check permissions for private articles
 		if ( $article->post_status != 'private' ) {
 			return true;
@@ -2284,19 +2320,19 @@ class EPKB_Utilities {
 		return $post_type_object->label;
 	}
 
-	/**
-	 * Check if the current theme is a block theme.
-	 * @return bool
-	 */
-	public static function is_block_theme() {
-		if ( function_exists( 'wp_is_block_theme' ) ) {
-			return (bool) wp_is_block_theme();
-		}
-		if ( function_exists( 'gutenberg_is_fse_theme' ) ) {
-			return (bool) gutenberg_is_fse_theme();
+	public static function is_article_search_synced( $kb_config ) {
+
+		if ( ! isset( $kb_config['article_search_sync_toggle'] ) ) {
+			return false;
 		}
 
-		return false;
+		// if KB Main Page uses blocks then do not sync articles
+		if ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config ) ) {
+			return false;
+		}
+
+		// if KB Main Page uses shortcode then sync articles
+		return $kb_config['article_search_sync_toggle'] == 'on';
 	}
 
 	/**

@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
  * Basically, the result contains messages from the target catalogue.
  *
  * @author Michael Lee <michael.lee@zerustech.com>
- * @internal
  */
 class TargetOperation extends AbstractOperation
 {
@@ -44,7 +43,7 @@ class TargetOperation extends AbstractOperation
                 $this->messages[$domain]['all'][$id] = $message;
                 $d = $this->source->defines($id, $intlDomain) ? $intlDomain : $domain;
                 $this->result->add([$id => $message], $d);
-                if (null !== ($keyMetadata = $this->source->getMetadata($id, $d))) {
+                if (null !== $keyMetadata = $this->source->getMetadata($id, $d)) {
                     $this->result->setMetadata($id, $keyMetadata, $d);
                 }
             } else {
@@ -57,7 +56,7 @@ class TargetOperation extends AbstractOperation
                 $this->messages[$domain]['new'][$id] = $message;
                 $d = $this->target->defines($id, $intlDomain) ? $intlDomain : $domain;
                 $this->result->add([$id => $message], $d);
-                if (null !== ($keyMetadata = $this->target->getMetadata($id, $d))) {
+                if (null !== $keyMetadata = $this->target->getMetadata($id, $d)) {
                     $this->result->setMetadata($id, $keyMetadata, $d);
                 }
             }

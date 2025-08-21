@@ -76,7 +76,7 @@ class EPKB_Site_Builders {
 
 		// check SiteOrigin
 		if ( ! $this->check_so_cpt() ) {
-			$this->show_builder_notice( esc_html__( 'SiteOrigin	Builder', 'echo-knowledge-base' ), 'options-general.php?page=siteorigin_panels', esc_html__( 'General -> Post Types', 'echo-knowledge-base' ), self::SITE_ORIGIN_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'SiteOrigin Builder', 'echo-knowledge-base' ), 'options-general.php?page=siteorigin_panels', esc_html__( 'General -> Post Types', 'echo-knowledge-base' ), self::SITE_ORIGIN_OPTION_NAME );
 		}
 	}
 
@@ -190,6 +190,7 @@ class EPKB_Site_Builders {
 		}
 
 		// should always be an array of strings with enabled post types
+		/** @disregard P1010 */
 		$divi_cpt_support = et_builder_get_enabled_builder_post_types();
 		if ( empty( $divi_cpt_support ) || ! is_array( $divi_cpt_support ) ) {
 			return true;
@@ -269,6 +270,7 @@ class EPKB_Site_Builders {
 			return true;
 		}
 
+		/** @disregard P1010 */
 		$wpb_cpt_support = vc_editor_post_types();
 		if ( empty( $wpb_cpt_support) || ! is_array( $wpb_cpt_support ) ) {
 			return true;
@@ -342,6 +344,20 @@ class EPKB_Site_Builders {
 		EPKB_Core_Utilities::add_kb_flag( 'so_notice_shown' );
 
 		return false;
+	}
+
+	/**
+	 * Check if any page builder is installed
+	 *
+	 * @return bool
+	 */
+	public static function has_page_builder_enabled() {
+		return self::is_elementor_enabled() || 
+			   self::is_divi_enabled() || 
+			   self::is_wpb_enabled() || 
+			   self::is_vc_enabled() || 
+			   self::is_beaver_enabled() || 
+			   self::is_so_enabled();
 	}
 
 	public static function is_elementor_enabled() {

@@ -4,9 +4,9 @@ namespace com\cminds\package\free\v1_1_5;
 if (!defined(__NAMESPACE__ . '\PLATFORM_VERSION')) {
     define(__NAMESPACE__ . '\PLATFORM_VERSION', '1_1_5');
 }
-if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
+if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
 
-    class CmindsFreePackage {
+    class CmindsFreePackageTT {
 
         private $config = array();
 
@@ -29,7 +29,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $this->pluginMenuPage = $this->getPageUrl('licensing');
 
             add_action('activated_plugin', array($this, 'redirectAfterInstall'), 10, 2);
-            add_action('admin_init', array($this, 'updatePoweredByOption'));
+            //add_action('admin_init', array($this, 'updatePoweredByOption'));
             add_action('admin_init', array($this, 'registerAdminActions'));
             add_action('admin_menu', array($this, 'updateMenu'), 21);
             add_action('admin_enqueue_scripts', array($this, 'enqueueAdminStyles'));
@@ -50,7 +50,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             add_action('init', array($this, 'cminds_get_actions'));
             add_action('init', array($this, 'cminds_post_actions'));
 
-            add_shortcode('cminds_free_author', array($this, 'showAuthor'));
+            //add_shortcode('cminds_free_author', array($this, 'showAuthor'));
             add_shortcode('cminds_free_registration', array($this, 'showRegistration'));
             add_shortcode('cminds_free_guide', array($this, 'showGuide'));
             add_shortcode('cminds_upgrade_box', array($this, 'showUpgrade'));
@@ -257,6 +257,11 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
          * @since  1.1.2
          */
         function submitUninstallReason() {
+			
+			if(!current_user_can('manage_options')) {
+				exit;
+			}
+			
             if (empty($_POST['plugin_slug']) || empty($_POST['deactivation_reason'])) {
                 exit;
             }
@@ -341,11 +346,11 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 do_action('cminds_' . $_POST['cminds_action'], $_POST);
             }
         }
-
+		
+		/*
         public function updatePoweredByOption() {
             $optionValue = filter_input(INPUT_POST, $this->getPoweredByOption());
             $submitValue = filter_input(INPUT_POST, 'cminds_poweredby_change');
-
             if (null !== $optionValue || null !== $submitValue) {
 				if(is_admin() && is_user_logged_in() && current_user_can('manage_options')) {
 					update_option($this->getPoweredByOption(), $optionValue);
@@ -358,55 +363,38 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             return $optionName;
         }
 
-        /**
-         * Default is 0 (disabled)
-         * @return type
-         */
         public function isPoweredByEnabled() {
             $result = get_option($this->getPoweredByOption(), 0);
             return $result;
         }
 
-        /**
-         * Returns the author Url (for free version only)
-         */
         public function showAuthor($atts = array()) {
             $authorUrl = '';
             global $cmindsPluginPackage;
-
             $atts = shortcode_atts(array('id' => null), $atts);
             $currentPlugin = !empty($atts['id']) ? $cmindsPluginPackage[$atts['id']] : $this;
-
             if (!$currentPlugin->isPoweredByEnabled()) {
                 return;
             }
             ob_start();
             ?>
             <style>
-                .cminds_poweredby {clear:both;float:none;font-size:11px;line-height:1.5;display: inline-block;padding: 3px;margin-top:20px;color:#bbb;text-decoration:none;font-weight:bold}
-                .cminds_poweredby:before {content:'Powered by ';}
-                .cminds_poweredbylink:link{color:#bbb;text-decoration:none;}
-                .cminds_poweredbylink:visited{color:#bbb;text-decoration:none;}
-                .cminds_poweredbylink:hover{color:#bbb;text-decoration:none;}
+			.cminds_poweredby {clear:both;float:none;font-size:11px;line-height:1.5;display: inline-block;padding: 3px;margin-top:20px;color:#bbb;text-decoration:none;font-weight:bold}
+			.cminds_poweredby:before {content:'Powered by ';}
+			.cminds_poweredbylink:link{color:#bbb;text-decoration:none;}
+			.cminds_poweredbylink:visited{color:#bbb;text-decoration:none;}
+			.cminds_poweredbylink:hover{color:#bbb;text-decoration:none;}
             </style>
-
             <?php
             $authorUrl .= ob_get_clean();
-            /*
-             * By leaving following snippet in the code, you're expressing your gratitude to creators of this plugin. Thank You!
-             */
             $authorUrl .= '<div style="display:block;clear:both;"></div><span class="cminds_poweredby">';
             $authorUrl .= '<a href="' . $currentPlugin->addAffiliateCode('https://www.cminds.com/') . '" target="_blank" class="cminds_poweredbylink">CreativeMinds</a> ';
             $authorUrl .= ' <a href="' . $currentPlugin->addAffiliateCode('https://www.cminds.com/wordpress-plugins/') . '" target="_blank" class="cminds_poweredbylink">WordPress Plugin</a>';
             $authorUrl .= ' <a href="' . $currentPlugin->addAffiliateCode($currentPlugin->getOption('plugin-store-url')) . '" target="_blank" class="cminds_poweredbylink">' . $currentPlugin->getOption('plugin-name') . '</a>';
             $authorUrl .= '</span><div style="display:block;clear:both;"></div>';
-
             return $authorUrl;
         }
-
-        /*
-         * Licensing Page Tabs
-         */
+        */
 
         public function displayUpgradeTutorialTab() {
             $content = '';
@@ -680,10 +668,17 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
         }
 
         public function updateMenu() {
-            add_submenu_page($this->getOption('plugin-menu-item'), __('User Guide', 'cminds-package'), __('User Guide', 'cminds-package'), 'manage_options', $this->getPageSlug(), array($this, 'displayPage'));
-            if (!$this->getOption('plugin-free-only')) {
-                add_submenu_page($this->getOption('plugin-menu-item'), __('Upgrade&nbsp;➤', 'cminds-package'), __('Upgrade&nbsp;➤', 'cminds-package'), 'manage_options', $this->getProSlug(), array($this, 'displayPage'));
-            }
+			
+            add_submenu_page($this->getOption('plugin-menu-item'), '', '<span class="cmseparator"></span>', 'create_users', '#');
+
+			if (!$this->getOption('plugin-free-only')) {
+				add_submenu_page($this->getOption('plugin-menu-item'), __('Upgrade&nbsp;➤', 'cminds-package'), __('Upgrade&nbsp;➤', 'cminds-package'), 'manage_options', $this->getProSlug(), array($this, 'displayPage'));
+			}
+           
+			add_submenu_page($this->getOption('plugin-menu-item'), __('User Guide', 'cminds-package'), __('User Guide', 'cminds-package'), 'manage_options', $this->getPageSlug(), array($this, 'displayPage'));
+			if ( $this->getOption( 'plugin-has-addons' ) ) {
+				add_submenu_page( $this->getOption( 'plugin-menu-item' ), __( 'Related Plugins', 'cminds-package' ), __( 'Related Plugins', 'cminds-package' ), 'manage_options', $this->getAddonsSlug(), array( $this, 'displayPage' ) );
+			}
 
             $tag = 'cminds-' . $this->getOption('plugin-short-slug') . '-license-page';
             $condition = has_action($tag);
@@ -704,9 +699,14 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             return $slug;
         }
 
+        public function getAddonsSlug() {
+            $slug = $this->getOption( 'plugin-abbrev' ) . '_addons';
+            return $slug;
+        } 
+		
         public function isOwnScreen() {
             $screen = get_current_screen();
-            return (strpos($screen->base, $this->getPageSlug()) !== false || strpos($screen->base, $this->getLicensingSlug()) !== false || strpos($screen->base, $this->getProSlug()) !== false);
+            return (strpos($screen->base, $this->getPageSlug()) !== false || strpos($screen->base, $this->getLicensingSlug()) !== false || strpos($screen->base, $this->getProSlug()) !== false || strpos($screen->base, $this->getAddonsSlug()) !== false);
         }
 
         /**
@@ -716,7 +716,10 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
          * @since 1.0
          */
         public function enqueueAdminStyles() {
-
+			
+			wp_enqueue_style('cmtt-custom-css', plugin_dir_url(__FILE__) . 'css/custom.css');
+			wp_enqueue_script('cmtt-custom', plugin_dir_url(__FILE__) . 'js/custom.js', array(), $this->getOption('plugin-version'), true);
+			
             $screen = get_current_screen();
             if (!isset($screen->id) || !$this->isOwnScreen()) {
                 return;
@@ -807,7 +810,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                     default:
                     case $currentPlugin->getPageSlug(): {
                             $title = __('About', 'cminds-package');
-                            wp_enqueue_script('cmdm-mailerlite', plugin_dir_url(__FILE__) . 'js/mailerlite.js', array(), $this->getOption('plugin-version'), true);
+                            wp_enqueue_script('cmtt-mailerlite', plugin_dir_url(__FILE__) . 'js/mailerlite.js', array(), $this->getOption('plugin-version'), true);
                             ob_start();
                             $base_path = $currentPlugin->getOption('plugin-dir-path');
                             include $base_path . 'package/views/userguide_free.php';
@@ -819,6 +822,13 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
 
                             ob_start();
                             echo $currentPlugin->displayUpgradeToProTab();
+                            $content .= ob_get_clean();
+                            break;
+                        }
+					case $currentPlugin->getAddonsSlug(): {
+                        
+                            ob_start();
+                            echo $currentPlugin->showAddons();
                             $content .= ob_get_clean();
                             break;
                         }
@@ -905,7 +915,185 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             ksort($settingsTabsArray);
             return $settingsTabsArray;
         }
+		
+		public function showAddons( $atts = array() ) {
 
+            global $cmindsPluginPackage;
+
+            $content = '';
+            $addons = $this->getOption('plugin-addons');
+            $specials = $this->getOption('plugin-specials');
+            $bundles = $this->getOption('plugin-bundles');
+            $services = $this->getOption('plugin-services');
+            $pluginUrl = $this->getOption('plugin-store-url');
+
+            $title = __( 'Related Plugins', 'cminds-package' );
+
+
+            $atts          = shortcode_atts( array( 'id' => null ), $atts );
+            $currentPlugin = !empty( $atts[ 'id' ] ) ? $cmindsPluginPackage[ $atts[ 'id' ] ] : $this;
+            $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'general';
+
+
+            ob_start();
+            ?>
+           
+            <style>
+			section.cm { width: 100%; display: block; }
+            .cm .cmlp-box.postbox.addonbox { width:35%; min-height:135px; margin: 20px 12px 20px 8px; display: inline-block; padding: 15px; background-color: #fff; border-radius: 10px; vertical-align: top; }
+			.cm .cmlp-box.postbox.addonbox .cmlp-img { width:20%; float:left; margin-right:5%;}
+			.cm .cmlp-box.postbox.addonbox .cmlp-img img { width:100%; }
+            .cm .cmlp-box.postbox.addonbox .cmlp-inside { display: block; margin-left:2%; width:100%; float:left; }
+			.cm .cmlp-box.postbox.addonbox .cmlp-inside h3 { color:#333; font-weight:600; margin-top:0px; margin-bottom:10px; text-align:center; }
+            .cm .cmlp-box.postbox.addonbox .cmlp-inside span { color:#333; line-height:1.5; font-size:14px; }
+            .cm .cmlp-box.postbox.addonbox .cmlp-inside .buttons { position:absolute; bottom:20px; right:20px; }
+			.cm .cmlp-box.postbox.addonbox .cmlp-inside .buttons label { cursor:pointer; }
+            .cm .cmlp-box.addonbox .button-success, .cm .cmlp-box.addonbox .button-success:focus { font-size: 14px; font-weight:bold; display:block; color:#135e96; text-decoration:none; }
+           .cm .cmlp-top {text-decoration:none; }
+		   .cm .cmlp-top:focus { box-shadow:none; }
+           .cm .cmlp-box {border: 2px solid #ccc;}
+           .cm .cmlp-box:hover {border: 2px solid #333; border-color: #135e96;}
+            </style>
+
+            <div class="wrap">
+
+        <h2 class="nav-tab-wrapper">
+            <a href="?page=cmtt_addons&tab=general" class="nav-tab <?php echo $active_tab === 'general' ? 'nav-tab-active' : ''; ?>">Free Plugins</a>
+            <a href="?page=cmtt_addons&tab=advanced" class="nav-tab <?php echo $active_tab === 'advanced' ? 'nav-tab-active' : ''; ?>">Premium Plugins</a>
+            <a href="?page=cmtt_addons&tab=extra" class="nav-tab <?php echo $active_tab === 'extra' ? 'nav-tab-active' : ''; ?>">Plugin Bundles</a>
+           <a href="?page=cmtt_addons&tab=service" class="nav-tab <?php echo $active_tab === 'service' ? 'nav-tab-active' : ''; ?>">Web Services</a>
+        </h2>
+
+        <div class="tab-content">
+            <?php
+            if ($active_tab === 'general') {
+			?>
+            <br><h2 style="padding-left:10px;">Discover more free plugins by CreativeMinds.</h2>
+			<section id="" class="cm">
+                <?php
+                foreach ( $addons as $value ) : ?>
+					<?php if ( esc_attr( $value[ 'color' ] ) == "") { ?>
+                    <div class="cmlp-box postbox addonbox">
+						<?php } else { ?>
+                      <div class="cmlp-box postbox addonbox" style="background:<?php echo esc_attr( $value[ 'color' ] ); ?>">
+                        <?php } ?>
+						<a class="cmlp-top" href="<?php echo esc_attr( $value[ 'link' ] ); ?>" target="_blank">
+							<div class="cmlp-inside">
+								<h3><span><?php echo esc_attr( $value[ 'title' ] ); ?></span></h3>
+                                <div class="cmlp-img">
+                                <img src="<?php echo esc_attr( $value[ 'image' ] ); ?>" alt="<?php echo esc_attr( $value[ 'title' ] ); ?>" />
+                                </div>
+								<span><?php echo esc_attr( $value[ 'description' ] ); ?></span>
+								<div class="buttons">
+									<label class="button-success">More Details</label>
+								</div>
+							</div>
+						</a>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+            </section>
+            <?php
+            } elseif ($active_tab === 'advanced') {
+			?>
+            <br><h2 style="padding-left:10px;">Save 10% on the following premium plugins! Use code <span style="color: red; font-weight: bold;">CMINDS10</span> at checkout.</h2>
+			<section id="" class="cm">
+                <?php
+                foreach ( $specials as $value ) : ?>
+                    <?php if ( esc_attr( $value[ 'color' ] ) == "") { ?>
+                    <div class="cmlp-box postbox addonbox">
+						<?php } else { ?>
+                      <div class="cmlp-box postbox addonbox" style="background:<?php echo esc_attr( $value[ 'color' ] ); ?>">
+                        <?php } ?>
+						  <a  class="cmlp-top" href="<?php echo esc_attr( $value[ 'link' ] ); ?>" target="_blank">
+							<div class="cmlp-inside">
+							   <h3><span><?php echo esc_attr( $value[ 'title' ] ); ?></span></h3>
+                               <div class="cmlp-img">
+                                <img src="<?php echo esc_attr( $value[ 'image' ] ); ?>" alt="<?php echo esc_attr( $value[ 'title' ] ); ?>" />
+                            </div>
+							   <span><?php echo esc_attr( $value[ 'description' ] ); ?></span>
+								<div class="buttons">
+									<label class="button-success">More Details</label>
+								</div>
+							</div>
+						</a>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+            </section>
+            <?php
+                // Advanced settings content
+            } elseif ($active_tab === 'extra') {
+            ?>
+			<section id="" class="cm">
+                <br><h2 style="padding-left:10px;">Get the best value with our plugin bundles - combine and save!</h2>
+                <?php
+                foreach ( $bundles as $value ) : ?>
+                    <?php if ( esc_attr( $value[ 'color' ] ) == "") { ?>
+                    <div class="cmlp-box postbox addonbox">
+						<?php } else { ?>
+                      <div class="cmlp-box postbox addonbox" style="background:<?php echo esc_attr( $value[ 'color' ] ); ?>">
+                        <?php } ?>
+						 <a  class="cmlp-top" href="<?php echo esc_attr( $value[ 'link' ] ); ?>" target="_blank">
+							<div class="cmlp-inside">
+							   <h3><span><?php echo esc_attr( $value[ 'title' ] ); ?></span></h3>
+                               <div class="cmlp-img">
+                                <img src="<?php echo esc_attr( $value[ 'image' ] ); ?>" alt="<?php echo esc_attr( $value[ 'title' ] ); ?>" />
+                                </div>
+							   <span><?php echo esc_attr( $value[ 'description' ] ); ?></span>
+								<div class="buttons">
+									<label class="button-success">More Details</label>
+								</div>
+							</div>
+						</a>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+            </section>
+			<?php
+                // Service settings content
+            } elseif ($active_tab === 'service') {
+            ?>
+            <br><h2 style="padding-left:10px;">Need customization, setup, or expert advice? Hire our WordPress specialists!</h2>
+            <section id="" class="cm">
+                <?php
+                foreach ( $services as $value ) : ?>
+                    <?php if ( esc_attr( $value[ 'color' ] ) == "") { ?>
+                    <div class="cmlp-box postbox addonbox">
+						<?php } else { ?>
+                      <div class="cmlp-box postbox addonbox" style="background:<?php echo esc_attr( $value[ 'color' ] ); ?>">
+                        <?php } ?>
+						 <a  class="cmlp-top" href="<?php echo esc_attr( $value[ 'link' ] ); ?>" target="_blank">
+							<div class="cmlp-inside">
+							   <h3><span><?php echo esc_attr( $value[ 'title' ] ); ?></span></h3>
+                               <div class="cmlp-img">
+                                <img src="<?php echo esc_attr( $value[ 'image' ] ); ?>" alt="<?php echo esc_attr( $value[ 'title' ] ); ?>" />
+                                </div>
+							   <span><?php echo esc_attr( $value[ 'description' ] ); ?></span>
+								<div class="buttons">
+									<label class="button-success">More Details</label>
+								</div>
+							</div>
+						</a>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+            </section>
+            <?php
+            // Extra tab content
+            }
+            ?>
+        </div>
+    </div>
+            <?php
+            $content .= ob_get_clean();
+            return $content;
+        }
+		
         /**
          * Function renders (default) or returns the setttings tabs
          *
@@ -964,8 +1152,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $pluginReviewLink = (string) $this->getOption('plugin-review-url');
             $pluginFullName = (string) $this->getOption('plugin-name');
             $pluginUrl = (string) $this->getOption('plugin-store-url');
-
-            $twitterTweet = rawurlencode('Checkout the ' . $pluginFullName . ' ( ' . $pluginUrl . ' ) #WordPress #Plugin by @CMPLUGINS');
 
             ob_start();
             ?>
@@ -1030,37 +1216,8 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                                             <div class="dashicons dashicons-share-alt2"></div><span><?php $this->_e('Submit a review'); ?></span>
                                         </div>
                                     </a>
-                                    <a target="_blank"  href="http://twitter.com/home/?status=<?php echo esc_attr(urlencode($twitterTweet)) ?>">
-                                        <div class="btn button">
-                                            <div class="dashicons dashicons-twitter"></div><span><?php $this->_e('Tweet'); ?></span>
-                                        </div>
-                                    </a>
                                 </td><td valign="top">
                                     <h3><?php $this->_e('Stay Up-to-Date'); ?></h3>
-                                    <a href="https://twitter.com/CMPLUGINS" class="twitter-follow-button" data-show-count="false" data-size="large" data-dnt="true"><?php $this->_e('Follow @CMPLUGINS'); ?></a>
-                                    <script>!function (d, s, id) {
-                                            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                                            if (!d.getElementById(id)) {
-                                                js = d.createElement(s);
-                                                js.id = id;
-                                                js.src = p + '://platform.twitter.com/widgets.js';
-                                                fjs.parentNode.insertBefore(js, fjs);
-                                            }
-                                        }(document, 'script', 'twitter-wjs');
-                                    </script>
-
-                                    <div class="g-follow" data-annotation="none" data-height="24" data-href="https://plus.google.com/108513627228464018583" data-rel="publisher"></div>
-
-                                    <script type="text/javascript">
-                                        (function () {
-                                            var po = document.createElement('script');
-                                            po.type = 'text/javascript';
-                                            po.async = true;
-                                            po.src = 'https://apis.google.com/js/platform.js';
-                                            var s = document.getElementsByTagName('script')[0];
-                                            s.parentNode.insertBefore(po, s);
-                                        })();
-                                    </script>
 
                                     <script>(function (d, s, id) {
                                             var js, fjs = d.getElementsByTagName(s)[0];
@@ -1110,52 +1267,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
          * @return boolean
          */
         protected function getAds() {
-            $connectionProblem = false;
-            $ads_arr = get_transient('cminds_free_ads');
-            if (empty($ads_arr) && !is_array($ads_arr)) {
-                $args = array(
-                    'body' => array()
-                );
-                $href = 'https://www.cminds.com/wp-admin/admin-ajax.php?action=get_ads&cminds_json_api=get_ads';
-                $response = wp_remote_post($href, $args);
-                if (!is_wp_error($response)) {
-                    $ads = json_decode(wp_remote_retrieve_body($response), true);
-                } else {
-                    $args['sslverify'] = false;
-                    $href = 'https://www.cminds.com/wp-admin/admin-ajax.php?action=get_ads&cminds_json_api=get_ads';
-                    $response = wp_remote_post($href, $args);
-                    if (!is_wp_error($response)) {
-                        $ads = json_decode(wp_remote_retrieve_body($response), true);
-                    } else {
-                        $ads = array();
-                        $connectionProblem = true;
-                    }
-                }
-                $ads_arr = array(
-                    'ads'          => $ads,
-                    'refresh_time' => time(),
-                    'connection'   => !$connectionProblem,
-                );
-                set_transient('cminds_free_ads', $ads_arr, self::ADS_REFRESH_INTERVAL);
-            }
-            /*
-             * Update from old version
-             */
-            if (!isset($ads_arr['ads']) && !isset($ads_arr['refresh_time'])) {
-                $temp_ads_arr = $ads_arr;
-                $ads_arr = array(
-                    'ads'          => $temp_ads_arr,
-                    'refresh_time' => strtotime('-10 DAYS'),
-                    'connection'   => TRUE,
-                );
-            }
-            /*
-             * Update from old version
-             */
-            if (!isset($ads_arr['connection'])) {
-                $ads_arr['connection'] = TRUE;
-            }
-            return $ads_arr;
+            return;
         }
 
         public function getStoreUrl($args = array()) {
@@ -1461,7 +1573,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php else : ?>
                     <div class="cminds_guide_wrapper">
                         <div>
-                            <a class="cminds-guide-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_guide_show' => 1), remove_query_arg('cminds_guide_hide'))); ?>">Show Installation Guide Box</a>
+                            <a class="cminds-guide-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_guide_show' => 1), esc_url(remove_query_arg('cminds_guide_hide')))); ?>">Show Installation Guide Box</a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
@@ -1818,13 +1930,13 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                             <?php endif; ?>
                         </div>                    </div>
                     <?php
-                    echo $this->showAds($atts);
+                    //echo $this->showAds($atts);
                     ?>
                     <div class="clear clearfix cmclearfix"></div>
                 <?php else : ?>
                     <div class="cminds_upgrade_wrapper">
                         <div>
-                            <a class="cminds-upgrade-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_upgrade_show' => 1), remove_query_arg('cminds_upgrade_hide'))); ?>">Why you shoud have the Premium Edition>></a>
+                            <a class="cminds-upgrade-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_upgrade_show' => 1), esc_url(remove_query_arg('cminds_upgrade_hide')))); ?>">Why you shoud have the Premium Edition>></a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
@@ -1851,357 +1963,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
         }
 
         public function showAds($atts = array()) {
-            global $cmindsPluginPackage;
-
-            $atts = shortcode_atts(array(
-                'flat' => false,
-                'id'   => null
-                    ), $atts);
-
-            $currentPlugin = !empty($atts['id']) ? $cmindsPluginPackage[$atts['id']] : $this;
-
-            $optionName = 'cminds-' . $this->getOption('plugin-short-slug') . '-ads-hidden';
-            $adsHide = filter_input(INPUT_GET, 'cminds_ad_hide');
-            if ($adsHide) {
-                update_option($optionName, 1);
-            }
-            $adsShow = filter_input(INPUT_GET, 'cminds_ad_show');
-            if ($adsShow) {
-                update_option($optionName, 0);
-            }
-            $adsHidden = get_option($optionName, 1);
-            $adsRefreshed = filter_input(INPUT_GET, 'cminds_ad_refresh');
-            if ($adsRefreshed) {
-                delete_transient('cminds_free_ads');
-            }
-            $ads_arr = $this->getAds();
-            $ads = isset($ads_arr['ads']) ? $ads_arr['ads'] : array();
-            $days_since_last_refresh = $this->getDaysSinceLastRefresh($ads_arr);
-
-            $isRegistered = $currentPlugin->isRegistered();
-            /*
-             * Don't display if there's no server connection
-             */
-            if (!$ads_arr['connection']) {
-                return;
-            }
-            ob_start();
-            ?>
-
-            <style type="text/css">
-
-                div.cminds_ads_wrapper {
-                    display: inline-block;
-                    padding: 1em;
-                    background: #FFF;
-                    border: solid 1px #E0E0E0;
-                    margin: 1em 1em 0 0;
-                    vertical-align: top;
-                }
-
-                .cminds_ads_internal_wrapper {
-                    display: inline-block;
-                    overflow: auto;
-                    max-height: 175px;
-                }
-
-                .cminds_ad{
-                    display: block;
-                    margin: 0.5em;
-                    vertical-align: top;
-                }
-
-                span.ad_code {
-                    font-weight: bold;
-                }
-
-                .cminds_ad.hidden{
-                    display: none;
-                }
-                .cminds_ads_wrapper.hidden{
-                    display: none;
-                }
-
-                .cminds_ad_text{
-                    display: block;
-                    margin-bottom: 1em;
-                }
-                .cminds_ad_link{
-                    text-align: center;
-                }
-
-                span.ads_refreshed{
-                    color: #259602;
-                    font-weight: bold;
-                }
-
-                .cminds_ad_text > a:before {
-                    content:"\A"; white-space:pre;
-                }
-
-                .cminds_ad_text > *:after {
-                    content:"\A"; white-space:pre;
-                }
-
-                .cminds_no_ads{
-                    margin: 1em 0;
-                    font-size: 12pt;
-                    font-weight: bold;
-                }
-
-                .cminds_links{
-                    display: inline-block;
-                    margin: 1em;
-                    padding: 0;
-                    max-width: 150px;
-                    min-height: 90px;
-                    vertical-align: top;
-                    text-align: left;
-                }
-
-                .cminds_links .cminds_link{
-                    margin: 5px 0;
-                }
-
-                .cminds_links .cminds_link:first-child{
-                    margin-top: 0;
-                }
-
-                .cminds_link{
-                    color: #555;
-                    border-color: rgba(204,204,204,0.8);
-                    background: #f7f7f7;
-                    -webkit-box-shadow: 0 1px 0 #ccc;
-                    box-shadow: 0 1px 0 #ccc;
-                    display: inline-block;
-                    text-decoration: none;
-                    line-height: 26px;
-                    height: 28px;
-                    padding: 0 10px 1px;
-                    cursor: pointer;
-                    border-width: 1px;
-                    border-style: solid;
-                    -webkit-border-radius: 3px;
-                    border-radius: 3px;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-                }
-
-                .cminds_link:active {
-                    background: #eee;
-                    border-color: #999;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_link:hover {
-                    background: #eee;
-                    border-color: #999;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_link.blue{
-                    color: #fff;
-                    border-color: #33ace7;
-                    background: #66c1ed;
-                    -webkit-box-shadow: 0 1px 0 #ccc;
-                    box-shadow: 0 1px 0 #ccc;
-                    display: inline-block;
-                    text-decoration: none;
-                    line-height: 26px;
-                    height: 28px;
-                    padding: 0 10px 1px;
-                    cursor: pointer;
-                    border-width: 1px;
-                    border-style: solid;
-                    -webkit-border-radius: 3px;
-                    border-radius: 3px;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-
-                }
-
-                .cminds_link.blue:active {
-                    background: #0198e1;
-                    border-color: #66c1ed;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_link.blue:hover {
-                    background: #005b87;
-                    border-color: #0198e1;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_link.orange{
-                    color: #fff;
-                    border-color: #ffb752;
-                    background: #ffb752;
-                    -webkit-box-shadow: 0 1px 0 #ccc;
-                    box-shadow: 0 1px 0 #ccc;
-                    display: inline-block;
-                    text-decoration: none;
-                    line-height: 26px;
-                    height: 28px;
-                    padding: 0 10px 1px;
-                    cursor: pointer;
-                    border-width: 1px;
-                    border-style: solid;
-                    -webkit-border-radius: 3px;
-                    border-radius: 3px;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    box-sizing: border-box;
-
-                }
-
-                .cminds_link.orange:active {
-                    background: #e5a449;
-                    border-color: #ffc574;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_link.orange:hover {
-                    background: #e5a449;
-                    border-color: #ffc574;
-                    -webkit-box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    box-shadow: inset 0 2px 5px -3px rgba(0,0,0,.5);
-                    -webkit-transform: translateY(1px);
-                    -ms-transform: translateY(1px);
-                    transform: translateY(1px);
-                }
-
-                .cminds_more{
-                    display: inline-block;
-                    margin: 1em;
-                    vertical-align: top;
-                    font-size: 12pt;
-                    line-height: 123px;
-                }
-
-                .cminds_more > *{
-                    cursor: pointer;
-                }
-
-                .cminds_link.cminds_more_ads {
-                    -moz-border-radius: 11px;
-                    -webkit-border-radius: 11px;
-                    border-radius: 11px;
-                    border: 1px solid #66c1ed;
-                    font-size: 23px;
-                    padding: 8px 14px;
-                    text-decoration: none;
-                    line-height: 23px;
-                    height: auto;
-                }
-
-                .clear, .clearfix{
-                    clear:both;
-                }
-
-                .cmclearfix{
-                    clear: both !important;
-                }
-            </style>
-
-            <?php if ($isRegistered) : ?>
-
-                <?php if (!$atts['flat']) : ?>
-
-                    <script>
-                        jQuery(document).ready(function ( ) {
-                            jQuery('.cminds-ads-show-button').on('click', function (e) {
-                                e.preventDefault( );
-                                jQuery('#cminds_offers_wrapper').toggleClass('hidden');
-                                jQuery('#cminds_links_wrapper').toggleClass('hidden');
-                            });
-                        });</script>
-
-                    <h3>Special offers from CreativeMinds</h3>
-
-                    <div class="cminds_ads_wrapper_white">
-                        <a href="https://www.cminds.com/wordpress-plugins-library/seo-keyword-hound-wordpress/" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>views/keywordhoundbanner.jpg"></a>
-                        <span style="margin-left:20px;">
-                            <a class="" href="https://www.cminds.com/wordpress-plugins-library/cm-wordpress-plugins-yearly-membership/" target="_blank"><img src="<?php echo plugin_dir_url(__FILE__); ?>views/99suite.png"></a>
-                        </span>
-                    </div>
-
-
-                    <?php if (!empty($ads)) : ?>
-                        <div class="cminds_ads_internal_wrapper">
-                            <?php foreach ($ads as $index => $ad) : ?>
-                                <div class="cminds_ad">
-                                    <?php
-                                    $dateUntil = date('jS F, Y', strtotime($ad['ad_valid_date']));
-                                    printf('Receive %s discount for <a target="_blank" href="%s">%s</a> with discount code <span class="ad_code">"%s"</span> valid until %s', $ad['ad_discount'], $ad['ad_product_url'], $ad['ad_title'], $ad['ad_code'], $dateUntil);
-                                    ?>
-                                    <span class="cminds_ad_link">
-                                        <a class="cminds_link blue" target="_blank" href="<?php echo $this->addAffiliateCode($ad['ad_url']); ?>">Redeem Offer</a>
-                                    </span>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="cminds_no_ads">
-                            <span class="cminds_no_ads_text">
-                                Currently we have no special discounts.
-                            </span>
-                        </div>
-                    <?php endif; ?>
-
-                    <div>
-                        <?php if ($adsRefreshed) :
-                            ?>
-                            <span class="ads_refreshed">
-                                Discounts have been refreshed.
-                            </span>
-                        <?php else : ?>
-                            You haven't refreshed the discounts for <?php echo $days_since_last_refresh . ' ' . _n('day', 'days', $days_since_last_refresh); ?>. <a class="cminds-ads-refresh-button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_ad_refresh' => 1))); ?>"><strong>Refresh now!</strong></a>
-                        <?php endif; ?>
-                    </div>
-                <?php else: ?>
-                    <ul class="cminds_ads_list_wrapper">
-                        <?php foreach ($ads as $index => $ad) : ?>
-                            <li class="cminds_ads_list_item">								<?php
-                                $dateUntil = date('Y-m-d', strtotime($ad['ad_valid_date']));
-                                printf('Receive %s discount for <a target="_blank" href="%s">%s</a> with discount code "%s" valid until %s', $ad['ad_discount'], $ad['ad_product_url'], $ad['ad_title'], $ad['ad_code'], $dateUntil);
-                                ?>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
-            <?php else: ?>
-                <h3>Special Offers from CreativeMinds</h3>
-
-                <p>
-                    <a href="javascript:void(0)" id="cminds-unskip">Complete <?php echo esc_attr($currentPlugin->getOption('plugin-name')); ?> registration</a> and receive special offers
-                </p>
-            <?php endif; ?>
-            <div class="clear clearfix cmclearfix"></div>
-            <?php
-            $content = ob_get_clean();
-            return $content;
+            return;
         }
 
         public function getRegistrationFields() {
@@ -2434,7 +2196,8 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
             $isRegistered = $this->isRegistered();
 
             if ($isRegistered) :
-                return $this->showAds($atts);
+                //return $this->showAds($atts);
+                return;
             else :
                 ob_start();
                 ?>
@@ -2638,7 +2401,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                                             ?>
                                             <input class="button button-primary" style="background-color:green;" type="submit" value="Register Your Copy" />
                                             <div class="no-registration">
-                                                <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_hide' => 1), remove_query_arg('cminds_registration_show'))); ?>">I don't want to register now</a>
+                                                <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_hide' => 1), esc_url(remove_query_arg('cminds_registration_show')))); ?>">I don't want to register now</a>
                                             </div>
                                         </form>
                                     </td>
@@ -2659,7 +2422,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php else : ?>
                     <div class="cminds_registration_wrapper">
                         <div>
-                            <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_show' => 1), remove_query_arg('cminds_registration_hide'))); ?>">Show registration box</a>
+                            <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_show' => 1), esc_url(remove_query_arg('cminds_registration_hide')))); ?>">Show registration box</a>
                             <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all CreativeMidns Plugins</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Bundle')); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Add-On')); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>
@@ -2732,8 +2495,11 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 ?>
                 <div id="cmhandfsl_admin_nav">
                     <ul class="subsubsub">
-                        <?php foreach ($submenus as $menu): ?>
-
+                        <?php foreach ($submenus as $menu):
+							if($menu['title'] == '<span class="cmseparator"></span>') {
+								continue;
+							}
+							?>
                             <li><a href="<?php echo esc_attr($menu['link']); ?>" <?php echo ( $menu['current'] ) ? 'class="current"' : ''; ?> <?php
                                 if ($menu['external']) {
                                     echo 'target="_blank"';
@@ -3182,4 +2948,4 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
  */
 global $cmindsPluginPackage;
 include('cminds-plugin-config.php');
-$cmindsPluginPackage[$cminds_plugin_config['plugin-abbrev']] = new CmindsFreePackage($cminds_plugin_config);
+$cmindsPluginPackage[$cminds_plugin_config['plugin-abbrev']] = new CmindsFreePackageTT($cminds_plugin_config);

@@ -43,7 +43,6 @@
 .nv-sidebar-wrap .button.edd-add-to-cart {
   display: inline-block;
 }
-
 .edd_purchase_submit_wrapper a.edd-add-to-cart {
   display: none;
 }
@@ -64,7 +63,6 @@
 .edd_download_purchase_form .edd_price_options {
   margin-bottom: 10px;
 }
-
 .edd_download_purchase_form .edd_price_options ul {
   list-style: none;
   padding-right: 0;
@@ -98,7 +96,6 @@
   padding: 12px 15px;
   text-decoration: none;
 }
-
 #edd_download_pagination .page-numbers.current {
   background: var(--nv-primary-accent);
   color: var(--nv-text-dark-bg);
@@ -120,33 +117,26 @@
   font-size: 80%;
   margin: 0 0 5px;
 }
-
 #edd_checkout_form_wrap input.edd-input {
   width: 100%;
 }
-
 #edd_checkout_form_wrap input.edd-gateway {
   margin-left: 5px;
 }
-
 #edd_checkout_form_wrap .edd-gateway-option {
   padding: 10px;
 }
-
 #edd_checkout_form_wrap .edd-payment-icons img.payment-icon {
   margin-left: 5px;
   max-height: 32px;
 }
-
 #edd_checkout_form_wrap #card_exp_month,
 #edd_checkout_form_wrap #card_exp_year {
   width: 60px;
 }
-
 #edd_checkout_form_wrap #edd_secure_site_wrapper span {
   font-size: 80%;
 }
-
 #edd_checkout_form_wrap .edd-icon {
   display: inline-block;
   fill: currentColor;
@@ -177,15 +167,12 @@
     grid-template-columns: repeat(6, 1fr);
   }
 }
-
 form#edd_profile_editor_form p label {
   display: block;
 }
-
-form#edd_profile_editor_form input:not(input[type="submit"]) {
+form#edd_profile_editor_form input:not(input[type=submit]) {
   width: 100%;
 }
-
 form#edd_profile_editor_form #edd_profile_submit_wrap {
   margin-bottom: 0;
 }
@@ -194,25 +181,20 @@ form#edd_profile_editor_form #edd_profile_submit_wrap {
   display: flex;
   align-items: center;
 }
-
 .cart-icon-wrapper:hover {
   color: var(--hovercolor, var(--color));
 }
-
 .cart-icon-wrapper .nv-cart {
   display: flex;
 }
-
 .cart-icon-wrapper .nv-cart svg {
   width: var(--iconsize);
   height: var(--iconsize);
 }
-
 .cart-icon-wrapper .edd-cart-icon-label {
   margin-left: 8px;
   font-size: var(--labelsize);
 }
-
 .cart-icon-wrapper .edd-cart-count {
   background: var(--nv-light-bg);
   color: var(--nv-text-color);
@@ -233,28 +215,23 @@ form#edd_profile_editor_form #edd_profile_submit_wrap {
 .nv-sidebar-wrap .edd-cart-number-of-items {
   font-style: normal;
 }
-
 .nv-sidebar-wrap .edd_total {
   background: none;
   font-size: 20px;
   padding: 20px 0;
 }
-
 .nv-sidebar-wrap .widget_edd_product_details .edd_price_options {
   margin-top: -20px;
 }
-
 .nv-sidebar-wrap .widget_edd_product_details .edd_purchase_submit_wrapper .edd-cart-added-alert {
   margin-top: 10px;
   position: relative;
 }
-
 .nv-sidebar-wrap .widget_edd_product_details .categories,
 .nv-sidebar-wrap .widget_edd_product_details .tags {
   font-size: 14px;
   margin-bottom: 10px;
 }
-
 .nv-sidebar-wrap .widget_edd_product_details .edd-meta {
   margin-top: 10px;
 }

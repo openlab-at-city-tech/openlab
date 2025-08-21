@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class About extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'teamDriveThemes';
@@ -249,4 +248,4 @@ class About extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(About::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_About');
+class_alias(About::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_About');

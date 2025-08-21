@@ -29,7 +29,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\MongoDBFormatter;
  *
  * The above examples uses the MongoDB PHP library's client class; however, the
  * MongoDB\Driver\Manager class from ext-mongodb is also supported.
- * @internal
  */
 class MongoDBHandler extends AbstractProcessingHandler
 {
@@ -49,7 +48,7 @@ class MongoDBHandler extends AbstractProcessingHandler
     public function __construct($mongodb, string $database, string $collection, $level = Logger::DEBUG, bool $bubble = \true)
     {
         if (!($mongodb instanceof Client || $mongodb instanceof Manager)) {
-            throw new \InvalidArgumentException('MongoDB\\Client or MongoDB\\Driver\\Manager instance required');
+            throw new \InvalidArgumentException('MongoDB\Client or MongoDB\Driver\Manager instance required');
         }
         if ($mongodb instanceof Client) {
             $this->collection = $mongodb->selectCollection($database, $collection);
@@ -59,7 +58,7 @@ class MongoDBHandler extends AbstractProcessingHandler
         }
         parent::__construct($level, $bubble);
     }
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if (isset($this->collection)) {
             $this->collection->insertOne($record['formatted']);
@@ -73,7 +72,7 @@ class MongoDBHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new MongoDBFormatter();
     }

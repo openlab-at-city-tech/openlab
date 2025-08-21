@@ -37,10 +37,80 @@ function tb_click(){
 	var a = this.href || this.alt;
 	var g = this.rel || false;
 
-	t = ( this.getAttribute( 'data-view-title' ) ) ? this.getAttribute( 'data-view-title' ) : t ;
-	tb_show(t,a,g);
+	// Sanitize the title to allow only safe HTML tags
+	if (t) {
+		t = sanitizeAllowedHTML(t);
+	}
+
+	// Sanitize the href or alt to allow only safe HTML tags
+	if (a) {
+		a = sanitizeAllowedHTML(a);
+	}
+
+	t = (this.getAttribute('data-view-title')) ? sanitizeAllowedHTML(this.getAttribute('data-view-title')) : t;
+	tb_show(t, a, g);
 	this.blur();
 	return false;
+}
+
+function sanitizeAllowedHTML(value) {
+	// Define allowed HTML tags and attributes similar to wp_kses
+	const allowedTags = {
+		a: ["href", "title", "target", "rel"],
+		b: [],
+		i: [],
+		u: [],
+		em: [],
+		strong: [],
+		p: [],
+		br: [],
+		span: ["class", "id", "style"],
+		img: ["src", "alt", "title"],
+		h1: [],
+		h2: [],
+		h4: [],
+		h4: [],
+		h5: [],
+		h6: [],
+		ul: [],
+		ol: [],
+		li: [],
+		blockquote: [],
+	};
+
+	// Use a temporary DOM element to parse and sanitize the input
+	const tempDiv = document.createElement('div');
+	tempDiv.innerHTML = value;
+
+	// Recursively sanitize child nodes
+	function sanitizeNode(node) {
+		if (node.nodeType === Node.ELEMENT_NODE) {
+			if (!allowedTags[node.tagName.toLowerCase()]) {
+				node.remove();
+				return;
+			}
+
+			// Remove disallowed attributes
+			[...node.attributes].forEach(attr => {
+				if (!allowedTags[node.tagName.toLowerCase()].includes(attr.name)) {
+					node.removeAttribute(attr.name);
+				}
+			});
+		} else if (node.nodeType === Node.TEXT_NODE) {
+			// Allow text nodes
+			return;
+		} else {
+			// Remove other node types
+			node.remove();
+		}
+
+		// Recursively sanitize child nodes
+		[...node.childNodes].forEach(sanitizeNode);
+	}
+
+	[...tempDiv.childNodes].forEach(sanitizeNode);
+
+	return tempDiv.innerHTML;
 }
 
 function sanitizeToPlainText(value) {

@@ -117,5 +117,4 @@ function astra_logo_svg_icons_dynamic_css( $dynamic_css ) {
 	$dynamic_css .= astra_parse_css( $mobile_css_output, '', astra_get_mobile_breakpoint() );
 
 	return $dynamic_css;
-
 }

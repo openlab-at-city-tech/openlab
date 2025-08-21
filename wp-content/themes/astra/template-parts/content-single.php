@@ -21,7 +21,7 @@
 					'id'    => 'post-' . get_the_id(),
 					'class' => join( ' ', get_post_class() ),
 				)
-			) 
+			)
 		);
 		?>
 >

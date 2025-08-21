@@ -18,7 +18,8 @@
                     : obj.options.l10n.datePicker.meridiem[isLower ? 'pm' : 'PM'];
             },
         });
-        let existsAppointmentForm = typeof BooklyAppointmentDialog !== 'undefined'
+
+        let allowEditAppointment = typeof BooklyAppointmentDialog !== 'undefined' && (!options.hasOwnProperty('disable_editor') || !options.disable_editor);
 
         let viewTypes = {
             dayGridMonth: 'resourceTimelineMonth',
@@ -152,60 +153,60 @@
             }],
             eventBackgroundColor: '#ccc',
             eventMouseEnter: function (arg) {
+                arg.jsEvent.stopPropagation();
                 if (arg.event.display === 'background') {
                     return '';
                 }
                 let $event = $(arg.el);
                 if (arg.event.display === 'auto' && arg.view.type !== 'listWeek') {
                     let $existing_popover = $event.find('.bookly-ec-popover')
-                    if ($existing_popover.length) {
-                        $existing_popover.remove();
-                    }
-                    let offset = $event.offset();
-                    let $popover, $arrow;
-                    if (offset.left > window.innerWidth / 2) {
-                        $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover bookly-popover-right">')
-                        $arrow = $('<div class="arrow" style="right: 8px;"></div><div class="bookly-arrow-background"></div>');
-                    } else {
-                        $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
-                        $arrow = $('<div class="arrow" style="left:8px;"></div><div class="bookly-arrow-background"></div>');
-                    }
-                    let $body = $('<div class="popover-body">');
-                    let $buttons = existsAppointmentForm ? popoverButtons(arg) : '';
-                    $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '200px'});
-                    $popover.append($arrow).append($body);
-                    $event.append($popover);
-
-                    let popover_height = $popover.outerHeight(),
-                        $calendar_container = $event.closest('.ec-body').length ? $event.closest('.ec-body') : $event.closest('.ec-all-day'),
-                        container_top = $calendar_container.offset().top,
-                        event_width = $event.outerWidth()
-                    ;
-
-                    $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
-
-                    if (container_top > offset.top - popover_height) {
-                        // Popover on side of event
-                        $popover.css('top', (Math.max(container_top, offset.top) - $(document).scrollTop()) + 'px');
-                        if ($popover.hasClass('bookly-popover-right')) {
-                            $popover.removeClass('bs-popover-top').addClass('bs-popover-left');
-                            $popover.css('left', (offset.left - $popover.outerWidth()) + 'px');
-                            $arrow.css('right', '-8px');
+                    if (!$existing_popover.length) {
+                        let offset = $event.offset();
+                        let $popover, $arrow;
+                        if (offset.left > window.innerWidth / 2) {
+                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover bookly-popover-right">')
+                            $arrow = $('<div class="arrow" style="right: 8px;"></div><div class="bookly-arrow-background"></div>');
                         } else {
-                            $popover.removeClass('bs-popover-top').addClass('bs-popover-right');
-                            $popover.css('left', Math.min(offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32) + 'px');
-                            $arrow.css('left', '-8px');
+                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
+                            $arrow = $('<div class="arrow" style="left:8px;"></div><div class="bookly-arrow-background"></div>');
                         }
-                    } else {
-                        // Popover on top of event
-                        let
-                            top = Math.max(popover_height + 40, Math.max(container_top, offset.top) - $(document).scrollTop());
+                        let $body = $('<div class="popover-body">');
+                        let $buttons = allowEditAppointment ? popoverButtons(arg) : '';
+                        $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '200px'});
+                        $popover.append($arrow).append($body);
+                        $event.append($popover);
 
-                        $popover.css('top', (top - popover_height - 4) + 'px')
-                        if ($popover.hasClass('bookly-popover-right')) {
-                            $popover.css('left', (offset.left + event_width - $popover.outerWidth()) + 'px');
+                        let popover_height = $popover.outerHeight(),
+                            $calendar_container = $event.closest('.ec-body').length ? $event.closest('.ec-body') : $event.closest('.ec-all-day'),
+                            container_top = $calendar_container.offset().top,
+                            event_width = $event.outerWidth()
+                        ;
+
+                        $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
+
+                        if (container_top > offset.top - popover_height) {
+                            // Popover on side of event
+                            $popover.css('top', (Math.max(container_top, offset.top) - $(document).scrollTop()) + 'px');
+                            if ($popover.hasClass('bookly-popover-right')) {
+                                $popover.removeClass('bs-popover-top').addClass('bs-popover-left');
+                                $popover.css('left', (offset.left - $popover.outerWidth()) + 'px');
+                                $arrow.css('right', '-8px');
+                            } else {
+                                $popover.removeClass('bs-popover-top').addClass('bs-popover-right');
+                                $popover.css('left', Math.min(offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32) + 'px');
+                                $arrow.css('left', '-8px');
+                            }
                         } else {
-                            $popover.css('left', (offset.left + 2) + 'px');
+                            // Popover on top of event
+                            let
+                                top = Math.max(popover_height + 40, Math.max(container_top, offset.top) - $(document).scrollTop());
+
+                            $popover.css('top', (top - popover_height - 4) + 'px')
+                            if ($popover.hasClass('bookly-popover-right')) {
+                                $popover.css('left', (offset.left + event_width - $popover.outerWidth()) + 'px');
+                            } else {
+                                $popover.css('left', (offset.left + 2) + 'px');
+                            }
                         }
                     }
                 }
@@ -241,7 +242,7 @@
                         break;
                 }
 
-                if (arg.view.type === 'listWeek' && existsAppointmentForm) {
+                if (arg.view.type === 'listWeek' && allowEditAppointment) {
                     $title.append(popoverButtons(arg));
                 }
 
@@ -252,7 +253,7 @@
                     return;
                 }
                 arg.jsEvent.stopPropagation();
-                if (existsAppointmentForm) {
+                if (allowEditAppointment) {
                     let visible_staff_id;
                     if (arg.view.type === 'resourceTimeGridDay') {
                         visible_staff_id = 0;
@@ -309,7 +310,7 @@
                     return;
                 }
                 if (isLoading) {
-                    if (existsAppointmentForm) {
+                    if (allowEditAppointment) {
                         BooklyL10nAppDialog.refreshed = true;
                     }
                     if (dateSetFromDatePicker) {
@@ -409,7 +410,7 @@
         }
 
         function addAppointmentDialog(date, staffId, visibleStaffId) {
-            if (existsAppointmentForm) {
+            if (allowEditAppointment) {
                 BooklyAppointmentDialog.showDialog(
                     null,
                     parseInt(staffId),

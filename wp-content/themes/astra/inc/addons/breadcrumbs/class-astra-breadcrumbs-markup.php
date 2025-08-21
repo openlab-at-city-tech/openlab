@@ -19,7 +19,6 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Markup' ) ) {
 	 * @since 1.8.0
 	 */
 	class Astra_Breadcrumbs_Markup {
-
 		/**
 		 * Member Variable
 		 *
@@ -105,7 +104,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Markup' ) ) {
 		 *
 		 * @since 1.8.0
 		 *
-		 * @return boolean
+		 * @return bool
 		 */
 		public static function astra_breadcrumb_rules() {
 
@@ -124,7 +123,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Markup' ) ) {
 				$display_breadcrumb = false;
 			}
 
-			if ( ( is_archive() ) && '0' == astra_get_option( 'breadcrumb-disable-archive' ) ) {
+			if ( is_archive() && '0' == astra_get_option( 'breadcrumb-disable-archive' ) ) {
 				$display_breadcrumb = false;
 			}
 
@@ -150,6 +149,6 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Markup' ) ) {
 }
 
 /**
-*  Kicking this off by calling 'get_instance()' method
-*/
+ *  Kicking this off by calling 'get_instance()' method
+ */
 Astra_Breadcrumbs_Markup::get_instance();

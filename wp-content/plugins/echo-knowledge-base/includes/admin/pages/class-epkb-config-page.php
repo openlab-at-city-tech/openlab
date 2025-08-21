@@ -29,8 +29,7 @@ class EPKB_Config_Page {
 			}
 
 			if ( is_plugin_active_for_network( plugin_basename( Echo_Knowledge_Base::$plugin_file ) ) ) {
-				$message = esc_html__( 'The Knowledge Base plugin cannot be activated network-wide. Please activate it on individual sites.', 'echo-knowledge-base' );
-				EPKB_Core_Utilities::display_config_error_page( $message );
+				EPKB_Core_Utilities::display_network_issue_error_message();
 				return;
 			}
 		}
@@ -58,15 +57,20 @@ class EPKB_Config_Page {
 		// regenerate KB sequence for Categories and Articles if missing
 		EPKB_KB_Handler::get_refreshed_kb_categories( $kb_id );
 
+
 		//-------------------------------- SETUP WIZARD --------------------------------
 
 		// should we display Setup Wizard or KB Configuration?
 		if ( isset( $_GET['setup-wizard-on'] ) && $this->kb_config['modular_main_page_toggle'] == 'on' && EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
-			$add_ons_kb_config = $this->get_add_ons_config( $kb_id );
-			if ( ! empty( $add_ons_kb_config) ) {
-				$handler = new EPKB_KB_Wizard_Setup( $add_ons_kb_config );
-				$handler->display_kb_setup_wizard();
+
+			$add_ons_kb_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $this->kb_config );
+			if ( empty( $add_ons_kb_config ) ) {
+				$add_ons_kb_config = $this->kb_config;
 			}
+
+			$handler = new EPKB_KB_Wizard_Setup( $add_ons_kb_config );
+			$handler->display_kb_setup_wizard();
+
 			return;
 		}
 
@@ -86,8 +90,9 @@ class EPKB_Config_Page {
 			$admin_page_views = self::get_run_setup_first_views_config();
 
 		} else {
-			$add_ons_kb_config = $this->get_add_ons_config( $kb_id );
-			if ( empty( $add_ons_kb_config) ) {
+			$add_ons_kb_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $this->kb_config );		
+			if ( $add_ons_kb_config === false ) {
+				EPKB_Core_Utilities::display_config_error_page();
 				return;
 			}
 			$admin_page_views = $this->get_regular_views_config( $add_ons_kb_config );
@@ -141,18 +146,6 @@ class EPKB_Config_Page {
 		}
 	}
 
-	private function get_add_ons_config( $kb_id ) {
-		// get current add-ons configuration
-		$add_ons_kb_config = $this->kb_config;
-		$add_ons_kb_config = apply_filters( 'epkb_all_wizards_get_current_config', $add_ons_kb_config, $kb_id );
-		if ( is_wp_error( $add_ons_kb_config ) || empty( $add_ons_kb_config ) || ! is_array( $add_ons_kb_config ) || count( $add_ons_kb_config ) < 100 ) {
-			EPKB_Core_Utilities::display_config_error_page();
-			return [];
-		}
-
-		return $add_ons_kb_config;
-	}
-
 	/**
 	 * Get configuration array for regular views of the KB Configuration page
 	 *
@@ -160,6 +153,16 @@ class EPKB_Config_Page {
 	 * @return array[]
 	 */
 	private function get_regular_views_config( $wizard_kb_config ) {
+
+		// allow user to edit settings on backend instead of FE on demand
+		$is_legacy_settings = EPKB_Core_Utilities::is_kb_flag_set( 'is_legacy_settings' );
+		if ( ! $is_legacy_settings && EPKB_Utilities::post( 'epkb_legacy_settings' ) == 'on' ) {
+			EPKB_Core_Utilities::add_kb_flag( 'is_legacy_settings' );
+			$is_legacy_settings = true;
+		}
+
+		// TODO: use for test only to reset the flag - do not forget to remove the 'epkb_legacy_settings=on' from current URL in browser to see he change
+		// EPKB_Core_Utilities::remove_kb_flag( 'is_legacy_settings' );
 
 		/**
 		 * PRIMARY TAB: Settings
@@ -174,7 +177,8 @@ class EPKB_Config_Page {
 			// Top Panel Item
 			'label_text' => esc_html__( 'Settings', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-cogs',
-			'vertical_tabs' => $settings_tab_handler->get_vertical_tabs_config()
+			'vertical_tabs' => $is_legacy_settings ? $settings_tab_handler->get_vertical_tabs_config() : [],
+			'horizontal_boxes' => $is_legacy_settings ? [] : $this->get_new_settings_boxes_config(),
 		);
 
 		/**
@@ -197,7 +201,6 @@ class EPKB_Config_Page {
 
 				array(
 					'class' => 'epkb-admin__boxes-list__box__ordering',
-					'title' => esc_html__( 'Ordering Settings', 'echo-knowledge-base' ),
 					'description' => '',
 					'html' => $wizard_ordering->show_article_ordering( $wizard_kb_config ),
 				),
@@ -223,6 +226,28 @@ class EPKB_Config_Page {
 		);
 
 		/**
+		 * PRIMARY TAB: AI Chat
+		 */
+		$ai_chat_view_config = array(
+			// Shared
+			'minimum_required_capability' => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
+			'list_key' => 'ai-chat',
+			'kb_config_id' => $this->kb_config['id'],
+
+			// Top Panel Item
+			'label_text' => esc_html__( 'AI Chat', 'echo-knowledge-base' ) . ' <span class="epkb-admin__new-tag">NEW!</span>',
+			'icon_class' => 'epkbfa epkbfa-comments',
+
+			// Boxes List
+			'boxes_list' => array(
+				array(
+					'class' => 'epkb-admin__boxes-list__box__ai-chat',
+					'html' => class_exists( 'MeowPro_MWAI_Embeddings' ) ? self::get_ai_chat_active_content() : self::get_ai_chat_inactive_content(),
+				),
+			),
+		);
+
+		/**
 		 * PRIMARY TAB: Widgets / Shortcode
 		 */
 		$kb_widgets_view_config = array(
@@ -241,7 +266,7 @@ class EPKB_Config_Page {
 			'secondary_tabs'  => array(
 
 				// SECONDARY VIEW: Blocks
-				/* array(    // TODO is_block_enabled()
+				array(
 
 					// Shared
 					'list_key'   => 'blocks',
@@ -251,7 +276,7 @@ class EPKB_Config_Page {
 
 					// Secondary Boxes List
 					'boxes_list' => self::get_widgets_boxes( self::get_blocks_boxes_config() )
-				), */
+				),
 
 				// SECONDARY VIEW: Shortcodes
 				array(
@@ -305,6 +330,7 @@ class EPKB_Config_Page {
 			$core_views[] = $settings_view_config;
 			$core_views[] = $ordering_view_config;
 			$core_views[] = $kb_url_view_config;
+			$core_views[] = $ai_chat_view_config;
 			$core_views[] = $kb_widgets_view_config;
 			$core_views[] = $tools_view_config;
 		}
@@ -429,7 +455,7 @@ class EPKB_Config_Page {
 
 			// If user has multiple pages with KB Shortcode or KB layout block then let them know this is normal for WPML users
 			if ( count( $this->kb_main_pages ) > 1 && ! EPKB_Utilities::is_wpml_enabled( $this->kb_config ) ) {        ?>
-				<div class="epkb-admin__chapter"><?php echo sprintf( esc_html__( 'Note: You have other pages with KB shortcode or KB layout block that are currently %snot used%s: ', 'echo-knowledge-base' ), '<strong>', '</strong>' ); ?></div>
+				<div class="epkb-admin__chapter"><?php echo sprintf( esc_html__( 'Note: You have other pages with KB shortcode or KB layout block that are currently %snot used%s', 'echo-knowledge-base' ) . ': ', '<strong>', '</strong>' ); ?></div>
 				<ul class="epkb-admin__items-list">    <?php
 
 					foreach ( $this->kb_main_pages as $page_id => $page_info ) {
@@ -501,7 +527,7 @@ class EPKB_Config_Page {
 				'icon'      => 'epkbfa epkbfa-list-alt',
 				'title'     => esc_html__( 'KB Search', 'echo-knowledge-base' ),
 				'desc'      => esc_html__( 'Fast search bar on KB Main Page with listed results.', 'echo-knowledge-base' ),
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/elementor-widgets-for-documentation/',
+				'docs'      => 'https://www.echoknowledgebase.com/documentation/search/',
 			],
 			[
 				'plugin'    => 'core',
@@ -569,7 +595,7 @@ class EPKB_Config_Page {
 				'plugin'    => 'ep'.'hd',
 				'icon'      => 'epkbfa epkbfa-list-alt',
 				'title'     => esc_html__( 'Help Dialog', 'echo-knowledge-base' ),
-				'desc'      => esc_html__( 'Help Dialog is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Help Dialog is a frontend dialog where users can ask AI questions, easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
 				'docs'      => 'https://www.helpdialog.com/documentation/',
 				'video'     => '',
 			],
@@ -700,7 +726,7 @@ class EPKB_Config_Page {
 				'icon'         => 'epkbfa epkbfa-list-alt',
 				'title'        => esc_html__( 'Knowledge Base Shortcode', 'echo-knowledge-base' ),
 				'desc'         => esc_html__( 'Display Echo Knowledge Base on a page.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $kb_id ], __( 'Shortcode:', 'echo-knowledge-base' ), false ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $kb_id ], esc_html__( 'Shortcode:', 'echo-knowledge-base' ), false ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/knowledge-base-shortcode/',
 			],
 			[
@@ -747,7 +773,7 @@ class EPKB_Config_Page {
 				'title'        => esc_html__( 'Popular Articles', 'echo-knowledge-base' ),
 				'desc'         => esc_html__( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ) ,
 				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-popular-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
-				'docs'         => 'https://www.echoknowledgebase.com/documentation/popular-articles-widget/',
+				'docs'         => 'https://www.echoknowledgebase.com/documentation/popular-articles-shortcode/',
 				'video'        => '',
 			],
 			[
@@ -878,7 +904,7 @@ class EPKB_Config_Page {
 		if ( ( ! empty( $add_on_messages ) && is_array( $add_on_messages ) ) || did_action( 'kb_overview_add_on_errors' ) ) {
 
 			$licenses_tab_url = admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-add-ons#licenses' );
-			$licenses_tab_button = '<a href="' . esc_url( $licenses_tab_url ) . '" class="epkb-primary-btn"> ' . esc_html__( 'Fix the Issue', 'echo-knowledge-base' ) . '</a>';
+			$licenses_tab_button = '<a href="' . esc_url( $licenses_tab_url ) . '" class="epkb-fix-btn epkb-primary-btn"> ' . esc_html__( 'Fix the Issue', 'echo-knowledge-base' ) . '</a>';
 
 			foreach ( $add_on_messages as $add_on_name => $add_on_message ) {
 
@@ -973,5 +999,274 @@ class EPKB_Config_Page {
 		do_action( 'eckb_admin_config_page_kb_status', $kb_config );
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get HTML content for AI Chat tab when MWAI is active
+	 *
+	 * @return string
+	 */
+	private static function get_ai_chat_active_content() {
+		ob_start(); ?>
+
+		<div class="epkb-admin__info-box">
+			<div class="epkb-admin__ai-chat-header" style="text-align: center; margin-bottom: 30px;">
+				<h2 style="margin-bottom: 15px; color: #2c3338;"><?php esc_html_e( 'AI Chat is Active', 'echo-knowledge-base' ); ?></h2>
+				<p style="font-size: 16px; color: #50575e; max-width: 800px; margin: 0 auto;">
+					<?php esc_html_e( 'Your AI Chat is up and running! Here are some helpful resources to get the most out of your AI Chat feature.', 'echo-knowledge-base' ); ?>
+				</p>
+			</div>
+
+			<div class="epkb-admin__ai-chat-features" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px;">
+				<div class="epkb-admin__feature-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e2e4e7;">
+					<h3 style="margin: 0 0 15px 0; color: #2c3338;"><?php esc_html_e( 'Quick Links', 'echo-knowledge-base' ); ?></h3>
+					<ul style="margin: 0; padding-left: 20px; color: #50575e;">
+						<li><a href="https://www.echoknowledgebase.com/documentation/ai-chat-configuration/" target="_blank"><?php esc_html_e( 'Configure AI Chat Settings', 'echo-knowledge-base' ); ?></a></li>
+						<li><a href="https://www.echoknowledgebase.com/documentation/ai-chat-teach-it-your-business/" target="_blank"><?php esc_html_e( 'AI Chat – Teach It Your Business', 'echo-knowledge-base' ); ?></a></li>
+						<li><a href="https://www.echoknowledgebase.com/documentation/ai-chat-features/" target="_blank"><?php esc_html_e( 'AI Chat Features', 'echo-knowledge-base' ); ?></a></li>
+						<li><a href="https://www.echoknowledgebase.com/documentation/ai-chat-tuning/" target="_blank"><?php esc_html_e( 'AI Chat Tuning', 'echo-knowledge-base' ); ?></a></li>
+					</ul>
+				</div>
+				<div class="epkb-admin__feature-card" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e2e4e7;">
+					<h3 style="margin: 0 0 15px 0; color: #2c3338;"><?php esc_html_e( 'Tips', 'echo-knowledge-base' ); ?></h3>
+					<ul style="margin: 0; padding-left: 20px; color: #50575e;">
+						<li><?php esc_html_e( 'Set appropriate temperature and max tokens for balanced responses', 'echo-knowledge-base' ); ?></li>
+						<li><?php esc_html_e( 'Contact us with ideas and suggestions!', 'echo-knowledge-base' ); ?></li>
+					</ul>
+				</div>
+			</div>
+
+			<div style="text-align: center; margin: 30px 0; padding: 20px; background: #fff5e6; border-radius: 8px; border: 1px solid #c5d9ed;">
+				<h3 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'AI CHAT Dialog - Free WordPress Plugin', 'echo-knowledge-base' ); ?></h3>
+				<p style="margin: 0; color: #50575e; font-size: 16px;">
+					<i class="epkbfa epkbfa-lightbulb-o" style="margin-right: 8px; color: #ffd700;"></i><?php esc_html_e( 'AI Chat with agent handover, FAQs, Knowledge Base Search, and Contact Form.', 'echo-knowledge-base' ); ?>
+					<a href="https://wordpress.org/plugins/help-dialog/" target="_blank"><?php esc_html_e( 'Get it from the WordPress Repo', 'echo-knowledge-base' ); ?></a>
+				</p>
+				<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ad/ad-help-dialog.jpg'); ?>" alt="Help Dialog" class="epkb-help-dialog-img" style="max-width: 100%; height: auto; margin-top: 15px; border-radius: 4px; cursor: zoom-in;">
+				
+				<!-- Image Popup -->
+				<div class="epkb-image-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+					<div class="epkb-image-popup-content" style="position: relative; max-width: 90%; max-height: 90%;">
+						<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ad/ad-help-dialog.jpg'); ?>" alt="Help Dialog Full Size" style="max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+					</div>
+				</div>
+			</div>
+
+			<div class="epkb-admin__ai-chat-resources" style="background: #f0f6fc; padding: 25px; border-radius: 8px; border: 1px solid #c5d9ed;">
+				<div class="epkb-admin__resources-support">
+					<div>
+						<h4 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Documentation', 'echo-knowledge-base' ); ?></h4>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Access comprehensive guides and tutorials for AI Chat features.', 'echo-knowledge-base' ); ?>
+						</p>
+						<a href="https://www.echoknowledgebase.com/documentation/ai-chat/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+							<?php esc_html_e( 'View Documentation', 'echo-knowledge-base' ); ?>
+						</a>
+					</div>
+					<div>
+						<h4 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Technical Support', 'echo-knowledge-base' ); ?></h4>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Get help from our support team for any AI Chat related issues.', 'echo-knowledge-base' ); ?>
+						</p>
+						<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+							<?php esc_html_e( 'Contact Support', 'echo-knowledge-base' ); ?>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>		<?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Get HTML content for AI Chat tab when MWAI is not active
+	 *
+	 * @return string
+	 */
+	private static function get_ai_chat_inactive_content() {
+		ob_start(); ?>
+
+		<div class="epkb-admin__info-box">
+			<div class="epkb-admin__ai-chat-header" style="text-align: center; margin-bottom: 30px;">
+				<h2 style="margin-bottom: 15px; color: #2c3338;"><?php esc_html_e( 'Welcome to AI Chat!', 'echo-knowledge-base' ); ?></h2>
+				<p style="font-size: 16px; color: #50575e; max-width: 800px; margin: 0 auto;">
+					<?php esc_html_e( 'Transform your knowledge base into an interactive AI-powered assistant that helps users find answers instantly.', 'echo-knowledge-base' ); ?>
+				</p>
+			</div>
+			
+			<div class="epkb-admin__ai-chat-features" style="margin-bottom: 30px;">
+				<div class="epkb-admin__text-image-container" style="display: flex; gap: 30px; align-items: center;">
+					<div class="epkb-admin__text-image-body" style="flex: 1; position: relative; right: -32px; top: -25px;">
+						<div class="epkb-admin__text-editor">
+							<p style="margin: 0 0 15px 0; color: #50575e;"><?php esc_html_e( 'We cut repetitive tickets by 85 % on our own support desk after deploying AI Chat—slashing response times and freeing the team for high-value work, all without adding head-count.', 'echo-knowledge-base' ); ?></p>
+							<div>
+								<p style="font-weight: bold; margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Extra Wins', 'echo-knowledge-base' ); ?></p>
+								<ul style="margin: 0; padding-left: 20px; color: #50575e;">
+									<li><strong><?php esc_html_e( 'Real-time insight', 'echo-knowledge-base' ); ?></strong> <?php esc_html_e( 'into top pain points & feature requests', 'echo-knowledge-base' ); ?></li>
+									<li><strong><?php esc_html_e( 'Auto alerts', 'echo-knowledge-base' ); ?></strong> <?php esc_html_e( 'that flag gaps in your docs so you can fix once, help everyone', 'echo-knowledge-base' ); ?></li>
+									<li><strong><?php esc_html_e( 'Seamless live-agent hand-over (beta)', 'echo-knowledge-base' ); ?></strong> <?php esc_html_e( 'for the few questions a bot shouldn\'t handle', 'echo-knowledge-base' ); ?></li>
+									<li><strong><?php esc_html_e( 'Fast ROI:', 'echo-knowledge-base' ); ?></strong> <?php esc_html_e( 'setup in minutes, benefits show up almost immediately.', 'echo-knowledge-base' ); ?></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="epkb-admin__text-image-img" style="flex: 1;">
+						<div class="epkb-admin__img-wrap" style="max-width: 100%;">
+							<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ad/ai-chat-efficiency.jpg'); ?>" alt="<?php esc_attr_e( 'AI Chat Efficiency', 'echo-knowledge-base' ); ?>" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="epkb-admin__ai-chat-intro" style="display: flex; gap: 30px; margin-bottom: 30px; background: #fff; padding: 25px; border-radius: 8px; border: 1px solid #e2e4e7;">
+				<div class="epkb-admin__ai-chat-text" style="flex: 1;">
+					<h3 style="margin: 0 0 25px -7px; color: #2c3338;"><?php esc_html_e( 'Quick Setup Guide', 'echo-knowledge-base' ); ?></h3>
+					<div style="margin-bottom: 25px; margin-left: 5px;">
+						<h5 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Step 1: Install Plugin', 'echo-knowledge-base' ); ?></h5>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Install and activate the AI Engine Pro plugin, which provides the necessary AI infrastructure for the chat feature.', 'echo-knowledge-base' ); ?>
+						</p>
+					</div>
+					<div style="margin-bottom: 25px; margin-left: 5px;">
+						<h5 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Step 2: Set Up OpenAI Integration', 'echo-knowledge-base' ); ?></h5>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Configure your OpenAI API key and set up the necessary embeddings for your knowledge base content.', 'echo-knowledge-base' ); ?>
+						</p>
+					</div>
+					<div style="margin-bottom: 25px; margin-left: 5px;">
+						<h5 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Step 3: Configure Chat Settings', 'echo-knowledge-base' ); ?></h5>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Customize your chat interface, response behavior, and other AI Chat settings to match your needs.', 'echo-knowledge-base' ); ?>
+						</p>
+					</div>
+					<div style="margin-bottom: 25px; margin-left: 5px;">
+						<h5 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Step 4: Index Articles', 'echo-knowledge-base' ); ?></h5>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Index your articles to create AI embeddings that AI Chat will use to answer questions. Larger KBs may take longer to index.', 'echo-knowledge-base' ); ?>
+							</p>
+					</div>
+					<div style="margin-bottom: 25px; margin-left: 5px;">
+						<h5 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Step 5: Launch and Fine-tune', 'echo-knowledge-base' ); ?></h5>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Your AI Chat is ready to go! Test it out and watch as it helps your users find answers instantly. As you gather user feedback, you can fine-tune the responses to make them even more accurate and helpful.', 'echo-knowledge-base' ); ?>
+						</p>
+					</div>
+					<div style="margin-top: 30px; text-align: center;">
+						<a href="https://www.echoknowledgebase.com/documentation/ai-chat/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+							<?php esc_html_e( 'View Detailed Setup Guide', 'echo-knowledge-base' ); ?>
+						</a>
+					</div>
+				</div>
+				<div class="epkb-admin__ai-chat-image" style="flex: 1;">
+					<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ai-chat-preview.jpg'); ?>" alt="AI Chat Preview" style="max-width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+				</div>
+			</div>
+
+			<div class="epkb-admin__ai-chat-notice" style="background: #fff5e6; padding: 20px; border-radius: 8px; border: 1px solid #c5d9ed; margin-bottom: 30px;">
+				<h3 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Important Notice', 'echo-knowledge-base' ); ?></h3>
+				<p style="margin: 0 0 15px 0; color: #50575e;">
+					<?php esc_html_e( 'Please note: The AI Chat feature requires the purchase of AI Engine, the best AI WordPress plugin. This powerful plugin provides comprehensive AI tools for your entire website—including AI Chat, writing tools, image generation, and more. For additional details and setup instructions, please see our article for details.', 'echo-knowledge-base' ); ?>
+				</p>
+				<a href="https://www.echoknowledgebase.com/documentation/ai-chat/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+					<?php esc_html_e( 'Learn More About AI Chat Integration', 'echo-knowledge-base' ); ?>
+				</a>
+			</div>
+
+			<div style="text-align: center; margin: 30px 0; padding: 20px; background: #fff5e6; border-radius: 8px; border: 1px solid #c5d9ed;">
+				<h3 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'AI Chat Dialog - Free WordPress Plugin', 'echo-knowledge-base' ); ?></h3>
+				<p style="margin: 0; color: #50575e; font-size: 16px;">
+					<i class="epkbfa epkbfa-lightbulb-o" style="margin-right: 8px; color: #ffd700;"></i><?php esc_html_e( 'AI Chat with agent handover, FAQs, Knowledge Base Search, and Contact Form.', 'echo-knowledge-base' ); ?>
+					<a href="https://wordpress.org/plugins/help-dialog/" target="_blank"><?php esc_html_e( 'Get it from the WordPress Repo', 'echo-knowledge-base' ); ?></a>
+				</p>
+				<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ad/ad-help-dialog.jpg'); ?>" alt="Help Dialog" class="epkb-help-dialog-img-inactive" style="max-width: 100%; height: auto; margin-top: 15px; border-radius: 4px; cursor: zoom-in;">
+				
+				<!-- Image Popup -->
+				<div class="epkb-image-popup-inactive" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+					<div class="epkb-image-popup-content" style="position: relative; max-width: 90%; max-height: 90%;">
+						<img src="<?php echo esc_url(Echo_Knowledge_Base::$plugin_url . 'img/ad/ad-help-dialog.jpg'); ?>" alt="Help Dialog Full Size" style="max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+					</div>
+				</div>
+			</div>
+
+			<div class="epkb-admin__ai-chat-resources" style="background: #f0f6fc; padding: 25px; border-radius: 8px; border: 1px solid #c5d9ed;">
+				<div class="epkb-admin__resources-support">
+					<div>
+						<h4 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Documentation', 'echo-knowledge-base' ); ?></h4>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Access comprehensive guides and tutorials for AI Chat features.', 'echo-knowledge-base' ); ?>
+						</p>
+						<a href="https://www.echoknowledgebase.com/documentation/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+							<?php esc_html_e( 'View Documentation', 'echo-knowledge-base' ); ?>
+						</a>
+					</div>
+					<div>
+						<h4 style="margin: 0 0 10px 0; color: #2c3338;"><?php esc_html_e( 'Technical Support', 'echo-knowledge-base' ); ?></h4>
+						<p style="margin: 0 0 15px 0; color: #50575e;">
+							<?php esc_html_e( 'Need help? Our support team is here to assist you with any questions or issues.', 'echo-knowledge-base' ); ?>
+						</p>
+						<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">
+							<?php esc_html_e( 'Contact Support', 'echo-knowledge-base' ); ?>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>		<?php
+
+		return ob_get_clean();
+	}
+
+	private function get_new_settings_boxes_config() {
+
+		$kb_main_page_button_text = esc_html__( 'Open Frontend Editor', 'echo-knowledge-base' );
+		$kb_main_page_button_url = esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $this->kb_config ) ) . '?action=epkb_load_editor';
+		$kb_main_page_has_kb_blocks = EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $this->kb_config );
+		if ( $kb_main_page_has_kb_blocks ) {
+			$kb_main_page_button_text = esc_html__( 'Edit Main Page', 'echo-knowledge-base' );
+			$kb_main_page_button_url =  esc_url( get_edit_post_link( EPKB_KB_Handler::get_first_kb_main_page_id( $this->kb_config ) ) ) ;
+		}
+
+		$first_kb_main_page_url = EPKB_KB_Handler::get_first_kb_main_page_url( $this->kb_config );
+		$first_kb_article_url = EPKB_KB_Handler::get_first_kb_article_url( $this->kb_config );
+
+		$new_settings_links_config = array(
+			'boxes' => array(
+				array(
+					'title' => esc_html__( 'Main Page', 'echo-knowledge-base' ),
+					'icon' => Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/config-page-icon-main-page.png',
+					'button_url' => empty( $first_kb_main_page_url ) ? '' : esc_url( $first_kb_main_page_url ) . '?epkb_fe_reopen_feature=none',
+					'button_text' => empty( $first_kb_main_page_url ) ? '' : esc_html__( 'Open Frontend Editor', 'echo-knowledge-base' ),
+					'message' => empty( $first_kb_main_page_url ) ? esc_html__( 'Main Page is not set', 'echo-knowledge-base' ) : '',
+				),
+				array(
+					'title' => esc_html__( 'Article Page', 'echo-knowledge-base' ),
+					'icon' => Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/config-page-icon-article-page.png',
+					'button_url' => empty( $first_kb_article_url ) ? '' : esc_url( $first_kb_article_url ) . '?epkb_fe_reopen_feature=none',
+					'button_text' => empty( $first_kb_article_url ) ? '' : esc_html__( 'Open Frontend Editor', 'echo-knowledge-base' ),
+					'message' => empty( $first_kb_article_url ) ? esc_html__( 'Add an Article to configure the Article Page', 'echo-knowledge-base' ) : '',
+				),
+			),
+			'bottom_html' => '<a href="' . esc_url( admin_url( 'edit.php?post_type=epkb_post_type_' . $this->kb_config['id'] . '&page=epkb-kb-configuration&epkb_legacy_settings=on#settings' ) ) . '" class="epkb-enable-backend-settings">' . esc_html__( 'Manually Edit Settings on Backend', 'echo-knowledge-base' ) . '</a>'
+		);
+
+		$is_theme_archive_page_template = $this->kb_config['template_for_archive_page'] == 'current_theme_templates';
+		$first_kb_archive_url = EPKB_KB_Handler::get_kb_category_with_most_articles_url( $this->kb_config );
+		$new_settings_links_config['boxes'][] = array(
+			'title' => __( 'Category Page', 'echo-knowledge-base' ),
+			'icon' => Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/config-page-icon-category-page.png',
+			'button_url' => $is_theme_archive_page_template || empty( $first_kb_archive_url ) ? '' : esc_url( $first_kb_archive_url ) . '?epkb_fe_reopen_feature=archive-page-settings',
+			'button_text' => $is_theme_archive_page_template || empty( $first_kb_archive_url ) ? '' : __( 'Open Frontend Editor	', 'echo-knowledge-base' ),
+			'message' => empty( $first_kb_archive_url ) ? esc_html__( 'Add an article with a category to configure the Archive Page', 'echo-knowledge-base' ) : ( $is_theme_archive_page_template ? __( 'Open Your Theme Editor or Switch to KB Template', 'echo-knowledge-base' ) : '' ),
+			'message_link_text' => empty( $first_kb_archive_url ) ? '' : esc_html__( 'Learn More', 'echo-knowledge-base' ),
+			'message_link' => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
+		);
+
+		$new_settings_links_config['boxes'][] = array(
+			'title' => esc_html__( 'Other Settings', 'echo-knowledge-base' ),
+			'icon' => Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/config-page-icon-other-settings.png',
+			'is_open_settings_link' => true,
+		);
+
+		return $new_settings_links_config;
 	}
 }

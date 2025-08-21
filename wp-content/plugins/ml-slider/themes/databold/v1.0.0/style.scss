@@ -54,6 +54,8 @@
 			width: 60px;
 			height: 36px;
 			background-image: none;
+			top: calc(50% + 20px); // 20px is the margin-bottom / 2 from .flexslider
+			transform: translateY(-50%);
 			
 			&:after {
 				background-color: #fff;
@@ -73,7 +75,7 @@
 
 				&:after {
 					mask-image: url(images/left.svg);
-					mask-position: 23px center;
+					mask-position: center center;
 				}
 			}
 
@@ -82,9 +84,14 @@
 
 				&:after {
 					mask-image: url(images/right.svg);
-					mask-position: 25px center;
 				}
 			}
+		}
+
+		.flex-control-paging li a {
+			font-size: 0;
+			text-indent: 99999px;
+			overflow: hidden;
 		}
 
 		.flex-control-nav {
@@ -108,6 +115,15 @@
 					background: #fff;
 					border: 1px solid #016fb9;
 				}
+			}
+		}
+
+		.flex-pauseplay a {
+			bottom: 12px;
+			left: 20px;
+
+			&:focus{
+				outline: 3px solid #fff;
 			}
 		}
 	}

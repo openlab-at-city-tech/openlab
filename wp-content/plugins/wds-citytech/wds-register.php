@@ -214,7 +214,10 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		$return .= ob_get_clean();
 
 if ( bp_has_profile( $has_profile_args ) ) :
-	$return .= '<p>The information below is optional and you can choose who is able to see it.</p>';
+	// Only append when doing AJAX. This is a hack for #3548.
+	if ( wp_doing_ajax() ) {
+		$return .= '<p>The information below is optional and you can choose who is able to see it.</p>';
+	}
 
 	while ( bp_profile_groups() ) :
 		bp_the_profile_group();

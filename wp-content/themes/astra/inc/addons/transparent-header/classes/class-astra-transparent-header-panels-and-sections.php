@@ -28,7 +28,6 @@ if ( ! class_exists( 'Astra_Transparent_Header_Panels_And_Sections' ) ) {
 	 * Register Transparent Header Customizer Configurations.
 	 */
 	class Astra_Transparent_Header_Panels_And_Sections extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Transparent Header Customizer Configurations.
 		 *
@@ -44,7 +43,7 @@ if ( ! class_exists( 'Astra_Transparent_Header_Panels_And_Sections' ) ) {
 				array(
 					'name'     => 'section-transparent-header',
 					'title'    => esc_html__( 'Transparent Header', 'astra' ),
-					'panel'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 'panel-header-builder-group' : 'panel-header-group',
+					'panel'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'panel-header-builder-group' : 'panel-header-group',
 					'type'     => 'section',
 					'priority' => 33,
 				),

@@ -24,7 +24,8 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initCollapsibleDefinitions();
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
 			OpenLab.utility.initClickableCards();
-			OpenLab.utility.initPortfolioProfileLinkToggle();
+			OpenLab.utility.initAvatarUploadCustomizations();
+			OpenLab.utility.setUpNav();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -282,8 +283,6 @@ OpenLab.utility = (function ($) {
 
 				var width = OpenLab.utility.getScrollBarWidth();
 
-				console.log( 'width', width );
-
 				$( '.eo-fullcalendar .fc-row.fc-widget-header' ).wrap( "<div class='fc-header-wrapper'></div>" );
 
 				$( '.eo-fullcalendar .fc-day-grid, .eo-fullcalendar .fc-header-wrapper' ).css(
@@ -370,7 +369,6 @@ OpenLab.utility = (function ($) {
 			$( '#home-new-member-wrap' ).css( 'visibility', 'visible' ).hide().fadeIn(
 				700,
 				function () {
-					console.log( 'openLab', OpenLab );
 					OpenLab.truncation.truncateOnTheFly( false, true );
 
 				}
@@ -627,8 +625,6 @@ OpenLab.utility = (function ($) {
 				'click',
 				function () {
 
-					console.log( 'click nav' );
-
 					dataLayer.push(
 						{
 							'event': 'openlab.click',
@@ -745,39 +741,237 @@ OpenLab.utility = (function ($) {
 				card.style.cursor = 'pointer';
 			});
 		},
-		initPortfolioProfileLinkToggle: function() {
-			const toggleNodes = document.querySelectorAll('.portfolio-profile-link-toggle-checkbox');
+		initAvatarUploadCustomizations: function() {
+			const avatarUploadForm = document.getElementById( 'avatar-upload-form' );
+			if ( ! avatarUploadForm ) {
+				return;
+			}
 
-			if (toggleNodes.length > 0) {
-				const toggles = Array.from(toggleNodes);
-				toggles.forEach(toggle => {
-					toggle.addEventListener('change', (e) => {
-						const isChecked = toggle.checked;
+			const checkButton = () => {
+				const fileInput = avatarUploadForm.querySelector( 'input[type="file"]' );
+				const submitButton = avatarUploadForm.querySelector( 'input[type="submit"]' );
 
-						const toggleNonce = document.getElementById( 'openlab_portfolio_link_visibility_nonce_' + toggle.dataset.counter );
+				if ( ! submitButton ) {
+					return;
+				}
 
-						if ( ! toggleNonce ) {
-							return;
+				if ( fileInput.value ) {
+					submitButton.removeAttribute( 'disabled' );
+				} else {
+					submitButton.setAttribute( 'disabled', 'disabled' );
+				}
+			}
+
+			checkButton();
+			avatarUploadForm.addEventListener( 'change', checkButton );
+		},
+		setUpNav: function() {
+			const drawer = document.querySelector('.openlab-navbar-drawer');
+
+			// Handling the drawer toggle button.
+			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+				toggle.addEventListener('click', (e) => {
+					e.preventDefault();
+
+					const isKeyboardEvent = e.detail === 0;
+
+					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+					// Close all open menus.
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(b => {
+						b.classList.remove('is-open');
+					});
+
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(button => {
+						button.setAttribute('aria-expanded', 'false');
+					} )
+
+					if ( isOpen ) {
+						document.body.classList.remove( 'drawer-open' );
+						drawer.setAttribute('aria-hidden', 'true');
+						drawer.classList.remove('is-open');
+					} else {
+						document.querySelectorAll('.flyout-menu').forEach(menu => {
+							menu.classList.remove('is-open');
+						})
+
+						const menuId = toggle.getAttribute('aria-controls');
+						const menu = document.getElementById(menuId);
+						menu.classList.add('is-open');
+
+						const defaultPanelId = menu.getAttribute('data-default-panel');
+						const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
+						if ( defaultPanel ) {
+							defaultPanel.classList.add('active');
+							defaultPanel.setAttribute('aria-hidden', 'false');
 						}
 
-						const nonce = toggleNonce.value;
+						document.body.classList.add( 'drawer-open' );
+						drawer.setAttribute('aria-hidden', 'false');
+						drawer.classList.add('is-open');
+						drawer.scrollTop = 0;
 
-						const url = ajaxurl + '?action=openlab_portfolio_link_visibility&nonce=' + nonce + '&state=' + ( isChecked ? 'enabled' : 'disabled' );
+						toggle.setAttribute('aria-expanded', 'true');
+						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
 
-						toggle.closest( '.portfolio-profile-link-toggle-wrapper' ).classList.add( 'loading' );
-						toggle.disabled = true;
+						// If this is a keyboard event, focus the first focusable element in the default panel.
+						if ( isKeyboardEvent ) {
+							const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
+							if (firstFocusable) {
+								firstFocusable.focus();
+							}
+						}
+					}
+				});
+			});
 
-						fetch(url, {
-							method: 'GET',
-						})
-						.then(response => response.json())
-						.then(data => {
-							toggle.closest( '.portfolio-profile-link-toggle-wrapper' ).classList.remove( 'loading' );
-							toggle.disabled = false;
-						})
+			// Handling flyout submenus.
+			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
+			submenuToggles.forEach( toggle => {
+				const targetId = toggle.getAttribute('data-target');
+
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+					const isKeyboardEvent = e.detail === 0;
+					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
+				});
+			});
+
+			// Handling back toggles in flyout submenus.
+			const backToggles = document.querySelectorAll('.flyout-subnav-back');
+			backToggles.forEach( toggle => {
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+					const currentPanel = this.closest('.drawer-panel');
+					const targetId = this.getAttribute('data-back');
+					OpenLab.utility.switchToNavPanel(targetId, false, 'backward', currentPanel);
+				});
+
+				toggle.addEventListener('keydown', function (e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						OpenLab.utility.switchToNavPanel( 'panel-root', true, 'backward' );
+					}
+				});
+			});
+
+			document.querySelectorAll('.flyout-submenu').forEach(menu => {
+				menu.hidden = true;
+			});
+
+			// Close flyout menus when clicking outside.
+			document.addEventListener('click', function (e) {
+				const nav = document.querySelector('.openlab-navbar');
+				const flyoutContainer = document.querySelector('.openlab-navbar-drawer');
+				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
+
+				if (!isClickInsideNav) {
+					// Close all open flyout menus
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
+						el.classList.remove('is-open')
+					);
+
+					document.querySelectorAll('.flyout-menu').forEach(el =>
+						el.classList.remove('is-open')
+					);
+
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+
+					document.body.classList.remove('drawer-open');
+
+					const drawer = document.querySelector('.openlab-navbar-drawer');
+					drawer.setAttribute('aria-hidden', 'true')
+					drawer.classList.remove('is-open');
+
+					// Close all submenus too
+					document.querySelectorAll('.flyout-submenu').forEach(el => {
+						el.hidden = true;
 					});
-				})
+					document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+				}
+			});
+
+			// Adding the just-clicked class to non-toggleable links.
+			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
+				link.addEventListener( 'click', function (e) {
+					link.classList.add( 'just-clicked' );
+				} )
+			} );
+
+			// Prevent touchmove on the drawer to avoid scrolling the page.
+			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
+				e.stopPropagation();
+			});
+		},
+		runAfterTransition: function(el, callback, fallbackDuration = 50) {
+			const style = window.getComputedStyle(el);
+			const duration = parseFloat(style.transitionDuration || '0') || 0;
+			const delay = parseFloat(style.transitionDelay || '0') || 0;
+			const total = (duration + delay) * 1000;
+
+			let fired = false;
+
+			const handler = () => {
+				if (fired) {
+					console.log('Handler already fired, exiting');
+					return;
+				}
+				fired = true;
+				el.removeEventListener('transitionend', handler);
+				callback();
+			};
+
+			if (total > 0) {
+				el.addEventListener('transitionend', handler);
+			} else {
+				setTimeout(handler, fallbackDuration);
 			}
+		},
+		switchToNavPanel: function(panelId, switchFocus, direction = 'forward', previousPanel = null) {
+
+			const targetPanel = document.getElementById(panelId);
+			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
+
+			// Animate out
+			if (previousPanel) {
+				if (direction === 'forward') {
+					previousPanel.classList.add('covered');
+				} else {
+					previousPanel.classList.add('is-leaving');
+				}
+			}
+
+			// Animate in
+			targetPanel.classList.add('active');
+			targetPanel.setAttribute('aria-hidden', 'false');
+
+			// Cleanup
+			if (previousPanel) {
+				OpenLab.utility.runAfterTransition(previousPanel, () => {
+					previousPanel.classList.remove('active', 'is-leaving', 'covered');
+					previousPanel.setAttribute('aria-hidden', 'true');
+				}, 600);
+			}
+
+			// Focus management
+			if (switchFocus) {
+				const firstFocusable = targetPanel.querySelector('.drawer-list button, .drawer-list a');
+				if (firstFocusable) {
+						OpenLab.utility.runAfterTransition(targetPanel, () => {
+							firstFocusable.focus();
+						});
+					}
+			} else {
+				const focusedElement = document.activeElement;
+				if (focusedElement && focusedElement.blur) focusedElement.blur();
+			}
+
+			const drawer = document.querySelector('.openlab-navbar-drawer');
+			drawer.scrollTop = 0;
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings
@@ -1083,9 +1277,6 @@ OpenLab.utility = (function ($) {
 							$( '.cameraContents .cameraContent.cameracurrent .camera_content a' ).on(
 								'click',
 								function () {
-
-									console.log( 'click link' );
-
 									dataLayer.push(
 										{
 											'event': 'openlab.click',

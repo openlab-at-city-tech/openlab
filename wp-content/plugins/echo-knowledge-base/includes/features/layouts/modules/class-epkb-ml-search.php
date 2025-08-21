@@ -103,7 +103,7 @@ class EPKB_ML_Search {
 				font-family: ' . ( ! empty( $kb_config['general_typography']['font-family'] ) ? $kb_config['general_typography']['font-family'] .'!important' : 'inherit !important' ) . ';
 			}';
 
-		// adjust for Article page
+		// adjust for Article page or Archive page that uses Article page search settings
 		if ( $is_article ) {
 
 			// still check prefix because Sidebar layout uses Main Page search for Article Page
@@ -147,54 +147,57 @@ class EPKB_ML_Search {
 				}';
 
 		} else if ( is_archive() ) {
+
+			$prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) ? '' : 'article_';
+
 			$output .= '
 				#eckb-archive-page-container #eckb-archive-header #epkb-ml__module-search {
-					margin-bottom: ' . $kb_config['search_box_margin_bottom'] . 'px;
-					padding-top: ' . $kb_config['search_box_padding_top'] . 'px;
-					padding-bottom: ' . $kb_config['search_box_padding_bottom'] . 'px;
-					background-color: ' . $kb_config['search_background_color'] . ';
+					margin-bottom: ' . $kb_config[$prefix . 'search_box_margin_bottom'] . 'px;
+					padding-top: ' . $kb_config[$prefix . 'search_box_padding_top'] . 'px;
+					padding-bottom: ' . $kb_config[$prefix . 'search_box_padding_bottom'] . 'px;
+					background-color: ' . $kb_config[$prefix . 'search_background_color'] . ';
 				}
 				#epkb-ml__module-search .epkb-ml-search-title {
-					color: ' . $kb_config['search_title_font_color'] . ';
+					color: ' . $kb_config[$prefix . 'search_title_font_color'] . ';
 				}';
 			// Classic Search
 			$output .= '
 				#epkb-ml__module-search #epkb-ml-search-classic-layout #epkb-ml-search-form {
-					max-width: ' . $kb_config['search_box_input_width'] . '% !important;
+					max-width: ' . $kb_config[$prefix . 'search_box_input_width'] . '% !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout .epkb-ml-search-box__input {
-					background-color: ' . $kb_config['search_text_input_background_color'] . ' !important;
+					background-color: ' . $kb_config[$prefix . 'search_text_input_background_color'] . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout #epkb-ml-search-form #epkb-ml-search-box {
-					background-color: ' . $kb_config['search_text_input_border_color'] . ' !important;
+					background-color: ' . $kb_config[$prefix . 'search_text_input_border_color'] . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout .epkb-ml-search-box__btn {
-					background-color: ' . $kb_config['search_btn_background_color'] . ' !important;
+					background-color: ' . $kb_config[$prefix . 'search_btn_background_color'] . ' !important;
 				}';
 			// Modern Search
 			$output .= '
 				#epkb-ml__module-search #epkb-ml-search-modern-layout #epkb-ml-search-form {
-					max-width: ' . $kb_config['search_box_input_width'] . '% !important;
+					max-width: ' . $kb_config[$prefix . 'search_box_input_width'] . '% !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-modern-layout #epkb-ml-search-form #epkb-ml-search-box {
-					background-color: ' . $kb_config['search_btn_background_color'] . ' !important;
+					background-color: ' . $kb_config[$prefix . 'search_btn_background_color'] . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-modern-layout .epkb-ml-search-box__input {
-					background-color: ' . $kb_config['search_text_input_background_color'] . ' !important;
+					background-color: ' . $kb_config[$prefix . 'search_text_input_background_color'] . ' !important;
 				}';
 
 		} else {    // KB Main Page
-			if ( ! $is_block ) {
-				$output .= '
-					#epkb-modular-main-page-container #epkb-ml__module-search {
-						padding-top: ' . $kb_config['search_box_padding_top'] . 'px;
-						padding-bottom: ' . $kb_config['search_box_padding_bottom'] . 'px;
-						background-color: ' . $kb_config['search_background_color'] . ';
-					}';
-			}
+
+			$output .= '
+				#epkb-ml__module-search {
+					padding-top: ' . intval( $kb_config['search_box_padding_top'] ) . 'px !important;
+					padding-bottom: ' . intval( $kb_config['search_box_padding_bottom'] ) . 'px !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_background_color'] ) . ' !important;
+				}';
+
 			$output .= '
 				#epkb-ml__module-search .epkb-ml-search-title {
-					color: ' . sanitize_hex_color( $kb_config['search_title_font_color'] ) . ';
+					color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_title_font_color'] ) . ';
 				}';
 			// Classic Search
 			$output .= '
@@ -202,13 +205,13 @@ class EPKB_ML_Search {
 					max-width: ' . intval( $kb_config['search_box_input_width'] ) . '% !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout .epkb-ml-search-box__input {
-					background-color: ' . sanitize_hex_color( $kb_config['search_text_input_background_color'] ) . ' !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_text_input_background_color'] ) . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout #epkb-ml-search-form #epkb-ml-search-box {
-					background-color: ' . sanitize_hex_color( $kb_config['search_text_input_border_color'] ) . ' !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_text_input_border_color'] ) . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-classic-layout .epkb-ml-search-box__btn {
-					background-color: ' . sanitize_hex_color( $kb_config['search_btn_background_color'] ) . ' !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_btn_background_color'] ) . ' !important;
 				}';
 			// Modern Search
 			$output .= '
@@ -216,10 +219,10 @@ class EPKB_ML_Search {
 					max-width: ' . intval( $kb_config['search_box_input_width'] ) . '% !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-modern-layout #epkb-ml-search-form #epkb-ml-search-box {
-					background-color: ' . sanitize_hex_color( $kb_config['search_btn_background_color'] ) . ' !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_btn_background_color'] ) . ' !important;
 				}
 				#epkb-ml__module-search #epkb-ml-search-modern-layout .epkb-ml-search-box__input {
-					background-color: ' . sanitize_hex_color( $kb_config['search_text_input_background_color'] ) . ' !important;
+					background-color: ' . EPKB_Utilities::sanitize_hex_color( $kb_config['search_text_input_background_color'] ) . ' !important;
 				}';
 		}
 
@@ -235,7 +238,7 @@ class EPKB_ML_Search {
 	 */
 	public static function display_search_results_html( $search_results, $kb_config ) {
 
-		if ( $kb_config['article_search_sync_toggle'] == 'on' || EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
+		if ( EPKB_Utilities::is_article_search_synced( $kb_config ) || EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
 			$show_article_excerpt = $kb_config['search_result_mode'] == 'title_excerpt';
 		} else {
 			$show_article_excerpt = $kb_config['article_search_result_mode'] == 'title_excerpt';

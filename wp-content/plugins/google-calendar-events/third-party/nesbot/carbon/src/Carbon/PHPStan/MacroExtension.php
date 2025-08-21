@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\PHPStan\Type\TypehintHelper;
  * Class MacroExtension.
  *
  * @codeCoverageIgnore Pure PHPStan wrapper.
- * @internal
  */
 final class MacroExtension implements MethodsClassReflectionExtension
 {
@@ -47,17 +46,17 @@ final class MacroExtension implements MethodsClassReflectionExtension
     /**
      * {@inheritdoc}
      */
-    public function hasMethod(ClassReflection $classReflection, string $methodName) : bool
+    public function hasMethod(ClassReflection $classReflection, string $methodName): bool
     {
         return $this->scanner->hasMethod($classReflection->getName(), $methodName);
     }
     /**
      * {@inheritdoc}
      */
-    public function getMethod(ClassReflection $classReflection, string $methodName) : MethodReflection
+    public function getMethod(ClassReflection $classReflection, string $methodName): MethodReflection
     {
         $builtinMacro = $this->scanner->getMethod($classReflection->getName(), $methodName);
-        $supportAssertions = \class_exists(Assertions::class);
+        $supportAssertions = class_exists(Assertions::class);
         return $this->methodReflectionFactory->create($classReflection, null, $builtinMacro, $classReflection->getActiveTemplateTypeMap(), [], TypehintHelper::decideTypeFromReflection($builtinMacro->getReturnType()), null, null, $builtinMacro->isDeprecated()->yes(), $builtinMacro->isInternal(), $builtinMacro->isFinal(), $supportAssertions ? null : $builtinMacro->getDocComment(), $supportAssertions ? Assertions::createEmpty() : null, null, $builtinMacro->getDocComment(), []);
     }
 }

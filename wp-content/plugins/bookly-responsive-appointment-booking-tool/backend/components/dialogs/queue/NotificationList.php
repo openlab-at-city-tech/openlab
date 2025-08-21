@@ -41,4 +41,22 @@ class NotificationList
     {
         return $this->list;
     }
+
+    /**
+     * @return array
+     */
+    public function getInfo()
+    {
+        $list = array();
+        foreach ( $this->list as $notification ) {
+            $list[] = array(
+                'gateway' => $notification['gateway'],
+                'user_name' => $notification['data']['name'],
+                'address' => $notification['address'],
+                'title' => $notification['name'],
+            );
+        }
+
+        return $list;
+    }
 }

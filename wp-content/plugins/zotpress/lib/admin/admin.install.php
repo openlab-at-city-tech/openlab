@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 // INSTALL -----------------------------------------------------------------------------------------
 
     function Zotpress_install( $taskType="install" )

@@ -22,8 +22,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * @since 3.0.0
  */
 class Astra_Customizer_Edd_Cart_Configs extends Astra_Customizer_Config_Base {
-
-
 	/**
 	 * Register Builder Customizer Configurations.
 	 *

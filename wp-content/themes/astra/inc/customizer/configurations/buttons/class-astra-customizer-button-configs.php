@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 	 * Register Button Customizer Configurations.
 	 */
 	class Astra_Customizer_Button_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Button Customizer Configurations.
 		 *
@@ -399,7 +398,7 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 						),
 						'priority'  => 18,
 						'transport' => 'postMessage',
-						'divider'   => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+						'divider'   => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 					),
 
 					/**
@@ -442,7 +441,7 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 						'section'   => 'section-buttons',
 						'transport' => 'postMessage',
 						'priority'  => 18.5,
-						'divider'   => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+						'divider'   => array( 'ast_class' => 'ast-bottom-divider' ),
 					),
 
 					/**
@@ -553,7 +552,6 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 						),
 						'priority'          => 19,
 						'connected'         => false,
-						'divider'           => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
 					),
 
 					/**
@@ -576,6 +574,7 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 							'bottom' => __( 'Bottom', 'astra' ),
 							'left'   => __( 'Left', 'astra' ),
 						),
+						'divider'        => array( 'ast_class' => 'ast-top-divider ast-bottom-divider' ),
 					),
 
 					/**
@@ -600,7 +599,6 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 						),
 						'priority'          => 19,
 						'connected'         => false,
-						'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),
 					),
 				);
 
@@ -620,8 +618,9 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 			// Only add outline presets to secondary button presets.
 			$secondary_btn_preset_index = 13;
 
+			$config_count = count( $_configs );
 			// Add context & priority dynamically to secondary tab options.
-			for ( $index = $secondary_btn_preset_index, $priority = 0; $index < count( $_configs ) - 1; $index++ ) {
+			for ( $index = $secondary_btn_preset_index, $priority = 0; $index < $config_count - 1; $index++ ) {
 				$_configs[ $index ]['context']  = Astra_Builder_Helper::$design_tab;
 				$_configs[ $index ]['priority'] = ++$priority;
 			}
@@ -865,7 +864,6 @@ if ( ! class_exists( 'Astra_Customizer_Button_Configs' ) ) {
 				$_configs = array_merge( $_configs, $_trans_config );
 
 			}
-
 
 			return array_merge( $configurations, $_configs );
 		}

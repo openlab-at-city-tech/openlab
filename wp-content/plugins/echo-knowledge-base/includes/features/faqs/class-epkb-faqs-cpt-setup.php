@@ -68,6 +68,11 @@ class EPKB_FAQs_CPT_Setup {
 		] );
 
 		/** setup Custom Post Type */
+		
+		// Get KB config to check FAQs public search setting
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		$publicly_queryable = ! empty( $kb_config['faqs_publicly_queryable'] ) && $kb_config['faqs_publicly_queryable'] == 'on';
+		
 		$labels = [
 			'name'               => esc_html__( 'Knowledge Base FAQs', 'echo-knowledge-base' ),
 			'singular_name'      => esc_html__( 'Knowledge Base FAQ', 'echo-knowledge-base' ),
@@ -91,8 +96,8 @@ class EPKB_FAQs_CPT_Setup {
 			'exclude_from_search' => false,
 			'show_ui'             => true,
 			'show_in_menu'        => false,
-			'publicly_queryable'  => true,
-			'query_var'           => true,
+			'publicly_queryable'  => $publicly_queryable,
+			'query_var'           => $publicly_queryable,
 			'rewrite'             => false,
 			'capability_type'     => ['faq', 'faqs'],
 			'map_meta_cap'        => true,

@@ -31,8 +31,10 @@ class Page extends Lib\Base\Component
                 'edit' => __( 'Edit', 'bookly' ),
                 'revokeTokensMessage' => __( 'You are going to delete access token(s). Please note that tokens will be automatically revoked, so user(s) associated with deleted token(s) will lose access', 'bookly' ),
                 'noResultFound' => esc_attr__( 'No result found', 'bookly' ),
-                'zeroRecords' => esc_attr__( 'No records.', 'bookly' ),
+                'zeroRecords' => esc_attr__( 'No matching records found', 'bookly' ),
                 'processing' => esc_attr__( 'Processing...', 'bookly' ),
+                'emptyTable' => __( 'No data available in table', 'bookly' ),
+                'loadingRecords' => __( 'Loading...', 'bookly' ),
                 'datatables' => $datatables
             ) );
 

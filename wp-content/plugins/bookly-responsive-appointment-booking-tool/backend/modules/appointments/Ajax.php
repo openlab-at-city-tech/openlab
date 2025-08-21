@@ -27,7 +27,7 @@ class Ajax extends Lib\Base\Ajax
             'start' => self::parameter( 'start' ),
         );
 
-        $data = self::getAppointmentsTableData( $filter, $limits, $columns, $order );
+        $data = self::getAppointmentsTableData( $filter, $limits, $columns, $order, false );
 
         unset( $filter['date'] );
 
@@ -101,7 +101,7 @@ class Ajax extends Lib\Base\Ajax
                 ->setData( json_encode( array( 'all' => $list ) ) )
                 ->save();
 
-            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $list );
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue->getInfo() );
         }
         wp_send_json_success( $response );
     }
@@ -111,9 +111,10 @@ class Ajax extends Lib\Base\Ajax
      * @param array $limits
      * @param array $columns
      * @param array $order
+     * @param bool $export
      * @return array
      */
-    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array() )
+    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false )
     {
         $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
         $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
@@ -154,6 +155,7 @@ class Ajax extends Lib\Base\Ajax
                 p.total      AS payment_total,
                 p.type       AS payment_type,
                 p.status     AS payment_status,
+                s.price      AS service_price,
                 COALESCE(s.title, a.custom_service_name) AS service_title,
                 (TIMESTAMPDIFF(SECOND, a.start_date, a.end_date) + a.extras_duration) AS service_duration' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'a.id = ca.appointment_id' )
@@ -255,7 +257,9 @@ class Ajax extends Lib\Base\Ajax
         $data = array();
         foreach ( $query->fetchArray() as $row ) {
             // Service duration.
-            $service_duration = Lib\Utils\DateTime::secondsToInterval( $row['service_duration'] );
+            $service_duration = $export
+                ? (int) ( $row['service_duration'] / MINUTE_IN_SECONDS )
+                : Lib\Utils\DateTime::secondsToInterval( $row['service_duration'] );
             // Payment title.
             $payment_title = '';
             $payment_raw_title = '';
@@ -311,7 +315,9 @@ class Ajax extends Lib\Base\Ajax
             $data[] = array(
                 'id' => $row['id'],
                 'no' => Lib\Config::groupBookingActive() && $row['ca_id'] ? $row['id'] . '-' . $row['ca_id'] : $row['ca_id'],
-                'start_date' => $row['start_date'] === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDateTime( $row['start_date'] ),
+                'start_date' => $row['start_date'] === null
+                    ? __( 'N/A', 'bookly' )
+                    : ( $export ? $row['start_date'] : Lib\Utils\DateTime::formatDateTime( $row['start_date'] ) ),
                 'staff' => array(
                     'name' => $row['staff_name'] . ( $row['staff_any'] ? $postfix_any : '' ) . ( $row['staff_visibility'] == 'archive' ? $postfix_archived : '' ),
                 ),
@@ -335,6 +341,7 @@ class Ajax extends Lib\Base\Ajax
                     'title' => $row['service_title'],
                     'duration' => $service_duration,
                     'extras' => $extras,
+                    'price' => Lib\Utils\Price::format( $row['service_price'] ),
                 ),
                 'status' => $row['status'],
                 'location' => $locations_active ? $row['location'] : '',
@@ -351,7 +358,7 @@ class Ajax extends Lib\Base\Ajax
                 'internal_note' => $row['internal_note'],
                 'online_meeting_provider' => $row['online_meeting_provider'],
                 'online_meeting_start_url' => $online_meeting_start_url,
-                'created_date' => Lib\Utils\DateTime::formatDateTime( $row['created_date'] ),
+                'created_date' => $export ? $row['created_date'] : Lib\Utils\DateTime::formatDateTime( $row['created_date'] ),
             );
 
             $custom_fields = array_map( function() { return ''; }, $custom_fields );

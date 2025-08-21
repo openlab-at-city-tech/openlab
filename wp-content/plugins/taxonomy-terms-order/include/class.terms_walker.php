@@ -37,7 +37,7 @@
                     
                     $term_link  =   isset ( $currentScreen->post_type ) ?   get_edit_term_link( $term, $term->taxonomy, $currentScreen->post_type ) :   get_edit_term_link( $term );
                     
-                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span class="title">'.apply_filters( 'to/term_title', $term->name, $term ).' </span> <span class="actions"><a href="' . $term_link .'"><span class="dashicons dashicons-edit"></span></a></span></div>';
+                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span class="title">'.apply_filters( 'to/term_title', $term->name, $term ).' </span> <span class="options ui-sortable-handle"><a href="' . $term_link .'"><span class="dashicons dashicons-edit"></span></a></span></div>';
                 }
 
 

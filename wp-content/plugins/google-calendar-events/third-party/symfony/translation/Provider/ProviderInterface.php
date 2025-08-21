@@ -12,17 +12,16 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBagInterface;
-/** @internal */
 interface ProviderInterface
 {
-    public function __toString() : string;
+    public function __toString(): string;
     /**
      * Translations available in the TranslatorBag only must be created.
      * Translations available in both the TranslatorBag and on the provider
      * must be overwritten.
      * Translations available on the provider only must be kept.
      */
-    public function write(TranslatorBagInterface $translatorBag) : void;
-    public function read(array $domains, array $locales) : TranslatorBag;
-    public function delete(TranslatorBagInterface $translatorBag) : void;
+    public function write(TranslatorBagInterface $translatorBag): void;
+    public function read(array $domains, array $locales): TranslatorBag;
+    public function delete(TranslatorBagInterface $translatorBag): void;
 }

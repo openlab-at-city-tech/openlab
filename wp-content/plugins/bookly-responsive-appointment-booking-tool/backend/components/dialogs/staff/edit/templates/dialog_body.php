@@ -1,5 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
+use Bookly\Lib;
+
 /** @var Bookly\Lib\Entities\Staff $staff */
 ?>
 <?php if ( $staff->getId() ) : ?>
@@ -11,7 +13,14 @@ use Bookly\Backend\Components\Dialogs\Staff\Edit\Proxy;
                     <span class="d-none d-lg-inline"><?php esc_html_e( 'Details', 'bookly' ) ?></span>
                 </a>
             </li>
-            <?php Proxy\Pro::renderAdvancedTab() ?>
+            <?php if ( Lib\Config::proActive() || Lib\Utils\Advertisement::isVisible( 'staff-modal-advanced-tab' ) ) : ?>
+                <li class="nav-item">
+                    <a id="bookly-advanced-tab" href="#advanced" data-toggle="bookly-tab" class="nav-link">
+                        <i class="fas fa-fw fa-cogs mr-lg-1"></i>
+                        <span class="d-none d-lg-inline"><?php esc_html_e( 'Advanced', 'bookly' ) ?></span>
+                    </a>
+                </li>
+            <?php endif ?>
             <li class="nav-item">
                 <a id="bookly-services-tab" href="#services" data-toggle="bookly-tab" class="nav-link">
                     <i class="fas fa-th fa-fw mr-lg-1"></i>

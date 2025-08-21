@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\GuzzleHttp\Psr7;
 
-/** @internal */
 final class Query
 {
     /**
@@ -17,7 +16,7 @@ final class Query
      * @param string   $str         Query string to parse
      * @param int|bool $urlEncoding How the query string is encoded
      */
-    public static function parse(string $str, $urlEncoding = \true) : array
+    public static function parse(string $str, $urlEncoding = \true): array
     {
         $result = [];
         if ($str === '') {
@@ -25,7 +24,7 @@ final class Query
         }
         if ($urlEncoding === \true) {
             $decoder = function ($value) {
-                return \rawurldecode(\str_replace('+', ' ', (string) $value));
+                return rawurldecode(str_replace('+', ' ', (string) $value));
             };
         } elseif ($urlEncoding === \PHP_QUERY_RFC3986) {
             $decoder = 'rawurldecode';
@@ -36,14 +35,14 @@ final class Query
                 return $str;
             };
         }
-        foreach (\explode('&', $str) as $kvp) {
-            $parts = \explode('=', $kvp, 2);
+        foreach (explode('&', $str) as $kvp) {
+            $parts = explode('=', $kvp, 2);
             $key = $decoder($parts[0]);
             $value = isset($parts[1]) ? $decoder($parts[1]) : null;
-            if (!\array_key_exists($key, $result)) {
+            if (!array_key_exists($key, $result)) {
                 $result[$key] = $value;
             } else {
-                if (!\is_array($result[$key])) {
+                if (!is_array($result[$key])) {
                     $result[$key] = [$result[$key]];
                 }
                 $result[$key][] = $value;
@@ -66,13 +65,13 @@ final class Query
      * @param bool      $treatBoolsAsInts Set to true to encode as 0/1, and
      *                                    false as false/true.
      */
-    public static function build(array $params, $encoding = \PHP_QUERY_RFC3986, bool $treatBoolsAsInts = \true) : string
+    public static function build(array $params, $encoding = \PHP_QUERY_RFC3986, bool $treatBoolsAsInts = \true): string
     {
         if (!$params) {
             return '';
         }
         if ($encoding === \false) {
-            $encoder = function (string $str) : string {
+            $encoder = function (string $str): string {
                 return $str;
             };
         } elseif ($encoding === \PHP_QUERY_RFC3986) {
@@ -90,9 +89,9 @@ final class Query
         $qs = '';
         foreach ($params as $k => $v) {
             $k = $encoder((string) $k);
-            if (!\is_array($v)) {
+            if (!is_array($v)) {
                 $qs .= $k;
-                $v = \is_bool($v) ? $castBool($v) : $v;
+                $v = is_bool($v) ? $castBool($v) : $v;
                 if ($v !== null) {
                     $qs .= '=' . $encoder((string) $v);
                 }
@@ -100,7 +99,7 @@ final class Query
             } else {
                 foreach ($v as $vv) {
                     $qs .= $k;
-                    $vv = \is_bool($vv) ? $castBool($vv) : $vv;
+                    $vv = is_bool($vv) ? $castBool($vv) : $vv;
                     if ($vv !== null) {
                         $qs .= '=' . $encoder((string) $vv);
                     }
@@ -108,6 +107,6 @@ final class Query
                 }
             }
         }
-        return $qs ? (string) \substr($qs, 0, -1) : '';
+        return $qs ? (string) substr($qs, 0, -1) : '';
     }
 }

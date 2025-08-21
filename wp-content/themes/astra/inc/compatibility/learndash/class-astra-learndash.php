@@ -14,7 +14,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 /**
  * Astra LearnDash Compatibility
  */
-if ( ! class_exists( 'Astra_LearnDash' ) ) :
+if ( ! class_exists( 'Astra_LearnDash' ) ) {
 
 	/**
 	 * Astra LearnDash Compatibility
@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_LearnDash' ) ) :
 	 * @since 1.3.0
 	 */
 	class Astra_LearnDash {
-
 		/**
 		 * Member Variable
 		 *
@@ -370,16 +369,16 @@ if ( ! class_exists( 'Astra_LearnDash' ) ) :
 			global $learndash_shortcode_used;
 
 			if ( $learndash_shortcode_used && ! ( is_singular( 'sfwd-courses' ) || is_singular( 'sfwd-lessons' ) || is_singular( 'sfwd-topic' ) || is_singular( 'sfwd-quiz' ) || is_singular( 'sfwd-certificates' ) || is_singular( 'sfwd-assignment' ) ) ) {
-		
+
 				// Added check if the shortcode is used in the header.
-				if ( ! did_action( 'astra_header' ) ) { 
+				if ( ! did_action( 'astra_header' ) ) {
 					// Page Meta Sidebar.
 					$layout = astra_get_option_meta( 'site-sidebar-layout', '', true );
 					if ( empty( $layout ) ) {
 						// Page Sidebar.
 						$layout = astra_get_option( 'single-page-sidebar-layout' );
 						// Default Site Sidebar.
-						if ( 'default' == $layout || empty( $layout ) ) {
+						if ( 'default' === $layout || empty( $layout ) ) {
 							// Get the global sidebar value.
 							// NOTE: Here not used `true` in the below function call.
 							$layout = astra_get_option( 'site-sidebar-layout' );
@@ -725,7 +724,7 @@ if ( ! class_exists( 'Astra_LearnDash' ) ) :
 		}
 	}
 
-endif;
+}
 
 if ( apply_filters( 'astra_enable_learndash_integration', true ) ) {
 

@@ -120,7 +120,7 @@ function epkb_add_page_tabs() {
 	// retrieve current KB configuration
 	$kb_config = epkb_get_instance()->kb_config_obj->get_current_kb_configuration();
 	if ( is_wp_error( $kb_config ) || empty($kb_config) || ! is_array($kb_config) || count($kb_config) < 100 ) {
-		$kb_config = EPKB_KB_Config_Specs::get_default_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		$kb_config = EPKB_KB_Config_Specs::get_default_kb_config();
 	}
 
 	// determine tab label e.g. 'Templates For:'

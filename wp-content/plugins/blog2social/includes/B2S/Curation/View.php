@@ -84,7 +84,7 @@ class B2S_Curation_View {
         foreach ($mandant as $k => $m) {
             if ((isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0]))) {
                 foreach ($auth->{$m->id} as $key => $value) {
-                    if ($value->networkId == 2) {
+                    if ($value->networkId == 2 || $value->networkId == 45) {
                         $twitterContent .= '<option data-mandant-id="' . esc_attr($m->id) . '" value="' . esc_attr($value->networkAuthId) . '">' . esc_html($value->networkUserName) . '</option>';
                     }
                 }

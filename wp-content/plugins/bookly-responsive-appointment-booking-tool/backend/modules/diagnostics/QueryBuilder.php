@@ -215,8 +215,8 @@ class QueryBuilder
             'bookly_gift_card_type_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_staff.gift_card_type_id' => array( 'bookly_gift_card_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_card_type_staff.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
-            'bookly_gift_cards.customer_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_cards.owner_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
+            'bookly_gift_cards.customer_id' => array( 'bookly_customers.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_cards.gift_card_type_id' => array( 'bookly_gift_card_types.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_gift_cards.order_id' => array( 'bookly_orders.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
             'bookly_gift_cards.payment_id' => array( 'bookly_payments.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'SET NULL', ), ),
@@ -257,8 +257,8 @@ class QueryBuilder
             'bookly_staff_special_days.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_staff_special_hours.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_staff_special_hours.staff_id' => array( 'bookly_staff.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
-            'bookly_sub_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
             'bookly_sub_services.sub_service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
+            'bookly_sub_services.service_id' => array( 'bookly_services.id' => array( 'UPDATE_RULE' => 'CASCADE', 'DELETE_RULE' => 'CASCADE', ), ),
         );
 
         /** @global \wpdb $wpdb */
@@ -330,7 +330,7 @@ class QueryBuilder
                 'action' => $rules[ $table ][ $column ][ $ref_table . '.' . $ref_column ],
                 'description' => '',
                 'button' => 'Custom fix',
-                'method' => function() {},
+                'method' => function() { },
             );
             foreach ( array( 'description', 'button', 'method' ) as $key ) {
                 if ( isset( $rules[ $table ][ $column ][ $key ] ) ) {
@@ -536,7 +536,7 @@ class QueryBuilder
             'bookly_files.custom_field_id' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_files.ci_id' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
-            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
+            'bookly_forms.type' => array( 'type' => "enum('search-form','services-form','staff-form','cancellation-confirmation','tags-form')", 'is_nullabe' => 0, 'extra' => "", 'default' => "search-form", 'key' => "" ),
             'bookly_forms.name' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.token' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_forms.settings' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -754,6 +754,7 @@ class QueryBuilder
             'bookly_services.min_time_prior_booking' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_services.min_time_prior_cancel' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_services.gateways' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_services.tags' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_services.visibility' => array( 'type' => "enum('public','private','group')", 'is_nullabe' => 0, 'extra' => "", 'default' => "public", 'key' => "" ),
             'bookly_services.position' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => "9999", 'key' => "" ),
             'bookly_sessions.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
@@ -868,8 +869,11 @@ class QueryBuilder
             'bookly_sub_services.duration' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_sub_services.position' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => "9999", 'key' => "" ),
             'bookly_tags.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_tags.type' => array( 'type' => "enum('customer','service')", 'is_nullabe' => 0, 'extra' => "", 'default' => "customer", 'key' => "MUL" ),
             'bookly_tags.tag' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "", 'key' => "MUL" ),
             'bookly_tags.color_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_tags.attachment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_tags.info' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_taxes.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_taxes.title' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => "", 'key' => "" ),
             'bookly_taxes.rate' => array( 'type' => "decimal(10,3)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.000", 'key' => "" ),

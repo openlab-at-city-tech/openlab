@@ -47,10 +47,6 @@ class Jetpack_Instagram_Widget extends WP_Widget {
 			)
 		);
 
-		if ( is_active_widget( false, false, self::ID_BASE ) || is_active_widget( false, false, 'monster' ) || is_customize_preview() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_css' ) );
-		}
-
 		add_action( 'wp_ajax_wpcom_instagram_widget_update_widget_token_id', array( $this, 'ajax_update_widget_token_id' ) );
 
 		$this->valid_options = array(
@@ -275,6 +271,9 @@ class Jetpack_Instagram_Widget extends WP_Widget {
 			return;
 		}
 
+		// Enqueue front end assets.
+		$this->enqueue_css();
+
 		echo $args['before_widget']; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Always show a title on an unconfigured widget.
@@ -389,6 +388,7 @@ class Jetpack_Instagram_Widget extends WP_Widget {
 	 * Allows the user to add new Instagram Keyring tokens and more.
 	 *
 	 * @param array $instance The widget instance (configuration options).
+	 * @return string|void
 	 */
 	public function form( $instance ) {
 		$instance = wp_parse_args( $instance, $this->defaults );

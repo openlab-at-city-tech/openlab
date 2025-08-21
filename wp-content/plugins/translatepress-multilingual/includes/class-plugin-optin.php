@@ -496,6 +496,7 @@ class Cozmoslabs_Plugin_Optin_Metadata_Builder_TRP extends Cozmoslabs_Plugin_Opt
 
         $this->blacklisted_option_patterns = [
             'trp_migrate_old_slug_to_new_parent_and_translate_slug_table',
+            'trp_woo_',
         ];
 
         add_action( 'cozmoslabs_plugin_optin_'. $this->option_prefix .'metadata_builder_metadata', array( $this, 'build_custom_plugin_metadata' ) );
@@ -551,12 +552,28 @@ class Cozmoslabs_Plugin_Optin_Metadata_Builder_TRP extends Cozmoslabs_Plugin_Opt
 
     public function process_settings_metadata( $settings ){
 
+        $trp                    = TRP_Translate_Press::get_trp_instance();
+        $trp_settings_component = $trp->get_component( 'settings' );
+        $trp_settings           = $trp_settings_component->get_settings();
+
         if( !empty( $settings['trp_settings']['translation-languages'] ) ){
             $settings['trp_settings']['translation-languages'] = implode( ',', $settings['trp_settings']['translation-languages'] );
         }
 
         if( !empty( $settings['trp_settings']['publish-languages'] ) ){
             $settings['trp_settings']['publish-languages'] = implode( ',', $settings['trp_settings']['publish-languages'] );
+        }
+
+        // In addition to Machine Translation being enabled, for the selected translation engine, verify if a license key is set. 
+        // If no license key is set, consider machine translation as disabled.
+        if( !empty( $settings['trp_machine_translation_settings']['machine-translation'] ) && $settings['trp_machine_translation_settings']['machine-translation'] == 'yes' && !empty( $settings['trp_machine_translation_settings']['translation-engine'] ) ){
+            if( $settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi' && empty( $trp_settings['trp_license_key'] ) ){
+                $settings['trp_machine_translation_settings']['machine-translation'] = 'no';
+            } else if( $settings['trp_machine_translation_settings']['translation-engine'] == 'google_translate_v2' && empty( $trp_settings['trp_machine_translation_settings']['google-translate-key'] ) ){
+                $settings['trp_machine_translation_settings']['machine-translation'] = 'no';
+            } else if( $settings['trp_machine_translation_settings']['translation-engine'] == 'deepl' && empty( $trp_settings['trp_machine_translation_settings']['deepl-api-key'] ) ){
+                $settings['trp_machine_translation_settings']['machine-translation'] = 'no';
+            }
         }
 
         return $settings;

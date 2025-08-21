@@ -1,9 +1,6 @@
 <?php
 /**
  * The base service provider class.
- *
- * @license GPL-3.0
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\lucatume\DI52;

@@ -3,9 +3,6 @@
  * A facade to make a DI container instance globally available as a Service Locator.
  *
  * @package lucatume\DI52
- *
- * @license GPL-3.0
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\lucatume\DI52;

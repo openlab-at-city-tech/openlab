@@ -23,7 +23,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * @author Christophe Coevoet <stof@notk.org>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 class BufferHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
@@ -55,21 +54,21 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($record['level'] < $this->level) {
             return \false;
         }
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            \register_shutdown_function([$this, 'close']);
+            register_shutdown_function([$this, 'close']);
             $this->initialized = \true;
         }
         if ($this->bufferLimit > 0 && $this->bufferSize === $this->bufferLimit) {
             if ($this->flushOnOverflow) {
                 $this->flush();
             } else {
-                \array_shift($this->buffer);
+                array_shift($this->buffer);
                 $this->bufferSize--;
             }
         }
@@ -81,7 +80,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
         $this->bufferSize++;
         return \false === $this->bubble;
     }
-    public function flush() : void
+    public function flush(): void
     {
         if ($this->bufferSize === 0) {
             return;
@@ -98,7 +97,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         $this->flush();
         $this->handler->close();
@@ -106,7 +105,7 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
     /**
      * Clears the buffer without flushing any messages down to the wrapped handler.
      */
-    public function clear() : void
+    public function clear(): void
     {
         $this->bufferSize = 0;
         $this->buffer = [];
@@ -123,22 +122,22 @@ class BufferHandler extends AbstractHandler implements ProcessableHandlerInterfa
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
             return $this;
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {
             return $this->handler->getFormatter();
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
 }

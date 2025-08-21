@@ -33,12 +33,12 @@ if ( 'full-width' === $astra_mobile_header_type ) {
 	do_action( 'astra_mobile_below_header' );
 
 	astra_main_header_bar_bottom();
-		
-	// Disable toggle menu if the toggle menu button is not exists in the mobile header items.	
+
+	// Disable toggle menu if the toggle menu button is not exists in the mobile header items.
 	$header_mobile_items = astra_get_option( 'header-mobile-items', array() );
 	array_walk_recursive(
 		$header_mobile_items,
-		function( string $value ) use ( &$show_mobile_toggle_menu ) {
+		static function( string $value ) use ( &$show_mobile_toggle_menu ) {
 			if ( 'mobile-trigger' === $value ) {
 				$show_mobile_toggle_menu = true;
 			}

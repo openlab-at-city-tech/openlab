@@ -1098,11 +1098,6 @@ function bbp_reply_author_display_name( $reply_id = 0 ) {
 			$author_name = bbp_get_fallback_display_name( $reply_id );
 		}
 
-		// Encode possible UTF8 display names
-		if ( seems_utf8( $author_name ) === false ) {
-			$author_name = utf8_encode( $author_name );
-		}
-
 		// Filter & return
 		return apply_filters( 'bbp_get_reply_author_display_name', $author_name, $reply_id );
 	}
@@ -1593,8 +1588,9 @@ function bbp_reply_to_link( $args = array() ) {
 		}
 
 		// Build the URI and return value
-		$uri = remove_query_arg( array( 'bbp_reply_to' ) );
-		$uri = add_query_arg( array( 'bbp_reply_to' => $reply->ID ) );
+		$uri = bbp_get_reply_url( $reply->ID );
+		$uri = strtok( $uri, "#" );
+		$uri = add_query_arg( array( 'bbp_reply_to' => $reply->ID ), $uri );
 		$uri = wp_nonce_url( $uri, 'respond_id_' . $reply->ID );
 		$uri = $uri . '#new-post';
 

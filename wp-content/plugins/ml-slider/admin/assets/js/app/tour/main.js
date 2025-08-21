@@ -79,6 +79,13 @@ MainTour.setPosition = () => {
 	})
 }
 
+// Add ESC key listener to stop the tour
+document.addEventListener('keydown', (event) => {
+	if (event.key === 'Escape' && MainTour.getCurrentStep()) {
+		MainTour.cancel()
+	}
+})
+
 // Events
 // Add slide button was clicked
 EventManager.$on('metaslider/add-slide-opening-ui', function () {

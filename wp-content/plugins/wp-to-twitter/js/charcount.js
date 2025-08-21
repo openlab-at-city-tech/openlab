@@ -33,7 +33,6 @@
 
         function calculate(obj) {
             var count   = $(obj).val().length;
-			console.log( count );
 			var allowed = options.allowed;
 			// Service specific limits.
 			var xAllowed        = options.x_limit;
@@ -88,7 +87,7 @@
             } else {
                 $(obj).next().removeClass(options.cssExceeded);
             }
-            $(obj).next().html(options.counterText + available);
+            $(obj).next().html(options.counterText + ' ' + length);
         };
 
         this.each(function () {

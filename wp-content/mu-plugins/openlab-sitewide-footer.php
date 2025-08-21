@@ -101,12 +101,9 @@ function cuny_site_wide_navi_styles() {
 	wp_register_style( 'font-awesome', $openlab_theme_link, array(), '20130604', 'all' );
 	wp_enqueue_style( 'font-awesome' );
 
-	$adminbar_custom_url = WP_CONTENT_URL . '/mu-plugins/css/admin-bar-custom.css';
-	$adminbar_custom_url = set_url_scheme( $adminbar_custom_url );
 	$openlab_toolbar_url = WP_CONTENT_URL . '/mu-plugins/css/openlab-toolbar.css';
 	$openlab_toolbar_url = set_url_scheme( $openlab_toolbar_url );
 
-	wp_enqueue_style( 'admin-bar-custom', $adminbar_custom_url, array( 'font-awesome' ), '1.6.9' );
 	wp_enqueue_style( 'openlab-toolbar', $openlab_toolbar_url, array( 'font-awesome' ), filemtime( WP_CONTENT_DIR . '/mu-plugins/css/openlab-toolbar.css' ) );
 }
 add_action( 'wp_print_styles', 'cuny_site_wide_navi_styles' );

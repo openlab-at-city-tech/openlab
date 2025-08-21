@@ -63,9 +63,7 @@ table.comments td.comment p a:after {
     width: 450px;
     height: 338px;
     z-index: 20000;
-    -moz-border-radius: 6px;
     border-radius: 6px;
-    -webkit-border-radius: 6px;
 }
 .akismet-mshot {
     position: absolute;
@@ -118,9 +116,6 @@ table.comments td.comment p a:after {
     font-size: 11px;
     text-transform: uppercase;
 	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-ms-box-sizing: border-box;
 }
 
 .akismet-new-snapshot__number {
@@ -190,13 +185,9 @@ table.comments td.comment p a:after {
 	color:#647a88
 }
 .akismet-masthead__links {
-	display:-ms-flexbox;
 	display:flex;
-	-ms-flex-flow:row wrap;
 	flex-flow:row wrap;
-	-ms-flex:2 50%;
 	flex:2 50%;
-	-ms-flex-pack:end;
 	justify-content:flex-end;
 	margin:0
 }
@@ -384,7 +375,6 @@ table.comments td.comment p a:after {
 	text-decoration: none;
 	vertical-align: top;
 	box-sizing: border-box;
-	font-size: 14px;
 	line-height: 21px;
 	border-radius: 4px;
 	padding: 7px 14px 9px;
@@ -429,11 +419,8 @@ table.comments td.comment p a:after {
 }
 
 .akismet-section-header__label {
-	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-align: center;
 	align-items: center;
-	-ms-flex-positive: 1;
 	flex-grow: 1;
 	line-height: 1.75rem;
 	position: relative;

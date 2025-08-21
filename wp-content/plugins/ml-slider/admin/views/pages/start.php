@@ -28,6 +28,13 @@ $demo_options = apply_filters( 'metaslider_quickstart_options', $demo_options );
 					</div>
 					<div>
 						<div id="plupload-upload-ui" class="hide-if-no-js">
+							<p id="loading-add-sample-slides-notice" style="display: none;">
+								<span style="background-image: url(<?php echo esc_url(admin_url( '/images/loading.gif' )); ?>);">
+									<span>
+										<?php _e( 'Uploading images...', 'ml-slider' ); ?>
+									</span>
+								</span>
+							</p>
 							<div id="drag-drop-area">
 								<div class="drag-drop-inside">
 								<p class="drag-drop-info"><?php _e('Drop files to upload'); ?></p>

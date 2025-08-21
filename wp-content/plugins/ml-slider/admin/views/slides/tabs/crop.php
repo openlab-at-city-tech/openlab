@@ -12,7 +12,7 @@ $image_crop_enabled = isset($this->settings['smartCrop'])
 <div class="row has-right-field">
     <label>
         <?php esc_html_e("Crop Position", "ml-slider"); ?>
-        <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('Choose how images are cropped if their size doesn\'t exactly match the size of your slideshow. This works if "Smart Crop" is selected in the "Image Crop" settings.', 'ml-slider') ?>" style="line-height: 1.2em;"></span>
+        <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('Choose how images are cropped if they are too large for the slideshow. This works if "Smart Crop" is selected in the "Image Crop" settings.', 'ml-slider') ?>" style="line-height: 1.2em;"></span>
     </label>
     <select class="crop_position" name="attachment[<?php echo esc_attr($slide_id); ?>][crop_position]"<?php
         echo !$image_crop_enabled ? ' disabled="disabled"' : '' ?>>

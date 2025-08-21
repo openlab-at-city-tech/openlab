@@ -20,7 +20,9 @@ require_once WORDADS_ROOT . '/php/class-wordads-cron.php';
 require_once WORDADS_ROOT . '/php/class-wordads-california-privacy.php';
 require_once WORDADS_ROOT . '/php/class-wordads-ccpa-do-not-sell-link-widget.php';
 require_once WORDADS_ROOT . '/php/class-wordads-consent-management-provider.php';
+require_once WORDADS_ROOT . '/php/class-wordads-formats.php';
 require_once WORDADS_ROOT . '/php/class-wordads-smart.php';
+require_once WORDADS_ROOT . '/php/class-wordads-shortcode.php';
 
 /**
  * Primary WordAds class.
@@ -30,7 +32,7 @@ class WordAds {
 	/**
 	 * Ads parameters.
 	 *
-	 * @var null
+	 * @var WordAds_Params
 	 */
 	public $params = null;
 
@@ -108,7 +110,7 @@ class WordAds {
 	 *
 	 * @var string
 	 */
-	public static $solo_unit_css = 'float:left;margin-right:5px;margin-top:0px;';
+	public static $solo_unit_css = 'float:left;margin-right:5px;margin-top:0;';
 
 	/**
 	 * Checks for AMP support and returns true iff active & AMP request
@@ -215,6 +217,9 @@ class WordAds {
 			WordAds_Consent_Management_Provider::init();
 		}
 
+		// Initialize [wordads] shortcode.
+		WordAds_Shortcode::init();
+
 		// Initialize Smart.
 		WordAds_Smart::instance()->init( $this->params );
 
@@ -243,7 +248,7 @@ class WordAds {
 			http_response_code( 200 );
 			header( 'Content-Type: text/plain; charset=utf-8' );
 			echo esc_html( $ads_txt_content );
-			die();
+			die( 0 );
 		}
 	}
 
@@ -265,8 +270,14 @@ class WordAds {
 	 */
 	private function insert_adcode() {
 		add_filter( 'wp_resource_hints', array( $this, 'resource_hints' ), 10, 2 );
+
+		// These 'wp_head' actions add the IPONWEB JavaScript snippets to the page.
+		// We need to remove these calls whenever migration to Aditude is complete.
 		add_action( 'wp_head', array( $this, 'insert_head_meta' ), 20 );
+
+		// TODO: Remove this function after June 30th, 2025.
 		add_action( 'wp_head', array( $this, 'insert_head_iponweb' ), 30 );
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'wordads_ads_txt', array( $this, 'insert_custom_adstxt' ) );
 
@@ -371,9 +382,43 @@ class WordAds {
 		$site_id      = $this->params->blog_id;
 		$consent      = (int) isset( $_COOKIE['personalized-ads-consent'] );
 		$is_logged_in = is_user_logged_in() ? '1' : '0';
+
+		$disabled_slot_formats = apply_filters( 'wordads_disabled_slot_formats', array() );
+
+		if ( apply_filters( 'wordads_iponweb_bottom_sticky_ad_disable', false ) ) {
+			$disabled_slot_formats[] = 'MTS';
+		}
+
+		if ( apply_filters( 'wordads_iponweb_sidebar_sticky_right_ad_disable', false ) ) {
+			$disabled_slot_formats[] = 'DPR';
+		}
+
+		$config    = array(
+			'pt'                    => $pagetype,
+			'ht'                    => $hosting_type,
+			'tn'                    => get_stylesheet(),
+			'uloggedin'             => $is_logged_in,
+			'amp'                   => false,
+			'siteid'                => $site_id,
+			'consent'               => $consent,
+			'ad'                    => array(
+				'label'           => array(
+					'text' => __( 'Advertisements', 'jetpack' ),
+				),
+				'reportAd'        => array(
+					'text' => __( 'Report this ad', 'jetpack' ),
+				),
+				'privacySettings' => array(
+					'text'    => __( 'Privacy', 'jetpack' ),
+					'onClick' => 'js:function() { window.__tcfapi && window.__tcfapi(\'showUi\'); }',
+				),
+			),
+			'disabled_slot_formats' => $disabled_slot_formats,
+		);
+		$js_config = WordAds_Array_Utils::array_to_js_object( $config );
 		?>
 		<script<?php echo esc_attr( $data_tags ); ?> type="text/javascript">
-			var __ATA_PP = { pt: <?php echo esc_js( $pagetype ); ?>, ht: <?php echo esc_js( $hosting_type ); ?>, tn: '<?php echo esc_js( get_stylesheet() ); ?>', uloggedin: <?php echo esc_js( $is_logged_in ); ?>, amp: false, siteid: <?php echo esc_js( $site_id ); ?>, consent: <?php echo esc_js( $consent ); ?>, ad: { label: { text: '<?php echo esc_js( __( 'Advertisements', 'jetpack' ) ); ?>' }, reportAd: { text: '<?php echo esc_js( __( 'Report this ad', 'jetpack' ) ); ?>' }, privacySettings: { text: '<?php echo esc_js( __( 'Privacy', 'jetpack' ) ); ?>', onClick: function() { window.__tcfapi && window.__tcfapi('showUi'); } } } };
+			var __ATA_PP = <?php echo $js_config; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>;
 			var __ATA = __ATA || {};
 			__ATA.cmd = __ATA.cmd || [];
 			__ATA.criteo = __ATA.criteo || {};
@@ -381,20 +426,36 @@ class WordAds {
 		</script>
 		<?php
 
+		$section_id = $this->params->blog_id . 5;
+
+		// Get below post tag.
+		$tag_belowpost = $this->get_fallback_ad_snippet( $section_id, 'square', 'belowpost', '', '{{unique_id}}' );
+
+		// Remove linebreaks and sanitize.
+		$tag_belowpost = esc_js( str_replace( array( "\n", "\t", "\r" ), '', $tag_belowpost ) );
+
 		// Get an inline tag with a macro as id handled on JS side to use as a fallback.
-		$tag_inline = $this->get_dynamic_ad_snippet( $this->params->blog_id . 5, 'square', 'inline', '', '{{unique_id}}' );
+		$tag_inline = $this->get_fallback_ad_snippet( $section_id, 'square', 'inline', '', '{{unique_id}}' );
 
 		// Remove linebreaks and sanitize.
 		$tag_inline = esc_js( str_replace( array( "\n", "\t", "\r" ), '', $tag_inline ) );
 
+		// Get top tag.
+		$tag_top = $this->get_fallback_ad_snippet( $section_id, 'leaderboard', 'top', '', '{{unique_id}}' );
+
+		// Remove linebreaks and sanitize.
+		$tag_top = esc_js( str_replace( array( "\n", "\t", "\r" ), '', $tag_top ) );
+
 		// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
 		echo <<<HTML
-				<script>
-					var sas_fallback = sas_fallback || [];
-					sas_fallback.push(
-						{ tag: "$tag_inline", type: 'inline' }
-					);
-				</script>
+			<script type="text/javascript">
+				window.sas_fallback = window.sas_fallback || [];
+				window.sas_fallback.push(
+					{ tag: "$tag_inline", type: 'inline' },
+					{ tag: "$tag_belowpost", type: 'belowpost' },
+					{ tag: "$tag_top", type: 'top' }
+				);
+			</script>
 HTML;
 	}
 
@@ -411,10 +472,12 @@ HTML;
 		$data_tags = ( $this->params->cloudflare ) ? ' data-cfasync="false"' : '';
 		?>
 		<script<?php echo esc_attr( $data_tags ); ?> type="text/javascript">
+		function loadIPONWEB() { // TODO: Remove this after June 30th, 2025
 		(function(){var g=Date.now||function(){return+new Date};function h(a,b){a:{for(var c=a.length,d="string"==typeof a?a.split(""):a,e=0;e<c;e++)if(e in d&&b.call(void 0,d[e],e,a)){b=e;break a}b=-1}return 0>b?null:"string"==typeof a?a.charAt(b):a[b]};function k(a,b,c){c=null!=c?"="+encodeURIComponent(String(c)):"";if(b+=c){c=a.indexOf("#");0>c&&(c=a.length);var d=a.indexOf("?");if(0>d||d>c){d=c;var e=""}else e=a.substring(d+1,c);a=[a.substr(0,d),e,a.substr(c)];c=a[1];a[1]=b?c?c+"&"+b:b:c;a=a[0]+(a[1]?"?"+a[1]:"")+a[2]}return a};var l=0;function m(a,b){var c=document.createElement("script");c.src=a;c.onload=function(){b&&b(void 0)};c.onerror=function(){b&&b("error")};a=document.getElementsByTagName("head");var d;a&&0!==a.length?d=a[0]:d=document.documentElement;d.appendChild(c)}function n(a){var b=void 0===b?document.cookie:b;return(b=h(b.split("; "),function(c){return-1!=c.indexOf(a+"=")}))?b.split("=")[1]:""}function p(a){return"string"==typeof a&&0<a.length}
 		function r(a,b,c){b=void 0===b?"":b;c=void 0===c?".":c;var d=[];Object.keys(a).forEach(function(e){var f=a[e],q=typeof f;"object"==q&&null!=f||"function"==q?d.push(r(f,b+e+c)):null!==f&&void 0!==f&&(e=encodeURIComponent(b+e),d.push(e+"="+encodeURIComponent(f)))});return d.filter(p).join("&")}function t(a,b){a||((window.__ATA||{}).config=b.c,m(b.url))}var u=Math.floor(1E13*Math.random()),v=window.__ATA||{};window.__ATA=v;window.__ATA.cmd=v.cmd||[];v.rid=u;v.createdAt=g();var w=window.__ATA||{},x="s.pubmine.com";
 		w&&w.serverDomain&&(x=w.serverDomain);var y="//"+x+"/conf",z=window.top===window,A=window.__ATA_PP&&window.__ATA_PP.gdpr_applies,B="boolean"===typeof A?Number(A):null,C=window.__ATA_PP||null,D=z?document.referrer?document.referrer:null:null,E=z?window.location.href:document.referrer?document.referrer:null,F,G=n("__ATA_tuuid");F=G?G:null;var H=window.innerWidth+"x"+window.innerHeight,I=n("usprivacy"),J=r({gdpr:B,pp:C,rid:u,src:D,ref:E,tuuid:F,vp:H,us_privacy:I?I:null},"",".");
 		(function(a){var b=void 0===b?"cb":b;l++;var c="callback__"+g().toString(36)+"_"+l.toString(36);a=k(a,b,c);window[c]=function(d){t(void 0,d)};m(a,function(d){d&&t(d)})})(y+"?"+J);}).call(this);
+		}
 		</script>
 		<?php
 	}
@@ -477,8 +540,15 @@ HTML;
 		}
 
 		$ad_type  = $this->option( 'wordads_house' ) ? 'house' : 'iponweb';
-		$content .= $this->get_ad( 'inline', $ad_type );
-		return $content;
+		$location = 'shortcode';
+
+		// Not house ad and WATL enabled.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( 'house' !== $ad_type && ( isset( $_GET['wordads-logging'] ) && isset( $_GET[ $location ] ) && 'true' === $_GET[ $location ] ) ) {
+			return $content . $this->get_watl_ad_html_tag( $location );
+		}
+
+		return $content . $this->get_ad( 'inline', $ad_type );
 	}
 
 	/**
@@ -677,19 +747,50 @@ HTML;
 			}
 
 			$loc_id = esc_js( $loc_id );
+
+			// Determine supported Gutenberg format by width and height.
+			$format = WordAds_Formats::get_format_slug( (int) $width, (int) $height );
+			if ( $format === '' ) {
+				return ''; // When format is not supported, ignore placement.
+			}
+
+			// For a while return elements for both IPONWEB (__ATA) and Aditude (tudeMappings).
+			// We will remove using IPONWEB after partnership termination on June 30, 2025.
 			return <<<HTML
 			<div style="padding-bottom:15px;width:{$width}px;height:{$height}px;$css">
 				<div id="atatags-{$ad_number}">
 					<script$data_tags type="text/javascript">
-					__ATA.cmd.push(function() {
-						__ATA.initSlot('atatags-{$ad_number}',  {
-							collapseEmpty: 'before',
-							sectionId: '{$section_id}',
-							location: {$loc_id},
-							width: {$width},
-							height: {$height}
-						});
-					});
+						window.getAdSnippetCallback = function () {
+							if ( true === ( window.isWatlV1 ?? false ) ) {
+								// Use IPONWEB scripts.
+								window.__ATA = window.__ATA || {};
+								window.__ATA.cmd = __ATA.cmd || [];
+								window.__ATA.cmd.push(function() {
+									window.__ATA.initSlot('atatags-{$ad_number}', {
+										collapseEmpty: 'before',
+										sectionId: '{$section_id}',
+										location: {$loc_id},
+										width: {$width},
+										height: {$height}
+									});
+								});
+							} else {
+								// Use Aditude scripts.
+								window.tudeMappings = window.tudeMappings || [];
+								window.tudeMappings.push( {
+									divId: 'atatags-{$ad_number}',
+									format: '{$format}',
+									width: {$width},
+									height: {$height},
+								} );
+							}
+						}
+
+						if ( document.readyState === 'loading' ) {
+							document.addEventListener( 'DOMContentLoaded', window.getAdSnippetCallback );
+						} else {
+							window.getAdSnippetCallback();
+						}
 					</script>
 				</div>
 			</div>
@@ -720,6 +821,29 @@ HTML;
 	 * @since 8.7
 	 */
 	public function get_dynamic_ad_snippet( $section_id, $form_factor = 'square', $location = '', $relocate = '', $id = null ) {
+		$is_location_enabled = in_array( $location, array( 'top', 'belowpost', 'inline' ), true );
+
+		if ( $is_location_enabled ) {
+			return self::get_watl_ad_html_tag( $location );
+		}
+
+		return $this->get_fallback_ad_snippet( $section_id, $form_factor, $location, $relocate, $id );
+	}
+
+	/**
+	 * Returns the fallback dynamic snippet to be inserted into the ad unit
+	 *
+	 * @param int           $section_id section_id.
+	 * @param string        $form_factor form_factor.
+	 * @param string        $location location.
+	 * @param string        $relocate location to be moved after the fact for themes without required hook.
+	 * @param string | null $id A unique string ID or placeholder.
+	 *
+	 * @return string
+	 *
+	 * @since 8.7
+	 */
+	public function get_fallback_ad_snippet( $section_id, $form_factor = 'square', $location = '', $relocate = '', $id = null ) {
 		$div_id = 'atatags-' . $section_id . '-' . ( $id ?? uniqid() );
 		$div_id = esc_attr( $div_id );
 
@@ -865,6 +989,44 @@ HTML;
 			marginheight="0"
 			marginwidth="0">
 		</iframe>
+HTML;
+	}
+
+	/**
+	 * Returns the html ad tag used by WordAds Tag Library
+	 *
+	 * @param  string $slot_type e.g belowpost, gutenberg_rectangle.
+	 *
+	 * @return string
+	 *
+	 * @since 8.7
+	 */
+	public static function get_watl_ad_html_tag( string $slot_type ): string {
+		$uid = uniqid( 'atatags-dynamic-' . $slot_type . '-' );
+
+		return <<<HTML
+			<div style="padding-bottom:15px;" class="wordads-tag" data-slot-type="{$slot_type}">
+				<div id="{$uid}">
+					<script type="text/javascript">
+						window.getAdSnippetCallback = function () {
+							if ( false === ( window.isWatlV1 ?? false ) ) {
+								// Use Aditude scripts.
+								window.tudeMappings = window.tudeMappings || [];
+								window.tudeMappings.push( {
+									divId: '{$uid}',
+									format: '{$slot_type}',
+								} );
+							}
+						}
+
+						if ( document.readyState === 'loading' ) {
+							document.addEventListener( 'DOMContentLoaded', window.getAdSnippetCallback );
+						} else {
+							window.getAdSnippetCallback();
+						}
+					</script>
+				</div>
+			</div>
 HTML;
 	}
 

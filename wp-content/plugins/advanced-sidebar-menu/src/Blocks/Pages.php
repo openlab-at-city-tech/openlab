@@ -2,6 +2,7 @@
 
 namespace Advanced_Sidebar_Menu\Blocks;
 
+use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
 use Advanced_Sidebar_Menu\Traits\Singleton;
 use Advanced_Sidebar_Menu\Widget\Page;
 
@@ -11,6 +12,8 @@ use Advanced_Sidebar_Menu\Widget\Page;
  * @since  9.0.0
  *
  * @phpstan-import-type ATTR_SHAPE from Block_Abstract
+ * @phpstan-import-type PAGE_SETTINGS from Page as WIDGET_SETTINGS
+ * @phpstan-import-type DEFAULTS from Page as DEFAULTS
  *
  * @phpstan-type PAGE_ATTRIBUTES array{
  *   display_all?: bool,
@@ -18,16 +21,27 @@ use Advanced_Sidebar_Menu\Widget\Page;
  *   include_childless_parent?: bool,
  *   include_parent?: bool,
  *   levels: int,
- *   order_by: 'menu_order'|'post_title'|'post_date',
+ *   order_by: Page::ORDER_BY_*,
  *   post_type?: string,
  * }
  *
- * @extends Block_Abstract<PAGE_ATTRIBUTES>
+ * @extends Block_Abstract<PAGE_ATTRIBUTES, WIDGET_SETTINGS, DEFAULTS>
+ * @implements Block<WIDGET_SETTINGS, DEFAULTS>
  */
-class Pages extends Block_Abstract {
+class Pages extends Block_Abstract implements Block {
 	use Singleton;
 
 	public const NAME = 'advanced-sidebar-menu/pages';
+
+
+	/**
+	 * Get the name of this block.
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return self::NAME;
+	}
 
 
 	/**
@@ -35,41 +49,71 @@ class Pages extends Block_Abstract {
 	 *
 	 * @return string
 	 */
-	protected function get_description() {
-		return __( 'Creates a menu of all the categories using the parent/child relationship',
-			'advanced-sidebar-menu' );
+	public function get_description(): string {
+		return __( 'Creates a menu of all the pages using the parent/child relationship', 'advanced-sidebar-menu' );
 	}
 
 
 	/**
-	 * Get featured this block supports.
+	 * Return a new instance of the Page widget.
 	 *
-	 * Done on the PHP side, so we can easily add additional features
-	 * via the PRO version.
+	 */
+	public function get_widget_class(): Page {
+		return new Page();
+	}
+
+
+	/**
+	 * Get the list of attributes and their types.
 	 *
+	 * Must be done PHP side because we're using ServerSideRender
+	 *
+	 * @link https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
+	 *
+	 * @phpstan-return array<key-of<PAGE_ATTRIBUTES>, ATTR_SHAPE|Attribute>
 	 * @return array
 	 */
-	protected function get_block_support() {
-		return apply_filters( 'advanced-sidebar-menu/blocks/pages/supports', [
-			'anchor' => true,
-			'html'   => false,
+	public function get_attributes(): array {
+		return (array) apply_filters( 'advanced-sidebar-menu/blocks/pages/attributes', [
+			Page::INCLUDE_PARENT           => Attribute::factory( [
+				'type' => 'boolean',
+			] ),
+			Page::INCLUDE_CHILDLESS_PARENT => Attribute::factory( [
+				'type' => 'boolean',
+			] ),
+			Page::ORDER_BY                 => Attribute::factory( [
+				'type'    => 'string',
+				'default' => Page::ORDER_BY_MENU_ORDER,
+			] ),
+			Page::EXCLUDE                  => Attribute::factory( [
+				'type'    => 'string',
+				'default' => '',
+			] ),
+			Page::DISPLAY_ALL              => Attribute::factory( [
+				'type' => 'boolean',
+			] ),
+			Page::LEVELS                   => Attribute::factory( [
+				'type'    => 'number',
+				'default' => 100,
+			] ),
 		] );
 	}
 
 
 	/**
-	 * Get list of words used to search for the block.
+	 * @deprecated 9.7.0
 	 *
-	 * English and translated so both will be searchable.
-	 *
-	 * @return array<string>
+	 * @phpstan-return array<string>
 	 */
 	public function get_keywords() {
+		_deprecated_function( __METHOD__, '9.7.0' );
+
 		return [
 			'Advanced Sidebar',
 			'menu',
 			'sidebar',
 			'pages',
+			'butt',
 			__( 'menu', 'advanced-sidebar-menu' ),
 			__( 'sidebar', 'advanced-sidebar-menu' ),
 			__( 'pages', 'advanced-sidebar-menu' ),
@@ -78,48 +122,16 @@ class Pages extends Block_Abstract {
 
 
 	/**
-	 * Get list of attributes and their types.
+	 * @deprecated 9.7.0
 	 *
-	 * Must be done PHP side because we're using ServerSideRender
-	 *
-	 * @link https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
-	 *
-	 * @phpstan-return array<key-of<PAGE_ATTRIBUTES>, ATTR_SHAPE>
-	 * @return array
+	 * @phpstan-return array<string, bool>
 	 */
-	protected function get_attributes(): array {
-		return (array) apply_filters( 'advanced-sidebar-menu/blocks/pages/attributes', [
-			Page::INCLUDE_PARENT           => [
-				'type' => 'boolean',
-			],
-			Page::INCLUDE_CHILDLESS_PARENT => [
-				'type' => 'boolean',
-			],
-			Page::ORDER_BY                 => [
-				'type'    => 'string',
-				'default' => 'menu_order',
-			],
-			Page::EXCLUDE                  => [
-				'type'    => 'string',
-				'default' => '',
-			],
-			Page::DISPLAY_ALL              => [
-				'type' => 'boolean',
-			],
-			Page::LEVELS                   => [
-				'type'    => 'number',
-				'default' => 100,
-			],
+	protected function get_block_support() {
+		_deprecated_function( __METHOD__, '9.7.0' );
+
+		return apply_filters( 'advanced-sidebar-menu/blocks/pages/supports', [
+			'anchor' => true,
+			'html'   => false,
 		] );
-	}
-
-
-	/**
-	 * Return a new instance of the Page widget.
-	 *
-	 * @return Page
-	 */
-	protected function get_widget_class() {
-		return new Page();
 	}
 }

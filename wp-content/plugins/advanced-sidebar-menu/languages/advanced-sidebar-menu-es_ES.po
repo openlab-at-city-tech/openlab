@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2025-03-19 10:41-0400\n"
-"PO-Revision-Date: 2025-03-19 10:42-0400\n"
+"POT-Creation-Date: 2025-05-26 17:50-0400\n"
+"PO-Revision-Date: 2025-05-26 17:50-0400\n"
 "Last-Translator: Mat Lipe <support@onpointplugins.com>\n"
 "Language-Team: Mat Lipe <support@onpointplugins.com>\n"
 "Language: es_ES\n"
@@ -33,7 +33,7 @@ msgstr "Este widget puede transformarse en un bloque."
 
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:162
+#: js/src/gutenberg/blocks/Display.tsx:35 src/Widget/Page.php:162
 #, javascript-format, php-format
 msgid "Display highest level parent %s"
 msgstr "Mostrar el %s principal de nivel más alto"
@@ -41,7 +41,7 @@ msgstr "Mostrar el %s principal de nivel más alto"
 #. translators: Selected taxonomy single label
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:179
+#: js/src/gutenberg/blocks/Display.tsx:37 src/Widget/Category.php:179
 #: src/Widget/Page.php:172
 #, javascript-format, php-format
 msgid "Display menu when there is only the parent %s"
@@ -50,28 +50,26 @@ msgstr "Mostrar menú cuando solo hay el elemento primario %s"
 #. translators: Selected taxonomy plural label
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:188
+#: js/src/gutenberg/blocks/Display.tsx:39 src/Widget/Category.php:188
 #: src/Widget/Page.php:182
 #, javascript-format, php-format
 msgid "Always display child %s"
 msgstr "Muestre siempre %s secundarios"
 
-#: js/src/gutenberg/blocks/Display.tsx:71
+#: js/src/gutenberg/blocks/Display.tsx:45 src/Widget/Category.php:202
+#: src/Widget/Page.php:203
+msgid "- All -"
+msgstr "- Todo -"
+
+#: js/src/gutenberg/blocks/Display.tsx:83
 msgid "Display"
 msgstr "Mostrar"
 
 #. translators: {select HTML input}, {post type plural label}
-#. translators: {select html input}, {Selected post type plural label}
-#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:217
-#: src/Widget/Page.php:217
-#, javascript-format, php-format
-msgid "Display %1$s levels of child %2$s"
-msgstr "Mostrar %1$s niveles de %2$s secundario"
-
-#: js/src/gutenberg/blocks/Display.tsx:100 src/Widget/Category.php:202
-#: src/Widget/Page.php:203
-msgid "- All -"
-msgstr "- Todo -"
+#: js/src/gutenberg/blocks/Display.tsx:107
+#, javascript-format
+msgid "Levels of child %s to display"
+msgstr "Niveles de %s secundarios para mostrar"
 
 #. translators: 1: Opening anchor tag, 2: Closing anchor tag
 #: js/src/gutenberg/blocks/ExcludeField.tsx:28
@@ -139,18 +137,18 @@ msgid "Title"
 msgstr "Título"
 
 #. translators: Selected taxonomy plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:88 src/Widget/Category.php:249
+#: js/src/gutenberg/blocks/categories/Edit.tsx:91 src/Widget/Category.php:249
 #, javascript-format, php-format
 msgid "Display %s on single posts"
 msgstr "Mostrar %s en publicaciones individuales"
 
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:103 src/Widget/Category.php:259
+#: js/src/gutenberg/blocks/categories/Edit.tsx:108 src/Widget/Category.php:259
 #, javascript-format, php-format
 msgid "Display each single post's %s"
 msgstr "Muestra las %s de cada publicación"
 
-#: js/src/gutenberg/blocks/pages/Edit.tsx:90 src/Widget/Page.php:245
+#: js/src/gutenberg/blocks/pages/Edit.tsx:93 src/Widget/Page.php:245
 msgid "Order by"
 msgstr "Ordenar por"
 
@@ -257,6 +255,12 @@ msgstr "En otra lista en el mismo widget"
 #, php-format
 msgid "Display the highest level parent %s"
 msgstr "Mostrar el %s principal de nivel más alto"
+
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:217 src/Widget/Page.php:217
+#, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr "Mostrar %1$s niveles de %2$s secundario"
 
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label

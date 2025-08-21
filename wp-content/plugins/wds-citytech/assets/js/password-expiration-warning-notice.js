@@ -40,13 +40,13 @@
 		dismissButton.appendChild( dismissButtonText );
 		warningEl.appendChild( dismissButton );
 
-		// insert after #wpadminbar
-		const wpAdminBar = document.getElementById( 'wpadminbar' );
-		wpAdminBar.parentNode.insertBefore( warningEl, wpAdminBar.nextSibling );
+		// Insert after .openlab-navbar.
+		const openlabNavbar = document.querySelector( '.openlab-navbar' );
+		openlabNavbar.parentNode.insertBefore( warningEl, openlabNavbar.nextSibling );
 
 		// The top position should be the same as the admin bar plus the height of the admin bar.
-		const adminBarHeight = wpAdminBar.offsetHeight;
-		const adminBarTop = wpAdminBar.offsetTop;
+		const adminBarHeight = openlabNavbar.offsetHeight;
+		const adminBarTop = openlabNavbar.offsetTop;
 		warningEl.style.top = ( adminBarTop + adminBarHeight ) + 'px';
 		warningEl.style.position = 'absolute';
 

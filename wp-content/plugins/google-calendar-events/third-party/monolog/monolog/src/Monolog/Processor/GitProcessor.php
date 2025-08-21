@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
- * @internal
  */
 class GitProcessor implements ProcessorInterface
 {
@@ -41,7 +40,7 @@ class GitProcessor implements ProcessorInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
@@ -53,13 +52,13 @@ class GitProcessor implements ProcessorInterface
     /**
      * @return array{branch: string, commit: string}|array<never>
      */
-    private static function getGitInfo() : array
+    private static function getGitInfo(): array
     {
         if (self::$cache) {
             return self::$cache;
         }
         $branches = `git branch -v --no-abbrev`;
-        if ($branches && \preg_match('{^\\* (.+?)\\s+([a-f0-9]{40})(?:\\s|$)}m', $branches, $matches)) {
+        if ($branches && preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)}m', $branches, $matches)) {
             return self::$cache = ['branch' => $matches[1], 'commit' => $matches[2]];
         }
         return self::$cache = [];

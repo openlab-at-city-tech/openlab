@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidAr
  * A trait to help implement TranslatorInterface and LocaleAwareInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- * @internal
  */
 trait TranslatorTrait
 {
@@ -34,25 +33,25 @@ trait TranslatorTrait
      */
     public function getLocale()
     {
-        return $this->locale ?: (\class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
+        return $this->locale ?: (class_exists(\Locale::class) ? \Locale::getDefault() : 'en');
     }
     /**
      * {@inheritdoc}
      */
-    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null) : string
+    public function trans(?string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         if (null === $id || '' === $id) {
             return '';
         }
-        if (!isset($parameters['%count%']) || !\is_numeric($parameters['%count%'])) {
-            return \strtr($id, $parameters);
+        if (!isset($parameters['%count%']) || !is_numeric($parameters['%count%'])) {
+            return strtr($id, $parameters);
         }
         $number = (float) $parameters['%count%'];
         $locale = $locale ?: $this->getLocale();
         $parts = [];
-        if (\preg_match('/^\\|++$/', $id)) {
-            $parts = \explode('|', $id);
-        } elseif (\preg_match_all('/(?:\\|\\||[^\\|])++/', $id, $matches)) {
+        if (preg_match('/^\|++$/', $id)) {
+            $parts = explode('|', $id);
+        } elseif (preg_match_all('/(?:\|\||[^\|])++/', $id, $matches)) {
             $parts = $matches[0];
         }
         $intervalRegexp = <<<'EOF'
@@ -74,23 +73,23 @@ trait TranslatorTrait
 EOF;
         $standardRules = [];
         foreach ($parts as $part) {
-            $part = \trim(\str_replace('||', '|', $part));
+            $part = trim(str_replace('||', '|', $part));
             // try to match an explicit rule, then fallback to the standard ones
-            if (\preg_match($intervalRegexp, $part, $matches)) {
+            if (preg_match($intervalRegexp, $part, $matches)) {
                 if ($matches[2]) {
-                    foreach (\explode(',', $matches[3]) as $n) {
+                    foreach (explode(',', $matches[3]) as $n) {
                         if ($number == $n) {
-                            return \strtr($matches['message'], $parameters);
+                            return strtr($matches['message'], $parameters);
                         }
                     }
                 } else {
                     $leftNumber = '-Inf' === $matches['left'] ? -\INF : (float) $matches['left'];
-                    $rightNumber = \is_numeric($matches['right']) ? (float) $matches['right'] : \INF;
+                    $rightNumber = is_numeric($matches['right']) ? (float) $matches['right'] : \INF;
                     if (('[' === $matches['left_delimiter'] ? $number >= $leftNumber : $number > $leftNumber) && (']' === $matches['right_delimiter'] ? $number <= $rightNumber : $number < $rightNumber)) {
-                        return \strtr($matches['message'], $parameters);
+                        return strtr($matches['message'], $parameters);
                     }
                 }
-            } elseif (\preg_match('/^\\w+\\:\\s*(.*?)$/', $part, $matches)) {
+            } elseif (preg_match('/^\w+\:\s*(.*?)$/', $part, $matches)) {
                 $standardRules[] = $matches[1];
             } else {
                 $standardRules[] = $part;
@@ -101,15 +100,15 @@ EOF;
             // when there's exactly one rule given, and that rule is a standard
             // rule, use this rule
             if (1 === \count($parts) && isset($standardRules[0])) {
-                return \strtr($standardRules[0], $parameters);
+                return strtr($standardRules[0], $parameters);
             }
-            $message = \sprintf('Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").', $id, $locale, $number);
-            if (\class_exists(InvalidArgumentException::class)) {
+            $message = sprintf('Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").', $id, $locale, $number);
+            if (class_exists(InvalidArgumentException::class)) {
                 throw new InvalidArgumentException($message);
             }
             throw new \InvalidArgumentException($message);
         }
-        return \strtr($standardRules[$position], $parameters);
+        return strtr($standardRules[$position], $parameters);
     }
     /**
      * Returns the plural position to use for the given locale and number.
@@ -118,10 +117,10 @@ EOF;
      * which is subject to the new BSD license (http://framework.zend.com/license/new-bsd).
      * Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
      */
-    private function getPluralizationRule(float $number, string $locale) : int
+    private function getPluralizationRule(float $number, string $locale): int
     {
-        $number = \abs($number);
-        switch ('pt_BR' !== $locale && 'en_US_POSIX' !== $locale && \strlen($locale) > 3 ? \substr($locale, 0, \strrpos($locale, '_')) : $locale) {
+        $number = abs($number);
+        switch ('pt_BR' !== $locale && 'en_US_POSIX' !== $locale && \strlen($locale) > 3 ? substr($locale, 0, strrpos($locale, '_')) : $locale) {
             case 'af':
             case 'bn':
             case 'bg':

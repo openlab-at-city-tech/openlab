@@ -1,85 +1,102 @@
 === EMC - Easily Embed Calendly Scheduling Features ===
 Contributors: turn2honey
-Donate link: https://simpma.com/emc#pricing
+Donate link: https://simpma.com/emc/pricing/
 Tags: appointment, booking, embed calendar, calendly, scheduling
 Requires at least: 4.6
 Tested up to: 6.7.1
-Stable tag: 4.1
+Stable tag: 4.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Simplest way to embed your booking calendar and integrate Calendly scheduling features into WordPress.
+Simplest Way to Embed Calendly Scheduling Features Into WordPress
 
-== Description ==
+## Description
 
-[EMC Scheduling Manager](https://simpma.com/emc) is the simplest way to embed Calendly scheduling pages in your website. 
+[EMC Scheduling Manager](https://simpma.com/emc/) is the **easiest way** to integrate your Calendly scheduling pages into your WordPress website. Forget the back-and-forth between multiple tabs, now you can **manage common Calendly tasks** directly from WordPress with just a few clicks!
 
-Allows visitors to easily schedule meetings *anywhere* on your WordPress website through Calendly.
+Whether you want to display your Calendly booking page inline, as a button, or in a popup, EMC Scheduling Manager gives you the flexibility to **customize and embed** your booking page just how you want it.
 
-With an easy to use widget customizer, design your embed widget directly from the WordPress dashboard.
+It's simple to use, fast to set up, and saves you time every day. But what really sets EMC apart is its **seamless integration** into your WordPress dashboard. Manage appointments and bookings without ever needing to leave your site.
 
-== Free Version Features ==
+Ready to simplify your scheduling workflow? [EMC Pro](https://simpma.com/emc/pricing/) offers even more powerful features to make managing your Calendly appointments easier than ever!
 
-1. Import Calendly event types to WordPress
-2. Customize embed widgets via shortcode.
-3. Easy to use widget customizer for customizing and generating embed widget shortcodes.
-4. Supports inline, text popup and button popup embed options.
-5. Prefill booking fields for logged in users.
+## Free Version Features
 
-== Pro Version Features ==
+The **free version** of EMC Scheduling Manager comes with all the basic features you need to integrate Calendly into your WordPress site. It's simple, easy, and effective:
 
-1. View and cancel booked meetings from WordPress
-2. Advanced analytics dashboard for tracking booking pages conversion
-3. Automated and manual email reminder
-4. Import, view and export contacts
-5. Elementor support
-6. Analytics data exporter
-7. Import Calendly event types to WordPress
-8. Customize embed widgets via shortcode.
-9. Easy to use widget customizer for customizing and generating embed widget shortcodes.
-10. Supports inline, text popup and button popup embed options.
+- **Import Calendly event types** directly into WordPress  
+- **Customize embed widgets** using shortcode  
+- **Widget Customizer** for generating and styling embed widget shortcodes  
+- **Supports inline, text popup, and button popup embed options**  
+- **Prefill booking fields** for logged-in users (no need to re-enter details!)
 
-== Shortcode ==
+The free version is perfect for users who need a basic yet effective Calendly integration.
 
-Add a Calendly scheduling page on WordPress with:
+## Pro Version Features (Unlock Powerful Upgrades!)
+
+Ready to take your scheduling to the next level? [EMC Pro](https://simpma.com/emc/pricing/) offers **advanced features** that save you time, help you optimize your workflow, and give you deeper insights into your scheduling efforts:
+
+- **View and cancel your Calendly bookings directly from WordPress** — no need to leave your site!  
+- **Advanced analytics dashboard** to track the performance of your booking pages — see which events are getting the most traction and make data-driven decisions.  
+- **Automated and manual email reminders** to ensure that both you and your clients never miss an appointment.  
+- **Import, view, and export contacts** — manage your clients and leads right from your WordPress dashboard.  
+- **Full Elementor support** for seamless integration with the Elementor page builder — design beautiful pages that fit perfectly with your booking system.  
+- **Analytics data exporter** for easy export of booking data into CSV format.  
+- **Everything from the free version** with **additional customization options** and more robust embed features.
+
+With **EMC Pro**, you'll be able to do more than just schedule appointments — you'll be able to **streamline your workflow** and **optimize** how you manage your time and your clients.
+
+🔓 **Unlock EMC Pro** and get everything you need to simplify scheduling and improve your workflow today!
+
+[Learn More >>](https://simpma.com/emc/pricing/)
+
+## Shortcode
+
+To add a Calendly scheduling page to your WordPress site, use the following shortcode:
 
 `[calendly url="https://calendly.com/example/call" type="1"]`
 
-Or
+You can also customize it further with additional options to match your needs:
 
 `[calendly url="https://calendly.com/example/call" type="2" text="Book Now" text_color="#ffffff" text_size="14" button_style="1" button_size="1" button_color="#2694ea" branding="false" hide_details="false" style_class="custom_form_style"]`
 
-== Customization == 
+## Customization
 
-You can customize the embed widget using the widget customizer at *Dashboard > EMC > Customizer*, or 
-with the following shortcode options:
+Use the **widget customizer** under **Dashboard > EMC > Customizer**, or apply the following shortcode options to fine-tune your widget appearance:
 
-*   `type` - Embed form type. *1* - inline embed, *2* - popup button embed, *3* - popup text embed
+- `type` – Embed form type:  
+  - *1* for inline embed  
+  - *2* for popup button embed  
+  - *3* for popup text embed  
+- `url` – Link to your Calendly scheduling page  
+- `text` – Button or link text (e.g., "Book Now")  
+- `text_color` – Button or link text color (hex code)  
+- `text_size` – Button or link text size (e.g., "14")  
+- `button_color` – Button background color (hex code)  
+- `button_size` – Button size:  
+  - *1* (small)  
+  - *2* (medium)  
+  - *3* (large)  
+- `button_style` – Button style:  
+  - *1* for inline  
+  - *2* for float  
+- `branding` – Show or hide branding (true/false)  
+- `prefill_fields` – Prefill form fields with user info (0/1)  
+- `hide_cookie_banner` – Show or hide cookie banner (0/1)  
+- `hide_details` – Show or hide event details (0/1)  
+- `style_class` – Custom CSS class for your embed widget  
 
-*   `url` - Scheduling page link
+## Why You'll Love EMC
 
-*   `text` - Button/Link text
+- **No more juggling tabs!** Manage all your Calendly bookings and appointments **directly from WordPress** — save time and streamline your process.  
+- **Save time and reduce hassle** with automatic email reminders, contact management, and powerful analytics — handle it all in one place!  
+- **Better insights and data** with advanced analytics that help you track your booking page performance and conversion rates.  
+- **Seamless integration with Elementor**, making it easy to build beautiful, functional pages that match your branding.
 
-*   `text_color` - Button/Link text color
+**Try the Free Version** today and get started with an easy-to-embed Calendly integration. Ready for more? **Upgrade to Pro** and unlock more features, more flexibility, and more time saved. You'll wonder how you ever managed without it!
 
-*   `text_size` - Button/Link text size
-
-*   `button_color` - Button background color. Any hexadecimal color code is supported here
-
-*   `button_size` - Button size. *1* - Samll, *2* - Medium, *3* - Large
-
-*   `button_style` - Button style. *1* - Inline, *2* - Float
-
-*   `branding` - true/false. Show or hide branding
-
-*   `prefill_fields` - 0(false) or 1(true). Prefill booking form user info fields, with logged in user info
-
-*   `hide_cookie_banner` - 0(false) or 1(true). Hide or show cookie settings/banner
-    
-*    `hide_details` - 0(false) or 1(true). Hide or show details
-
-*   `style_class` - CSS style name for adding custom css style to embed widget
+[Learn More >>](https://simpma.com/emc/pricing/)
 
 == Frequently Asked Questions ==
 
@@ -108,7 +125,7 @@ The free version comes with optional promotion notices that can be easily disabl
 
 These notices are shown in your admin dashboard, and once any of them is disabled, all other promotion notices from EMC Scheduling Manager are disabled.
 
-You can upgrade to the [pro version](https://simpma.com/emc#pricing/) to automatically disable all promotion notices.
+You can upgrade to the [pro version](https://simpma.com/emc/pricing/) to automatically disable all promotion notices.
 
 Optionally, you can disable the promotions by also including the below code snippet in your theme's function.php file:
 
@@ -123,6 +140,12 @@ function emcs_show_promotions() {
 `
 
 == Changelog ==
+
+= 4.2 - 17-01-2025 =
+
+- Added prefill field option to customizer
+- Updated readme
+- Adjusted promotion module
 
 = 4.1 - 26-11-2024 =
 

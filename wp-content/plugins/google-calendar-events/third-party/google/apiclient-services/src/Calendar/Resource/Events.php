@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Events as EventsModel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $events = $calendarService->events;
  *  </code>
- * @internal
  */
 class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -51,7 +50,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($calendarId, $eventId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -79,7 +78,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($calendarId, $eventId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Event::class);
     }
     /**
@@ -104,7 +103,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function import($calendarId, Event $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('import', [$params], Event::class);
     }
     /**
@@ -139,7 +138,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function insert($calendarId, Event $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('insert', [$params], Event::class);
     }
     /**
@@ -182,7 +181,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function instances($calendarId, $eventId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('instances', [$params], EventsModel::class);
     }
     /**
@@ -282,7 +281,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listEvents($calendarId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], EventsModel::class);
     }
     /**
@@ -308,7 +307,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function move($calendarId, $eventId, $destination, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId, 'destination' => $destination];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('move', [$params], Event::class);
     }
     /**
@@ -347,7 +346,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function patch($calendarId, $eventId, Event $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('patch', [$params], Event::class);
     }
     /**
@@ -371,7 +370,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function quickAdd($calendarId, $text, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'text' => $text];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('quickAdd', [$params], Event::class);
     }
     /**
@@ -410,7 +409,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($calendarId, $eventId, Event $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'eventId' => $eventId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Event::class);
     }
     /**
@@ -511,9 +510,9 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch($calendarId, Channel $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Events::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_Events');
+class_alias(Events::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_Events');

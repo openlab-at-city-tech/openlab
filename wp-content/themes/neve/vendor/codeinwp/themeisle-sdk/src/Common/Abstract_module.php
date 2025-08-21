@@ -41,6 +41,7 @@ abstract class Abstract_Module {
 		'templates-patterns-collection'       => 'templates-patterns-collection/templates-patterns-collection.php',
 		'wpcf7-redirect'                      => 'wpcf7-redirect/wpcf7-redirect.php',
 		'wp-full-stripe-free'                 => 'wp-full-stripe-free/wp-full-stripe.php',
+		'learning-management-system'          => 'learning-management-system/lms.php',
 	];
 
 	/**
@@ -219,5 +220,14 @@ abstract class Abstract_Module {
 		$plugin = isset( $this->plugin_paths[ $plugin ] ) ? $this->plugin_paths[ $plugin ] : $plugin . '/' . $plugin . '.php';
 
 		return is_plugin_active( $plugin );
+	}
+
+	/**
+	 * Get the current date.
+	 * 
+	 * @return \DateTime The date time.
+	 */
+	public function get_current_date() {
+		return apply_filters( 'themeisle_sdk_current_date', new \DateTime( 'now' ) );
 	}
 }

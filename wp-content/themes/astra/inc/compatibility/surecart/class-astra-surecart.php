@@ -19,7 +19,6 @@ if ( ! defined( 'SURECART_PLUGIN_FILE' ) ) {
  * @since 4.4.0
  */
 class Astra_SureCart {
-
 	/**
 	 * The post type slug.
 	 *
@@ -37,7 +36,7 @@ class Astra_SureCart {
 	/**
 	 * SureCart Shop Page Status.
 	 *
-	 * @var null|bool
+	 * @var bool|null
 	 */
 	public $shop_page_status = null;
 
@@ -62,19 +61,19 @@ class Astra_SureCart {
 		add_action( 'admin_bar_menu', array( $this, 'customize_admin_bar' ), 999 );
 	}
 
-		/**
-		 * Register Customizer sections and panel for SureCart.
-		 *
-		 * @since 4.6.13
-		 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
-		 */
+	/**
+	 * Register Customizer sections and panel for SureCart.
+	 *
+	 * @since 4.6.13
+	 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
+	 */
 	public function customize_register( $wp_customize ) {
 
 		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 		/**
 		 * Register Sections & Panels
 		 */
-		require ASTRA_THEME_DIR . 'inc/compatibility/surecart/customizer/class-astra-customizer-register-surecart-section.php';		
+		require ASTRA_THEME_DIR . 'inc/compatibility/surecart/customizer/class-astra-customizer-register-surecart-section.php';
 	}
 
 	/**
@@ -218,7 +217,7 @@ class Astra_SureCart {
 				add_filter( 'astra_apply_hero_header_banner', '__return_false' );
 				add_action( 'astra_primary_content_top', array( $this, 'astra_force_render_banner_layout_1' ) );
 			}
-		}		
+		}
 	}
 
 	/**
@@ -301,8 +300,7 @@ class Astra_SureCart {
 			return $title;
 		}
 		$custom_title = astra_get_option( 'ast-dynamic-archive-' . $this->post_type . '-custom-title', '' );
-		$title        = ! empty( $custom_title ) ? $custom_title : $title;
-		return $title;
+		return ! empty( $custom_title ) ? $custom_title : $title;
 	}
 
 	/**
@@ -381,7 +379,7 @@ class Astra_SureCart {
 	 *
 	 * @param string  $title     Title Area label.
 	 * @param string  $post_type Current post type.
-	 * @param boolean $singular  Whether singular or plural.
+	 * @param bool $singular  Whether singular or plural.
 	 *
 	 * @since 4.7.3
 	 * @return string Returns customized label for title area.
@@ -458,19 +456,19 @@ class Astra_SureCart {
 
 		// Get the customize node by ID.
 		$node = $wp_admin_bar->get_node( 'customize' );
-	
+
 		if ( $node ) {
 			$post_type = get_post_type();
 			$page      = is_singular() ? 'single' : 'archive';
 
 			// If the current page is SureCart shop page.
-			if ( 'page' === $post_type && get_the_ID() == get_option( 'surecart_shop_page_id' ) ) {
+			if ( 'page' === $post_type && get_the_ID() === get_option( 'surecart_shop_page_id' ) ) {
 				$page      = 'archive';
 				$post_type = 'sc_product';
 			}
 
 			// Check for surecart post type.
-			if ( in_array( $post_type, array( 'sc_product', 'sc_collection', 'sc_upsell' ) ) ) {	
+			if ( in_array( $post_type, array( 'sc_product', 'sc_collection', 'sc_upsell' ) ) ) {
 				// Add custom parameter to the URL.
 				$node->href = add_query_arg( 'autofocus[section]', "{$page}-posttype-{$post_type}", $node->href );
 				// Update the node with the modified URL.

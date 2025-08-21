@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * QtFileLoader loads translations from QT Translations XML files.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
- * @internal
  */
 class QtFileLoader implements LoaderInterface
 {
@@ -29,22 +28,22 @@ class QtFileLoader implements LoaderInterface
      */
     public function load($resource, string $locale, string $domain = 'messages')
     {
-        if (!\class_exists(XmlUtils::class)) {
+        if (!class_exists(XmlUtils::class)) {
             throw new RuntimeException('Loading translations from the QT format requires the Symfony Config component.');
         }
-        if (!\stream_is_local($resource)) {
-            throw new InvalidResourceException(\sprintf('This is not a local file "%s".', $resource));
+        if (!stream_is_local($resource)) {
+            throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
-        if (!\file_exists($resource)) {
-            throw new NotFoundResourceException(\sprintf('File "%s" not found.', $resource));
+        if (!file_exists($resource)) {
+            throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
         try {
             $dom = XmlUtils::loadFile($resource);
         } catch (\InvalidArgumentException $e) {
-            throw new InvalidResourceException(\sprintf('Unable to load "%s".', $resource), $e->getCode(), $e);
+            throw new InvalidResourceException(sprintf('Unable to load "%s".', $resource), $e->getCode(), $e);
         }
-        $internalErrors = \libxml_use_internal_errors(\true);
-        \libxml_clear_errors();
+        $internalErrors = libxml_use_internal_errors(\true);
+        libxml_clear_errors();
         $xpath = new \DOMXPath($dom);
         $nodes = $xpath->evaluate('//TS/context/name[text()="' . $domain . '"]');
         $catalogue = new MessageCatalogue($locale);
@@ -57,11 +56,11 @@ class QtFileLoader implements LoaderInterface
                 }
                 $translation = $translation->nextSibling;
             }
-            if (\class_exists(FileResource::class)) {
+            if (class_exists(FileResource::class)) {
                 $catalogue->addResource(new FileResource($resource));
             }
         }
-        \libxml_use_internal_errors($internalErrors);
+        libxml_use_internal_errors($internalErrors);
         return $catalogue;
     }
 }

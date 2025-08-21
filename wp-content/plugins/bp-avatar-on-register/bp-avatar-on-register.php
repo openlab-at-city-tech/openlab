@@ -239,47 +239,79 @@ function bpar_filter_avatar_preview_url( $url, $params ) {
 }
 
 function bpar_validate_upload( $upload ) {
-	$tmp_name = $upload['tmp_name'];
-	$finfo = finfo_open( FILEINFO_MIME_TYPE );
-	$real_mime = finfo_file( $finfo, $tmp_name );
+	$tmp_name   = $upload['tmp_name'];
+	$finfo      = finfo_open( FILEINFO_MIME_TYPE );
+	$real_mime  = finfo_file( $finfo, $tmp_name );
 	finfo_close( $finfo );
 
 	$file_is_ok = true;
-	switch ( $real_mime ) {
-		case 'image/gif' :
-			$gif = imagecreatefromgif( $tmp_name );
-			if ( empty( $gif ) ) {
-				$file_is_ok = false;
-			} else {
-				$new_tmp_name = wp_tempnam( wp_rand() );
-				$copied = imagegif( $gif, $new_tmp_name, 100 );
-				$upload['tmp_name'] = $new_tmp_name;
-				$upload['size'] = filesize($new_tmp_name );
-			}
-		break;
+	$new_tmp_name = wp_tempnam( wp_rand() );
 
-		case 'image/jpeg' :
-			$jpg = imagecreatefromjpeg( $tmp_name );
+	try {
+		switch ( $real_mime ) {
+			case 'image/gif':
+			case 'image/jpeg':
+				if ( extension_loaded( 'imagick' ) ) {
+					$img = new Imagick( $tmp_name );
 
-			if ( empty( $jpg ) ) {
-				$file_is_ok = false;
-			} else {
-				$exif = exif_read_data( $tmp_name );
-				if ( ! empty( $exif['Orientation'] ) ) {
-					$jpg = imagecreatefromjpeg( $tmp_name );
-					$jpg = bpar_apply_orientation( $jpg, $exif['Orientation'] );
+					// Auto-orient for JPEG
+					if ( $real_mime === 'image/jpeg' ) {
+						$img->setImageOrientation( Imagick::ORIENTATION_UNDEFINED );
+						$img->autoOrient();
+					}
+
+					// Set format and quality
+					$img->setImageFormat( $real_mime === 'image/gif' ? 'gif' : 'jpeg' );
+					$img->setImageCompressionQuality( 100 );
+
+					$img->writeImage( $new_tmp_name );
+					$img->destroy();
+
+					$upload['tmp_name'] = $new_tmp_name;
+					$upload['size']     = filesize( $new_tmp_name );
+				} else {
+					// Fallback to GD
+					if ( $real_mime === 'image/gif' ) {
+						$gif = imagecreatefromgif( $tmp_name );
+						if ( empty( $gif ) ) {
+							$file_is_ok = false;
+							break;
+						}
+						imagegif( $gif, $new_tmp_name );
+						imagedestroy( $gif );
+
+					} elseif ( $real_mime === 'image/jpeg' ) {
+						$jpg = imagecreatefromjpeg( $tmp_name );
+						if ( empty( $jpg ) ) {
+							$file_is_ok = false;
+							break;
+						}
+
+						$exif = @exif_read_data( $tmp_name );
+						if ( ! empty( $exif['Orientation'] ) ) {
+							$jpg = bpar_apply_orientation( $jpg, $exif['Orientation'] );
+						}
+
+						imagejpeg( $jpg, $new_tmp_name, 100 );
+						imagedestroy( $jpg );
+					}
+
+					$upload['tmp_name'] = $new_tmp_name;
+					$upload['size']     = filesize( $new_tmp_name );
 				}
+				break;
 
-				$new_tmp_name = wp_tempnam( wp_rand() );
-				$copied = imagejpeg( $jpg, $new_tmp_name, 100 );
-				$upload['tmp_name'] = $new_tmp_name;
-				$upload['size'] = filesize($new_tmp_name );
-			}
-		break;
+			default:
+				// Unsupported MIME type, skip processing
+				break;
+		}
+	} catch ( Exception $e ) {
+		error_log( 'bpar_validate_upload error: ' . $e->getMessage() );
+		$file_is_ok = false;
 	}
 
 	if ( ! $file_is_ok ) {
-		$upload['error'] = 5;
+		$upload['error'] = 5; // standard WP upload error code
 	}
 
 	return $upload;

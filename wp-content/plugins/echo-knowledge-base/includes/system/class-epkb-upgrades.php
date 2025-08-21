@@ -158,10 +158,6 @@ class EPKB_Upgrades {
 
 	public static function run_upgrades( &$kb_config, $last_version ) {
 
-	    if ( version_compare( $last_version, '11.0.1', '<' ) ) {
-		    self::upgrade_to_v11_0_1( $kb_config );
-	    }
-
 		if ( version_compare( $last_version, '11.30.0', '<' ) ) {
 			self::upgrade_to_v11_30_0( $kb_config );
 		}
@@ -198,13 +194,40 @@ class EPKB_Upgrades {
 			self::upgrade_to_v12_30_0( $kb_config );
 		}
 
-		if ( version_compare( $last_version, '12.32.0', '<' ) ) {
-			self::upgrade_to_v12_32_0( $kb_config );
-		}
-
 		if ( version_compare( $last_version, '12.42.0', '<' ) ) {
 			self::upgrade_to_v12_42_0( $kb_config );
 		}
+
+		if ( version_compare( $last_version, '13.11.0', '<' ) ) {
+			self::upgrade_to_v13_11_0( $kb_config );
+		}
+
+		if ( version_compare( $last_version, '13.51.0', '<' ) ) {
+			self::upgrade_to_v13_51_0( $kb_config );
+		}
+
+		if ( version_compare( $last_version, '13.60.0', '<' ) ) {	
+			self::upgrade_to_v13_60_0( $kb_config );
+		}
+	}
+
+	private static function upgrade_to_v13_60_0( &$kb_config ) {
+		if ( $kb_config['kb_main_page_layout'] == EPKB_Layout::CLASSIC_LAYOUT ) {
+			$kb_config['sub_article_list_margin'] = 20;
+			$kb_config['nof_articles_displayed'] = 0;
+		}
+	}
+
+	private static function upgrade_to_v13_51_0( &$kb_config ) {
+		// Check if disable_openai flag exists and is false or missing
+		$disable_openai = EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' );
+		if ( ! $disable_openai ) {
+			EPKB_Core_Utilities::add_kb_flag( 'enable_legacy_open_ai' );
+		}
+	}
+
+	private static function upgrade_to_v13_11_0( &$kb_config ) {
+		$kb_config['tab_nav_overflow_mode'] = 'drop_down';
 	}
 
 	private static function upgrade_to_v12_42_0( &$kb_config ) {
@@ -219,10 +242,6 @@ class EPKB_Upgrades {
 		if ( ! is_wp_error( $result ) ) {
 			delete_option( 'epkb_openai_api_key' );
 		}
-	}
-
-	private static function upgrade_to_v12_32_0( &$kb_config ) {
-		$kb_config['visual_helper_switch_visibility_toggle'] = 'off';
 	}
 
 	private static function upgrade_to_v12_30_0( &$kb_config ) {
@@ -381,7 +400,7 @@ class EPKB_Upgrades {
 		}
 
 		// user with article v1 is switched to article v2
-		if ( $kb_config['article_toc_enable'] == 'on' ) {
+		if ( ! empty( $kb_config['article_toc_enable'] ) && $kb_config['article_toc_enable'] == 'on' ) {
 
 			if ( $kb_config['article_toc_position'] == 'left' ) {
 				$kb_config['article_sidebar_component_priority']['toc_left'] = 1;
@@ -441,7 +460,7 @@ class EPKB_Upgrades {
 		if ( $kb_config['kb_main_page_layout'] == 'Modular' ) {
 			$kb_config['modular_main_page_toggle'] = 'on';
 
-			// do not add Popular Articles to Articles List module after upgrade
+			// do not add Popular Articles to Featured Articles module after upgrade
 			$kb_config['ml_articles_list_column_1'] = 'none';
 
 			// refactor Modular settings for Categories & Articles module to use shared configuration
@@ -529,17 +548,6 @@ class EPKB_Upgrades {
 		}
 	}
 
-	private static function upgrade_to_v11_0_1( &$kb_config ) {
-		if ( isset( $kb_config['ml_faqs_kb_id'] ) ) {
-			$ml_faqs_kb_id = $kb_config['ml_faqs_kb_id'];
-			EPKB_Utilities::save_kb_option( $kb_config['id'], EPKB_ML_FAQs::FAQS_KB_ID, $ml_faqs_kb_id );
-		}
-		if ( isset( $kb_config['ml_faqs_category_ids'] ) ) {
-			$faqs_category_ids = explode( ',', $kb_config['ml_faqs_category_ids'] );
-			EPKB_Utilities::save_kb_option( $kb_config['id'], EPKB_ML_FAQs::FAQS_CATEGORY_IDS, $faqs_category_ids );
-		}
-	}
-
 	/**
 	 * Function for major updates
 	 *
@@ -551,7 +559,7 @@ class EPKB_Upgrades {
 		$new_version = empty( $args['new_version'] ) ? $current_version : $args['new_version'];
 
 		// versions x.y0.z are major releases
-		if ( ! preg_match( '/.*\.\d0\..*/', $new_version ) ) {
+		if ( ! preg_match( '/^\d+\.\d{1,}11\.\d+$/', $new_version ) ) {
 			return;
 		}
 

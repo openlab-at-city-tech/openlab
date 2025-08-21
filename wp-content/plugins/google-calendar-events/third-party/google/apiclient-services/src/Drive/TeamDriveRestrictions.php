@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -112,4 +111,4 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(TeamDriveRestrictions::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_TeamDriveRestrictions');
+class_alias(TeamDriveRestrictions::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDriveRestrictions');

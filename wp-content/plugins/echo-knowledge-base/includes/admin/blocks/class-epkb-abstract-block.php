@@ -6,75 +6,80 @@ abstract class EPKB_Abstract_Block {
 	const EPKB_BLOCK_CATEGORY = 'echo-knowledge-base';
 	const EPKB_BLOCK_CATEGORY_ICON = 'welcome-learn-more';  // not currently used by WordPress
 
+	const EPKB_KB_BLOCK_PAGE_NAMESPACE = 'echo-knowledge-base';
+	const EPKB_KB_BLOCK_PAGE_TEMPLATE = 'kb-block-page-template';
+
 	// each block should override the properties below
 	protected $block_name = '';
 	protected $block_var_name = '';
+	protected $keywords = array();	// is internally wrapped into _x() - see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#internationalization
+	protected $has_rtl_css = false;
 
-	public function __construct() {
-		add_action( 'init', array( $this, 'initialize' ) );
-		add_filter( 'block_type_metadata', array( $this, 'inject_attributes_custom_specs' ), 10, 1 );
+	public function __construct( $init_hooks = true ) {
+
+		// when insert blocks programmatically we need to utilize non-static methods of the block classes, but we do not need hooks for this
+		if ( ! $init_hooks ) {
+			return;
+		}
+
+		add_action( 'init', array( $this, 'register_block_type' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'register_block_editor_assets' ) ); // Backend
-		add_filter( 'kb_' . $this->block_var_name . '_block_config', array( $this, 'filter_block_config_if_exists' ), 10, 2 );
-		add_filter( 'get_block_templates', array( $this, 'filter_block_templates_by_post_type' ), 10, 3 );
+
+		// for Search blocks (KB core and AS.EA) we need to retrieve the block config in AJAX handlers - this filter is applied to get relevant configuration for each block in such cases
+		add_filter( 'kb_' . $this->block_var_name . '_block_config', array( $this, 'filter_block_config_if_exists' ), 10, 2 );  // e.g. kb_advanced_search_block_config
 	}
 
-	public function initialize() {
+	public function register_block_type() {
 
 		if ( empty( $this->block_name ) ) {
 			return;
 		}
 
-		$this->register_block_category();
+		$name = $this->block_name;
 
-		$this->register_block_type();
-
-		self::add_kb_block_page_template_if_missing();
-	}
-
-	protected function register_block_category() {
-		// block_categories_all is a replacement for block_categories filter from WP v5.8
-		if ( version_compare( get_bloginfo( 'version' ), '5.8', '>=' ) && class_exists( 'WP_Block_Editor_Context' ) ) {
-			add_filter( 'block_categories_all', array( $this, 'add_block_category' ), 10, 2 );
-		} else {
-			add_filter( 'block_categories', array( $this, 'add_block_category' ), 10, 2 );
-		}
-	}
-
-	/**
-	 * Register block editor assets
-	 * @return void
-	 */
-	function register_block_editor_assets() {
-		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-
-		// PER BLOCK: register block script for editor ( Enqueued via {name}-block.json editorScript )
-		if ( ! wp_script_is( $this->get_block_editor_script_handle(), 'registered' ) ) {
-
-			// use 'include' to have warning instead of generating PHP error and make the plugin not working due to the soft issue - the block can be not rendered, but the rest of the code (or blocks) will be still working
-			$block_asset = include_once(  Echo_Knowledge_Base::$plugin_dir . 'includes/admin/blocks//block.asset.php' );
-			$block_asset = empty( $block_asset ) || ! is_array( $block_asset ) ? array( 'dependencies' => array() ) : $block_asset;
-
-			wp_register_script( $this->get_block_editor_script_handle(), Echo_Knowledge_Base::$plugin_url . 'js/' . $this->block_name . '-block' . $suffix . '.js', $block_asset['dependencies'], Echo_Knowledge_Base::$version );
-
-			// used by JS to display input fields for the block edit screen. It is enqueued in the editor only.
-			$block_ui_config = $this->get_block_ui_config();
-			wp_add_inline_script( $this->get_block_editor_script_handle(), 'const epkb_' . $this->block_var_name . '_block_ui_config = ' . wp_json_encode( $block_ui_config, ENT_QUOTES ) . ';', 'before' );
+		if ( WP_Block_Type_Registry::get_instance()->is_registered( 'echo-knowledge-base/' . $name ) ) {
+			return;
 		}
 
-		// register styles if not already registered ( Enqueued via {name}-block.json editorStyle )
-		if ( ! wp_style_is( $this->get_block_editor_styles_handle(), 'registered' ) ) {
-			wp_register_style( $this->get_block_editor_styles_handle(),Echo_Knowledge_Base::$plugin_url . 'css/block-editor' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+		if ( ! self::is_block_available() ) {
+			return;
 		}
-	}
 
-	protected function register_block_type() {
+		// if block provides RTL styles RTL always specify RTL handle on block registration - it is too earlier to use is_rtl() on 'init' hook; the RTL handle will be ignored if corresponding CSS file is not registered
+		$block_public_style_handles = [ $this->get_block_public_styles_handle() ];
+		if ( $this->has_rtl_css ) {
+			$block_public_style_handles[] = $this->get_block_public_styles_handle() . '-rtl';
+		}
+
+		$block_title = $this->block_title;
+		if ( EPKB_Utilities::is_advanced_search_enabled() && $this->block_name == 'search' ) {
+			$block_title = esc_html__( 'KB Basic Search', 'echo-knowledge-base' );
+		}
+
 		register_block_type(
-			Echo_Knowledge_Base::$plugin_dir . "includes/admin/blocks/{$this->block_name}/{$this->block_name}-block.json",
-			array(
+			'echo-knowledge-base/' . $name,
+			[
+				'api_version' => 3,
+				'name' => 'echo-knowledge-base/' . $name,
+				'title' => esc_html__( $block_title, 'echo-knowledge-base' ),
+				'category' => 'echo-knowledge-base',
+				'icon' => $this->icon,
+				'description' => '',
+				'keywords' => $this->keywords,	// is internally wrapped into _x() - see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#internationalization
+				'attributes' => $this->get_attribute_types_and_defaults(),
+				'supports' => ['html' => false, 'align '=> true, 'reusable' => false, 'customClassName' => false ],
+				'editor_script_handles' => [ $this->get_the_block_script_handle_for_editor_only() ],
+				'script_handles' => [ $this->get_block_public_scripts_handle() ],
+				'editor_style_handles' => ['echo-knowledge-base-block-editor'],
+				'style_handles' => $block_public_style_handles,
 				'render_callback' => array( $this, 'render_block' ),
-				'style' => 'epkb-' . $this->get_block_public_styles_handle(),	// TODO future: for RTL specify RTL slug as main here and the LTR as its dependency during registration
-				'script' => 'epkb-public-scripts'
-			)
+				'style' => $block_public_style_handles,
+				'script' => $this->get_block_public_scripts_handle(),
+				'example' => array(
+					'viewportWidth' => 1200,
+					'attributes' => array(),
+				),
+			]
 		);
 	}
 
@@ -101,18 +106,16 @@ abstract class EPKB_Abstract_Block {
 		$block_attributes = $this->add_internal_kb_settings( $block_attributes );
 
 		// do not display Main Page of Archived KB
-		if ( $block_attributes['kb_id'] !== EPKB_KB_Config_DB::DEFAULT_KB_ID && EPKB_Core_Utilities::is_kb_archived( $block_attributes['status'] ) ) {
+		if ( $block_kb_id !== EPKB_KB_Config_DB::DEFAULT_KB_ID && EPKB_Core_Utilities::is_kb_archived( $block_attributes['status'] ) ) {
 			return esc_html__( 'This knowledge base was archived.', 'echo-knowledge-base' );
 		}
 
 		// apply defaults to missing attributes in $block_attributes
-		foreach( $this->get_block_attributes_defaults() as $setting_name => $default ) {
-			$block_attributes[ $setting_name ] = isset( $block_attributes[ $setting_name ] ) ? $block_attributes[ $setting_name ] : $default;
+		foreach( $this->get_block_attributes_defaults() as $block_setting_name => $default ) {
+			$block_attributes[ $block_setting_name ] = isset( $block_attributes[ $block_setting_name ] ) ? $block_attributes[ $block_setting_name ] : $default;
 		}
 
 		$custom_css_class_escaped = empty( $block_attributes['custom_css_class'] ) ? '' : ' ' . esc_attr( $block_attributes['custom_css_class'] );
-
-		/* TODO: decide either remove this or add a setting to place this only for one block wrap as it should indicate the main content container: role="main" aria-labelledby="epkb-modular-main-page-container" */
 
 		ob_start(); ?>
 
@@ -126,36 +129,12 @@ abstract class EPKB_Abstract_Block {
 
 		// editor styles - in editor preview render inline CSS into dedicated style tag in the block container to update it with the block HTML
 		if ( $is_editor_preview ) {	?>
-			<style><?php echo $this->get_this_block_inline_styles( $block_attributes ); ?></style>	<?php
+			<style><?php echo $this->get_block_inline_styles( $block_attributes ); ?></style>	<?php
 			$block_font_slugs = self::register_block_fonts( $block_attributes );
-			self::print_block_fonts( $block_font_slugs );
+			EPKB_Blocks_Settings::print_block_fonts( $block_font_slugs );
 		}
 
 		return ob_get_clean();
-	}
-
-	/**
-	 * Register product related block categories.
-	 *
-	 * @param array[] $block_categories Array of categories for block types.
-	 * @param WP_Block_Editor_Context $block_editor_context The current block editor context.
-	 */
-	public function add_block_category( $block_categories, $block_editor_context ) {
-
-		// ensure the category is added only once (in case of child classes)
-		if ( in_array( self::EPKB_BLOCK_CATEGORY, array_column( $block_categories, 'slug' ) ) ) {
-			return $block_categories;
-		}
-
-		array_unshift( $block_categories,
-			array(
-				'slug' => self::EPKB_BLOCK_CATEGORY,
-				'title' => __( 'Knowledge Base', 'echo-knowledge-base' ),
-				'icon' => self::EPKB_BLOCK_CATEGORY_ICON,
-			)
-		);
-
-		return $block_categories;
 	}
 
 	/**
@@ -164,6 +143,19 @@ abstract class EPKB_Abstract_Block {
 	 */
 	public function register_block_assets() {
 		global $post;
+
+		// allow to register block assets only for 'page' post type
+		if ( empty( $post ) || $post->post_type != 'page' ) {
+			return;
+		}
+
+		// register block assets only if either in the editor (backend) or the post is not empty AND has KB blocks (frontend)
+		// (otherwise non-block Themes which support blocks enqueue KB block styles on every page regardless of KB block presence)
+		//		- edit action detects the editor view for existing pages
+		//		- is_admin() detects the editor for new page creation
+		if ( EPKB_Utilities::post( 'action' ) != 'edit' && ! is_admin() && ( empty( $post ) || ! EPKB_Block_Utilities::content_has_the_kb_block( $post->post_content, $this->block_name ) ) ) {
+			return;
+		}
 
 		// retrieve attributes for the current block
 		$block_attributes = $this->get_parsed_block_attributes_or_defaults( $post );
@@ -174,20 +166,8 @@ abstract class EPKB_Abstract_Block {
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		// core KB JS - enqueued via register_block_type()
-		if ( ! wp_script_is( 'epkb-public-scripts', 'registered' ) ) {
-			wp_register_script( 'epkb-public-scripts', Echo_Knowledge_Base::$plugin_url . 'js/public-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
-			$epkb_vars = array(
-				'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
-				'msg_try_again' => esc_html__( 'Please try again later.', 'echo-knowledge-base' ),
-				'error_occurred' => esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (1936)',
-				'unknown_error' => esc_html__( 'Unknown error', 'echo-knowledge-base' ) . ' (1247)',
-				'reload_try_again' => esc_html__( 'Please reload the page and try again.', 'echo-knowledge-base' ),
-				'save_config' => esc_html__( 'Saving configuration', 'echo-knowledge-base' ),
-				'input_required' => esc_html__( 'Input is required', 'echo-knowledge-base' ),
-				'nonce' => wp_create_nonce( "_wpnonce_epkb_ajax_action" ),
-				'creating_demo_data' => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' )
-			);
-			wp_localize_script( 'epkb-public-scripts', 'epkb_vars', $epkb_vars );
+		if ( ! wp_script_is( $this->get_block_public_scripts_handle(), 'registered' ) ) {
+			$this->register_block_public_scripts( $suffix );
 		}
 
 		// register common public styles and scripts - enqueued as a dependency of main block style
@@ -196,271 +176,72 @@ abstract class EPKB_Abstract_Block {
 		}
 
 		// PER BLOCK: public styles and scripts - enqueued via register_block_type()
-		if ( ! wp_style_is( 'epkb-' . $this->get_block_public_styles_handle(), 'registered' ) ) {
+		if ( ! wp_style_is( $this->get_block_public_styles_handle(), 'registered' ) ) {
 
 			// main styles dependencies
 			$block_styles_dependencies = array_merge( array(  'epkb-icon-fonts' ), self::register_block_fonts( $block_attributes ) );
 
 			// register main styles for current block
-			wp_register_style( 'epkb-' . $this->get_block_public_styles_handle(), Echo_Knowledge_Base::$plugin_url . 'css/' . $this->get_block_public_styles_handle() . $suffix . '.css', $block_styles_dependencies, Echo_Knowledge_Base::$version );
+			$this->register_block_public_styles( $suffix, $block_styles_dependencies );
 
 			// register inline styles for current block
-			wp_add_inline_style( 'epkb-' . $this->get_block_public_styles_handle(), EPKB_Utilities::minify_css( $this->get_this_block_inline_styles( $block_attributes ) ) );
+			wp_add_inline_style( $this->get_block_public_styles_handle(), EPKB_Utilities::minify_css( $this->get_block_inline_styles( $block_attributes ) ) );
 
-			// TODO future: add RTL files - use RTL slug as main slug and LTR slug as its dependency; then specify the RTL slug inside register_block_type() as main slug
-			/*if ( is_rtl() ) {
-				wp_register_style( 'epkb-' . $this->get_block_public_styles_handle() . '-rtl', Echo_Knowledge_Base::$plugin_url . 'css/' . $this->get_block_public_styles_handle() . '-rtl' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
-			}*/
-		}
-	}
-
-	/**
-	 * Modify global block definitions, if required and injects fully-fleshed attributes
-	 */
-	public function inject_attributes_custom_specs( array $meta_data ) {
-
-		if ( self::EPKB_BLOCK_NAMESPACE . '/' . $this->block_name === $meta_data['name'] ) {
-
-			// get attribute specifications for this block
-			$block_json_attributes = $this->get_block_json_attributes();
-			$block_config_defaults = $this->get_block_config_defaults();
-
-			$kb_config_defaults = EPKB_KB_Config_Specs::get_default_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID );
-
-			foreach ( $block_json_attributes as $block_setting_name => $block_spec ) {
-
-				// allow block config to set default value instead of KB config
-				if ( isset( $block_config_defaults[ $block_setting_name ] ) ) {
-
-					// typography field
-					if ( is_array( $block_config_defaults[ $block_setting_name ] ) ) {
-						$block_json_attributes[ $block_setting_name ]['default'] = array(
-							'font_family' => $block_config_defaults[ $block_setting_name ]['font_family'],
-							'font_size' => $block_config_defaults[ $block_setting_name ]['font_size'],
-							'font_appearance' => $block_config_defaults[ $block_setting_name ]['font_appearance'],
-						);
-					}
-
-					$block_json_attributes[ $block_setting_name ]['default'] = $block_config_defaults[ $block_setting_name ];
-					continue;
-				}
-
-				$block_json_attributes[ $block_setting_name ]['default'] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $kb_config_defaults[ $block_setting_name ] : '';
-			}
-
-			$meta_data['attributes'] = $block_json_attributes;
-		}
-
-		// version of all the blocks should follow the version of the plugin
-		$meta_data['version'] = Echo_Knowledge_Base::$version;
-
-		return $meta_data;
-	}
-
-	/**
-	 * Add default values from KB configuration to the block settings
-	 * @return array
-	 */
-	private function get_block_attributes_defaults() {
-		$kb_config_defaults = EPKB_KB_Config_Specs::get_default_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID );
-		$block_config_defaults = $this->get_block_config_defaults();
-		$block_attributes_defaults = array();
-		foreach ( $this->get_block_json_attributes() as $setting_name => $spec ) {
-
-			// allow block config to set default value instead of KB config
-			if ( isset( $block_config_defaults[ $setting_name ] ) ) {
-				$block_attributes_defaults[ $setting_name ] = $block_config_defaults[ $setting_name ];
-				continue;
-			}
-
-			$block_attributes_defaults[ $setting_name ] = isset( $kb_config_defaults[ $setting_name ] ) ? $kb_config_defaults[ $setting_name ] : '';
-		}
-
-		return $block_attributes_defaults;
-	}
-
-	/**
-	 * Return only those block config settings which have default value
-	 * @return array
-	 */
-	private function get_block_config_defaults() {
-		$block_ui_config = $this->get_this_block_ui_config();
-		$block_config_defaults = array();
-
-		foreach ( $block_ui_config as $tab_name => $tab_config ) {
-			foreach ( $tab_config['groups'] as $group_name => $group_config ) {
-				foreach ( $group_config['fields'] as $field_name => $field_specs ) {
-
-					// combined fields
-					if ( isset( $field_specs['combined_settings'] ) ) {
-						foreach ( $field_specs['combined_settings'] as $setting_name => $setting_specs ) {
-
-							// allow the default value to be empty, but continue only if it is set
-							if ( ! isset( $setting_specs['default'] ) ) {
-								continue;
-							}
-
-							$block_config_defaults[ $setting_name ] = $setting_specs['default'];
-						}
-						continue;
-					}
-
-					// typography fields
-					if ( $field_specs['setting_type'] == 'typography_controls' ) {
-						$block_config_defaults[ $field_name ] = array(
-							'font_family' => $field_specs['controls']['font_family']['default'],
-							'font_size' => $field_specs['controls']['font_size']['default'],
-							'font_appearance' => $field_specs['controls']['font_appearance']['default'],
-						);
-						continue;
-					}
-
-					// allow the default value to be empty, but continue only if it is set
-					if ( ! isset( $field_specs['default'] ) ) {
-						continue;
-					}
-
-					$block_config_defaults[ $field_name ] = $field_specs['default'];
-				}
+			// optional RTL styles - used only if the current block provides RTL styles
+			if ( $this->has_rtl_css && is_rtl() ) {
+				wp_register_style( $this->get_block_public_styles_handle() . '-rtl', Echo_Knowledge_Base::$plugin_url . 'css/' . $this->block_name . '-block' . '-rtl' . $suffix . '.css', array( $this->get_block_public_styles_handle() ), Echo_Knowledge_Base::$version );
 			}
 		}
 
-		return $block_config_defaults;
+		return;
 	}
 
 	/**
-	 * Return block configuration if the block is present in the post with given ID
-	 * @param $kb_config
-	 * @param $post_id
-	 * @return array|string[]
+	 * Register block assets which used for editor only
+	 * @return void
 	 */
-	public function filter_block_config_if_exists( $kb_config, $post_id ) {
+	public function register_block_editor_assets() {
+		global $post;
 
-		if ( empty( $post_id ) ) {
-			return $kb_config;
+		// allow to register block assets only for 'page' post type
+		if ( empty( $post->post_type ) || $post->post_type !== 'page' ) {
+			return;
 		}
 
-		$post = get_post( $post_id );
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		$block_attributes = $this->get_parsed_block_attributes_or_defaults( $post );
-		return empty( $block_attributes ) ? $kb_config : $this->add_internal_kb_settings( $block_attributes );
-	}
+		// PER BLOCK: register block script for editor ( Enqueued via register_block_type() by handle )
+		if ( ! wp_script_is( $this->get_the_block_script_handle_for_editor_only(), 'registered' ) ) {
 
-	/**
-	 * Add to block attributes the internal KB settings which are required for compatibility with non-block KB functionality but are not using in KB blocks directly
-	 * @param $block_attributes
-	 * @return mixed
-	 */
-	private function add_internal_kb_settings( $block_attributes ) {
+			// use 'include' to have warning instead of generating PHP error and make the plugin not working due to the soft issue - the block can be not rendered, but the rest of the code (or blocks) will be still working
+			$block_asset = include_once(  Echo_Knowledge_Base::$plugin_dir . 'includes/admin/blocks/block.asset.php' );
+			$shared_dependencies = array( 'echo-knowledge-base-block-editor-shared' );
+			$dependencies = empty( $block_asset ) || ! is_array( $block_asset ) ? $shared_dependencies : array_merge( $shared_dependencies, $block_asset['dependencies'] );
 
-		// ensure the 'kb_id' is set - empty 'kb_id' in stored block attributes means the block has default value
-		$block_attributes['kb_id'] = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int)$block_attributes['kb_id'];
+			wp_register_script( $this->get_the_block_script_handle_for_editor_only(), Echo_Knowledge_Base::$plugin_url . 'js/' . $this->block_name . '-block' . $suffix . '.js', $dependencies, Echo_Knowledge_Base::$version );
 
-		// retrieve selected KB configuration
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $block_attributes['kb_id'] );
-
-		$block_attributes['id'] = $kb_config['id'];
-		$block_attributes['status'] = $kb_config['status'];
-		$block_attributes['modular_main_page_toggle'] = $kb_config['modular_main_page_toggle'];
-		$block_attributes['show_articles_before_categories'] = $kb_config['show_articles_before_categories'];
-		$block_attributes['wpml_is_enabled'] = $kb_config['wpml_is_enabled'];
-		$block_attributes['kb_main_pages'] = $kb_config['kb_main_pages'];
-
-		// let blocks to hard-code value of certain KB settings regardless of actual KB config value
-		$block_attributes = $this->add_this_block_required_kb_attributes( $block_attributes );
-
-		return $block_attributes;
-	}
-
-	private static function get_block_editor_styles_handle() {
-		return self::EPKB_BLOCK_NAMESPACE . '-block-editor';
-	}
-
-	private function get_block_editor_script_handle() {
-		return self::EPKB_BLOCK_NAMESPACE . '-' . $this->block_name . '-block';
-	}
-
-	private function get_block_public_styles_handle() {
-		return $this->block_name . '-block';
-	}
-
-	/**
-	 * Retrieve current block settings if the block is present in the current post and add missing settings with default values, otherwise return default block settings
-	 * @param $post
-	 * @return array|string[]
-	 */
-	private function get_parsed_block_attributes_or_defaults( $post ) {
-
-		$block_attributes = EPKB_Block_Utilities::parse_block_attributes_from_post( $post, $this->block_name );
-
-		// return empty array if the block was not found in the given post
-		if ( $block_attributes === false ) {
-			$block_attributes = [];
+			// used by JS to display input fields for the block edit screen. It is enqueued in the editor only.
+			$block_ui_config = $this->get_block_ui_config();
+			$block_ui_config['settings']['kb_block_page_template'] = self::EPKB_KB_BLOCK_PAGE_TEMPLATE;
+			wp_add_inline_script( $this->get_the_block_script_handle_for_editor_only(), 'const epkb_' . $this->block_var_name . '_block_ui_config = ' . wp_json_encode( $block_ui_config, ENT_QUOTES ) . ';', 'before' );
 		}
 
-		// if the current block has default config, then its attributes can be empty
-		if ( empty( $block_attributes ) || ! is_array( $block_attributes ) ) {
-			$block_attributes = [];
+		// register styles if not already registered ( Enqueued via register_block_type() by handle )
+		if ( ! wp_style_is( $this->get_block_editor_styles_handle(), 'registered' ) ) {
+
+			// register block editor script (is common for all KB blocks)
+			$epkb_block_editor_vars = array(
+				'font_families' => array_combine( EPKB_Typography::get_google_fonts_family_list(), EPKB_Typography::get_google_fonts_family_list() ),
+			);
+			wp_register_script( 'echo-knowledge-base-block-editor-shared', false );
+			wp_localize_script( 'echo-knowledge-base-block-editor-shared', 'epkb_block_editor_vars', $epkb_block_editor_vars );
+
+			// block editor UI
+			wp_register_style( $this->get_block_editor_styles_handle(),Echo_Knowledge_Base::$plugin_url . 'css/block-editor' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+
+			// hide KB block page template in the available templates list by default - when user adds layout block, then dedicated script will remove the inline style and the template will be shown
+			wp_add_inline_style( $this->get_block_editor_styles_handle(), EPKB_Utilities::minify_css( '.block-editor-block-patterns-list .block-editor-block-patterns-list__list-item:has(#kb-block-page-template){display:none!important;}' ) );
 		}
-
-		// apply defaults to missing attributes in $block_attributes
-		foreach( $this->get_block_attributes_defaults() as $setting_name => $default ) {
-			$block_attributes[ $setting_name ] = isset( $block_attributes[ $setting_name ] ) ? $block_attributes[ $setting_name ] : $default;
-		}
-
-		// blocks use 'kb_id' key while rest of KB code is using 'id' key - ensure the 'id' is updated before passing it to non-block functions
-		$block_attributes['id'] = $block_attributes['kb_id'];
-
-		return $block_attributes;
-	}
-
-	/**
-	 * Return block attributes which are specified in the block JSON configuration
-	 * @return array
-	 */
-	protected function get_block_json_attributes() {
-
-		// get block configuration defined in the block JSON file
-		$file_contents = json_decode(
-			file_get_contents( Echo_Knowledge_Base::$plugin_dir . "includes/admin/blocks/{$this->block_name}/{$this->block_name}-block.json" ),
-			true
-		);
-
-		return $file_contents['attributes'];
-	}
-
-	private function get_block_ui_config() {
-
-		$block_ui_config = $this->get_this_block_ui_config();
-		$kb_config_specs = EPKB_KB_Config_Specs::get_fields_specification( EPKB_KB_Config_DB::DEFAULT_KB_ID );
-
-		foreach ( $block_ui_config as $tab_name => $tab_config ) {
-			foreach ( $tab_config['groups'] as $group_name => $group_config ) {
-				foreach ( $group_config['fields'] as $field_name => $field_specs ) {
-
-					// combined field
-					if ( isset( $field_specs['combined_settings'] ) ) {
-						foreach ( $field_specs['combined_settings'] as $setting_name => $setting_specs ) {
-							$block_ui_config[$tab_name]['groups'][ $group_name ]['fields'][ $field_name ]['combined_settings'][ $setting_name ] = array_merge( $kb_config_specs[ $setting_name ], $setting_specs );
-						}
-						continue;
-					}
-
-					// typography fields
-					if ( isset( $field_specs['typography_controls'] ) ) {
-						continue;
-					}
-
-					if ( empty( $kb_config_specs[ $field_name ] ) ) {
-						continue;
-					}
-
-					$block_ui_config[$tab_name]['groups'][ $group_name ]['fields'][ $field_name ] = array_merge( $kb_config_specs[ $field_name ], $field_specs );
-				}
-			}
-		}
-
-		return $block_ui_config;
 	}
 
 	/**
@@ -502,403 +283,439 @@ abstract class EPKB_Abstract_Block {
 	}
 
 	/**
-	 * Print block fonts - use common KB slugs to avoid duplicated fonts loading
-	 * @param $block_font_slugs
+	 * Modify global block definitions, if required and injects fully-fleshed attributes
+	 */
+	private function get_attribute_types_and_defaults() {
+
+		$kb_config_defaults = EPKB_KB_Config_Specs::get_default_all_kb_config();
+		$block_config_defaults = $this->get_block_config_defaults();
+		$block_attributes = epkb_get_block_attributes( $this->block_name );
+		foreach ( $block_attributes as $block_setting_name => $block_spec ) {
+
+			// allow block config to set default value instead of KB config
+			if ( isset( $block_config_defaults[ $block_setting_name ] ) ) {
+
+				// typography field
+				if ( is_array( $block_config_defaults[ $block_setting_name ] ) && isset( $block_config_defaults[ $block_setting_name ]['font_family'] ) ) {
+					$block_attributes[ $block_setting_name ]['default'] = array(
+						'font_family' => $block_config_defaults[ $block_setting_name ]['font_family'],
+						'font_size' => $block_config_defaults[ $block_setting_name ]['font_size'],
+						'font_appearance' => $block_config_defaults[ $block_setting_name ]['font_appearance'],
+					);
+				}
+
+				$block_attributes[ $block_setting_name ]['default'] = $block_config_defaults[ $block_setting_name ];
+				continue;
+			}
+
+			$block_attributes[ $block_setting_name ]['default'] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $kb_config_defaults[ $block_setting_name ] : '';
+
+			// ensure attributes type to avoid type errors on attributes validation by WordPress blocks core
+			if ( $block_spec['type'] === 'string' ) {
+				$block_attributes[ $block_setting_name ]['default'] = strval( $block_attributes[ $block_setting_name ]['default'] );
+			}
+			if ( $block_spec['type'] === 'number' ) {
+				$block_attributes[ $block_setting_name ]['default'] = intval( $block_attributes[ $block_setting_name ]['default'] );
+			}
+		}
+
+		return $block_attributes;
+	}
+
+	/**
+	 * Add default values from KB configuration to the block settings
+	 * @return array
+	 */
+	public function get_block_attributes_defaults() {
+
+		$kb_config_defaults = EPKB_KB_Config_Specs::get_default_all_kb_config();
+		$block_config_defaults = $this->get_block_config_defaults();
+		$block_attributes = epkb_get_block_attributes( $this->block_name );
+		$block_attributes_defaults = array();
+		foreach ( $block_attributes as $block_setting_name => $block_spec ) {
+
+			// allow block config to set default value instead of KB config
+			if ( isset( $block_config_defaults[ $block_setting_name ] ) ) {
+				$block_attributes_defaults[ $block_setting_name ] = $block_config_defaults[ $block_setting_name ];
+				continue;
+			}
+
+			$block_attributes_defaults[ $block_setting_name ] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $kb_config_defaults[ $block_setting_name ] : '';
+		}
+
+		return $block_attributes_defaults;
+	}
+
+	/**
+	 * Return only those block config settings which have default value
+	 * @return array
+	 */
+	private function get_block_config_defaults() {
+		$block_ui_config = $this->get_this_block_ui_config();
+		$block_config_defaults = array();
+
+		foreach ( $block_ui_config as $tab_name => $tab_config ) {
+			foreach ( $tab_config['groups'] as $group_name => $group_config ) {
+				foreach ( $group_config['fields'] as $field_name => $field_specs ) {
+
+					// combined fields
+					if ( isset( $field_specs['combined_settings'] ) ) {
+						foreach ( $field_specs['combined_settings'] as $block_setting_name => $setting_specs ) {
+
+							// allow the default value to be empty, but continue only if it is set
+							if ( ! isset( $setting_specs['default'] ) ) {
+								continue;
+							}
+
+							$block_config_defaults[ $block_setting_name ] = $setting_specs['default'];
+						}
+						continue;
+					}
+
+					// typography fields
+					if ( $field_specs['setting_type'] == 'typography_controls' ) {
+						$block_config_defaults[ $field_name ] = array(
+							'font_family' => $field_specs['controls']['font_family']['default'],
+							'font_size' => $field_specs['controls']['font_size']['default'],
+							'font_appearance' => $field_specs['controls']['font_appearance']['default'],
+						);
+						continue;
+					}
+
+					// allow the default value to be empty, but continue only if it is set
+					if ( ! isset( $field_specs['default'] ) ) {
+						continue;
+					}
+
+					$block_config_defaults[ $field_name ] = $field_specs['default'];
+				}
+			}
+		}
+
+		return $block_config_defaults;
+	}
+
+	/**
+	 * Return block configuration if the block is present in the post with given ID
+	 * @param $kb_config
+	 * @param $post_id
+	 * @return array|string[]
+	 */
+	public function filter_block_config_if_exists( $kb_config, $post_id ) {
+
+		if ( empty( $post_id ) ) {
+			return $kb_config;
+		}
+
+		$post = get_post( $post_id );
+		if ( empty( $post ) ) {
+			return $kb_config;
+		}
+
+		$block_attributes = $this->get_parsed_block_attributes_or_defaults( $post );
+
+		return empty( $block_attributes ) ? $kb_config : array_merge( $kb_config, $this->add_internal_kb_settings( $block_attributes ) );
+	}
+
+	/**
+	 * Update special settings
+	 * @param $post_id
+	 * @param $post
+	 * @param $update
 	 * @return void
 	 */
-	private static function print_block_fonts( $block_font_slugs ) {
+	public function update_kb_setting_on_save_post( $post_id, $post, $update ) {
 
-		foreach ( $block_font_slugs as $one_font_slug ) {
-
-			// do nothing if slug is empty, or the font is not registered yet, or the font is already enqueued
-			if ( empty( $one_font_slug ) || ! wp_style_is( $one_font_slug, 'registered' ) || wp_style_is( $one_font_slug ) ) {
-				continue;
-			}
-
-			wp_print_styles( $one_font_slug );
-		}
-	}
-
-	/**
-	 * Return 'kb_id' setting for each block
-	 * @return array
-	 */
-	protected static function get_kb_id_setting() {
-
-		$kb_id_setting = array(
-			'setting_type' => 'custom_dropdown',
-			'default' => EPKB_KB_Config_DB::DEFAULT_KB_ID,
-			'label' => __( 'Selected KB', 'echo-knowledge-base' ),
-			'options' => array(),
-		);
-
-		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
-		foreach ( $all_kb_configs as $one_kb_config ) {
-
-			$one_kb_id = $one_kb_config['id'];
-
-			// do not show archived KBs
-			if ( $one_kb_id !== EPKB_KB_Config_DB::DEFAULT_KB_ID && EPKB_Core_Utilities::is_kb_archived( $one_kb_config['status'] ) ) {
-				continue;
-			}
-
-			// do not render the KB into the dropdown if the current user does not have at least minimum required capability (covers KB Groups)
-			$required_capability = EPKB_Admin_UI_Access::get_contributor_capability( $one_kb_id );
-			if ( ! current_user_can( $required_capability ) ) {
-				continue;
-			}
-
-			// add current KB to the list
-			$kb_id_setting['options'][] = array(
-				'key' => (int)$one_kb_id,
-				'name' => $one_kb_config['kb_name'],
-				'style' => array(),
-			);
-		}
-
-		return $kb_id_setting;
-	}
-
-	/**
-	 * Return 'custom_css_class' setting for each block
-	 * @return array
-	 */
-	protected static function get_custom_css_class_setting() {
-		return array(
-			'label'	=> __( 'Additional CSS Class(es)', 'echo-knowledge-base' ),
-			'setting_type' => 'text',
-			'default' => '',
-			'description' => __( 'Separate multiple classes with spaces.', 'echo-knowledge-base' ),
-		);
-	}
-
-	/**
-	 * Return font family specs for Typography control
-	 * @return array
-	 */
-	protected static function get_typography_control_font_family() {
-		return array(
-			'label' => __( 'Font', 'echo-knowledge-base' ),
-			'default' => '',
-			'options' => array_combine( EPKB_Typography::get_google_fonts_family_list(), EPKB_Typography::get_google_fonts_family_list() ),
-		);
-	}
-
-	/**
-	 * Return font size specs for Typography control
-	 * @return array
-	 */
-	protected static function get_typography_control_font_size( $size_options, $default_size ) {
-
-		$font_size_control = array(
-			'label' => __( 'Size', 'echo-knowledge-base' ),
-			'default' => $default_size,
-			'units' => 'px',
-			'options' => [],
-		);
-
-		$all_size_options = array(
-			'small' => array(
-				'name' => __( 'Small', 'echo-knowledge-base' ),
-				'size' => 24,
-			),
-			'normal' => array(
-				'name' => __( 'Medium', 'echo-knowledge-base' ),
-				'size' => 36,
-			),
-			'big' => array(
-				'name' => __( 'Large', 'echo-knowledge-base' ),
-				'size' => 48,
-				'slug' => 'big',
-			),
-		);
-
-		foreach ( $size_options as $one_size_key => $one_size_value ) {
-			if ( empty( $all_size_options[ $one_size_key ] ) ) {
-				continue;
-			}
-			$font_size_control['options'][ $one_size_key ] = $all_size_options[ $one_size_key ];
-			$font_size_control['options'][ $one_size_key ]['size'] = $one_size_value;
-		}
-
-		return $font_size_control;
-	}
-
-	/**
-	 * Return font appearance specs for Typography control
-	 * @param $default_args
-	 * @return array
-	 */
-	protected static function get_typography_control_font_appearance( $default_args = array() ) {
-		$default_args = wp_parse_args( $default_args, array(
-			'fontWeight' => 400,
-			'fontStyle' => 'normal',
-		) );
-		return array(
-			'label' => __( 'Appearance', 'echo-knowledge-base' ),
-			'default' => 'default',
-			'options' => array(
-				'default' => array(
-					'name' => __( 'Default', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => $default_args['fontWeight'],
-						'fontStyle' => $default_args['fontStyle'],
-					),
-				),
-				'thin' => array(
-					'name' => __( 'Thin', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 100,
-						'fontStyle' => 'normal',
-					),
-				),
-				'extra_light' => array(
-					'name' => __( 'Extra Light', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 200,
-						'fontStyle' => 'normal',
-					),
-				),
-				'light' => array(
-					'name' => __( 'Light', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 300,
-						'fontStyle' => 'normal',
-					),
-				),
-				'regular' => array(
-					'name' => __( 'Regular', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 400,
-						'fontStyle' => 'normal',
-					),
-				),
-				'medium' => array(
-					'name' => __( 'Medium', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 500,
-						'fontStyle' => 'normal',
-					),
-				),
-				'semi_bold' => array(
-					'name' => __( 'Semi Bold', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 600,
-						'fontStyle' => 'normal',
-					),
-				),
-				'bold' => array(
-					'name' => __( 'Bold', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 700,
-						'fontStyle' => 'normal',
-					),
-				),
-				'extra_bold' => array(
-					'name' => __( 'Extra Bold', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 800,
-						'fontStyle' => 'normal',
-					),
-				),
-				'black' => array(
-					'name' => __( 'Black', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 900,
-						'fontStyle' => 'normal',
-					),
-				),
-				'thin_italic' => array(
-					'key' => 'thin_italic',
-					'name' => __( 'Thin Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 100,
-						'fontStyle' => 'italic',
-					),
-				),
-				'extra_light_italic' => array(
-					'name' => __( 'Extra Light Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 200,
-						'fontStyle' => 'italic',
-					),
-				),
-				'light_italic' => array(
-					'name' => __( 'Light Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 300,
-						'fontStyle' => 'italic',
-					),
-				),
-				'regular_italic' => array(
-					'name' => __( 'Regular Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 400,
-						'fontStyle' => 'italic',
-					),
-				),
-				'medium_italic' => array(
-					'name' => __( 'Medium Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 500,
-						'fontStyle' => 'italic',
-					),
-				),
-				'semi_bold_italic' => array(
-					'name' => __( 'Semi Bold Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 600,
-						'fontStyle' => 'italic',
-					),
-				),
-				'bold_italic' => array(
-					'name' => __( 'Bold Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 700,
-						'fontStyle' => 'italic',
-					),
-				),
-				'extra_bold_italic' => array(
-					'name' => __( 'Extra Bold Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 800,
-						'fontStyle' => 'italic',
-					),
-				),
-				'black_italic' => array(
-					'name' => __( 'Black Italic', 'echo-knowledge-base' ),
-					'style' => array(
-						'fontWeight' => 900,
-						'fontStyle' => 'italic',
-					),
-				),
-			),
-		);
-	}
-
-	/**
-	 * Return configuration array for message about KB block page template
-	 * @return array
-	 */
-	protected static function get_kb_block_template_mention() {
-		return array(
-			'setting_type' => 'section_description',
-			'description' => __( 'Consider to use KB Block Page Template for block Main Page.', 'echo-knowledge-base' ),
-			'link_text' => __( 'Learn More', 'echo-knowledge-base' ),
-			'link_url' => '#',	// TODO: update URL
-			'show_for_non_kb_template' => true,
-		);
-	}
-
-	protected static function get_font_appearance_weight( $key = 'default' ) {
-		$font_appearance_specs = self::get_typography_control_font_appearance();
-		return $font_appearance_specs['options'][ $key ]['style']['fontWeight'];
-	}
-
-	protected static function get_font_appearance_style( $key = 'default' ) {
-		$font_appearance_specs = self::get_typography_control_font_appearance();
-		return $font_appearance_specs['options'][ $key ]['style']['fontStyle'];
-	}
-
-	/**
-	 * Add KB block page template if missing
-	 * @return void
-	 */
-	private static function add_kb_block_page_template_if_missing() {
-
-		$kb_block_page_template_slug = 'kb-block-page-template';
-
-		// get current Theme slug
-		$theme = wp_get_theme();
-		$current_theme_slug = $theme->get_stylesheet();
-
-		// check if the template already exists for the current theme
-		$kb_block_page_template_id = $current_theme_slug . '//' . $kb_block_page_template_slug;
-		$existing_kb_block_template = get_block_template( $kb_block_page_template_id );
-
-		// do not continue if error returned on the template retrieval - better to not have the template added rather than create duplicates
-		if ( is_wp_error( $existing_kb_block_template ) ) {
-			EPKB_Logging::add_log( 'Failed to retrieve KB block page template.', $existing_kb_block_template );
+		// Verify nonce, permissions, and autosave to ensure security
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return;
 		}
 
-		// do nothing if the template already registered for the current Theme
-		if ( $existing_kb_block_template ) {
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
 
-		// try to retrieve existing template - the KB block page template may exist here but is not associated with the current Theme
-		$existing_kb_block_templates = get_posts( array(
-			'post_type'      => 'wp_template',
-			'name'           => $kb_block_page_template_slug,
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-		) );
-
-
-		// CASE: template is missing - create the template
-		if ( empty( $existing_kb_block_templates ) ) {
-
-			// define the content of the template
-			$template_content =
-				'<!-- wp:template-part {"slug":"header","area":"header","tagName":"header"} /-->
-				<!-- wp:post-content /-->
-				<!-- wp:template-part {"slug":"footer","area":"footer","tagName":"footer"} /-->';
-
-			// insert the custom template
-			$inserted_template_id = wp_insert_post( array(
-				'post_title'   => esc_html__( 'KB Block Page Template', 'echo-knowledge-base' ),
-				'post_excerpt' => esc_html__( 'The recommended template to use for creating the KB main page.', 'echo-knowledge-base' ),
-				'post_name'    => sanitize_title( $kb_block_page_template_slug ),
-				'post_content' => $template_content,
-				'post_status'  => 'publish',
-				'post_type'    => 'wp_template',
-				'tax_input'    => array(
-					'wp_theme' => array( $current_theme_slug ),
-				),
-				'meta_input' => array(
-					'wp_template_type'	=> 'custom',
-					'postTypes'			=> array( 'page' ),
-				),
-			), true );
-
-			if ( is_wp_error( $inserted_template_id ) ) {
-				EPKB_Logging::add_log( 'Failed to insert KB block page template.', $inserted_template_id );
-			}
-
+		// if block is not present in the post, then do nothing
+		$block_attributes = EPKB_Block_Utilities::parse_block_attributes_from_post( $post, $this->block_name );
+		if ( ! is_array( $block_attributes ) ) {
 			return;
 		}
 
-		// CASE: template exists - check if the template is associated with the current theme
-		$kb_block_page_template = reset( $existing_kb_block_templates );
-		$terms = wp_get_object_terms( $kb_block_page_template->ID, 'wp_theme', array( 'fields' => 'slugs' ) );
-		if ( ! in_array( $current_theme_slug, $terms, true ) ) {
-			wp_set_object_terms( $kb_block_page_template->ID, array_merge( $terms, array( $current_theme_slug ) ), 'wp_theme' );
+		$kb_id = isset( $block_attributes['kb_id'] ) ? $block_attributes['kb_id'] : EPKB_KB_Config_DB::DEFAULT_KB_ID;
+
+		// update search highlight for Advanced Search
+		if ( $this->block_name == 'advanced-search' && EPKB_Utilities::is_advanced_search_enabled() ) {
+			$text_highlight_enabled = isset( $block_attributes['advanced_search_text_highlight_enabled'] ) ? $block_attributes['advanced_search_text_highlight_enabled'] : 'on';
+			do_action( 'eckb_kb_config_save_value', $kb_id, 'advanced_search_text_highlight_enabled', $text_highlight_enabled );
+			return;
+		}
+
+		// for layout block need to update 'templates_for_kb' in the current KB configuration:
+		// - the KB Template toggle for the block Main Page in Settings UI tab of the admin page is hidden (since they are controlled by the layout block settings in Gutenberg Editor).
+		// - When user chooses KB Template or KB Custom Block Page template then we need to update the value in the KB config (e.g. not only the block attribute)
+		// - So this is to make all the rest functionality, which depends on the 'templates_for_kb' setting, to work correctly without a need to retrieve the layout block attributes form post content.
+		// Reference:
+		//    'kb_block_template_toggle' - internal temporary indicator of user intention to use KB Custom Block Template
+		//    'template_toggle' - used by JS when user toggles 'on' the kb_block_template_toggle' settings
+		if ( EPKB_Block_Utilities::is_block_theme() ) {
+			$templates_for_kb = isset( $block_attributes['kb_block_template_toggle'] ) && $block_attributes['kb_block_template_toggle'] == 'on' ? 'kb_templates' : 'current_theme_templates';
+		} else {
+			$templates_for_kb = isset( $block_attributes['templates_for_kb'] ) ? $block_attributes['templates_for_kb'] : 'kb_templates';
+		}
+
+		$updated_kb_config = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'templates_for_kb', $templates_for_kb );
+
+		// update icons if user chose another theme design
+		if ( isset( $block_attributes['theme_name'] ) && $block_attributes['theme_name'] != 'current' && is_array( $updated_kb_config ) ) {
+			$block_attributes = array_merge( $updated_kb_config, $block_attributes );
+			// if user selects Image theme then change font icons to image icons
+			EPKB_Core_Utilities::get_or_update_new_category_icons( $block_attributes, $block_attributes['theme_name'], true );
 		}
 	}
 
 	/**
-	 * Filter out KB block page template for non-page post type
-	 * @param $block_templates
-	 * @param $query
-	 * @param $template_type
+	 * Add to block attributes the internal KB settings which are required for compatibility with non-block KB functionality but are not using in KB blocks directly
+	 * @param $block_attributes
 	 * @return mixed
 	 */
-	public static function filter_block_templates_by_post_type( $block_templates, $query, $template_type ) {
+	private function add_internal_kb_settings( $block_attributes ) {
 
-		// only filter out the KB block page template if the post type is defined and is not page
-		if ( empty( $query['post_type'] ) || $query['post_type'] == 'page' ) {
-			return $block_templates;
+		// ensure the 'kb_id' is set - empty 'kb_id' in stored block attributes means the block has default value
+		$block_attributes['kb_id'] = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int)$block_attributes['kb_id'];
+
+		// retrieve selected KB configuration
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $block_attributes['kb_id'] );
+
+		// distinguish blocks for cache (article icon cache)
+		$block_attributes['block_name'] = $this->block_name;
+
+		$block_attributes['id'] = $kb_config['id'];
+		$block_attributes['status'] = $kb_config['status'];
+		$block_attributes['kb_main_pages'] = $kb_config['kb_main_pages'];
+		$block_attributes['first_plugin_version'] = $kb_config['first_plugin_version'];
+		$block_attributes['upgrade_plugin_version'] = $kb_config['upgrade_plugin_version'];
+		$block_attributes['modular_main_page_toggle'] = $kb_config['modular_main_page_toggle'];
+		$block_attributes['show_articles_before_categories'] = $this->block_name == 'sidebar-layout' ? $kb_config['sidebar_show_articles_before_categories'] : $kb_config['show_articles_before_categories'];
+		$block_attributes['wpml_is_enabled'] = $kb_config['wpml_is_enabled'];
+
+		// let blocks to hard-code value of certain KB settings regardless of actual KB config value
+		$block_attributes = $this->add_this_block_required_kb_attributes( $block_attributes );
+
+		return $block_attributes;
+	}
+
+	/**
+	 * Retrieve current block settings if the block is present in the current post and add missing settings with default values, otherwise return default block settings
+	 * @param $post
+	 * @return array|string[]
+	 */
+	private function get_parsed_block_attributes_or_defaults( $post ) {
+
+		$block_attributes = EPKB_Block_Utilities::parse_block_attributes_from_post( $post, $this->block_name );
+
+		// return empty array if the block was not found in the given post
+		if ( $block_attributes === false ) {
+			$block_attributes = [];
 		}
 
-		// filter out KB block page template for non-page post type
-		foreach ( $block_templates as $key => $template ) {
-			if ( isset( $template->slug ) && $template->slug === 'kb-block-page-template' ) {
-				unset( $block_templates[ $key ] );
+		// if the current block has default config, then its attributes can be empty
+		if ( empty( $block_attributes ) || ! is_array( $block_attributes ) ) {
+			$block_attributes = [];
+		}
+
+		// apply defaults to missing attributes in $block_attributes
+		foreach( $this->get_block_attributes_defaults() as $block_setting_name => $default ) {
+			$block_attributes[ $block_setting_name ] = isset( $block_attributes[ $block_setting_name ] ) ? $block_attributes[ $block_setting_name ] : $default;
+		}
+
+		// blocks use 'kb_id' key while rest of KB code is using 'id' key - ensure the 'id' is updated before passing it to non-block functions
+		$block_attributes['id'] = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int)$block_attributes['kb_id'];
+
+		return $block_attributes;
+	}
+
+	private function get_block_ui_config() {
+
+		$block_ui_config = $this->get_this_block_ui_config();
+		$kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+
+		foreach ( $block_ui_config as $tab_name => $tab_config ) {
+			foreach ( $tab_config['groups'] as $group_name => $group_config ) {
+				foreach ( $group_config['fields'] as $field_name => $field_specs ) {
+
+					// combined field
+					if ( isset( $field_specs['combined_settings'] ) ) {
+						foreach ( $field_specs['combined_settings'] as $block_setting_name => $setting_specs ) {
+							$block_ui_config[$tab_name]['groups'][ $group_name ]['fields'][ $field_name ]['combined_settings'][ $block_setting_name ] = array_merge( $kb_config_specs[ $block_setting_name ], $setting_specs );
+						}
+						continue;
+					}
+
+					// typography fields
+					if ( isset( $field_specs['typography_controls'] ) ) {
+						continue;
+					}
+
+					if ( empty( $kb_config_specs[ $field_name ] ) ) {
+						continue;
+					}
+
+					$block_ui_config[$tab_name]['groups'][ $group_name ]['fields'][ $field_name ] = array_merge( $kb_config_specs[ $field_name ], $field_specs );
+				}
 			}
 		}
 
-		return $block_templates;
+		return $block_ui_config;
+	}
+
+	/**
+	 * Return array where each element key is field name and value is specification
+	 * @return array
+	 */
+	protected function get_block_ui_specs() {
+		$block_ui_config = $this->get_this_block_ui_config();
+		$block_ui_specs = array();
+		foreach ( $block_ui_config as $tab_key => $tab_config ) {
+			foreach ( $tab_config['groups'] as $group_key => $group_config ) {
+				foreach ( $group_config['fields'] as $field_key => $field_specs ) {
+
+					// combined settings
+					if ( isset( $field_specs['combined_settings'] ) ) {
+						foreach ( $field_specs['combined_settings'] as $combined_field_name => $combined_field_specs ) {
+							$block_ui_specs[ $combined_field_name ] = $combined_field_specs;
+							$block_ui_specs[ $combined_field_name ]['setting_type'] = 'range';
+						}
+						continue;
+					}
+
+					// single setting
+					$block_ui_specs[ $field_key ] = $field_specs;
+				}
+			}
+		}
+		return $block_ui_specs;
+	}
+
+	/**
+	 * Block inline styles (common + block-dedicated)
+	 * @param $block_attributes
+	 * @return string
+	 */
+	private function get_block_inline_styles( $block_attributes ) {
+
+		// common block inline styles
+		$block_max_width_sanitized = $block_attributes['block_full_width_toggle'] == 'on' ? '100%' : intval( $block_attributes['block_max_width'] ) . 'px';
+		$output = '.eckb-kb-block .epkb-block-main-page-container .epkb-ml__row-' . $this->block_name . ' {
+			max-width: ' . $block_max_width_sanitized . ' ' . '!important;
+		}';
+
+		// dedicated block inline styles
+		$output .= $this->get_this_block_inline_styles( $block_attributes );
+
+		return $output;
+	}
+
+	private static function get_block_editor_styles_handle() {
+		return self::EPKB_BLOCK_NAMESPACE . '-block-editor';
+	}
+
+	private function get_the_block_script_handle_for_editor_only() {
+		return self::EPKB_BLOCK_NAMESPACE . '-' . $this->block_name . '-block';
+	}
+
+	/**
+	 * Return handle for block public styles - add-on's block can override this method
+	 * @return string
+	 */
+	protected function get_block_public_styles_handle() {
+		return 'epkb-' . $this->block_name . '-block';
+	}
+
+	/**
+	 * Return handle for block public scripts - add-on's block can override this method
+	 * @return string
+	 */
+	protected function get_block_public_scripts_handle() {
+		return 'epkb-blocks-public-scripts';
+	}
+
+	/**
+	 * Add-on dedicated classes can override the method to control the block availability - add-on's block class needs to be checked inside hook handler when all available classes are registered
+	 * @return bool
+	 */
+	protected static function is_block_available() {
+		return true;
+	}
+
+	/**
+	 * Provides a possibility for add-on's block to register its own styles by overriding the method
+	 * @param $suffix
+	 * @param $block_styles_dependencies
+	 * @return void
+	 */
+	protected function register_block_public_styles( $suffix, $block_styles_dependencies ) {
+		wp_register_style( $this->get_block_public_styles_handle(), Echo_Knowledge_Base::$plugin_url . 'css/' . $this->block_name . '-block' . $suffix . '.css', $block_styles_dependencies, Echo_Knowledge_Base::$version );
+	}
+
+	/**
+	 * Provides a possibility for add-on's block to register its own public scripts by overriding the method
+	 * @param $suffix
+	 * @return void
+	 */
+	protected function register_block_public_scripts( $suffix ) {
+		wp_register_script( $this->get_block_public_scripts_handle(), Echo_Knowledge_Base::$plugin_url . 'js/public-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
+		$epkb_vars = array(
+			'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
+			'msg_try_again' => esc_html__( 'Please try again later.', 'echo-knowledge-base' ),
+			'error_occurred' => esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (1936)',
+			'unknown_error' => esc_html__( 'Unknown error', 'echo-knowledge-base' ) . ' (1247)',
+			'reload_try_again' => esc_html__( 'Please reload the page and try again.', 'echo-knowledge-base' ),
+			'save_config' => esc_html__( 'Saving configuration', 'echo-knowledge-base' ),
+			'input_required' => esc_html__( 'Input is required', 'echo-knowledge-base' ),
+			'nonce' => wp_create_nonce( "_wpnonce_epkb_ajax_action" ),
+			'creating_demo_data' => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' )
+		);
+		wp_localize_script( $this->get_block_public_scripts_handle(), 'epkb_vars', $epkb_vars );
+	}
+
+	/**
+	 * Sanitize attributes before pass to KB legacy code (unlike to KB config, the block attributes can be modified in the post content and thus become unsafe)
+	 * (used for add-ons legacy code which renders inline styles directly in HTML until we update the add-ons code to sanitize values where they are applied)
+	 * @param $block_attributes
+	 * @return array
+	 */
+	protected function sanitize_block_attributes( $block_attributes ) {
+
+		$block_specs = $this->get_block_ui_specs();
+		foreach ( $block_attributes as $attribute_name => $attribute_value ) {
+
+			if ( empty( $block_specs[ $attribute_name ]['setting_type'] ) ) {
+				continue;
+			}
+
+			switch ( $block_specs[ $attribute_name ]['setting_type'] ) {
+				case 'range':
+					$block_attributes[ $attribute_name ] = intval( $attribute_value );
+					break;
+				case 'range_float':
+					$block_attributes[ $attribute_name ] = number_format( floatval( $attribute_value ), 2 );
+					break;
+				case 'color':
+					$block_attributes[ $attribute_name ] = EPKB_Utilities::sanitize_hex_color( $attribute_value );
+					break;
+				case 'select_buttons_string':
+				case 'toggle':
+				case 'dropdown':
+					$block_attributes[ $attribute_name ] = sanitize_text_field( $attribute_value );
+					break;
+				default:
+				case 'text':
+					// text and html is sanitized where they are applied accordingly to the place where they are used (e.g. via esc_attr(), esc_html(), or via wp_kses() with appropriate allowed tags)
+					break;
+			}
+		}
+
+		return $block_attributes;
 	}
 
 	abstract protected function get_this_block_inline_styles( $block_attributes );

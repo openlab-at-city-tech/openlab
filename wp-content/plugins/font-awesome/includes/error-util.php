@@ -1,8 +1,18 @@
 <?php
 namespace FortAwesome;
 
-use \WP_Error, \Exception;
-require_once dirname( __FILE__ ) . '/../includes/class-fontawesome-command.php';
+use WP_Error, Exception;
+require_once __DIR__ . '/../includes/class-fontawesome-command.php';
+
+/**
+ * Handle fatal errors
+ *
+ * @ignore
+ * @internal
+ */
+function notify_admin_warning( $e ) {
+	notify_admin( $e, 'warning' );
+}
 
 /**
  * Handle fatal errors
@@ -11,14 +21,26 @@ require_once dirname( __FILE__ ) . '/../includes/class-fontawesome-command.php';
  * @internal
  */
 function notify_admin_fatal_error( $e ) {
+	notify_admin( $e, 'error' );
+}
+
+/**
+ * Notify admin of error or warning.
+ *
+ * @ignore
+ * @internal
+ */
+function notify_admin( $e, $level ) {
+	$notification_level = 'warning' === $level ? 'warning' : 'error';
+
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
 	if ( method_exists( 'FortAwesome\FontAwesome_Loader', 'emit_admin_error_output' ) ) {
 		$command = new FontAwesome_Command(
-			function() use ( $e ) {
-				FontAwesome_Loader::emit_admin_error_output( $e );
+			function () use ( $e, $notification_level ) {
+				FontAwesome_Loader::emit_admin_error_output( $e, $notification_level );
 			}
 		);
 
@@ -30,7 +52,7 @@ function notify_admin_fatal_error( $e ) {
 
 	if ( method_exists( 'FortAwesome\FontAwesome_Loader', 'emit_error_output_to_console' ) ) {
 		$command = new FontAwesome_Command(
-			function() use ( $e ) {
+			function () use ( $e ) {
 				FontAwesome_Loader::emit_error_output_to_console( $e );
 			}
 		);
@@ -171,7 +193,6 @@ function build_wp_error( $e, $code ) {
 			);
 		}
 	}
-
 }
 
 /**

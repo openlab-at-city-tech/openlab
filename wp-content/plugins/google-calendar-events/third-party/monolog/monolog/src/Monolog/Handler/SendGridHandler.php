@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * SendGridrHandler uses the SendGrid API v2 function to send Log emails, more information in https://sendgrid.com/docs/API_Reference/Web_API/mail.html
  *
  * @author Ricardo Fontanelli <ricardo.fontanelli@hotmail.com>
- * @internal
  */
 class SendGridHandler extends MailHandler
 {
@@ -54,7 +53,7 @@ class SendGridHandler extends MailHandler
      */
     public function __construct(string $apiUser, string $apiKey, string $from, $to, string $subject, $level = Logger::ERROR, bool $bubble = \true)
     {
-        if (!\extension_loaded('curl')) {
+        if (!extension_loaded('curl')) {
             throw new MissingExtensionException('The curl extension is needed to use the SendGridHandler');
         }
         parent::__construct($level, $bubble);
@@ -67,7 +66,7 @@ class SendGridHandler extends MailHandler
     /**
      * {@inheritDoc}
      */
-    protected function send(string $content, array $records) : void
+    protected function send(string $content, array $records): void
     {
         $message = [];
         $message['api_user'] = $this->apiUser;
@@ -77,17 +76,17 @@ class SendGridHandler extends MailHandler
             $message['to[]'] = $recipient;
         }
         $message['subject'] = $this->subject;
-        $message['date'] = \date('r');
+        $message['date'] = date('r');
         if ($this->isHtmlBody($content)) {
             $message['html'] = $content;
         } else {
             $message['text'] = $content;
         }
-        $ch = \curl_init();
-        \curl_setopt($ch, \CURLOPT_URL, 'https://api.sendgrid.com/api/mail.send.json');
-        \curl_setopt($ch, \CURLOPT_POST, 1);
-        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
-        \curl_setopt($ch, \CURLOPT_POSTFIELDS, \http_build_query($message));
+        $ch = curl_init();
+        curl_setopt($ch, \CURLOPT_URL, 'https://api.sendgrid.com/api/mail.send.json');
+        curl_setopt($ch, \CURLOPT_POST, 1);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, http_build_query($message));
         Curl\Util::execute($ch, 2);
     }
 }

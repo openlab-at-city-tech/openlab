@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
 /**
  * @copyright Copyright (c) 2010, Union of RAD https://github.com/UnionOfRAD/lithium
  * @copyright Copyright (c) 2012, Clemens Tolboom
- * @internal
  */
 class PoFileLoader extends FileLoader
 {
@@ -62,13 +61,13 @@ class PoFileLoader extends FileLoader
      */
     protected function loadResource(string $resource)
     {
-        $stream = \fopen($resource, 'r');
+        $stream = fopen($resource, 'r');
         $defaults = ['ids' => [], 'translated' => null];
         $messages = [];
         $item = $defaults;
         $flags = [];
-        while ($line = \fgets($stream)) {
-            $line = \trim($line);
+        while ($line = fgets($stream)) {
+            $line = trim($line);
             if ('' === $line) {
                 // Whitespace indicated current item is done
                 if (!\in_array('fuzzy', $flags)) {
@@ -76,36 +75,36 @@ class PoFileLoader extends FileLoader
                 }
                 $item = $defaults;
                 $flags = [];
-            } elseif ('#,' === \substr($line, 0, 2)) {
-                $flags = \array_map('trim', \explode(',', \substr($line, 2)));
-            } elseif ('msgid "' === \substr($line, 0, 7)) {
+            } elseif ('#,' === substr($line, 0, 2)) {
+                $flags = array_map('trim', explode(',', substr($line, 2)));
+            } elseif ('msgid "' === substr($line, 0, 7)) {
                 // We start a new msg so save previous
                 // TODO: this fails when comments or contexts are added
                 $this->addMessage($messages, $item);
                 $item = $defaults;
-                $item['ids']['singular'] = \substr($line, 7, -1);
-            } elseif ('msgstr "' === \substr($line, 0, 8)) {
-                $item['translated'] = \substr($line, 8, -1);
+                $item['ids']['singular'] = substr($line, 7, -1);
+            } elseif ('msgstr "' === substr($line, 0, 8)) {
+                $item['translated'] = substr($line, 8, -1);
             } elseif ('"' === $line[0]) {
                 $continues = isset($item['translated']) ? 'translated' : 'ids';
                 if (\is_array($item[$continues])) {
-                    \end($item[$continues]);
-                    $item[$continues][\key($item[$continues])] .= \substr($line, 1, -1);
+                    end($item[$continues]);
+                    $item[$continues][key($item[$continues])] .= substr($line, 1, -1);
                 } else {
-                    $item[$continues] .= \substr($line, 1, -1);
+                    $item[$continues] .= substr($line, 1, -1);
                 }
-            } elseif ('msgid_plural "' === \substr($line, 0, 14)) {
-                $item['ids']['plural'] = \substr($line, 14, -1);
-            } elseif ('msgstr[' === \substr($line, 0, 7)) {
-                $size = \strpos($line, ']');
-                $item['translated'][(int) \substr($line, 7, 1)] = \substr($line, $size + 3, -1);
+            } elseif ('msgid_plural "' === substr($line, 0, 14)) {
+                $item['ids']['plural'] = substr($line, 14, -1);
+            } elseif ('msgstr[' === substr($line, 0, 7)) {
+                $size = strpos($line, ']');
+                $item['translated'][(int) substr($line, 7, 1)] = substr($line, $size + 3, -1);
             }
         }
         // save last item
         if (!\in_array('fuzzy', $flags)) {
             $this->addMessage($messages, $item);
         }
-        \fclose($stream);
+        fclose($stream);
         return $messages;
     }
     /**
@@ -117,21 +116,21 @@ class PoFileLoader extends FileLoader
     private function addMessage(array &$messages, array $item)
     {
         if (!empty($item['ids']['singular'])) {
-            $id = \stripcslashes($item['ids']['singular']);
+            $id = stripcslashes($item['ids']['singular']);
             if (isset($item['ids']['plural'])) {
-                $id .= '|' . \stripcslashes($item['ids']['plural']);
+                $id .= '|' . stripcslashes($item['ids']['plural']);
             }
             $translated = (array) $item['translated'];
             // PO are by definition indexed so sort by index.
-            \ksort($translated);
+            ksort($translated);
             // Make sure every index is filled.
-            \end($translated);
-            $count = \key($translated);
+            end($translated);
+            $count = key($translated);
             // Fill missing spots with '-'.
-            $empties = \array_fill(0, $count + 1, '-');
+            $empties = array_fill(0, $count + 1, '-');
             $translated += $empties;
-            \ksort($translated);
-            $messages[$id] = \stripcslashes(\implode('|', $translated));
+            ksort($translated);
+            $messages[$id] = stripcslashes(implode('|', $translated));
         }
     }
 }

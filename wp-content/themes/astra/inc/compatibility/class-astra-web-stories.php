@@ -18,7 +18,6 @@ if ( ! defined( 'WEBSTORIES_VERSION' ) ) {
  * @since 3.2.0
  */
 class Astra_Web_Stories {
-
 	/**
 	 * Constructor
 	 *

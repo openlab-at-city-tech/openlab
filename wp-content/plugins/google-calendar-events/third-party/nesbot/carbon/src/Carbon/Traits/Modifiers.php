@@ -16,7 +16,6 @@ use ReturnTypeWillChange;
  * Trait Modifiers.
  *
  * Returns dates relative to current date using modifier short-hand.
- * @internal
  */
 trait Modifiers
 {
@@ -409,12 +408,12 @@ trait Modifiers
      */
     public function change($modifier)
     {
-        return $this->modify(\preg_replace_callback('/^(next|previous|last)\\s+(\\d{1,2}(h|am|pm|:\\d{1,2}(:\\d{1,2})?))$/i', function ($match) {
-            $match[2] = \str_replace('h', ':00', $match[2]);
+        return $this->modify(preg_replace_callback('/^(next|previous|last)\s+(\d{1,2}(h|am|pm|:\d{1,2}(:\d{1,2})?))$/i', function ($match) {
+            $match[2] = str_replace('h', ':00', $match[2]);
             $test = $this->avoidMutation()->modify($match[2]);
             $method = $match[1] === 'next' ? 'lt' : 'gt';
             $match[1] = $test->{$method}($this) ? $match[1] . ' day' : 'today';
             return $match[1] . ' ' . $match[2];
-        }, \strtr(\trim($modifier), [' at ' => ' ', 'just now' => 'now', 'after tomorrow' => 'tomorrow +1 day', 'before yesterday' => 'yesterday -1 day'])));
+        }, strtr(trim($modifier), [' at ' => ' ', 'just now' => 'now', 'after tomorrow' => 'tomorrow +1 day', 'before yesterday' => 'yesterday -1 day'])));
     }
 }

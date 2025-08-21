@@ -5,7 +5,14 @@ namespace PDFEmbedder\Admin;
 use PDFEmbedder\Options;
 use PDFEmbedder\Helpers\Links;
 use PDFEmbedder\Helpers\Assets;
+use PDFEmbedder\Admin\Pages\Page;
 use PDFEmbedder\Helpers\Multisite;
+use PDFEmbedder\Admin\Pages\About;
+use PDFEmbedder\Admin\Pages\GetPro;
+use PDFEmbedder\Admin\Pages\Mobile;
+use PDFEmbedder\Admin\Pages\Secure;
+use PDFEmbedder\Admin\Pages\Settings;
+use PDFEmbedder\Admin\Pages\Watermarks;
 
 /**
  * Admin page.
@@ -32,14 +39,8 @@ class Admin {
 
 		( new WPorgReview() )->hooks();
 		( new Education\SettingsTopBar() )->hooks();
-		( new Education\SettingsBottomBanner() )->hooks();
-
-		// Register settings and their validation method.
-		register_setting(
-			'pdfemb_options',
-			Options::KEY,
-			[ Options::class, 'validate' ]
-		);
+		( new Education\DemoContent() )->hooks();
+		( new Education\GetStarted() )->hooks();
 
 		// Styles used inside Media library screens.
 		if ( $pagenow === 'upload.php' ) {
@@ -72,11 +73,7 @@ class Admin {
 
 		( new MediaLibrary() )->hooks();
 
-		add_action( 'pdfemb_admin_settings_render_section_settings', [ $this, 'render_settings' ] );
 		add_action( 'pdfemb_admin_settings_extra', [ $this, 'render_ut_setting' ], 0 );
-		add_action( 'pdfemb_admin_settings_render_section_mobile', [ $this, 'render_mobile' ] );
-		add_action( 'pdfemb_admin_settings_render_section_secure', [ $this, 'render_secure' ] );
-		add_action( 'pdfemb_admin_settings_render_section_about', [ $this, 'render_about' ] );
 
 		// Plugins page.
 		add_filter( Multisite::is_network_activated() ? 'network_admin_plugin_action_links' : 'plugin_action_links', [ $this, 'register_plugin_action_links' ], 10, 2 );
@@ -84,6 +81,31 @@ class Admin {
 		if ( Multisite::is_network_activated() ) {
 			add_action( 'network_admin_edit_' . self::SLUG, [ $this, 'save_network_options' ] );
 		}
+
+		add_action( 'load-settings_page_' . self::SLUG, [ $this, 'save_settings' ] );
+	}
+
+	/**
+	 * Save the plugin settings.
+	 *
+	 * @since 4.9.0
+	 */
+	public function save_settings() {
+
+		// We must have all the required data.
+		if ( ! isset( $_POST['pdfemb'], $_POST['section'], $_POST['_wpnonce'], $_POST['option_page'], $_POST['action'], $_POST['_wp_http_referer'] ) ) {
+			return;
+		}
+
+		// Check the nonce.
+		check_admin_referer( 'pdfemb_options-options' );
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		pdf_embedder()->options()->save( wp_unslash( $_POST[ Options::KEY ] ), sanitize_key( $_POST['section'] ) );
+
+		// Redirect back to the settings page that was submitted.
+		wp_safe_redirect( add_query_arg( 'settings-updated', 'true', esc_url_raw( wp_unslash( $_POST['_wp_http_referer'] ) ) ) );
+		exit;
 	}
 
 	/**
@@ -94,7 +116,7 @@ class Admin {
 	public function register_menu() {
 
 		if ( Multisite::is_network_activated() ) {
-			add_submenu_page(
+			$hook = add_submenu_page(
 				'settings.php',
 				__( 'PDF Embedder settings', 'pdf-embedder' ),
 				__( 'PDF Embedder', 'pdf-embedder' ),
@@ -103,7 +125,7 @@ class Admin {
 				[ $this, 'render_page' ]
 			);
 		} else {
-			add_options_page(
+			$hook = add_options_page(
 				__( 'PDF Embedder settings', 'pdf-embedder' ),
 				__( 'PDF Embedder', 'pdf-embedder' ),
 				'manage_options',
@@ -111,14 +133,69 @@ class Admin {
 				[ $this, 'render_page' ]
 			);
 		}
+
+		add_action( 'admin_print_styles-' . $hook, [ $this, 'enqueue_admin_styles' ] );
+	}
+
+	/**
+	 * Enqueue admin styles.
+	 *
+	 * @since 4.8.0
+	 */
+	public function enqueue_admin_styles() {
+
+		wp_enqueue_script(
+			'pdfemb_admin',
+			Assets::url( 'js/admin/pdfemb-admin.js' ),
+			[ 'jquery' ],
+			Assets::ver(),
+			false
+		);
+
+		wp_add_inline_script(
+			'pdfemb_admin',
+			'const pdfemb_args = ' . wp_json_encode(
+				[
+					'activate_nonce'   => wp_create_nonce( 'pdfemb-activate-partner' ),
+					'active'           => esc_html__( 'Status: Active', 'pdf-embedder' ),
+					'activate'         => esc_html__( 'Activate', 'pdf-embedder' ),
+					'activating'       => esc_html__( 'Activating...', 'pdf-embedder' ),
+					'ajax'             => admin_url( 'admin-ajax.php' ),
+					'deactivate'       => esc_html__( 'Deactivate', 'pdf-embedder' ),
+					'deactivate_nonce' => wp_create_nonce( 'pdfemb-deactivate-partner' ),
+					'deactivating'     => esc_html__( 'Deactivating...', 'pdf-embedder' ),
+					'inactive'         => esc_html__( 'Status: Inactive', 'pdf-embedder' ),
+					'install'          => esc_html__( 'Install', 'pdf-embedder' ),
+					'install_nonce'    => wp_create_nonce( 'pdfemb-install-partner' ),
+					'installing'       => esc_html__( 'Installing...', 'pdf-embedder' ),
+					'proceed'          => esc_html__( 'Proceed', 'pdf-embedder' ),
+				]
+			),
+			'before'
+		);
+
+		wp_enqueue_style(
+			'pdfemb_admin',
+			Assets::url( 'css/admin/pdfemb-admin.css' ),
+			[],
+			Assets::ver()
+		);
 	}
 
 	/**
      * Register sections used in plugin admin area.
 	 *
 	 * @since 4.7.0
+	 *
+	 * @return Page[] List of admin area pages.
 	 */
 	protected function get_sections(): array {
+
+		static $inited;
+
+		if ( $inited ) {
+			return $inited;
+		}
 
 		/**
 		 * Filter the list of admin area sections.
@@ -127,15 +204,31 @@ class Admin {
 		 *
 		 * @param array $sections List of admin area sections.
 		 */
-		return apply_filters(
+		$sections = (array) apply_filters(
 			'pdfemb_admin_sections',
 			[
-				'settings' => __( 'Settings', 'pdf-embedder' ),
-				'mobile'   => __( 'Mobile', 'pdf-embedder' ),
-				'secure'   => __( 'Secure', 'pdf-embedder' ),
-				'about'    => __( 'About', 'pdf-embedder' ),
+				Settings::SLUG   => Settings::class,
+				Mobile::SLUG     => Mobile::class,
+				Secure::SLUG     => Secure::class,
+				Watermarks::SLUG => Watermarks::class,
+				About::SLUG      => About::class,
+				GetPro::SLUG     => GetPro::class,
 			]
 		);
+
+		$inited = array_map(
+			static function ( $section ) {
+
+				if ( is_subclass_of( $section, Page::class ) ) {
+					return new $section();
+				}
+
+				return null;
+			},
+			$sections
+		);
+
+		return array_filter( $inited );
 	}
 
 	/**
@@ -145,22 +238,7 @@ class Admin {
 	 */
 	public function render_page() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
-		wp_enqueue_script(
-			'pdfemb_admin',
-			Assets::url( 'js/admin/pdfemb-admin.js', true ),
-			[ 'jquery' ],
-			Assets::ver(),
-			false
-		);
-
-		wp_enqueue_style(
-			'pdfemb_admin_css',
-			Assets::url( 'css/admin/pdfemb-admin.css', true ),
-			[],
-			Assets::ver()
-		);
-
-		$submit_page_url = Multisite::is_network_activated() ? 'edit.php?action=' . self::SLUG : 'options.php';
+		$submit_page_url = $this->get_url( $this->get_current_section() );
 
 		if ( Multisite::is_network_activated() ) {
 			$this->network_save_settings();
@@ -180,24 +258,31 @@ class Admin {
 
 			<div id="pdfemb-header">
 				<div class="pdfemb-logo">
-					<h1><?php esc_html_e( 'PDF Embedder', 'pdf-embedder' ); ?></h1>
+					<img src="<?php echo esc_url( Assets::url( 'img/admin/logo.svg', false ) ); ?>" alt="<?php esc_attr_e( 'PDF Embedder Logo', 'pdf-embedder' ); ?>" height="40"/>
 				</div>
 
 				<div class="pdfemb-links">
+					<a href="#" target="_blank" class="trigger-getstarted">
+						<img src="<?php echo esc_url( Assets::url( 'img/admin/icon-rocket.svg', false ) ); ?>" alt="" width="22" />
+						<?php esc_html_e( 'Get Started', 'pdf-embedder' ); ?>
+					</a>
 					<a href="<?php echo esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/', 'Admin Header', 'Help Icon' ) ); ?>" target="_blank">
-						<img src="<?php echo esc_url( Assets::url( 'img/admin/icon-help.svg', false ) ); ?>" alt="<?php esc_attr_e( 'Help Icon', 'pdf-embedder' ); ?>"/>
+						<img src="<?php echo esc_url( Assets::url( 'img/admin/icon-help.svg', false ) ); ?>" alt="" width="22" />
+						<?php esc_html_e( 'Help', 'pdf-embedder' ); ?>
 					</a>
 				</div>
 			</div>
 
 			<div id="pdfemb-content">
-				<h2 id="pdfemb-tabs" class="nav-tab-wrapper">
+				<h2 id="pdfemb-sections" class="nav-tab-wrapper">
 					<?php
-					foreach ( $this->get_sections() as $section => $title ) {
-						$active = $section === 'settings' ? 'nav-tab-active' : '';
+					foreach ( $this->get_sections() as $section ) {
+						$active_class = $this->get_current_section() === (string) $section ? 'nav-tab-active' : '';
+						$url          = $this->get_url( $section );
+						$right_class  = $section::SLUG === GetPro::SLUG ? 'nav-tab-right' : '';
 						?>
-						<a href="#<?php echo esc_attr( $section ); ?>" id="<?php echo esc_attr( $section ); ?>-tab" class="nav-tab <?php echo esc_attr( $active ); ?>">
-							<?php echo esc_html( $title ); ?>
+						<a href="<?php echo esc_url( $url ); ?>" id="pdfemb-section-<?php echo esc_attr( $section ); ?>-link" class="nav-tab <?php echo esc_attr( $active_class ); ?> <?php echo esc_attr( $right_class ); ?>">
+							<?php echo esc_html( $section->get_title() ); ?>
 						</a>
 						<?php
 					}
@@ -213,30 +298,37 @@ class Admin {
 					?>
 				</h2>
 
-				<div id="pdfemb-tabswrapper">
+				<div id="pdfemb-section-wrapper">
+
+					<?php $this->render_admin_notices(); ?>
+
+					<?php ( new Education\GetStarted() )->render(); ?>
 
 					<form action="<?php echo esc_url( $submit_page_url ); ?>" method="post" id="pdfemb_form" enctype="multipart/form-data">
+						<input type="hidden" name="section" value="<?php echo esc_attr( $this->get_current_section() ); ?>">
 						<?php
-						foreach ( $this->get_sections() as $section => $title ) {
-							$active = $section === 'settings' ? 'active' : '';
-							$desc   = sprintf( /* translators: %s - tab title. */
-								esc_html__( '%s tab content with all the settings and additional information', 'pdf-embedder' ),
-								esc_attr( $title )
-							);
+						foreach ( $this->get_sections() as $section ) {
+							if ( $this->get_current_section() !== (string) $section ) {
+								continue;
+							}
+							?>
 
-							echo '<div
-								id="' . esc_attr( $section ) . '-section"
-								class="pdfembtab ' . esc_attr( $active ) . '"
-								aria-labelledby="' . esc_attr( $section ) . '-tab"
-								aria-description="' . esc_attr( $desc ) . '"
-								>';
-							/**
-							 * Render a specific section.
-							 *
-							 * @since 4.7.0
-							 */
-							do_action( 'pdfemb_admin_settings_render_section_' . $section );
-							echo '</div>';
+							<div id="pdfemb-<?php echo esc_attr( $section ); ?>-section">
+								<?php
+								$section->content();
+
+								/**
+								 * Render a specific section.
+								 *
+								 * @since 4.7.0
+								 * @deprecated 4.9.0
+								 */
+								do_action_deprecated( 'pdfemb_admin_settings_render_section_' . $section, [], '4.9.0 of PDF Embedder' );
+								?>
+
+							</div>
+
+							<?php
 						}
 
 						/**
@@ -274,159 +366,34 @@ class Admin {
 					<span>/</span>
 					<a href="<?php echo esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/', 'Admin Footer', 'Docs' ) ); ?>" target="_blank"><?php esc_html_e( 'Docs', 'pdf-embedder' ); ?></a>
 					<span>/</span>
-					<a href="#about" class="free-plugins"><?php esc_html_e( 'Free Plugins', 'pdf-embedder' ); ?></a>
+					<a href="<?php echo esc_url( pdf_embedder()->admin()->get_url( 'about' ) ); ?>" class="free-plugins"><?php esc_html_e( 'Free Plugins', 'pdf-embedder' ); ?></a>
 				</p>
 			</div>
 		</div>
 		<?php
 	}
 
-	/**
-	 * Render the admin page and its Settings tab.
-	 * Extended in Premium.
-	 *
-	 * @since 4.7.0
-	 */
-	public function render_settings() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	protected function render_admin_notices() {
 
-		$options = pdf_embedder()->options()->get();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$is_settings_update = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
 		?>
 
-		<h3>
-			<?php esc_html_e( 'PDF Embedder Configuration', 'pdf-embedder' ); ?>
-		</h3>
-
-		<p>
-			<?php esc_html_e( 'To use the plugin, just embed PDFs in the same way as you would normally embed images in your posts/pages - but try with a PDF file instead.', 'pdf-embedder' ); ?>
-		</p>
-		<p>
-			<?php esc_html_e( "From the post editor, click Add Media, and then drag-and-drop your PDF file into the media library. When you insert the PDF into your post, it will automatically embed using the plugin's viewer.", 'pdf-embedder' ); ?>
-		</p>
-
-		<hr/>
-
-		<h3>
-			<?php esc_html_e( 'Default Viewer Settings', 'pdf-embedder' ); ?>
-		</h3>
-
-		<div class="pdfemb-admin-setting pdfemb-admin-setting-width">
-			<label for="input_pdfemb_width" class="textinput">
-				<?php esc_html_e( 'Width', 'pdf-embedder' ); ?>
-			</label>
-			<input id='input_pdfemb_width' class='textinput' name='pdfemb[pdfemb_width]' size='10' type='text' value='<?php echo esc_attr( $options['pdfemb_width'] ); ?>'/>
-		</div>
-
-		<br class="clear"/>
-
-		<div class="pdfemb-admin-setting pdfemb-admin-setting-height">
-			<label for="input_pdfemb_height" class="textinput">
-				<?php esc_html_e( 'Height', 'pdf-embedder' ); ?>
-			</label>
-			<input id='input_pdfemb_height' class='textinput' name='pdfemb[pdfemb_height]' size='10' type='text' value='<?php echo esc_attr( $options['pdfemb_height'] ); ?>'/>
-		</div>
-
-		<br class="clear"/>
-
-		<p class="desc big">
-			<em>
-				<?php
-				printf(
-					wp_kses(
-						__( 'Enter <code>max</code> or an integer number of pixels.', 'pdf-embedder' ),
-						[
-							'code' => [],
-						]
-					)
-				);
-				?>
-			</em>
-		</p>
-
-		<div class="pdfemb-admin-setting pdfemb-admin-setting-toolbar-location">
-			<label for="pdfemb_toolbar" class="textinput">
-				<?php esc_html_e( 'Toolbar Location', 'pdf-embedder' ); ?>
-			</label>
-			<select name='pdfemb[pdfemb_toolbar]' id='pdfemb_toolbar' class='select'>
-				<option value="top" <?php echo $options['pdfemb_toolbar'] === 'top' ? 'selected' : ''; ?>>
-					<?php esc_html_e( 'Top', 'pdf-embedder' ); ?>
-				</option>
-				<option value="bottom" <?php echo $options['pdfemb_toolbar'] === 'bottom' ? 'selected' : ''; ?>>
-					<?php esc_html_e( 'Bottom', 'pdf-embedder' ); ?>
-				</option>
-				<option value="both" <?php echo $options['pdfemb_toolbar'] === 'both' ? 'selected' : ''; ?>>
-					<?php esc_html_e( 'Both', 'pdf-embedder' ); ?>
-				</option>
-				<option value="none" <?php echo $options['pdfemb_toolbar'] === 'none' ? 'selected' : ''; ?>>
-					<?php esc_html_e( 'No Toolbar', 'pdf-embedder' ); ?>
-				</option>
-			</select>
-		</div>
-
-		<br class="clear"/>
-		<br class="clear"/>
-
-		<div class="pdfemb-admin-setting pdfemb-admin-setting-toolbar-hover">
-			<label class="textinput">
-				<?php esc_html_e( 'Toolbar Hover', 'pdf-embedder' ); ?>
-			</label>
-			<span>
-				<input type="radio" name='pdfemb[pdfemb_toolbarfixed]' id='pdfemb_toolbarfixed_off' class='radio' value="off" <?php echo $options['pdfemb_toolbarfixed'] === 'off' ? 'checked' : ''; ?>/>
-				<label for="pdfemb_toolbarfixed_off" class="radio"><?php esc_html_e( 'Toolbar appears only on hover over document', 'pdf-embedder' ); ?></label>
-			</span>
-			<br/>
-			<span>
-				<input type="radio" name='pdfemb[pdfemb_toolbarfixed]' id='pdfemb_toolbarfixed_on' class='radio' value="on" <?php echo $options['pdfemb_toolbarfixed'] === 'on' ? 'checked' : ''; ?>/>
-				<label for="pdfemb_toolbarfixed_on" class="radio">
-					<?php esc_html_e( 'Toolbar always visible', 'pdf-embedder' ); ?>
-	            </label>
-			</span>
-		</div>
-
-		<br class="clear">
-
-		<p>
-			<?php
-			printf(
-				wp_kses( /* translators: %s - URL to wp-pdf.com doc. */
-					__( 'You can override these defaults for specific embeds by modifying the shortcodes - see <a href="%s" target="_blank">instructions</a>.', 'pdf-embedder' ),
-					[
-						'a' => [
-							'href'   => [],
-							'target' => [],
-						],
-					]
-				),
-				esc_url( Links::get_utm_link( 'https://wp-pdf.com/docs/', 'Admin - Settings', 'Override Shortcode Defaults' ) )
-			);
-			?>
-		</p>
-
-		<hr>
-
-		<h3>
-			<?php esc_html_e( 'Miscellaneous', 'pdf-embedder' ); ?>
-		</h3>
-
-		<br class="clear"/>
+		<?php if ( $is_settings_update ) : ?>
+			<div id="setting-error-settings_updated" class="notice notice-success settings-error">
+				<p>
+					<?php esc_html_e( 'Settings were successfully saved.', 'pdf-embedder' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
 
 		<?php
 		/**
-		 * Fires after the main settings section.
+		 * Fires in place where all the notices in the plugin admin area should be rendered.
 		 *
-		 * @since 4.7.0
+		 * @since 4.9.0
 		 */
-		do_action( 'pdfemb_admin_settings_extra' );
-		?>
-
-		<hr class="clear">
-
-		<p class="submit">
-			<button type="submit" class="button button-primary" id="submit" name="submit">
-				<?php esc_html_e( 'Save Changes', 'pdf-embedder' ); ?>
-			</button>
-		</p>
-
-		<?php
+		do_action( 'pdfemb_admin_settings_notices' );
 	}
 
 	/**
@@ -439,6 +406,10 @@ class Admin {
 		$options = pdf_embedder()->options()->get();
 		?>
 
+		<h3>
+			<?php esc_html_e( 'Miscellaneous', 'pdf-embedder' ); ?>
+		</h3>
+
 		<br class="clear"/>
 
 		<div class="pdfemb-admin-setting pdfemb-admin-setting-usagetracking">
@@ -446,148 +417,15 @@ class Admin {
 				<?php esc_html_e( 'Allow Usage Tracking', 'pdf-embedder' ); ?>
 			</label>
 			<span>
-					<input type="checkbox" name="pdfemb[usagetracking]" id="usagetracking" class="checkbox" <?php echo $options['usagetracking'] === 'on' ? 'checked' : ''; ?>/>
+				<input type="checkbox" name="pdfemb[usagetracking]" id="usagetracking" class="checkbox" <?php checked( Options::is_on( $options['usagetracking'] ) ); ?>/>
 
-					<label for="usagetracking" class="checkbox plain">
-						<?php esc_html_e( 'By allowing us to track usage data, we can better help you, as we will know which WordPress configurations, themes, and plugins we should test.', 'pdf-embedder' ); ?>
-					</label>
-				</span>
+				<label for="usagetracking" class="checkbox plain">
+					<?php esc_html_e( 'By allowing us to track usage data, we can better help you, as we will know which WordPress configurations, themes, and plugins we should test.', 'pdf-embedder' ); ?>
+				</label>
+			</span>
 		</div>
 
 		<br class="clear"/>
-
-		<?php
-	}
-
-	/**
-	 * Render the admin page and its Mobile tab.
-	 * Redefined in Premium.
-	 *
-	 * @since 4.7.0
-	 */
-	public function render_mobile() {
-		?>
-
-		<h3>
-			<?php esc_html_e( 'Mobile-friendly embedding using PDF Embedder Premium', 'pdf-embedder' ); ?>
-		</h3>
-
-		<p>
-			<?php esc_html_e( "This free version of the plugin should work on most mobile browsers, but it will be cumbersome for users with small screens - it is difficult to position the document entirely within the screen, and your users' fingers may catch the entire browser page when they're trying only to move about the document...", 'pdf-embedder' ); ?>
-		</p>
-
-		<p>
-			<?php
-			echo wp_kses(
-				__(
-					"Our <strong>PDF Embedder Premium</strong> plugin on its Basic plan solves this problem with an intelligent 'full screen' mode.
-						When the document is smaller than a certain width, the document displays only as a 'thumbnail' with a large
-						'View in Full Screen' button for the user to click when they want to study your document.
-						This opens up the document in a way that has the full focus of the mobile browser, and the user can move around the
-						document without hitting other parts of the web page by mistake. Click Exit to return to the regular web page.",
-					'pdf-embedder'
-				),
-				[
-					'strong' => [],
-				]
-			);
-			?>
-		</p>
-
-		<p>
-			<?php esc_html_e( 'The user can also touch and scroll continuously between all pages of the PDF which is much easier than clicking the next/prev buttons to navigate.', 'pdf-embedder' ); ?>
-		</p>
-
-		<p>
-			<?php
-			printf(
-				wp_kses( /* translators: %s - URL to wp-pdf.com page. */
-					__( 'See our website <a href="%s" target="_blank">wp-pdf.com</a> for more details and purchase options.', 'pdf-embedder' ),
-					[
-						'a' => [
-							'href'   => [],
-							'target' => [],
-						],
-					]
-				),
-				esc_url( Links::get_utm_link( 'https://wp-pdf.com/premium/', 'Admin - Mobile', 'Premium Inline Education' ) )
-			);
-			?>
-		</p>
-
-		<?php
-	}
-
-	/**
-	 * Render the admin page and its Secure tab.
-	 * Redefined in Premium.
-	 *
-	 * @since 4.7.0
-	 */
-	public function render_secure() {
-		?>
-
-		<h3>
-			<?php esc_html_e( 'Protect your PDFs using PDF Embedder Premium', 'pdf-embedder' ); ?>
-		</h3>
-		<p>
-			<?php
-			echo wp_kses(
-				__( 'Our <strong>PDF Embedder Premium</strong> plugin on its Pro plan provides the same simple but elegant viewer for your website visitors, with the added protection that it is difficult for users to download or print the original PDF document.', 'pdf-embedder' ),
-				[
-					'strong' => [],
-				]
-			);
-			?>
-		</p>
-
-		<p>
-			<?php esc_html_e( 'This means that your PDF is unlikely to be shared outside your site where you have no control over who views, prints, or shares it.', 'pdf-embedder' ); ?>
-		</p>
-
-		<p>
-			<?php esc_html_e( "Optionally add a watermark containing the user's name or email address to discourage sharing of screenshots.", 'pdf-embedder' ); ?>
-		</p>
-
-		<p>
-			<?php
-			printf(
-				wp_kses( /* translators: %s - URL to wp-pdf.com page. */
-					__( 'See our website <a href="%s" target="_blank">wp-pdf.com</a> for more details and purchase options.', 'pdf-embedder' ),
-					[
-						'a' => [
-							'href'   => [],
-							'target' => [],
-						],
-					]
-				),
-				esc_url( Links::get_utm_link( 'https://wp-pdf.com/secure/', 'Admin - Secure', 'Premium Education' ) )
-			);
-			?>
-		</p>
-
-		<?php
-	}
-
-	/**
-	 * Render the admin page and its About tab.
-	 *
-	 * @since 4.7.0
-	 */
-	public function render_about() {
-		?>
-
-		<h3 class="headline-title">
-			<?php esc_html_e( 'Our Plugins', 'pdf-embedder' ); ?>
-		</h3>
-
-		<p>
-			<?php esc_html_e( 'Get the most out of your site with these plugins.', 'pdf-embedder' ); ?>
-		</p>
-
-		<div class="pdfemb-partners-wrap">
-			<?php ( new Partners() )->show(); ?>
-		</div>
 
 		<?php
 	}
@@ -599,7 +437,7 @@ class Admin {
 	 *
 	 * @param string $text Footer text.
 	 */
-	public function render_page_footer( string $text ): string {
+	public function render_page_footer( $text ) {
 
 		if ( ! $this->is_admin_page() ) {
 			return $text;
@@ -634,7 +472,7 @@ class Admin {
 	 * @param int    $id         The first key from the $_POST['send'] data.
 	 * @param array  $attachment Array of attachment metadata.
 	 */
-	public function media_send_shortcode_to_editor( string $html, int $id, array $attachment ): string { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	public function media_send_shortcode_to_editor( $html, $id, $attachment ): string { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		$pdf_url = '';
 		$title   = '';
@@ -716,24 +554,6 @@ class Admin {
 	}
 
 	/**
-	 * Get the plugin settings page URL.
-	 *
-	 * @since 4.7.0
-	 *
-	 * @param string $page Tab to link to.
-	 */
-	public function get_settings_url( string $page = 'settings' ): string {
-
-		if ( ! empty( $page ) ) {
-			$page = '#' . sanitize_key( $page );
-		}
-
-		return Multisite::is_network_activated()
-			? network_admin_url( 'settings.php?page=' . self::SLUG . $page )
-			: admin_url( 'options-general.php?page=' . self::SLUG . $page );
-	}
-
-	/**
 	 * Register plugin action links.
 	 *
 	 * @since 4.7.0
@@ -748,7 +568,7 @@ class Admin {
 			$deactivate = $links['deactivate'];
 
 			$links = [
-				'settings'   => '<a href="' . esc_url( $this->get_settings_url() ) . '">' . esc_html__( 'Settings', 'pdf-embedder' ) . '</a>',
+				'settings'   => '<a href="' . esc_url( $this->get_url() ) . '">' . esc_html__( 'Settings', 'pdf-embedder' ) . '</a>',
 				'premium'    => '<a href="' . esc_url( Links::get_utm_link( 'https://wp-pdf.com/premium/', 'Plugins List', 'Premium Link' ) ) . '" target="_blank">' . esc_html__( 'Premium', 'pdf-embedder' ) . '</a>',
 				'secure'     => '<a href="' . esc_url( Links::get_utm_link( 'https://wp-pdf.com/secure/', 'Plugins List', 'Secure Link' ) ) . '" target="_blank">' . esc_html__( 'Secure', 'pdf-embedder' ) . '</a>',
 				'deactivate' => $deactivate,
@@ -843,8 +663,8 @@ class Admin {
 			exit;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		pdf_embedder()->options()->save( wp_unslash( $_POST[ Options::KEY ] ) );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+		pdf_embedder()->options()->save( wp_unslash( $_POST[ Options::KEY ] ), sanitize_key( $_POST['section'] ) );
 
 		$error_code    = [];
 		$error_setting = [];
@@ -866,6 +686,7 @@ class Admin {
 			add_query_arg(
 				[
 					'page'          => self::SLUG,
+					'section'       => $this->get_current_section(),
 					'updated'       => true,
 					'error_setting' => $error_setting,
 					'error_code'    => $error_code,
@@ -945,5 +766,40 @@ class Admin {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the plugin settings page URL.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @param string $section Section to link to.
+	 */
+	public function get_url( string $section = 'settings' ): string {
+
+		if ( ! empty( $section ) ) {
+			$section = sanitize_key( $section );
+		}
+
+		return Multisite::is_network_activated()
+			? add_query_arg( 'section', $section, network_admin_url( 'settings.php?page=' . self::SLUG ) )
+			: add_query_arg( 'section', $section, admin_url( 'options-general.php?page=' . self::SLUG ) );
+	}
+
+	/**
+	 * Get the current section.
+	 *
+	 * @since 4.9.0
+	 *
+	 * @return string Current section.
+	 */
+	public function get_current_section(): string {
+
+		$sections = $this->get_sections();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$section = isset( $_GET['section'] ) ? sanitize_key( $_GET['section'] ) : '';
+
+		return array_key_exists( $section, $sections ) ? $section : 'settings';
 	}
 }

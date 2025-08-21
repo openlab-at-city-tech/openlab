@@ -36,7 +36,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
- * @internal
  */
 class ChannelLevelActivationStrategy implements ActivationStrategyInterface
 {
@@ -58,12 +57,12 @@ class ChannelLevelActivationStrategy implements ActivationStrategyInterface
     public function __construct($defaultActionLevel, array $channelToActionLevel = [])
     {
         $this->defaultActionLevel = Logger::toMonologLevel($defaultActionLevel);
-        $this->channelToActionLevel = \array_map('SimpleCalendar\\plugin_deps\\Monolog\\Logger::toMonologLevel', $channelToActionLevel);
+        $this->channelToActionLevel = array_map('SimpleCalendar\plugin_deps\Monolog\Logger::toMonologLevel', $channelToActionLevel);
     }
     /**
      * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record) : bool
+    public function isHandlerActivated(array $record): bool
     {
         if (isset($this->channelToActionLevel[$record['channel']])) {
             return $record['level'] >= $this->channelToActionLevel[$record['channel']];

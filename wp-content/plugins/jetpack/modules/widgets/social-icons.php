@@ -53,12 +53,6 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 			add_action( 'admin_print_footer_scripts', array( $this, 'render_admin_js' ) );
 		}
 
-		// Enqueue scripts and styles for the display of the widget, on the frontend or in the customizer.
-		if ( is_active_widget( false, $this->id, $this->id_base, true ) || is_customize_preview() ) {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_icon_scripts' ) );
-			add_action( 'wp_footer', array( $this, 'include_svg_icons' ), 9999 );
-		}
-
 		add_filter( 'widget_types_to_hide_from_legacy_widget_block', array( $this, 'hide_widget_in_block_editor' ) );
 	}
 
@@ -160,6 +154,10 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$instance = wp_parse_args( $instance, $this->defaults );
 
+		// Enqueue front end assets.
+		$this->enqueue_icon_scripts();
+		add_action( 'wp_footer', array( $this, 'include_svg_icons' ), 9999 );
+
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
@@ -186,7 +184,7 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 							<?php
 							printf(
 								'<a href="%1$s" %2$s>',
-								esc_url( $icon['url'], array( 'http', 'https', 'mailto', 'skype', 'sms' ) ),
+								esc_url( $icon['url'], array( 'http', 'https', 'mailto', 'sms' ) ),
 								true === $instance['new-tab'] ?
 									'target="_blank" rel="noopener noreferrer"' :
 									'target="_self"'
@@ -399,7 +397,7 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 							esc_attr( $args['url-icon-id'] ),
 							esc_attr( $args['url-icon-name'] ),
 							esc_attr__( 'Account URL', 'jetpack' ),
-							esc_url( $args['url-value'], array( 'http', 'https', 'mailto', 'skype', 'sms' ) )
+							esc_url( $args['url-value'], array( 'http', 'https', 'mailto', 'sms' ) )
 						);
 					?>
 				</p>
@@ -652,16 +650,6 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 				'label' => 'Reddit',
 			),
 			array(
-				'url'   => array( 'skype.com' ),
-				'icon'  => 'skype',
-				'label' => 'Skype',
-			),
-			array(
-				'url'   => array( 'skype:' ),
-				'icon'  => 'skype',
-				'label' => 'Skype',
-			),
-			array(
 				'url'   => array( 'slideshare.net' ),
 				'icon'  => 'slideshare',
 				'label' => 'SlideShare',
@@ -727,11 +715,6 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 				'label' => 'Twitch',
 			),
 			array(
-				'url'   => array( 'twitter.com' ),
-				'icon'  => 'twitter',
-				'label' => 'Twitter',
-			),
-			array(
 				'url'   => array( 'vimeo.com' ),
 				'icon'  => 'vimeo',
 				'label' => 'Vimeo',
@@ -762,7 +745,7 @@ class Jetpack_Widget_Social_Icons extends WP_Widget {
 				'label' => 'Yelp',
 			),
 			array(
-				'url'   => array( 'x.com' ),
+				'url'   => array( '#^https?:\/\/(www\.)?(twitter|x)\.com#' ),
 				'icon'  => 'x',
 				'label' => 'X',
 			),

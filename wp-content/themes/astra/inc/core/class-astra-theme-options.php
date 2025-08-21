@@ -19,11 +19,10 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 	 * Theme Options
 	 */
 	class Astra_Theme_Options {
-
 		/**
 		 * Class instance.
 		 *
-		 * @var $instance Class instance.
+		 * @var Astra_Theme_Options|null $instance Class instance.
 		 */
 		private static $instance;
 
@@ -38,7 +37,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 		/**
 		 * Post id.
 		 *
-		 * @var $instance Post id.
+		 * @var int|null $instance Post id.
 		 */
 		public static $post_id = null;
 
@@ -83,7 +82,6 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 
 			// Refresh options variables after customizer save.
 			add_action( 'after_setup_theme', array( $this, 'refresh' ) );
-
 		}
 
 		/**
@@ -134,17 +132,18 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 			$astra_options        = self::get_astra_options();
 			$post_per_page        = intval( get_option( 'posts_per_page' ) );
 			$blog_defaults_update = Astra_Dynamic_CSS::astra_4_6_0_compatibility();
+			$reorder_color_seq    = Astra_Dynamic_CSS::astra_4_8_9_compatibility();
 
 			// Update Astra heading 5 font size & handled backward case
 			$update_heading_five_font_size  = Astra_Dynamic_CSS::astra_4_6_14_compatibility();
-			$updated_heading_font_five_size = ( $blog_defaults_update && $update_heading_five_font_size ) ? 18 : 16;
+			$updated_heading_font_five_size = $blog_defaults_update && $update_heading_five_font_size ? 18 : 16;
 
 			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) {
 				/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$selected_layout = ( false === $blog_defaults_update ) ? 'blog-layout-1' : 'blog-layout-4';
+				$selected_layout = false === $blog_defaults_update ? 'blog-layout-1' : 'blog-layout-4';
 			} else {
-				$selected_layout = ( false === $blog_defaults_update ) ? 'blog-layout-classic' : 'blog-layout-4';
+				$selected_layout = false === $blog_defaults_update ? 'blog-layout-classic' : 'blog-layout-4';
 			}
 
 			// Defaults list of options.
@@ -279,7 +278,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 					'theme-color'                          => 'var(' . $palette_css_var_prefix . '0)',
 					'link-h-color'                         => 'var(' . $palette_css_var_prefix . '1)',
 					'heading-base-color'                   => 'var(' . $palette_css_var_prefix . '2)',
-					'border-color'                         => 'var(' . $palette_css_var_prefix . '6)',
+					'border-color'                         => $reorder_color_seq ? 'var(' . $palette_css_var_prefix . '7)' : 'var(' . $palette_css_var_prefix . '6)',
 
 					// Footer Bar Background.
 					'footer-bg-obj'                        => array(
@@ -462,7 +461,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'tablet'  => '',
 						'mobile'  => '',
 					),
-					'header-color-site-title'              => '',
+					'header-color-site-title'              => 'var(--ast-global-color-2)',
 					'header-color-h-site-title'            => '',
 					'header-color-site-tagline'            => '',
 					'display-site-title-responsive'        => array(
@@ -561,7 +560,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 					'narrow-container-max-width'           => 750,
 					'site-layout-outside-bg-obj-responsive' => array(
 						'desktop' => array(
-							'background-color'      => $apply_new_default_values ? 'var(--ast-global-color-4)' : '',
+							'background-color'      => $apply_new_default_values ? ( $reorder_color_seq ? 'var(--ast-global-color-5)' : 'var(--ast-global-color-4)' ) : '',
 							'background-image'      => '',
 							'background-repeat'     => 'repeat',
 							'background-position'   => 'center center',
@@ -605,7 +604,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 					),
 					'content-bg-obj-responsive'            => array(
 						'desktop' => array(
-							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-color'      => $reorder_color_seq ? 'var(' . $palette_css_var_prefix . '4)' : 'var(' . $palette_css_var_prefix . '5)',
 							'background-image'      => '',
 							'background-repeat'     => 'repeat',
 							'background-position'   => 'center center',
@@ -619,7 +618,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 							'overlay-gradient'      => '',
 						),
 						'tablet'  => array(
-							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-color'      => $reorder_color_seq ? 'var(' . $palette_css_var_prefix . '4)' : 'var(' . $palette_css_var_prefix . '5)',
 							'background-image'      => '',
 							'background-repeat'     => 'repeat',
 							'background-position'   => 'center center',
@@ -633,7 +632,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 							'overlay-gradient'      => '',
 						),
 						'mobile'  => array(
-							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-color'      => $reorder_color_seq ? 'var(' . $palette_css_var_prefix . '4)' : 'var(' . $palette_css_var_prefix . '5)',
 							'background-image'      => '',
 							'background-repeat'     => 'repeat',
 							'background-position'   => 'center center',
@@ -752,7 +751,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'text-transform'      => ! isset( $astra_options['body-font-extras'] ) && isset( $astra_options['body-text-transform'] ) ? $astra_options['body-text-transform'] : '',
 						'text-decoration'     => '',
 					),
-					'headings-font-height-settings'        => array(
+					'headings-font-extras'                 => array(
 						'line-height'         => ! isset( $astra_options['headings-font-extras'] ) && isset( $astra_options['headings-line-height'] ) ? $astra_options['headings-line-height'] : '',
 						'line-height-unit'    => 'em',
 						'letter-spacing'      => '',
@@ -905,7 +904,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 
 					// Misc.
 					'enable-scroll-to-id'                  => true,
-					'ast-dynamic-single-download-structure' => ( true === astra_enable_edd_featured_image_defaults() ) ? array(
+					'ast-dynamic-single-download-structure' => true === astra_enable_edd_featured_image_defaults() ? array(
 						'ast-dynamic-single-download-title',
 						'ast-dynamic-single-download-meta',
 						'ast-dynamic-single-download-image',

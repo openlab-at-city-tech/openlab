@@ -19,7 +19,6 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Loader' ) ) {
 	 * @since 1.7.0
 	 */
 	class Astra_Breadcrumbs_Loader {
-
 		/**
 		 * Member Variable
 		 *
@@ -184,14 +183,14 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Loader' ) ) {
 			 * Load unminified if SCRIPT_DEBUG is true.
 			 */
 			/* Directory and Extension */
-			$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
-			$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+			$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
+			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 			wp_enqueue_script( 'astra-breadcrumbs-customizer-preview-js', ASTRA_THEME_BREADCRUMBS_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 		}
 	}
 }
 
 /**
-*  Kicking this off by calling 'get_instance()' method
-*/
+ *  Kicking this off by calling 'get_instance()' method
+ */
 Astra_Breadcrumbs_Loader::get_instance();

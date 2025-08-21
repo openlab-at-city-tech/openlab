@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Reader\TranslationR
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Writer\TranslationWriterInterface;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
- * @internal
  */
 final class TranslationPullCommand extends Command
 {
@@ -48,7 +47,7 @@ final class TranslationPullCommand extends Command
         $this->enabledLocales = $enabledLocales;
         parent::__construct();
     }
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions) : void
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
     {
         if ($input->mustSuggestArgumentValuesFor('provider')) {
             $suggestions->suggestValues($this->providerCollection->keys());
@@ -56,7 +55,7 @@ final class TranslationPullCommand extends Command
         }
         if ($input->mustSuggestOptionValuesFor('domains')) {
             $provider = $this->providerCollection->get($input->getArgument('provider'));
-            if ($provider && \method_exists($provider, 'getDomains')) {
+            if ($provider && method_exists($provider, 'getDomains')) {
                 $domains = $provider->getDomains();
                 $suggestions->suggestValues($domains);
             }
@@ -98,7 +97,7 @@ EOF
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $provider = $this->providerCollection->get($input->getArgument('provider'));
@@ -118,7 +117,7 @@ EOF
             case 'xlf12':
                 $format = 'xlf';
         }
-        $writeOptions = ['path' => \end($this->transPaths), 'xliff_version' => $xliffVersion, 'default_locale' => $this->defaultLocale];
+        $writeOptions = ['path' => end($this->transPaths), 'xliff_version' => $xliffVersion, 'default_locale' => $this->defaultLocale];
         if (!$domains) {
             $domains = $provider->getDomains();
         }
@@ -131,7 +130,7 @@ EOF
                 }
                 $this->writer->write($operation->getResult(), $format, $writeOptions);
             }
-            $io->success(\sprintf('Local translations has been updated from "%s" (for "%s" locale(s), and "%s" domain(s)).', \parse_url($provider, \PHP_URL_SCHEME), \implode(', ', $locales), \implode(', ', $domains)));
+            $io->success(sprintf('Local translations has been updated from "%s" (for "%s" locale(s), and "%s" domain(s)).', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
             return 0;
         }
         $localTranslations = $this->readLocalTranslations($locales, $domains, $this->transPaths);
@@ -140,7 +139,7 @@ EOF
         foreach ($localTranslations->getCatalogues() as $catalogue) {
             $this->writer->write($catalogue, $format, $writeOptions);
         }
-        $io->success(\sprintf('New translations from "%s" has been written locally (for "%s" locale(s), and "%s" domain(s)).', \parse_url($provider, \PHP_URL_SCHEME), \implode(', ', $locales), \implode(', ', $domains)));
+        $io->success(sprintf('New translations from "%s" has been written locally (for "%s" locale(s), and "%s" domain(s)).', parse_url($provider, \PHP_URL_SCHEME), implode(', ', $locales), implode(', ', $domains)));
         return 0;
     }
 }

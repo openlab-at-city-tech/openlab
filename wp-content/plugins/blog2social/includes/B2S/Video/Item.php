@@ -42,7 +42,9 @@ class B2S_Video_Item {
                                                             ' . $shareVideoBtn . '
                                                             <button class="b2s-show-video-uploads btn btn-primary" disabled data-file-url="' . esc_attr($videoUrl) . '" data-attachment-id="' . esc_attr((int) $attachment_id) . '"><i class="glyphicon glyphicon-ban-circle"></i> ' . esc_html__('Details', 'blog2social') . '</button>
                                                         </span>
-                                                        <p class="info hidden-xs">' . sprintf(esc_html__('uploaded by %s on %s', 'blog2social'), get_the_author_meta('display_name', $postData->post_author), B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2))) . '</p>
+                                                        <p class="info hidden-xs">' . sprintf(
+                                                            // translators: %s is network name
+                                                            esc_html__('uploaded by %1$s on %2$s', 'blog2social'), get_the_author_meta('display_name', $postData->post_author), B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2))) . '</p>
                                                     </div>
                                                      <div class="pull-left">
                                                         <div class="b2s-post-video-upload-area" data-attachment-id="' . esc_attr((int) $attachment_id) . '"></div>
@@ -56,8 +58,8 @@ class B2S_Video_Item {
         global $wpdb;
         $content = '';
         $addNotAdminPosts = (!B2S_PLUGIN_ADMIN) ? (" AND `{$wpdb->prefix}b2s_posts`.blog_user_id =" . B2S_PLUGIN_BLOG_USER_ID) : '';
-        $sqlData = $wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`{$wpdb->prefix}b2s_posts`.`blog_user_id`,`publish_date`,`publish_link`,`publish_error_code`,`{$wpdb->prefix}b2s_posts`.`sched_date`,`{$wpdb->prefix}b2s_posts`.`sched_date_utc`,`post_format`,`hook_action`,`upload_video_token`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id`  WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`publish_error_code` = '' $addNotAdminPosts  AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $attachment_id);
-        $result = $wpdb->get_results($sqlData);
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared	
+        $result = $wpdb->get_results($wpdb->prepare("SELECT `{$wpdb->prefix}b2s_posts`.`id`,`{$wpdb->prefix}b2s_posts`.`blog_user_id`,`publish_date`,`publish_link`,`publish_error_code`,`{$wpdb->prefix}b2s_posts`.`sched_date`,`{$wpdb->prefix}b2s_posts`.`sched_date_utc`,`post_format`,`hook_action`,`upload_video_token`,`{$wpdb->prefix}b2s_posts_network_details`.`network_id`,`{$wpdb->prefix}b2s_posts_network_details`.`network_type`, `{$wpdb->prefix}b2s_posts_network_details`.`network_auth_id`, `{$wpdb->prefix}b2s_posts_network_details`.`network_display_name` FROM `{$wpdb->prefix}b2s_posts` LEFT JOIN `{$wpdb->prefix}b2s_posts_network_details` ON `{$wpdb->prefix}b2s_posts`.`network_details_id` = `{$wpdb->prefix}b2s_posts_network_details`.`id`  WHERE `{$wpdb->prefix}b2s_posts`.`hide` = 0 AND `{$wpdb->prefix}b2s_posts`.`publish_error_code` = '' $addNotAdminPosts  AND `{$wpdb->prefix}b2s_posts`.`post_id` = %d ORDER BY `{$wpdb->prefix}b2s_posts`.`publish_date` DESC", $attachment_id));
 
         if (!empty($result) && is_array($result)) {
             $networkType = unserialize(B2S_PLUGIN_NETWORK_TYPE);
@@ -85,16 +87,26 @@ class B2S_Video_Item {
 
                 if(!$schedDate){
                     if(empty($publishDate)){
-                        $publishText = (empty($publishDate)) ? __('uploading in progress by %s', 'blog2social') : __('uploaded by %s', 'blog2social');
+                        $publishText = (empty($publishDate)) ? 
+                        // translators: %s is author name
+                        __('uploading in progress by %s', 'blog2social') : 
+                        // translators: %s is author name
+                        __('uploaded by %s', 'blog2social');
                     } else {
-                        $publishText = __('uploaded by %s', 'blog2social');
+                        $publishText = 
+                        // translators: %s is author name
+                        __('uploaded by %s', 'blog2social');
                     }
                 } 
 
                 if($schedDate && gmdate('Y-m-d H:i:s') < $var->sched_date_utc){
-                    $publishText = __( 'The video was scheduled by %s.', 'blog2social'). " ". esc_html(B2S_Util::getCustomDateFormat($var->sched_date, substr(B2S_LANGUAGE, 0, 2)));
+                    $publishText = 
+                    // translators: %s is author name
+                    __( 'The video was scheduled by %s.', 'blog2social'). " ". esc_html(B2S_Util::getCustomDateFormat($var->sched_date, substr(B2S_LANGUAGE, 0, 2)));
                 } else if($schedDate && gmdate('Y-m-d H:i:s') >= $var->sched_date_utc){
-                    $publishText = __('uploaded by %s', 'blog2social');
+                    $publishText = 
+                    // translators: %s is author name
+                    __('uploaded by %s', 'blog2social');
                 }
 
                 //special Case

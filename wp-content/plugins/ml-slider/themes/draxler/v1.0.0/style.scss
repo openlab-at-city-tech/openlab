@@ -42,6 +42,8 @@
 		.caption-wrap {
 			bottom: unset;
 			top: 0;
+			transform: translateY(0);
+			z-index: 2;
 			opacity: 1;
 
 			.caption {
@@ -74,7 +76,7 @@
 				background-position: center;
 				width: 45px;
 				height: 45px;
-				top: 54px;
+				top: calc(34px + 20px); // 20px is the margin-bottom / 2 from .flexslider
 				box-shadow: 1px 1px 1px rgba(0,0,0,0.3) !important;
 				background-image: none;
 			
@@ -102,7 +104,7 @@
 
 					&:after {
 						mask-image: url(images/left.svg);
-						mask-position: 16px center;
+						mask-position: center center;
 					}
 				}
 
@@ -112,7 +114,7 @@
 
 					&:after {
 						mask-image: url(images/right.svg);
-						mask-position: 17px center;
+						mask-position: center center;
 					}
 				}
 			}
@@ -152,6 +154,12 @@
 					}
 				}
 			}
+		}
+
+		.flex-pauseplay a {
+			right: 30px;
+			left: unset;
+			bottom: 22px;
 		}
 	}
 

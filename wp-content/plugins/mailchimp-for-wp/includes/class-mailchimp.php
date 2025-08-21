@@ -28,13 +28,13 @@ class MC4WP_MailChimp
      * @return object
      * @throws Exception
      */
-    public function list_subscribe($list_id, $email_address, array $args = array(), $update_existing = false, $replace_interests = true)
+    public function list_subscribe($list_id, $email_address, array $args = [], $update_existing = false, $replace_interests = true)
     {
         $this->reset_error();
-        $default_args         = array(
+        $default_args         = [
             'status'        => 'pending',
             'email_address' => $email_address,
-        );
+        ];
         $existing_member_data = null;
 
         // setup default args
@@ -71,9 +71,9 @@ class MC4WP_MailChimp
                 $api->update_list_member(
                     $list_id,
                     $email_address,
-                    array(
+                    [
                         'status' => 'unsubscribed',
-                    )
+                    ]
                 );
             }
         } catch (MC4WP_API_Resource_Not_Found_Exception $e) {
@@ -128,10 +128,10 @@ class MC4WP_MailChimp
 
         return array_map(
             function ($tag) {
-                return array(
+                return [
                     'name'   => $tag,
                     'status' => 'active',
-                );
+                ];
             },
             $tags
         );
@@ -156,9 +156,9 @@ class MC4WP_MailChimp
         }
 
         $api  = $this->get_api();
-        $data = array(
+        $data = [
             'tags' => $this->merge_and_format_member_tags($mailchimp_member->tags, $new_tags),
-        );
+        ];
 
         try {
             $api->update_list_member_tags($mailchimp_list_id, $mailchimp_member->email_address, $data);
@@ -183,7 +183,7 @@ class MC4WP_MailChimp
         $this->reset_error();
 
         try {
-            $this->get_api()->update_list_member($list_id, $email_address, array( 'status' => 'unsubscribed' ));
+            $this->get_api()->update_list_member($list_id, $email_address, [ 'status' => 'unsubscribed' ]);
         } catch (MC4WP_API_Resource_Not_Found_Exception $e) {
             // if email wasn't even on the list: great.
             return true;
@@ -225,7 +225,7 @@ class MC4WP_MailChimp
      */
     public function get_list_merge_fields($list_id)
     {
-        $transient_key = sprintf('mc4wp_list_%s_mf', $list_id);
+        $transient_key = "mc4wp_list_{$list_id}_mf";
         $cached        = get_transient($transient_key);
         if (is_array($cached)) {
             return $cached;
@@ -237,26 +237,26 @@ class MC4WP_MailChimp
             // fetch list merge fields
             $merge_fields = $api->get_list_merge_fields(
                 $list_id,
-                array(
+                [
                     'count'  => 100,
                     'fields' => 'merge_fields.name,merge_fields.tag,merge_fields.type,merge_fields.required,merge_fields.default_value,merge_fields.options,merge_fields.public',
-                )
+                ]
             );
         } catch (MC4WP_API_Exception $e) {
-            return array();
+            return [];
         }
 
         // add EMAIL field
         array_unshift(
             $merge_fields,
-            (object) array(
+            (object) [
                 'tag'      => 'EMAIL',
                 'name'     => __('Email address', 'mailchimp-for-wp'),
                 'required' => true,
                 'type'     => 'email',
-                'options'  => array(),
+                'options'  => [],
                 'public'   => true,
-            )
+            ]
         );
 
         set_transient($transient_key, $merge_fields, HOUR_IN_SECONDS * 24);
@@ -272,7 +272,7 @@ class MC4WP_MailChimp
      */
     public function get_list_interest_categories($list_id)
     {
-        $transient_key = sprintf('mc4wp_list_%s_ic', $list_id);
+        $transient_key = "mc4wp_list_{$list_id}_ic";
         $cached        = get_transient($transient_key);
         if (is_array($cached)) {
             return $cached;
@@ -284,27 +284,27 @@ class MC4WP_MailChimp
             // fetch list interest categories
             $interest_categories = $api->get_list_interest_categories(
                 $list_id,
-                array(
+                [
                     'count'  => 100,
                     'fields' => 'categories.id,categories.title,categories.type',
-                )
+                ]
             );
         } catch (MC4WP_API_Exception $e) {
-            return array();
+            return [];
         }
 
         foreach ($interest_categories as $interest_category) {
-            $interest_category->interests = array();
+            $interest_category->interests = [];
 
             try {
                 // fetch groups for this interest
                 $interests_data = $api->get_list_interest_category_interests(
                     $list_id,
                     $interest_category->id,
-                    array(
+                    [
                         'count'  => 100,
                         'fields' => 'interests.id,interests.name',
-                    )
+                    ]
                 );
                 foreach ($interests_data as $interest_data) {
                     $interest_category->interests[ (string) $interest_data->id ] = $interest_data->name;
@@ -330,7 +330,7 @@ class MC4WP_MailChimp
      */
     public function get_list_marketing_permissions($list_id)
     {
-        $transient_key = sprintf('mc4wp_list_%s_mp', $list_id);
+        $transient_key = "mc4wp_list_{$list_id}_mp";
         $cached        = get_transient($transient_key);
         if (is_array($cached)) {
             return $cached;
@@ -340,23 +340,23 @@ class MC4WP_MailChimp
             $api  = $this->get_api();
             $data = $api->get_list_members(
                 $list_id,
-                array(
-                    'fields' => array( 'members.marketing_permissions' ),
+                [
+                    'fields' => [ 'members.marketing_permissions' ],
                     'count'  => 1,
-                )
+                ]
             );
 
-            $marketing_permissions = array();
-            if (count($data->members) > 0 && $data->members[0]->marketing_permissions) {
+            $marketing_permissions = [];
+            if (count($data->members) > 0 && isset($data->members[0]->marketing_permissions)) {
                 foreach ($data->members[0]->marketing_permissions as $mp) {
-                    $marketing_permissions[] = (object) array(
+                    $marketing_permissions[] = (object) [
                         'marketing_permission_id' => $mp->marketing_permission_id,
                         'text'                    => $mp->text,
-                    );
+                    ];
                 }
             }
         } catch (MC4WP_API_Exception $e) {
-            return array();
+            return [];
         }
 
         set_transient($transient_key, $marketing_permissions, HOUR_IN_SECONDS * 24);
@@ -396,7 +396,7 @@ class MC4WP_MailChimp
     private function fetch_lists()
     {
         $client             = $this->get_api()->get_client();
-        $lists_data         = array();
+        $lists_data         = [];
         $offset             = 0;
         $count              = 10;
         $exceptions_skipped = 0;
@@ -418,11 +418,11 @@ class MC4WP_MailChimp
             try {
                 $data = $client->get(
                     '/lists',
-                    array(
+                    [
                         'count'  => $count,
                         'offset' => $offset,
                         'fields' => 'total_items,lists.id,lists.name,lists.web_id,lists.stats.member_count,lists.marketing_permissions',
-                    )
+                    ]
                 );
 
                 $lists_data = array_merge($lists_data, $data->lists);
@@ -447,7 +447,7 @@ class MC4WP_MailChimp
         } while ($data->total_items >= $offset);
 
         // key by list ID
-        $lists = array();
+        $lists = [];
         foreach ($lists_data as $list_data) {
             $lists["$list_data->id"] = $list_data;
         }
@@ -476,16 +476,13 @@ class MC4WP_MailChimp
 
         foreach ($lists as $list_id => $list) {
             // delete cached merge fields
-            $transient_key = sprintf('mc4wp_list_%s_mf', $list_id);
-            delete_transient($transient_key);
+            delete_transient("mc4wp_list_{$list_id}_mf");
 
             // delete cached interest categories
-            $transient_key = sprintf('mc4wp_list_%s_ic', $list_id);
-            delete_transient($transient_key);
+            delete_transient("mc4wp_list_{$list_id}_ic");
 
             // delete cached marketing permissions
-            $transient_key = sprintf('mc4wp_list_%s_mp', $list_id);
-            delete_transient($transient_key);
+            delete_transient("mc4wp_list_{$list_id}_mp");
         }
 
         return ! empty($lists);
@@ -503,7 +500,7 @@ class MC4WP_MailChimp
     {
         // make sure we're getting an array
         if (! is_array($list_ids)) {
-            $list_ids = array( $list_ids );
+            $list_ids = [ $list_ids ];
         }
 
         // if we got an empty array, return 0

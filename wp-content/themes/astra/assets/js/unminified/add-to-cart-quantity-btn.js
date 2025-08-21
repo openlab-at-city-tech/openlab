@@ -262,6 +262,9 @@ function quantityInput() {
 
         quantityInput.forEach( single => {
             single.addEventListener('keyup', (e) => {
+                if ( e.key === 'Tab' || e.keyCode === 9 ) {
+                    return;
+                }
                 clearTimeout(typingTimer);
                 if (single.value) {
                     typingTimer = setTimeout(() => {

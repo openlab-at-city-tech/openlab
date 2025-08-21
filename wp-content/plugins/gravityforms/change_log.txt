@@ -1,5 +1,67 @@
-### 2.9.6.1
-- Fixed a PHP fatal error that occurs when the gform_form_switcher_forms filter returns an invalid value, or when a deleted form remains in the current users recent forms list.
+### 2.9.11.1
+- Fixed an issue where the recent forms list used by the form switcher is not updated when the admin toolbar menu is disabled.
+- Fixed an issue in reCAPTCHA that prevents the form from being submitted when the reCAPTCHA API keys are invalid on the settings page.
+
+### 2.9.11 | 2025-06-26
+- Added a top-level heading to all admin pages to improve accessibility.
+- Fixed undefined variable error when the filter [gform_toolbar_menu](https://docs.gravityforms.com/gform_toolbar_menu/) returns an empty array.
+- Fixed handling of notification addressing where comma-separation of merge tags includes spaces.
+- Updated links in the admin to indicate when they open in a new window for improved accessibility.
+- Updated messages around deprecated Ready Classes in the form editor.
+- API: Fixed a bug in the Settings API that prevents custom settings fields from being rendered in a tabbed interface.
+- API: Fixed a bug in the Settings API that prevents the description from being rendered in the Post Select field.
+- API: Fixed a bug in the Settings API that prevents the `after_input` parameter from being rendered in the Conditional Logic field.
+
+### 2.9.10 | 2025-06-12
+- Fixed an issue where the background processing queue can become indefinitely paused if the theme or another plugin is using a WP option filter or action hook incorrectly.
+- Fixed an issue with the background processor AJAX request arguments, improving form submission performance for add-ons where feed processing takes a while.
+- Fixed an issue where the form title and description can be removed when the form fails validation using the new AJAX submission method.
+- Fixed an issue with new AJAX where form submissions can break if the form action attribute changes to the admin-ajax.php URL when form markup is updated.
+- AF: Improved support for WordPress plugin checks in `GFAddOn::minimum_requirements()`. Credit: The Gravity Wiz Team.
+- AF: Fixed a fatal error that occurs when validating a select type setting when the option to select multiple choices is enabled.
+
+### 2.9.9 | 2025-05-29
+- Fixed a JavaScript error that occurs when a submit button located outside the form is clicked. Includes a browser console error statement that recommends checking the settings of fields in the form editor for invalid HTML.
+- Fixed an inconsistency in the Rich Text Editor content when using the new AJAX submission method.
+- Fixed several RTL issues for feed pages and form settings icons.
+- Fixed an issue where the multi-column vertical list ready classes are not working for the Orbital theme.
+- Fixed an issue that prevents validation messages from displaying correctly in repeater fields.
+- Updated error handling by moving it from `GF_Feed_Processor` to `GF_Background_Process`, and improved it, so it will also catch and log errors that occur when the notifications processor is used.
+- Updated Gravity Forms admin page header to reflect updated branding.
+- Updated new AJAX submission so that the form is submitted correctly even when third-party code outputs text in the AJAX response.
+- Updated the Autocomplete Attribute setting tooltip to provide clearer instructions about valid values and added a link to a list of supported attributes.
+- Updated the error messages that are displayed any time you try to change or delete a field when there is conditional logic based on that field so that the messages are more informative.
+- API: Fixed an incorrect parameter being passed to `gform_field_map_choices` filter. Credit: The GravityKit Team
+- API: added the ability to query notes from multiple entries at once. Credit: The GravityKit Team.
+
+### 2.9.8 | 2025-05-08
+- Added a setting to disable the dashboard widget.
+- Fixed a PHP fatal error that occurs during background processing if another plugin includes an older version of `WP_Async_Request` that doesn't include `maybe_wp_die()`.
+- Fixed a PHP fatal error that occurs in `wp_date()` for some PHP versions and timestamps during background processing if a batch has previously been attempted.
+- Fixed a nonce validation error that occurs when a background processor dispatch method is called during an admin-ajax.php request, such as the one used to process new Ajax enabled form submissions.
+- Fixed an accessibility issue where the consent field description does not get keyboard focus.
+- Fixed an issue that causes the URL field properties to be overwritten by defaults in the form editor.
+- Fixed an issue where the honeypot doesn't work with new AJAX.
+- Fixed a deprecation notice for the `utf8_encoded()` PHP function.
+- Updated tables on the System Report page to improve accessibility.
+- Updated the default honeypot action from "Do not create an entry" to "Create an entry and mark it as spam".
+- Updated the flyout in the form editor to be more consistent.
+- Removed the unused `data-js-reload` attribute from field markup.
+- AF: Updated the generic map field to show Entry Date and Entry ID as options when the field types are date and number, respectively.
+- API: Fixed an issue with the `gform/post_render` event being fired too early during an AJAX submission, which causes conflicts with certain add-ons.
+- API: Updated `GFAPI::submit_form()` to support an optional 6th param, `$initiated_by`, the process that initiated the submission. Supported integers are 1 (aka `GFFormDisplay::SUBMISSION_INITIATED_BY_WEBFORM`) or 2 (aka `GFFormDisplay::SUBMISSION_INITIATED_BY_API`). Defaults to `GFFormDisplay::SUBMISSION_INITIATED_BY_API`.
+- API: Updated the result returned by `GFAPI::submit_form()` to include the `is_spam`, `confirmation_message`, and `confirmation_type` properties when the form fails honeypot validation and it is configured to use the "Do not create an entry" action.
+
+### 2.9.7 | 2025-04-22
+- Added the autocomplete attribute setting to Website field.
+- Fixed spacing and margin issues in the admin and help sections in RTL languages.
+- Fixed a PHP fatal error that occurs when the [`gform_form_switcher_forms`](https://docs.gravityforms.com/gform_form_switcher_forms/) filter returns an invalid value, or when a deleted form remains in the current users recent forms list.
+- Updated the minimum WordPress version (for support) on the System Status page to 6.7.
+- Removed trailing spaces from some translatable strings to improve translation.
+- AF: Fixed an issue where the placeholder attribute isn't rendered for text input fields in add-on feed settings. Credit: GravityKit team
+- AF: Updated the background processor to pause when a task encounters an error (e.g. external API rate limit), and resume later on the fallback cron job.
+- API: Added the submission type ("submission_type" property) to the result returned by an AJAX submission.
+- API: Fixed an issue where the conditional logic setting instructions property could not be overridden. Credit: GravityKit team
 
 ### 2.9.6 | 2025-04-08
 - Added a performance improvement by making the form switcher only show the most recent 10 forms.

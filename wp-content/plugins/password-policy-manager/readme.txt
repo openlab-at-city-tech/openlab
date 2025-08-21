@@ -4,11 +4,11 @@ Contributors: miniOrange
 Tags:  Reset Password, Password Security, Strong password, Secure Password, Password strength, password score, force password change, Users password manager, Generate Random Passwords, One Click password reset, password audit report, Enforce strong password
 Donate link: https://miniorange.com
 Requires at least: 4.6
-Tested up to: 6.7.2
+Tested up to: 6.8
 Requires PHP: 5.3.0
-Stable tag: 2.0.2
-License: MIT/Expat
-License URI: https://docs.miniorange.com/mit-license
+Stable tag: 2.0.5
+License: Expat
+License URI: https://plugins.miniorange.com/mit-license
 
 The Password Policy Manager is a plugin that makes it easy to create and enforce strong and secure password policies with features like force password change, reset the password, password security, strong password, user password manager, password strength, auto password expiry, etc. 
 
@@ -179,6 +179,19 @@ For any customization related queries or if you require any assistance, email us
 2. Check for password strength
 
 == Changelog ==
+
+= 2.0.5 =
+
+* Vulnerability Fixes
+
+= 2.0.4 =
+
+* Code Optimizations
+
+= 2.0.3 =
+
+* Vulnerability Fixes
+* Compatibility with WordPress 6.8
 
 = 2.0.2 =
 

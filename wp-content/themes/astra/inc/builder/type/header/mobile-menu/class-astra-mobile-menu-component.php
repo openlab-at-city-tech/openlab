@@ -20,7 +20,6 @@ define( 'ASTRA_BUILDER_MOBILE_MENU_URI', ASTRA_THEME_URI . 'inc/builder/type/hea
  * @since 3.0.0
  */
 class Astra_Mobile_Menu_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */
@@ -99,7 +98,7 @@ class Astra_Mobile_Menu_Component {
 
 		// To add default alignment for navigation which can be added through any third party plugin.
 		// Do not add any CSS from theme except header alignment.
-		echo '<div ' . astra_attr( 'ast-main-header-bar-alignment' ) . '>';
+		echo '<div ' . astra_attr( 'ast-main-header-bar-alignment' ) . '>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( is_customize_preview() ) {
 			Astra_Builder_UI_Controller::render_customizer_edit_button();
@@ -131,7 +130,7 @@ class Astra_Mobile_Menu_Component {
 						'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility',
 						'aria-label' => esc_attr__( 'Site Navigation', 'astra' ),
 					)
-				) 
+				)
 			);
 			echo '>';
 			$mobile_menu_markup = wp_page_menu( $fallback_menu_args );

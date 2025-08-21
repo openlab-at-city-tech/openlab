@@ -1,5 +1,6 @@
 jQuery(function ($) {
     let $dateFilter = $('#bookly-filter-date'),
+        $based_on = $('#bookly-based-on'),
         pickerRanges = [];
 
     /**
@@ -32,7 +33,13 @@ jQuery(function ($) {
         }
     } );
 
+    $based_on.val(BooklyL10n.based_on);
+
     $dateFilter.on('apply.daterangepicker', function () {
-        $(document.body).trigger('bookly.dateRange.changed', [$dateFilter.data('date')]);
+        $(document.body).trigger('bookly.dateRange.changed', [$dateFilter.data('date'), $based_on.val()]);
     }).trigger('apply.daterangepicker');
+
+    $based_on.on('change', function() {
+        $(document.body).trigger('bookly.dateRange.changed', [$dateFilter.data('date'), $based_on.val()]);
+    });
 });

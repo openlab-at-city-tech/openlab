@@ -211,6 +211,21 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Tutor LMS' );
     }
 
+    // Houzez
+		if ( defined( 'HOUZEZ_THEME_VERSION' ) ) {
+      array_push( $unsupported, 'Houzez' );
+		}
+
+    // Kadence Blocks
+		if ( defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+			array_push( $unsupported, 'Kadence Blocks' );
+		}
+
+    // FLuent Forms
+		if ( defined( 'FLUENTFORM_VERSION' ) ) {
+      array_push( $unsupported, 'Fluent Forms' );
+    }
+
     return $unsupported;
   }
 }

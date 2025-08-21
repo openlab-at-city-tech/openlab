@@ -20,7 +20,6 @@ define( 'ASTRA_BUILDER_FOOTER_MENU_URI', ASTRA_THEME_URI . 'inc/builder/type/foo
  * @since 3.0.0
  */
 class Astra_Footer_Menu_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */
@@ -49,9 +48,9 @@ class Astra_Footer_Menu_Component {
 		$mobile_menu_layout_class  = '';
 		$menu_layout               = astra_get_option( 'footer-menu-layout' );
 
-		$desktop_menu_layout = ( isset( $menu_layout['desktop'] ) ) ? $menu_layout['desktop'] : '';
-		$tablet_menu_layout  = ( isset( $menu_layout['tablet'] ) ) ? $menu_layout['tablet'] : '';
-		$mobile_menu_layout  = ( isset( $menu_layout['mobile'] ) ) ? $menu_layout['mobile'] : '';
+		$desktop_menu_layout = isset( $menu_layout['desktop'] ) ? $menu_layout['desktop'] : '';
+		$tablet_menu_layout  = isset( $menu_layout['tablet'] ) ? $menu_layout['tablet'] : '';
+		$mobile_menu_layout  = isset( $menu_layout['mobile'] ) ? $menu_layout['mobile'] : '';
 
 		if ( ! empty( $desktop_menu_layout ) ) {
 			$desktop_menu_layout_class = 'astra-footer-' . esc_attr( $desktop_menu_layout ) . '-menu';

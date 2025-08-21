@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Header_Edd_Cart_Component' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Header_Edd_Cart_Component {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

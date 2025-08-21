@@ -42,8 +42,10 @@ class Page extends Lib\Base\Ajax
             'categories' => $categories,
             'uncategorized' => esc_attr__( 'Uncategorized', 'bookly' ),
             'noResultFound' => esc_attr__( 'No result found', 'bookly' ),
-            'zeroRecords' => esc_attr__( 'No records.', 'bookly' ),
+            'zeroRecords' => __( 'No matching records found', 'bookly' ),
             'processing' => esc_attr__( 'Processing...', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'show_type' => count( Proxy\Shared::prepareServiceTypes( array() ) ) > 0,
             'datatables' => $datatables,
         ) );

@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Sanitizes {
-
 		/**
 		 * Instance
 		 *
@@ -44,7 +43,8 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 		/**
 		 * Constructor
 		 */
-		public function __construct() { }
+		public function __construct() {
+		}
 
 		/**
 		 * Sanitize Logo SVG Icon.
@@ -118,7 +118,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			$content = preg_replace( '/<\?(.*)\?>/Us', '', $content );
 			$content = preg_replace( '/<\%(.*)\%>/Us', '', $content );
 
-			if ( ( false !== strpos( $content, '<?php' ) ) || ( false !== strpos( $content, '<%' ) ) ) {
+			if ( false !== strpos( $content, '<?php' ) || ( false !== strpos( $content, '<%' ) ) ) {
 				return '';
 			}
 
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			$content = preg_replace( '/<!--(.*)-->/Us', '', $content );
 			$content = preg_replace( '/\/\*(.*)\*\//Us', '', $content );
 
-			if ( ( false !== strpos( $content, '<!--' ) ) || ( false !== strpos( $content, '/*' ) ) ) {
+			if ( false !== strpos( $content, '<!--' ) || ( false !== strpos( $content, '/*' ) ) ) {
 				return '';
 			}
 
@@ -288,7 +288,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 		public static function sanitize_spacing( $val ) {
 
 			foreach ( $val as $key => $value ) {
-				$val[ $key ] = ( is_numeric( $val[ $key ] ) && $val[ $key ] >= 0 ) ? $val[ $key ] : '';
+				$val[ $key ] = is_numeric( $val[ $key ] ) && $val[ $key ] >= 0 ? $val[ $key ] : '';
 			}
 
 			return $val;
@@ -366,17 +366,16 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 				return $spacing;
 
-			} else {
-				/** @psalm-suppress DocblockTypeContradiction */
-				if ( is_array( $val ) ) {
-					foreach ( $val as $key => $value ) {
-						$val[ $key ] = is_numeric( $val[ $key ] ) ? $val[ $key ] : '';
-					}
-				}
-				/** @psalm-suppress InvalidReturnStatement */
-				return $val;
 			}
 
+			/** @psalm-suppress DocblockTypeContradiction */
+			if ( is_array( $val ) ) {
+				foreach ( $val as $key => $value ) {
+					$val[ $key ] = is_numeric( $val[ $key ] ) ? $val[ $key ] : '';
+				}
+			}
+			/** @psalm-suppress InvalidReturnStatement */
+			return $val;
 		}
 
 		/**
@@ -388,7 +387,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 		 * @since 2.5.4
 		 */
 		public static function check_numberic_values( $value ) {
-			return ( is_numeric( $value ) ) ? $value : '';
+			return is_numeric( $value ) ? $value : '';
 		}
 
 		/**
@@ -444,12 +443,12 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 				'mobile-unit'  => '',
 			);
 			if ( is_array( $val ) ) {
-				$responsive['desktop']      = ( isset( $val['desktop'] ) && is_numeric( $val['desktop'] ) ) ? $val['desktop'] : '';
-				$responsive['tablet']       = ( isset( $val['tablet'] ) && is_numeric( $val['tablet'] ) ) ? $val['tablet'] : '';
-				$responsive['mobile']       = ( isset( $val['mobile'] ) && is_numeric( $val['mobile'] ) ) ? $val['mobile'] : '';
-				$responsive['desktop-unit'] = ( isset( $val['desktop-unit'] ) && in_array( $val['desktop-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ) ? $val['desktop-unit'] : 'px';
-				$responsive['tablet-unit']  = ( isset( $val['tablet-unit'] ) && in_array( $val['tablet-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ) ? $val['tablet-unit'] : 'px';
-				$responsive['mobile-unit']  = ( isset( $val['mobile-unit'] ) && in_array( $val['mobile-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ) ? $val['mobile-unit'] : 'px';
+				$responsive['desktop']      = isset( $val['desktop'] ) && is_numeric( $val['desktop'] ) ? $val['desktop'] : '';
+				$responsive['tablet']       = isset( $val['tablet'] ) && is_numeric( $val['tablet'] ) ? $val['tablet'] : '';
+				$responsive['mobile']       = isset( $val['mobile'] ) && is_numeric( $val['mobile'] ) ? $val['mobile'] : '';
+				$responsive['desktop-unit'] = isset( $val['desktop-unit'] ) && in_array( $val['desktop-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ? $val['desktop-unit'] : 'px';
+				$responsive['tablet-unit']  = isset( $val['tablet-unit'] ) && in_array( $val['tablet-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ? $val['tablet-unit'] : 'px';
+				$responsive['mobile-unit']  = isset( $val['mobile-unit'] ) && in_array( $val['mobile-unit'], array( '', 'px', 'em', 'rem', '%' ) ) ? $val['mobile-unit'] : 'px';
 			} else {
 				$responsive['desktop'] = is_numeric( $val ) ? $val : '';
 			}
@@ -618,7 +617,8 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 			// Get list of choices from the control
 			// associated with the setting.
-			$choices    = $setting->manager->get_control( $setting->id )->choices;
+			$choices = $setting->manager->get_control( $setting->id )->choices;
+
 			$input_keys = $input;
 
 			foreach ( $input_keys as $key => $value ) {
@@ -629,7 +629,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 			// If the input is a valid key, return it;
 			// otherwise, return the default.
-			return ( is_array( $input ) ? $input : $setting->default );
+			return is_array( $input ) ? $input : $setting->default;
 		}
 
 		/**
@@ -650,7 +650,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 			// If the input is a valid key, return it;
 			// otherwise, return the default.
-			return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
+			return array_key_exists( $input, $choices ) ? $input : $setting->default;
 		}
 
 		/**
@@ -678,9 +678,9 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 			if ( in_array( $input, $valid ) ) {
 				return $input;
-			} else {
-				return 'normal';
 			}
+
+			return 'normal';
 		}
 
 		/**
@@ -866,7 +866,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 		 */
 		public static function sanitize_toggle_control( $val ) {
 			// returns true if checkbox is checked.
-			return ( isset( $val ) && is_bool( $val ) ? $val : '' );
+			return isset( $val ) && is_bool( $val ) ? $val : '';
 		}
 	}
 }

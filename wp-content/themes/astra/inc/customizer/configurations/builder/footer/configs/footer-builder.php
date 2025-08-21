@@ -35,7 +35,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 
 		Astra_Builder_Helper::$footer_desktop_items[ 'html-' . $index ] = array(
 			'name'    => 'HTML ' . $index,
-			'icon'    => 'text',
+			'icon'    => 'editor-code',
 			'section' => $footer_html_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'html',
@@ -55,7 +55,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 
 		Astra_Builder_Helper::$footer_desktop_items[ 'widget-' . $index ] = array(
 			'name'    => 'Widget ' . $index,
-			'icon'    => 'wordpress',
+			'icon'    => 'screenoptions',
 			'section' => $footer_widget_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'widget',
@@ -87,8 +87,8 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 		}
 
 		Astra_Builder_Helper::$footer_desktop_items[ 'button-' . $index ] = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_footer_button ) ? 'Button' : 'Button ' . $index,
-			'icon'    => 'admin-links',
+			'name'    => 1 === Astra_Builder_Helper::$num_of_footer_button ? 'Button' : 'Button ' . $index,
+			'icon'    => 'button',
 			'section' => $footer_button_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
 			'type'    => 'button',
@@ -107,7 +107,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 		}
 
 		Astra_Builder_Helper::$footer_desktop_items[ 'social-icons-' . $index ] = array(
-			'name'    => ( 1 === Astra_Builder_Helper::$num_of_footer_social_icons ) ? 'Social' : 'Social ' . $index,
+			'name'    => 1 === Astra_Builder_Helper::$num_of_footer_social_icons ? 'Social' : 'Social ' . $index,
 			'icon'    => 'share',
 			'section' => $footer_social_section,
 			'clone'   => defined( 'ASTRA_EXT_VER' ),
@@ -123,7 +123,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 		'below'   => array(),
 	);
 
-	foreach ( $zone_base as $key => $base ) {
+	foreach ( $zone_base as $base ) {
 		for ( $index = 1; $index <= Astra_Builder_Helper::$num_of_footer_columns; $index++ ) {
 			$zones[ $base ][ $base . '_' . $index ] = ucfirst( $base ) . ' Section ' . $index;
 		}
@@ -135,7 +135,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 			'name'     => 'panel-footer-builder-group',
 			'type'     => 'panel',
 			'priority' => 60,
-			'title'    => __( 'Footer Builder', 'astra' ),
+			'title'    => __( 'Footer', 'astra' ),
 		),
 
 		/**
@@ -168,7 +168,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 			'name'     => 'section-footer-builder',
 			'type'     => 'section',
 			'priority' => 5,
-			'title'    => __( 'Footer Builder', 'astra' ),
+			'title'    => __( 'Footer', 'astra' ),
 			'panel'    => 'panel-footer-builder-group',
 			'context'  => array(
 				array(
@@ -190,7 +190,7 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 			'priority'    => 20,
 			'description' => '',
 			'context'     => array(),
-			'divider'     => ( astra_showcase_upgrade_notices() ) ? array() : array( 'ast_class' => 'ast-pro-available' ),
+			'divider'     => astra_showcase_upgrade_notices() ? array() : array( 'ast_class' => 'ast-pro-available' ),
 		),
 
 		// Group Option: Global Footer Background styling.
@@ -294,7 +294,6 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 			'type'     => 'control',
 			'control'  => 'ast-upgrade',
 			'campaign' => 'footer-builder',
-			'renderAs' => 'list',
 			'choices'  => array(
 				'two'   => array(
 					'title' => __( 'Divider element', 'astra' ),
@@ -333,5 +332,5 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_builder_footer_configuration();
+	add_action( 'init', 'astra_builder_footer_configuration', 10, 0 );
 }

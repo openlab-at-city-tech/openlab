@@ -24,7 +24,7 @@
 		</p>
 		<form method="post">
 			<div style="position: absolute; right: 20px;">
-				<input onclick="jQuery('.onlyinpro').toggleClass('hide'); return false;" type="submit" name="cmtt_toggleProOptions" value="Show/hide Pro options" class="button cmtt-cleanup-button"/>
+				<input onclick="jQuery('.onlyinpro').toggleClass('hide'); jQuery('.onlyinpro_empty').toggleClass('show'); return false;" type="submit" name="cmtt_toggleProOptions" value="Show/hide Pro options" class="button cmtt-cleanup-button cmtt_show_hide_pro_options" style="background:lightgreen;"/>
 			</div>
 			<div>
 				<div class="cm_field_help_container">Warning! This option will completely erase all of the data stored by the CM Tooltip Glossary in the database: terms, options, synonyms etc. <br/> It will also remove the Glossary Index Page. <br/> It cannot be reverted.</div>
@@ -151,7 +151,12 @@
 					<div class="clear"></div>
 				</div>
 				<div class="block onlyinpro">
-					<h3>Advanced Custom Fields Settings</h3>
+					<h3 class="section-title">
+						<span>Advanced Custom Fields Settings</span>
+						<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+							<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+						</svg>
+					</h3>
 					<table class="floated-form-table form-table">
 						<tr valign="top" class="onlyinpro">
 							<th scope="row">Highlight terms in ACF fields?</th>
@@ -536,7 +541,12 @@
 					</table>
 				</div>
 				<div class="block onlyinpro">
-					<h3>Edit Screen Elements</h3>
+					<h3 class="section-title">
+						<span>Edit Screen Elements</span>
+						<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+							<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+						</svg>
+					</h3>
 					<table class="floated-form-table form-table">
 						<tr valign="top" class="onlyinpro">
 							<th scope="row" valign="middle" align="left" ><?php _e('Synonym Suggestions API', 'cm-tooltip-glossary'); ?>:</th>
@@ -553,7 +563,7 @@
 						</svg>
 					</h3>
 					<p>Refer new users to any of the CM Plugins and you'll receive a minimum of <strong>15%</strong> of their purchase! For more information please visit CM Plugins <a href="http://www.cminds.com/referral-program/" target="new">Affiliate page</a></p>
-					<table>
+					<table class="floated-form-table form-table">
 						<tr valign="top">
 							<th scope="row" valign="middle" align="left" >Enable referrals:</th>
 							<td>
@@ -571,15 +581,10 @@
 						</tr>
 					</table>
 				</div>
-				<div class="block">
-					<h3>Page Builder Support</h3>
-					<p>Support Advanced Custom fields (ACF) and Page Builders including Divi, Beaver Builder, WPBakery, Elementor and more.</p>
-					<table>
-						<tr valign="top">
-							<th scope="row" valign="middle" align="left" >Page Builder Support:</th>
-							<td><span style="color:red">Available only in Premium versions of the plugin </span>
-							</td>
-
+				<div class="block" style="padding-top:0px;">
+					<table class="floated-form-table form-table" style="margin-top:0px;">
+						<tr style="width:100%;">
+							<td style="width:100%; padding-left:0px; padding-right:0px; margin-top:0px;"><div class="onlyinpro_empty" style="display:none;"><p>Pro options are hidden. Click the button <span style="font-weight:bold;color:#00cd00;">"Show/hide Pro options"</span> to see them.</p></div></td>
 						</tr>
 					</table>
 				</div>
@@ -779,6 +784,13 @@
 						</tr>
 					</table>
 				</div>
+				<div class="block" style="padding-top:0px;">
+					<table class="floated-form-table form-table" style="margin-top:0px;">
+						<tr style="width:100%;">
+							<td style="width:100%; padding-left:0px; padding-right:0px; margin-top:0px;"><div class="onlyinpro_empty" style="display:none;"><p>Pro options are hidden. Click the button <span style="font-weight:bold;color:#00cd00;">"Show/hide Pro options"</span> to see them.</p></div></td>
+						</tr>
+					</table>
+				</div>
 			</div>
 			<div id="tabs-3" class="settings-tab">
 				<div class="cminds_settings_toggle_tabs cminds_settings_toggle-opened">Toggle All</div>
@@ -907,8 +919,6 @@
 							<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
 						</svg>
 					</h3>
-					<div class="block">
-						<h3 class="section-title">Related Articles</h3>
 						<table class="floated-form-table form-table">
 							<tr valign="top" class="onlyinpro">
 								<th scope="row">Show related articles</th>
@@ -945,7 +955,12 @@
 						</table>
 					</div>
 					<div class="block onlyinpro">
-						<h3>Glossary Term - Synonyms</h3>
+						<h3 class="section-title">
+							<span>Glossary Term - Synonyms</span>
+							<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+								<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+							</svg>
+						</h3>
 						<table class="floated-form-table form-table">
 							<tr valign="top" class="onlyinpro">
 								<th scope="row">Show synonyms list</th>
@@ -966,6 +981,12 @@
 							</tr>
 						</table>
 					</div>
+				<div class="block" style="padding-top:0px;">
+					<table class="floated-form-table form-table" style="margin-top:0px;">
+						<tr style="width:100%;">
+							<td style="width:100%; padding-left:0px; padding-right:0px; margin-top:0px;"><div class="onlyinpro_empty" style="display:none;"><p>Pro options are hidden. Click the button <span style="font-weight:bold;color:#00cd00;">"Show/hide Pro options"</span> to see them.</p></div></td>
+						</tr>
+					</table>
 				</div>
 			</div>
 			<div id="tabs-4" class="settings-tab">
@@ -1124,7 +1145,12 @@
 					</table>
 				</div>
 				<div class="block onlyinpro">
-					<h3>Tooltip - Featured Images</h3>
+					<h3 class="section-title">
+						<span>Tooltip - Featured Images</span>
+						<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+							<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+						</svg>
+					</h3>
 					<table class="floated-form-table form-table">
 						<tr valign="top" class="onlyinpro">
 							<th scope="row"> Show featured image in tooltip?</th>

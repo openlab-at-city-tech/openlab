@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.1.3
  */
 class Astra_Schema {
-
 	/**
 	 * Constructor
 	 */
@@ -32,7 +31,8 @@ class Astra_Schema {
 	 *
 	 * @since 2.1.3
 	 */
-	public function setup_schema() { }
+	public function setup_schema() {
+	}
 
 	/**
 	 * Include schema files.

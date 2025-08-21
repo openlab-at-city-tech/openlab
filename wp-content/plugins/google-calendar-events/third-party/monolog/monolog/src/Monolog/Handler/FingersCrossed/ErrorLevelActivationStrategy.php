@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
- * @internal
  */
 class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
@@ -37,7 +36,7 @@ class ErrorLevelActivationStrategy implements ActivationStrategyInterface
     {
         $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
-    public function isHandlerActivated(array $record) : bool
+    public function isHandlerActivated(array $record): bool
     {
         return $record['level'] >= $this->actionLevel;
     }

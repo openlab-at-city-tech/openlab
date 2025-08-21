@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class DriveFileImageMediaMetadataLocation extends \SimpleCalendar\plugin_deps\Google\Model
 {
     public $altitude;
@@ -49,4 +48,4 @@ class DriveFileImageMediaMetadataLocation extends \SimpleCalendar\plugin_deps\Go
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(DriveFileImageMediaMetadataLocation::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_DriveFileImageMediaMetadataLocation');
+class_alias(DriveFileImageMediaMetadataLocation::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileImageMediaMetadataLocation');

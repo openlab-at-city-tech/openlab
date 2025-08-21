@@ -432,6 +432,8 @@
             </div>
         </div>
         <div class="clear"></div>
-        <?php submit_button(); ?>
+        <div class="sr-only">
+            <?php submit_button(); ?>
+        </div>
     </div>
 </div>

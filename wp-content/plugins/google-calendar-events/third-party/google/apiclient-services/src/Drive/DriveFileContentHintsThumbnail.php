@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class DriveFileContentHintsThumbnail extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -58,4 +57,4 @@ class DriveFileContentHintsThumbnail extends \SimpleCalendar\plugin_deps\Google\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(DriveFileContentHintsThumbnail::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_DriveFileContentHintsThumbnail');
+class_alias(DriveFileContentHintsThumbnail::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileContentHintsThumbnail');

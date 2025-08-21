@@ -1,6 +1,7 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
-function zpStripQuotes($string)
+
+function zotpress_strip_quotes($string)
 {
     // Strip quotes and decode
     $string = str_replace("”", "", str_replace('"','', html_entity_decode( $string )));
@@ -38,26 +39,26 @@ function Zotpress_zotpressInText ($atts)
 
     // PREPARE ATTRIBUTES
     if ( $items )
-        $items = zpStripQuotes( str_replace(" ", "", $items ));
+        $items = zotpress_strip_quotes( str_replace(" ", "", $items ));
     elseif ( $item )
-        $items = zpStripQuotes( str_replace(" ", "", $item ));
+        $items = zotpress_strip_quotes( str_replace(" ", "", $item ));
 
-    $pages = zpStripQuotes( $pages );
-    $format = zpStripQuotes( $format );
-    $brackets = zpStripQuotes( $brackets );
+    $pages = zotpress_strip_quotes( $pages );
+    $format = zotpress_strip_quotes( $format );
+    $brackets = zotpress_strip_quotes( $brackets );
 
-    $etal = zpStripQuotes( $etal );
+    $etal = zotpress_strip_quotes( $etal );
     if ( $etal == "default" ) $etal = false;
 
-    $separator = zpStripQuotes( $separator );
+    $separator = zotpress_strip_quotes( $separator );
     if ( $separator == "default" ) $separator = false;
 
-    $and = zpStripQuotes( $and );
+    $and = zotpress_strip_quotes( $and );
     if ( $and == "default" ) $and = false;
 
-    if ( $userid ) $api_user_id = zpStripQuotes( $userid );
-    if ( $nickname ) $nickname = zpStripQuotes( $nickname );
-    if ( $nick ) $nickname = zpStripQuotes( $nick );
+    if ( $userid ) $api_user_id = zotpress_strip_quotes( $userid );
+    if ( $nickname ) $nickname = zotpress_strip_quotes( $nickname );
+    if ( $nick ) $nickname = zotpress_strip_quotes( $nick );
 
 
 
@@ -79,8 +80,8 @@ function Zotpress_zotpressInText ($atts)
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE nickname='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `nickname`=%s
                 ",
                 array( $nickname )
             ), OBJECT
@@ -95,8 +96,8 @@ function Zotpress_zotpressInText ($atts)
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE api_user_id='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `api_user_id`=%s
                 ",
                 array( $api_user_id )
             ), OBJECT
@@ -115,8 +116,8 @@ function Zotpress_zotpressInText ($atts)
             $zp_account = $wpdb->get_row(
                 $wpdb->prepare(
                     "
-                    SELECT * FROM ".$wpdb->prefix."zotpress 
-                    WHERE api_user_id ='%s'
+                    SELECT * FROM `".$wpdb->prefix."zotpress` 
+                    WHERE `api_user_id`=%s
                     ",
                     array( $api_user_id )
                 ), OBJECT
@@ -259,6 +260,5 @@ function Zotpress_zotpressInText ($atts)
 
     return $output;
 }
-
 
 ?>

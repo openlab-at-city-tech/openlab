@@ -77,7 +77,7 @@ class B2S_Ship_Image {
             if($this->viewMode != 'curation'){
                 $content .= ' <button class="btn btn-primary b2s-image-change-all-network b2s-image-change-btn-area" data-network-id="" data-post-id="' . esc_attr($postId) . '">' . esc_html__('Apply image for all posts', 'blog2social') . '</button>';
             } else {
-                $content .= ' <button class="btn btn-primary b2s-image-change b2s-image-change-btn-area">' . esc_html__('Apply image', 'blog2social') . '</button>';
+                $content .= ' <button class="btn btn-primary b2s-image-change b2s-image-change-btn-area b2s-image-change-apply">' . esc_html__('Apply image', 'blog2social') . '</button>';
             }
         }
 

@@ -425,6 +425,7 @@ class Installer extends Base\Installer
             'bookly_cloud_stripe_timeout' => '0',
             'bookly_cloud_token' => '',
             'bookly_cloud_zapier_api_key' => '',
+            'bookly_advertisement' => array(),
             // Business hours.
             'bookly_bh_monday_start' => '08:00:00',
             'bookly_bh_monday_end' => '18:00:00',
@@ -470,6 +471,9 @@ class Installer extends Base\Installer
             'bookly_smtp_secure' => 'none',
             // Appointments.
             'bookly_appointment_end_date_method' => 'default',
+            'bookly_advanced_time_slot_length_minutes' => '',
+            'bookly_advanced_slot_date_format' => 'D, M d',
+            'bookly_dashboard_based_on_appointment' => 'created_at',
         );
     }
 
@@ -624,6 +628,7 @@ class Installer extends Base\Installer
                 `min_time_prior_booking`       INT DEFAULT NULL,
                 `min_time_prior_cancel`        INT DEFAULT NULL,
                 `gateways`                     VARCHAR(255) DEFAULT NULL,
+                `tags`                         TEXT DEFAULT NULL,
                 `visibility`                   ENUM("public","private","group") NOT NULL DEFAULT "public",
                 `position`                     INT NOT NULL DEFAULT 9999,
             CONSTRAINT
@@ -1114,6 +1119,7 @@ class Installer extends Base\Installer
             $notification = new Entities\Notification();
             $notification->setFields( $data )->save();
         }
+        do_action( 'wpml_register_single_string', 'bookly', 'currency_USD', '$' );
     }
 
     /**

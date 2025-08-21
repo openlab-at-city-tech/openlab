@@ -10,7 +10,9 @@
  */
 function epkb_add_main_page_if_required( $post_id, $post ) {
 
-	// ignore autosave/revision which is not article submission; same with ajax and bulk edit
+	// -------------------------------------------------------------------------
+	// 0. Ignore autosave / AJAX / bulk-edit / unsupported post types / statuses
+	// -------------------------------------------------------------------------
 	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX') && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty( $post->post_status ) ) {
 		return;
 	}
@@ -20,19 +22,28 @@ function epkb_add_main_page_if_required( $post_id, $post ) {
 		return;
 	}
 
-	// return if this page does not have KB shortcode, KB layout block, or error occurred; we remove old pages elsewhere
+	// -------------------------------------------------------------------------
+	// 1. Page must actually be / become a KB Main Page
+	// -------------------------------------------------------------------------
 	$kb_id = EPKB_KB_Handler::get_kb_id_from_kb_main_page( $post );
 	if ( empty( $kb_id ) ) {
 		return;
 	}
 
+	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+	if ( empty( $kb_config ) || is_wp_error( $kb_config ) ) {
+		return;
+	}
+
 	// get KB main pages
-	$kb_main_pages = epkb_get_instance()->kb_config_obj->get_value( $kb_id, 'kb_main_pages' );
+	$kb_main_pages = $kb_config['kb_main_pages'];
 	if ( ! is_array( $kb_main_pages ) ) {
 		return;
 	}
 
-	// if the page is not relevant then remove it
+	// -------------------------------------------------------------------------
+	// 2. Handle deletes / restores
+	// -------------------------------------------------------------------------
 	if ( in_array( $post->post_status, array( 'inherit', 'trash' ) ) ) {
 		if ( ! isset( $kb_main_pages[$post_id] ) ) {
 			return;
@@ -42,9 +53,12 @@ function epkb_add_main_page_if_required( $post_id, $post ) {
 		return;
 	}
 
-	// don't update if the page is stored with the same title
-	if ( in_array( $post_id, array_keys( $kb_main_pages ) ) && $kb_main_pages[$post_id] == $post->post_title ) {
-		return;
+	// -------------------------------------------------------------------------
+	// 3. New or renamed KB Main Page?
+	// -------------------------------------------------------------------------
+	$is_new_main_page = ! isset( $kb_main_pages[ $post_id ] );
+	if ( ! $is_new_main_page && $kb_main_pages[ $post_id ] == $post->post_title ) {
+		return; // nothing changed
 	}
 
 	$kb_main_pages[$post_id] = $post->post_title;
@@ -179,8 +193,8 @@ function epkb_add_delete_kb_page_warning( $post_id ) {
 	$main_page_slug = EPKB_Core_Utilities::get_main_page_slug( $post_id );
 	
 	if ( $kb_articles_common_path == $main_page_slug ) {
-		EPKB_Admin_Notices::add_one_time_notice( 'warning', sprintf( esc_html__( 'We detected that you deleted KB Main Page "%s". If you did this by accident you can restore here: ', 'echo-knowledge-base' ), $post->post_title ) .
-		                                                    ' <a href="' . esc_url( admin_url( 'edit.php?post_status=trash&post_type=page' ) ) . '">' . esc_html__( 'Restore', 'echo-knowledge-base' ) . '</a> ' );
+		EPKB_Admin_Notices::add_one_time_notice( 'warning', esc_html__( 'We detected that you deleted KB Main Page', 'echo-knowledge-base' ) . $post->post_title . esc_html__( 'If you did this by accident you can restore here', 'echo-knowledge-base' ) .
+		                                                    ': <a href="' . esc_url( admin_url( 'edit.php?post_status=trash&post_type=page' ) ) . '">' . esc_html__( 'Restore', 'echo-knowledge-base' ) . '</a> ' );
 	}
 }
 add_action( 'wp_trash_post', 'epkb_add_delete_kb_page_warning', 15, 2 ); 
@@ -199,7 +213,7 @@ function epkb_add_post_state( $post_states, $post ) {
 	}
 
 	if ( in_array( $post->ID, array_keys( $kb_config['kb_main_pages'] ) ) ) {
-		$post_states[] = __( 'Knowledge Base', 'echo-knowledge-base' ) . ' #1';
+		$post_states[] = esc_html__( 'Knowledge Base', 'echo-knowledge-base' ) . ' #1';
 	}
 
 	return $post_states;
@@ -239,7 +253,7 @@ function epkb_crel_notice() {
 	}
 
 	$link = '<a href="' . esc_url( 'https://wordpress.org/plugins/creative-addons-for-elementor/' ) . '" target="_blank">' . esc_html__( 'Free Download', 'echo-knowledge-base' ) . '</a>';
-	$message = esc_html__( 'Hey, did you know that makers of the Echo Knowledge Page plugin developed free Elementor widgets to help you create amazing documentation? See more details about our Creative Addons here: ' , 'echo-knowledge-base' ) . ' ' . $link;
+	$message = esc_html__( 'Hey, did you know that makers of the Echo Knowledge Page plugin developed free Elementor widgets to help you create amazing documentation? See more details about our Creative Addons here' , 'echo-knowledge-base' ) . ': ' . $link;
 
 	EPKB_Admin_Notices::add_ongoing_notice( 'large-info',  'epkb_crel_notice',
 		$message,

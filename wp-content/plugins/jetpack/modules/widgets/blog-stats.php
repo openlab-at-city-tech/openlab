@@ -14,7 +14,7 @@ use Automattic\Jetpack\Status\Host;
 
 // Disable direct access/execution to/of the widget code.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit( 0 );
 }
 
 /**
@@ -103,7 +103,7 @@ class Jetpack_Blog_Stats_Widget extends WP_Widget {
 	 *
 	 * @param array $instance Previously saved values from database.
 	 *
-	 * @return void
+	 * @return string|void
 	 */
 	public function form( $instance ) {
 		$instance = wp_parse_args( $instance, $this->defaults() );

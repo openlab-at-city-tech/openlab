@@ -41,6 +41,7 @@ class Dialog extends Lib\Base\Component
                 CustomerAppointment::STATUS_CANCELLED,
                 CustomerAppointment::STATUS_REJECTED,
                 CustomerAppointment::STATUS_WAITLISTED,
+                CustomerAppointment::STATUS_DONE,
             ) ),
             'send_notifications' => (int) get_user_meta( get_current_user_id(), 'bookly_appointment_form_send_notifications', true ),
             'appropriate_slots' => get_option( 'bookly_appointments_displayed_time_slots', 'all' ) === 'appropriate',

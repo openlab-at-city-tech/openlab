@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Config_Base {
-
 		/**
 		 * Constructor
 		 */
@@ -70,7 +69,7 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
 			// Links.
 			if ( astra_get_prop( $args, 'links' ) ) {
 				$content .= '<ul>';
-				foreach ( $args['links'] as $index => $link ) {
+				foreach ( $args['links'] as $link ) {
 
 					if ( astra_get_prop( $link, 'attrs' ) ) {
 

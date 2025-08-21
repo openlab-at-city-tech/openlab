@@ -1,9 +1,9 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
 
 // Restrict to Editors
 if ( current_user_can('edit_others_posts') )
 {
-
 	// Determine if server supports OAuth
 	$oauth_is_not_installed = ! in_array( 'oauth', get_loaded_extensions() );
 
@@ -11,33 +11,39 @@ if ( current_user_can('edit_others_posts') )
 	{
 		include(__DIR__ . "/admin.accounts.oauth.php");
 
-	} else {
-
-	?>
+	} else { ?>
 
 		<div id="zp-Zotpress" class="wrap">
 
 			<?php include( dirname(__FILE__) . '/admin.menu.php' ); ?>
 
 
+
 			<!-- ZOTPRESS MANAGE ACCOUNTS -->
 
 			<div id="zp-ManageAccounts">
 
-				<h3><?php _e('Synced Zotero Accounts','zotpress'); ?></h3>
-				<?php if (!isset( $_GET['no_accounts'] ) || (isset( $_GET['no_accounts'] ) && $_GET['no_accounts'] != "true")) { ?><a title="<?php _e('Add Account','zotpress'); ?>" class="zp-AddAccountButton button button-secondary" href="<?php echo admin_url("admin.php?page=Zotpress&setup=true"); ?>"><span class="dashicons dashicons-plus-alt"></span><span><?php _e('Add Account','zotpress'); ?></span></a><?php } ?>
+				<h3><?php esc_html_e('Synced Zotero Accounts','zotpress'); ?></h3>
+				<?php
+				if ( ! isset( $_GET['no_accounts'] ) 
+						|| ( isset( $_GET['no_accounts'] ) && $_GET['no_accounts'] != 'true' ) )
+				{ ?>
+				<a title="<?php esc_html_e('Add Account','zotpress'); ?>" class="zp-AddAccountButton button button-secondary" href="<?php echo esc_url(admin_url("admin.php?page=Zotpress&setup=true")); ?>">
+					<span class="dashicons dashicons-plus-alt"></span>
+					<span><?php esc_html_e('Add Account','zotpress'); ?></span>
+				</a><?php } ?>
 
 				<table id="zp-Accounts" class="wp-list-table widefat fixed posts">
 
 					<thead>
 						<tr>
-							<th class="default first manage-column" scope="col"><?php _e('Default','zotpress'); ?></th>
-							<th class="account_type first manage-column" scope="col"><?php _e('Type','zotpress'); ?></th>
-							<th class="api_user_id manage-column" scope="col"><?php _e('User ID','zotpress'); ?></th>
-							<th class="private_key manage-column" scope="col"><?php _e('Private Key','zotpress'); ?></th>
-							<th class="nickname manage-column" scope="col"><?php _e('Nickname','zotpress'); ?></th>
-							<th class="cache last manage-column" scope="col"><?php _e('Cache','zotpress'); ?></th>
-							<th class="remove last manage-column" scope="col"><?php _e('Remove','zotpress'); ?></th>
+							<th class="default first manage-column" scope="col"><?php esc_html_e('Default','zotpress'); ?></th>
+							<th class="account_type first manage-column" scope="col"><?php esc_html_e('Type','zotpress'); ?></th>
+							<th class="api_user_id manage-column" scope="col"><?php esc_html_e('User ID','zotpress'); ?></th>
+							<th class="private_key manage-column" scope="col"><?php esc_html_e('Private Key','zotpress'); ?></th>
+							<th class="nickname manage-column" scope="col"><?php esc_html_e('Nickname','zotpress'); ?></th>
+							<th class="cache last manage-column" scope="col"><?php esc_html_e('Cache','zotpress'); ?></th>
+							<th class="remove last manage-column" scope="col"><?php esc_html_e('Remove','zotpress'); ?></th>
 						</tr>
 					</thead>
 
@@ -98,7 +104,7 @@ if ( current_user_can('edit_others_posts') )
 
 								$code .= "                         </tr>\n\n";
 
-								echo $code;
+								echo wp_kses_post($code);
 							}
 						?>
 					</tbody>
@@ -107,10 +113,10 @@ if ( current_user_can('edit_others_posts') )
 
 			</div>
 
-			<span id="ZOTPRESS_PLUGIN_URL" style="display: none;"><?php echo ZOTPRESS_PLUGIN_URL; ?></span>
+			<span id="ZOTPRESS_PLUGIN_URL" class="ZP_ATTR"><?php echo esc_url(ZOTPRESS_PLUGIN_URL); ?></span>
 
 			<?php if ( ! $oauth_is_not_installed ) { ?>
-				<h3><?php _e('What is OAuth?','zotpress'); ?></h3>
+				<h3><?php esc_html_e('What is OAuth?','zotpress'); ?></h3>
 
 				<p>
 					OAuth helps you create the necessary private key for allowing Zotpress to read your Zotero library and display
@@ -122,15 +128,15 @@ if ( current_user_can('edit_others_posts') )
 
 		</div>
 
-<?php
-
-	} /* OAuth check */
+	<?php } /* OAuth check */
 
 } // ! current_user_can('edit_others_posts')
 
 else
 {
-	echo "<p>".__("Sorry, you don't have permission to access this page.","zotpress")."</p>";
+	echo "<p>";
+	esc_html_e("Sorry, you don't have permission to access this page.", "zotpress");
+	echo "</p>";
 }
 
 ?>

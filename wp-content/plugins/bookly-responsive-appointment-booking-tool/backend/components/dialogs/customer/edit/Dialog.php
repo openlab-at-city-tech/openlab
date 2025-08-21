@@ -74,8 +74,6 @@ class Dialog extends Lib\Base\Component
                 'delete' => __( 'Delete', 'bookly' )
             ),
         ) ) );
-
-        print '<div id="bookly-customer-dialog"></div>';
     }
 
     /**

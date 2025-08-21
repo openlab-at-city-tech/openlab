@@ -21,10 +21,16 @@ use Bookly\Lib\Utils\DateTime;
                 </span>
             </button>
         </div>
-        <div class="col-md-9 col-sm-6">
+        <div class="col-md-6 col-sm-6">
             <h6 class="mt-2 text-muted">
                 <?php esc_html_e( 'See the number of appointments and total revenue for the selected period', 'bookly' ) ?>
             </h6>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <select class="form-control custom-select" id="bookly-based-on">
+                <option value="start_date"><?php esc_html_e( 'Based on appointment date', 'bookly' ) ?></option>
+                <option value="created_at"><?php esc_html_e( 'Based on date of creation', 'bookly' ) ?></option>
+            </select>
         </div>
     </div>
     <div class="card">

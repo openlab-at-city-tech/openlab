@@ -19,7 +19,6 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 
 /**
  * Describes a class which supports signing arbitrary strings.
- * @internal
  */
 interface SignBlobInterface extends FetchAuthTokenInterface
 {

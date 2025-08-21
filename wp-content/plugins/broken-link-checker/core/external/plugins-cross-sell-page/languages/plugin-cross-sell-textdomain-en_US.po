@@ -1,0 +1,311 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-04-22T13:36:58+00:00\n"
+"PO-Revision-Date: 2025-04-22T13:36:58+00:00\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: plugin-cross-sell-textdomain\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: assets/js/crosssellpage.js:137 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:65
+msgid "We heard you like plugins...😉"
+msgstr "We heard you like plugins...😉"
+
+#: assets/js/crosssellpage.js:144 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:71
+msgid "Check out these top-rated tools for securing, optimizing and growing your site."
+msgstr "Check out these top-rated tools for securing, optimizing and growing your site."
+
+#: assets/js/crosssellpage.js:1249 assets/js/crosssellpage.js:1254
+#: assets/js/crosssellpage.min.js:1 assets/js/crosssellpage.js:697
+#: assets/js/crosssellpage.js:703
+msgid "4.9/5"
+msgstr "4.9/5"
+
+#: assets/js/crosssellpage.js:1250 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:698
+msgid "3,002"
+msgstr "3,002"
+
+#: assets/js/crosssellpage.js:1255 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:704
+msgid "1,746"
+msgstr "1,746"
+
+#: assets/js/crosssellpage.js:1259 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:709
+msgid "5/5"
+msgstr "5/5"
+
+#: assets/js/crosssellpage.js:1260 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:710
+msgid "592"
+msgstr "592"
+
+#: assets/js/crosssellpage.js:1302 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:720
+msgid "About WPMU DEV"
+msgstr "About WPMU DEV"
+
+#: assets/js/crosssellpage.js:1309 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:722
+msgid "Made for web developers, by web developers"
+msgstr "Made for web developers, by web developers"
+
+#: assets/js/crosssellpage.js:1324 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:730
+msgid "Since 2006, our award-winning WordPress plugins, hosting, world beating support and site management tools have helped hundreds of thousands of web developers, freelancers and agencies run and grow their businesses. "
+msgstr "Since 2006, our award-winning WordPress plugins, hosting, world beating support and site management tools have helped hundreds of thousands of web developers, freelancers and agencies run and grow their businesses. "
+
+#: assets/js/crosssellpage.js:1336 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:739
+msgid "Learn more"
+msgstr "Learn more"
+
+#: assets/js/crosssellpage.js:1370 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:753
+msgid "Everything Wordpress found in one place. "
+msgstr "Everything Wordpress found in one place. "
+
+#: assets/js/crosssellpage.js:1382 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:762
+msgid "WPMU DEV"
+msgstr "WPMU DEV"
+
+#: assets/js/crosssellpage.js:1394 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:781
+msgid "Trusted by 60,000+ businesses worldwide"
+msgstr "Trusted by 60,000+ businesses worldwide"
+
+#: assets/js/crosssellpage.js:1397 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:788
+msgid "67,233,282 plugin downloads"
+msgstr "67,233,282 plugin downloads"
+
+#: assets/js/crosssellpage.js:1400 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:792
+msgid "7,260+ 5 star reviews"
+msgstr "7,260+ 5 star reviews"
+
+#: assets/js/crosssellpage.js:2168 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1447
+msgid " plugin has been installed successfully!"
+msgstr " plugin has been installed successfully!"
+
+#: assets/js/crosssellpage.js:2227 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1495
+msgid " plugin has been activated successfully!"
+msgstr " plugin has been activated successfully!"
+
+#: assets/js/crosssellpage.js:2321 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1551
+msgid "Installing..."
+msgstr "Installing..."
+
+#: assets/js/crosssellpage.js:2321 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1552
+msgid "Install"
+msgstr "Install"
+
+#: assets/js/crosssellpage.js:2332 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1562
+msgid "Activating..."
+msgstr "Activating..."
+
+#: assets/js/crosssellpage.js:2332 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1563
+msgid "Activate"
+msgstr "Activate"
+
+#: assets/js/crosssellpage.js:2343 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1571
+msgid "Active"
+msgstr "Active"
+
+#: assets/js/crosssellpage.js:2452 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1627
+msgid "Try our other highly-rated free WordPress plugins"
+msgstr "Try our other highly-rated free WordPress plugins"
+
+#: assets/js/crosssellpage.js:2453 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1631
+msgid "From security to SEO to marketing, we’ve got you covered."
+msgstr "From security to SEO to marketing, we’ve got you covered."
+
+#: assets/js/crosssellpage.js:2499 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1663
+msgid "Get a high-powered web-building suite, at no extra cost"
+msgstr "Get a high-powered web-building suite, at no extra cost"
+
+#: assets/js/crosssellpage.js:2548 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1683
+msgid "View all pro plugins"
+msgstr "View all pro plugins"
+
+#: assets/js/crosssellpage.js:2602 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1733
+msgid "Fully managed hosting"
+msgstr "Fully managed hosting"
+
+#: assets/js/crosssellpage.js:2603 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1734
+msgid "Deliver lightning-fast, secure websites with a 99.9% SLA—complete with isolated environments, global server locations, and expert support."
+msgstr "Deliver lightning-fast, secure websites with a 99.9% SLA—complete with isolated environments, global server locations, and expert support."
+
+#: assets/js/crosssellpage.js:2609 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1742
+msgid "Site management"
+msgstr "Site management"
+
+#: assets/js/crosssellpage.js:2610 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1743
+msgid "Take command of all your WordPress sites with one simple dashboard to automate updates, monitor performance, and generate white-label client reports."
+msgstr "Take command of all your WordPress sites with one simple dashboard to automate updates, monitor performance, and generate white-label client reports."
+
+#: assets/js/crosssellpage.js:2616 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1751
+msgid "Domains"
+msgstr "Domains"
+
+#: assets/js/crosssellpage.js:2617 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1752
+msgid "With access to over 250 TLDs, seamless integration and free privacy protection, you can offer domain registration services at unbeatable prices."
+msgstr "With access to over 250 TLDs, seamless integration and free privacy protection, you can offer domain registration services at unbeatable prices."
+
+#: assets/js/crosssellpage.js:2623 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1760
+msgid "100+ template library"
+msgstr "100+ template library"
+
+#: assets/js/crosssellpage.js:2624 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1761
+msgid "Create beautiful sites in seconds with pre-configured site templates for you and your client projects—compatible with every plugin, theme builder and tool."
+msgstr "Create beautiful sites in seconds with pre-configured site templates for you and your client projects—compatible with every plugin, theme builder and tool."
+
+#: assets/js/crosssellpage.js:2630 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1769
+msgid "Get Pro Email"
+msgstr "Get Pro Email"
+
+#: assets/js/crosssellpage.js:2631 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1770
+msgid "Add-on private, ad-free IMAP webmail for easily managed, auto-synced, professional emails for you and your clients with 5-50GB storage options."
+msgstr "Add-on private, ad-free IMAP webmail for easily managed, auto-synced, professional emails for you and your clients with 5-50GB storage options."
+
+#: assets/js/crosssellpage.js:2637 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1778
+msgid "Unparalleled support"
+msgstr "Unparalleled support"
+
+#: assets/js/crosssellpage.js:2638 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1779
+msgid "Chat with our support team anytime—24/7, 365 days a year—with an average response time of 2 minutes. We’ll even log in and fix issues for you and your clients!"
+msgstr "Chat with our support team anytime—24/7, 365 days a year—with an average response time of 2 minutes. We’ll even log in and fix issues for you and your clients!"
+
+#: assets/js/crosssellpage.js:2645 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1790
+msgid "Everything you need to grow a successful agency - at an unrivaled value"
+msgstr "Everything you need to grow a successful agency - at an unrivaled value"
+
+#: assets/js/crosssellpage.js:2737 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1835
+msgid "On-Demand Development"
+msgstr "On-Demand Development"
+
+#: assets/js/crosssellpage.js:2738 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1836
+msgid "Need assistance with CSS or custom functionality? Our experts create scripts to solve WordPress issues and enhance your site."
+msgstr "Need assistance with CSS or custom functionality? Our experts create scripts to solve WordPress issues and enhance your site."
+
+#: assets/js/crosssellpage.js:2744 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1844
+msgid "Proactive Monitoring"
+msgstr "Proactive Monitoring"
+
+#: assets/js/crosssellpage.js:2745 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1845
+msgid "We monitor WPMU DEV hosted sites 24/7 and fix them fast if they go down, you don’t have to do anything."
+msgstr "We monitor WPMU DEV hosted sites 24/7 and fix them fast if they go down, you don’t have to do anything."
+
+#: assets/js/crosssellpage.js:2751 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1853
+msgid "Speed Optimization"
+msgstr "Speed Optimization"
+
+#: assets/js/crosssellpage.js:2752 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1854
+msgid "Page Speed lagging behind? Our experts will give your site a guaranteed scores of 90+ on desktop and 75+ on mobile."
+msgstr "Page Speed lagging behind? Our experts will give your site a guaranteed scores of 90+ on desktop and 75+ on mobile."
+
+#: assets/js/crosssellpage.js:2758 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1862
+msgid "Malware Removal"
+msgstr "Malware Removal"
+
+#: assets/js/crosssellpage.js:2759 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1863
+msgid "Need help with CSS or custom functionality? Our experts create scripts to solve WordPress issues and enhance your site."
+msgstr "Need help with CSS or custom functionality? Our experts create scripts to solve WordPress issues and enhance your site."
+
+#: assets/js/crosssellpage.js:2766 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1874
+msgid "Expert services"
+msgstr "Expert services"
+
+#: assets/js/crosssellpage.js:2768 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1876
+msgid "Hand off any site issues to our WordPress expert team’s 20+ years of expertise."
+msgstr "Hand off any site issues to our WordPress expert team’s 20+ years of expertise."
+
+#: assets/js/crosssellpage.js:2777 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1882
+msgid "Add-on services"
+msgstr "Add-on services"
+
+#: assets/js/crosssellpage.js:2890 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1939
+msgid "Find your plan (From $3/m <highlight>$15/m</highlight>)"
+msgstr "Find your plan (From $3/m <highlight>$15/m</highlight>)"
+
+#: assets/js/crosssellpage.js:2910 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1952
+msgid "Did you know WPMU DEV Membership includes "
+msgstr "Did you know WPMU DEV Membership includes "
+
+#: assets/js/crosssellpage.js:2911 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1956
+msgid "ALL our Pro Plugins?"
+msgstr "ALL our Pro Plugins?"
+
+#: assets/js/crosssellpage.js:2912 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1960
+msgid "Plus, everything your agency needs for hosting, reselling and more."
+msgstr "Plus, everything your agency needs for hosting, reselling and more."
+
+#: assets/js/crosssellpage.js:2983 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1979
+msgid "Your comprehensive toolkit for WordPress website management."
+msgstr "Your comprehensive toolkit for WordPress website management."
+
+#: assets/js/crosssellpage.js:3018 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:1989
+msgid "30 day guarantee: If you don’t love it, we’ll give you your money back - no questions asked."
+msgstr "30 day guarantee: If you don’t love it, we’ll give you your money back - no questions asked."
+
+#: assets/js/crosssellpage.js:3085 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:2020
+msgid "Free Plugins you’ll like"
+msgstr "Free Plugins you’ll like"
+
+#: assets/js/crosssellpage.js:3092 assets/js/crosssellpage.min.js:1
+#: assets/js/crosssellpage.js:2023
+msgid "Pro Plugins You’ll LOVE (Bundle Deal)"
+msgstr "Pro Plugins You’ll LOVE (Bundle Deal)"

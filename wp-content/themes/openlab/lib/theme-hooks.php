@@ -84,91 +84,14 @@ function openlab_custom_the_content($content) {
 
 add_filter('the_content', 'openlab_custom_the_content', 11);
 
-/**
- * OpenLab main menu markup.
- *
- * @param string $location
- */
-function openlab_main_menu( $location = 'header' ) {
-    ?>
-    <nav class="navbar navbar-default oplb-bs navbar-location-<?php echo $location ?>" role="navigation">
-        <?php openlab_sitewide_header($location); ?>
-        <div class="main-nav-wrapper">
-            <div class="container-fluid">
-                <div class="navbar-header hidden-xs">
-                    <header class="menu-title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></header>
-                </div>
-                <div class="navbar-collapse collapse" id="main-nav-<?php echo $location ?>">
-                    <?php
-                    //this adds the main menu, controlled through the WP menu interface
-                    $args = array(
-                        'theme_location' => 'main',
-                        'container' => false,
-                        'menu_class' => 'nav navbar-nav',
-                        'menu_id' => 'menu-main-menu-' . $location,
-                    );
-
-                    wp_nav_menu($args);
-                    ?>
-                    <div class="navbar-right search hidden-xs">
-                        <?php openlab_mu_site_wide_bp_search('desktop', $location); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <?php
-}
-
-/**
- * Main menu in header
- */
-function openlab_header_bar() {
-    openlab_main_menu('header');
-}
-
-/*
- * Main menu in footer
- */
-
-function openlab_footer_bar() {
-    openlab_main_menu('footer');
-}
-
-add_action('bp_before_header', 'openlab_header_bar', 10);
-add_action('bp_before_footer', 'openlab_footer_bar', 6);
-
-function openlab_custom_menu_items($items, $menu) {
-    global $post, $bp;
-
-    if ($menu->theme_location == 'main') {
-
-        $opl_link = '';
-
-        $classes = '';
-
-        if (is_user_logged_in()) {
-            $class = '';
-            if (bp_is_my_profile() || bp_is_current_action('create') || is_page('my-courses') || is_page('my-projects') || is_page('my-clubs')) {
-                $class = 'class="current-menu-item"';
-            }
-            $opl_link = '<li ' . $class . '>';
-            $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
-            $opl_link .= '</li>';
-        }
-
-        return $items . $opl_link;
-    } else if ($menu->theme_location == 'aboutmenu') {
-
-        $items = str_replace('Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items);
-
-        return $items;
-    } else {
-        return $items;
+function openlab_custom_menu_items( $items, $menu ) {
+    if ( 'aboutmenu' === $menu->theme_location ) {
+        $items = str_replace( 'Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items );
     }
-}
 
-add_filter('wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2);
+	return $items;
+}
+add_filter( 'wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2 );
 
 function openlab_form_classes($classes) {
 

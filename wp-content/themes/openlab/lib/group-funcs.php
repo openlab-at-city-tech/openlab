@@ -43,6 +43,12 @@ function openlab_group_privacy_settings($group_type) {
         ));
     }
 
+	if ( bp_is_group_create() ) {
+		$group_status = openlab_get_default_group_privacy_setting( $group_type );
+	} else {
+		$group_status = groups_get_current_group()->status;
+	}
+
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -55,15 +61,9 @@ function openlab_group_privacy_settings($group_type) {
                 <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Profile.</p>
             <?php endif; ?>
 
-            <?php
-            $new_group_status = bp_get_new_group_status();
-            if ( ! $new_group_status ) {
-                $new_group_status = 'public';
-            }
-            ?>
             <div class="row">
                 <div class="col-sm-24">
-                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
+                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $group_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
@@ -71,14 +71,14 @@ function openlab_group_privacy_settings($group_type) {
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
                         <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can disable membership requests in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
 
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
@@ -97,11 +97,11 @@ function openlab_group_privacy_settings($group_type) {
 	$selected_privacy = 1;
 	if ( $site_id ) {
 		$has_site         = true;
-		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
+		$selected_privacy = bp_is_group_create() ? openlab_get_default_group_site_privacy_setting( $group_type ) : null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
 		$clone_steps      = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
 		$has_site         = is_array( $clone_steps ) && ! empty( $clone_steps ) && in_array( 'site', $clone_steps, true );
-		$selected_privacy = 1;
+		$selected_privacy = openlab_get_default_group_site_privacy_setting( $group_type );
 	}
 	?>
 
@@ -122,6 +122,8 @@ function openlab_group_privacy_settings($group_type) {
 				<p>You can choose to show a link to your Portfolio on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name but you want to use your real name on your Portfolio, you may wish to leave this unchecked.</p>
 
 				<input name="portfolio-profile-link" id="portfolio-profile-link-toggle" type="checkbox" name="portfolio-profile-link-toggle" value="1" /> <label for="portfolio-profile-link-toggle">Show link to my <?php echo esc_html( $group_type_name_uc ); ?> on my public OpenLab Profile</label>
+
+				<?php wp_nonce_field( 'portfolio_profile_link', 'portfolio-profile-link-nonce', false ); ?>
 			</div>
 		</div>
 	<?php endif; ?>
@@ -642,14 +644,22 @@ function openlab_get_active_semesters() {
 }
 
 /**
- * Markup for groupblog privacy settings
+ * Markup for groupblog privacy settings.
+ *
+ * @param int   $site_id          The ID of the site for which to display the privacy settings.
+ * @param mixed $selected_privacy The selected privacy setting, or null to use the current
+ *                                site's setting. Note that non-null values will take
+ *                                precedence over the current site's setting, behavior which
+ *                                is needed during group creation.
  */
 function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy = null ) {
 	if ( ! $site_id ) {
 		$site_id     = get_current_blog_id();
 		$blog_public = $selected_privacy;
-	} else {
+	} elseif ( null === $selected_privacy ) {
 		$blog_public = get_blog_option( $site_id, 'blog_public' );
+	} else {
+		$blog_public = $selected_privacy;
 	}
 
 	$group_type = openlab_get_current_group_type( 'case=upper' );
@@ -2667,3 +2677,112 @@ add_filter(
 	50,
 	2
 );
+
+/**
+ * Filter callback for 'Resources' group query.
+ *
+ * @param string $sql       SQL query.
+ * @param array  $sql_parts SQL parts.
+ * @param array  $args      Query arguments.
+ * @return string
+ */
+function openlab_filter_groups_query_for_resources( $sql, $sql_parts, $args ) {
+	global $wpdb;
+	static $groups_with_resource_badges_ids = null;
+
+	if ( null === $groups_with_resource_badges_ids ) {
+		$resource_badge_keys = [ 'fylc', 'citytech-oer', 'department-model', 'resource' ];
+		$resource_badges     = array_filter(
+			\OpenLab\Badges\Badge::get(),
+			function( $badge ) use ( $resource_badge_keys ) {
+				return in_array( $badge->get_slug(), $resource_badge_keys, true );
+			}
+		);
+
+		$resource_badge_term_ids = array_map(
+			function( $badge ) {
+				return $badge->get_id();
+			},
+			$resource_badges
+		);
+
+		$groups_with_resource_badges_ids = bp_get_objects_in_term( $resource_badge_term_ids, 'openlab_badge' );
+		if ( empty( $groups_with_resource_badges_ids ) ) {
+			$groups_with_resource_badges_ids = [ 0 ];
+		} else {
+			$groups_with_resource_badges_ids = array_unique( $groups_with_resource_badges_ids );
+		}
+	}
+
+	$sql_clause_template = 'g.id IN (' . implode( ', ', array_fill( 0, count( $groups_with_resource_badges_ids ), '%d' ) ) . ')';
+
+	$sql_clause = $wpdb->prepare( $sql_clause_template, ...$groups_with_resource_badges_ids );
+
+	if ( false !== strpos( $sql, 'WHERE' ) ) {
+		$sql = preg_replace( '/\bWHERE\b/i', 'WHERE ' . $sql_clause . ' AND ', $sql, 1 );
+	}
+
+	return $sql;
+}
+
+/**
+ * Gets the default privacy setting for a group.
+ *
+ * @param string $group_type Group type slug.
+ * @param int    $user_id    Optional. User ID. Defaults to the current user ID.
+ * @return string
+ */
+function openlab_get_default_group_privacy_setting( $group_type, $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	$member_type = openlab_get_user_member_type( $user_id );
+
+	switch ( $group_type ) {
+		case 'course':
+			return 'private';
+
+		case 'club':
+			return 'public';
+
+		case 'project':
+		case 'portfolio':
+		default:
+			if ( 'faculty' === $member_type || 'staff' === $member_type ) {
+				return 'public';
+			}
+
+			return 'private';
+	}
+}
+
+/**
+ * Gets the default privacy setting for a group site.
+ *
+ * @param string $group_type Group type slug.
+ * @param int    $user_id    Optional. User ID. Defaults to the current user ID.
+ * @return int
+ */
+function openlab_get_default_group_site_privacy_setting( $group_type, $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	$member_type = openlab_get_user_member_type( $user_id );
+
+	switch ( $group_type ) {
+		case 'course':
+			return 0;
+
+		case 'project':
+		case 'club':
+		case 'portfolio':
+		default:
+			if ( 'faculty' === $member_type || 'staff' === $member_type ) {
+				return 1;
+			}
+
+			return 0;
+	}
+}

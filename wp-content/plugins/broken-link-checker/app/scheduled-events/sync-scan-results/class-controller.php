@@ -53,6 +53,7 @@ class Controller extends Base {
 	 */
 	public function init() {
 		add_action( 'wpmudev_blc_plugin_deactivated', array( $this, 'deactivate_cron' ) );
+		add_action( $this->get_hook_name(), array( $this, 'process_scheduled_event' ) );
 
 		if ( wp_doing_ajax() || Settings::instance()->get( 'use_legacy_blc_version' ) ) {
 			return;

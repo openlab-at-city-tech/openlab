@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class CalendarListEntry extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'defaultReminders';
@@ -359,4 +358,4 @@ class CalendarListEntry extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CalendarListEntry::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_CalendarListEntry');
+class_alias(CalendarListEntry::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntry');

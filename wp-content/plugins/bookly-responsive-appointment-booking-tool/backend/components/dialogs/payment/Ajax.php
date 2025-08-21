@@ -185,7 +185,7 @@ class Ajax extends Lib\Base\Ajax
         $gateway = null;
         switch ( $payment->getType() ) {
             case Lib\Entities\Payment::TYPE_CLOUD_STRIPE:
-                $gateway = new Lib\Payment\StripeCloudGateway();
+                $gateway = new Lib\Payment\StripeCloudGateway( \Bookly\Frontend\Modules\Payment\Request::getInstance() );
                 break;
             default:
                 $gateway = Lib\Payment\Proxy\Shared::getGatewayForRefund( $gateway, $payment );

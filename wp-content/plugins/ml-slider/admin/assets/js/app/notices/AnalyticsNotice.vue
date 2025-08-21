@@ -14,7 +14,7 @@
         </div>
         <div class="mt-6 sm:grid sm:gap-3 sm:grid-flow-row-dense px-4 pb-5">
             <span class="flex w-full rounded-md shadow-sm sm:col-start-2">
-                <button @click="opt('yes')" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 text-base leading-6 font-medium text-white shadow-sm bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                <button @click="opt('yes')" type="button" :disabled="!isValidEmail" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 text-base leading-6 font-medium text-white shadow-sm bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 sm:text-sm sm:leading-5 disabled:opacity-50 disabled:cursor-not-allowed">
                     {{ __('Agree and continue', 'ml-slider') }}
                 </button>
             </span>
@@ -50,11 +50,23 @@ export default {
     },
     mounted() {
         this.notifyInfo('metaslider/add-slide-css-manager-notice-opened', this.__('Analytics notice opened', 'ml-slider'))
+        document.addEventListener('keydown', this.handleKeydown)
     },
     beforeDestroy() {
         this.notifyInfo('metaslider/add-slide-css-manager-notice-closed', this.__('Analytics notice closed', 'ml-slider'))
+        document.removeEventListener('keydown', this.handleKeydown)
+    },
+    computed: {
+        isValidEmail() {
+            return this.optinEmail && this.optinEmail.trim() !== ''
+        }
     },
     methods: {
+        handleKeydown(event) {
+            if (event.key === 'Escape') {
+                this.opt('no')
+            }
+        },
         modalPrivacyPolicy() {
             return this.sprintf(this.__('We\'d also like to send you infrequent emails with important security and feature updates. See our %s for more details.', 'ml-slider'), '<a target="_blank" class="underline" href="https://www.metaslider.com/privacy-policy">' + this.__('privacy policy', 'ml-slider') + '</a>', 'ml-slider')
         },

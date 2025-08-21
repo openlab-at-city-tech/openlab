@@ -1,5 +1,5 @@
 :root {
-    --bookly-css-version: "24.4";
+    --bookly-css-version: "24.9";
 }
 
 .bookly-list-none {
@@ -216,7 +216,7 @@
     text-align: center;
     line-height: normal;
     border-radius: 4px !important;
-    background: #f4662f;
+    background: var(--bookly-main-color);
     cursor: pointer !important;
     height: auto !important;
     outline: none !important;
@@ -294,18 +294,27 @@ span.bookly-round {
     box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
 }
 
-.bookly-checkbox-group > input[type='checkbox']:not(:checked) + label > i {
-    background-image: url(../../../frontend/resources/images/square-24.png);
+.bookly-checkbox-group > input[type='checkbox'] + label > i {
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--bookly-main-color);
+    border-radius: 4px;
 }
 
 .bookly-checkbox-group > input[type='checkbox']:checked + label > i {
-    background-image: url(../../../frontend/resources/images/checkbox-16.png);
+    background-image: url("../images/check-square.svg");
+    background-color: var(--bookly-main-color);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-checkbox-group > input[type='checkbox']:disabled + label > i {
-    background-image: url(../../../frontend/resources/images/x-24.png) !important;
+    background-image: url("../images/x.svg") !important;
     opacity: 0.8;
     cursor: not-allowed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: var(--bookly-main-color);
 }
 
 .bookly-checkbox-group label {
@@ -428,8 +437,9 @@ span.bookly-round {
 
 .bookly-form .bookly-service-step .bookly-week-days input[type='checkbox']:checked,
 .bookly-form .bookly-repeat-step .bookly-week-days input[type='checkbox']:checked {
-    background-image: url("../images/checkbox.png");
+    background-image: url("../images/checkbox.svg");
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-form .bookly-service-step .bookly-week-days input[type='checkbox'],
@@ -567,9 +577,8 @@ span.bookly-round {
     min-width: 205px;
 }
 
-.bookly-columnizer .bookly-column.bookly-column-wide span.bookly-time-main {
-    float: left;
-    margin-left: 10px;
+.bookly-columnizer .bookly-column.bookly-column-wide .bookly-hour .bookly-time-main {
+    min-width: 160px;
 }
 
 .bookly-columnizer .bookly-column.bookly-column-wide span.bookly-time-additional {
@@ -615,6 +624,10 @@ span.bookly-round {
     background-color: #d6d6d6 !important;
 }
 
+.bookly-columnizer .bookly-hour .bookly-time-main {
+    min-width: 92px;
+}
+
 .bookly-columnizer .bookly-hour.bookly-slot-in-special-hour .bookly-time-main {
     font-weight: bold;
 }
@@ -625,10 +638,10 @@ span.bookly-round {
 
 .bookly-form .bookly-schedule-date,
 .bookly-form .bookly-columnizer .bookly-day {
-    background: #f4662f;
+    background: var(--bookly-main-color);
     color: white !important;
     font-weight: bold !important;
-    border: 1px solid #f4662f;
+    border: 1px solid var(--bookly-main-color);
 }
 
 .bookly-form .bookly-schedule-date input {
@@ -649,17 +662,19 @@ span.bookly-round {
 .bookly-columnizer .bookly-hour .bookly-hour-icon {
     display: block;
     float: left;
-    width: 18px;
-    height: 18px;
-    margin-top: 1px;
-    margin-right: 5px;
-    background: url("../images/success.png") 0 0 no-repeat;
+    background: none;
+    outline: 2px solid #eeeeee;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+    margin-top: 2px;
+    margin-right: 3px;
 }
 
 @media (hover) {
     .bookly-columnizer .bookly-hour:hover {
-        border: 2px solid #f4662f;
-        color: #f4662f;
+        border: 2px solid var(--bookly-main-color);
+        color: var(--bookly-main-color);
     }
 
     .bookly-columnizer .bookly-hour.booked:hover {
@@ -673,12 +688,12 @@ span.bookly-round {
 
     .bookly-columnizer .bookly-hour:hover .bookly-hour-icon {
         background: none;
-        border: 2px solid #f4662f;
-        color: #f4662f;
-        width: auto;
-        height: auto;
-        padding: 3px;
-        border-radius: 25px;
+        outline: 2px solid var(--bookly-main-color);
+        color: var(--bookly-main-color);
+        width: 16px;
+        height: 16px;
+        border-radius: 100%;
+        margin-top: 2px;
         margin-right: 3px;
     }
 
@@ -687,10 +702,13 @@ span.bookly-round {
     }
 
     .bookly-columnizer .bookly-hour:hover .bookly-hour-icon span {
-        background: #f4662f;
+        margin-left: 4px;
+        margin-top: 4px;
+        background: var(--bookly-main-color);
         width: 8px;
         height: 8px;
-        border-radius: 10px;
+        border: none;
+        border-radius: 100%;
         display: block;
     }
 }
@@ -993,44 +1011,63 @@ label.bookly-square {
 }
 
 .bookly-icon-sm.bookly-icon-restore {
-    background-image: url(../../../frontend/resources/images/redo-16.png);
+    background-image: url("../images/redo.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .bookly-icon-sm.bookly-icon-exclamation {
-    background-image: url(../../../frontend/resources/images/exclamation-16.png);
+    background-image: url("../images/exclamation.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-icon-sm.bookly-icon-i {
-    background-image: url(../../../frontend/resources/images/info-16.png);
+    background-image: url("../images/info.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-icon-sm.bookly-icon-edit {
-    background-image: url(../../../frontend/resources/images/edit-16.png);
+    background-image: url("../images/edit.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .bookly-icon-sm.bookly-icon-plus {
-    background-image: url(../../../frontend/resources/images/plus-16.png);
+    background-image: url("../images/plus.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-icon-sm.bookly-icon-minus {
-    background-image: url(../../../frontend/resources/images/minus-16.png);
+    background-image: url("../images/minus.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-icon-sm.bookly-icon-drop {
-    background-image: url(../../../frontend/resources/images/delete-16.png);
+    background-image: url("../images/delete.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .bookly-icon-sm.bookly-icon-check {
-    background-image: url(../../../frontend/resources/images/check-16.png);
+    background-image: url("../images/checkbox.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bookly-icon-user {
     height: 16px;
     width: 16px;
     display: inline-block;
-    margin: 4px 2px 0 2px;
+    margin-right: 4px;
+    margin-top: 1px;
     vertical-align: top;
-    background-image: url(../../../frontend/resources/images/user-16.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url("../images/user.svg");
 }
 
 /* Cart */
@@ -1510,15 +1547,15 @@ ol.bookly-stepper {
         list-style: none;
         justify-content: space-between;
         margin: 0px 0px 20px 0px;
-        padding: 0px;
+        padding: 4px;
         overflow: hidden;
-        background: linear-gradient(180deg, #FFFFFF 10.9px, silver 11px, silver 12.9px, #FFFFFF 13px);
+        background: linear-gradient(180deg, transparent 15.9px, silver 16px, silver 17.9px, transparent 18px);
     }
 
     .bookly-form ol.bookly-stepper li {
         display: grid !important;
         position: relative;
-        outline: 4px solid white;
+        outline: none;
     }
 
     .bookly-form ol.bookly-stepper li::before {
@@ -1787,7 +1824,6 @@ ol.bookly-stepper {
 .bookly-form .bookly-btn:hover,
 .bookly-form .bookly-btn-submit,
 .bookly-form .bookly-round,
-.bookly-form .bookly-square,
 .bookly-form .bookly-pagination > li.active,
 .bookly-form .bg-bookly,
 .bookly-form .hover\:bg-bookly:hover,
@@ -1824,22 +1860,14 @@ ol.bookly-stepper {
     color: var(--bookly-main-color) !important;
 }
 
-.bookly-form .bookly-columnizer .bookly-hour:active .bookly-hour-icon {
-    background: none;
-    border: 2px solid var(--bookly-main-color) !important;
-    color: var(--bookly-main-color) !important;
-    width: auto;
-    height: auto;
-    padding: 3px;
-    border-radius: 25px;
-    margin-right: 3px;
-}
-
 .bookly-form .bookly-columnizer .bookly-hour:active .bookly-hour-icon span {
     background-color: var(--bookly-main-color) !important;
-    width: 8px;
-    height: 8px;
-    border-radius: 10px;
+    margin-left: 3px;
+    margin-top: 3px;
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 100%;
     display: block;
 }
 
@@ -1851,7 +1879,8 @@ ol.bookly-stepper {
 
     .bookly-form .bookly-columnizer .bookly-hour:hover .bookly-hour-icon {
         background: none;
-        border: 2px solid var(--bookly-main-color) !important;
+        border: none;
+        outline: 2px solid var(--bookly-main-color) !important;
         color: var(--bookly-main-color) !important;
     }
 

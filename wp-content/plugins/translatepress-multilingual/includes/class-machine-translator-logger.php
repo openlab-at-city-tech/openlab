@@ -23,6 +23,8 @@ class TRP_Machine_Translator_Logger {
         $this->limit        = intval( $this->get_mt_option('machine_translation_limit', 1000000) );
         // if a new day has passed, update the counter and date
         $this->maybe_reset_counter_date();
+
+        add_action('trp_is_deepl_glossary_id_valid', array( $this, 'show_notice_if_glossary_id_invalid'), 10, 1 );
     }
 
     public function get_todays_character_count() {
@@ -302,6 +304,31 @@ class TRP_Machine_Translator_Logger {
 
         update_option( 'trp_machine_translated_characters', $machine_translated_characters, false );
 
+    }
+
+    public function show_notice_if_glossary_id_invalid( $response ){
+
+        global $wpdb;
+
+        if ( is_array( $response ) && ! is_wp_error( $response ) && isset( $response['response'] ) &&
+            isset( $response['response']['code']) && $response['response']['code'] !== 200 ) {
+
+            $response_body = json_decode( $response['body'] );
+
+            if ( isset( $response_body->message ) ) {
+
+                if ( !$this->error_manager ) {
+                    $trp                 = TRP_Translate_Press::get_trp_instance();
+                    $this->error_manager = $trp->get_component( 'error_manager' );
+                }
+
+                if ( strpos( strtolower( $response_body->message), 'glossary' ) !== false ) {
+
+                    $wpdb->last_error = ' The glossary ID provided for DeepL translation request was invalid. Please check again';
+                    $this->error_manager->record_error( array( 'glossary_id_is_invalid' => $wpdb->last_error, 'disable_automatic_translations' => true ) );
+                }
+            }
+        }
     }
 
 }

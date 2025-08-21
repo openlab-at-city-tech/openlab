@@ -162,7 +162,7 @@ class Controller extends Base {
 	 *
 	 * @return void
 	 */
-	public function remove_user_from_blog( int $user_id = null, int $user_id_reassign = null ) {
+	public function remove_user_from_blog( ?int $user_id = null, ?int $user_id_reassign = null ) {
 		$this->adapt_schedule_recipients( $user_id );
 	}
 
@@ -174,7 +174,7 @@ class Controller extends Base {
 	 *
 	 * @return void
 	 */
-	public function adapt_schedule_recipients( int $user_id = null, int $user_id_reassign = null ) {
+	public function adapt_schedule_recipients( ?int $user_id = null, ?int $user_id_reassign = null ) {
 		if ( empty( $user_id ) ) {
 			return;
 		}

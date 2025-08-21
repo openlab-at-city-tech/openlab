@@ -144,14 +144,17 @@ class Router extends Base {
 
 		Queue::instance()->push( $data );
 		// Run schedule in 5 seconds after pushing.
-		//Schedule::instance()->setup( 5 );
+		// We're keeping this in order to provide a request response back to HUB's edit/unlink request. 
+		// This is done so we manage to keep the order the responses and requests are sent to HUB. 
+		// Specifically the response from to HUB's request needs to be sent first, then theBLC request to HUB's `edit-link-completed` endpoint needs to be sent after the response [BLC-743].
+		Schedule::instance()->setup( 5 );
 
 		// If Queue is empty, run first link immediately and schedule the rest links.
-		if ( $first_link ) {
-			Schedule::instance()->process_scheduled_event();
-		} else {
-			Schedule::instance()->setup( 5 );
-		}
+		//if ( $first_link ) {
+		//	Schedule::instance()->process_scheduled_event();
+		//} else {
+		//	Schedule::instance()->setup( 5 );
+		//}
 
 		return array(
 			'success'         => true,

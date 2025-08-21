@@ -18,7 +18,7 @@
         <b>{{ __('A few notes on exporting slideshow images:', 'ml-slider') }}</b>
         <ul class="export-instruction">
           <li>{{ __('Your images need to be exported manually. Please upload them to the new website before importing these slideshows.', 'ml-slider') }}</li>
-          <li>{{ __('Images will need to keep the same file names on the new site.', 'ml-slider') }} <a href="https://www.metaslider.com/how-to-export-and-import-slideshows-from-one-website-to-another"
+          <li>{{ __('Images will need to keep the same file names on the new site.', 'ml-slider') }} <a href="https://www.metaslider.com/docs/export-and-import-slideshows/"
            target="_blank">{{ this.__('Read our guide on exporting images.', 'ml-slider') }} <span class="dashicons dashicons-external"></span></a> </li>
         </ul>
       </template>

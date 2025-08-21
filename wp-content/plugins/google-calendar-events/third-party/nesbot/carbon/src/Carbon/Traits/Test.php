@@ -17,7 +17,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Throwable;
-/** @internal */
 trait Test
 {
     ///////////////////////////////////////////////////////////////////
@@ -83,7 +82,7 @@ trait Test
     public static function setTestNowAndTimezone($testNow = null, $tz = null)
     {
         if ($testNow) {
-            self::$testDefaultTimezone = self::$testDefaultTimezone ?? \date_default_timezone_get();
+            self::$testDefaultTimezone = self::$testDefaultTimezone ?? date_default_timezone_get();
         }
         $useDateInstanceTimezone = $testNow instanceof DateTimeInterface;
         if ($useDateInstanceTimezone) {
@@ -174,7 +173,7 @@ trait Test
         $previous = null;
         $success = \false;
         try {
-            $success = \date_default_timezone_set($timezone);
+            $success = date_default_timezone_set($timezone);
         } catch (Throwable $exception) {
             $previous = $exception;
         }

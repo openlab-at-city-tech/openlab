@@ -27,7 +27,7 @@ class WPCF7_REST_Controller {
 							return true;
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
-								__( "You are not allowed to access contact forms.", 'contact-form-7' ),
+								__( 'You are not allowed to access contact forms.', 'contact-form-7' ),
 								array( 'status' => 403 )
 							);
 						}
@@ -41,7 +41,7 @@ class WPCF7_REST_Controller {
 							return true;
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
-								__( "You are not allowed to create a contact form.", 'contact-form-7' ),
+								__( 'You are not allowed to create a contact form.', 'contact-form-7' ),
 								array( 'status' => 403 )
 							);
 						}
@@ -63,7 +63,7 @@ class WPCF7_REST_Controller {
 							return true;
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
-								__( "You are not allowed to access the requested contact form.", 'contact-form-7' ),
+								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
 								array( 'status' => 403 )
 							);
 						}
@@ -79,7 +79,7 @@ class WPCF7_REST_Controller {
 							return true;
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
-								__( "You are not allowed to access the requested contact form.", 'contact-form-7' ),
+								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
 								array( 'status' => 403 )
 							);
 						}
@@ -95,7 +95,7 @@ class WPCF7_REST_Controller {
 							return true;
 						} else {
 							return new WP_Error( 'wpcf7_forbidden',
-								__( "You are not allowed to access the requested contact form.", 'contact-form-7' ),
+								__( 'You are not allowed to access the requested contact form.', 'contact-form-7' ),
 								array( 'status' => 403 )
 							);
 						}
@@ -194,7 +194,7 @@ class WPCF7_REST_Controller {
 
 		if ( $id ) {
 			return new WP_Error( 'wpcf7_post_exists',
-				__( "Cannot create existing contact form.", 'contact-form-7' ),
+				__( 'Cannot create existing contact form.', 'contact-form-7' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -206,7 +206,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_cannot_save',
-				__( "There was an error saving the contact form.", 'contact-form-7' ),
+				__( 'There was an error saving the contact form.', 'contact-form-7' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -224,7 +224,9 @@ class WPCF7_REST_Controller {
 			$config_validator = new WPCF7_ConfigValidator( $item );
 			$config_validator->validate();
 
-			$response['config_errors'] = $config_validator->collect_error_messages();
+			$response['config_errors'] = $config_validator->collect_error_messages(
+				array( 'decodes_html_entities' => true )
+			);
 
 			if ( 'save' === $context ) {
 				$config_validator->save();
@@ -240,7 +242,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -262,7 +264,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -273,7 +275,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_cannot_save',
-				__( "There was an error saving the contact form.", 'contact-form-7' ),
+				__( 'There was an error saving the contact form.', 'contact-form-7' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -291,7 +293,9 @@ class WPCF7_REST_Controller {
 			$config_validator = new WPCF7_ConfigValidator( $item );
 			$config_validator->validate();
 
-			$response['config_errors'] = $config_validator->collect_error_messages();
+			$response['config_errors'] = $config_validator->collect_error_messages(
+				array( 'decodes_html_entities' => true )
+			);
 
 			if ( 'save' === $context ) {
 				$config_validator->save();
@@ -307,7 +311,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -316,7 +320,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $result ) {
 			return new WP_Error( 'wpcf7_cannot_delete',
-				__( "There was an error deleting the contact form.", 'contact-form-7' ),
+				__( 'There was an error deleting the contact form.', 'contact-form-7' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -331,7 +335,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! str_starts_with( $content_type, 'multipart/form-data' ) ) {
 			return new WP_Error( 'wpcf7_unsupported_media_type',
-				__( "The request payload format is not supported.", 'contact-form-7' ),
+				__( 'The request payload format is not supported.', 'contact-form-7' ),
 				array( 'status' => 415 )
 			);
 		}
@@ -346,7 +350,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -357,7 +361,7 @@ class WPCF7_REST_Controller {
 
 		if ( empty( $unit_tag ) ) {
 			return new WP_Error( 'wpcf7_unit_tag_not_found',
-				__( "There is no valid unit tag.", 'contact-form-7' ),
+				__( 'There is no valid unit tag.', 'contact-form-7' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -418,7 +422,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -437,7 +441,7 @@ class WPCF7_REST_Controller {
 
 		if ( ! $item ) {
 			return new WP_Error( 'wpcf7_not_found',
-				__( "The requested contact form was not found.", 'contact-form-7' ),
+				__( 'The requested contact form was not found.', 'contact-form-7' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -510,7 +514,7 @@ class WPCF7_REST_Controller {
 	private function get_argument_schema() {
 		return array(
 			'id' => array(
-				'description' => __( "Unique identifier for the contact form.", 'contact-form-7' ),
+				'description' => __( 'Unique identifier for the contact form.', 'contact-form-7' ),
 				'type' => 'integer',
 				'required' => true,
 			),

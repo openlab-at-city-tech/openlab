@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class EventReminders extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'overrides';
@@ -57,4 +56,4 @@ class EventReminders extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(EventReminders::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_EventReminders');
+class_alias(EventReminders::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventReminders');

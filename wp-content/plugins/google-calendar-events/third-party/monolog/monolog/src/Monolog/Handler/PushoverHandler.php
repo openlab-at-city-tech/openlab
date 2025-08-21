@@ -23,7 +23,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
- * @internal
  */
 class PushoverHandler extends SocketHandler
 {
@@ -82,13 +81,13 @@ class PushoverHandler extends SocketHandler
         parent::__construct($connectionString, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->token = $token;
         $this->users = (array) $users;
-        $this->title = $title ?: (string) \gethostname();
+        $this->title = $title ?: (string) gethostname();
         $this->highPriorityLevel = Logger::toMonologLevel($highPriorityLevel);
         $this->emergencyLevel = Logger::toMonologLevel($emergencyLevel);
         $this->retry = $retry;
         $this->expire = $expire;
     }
-    protected function generateDataStream(array $record) : string
+    protected function generateDataStream(array $record): string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -96,10 +95,10 @@ class PushoverHandler extends SocketHandler
     /**
      * @phpstan-param FormattedRecord $record
      */
-    private function buildContent(array $record) : string
+    private function buildContent(array $record): string
     {
         // Pushover has a limit of 512 characters on title and message combined.
-        $maxMessageLength = 512 - \strlen($this->title);
+        $maxMessageLength = 512 - strlen($this->title);
         $message = $this->useFormattedMessage ? $record['formatted'] : $record['message'];
         $message = Utils::substr($message, 0, $maxMessageLength);
         $timestamp = $record['datetime']->getTimestamp();
@@ -112,26 +111,26 @@ class PushoverHandler extends SocketHandler
             $dataArray['priority'] = 1;
         }
         // First determine the available parameters
-        $context = \array_intersect_key($record['context'], $this->parameterNames);
-        $extra = \array_intersect_key($record['extra'], $this->parameterNames);
+        $context = array_intersect_key($record['context'], $this->parameterNames);
+        $extra = array_intersect_key($record['extra'], $this->parameterNames);
         // Least important info should be merged with subsequent info
-        $dataArray = \array_merge($extra, $context, $dataArray);
+        $dataArray = array_merge($extra, $context, $dataArray);
         // Only pass sounds that are supported by the API
-        if (isset($dataArray['sound']) && !\in_array($dataArray['sound'], $this->sounds)) {
+        if (isset($dataArray['sound']) && !in_array($dataArray['sound'], $this->sounds)) {
             unset($dataArray['sound']);
         }
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
-    private function buildHeader(string $content) : string
+    private function buildHeader(string $content): string
     {
         $header = "POST /1/messages.json HTTP/1.1\r\n";
         $header .= "Host: api.pushover.net\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         foreach ($this->users as $user) {
             $this->user = $user;
@@ -145,7 +144,7 @@ class PushoverHandler extends SocketHandler
      *
      * @phpstan-param Level|LevelName|LogLevel::* $value
      */
-    public function setHighPriorityLevel($value) : self
+    public function setHighPriorityLevel($value): self
     {
         $this->highPriorityLevel = Logger::toMonologLevel($value);
         return $this;
@@ -155,7 +154,7 @@ class PushoverHandler extends SocketHandler
      *
      * @phpstan-param Level|LevelName|LogLevel::* $value
      */
-    public function setEmergencyLevel($value) : self
+    public function setEmergencyLevel($value): self
     {
         $this->emergencyLevel = Logger::toMonologLevel($value);
         return $this;
@@ -163,7 +162,7 @@ class PushoverHandler extends SocketHandler
     /**
      * Use the formatted message?
      */
-    public function useFormattedMessage(bool $value) : self
+    public function useFormattedMessage(bool $value): self
     {
         $this->useFormattedMessage = $value;
         return $this;

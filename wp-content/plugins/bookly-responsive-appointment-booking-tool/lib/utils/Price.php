@@ -149,7 +149,7 @@ abstract class Price
         if ( preg_match( '/{price\|(\d)}/', $format, $match ) ) {
             return strtr( $format, array(
                 '{sign}' => $price < 0 ? '-' : '',
-                '{symbol}' => $symbol,
+                '{symbol}' => Common::getTranslatedString( 'currency_' . $currency, $symbol, null ),
                 '{price|' . $match[1] . '}' => html_entity_decode( number_format_i18n( abs( $price ), $match[1] ) ),
             ) );
         }

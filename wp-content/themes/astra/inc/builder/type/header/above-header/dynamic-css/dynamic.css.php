@@ -44,9 +44,9 @@ function astra_above_header_row_setting( $dynamic_css, $dynamic_css_filtered = '
 	$mobile_background  = isset( $hba_header_bg_obj['mobile']['background-color'] ) ? $hba_header_bg_obj['mobile']['background-color'] : '';
 
 	// Header Height.
-	$hba_header_height_desktop = ( isset( $hba_header_height['desktop'] ) && ! empty( $hba_header_height['desktop'] ) ) ? $hba_header_height['desktop'] : '';
-	$hba_header_height_tablet  = ( isset( $hba_header_height['tablet'] ) && ! empty( $hba_header_height['tablet'] ) ) ? $hba_header_height['tablet'] : '';
-	$hba_header_height_mobile  = ( isset( $hba_header_height['mobile'] ) && ! empty( $hba_header_height['mobile'] ) ) ? $hba_header_height['mobile'] : '';
+	$hba_header_height_desktop = isset( $hba_header_height['desktop'] ) && ! empty( $hba_header_height['desktop'] ) ? $hba_header_height['desktop'] : '';
+	$hba_header_height_tablet  = isset( $hba_header_height['tablet'] ) && ! empty( $hba_header_height['tablet'] ) ? $hba_header_height['tablet'] : '';
+	$hba_header_height_mobile  = isset( $hba_header_height['mobile'] ) && ! empty( $hba_header_height['mobile'] ) ? $hba_header_height['mobile'] : '';
 
 	/**
 	 * Above Header General options
@@ -131,8 +131,6 @@ function astra_above_header_row_setting( $dynamic_css, $dynamic_css_filtered = '
 	$dynamic_css .= Astra_Enqueue_Scripts::trim_css( $parse_css );
 
 	$_section = 'section-above-header-builder';
-
-	$selector = '.site-above-header-wrap[data-section="ast_header_above"]';
 
 	$parent_selector = '.ast-above-header.ast-above-header-bar, .ast-header-break-point #masthead.site-header .ast-above-header-bar';
 

@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Shop page - Products Title markup updated
  */
-if ( ! function_exists( 'astra_woo_shop_products_title' ) ) :
+if ( ! function_exists( 'astra_woo_shop_products_title' ) ) {
 
 	/**
 	 * Shop Page product titles with anchor
@@ -32,13 +32,12 @@ if ( ! function_exists( 'astra_woo_shop_products_title' ) ) :
 
 		echo '</a>';
 	}
-
-endif;
+}
 
 /**
  * Shop page - Parent Category
  */
-if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) :
+if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) {
 	/**
 	 * Add and/or Remove Categories from shop archive page.
 	 *
@@ -47,13 +46,13 @@ if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) :
 	 * @since 1.1.0
 	 */
 	function astra_woo_shop_parent_category() {
-		if ( apply_filters( 'astra_woo_shop_parent_category', true ) ) : ?>
+		if ( apply_filters( 'astra_woo_shop_parent_category', true ) ) { ?>
 			<span class="ast-woo-product-category">
 				<?php
 				global $product;
 				$product_categories = function_exists( 'wc_get_product_category_list' ) ? wc_get_product_category_list( get_the_ID(), ';', '', '' ) : $product->get_categories( ';', '', '' );
 
-				$product_categories = wp_strip_all_tags( $product_categories );
+				$product_categories = html_entity_decode( wp_strip_all_tags( $product_categories ) );
 				if ( $product_categories ) {
 					list( $parent_cat ) = explode( ';', $product_categories );
 					echo apply_filters( 'astra_woo_shop_product_categories', esc_html( $parent_cat ), get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -62,14 +61,14 @@ if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) :
 				?>
 			</span>
 			<?php
-		endif;
+		}
 	}
-endif;
+}
 
 /**
  * Shop page - Out of Stock
  */
-if ( ! function_exists( 'astra_woo_shop_out_of_stock' ) ) :
+if ( ! function_exists( 'astra_woo_shop_out_of_stock' ) ) {
 	/**
 	 * Add Out of Stock to the Shop page
 	 *
@@ -86,13 +85,12 @@ if ( ! function_exists( 'astra_woo_shop_out_of_stock' ) ) :
 			<?php
 		}
 	}
-
-endif;
+}
 
 /**
  * Shop page - Short Description
  */
-if ( ! function_exists( 'astra_woo_shop_product_short_description' ) ) :
+if ( ! function_exists( 'astra_woo_shop_product_short_description' ) ) {
 	/**
 	 * Product short description
 	 *
@@ -106,14 +104,14 @@ if ( ! function_exists( 'astra_woo_shop_product_short_description' ) ) :
 		<div class="ast-woo-shop-product-description">
 			<?php the_excerpt(); ?>
 		</div>
-	<?php } ?>
+		<?php } ?>
 		<?php
 	}
-endif;
+}
 /**
  * Product page - Availability: in stock
  */
-if ( ! function_exists( 'astra_woo_product_in_stock' ) ) :
+if ( ! function_exists( 'astra_woo_product_in_stock' ) ) {
 	/**
 	 * Availability: in stock string updated
 	 *
@@ -143,7 +141,7 @@ if ( ! function_exists( 'astra_woo_product_in_stock' ) ) :
 
 		return $markup;
 	}
-endif;
+}
 
 if ( ! function_exists( 'astra_woo_woocommerce_template_loop_product_title' ) ) {
 
@@ -256,7 +254,6 @@ if ( ! function_exists( 'astra_woo_shop_thumbnail_wrap_end' ) ) {
 	}
 }
 
-
 /**
  * Woocommerce filter - Widget Products Tags
  */
@@ -271,7 +268,7 @@ if ( ! function_exists( 'astra_widget_product_tag_cloud_args' ) ) {
 	function astra_widget_product_tag_cloud_args( $args = array() ) {
 
 		$sidebar_link_font_size            = astra_get_option( 'font-size-body' );
-		$sidebar_link_font_size['desktop'] = ( '' != $sidebar_link_font_size['desktop'] ) ? $sidebar_link_font_size['desktop'] : 15;
+		$sidebar_link_font_size['desktop'] = '' != $sidebar_link_font_size['desktop'] ? $sidebar_link_font_size['desktop'] : 15;
 
 		$args['smallest'] = intval( $sidebar_link_font_size['desktop'] ) - 2;
 		$args['largest']  = intval( $sidebar_link_font_size['desktop'] ) + 3;
@@ -286,7 +283,7 @@ if ( ! function_exists( 'astra_widget_product_tag_cloud_args' ) ) {
 /**
  * Woocommerce shop/product div close tag.
  */
-if ( ! function_exists( 'astra_woocommerce_div_wrapper_close' ) ) :
+if ( ! function_exists( 'astra_woocommerce_div_wrapper_close' ) ) {
 
 	/**
 	 * Woocommerce shop/product div close tag.
@@ -296,17 +293,13 @@ if ( ! function_exists( 'astra_woocommerce_div_wrapper_close' ) ) :
 	function astra_woocommerce_div_wrapper_close() {
 
 		echo '</div>';
-
 	}
-
-endif;
-
-
+}
 
 /**
  * Checking whether shop page style is selected as modern layout.
  */
-if ( ! function_exists( 'astra_is_shop_page_modern_style' ) ) :
+if ( ! function_exists( 'astra_is_shop_page_modern_style' ) ) {
 
 	/**
 	 * Checking whether shop page style is selected as modern layout.
@@ -314,10 +307,9 @@ if ( ! function_exists( 'astra_is_shop_page_modern_style' ) ) :
 	 * @return bool true|false.
 	 */
 	function astra_is_shop_page_modern_style() {
-		return ( 'shop-page-modern-style' === astra_get_option( 'shop-style' ) ) ? true : false;
+		return 'shop-page-modern-style' === astra_get_option( 'shop-style' ) ? true : false;
 	}
-
-endif;
+}
 
 /**
  * Check if Woocommerce pro addons is enabled.
@@ -326,7 +318,7 @@ endif;
  */
 function astra_has_pro_woocommerce_addon() {
 	/** @psalm-suppress UndefinedClass  */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-	return ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'woocommerce' ) ) ? true : false;
+	return defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'woocommerce' ) ? true : false;
 	/** @psalm-suppress UndefinedClass  */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 }
 
@@ -335,10 +327,10 @@ function astra_has_pro_woocommerce_addon() {
  * This case is only for old header layout.
  *
  * @since 3.9.2
- * @return boolean false if it is an existing user, true if not.
+ * @return bool false if it is an existing user, true if not.
  */
 function astra_cart_color_default_icon_old_header() {
-	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings = astra_get_options();
 	return apply_filters( 'astra_support_default_cart_color_in_old_header', isset( $astra_settings['can-reflect-cart-color-in-old-header'] ) ? false : true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 }
 
@@ -387,17 +379,45 @@ if ( ! function_exists( 'astra_woocommerce_get_cart_url' ) ) {
 	/**
 	 * Filters and returns the WooCommerce cart URL for compatibility with WooCommerce 9.3.0.
 	 *
-	 * @param string $cart_url WooCommerce cart page URL.
+	 * @param string|null $cart_url WooCommerce cart page URL.
 	 *
 	 * @return string Returns the filtered WooCommerce cart page URL.
 	 *
 	 * @since 4.8.3
 	 */
-	function astra_woocommerce_get_cart_url( $cart_url ) {
+	function astra_woocommerce_get_cart_url( $cart_url = null ) {
 		// Check if WooCommerce function exists.
 		if ( function_exists( 'wc_get_page_permalink' ) ) {
 			$cart_url = wc_get_page_permalink( 'cart' );
 		}
-		return $cart_url;
+
+		if ( $cart_url === null ) {
+			$cart_url = wc_get_cart_url();
+		}
+
+		/**
+		 * Applies filters to the WooCommerce cart URL and returns the filtered URL.
+		 *
+		 * @param string $cart_url The WooCommerce cart URL.
+		 *
+		 * @return string The filtered WooCommerce cart URL.
+		 *
+		 * @since 4.8.10
+		 */
+		return apply_filters( 'astra_woocommerce_get_cart_url', $cart_url );
+	}
+}
+
+if ( ! function_exists( 'astra_wc_is_star_rating_compatibility' ) ) {
+	/**
+	 * Checks if star rating compatibility is enabled.
+	 *
+	 * @return bool Returns true if star rating compatibility is enabled, false otherwise.
+	 *
+	 * @since 4.8.10
+	 */
+	function astra_wc_is_star_rating_compatibility() {
+		$astra_settings = astra_get_options();
+		return apply_filters( 'astra_get_option_star-rating-comp', isset( $astra_settings['star-rating-comp'] ) );
 	}
 }

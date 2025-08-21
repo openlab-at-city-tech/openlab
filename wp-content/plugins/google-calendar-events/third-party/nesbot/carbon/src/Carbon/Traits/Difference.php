@@ -29,7 +29,6 @@ use ReturnTypeWillChange;
  * @method static copy()
  * @method static resolveCarbon($date = null)
  * @method static Translator translator()
- * @internal
  */
 trait Difference
 {
@@ -41,7 +40,7 @@ trait Difference
     protected static function fixNegativeMicroseconds(CarbonInterval $diff)
     {
         if ($diff->s !== 0 || $diff->i !== 0 || $diff->h !== 0 || $diff->d !== 0 || $diff->m !== 0 || $diff->y !== 0) {
-            $diff->f = (\round($diff->f * 1000000) + 1000000) / 1000000;
+            $diff->f = (round($diff->f * 1000000) + 1000000) / 1000000;
             $diff->s--;
             if ($diff->s < 0) {
                 $diff->s += 60;
@@ -86,7 +85,7 @@ trait Difference
             $diff->h = 0;
             $diff->i = 0;
             $diff->s = 0;
-            $diff->f = (1000000 - \round($diff->f * 1000000)) / 1000000;
+            $diff->f = (1000000 - round($diff->f * 1000000)) / 1000000;
             $diff->invert();
         } elseif ($diff->f < 0) {
             static::fixNegativeMicroseconds($diff);
@@ -116,7 +115,7 @@ trait Difference
         // The very specific case of 80998 was fixed in PHP 8.1beta3, but it introduced 81458
         // So we still need to keep this for now
         // @codeCoverageIgnoreStart
-        if (\version_compare(\PHP_VERSION, '8.1.0-dev', '>=') && $other->tz !== $this->tz) {
+        if (version_compare(\PHP_VERSION, '8.1.0-dev', '>=') && $other->tz !== $this->tz) {
             $other = $other->avoidMutation()->tz($this->tz);
         }
         // @codeCoverageIgnoreEnd
@@ -171,15 +170,15 @@ trait Difference
     public function diffInMonths($date = null, $absolute = \true)
     {
         $date = $this->resolveCarbon($date)->avoidMutation()->tz($this->tz);
-        [$yearStart, $monthStart, $dayStart] = \explode('-', $this->format('Y-m-dHisu'));
-        [$yearEnd, $monthEnd, $dayEnd] = \explode('-', $date->format('Y-m-dHisu'));
+        [$yearStart, $monthStart, $dayStart] = explode('-', $this->format('Y-m-dHisu'));
+        [$yearEnd, $monthEnd, $dayEnd] = explode('-', $date->format('Y-m-dHisu'));
         $diff = ((int) $yearEnd - (int) $yearStart) * static::MONTHS_PER_YEAR + (int) $monthEnd - (int) $monthStart;
         if ($diff > 0) {
             $diff -= $dayStart > $dayEnd ? 1 : 0;
         } elseif ($diff < 0) {
             $diff += $dayStart < $dayEnd ? 1 : 0;
         }
-        return $absolute ? \abs($diff) : $diff;
+        return $absolute ? abs($diff) : $diff;
     }
     /**
      * Get the difference in weeks rounded down.
@@ -359,7 +358,7 @@ trait Difference
     public function diffInMicroseconds($date = null, $absolute = \true)
     {
         $diff = $this->diff($date);
-        $value = (int) \round((((($diff->m || $diff->y ? $diff->days : $diff->d) * static::HOURS_PER_DAY + $diff->h) * static::MINUTES_PER_HOUR + $diff->i) * static::SECONDS_PER_MINUTE + ($diff->f + $diff->s)) * static::MICROSECONDS_PER_SECOND);
+        $value = (int) round((((($diff->m || $diff->y ? $diff->days : $diff->d) * static::HOURS_PER_DAY + $diff->h) * static::MINUTES_PER_HOUR + $diff->i) * static::SECONDS_PER_MINUTE + ($diff->f + $diff->s)) * static::MICROSECONDS_PER_SECOND);
         return $absolute || !$diff->invert ? $value : -$value;
     }
     /**
@@ -387,7 +386,7 @@ trait Difference
         /** @var CarbonInterface $date */
         $date = $this->resolveCarbon($date);
         $value = $date->getTimestamp() - $this->getTimestamp();
-        return $absolute ? \abs($value) : $value;
+        return $absolute ? abs($value) : $value;
     }
     /**
      * Get the difference in microseconds using timestamps.
@@ -402,7 +401,7 @@ trait Difference
         /** @var CarbonInterface $date */
         $date = $this->resolveCarbon($date);
         $value = ($date->timestamp - $this->timestamp) * static::MICROSECONDS_PER_SECOND + $date->micro - $this->micro;
-        return $absolute ? \abs($value) : $value;
+        return $absolute ? abs($value) : $value;
     }
     /**
      * Get the difference in milliseconds rounded down using timestamps.
@@ -468,7 +467,7 @@ trait Difference
             return $hoursDiff / static::HOURS_PER_DAY;
         }
         $daysDiff = $this->getIntervalDayDiff($interval);
-        return $daysDiff + \fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+        return $daysDiff + fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
     }
     /**
      * Get the difference in weeks as float (microsecond-precision).
@@ -591,7 +590,7 @@ trait Difference
         $date = $this->resolveUTC($date);
         $utc = $this->avoidMutation()->utc();
         $hoursDiff = $utc->floatDiffInRealHours($date, $absolute);
-        return ($hoursDiff < 0 ? -1 : 1) * $utc->diffInDays($date) + \fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
+        return ($hoursDiff < 0 ? -1 : 1) * $utc->diffInDays($date) + fmod($hoursDiff, static::HOURS_PER_DAY) / static::HOURS_PER_DAY;
     }
     /**
      * Get the difference in weeks as float (microsecond-precision).
@@ -745,7 +744,7 @@ trait Difference
         }
         $intSyntax = (int) ($intSyntax ?? static::DIFF_RELATIVE_AUTO);
         $intSyntax = $intSyntax === static::DIFF_RELATIVE_AUTO && $other === null ? static::DIFF_RELATIVE_TO_NOW : $intSyntax;
-        $parts = \min(7, \max(1, (int) $parts));
+        $parts = min(7, max(1, (int) $parts));
         $skip = \is_array($syntax) ? $syntax['skip'] ?? [] : [];
         return $this->diffAsCarbonInterval($other, \false, (array) $skip)->setLocalTranslator($this->getLocalTranslator())->forHumans($syntax, (bool) $short, $parts, $options ?? $this->localHumanDiffOptions ?? static::getHumanDiffOptions());
     }
@@ -922,7 +921,7 @@ trait Difference
     {
         $other = null;
         if ($syntax instanceof DateTimeInterface) {
-            [$other, $syntax, $short, $parts, $options] = \array_pad(\func_get_args(), 5, null);
+            [$other, $syntax, $short, $parts, $options] = array_pad(\func_get_args(), 5, null);
         }
         return $this->from($other, $syntax, $short, $parts, $options);
     }
@@ -990,7 +989,7 @@ trait Difference
     {
         $other = null;
         if ($syntax instanceof DateTimeInterface) {
-            [$other, $syntax, $short, $parts, $options] = \array_pad(\func_get_args(), 5, null);
+            [$other, $syntax, $short, $parts, $options] = array_pad(\func_get_args(), 5, null);
         }
         return $this->from($other, $syntax, $short, $parts, $options);
     }
@@ -1026,18 +1025,18 @@ trait Difference
         $other = $this->resolveCarbon($referenceTime)->avoidMutation()->setTimezone($this->getTimezone())->startOfDay();
         $diff = $other->diffInDays($current, \false);
         $format = $diff < -6 ? 'sameElse' : ($diff < -1 ? 'lastWeek' : ($diff < 0 ? 'lastDay' : ($diff < 1 ? 'sameDay' : ($diff < 2 ? 'nextDay' : ($diff < 7 ? 'nextWeek' : 'sameElse')))));
-        $format = \array_merge($this->getCalendarFormats(), $formats)[$format];
+        $format = array_merge($this->getCalendarFormats(), $formats)[$format];
         if ($format instanceof Closure) {
             $format = $format($current, $other) ?? '';
         }
         return $this->isoFormat((string) $format);
     }
-    private function getIntervalDayDiff(DateInterval $interval) : int
+    private function getIntervalDayDiff(DateInterval $interval): int
     {
         $daysDiff = (int) $interval->format('%a');
         $sign = $interval->format('%r') === '-' ? -1 : 1;
-        if (\is_int($interval->days) && $interval->y === 0 && $interval->m === 0 && \version_compare(\PHP_VERSION, '8.1.0-dev', '<') && \abs($interval->d - $daysDiff) === 1) {
-            $daysDiff = \abs($interval->d);
+        if (\is_int($interval->days) && $interval->y === 0 && $interval->m === 0 && version_compare(\PHP_VERSION, '8.1.0-dev', '<') && abs($interval->d - $daysDiff) === 1) {
+            $daysDiff = abs($interval->d);
             // @codeCoverageIgnore
         }
         return $daysDiff * $sign;

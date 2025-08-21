@@ -39,6 +39,10 @@ class ElementsKit_Widget_Business_Hours extends Widget_Base {
         return false;
     }
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
     protected function register_controls() {
 
 

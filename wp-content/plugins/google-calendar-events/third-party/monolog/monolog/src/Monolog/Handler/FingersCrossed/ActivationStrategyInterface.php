@@ -17,7 +17,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler\FingersCrossed;
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 interface ActivationStrategyInterface
 {
@@ -26,5 +25,5 @@ interface ActivationStrategyInterface
      *
      * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record) : bool;
+    public function isHandlerActivated(array $record): bool;
 }

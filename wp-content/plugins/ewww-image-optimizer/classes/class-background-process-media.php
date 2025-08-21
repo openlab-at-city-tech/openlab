@@ -46,6 +46,42 @@ class Background_Process_Media extends Background_Process {
 	protected $limit = 500;
 
 	/**
+	 * Metadata for checking attachments.
+	 *
+	 * @var array
+	 * @access protected
+	 */
+	protected $attachments_meta = array();
+
+	/**
+	 * Get batch
+	 *
+	 * @return array Return the first batch from the queue
+	 */
+	protected function get_batch() {
+		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+
+		$batch = parent::get_batch();
+		if ( empty( $batch ) ) {
+			return array();
+		}
+		$attachment_ids = array();
+		foreach ( $batch as $item ) {
+			if ( ! empty( $item['attachment_id'] ) ) {
+				$attachment_ids[] = $item['attachment_id'];
+			}
+		}
+
+		// This retrieves the mime type, _wp_attached_file, _wp_attachment_metadata, tinypng and wpml status from the postmeta table.
+		// Done in bulk, because it is way faster.
+		if ( ! empty( $attachment_ids ) ) {
+			$this->attachments_meta = ewww_image_optimizer_fetch_metadata_batch( $attachment_ids );
+
+		}
+		return $batch;
+	}
+
+	/**
 	 * Handle
 	 *
 	 * @global string|array $optimized_list A list of all images that have been optimized, or a string
@@ -87,34 +123,49 @@ class Background_Process_Media extends Background_Process {
 		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		ewwwio()->defer = false;
 		$max_attempts   = 15;
-		$id             = $item['id'];
+		$attachment_id  = $item['attachment_id'];
 		if ( empty( $item['attempts'] ) && ! empty( $item['new'] ) ) {
 			ewwwio_debug_message( 'first attempt on new upload, going to sleep for a second' );
 			$item['attempts'] = 0;
 			sleep( 1 ); // On the first attempt, hold off and wait for the db to catch up.
 		}
-		$type = get_post_mime_type( $id );
+		if ( ! empty( $this->attachments_meta[ $attachment_id ]['type'] ) ) {
+			$type = $this->attachments_meta[ $attachment_id ]['type'];
+		} else {
+			$type = get_post_mime_type( $attachment_id );
+		}
 		if ( empty( $type ) ) {
-			ewwwio_debug_message( "mime is missing, requeueing {$item['attempts']}" );
+			ewwwio_debug_message( "mime is missing, requeueing (previous attempts: {$item['attempts']})" );
 			sleep( 4 );
 			return $item;
 		}
 
-		ewwwio_debug_message( "background processing $id, type: " . $type );
+		ewwwio_debug_message( "background processing $attachment_id, type: " . $type );
 		$supported_types = ewwwio()->get_supported_types();
 
 		if ( in_array( $type, $supported_types, true ) && $item['new'] && class_exists( 'wpCloud\StatelessMedia\EWWW' ) ) {
-			$meta = wp_get_attachment_metadata( $id );
+			$meta = wp_get_attachment_metadata( $attachment_id );
+		} elseif ( ! empty( $this->attachments_meta[ $attachment_id ]['meta'] ) ) {
+			// Use the data from the batch cache, if available.
+			$meta = maybe_unserialize( $this->attachments_meta[ $attachment_id ]['meta'] );
 		} else {
 			// This is unfiltered for performance, because we don't often need filtered meta.
-			$meta = wp_get_attachment_metadata( $id, true );
+			$meta = wp_get_attachment_metadata( $attachment_id, true );
 		}
-		if ( in_array( $type, $supported_types, true ) && empty( $meta ) ) {
-			ewwwio_debug_message( "metadata is missing, requeueing {$item['attempts']}" );
+		$missing_meta_bail = true;
+		if ( 'application/pdf' === $type ) {
+			$missing_meta_bail = false;
+			// If the upload is a PDF, only bail for missing meta for new uploads that have less than 5 attempts.
+			if ( $item['attempts'] < 5 && $item['new'] ) {
+				$missing_meta_bail = true;
+			}
+		}
+		if ( in_array( $type, $supported_types, true ) && empty( $meta ) && $missing_meta_bail ) {
+			ewwwio_debug_message( "metadata is missing, requeueing (previous attempts: {$item['attempts']})" );
 			sleep( 4 );
 			return $item;
 		}
-		$this->process_attachment( $meta, $item, $id );
+		$this->process_attachment( $meta, $item, $attachment_id );
 
 		return false;
 	}
@@ -134,6 +185,10 @@ class Background_Process_Media extends Background_Process {
 			\ewwwio_debug_message( "skipping $file_path as instructed" );
 			return false;
 		}
+		if ( ! \is_file( $file_path ) ) {
+			\ewwwio_debug_message( "file does not exist: $file_path" );
+			return false;
+		}
 		$image_size = filesize( $file_path );
 		if ( ! $image_size ) {
 			\ewwwio_debug_message( "file skipped due to no size: $file_path" );
@@ -143,7 +198,12 @@ class Background_Process_Media extends Background_Process {
 			\ewwwio_debug_message( "file skipped due to filesize: $file_path" );
 			return false;
 		}
-		$mime = ewww_image_optimizer_quick_mimetype( $file_path );
+		$mime       = ewww_image_optimizer_quick_mimetype( $file_path );
+		$webp_types = ewwwio()->get_webp_types();
+		if ( $item['webp_only'] && ! in_array( $mime, $webp_types, true ) ) {
+			\ewwwio_debug_message( "not eligible for WebP conversion: $file_path" );
+			return false;
+		}
 		if ( 'image/png' === $mime && \ewww_image_optimizer_get_option( 'ewww_image_optimizer_skip_png_size' ) && $image_size > \ewww_image_optimizer_get_option( 'ewww_image_optimizer_skip_png_size' ) ) {
 			\ewwwio_debug_message( "file skipped due to PNG filesize: $file_path" );
 			return false;
@@ -187,6 +247,7 @@ class Background_Process_Media extends Background_Process {
 		global $optimized_list;
 
 		if ( is_array( $optimized_list ) && isset( $optimized_list[ $file_path ] ) ) {
+			ewwwio_debug_message( "found already_optimized in memory for $file_path" );
 			$already_optimized = $optimized_list[ $file_path ];
 		} else {
 			$already_optimized = \ewww_image_optimizer_find_already_optimized( $file_path );
@@ -286,7 +347,9 @@ class Background_Process_Media extends Background_Process {
 			$new_image = false;
 		}
 
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$attached_file = ! empty( $this->attachments_meta[ $id ]['_wp_attached_file'] ) ? $this->attachments_meta[ $id ]['_wp_attached_file'] : '';
+
+		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id, $attached_file, false );
 
 		/**
 		 * Allow altering the metadata or performing other actions before the plugin processes an attachement.
@@ -359,8 +422,10 @@ class Background_Process_Media extends Background_Process {
 					if ( $scan['height'] === $data['height'] && $scan['width'] === $data['width'] ) {
 						// We found a duplicate resize, so...
 						// Point this resize at the same image as the previous one.
-						$meta['sizes'][ $size ]['file']      = $meta['sizes'][ $proc ]['file'];
-						$meta['sizes'][ $size ]['mime-type'] = $meta['sizes'][ $proc ]['mime-type'];
+						$meta['sizes'][ $size ]['file'] = $meta['sizes'][ $proc ]['file'];
+						if ( isset( $meta['sizes'][ $proc ]['mime-type'] ) ) {
+							$meta['sizes'][ $size ]['mime-type'] = $meta['sizes'][ $proc ]['mime-type'];
+						}
 						continue( 2 );
 					}
 				}
@@ -370,7 +435,6 @@ class Background_Process_Media extends Background_Process {
 					ewwwio_debug_message( 'strange... $resize_path was empty' );
 					continue;
 				}
-				$resize_path = path_join( $upload_path, $resize_path );
 				if ( 'application/pdf' === $type && 'full' === $size ) {
 					$size = 'pdf-full';
 				}
@@ -447,14 +511,14 @@ class Background_Process_Media extends Background_Process {
 	 *                    the item and whether it is a new upload.
 	 */
 	protected function failure( $item ) {
-		if ( empty( $item['id'] ) ) {
+		if ( empty( $item['attachment_id'] ) ) {
 			return;
 		}
 		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		$file_path = false;
-		$meta      = \wp_get_attachment_metadata( $item['id'] );
+		$meta      = \wp_get_attachment_metadata( $item['attachment_id'] );
 		if ( ! empty( $meta ) ) {
-			list( $file_path, $upload_path ) = \ewww_image_optimizer_attachment_path( $meta, $item['id'] );
+			list( $file_path, $upload_path ) = \ewww_image_optimizer_attachment_path( $meta, $item['attachment_id'] );
 		}
 
 		if ( $file_path ) {

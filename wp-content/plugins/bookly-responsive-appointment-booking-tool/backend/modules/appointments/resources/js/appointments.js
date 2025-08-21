@@ -29,7 +29,7 @@ jQuery(function ($) {
                 endDate: moment().endOf('month'),
             },
             creationDate: {
-                startDate: moment(),
+                startDate: moment().subtract(100, 'years'),
                 endDate: moment().add(100, 'years'),
             },
         },
@@ -71,12 +71,18 @@ jQuery(function ($) {
                     .data('date', 'null').find('span')
                     .html(BooklyL10n.tasks.title);
             } else if (params[0] === 'created-date') {
-                pickers.creationDate.startDate = moment(params['1'].substring(0, 10));
-                pickers.creationDate.endDate = moment(params['1'].substring(11));
-                $creationDateFilter
-                    .data('date', pickers.creationDate.startDate.format(pickers.dateFormat) + ' - ' + pickers.creationDate.endDate.format(pickers.dateFormat))
-                    .find('span')
-                    .html(pickers.creationDate.startDate.format(BooklyL10n.dateRange.format) + ' - ' + pickers.creationDate.endDate.format(BooklyL10n.dateRange.format));
+                if (params['1'] === 'any') {
+                    $creationDateFilter
+                        .data('date', 'any').find('span')
+                        .html(BooklyL10n.dateRange.createdAtAnyTime);
+                } else {
+                    pickers.creationDate.startDate = moment(params['1'].substring(0, 10));
+                    pickers.creationDate.endDate = moment(params['1'].substring(11));
+                    $creationDateFilter
+                        .data('date', pickers.creationDate.startDate.format(pickers.dateFormat) + ' - ' + pickers.creationDate.endDate.format(pickers.dateFormat))
+                        .find('span')
+                        .html(pickers.creationDate.startDate.format(BooklyL10n.dateRange.format) + ' - ' + pickers.creationDate.endDate.format(BooklyL10n.dateRange.format));
+                }
             } else if (params[0] === 'status') {
                 status_filtered = true;
                 if (params[1] == 'any') {
@@ -178,6 +184,9 @@ jQuery(function ($) {
                     break;
                 case 'service_duration':
                     columns.push({data: 'service.duration'});
+                    break;
+                case 'service_price':
+                    columns.push({data: 'service.price'});
                     break;
                 case 'attachments':
                     columns.push({
@@ -457,7 +466,7 @@ jQuery(function ($) {
     pickerRanges1[BooklyL10n.dateRange.thisMonth] = [moment().startOf('month'), moment().endOf('month')];
     pickerRanges1[BooklyL10n.dateRange.nextMonth] = [moment().add(1, 'month').startOf('month'), moment().add(1, 'month').endOf('month')];
 
-    pickerRanges2[BooklyL10n.dateRange.anyTime] = pickerRanges1[BooklyL10n.dateRange.anyTime];
+    pickerRanges2[BooklyL10n.dateRange.anyTime] = [pickers.creationDate.startDate, pickers.creationDate.endDate];
     pickerRanges2[BooklyL10n.dateRange.yesterday] = pickerRanges1[BooklyL10n.dateRange.yesterday];
     pickerRanges2[BooklyL10n.dateRange.today] = pickerRanges1[BooklyL10n.dateRange.today];
     pickerRanges2[BooklyL10n.dateRange.last_7] = pickerRanges1[BooklyL10n.dateRange.last_7];

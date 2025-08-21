@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Above_Footer' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Above_Footer {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

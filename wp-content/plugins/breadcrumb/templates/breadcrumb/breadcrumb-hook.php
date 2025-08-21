@@ -18,16 +18,17 @@ function breadcrumb_main_items($atts)
 
 
     if (!empty($breadcrumb_items)) :
-?> <div class="breadcrumb-container <?php echo esc_attr($breadcrumb_themes); ?>">
-
-            <ol>
-                <?php
-                foreach ($breadcrumb_items as $item_index => $item) :
-                    do_action('breadcrumb_main_item_loop', $item);
-                endforeach;
-                ?>
-            </ol>
-        </div><?php
+?><nav aria-label="breadcrumbs">
+            <div class="breadcrumb-container <?php echo esc_attr($breadcrumb_themes); ?>">
+                <ol>
+                    <?php
+                    foreach ($breadcrumb_items as $item_index => $item) :
+                        do_action('breadcrumb_main_item_loop', $item);
+                    endforeach;
+                    ?>
+                </ol>
+            </div>
+        </nav><?php
                 do_action('breadcrumb_main_end', $atts);
             endif;
         }

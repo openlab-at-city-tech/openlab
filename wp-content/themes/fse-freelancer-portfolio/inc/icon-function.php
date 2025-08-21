@@ -11,11 +11,11 @@
  */
 function fse_freelancer_portfolio_include_svg_icons() {
 	// Define SVG sprite file.
-	$svg_icons = get_parent_theme_file_path( '/assets/images/icons.svg' );
+	$fse_freelancer_portfolio_svg_icons = get_parent_theme_file_path( '/assets/images/icons.svg' );
 
 	// If it exists, include it.
-	if ( file_exists( $svg_icons ) ) {
-		require $svg_icons;
+	if ( file_exists( $fse_freelancer_portfolio_svg_icons ) ) {
+		require $fse_freelancer_portfolio_svg_icons;
 	}
 }
 add_action( 'wp_footer', 'fse_freelancer_portfolio_include_svg_icons', 9999 );
@@ -102,11 +102,11 @@ function fse_freelancer_portfolio_get_svg( $args = array() ) {
 /**
  * Returns an array of supported social links (URL and icon name).
  *
- * @return array $social_links_icons
+ * @return array $fse_freelancer_portfolio_social_links_icons
  */
 function fse_freelancer_portfolio_social_links_icons() {
 	// Supported social links icons.
-	$social_links_icons = array(
+	$fse_freelancer_portfolio_social_links_icons = array(
 		'amazon.com'	  => 'amazon',
 		'apple.com'	      => 'appleinc',
 		'behance.net'     => 'behance',
@@ -153,8 +153,8 @@ function fse_freelancer_portfolio_social_links_icons() {
 	 *
 	 * @since Catch Mag Pro 1.0
 	 *
-	 * @param array $social_links_icons Array of social links icons.
+	 * @param array $fse_freelancer_portfolio_social_links_icons Array of social links icons.
 	 */
-	return apply_filters( 'fse_freelancer_portfolio_social_links_icons', $social_links_icons );
+	return apply_filters( 'fse_freelancer_portfolio_social_links_icons', $fse_freelancer_portfolio_social_links_icons );
 }
 

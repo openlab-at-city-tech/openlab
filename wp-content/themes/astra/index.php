@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header(); ?>
-<?php if ( astra_page_layout() == 'left-sidebar' ) : ?>
+<?php if ( astra_page_layout() === 'left-sidebar' ) { ?>
 
 	<?php get_sidebar(); ?>
 
-<?php endif ?>
+<?php } ?>
 	<div id="primary" <?php astra_primary_class(); ?>>
 		<?php
 		astra_primary_content_top();
@@ -35,10 +35,10 @@ get_header(); ?>
 		?>
 	</div><!-- #primary -->
 <?php
-if ( astra_page_layout() == 'right-sidebar' ) :
+if ( astra_page_layout() === 'right-sidebar' ) {
 
 	get_sidebar();
 
-endif;
+}
 
 get_footer();

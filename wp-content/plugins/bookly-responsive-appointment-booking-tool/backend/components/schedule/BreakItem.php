@@ -21,9 +21,9 @@ class BreakItem extends Lib\Base\Component
      */
     public function __construct( $id, $start, $end )
     {
-        $this->id    = $id;
+        $this->id = $id;
         $this->start = $start;
-        $this->end   = $end;
+        $this->end = $end;
     }
 
     /**
@@ -35,8 +35,10 @@ class BreakItem extends Lib\Base\Component
     public function render( $echo = true )
     {
         return self::renderTemplate( 'break', array(
-            'id'       => $this->id,
+            'id' => $this->id,
             'interval' => $this->getFormattedInterval(),
+            'start' => $this->start,
+            'end' => $this->end,
         ), $echo );
     }
 

@@ -39,7 +39,6 @@ use SimpleCalendar\plugin_deps\PhpConsole\Helper;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @deprecated Since 2.8.0 and 3.2.0, PHPConsole is abandoned and thus we will drop this handler in Monolog 4
- * @internal
  */
 class PHPConsoleHandler extends AbstractProcessingHandler
 {
@@ -94,7 +93,7 @@ class PHPConsoleHandler extends AbstractProcessingHandler
      */
     public function __construct(array $options = [], ?Connector $connector = null, $level = Logger::DEBUG, bool $bubble = \true)
     {
-        if (!\class_exists('SimpleCalendar\\plugin_deps\\PhpConsole\\Connector')) {
+        if (!class_exists('SimpleCalendar\plugin_deps\PhpConsole\Connector')) {
             throw new \RuntimeException('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
         }
         parent::__construct($level, $bubble);
@@ -106,15 +105,15 @@ class PHPConsoleHandler extends AbstractProcessingHandler
      *
      * @return array<string, mixed>
      */
-    private function initOptions(array $options) : array
+    private function initOptions(array $options): array
     {
-        $wrongOptions = \array_diff(\array_keys($options), \array_keys($this->options));
+        $wrongOptions = array_diff(array_keys($options), array_keys($this->options));
         if ($wrongOptions) {
-            throw new \RuntimeException('Unknown options: ' . \implode(', ', $wrongOptions));
+            throw new \RuntimeException('Unknown options: ' . implode(', ', $wrongOptions));
         }
-        return \array_replace($this->options, $options);
+        return array_replace($this->options, $options);
     }
-    private function initConnector(?Connector $connector = null) : Connector
+    private function initConnector(?Connector $connector = null): Connector
     {
         if (!$connector) {
             if ($this->options['dataStorage']) {
@@ -165,18 +164,18 @@ class PHPConsoleHandler extends AbstractProcessingHandler
         }
         return $connector;
     }
-    public function getConnector() : Connector
+    public function getConnector(): Connector
     {
         return $this->connector;
     }
     /**
      * @return array<string, mixed>
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->options;
     }
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($this->options['enabled'] && $this->connector->isActiveClient()) {
             return parent::handle($record);
@@ -186,7 +185,7 @@ class PHPConsoleHandler extends AbstractProcessingHandler
     /**
      * Writes the record down to the log of the implementing handler
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if ($record['level'] < Logger::NOTICE) {
             $this->handleDebugRecord($record);
@@ -199,26 +198,26 @@ class PHPConsoleHandler extends AbstractProcessingHandler
     /**
      * @phpstan-param Record $record
      */
-    private function handleDebugRecord(array $record) : void
+    private function handleDebugRecord(array $record): void
     {
         $tags = $this->getRecordTags($record);
         $message = $record['message'];
         if ($record['context']) {
-            $message .= ' ' . Utils::jsonEncode($this->connector->getDumper()->dump(\array_filter($record['context'])), null, \true);
+            $message .= ' ' . Utils::jsonEncode($this->connector->getDumper()->dump(array_filter($record['context'])), null, \true);
         }
         $this->connector->getDebugDispatcher()->dispatchDebug($message, $tags, $this->options['classesPartialsTraceIgnore']);
     }
     /**
      * @phpstan-param Record $record
      */
-    private function handleExceptionRecord(array $record) : void
+    private function handleExceptionRecord(array $record): void
     {
         $this->connector->getErrorsDispatcher()->dispatchException($record['context']['exception']);
     }
     /**
      * @phpstan-param Record $record
      */
-    private function handleErrorRecord(array $record) : void
+    private function handleErrorRecord(array $record): void
     {
         $context = $record['context'];
         $this->connector->getErrorsDispatcher()->dispatchError($context['code'] ?? null, $context['message'] ?? $record['message'], $context['file'] ?? null, $context['line'] ?? null, $this->options['classesPartialsTraceIgnore']);
@@ -236,7 +235,7 @@ class PHPConsoleHandler extends AbstractProcessingHandler
                 if (!empty($context[$key])) {
                     $tags = $context[$key];
                     if ($key === 0) {
-                        \array_shift($context);
+                        array_shift($context);
                     } else {
                         unset($context[$key]);
                     }
@@ -244,12 +243,12 @@ class PHPConsoleHandler extends AbstractProcessingHandler
                 }
             }
         }
-        return $tags ?: \strtolower($record['level_name']);
+        return $tags ?: strtolower($record['level_name']);
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new LineFormatter('%message%');
     }

@@ -20,9 +20,9 @@ use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
  * @formatter:on
  *
  * @implements WidgetWithId<CATEGORY_SETTINGS, DEFAULTS>
- * @extends Widget_Abstract<CATEGORY_SETTINGS, DEFAULTS>
+ * @extends \WP_Widget<CATEGORY_SETTINGS>
  */
-class Category extends Widget_Abstract implements WidgetWithId {
+class Category extends \WP_Widget implements WidgetWithId {
 	/**
 	 * @use Checkbox<CATEGORY_SETTINGS>
 	 */
@@ -37,16 +37,16 @@ class Category extends Widget_Abstract implements WidgetWithId {
 
 	public const NAME = 'advanced_sidebar_menu_category';
 
-	public const TITLE                    = Menu_Abstract::TITLE;
-	public const INCLUDE_PARENT           = Menu_Abstract::INCLUDE_PARENT;
-	public const INCLUDE_CHILDLESS_PARENT = Menu_Abstract::INCLUDE_CHILDLESS_PARENT;
-	public const ORDER_BY                 = Menu_Abstract::ORDER_BY;
-	public const EXCLUDE                  = Menu_Abstract::EXCLUDE;
-	public const DISPLAY_ALL              = Menu_Abstract::DISPLAY_ALL;
-	public const LEVELS                   = Menu_Abstract::LEVELS;
+	public const TITLE                    = CategoryMenu::TITLE;
+	public const INCLUDE_PARENT           = CategoryMenu::INCLUDE_PARENT;
+	public const INCLUDE_CHILDLESS_PARENT = CategoryMenu::INCLUDE_CHILDLESS_PARENT;
+	public const ORDER_BY                 = CategoryMenu::ORDER_BY;
+	public const EXCLUDE                  = CategoryMenu::EXCLUDE;
+	public const DISPLAY_ALL              = CategoryMenu::DISPLAY_ALL;
+	public const LEVELS                   = CategoryMenu::LEVELS;
 
-	public const DISPLAY_ON_SINGLE     = CategoryMenu::DISPLAY_ON_SINGLE;
-	public const EACH_CATEGORY_DISPLAY = CategoryMenu::EACH_CATEGORY_DISPLAY;
+	public const DISPLAY_ON_SINGLE    = CategoryMenu::DISPLAY_ON_SINGLE;
+	public const POST_CATEGORY_LAYOUT = CategoryMenu::POST_CATEGORY_LAYOUT;
 
 	/**
 	 * Default widget values.
@@ -58,7 +58,7 @@ class Category extends Widget_Abstract implements WidgetWithId {
 		self::INCLUDE_PARENT           => '',
 		self::INCLUDE_CHILDLESS_PARENT => '',
 		self::DISPLAY_ON_SINGLE        => '',
-		self::EACH_CATEGORY_DISPLAY    => 'widget',
+		self::POST_CATEGORY_LAYOUT     => 'widget',
 		self::EXCLUDE                  => '',
 		self::DISPLAY_ALL              => '',
 		self::LEVELS                   => '1',
@@ -137,7 +137,7 @@ class Category extends Widget_Abstract implements WidgetWithId {
 
 
 	/**
-	 * Get list of display each single post's category options.
+	 * Get the list of display each single post's category options.
 	 *
 	 * @return array{widget: string, list: string}
 	 */
@@ -214,7 +214,7 @@ class Category extends Widget_Abstract implements WidgetWithId {
 						</select>
 						<?php
 						/* translators: {select html input}, {Selected post type plural label} */
-						printf( esc_html__( 'Display %1$s levels of child %2$s', 'advanced-sidebar-menu' ), ob_get_clean(), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						\printf( esc_html__( 'Display %1$s levels of child %2$s', 'advanced-sidebar-menu' ), ob_get_clean(), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
 					</label>
 				</p>
@@ -242,26 +242,26 @@ class Category extends Widget_Abstract implements WidgetWithId {
 		<div class="advanced-sidebar-menu-column-box">
 			<p>
 
-				<?php $widget->checkbox( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>
+				<?php $widget->checkbox( self::DISPLAY_ON_SINGLE, self::POST_CATEGORY_LAYOUT ); ?>
 				<label>
 					<?php
 					/* translators: Selected taxonomy plural label */
-					printf( esc_html__( 'Display %s on single posts', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) );
+					\printf( esc_html__( 'Display %s on single posts', 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance, false ) ) ) );
 					?>
 				</label>
 			</p>
 
-			<div <?php $widget->hide_element( self::DISPLAY_ON_SINGLE, self::EACH_CATEGORY_DISPLAY ); ?>>
+			<div <?php $widget->hide_element( self::DISPLAY_ON_SINGLE, self::POST_CATEGORY_LAYOUT ); ?>>
 				<p>
-					<label for="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>">
+					<label for="<?php echo esc_attr( $widget->get_field_id( self::POST_CATEGORY_LAYOUT ) ); ?>">
 						<?php
 						/* translators: Selected taxonomy single label */
-						printf( esc_html__( "Display each single post's %s", 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
+						\printf( esc_html__( "Display each single post's %s", 'advanced-sidebar-menu' ), esc_html( strtolower( $this->get_taxonomy_label( $instance ) ) ) );
 						?>
 					</label>
 					<select
-						id="<?php echo esc_attr( $widget->get_field_id( self::EACH_CATEGORY_DISPLAY ) ); ?>"
-						name="<?php echo esc_attr( $widget->get_field_name( self::EACH_CATEGORY_DISPLAY ) ); ?>"
+						id="<?php echo esc_attr( $widget->get_field_id( self::POST_CATEGORY_LAYOUT ) ); ?>"
+						name="<?php echo esc_attr( $widget->get_field_name( self::POST_CATEGORY_LAYOUT ) ); ?>"
 						class="advanced-sidebar-menu-block-field"
 					>
 						<?php
@@ -269,7 +269,7 @@ class Category extends Widget_Abstract implements WidgetWithId {
 							?>
 							<option
 								value="<?php echo esc_attr( $value ); ?>"
-								<?php selected( $value, $instance[ self::EACH_CATEGORY_DISPLAY ] ); ?>
+								<?php selected( $value, $instance[ self::POST_CATEGORY_LAYOUT ] ); ?>
 							>
 								<?php echo esc_html( $label ); ?>
 							</option>

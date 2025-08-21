@@ -20,7 +20,6 @@ namespace SimpleCalendar\plugin_deps\Psr\Cache;
  * be requested from a Pool object via the getItem() method.  Calling Libraries
  * SHOULD NOT assume that an Item created by one Implementing Library is
  * compatible with a Pool from another Implementing Library.
- * @internal
  */
 interface CacheItemInterface
 {

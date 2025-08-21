@@ -1,14 +1,15 @@
 jQuery.noConflict();
 
-if (typeof wp.heartbeat !== "undefined") {
-    jQuery(document).on('heartbeat-send', function (e, data) {
-        data['b2s_heartbeat'] = 'b2s_listener';
-        data['b2s_heartbeat_action'] = 'b2s_video_upload';
-    });
-    wp.heartbeat.connectNow();
-}
-
 jQuery(window).on("load", function () {
+
+    if (typeof wp.heartbeat !== "undefined") {
+        jQuery(document).on('heartbeat-send', function (e, data) {
+            data['b2s_heartbeat'] = 'b2s_listener';
+            data['b2s_heartbeat_action'] = 'b2s_video_upload';
+        });
+        wp.heartbeat.connectNow();
+    }
+
     jQuery('#b2sPagination').val("1");
     /*video upload list*/
     b2sSortFormSubmit();

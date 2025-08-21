@@ -16,13 +16,16 @@ if (!defined('ABSPATH')) {
 
                 // @todo - These notifications should require nonce, except delete-notify action
                 if ('delete' === $listtable->current_action() || 'delete-notify' === $listtable->current_action()) {
-                    echo '<div class="updated below-h2" id="message"><p>' . sprintf( esc_html( _n('%d slideshow moved to the Trash.', '%d slideshows moved to the Trash.', $count), 'ml-slider'), esc_html($count) ) . '</p></div>';
+                    // Translators: %d is the number of slideshows moved to the Trash.
+                    echo '<div class="updated below-h2" id="message"><p>' . esc_html( sprintf( _n( '%d slideshow moved to the Trash.', '%d slideshows moved to the Trash.', $count, 'ml-slider' ), $count ) ) . '</p></div>';
                 }
                 if ('restore' === $listtable->current_action()) {
-                    echo '<div class="updated below-h2" id="message"><p>' . sprintf( esc_html( _n('%d slideshow restored from the Trash.', '%d slideshows restored from the Trash.', $count), 'ml-slider'), esc_html($count) ) . '</p></div>';
+                    // Translators: %d is the number of slideshows restored from the Trash.
+                     echo '<div class="updated below-h2" id="message"><p>' . esc_html( sprintf( _n( '%d slideshow restored from the Trash.', '%d slideshows restored from the Trash.', $count, 'ml-slider' ), $count ) ) . '</p></div>';
                 }
                 if ('permanent' === $listtable->current_action()) {
-                    echo '<div class="updated below-h2" id="message"><p>' . sprintf( esc_html( _n('%d slideshow permanently deleted.', '%d slideshows permanently deleted.', $count), 'ml-slider'), esc_html($count) ). '</p></div>';
+                    // Translators: %d is the number of slideshows permanently deleted.
+                    echo '<div class="updated below-h2" id="message"><p>' . esc_html( sprintf( _n( '%d slideshow permanently deleted.', '%d slideshows permanently deleted.', $count, 'ml-slider' ), $count ) ). '</p></div>';
                 }
             }
 

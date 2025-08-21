@@ -10,7 +10,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon;
 
-/** @internal */
 class CarbonPeriodImmutable extends CarbonPeriod
 {
     /**

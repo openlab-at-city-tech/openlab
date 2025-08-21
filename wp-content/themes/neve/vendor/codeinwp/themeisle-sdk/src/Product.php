@@ -346,7 +346,17 @@ class Product {
 	 * @return string Friendly name.
 	 */
 	public function get_friendly_name() {
-		$name = apply_filters( $this->get_key() . '_friendly_name', trim( str_replace( 'Lite', '', $this->get_name() ) ) );
+		$name = trim( str_replace( 'Lite', '', $this->get_name() ) );
+		if ( defined( 'OTTER_BLOCKS_BASEFILE' ) && OTTER_BLOCKS_BASEFILE === $this->basefile ) {
+			$name = 'Otter Blocks';
+		}
+		if ( defined( 'OPTML_BASEFILE' ) && OPTML_BASEFILE === $this->basefile ) {
+			$name = 'Optimole';
+		}
+		if ( defined( 'WPMM_FILE' ) && WPMM_FILE === $this->basefile ) {
+			$name = 'LightStart';
+		}
+		$name = apply_filters( $this->get_key() . '_friendly_name', $name );
 		$name = rtrim( $name, '- ()' );
 
 		return $name;

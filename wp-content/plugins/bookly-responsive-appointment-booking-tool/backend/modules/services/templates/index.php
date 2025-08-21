@@ -20,6 +20,7 @@ use Bookly\Backend\Components\Dialogs;
                 <div class="col-12 col-sm-auto">
                     <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Services order', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-service-order-modal', 'disabled' => 'disabled' ), true ) ?>
                 </div>
+                <?php Proxy\Shared::renderTopButtons() ?>
                 <div class="col-12 col-sm-auto">
                     <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Categories', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-service-categories-modal', 'disabled' => 'disabled' ), true ) ?>
                 </div>
@@ -72,6 +73,7 @@ use Bookly\Backend\Components\Dialogs;
     <?php Dialogs\Service\Create\Dialog::render() ?>
     <?php Dialogs\Service\Edit\Dialog::render() ?>
     <?php Dialogs\Service\Categories\Dialog::render() ?>
+    <?php Proxy\Shared::renderAddOnsComponents() ?>
     <?php Dialogs\Service\Order\Dialog::render() ?>
     <?php Dialogs\TableSettings\Dialog::render() ?>
     <div id="bookly-update-service-settings" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">

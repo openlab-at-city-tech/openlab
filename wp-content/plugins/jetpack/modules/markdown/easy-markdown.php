@@ -75,6 +75,13 @@ class WPCom_Markdown {
 	);
 
 	/**
+	 * Whether or not kses filters were removed. Only set if removal was attempted.
+	 *
+	 * @var ?bool
+	 */
+	public $kses;
+
+	/**
 	 * Yay singletons!
 	 *
 	 * @return object WPCom_Markdown instance
@@ -93,6 +100,7 @@ class WPCom_Markdown {
 		$this->add_default_post_type_support();
 		$this->maybe_load_actions_and_filters();
 		if ( defined( 'REST_API_REQUEST' ) && REST_API_REQUEST ) {
+			// phpcs:ignore WPCUT.SwitchBlog.SwitchBlog -- wpcom flags **every** use of switch_blog, apparently expecting valid instances to ignore or suppress the sniff.
 			add_action( 'switch_blog', array( $this, 'maybe_load_actions_and_filters' ), 10, 2 );
 		}
 		add_action( 'admin_init', array( $this, 'register_setting' ) );
@@ -170,10 +178,10 @@ class WPCom_Markdown {
 		remove_filter( 'wp_kses_allowed_html', array( $this, 'wp_kses_allowed_html' ) );
 		remove_action( 'after_wp_tiny_mce', array( $this, 'after_wp_tiny_mce' ) );
 		remove_action( 'wp_insert_post', array( $this, 'wp_insert_post' ) );
-		remove_filter( 'wp_insert_post_data', array( $this, 'wp_insert_post_data' ), 10, 2 );
-		remove_filter( 'edit_post_content', array( $this, 'edit_post_content' ), 10, 2 );
-		remove_filter( 'edit_post_content_filtered', array( $this, 'edit_post_content_filtered' ), 10, 2 );
-		remove_action( 'wp_restore_post_revision', array( $this, 'wp_restore_post_revision' ), 10, 2 );
+		remove_filter( 'wp_insert_post_data', array( $this, 'wp_insert_post_data' ), 10 );
+		remove_filter( 'edit_post_content', array( $this, 'edit_post_content' ), 10 );
+		remove_filter( 'edit_post_content_filtered', array( $this, 'edit_post_content_filtered' ), 10 );
+		remove_action( 'wp_restore_post_revision', array( $this, 'wp_restore_post_revision' ), 10 );
 		remove_filter( '_wp_post_revision_fields', array( $this, 'wp_post_revision_fields' ) );
 		remove_action( 'xmlrpc_call', array( $this, 'xmlrpc_actions' ) );
 		remove_filter( 'content_save_pre', array( $this, 'preserve_code_blocks' ), 1 );
@@ -305,7 +313,7 @@ class WPCom_Markdown {
 			esc_attr( self::POST_OPTION ),
 			checked( $this->is_posting_enabled(), true, false ),
 			esc_html__( 'Use Markdown for posts and pages.', 'jetpack' ),
-			sprintf( '<a href="%s">%s</a>', esc_url( $this->get_support_url() ), esc_html__( 'Learn more about Markdown.', 'jetpack' ) )
+			sprintf( '<a href="%s" data-target="wpcom-help-center">%s</a>', esc_url( $this->get_support_url() ), esc_html__( 'Learn more about Markdown.', 'jetpack' ) )
 		);
 	}
 
@@ -318,7 +326,7 @@ class WPCom_Markdown {
 			esc_attr( self::COMMENT_OPTION ),
 			checked( $this->is_commenting_enabled(), true, false ),
 			esc_html__( 'Use Markdown for comments.', 'jetpack' ),
-			sprintf( '<a href="%s">%s</a>', esc_url( $this->get_support_url() ), esc_html__( 'Learn more about Markdown.', 'jetpack' ) )
+			sprintf( '<a href="%s" data-target="wpcom-help-center">%s</a>', esc_url( $this->get_support_url() ), esc_html__( 'Learn more about Markdown.', 'jetpack' ) )
 		);
 	}
 
@@ -666,7 +674,7 @@ jQuery( function() {
 		 * @param string $text Content to be run through Markdown
 		 * @param array $args Array of Markdown options.
 		 */
-		$text = apply_filters( 'wpcom_markdown_transform_pre', $text, $args );
+		$text = apply_filters( 'wpcom_markdown_transform_pre', $text, $args ) ?? '';
 		// ensure our paragraphs are separated.
 		$text = str_replace( array( '</p><p>', "</p>\n<p>" ), "</p>\n\n<p>", $text );
 		// visual editor likes to add <p>s. Buh-bye.
@@ -787,7 +795,7 @@ jQuery( function() {
 		$message = new IXR_Message( $raw_post_data );
 		$message->parse();
 		$post_id_position = 'metaWeblog.getPost' === $message->methodName ? 0 : 1; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		$this->prime_post_cache( $message->params[ $post_id_position ] );
+		$this->prime_post_cache( $message->params[ $post_id_position ] ?? false );
 	}
 
 	/**
@@ -799,7 +807,11 @@ jQuery( function() {
 	private function prime_post_cache( $post_id = false ) {
 		global $wp_xmlrpc_server;
 		if ( ! $post_id ) {
-			$post_id = $wp_xmlrpc_server->message->params[3];
+			if ( isset( $wp_xmlrpc_server->message->params[3] ) ) {
+				$post_id = $wp_xmlrpc_server->message->params[3];
+			} else {
+				return; // Exit early if we can't get a valid post_id
+			}
 		}
 
 		// prime the post cache.

@@ -146,7 +146,9 @@ jQuery(function ($) {
                 columns: columns,
                 language: {
                     zeroRecords: BooklyL10n.zeroRecords,
-                    processing: BooklyL10n.processing
+                    processing: BooklyL10n.processing,
+                    emptyTable: BooklyL10n.emptyTable,
+                    loadingRecords: BooklyL10n.loadingRecords
                 },
                 layout: {
                     bottomStart: 'paging',
@@ -246,8 +248,10 @@ jQuery(function ($) {
             },
             columns: columns,
             language: {
-                zeroRecords: BooklyL10n.noResults,
-                processing: BooklyL10n.processing
+                zeroRecords: BooklyL10n.zeroRecords,
+                processing: BooklyL10n.processing,
+                emptyTable: BooklyL10n.emptyTable,
+                loadingRecords: BooklyL10n.loadingRecords
             },
             layout: {
                 bottomStart: 'paging',

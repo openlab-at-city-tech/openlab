@@ -13,13 +13,20 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $this->type     = 'mailchimp';
         $this->icon     = 'fa-envelope-o';
         $this->order    = 21;
-        $this->defaults = array(
-            array(
-                'label'   => __('Sign-up to our newsletter?', 'mailchimp-for-wp'),
+        $this->defaults = [
+            [
+                'label'   => 'Sign-up to our newsletter?',
                 'value'   => '1',
                 'default' => '',
-            ),
-        );
+            ],
+        ];
+
+        add_action('init', [$this, 'translate_label']);
+    }
+
+    public function translate_label(): void
+    {
+        $this->defaults[0]['label'] = __('Sign-up to our newsletter?', 'mailchimp-for-wp');
     }
 
     /**
@@ -36,7 +43,7 @@ class MC4WP_WPForms_Field extends WPForms_Field
         //--------------------------------------------------------------------//
 
         // Options open markup
-        $this->field_option('basic-options', $field, array( 'markup' => 'open' ));
+        $this->field_option('basic-options', $field, [ 'markup' => 'open' ]);
 
         // Mailchimp list
         $this->field_option_mailchimp_list($field);
@@ -51,20 +58,20 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $this->field_option('required', $field);
 
         // Options close markup
-        $this->field_option('basic-options', $field, array( 'markup' => 'close' ));
+        $this->field_option('basic-options', $field, [ 'markup' => 'close' ]);
 
         //--------------------------------------------------------------------//
         // Advanced field options
         //--------------------------------------------------------------------//
 
         // Options open markup
-        $this->field_option('advanced-options', $field, array( 'markup' => 'open' ));
+        $this->field_option('advanced-options', $field, [ 'markup' => 'open' ]);
 
         // Custom CSS classes
         $this->field_option('css', $field);
 
         // Options close markup
-        $this->field_option('advanced-options', $field, array( 'markup' => 'close' ));
+        $this->field_option('advanced-options', $field, [ 'markup' => 'close' ]);
     }
 
     private function field_option_mailchimp_list($field)
@@ -76,11 +83,11 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $option_label = $this->field_element(
             'label',
             $field,
-            array(
+            [
                 'slug'    => 'mailchimp-list',
                 'value'   => __('Mailchimp list', 'mailchimp-for-wp'),
                 'tooltip' => $tooltip,
-            ),
+            ],
             false
         );
 
@@ -95,10 +102,10 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $output = $this->field_element(
             'row',
             $field,
-            array(
+            [
                 'slug'    => 'mailchimp-list',
                 'content' => $option_label . $option_select,
-            )
+            ]
         );
     }
 
@@ -113,11 +120,11 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $option_label = $this->field_element(
             'label',
             $field,
-            array(
+            [
                 'slug'    => 'mailchimp-checkbox',
                 'value'   => __('Sign-up checkbox', 'mailchimp-for-wp'),
                 'tooltip' => $tooltip,
-            ),
+            ],
             false
         );
 
@@ -137,10 +144,10 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $output = $this->field_element(
             'row',
             $field,
-            array(
+            [
                 'slug'    => 'choices',
                 'content' => $option_label . $option_choices,
-            )
+            ]
         );
     }
 
@@ -159,7 +166,7 @@ class MC4WP_WPForms_Field extends WPForms_Field
 
         // Notify if currently empty
         if (empty($values)) {
-            $values = array( 'label' => __('(empty)', 'wpforms') );
+            $values = [ 'label' => __('(empty)', 'wpforms') ];
         }
 
         // Individual checkbox options
@@ -187,16 +194,16 @@ class MC4WP_WPForms_Field extends WPForms_Field
      * Field display on the form front-end.
      *
      * @since 1.0.0
-     * @param array $field
+     * @param null $field (deprecated)
      * @param array $form_data
      */
     public function field_display($field, $field_atts, $form_data)
     {
         // Setup some defaults because WPForms broke their integration in v1.8.1.1
-        $field_atts = array_merge(array(
-            'input_class' => array(),
-            'input_id' => array(),
-        ), $field_atts);
+        $field_atts = array_merge([
+            'input_class' => [],
+            'input_id' => [],
+        ], is_array($field_atts) ? $field_atts : []);
 
         // Setup and sanitize the necessary data
         $field_required = ! empty($field['required']) ? ' required' : '';
@@ -248,13 +255,13 @@ class MC4WP_WPForms_Field extends WPForms_Field
         $choice = array_pop($field['choices']);
         $name   = sanitize_text_field($choice['label']);
 
-        $data = array(
+        $data = [
             'name'      => $name,
             'value'     => empty($field_submit) ? __('No', 'mailchimp-for-wp') : __('Yes', 'mailchimp-for-wp'),
             'value_raw' => $field_submit,
             'id'        => absint($field_id),
             'type'      => $this->type,
-        );
+        ];
 
         wpforms()->process->fields[ $field_id ] = $data;
     }

@@ -20,7 +20,6 @@ namespace SimpleCalendar\plugin_deps\Google\Auth;
 use Exception;
 use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpClientCache;
 use SimpleCalendar\plugin_deps\Google\Auth\HttpHandler\HttpHandlerFactory;
-/** @internal */
 trait IamSignerTrait
 {
     /**
@@ -50,7 +49,7 @@ trait IamSignerTrait
         // because it's not something a user would generally need to do.
         $signer = $this->iam ?: new Iam($httpHandler);
         $email = $this->getClientName($httpHandler);
-        if (\is_null($accessToken)) {
+        if (is_null($accessToken)) {
             $previousToken = $this->getLastReceivedToken();
             $accessToken = $previousToken ? $previousToken['access_token'] : $this->fetchAuthToken($httpHandler)['access_token'];
         }

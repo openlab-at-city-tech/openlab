@@ -13,9 +13,9 @@ class EPKB_Templates {
 		// automatically load KB templates or KB Custom Block Template if configured
 
 		// a) block theme - use KB custom block template with blocks
-		if ( EPKB_Utilities::is_block_theme() ) {
+		if ( EPKB_Block_Utilities::is_block_theme() ) {
 
-			add_action( 'init', array( $this, 'register_block' ) );
+			add_action( 'init', array( $this, 'register_legacy_kb_content_block') );
 			add_filter( 'get_block_templates', array( __CLASS__, 'block_template_loader' ), 99999, 3 );
 
 		// b) classic theme - use KB Template if configured
@@ -99,8 +99,11 @@ class EPKB_Templates {
 
 		// continue only if we are using KB templates
 		$temp_config = empty( $all_kb_configs[$kb_id] ) ? array() : $all_kb_configs[$kb_id];
-		$temp_config = EPKB_Editor_Utilities::update_kb_from_editor_config( $temp_config );
-		
+
+		// let FE apply layout changes for preview without saving the changes
+		$temp_config = EPKB_Frontend_Editor::fe_preview_config( $temp_config );
+
+		// return if KB Template is not active; use theme supplied one
         if ( ! self::is_kb_template_active( $temp_config ) ) {
             return $template;
         }
@@ -112,7 +115,7 @@ class EPKB_Templates {
 			$layout_name = 'Article';
 		}
 
-		// locate KB template
+		// find name for the KB template; if none found then return the default WP template
 		$template_name = self::get_template_name( $layout_name );
 		if ( empty( $template_name ) ) {
 			return $template;
@@ -341,17 +344,37 @@ class EPKB_Templates {
 	 * @return array
 	 */
 	public static function block_template_loader( $query_result, $query, $template_type ) {
-		global $eckb_is_kb_main_page;
+		global $eckb_is_kb_main_page, $eckb_kb_id;
 
-		// if page contains any KB Blocks we will not load KB Template
-		if ( EPKB_Block_Utilities::current_post_has_kb_layout_blocks() ) {
+		// a) if new user with block theme OR page uses KB Custom Block Template (WP >= 6.7) OR contains any KB Blocks, then we prepare to load KB Block Template (if set) instead of the legacy KB Template
+		//		- also initialize global KB variables; KB Block Template is registered in add_kb_block_page_template_if_missing()
+		if ( array_filter( $query_result, array( 'EPKB_Block_Utilities', 'is_kb_block_page_template' ) ) || EPKB_Block_Utilities::current_post_has_kb_blocks() ) {
+
+			$found_post = EPKB_Core_Utilities::get_current_post();
+			if ( ! $found_post || in_array( $found_post->post_type, [ 'post', 'attachment', 'revision', 'nav_menu_item' ] ) ) {
+				return $query_result;
+			}
+
+			// also initialize global KB ID
+			$eckb_is_kb_main_page = false;
+			$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs( true );
+			foreach ( $all_kb_configs as $one_kb_config ) {
+				if ( ! empty( $one_kb_config['kb_main_pages'] ) && is_array( $one_kb_config['kb_main_pages'] ) &&
+					in_array( $found_post->ID, array_keys( $one_kb_config['kb_main_pages'] ) ) ) {
+					$eckb_kb_id = $one_kb_config['id'];
+					$eckb_is_kb_main_page = true;
+					break;  // found matching KB Main Page
+				}
+			}
+
 			return $query_result;
 		}
 
-		// get KB Template for Main, Article or Category page if available and configured to be used
-		$kb_template_name = self::template_loader( '' );
+		// b) Block Theme + KB Shortcode i.e. Custom Block Template is not used and no KB blocks on the page used.
+		//    Therefore, get the legacy KB Template for the Main, Article or Category page if available and configured to be used
+		$kb_template_name = self::template_loader( '' );    // sets $eckb_is_kb_main_page
 
-		// return if this is not KB page or KB template setting is not active
+		// return if this is not KB page or the legacy KB Template setting is not active
 		if ( ! $kb_template_name ) {
 			return $query_result;
 		}
@@ -381,13 +404,13 @@ class EPKB_Templates {
 		// random text
 		$template_slug = $query['slug__in'][0];
 
-		// we don't allow user themes with our KB files so this content not inside file, but like a string
+		// the template for KB pages used in block Themes; hard-coded here instead of normal template registering to make the template not available for non-KB posts
 		$template_content = '<!-- wp:template-part {"slug":"header"} /-->
 							 <!-- wp:epkb/content-block {} /-->
 							 <!-- wp:template-part {"slug":"footer"} /-->';
 		$kb_content = self::blocks_inject_theme_attribute_in_content( $template_content );
 
-		// wp class to create custom templates based on the file content
+		// Block Theme + KB Shortcode -> Create a custom block template to inject our file based KB Template for the KB Main Page, Article Page and Category Archive Page
 		$template          = new \WP_Block_Template();
 		$template->id             = 'epkb' . '//' . $template_slug;     // theme//slug
 		$template->theme          = 'epkb';     // kb "theme"
@@ -411,8 +434,7 @@ class EPKB_Templates {
 	}
 
 	/**
-	 * Parses wp_template content and injects the current theme's
-	 * stylesheet and blocks as a theme attribute into each wp_template_part
+	 * Parses wp_template content and injects the current theme's stylesheet and blocks as a theme attribute into each wp_template_part
 	 * Based on WooCommerce function of the same name.
 	 *
 	 * @param string $template_content serialized wp_template content.
@@ -480,27 +502,29 @@ class EPKB_Templates {
 	}
 
 	/**
-	 * Register block, so it can be used in .html block theme templates
+	 * For block Themes we override page template for any KB page via hard-coded template (see usage of 'epkb/content-block' in block_template_loader()),
+	 * except when the current page either has KB Block Template or KB blocks.
 	 */
-	public function register_block() {
+	public function register_legacy_kb_content_block() {
 		register_block_type( 'epkb/content-block', [ 'render_callback' => [ $this, 'block_render_callback' ] ] );
 	}
 
 	/**
-	 * EPKB block will use usual way to show KB. This block can be used by the user theme if needed
+	 * IF Block Theme + KB Shortcode used -> Renders KB Template for KB Main Pages, KB Article Page, KB Category Archive Page. This is a fallback legacy way.
 	 * @param $attributes
 	 * @param $content
 	 * @return false|string
 	 */
 	public function block_render_callback( $attributes, $content ) {
-		global $eckb_our_block_template;
+		global $eckb_deprecated_kb_block_template;
 
 		$template = self::template_loader( '' );
 		$hide_header_footer = true;
 
+		// if KB template found, then use it
 		$output = '';
 		if ( $template ) {
-			$eckb_our_block_template = true;
+			$eckb_deprecated_kb_block_template = true;
 			ob_start();
 			require_once( $template );
 			$output = ob_get_clean();

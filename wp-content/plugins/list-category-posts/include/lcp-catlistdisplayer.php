@@ -10,6 +10,7 @@ require_once 'lcp-templater.php';
 
 class CatListDisplayer {
   public $catlist;
+  private $parent;
   private $wrapper;
   private $templater;
   private $params = array();
@@ -261,7 +262,8 @@ class CatListDisplayer {
     }
 
     // Shortcode parameters take precedence.
-    $tag = tag_escape($this->params['title_tag']) ?: tag_escape($tag);
+    $tag = $this->params['title_tag'] ?: $tag;
+    $tag = $tag ? tag_escape($tag) : $tag;
     $css_class = esc_attr($this->params['title_class']) ?: esc_attr($css_class);
     $suffix = $this->params['post_suffix'] ? ' ' . $this->params['post_suffix'] : '';
 

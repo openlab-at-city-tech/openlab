@@ -12,6 +12,7 @@ class PRG_Post_Item {
     protected $searchPublishDate;
     protected $searchSchedDate;
     protected $searchPostTitle;
+    protected $searchPostStatus='';
     protected $userLang;
     public $currentPage = 0;
     public $type;
@@ -46,7 +47,12 @@ class PRG_Post_Item {
 
         $postTypes = " ";
         if (!empty($this->searchPostType)) {
-            $postTypes .= " `post_type` LIKE '%" . $this->searchPostType . "%' ";
+         
+            $postTypes .=  $wpdb->prepare(
+                " `post_type` LIKE %s ",
+                '%' . $wpdb->esc_like($this->searchPostType) . '%'
+            );
+        
         } else {
             $post_types = get_post_types(array('public' => true));
             if (is_array($post_types) && !empty($post_types)) {
@@ -72,11 +78,15 @@ class PRG_Post_Item {
                 AND $postTypes
 		ORDER BY `" . $order . "` " . $sortType . " 
                 LIMIT " . (($this->currentPage - 1) * B2S_PLUGIN_POSTPERPAGE) . "," . B2S_PLUGIN_POSTPERPAGE;
+            //No unprepared User Input
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $this->postData = $wpdb->get_results($sqlPosts);
             $sqlPostsTotal = "SELECT COUNT(*)
 		FROM `$wpdb->posts`
 		WHERE $addSearchType $addSearchAuthorId $addSearchPostTitle $addNotAdmin
                 AND $postTypes";
+            //No unprepared User Input
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $this->postTotal = $wpdb->get_var($sqlPostsTotal);
         }
     }

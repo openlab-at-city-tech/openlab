@@ -26,8 +26,8 @@ namespace Advanced_Sidebar_Menu\Widget;
  *       widget_name?:   string,
  *  }
  *
- * @template SETTINGS of array<string, mixed>
- * @template DEFAULTS of array<key-of<SETTINGS>, mixed>
+ * @template SETTINGS of array<string, string|int|bool|array<string, string>>
+ * @template DEFAULTS of array<key-of<SETTINGS>, int|string|array<string, string>>
  */
 interface Widget {
 	/**
@@ -52,7 +52,7 @@ interface Widget {
 	/**
 	 * Is this checkbox checked?
 	 *
-	 * Checks first for a value then verifies the value = 'checked'.
+	 * Checks first for a value, then verifies the value = 'checked'.
 	 *
 	 * @param string $name - Name of checkbox.
 	 *
@@ -79,9 +79,24 @@ interface Widget {
 	 * Outputs a <input type="checkbox"> with the id and name filled.
 	 *
 	 * @param string  $name              - Name of field.
-	 * @param ?string $element_to_reveal - Element to reveal/hide when box is checked/unchecked.
+	 * @param ?string $element_to_reveal - Element to reveal/hide when a box is checked/unchecked.
 	 *
 	 * @return void
 	 */
 	public function checkbox( $name, $element_to_reveal = null ): void;
+
+
+	/**
+	 * Echoes the widget content.
+	 *
+	 * @phpstan-param WIDGET_ARGS $args
+	 * @phpstan-param SETTINGS    $instance
+	 *
+	 * @param array               $args     Display arguments including 'before_title', 'after_title',
+	 *                                      'before_widget', and 'after_widget'.
+	 * @param array               $instance The settings for the particular instance of the widget.
+	 *
+	 * @return void
+	 */
+	public function widget( $args, $instance );
 }

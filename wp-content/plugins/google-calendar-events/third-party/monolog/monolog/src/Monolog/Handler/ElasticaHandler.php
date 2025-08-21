@@ -32,7 +32,6 @@ use SimpleCalendar\plugin_deps\Elastica\Exception\ExceptionInterface;
  *    $log->pushHandler($handler);
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
- * @internal
  */
 class ElasticaHandler extends AbstractProcessingHandler
 {
@@ -52,7 +51,7 @@ class ElasticaHandler extends AbstractProcessingHandler
     {
         parent::__construct($level, $bubble);
         $this->client = $client;
-        $this->options = \array_merge([
+        $this->options = array_merge([
             'index' => 'monolog',
             // Elastic index name
             'type' => 'record',
@@ -63,14 +62,14 @@ class ElasticaHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->bulkSend([$record['formatted']]);
     }
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($formatter instanceof ElasticaFormatter) {
             return parent::setFormatter($formatter);
@@ -80,21 +79,21 @@ class ElasticaHandler extends AbstractProcessingHandler
     /**
      * @return mixed[]
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->options;
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new ElasticaFormatter($this->options['index'], $this->options['type']);
     }
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         $documents = $this->getFormatter()->formatBatch($records);
         $this->bulkSend($documents);
@@ -106,7 +105,7 @@ class ElasticaHandler extends AbstractProcessingHandler
      *
      * @throws \RuntimeException
      */
-    protected function bulkSend(array $documents) : void
+    protected function bulkSend(array $documents): void
     {
         try {
             $this->client->addDocuments($documents);

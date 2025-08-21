@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'fieldModifications';
@@ -93,4 +92,4 @@ class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(LabelModification::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_LabelModification');
+class_alias(LabelModification::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_LabelModification');

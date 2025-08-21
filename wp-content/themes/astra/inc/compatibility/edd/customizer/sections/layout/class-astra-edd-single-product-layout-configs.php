@@ -13,12 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Astra_Edd_Single_Product_Layout_Configs' ) ) {
 
-
 	/**
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Edd_Single_Product_Layout_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Astra-Easy Digital Downloads Shop Cart Layout Customizer Configurations.
 		 *

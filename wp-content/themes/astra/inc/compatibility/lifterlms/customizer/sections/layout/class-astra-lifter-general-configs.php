@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Lifter_General_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Astra-LifterLMS General Customizer Configurations.
 		 *
@@ -29,11 +28,9 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 		public function register_configuration( $configurations, $wp_customize ) {
 
 			if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'lifterlms' ) ) {
-				$divider_array = array( 'ast_class' => 'ast-bottom-divider' );
-				$section       = 'section-lifterlms-general';
+				$section = 'section-lifterlms-general';
 			} else {
-				$divider_array = array();
-				$section       = 'section-lifterlms';
+				$section = 'section-lifterlms';
 			}
 
 			$_configs = array(
@@ -121,7 +118,7 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 						'section'  => $section,
 						'priority' => 999,
 						'title'    => __( 'View Astra Pro Features', 'astra' ),
-						'url'      => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'lifterlms' ),
+						'url'      => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'lifterlms' ),
 						'settings' => array(),
 						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 					);
@@ -129,7 +126,6 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 			}
 
 			return array_merge( $configurations, $_configs );
-
 		}
 	}
 }

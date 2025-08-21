@@ -12,7 +12,7 @@ namespace Automattic\Jetpack\Image_CDN;
  */
 final class Image_CDN {
 
-	const PACKAGE_VERSION = '0.5.3';
+	const PACKAGE_VERSION = '0.7.13';
 
 	/**
 	 * Singleton.
@@ -110,7 +110,7 @@ final class Image_CDN {
 
 		// Responsive image srcset substitution.
 		add_filter( 'wp_calculate_image_srcset', array( $this, 'filter_srcset_array' ), 10, 5 );
-		add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_sizes' ), 1, 2 ); // Early so themes can still easily filter.
+		add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_sizes' ), 1, 3 ); // Early so themes can still easily filter.
 
 		/**
 		 * Allow Photon to disable uploaded images resizing and use its own resize capabilities instead.
@@ -393,7 +393,7 @@ final class Image_CDN {
 			 * present all attributes as double-quoted attributes and include at
 			 * most one copy of each attribute, escaping all values appropriately.
 			 */
-			$tag_name = strtolower( $processor->get_tag() );
+			$tag_name = strtolower( (string) $processor->get_tag() );
 			$tag      = new \WP_HTML_Tag_Processor( "<{$tag_name}>" );
 			$tag->next_tag();
 			foreach ( $processor->get_attribute_names_with_prefix( '' ) ?? array() as $name ) {
@@ -976,18 +976,23 @@ final class Image_CDN {
 	/**
 	 * Filters an array of image `srcset` values, replacing each URL with its Photon equivalent.
 	 *
-	 * @param array $sources An array of image urls and widths.
-	 * @param array $size_array The size array for srcset.
-	 * @param array $image_src The image srcs.
-	 * @param array $image_meta The image meta.
-	 * @param int   $attachment_id Attachment ID.
+	 * @param array  $sources An array of image urls and widths.
+	 * @param array  $size_array The size array for srcset.
+	 * @param string $image_src The image src attribute.
+	 * @param array  $image_meta The image meta.
+	 * @param int    $attachment_id Attachment ID.
 	 *
 	 * @uses self::validate_image_url, Image_CDN_Core::cdn_url
 	 * @uses Image_CDN::strip_image_dimensions_maybe, Image_CDN_Core::get_jetpack_content_width
 	 *
 	 * @return array An array of Photon image urls and widths.
 	 */
-	public function filter_srcset_array( $sources = array(), $size_array = array(), $image_src = array(), $image_meta = array(), $attachment_id = 0 ) {
+	public function filter_srcset_array( $sources = array(), $size_array = array(), $image_src = '', $image_meta = array(), $attachment_id = 0 ) {
+		// Check if we are supposed to skip the main image.
+		if ( $this->photon_should_skip_image( $image_src ) ) {
+			return $sources;
+		}
+
 		if ( ! is_array( $sources ) || array() === $sources ) {
 			return $sources;
 		}
@@ -1112,12 +1117,18 @@ final class Image_CDN {
 	/**
 	 * Filters an array of image `sizes` values, using $content_width instead of image's full size.
 	 *
-	 * @param array $sizes An array of media query breakpoints.
-	 * @param array $size  Width and height of the image.
+	 * @param array  $sizes An array of media query breakpoints.
+	 * @param array  $size  Width and height of the image.
+	 * @param string $image_url The image URL.
+	 *
 	 * @uses Jetpack::get_content_width
 	 * @return array An array of media query breakpoints.
 	 */
-	public function filter_sizes( $sizes, $size ) {
+	public function filter_sizes( $sizes, $size, $image_url ) {
+		if ( $this->photon_should_skip_image( $image_url ) ) {
+			return $sizes;
+		}
+
 		if ( ! doing_filter( 'the_content' ) ) {
 			return $sizes;
 		}
@@ -1131,6 +1142,17 @@ final class Image_CDN {
 		}
 
 		return sprintf( '(max-width: %1$dpx) 100vw, %1$dpx', $content_width );
+	}
+
+	/**
+	 * Whether to skip the image from being processed by Photon.
+	 *
+	 * @param string $image_url The image URL.
+	 *
+	 * @return bool Whether to skip the image.
+	 */
+	private function photon_should_skip_image( $image_url ) {
+		return apply_filters( 'jetpack_photon_skip_image', false, $image_url, null );
 	}
 
 	/**
@@ -1444,5 +1466,14 @@ final class Image_CDN {
 	 */
 	private static function is_amp_endpoint() {
 		return class_exists( '\Jetpack_AMP_Support' ) && \Jetpack_AMP_Support::is_amp_request();
+	}
+
+	/**
+	 * Get the list of supported image extensions
+	 *
+	 * @return string[] Array of supported extensions
+	 */
+	public static function get_supported_extensions() {
+		return self::$extensions;
 	}
 }

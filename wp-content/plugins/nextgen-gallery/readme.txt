@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 3.59.10
-Tested up to: 6.7.1
+Stable tag: 3.59.12
+Tested up to: 6.8
 License: GPLv3
 Requires PHP: 7.0
 
@@ -196,13 +196,20 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
-= V3.59.10 - 01.28.2024 =
+= V3.59.12 - 04.23.2025 =
+* Fixed: Lightbox allowed html discrepancy
+
+= V3.59.11 - 04.17.2025 =
+* Fixed: SQL formatting error on plugin activation
+* Fixed: Translation warning in some admin pages
+
+= V3.59.10 - 01.28.2025 =
 * Fixed: Frontend search not working in some cases
 
-= V3.59.9 - 01.16.2024 =
+= V3.59.9 - 01.16.2025 =
 * Fixed: Title and caption allowed html tags.
 
-= V3.59.8 - 01.06.2024 =
+= V3.59.8 - 01.06.2025 =
 * Fixed: Apostrophes not being added to image title
 * Improved: Fields sanitization
 

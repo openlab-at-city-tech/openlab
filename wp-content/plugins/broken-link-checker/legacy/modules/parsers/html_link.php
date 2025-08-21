@@ -16,6 +16,11 @@ class blcHTMLLink extends blcParser {
 	var $supported_formats = array( 'html' );
 
 	/**
+	 * @var array $modified_links An array of modified BLC links.
+	 */
+	var $modified_links = array();
+
+	/**
 	 * Parse a string for HTML links - <a href="URL">anchor text</a>
 	 *
 	 * @param string $content The text to parse.
@@ -310,12 +315,15 @@ class blcHTMLLink extends blcParser {
 	 * @return string The modified input string.
 	 */
 	function multi_edit( $content, $callback, $extra = null ) {
+
+		$content = apply_filters( 'blc_parser_html_link_pre_content', $content );
+
 		//Just reuse map() + a little helper func. to apply the callback to all links and get modified links
-		$modified_links = $this->map( $content, array( &$this, 'execute_edit_callback' ), array( $callback, $extra ) );
+		$this->modified_links = $this->map( $content, array( &$this, 'execute_edit_callback' ), array( $callback, $extra ) );
 
 		//Replace each old link with the modified one
 		$offset = 0;
-		foreach ( $modified_links as $link ) {
+		foreach ( $this->modified_links as $link ) {
 			if ( isset( $link['#new_raw'] ) ) {
 				$new_html = $link['#new_raw'];
 			} else {
@@ -337,6 +345,8 @@ class blcHTMLLink extends blcParser {
 			//Update the replacement offset
 			$offset += ( strlen( $new_html ) - strlen( $link['#raw'] ) );
 		}
+
+		$content = apply_filters( 'blc_parser_html_link_post_content', $content );
 
 		return $content;
 	}

@@ -84,8 +84,8 @@ class Control_Repeater extends Base_Data_Control implements Has_Validation {
 	 * @since 1.0.0
 	 * @access public
 	 *
-	 * @param array $control  Control
-	 * @param array $settings Controls_Stack settings
+	 * @param array $control  Control.
+	 * @param array $settings Controls_Stack settings.
 	 *
 	 * @return mixed Control values.
 	 */
@@ -167,7 +167,7 @@ class Control_Repeater extends Base_Data_Control implements Has_Validation {
 		<label>
 			<span class="elementor-control-title">{{{ data.label }}}</span>
 		</label>
-		<div class="elementor-repeater-fields-wrapper"></div>
+		<div class="elementor-repeater-fields-wrapper" role="list"></div>
 		<# if ( itemActions.add ) { #>
 			<div class="elementor-button-wrapper">
 				<button class="elementor-button elementor-repeater-add" type="button">
@@ -191,7 +191,7 @@ class Control_Repeater extends Base_Data_Control implements Has_Validation {
 				count( $control_data['default'] ) < $control_data['min_items']
 			) {
 				throw new \Exception(
-					__( 'In a Repeater control, if you specify a minimum number of items, you must also specify a default value that contains at least that number of items.', 'elementor' )
+					esc_html__( 'In a Repeater control, if you specify a minimum number of items, you must also specify a default value that contains at least that number of items.', 'elementor' )
 				);
 			}
 		}

@@ -737,13 +737,26 @@ class MetaSlide
      * Info icon with tooltip
      * 
      * @since 3.60
+     * @since 3.96 - Added $style param
+     * 
+     * @param string $label
+     * @param array $style 
      * 
      * @return html
      */
-    public function info_tooltip( $label )
+    public function info_tooltip( $label, $style = array() )
     {
+        $style_string = '';
+        if ( count( $style ) > 0 ) {
+            $style_array = [];
+            foreach ( $style as $key => $value ) {
+                $style_array[] = "$key: $value";
+            }
+            $style_string = implode( '; ', $style_array );
+        }
+
         $html = '<span class="dashicons dashicons-info tipsy-tooltip-top" title="' . 
-            esc_attr( $label ) . '"></span>';
+            esc_attr( $label ) . '" style="' . esc_attr( $style_string ) . '"></span>';
 
         return $html;
     }

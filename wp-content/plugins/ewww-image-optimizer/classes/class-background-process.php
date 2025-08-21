@@ -131,7 +131,7 @@ abstract class Background_Process extends Async_Request {
 		$this->cron_interval_identifier = $this->identifier . '_cron_interval';
 
 		add_action( $this->cron_hook_identifier, array( $this, 'handle_cron_healthcheck' ) );
-		add_filter( 'cron_schedules', array( $this, 'schedule_cron_healthcheck' ) );
+		add_filter( 'cron_schedules', array( $this, 'add_healthcheck_cron_schedule' ) );
 	}
 
 	/**
@@ -141,8 +141,12 @@ abstract class Background_Process extends Async_Request {
 	 * @return array The wp_remote_post response.
 	 */
 	public function dispatch() {
-		// Schedule the cron healthcheck.
-		$this->schedule_event();
+		if ( did_action( 'init' ) ) {
+			// Schedule the cron healthcheck.
+			$this->schedule_event();
+		} else {
+			add_action( 'init', array( $this, 'schedule_event' ) );
+		}
 
 		// Perform remote post.
 		return parent::dispatch();
@@ -190,7 +194,7 @@ abstract class Background_Process extends Async_Request {
 	public function update( $id, $data = array() ) {
 		if ( ! empty( $id ) ) {
 			global $wpdb;
-			$wpdb->get_row( $wpdb->prepare( "UPDATE $wpdb->ewwwio_queue SET scanned=scanned+1 WHERE attachment_id = %d AND gallery = %s LIMIT 1", $id, $this->active_queue ) );
+			$wpdb->get_row( $wpdb->prepare( "UPDATE $wpdb->ewwwio_queue SET scanned=scanned+1 WHERE id = %d LIMIT 1", $id ) );
 		}
 	}
 
@@ -208,10 +212,9 @@ abstract class Background_Process extends Async_Request {
 		$wpdb->delete(
 			$wpdb->ewwwio_queue,
 			array(
-				'attachment_id' => $key,
-				'gallery'       => $this->active_queue,
+				'id' => $key,
 			),
-			array( '%d', '%s' )
+			array( '%d' )
 		);
 	}
 
@@ -382,15 +385,25 @@ abstract class Background_Process extends Async_Request {
 	 * Update the process lock so that other instances do not spawn.
 	 */
 	protected function update_lock() {
+		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		if ( ! empty( $this->active_queue ) ) {
 			if ( empty( $this->lock_key ) ) {
 				$this->lock_key = \uniqid( $this->active_queue, true ) . $this->generate_key_suffix();
+				\ewwwio_debug_message( "no key, generated: $this->lock_key" );
+			} else {
+				\ewwwio_debug_message( "using existing key: $this->lock_key" );
 			}
 			if ( $this->lock_dir ) {
-				\file_put_contents( $this->process_lock_file(), $this->lock_key );
+				$written = \file_put_contents( $this->process_lock_file(), $this->lock_key );
+				if ( $written ) {
+					\ewwwio_debug_message( 'saved key to lock file' );
+				} else {
+					\ewwwio_debug_message( 'zero bytes written' );
+				}
 			} else {
 				$lock_duration = \apply_filters( $this->identifier . '_queue_lock_time', $this->queue_lock_time );
 				\set_transient( $this->identifier . '_process_lock', $this->lock_key, $lock_duration );
+				\ewwwio_debug_message( "transient locking, stored $this->lock_key in " . $this->identifier . "_process_lock for $lock_duration" );
 			}
 		}
 	}
@@ -432,12 +445,13 @@ abstract class Background_Process extends Async_Request {
 	 * @return array Return the first batch from the queue
 	 */
 	protected function get_batch() {
+		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		global $wpdb;
-		$batch = $wpdb->get_results( $wpdb->prepare( "SELECT attachment_id AS id, scanned AS attempts, new, convert_once, force_reopt, force_smart, webp_only FROM $wpdb->ewwwio_queue WHERE gallery = %s LIMIT %d", $this->active_queue, $this->limit ), ARRAY_A );
+		$batch = $wpdb->get_results( $wpdb->prepare( "SELECT id, attachment_id, scanned AS attempts, new, convert_once, force_reopt, force_smart, webp_only FROM $wpdb->ewwwio_queue WHERE gallery = %s ORDER BY id LIMIT %d", $this->active_queue, $this->limit ), ARRAY_A );
 		if ( empty( $batch ) ) {
 			return array();
 		}
-		\ewwwio_debug_message( 'selected items: ' . count( $batch ) );
+		\ewwwio_debug_message( "selected items for {$this->active_queue}: " . count( $batch ) );
 
 		$this->update_lock();
 		return $batch;
@@ -576,14 +590,18 @@ abstract class Background_Process extends Async_Request {
 	 * @param mixed $schedules Schedules.
 	 * @return mixed
 	 */
-	public function schedule_cron_healthcheck( $schedules ) {
-		$interval = \apply_filters( $this->identifier . '_cron_interval', $this->cron_interval );
+	public function add_healthcheck_cron_schedule( $schedules ) {
+		$interval    = \apply_filters( $this->identifier . '_cron_interval', $this->cron_interval );
+		$description = \sprintf( 'Every %d Minutes', $interval );
+		if ( \did_action( 'init' ) || doing_action( 'init' ) ) {
+			/* translators: %d: number of minutes */
+			$description = \sprintf( __( 'Every %d Minutes', 'ewww-image-optimizer' ), $interval );
+		}
 
 		// Adds every X (default=5) minutes to the existing schedules.
 		$schedules[ $this->identifier . '_cron_interval' ] = array(
 			'interval' => MINUTE_IN_SECONDS * $interval,
-			/* translators: %d: number of minutes */
-			'display'  => sprintf( __( 'Every %d Minutes', 'ewww-image-optimizer' ), $interval ),
+			'display'  => $description,
 		);
 
 		return $schedules;
@@ -615,7 +633,7 @@ abstract class Background_Process extends Async_Request {
 	/**
 	 * Schedule event
 	 */
-	protected function schedule_event() {
+	public function schedule_event() {
 		if ( ! \wp_next_scheduled( $this->cron_hook_identifier ) ) {
 			\wp_schedule_event( time(), $this->cron_interval_identifier, $this->cron_hook_identifier );
 		}

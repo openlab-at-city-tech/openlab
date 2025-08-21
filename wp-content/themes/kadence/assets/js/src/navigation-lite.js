@@ -494,51 +494,51 @@
 		},
 		initClickToOpen: function () {
 			// Find all <li> elements with the `menu-item--has-toggle` class
-			const toggleItems = document.querySelectorAll('li.menu-item--has-toggle');
-
+			const toggleItems = document.querySelectorAll('.header-navigation.click-to-open li.menu-item--has-toggle');
+	  
 			toggleItems.forEach(function (item) {
 				const anchor = item.querySelector('a'); // Find the first child anchor inside <li>
 				const button = item.querySelector('button[class="dropdown-nav*"]'); // Find a button if it exists
-
+		
 				[anchor, button].forEach(function (clickableTarget) {
-					if (clickableTarget) {
-						clickableTarget.addEventListener('click', function (e) {
-							e.preventDefault(); // Prevent default action for <a> or <button>
-
-							// Toggle the 'opened' class on the first child `ul.sub-menu`
-							const submenu = item.querySelector('ul.sub-menu');
-							if (submenu) {
-								const isOpen = submenu.classList.contains('opened');
-								submenu.classList.toggle('opened', !isOpen); // Toggle the 'opened' class
-
-								// Close other open submenus at the same level
-								const siblings = Array.from(item.parentNode.children).filter(sibling => sibling !== item);
-
-								siblings.forEach(function (sibling) {
-									const siblingSubmenu = sibling.querySelector(':scope > ul.sub-menu');
-									if (siblingSubmenu) {
-										siblingSubmenu.classList.remove('opened'); // Close sibling submenus
-									}
-								});
-
-								// Add a `click` listener on the document to close the menu when clicking outside
-								if (!isOpen) {
-									// If opening the menu, add the event listener
-									const handleClickOutside = (event) => {
-										if (!item.contains(event.target)) {
-											submenu.classList.remove('opened'); // Close the submenu
-											document.removeEventListener('click', handleClickOutside); // Remove the listener
-										}
-									};
-
-									document.addEventListener('click', handleClickOutside);
-								}
-							}
-						});
+				  if (clickableTarget) {
+					clickableTarget.addEventListener('click', function (e) {
+					  e.preventDefault(); // Prevent default action for <a> or <button>
+	  
+					// Toggle the 'opened' class on the first child `ul.sub-menu`
+					const submenu = item.querySelector('ul.sub-menu');
+					if (submenu) {
+					  const isOpen = submenu.classList.contains('opened');
+					  submenu.classList.toggle('opened', !isOpen); // Toggle the 'opened' class
+	  
+					  // Close other open submenus at the same level
+					  const siblings = Array.from(item.parentNode.children).filter(sibling => sibling !== item);
+	  
+					  siblings.forEach(function (sibling) {
+						const siblingSubmenu = sibling.querySelector(':scope > ul.sub-menu');
+						if (siblingSubmenu) {
+						  siblingSubmenu.classList.remove('opened'); // Close sibling submenus
+						}
+					  });
+	  
+					  // Add a `click` listener on the document to close the menu when clicking outside
+					  if (!isOpen) {
+						// If opening the menu, add the event listener
+						const handleClickOutside = (event) => {
+						  if (!item.contains(event.target)) {
+							submenu.classList.remove('opened'); // Close the submenu
+							document.removeEventListener('click', handleClickOutside); // Remove the listener
+						  }
+						};
+	  
+						document.addEventListener('click', handleClickOutside);
+					  }
 					}
-				});
+				  });
+				}
+			  });
 			});
-		},
+		  },
 		// Initiate the menus when the DOM loads.
 		init: function() {
 			window.kadence.initNavToggleSubmenus();

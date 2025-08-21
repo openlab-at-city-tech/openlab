@@ -7,6 +7,8 @@
  * @since       Astra 3.3.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Icons Initial Setup
  *
@@ -29,11 +31,46 @@ class Astra_Icons {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @return boolean should be svg or font.
+	 * @return bool should be svg or font.
 	 */
 	public static function is_svg_icons() {
-		$astra_settings = get_option( ASTRA_THEME_SETTINGS, array() );
+		$astra_settings = astra_get_options();
 		return apply_filters( 'astra_is_svg_icons', isset( $astra_settings['can-update-astra-icons-svg'] ) ? $astra_settings['can-update-astra-icons-svg'] : true );
+	}
+
+	/**
+	 * Returns an array of allowed SVG arguments.
+	 *
+	 * @return array An array of allowed SVG arguments.
+	 * @since 4.10.0
+	 */
+	public static function allowed_svg_args() {
+		return array(
+			'span'  => array( 'class' => array() ),
+			'svg'   => array(
+				'xmlns:xlink'       => array(),
+				'version'           => array(),
+				'id'                => array(),
+				'x'                 => array(),
+				'y'                 => array(),
+				'enable-background' => array(),
+				'xml:space'         => array(),
+				'class'             => array(),
+				'aria-hidden'       => array(),
+				'aria-labelledby'   => array(),
+				'role'              => array(),
+				'xmlns'             => array(),
+				'width'             => array(),
+				'height'            => array(),
+				'viewbox'           => array(),
+			),
+			'g'     => array( 'fill' => array() ),
+			'title' => array( 'title' => array() ),
+			'path'  => array(
+				'd'    => array(),
+				'fill' => array(),
+			),
+		);
 	}
 
 	/**
@@ -42,10 +79,10 @@ class Astra_Icons {
 	 *
 	 * @since 3.3.0
 	 *
-	 * @param string  $icon Key for the SVG you want to load.
-	 * @param boolean $is_echo whether to echo the output or return.
-	 * @param boolean $replace load close markup for SVG.
-	 * @param string  $menu_location Creates dynamic filter for passed parameter.
+	 * @param string $icon Key for the SVG you want to load.
+	 * @param bool   $is_echo whether to echo the output or return.
+	 * @param bool   $replace load close markup for SVG.
+	 * @param string $menu_location Creates dynamic filter for passed parameter.
 	 *
 	 * @return string SVG for passed key.
 	 */
@@ -70,7 +107,6 @@ class Astra_Icons {
 						  <path d="M-787.4,568.7h-6.3l-2.4-2.4c7.9-8.7,12.6-20.5,12.6-33.1c0-28.4-22.9-51.3-51.3-51.3  c-28.4,0-51.3,22.9-51.3,51.3c0,28.4,22.9,51.3,51.3,51.3c12.6,0,24.4-4.7,33.1-12.6l2.4,2.4v6.3l39.4,39.4l11.8-11.8L-787.4,568.7  L-787.4,568.7z M-834.7,568.7c-19.7,0-35.5-15.8-35.5-35.5c0-19.7,15.8-35.5,35.5-35.5c19.7,0,35.5,15.8,35.5,35.5  C-799.3,553-815,568.7-834.7,568.7L-834.7,568.7z"/>
 						  </svg>';
 					break;
-
 
 				case 'arrow':
 					$output = '<svg class="ast-arrow-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="26px" height="16.043px" viewBox="57 35.171 26 16.043" enable-background="new 57 35.171 26 16.043" xml:space="preserve">
@@ -118,17 +154,24 @@ class Astra_Icons {
 			'icon-' . $icon,
 		);
 
-		$output = sprintf(
-			'<span class="%1$s">%2$s</span>',
-			implode( ' ', $classes ),
-			$output
+		/**
+		 * @psalm-suppress TooManyArguments
+		 */
+		$output = apply_filters(
+			'astra_svg_icon', // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			sprintf(
+				'<span class="%1$s">%2$s</span>',
+				implode( ' ', $classes ),
+				$output
+			),
+			$icon
 		);
 
-		if ( ! $is_echo ) {
-			return apply_filters( 'astra_svg_icon', $output, $icon );
+		if ( $is_echo !== true ) {
+			return wp_kses( $output, self::allowed_svg_args() );
 		}
 
-		echo apply_filters( 'astra_svg_icon', $output, $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( $output, self::allowed_svg_args() );
 	}
 }
 new Astra_Icons();

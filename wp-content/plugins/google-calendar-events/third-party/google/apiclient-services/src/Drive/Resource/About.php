@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\About as AboutModel;
  *   $driveService = new Google\Service\Drive(...);
  *   $about = $driveService->about;
  *  </code>
- * @internal
  */
 class About extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -39,9 +38,9 @@ class About extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], AboutModel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(About::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_About');
+class_alias(About::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_About');

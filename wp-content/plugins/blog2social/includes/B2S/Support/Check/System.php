@@ -39,34 +39,34 @@ class B2S_Support_Check_System {
         foreach ($this->systemData as $key => $value) {
             $systemHtml .= '<div class="row">
                             <div class="col-sm-4 b2s-text-bold"">
-                                ' . esc_html__($value["name"], "blog2social") . '
+                                ' . esc_html($value["name"], "blog2social") . '
                             </div>
                             <div class="col-sm-3 b2s-debug-req">' .
                     (($value["type"] == "version") ?
-                            ((isset($value["req"]) && !empty($value["req"])) ?
-                                    $value["req"] . ' ' . esc_html__("or higher", "blog2social") :
-                                    ''
-                            ) :
-                            (($value["req"]) ?
-                                    '<i class="glyphicon glyphicon-ok glyphicon-success"></i>' :
-                                    '<i class="glyphicon glyphicon-remove glyphicon-danger"></i>'
-                            )
+                    ((isset($value["req"]) && !empty($value["req"])) ?
+                    $value["req"] . ' ' . esc_html__("or higher", "blog2social") :
+                    ''
+                    ) :
+                    (($value["req"]) ?
+                    '<i class="glyphicon glyphicon-ok glyphicon-success"></i>' :
+                    '<i class="glyphicon glyphicon-remove glyphicon-danger"></i>'
+                    )
                     )
                     . '</div>
                             <div class="col-sm-2 b2s-debug-user">' .
                     (($value["type"] == "version") ?
-                            $value["system"] :
-                            (($value["system"]) ?
-                                    '<i class="glyphicon glyphicon-ok glyphicon-success"></i>' :
-                                    '<i class="glyphicon glyphicon-remove glyphicon-danger"></i>'
-                            )
+                    $value["system"] :
+                    (($value["system"]) ?
+                    '<i class="glyphicon glyphicon-ok glyphicon-success"></i>' :
+                    '<i class="glyphicon glyphicon-remove glyphicon-danger"></i>'
+                    )
                     )
                     . '</div>
                             <div class="col-sm-1 b2s-debug-warn">' . (($value["success"]) ? '' : '<i class="glyphicon glyphicon-warning-sign glyphicon-warning pull-right"></i>') . '</div>
                             <div class="col-sm-2">' .
                     ((isset($value["link"]) && !empty($value["link"])) ?
-                            '<a href="' . esc_url($value["link"]) . '" target="_blank" class="pull-right margin-right-15 ' . (($value["success"]) ? 'b2s-support-link-not-active' : '') . '">' . esc_html__("resolve conflict", "blog2social") . '</a>' :
-                            '')
+                    '<a href="' . esc_url($value["link"]) . '" target="_blank" class="pull-right margin-right-15 ' . (($value["success"]) ? 'b2s-support-link-not-active' : '') . '">' . esc_html__("resolve conflict", "blog2social") . '</a>' :
+                    '')
                     . '</div>
                         </div>
                         <br>
@@ -119,10 +119,18 @@ class B2S_Support_Check_System {
     }
 
     private function getB2sNeededVersion() {
+        $wpVersion = get_bloginfo('version');
+        $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
+        $ua = sprintf(
+                'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
+                $wpVersion,
+                $pluginVersion
+        );
+
         $args = array(
             'timeout' => '15',
             'redirection' => '5',
-            'user-agent' => "Blog2Social/" . B2S_PLUGIN_VERSION . " (Wordpress/Plugin)"
+            'user-agent' => $ua
         );
         $result = wp_remote_retrieve_body(wp_remote_get(B2S_PLUGIN_API_ENDPOINT . 'update.txt', $args));
         $currentVersion = explode('#', $result);
@@ -135,29 +143,29 @@ class B2S_Support_Check_System {
     }
 
     //Since V6.2.0 - disabled check database rights  - is checked in install prozess
-    /*private function getDatabaseRights() {
-        global $wpdb;
-        $rights = $wpdb->get_var("SHOW GRANTS");
-        if (isset($rights) && !empty($rights) && (strpos($rights, 'ALL PRIVILEGES') != false || (strpos($rights, 'CREATE') != false && strpos($rights, 'ALTER') != false))) {
-            return true;
-        } else {
-            $tables_count = $wpdb->get_var("SELECT count(*) FROM information_schema.tables WHERE table_name LIKE '{$wpdb->prefix}b2s_%%'");
-            if (isset($tables_count) && !empty($tables_count) && $tables_count >= 8) {
-                return true;
-            }
-        }
-        return false;
-    }*/
+    /* private function getDatabaseRights() {
+      global $wpdb;
+      $rights = $wpdb->get_var("SHOW GRANTS");
+      if (isset($rights) && !empty($rights) && (strpos($rights, 'ALL PRIVILEGES') != false || (strpos($rights, 'CREATE') != false && strpos($rights, 'ALTER') != false))) {
+      return true;
+      } else {
+      $tables_count = $wpdb->get_var("SELECT count(*) FROM information_schema.tables WHERE table_name LIKE '{$wpdb->prefix}b2s_%%'");
+      if (isset($tables_count) && !empty($tables_count) && $tables_count >= 8) {
+      return true;
+      }
+      }
+      return false;
+      } */
 
     //Since V6.6.0.5 - disabled php heartbeat check  - is checked in javascript
-    /*private function getHeartbeat() {
-        return wp_script_is('heartbeat', 'registered');
-    }*/
-    
+    /* private function getHeartbeat() {
+      return wp_script_is('heartbeat', 'registered');
+      } */
+
     private function getPhpCurl() {
         return function_exists('curl_version');
     }
-    
+
     private function getPhpMbstring() {
         return function_exists('mb_strlen');
     }
@@ -220,20 +228,20 @@ class B2S_Support_Check_System {
             }
         }
     }
+
     //deprecated since V 6.8.0
     private function getWpJson() {
         $base_url = get_site_url();
-        $url = (substr($base_url, -1) == "/") ? $base_url."wp-json" : $base_url."/wp-json";
+        $url = (substr($base_url, -1) == "/") ? $base_url . "wp-json" : $base_url . "/wp-json";
         $result = json_decode(B2S_Api_Get::get($url), true);
-        if(isset($result["url"]) && !empty($result["url"]) && $result["url"] == $base_url){
+        if (isset($result["url"]) && !empty($result["url"]) && $result["url"] == $base_url) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     private function getOpenssl() {
         return function_exists("openssl_private_decrypt");
     }
-
 }

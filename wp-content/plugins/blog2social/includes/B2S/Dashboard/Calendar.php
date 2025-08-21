@@ -12,14 +12,14 @@ class B2S_Dashboard_Calendar {
 
         $results = array();
 
-        $start = date('Y-m-01 00:00:00');
-        $end = date('Y-m-d 23:59:59', strtotime('+3 months'));
+        $start =  wp_date('Y-m-01 00:00:00',null, new DateTimeZone(date_default_timezone_get()));
+        $end =  wp_date('Y-m-d 23:59:59', strtotime('+3 months'), new DateTimeZone(date_default_timezone_get()));
 
         $calendar = B2S_Calendar_Filter::getByTimespam($start, $end, 0, 0, 0);
         $entries = $calendar->asCalendarArray();
         foreach ($entries as $entry) {
             if (isset($entry['start']) && !empty($entry['start'])) {
-                $results[] = date('Y-m-d', strtotime($entry['start']));
+                $results[] =  wp_date('Y-m-d', strtotime($entry['start']), new DateTimeZone(date_default_timezone_get()));
             }
         }
         return $results;

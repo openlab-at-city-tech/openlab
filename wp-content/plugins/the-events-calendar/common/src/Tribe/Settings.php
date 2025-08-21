@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use TEC\Common\Admin\Entities\Element_With_Children;
 use TEC\Common\Admin\Entities\Field_Wrapper;
 use Tribe\Admin\Pages as Admin_Pages;
+use TEC\Common\Notifications\Controller;
 
 if ( did_action( 'tec_settings_init' ) ) {
 	return;
@@ -304,7 +305,7 @@ class Tribe__Settings {
 	/**
 	 * Magic getter for deprecated properties.
 	 *
-	 * @since 6.3.2
+	 * @since 6.3.1
 	 *
 	 * @param string $name The property name we are looking for.
 	 *
@@ -589,12 +590,15 @@ class Tribe__Settings {
 	 */
 	public function do_page_header( $admin_page ): void {
 		?>
-		<h1>
-			<?php if ( $this->is_event_settings() ) : ?>
+		<div class="tec-settings-header-wrap">
+			<h1>
 				<?php echo wp_kses_post( $this->get_page_logo( $admin_page ) ); ?>
+				<?php echo esc_html( $this->get_page_title( $admin_page ) ); ?>
+			</h1>
+			<?php if ( tribe( Controller::class )->is_ian_page() ) : ?>
+				<div class="ian-client" data-tec-ian-trigger="iconIan"></div>
 			<?php endif; ?>
-			<?php echo esc_html( $this->get_page_title( $admin_page ) ); ?>
-		</h1>
+		</div>
 		<?php
 	}
 
@@ -633,7 +637,7 @@ class Tribe__Settings {
 	 * @return string The settings page logo.
 	 */
 	public function get_page_logo( $admin_page ) {
-		$logo_source = tribe_resource_url( 'images/logo/tec-brand.svg', false, null, Tribe__Main::instance() );
+		$logo_source = tribe_resource_url( 'images/logo/the-events-calendar.svg', false, null, Tribe__Main::instance() );
 
 		/**
 		 * Filter the tribe settings page logo source URL.
@@ -684,45 +688,42 @@ class Tribe__Settings {
 	 * Includes the view file.
 	 *
 	 * @since 6.1.0
+	 * @since 6.4.1 Avoid Fatal error when the current tab is not an object.
 	 */
 	public function generate_page(): void {
-		$admin_pages       = tribe( 'admin.pages' );
-		$admin_page        = $admin_pages->get_current_page();
-		$current_tab       = $this->get_current_tab();
-		$wrap_classes      = apply_filters( 'tribe_settings_wrap_classes', [ 'tribe_settings', 'wrap' ], $admin_page );
-		$is_event_settings = $this->is_event_settings( $admin_page );
-		$form_classes      = [ "tec-settings-form__{$current_tab}-tab--active" ];
-
-		if ( $this->get_tab( $current_tab )->has_parent() ) {
-			$form_classes[] = 'tec-settings-form__subnav-active';
-		}
+		$admin_pages  = tribe( 'admin.pages' );
+		$admin_page   = $admin_pages->get_current_page();
+		$current_tab  = $this->get_current_tab();
+		$wrap_classes = apply_filters( 'tribe_settings_wrap_classes', [ 'tribe_settings', 'wrap' ], $admin_page );
+		$tab_object   = $this->get_tab( $current_tab );
+		$form_classes = [
+			"tec-settings-form__{$current_tab}-tab--active" => true,
+			'tec-settings-form__subnav-active' => ( $tab_object && $tab_object->has_parent() ),
+			'tec-settings-form'                => true,
+		];
 
 		/**
 		 * Filter the classes for the settings form.
 		 *
 		 * @since 6.1.0
 		 *
-		 * @param array<string> $form_classes The classes for the settings form.
+		 * @param array<string>            $form_classes The classes for the settings form.
+		 * @param string                   $admin_page   The admin page ID.
+		 * @param Tribe__Settings_Tab|null $tab_object   The current tab object.
 		 */
-		$form_classes = apply_filters( 'tribe_settings_form_class', $form_classes, $admin_page );
+		$form_classes = apply_filters( 'tribe_settings_form_class', $form_classes, $admin_page, $tab_object );
 
 		ob_start();
 		do_action( 'tribe_settings_top', $admin_page );
 		?>
-		<div <?php tribe_classes( $wrap_classes ); ?>>
+		<div <?php tec_classes( $wrap_classes ); ?>>
 			<?php
-			$this->output_notice_wrap();
+			$this->output_notice_wrap( $current_tab, $admin_page );
 			$this->do_page_header( $admin_page );
-			if ( $is_event_settings ) {
-				$this->generate_modal_nav( $admin_page );
-			}
+			$this->generate_modal_nav( $admin_page );
 
 			do_action( 'tribe_settings_above_tabs' );
-			if ( $is_event_settings ) {
-				$this->generate_tabs();
-			} else {
-				$this->generateTabs();
-			}
+			$this->generate_tabs();
 
 			do_action( 'tribe_settings_below_tabs' );
 			do_action( 'tribe_settings_below_tabs_tab_' . $current_tab, $admin_page );
@@ -731,9 +732,9 @@ class Tribe__Settings {
 				<?php
 				do_action( 'tribe_settings_above_form_element' );
 				do_action( 'tribe_settings_above_form_element_tab_' . $current_tab, $admin_page );
-				$form_id = $is_event_settings ? 'tec-settings-form' : 'tec-tickets-settings-form';
+				$form_id = 'tec-settings-form';
 				?>
-				<form id="<?php echo esc_attr( $form_id ); ?>" <?php tribe_classes( $form_classes ); ?> method="post">
+				<form id="<?php echo esc_attr( $form_id ); ?>" <?php tec_classes( $form_classes ); ?> method="post">
 				<?php
 				do_action( 'tribe_settings_before_content' );
 				do_action( 'tribe_settings_before_content_tab_' . $current_tab );
@@ -755,10 +756,8 @@ class Tribe__Settings {
 				?>
 			</div>
 			<?php
-			do_action( 'tribe_settings_after_form_div', $this );
-			if ( $is_event_settings ) {
+				do_action( 'tribe_settings_after_form_div', $this );
 				$this->generate_modal_sidebar();
-			}
 			?>
 		</div>
 		<?php
@@ -794,9 +793,29 @@ class Tribe__Settings {
 		?>
 
 		<div class="tec-settings-form__footer">
+			<?php
+			/**
+			 * Fires at the start of the settings footer, before any content is output.
+			 *
+			 * @since 6.7.0
+			 *
+			 * @param string $current_tab The current tab ID.
+			 */
+			do_action( "tec_settings_footer_start_tab_{$current_tab}" );
+			?>
 			<?php if ( $saving ) : ?>
 				<input type="hidden" name="current-settings-tab" id="current-settings-tab" value="<?php echo esc_attr( $this->current_tab ); ?>" />
 				<input id="tribeSaveSettings" class="button-primary" type="submit" name="tribeSaveSettings" value="<?php echo esc_attr__( 'Save Changes', 'tribe-common' ); ?>" />
+				<?php
+				/**
+				 * Fires after the save fields are output in the settings footer.
+				 *
+				 * @since 6.7.0
+				 *
+				 * @param string $current_tab The current tab ID.
+				 */
+				do_action( "tec_settings_footer_after_save_fields_tab_{$current_tab}" );
+				?>
 			<?php endif; ?>
 			<?php if ( $has_sidebar ) : ?>
 				<button id="tec-settings-sidebar-modal-open" class="tec-settings-form__sidebar-toggle"><?php esc_html_e( 'Help', 'tribe-common' ); ?><span class="dashicons dashicons-editor-help"></span></button>
@@ -822,19 +841,16 @@ class Tribe__Settings {
 		}
 
 		$nav_id          = $modal ? 'tec-settings-modal-nav' : 'tribe-settings-tabs';
+		$tab_object      = $this->get_tab( $this->get_current_tab() );
 		$wrapper_classes = [
 			'tec-nav__wrapper'                => true,
-			'tec-settings__nav-wrapper'       => $this->is_event_settings(),
-			'tec-nav__wrapper--subnav-active' => false,
+			'tec-settings__nav-wrapper'       => true,
+			'tec-nav__wrapper--subnav-active' => (bool) ( $tab_object && $tab_object->has_parent() ),
 		];
-
-		if ( $this->get_tab( $this->get_current_tab() )->has_parent() ) {
-			$wrapper_classes['tec-nav__wrapper--subnav-active'] = true;
-		}
 
 		ob_start();
 		?>
-			<nav id="<?php echo esc_attr( $nav_id ); ?>" <?php tribe_classes( $wrapper_classes ); ?>>
+			<nav id="<?php echo esc_attr( $nav_id ); ?>" <?php tec_classes( $wrapper_classes ); ?>>
 				<ul class="tec-nav">
 					<?php if ( ! $modal ) : ?>
 					<li class="tec-nav__tab tec-nav__tab--skip-link">
@@ -870,7 +886,10 @@ class Tribe__Settings {
 		<dialog id="tec-settings-nav-modal" class="tec-settings-form__modal">
 			<div class="tec-modal__content">
 				<div class="tec-modal__header">
-					<?php $this->do_page_header( $admin_page ); ?>
+					<h1>
+						<?php echo wp_kses_post( $this->get_page_logo( $admin_page ) ); ?>
+						<?php echo esc_html( $this->get_page_title( $admin_page ) ); ?>
+					</h1>
 					<button id="tec-settings-nav-modal-close" class="tec-modal__control tec-modal__control--close" data-modal-close>
 						<span class="screen-reader-text"><?php esc_html_e( 'Close', 'tribe-common' ); ?></span>
 					</button>
@@ -922,9 +941,19 @@ class Tribe__Settings {
 	 *
 	 * @return void
 	 */
-	protected function output_notice_wrap() {
+	protected function output_notice_wrap( $current_tab, $admin_page ) {
 		?>
 		<div class="tribe-notice-wrap">
+			<?php
+			/**
+			 * Trigger the conditional content header notice.
+			 *
+			 * @since 6.8.2
+			 *
+			 * @param \Tribe__Admin__View $admin_page The current admin page object.
+			 */
+			do_action( 'tec_conditional_content_header_notice', $admin_page );
+			?>
 			<div class="wp-header-end"></div>
 		</div>
 		<?php
@@ -964,7 +993,7 @@ class Tribe__Settings {
 
 		ob_start();
 		?>
-		<li <?php tribe_classes( $class ); ?>>
+		<li <?php tec_classes( $class ); ?>>
 			<a
 				id="<?php echo esc_attr( $tab->id ); ?>"
 				class="tec-nav__link"
@@ -1093,8 +1122,8 @@ class Tribe__Settings {
 	 *
 	 * @since 6.1.0
 	 *
-	 * @param  object $a First tab to compare.
-	 * @param  object $b Second tab to compare.
+	 * @param object $a First tab to compare.
+	 * @param object $b Second tab to compare.
 	 *
 	 * @return int
 	 */
@@ -1604,20 +1633,8 @@ class Tribe__Settings {
 	 * @deprecated 6.1.0
 	 */
 	public function generateTabs() {
-		if ( $this->is_event_settings() ) {
 			_deprecated_function( __METHOD__, '6.1.0', 'generate_tabs' );
 			$this->generate_tabs();
-		} elseif ( is_array( $this->tabs ) && ! empty( $this->tabs ) ) {
-			uasort( $this->tabs, [ $this, 'sort_by_priority' ] );
-			echo '<h2 id="tribe-settings-tabs" class="nav-tab-wrapper">';
-			foreach ( $this->tabs as $tab ) {
-				$url   = $this->get_tab_url( $tab->id );
-				$class = ( $tab->id == $this->current_tab ) ? ' nav-tab-active' : '';
-				echo '<a id="' . esc_attr( $tab->id ) . '" class="nav-tab' . esc_attr( $class ) . '" href="' . esc_url( $url ) . '">' . esc_html( $tab->name ) . '</a>';
-			}
-			do_action( 'tribe_settings_after_tabs' );
-			echo '</h2>';
-		}
 	}
 
 	/**
@@ -1660,10 +1677,7 @@ class Tribe__Settings {
 	 * @since 4.15.0 Add the current page as parameter for the actions.
 	 */
 	public function generatePage() {
-		if ( $this->is_event_settings() ) {
 			_deprecated_function( __METHOD__, '6.1.0', 'generate_page' );
-		}
-
 		$this->generate_page();
 	}
 	// phpcs:enable WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid

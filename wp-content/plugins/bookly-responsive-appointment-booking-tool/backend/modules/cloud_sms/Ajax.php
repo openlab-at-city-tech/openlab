@@ -216,36 +216,7 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function sendQueue()
     {
-        $notifications = self::parameter( 'notifications', array() );
-        $type = self::parameter( 'type', 'all' );
-        $token = self::parameter( 'token' );
-        /** @var Lib\Entities\NotificationQueue $queue */
-        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $token )->where( 'sent', 0 )->findOne();
-        if ( $queue ) {
-            $queue_data = json_decode( $queue->getData(), true );
-            if ( isset( $queue_data[ $type ] ) ) {
-                $cloud = Lib\Cloud\API::getInstance();
-                foreach ( $notifications as $queue_id ) {
-                    if ( isset( $queue_data[ $type ][ $queue_id ] ) ) {
-                        $notification = $queue_data[ $type ][ $queue_id ];
-                        $gateway = $notification['gateway'];
-                        if ( $gateway === 'sms' ) {
-                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
-                        } elseif ( $gateway === 'email' ) {
-                            Lib\Utils\Mail::send( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array(), $notification['type_id'] );
-                        } elseif ( $gateway === 'voice' ) {
-                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->call( $notification['address'], $notification['message'], $notification['impersonal'] );
-                        } elseif ( $gateway === 'whatsapp' ) {
-                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->send( $notification['address'], $notification['message'] );
-                        }
-                    }
-                }
-            }
-            self::_deleteAttachmentFiles( $queue_data );
-
-            $queue->setSent( 1 )->save();
-        }
-
+        Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( self::parameter( 'notifications', array() ), self::parameter( 'type', 'all' ), self::parameter( 'token' ) );
         wp_send_json_success();
     }
 
@@ -254,13 +225,11 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function clearAttachments()
     {
-        $token = self::parameter( 'token' );
         /** @var Lib\Entities\NotificationQueue $queue */
-        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $token )->where( 'sent', 0 )->findOne();
+        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', self::parameter( 'token' ) )->where( 'sent', 0 )->findOne();
         if ( $queue ) {
             $queue_data = json_decode( $queue->getData(), true );
-            self::_deleteAttachmentFiles( $queue_data );
-
+            Lib\Notifications\Routine::deleteNotificationAttachmentFiles( $queue_data );
             $queue->setSent( 1 )->save();
         }
 

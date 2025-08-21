@@ -87,3 +87,75 @@ function cv_portfolio_blocks_register_required_plugins() {
 
 	tgmpa( $plugins, $config );
 }
+
+
+// WordClever – AI Content Writer plugin activation
+add_action('wp_ajax_install_and_activate_wordclever_plugin', 'install_and_activate_wordclever_plugin');
+
+function install_and_activate_wordclever_plugin() {
+    // Verify nonce for security
+    if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'install_activate_nonce')) {
+        wp_send_json_error(['message' => 'Nonce verification failed.']);
+    }
+
+    // Define plugin slugs and file paths
+    $cv_portfolio_blocks_woocommerce_slug = 'woocommerce';
+    $cv_portfolio_blocks_woocommerce_file = 'woocommerce/woocommerce.php';
+    $cv_portfolio_blocks_woocommerce_url  = 'https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip';
+
+    $cv_portfolio_blocks_wordclever_slug = 'wordclever-ai-content-writer';
+    $cv_portfolio_blocks_wordclever_file = 'wordclever-ai-content-writer/wordclever.php';
+    $cv_portfolio_blocks_wordclever_url  = 'https://downloads.wordpress.org/plugin/wordclever-ai-content-writer.latest-stable.zip';
+
+    // Include necessary WordPress files
+    include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    include_once ABSPATH . 'wp-admin/includes/file.php';
+    include_once ABSPATH . 'wp-admin/includes/misc.php';
+    include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+    include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+
+    $cv_portfolio_blocks_upgrader = new Plugin_Upgrader(new Automatic_Upgrader_Skin());
+
+    // Step 1: Install and activate WooCommerce if not active
+    if (!is_plugin_active($cv_portfolio_blocks_woocommerce_file)) {
+        $cv_portfolio_blocks_installed_plugins = get_plugins();
+
+        if (!isset($cv_portfolio_blocks_installed_plugins[$cv_portfolio_blocks_woocommerce_file])) {
+            // Install WooCommerce
+            $cv_portfolio_blocks_install_wc = $cv_portfolio_blocks_upgrader->install($cv_portfolio_blocks_woocommerce_url);
+            if (is_wp_error($cv_portfolio_blocks_install_wc)) {
+                wp_send_json_error(['message' => 'WooCommerce installation failed.']);
+            }
+        }
+
+        // Activate WooCommerce
+        $cv_portfolio_blocks_activate_wc = activate_plugin($cv_portfolio_blocks_woocommerce_file);
+        if (is_wp_error($cv_portfolio_blocks_activate_wc)) {
+            wp_send_json_error(['message' => 'WooCommerce activation failed.', 'error' => $cv_portfolio_blocks_activate_wc->get_error_message()]);
+        }
+    }
+
+    // Step 2: Install and activate WordClever plugin
+    if (!is_plugin_active($cv_portfolio_blocks_wordclever_file)) {
+        $cv_portfolio_blocks_installed_plugins = get_plugins();
+
+        if (!isset($cv_portfolio_blocks_installed_plugins[$cv_portfolio_blocks_wordclever_file])) {
+            // Install WordClever plugin
+            $cv_portfolio_blocks_install_wc_plugin = $cv_portfolio_blocks_upgrader->install($cv_portfolio_blocks_wordclever_url);
+            if (is_wp_error($cv_portfolio_blocks_install_wc_plugin)) {
+                wp_send_json_error(['message' => 'WordClever plugin installation failed.']);
+            }
+        }
+
+        // Activate WordClever plugin
+        $cv_portfolio_blocks_activate_wc_plugin = activate_plugin($cv_portfolio_blocks_wordclever_file);
+        if (is_wp_error($cv_portfolio_blocks_activate_wc_plugin)) {
+            wp_send_json_error(['message' => 'WordClever plugin activation failed.', 'error' => $cv_portfolio_blocks_activate_wc_plugin->get_error_message()]);
+        }
+    }
+
+    // Success response
+    wp_send_json_success(['message' => 'WooCommerce and WordClever plugins are activated successfully.']);
+}
+
+

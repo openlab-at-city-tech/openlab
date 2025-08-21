@@ -19,7 +19,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
- * @internal
  */
 class FirePHPHandler extends AbstractProcessingHandler
 {
@@ -62,9 +61,9 @@ class FirePHPHandler extends AbstractProcessingHandler
      *
      * @phpstan-return non-empty-array<string, string>
      */
-    protected function createHeader(array $meta, string $message) : array
+    protected function createHeader(array $meta, string $message): array
     {
-        $header = \sprintf('%s-%s', static::HEADER_PREFIX, \join('-', $meta));
+        $header = sprintf('%s-%s', static::HEADER_PREFIX, join('-', $meta));
         return [$header => $message];
     }
     /**
@@ -78,7 +77,7 @@ class FirePHPHandler extends AbstractProcessingHandler
      *
      * @phpstan-param FormattedRecord $record
      */
-    protected function createRecordHeader(array $record) : array
+    protected function createRecordHeader(array $record): array
     {
         // Wildfire is extensible to support multiple protocols & plugins in a single request,
         // but we're not taking advantage of that (yet), so we're using "1" for simplicity's sake.
@@ -87,7 +86,7 @@ class FirePHPHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new WildfireFormatter();
     }
@@ -99,18 +98,18 @@ class FirePHPHandler extends AbstractProcessingHandler
      *
      * @return array<string, string>
      */
-    protected function getInitHeaders() : array
+    protected function getInitHeaders(): array
     {
         // Initial payload consists of required headers for Wildfire
-        return \array_merge($this->createHeader(['Protocol', 1], static::PROTOCOL_URI), $this->createHeader([1, 'Structure', 1], static::STRUCTURE_URI), $this->createHeader([1, 'Plugin', 1], static::PLUGIN_URI));
+        return array_merge($this->createHeader(['Protocol', 1], static::PROTOCOL_URI), $this->createHeader([1, 'Structure', 1], static::STRUCTURE_URI), $this->createHeader([1, 'Plugin', 1], static::PLUGIN_URI));
     }
     /**
      * Send header string to the client
      */
-    protected function sendHeader(string $header, string $content) : void
+    protected function sendHeader(string $header, string $content): void
     {
-        if (!\headers_sent() && self::$sendHeaders) {
-            \header(\sprintf('%s: %s', $header, $content));
+        if (!headers_sent() && self::$sendHeaders) {
+            header(sprintf('%s: %s', $header, $content));
         }
     }
     /**
@@ -119,7 +118,7 @@ class FirePHPHandler extends AbstractProcessingHandler
      * @see sendHeader()
      * @see sendInitHeaders()
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if (!self::$sendHeaders || !$this->isWebRequest()) {
             return;
@@ -136,16 +135,16 @@ class FirePHPHandler extends AbstractProcessingHandler
             }
         }
         $header = $this->createRecordHeader($record);
-        if (\trim(\current($header)) !== '') {
-            $this->sendHeader(\key($header), \current($header));
+        if (trim(current($header)) !== '') {
+            $this->sendHeader(key($header), current($header));
         }
     }
     /**
      * Verifies if the headers are accepted by the current user agent
      */
-    protected function headersAccepted() : bool
+    protected function headersAccepted(): bool
     {
-        if (!empty($_SERVER['HTTP_USER_AGENT']) && \preg_match('{\\bFirePHP/\\d+\\.\\d+\\b}', $_SERVER['HTTP_USER_AGENT'])) {
+        if (!empty($_SERVER['HTTP_USER_AGENT']) && preg_match('{\bFirePHP/\d+\.\d+\b}', $_SERVER['HTTP_USER_AGENT'])) {
             return \true;
         }
         return isset($_SERVER['HTTP_X_FIREPHP_VERSION']);

@@ -13,18 +13,17 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Provider;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\UnsupportedSchemeException;
 /**
  * @author Mathieu Santostefano <msantostefano@protonmail.com>
- * @internal
  */
 final class NullProviderFactory extends AbstractProviderFactory
 {
-    public function create(Dsn $dsn) : ProviderInterface
+    public function create(Dsn $dsn): ProviderInterface
     {
         if ('null' === $dsn->getScheme()) {
             return new NullProvider();
         }
         throw new UnsupportedSchemeException($dsn, 'null', $this->getSupportedSchemes());
     }
-    protected function getSupportedSchemes() : array
+    protected function getSupportedSchemes(): array
     {
         return ['null'];
     }

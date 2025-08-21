@@ -2877,7 +2877,7 @@ a:hover, a:focus{
   color: var(--wp--preset--color--primary);
 }
 .wp-block-button a:hover,.wp-block-button a:focus{
-  color: var(--wp--preset--color--white);
+  color: var(--wp--preset--color--background);
 }
 /* Tertiary Background Color */
 .newsletter-section

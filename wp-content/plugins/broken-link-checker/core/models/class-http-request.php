@@ -84,7 +84,7 @@ class Http_Request extends Base {
 	 * @return array|WP_Error
 	 */
 	private function process_request(
-		string $url = null,
+		?string $url = null,
 		array $headers = array(),
 		array $body = array(),
 		string $method = 'GET'

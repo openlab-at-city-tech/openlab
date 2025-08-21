@@ -1,4 +1,6 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
+
 
 /**
  * Returns total number of accounts.
@@ -7,7 +9,7 @@
  *
  * @return int
  */
-function zp_get_total_accounts($wpdb=false)
+function zotpress_get_total_accounts($wpdb=false)
 {
 	if ( $wpdb === false) global $wpdb;
 
@@ -30,7 +32,7 @@ function zp_get_total_accounts($wpdb=false)
  *
  * @return int
  */
-function zp_get_accounts($wpdb=false, $use_select=false, $select_req=false, $select_id=false, $select_name=false, $select_default=false )
+function zotpress_get_accounts($wpdb=false, $use_select=false, $select_req=false, $select_id=false, $select_name=false, $select_default=false )
 {
 	if ( $wpdb === false) global $wpdb;
 
@@ -59,12 +61,14 @@ function zp_get_accounts($wpdb=false, $use_select=false, $select_req=false, $sel
 				$output .= "<option ";
 
 				// Default, if exists
-				if ( $select_default && $select_default == $zp_account->api_user_id ) $output .= "selected='selected' ";
+				if ( $select_default 
+						&& $select_default == $zp_account->api_user_id )
+					$output .= "selected='selected' ";
 
 				// Value and option name
 				$output .= "rel='".$zp_account->api_user_id."' value='".$zp_account->api_user_id."'>";
 				if ( $zp_account->nickname ) $output .= $zp_account->nickname; else $output .= $zp_account->api_user_id;
-				$output .= __("'s Library", "zotpress");
+				$output .= esc_html__("'s Library", "zotpress");
 
 				$output .= "</option>\n";
 			}

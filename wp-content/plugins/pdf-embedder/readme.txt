@@ -1,10 +1,10 @@
 === PDF Embedder ===
 Contributors: slaFFik, jaredatch, smub
-Tags: pdf, pdf viewer, embed pdf, pdf document, pdf block
-Requires at least: 5.8
-Requires PHP: 7.0
-Tested up to: 6.5
-Stable tag: 4.8.2
+Tags: pdf, pdf viewer, embed pdf, pdf document, block
+Requires at least: 6.1
+Requires PHP: 7.2
+Tested up to: 6.8
+Stable tag: 4.9.2
 License: GPL-2.0-or-later
 
 Seamlessly embed PDFs into your content, with customizations and intelligent responsive resizing, and no third-party services or iframes.
@@ -182,6 +182,28 @@ If you cannot install from the WordPress plugins directory for any reason, and n
 1. Click Activate on the "Plugins" screen.
 
 == Changelog ==
+
+= 4.9.2 =
+* Changed: When just installed, the plugin was not saving its settings into the database upon activation. This caused the plugin to not work properly until the settings were saved at least once.
+* Fixed: PDF Viewer Toolbar was displayed on the front-end even when disabled using block/shortcode attributes until the plugin settings were saved at least once.
+
+= 4.9.1 =
+* Fixed: The PDF Embedder block performance was improved slightly in the Block Editor.
+* Fixed: Toolbar was not visible when configured to be displayed on hover.
+* Fixed: Make sure that PDF URL has the domain when requesting the file from the server.
+* Fixed: When the shortcode `height` attribute contained the value `auto` - the PDF Viewer wasn't correctly displaying the PDF file content.
+* Fixed: Do not output debug information in the browser console when the PDF file has some True Type fonts incorrect data. PDF Rendering is still fine.
+
+= 4.9.0 =
+* IMPORTANT: The minimum WordPress version has been raised to WordPress v6.1.
+* IMPORTANT: The minimum PHP version has been raised to PHP v7.2.
+* Added: A new dismissible "Get Started" section was added to the plugin settings page to help you get started with the plugin.
+* Changed: Compatibility with WordPress 6.7.
+* Changed: Various plugin admin area improvements.
+* Changed: Further improvements to the PDF Embedder block in the Block Editor.
+* Fixed: Address the issue with the WordPress Interactivity API and mobile navigation when the site works in SCRIPT_DEBUG mode.
+* Fixed: Dropdown menus when opened were not able to "cover" the PDF Viewer toolbar due to the z-index value set for the toolbar.
+* Fixed: Prevent occasional fatal errors from happening when the plugin is initiated during the cron request.
 
 = 4.8.2 =
 * Fixed: PDF files containing the text in certain languages (like Korean or Japanese) were not rendered properly due to a bug in PDF.js library incorrectly handling passed options.

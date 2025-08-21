@@ -430,10 +430,72 @@ class Widget_Writer {
 		return "\n\t\t" . '$this->end_controls_section();' . PHP_EOL . PHP_EOL;
 	}
 
+	/**
+	 * Apply proper security escaping to widget markup
+	 * 
+	 * @param string $markup The widget markup template
+	 * @return string The processed markup with proper escaping
+	 */
+	private function apply_escaping($markup) {
+		// Array of regex patterns and their replacements
+		$patterns = [
+			// Pattern 1: URL attributes in href, src, action with array access ["url"]
+			'/(href|src|action)=["\']\s*<\?php\s+echo\s+isset\s*\(\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\[\s*["\']url["\']\s*\]\s*\)\s*\?\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\[\s*["\']url["\']\s*\]\s*:\s*["\'][^"\']*["\']\s*;\s*\?>/i' 
+				=> '$1="<?php echo isset($settings["$2"]["url"]) ? esc_url($settings["$3"]["url"]) : ""; ?>"',
+			
+			// Pattern 2: URL attributes in href, src, action (standard, not arrays)
+			'/(href|src|action)=["\']\s*<\?php\s+echo\s+isset\s*\(\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\)\s*\?\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*:\s*["\'][^"\']*["\']\s*;\s*\?>/i'
+				=> '$1="<?php echo isset($settings["$2"]) ? esc_url($settings["$3"]) : ""; ?>"',
+			
+			// Pattern 3: Non-URL attributes (class, data-*, etc.) with array access
+			'/(?<!href|src|action)=["\']\s*<\?php\s+echo\s+isset\s*\(\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\[\s*["\'](?!url)([^"\']+)["\']\s*\]\s*\)\s*\?\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\[\s*["\']([^"\']+)["\']\s*\]\s*:\s*["\'][^"\']*["\']\s*;\s*\?>/i'
+				=> '="<?php echo isset($settings["$1"]["$2"]) ? esc_attr($settings["$3"]["$4"]) : ""; ?>"',
+			
+			// Pattern 4: Non-URL attributes (class, data-*, etc.) standard access
+			'/(?<!href|src|action)=["\']\s*<\?php\s+echo\s+isset\s*\(\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\)\s*\?\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*:\s*["\'][^"\']*["\']\s*;\s*\?>/i'
+				=> '="<?php echo isset($settings["$1"]) ? esc_attr($settings["$2"]) : ""; ?>"',
+			
+			// Pattern 5: Text content (not in attributes) - use wp_kses_post()
+			'/>\s*<\?php\s+echo\s+isset\s*\(\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\)\s*\?\s*\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*:\s*["\'][^"\']*["\']\s*;\s*\?>\s*</i'
+				=> '><?php echo isset($settings["$1"]) ? wp_kses_post($settings["$2"]) : ""; ?><',
+		];
+		
+		// Apply patterns in order
+		foreach ($patterns as $pattern => $replacement) {
+			$markup = preg_replace($pattern, $replacement, $markup);
+		}
+		
+		// Additional safety check for any remaining URL array references
+		$markup = preg_replace_callback(
+			'/<\?php.*?\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]\s*\[\s*["\']url["\']\s*\].*?\?>/i',
+			function($matches) {
+				$fullMatch = $matches[0];
+				
+				// Only modify if it doesn't already have proper array checking
+				if (strpos($fullMatch, 'isset') === false || strpos($fullMatch, 'esc_url') === false) {
+					// Extract setting key
+					preg_match('/\$settings\s*\[\s*["\']([^"\']+)["\']\s*\]/', $fullMatch, $keyMatches);
+					$key = isset($keyMatches[1]) ? $keyMatches[1] : '';
+					
+					if (!empty($key)) {
+						return '<?php echo isset($settings["' . $key . '"]["url"]) ? esc_url($settings["' . $key . '"]["url"]) : ""; ?>';
+					}
+				}
+				
+				return $fullMatch;
+			},
+			$markup
+		);
+		
+		return $markup;
+	}
 
 	private function write_render_method( $markup = '' ) {
 
 		$markup = \ElementsKit_Lite\Libs\Template\Loader::instance()->replace_tags( $markup, $this->control_prefix );
+
+		// Apply security escaping
+		$markup = $this->apply_escaping($markup);
 
 		$ret = "\n\t" . 'protected function render() {' . PHP_EOL;
 

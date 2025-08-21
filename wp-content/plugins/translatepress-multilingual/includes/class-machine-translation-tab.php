@@ -68,8 +68,7 @@ class TRP_Machine_Translation_Tab {
 
         $free_version = !class_exists( 'TRP_Handle_Included_Addons' );
         $seo_pack_active = class_exists( 'TRP_IN_Seo_Pack');
-        $trp = TRP_Translate_Press::get_trp_instance();
-        $machine_translator = $trp->get_component( 'machine_translator' );
+
         $settings = array();
         $machine_translation_keys = array( 'machine-translation', 'translation-engine', 'google-translate-key', 'deepl-api-type', 'deepl-api-key', 'block-crawlers', 'automatically-translate-slug', 'machine_translation_limit', 'machine_translation_log', 'machine_translation_limit_enabled' );
         foreach( $machine_translation_keys as $key ){
@@ -115,9 +114,14 @@ class TRP_Machine_Translation_Tab {
                 $settings['automatically-translate-slug'] = 'no';
         }
 
-        $db_stored_data = get_option('trp_db_stored_data', array() );
-        unset( $db_stored_data['trp_mt_supported_languages'][ $settings['translation-engine'] ]['last-checked'] );
-        update_option( 'trp_db_stored_data', $db_stored_data );
+        if (  isset ( $_POST['option_page'] ) &&
+            $_POST['option_page'] === 'trp_machine_translation_settings' &&
+            current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) )
+        {
+            $db_stored_data = get_option( 'trp_db_stored_data', array() );
+            unset( $db_stored_data['trp_mt_supported_languages'][ $settings['translation-engine'] ]['last-checked'] );
+            update_option( 'trp_db_stored_data', $db_stored_data );
+        }
 
         return apply_filters( 'trp_machine_translation_sanitize_settings', $settings, $mt_settings );
     }

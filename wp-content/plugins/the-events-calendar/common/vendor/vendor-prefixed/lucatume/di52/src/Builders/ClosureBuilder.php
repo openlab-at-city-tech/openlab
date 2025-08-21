@@ -3,9 +3,6 @@
  * Closure-based builder.
  *
  * @package lucatume\DI52
- *
- * @license GPL-3.0
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\lucatume\DI52\Builders;

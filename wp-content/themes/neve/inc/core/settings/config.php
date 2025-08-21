@@ -56,6 +56,7 @@ class Config {
 	const MODS_FONT_GENERAL                = 'neve_body_font_family';
 	const MODS_FONT_GENERAL_VARIANTS       = 'neve_body_font_family_variants';
 	const MODS_FONT_HEADINGS               = 'neve_headings_font_family';
+	const MODS_COLOR_HEADINGS              = 'neve_headings_color';
 	const MODS_DEFAULT_CONTAINER_STYLE     = 'neve_default_container_style';
 	const MODS_SINGLE_POST_CONTAINER_STYLE = 'neve_single_post_container_style';
 
@@ -93,6 +94,7 @@ class Config {
 	const MODS_POST_TYPE_VSPACING         = 'content_vspacing';
 
 	const OPTION_LOCAL_GOOGLE_FONTS_HOSTING = 'nv_pro_enable_local_fonts';
+	const OPTION_POSTS_PER_PAGE             = 'posts_per_page';
 
 	const MODS_TPOGRAPHY_FONT_PAIRS = 'neve_font_pairs';
 

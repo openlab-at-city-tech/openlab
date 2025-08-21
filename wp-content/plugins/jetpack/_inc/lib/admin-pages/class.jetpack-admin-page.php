@@ -14,13 +14,13 @@ use Automattic\Jetpack\Status;
  * Shared logic between Jetpack admin pages.
  */
 abstract class Jetpack_Admin_Page {
+
 	/**
-	 * Jetpack Object.
+	 * Determines whether or not to hide if not active.
 	 *
-	 * @var Jetpack
-	 * @deprecated 13.9 Use `Jetpack::init()` instead.
+	 * @var bool
 	 */
-	public $jetpack;
+	protected $dont_show_if_not_active;
 
 	/**
 	 * Add page specific actions given the page hook.
@@ -52,30 +52,6 @@ abstract class Jetpack_Admin_Page {
 	 * @since 4.3.0
 	 */
 	public function additional_styles() {}
-
-	/**
-	 * The constructor.
-	 */
-	public function __construct() {
-		/**
-		 * Keeping it for backward compatibility in case the `$jetpack` property is still in use.
-		 * To be removed.
-		 *
-		 * @deprecated 13.9
-		 */
-		add_action( 'jetpack_loaded', array( $this, 'on_jetpack_loaded' ) );
-	}
-
-	/**
-	 * Runs on Jetpack being ready to load its packages.
-	 *
-	 * @deprecated 13.9
-	 *
-	 * @param Jetpack $jetpack object.
-	 */
-	public function on_jetpack_loaded( $jetpack ) {
-		$this->jetpack = $jetpack;
-	}
 
 	/**
 	 * Add common page actions and attach page-specific actions.
@@ -141,13 +117,6 @@ abstract class Jetpack_Admin_Page {
 
 		self::wrap_ui( array( $this, 'page_render' ), $args );
 	}
-
-	/**
-	 * Doesn't do anything anymore.
-	 *
-	 * @deprecated 13.9 No longer used.
-	 */
-	public function admin_help() {}
 
 	/**
 	 * Call the existing admin page events.

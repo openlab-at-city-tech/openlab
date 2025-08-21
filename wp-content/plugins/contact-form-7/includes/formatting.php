@@ -18,7 +18,7 @@ function wpcf7_autop( $input, $br = true ) {
 			$placeholder = sprintf(
 				'<%1$s id="%2$s" />',
 				WPCF7_HTMLFormatter::placeholder_inline,
-				sha1( $matches[0] )
+				hash( 'sha256', $matches[0] )
 			);
 
 			list( $placeholder ) =
@@ -33,6 +33,7 @@ function wpcf7_autop( $input, $br = true ) {
 
 	$formatter = new WPCF7_HTMLFormatter( array(
 		'auto_br' => $br,
+		'allowed_html' => null,
 	) );
 
 	$chunks = $formatter->separate_into_chunks( $input );
@@ -93,7 +94,7 @@ function wpcf7_sanitize_query_var( $text ) {
  * @return string Processed output.
  */
 function wpcf7_strip_quote( $text ) {
-	$text = trim( $text );
+	$text = wpcf7_strip_whitespaces( $text );
 
 	if ( preg_match( '/^"(.*)"$/s', $text, $matches ) ) {
 		$text = $matches[1];
@@ -183,7 +184,7 @@ function wpcf7_normalize_newline_deep( $input, $to = "\n" ) {
 function wpcf7_strip_newline( $text ) {
 	$text = (string) $text;
 	$text = str_replace( array( "\r", "\n" ), '', $text );
-	return trim( $text );
+	return wpcf7_strip_whitespaces( $text );
 }
 
 
@@ -196,8 +197,11 @@ function wpcf7_strip_newline( $text ) {
  */
 function wpcf7_canonicalize( $text, $options = '' ) {
 	// for back-compat
-	if ( is_string( $options ) and '' !== $options
-	and false === strpos( $options, '=' ) ) {
+	if (
+		is_string( $options ) and
+		'' !== $options and
+		! str_contains( $options, '=' )
+	) {
 		$options = array(
 			'strto' => $options,
 		);
@@ -250,8 +254,7 @@ function wpcf7_canonicalize( $text, $options = '' ) {
 		}
 	}
 
-	$text = trim( $text );
-	return $text;
+	return wpcf7_strip_whitespaces( $text );
 }
 
 
@@ -396,6 +399,7 @@ function wpcf7_kses_allowed_html( $context = 'form' ) {
 			'input' => array(
 				'accept' => true,
 				'alt' => true,
+				'autocomplete' => true,
 				'capture' => true,
 				'checked' => true,
 				'disabled' => true,
@@ -406,8 +410,10 @@ function wpcf7_kses_allowed_html( $context = 'form' ) {
 				'minlength' => true,
 				'multiple' => true,
 				'name' => true,
+				'pattern' => true,
 				'placeholder' => true,
 				'readonly' => true,
+				'required' => true,
 				'size' => true,
 				'step' => true,
 				'type' => true,
@@ -444,12 +450,15 @@ function wpcf7_kses_allowed_html( $context = 'form' ) {
 				'value' => true,
 			),
 			'select' => array(
+				'autocomplete' => true,
 				'disabled' => true,
 				'multiple' => true,
 				'name' => true,
+				'required' => true,
 				'size' => true,
 			),
 			'textarea' => array(
+				'autocomplete' => true,
 				'cols' => true,
 				'disabled' => true,
 				'maxlength' => true,
@@ -457,20 +466,28 @@ function wpcf7_kses_allowed_html( $context = 'form' ) {
 				'name' => true,
 				'placeholder' => true,
 				'readonly' => true,
+				'required' => true,
 				'rows' => true,
-				'spellcheck' => true,
 				'wrap' => true,
 			),
 		);
 
-		$additional_tags_for_form = array_map(
+		$allowed_tags[$context] = array_merge(
+			$allowed_tags[$context],
+			$additional_tags_for_form
+		);
+
+		$allowed_tags[$context] = array_map(
 			static function ( $elm ) {
 				$global_attributes = array(
 					'aria-atomic' => true,
 					'aria-checked' => true,
+					'aria-controls' => true,
+					'aria-current' => true,
 					'aria-describedby' => true,
 					'aria-details' => true,
 					'aria-disabled' => true,
+					'aria-expanded' => true,
 					'aria-hidden' => true,
 					'aria-invalid' => true,
 					'aria-label' => true,
@@ -481,22 +498,22 @@ function wpcf7_kses_allowed_html( $context = 'form' ) {
 					'aria-selected' => true,
 					'class' => true,
 					'data-*' => true,
+					'dir' => true,
+					'hidden' => true,
 					'id' => true,
 					'inputmode' => true,
+					'lang' => true,
 					'role' => true,
+					'spellcheck' => true,
 					'style' => true,
 					'tabindex' => true,
 					'title' => true,
+					'xml:lang' => true,
 				);
 
 				return array_merge( $global_attributes, (array) $elm );
 			},
-			$additional_tags_for_form
-		);
-
-		$allowed_tags[$context] = array_merge(
-			$allowed_tags[$context],
-			$additional_tags_for_form
+			$allowed_tags[$context]
 		);
 	}
 
@@ -579,35 +596,58 @@ function wpcf7_format_atts( $atts ) {
 
 
 /**
+ * Returns the regular expression pattern that represents
+ * whitespace characters Unicode defines.
+ *
+ * @link https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
+ *
+ * @return string Regular expression pattern.
+ */
+function wpcf7_get_unicode_whitespaces() {
+	return '\x09-\x0D\x20\x85\xA0\x{1680}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}\x{3000}';
+}
+
+
+/**
  * Strips surrounding whitespaces.
  *
  * @link https://contactform7.com/2024/07/13/consistent-handling-policy-of-surrounding-whitespaces/
  *
  * @param string|array $input Input text.
+ * @param string $side The side from which whitespaces are stripped.
+ *               'start', 'end', or 'both' (default).
  * @return string|array Output text.
  */
-function wpcf7_strip_whitespaces( $input ) {
+function wpcf7_strip_whitespaces( $input, $side = 'both' ) {
 	if ( is_array( $input ) ) {
-		return array_map( 'wpcf7_strip_whitespaces', $input );
+		return array_map(
+			static function ( $i ) use ( $side ) {
+				return wpcf7_strip_whitespaces( $i, $side );
+			},
+			$input
+		);
 	}
 
-	// https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
 	// https://tc39.es/ecma262/multipage/ecmascript-language-lexical-grammar.html
-	$whitespaces = '\x09-\x0D\x20\x85\xA0\x{1680}\x{2000}-\x{200A}\x{2028}\x{2029}\x{202F}\x{205F}\x{3000}\x{FEFF}';
+	$whitespaces = wpcf7_get_unicode_whitespaces() . '\x{FEFF}';
 
-	// Strip leading whitespaces
-	$input = preg_replace(
-		sprintf( '/^[%s]+/u', $whitespaces ),
-		'',
-		$input
-	);
+	if ( 'end' !== $side ) {
+		// Strip leading whitespaces
+		$input = preg_replace(
+			sprintf( '/^[%s]+/u', $whitespaces ),
+			'',
+			$input
+		);
+	}
 
-	// Strip trailing whitespaces
-	$input = preg_replace(
-		sprintf( '/[%s]+$/u', $whitespaces ),
-		'',
-		$input
-	);
+	if ( 'start' !== $side ) {
+		// Strip trailing whitespaces
+		$input = preg_replace(
+			sprintf( '/[%s]+$/u', $whitespaces ),
+			'',
+			$input
+		);
+	}
 
 	return $input;
 }

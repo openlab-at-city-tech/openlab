@@ -184,8 +184,6 @@ const external_wp_widgets_namespaceObject = window["wp"]["widgets"];
 const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
 ;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
-;// external ["wp","editor"]
-const external_wp_editor_namespaceObject = window["wp"]["editor"];
 ;// external ["wp","preferences"]
 const external_wp_preferences_namespaceObject = window["wp"]["preferences"];
 ;// external ["wp","components"]
@@ -782,6 +780,7 @@ function DynamicShortcut({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -844,15 +843,17 @@ function KeyboardShortcutHelpModal({
   const {
     registerShortcut
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_keyboardShortcuts_namespaceObject.store);
-  registerShortcut({
-    name: 'core/customize-widgets/keyboard-shortcuts',
-    category: 'main',
-    description: (0,external_wp_i18n_namespaceObject.__)('Display these keyboard shortcuts.'),
-    keyCombination: {
-      modifier: 'access',
-      character: 'h'
-    }
-  });
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    registerShortcut({
+      name: 'core/customize-widgets/keyboard-shortcuts',
+      category: 'main',
+      description: (0,external_wp_i18n_namespaceObject.__)('Display these keyboard shortcuts.'),
+      keyCombination: {
+        modifier: 'access',
+        character: 'h'
+      }
+    });
+  }, [registerShortcut]);
   (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)('core/customize-widgets/keyboard-shortcuts', toggleModal);
   if (!isModalActive) {
     return null;
@@ -1717,6 +1718,7 @@ function SidebarBlockEditor({
       mediaUpload: mediaUploadBlockEditor,
       hasFixedToolbar: isFixedToolbarActive || !isMediumViewport,
       keepCaretInsideBlock,
+      editorTool: 'edit',
       __unstableHasCustomAppender: true
     };
   }, [hasUploadPermissions, blockEditorSettings, isFixedToolbarActive, isMediumViewport, keepCaretInsideBlock, setIsInserterOpened]);
@@ -2101,7 +2103,6 @@ function getSidebarSection() {
 }
 
 ;// ./packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-adapter.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -2482,7 +2483,6 @@ function getInserterOuterSection() {
 }
 
 ;// ./packages/customize-widgets/build-module/controls/sidebar-control.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2661,11 +2661,9 @@ const withWideWidgetDisplay = (0,external_wp_compose_namespaceObject.createHighe
 
 
 
-
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -2676,9 +2674,6 @@ const {
 } = window;
 const DISABLED_BLOCKS = ['core/more', 'core/block', 'core/freeform', 'core/template-part'];
 const ENABLE_EXPERIMENTAL_FSE_BLOCKS = false;
-const {
-  registerCoreBlockBindingsSources
-} = unlock(external_wp_editor_namespaceObject.privateApis);
 
 /**
  * Initializes the widgets block editor in the customizer.
@@ -2696,7 +2691,6 @@ function initialize(editorName, blockEditorSettings) {
     return !(DISABLED_BLOCKS.includes(block.name) || block.name.startsWith('core/post') || block.name.startsWith('core/query') || block.name.startsWith('core/site') || block.name.startsWith('core/navigation'));
   });
   (0,external_wp_blockLibrary_namespaceObject.registerCoreBlocks)(coreBlocks);
-  registerCoreBlockBindingsSources();
   (0,external_wp_widgets_namespaceObject.registerLegacyWidgetBlock)();
   if (true) {
     (0,external_wp_blockLibrary_namespaceObject.__experimentalRegisterExperimentalCoreBlocks)({

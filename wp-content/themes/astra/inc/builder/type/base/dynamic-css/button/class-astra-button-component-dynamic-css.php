@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Button_Component_Dynamic_CSS {
-
 	/**
 	 * Dynamic CSS
 	 *
@@ -31,7 +30,7 @@ class Astra_Button_Component_Dynamic_CSS {
 
 		$generated_css = '';
 
-		$number_of_button = ( 'header' === $builder_type ) ? Astra_Builder_Helper::$num_of_header_button : Astra_Builder_Helper::$num_of_footer_button;
+		$number_of_button = 'header' === $builder_type ? Astra_Builder_Helper::$num_of_header_button : Astra_Builder_Helper::$num_of_footer_button;
 		$hb_button_flag   = false;
 
 		for ( $index = 1; $index <= $number_of_button; $index++ ) {
@@ -39,10 +38,10 @@ class Astra_Button_Component_Dynamic_CSS {
 			if ( ! Astra_Builder_Helper::is_component_loaded( 'button-' . $index, $builder_type ) ) {
 				continue;
 			}
-			$hb_button_flag = ( 'header' === $builder_type ) ? true : false;
+			$hb_button_flag = 'header' === $builder_type ? true : false;
 
-			$_section = ( 'header' === $builder_type ) ? 'section-hb-button-' . $index : 'section-fb-button-' . $index;
-			$context  = ( 'header' === $builder_type ) ? 'hb' : 'fb';
+			$_section = 'header' === $builder_type ? 'section-hb-button-' . $index : 'section-fb-button-' . $index;
+			$context  = 'header' === $builder_type ? 'hb' : 'fb';
 
 			$_prefix = 'button' . $index;
 

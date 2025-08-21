@@ -192,7 +192,3 @@ body.customize-partial-edit-shortcuts-shown .customize-partial-edit-shortcut but
     line-height: 1em;
 }
 
-/* Hide Scroll to Top button for non Astra theme customizer previews */
-body:not(.astra-theme) #ast-scroll-top {
-    display: none;
-}

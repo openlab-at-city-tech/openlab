@@ -219,8 +219,14 @@
 		.show-password-input {
 			position: absolute;
 			right: 0.7em;
-			top: 0.7em;
 			cursor: pointer;
+			top: 50%;
+			translate: 0 -50%;
+			padding: initial;
+			background: initial;
+			color: initial;
+			box-shadow: none;
+			border: none;
 		}
 
 		.show-password-input::after {

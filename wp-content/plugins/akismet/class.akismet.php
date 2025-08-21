@@ -496,8 +496,6 @@ class Akismet {
 		// as was checked by auto_check_comment
 		if ( is_object( $comment ) && ! empty( self::$last_comment ) && is_array( self::$last_comment ) ) {
 			if ( self::matches_last_comment_by_id( $id ) ) {
-				load_plugin_textdomain( 'akismet' );
-
 				// normal result: true or false
 				if ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'true' ) {
 					self::update_comment_history( $comment->comment_ID, '', 'check-spam' );
@@ -1113,8 +1111,6 @@ class Akismet {
 
 		$comment_errors = $wpdb->get_col( "SELECT comment_id FROM {$wpdb->commentmeta} WHERE meta_key = 'akismet_error'	LIMIT 100" );
 
-		load_plugin_textdomain( 'akismet' );
-
 		foreach ( (array) $comment_errors as $comment_id ) {
 			// if the comment no longer exists, or is too old, remove the meta entry from the queue to avoid getting stuck
 			$comment = get_comment( $comment_id );
@@ -1715,8 +1711,6 @@ p {
 			$$key = $val;
 		}
 
-		load_plugin_textdomain( 'akismet' );
-
 		$file = AKISMET__PLUGIN_DIR . 'views/' . basename( $name ) . '.php';
 
 		if ( file_exists( $file ) ) {
@@ -1731,8 +1725,6 @@ p {
 	 */
 	public static function plugin_activation() {
 		if ( version_compare( $GLOBALS['wp_version'], AKISMET__MINIMUM_WP_VERSION, '<' ) ) {
-			load_plugin_textdomain( 'akismet' );
-
 			$message = '<strong>' .
 				/* translators: 1: Current Akismet version number, 2: Minimum WordPress version number required. */
 				sprintf( esc_html__( 'Akismet %1$s requires WordPress %2$s or higher.', 'akismet' ), AKISMET_VERSION, AKISMET__MINIMUM_WP_VERSION ) . '</strong> ' .

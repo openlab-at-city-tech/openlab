@@ -178,8 +178,20 @@ if ( ! class_exists( 'wsScreenOptions12' ) ) :
 				die( '0' );
 			}
 
+			if ( ! current_user_can( 'edit_others_posts' ) ) {
+				wp_die(
+					json_encode(
+						array(
+							'error' => __( "You're not allowed to do that!", 'broken-link-checker' ),
+						)
+					),
+					403
+				);
+			}
+
 			//The 'action' argument is in the form "save_settings-panel_id"
-			$id = end( explode( '-', $_POST['action'], 2 ) );
+			$parts = explode( '-', $_POST['action'], 2 );
+			$id    = end( $parts );
 
 			//Basic security check.
 			check_ajax_referer( 'save_settings-' . $id, '_wpnonce-' . $id );

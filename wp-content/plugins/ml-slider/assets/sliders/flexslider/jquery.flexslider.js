@@ -30,7 +30,8 @@
         vertical = slider.vars.direction === "vertical",
         reverse = slider.vars.reverse,
         carousel = (slider.vars.itemWidth > 0),
-        fade = slider.vars.animation === "fade",
+        fade = slider.vars.animation !== "slide",
+        animation = slider.vars.animation,
         asNav = slider.vars.asNavFor !== "",
         methods = {};
 
@@ -157,7 +158,7 @@
         if (touch && slider.vars.touch) { methods.touch(); }
 
         // FADE&&SMOOTHHEIGHT || SLIDE:
-        if (!fade || (fade && slider.vars.smoothHeight)) { $(window).on("resize orientationchange focus", methods.resize); }
+        if (slider.vars.allowResize && (!fade || (fade && slider.vars.smoothHeight))) { $(window).on("resize orientationchange focus", methods.resize); }
 
         slider.find("img").attr("draggable", "false");
 
@@ -238,12 +239,12 @@
               slide = slider.slides.eq(i);
               if ( undefined === slide.attr( 'data-thumb-alt' ) ) { slide.attr( 'data-thumb-alt', '' ); }
               var altText = ( '' !== slide.attr( 'data-thumb-alt' ) ) ? altText = ' alt="' + slide.attr( 'data-thumb-alt' ) + '"' : '';
-              item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr( 'data-thumb' ) + '"' + altText + '/>' : '<a href="#">' + j + '</a>';
+              item = (slider.vars.controlNav === "thumbnails") ? '<img src="' + slide.attr( 'data-thumb' ) + '"' + altText + '/>' : '<a href="#" aria-label="Show slide ' + j + ' of ' + slider.pagingCount + '" role="tab">' + j + '</a>';
               if ( 'thumbnails' === slider.vars.controlNav && true === slider.vars.thumbCaptions ) {
                 var captn = slide.attr( 'data-thumbcaption' );
                 if ( '' !== captn && undefined !== captn ) { item += '<span class="' + namespace + 'caption">' + captn + '</span>'; }
               }
-              slider.controlNavScaffold.append('<li aria-label="Show slide ' + j + ' of ' + slider.pagingCount + '">' + item + '</li>');
+              slider.controlNavScaffold.append('<li role="presentation">' + item + '</li>');
               j++;
             }
           }
@@ -784,9 +785,69 @@
           // SLIDESHOW && !INFINITE LOOP:
           if (!slider.vars.animationLoop) { slider.pause(); }
         }
+        
+        if (animation === "zooming") {
+            
+            slider.slides.eq(slider.currentSlide).css({
+                "zIndex": 1,
+                "transition": "transform " + slider.vars.animationSpeed + "ms " + slider.vars.easing
+            }).animate(
+                {"opacity": 0}, 
+                {
+                    duration: slider.vars.animationSpeed,
+                    easing: slider.vars.easing,
+                    step: function(now) {
+                        let scale = 1 - (0.5 * now); // Shrinks from 1 to 0.5
+                        $(this).css("transform", `scale(${scale})`);
+                    },
+                    complete: function() {
+                        $(this).css({
+                            "transition": "",
+                        });
+                    }
+                }
+            );
+            
+            slider.slides.eq(target).css({"zIndex": 2, "opacity": 0, "transform": "scale(0.5)"}).animate(
+                {"opacity": 1}, 
+                {
+                    duration: slider.vars.animationSpeed,
+                    easing: slider.vars.easing,
+                    step: function(now) {
+                        let scale = 0.5 + (0.5 * now); // Grows from 0.5 to 1
+                        $(this).css("transform", `scale(${scale})`);
+                    },
+                    complete: slider.wrapup
+                }
+            );  
 
-        // SLIDE:
-        if (!fade) {
+        } else if (animation === "flip") {
+
+            slider.find('ul.slides').css({"perspective": "1000px"});
+
+            slider.slides.eq(slider.currentSlide).css({"zIndex": 1}).animate({"opacity": 0}, slider.vars.animationSpeed, slider.vars.easing);
+            
+            slider.slides.eq(target).css({
+                "zIndex": 2, 
+                "opacity": 0, 
+                "transform": "rotateX(180)",
+                "transformStyle": "preserve-3d", 
+                "backfaceVisibility": "hidden"
+            }).animate(
+                {"opacity": 1}, 
+                {
+                    duration: slider.vars.animationSpeed,
+                    easing: slider.vars.easing,
+                    step: function(now) {
+                        let deg = 180 - (180 * now); // Rotate from 180 to 0deg
+                        $(this).css("transform", `rotateX(${deg}deg)`);
+                    },
+                    complete: slider.wrapup
+                }
+            );
+
+        }  else if (!fade) { // SLIDE:
+
           var dimension = (vertical) ? slider.slides.filter(':first').height() : slider.computedW,
               margin, slideString, calcNext;
 
@@ -1048,7 +1109,7 @@
           maxItems = slider.vars.maxItems;
 
       slider.w = (slider.viewport===undefined) ? slider.width() : slider.viewport.width();
-      if (slider.isFirefox) { slider.w = slider.width(); }
+      if (slider.isFirefox || slider.vars.useContainerWidth) { slider.w = slider.width(); }
       slider.h = slide.height();
       slider.boxPadding = slide.outerWidth() - slide.width();
 
@@ -1230,6 +1291,10 @@
 
     // Browser Specific
     isFirefox: false,             // {NEW} Boolean: Set to true when Firefox is the browser used.
+
+    // Custom MetaSlider specific
+    allowResize: true,            // {NEW} Boolean: Whether or not to allow slider.resize on resize event
+    useContainerWidth: false,      // {NEW} Boolean: Force to use slider.width() in doMath
 
     // Callback API
     start: function(){},            //Callback: function(slider) - Fires when the slider loads the first slide

@@ -117,7 +117,7 @@ class WPCF7_Submission {
 
 					if ( '' === $this->get_response() ) {
 						$this->set_response( $contact_form->filter_message(
-							__( "Sending mail has been aborted.", 'contact-form-7' ) )
+							__( 'Sending mail has been aborted.', 'contact-form-7' ) )
 						);
 					}
 				} elseif ( $this->mail() ) {
@@ -292,11 +292,15 @@ class WPCF7_Submission {
 		$this->meta = array(
 			'timestamp' => time(),
 			'remote_ip' => $this->get_remote_ip_addr(),
-			'remote_port' => $_SERVER['REMOTE_PORT'] ?? '',
-			'user_agent' => substr( $_SERVER['HTTP_USER_AGENT'] ?? '', 0, 254 ),
+			'remote_port' => wpcf7_superglobal_server( 'REMOTE_PORT' ),
+			'user_agent' => wpcf7_superglobal_server( 'HTTP_USER_AGENT' ),
 			'url' => $this->get_request_url(),
-			'unit_tag' => wpcf7_sanitize_unit_tag( $_POST['_wpcf7_unit_tag'] ?? '' ),
-			'container_post_id' => absint( $_POST['_wpcf7_container_post'] ?? 0 ),
+			'unit_tag' => wpcf7_sanitize_unit_tag(
+				wpcf7_superglobal_post( '_wpcf7_unit_tag' )
+			),
+			'container_post_id' => absint(
+				wpcf7_superglobal_post( '_wpcf7_container_post' )
+			),
 			'current_user_id' => get_current_user_id(),
 			'do_not_store' => $this->contact_form->is_true( 'do_not_store' ),
 		);
@@ -411,15 +415,13 @@ class WPCF7_Submission {
 	 * Sanitizes user input data.
 	 */
 	private function sanitize_posted_data( $value ) {
-		if ( is_array( $value ) ) {
-			$value = array_map( array( $this, 'sanitize_posted_data' ), $value );
-		} elseif ( is_string( $value ) ) {
-			$value = wp_check_invalid_utf8( $value );
-			$value = wp_kses_no_null( $value );
-			$value = wpcf7_strip_whitespaces( $value );
-		}
-
-		return $value;
+		return map_deep( $value, static function ( $val ) {
+			$val = (string) $val;
+			$val = wp_check_invalid_utf8( $val );
+			$val = wp_kses_no_null( $val );
+			$val = wpcf7_strip_whitespaces( $val );
+			return $val;
+		} );
 	}
 
 
@@ -484,8 +486,8 @@ class WPCF7_Submission {
 	 *                  false if $hash is invalid.
 	 */
 	public function verify_posted_data_hash( $hash = '' ) {
-		if ( '' === $hash and ! empty( $_POST['_wpcf7_posted_data_hash'] ) ) {
-			$hash = trim( $_POST['_wpcf7_posted_data_hash'] );
+		if ( '' === $hash ) {
+			$hash = wpcf7_superglobal_post( '_wpcf7_posted_data_hash' );
 		}
 
 		if ( '' === $hash ) {
@@ -516,11 +518,10 @@ class WPCF7_Submission {
 	 * Retrieves the remote IP address of this submission.
 	 */
 	private function get_remote_ip_addr() {
-		$ip_addr = '';
+		$ip_addr = wpcf7_superglobal_server( 'REMOTE_ADDR' );
 
-		if ( isset( $_SERVER['REMOTE_ADDR'] )
-		and WP_Http::is_ip_address( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ip_addr = $_SERVER['REMOTE_ADDR'];
+		if ( ! WP_Http::is_ip_address( $ip_addr ) ) {
+			$ip_addr = '';
 		}
 
 		return apply_filters( 'wpcf7_remote_ip_addr', $ip_addr );
@@ -534,7 +535,7 @@ class WPCF7_Submission {
 		$home_url = untrailingslashit( home_url() );
 
 		if ( self::is_restful() ) {
-			$referer = trim( $_SERVER['HTTP_REFERER'] ?? '' );
+			$referer = wpcf7_superglobal_server( 'HTTP_REFERER' );
 
 			if ( $referer and str_starts_with( $referer, $home_url ) ) {
 				return sanitize_url( $referer );
@@ -633,8 +634,10 @@ class WPCF7_Submission {
 			return $spam;
 		}
 
-		if ( $this->contact_form->is_true( 'subscribers_only' )
-		and current_user_can( 'wpcf7_submit', $this->contact_form->id() ) ) {
+		if (
+			$this->contact_form->is_true( 'subscribers_only' ) and
+			current_user_can( 'wpcf7_submit', $this->contact_form->id() )
+		) {
 			return $spam;
 		}
 
@@ -645,7 +648,7 @@ class WPCF7_Submission {
 
 			$this->add_spam_log( array(
 				'agent' => 'wpcf7',
-				'reason' => __( "User-Agent string is unnaturally short.", 'contact-form-7' ),
+				'reason' => __( 'User-Agent string is unnaturally short.', 'contact-form-7' ),
 			) );
 		}
 
@@ -654,7 +657,7 @@ class WPCF7_Submission {
 
 			$this->add_spam_log( array(
 				'agent' => 'wpcf7',
-				'reason' => __( "Submitted nonce is invalid.", 'contact-form-7' ),
+				'reason' => __( 'Submitted nonce is invalid.', 'contact-form-7' ),
 			) );
 		}
 
@@ -695,7 +698,7 @@ class WPCF7_Submission {
 			return true;
 		}
 
-		$nonce = $_POST['_wpnonce'] ?? '';
+		$nonce = wpcf7_superglobal_post( '_wpnonce' );
 
 		return wpcf7_verify_nonce( $nonce );
 	}
@@ -736,8 +739,10 @@ class WPCF7_Submission {
 		if ( $result ) {
 			$additional_mail = array();
 
-			if ( $mail_2 = $contact_form->prop( 'mail_2' )
-			and $mail_2['active'] ) {
+			if (
+				$mail_2 = $contact_form->prop( 'mail_2' ) and
+				$mail_2['active']
+			) {
 				$additional_mail['mail_2'] = $mail_2;
 			}
 
@@ -782,7 +787,7 @@ class WPCF7_Submission {
 		foreach ( $paths as $path ) {
 			if ( @is_file( $path ) and @is_readable( $path ) ) {
 				$uploaded_files[] = $path;
-				$hash_strings[] = md5_file( $path );
+				$hash_strings[] = hash_file( 'sha256', $path );
 			}
 		}
 
@@ -798,18 +803,14 @@ class WPCF7_Submission {
 	 * Removes uploaded files.
 	 */
 	private function remove_uploaded_files() {
-		foreach ( (array) $this->uploaded_files as $file_path ) {
-			$paths = (array) $file_path;
+		$filesystem = WPCF7_Filesystem::get_instance();
 
-			foreach ( $paths as $path ) {
+		foreach ( (array) $this->uploaded_files as $file_path ) {
+			foreach ( (array) $file_path as $path ) {
 				wpcf7_rmdir_p( $path );
 
-				if ( $dir = dirname( $path )
-				and false !== ( $files = scandir( $dir ) )
-				and ! array_diff( $files, array( '.', '..' ) ) ) {
-					// remove parent dir if it's empty.
-					rmdir( $dir );
-				}
+				// Remove parent dir if empty.
+				$filesystem->delete( dirname( $path ), false );
 			}
 		}
 	}

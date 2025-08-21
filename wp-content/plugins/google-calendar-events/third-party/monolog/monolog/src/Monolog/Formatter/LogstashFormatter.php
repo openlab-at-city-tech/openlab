@@ -18,7 +18,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
  * @see https://github.com/elastic/logstash/blob/master/logstash-core/src/main/java/org/logstash/Event.java
  *
  * @author Tim Mower <timothy.mower@gmail.com>
- * @internal
  */
 class LogstashFormatter extends NormalizerFormatter
 {
@@ -47,8 +46,8 @@ class LogstashFormatter extends NormalizerFormatter
     public function __construct(string $applicationName, ?string $systemName = null, string $extraKey = 'extra', string $contextKey = 'context')
     {
         // logstash requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
-        $this->systemName = $systemName === null ? (string) \gethostname() : $systemName;
+        parent::__construct('Y-m-d\TH:i:s.uP');
+        $this->systemName = $systemName === null ? (string) gethostname() : $systemName;
         $this->applicationName = $applicationName;
         $this->extraKey = $extraKey;
         $this->contextKey = $contextKey;
@@ -56,11 +55,11 @@ class LogstashFormatter extends NormalizerFormatter
     /**
      * {@inheritDoc}
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         $record = parent::format($record);
         if (empty($record['datetime'])) {
-            $record['datetime'] = \gmdate('c');
+            $record['datetime'] = gmdate('c');
         }
         $message = ['@timestamp' => $record['datetime'], '@version' => 1, 'host' => $this->systemName];
         if (isset($record['message'])) {

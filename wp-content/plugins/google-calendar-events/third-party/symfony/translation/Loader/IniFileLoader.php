@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
  * IniFileLoader loads translations from an ini file.
  *
  * @author stealth35
- * @internal
  */
 class IniFileLoader extends FileLoader
 {
@@ -23,6 +22,6 @@ class IniFileLoader extends FileLoader
      */
     protected function loadResource(string $resource)
     {
-        return \parse_ini_file($resource, \true);
+        return parse_ini_file($resource, \true);
     }
 }

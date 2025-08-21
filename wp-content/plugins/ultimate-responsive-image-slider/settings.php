@@ -165,15 +165,10 @@ else
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function(){
-	var editor = CodeMirror.fromTextArea(document.getElementById("wl-l3-custom-css"), {
-		lineWrapping: true,
-		lineNumbers: true,
-		styleActiveLine: true,
-		matchBrackets: true,
-		hint:true,
-		theme : 'blackboard',
-		extraKeys: {"Ctrl-Space": "autocomplete"},
-	});
+	// Initialize CodeMirror on the textarea
+	var editorSettings = codemirror_settings.codeEditor || {};
+	wp.codeEditor.initialize(jQuery('#wl-l3-custom-css'), editorSettings);
+    
 	jQuery(window).scroll(function(){
 		if (jQuery(this).scrollTop() < 200) {
 			jQuery('#smoothup') .fadeOut();

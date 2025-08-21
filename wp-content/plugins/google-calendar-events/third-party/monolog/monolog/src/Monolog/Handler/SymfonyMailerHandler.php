@@ -24,7 +24,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Mime\Email;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 class SymfonyMailerHandler extends MailHandler
 {
@@ -47,7 +46,7 @@ class SymfonyMailerHandler extends MailHandler
     /**
      * {@inheritDoc}
      */
-    protected function send(string $content, array $records) : void
+    protected function send(string $content, array $records): void
     {
         $this->mailer->send($this->buildMessage($content, $records));
     }
@@ -56,7 +55,7 @@ class SymfonyMailerHandler extends MailHandler
      *
      * @param string|null $format The format of the subject
      */
-    protected function getSubjectFormatter(?string $format) : FormatterInterface
+    protected function getSubjectFormatter(?string $format): FormatterInterface
     {
         return new LineFormatter($format);
     }
@@ -68,16 +67,16 @@ class SymfonyMailerHandler extends MailHandler
      *
      * @phpstan-param Record[] $records
      */
-    protected function buildMessage(string $content, array $records) : Email
+    protected function buildMessage(string $content, array $records): Email
     {
         $message = null;
         if ($this->emailTemplate instanceof Email) {
             $message = clone $this->emailTemplate;
-        } elseif (\is_callable($this->emailTemplate)) {
+        } elseif (is_callable($this->emailTemplate)) {
             $message = ($this->emailTemplate)($content, $records);
         }
         if (!$message instanceof Email) {
-            $record = \reset($records);
+            $record = reset($records);
             throw new \InvalidArgumentException('Could not resolve message as instance of Email or a callable returning it' . ($record ? Utils::getRecordMessageForException($record) : ''));
         }
         if ($records) {
@@ -85,17 +84,15 @@ class SymfonyMailerHandler extends MailHandler
             $message->subject($subjectFormatter->format($this->getHighestRecord($records)));
         }
         if ($this->isHtmlBody($content)) {
-            if (null !== ($charset = $message->getHtmlCharset())) {
+            if (null !== $charset = $message->getHtmlCharset()) {
                 $message->html($content, $charset);
             } else {
                 $message->html($content);
             }
+        } else if (null !== $charset = $message->getTextCharset()) {
+            $message->text($content, $charset);
         } else {
-            if (null !== ($charset = $message->getTextCharset())) {
-                $message->text($content, $charset);
-            } else {
-                $message->text($content);
-            }
+            $message->text($content);
         }
         return $message->date(new \DateTimeImmutable());
     }

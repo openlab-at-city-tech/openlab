@@ -127,6 +127,13 @@ class MeowApps_WPMC_Parser_Common {
 			}
 		}
 
+		// Check all the shortcodes attributes
+		$shortcodes = array();
+		$shortcodes = $wpmc->get_all_shortcodes_attributes( $html, [ "id", "ids" ],  [ "url", "link" ] );
+		
+		$posts_images_ids  = array_merge( $posts_images_ids, $shortcodes['ids'] );
+		$posts_images_urls = array_merge( $posts_images_urls, $shortcodes['urls'] );
+
 		$wpmc->add_reference_id( $posts_images_ids, "CONTENT (ID)", $id );
 		$wpmc->add_reference_url( $posts_images_urls, "CONTENT (URL)", $id );
 		$wpmc->add_reference_url( $galleries_images, "GALLERY (URL)", $id );

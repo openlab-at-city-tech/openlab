@@ -4,7 +4,6 @@ namespace SimpleCalendar\plugin_deps\Psr\Log;
 
 /**
  * Basic Implementation of LoggerAwareInterface.
- * @internal
  */
 trait LoggerAwareTrait
 {

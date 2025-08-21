@@ -35,9 +35,14 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/icon-box-4/';
     }
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 
     protected function register_controls() {
 
@@ -59,8 +64,12 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 ],
                 'default'   => 'disable',
                 'prefix_class'  => 'ekit-equal-height-',
+				// TODO: Remove this line `{{WRAPPER}}.ekit-equal-height-enable > div` condition after the `Optimized Markup` feature is stable
                 'selectors' => [
-					'{{WRAPPER}}.ekit-equal-height-enable, {{WRAPPER}}.ekit-equal-height-enable .elementor-widget-container, {{WRAPPER}}.ekit-equal-height-enable .ekit-wid-con, {{WRAPPER}}.ekit-equal-height-enable .ekit-wid-con .elementskit-infobox' => 'height: 100%;',
+					'{{WRAPPER}}.ekit-equal-height-enable,
+					{{WRAPPER}}.ekit-equal-height-enable > div,
+					{{WRAPPER}}.ekit-equal-height-enable .ekit-wid-con,
+					{{WRAPPER}}.ekit-equal-height-enable .ekit-wid-con .elementskit-infobox' => 'height: 100%;',
                 ],
             ]
         );
@@ -902,8 +911,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => '#000000',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-infobox .icon-hover i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-infobox .icon-hover > svg path'   => 'stroke: {{VALUE}}; fill: {{VALUE}};'
+                    '{{WRAPPER}} .elementskit-infobox .icon-hover' => 'color: {{VALUE}};fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'ekit_icon_box_enable_water_mark' => 'yes',
@@ -968,8 +976,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => '#656565',
                 'selectors' => [
-                    '{{WRAPPER}} .elementkit-infobox-icon' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-info-box-icon > svg path' => 'fill: {{VALUE}}; stroke: {{VALUE}};'
+                    '{{WRAPPER}} .elementskit-info-box-icon' => 'color: {{VALUE}};fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'ekit_icon_box_enable_header_icon' => 'icon'
@@ -1015,7 +1022,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
             Group_Control_Box_Shadow::get_type(),
             [
                 'name' => 'ekit_icon_icon_box_shadow_normal_group',
-                'selector' => '{{WRAPPER}} .elementskit-infobox .elementskit-info-box-icon',
+                'selector' => '{{WRAPPER}} .elementskit-info-box-icon',
             ]
         );
         $this->end_controls_tab();
@@ -1034,8 +1041,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-infobox:hover .elementskit-info-box-icon i' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-infobox:hover .elementskit-info-box-icon svg path' => 'fill: {{VALUE}}; stroke: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-infobox:hover .elementskit-info-box-icon' => 'color: {{VALUE}};fill: {{VALUE}};',
                 ],
                 'condition' => [
                     'ekit_icon_box_enable_header_icon' => 'icon'
@@ -1108,11 +1114,11 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                     'unit' => 'px',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-infobox .elementskit-info-box-icon :is(i, svg)' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-infobox .elementskit-info-box-icon' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
                 'separator' => 'before',
                 'condition' => [
-                        'ekit_icon_box_enable_header_icon' => 'icon'
+					'ekit_icon_box_enable_header_icon' => 'icon'
                 ]
             ]
         );
@@ -1327,6 +1333,47 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 ],
             )
         );
+
+        $this->add_control(
+            'ekit_icon_box_btn_icon_right_space',
+            [
+                'label' => esc_html__( 'Icon Space', 'elementskit-lite' ),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'size' => 5,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-btn i' => 'margin-left: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-btn svg' => 'margin-left: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'ekit_icon_box_icons__switch'   => 'yes',
+                    'ekit_icon_box_icon_align'      => 'right',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'ekit_icon_box_btn_icon_left_space',
+            [
+                'label' => esc_html__( 'Icon Space', 'elementskit-lite' ),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'size' => 5,
+                    'unit' => 'px',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementskit-btn i' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-btn svg' => 'margin-right: {{SIZE}}{{UNIT}};',
+                ],
+                'condition' => [
+                    'ekit_icon_box_icons__switch'   => 'yes',
+                    'ekit_icon_box_icon_align'      => 'left',
+                ],
+            ]
+        );
+        
         $this->start_controls_tabs( 'tabs_button_style' );
 
         $this->start_controls_tab(
@@ -1343,8 +1390,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-btn' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-btn svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                    '{{WRAPPER}} .elementskit-btn' => 'color: {{VALUE}};fill: {{VALUE}};',
                 ],
             ]
         );
@@ -1408,7 +1454,6 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .elementskit-infobox:hover .elementskit-btn' => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .elementskit-infobox:hover .elementskit-btn svg path' => 'stroke: {{VALUE}}; fill: {{VALUE}};',
                 ],
             ]
         );
@@ -1762,7 +1807,6 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
 		$ekit_icon_box_title_size_esc = \ElementsKit_Lite\Utils::esc_options( $settings['ekit_icon_box_title_size'], $options_ekit_icon_box_title_size, 'h3');
 
         // Icon
-
         $image = '';
         if ( ! empty( $settings['ekit_icon_box_show_image']['url'] ) && $settings['ekit_icon_box_show_image_overlay'] == 'yes') {
             $this->add_render_attribute( 'image', 'src', $settings['ekit_icon_box_show_image']['url'] );
@@ -1773,15 +1817,24 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
 
             $image = '<figure class="image-hover">' . $image_html . '</figure>';
         }
+
         // Button
         $btn_text = $settings['ekit_icon_box_btn_text'];
         $btn_url = (! empty( $settings['ekit_icon_box_btn_url']['url'])) ? $settings['ekit_icon_box_btn_url']['url'] : '';
 
-		// Get Link  attributes
+		// Set Link  attributes
 		if ( ! empty( $settings['ekit_icon_box_global_link']['url'] ) ) {
 			$this->add_link_attributes( 'ekit_icon_box_global_link', $settings['ekit_icon_box_global_link'] );
 		}
 
+		// Set attributes for read more button
+		if ( $settings['ekit_icon_box_enable_btn'] == 'yes' && ! empty( $btn_url ) ) {
+			$this->add_render_attribute( 'ekit_icon_readme_btn', 'class', 'elementskit-btn whitespace--normal' );
+			if(!empty($settings['ekit_icon_box_button_hover_animation'])) {
+				$this->add_render_attribute( 'ekit_icon_readme_btn', 'class', 'elementor-animation-'.esc_attr($settings['ekit_icon_box_button_hover_animation']) );
+			}
+			$this->add_link_attributes( 'ekit_icon_readme_btn', $settings['ekit_icon_box_btn_url'] );
+		}
         ?>
         <!-- link opening -->
         <?php if($settings['ekit_icon_box_show_global_link'] == 'yes' && $settings['ekit_icon_box_enable_btn'] != 'yes' && (!empty( $settings['ekit_icon_box_global_link']['url']))) : ?>
@@ -1831,7 +1884,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                 </<?php echo esc_attr($ekit_icon_box_title_size_esc); ?>>
             <?php } ?>
             <?php if($settings['ekit_icon_box_description_text'] != ''): ?>
-		  <p><?php echo wp_kses($settings['ekit_icon_box_description_text'], \ElementsKit_Lite\Utils::get_kses_array()); ?></p>
+		  	<p><?php echo wp_kses($settings['ekit_icon_box_description_text'], \ElementsKit_Lite\Utils::get_kses_array()); ?></p>
             <?php endif; ?>
             <?php if($settings['ekit_icon_box_enable_btn'] == 'yes') :  ?>
                 <div class="box-footer <?php if($settings['ekit_icon_box_enable_hover_btn']== 'yes'){echo esc_attr("enable_hover_btn");} else {echo esc_attr("disable_hover_button");}?>">
@@ -1839,49 +1892,19 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                         <?php
                             switch ($settings['ekit_icon_box_icon_align']) {
                                 case 'right': ?>
-                                    <a href="<?php echo esc_url( $btn_url ); ?>"  target="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['is_external'] ? '_blank' : '_self');?>" rel="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['nofollow'] ? 'nofollow' : '');?>" class="elementskit-btn whitespace--normal <?php echo isset($settings['ekit_icon_box_button_hover_animation']) ? 'elementor-animation-'.esc_attr($settings['ekit_icon_box_button_hover_animation']) : ''; ?>">
+                                    <a <?php $this->print_render_attribute_string('ekit_icon_readme_btn'); ?>>
                                         <?php echo esc_html( $btn_text ); ?>
-
-                                        <?php
-                                            // new icon
-                                            $migrated = isset( $settings['__fa4_migrated']['ekit_icon_box_icons'] );
-                                            // Check if its a new widget without previously selected icon using the old Icon control
-                                            $is_new = empty( $settings['ekit_icon_box_icon'] );
-                                            if ( $is_new || $migrated ) {
-
-                                                // new icon
-                                                Icons_Manager::render_icon( $settings['ekit_icon_box_icons'], [ 'aria-hidden' => 'true' ] );
-                                            } else {
-                                                ?>
-                                                <i class="<?php echo esc_attr($settings['ekit_icon_box_icon']); ?>" aria-hidden="true"></i>
-                                                <?php
-                                            }
-                                        ?>
-
+                                        <?php Icons_Manager::render_icon( $settings['ekit_icon_box_icons'], [ 'aria-hidden' => 'true' ] ); ?>
                                     </a>
                                     <?php break;
                                 case 'left': ?>
-                                    <a href="<?php echo esc_url( $btn_url ); ?>" target="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['is_external'] ? '_blank' : '_self');?>" rel="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['nofollow'] ? 'nofollow' : '');?>" class="elementskit-btn whitespace--normal <?php echo isset($settings['ekit_icon_box_button_hover_animation']) ? 'elementor-animation-'.esc_attr($settings['ekit_icon_box_button_hover_animation']) : ''; ?>">
-                                        <?php
-                                            // new icon
-                                            $migrated = isset( $settings['__fa4_migrated']['ekit_icon_box_icons'] );
-                                            // Check if its a new widget without previously selected icon using the old Icon control
-                                            $is_new = empty( $settings['ekit_icon_box_icon'] );
-                                            if ( $is_new || $migrated ) {
-
-                                                // new icon
-                                                Icons_Manager::render_icon( $settings['ekit_icon_box_icons'], [ 'aria-hidden' => 'true' ] );
-                                            } else {
-                                                ?>
-                                                <i class="<?php echo esc_attr($settings['ekit_icon_box_icon']); ?>" aria-hidden="true"></i>
-                                                <?php
-                                            }
-                                        ?>
+                                    <a <?php $this->print_render_attribute_string('ekit_icon_readme_btn'); ?>>
+                                        <?php Icons_Manager::render_icon( $settings['ekit_icon_box_icons'], [ 'aria-hidden' => 'true' ] ); ?>
                                         <?php echo esc_html( $btn_text ); ?>
                                     </a>
                                     <?php break;
                                 default: ?>
-                                    <a href="<?php echo esc_url( $btn_url ); ?>" target="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['is_external'] ? '_blank' : '_self');?>" rel="<?php echo esc_attr($settings['ekit_icon_box_btn_url']['nofollow'] ? 'nofollow' : '');?>" class="elementskit-btn whitespace--normal <?php echo isset($settings['ekit_icon_box_button_hover_animation']) ? 'elementor-animation-'.esc_attr($settings['ekit_icon_box_button_hover_animation']) : ''; ?>">
+                                    <a <?php $this->print_render_attribute_string('ekit_icon_readme_btn'); ?>>
                                         <?php echo esc_html( $btn_text ); ?>
                                     </a>
                                     <?php break;

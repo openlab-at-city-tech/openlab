@@ -26,15 +26,6 @@
 			&:not(.flex-control-thumbs) {
 				background: transparent;
 				bottom: 30px;
-				-webkit-box-pack: center;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-ms-flex-pack: center;
-				-ms-flex-wrap: wrap;
-				flex-wrap: wrap;
-				justify-content: center;
-				justify-content: center;
 				line-height: 15px;
 				margin: 0;
 				padding: 0 !important;
@@ -45,7 +36,7 @@
 				li {
 					a {
 						background: rgba(255,255,255,.8);
-						border: 0;
+						border: 2px solid rgba(255,255,255,0);
 						border-radius: 0;
 						-webkit-box-shadow: none !important;
 						box-shadow: none !important;
@@ -56,10 +47,11 @@
 						margin: 2px 10px 2px 0;
 						max-width: 130px;
 						padding: 0;
-						text-indent: -9999px;
+						text-indent: 9999px;
 						-webkit-transition: background .2s ease-in-out;
 						transition: background .2s ease-in-out;
 						width: 130px;
+						overflow: hidden;
 						&:hover {
 							background: rgba(0,0,0,.1);
 							border: 2px solid rgba(255,255,255,.8);
@@ -93,10 +85,14 @@
 			ul.flex-direction-nav {
 				position: absolute;
 				right: 20px;
-				top: 20px;
+				top: 0;
 				-webkit-transition: top .2s;
 				transition: top .2s;
 				width: 130px;
+				
+				a {
+					top: 20px;
+				}
 			}
 		}
 		ul.flex-direction-nav {
@@ -124,9 +120,9 @@
                         mask-position: center center;
                         content: '' !important;
 						display: block;
-						height: 26px;
+						height: 100%;
 						position: absolute;
-						width: 40px;
+						width: 100%;
 					}
 				}
 				a.flex-next {

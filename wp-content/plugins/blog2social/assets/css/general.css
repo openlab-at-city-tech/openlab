@@ -7119,6 +7119,11 @@ h4{
 .padding-left-20{
     padding-left: 20px;
 }
+
+.b2s-padding-left-10{
+    padding-left:10px;
+}
+
 .margin-right-15{
     margin-right: 15px;
 }
@@ -7299,6 +7304,10 @@ input[type="checkbox"].error + label{
 }
 .b2s-padding-top-8{
     padding-top:8px;
+}
+
+.b2s-padding-0{
+    padding:0px !important;
 }
 
 .btn-label-premium {
@@ -7678,6 +7687,10 @@ CSS CheckBOX
     margin-bottom: 0px !important;
 }
 
+.b2s-margin-0{
+    margin: 0px !important;
+}
+
 .b2s-sort-pagination-area {
     display: none;
 }
@@ -7944,6 +7957,15 @@ CSS CheckBOX
     color: #fff;
 }
 
+.btn-band{
+    background-color: #21c531 !important;
+    border-color: #21c531 !important;
+    color: #fff !important;
+}
+
+.btn-band:hover {
+    color: #fff;
+}
 .btn-bluesky {
     background-color: #1185fe !important;
     border-color: #1185fe !important;

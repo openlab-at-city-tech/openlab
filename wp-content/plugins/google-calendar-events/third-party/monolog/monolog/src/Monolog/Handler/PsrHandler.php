@@ -22,7 +22,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  * log record's message.
  *
  * @author Michael Moussa <michael.moussa@gmail.com>
- * @internal
  */
 class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
 {
@@ -47,16 +46,16 @@ class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if (!$this->isHandling($record)) {
             return \false;
         }
         if ($this->formatter) {
             $formatted = $this->formatter->format($record);
-            $this->logger->log(\strtolower($record['level_name']), (string) $formatted, $record['context']);
+            $this->logger->log(strtolower($record['level_name']), (string) $formatted, $record['context']);
         } else {
-            $this->logger->log(\strtolower($record['level_name']), $record['message'], $record['context']);
+            $this->logger->log(strtolower($record['level_name']), $record['message'], $record['context']);
         }
         return \false === $this->bubble;
     }
@@ -65,7 +64,7 @@ class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
      *
      * @param FormatterInterface $formatter
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $this->formatter = $formatter;
         return $this;
@@ -75,7 +74,7 @@ class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
      *
      * @return FormatterInterface
      */
-    public function getFormatter() : FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         if (!$this->formatter) {
             throw new \LogicException('No formatter has been set and this handler does not have a default formatter');

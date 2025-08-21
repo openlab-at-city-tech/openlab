@@ -27,7 +27,7 @@ $networkData = $networkItem->getData();
             $onboardingPaused = 0;
         }
         ?>
-        <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+        <input type="hidden" id="b2s-toastee-paused" value='<?php echo esc_attr($onboardingPaused, "blog2social") ?>'>
 
         <div id="b2s-onboarding-toastee">
             <div id="b2s-onboarding-toastee-inner">
@@ -456,6 +456,15 @@ $networkData = $networkItem->getData();
                 <div class="b2sInfoFormatText" data-network-id="12">
                     <?php esc_html_e('Decide in wich form you want to post your Content. Either as image with frame, or as image cut out.', 'blog2social') ?>
                 </div>
+                <div class="b2sInfoFormatText" data-network-id="43">
+                    <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                </div>
+                <div class="b2sInfoFormatText" data-network-id="44">
+                    <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                </div>
+                <div class="b2sInfoFormatText" data-network-id="45">
+                    <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                </div>
             </div>
         </div>
     </div>
@@ -610,7 +619,7 @@ $networkData = $networkItem->getData();
                             </div>
                             <div class="row b2s-connection-owner" style="display: none;">
                                 <div class="col-sm-12">
-                                    <div class="alert alert-info"><span class="glyphicon glyphicon-warning-sign glyphicon-info"></span> <?php esc_html_e('This connection was assigned by') ?> </span><span id="b2s-connection-owner-name"></span></div>
+                                    <div class="alert alert-info"><span class="glyphicon glyphicon-warning-sign glyphicon-info"></span> <?php esc_html_e('This connection was assigned by', 'blog2social') ?> </span><span id="b2s-connection-owner-name"></span></div>
                                 </div>
                             </div>
                         </div>
@@ -621,7 +630,16 @@ $networkData = $networkItem->getData();
                         </div>
                         <div class="row b2s-btn-disabled">
                             <div class="col-md-12 b2s-text-bold"><h4><?php esc_html_e('URL Parameters', 'blog2social') ?></h4></div>
-                            <div class="col-md-12 b2s-text-bold"><span><?php echo sprintf(__('Define parameters that will be added to link posts on this network e.g. to create tracking links with UTM paramters. <a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('url_parameter'))) ?></span></div>
+                            <div class="col-md-12 b2s-text-bold"><span><?php echo wp_kses(sprintf(
+                                // translators: %s is a link
+                                __('Define parameters that will be added to link posts on this network e.g. to create tracking links with UTM paramters. <a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('url_parameter'))),
+                                array(
+                                    'a' => array(
+                                        'href' => array(),
+                                        'target' => array()
+                                    )
+                                ));
+                            ?></span></div>
                             <div class="col-md-12 del-padding-left b2s-url-parameter-content"></div>
                         </div>
                         <hr>
@@ -673,7 +691,17 @@ $networkData = $networkItem->getData();
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo sprintf(__('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                        ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                     </div>
                 </div>
@@ -690,7 +718,17 @@ $networkData = $networkItem->getData();
                 <h4 class="modal-title"><?php esc_html_e('Add APP', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-                <?php echo sprintf(__('To comply with <a href="%s" target="_blank">Pinterest\'s policies and API guidelines</a>, Pinterest integration is exclusively available in our premium versions. Now available in Smart, Pro and Business licenses.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_app_tos_spam'))); ?>
+                <?php echo wp_kses(sprintf(
+                    // translators: %s is a link
+                    __('To comply with <a href="%s" target="_blank">Pinterest\'s policies and API guidelines</a>, Pinterest integration is exclusively available in our premium versions. Now available in Smart, Pro and Business licenses.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_app_tos_spam'))),
+                    array(
+                        'a' => array(
+                            'href' => array(),
+                            'target' => array()
+                            )
+                        )
+                    );
+                ?>
             </div>
             <div class="modal-footer">
                 <a class="btn btn-default pull-left" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pinterest_faq')); ?>"><?php esc_html_e('How to connect Pinterest with Blog2Social', 'blog2social'); ?></a>
@@ -713,7 +751,17 @@ $networkData = $networkItem->getData();
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo sprintf(__('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                        ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                     </div>
                 </div>
@@ -732,7 +780,17 @@ $networkData = $networkItem->getData();
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo sprintf(__('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                        ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                     </div>
                 </div>
@@ -760,7 +818,17 @@ $networkData = $networkItem->getData();
                         <?php esc_html_e('3. Blog2Social has the permission to publish your posts.', 'blog2social') ?>
                         <br>
                         <br>
-                        <?php echo sprintf(__('You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                        ?>
                         <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                     </div>
                 </div>
@@ -808,7 +876,17 @@ $networkData = $networkItem->getData();
                         <?php esc_html_e('For example: If you purchase 5 Facebook groups, these additional 5 Facebook groups are available for all users. So, when 5 users are activated for the Pro or Business license, each user can connect 1 additional Facebook group, or one user can connect 5 additional Facebook groups.', 'blog2social'); ?>
                         <br>
                         <br>
-                        <?php echo sprintf(__('<a href="%s" target="_blank">Get more information on how to add more sites or groups.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_addon_faq'))); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('<a href="%s" target="_blank">Get more information on how to add more sites or groups.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_addon_faq'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                        ?>
                     </div>
                 </div>
             </div>

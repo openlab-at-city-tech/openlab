@@ -144,7 +144,7 @@ switch ( $astra_header_component_slug ) {
 					'data-section' => 'sidebar-widgets-header-widget-1',
 					'aria-label'   => 'Header Widget 1',
 				)
-			) 
+			)
 		);
 		?>
 		>
@@ -173,7 +173,7 @@ switch ( $astra_header_component_slug ) {
 					'data-section' => 'sidebar-widgets-header-widget-2',
 					'aria-label'   => 'Header Widget 2',
 				)
-			) 
+			)
 		);
 		?>
 		>

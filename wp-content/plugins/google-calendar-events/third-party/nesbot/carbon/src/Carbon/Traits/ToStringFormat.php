@@ -15,7 +15,6 @@ use Closure;
  * Trait ToStringFormat.
  *
  * Handle global format customization for string cast of the object.
- * @internal
  */
 trait ToStringFormat
 {

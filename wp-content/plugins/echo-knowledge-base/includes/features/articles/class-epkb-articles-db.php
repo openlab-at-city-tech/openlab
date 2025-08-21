@@ -19,7 +19,7 @@ class EPKB_Articles_DB {
 	 *
 	 * @return array of matching articles or empty array
 	 */
-	function get_articles_by_sub_or_category( $kb_id, $sub_or_category_id, $order_by='date', $nof_articles=500, $include_children=false, $all_articles=true ) {
+	public function get_articles_by_sub_or_category( $kb_id, $sub_or_category_id, $order_by='date', $nof_articles=500, $include_children=false, $all_articles=true ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 		
@@ -28,12 +28,16 @@ class EPKB_Articles_DB {
 			return array();
 		}
 
-		if ( ! EPKB_Utilities::is_positive_int($sub_or_category_id) ) {
+		if ( ! EPKB_Utilities::is_positive_int( $sub_or_category_id ) ) {
 			EPKB_Logging::add_log( 'Invalid category id', $sub_or_category_id );
 			return array();
 		}
 
 		$order = $order_by == 'title' ? 'ASC' : 'DESC';
+
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+
+		$nof_articles = ! is_wp_error( $kb_config ) && $kb_config['archive_content_articles_nof_articles_displayed'] > $nof_articles ? $kb_config['archive_content_articles_nof_articles_displayed'] : $nof_articles;
 
 		$query_args = array(
 			'post_type' => EPKB_KB_Handler::get_post_type( $kb_id ),
@@ -76,7 +80,6 @@ class EPKB_Articles_DB {
 		$where_post_status_escaped = ' (' . $where_post_status_escaped . ') ';
 
 		// Get only Published articles
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 		if ( ! is_wp_error( $kb_config ) && EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
 			$order_by = $order_by == 'title' ? 'post_title' : 'post_date';
 			return $wpdb->get_results( $wpdb->prepare( " SELECT * " .
@@ -96,9 +99,9 @@ class EPKB_Articles_DB {
 	 * Retrieve all KB articles but do not count articles in Trash
 	 *
 	 * @param $kb_id
-	 * @return number of all posts
+	 * @return int|null of all posts
 	 */
-	static function get_count_of_all_kb_articles( $kb_id ) {
+	static public function get_count_of_all_kb_articles( $kb_id ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
@@ -133,7 +136,7 @@ class EPKB_Articles_DB {
 	 *
 	 * @return array of posts
 	 */
-	function get_orphan_published_articles( $kb_id ) {
+	public function get_orphan_published_articles( $kb_id ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 

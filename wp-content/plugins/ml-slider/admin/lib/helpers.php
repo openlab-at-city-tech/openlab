@@ -16,8 +16,13 @@ function metaslider_plugin_is_installed($name = 'ml-slider')
         include_once(ABSPATH . 'wp-admin/includes/plugin.php');
     }
     $plugins = get_plugins();
-    // Don't cache plugins this early
-    wp_cache_delete('plugins', 'plugins');
+    
+    $delete_cache = apply_filters( 'metaslider_plugins_delete_cache', true );
+    if ( $delete_cache ) {
+        // Don't cache plugins this early
+        wp_cache_delete('plugins', 'plugins');
+    }
+
     foreach ($plugins as $plugin => $data) {
         if ($data['TextDomain'] == $name) {
             return $plugin;

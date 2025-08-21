@@ -40,8 +40,8 @@
 									$( original ).data( 'hasitem', false );
 
 									if ( $( original ).data( 'hasoriginal' ) === false ) {
-										var timer = setTimeout( close_it, 800 );
-										$( original ).data( 'timer2', timer );
+										var timer2 = setTimeout( close_it, 800 );
+										$( original ).data( 'timer2', timer2 );
 									}
 								};
 
@@ -54,8 +54,8 @@
 									$( original ).data( 'hasoriginal', false );
 
 									if ( $( original ).data( 'hasitem' ) === false ) {
-										var timer = setTimeout( close_it, 800 );
-										$( original ).data( 'timer2', timer );
+										var timer2 = setTimeout( close_it, 800 );
+										$( original ).data( 'timer2', timer2 );
 									}
 								};
 
@@ -461,7 +461,7 @@
 			beforeSubmit: function () {
 				$( '#new-service-form .error' ).hide();
 				$( '#new-service-form img' ).show();
-				$( '#new-service-form input[type=submit]' ).prop( 'disabled', true );
+				$( '#new-service-form input[type="submit"]' ).prop( 'disabled', true );
 			},
 			success: function ( response ) {
 				$( '#new-service-form img' ).hide();
@@ -469,7 +469,7 @@
 				if ( '' + response === '1' ) {
 					$( '#new-service-form .inerror' ).removeClass( 'inerror' ).addClass( 'error' );
 					$( '#new-service-form .error' ).show();
-					$( '#new-service-form input[type=submit]' ).prop( 'disabled', false );
+					$( '#new-service-form input[type="submit"]' ).prop( 'disabled', false );
 				} else {
 					document.location.reload();
 				}

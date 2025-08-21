@@ -194,8 +194,9 @@ class SendUsageTask extends Task {
 
 		global $wpdb;
 
-		$theme_data     = wp_get_theme();
-		$activated_time = (int) get_option( 'wppdf_emb_activation', 0 );
+		$theme_data          = wp_get_theme();
+		$lite_activated_date = get_option( 'wppdf_emb_activation', 0 );
+		$pro_activated_date  = get_option( 'wppdf_emb_activation_premium', 0 );
 
 		$data = [
 			// Generic data (environment).
@@ -215,16 +216,19 @@ class SendUsageTask extends Task {
 			'active_plugins'             => $this->get_active_plugins(),
 			'theme_name'                 => $theme_data->name,
 			'theme_version'              => $theme_data->version,
+			'is_block_theme'             => wp_is_block_theme(),
 			'locale'                     => get_locale(),
 			'timezone_offset'            => wp_timezone_string(),
 			'pdf_files_count'            => $this->get_number_of_pdfs(),
 			// Plugin-specific data.
 			'pdfemb_version'             => PDFEMB_VERSION,
+			'pdfemb_premium_version'     => defined( 'PDFEMB_PREMIUM_VERSION' ) ? PDFEMB_PREMIUM_VERSION : '',
 			'pdfemb_license_key'         => License::get_key(),
 			'pdfemb_license_type'        => License::get_type(),
 			'pdfemb_license_status'      => License::get_status(),
-			'pdfemb_is_pro'              => false,
-			'pdfemb_lite_installed_date' => $activated_time,
+			'pdfemb_is_pro'              => (int) pdf_embedder()->is_premium(),
+			'pdfemb_lite_installed_date' => (int) $lite_activated_date,
+			'pdfemb_pro_installed_date'  => (int) $pro_activated_date,
 			'pdfemb_settings'            => $this->get_settings(),
 		];
 
@@ -239,8 +243,6 @@ class SendUsageTask extends Task {
 	 * Get all settings, except those with sensitive data.
 	 *
 	 * @since 4.7.0
-	 *
-	 * @return array
 	 */
 	private function get_settings(): array {
 		// Remove keys with exact names that we don't need.
@@ -248,6 +250,7 @@ class SendUsageTask extends Task {
 			pdf_embedder()->options()->get(),
 			array_flip(
 				[
+					// No need to send the version stored in DB as we send it separately.
 					'pdfemb_version',
 				]
 			)

@@ -186,11 +186,6 @@ parameters:
 			path: form_detail.php
 
 		-
-			message: "#^Variable \\$fixed_menu_items might not be defined\\.$#"
-			count: 1
-			path: form_detail.php
-
-		-
 			message: "#^Variable \\$my_parent might not be defined\\.$#"
 			count: 1
 			path: form_detail.php
@@ -406,11 +401,6 @@ parameters:
 			path: gravityforms.php
 
 		-
-			message: "#^Variable \\$fixed_menu_items might not be defined\\.$#"
-			count: 1
-			path: gravityforms.php
-
-		-
 			message: "#^Variable \\$lead might not be defined\\.$#"
 			count: 1
 			path: gravityforms.php
@@ -514,11 +504,6 @@ parameters:
 			message: "#^Variable \\$value might not be defined\\.$#"
 			count: 2
 			path: includes/addon/class-gf-feed-addon.php
-
-		-
-			message: "#^Method GF_Feed_Processor\\:\\:custom_error_handler\\(\\) should return false but return statement is missing\\.$#"
-			count: 1
-			path: includes/addon/class-gf-feed-processor.php
 
 		-
 			message: "#^Access to an undefined property GFPaymentStatsTable\\:\\:\\$_pagination\\.$#"
@@ -1146,16 +1131,6 @@ parameters:
 			path: includes/settings/fields/class-checkbox.php
 
 		-
-			message: "#^@param array\\|null \\$field_type does not accept actual type of parameter\\: string\\.$#"
-			count: 2
-			path: includes/settings/fields/class-generic-map.php
-
-		-
-			message: "#^Variable \\$field might not be defined\\.$#"
-			count: 2
-			path: includes/settings/fields/class-generic-map.php
-
-		-
 			message: "#^Variable \\$this might not be defined\\.$#"
 			count: 14
 			path: includes/splash-page/gf_splash.php
@@ -1261,7 +1236,7 @@ parameters:
 			path: includes/webapi/v2/includes/controllers/class-controller-entry-notes.php
 
 		-
-			message: "#^is_wp_error\\(bool\\) will always evaluate to false\\.$#"
+			message: "#^is_wp_error\\(int\\|false\\) will always evaluate to false\\.$#"
 			count: 2
 			path: includes/webapi/v2/includes/controllers/class-controller-entry-properties.php
 
@@ -1306,7 +1281,7 @@ parameters:
 			path: includes/webapi/webapi.php
 
 		-
-			message: "#^is_wp_error\\(bool\\) will always evaluate to false\\.$#"
+			message: "#^is_wp_error\\(int\\|false\\) will always evaluate to false\\.$#"
 			count: 2
 			path: includes/webapi/webapi.php
 

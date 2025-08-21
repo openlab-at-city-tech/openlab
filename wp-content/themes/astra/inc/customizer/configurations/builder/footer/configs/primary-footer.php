@@ -68,7 +68,7 @@ function astra_primary_footer_configuration() {
 			),
 			'renderAs'   => 'text',
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		/**
@@ -134,7 +134,6 @@ function astra_primary_footer_configuration() {
 			'context'     => Astra_Builder_Helper::$general_tab,
 		),
 
-
 		/**
 		 * Option: Vertical Alignment
 		 */
@@ -191,7 +190,7 @@ function astra_primary_footer_configuration() {
 				'max'  => 600,
 			),
 			'context'     => Astra_Builder_Helper::$design_tab,
-			'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		// Option: Footer Top Boder Color.
@@ -269,5 +268,5 @@ function astra_primary_footer_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_primary_footer_configuration();
+	add_action( 'init', 'astra_primary_footer_configuration' );
 }

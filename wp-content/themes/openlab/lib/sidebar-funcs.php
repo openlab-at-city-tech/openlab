@@ -130,15 +130,11 @@ function openlab_learnmore_sidebar() {
  */
 function openlab_member_sidebar_menu( $mobile = false ) {
 
-    if (!$dud = bp_displayed_user_domain()) {
-        $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
-    }
+	if ( ! $dud = bp_displayed_user_domain() ) {
+		$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
+	}
 
-    if ($mobile) {
-        $classes = 'visible-xs';
-    } else {
-        $classes = 'hidden-xs';
-    }
+	$classes = $mobile ? 'visible-xs' : 'hidden-xs';
 
 	$portfolio_label = openlab_get_portfolio_label(
 		[
@@ -147,109 +143,196 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 		]
 	);
 
-    if (is_user_logged_in() && openlab_is_my_profile()) :
-        ?>
+	$is_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
+	$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
+	$is_friends  = bp_is_my_profile() && bp_is_friends_component();
+	$is_messages = bp_is_my_profile() && bp_is_messages_component();
+	$is_invites  = bp_is_my_profile() && ( bp_is_current_component( 'invite-anyone' ) || bp_is_groups_component() && ( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ) );
 
-        <div id="item-buttons<?php echo ($mobile ? '-mobile' : '') ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
+	if ( is_user_logged_in() && openlab_is_my_profile() ) :
+		?>
 
-            <ul class="sidebar-nav clearfix">
+		<div id="item-buttons<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-                <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
+			<ul class="sidebar-nav clearfix">
 
-                <li class="sq-bullet <?php if ( bp_is_current_component( 'my-activity' ) ) : ?>selected-page<?php endif ?> mol-profile my-activity"><a href="<?php echo $dud ?>my-activity">My Activity</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile my-profile">
+					<a href="<?php echo $dud ?>">My Profile</a>
+				</li>
 
-                <li class="sq-bullet <?php if ( bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit() ) : ?>selected-page<?php endif ?> mol-settings my-settings"><a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_component( 'my-activity' ) ); ?> mol-profile my-activity">
+					<a href="<?php echo $dud ?>my-activity">My Activity</a>
 
-                <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
+					<?php if ( $is_activity ) : ?>
+						<ul class="sidebar-submenu">
+							<?php $activity_submenu_items = openlab_my_activity_submenu_items(); ?>
+							<?php foreach ( $activity_submenu_items as $item ) : ?>
+								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</li>
 
-                    <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>">My <?php echo esc_html( $portfolio_label ); ?></a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( $is_settings ); ?> mol-settings my-settings">
+					<a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a>
 
-                <?php else: ?>
+					<?php if ( $is_settings ) : ?>
+						<ul class="sidebar-submenu">
+							<?php $settings_submenu_items = openlab_my_settings_submenu_items(); ?>
+							<?php foreach ( $settings_submenu_items as $item ) : ?>
+								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</li>
 
-                    <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>">Create <?php echo esc_html( $portfolio_label ); ?></a></li>
+				<?php if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) : ?>
+					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
+						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>">My <?php echo esc_html( $portfolio_label ); ?></a>
+					</li>
+				<?php else : ?>
+					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
+						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>">Create <?php echo esc_html( $portfolio_label ); ?></a>
+					</li>
+				<?php endif; ?>
 
-                <?php endif; ?>
+				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-courses' ) || openlab_is_create_group( 'course' ) ); ?> mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
 
-                <li class="sq-bullet <?php if (is_page('my-courses') || openlab_is_create_group('course')) : ?>selected-page<?php endif ?> mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-projects' ) || openlab_is_create_group( 'project' ) ); ?> mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
 
-                <li class="sq-bullet <?php if (is_page('my-projects') || openlab_is_create_group('project')) : ?>selected-page<?php endif ?> mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-clubs' ) || openlab_is_create_group( 'club' ) ); ?> mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
 
-                <li class="sq-bullet <?php if (is_page('my-clubs') || openlab_is_create_group('club')) : ?>selected-page<?php endif ?> mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
+				<?php if ( bp_is_active( 'friends' ) ) : ?>
+					<?php
+					$request_ids   = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+					$request_count = intval( count( (array) $request_ids ) );
+					?>
+					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_friends() ); ?> mol-friends my-friends">
+						<a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup( $request_count ); ?></a>
 
-                <?php /* Get a friend request count */ ?>
-                <?php if (bp_is_active('friends')) : ?>
-                    <?php
-                    $request_ids = friends_get_friendship_request_user_ids(bp_loggedin_user_id());
-                    $request_count = intval(count((array) $request_ids));
-                    ?>
+						<?php if ( $is_friends ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $friends_submenu_items = openlab_my_friends_submenu_items(); ?>
+								<?php foreach ( $friends_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
+				<?php endif; ?>
 
-                    <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?> mol-friends my-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup($request_count); ?></a></li>
-                <?php endif; ?>
+				<?php if ( bp_is_active( 'messages' ) ) : ?>
+					<?php $message_count = bp_get_total_unread_messages_count(); ?>
+					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_messages() ); ?> mol-messages my-messages">
+						<a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup( $message_count ); ?></a>
 
-                <?php /* Get an unread message count */ ?>
-                <?php if (bp_is_active('messages')) : ?>
-                    <?php $message_count = bp_get_total_unread_messages_count() ?>
+						<?php if ( $is_messages ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $messages_submenu_items = openlab_my_messages_submenu_items(); ?>
+								<?php foreach ( $messages_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
+				<?php endif; ?>
 
-                    <li class="sq-bullet <?php if (bp_is_user_messages()) : ?>selected-page<?php endif ?> mol-messages my-messages"><a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup($message_count); ?></a></li>
-                <?php endif; ?>
+				<?php if ( bp_is_active( 'groups' ) ) : ?>
+					<?php
+					$invites      = groups_get_invites_for_user();
+					$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+					?>
+					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ); ?> mol-invites my-invites">
+						<a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup( $invite_count ); ?></a>
 
-                <?php /* Get an invitation count */ ?>
-                <?php if (bp_is_active('groups')) : ?>
-                    <?php
-                    $invites = groups_get_invites_for_user();
-                    $invite_count = isset($invites['total']) ? (int) $invites['total'] : 0;
-                    ?>
+						<?php if ( $is_invites ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $invitations_submenu_items = openlab_my_invitations_submenu_items(); ?>
+								<?php foreach ( $invitations_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
+					</li>
+				<?php endif; ?>
 
-                    <li class="sq-bullet <?php if (bp_is_current_action('invites') || bp_is_current_action('sent-invites') || bp_is_current_action('invite-new-members')) : ?>selected-page<?php endif ?> mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
-                <?php endif ?>
+				<li class="sq-bullet mol-dashboard my-dashboard">
+					<a href="<?php echo esc_url( openlab_get_my_dashboard_url( bp_loggedin_user_id() ) ); ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
+				</li>
 
-                <?php
-                // My Dashboard points to the my-sites.php Dashboard panel for this user. However,
-                // this panel only works if looking at a site where the user has Dashboard-level
-                // permissions. So we have to find a valid site for the logged in user.
-                $primary_site_id = get_user_meta(bp_loggedin_user_id(), 'primary_blog', true);
-                $primary_site_url = set_url_scheme(get_blog_option($primary_site_id, 'siteurl'));
-                ?>
+			</ul>
 
-                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></li>
+		</div>
 
-            </ul>
+	<?php else : ?>
 
-        </div>
+		<div id="item-buttons<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
 
-    <?php else : ?>
+			<ul class="sidebar-nav clearfix">
 
-        <div id="item-buttons<?php echo ($mobile ? '-mobile' : '') ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
 
-            <ul class="sidebar-nav clearfix">
+				<?php if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) : ?>
+					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
+						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>"><?php echo esc_html( $portfolio_label ); ?></a>
+					</li>
+				<?php endif; ?>
 
-                <li class="sq-bullet <?php if (bp_is_user_activity()) : ?>selected-page<?php endif ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
+				<?php $current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : ''; ?>
 
-                <?php if (openlab_user_has_portfolio(bp_displayed_user_id()) && (!openlab_group_is_hidden(openlab_get_user_portfolio_id()) || openlab_is_my_profile() || groups_is_user_member(bp_loggedin_user_id(), openlab_get_user_portfolio_id()) )) : ?>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'course' === $current_group_view ); ?> mol-courses">
+					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a>
+				</li>
 
-                    <li id="portfolios-groups-li<?php echo ($mobile ? '-mobile' : '') ?>" class="visible-xs mobile-anchor-link"><a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ($mobile ? '-mobile' : '') ?>"><?php echo esc_html( $portfolio_label ); ?></a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'project' === $current_group_view ); ?> mol-projects">
+					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a>
+				</li>
 
-                <?php endif; ?>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'club' === $current_group_view ); ?> mol-club">
+					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a>
+				</li>
 
-                <?php
-				/* Current page highlighting requires the GET param */
-                $current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ): '';
-				?>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_friends() ); ?> mol-friends">
+					<a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a>
+				</li>
 
-                <li class="sq-bullet <?php if (bp_is_user_groups() && 'course' == $current_group_view) : ?>selected-page<?php endif ?> mol-courses"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a></li>
+			</ul>
 
-                <li class="sq-bullet <?php if (bp_is_user_groups() && 'project' == $current_group_view) : ?>selected-page<?php endif ?> mol-projects"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a></li>
+		</div>
 
-                <li class="sq-bullet <?php if (bp_is_user_groups() && 'club' == $current_group_view) : ?>selected-page<?php endif ?> mol-club"><a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a></li>
+	<?php endif;
+}
+/**
+ * Echoes 'selected-page' class if the current page is the one passed in.
+ *
+ * Works like `selected()` etc from WP.
+ *
+ * @param mixed $selected The value to check against.
+ * @param mixed $current  Optional. The current value. Defaults to true.
+ * @param bool  $display  Whether to display the class. Defaults to true.
+ * @return string The class if the values match, empty string otherwise.
+ */
+function openlab_selected_page_class( $selected, $current = true, $display = true) {
+	$result = '';
+	if ( (string) $selected === (string) $current ) {
+		$result = ' selected-page ';
+	}
 
-                <li class="sq-bullet <?php if (bp_is_user_friends()) : ?>selected-page<?php endif ?> mol-friends"><a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a></li>
+	if ( $display ) {
+		echo esc_html( $result );
+	}
 
-            </ul>
-
-        </div>
-
-    <?php
-    endif;
+	return $result;
 }
 
 /**
@@ -309,15 +392,6 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
                         | <a class="portfolio-dashboard-link" href="<?php openlab_user_portfolio_url() ?>/wp-admin">Dashboard</a>
                     <?php endif ?>
                 </li>
-
-				<?php if ( openlab_is_my_profile() && openlab_user_has_portfolio( bp_displayed_user_id() ) && ! bp_is_group_create() ) : ?>
-					<li class="portfolio-profile-link-toggle-wrapper">
-						<input value="1" data-counter="<?php echo esc_attr( $counter ); ?>" type="checkbox" id="portfolio-profile-link-toggle-<?php echo esc_attr( $counter ); ?>" class="portfolio-profile-link-toggle-checkbox" <?php checked( openlab_show_portfolio_link_on_user_profile() ); ?> /> <label for="portfolio-profile-link-toggle-<?php echo esc_attr( $counter ); ?>">Show link to my <?php echo esc_html( $portfolio_label ); ?> on my public OpenLab profile</label>
-
-						<?php wp_nonce_field( 'openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_nonce_' . $counter, false ); ?>
-					</li>
-				<?php endif; ?>
-
             </ul>
         </div>
 

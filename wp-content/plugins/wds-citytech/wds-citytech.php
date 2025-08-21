@@ -1157,9 +1157,10 @@ function wds_bp_group_meta_save( $group ) {
 	}
 
 	// Portfolio profile link
-	if ( ! empty( $_POST['portfolio-profile-link'] ) ) {
-		$portfolio_user_id = openlab_get_user_id_from_portfolio_group_id( $group->id );
-		openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, true );
+	if ( ! empty( $_POST['portfolio-profile-link-nonce'] ) ) {
+		$portfolio_user_id   = openlab_get_user_id_from_portfolio_group_id( $group->id );
+		$show_portfolio_link = ! empty( $_POST['portfolio-profile-link'] ) ? true : false;
+		openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, $show_portfolio_link );
 	}
 
 	// Member roles.
@@ -1443,8 +1444,23 @@ function ra_copy_blog_page( $group_id ) {
 								add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
 							}
 
-							OpenLab\NavMenus\add_group_menu_item( $group_id );
-							OpenLab\NavMenus\add_home_menu_item();
+							$wp_navigation_posts = get_posts(
+								[
+									'post_type'      => 'wp_navigation',
+									'posts_per_page' => 1,
+									'post_status'    => 'publish',
+								]
+							);
+
+							$use_block_navigation = ! empty( $wp_navigation_posts ) && ! empty( $wp_navigation_posts[0]->ID );
+
+							if ( $use_block_navigation ) {
+								OpenLab\NavMenus\add_home_menu_item_block();
+								OpenLab\NavMenus\add_group_menu_item_block( $group_id );
+							} else {
+								OpenLab\NavMenus\add_group_menu_item_classic( $group_id );
+								OpenLab\NavMenus\add_home_menu_item_classic();
+							}
 
 							if ( $taxonomy_terms_order_is_active ) {
 								remove_filter( 'to/get_terms_orderby/ignore', '__return_true' );
@@ -1463,6 +1479,10 @@ function ra_copy_blog_page( $group_id ) {
 					openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
 				}
 				restore_current_blog();
+
+				// Set default blog_privacy based on group type.
+				$default_blog_privacy = openlab_get_default_group_site_privacy_setting( $group_id );
+				update_blog_option( $new_id, 'blog_public', $default_blog_privacy );
 
 			} else {
 				$msg = $id->get_error_message();
@@ -3334,6 +3354,10 @@ add_action(
 		];
 
 		$callback = function( $value ) {
+			if ( ! is_array( $value ) ) {
+				$value = [];
+			}
+
 			$value['who_can_upload'] = 2;
 			return $value;
 		};
@@ -3855,3 +3879,40 @@ function openlab_delete_user_files_on_account_deletion( $user_id ) {
 	}
 }
 add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_files_on_account_deletion' );
+
+/**
+ * Delete a user's portfolio group and site on account deletion.
+ *
+ * @param int $user_id The ID of the user being deleted.
+ * @return void
+ */
+function openlab_delete_user_portfolio_on_account_deletion( $user_id ) {
+	$portfolio_group_id = openlab_get_user_portfolio_id( $user_id );
+	if ( ! $portfolio_group_id ) {
+		return;
+	}
+
+	$portfolio_site_id = openlab_get_site_id_by_group_id( $portfolio_group_id );
+	if ( $portfolio_site_id ) {
+		if ( ! function_exists( 'wpmu_delete_blog' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/ms.php';
+		}
+
+		wpmu_delete_blog( $portfolio_site_id, false );
+	}
+
+	// Delete the portfolio group.
+	groups_delete_group( $portfolio_group_id );
+}
+add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_portfolio_on_account_deletion', 5 );
+
+/**
+ * Remove the PHP outdated nag.
+ */
+add_action(
+	'wp_dashboard_setup',
+	function() {
+		remove_meta_box( 'dashboard_php_nag', 'dashboard', 'normal' );
+	},
+	100
+);

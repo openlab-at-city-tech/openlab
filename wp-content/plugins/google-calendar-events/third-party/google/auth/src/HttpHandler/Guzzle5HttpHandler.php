@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
 /**
  * @deprecated
- * @internal
  */
 class Guzzle5HttpHandler
 {
@@ -63,11 +62,11 @@ class Guzzle5HttpHandler
      */
     public function async(RequestInterface $request, array $options = [])
     {
-        if (!\class_exists('SimpleCalendar\\plugin_deps\\GuzzleHttp\\Promise\\Promise')) {
+        if (!class_exists('SimpleCalendar\plugin_deps\GuzzleHttp\Promise\Promise')) {
             throw new Exception('Install guzzlehttp/promises to use async with Guzzle 5');
         }
         $futureResponse = $this->client->send($this->createGuzzle5Request($request, ['future' => \true] + $options));
-        $promise = new Promise(function () use($futureResponse) {
+        $promise = new Promise(function () use ($futureResponse) {
             try {
                 $futureResponse->wait();
             } catch (Exception $e) {
@@ -85,7 +84,7 @@ class Guzzle5HttpHandler
     }
     private function createGuzzle5Request(RequestInterface $request, array $options)
     {
-        return $this->client->createRequest($request->getMethod(), $request->getUri(), \array_merge_recursive(['headers' => $request->getHeaders(), 'body' => $request->getBody()], $options));
+        return $this->client->createRequest($request->getMethod(), $request->getUri(), array_merge_recursive(['headers' => $request->getHeaders(), 'body' => $request->getBody()], $options));
     }
     private function createPsr7Response(Guzzle5ResponseInterface $response)
     {

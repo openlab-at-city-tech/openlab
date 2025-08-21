@@ -1146,7 +1146,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"version":"2023c","zones":["Africa/Ab
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -1565,7 +1565,7 @@ const formatMap = {
  * Formats a date. Does not alter the date's timezone.
  *
  * @param {string}                             dateFormat PHP-style formatting string.
- *                                                        See php.net/date.
+ *                                                        See [php.net/date](https://www.php.net/manual/en/function.date.php).
  * @param {Moment | Date | string | undefined} dateValue  Date object or string,
  *                                                        parsable by moment.js.
  *
@@ -1606,7 +1606,7 @@ function format(dateFormat, dateValue = new Date()) {
  * Formats a date (like `date()` in PHP).
  *
  * @param {string}                             dateFormat PHP-style formatting string.
- *                                                        See php.net/date.
+ *                                                        See [php.net/date](https://www.php.net/manual/en/function.date.php).
  * @param {Moment | Date | string | undefined} dateValue  Date object or string, parsable
  *                                                        by moment.js.
  * @param {string | number | undefined}        timezone   Timezone to output result in or a
@@ -1627,7 +1627,7 @@ function date(dateFormat, dateValue = new Date(), timezone) {
  * Formats a date (like `date()` in PHP), in the UTC timezone.
  *
  * @param {string}                             dateFormat PHP-style formatting string.
- *                                                        See php.net/date.
+ *                                                        See [php.net/date](https://www.php.net/manual/en/function.date.php).
  * @param {Moment | Date | string | undefined} dateValue  Date object or string,
  *                                                        parsable by moment.js.
  *
@@ -1645,7 +1645,7 @@ function gmdate(dateFormat, dateValue = new Date()) {
  * behaves like `gmdateI18n`.
  *
  * @param {string}                                 dateFormat PHP-style formatting string.
- *                                                            See php.net/date.
+ *                                                            See [php.net/date](https://www.php.net/manual/en/function.date.php).
  * @param {Moment | Date | string | undefined}     dateValue  Date object or string, parsable by
  *                                                            moment.js.
  * @param {string | number | boolean | undefined=} timezone   Timezone to output result in or a
@@ -1676,7 +1676,7 @@ function dateI18n(dateFormat, dateValue = new Date(), timezone) {
  * and using the UTC timezone.
  *
  * @param {string}                             dateFormat PHP-style formatting string.
- *                                                        See php.net/date.
+ *                                                        See [php.net/date](https://www.php.net/manual/en/function.date.php).
  * @param {Moment | Date | string | undefined} dateValue  Date object or string,
  *                                                        parsable by moment.js.
  *
@@ -1704,7 +1704,7 @@ function isInTheFuture(dateValue) {
 /**
  * Create and return a JavaScript Date Object from a date string in the WP timezone.
  *
- * @param {string?} dateString Date formatted in the WP timezone.
+ * @param {?string} dateString Date formatted in the WP timezone.
  *
  * @return {Date} Date
  */

@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * MoFileDumper generates a gettext formatted string representation of a message catalogue.
  *
  * @author Stealth35
- * @internal
  */
 class MoFileDumper extends FileDumper
 {
@@ -29,7 +28,7 @@ class MoFileDumper extends FileDumper
         $offsets = [];
         $size = 0;
         foreach ($messages->all($domain) as $source => $target) {
-            $offsets[] = \array_map('strlen', [$sources, $source, $targets, $target]);
+            $offsets[] = array_map('strlen', [$sources, $source, $targets, $target]);
             $sources .= "\x00" . $source;
             $targets .= "\x00" . $target;
             ++$size;
@@ -41,7 +40,7 @@ class MoFileDumper extends FileDumper
             $sourceOffsets .= $this->writeLong($offset[1]) . $this->writeLong($offset[0] + $sourcesStart);
             $targetOffsets .= $this->writeLong($offset[3]) . $this->writeLong($offset[2] + $sourcesStart + $sourcesSize);
         }
-        $output = \implode('', \array_map([$this, 'writeLong'], $header)) . $sourceOffsets . $targetOffsets . $sources . $targets;
+        $output = implode('', array_map([$this, 'writeLong'], $header)) . $sourceOffsets . $targetOffsets . $sources . $targets;
         return $output;
     }
     /**
@@ -51,8 +50,8 @@ class MoFileDumper extends FileDumper
     {
         return 'mo';
     }
-    private function writeLong($str) : string
+    private function writeLong($str): string
     {
-        return \pack('V*', $str);
+        return pack('V*', $str);
     }
 }

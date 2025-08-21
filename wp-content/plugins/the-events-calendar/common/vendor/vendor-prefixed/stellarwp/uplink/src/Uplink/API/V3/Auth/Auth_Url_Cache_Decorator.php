@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\API\V3\Auth;
 
@@ -55,7 +50,7 @@ final class Auth_Url_Cache_Decorator implements Contracts\Auth_Url {
 	 */
 	public function get( string $slug ): string {
 		if ( ! $slug ) {
-			throw new InvalidArgumentException( __( 'The Product Slug cannot be empty', '%TEXTDOMAIN%' ) );
+			throw new InvalidArgumentException( __( 'The Product Slug cannot be empty', 'tribe-common' ) );
 		}
 
 		$transient = $this->build_transient( $slug );

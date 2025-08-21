@@ -77,7 +77,7 @@ function astra_header_search_configuration() {
 			'type'              => 'control',
 			'control'           => 'ast-responsive-slider',
 			'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
-			'divider'           => array( 'ast_class' => ( defined( 'ASTRA_EXT_VER' ) ) ? 'ast-top-section-divider ast-bottom-section-divider' : 'ast-section-spacing' ),
+			'divider'           => array( 'ast_class' => defined( 'ASTRA_EXT_VER' ) ? 'ast-top-section-divider ast-bottom-section-divider' : 'ast-section-spacing' ),
 			'input_attrs'       => array(
 				'min'  => 0,
 				'step' => 1,
@@ -104,7 +104,7 @@ function astra_header_search_configuration() {
 				'step' => 1,
 				'max'  => 1000,
 			),
-			'divider'     => defined( 'ASTRA_EXT_VER' ) ? array( 'ast_class' => 'ast-top-dotted-divider' ) : array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'     => defined( 'ASTRA_EXT_VER' ) ? array( 'ast_class' => 'ast-top-divider' ) : array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 			'context'     => defined( 'ASTRA_EXT_VER' ) ? array(
 				Astra_Builder_Helper::$general_tab_config,
 				array(
@@ -151,10 +151,38 @@ function astra_header_search_configuration() {
 			),
 			'transport'   => 'refresh',
 			'choices'     => astra_customizer_search_post_types_choices(),
-			'divider'     => array( 'ast_class' => 'ast-top-dotted-divider' ),
+			'divider'     => array( 'ast_class' => 'ast-top-divider' ),
 			'renderAs'    => 'text',
 			'input_attrs' => array(
 				'stack_after' => 2, // Currently stack options supports after 2 & 3.
+			),
+		),
+
+		/**
+		 * Option: Live search result count
+		 */
+		array(
+			'name'         => ASTRA_THEME_SETTINGS . '[live-search-result-count]',
+			'default'      => astra_get_option( 'live-search-result-count' ),
+			'type'         => 'control',
+			'control'      => 'ast-number',
+			'qty_selector' => true,
+			'section'      => $_section,
+			'title'        => __( 'Visible Search Result', 'astra' ),
+			'priority'     => 5,
+			'responsive'   => false,
+			'input_attrs'  => array(
+				'min'  => 1,
+				'step' => 1,
+				'max'  => 20,
+			),
+			'context'      => array(
+				Astra_Builder_Helper::$general_tab_config,
+				array(
+					'setting'  => ASTRA_THEME_SETTINGS . '[live-search]',
+					'operator' => '==',
+					'value'    => true,
+				),
 			),
 		),
 
@@ -170,7 +198,7 @@ function astra_header_search_configuration() {
 			'priority' => 220,
 			'settings' => array(),
 			'context'  => Astra_Builder_Helper::$design_tab,
-			'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
 		/**
@@ -210,5 +238,5 @@ function astra_header_search_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_search_configuration();
+	add_action( 'init', 'astra_header_search_configuration' );
 }

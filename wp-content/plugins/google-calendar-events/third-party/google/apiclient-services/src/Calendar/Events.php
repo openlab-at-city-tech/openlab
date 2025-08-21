@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class Events extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'items';
@@ -217,4 +216,4 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Events::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Events');
+class_alias(Events::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Events');

@@ -1150,6 +1150,9 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// After handling 'publish_posts' option but before the deletion operations
+		// Record permalinks so that we can update after the date changes.
+		$new_permalinks = [];
+		$old_permalinks = [];
 		if ( $clone_options['set_dates_to_today'] && ! empty( $site_posts ) ) {
 			// Get current date
 			$today      = current_time( 'mysql' );
@@ -1176,6 +1179,8 @@ class Openlab_Clone_Course_Site {
 				);
 
 				foreach ( $posts_to_update as $index => $post ) {
+					$old_permalinks[ $post->ID ] = get_permalink( $post->ID );
+
 					// Calculate the new date, each post is separated by $seconds_per_post
 					$new_date = date( 'Y-m-d H:i:s', $start_time + ( $index * $seconds_per_post ) );
 
@@ -1199,6 +1204,8 @@ class Openlab_Clone_Course_Site {
 
 					// Clear post cache
 					clean_post_cache( $post->ID );
+
+					$new_permalinks[ $post->ID ] = get_permalink( $post->ID );
 				}
 			}
 		}
@@ -1231,8 +1238,65 @@ class Openlab_Clone_Course_Site {
 			$this->delete_orphaned_attachments();
 		}
 
+		$touched_post_ids = [];
+
+		$posts_containing_source_site_url = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE %s",
+				'%' . $wpdb->esc_like( $source_site_url ) . '%'
+			)
+		);
+
+		$touched_post_ids = array_merge( $touched_post_ids, $posts_containing_source_site_url );
+
 		// Replace the site URL in all post content.
-		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )",
+				$source_site_url,
+				$dest_site_url
+			)
+		);
+
+		// Update URLs in post content for each modified item.
+		foreach ( $old_permalinks as $post_id => $old_url ) {
+			if ( ! isset( $new_permalinks[ $post_id ] ) ) {
+				continue;
+			}
+
+			$new_url = $new_permalinks[ $post_id ];
+
+			if ( $new_url === $old_url ) {
+				continue;
+			}
+
+			$post_ids_containing_old_url = $wpdb->get_col( $wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE %s",
+				'%' . $wpdb->esc_like( $old_url ) . '%'
+			) );
+
+			if ( empty( $post_ids_containing_old_url ) ) {
+				continue;
+			}
+
+			$touched_post_ids = array_merge( $touched_post_ids, $post_ids_containing_old_url );
+
+			$replace_query = $wpdb->prepare(
+				"UPDATE {$wpdb->posts}
+				SET post_content = REPLACE( post_content, %s, %s )
+				WHERE ID IN (" . implode( ',', array_map( 'intval', $post_ids_containing_old_url ) ) . ")",
+				$old_url,
+				$new_url
+			);
+
+			// Replace in the content of all posts.
+			$replaced = $wpdb->query( $replace_query );
+		}
+
+		$touched_post_ids = array_unique( $touched_post_ids );
+		foreach ( $touched_post_ids as $post_id ) {
+			clean_post_cache( $post_id );
+		}
 
 		restore_current_blog();
 	}

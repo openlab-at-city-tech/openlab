@@ -6,9 +6,19 @@
     "color": {
         "palette": [
         {
+          "slug": "background",
+          "color": "#ffffff",
+          "name": "Background"
+        },
+        {
           "slug": "primary",
           "color": "#FF3C58",
           "name": "Primary"
+        },
+        {
+          "slug": "border-color",
+          "color": "#dadada",
+          "name": "Border Color"
         },
         {
           "slug": "heading",
@@ -31,21 +41,23 @@
           "name": "Tertiary Bg Color"
         },
         {
-          "slug": "border-color",
-          "color": "#dadada",
-          "name": "Border Color"
-        },
-        {
-          "slug": "background",
-          "color": "#ffffff",
-          "name": "Background"
-        },
-        {
           "slug": "foreground",
           "color": "#000000",
           "name": "Foreground"
         }
       ]
+    }
+  },
+  "styles": {
+    "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--noto-sans)"
+        }
+      }
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--noto-sans)"
     }
   }
 }

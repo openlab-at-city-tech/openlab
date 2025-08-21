@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class DriveFileImageMediaMetadata extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -398,4 +397,4 @@ class DriveFileImageMediaMetadata extends \SimpleCalendar\plugin_deps\Google\Mod
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(DriveFileImageMediaMetadata::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_DriveFileImageMediaMetadata');
+class_alias(DriveFileImageMediaMetadata::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileImageMediaMetadata');

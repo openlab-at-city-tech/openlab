@@ -37,7 +37,7 @@ class EPKB_Controller {
 	}
 
 	/**
-	 * Handle submission of admin error
+	 * Handle submission of admin error; used by Setup Wizard as well
 	 */
 	public static function handle_report_admin_error() {
 		global $wp_version;

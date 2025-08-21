@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Carbon;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInterface;
 /**
  * Mark translator using strong type from symfony/translation >= 6.
- * @internal
  */
 interface TranslatorStrongTypeInterface
 {

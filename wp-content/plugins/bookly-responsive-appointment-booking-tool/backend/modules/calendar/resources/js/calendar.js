@@ -158,12 +158,34 @@ jQuery(function ($) {
         }
     }
 
+    function setCalendarHeight(height) {
+        if (BooklyL10n.scrollable_calendar !== '0') {
+            calendar.ec.setOption('height', height);
+        }
+    }
+
     function encodeHTML(s) {
         return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     $('#bookly-calendar-refresh').on('click', function () {
         calendar.ec.refetchEvents();
+    });
+
+    $('#bookly-calendar-fullscreen').on('click', function () {
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+        let $card = $(this).closest('.card');
+        $card.toggleClass('bookly-fullscreen');
+        setCalendarHeight(heightEC(calendar.ec.getOption('view')));
+        if ($card.hasClass('bookly-fullscreen')) {
+            $("body").css("overflow", "hidden");
+            $(this).find('i').removeClass('fa-expand').addClass('fa-compress');
+        } else {
+            $("body").css("overflow", "auto");
+            $(this).find('i').removeClass('fa-compress').addClass('fa-expand');
+        }
     });
 
     $('input[name="bookly_calendar_refresh_rate"]').change(function () {
@@ -250,7 +272,7 @@ jQuery(function ($) {
                 setCookie('bookly_cal_view', view.type);
             }
             resizeTimer = setTimeout(function () {
-                calendar.ec.setOption('height', heightEC(view.type));
+                setCalendarHeight(heightEC(view.type));
             }, 0);
         },
         l10n: BooklyL10n
@@ -285,7 +307,7 @@ jQuery(function ($) {
     $(window).on('resize', function () {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
-            calendar.ec.setOption('height', heightEC(calendar.ec.getOption('view')));
+            setCalendarHeight(heightEC(calendar.ec.getOption('view')));
         }, 500);
     });
 

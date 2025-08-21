@@ -10,9 +10,9 @@
 			<fields-in-item items_of="ekit_img_accordion_items">
 				<field type="Image Accordion: Title" editor_type="LINE">ekit_img_accordion_title</field>
 				<field type="Image Accordion: Button Label" editor_type="LINE">ekit_img_accordion_button_label</field>
-				<field type="Image Accordion: Wrap URL" editor_type="LINK">ekit_img_accordion_wrap_link_url>url</field>
-				<field type="Image Accordion: Button URL" editor_type="LINK">ekit_img_accordion_button_url>url</field>
-				<field type="Image Accordion: Project Link" editor_type="LINK">ekit_img_accordion_project_link>url</field>
+				<field type="Image Accordion: Wrap URL" key_of="ekit_img_accordion_wrap_link_url" editor_type="LINE">url</field>
+				<field type="Image Accordion: Button URL" key_of="ekit_img_accordion_button_url" editor_type="LINE">url</field>
+				<field type="Image Accordion: Project Link" key_of="ekit_img_accordion_project_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-accordion">
@@ -41,7 +41,7 @@
 				<field type="Testimonial: Client Name" editor_type="LINE">client_name</field>
 				<field type="Testimonial: Designation" editor_type="LINE">designation</field>
 				<field type="Testimonial: Review" editor_type="AREA">review</field>
-				<field type="Testimonial: Link" editor_type="LINK">link>url</field>
+				<field type="Testimonial: Link" key_of="link" editor_type="LINK">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-pricing">
@@ -56,7 +56,7 @@
 				<field type="Pricing Table: Duration" editor_type="LINE">ekit_pricing_table_duration</field>
 				<field type="Pricing Table: Table Content" editor_type="AREA">ekit_pricing_table_content</field>
 				<field type="Pricing Table: Label" editor_type="LINE">ekit_pricing_btn_text</field>
-				<field type="Pricing Table: Link" editor_type="LINK">ekit_pricing_btn_link>url</field>
+				<field type="Pricing Table: Link" key_of="ekit_pricing_btn_link" editor_type="LINE">url</field>
 			</fields>
 			<fields-in-item items_of="ekit_pricing_table_content_repeater">
 				<field type="Pricing Table: List text" editor_type="LINE">ekit_pricVISUALing_list</field>
@@ -69,7 +69,7 @@
 			</conditions>
 			<fields-in-item items_of="ekit_socialmedia_add_icons">
 				<field type="Social Media: Label" editor_type="LINE">ekit_socialmedia_label</field>
-				<field type="Social Media: Link" editor_type="LINK">ekit_socialmedia_link>url</field>
+				<field type="Social Media: Link" key_of="ekit_socialmedia_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-simple-tab">
@@ -175,7 +175,7 @@
 				<field type="Page List: Title" editor_type="LINE">text</field>
 				<field type="Page List: Sub-Title" editor_type="LINE">ekit_menu_widget_sub_title</field>
 				<field type="Page List: Label" editor_type="LINE">ekit_menu_list_label_title</field>
-				<field type="Page List: Link" editor_type="LINK">ekit_page_list_website_link>url</field>
+				<field type="Page List: Link" key_of="ekit_page_list_website_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-post-list">
@@ -192,7 +192,7 @@
 			</conditions>
 			<fields-in-item items_of="ekit_headerinfo_group">
 				<field type="Header Info: Text" editor_type="LINE">ekit_headerinfo_text</field>
-				<field type="Header Info: Link" editor_type="LINK">ekit_headerinfo_link>url</field>
+				<field type="Header Info: Link" key_of="ekit_headerinfo_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-back-to-top">
@@ -217,7 +217,7 @@
 			</conditions>
 			<fields>
 				<field type="Button: Label" editor_type="LINE">ekit_btn_text</field>
-				<field type="Button: URL" editor_type="LINK">ekit_btn_url>url</field>
+				<field type="Button: URL" key_of="ekit_btn_url" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-client-logo">
@@ -226,7 +226,7 @@
 			</conditions>
 			<fields-in-item items_of="ekit_client_logo_repiter">
 				<field type="Client Logo: Client Name" editor_type="LINE">ekit_client_logo_list_title</field>
-				<field type="Caldera Forms: Link" editor_type="LINK">ekit_client_logo_website_link>url</field>
+				<field type="Client Logo: Link" key_of="ekit_client_logo_website_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-countdown-timer">
@@ -258,9 +258,9 @@
 			<fields>
 				<field type="Dual Button: Text" editor_type="LINE">ekit_button_middle_text</field>
 				<field type="Dual Button: Text" editor_type="LINE">ekit_button_one_text</field>
-				<field type="Dual Button: Link" editor_type="LINK">ekit_button_one_link>url</field>
+				<field type="Dual Button: Link" key_of="ekit_button_one_link" editor_type="LINE">url</field>
 				<field type="Dual Button: Text" editor_type="LINE">ekit_button_two_text</field>
-				<field type="Dual Button: Link" editor_type="LINK">ekit_button_two_link>url</field>
+				<field type="Dual Button: Link" key_of="ekit_button_two_link" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-fluent-forms">
@@ -305,7 +305,7 @@
 			</conditions>
 			<fields>
 				<field type="Heading: Heading Title" editor_type="LINE">ekit_heading_title</field>
-				<field type="Heading: Link" editor_type="LINK">ekit_heading_link>url</field>
+				<field type="Heading: Link" key_of="ekit_heading_link" editor_type="LINE">url</field>
 				<field type="Heading: Heading Sub Title" editor_type="LINE">ekit_heading_sub_title</field>
 				<field type="Heading: Heading Description" editor_type="VISUAL">ekit_heading_extra_title</field>
 				<field type="Heading: Content" editor_type="LINE">shadow_text_content</field>
@@ -319,8 +319,8 @@
 				<field type="Icon Box: Title" editor_type="LINE">ekit_icon_box_title_text</field>
 				<field type="Icon Box: Content" editor_type="AREA">ekit_icon_box_description_text</field>
 				<field type="Icon Box: Label" editor_type="LINE">ekit_icon_box_btn_text</field>
-				<field type="Icon Box: URL" editor_type="LINK">ekit_icon_box_btn_url>url</field>
-				<field type="Icon Box: Link" editor_type="LINK">ekit_icon_box_global_link>url</field>
+				<field type="Icon Box: URL" key_of="ekit_icon_box_btn_url" editor_type="LINE">url</field>
+				<field type="Icon Box: Link" key_of="ekit_icon_box_global_link" editor_type="LINE">url</field>
 				<field type="Icon Box: Title" editor_type="LINE">ekit_icon_box_badge_title</field>
 			</fields>
 		</widget>
@@ -337,11 +337,11 @@
 				<condition key="widgetType">elementskit-image-box</condition>
 			</conditions>
 			<fields>
-				<field type="Image Box: Link" editor_type="LINK">ekit_image_box_website_link>url</field>
+				<field type="Image Box: Link" key_of="ekit_image_box_website_link" editor_type="LINE">url</field>
 				<field type="Image Box: Title" editor_type="LINE">ekit_image_box_title_text</field>
 				<field type="Image Box: Description" editor_type="AREA">ekit_image_box_description_text</field>
 				<field type="Image Box: Label" editor_type="LINE">ekit_image_box_btn_text</field>
-				<field type="Image Box: URL" editor_type="LINK">ekit_image_box_btn_url>url</field>
+				<field type="Image Box: URL" key_of="ekit_image_box_btn_url" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-image-comparison">
@@ -359,7 +359,7 @@
 			</conditions>
 			<fields>
 				<field type="Lottie: ''" editor_type="LINE">ekit_lottie_url</field>
-				<field type="Lottie: ''" editor_type="LINK">ekit_lottie_link>url</field>
+				<field type="Lottie: ''" key_of="ekit_lottie_link" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-mail-chimp">
@@ -384,7 +384,7 @@
 				<condition key="widgetType">ekit-nav-menu</condition>
 			</conditions>
 			<fields>
-				<field type="ElementsKit Nav Menu: Custom Link" editor_type="LINK">elementskit_nav_menu_logo_link>url</field>
+				<field type="ElementsKit Nav Menu: Custom Link" key_of="elementskit_nav_menu_logo_link" editor_type="LINE">url</field>
 				<field type="ElementsKit Nav Menu: Conatiner width" editor_type="LINE">elementskit_submenu_container_width</field>
 			</fields>
 		</widget>
@@ -511,7 +511,7 @@
 			</conditions>
 			<fields>
 				<field type="Creative Button: Label" editor_type="LINE">ekit_btn_text</field>
-				<field type="Creative Button: URL" editor_type="LINK">ekit_btn_url>url</field>
+				<field type="Creative Button: URL" key_of="ekit_btn_url" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-gallery">
@@ -555,7 +555,7 @@
 				<condition key="widgetType">elementskit-image-swap</condition>
 			</conditions>
 			<fields>
-				<field type="Image Swap: Link" editor_type="LINK">ekit_img_swap_link>url</field>
+				<field type="Image Swap: Link" key_of="ekit_img_swap_link" editor_type="LINE">url</field>
 			</fields>
 			<fields-in-item items_of="ekit_location_repeater">
 				<field type="Image Swap: Title" editor_type="LINE">ekit_hotspot_title</field>
@@ -576,7 +576,7 @@
 			</conditions>
 			<fields>
 				<field type="Motion Text: Title" editor_type="LINE">ekit_motion_text_content_text</field>
-				<field type="Motion Text: Link" editor_type="LINK">ekit_motion_text_sub_title_website_link>url</field>
+				<field type="Motion Text: Link" key_of="ekit_motion_text_sub_title_website_link" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-pinterest-feed">
@@ -605,8 +605,8 @@
 				<condition key="widgetType">elementskit-table</condition>
 			</conditions>
 			<fields>
-				<field type="Table: Enter a CSV File URL" editor_type="LINK">ekit_table_csv_url>url</field>
-				<field type="Table: Enter a Google Sheet URL" editor_type="LINK">ekit_table_google_sheet_viewer_url>url</field>
+				<field type="Table: Enter a CSV File URL" key_of="ekit_table_csv_url" editor_type="LINE">url</field>
+				<field type="Table: Enter a Google Sheet URL" key_of="ekit_table_google_sheet_viewer_url" editor_type="LINE">url</field>
 				<field type="Table: Serial Header Text" editor_type="LINE">show_serial_header_text</field>
 				<field type="Table: Search Placeholder" editor_type="LINE">search_placeholder</field>
 				<field type="Table: Prev Text" editor_type="LINE">ekit_table_navigation_prev_text</field>
@@ -616,7 +616,7 @@
 			</fields>
 			<fields-in-item items_of="table_body_content">
 				<field type="Table: Text" editor_type="VISUAL">cell_text</field>
-				<field type="Table: URL" editor_type="LINK">body_cell_url>url</field>
+				<field type="Table: URL" key_of="body_cell_url" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-timeline">
@@ -626,7 +626,7 @@
 			<fields-in-item items_of="ekit_timelinehr_content_repeater">
 				<field type="Timeline: Sub Title" editor_type="LINE">ekit_timeline_line_subtitle</field>
 				<field type="Timeline: Title" editor_type="LINE">ekit_timeline_line_title</field>
-				<field type="Timeline: Title Link" editor_type="LINK">ekit_timeline_date_link>url</field>
+				<field type="Timeline: Title Link" key_of="ekit_timeline_date_link" editor_type="LINE">url</field>
 				<field type="Timeline: Description" editor_type="AREA">ekit_timeline_line_content</field>
 				<field type="Timeline: Date" editor_type="LINE">ekit_timeline_content_date</field>
 				<field type="Timeline: Address" editor_type="LINE">ekit_timelinehr_content_address</field>
@@ -665,7 +665,7 @@
 				<condition key="widgetType">elementskit-video-gallery</condition>
 			</conditions>
 			<fields-in-item items_of="video_content">
-				<field type="Video Gallery: URL" editor_type="LINK">video_url>url</field>
+				<field type="Video Gallery: URL" key_of="video_url" editor_type="LINE">url</field>
 				<field type="Video Gallery: Category" editor_type="LINE">video_category</field>
 			</fields-in-item>
 		</widget>
@@ -686,7 +686,7 @@
 				<condition key="widgetType">elementskit-woo-category-list</condition>
 			</conditions>
 			<fields>
-				<field type="Woo Category List: URL" editor_type="LINK">ekit_featured_cat_link>url</field>
+				<field type="Woo Category List: URL" key_of="ekit_featured_cat_link" editor_type="LINE">url</field>
 			</fields>
 		</widget>
 		<widget name="elementskit-zoom">
@@ -736,7 +736,7 @@
 				<field type="Fancy Heading: Prefix Text" editor_type="LINE">ekit_fancy_prefix_text</field>
 				<field type="Fancy Heading: Highlighted Text" editor_type="LINE">ekit_fancy_highlighted_text</field>
 				<field type="Fancy Heading: Suffix Text" editor_type="LINE">ekit_fancy_suffix_text</field>
-				<field type="Fancy Heading: Link (Optional)" editor_type="LINK">ekit_fancy_text_link>url</field>
+				<field type="Fancy Heading: Link (Optional)" key_of="ekit_fancy_text_link" editor_type="LINE">url</field>
 			</fields>								
 			<fields-in-item items_of="ekit_fancy_text_lists">
 				<field type="Fancy Heading: Fancy Text" editor_type="LINE">ekit_fancy_text</field>
@@ -750,9 +750,9 @@
 				<field type="Price Menu: Title" editor_type="LINE">title</field>
 				<field type="Price Menu: Description" editor_type="AREA">description</field>
 				<field type="Price Menu: Price" editor_type="LINE">price</field>
-				<field type="Price Menu: Link" editor_type="LINK">link>url</field>
+				<field type="Price Menu: Link" key_of="link" editor_type="LINE">url</field>
 				<field type="Price Menu: Button Text" editor_type="LINE">button_text</field>
-				<field type="Price Menu: Button Link" editor_type="LINK">button_link>url</field>
+				<field type="Price Menu: Button Link" key_of="button_link" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>								
 		<widget name="elementskit-flip-box">
@@ -779,7 +779,7 @@
 				<field type="Stylish List: Title" editor_type="LINE">title</field>
 				<field type="Stylish List: Description" editor_type="AREA">description</field>
 				<field type="Stylish List: Badge Text" editor_type="LINE">badge_title</field>
-				<field type="Stylish List: Link" editor_type="LINK">link>url</field>
+				<field type="Stylish List: Link" key_of="url" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-team-slider">
@@ -793,11 +793,11 @@
 				<field type="Team Carousel Slider: Phone" editor_type="LINE">popup_phone</field>
 				<field type="Team Carousel Slider: Email" editor_type="LINE">popup_email</field>
 				<field type="Team Carousel Slider: About Member" editor_type="AREA">popup_description</field>
-				<field type="Team Carousel Slider: " editor_type="LINK">link_0>url</field>
-				<field type="Team Carousel Slider: " editor_type="LINK">link_1>url</field>
-				<field type="Team Carousel Slider: " editor_type="LINK">link_2>url</field>
-				<field type="Team Carousel Slider: " editor_type="LINK">link_3>url</field>
-				<field type="Team Carousel Slider: " editor_type="LINK">link_4>url</field>
+				<field type="Team Carousel Slider: " key_of="link_0" editor_type="LINE">url</field>
+				<field type="Team Carousel Slider: " key_of="link_1" editor_type="LINE">url</field>
+				<field type="Team Carousel Slider: " key_of="link_2" editor_type="LINE">url</field>
+				<field type="Team Carousel Slider: " key_of="link_3" editor_type="LINE">url</field>
+				<field type="Team Carousel Slider: " key_of="link_4" editor_type="LINE">url</field>
 			</fields-in-item>
 		</widget>
 		<widget name="elementskit-content-ticker">
@@ -810,8 +810,23 @@
 			<fields-in-item items_of="ekit_content_ticker_text_list">
 				<field type="Content Ticker: Content Title" editor_type="LINE">ekit_content_ticker_text</field>
 				<field type="Content Ticker: Content Description" editor_type="AREA">ekit_content_ticker_description</field>
-				<field type="Content Ticker: Link" editor_type="LINK">ekit_content_ticker_text_url>url</field>
+				<field type="Content Ticker: Link" key_of="ekit_content_ticker_text_url" editor_type="LINE">url</field>
 			</fields-in-item>
+		</widget>
+		<widget name="elementskit-advanced-search">
+			<conditions>
+				<condition key="widgetType">elementskit-advanced-search</condition>
+			</conditions>
+			<fields>
+				<field type="Advanced Search: Placeholder" editor_type="LINE">ekit_adv_section_search_placeholder</field>
+				<field type="Advanced Search: Categories" editor_type="LINE">ekit_adv_section_search_categories</field>
+				<field type="Advanced Search: Tags" editor_type="LINE">ekit_adv_section_search_tags</field>
+				<field type="Advanced Search: Button" editor_type="LINE">ekit_adv_section_search_button</field>
+				<field type="Advanced Search: Load More" editor_type="LINE">ekit_search_load_more_button</field>
+				<field type="Advanced Search: Copyright Url" editor_type="LINE">ekit_search_in_copyright_url>url</field>
+				<field type="Advanced Search: Copyright Name" editor_type="LINE">ekit_search_in_copyright_name</field>
+				<field type="Advanced Search: Keywords Title" editor_type="LINE">ekit_adv_show_popular_keyword_title</field>
+			</fields>
 		</widget>
 	</elementor-widgets>
 </wpml-config>

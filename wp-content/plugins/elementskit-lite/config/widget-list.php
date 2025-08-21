@@ -556,6 +556,12 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
+				'advanced-search' => array(
+					'slug'    => 'advanced-search',
+					'title'   => 'Advanced Search',
+					'package' => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
 			)
 		);
 	}

@@ -64,12 +64,38 @@ abstract class Sharing_Source_Block {
 	}
 
 	/**
-	 * Get sharing stats for a specific post or sharing service.
+	 * Get stats for a site, a post, or a sharing service.
+	 * Soon to come to a .org plugin near you!
 	 *
-	 * @return int This is a placeholder that returns 0 at the moment. We might want to implement this in the future.
+	 * @param WP_Post|bool $post Post object.
+	 *
+	 * @return int
 	 */
-	public function get_total() {
-		return 0;
+	public function get_total( $post = false ) {
+		global $wpdb, $blog_id;
+
+		$name = strtolower( (string) $this->get_id() );
+
+		if ( $post === false ) {
+			// get total number of shares for service
+			return (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$wpdb->prepare(
+					'SELECT SUM( count ) FROM sharing_stats WHERE blog_id = %d AND share_service = %s',
+					$blog_id,
+					$name
+				)
+			);
+		}
+
+		// get total shares for a post
+		return (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				'SELECT count FROM sharing_stats WHERE blog_id = %d AND post_id = %d AND share_service = %s',
+				$blog_id,
+				$post->ID,
+				$name
+			)
+		);
 	}
 
 	/**
@@ -114,8 +140,7 @@ abstract class Sharing_Source_Block {
 		 * @param int $post_id Post ID.
 		 * @param int $this->id Sharing ID.
 		 */
-		$title = apply_filters( 'sharing_title', $post->post_title, $post_id, $this->id );
-
+		$title = $post instanceof WP_Post ? apply_filters( 'sharing_title', $post->post_title, $post_id, $this->id ) : '';
 		return html_entity_decode( wp_kses( $title, '' ), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 );
 	}
 
@@ -375,7 +400,7 @@ abstract class Sharing_Source_Block {
 
 		// We set up this custom header to indicate to search engines not to index this page.
 		header( 'X-Robots-Tag: noindex, nofollow' );
-		die();
+		die( 0 );
 	}
 }
 
@@ -499,7 +524,7 @@ class Share_Email_Block extends Sharing_Source_Block {
 			wp_send_json_success();
 		} else {
 			wp_safe_redirect( get_permalink( $post->ID ) . '?shared=email&msg=fail' );
-			exit;
+			exit( 0 );
 		}
 
 		wp_die();
@@ -542,7 +567,8 @@ class Share_Facebook_Block extends Sharing_Source_Block {
 	 * @return void
 	 */
 	public function process_request( $post, array $post_data ) {
-		$fb_url = $this->http() . '://www.facebook.com/sharer.php?u=' . rawurlencode( $this->get_share_url( $post->ID ) ) . '&t=' . rawurlencode( $this->get_share_title( $post->ID ) );
+		$post_id = $post instanceof WP_Post ? $post->ID : 0;
+		$fb_url  = $this->http() . '://www.facebook.com/sharer.php?u=' . rawurlencode( $this->get_share_url( $post_id ) ) . '&t=' . rawurlencode( $this->get_share_title( $post_id ) );
 
 		// Record stats
 		parent::process_request( $post, $post_data );
@@ -738,7 +764,7 @@ class Share_Pinterest_Block extends Sharing_Source_Block {
 			parent::redirect_request( $pinterest_url );
 		} else {
 			echo '// share count bumped';
-			die();
+			die( 0 );
 		}
 	}
 }
@@ -1188,7 +1214,7 @@ class Share_Twitter_Block extends Sharing_Source_Block {
 	 * @return string
 	 */
 	public function get_name() {
-		return __( 'Twitter', 'jetpack' );
+		return __( 'X', 'jetpack' );
 	}
 
 	/**
@@ -1325,7 +1351,7 @@ class Share_Twitter_Block extends Sharing_Source_Block {
 		$url         = $post_link;
 		$twitter_url = add_query_arg(
 			rawurlencode_deep( array_filter( compact( 'via', 'related', 'text', 'url' ) ) ),
-			'https://twitter.com/intent/tweet'
+			'https://x.com/intent/tweet'
 		);
 
 		parent::redirect_request( $twitter_url );
@@ -1415,27 +1441,6 @@ class Share_LinkedIn_Block extends Sharing_Source_Block {
 		parent::process_request( $post, $post_data );
 
 		parent::redirect_request( $linkedin_url );
-	}
-}
-
-/**
- * Skype sharing service.
- */
-class Share_Skype_Block extends Sharing_Source_Block {
-	/**
-	 * Service short name.
-	 *
-	 * @var string
-	 */
-	public $shortname = 'skype';
-
-	/**
-	 * Service name.
-	 *
-	 * @return string
-	 */
-	public function get_name() {
-		return __( 'Skype', 'jetpack' );
 	}
 }
 

@@ -5,7 +5,7 @@ use Elementor\Core\Base\Module as BaseModule;
 use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class Module extends BaseModule {
@@ -26,7 +26,7 @@ class Module extends BaseModule {
 		}
 
 		add_action( 'wp_head', function() {
-			if ( ! $this->should_lazyload() ) {
+			if ( ! $this->should_lazy_load_background_images() ) {
 				return;
 			}
 			?>
@@ -52,11 +52,11 @@ class Module extends BaseModule {
 		} );
 
 		add_action( 'wp_footer', function() {
-			if ( ! $this->should_lazyload() ) {
+			if ( ! $this->should_lazy_load_background_images() ) {
 				return;
 			}
 			?>
-			<script type='text/javascript'>
+			<script>
 				const lazyloadRunObserver = () => {
 					const lazyloadBackgrounds = document.querySelectorAll( `.e-con.e-parent:not(.e-lazyloaded)` );
 					const lazyloadBackgroundObserver = new IntersectionObserver( ( entries ) => {
@@ -86,7 +86,7 @@ class Module extends BaseModule {
 		} );
 	}
 
-	private function should_lazyload() {
+	private function should_lazy_load_background_images(): bool {
 		return ! is_admin() && ! Plugin::$instance->preview->is_preview_mode() && ! Plugin::$instance->editor->is_edit_mode();
 	}
 

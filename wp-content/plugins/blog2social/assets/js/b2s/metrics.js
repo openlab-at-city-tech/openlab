@@ -2,31 +2,32 @@ jQuery.noConflict();
 
 var filterDates = [];
 
-if (typeof wp.heartbeat !== "undefined") {
-    jQuery(document).on('heartbeat-send', function (e, data) {
-        data['b2s_heartbeat'] = 'b2s_listener';
-        data['b2s_heartbeat_action'] = 'b2s_metrics';
-    });
-    wp.heartbeat.connectNow();
-}
-
 jQuery(window).on("load", function () {
-    if(jQuery('#b2sOptionMetricsStarted').val() == '1' && jQuery('#b2sOptionMetricsFeedback').val() == '0') {
+
+    if (typeof wp.heartbeat !== "undefined") {
+        jQuery(document).on('heartbeat-send', function (e, data) {
+            data['b2s_heartbeat'] = 'b2s_listener';
+            data['b2s_heartbeat_action'] = 'b2s_metrics';
+        });
+        wp.heartbeat.connectNow();
+    }
+
+    if (jQuery('#b2sOptionMetricsStarted').val() == '1' && jQuery('#b2sOptionMetricsFeedback').val() == '0') {
         jQuery('.b2s-metrics-feedback-modal').modal('show');
-    }   
-    if(jQuery('#b2sOptionMetricsStarted').val() == '0') {
+    }
+    if (jQuery('#b2sOptionMetricsStarted').val() == '0') {
         jQuery('.b2s-metrics-starting-modal').modal('show');
     }
-    
+
     var today = new Date();
     var startDate = new Date();
-    startDate.setTime(startDate.getTime() - ((24*60*60*1000) * 30));//today -30 days
-    
+    startDate.setTime(startDate.getTime() - ((24 * 60 * 60 * 1000) * 30));//today -30 days
+
     var dateFormat = 'DD.MM.YYYY';
-    if(jQuery('#b2sUserLang').val() == 'en') {
+    if (jQuery('#b2sUserLang').val() == 'en') {
         dateFormat = 'YYYY-MM-DD';
     }
-    
+
     jQuery('#b2s-metrics-date-picker').daterangepicker({
         ranges: {
             'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -41,11 +42,11 @@ jQuery(window).on("load", function () {
         "locale": {
             format: dateFormat
         }
-    }, function(start, end, label) {
+    }, function (start, end, label) {
         filterDates = [start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')];
         loadInsights();
     });
-    
+
     loadInsights();
 });
 
@@ -71,42 +72,42 @@ function loadInsights() {
         success: function (data) {
             jQuery('.b2s-metrics-area').show();
             jQuery('.b2s-loading-area').hide();
-            if(data.result == true) {
+            if (data.result == true) {
                 jQuery('.b2s-sort-result-item-area').html(data.data.posts);
-                
+
                 jQuery('.b2s-posts-total-data').html(data.data.general.postCountTotal);
                 jQuery('.b2s-impressions-total-data').html(data.data.general.impressionsTotal);
                 jQuery('.b2s-engagements-total-data').html(data.data.general.engagementsTotal);
-                
+
                 jQuery('.b2s-posts-gain-data').html(data.data.general.postCountToday);
                 jQuery('.b2s-impressions-gain-data').html(data.data.general.impressionsToday);
                 jQuery('.b2s-engagements-gain-data').html(data.data.general.engagementsToday);
-                
+
                 jQuery('#b2s-posts-status').removeClass('glyphicon-arrow-up').removeClass('glyphicon-arrow-down').removeClass('glyphicon-minus');
                 jQuery('#b2s-impressions-status').removeClass('glyphicon-arrow-up').removeClass('glyphicon-arrow-down').removeClass('glyphicon-minus');
                 jQuery('#b2s-engagements-status').removeClass('glyphicon-arrow-up').removeClass('glyphicon-arrow-down').removeClass('glyphicon-minus');
-                
-                if(data.data.general.postCountToday == data.data.general.impressionsCompare) {
+
+                if (data.data.general.postCountToday == data.data.general.impressionsCompare) {
                     jQuery('#b2s-posts-status').addClass('glyphicon-minus');
-                } else if(data.data.general.postCountToday > data.data.general.impressionsCompare) {
+                } else if (data.data.general.postCountToday > data.data.general.impressionsCompare) {
                     jQuery('#b2s-posts-status').addClass('glyphicon-arrow-up');
-                } else if(data.data.general.postCountToday < data.data.general.impressionsCompare) {
+                } else if (data.data.general.postCountToday < data.data.general.impressionsCompare) {
                     jQuery('#b2s-posts-status').addClass('glyphicon-arrow-down');
                 }
-                
-                if(data.data.general.impressionsToday == data.data.general.impressionsCompare) {
+
+                if (data.data.general.impressionsToday == data.data.general.impressionsCompare) {
                     jQuery('#b2s-impressions-status').addClass('glyphicon-minus');
-                } else if(data.data.general.impressionsToday > data.data.general.impressionsCompare) {
+                } else if (data.data.general.impressionsToday > data.data.general.impressionsCompare) {
                     jQuery('#b2s-impressions-status').addClass('glyphicon-arrow-up');
-                } else if(data.data.general.impressionsToday < data.data.general.impressionsCompare) {
+                } else if (data.data.general.impressionsToday < data.data.general.impressionsCompare) {
                     jQuery('#b2s-impressions-status').addClass('glyphicon-arrow-down');
                 }
-                
-                if(data.data.general.engagementsToday == data.data.general.engagementsCompare) {
+
+                if (data.data.general.engagementsToday == data.data.general.engagementsCompare) {
                     jQuery('#b2s-engagements-status').addClass('glyphicon-minus');
-                } else if(data.data.general.engagementsToday > data.data.general.engagementsCompare) {
+                } else if (data.data.general.engagementsToday > data.data.general.engagementsCompare) {
                     jQuery('#b2s-engagements-status').addClass('glyphicon-arrow-up');
-                } else if(data.data.general.engagementsToday < data.data.general.engagementsCompare) {
+                } else if (data.data.general.engagementsToday < data.data.general.engagementsCompare) {
                     jQuery('#b2s-engagements-status').addClass('glyphicon-arrow-down');
                 }
             }
@@ -114,11 +115,11 @@ function loadInsights() {
     });
 }
 
-jQuery(document).on('change', '.b2s-calendar-filter-network-btn', function() {
+jQuery(document).on('change', '.b2s-calendar-filter-network-btn', function () {
     loadInsights();
 });
 
-jQuery(document).on('click', '.b2s-sort-posts', function() {
+jQuery(document).on('click', '.b2s-sort-posts', function () {
     jQuery('.b2s-sort-posts').removeClass('btn-primary').addClass('btn-default');
     jQuery(this).addClass('btn-primary').removeClass('btn-default');
     var sortType = jQuery(this).data('sort-type');
@@ -128,21 +129,21 @@ jQuery(document).on('click', '.b2s-sort-posts', function() {
     }
 });
 
-jQuery(document).on('change', '.b2s-filter-active', function() {
+jQuery(document).on('change', '.b2s-filter-active', function () {
     var activeType = jQuery(this).val();
-    jQuery(".b2s-sort-result-item-area li").each(function(element) {
-        if(activeType == "0") {
+    jQuery(".b2s-sort-result-item-area li").each(function (element) {
+        if (activeType == "0") {
             jQuery(this).show();
         }
-        if(activeType == "1") {
-            if(jQuery(this).data('active') == "1") {
+        if (activeType == "1") {
+            if (jQuery(this).data('active') == "1") {
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
             }
         }
-        if(activeType == "2") {
-            if(jQuery(this).data('active') == "0") {
+        if (activeType == "2") {
+            if (jQuery(this).data('active') == "0") {
                 jQuery(this).show();
             } else {
                 jQuery(this).hide();
@@ -210,33 +211,33 @@ jQuery(document).on('click', '.b2sFavoriteStar', function () {
             'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
         },
         error: function () {
-            jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').removeClass('b2sFavoriteStarLoading');
+            jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').removeClass('b2sFavoriteStarLoading');
             jQuery('.b2s-server-connection-fail').show();
             return false;
         },
         success: function (data) {
             if (data.result == true) {
-                jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').data('is-favorite', newStatus);
-                if(newStatus == 1){
-                    jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').removeClass('glyphicon-star-empty');
-                    jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').addClass('glyphicon-star');
+                jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').data('is-favorite', newStatus);
+                if (newStatus == 1) {
+                    jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').removeClass('glyphicon-star-empty');
+                    jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').addClass('glyphicon-star');
                 } else {
-                    jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').removeClass('glyphicon-star');
-                    jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').addClass('glyphicon-star-empty');
+                    jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').removeClass('glyphicon-star');
+                    jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').addClass('glyphicon-star-empty');
                 }
-                if(jQuery('#b2sType').val() == 'favorites') {
-                    jQuery('.b2s-favorite-list-entry[data-post-id="'+postId+'"]').remove();
-                    if(jQuery('.b2s-favorite-list-entry').length == 0) {
-                        jQuery('.b2s-sort-result-item-area').html('<li class="list-group-item"><div class="media"><div class="media-body"></div>'+jQuery('#b2sNoFavoritesText').val()+'</div></li>');
+                if (jQuery('#b2sType').val() == 'favorites') {
+                    jQuery('.b2s-favorite-list-entry[data-post-id="' + postId + '"]').remove();
+                    if (jQuery('.b2s-favorite-list-entry').length == 0) {
+                        jQuery('.b2s-sort-result-item-area').html('<li class="list-group-item"><div class="media"><div class="media-body"></div>' + jQuery('#b2sNoFavoritesText').val() + '</div></li>');
                         jQuery('.b2s-sort-pagination-area').hide();
                     }
                 }
             }
-            jQuery('.b2sFavoriteStar[data-post-id="'+postId+'"]').removeClass('b2sFavoriteStarLoading');
+            jQuery('.b2sFavoriteStar[data-post-id="' + postId + '"]').removeClass('b2sFavoriteStarLoading');
             return true;
         }
     });
-    
+
 });
 
 jQuery(document).on('click', '.checkbox-all', function () {

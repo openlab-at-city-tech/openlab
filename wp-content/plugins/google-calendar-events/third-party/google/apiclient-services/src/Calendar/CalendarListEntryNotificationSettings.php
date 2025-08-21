@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class CalendarListEntryNotificationSettings extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'notifications';
@@ -39,4 +38,4 @@ class CalendarListEntryNotificationSettings extends \SimpleCalendar\plugin_deps\
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CalendarListEntryNotificationSettings::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_CalendarListEntryNotificationSettings');
+class_alias(CalendarListEntryNotificationSettings::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarListEntryNotificationSettings');

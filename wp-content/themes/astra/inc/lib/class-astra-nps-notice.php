@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
+if ( ! class_exists( 'Astra_Nps_Notice' ) ) {
 
 	/**
 	 * Admin
@@ -23,6 +23,40 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
 		 * @var (Object) Astra_Nps_Notice
 		 */
 		private static $instance = null;
+
+		/**
+		 * Constructor.
+		 *
+		 * @since 1.0.0
+		 */
+		private function __construct() {
+
+			// Allow users to disable NPS survey via a filter && return early if the user does not have admin access.
+			if ( ! current_user_can( 'manage_options' ) || apply_filters( 'astra_nps_survey_disable', false ) ) {
+				return;
+			}
+
+			// Added filter to allow overriding the URL externally.
+			add_filter( 'nps_survey_build_url', static function( $url ) {
+				return get_template_directory_uri() . '/inc/lib/nps-survey/dist/';
+			} );
+
+			// Bail early if soft while labeling is enabled.
+			if (
+				defined( 'ASTRA_EXT_VER' ) &&
+				is_callable( 'Astra_Ext_White_Label_Markup::get_whitelabel_string' ) &&
+				'astra' !== strtolower( Astra_Ext_White_Label_Markup::get_whitelabel_string( 'astra', 'name', 'astra' ) )
+			) {
+				return;
+			}
+
+			// Return if white labelled is enabled.
+			if ( astra_is_white_labelled() ) {
+				return;
+			}
+
+			add_action( 'admin_footer', array( $this, 'render_astra_nps_survey' ), 999 );
+		}
 
 		/**
 		 * Get Instance
@@ -40,75 +74,26 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
 		}
 
 		/**
-		 * Constructor.
-		 *
-		 * @since 1.0.0
-		 */
-		private function __construct() {
-
-			// Return if white labelled is enabled.
-			if ( astra_is_white_labelled() ) {
-				return;
-			}
-
-			add_action( 'admin_footer', array( $this, 'render_astra_nps_survey' ), 999 );
-
-			// Added filter to allow overriding the URL externally.
-			add_filter( 'nps_survey_build_url', function( $url ) {
-				return get_template_directory_uri() . '/inc/lib/nps-survey/dist/';
-			});
-
-			add_filter( 'nps_survey_allowed_screens', function( $screens ) {
-				// Restrict other NPS popups on Astra specific pages.
-				if ( ! self::is_nps_showing() ) {
-					return $screens;
-				}
-
-				// Add new screen IDs to the array.
-				$screens[] = 'toplevel_page_astra';
-				$screens[] = 'astra_page_theme-builder-free';
-				$screens[] = 'astra_page_theme-builder';
-			
-				return $screens;
-			});
-
-			add_action( 'admin_enqueue_scripts', array( $this, 'register_assets' ) );
-		}
-
-		/**
-		 * Check if NPS is showing.
-		 *
-		 * @since 4.8.7
-		 * @return bool
-		 */
-		public static function is_nps_showing() {
-			$astra_nps_options = get_option( Nps_Survey::get_nps_id( 'astra' ), array() );
-			$display_after     = isset( $astra_nps_options['display_after'] ) && is_int( $astra_nps_options['display_after'] ) ? $astra_nps_options['display_after'] : 0;
-
-			return Nps_Survey::is_show_nps_survey_form( 'astra', $display_after );
-		}
-
-		/**
-		 * Register admin scripts for NPS visibility condition.
-		 *
-		 * @param String $hook Screen name where the hook is fired.
-		 * @since 4.8.7
-		 * @return void
-		 */
-		public static function register_assets( ) {
-			if ( self::is_nps_showing() ) {
-				// Intentionally hiding the other NPS popups when visible along with the Astra NPS.
-				$css_file = is_rtl() ? 'nps-visibility-rtl.css' : 'nps-visibility.css';
-				wp_enqueue_style( 'astra-nps-visibility', ASTRA_THEME_URI . 'inc/assets/css/' . $css_file, array(), ASTRA_THEME_VERSION );
-			}
-		}
-
-		/** 
 		 * Render NPS Survey
 		 *
 		 * @return void
 		 */
 		public function render_astra_nps_survey() {
+
+			$current_screen = get_current_screen();
+
+			// Defining the astra allowed screens.
+			$allowed_screens = [
+				'toplevel_page_astra',
+				'astra_page_theme-builder-free',
+				'astra_page_theme-builder',
+			];
+
+			// Checking if we're on one of the specified screens
+			if ( ! in_array( $current_screen->id, $allowed_screens ) ) {
+				return;
+			}
+
 			Nps_Survey::show_nps_notice(
 				'nps-survey-astra',
 				array(
@@ -116,6 +101,7 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
 					'dismiss_timespan' => 2 * WEEK_IN_SECONDS,
 					'display_after' => get_option('astra_nps_show') ? 0 : 2 * WEEK_IN_SECONDS,
 					'plugin_slug' => 'astra',
+					'show_on_screens' => $allowed_screens,
 					'message' => array(
 						// Step 1 i.e rating input.
 						'logo' => esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg'),
@@ -126,6 +112,7 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
 						'feedback_title' => __( 'Thanks a lot for your feedback! 😍', 'astra' ),
 						'feedback_content' => __( 'Could you please do us a favor and give us a 5-star rating on WordPress? It would help others choose Astra with confidence. Thank you!', 'astra' ),
 						'plugin_rating_link' => esc_url( 'https://wordpress.org/support/theme/astra/reviews/#new-post' ),
+						'plugin_rating_button_string' => __( 'Rate the Theme', 'astra' ),
 
 						// Step 2B i.e. negative.
 						'plugin_rating_title' => __( 'Thank you for your feedback', 'astra' ),
@@ -142,4 +129,4 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) :
 	 */
 	Astra_Nps_Notice::get_instance();
 
-endif;
+}

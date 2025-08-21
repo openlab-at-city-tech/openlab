@@ -504,7 +504,6 @@ use DateTimeZone;
  * @method        static static       __set_state(array $array)                                                                       https://php.net/manual/en/datetime.set-state.php
  *
  * </autodoc>
- * @internal
  */
 class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
 {
@@ -522,7 +521,7 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
      *
      * @return static
      */
-    public static function startOfTime() : self
+    public static function startOfTime(): self
     {
         $date = static::parse('0001-01-01')->years(self::getStartOfTimeYear());
         $date->startOfTime = \true;
@@ -533,7 +532,7 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
      *
      * @return static
      */
-    public static function endOfTime() : self
+    public static function endOfTime(): self
     {
         $date = static::parse('9999-12-31 23:59:59.999999')->years(self::getEndOfTimeYear());
         $date->endOfTime = \true;
@@ -542,13 +541,13 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
     /**
      * @codeCoverageIgnore
      */
-    private static function getEndOfTimeYear() : int
+    private static function getEndOfTimeYear(): int
     {
-        if (\version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
+        if (version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
             return 145261681241552;
         }
         // Remove if https://bugs.php.net/bug.php?id=81107 is fixed
-        if (\version_compare(\PHP_VERSION, '8.1.0-dev', '>=')) {
+        if (version_compare(\PHP_VERSION, '8.1.0-dev', '>=')) {
             return 1118290769066902787;
         }
         return \PHP_INT_MAX;
@@ -556,15 +555,15 @@ class CarbonImmutable extends DateTimeImmutable implements CarbonInterface
     /**
      * @codeCoverageIgnore
      */
-    private static function getStartOfTimeYear() : int
+    private static function getStartOfTimeYear(): int
     {
-        if (\version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
+        if (version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
             return -135908816449551;
         }
         // Remove if https://bugs.php.net/bug.php?id=81107 is fixed
-        if (\version_compare(\PHP_VERSION, '8.1.0-dev', '>=')) {
+        if (version_compare(\PHP_VERSION, '8.1.0-dev', '>=')) {
             return -1118290769066898816;
         }
-        return \max(\PHP_INT_MIN, -9223372036854773760);
+        return max(\PHP_INT_MIN, -9223372036854773760);
     }
 }

@@ -116,9 +116,14 @@ textarea.form-control {
     cursor: pointer;
 }
 .b2s-user-network-settings-post-format-area label > input {
-    visibility: hidden;
-    position: absolute;
+   /* visibility: hidden;
+    position: absolute;*/
 }
+
+.b2s-user-network-settings-post-format-container{
+    display: flex; flex-direction: column;
+}
+
 .b2s-settings-checked + img {
     border: 3px solid #79b232 !important;
 }

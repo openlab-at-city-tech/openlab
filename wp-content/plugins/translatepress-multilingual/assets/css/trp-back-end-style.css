@@ -14,7 +14,7 @@
     padding-left:0;
 }
 
-#trp-settings-page .notice, #trp-settings-page .error{
+#trp-settings-page .notice, #trp-settings-page .error, #trp-settings-page .updated{
     margin: 12px 32px;
 }
 
@@ -313,7 +313,7 @@ div.trp-switch .trp-switch-input {
 .trp-settings-options__wrapper{
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 45px;
 }
 
 .trp-settings-options-item{
@@ -559,11 +559,15 @@ a.nav-tab.trp-translation-editor:hover {
 }
 
 .trp-col-formality{
-    padding: 16px;
+    padding: 16px 16px 16px 0;
 }
 
 .trp-free-language-selector .trp-col-select-language{
     padding-right: 30px;
+}
+
+.trp-col-select-language{
+    padding-right: 16px;
 }
 
 .trp-free-language-selector .trp-language > *:not(:last-child) {
@@ -774,6 +778,106 @@ input.trp-language-slug{
 
 .trp-automatic-translation-license-notice__wrapper .trp-no-license-automatic-translation__icon path{
     fill: var(--trp-settings-warning-text-color);
+}
+
+#trp-refresh-tpai{
+    cursor: pointer;
+}
+#trp-refresh-tpai:hover,
+#trp-refresh-tpai:hover span{
+    color: var(--trp-settings-accent-color);
+}
+
+.trp-get-free-license__container{
+    display: flex;
+    width: 100%;
+    gap: 25px;
+ }
+
+#tpai-upsale {
+    width: 27%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.trp-automatic-translation-get-license-buttons{
+    display: inline-flex;
+}
+
+.trp-get-free-license-button{
+    height: 46px;
+    padding: 4px 12px !important;
+    border-radius: 5px !important;
+    gap: 8px;
+    line-height: 2.6 !important;
+}
+
+.trp-enter-license-link{
+    height: 36.5px;
+    display: inline-flex;
+    line-height: 2.4 !important;
+}
+
+.trp-get-free-license-text{
+    color: #1D2327;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 160%;
+}
+
+.trp-text-auto{
+    padding: 15px;
+    color: #1D2327;
+}
+
+.trp-check-text{
+    display: inline-flex;
+    align-items: center;;
+    gap: 5px;
+}
+
+.trp-get-free-license-link{
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.trp-upsale-fill{
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: #FCF2DD;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #F9E2B2;
+    border-radius: 3px;
+    text-align: left;
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.trp-upsale-fill-active-license{
+    margin-top: 25px;
+    height: 40px;
+    width: auto;
+    padding: 1px 15px 10px;
+}
+
+.trp-upsale-text-red{
+    color: #8A6412;
+    font-size: 14px;
+    line-height: 0.5;
+    vertical-align: middle;
+    font-weight: 454;
+}
+
+#trp-upgrade-link{
+    color: #8A6412;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .trp-quota-bar {
@@ -1107,6 +1211,22 @@ details .trp-description-text{
 .trp-license-page-upsell-container{
     display: flex;
     gap: 13px;
+}
+
+.trp-license-page-upsell-container summary{
+    cursor: pointer; font-weight: bold; padding: 10px 0;
+}
+
+.trp-license-page-upsell-container code{
+    display: block;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    margin: 10px 0;
 }
 
 .trp-license-page-upsell-container-content{
@@ -1455,6 +1575,31 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
         flex-direction: column;
     }
 
+    .trp-get-free-license__container{
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    #tpai-upsale{
+        width: 350px;
+    }
+
+}
+
+@media screen and (max-width: 1370px) {
+    .trp-upsale-fill{
+        height: auto;
+        display: flex;
+        align-items: center;
+        padding: 25px;
+        bottom: 0;
+        width: auto;
+    }
+
+    .trp-upsale-text-red{
+        text-overflow: ellipsis;
+        line-height: 1.2;
+    }
 }
 
 @media screen and (max-width: 782px) {

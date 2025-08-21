@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Astra Fonts
  */
 final class Astra_Fonts {
-
 	/**
 	 * Get fonts to generate.
 	 *
@@ -35,7 +34,7 @@ final class Astra_Fonts {
 	 */
 	public static function add_font( $name, $variants = array() ) {
 
-		if ( 'inherit' == $name ) {
+		if ( 'inherit' === $name ) {
 			return;
 		}
 		if ( ! is_array( $variants ) ) {
@@ -53,7 +52,7 @@ final class Astra_Fonts {
 					$variants[] = 400;
 				}
 			}
-		} elseif ( 'inherit' == $variants ) {
+		} elseif ( 'inherit' === $variants ) {
 			$variants = 400;
 		}
 

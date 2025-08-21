@@ -145,6 +145,12 @@ su_add_shortcode(
 				'desc' => __('Additional CSS class name(s) separated by space(s)', 'shortcodes-ultimate'),
 				'default' => '',
 			),
+			'bold' => array(
+				'type' => 'bool',
+				'default' => 'no',
+				'name' => __('Bold', 'shortcodes-ultimate'),
+				'desc' => __('Make button text bold', 'shortcodes-ultimate'),
+			),
 		),
 		'content' => __('Button text', 'shortcodes-ultimate'),
 		'desc' => __('Styled button', 'shortcodes-ultimate'),
@@ -181,6 +187,7 @@ function su_shortcode_button($atts = null, $content = null)
 			'title' => '',
 			'id' => '',
 			'class' => '',
+			'bold' => 'no',
 		),
 		$atts,
 		'button'
@@ -351,6 +358,10 @@ function su_shortcode_button($atts = null, $content = null)
 	// Button text has no icon marker, append icon to begin of the text
 	else {
 		$content = $icon . ' ' . $content;
+	}
+
+	if ($atts['bold'] === 'yes') {
+		$content = '<strong>' . $content . '</strong>';
 	}
 
 	// Prepare onclick action

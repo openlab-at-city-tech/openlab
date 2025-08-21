@@ -113,7 +113,7 @@ class Post_Connection_JITM extends JITM {
 				array(
 					'creative-mail-action' => 'install',
 				),
-				admin_url( 'edit.php?post_type=feedback' )
+				admin_url( 'admin.php?page=jetpack-forms-admin' )
 			),
 			'creative-mail-install'
 		);
@@ -130,7 +130,7 @@ class Post_Connection_JITM extends JITM {
 				array(
 					'creative-mail-action' => 'activate',
 				),
-				admin_url( 'edit.php?post_type=feedback' )
+				admin_url( 'admin.php?page=jetpack-forms-admin' )
 			),
 			'creative-mail-install'
 		);
@@ -225,7 +225,11 @@ class Post_Connection_JITM extends JITM {
 	}
 
 	/**
-	 * Asks the wpcom API for the current message to display keyed on query string and message path
+	 * Asks the wpcom API for the current message to display keyed on query string and message path.
+	 *
+	 * For sites running on the Dotcom Simple codebase, the network request is bypassed
+	 * via Client::wpcom_json_api_request_as_blog allowing for the JITM\Engine to be called
+	 * directly.
 	 *
 	 * @param string $message_path The message path to ask for.
 	 * @param string $query The query string originally from the front end.
@@ -292,8 +296,16 @@ class Post_Connection_JITM extends JITM {
 		}
 
 		if ( $use_cache ) {
-			$last_sync  = (int) get_transient( 'jetpack_last_plugin_sync' );
-			$from_cache = $envelopes && $last_sync > 0 && $last_sync < $envelopes['last_response_time'];
+			$last_sync = (int) get_transient( 'jetpack_last_plugin_sync' );
+			// The sync timestamp indicates when a plugin change was last sent to Jetpack, however,
+			// it's stored in a transient and doesn't stay forever. Therefore, an admin who last changed
+			// a plugin a month ago is likely to have $last_sync=0.
+			//
+			// If the sync timestamp is missing (value 0): use the cache.
+			// If the timestamp exists and is older than the cached envelope: use the cache.
+			// If the timestamp exists and is newer: bypass and refresh.
+			// (This case means the JITM was created before the last plugin activate/deactivate and is invalid).
+			$from_cache = $envelopes && ( 0 === $last_sync || $last_sync < $envelopes['last_response_time'] );
 		} else {
 			$from_cache = false;
 		}

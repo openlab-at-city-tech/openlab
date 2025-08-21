@@ -5,7 +5,6 @@ use Bookly\Backend\Components\Dialogs;
 
 /** @var bool $show_wp_users */
 ?>
-    <div id="bookly-appointment-dialog"></div>
 <?php AttachPaymentProxy\Pro::renderAttachPaymentDialog() ?>
 <?php AttachPackageProxy\Packages::renderAttachPackageDialog() ?>
 <?php Dialogs\Payment\Dialog::render() ?>

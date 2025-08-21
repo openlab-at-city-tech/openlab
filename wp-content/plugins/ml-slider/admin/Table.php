@@ -48,17 +48,7 @@ class MetaSlider_Admin_Table extends WP_List_table
 
         $status = isset($_GET['post_status']) && 'trash' === $_GET['post_status'] ? 'trash' : 'publish';
 
-        if (!empty($search)) {
-            $slides_query = $wpdb->prepare("SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s AND post_title LIKE %s", array('ml-slider', 'publish', '%'. $wpdb->esc_like($search). '%'));  // WPCS: unprepared SQL OK.
-        } else {
-            if( $status == 'publish' ) {
-                $slides_query = $wpdb->prepare("SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s", array('ml-slider', 'publish'));  // WPCS: unprepared SQL OK.
-            } else {
-                $slides_query = $wpdb->prepare("SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s", array('ml-slider', 'trash'));  // WPCS: unprepared SQL OK.
-            }         
-        }
-
-        $query_results = $wpdb->get_results($slides_query, ARRAY_A ); // WPCS: unprepared SQL OK.
+        $query_results = $this->get_slideshow_query($status, $search);
 
         foreach ($query_results as &$each_slide) {
             $theme = get_post_meta($each_slide['ID'], 'metaslider_slideshow_theme', true);
@@ -121,37 +111,41 @@ class MetaSlider_Admin_Table extends WP_List_table
         
     }   
 
-    protected function get_views()
-    {
+    protected function get_views() {
         global $wpdb;
-        $views = array();
-        $paramaters = array('action', 'slideshows', 'post_status', '_wpnonce', 'paged');
-        $current = ( !empty($_REQUEST['post_status']) ? $_REQUEST['post_status'] : 'all');
-   
-        $all = remove_query_arg($paramaters);
-        $class = ($current == 'all' ? ' class="current"' :'');
-        $views['all'] = "<a href='" . esc_url($all) . "' {$class} >" . esc_html__('Published', 'ml-slider') . " (" . $this->slideshow_count('all') . ")</a>";
         
-        if ($this->slideshow_count('trash') != 0) {
-            $class = ($current == 'trash' ? ' class="current"' :'');
-            $views['trash'] = "<a href='" . esc_url($all) . "&post_status=trash' {$class} >" . esc_html__('Trash', 'ml-slider') . " (" . $this->slideshow_count('trash') . ")</a>";
+        $views = [];
+        $parameters = ['action', 'slideshows', 'post_status', '_wpnonce', 'paged'];
+        $current = $_REQUEST['post_status'] ?? 'all';
+        $base_url = remove_query_arg($parameters);
+    
+        // Helper function to generate view links
+        $generate_view_link = function ($status, $label) use ($base_url, $current) {
+            $count = $this->slideshow_count($status);
+            if ($count == 0 && $status === 'trash') {
+                return null;
+            }
+            $url = ($status === 'all') ? $base_url : add_query_arg('post_status', $status, $base_url);
+            $class = ($current === $status) ? ' class="current"' : '';
+            return "<a href='" . esc_url($url) . "' {$class}>" . esc_html__($label, 'ml-slider') . " ({$count})</a>";
+        };
+    
+        $views['all'] = $generate_view_link('all', 'Published');
+        
+        if ($trash_link = $generate_view_link('trash', 'Trash')) {
+            $views['trash'] = $trash_link;
         }
-        
+    
         return $views;
     }
-
+    
     private function slideshow_count($status = 'all')
     {
-        global $wpdb;
-        $wpdbTable = $wpdb->prefix . 'posts';
-        if ($status == 'trash') {
-            $slides_query = $wpdb->prepare("SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s", array('ml-slider', 'trash'));  // WPCS: unprepared SQL OK.
-        } else {
-            $slides_query = $wpdb->prepare("SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s", array('ml-slider', 'publish'));  // WPCS: unprepared SQL OK.
+        if ($status === 'all') {
+            $status = 'publish';
         }
-
-        $wpdb->get_results($slides_query, ARRAY_A ); // WPCS: unprepared SQL OK.
-        return $wpdb->num_rows;
+        $results = $this->get_slideshow_query($status);
+        return count($results);
     }
 
     public function get_bulk_actions()
@@ -182,6 +176,12 @@ class MetaSlider_Admin_Table extends WP_List_table
             'post_date' => esc_html__('Created', 'ml-slider'),
             'ID' => esc_html__('Shortcode', 'ml-slider')
         );
+
+        $status = $_REQUEST['post_status'] ?? 'publish';
+        if ($status !== 'trash') {
+            $columns['used_on'] = __('Usage', 'ml-slider');
+        }
+
         return $columns;
     }
 
@@ -214,11 +214,28 @@ class MetaSlider_Admin_Table extends WP_List_table
         return $slidethumb;
     }
 
+    private function get_slideshow_query($status = 'publish', $search = '') {
+        global $wpdb;
+        $wpdbTable = $wpdb->prefix . 'posts';
+        
+        $query = "SELECT ID, post_title, post_date FROM $wpdbTable WHERE post_type = %s AND post_status = %s";
+        $params = ['ml-slider', $status];
+    
+        if (!empty($search)) {
+            $query .= " AND post_title LIKE %s";
+            $params[] = '%' . $wpdb->esc_like($search) . '%';
+        }
+
+        $prepared_query = $wpdb->prepare($query, $params); // WPCS: unprepared SQL OK.
+        return $wpdb->get_results($prepared_query, ARRAY_A); // WPCS: unprepared SQL OK.
+    }
+
     public function get_slides($slideshowId, $status)
     {
+        $post_status = $status === 'trash' ? array('trash', 'publish') : array($status);
         $slides = get_posts(array(
             'post_type' => array('ml-slide'),
-            'post_status' => array($status),
+            'post_status' => $post_status,
             'orderby' => 'menu_order',
             'order' => 'ASC',
             'lang' => '',
@@ -348,8 +365,89 @@ class MetaSlider_Admin_Table extends WP_List_table
         return ('<pre class="copy-shortcode tipsy-tooltip" original-title="' . __('Click to copy shortcode.', 'ml-slider') . '"><div class="text-orange cursor-pointer whitespace-normal inline">[metaslider id="'. esc_attr($item['ID']) .'"]</div></pre><span class="copy-message" style="display:none;"><div class="dashicons dashicons-yes"></div></span>');
     }
 
+    public function column_used_on($item)
+    {
+        $slideshow_id = $item['ID'];
+        $pages = $this->get_posts_using_slideshow($slideshow_id);
+        
+        if ($pages !== esc_html__('Not found.', 'ml-slider')) {
+            return '<button class="open-modal button" data-id="' . esc_attr($slideshow_id) . '">'
+                . esc_html__('View Usage', 'ml-slider') . '</button>
+                <div class="modal-overlay" id="overlay-' . esc_attr($slideshow_id) . '" style="display: none;"></div>
+                <div class="shortcode-modal bg-white shadow" id="modal-' . esc_attr($slideshow_id) . '" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-modal" data-id="' . esc_attr($slideshow_id) . '">&times;</span>
+                        <h3 class="text-lg font-medium m-0 leading-6 text-gray-darkest">'
+                            . esc_html__('Content Using This Slideshow', 'ml-slider') . '</h3>' 
+                            . $pages . '
+                    </div>
+                </div>';
+        } else {
+            return esc_html__('Not found.', 'ml-slider');
+        }
+    }
+    
+    
+    private function get_posts_using_slideshow($slideshow_id)
+    {
+        global $wpdb;
+        $results = [];
 
-    public function extra_tablenav( $which ) {
+        $posts = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT ID, post_title, post_type FROM {$wpdb->posts} WHERE post_status = %s AND (post_content LIKE %s OR post_content REGEXP %s)",
+                'publish',
+                '%' . $wpdb->esc_like("[metaslider id=\"$slideshow_id\"") . '%',
+                '\\[metaslider[^]]*id=[\"\\\']?' . $slideshow_id . '[\"\\\']?[^]]*\\]'
+            )
+        );
+
+        // Organize by post type
+        $grouped_results = [];
+    
+        foreach ($posts as $post) {
+            $post_type_obj = get_post_type_object($post->post_type);
+            $post_type_label = $post_type_obj ? $post_type_obj->labels->singular_name : ucfirst($post->post_type);
+    
+            $grouped_results[$post_type_label][] = sprintf(
+                '<li><a href="%s" target="_blank">%s</a></li>',
+                esc_url(get_permalink($post->ID)),
+                esc_html($post->post_title)
+            );
+        }
+
+        $theme_mods = get_option('theme_mods_' . get_option('stylesheet'), []);
+        if (is_array($theme_mods)) {
+            foreach ($theme_mods as $key => $value) {
+                if (is_string($value) && preg_match('/\[metaslider[^]]*id=["\']?' . $slideshow_id . '["\']?[^]]*]/', $value)) {
+                    $grouped_results[esc_html__('Theme Setting', 'ml-slider')][] = "<li>" . esc_html($key) . "</li>";
+                }
+            }
+        }
+
+        $all_options = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_value LIKE %s",
+                '%' . $wpdb->esc_like("[metaslider id=\"$slideshow_id\"") . '%'
+            )
+        );
+    
+        foreach ($all_options as $option) {
+            if (is_string($option->option_value) && preg_match('/\[metaslider[^]]*id=["\']?' . $slideshow_id . '["\']?[^]]*]/', $option->option_value)) {
+                $grouped_results[esc_html__('Option', 'ml-slider')][] = "<li>" . esc_html($option->option_name) . "</li>";
+            }
+        }
+
+        $output = '';
+        foreach ($grouped_results as $category => $items) {
+            $output .= "<h5>{$category}:</h5><ul>" . implode('', $items) . "</ul>";
+        }
+    
+        return empty($output) ? esc_html__('Not found.', 'ml-slider') : $output;
+    }          
+
+    public function extra_tablenav( $which )
+    {
 		if ( $which == "top" ) {
             if (isset($_REQUEST['post_status']) && $_REQUEST['post_status'] == "trash") {
                 if ( ! empty($this->table_data('', 'trash'))) {

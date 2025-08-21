@@ -154,19 +154,20 @@ function wpcf7_checkbox_form_tag_handler( $tag ) {
 				$free_text_name = sprintf( '_wpcf7_free_text_%s', $tag->name );
 
 				$free_text_atts = array(
+					'type' => 'text',
 					'name' => $free_text_name,
 					'class' => 'wpcf7-free-text',
 					'tabindex' => $tabindex,
 				);
 
-				if ( wpcf7_is_posted()
-				and isset( $_POST[$free_text_name] ) ) {
-					$free_text_atts['value'] = wp_unslash( $_POST[$free_text_name] );
+				if ( wpcf7_is_posted() ) {
+					$free_text_atts['value'] = wpcf7_superglobal_post( $free_text_name );
 				}
 
-				$free_text_atts = wpcf7_format_atts( $free_text_atts );
-
-				$item .= sprintf( ' <input type="text" %s />', $free_text_atts );
+				$item .= sprintf(
+					' <input %s />',
+					wpcf7_format_atts( $free_text_atts )
+				);
 
 				$class .= ' has-free-text';
 			}
@@ -324,7 +325,7 @@ function wpcf7_posted_data_checkbox( $value, $value_orig, $form_tag ) {
 		$value = (array) $value;
 
 		$free_text_name = sprintf( '_wpcf7_free_text_%s', $form_tag->name );
-		$free_text = wp_unslash( $_POST[$free_text_name] ?? '' );
+		$free_text = wpcf7_superglobal_post( $free_text_name );
 
 		$last_val = array_pop( $value );
 
@@ -381,28 +382,33 @@ function wpcf7_tag_generator_checkbox( $contact_form, $options ) {
 
 	$tgg = new WPCF7_TagGeneratorGenerator( $options['content'] );
 
-?>
-<header class="description-box">
-	<h3><?php
-		echo esc_html( $field_types[$basetype]['heading'] );
-	?></h3>
+	$formatter = new WPCF7_HTMLFormatter();
 
-	<p><?php
-		$description = wp_kses(
-			$field_types[$basetype]['description'],
-			array(
-				'a' => array( 'href' => true ),
-				'strong' => array(),
-			),
-			array( 'http', 'https' )
-		);
+	$formatter->append_start_tag( 'header', array(
+		'class' => 'description-box',
+	) );
 
-		echo $description;
-	?></p>
-</header>
+	$formatter->append_start_tag( 'h3' );
 
-<div class="control-box">
-	<?php
+	$formatter->append_preformatted(
+		esc_html( $field_types[$basetype]['heading'] )
+	);
+
+	$formatter->end_tag( 'h3' );
+
+	$formatter->append_start_tag( 'p' );
+
+	$formatter->append_preformatted(
+		wp_kses_data( $field_types[$basetype]['description'] )
+	);
+
+	$formatter->end_tag( 'header' );
+
+	$formatter->append_start_tag( 'div', array(
+		'class' => 'control-box',
+	) );
+
+	$formatter->call_user_func( static function () use ( $tgg, $field_types, $basetype ) {
 		$tgg->print( 'field_type', array(
 			'with_required' => 'checkbox' === $basetype,
 			'select_options' => array(
@@ -417,15 +423,19 @@ function wpcf7_tag_generator_checkbox( $contact_form, $options ) {
 		$tgg->print( 'selectable_values', array(
 			'use_label_element' => 'checked',
 		) );
-	?>
-</div>
+	} );
 
-<footer class="insert-box">
-	<?php
+	$formatter->end_tag( 'div' );
+
+	$formatter->append_start_tag( 'footer', array(
+		'class' => 'insert-box',
+	) );
+
+	$formatter->call_user_func( static function () use ( $tgg, $field_types ) {
 		$tgg->print( 'insert_box_content' );
 
 		$tgg->print( 'mail_tag_tip' );
-	?>
-</footer>
-<?php
+	} );
+
+	$formatter->print();
 }

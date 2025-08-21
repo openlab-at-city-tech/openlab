@@ -40,28 +40,42 @@ function astra_fb_html_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 
 		$alignment = astra_get_option( 'footer-html-' . $index . '-alignment' );
 
-		$desktop_alignment = ( isset( $alignment['desktop'] ) ) ? $alignment['desktop'] : '';
-		$tablet_alignment  = ( isset( $alignment['tablet'] ) ) ? $alignment['tablet'] : '';
-		$mobile_alignment  = ( isset( $alignment['mobile'] ) ) ? $alignment['mobile'] : '';
+		$desktop_alignment = isset( $alignment['desktop'] ) ? $alignment['desktop'] : '';
+		$tablet_alignment  = isset( $alignment['tablet'] ) ? $alignment['tablet'] : '';
+		$mobile_alignment  = isset( $alignment['mobile'] ) ? $alignment['mobile'] : '';
+
+		$is_rtl = is_rtl();
+
+		$desktop_text_alignment = $is_rtl ?
+			( $desktop_alignment === 'left' ? 'right' : ( $desktop_alignment === 'right' ? 'left' : $desktop_alignment ) )
+			: $desktop_alignment;
+
+		$tablet_text_alignment = $is_rtl ?
+			( $tablet_alignment === 'left' ? 'right' : ( $tablet_alignment === 'right' ? 'left' : $tablet_alignment ) )
+			: $tablet_alignment;
+
+		$mobile_text_alignment = $is_rtl ?
+			( $mobile_alignment === 'left' ? 'right' : ( $mobile_alignment === 'right' ? 'left' : $mobile_alignment ) )
+			: $mobile_alignment;
 
 		/**
 		 * Copyright CSS.
 		 */
 		$css_output_desktop = array(
 			$selector . ' .ast-builder-html-element' => array(
-				'text-align' => $desktop_alignment,
+				'text-align' => $desktop_text_alignment,
 			),
 		);
 
 		$css_output_tablet = array(
 			$selector . ' .ast-builder-html-element' => array(
-				'text-align' => $tablet_alignment,
+				'text-align' => $tablet_text_alignment,
 			),
 		);
 
 		$css_output_mobile = array(
 			$selector . ' .ast-builder-html-element' => array(
-				'text-align' => $mobile_alignment,
+				'text-align' => $mobile_text_alignment,
 			),
 		);
 

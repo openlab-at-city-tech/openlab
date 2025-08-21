@@ -189,7 +189,7 @@ class Translations extends Abstract_Module {
 	 * @return array
 	 */
 	public function add_theme_translations( $_transient_data ) {
-		return $this->add_translations( $_transient_data, 'theme' );
+		return $this->add_translations( $_transient_data, 'themes' );
 	}
 
 

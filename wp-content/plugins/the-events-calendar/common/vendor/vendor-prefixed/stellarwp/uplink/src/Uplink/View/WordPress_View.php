@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\View;
 
@@ -92,7 +87,7 @@ final class WordPress_View implements Contracts\View {
 
 		if( $path === false ) {
 			throw new FileNotFoundException(
-				sprintf( __( 'View file "%s" not found or not readable.', '%TEXTDOMAIN%' ), $file )
+				sprintf( __( 'View file "%s" not found or not readable.', 'tribe-common' ), $file )
 			);
 		}
 

@@ -16,7 +16,7 @@ if ( ! class_exists( 'UberMenu' ) ) {
 /**
  * Astra Ubermenu Compatibility
  */
-if ( ! class_exists( 'Astra_Ubermeu' ) ) :
+if ( ! class_exists( 'Astra_Ubermeu' ) ) {
 
 	/**
 	 * Astra Ubermenu Compatibility
@@ -24,7 +24,6 @@ if ( ! class_exists( 'Astra_Ubermeu' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_Ubermeu {
-
 		/**
 		 * Member Variable
 		 *
@@ -79,7 +78,7 @@ if ( ! class_exists( 'Astra_Ubermeu' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

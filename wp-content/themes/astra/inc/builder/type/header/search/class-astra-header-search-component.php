@@ -20,7 +20,6 @@ define( 'ASTRA_HEADER_SEARCH_URI', ASTRA_THEME_URI . 'inc/builder/type/header/se
  * @since 3.0.0
  */
 class Astra_Header_Search_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */

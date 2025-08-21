@@ -22,12 +22,14 @@ class B2S_RePost_Item {
         $currentDate = new DateTime("now", wp_timezone());
         $this->authData = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
 
-        
         if (isset($this->authData->licence_condition)) {
             //update
             $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
             if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
                 $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $this->authData->licence_condition;
+                if (isset($result->network_condition)) {
+                    $versionDetails['B2S_PLUGIN_NETWORK_CONDITION'] = (array) $result->network_condition;
+                }
                 update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
 
                 if (isset($this->authData->licence_condition->open_sched_post_quota) && B2S_PLUGIN_USER_VERSION > 0) {
@@ -48,7 +50,7 @@ class B2S_RePost_Item {
         $limit = unserialize(B2S_PLUGIN_RE_POST_LIMIT);
 
         $content = '';
-        $content .= '<h3 class="b2s-re-post-h3">' . esc_html__('Re-share your blog content automatically on your social media channels.', 'blog2social') . ((!$isPremium) ? ' <span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') . '</h3>';
+        $content .= '<h3 class="b2s-re-post-h3">' . esc_html__('Re-share your blog content automatically on your social media channels.', 'blog2social') . ((!$isPremium) ? ' <span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') . ' (<a href="' . esc_url(B2S_Tools::getSupportLink('network_guide_re_sharer')) . '" target="_blank">' . esc_html__('Guide', 'blog2social') . '</a>)</h3>';
         $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
         $content .= '<div class="col-md-12 b2s-re-post-settings-header">';
         $content .= '<i class="glyphicon glyphicon-cog b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Settings', 'blog2social') . '</span><span class="b2s-re-post-headline"><i class="glyphicon glyphicon-chevron-up b2s-re-post-settings-toggle b2s-icon-size"></i></span>';
@@ -82,13 +84,17 @@ class B2S_RePost_Item {
         $content .= $this->getChosenPostAuthorData();
         $content .= '<br>';
         $content .= '<input type="checkbox" name="b2s-re-post-favorites-active" id="b2s-re-post-favorites-active" value="1">';
-        $content .= '<label for="b2s-re-post-favorites-active"> ' . sprintf(__('include <a href="%s" target="_blank">favorites posts</a> only', 'blog2social'), 'admin.php?page=blog2social-favorites') . ' </label>';
+        $content .= '<label for="b2s-re-post-favorites-active"> ' . sprintf(
+             // translators: %s is a link
+            __('include <a href="%s" target="_blank">favorites posts</a> only', 'blog2social'), 'admin.php?page=blog2social-favorites') . ' </label>';
         $content .= '<br>';
         $content .= '<input type="checkbox" name="b2s-re-post-images-active" id="b2s-re-post-images-active" value="1">';
         $content .= '<label for="b2s-re-post-images-active"> ' . esc_html__('include posts with images only', 'blog2social') . ' </label>';
         $content .= '<br>';
         $content .= '<input type="checkbox" name="b2s-re-post-already-planed-active" id="b2s-re-post-already-planed-active" value="1">';
-        $content .= '<label for="b2s-re-post-already-planed-active"> ' . sprintf(esc_html__('only posts that have been shared no more than %s times', 'blog2social'), '<input type="number" name="b2s-re-post-already-planed-count" class="b2s-re-post-number-input" value="1" min="1" max="50">') . ' </label>';
+        $content .= '<label for="b2s-re-post-already-planed-active"> ' . sprintf(
+            // translators: %s input field
+            esc_html__('only posts that have been shared no more than %s times', 'blog2social'), '<input type="number" name="b2s-re-post-already-planed-count" class="b2s-re-post-number-input" value="1" min="1" max="50">') . ' </label>';
         $content .= '</div>';
         $content .= '</div>';
 
@@ -139,7 +145,7 @@ class B2S_RePost_Item {
         //Network Settings
         $content .= '<h4>' . esc_html__('Where should your content be shared?', 'blog2social') . '</h4>';
         $content .= $this->getMandantSelect();
-        $content .= '<input type="button" class="btn btn-primary pull-right ' . ((!$isPremium) ? 'b2s-re-post-submit-premium' : (($this->schedLimit <= 0) ? '':'b2s-re-post-submit-btn')) . '" '.(($isPremium && $this->schedLimit <= 0) ? 'disabled= "disabled "': '').'  value="' . esc_html__('Add to queue', 'blog2social') . '">';
+        $content .= '<input type="button" class="btn btn-primary pull-right ' . ((!$isPremium) ? 'b2s-re-post-submit-premium' : (($this->schedLimit <= 0) ? '' : 'b2s-re-post-submit-btn')) . '" ' . (($isPremium && $this->schedLimit <= 0) ? 'disabled= "disabled "' : '') . '  value="' . esc_html__('Add to queue', 'blog2social') . '">';
         $content .= '</div>';
         $content .= '</div>';
         $content .= '<input type="hidden" id="b2sUserLang" name="b2s-user-lang" value="' . esc_attr(strtolower(substr(get_locale(), 0, 2))) . '">';
@@ -209,7 +215,7 @@ class B2S_RePost_Item {
                 <select class="b2s-w-100" id="b2s-re-post-profil-dropdown" name="b2s-re-post-profil-dropdown">';
 
             foreach ($mandant as $k => $m) {
-                $content .= '<option value="' . esc_attr($m->id) . '" ' . (((int) $m->id == (int) $mandantId) ? 'selected' : '') . '>' . esc_html((($m->id == 0) ? __($m->name, 'blog2social') : $m->name)) . '</option>';
+                $content .= '<option value="' . esc_attr($m->id) . '" ' . (((int) $m->id == (int) $mandantId) ? 'selected' : '') . '>' . esc_html((($m->id == 0) ? __("My Profile", 'blog2social') : $m->name)) . '</option>';
                 $profilData = (isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0])) ? json_encode($auth->{$m->id}) : '';
                 $authContent .= "<input type='hidden' name='b2s-re-post-profil-data-" . esc_attr($m->id) . "' id='b2s-re-post-profil-data-" . esc_attr($m->id) . "' value='" . base64_encode($profilData) . "'/>";
             }
@@ -221,7 +227,7 @@ class B2S_RePost_Item {
             foreach ($mandant as $k => $m) {
                 if ((isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0]))) {
                     foreach ($auth->{$m->id} as $key => $value) {
-                        if ($value->networkId == 2) {
+                        if ($value->networkId == 2 || $value->networkId == 45) {
                             $content .= '<option data-mandant-id="' . esc_attr($m->id) . '" value="' . esc_attr($value->networkAuthId) . '" ' . (((int) $value->networkAuthId == (int) $twitterId) ? 'selected' : '') . '>' . esc_html($value->networkUserName) . '</option>';
                         }
                     }
@@ -257,7 +263,7 @@ class B2S_RePost_Item {
 
         $html = '';
         $html .= '<input type="checkbox" name="b2s-re-post-date-active" class="b2s-re-post-date-active" id="b2s-re-post-date-active" value="1">';
-        $html .= '<label for="b2s-re-post-date-active"> ' . esc_html__('Date', 'blog2social') . ' </label>';
+        $html .= '<label for="b2s-re-post-date-active"> ' . esc_html__('Publication Date', 'blog2social') . ' </label>';
         $html .= '<input id="b2s-re-post-date-state-include" name="b2s-re-post-date-state" value="0" checked type="radio" class="b2s-re-post-state"><label class="padding-bottom-3" for="b2s-re-post-date-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
         $html .= '<input id="b2s-re-post-date-state-exclude" name="b2s-re-post-date-state" value="1" type="radio" class="b2s-re-post-state"><label class="padding-bottom-3" for="b2s-re-post-date-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label>';
         $html .= '<div class="row">';
@@ -332,5 +338,4 @@ class B2S_RePost_Item {
         }
         return $html;
     }
-
 }

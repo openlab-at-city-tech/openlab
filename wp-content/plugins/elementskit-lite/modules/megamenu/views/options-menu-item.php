@@ -31,7 +31,7 @@
 								class="elementskit-menu-elementor-button button" data-attr-toggle="modal"
 								data-target="#elementskit-menu-builder-modal">
 								<img src="<?php echo esc_url( $this->url ); ?>/assets/images/elementor-icon.png"
-									alt="elementskit megamenu" />
+									alt="<?php esc_attr_e( 'elementskit megamenu', 'elementskit-lite' ); ?>" />
 								<?php esc_html_e( 'Edit megamenu content', 'elementskit-lite' ); ?>
 							</button>
 

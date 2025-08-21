@@ -55,6 +55,8 @@ class Controller extends Base {
 	 * @return void
 	 */
 	public function init() {
+		add_action( $this->get_hook_name(), array( $this, 'process_scheduled_event' ) );
+		
 		if ( wp_doing_ajax() ) {
 			return;
 		}
@@ -189,7 +191,7 @@ class Controller extends Base {
 	 *
 	 * @return bool
 	 */
-	public function setup( int $seconds = null ) {
+	public function setup( ?int $seconds = null ) {
 		// Deactivate cron if is already created, so we will replace it later on.
 		$this->deactivate_cron();
 
@@ -208,7 +210,7 @@ class Controller extends Base {
 	 *
 	 * @return false|int|null
 	 */
-	public function get_timestamp( int $seconds = null ) {
+	public function get_timestamp( ?int $seconds = null ) {
 		if ( empty( $seconds ) ) {
 			$seconds = intval( apply_filters( 'wpmudev_blc_edit_links_cron_seconds', 30 ) );
 		}

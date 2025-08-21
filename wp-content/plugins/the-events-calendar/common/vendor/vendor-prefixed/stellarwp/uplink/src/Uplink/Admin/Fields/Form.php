@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\Admin\Fields;
 
@@ -57,7 +52,7 @@ class Form extends Controller{
 	 */
 	public function get_button_text(): string {
 		if ( empty( $this->button_text ) ) {
-			return esc_html__( 'Save Changes', '%TEXTDOMAIN%' );
+			return esc_html__( 'Save Changes', 'tribe-common' );
 		}
 
 		return $this->button_text;

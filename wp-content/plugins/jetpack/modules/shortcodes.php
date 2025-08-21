@@ -1,7 +1,7 @@
 <?php
 /**
  * Module Name: Shortcode Embeds
- * Module Description: Shortcodes are WordPress-specific markup that let you add media from popular sites. This feature is no longer necessary as the editor now handles media embeds rather gracefully.
+ * Module Description: Easily embed rich media like YouTube videos and tweets using simple shortcodes.
  * Sort Order: 3
  * First Introduced: 1.1
  * Major Changes In: 1.2
@@ -46,12 +46,20 @@ function shortcode_new_to_old_params( $params, $old_format_support = false ) {
  * Load all available Jetpack shortcode files.
  */
 function jetpack_load_shortcodes() {
+	// Prevent third-party shortcode plugins when loading shortcode files.
+	// Format: shortcode => condition_when_to_skip
+	$shortcode_skips = array(
+		'soundcloud' => function_exists( 'soundcloud_shortcode' ), // SoundCloud Shortcodes plugin
+	);
+
 	$shortcode_includes = array();
 
 	foreach ( Jetpack::glob_php( __DIR__ . '/shortcodes' ) as $file ) {
 		$filename = substr( basename( $file ), 0, -4 );
 
-		$shortcode_includes[ $filename ] = $file;
+		if ( empty( $shortcode_skips[ $filename ] ) ) {
+			$shortcode_includes[ $filename ] = $file;
+		}
 	}
 
 	/**

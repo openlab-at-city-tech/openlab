@@ -11,7 +11,6 @@
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use RuntimeException as BaseRuntimeException;
-/** @internal */
 class UnreachableException extends BaseRuntimeException implements RuntimeException
 {
     //

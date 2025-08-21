@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class EventSource extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -58,4 +57,4 @@ class EventSource extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(EventSource::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_EventSource');
+class_alias(EventSource::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventSource');

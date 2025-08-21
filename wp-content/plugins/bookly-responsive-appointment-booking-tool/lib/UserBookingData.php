@@ -666,7 +666,7 @@ class UserBookingData
         }
 
         // Customer information fields.
-        $customer->setInfoFields( json_encode( $this->getInfoFields() ) );
+        $customer->setInfoFields( json_encode( Proxy\CustomerInformation::prepareVisibleInfoFields( $this->getInfoFields(), $customer ) ) );
 
         Proxy\Pro::createWPUser( $customer );
 

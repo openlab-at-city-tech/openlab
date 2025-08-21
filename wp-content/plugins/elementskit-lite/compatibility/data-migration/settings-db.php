@@ -13,8 +13,7 @@ class Settings_Db {
 		$this->migrate($module_list, 'module');
 
 		// TODO - remove this after 3.10.0 release
-		add_action( 'upgrader_process_complete', [$this, 'social_share_css_was_updated'], 10, 2 );
-		add_action( 'upgrader_process_complete', [$this, 'team_widget_css_was_updated'], 10, 2 );
+		add_action( 'upgrader_process_complete', [$this, 'clear_cache'], 10, 2 );
 	}
 
 	private function migrate($list, $type) {
@@ -42,29 +41,32 @@ class Settings_Db {
 		\ElementsKit_Lite\Libs\Framework\Attr::instance()->utils->save_option($type . '_list', $list_prepared);
 	}
 
-	public function social_share_css_was_updated($upgrader_object, $options){
+	public function clear_cache($upgrader_object, $options){
 		$our_plugin = 'elementskit-lite/elementskit-lite.php';
 		if (!empty($options['plugins']) && $options['action'] == 'update' && $options['type'] == 'plugin' ) {
 			foreach($options['plugins'] as $plugin) {
 				if ($plugin == $our_plugin) {
-					if ( !get_transient('social_share_css_was_updated')) {
-						set_transient('social_share_css_was_updated', \ElementsKit_Lite::version());
-						\Elementor\Plugin::$instance->files_manager->clear_cache();
-					}
+					$this->regenerate_widget_builder_widgets();
 				}
 			}
 		}
 	}
 
-	public function team_widget_css_was_updated($upgrader_object, $options){
-		$our_plugin = 'elementskit-lite/elementskit-lite.php';
-		if (!empty($options['plugins']) && $options['action'] == 'update' && $options['type'] == 'plugin' ) {
-			foreach($options['plugins'] as $plugin) {
-				if ($plugin == $our_plugin) {
-					if ( !get_transient('team_widget_css_was_updated')) {
-						set_transient('team_widget_css_was_updated', \ElementsKit_Lite::version());
-						\Elementor\Plugin::$instance->files_manager->clear_cache();
-					}
+	public function regenerate_widget_builder_widgets() {
+		$args = array(
+			'post_type'      => 'elementskit_widget',
+			'post_status'    => 'publish', // Only get published posts
+			'posts_per_page' => -1,
+		);
+
+		$posts = get_posts($args);
+	
+		if ($posts) {
+			foreach ($posts as $post) {
+				$id = $post->ID;
+				$widget_data = get_post_meta($id, 'elementskit_custom_widget_data', true);
+				if(!empty($widget_data) && is_object( $widget_data )) {
+					\ElementsKit_Lite\Modules\Widget_Builder\Widget_File::instance()->create( $widget_data, $id );
 				}
 			}
 		}

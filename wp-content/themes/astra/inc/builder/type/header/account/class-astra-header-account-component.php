@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Header_Account_Component' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Header_Account_Component {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

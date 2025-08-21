@@ -20,14 +20,13 @@ use Throwable;
  * As soon as one handler handles a record successfully, the handling stops there.
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 class FallbackGroupHandler extends GroupHandler
 {
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($this->processors) {
             /** @var Record $record */
@@ -46,7 +45,7 @@ class FallbackGroupHandler extends GroupHandler
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         if ($this->processors) {
             $processed = [];

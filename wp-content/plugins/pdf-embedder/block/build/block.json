@@ -2,14 +2,16 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
   "name": "pdfemb/pdf-embedder-viewer",
-  "version": "4.8.0",
+  "version": "4.9.0",
   "title": "PDF Embedder",
+  "description": "Embed PDF files straight into your content.",
   "category": "embed",
   "icon": "pdf",
-  "description": "Embed PDF files straight into your content.",
   "keywords": [
     "pdf",
     "pdf embed",
+    "pdf viewer",
+    "document",
     "pdfs"
   ],
   "example": {},

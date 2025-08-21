@@ -4,6 +4,8 @@ class wp_lightbox_2_general_settings_page{
 	private $databese_settings;
 	public  $initial_values;
 
+	protected $plugin_url = '';
+	protected $plugin_path = '';
 
 	function __construct($params){
 		// set plugin url

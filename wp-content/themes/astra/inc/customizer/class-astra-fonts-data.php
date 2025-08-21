@@ -15,13 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Font info class for System and Google fonts.
  */
-if ( ! class_exists( 'Astra_Fonts_Data' ) ) :
+if ( ! class_exists( 'Astra_Fonts_Data' ) ) {
 
 	/**
 	 * Fonts Data
 	 */
 	final class Astra_Fonts_Data {
-
 		/**
 		 * Localize Fonts
 		 */
@@ -32,11 +31,10 @@ if ( ! class_exists( 'Astra_Fonts_Data' ) ) :
 			$custom = wp_json_encode( Astra_Font_Families::get_custom_fonts() );
 			if ( ! empty( $custom ) ) {
 				return 'var AstFontFamilies = { system: ' . $system . ', custom: ' . $custom . ', google: ' . $google . ' };';
-			} else {
-				return 'var AstFontFamilies = { system: ' . $system . ', google: ' . $google . ' };';
 			}
+
+			return 'var AstFontFamilies = { system: ' . $system . ', google: ' . $google . ' };';
 		}
 	}
 
-endif;
-
+}

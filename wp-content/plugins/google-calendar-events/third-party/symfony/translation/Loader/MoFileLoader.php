@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Loader;
 use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidResourceException;
 /**
  * @copyright Copyright (c) 2010, Union of RAD http://union-of-rad.org (http://lithify.me/)
- * @internal
  */
 class MoFileLoader extends FileLoader
 {
@@ -39,13 +38,13 @@ class MoFileLoader extends FileLoader
      */
     protected function loadResource(string $resource)
     {
-        $stream = \fopen($resource, 'r');
-        $stat = \fstat($stream);
+        $stream = fopen($resource, 'r');
+        $stat = fstat($stream);
         if ($stat['size'] < self::MO_HEADER_SIZE) {
             throw new InvalidResourceException('MO stream content has an invalid format.');
         }
-        $magic = \unpack('V1', \fread($stream, 4));
-        $magic = \hexdec(\substr(\dechex(\current($magic)), -8));
+        $magic = unpack('V1', fread($stream, 4));
+        $magic = hexdec(substr(dechex(current($magic)), -8));
         if (self::MO_LITTLE_ENDIAN_MAGIC == $magic) {
             $isBigEndian = \false;
         } elseif (self::MO_BIG_ENDIAN_MAGIC == $magic) {
@@ -66,50 +65,50 @@ class MoFileLoader extends FileLoader
         for ($i = 0; $i < $count; ++$i) {
             $pluralId = null;
             $translated = null;
-            \fseek($stream, $offsetId + $i * 8);
+            fseek($stream, $offsetId + $i * 8);
             $length = $this->readLong($stream, $isBigEndian);
             $offset = $this->readLong($stream, $isBigEndian);
             if ($length < 1) {
                 continue;
             }
-            \fseek($stream, $offset);
-            $singularId = \fread($stream, $length);
-            if (\str_contains($singularId, "\x00")) {
-                [$singularId, $pluralId] = \explode("\x00", $singularId);
+            fseek($stream, $offset);
+            $singularId = fread($stream, $length);
+            if (str_contains($singularId, "\x00")) {
+                [$singularId, $pluralId] = explode("\x00", $singularId);
             }
-            \fseek($stream, $offsetTranslated + $i * 8);
+            fseek($stream, $offsetTranslated + $i * 8);
             $length = $this->readLong($stream, $isBigEndian);
             $offset = $this->readLong($stream, $isBigEndian);
             if ($length < 1) {
                 continue;
             }
-            \fseek($stream, $offset);
-            $translated = \fread($stream, $length);
-            if (\str_contains($translated, "\x00")) {
-                $translated = \explode("\x00", $translated);
+            fseek($stream, $offset);
+            $translated = fread($stream, $length);
+            if (str_contains($translated, "\x00")) {
+                $translated = explode("\x00", $translated);
             }
             $ids = ['singular' => $singularId, 'plural' => $pluralId];
-            $item = \compact('ids', 'translated');
+            $item = compact('ids', 'translated');
             if (!empty($item['ids']['singular'])) {
                 $id = $item['ids']['singular'];
                 if (isset($item['ids']['plural'])) {
                     $id .= '|' . $item['ids']['plural'];
                 }
-                $messages[$id] = \stripcslashes(\implode('|', (array) $item['translated']));
+                $messages[$id] = stripcslashes(implode('|', (array) $item['translated']));
             }
         }
-        \fclose($stream);
-        return \array_filter($messages);
+        fclose($stream);
+        return array_filter($messages);
     }
     /**
      * Reads an unsigned long from stream respecting endianness.
      *
      * @param resource $stream
      */
-    private function readLong($stream, bool $isBigEndian) : int
+    private function readLong($stream, bool $isBigEndian): int
     {
-        $result = \unpack($isBigEndian ? 'N1' : 'V1', \fread($stream, 4));
-        $result = \current($result);
-        return (int) \substr($result, -8);
+        $result = unpack($isBigEndian ? 'N1' : 'V1', fread($stream, 4));
+        $result = current($result);
+        return (int) substr($result, -8);
     }
 }

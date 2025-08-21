@@ -57,4 +57,18 @@ class Check {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		return wp_doing_ajax() && isset( $_POST['action'] ) && $_POST['action'] === 'heartbeat';
 	}
+
+	/**
+	 * We can't use is_attachment() here to process only PDF attachment pages files.
+	 *
+	 * @since 4.9.0
+	 */
+	public static function is_pdf_attachment(): bool {
+
+		global $post;
+
+		return isset( $post, $post->post_type, $post->post_mime_type ) &&
+			$post->post_type === 'attachment' && $post->post_mime_type === 'application/pdf' &&
+			is_singular();
+	}
 }

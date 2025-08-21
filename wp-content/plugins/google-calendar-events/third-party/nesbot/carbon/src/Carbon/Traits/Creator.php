@@ -18,7 +18,7 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidFormatException;
 use SimpleCalendar\plugin_deps\Carbon\Exceptions\OutOfRangeException;
 use SimpleCalendar\plugin_deps\Carbon\Translator;
 use Closure;
-use SimpleCalendar\plugin_deps\DateMalformedStringException;
+use DateMalformedStringException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
@@ -32,7 +32,6 @@ use ReturnTypeWillChange;
  * Depends on the following methods:
  *
  * @method static Carbon|CarbonImmutable getTestNow()
- * @internal
  */
 trait Creator
 {
@@ -59,20 +58,20 @@ trait Creator
         if ($time instanceof DateTimeInterface) {
             $time = $this->constructTimezoneFromDateTime($time, $tz)->format('Y-m-d H:i:s.u');
         }
-        if (\is_numeric($time) && (!\is_string($time) || !\preg_match('/^\\d{1,14}$/', $time))) {
-            $time = static::createFromTimestampUTC($time)->format('Y-m-d\\TH:i:s.uP');
+        if (is_numeric($time) && (!\is_string($time) || !preg_match('/^\d{1,14}$/', $time))) {
+            $time = static::createFromTimestampUTC($time)->format('Y-m-d\TH:i:s.uP');
         }
         // If the class has a test now set and we are trying to create a now()
         // instance then override as required
         $isNow = empty($time) || $time === 'now';
-        if (\method_exists(static::class, 'hasTestNow') && \method_exists(static::class, 'getTestNow') && static::hasTestNow() && ($isNow || static::hasRelativeKeywords($time))) {
+        if (method_exists(static::class, 'hasTestNow') && method_exists(static::class, 'getTestNow') && static::hasTestNow() && ($isNow || static::hasRelativeKeywords($time))) {
             static::mockConstructorParameters($time, $tz);
         }
         // Work-around for PHP bug https://bugs.php.net/bug.php?id=67127
-        if (!\str_contains((string) 0.1, '.')) {
-            $locale = \setlocale(\LC_NUMERIC, '0');
+        if (!str_contains((string) 0.1, '.')) {
+            $locale = setlocale(\LC_NUMERIC, '0');
             // @codeCoverageIgnore
-            \setlocale(\LC_NUMERIC, 'C');
+            setlocale(\LC_NUMERIC, 'C');
             // @codeCoverageIgnore
         }
         try {
@@ -80,9 +79,9 @@ trait Creator
         } catch (Exception $exception) {
             throw new InvalidFormatException($exception->getMessage(), 0, $exception);
         }
-        $this->constructedObjectId = \spl_object_hash($this);
+        $this->constructedObjectId = spl_object_hash($this);
         if (isset($locale)) {
-            \setlocale(\LC_NUMERIC, $locale);
+            setlocale(\LC_NUMERIC, $locale);
             // @codeCoverageIgnore
         }
         self::setLastErrors(parent::getLastErrors());
@@ -112,7 +111,7 @@ trait Creator
      */
     public function __clone()
     {
-        $this->constructedObjectId = \spl_object_hash($this);
+        $this->constructedObjectId = spl_object_hash($this);
     }
     /**
      * Create a Carbon instance from a DateTime one.
@@ -192,7 +191,7 @@ trait Creator
         if (!$function) {
             return static::rawParse($time, $tz);
         }
-        if (\is_string($function) && \method_exists(static::class, $function)) {
+        if (\is_string($function) && method_exists(static::class, $function)) {
             $function = [static::class, $function];
         }
         return $function(...\func_get_args());
@@ -330,14 +329,14 @@ trait Creator
      */
     public static function create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $tz = null)
     {
-        if (\is_string($year) && !\is_numeric($year) || $year instanceof DateTimeInterface) {
+        if (\is_string($year) && !is_numeric($year) || $year instanceof DateTimeInterface) {
             return static::parse($year, $tz ?: (\is_string($month) || $month instanceof DateTimeZone ? $month : null));
         }
         $defaults = null;
-        $getDefault = function ($unit) use($tz, &$defaults) {
+        $getDefault = function ($unit) use ($tz, &$defaults) {
             if ($defaults === null) {
                 $now = self::createNowInstance($tz);
-                $defaults = \array_combine(['year', 'month', 'day', 'hour', 'minute', 'second'], \explode('-', $now->rawFormat('Y-n-j-G-i-s.u')));
+                $defaults = array_combine(['year', 'month', 'day', 'hour', 'minute', 'second'], explode('-', $now->rawFormat('Y-n-j-G-i-s.u')));
             }
             return $defaults[$unit];
         };
@@ -360,8 +359,8 @@ trait Creator
             $fixYear = $year - 9999;
             $year = 9999;
         }
-        $second = ($second < 10 ? '0' : '') . \number_format($second, 6);
-        $instance = static::rawCreateFromFormat('!Y-n-j G:i:s.u', \sprintf('%s-%s-%s %s:%02s:%02s', $year, $month, $day, $hour, $minute, $second), $tz);
+        $second = ($second < 10 ? '0' : '') . number_format($second, 6);
+        $instance = static::rawCreateFromFormat('!Y-n-j G:i:s.u', sprintf('%s-%s-%s %s:%02s:%02s', $year, $month, $day, $hour, $minute, $second), $tz);
         if ($fixYear !== null) {
             $instance = $instance->addYears($fixYear);
         }
@@ -406,7 +405,7 @@ trait Creator
             }
         }
         $instance = static::create($year, $month, $day, $hour, $minute, $second, $tz);
-        foreach (\array_reverse($fields) as $field => $range) {
+        foreach (array_reverse($fields) as $field => $range) {
             if (${$field} !== null && (!\is_int(${$field}) || ${$field} !== $instance->{$field})) {
                 if (static::isStrictModeEnabled()) {
                     throw new InvalidDateException($field, ${$field});
@@ -433,7 +432,7 @@ trait Creator
      *
      * @return static
      */
-    public static function createStrict(?int $year = 0, ?int $month = 1, ?int $day = 1, ?int $hour = 0, ?int $minute = 0, ?int $second = 0, $tz = null) : self
+    public static function createStrict(?int $year = 0, ?int $month = 1, ?int $day = 1, ?int $hour = 0, ?int $minute = 0, ?int $second = 0, $tz = null): self
     {
         $initialStrictMode = static::isStrictModeEnabled();
         static::useStrictMode(\true);
@@ -517,14 +516,14 @@ trait Creator
     {
         // Work-around for https://bugs.php.net/bug.php?id=75577
         // @codeCoverageIgnoreStart
-        if (\version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
-            $format = \str_replace('.v', '.u', $format);
+        if (version_compare(\PHP_VERSION, '7.3.0-dev', '<')) {
+            $format = str_replace('.v', '.u', $format);
         }
         // @codeCoverageIgnoreEnd
         if ($originalTz === null) {
             return parent::createFromFormat($format, (string) $time);
         }
-        $tz = \is_int($originalTz) ? @\timezone_name_from_abbr('', (int) ($originalTz * static::MINUTES_PER_HOUR * static::SECONDS_PER_MINUTE), 1) : $originalTz;
+        $tz = \is_int($originalTz) ? @timezone_name_from_abbr('', (int) ($originalTz * static::MINUTES_PER_HOUR * static::SECONDS_PER_MINUTE), 1) : $originalTz;
         $tz = static::safeCreateDateTimeZone($tz, $originalTz);
         if ($tz === \false) {
             return \false;
@@ -545,10 +544,10 @@ trait Creator
     public static function rawCreateFromFormat($format, $time, $tz = null)
     {
         // Work-around for https://bugs.php.net/bug.php?id=80141
-        $format = \preg_replace('/(?<!\\\\)((?:\\\\{2})*)c/', '$1Y-m-d\\TH:i:sP', $format);
-        if (\preg_match('/(?<!\\\\)(?:\\\\{2})*(a|A)/', $format, $aMatches, \PREG_OFFSET_CAPTURE) && \preg_match('/(?<!\\\\)(?:\\\\{2})*(h|g|H|G)/', $format, $hMatches, \PREG_OFFSET_CAPTURE) && $aMatches[1][1] < $hMatches[1][1] && \preg_match('/(am|pm|AM|PM)/', $time)) {
-            $format = \preg_replace('/^(.*)(?<!\\\\)((?:\\\\{2})*)(a|A)(.*)$/U', '$1$2$4 $3', $format);
-            $time = \preg_replace('/^(.*)(am|pm|AM|PM)(.*)$/U', '$1$3 $2', $time);
+        $format = preg_replace('/(?<!\\\\)((?:\\\\{2})*)c/', '$1Y-m-d\TH:i:sP', $format);
+        if (preg_match('/(?<!\\\\)(?:\\\\{2})*(a|A)/', $format, $aMatches, \PREG_OFFSET_CAPTURE) && preg_match('/(?<!\\\\)(?:\\\\{2})*(h|g|H|G)/', $format, $hMatches, \PREG_OFFSET_CAPTURE) && $aMatches[1][1] < $hMatches[1][1] && preg_match('/(am|pm|AM|PM)/', $time)) {
+            $format = preg_replace('/^(.*)(?<!\\\\)((?:\\\\{2})*)(a|A)(.*)$/U', '$1$2$4 $3', $format);
+            $time = preg_replace('/^(.*)(am|pm|AM|PM)(.*)$/U', '$1$3 $2', $time);
         }
         if ($tz === \false) {
             $tz = null;
@@ -562,14 +561,14 @@ trait Creator
             // Set timezone from mock if custom timezone was neither given directly nor as a part of format.
             // First let's skip the part that will be ignored by the parser.
             $nonEscaped = '(?<!\\\\)(\\\\{2})*';
-            $nonIgnored = \preg_replace("/^.*{$nonEscaped}!/s", '', $format);
-            if ($tz === null && !\preg_match("/{$nonEscaped}[eOPT]/", $nonIgnored)) {
+            $nonIgnored = preg_replace("/^.*{$nonEscaped}!/s", '', $format);
+            if ($tz === null && !preg_match("/{$nonEscaped}[eOPT]/", $nonIgnored)) {
                 $tz = clone $mock->getTimezone();
             }
             $mock = $mock->copy();
             // Prepend mock datetime only if the format does not contain non escaped unix epoch reset flag.
-            if (!\preg_match("/{$nonEscaped}[!|]/", $format)) {
-                if (\preg_match('/[HhGgisvuB]/', $format)) {
+            if (!preg_match("/{$nonEscaped}[!|]/", $format)) {
+                if (preg_match('/[HhGgisvuB]/', $format)) {
                     $mock = $mock->setTime(0, 0);
                 }
                 $format = static::MOCK_DATETIME_FORMAT . ' ' . $format;
@@ -584,7 +583,7 @@ trait Creator
             return $instance;
         }
         if (static::isStrictModeEnabled()) {
-            throw new InvalidFormatException(\implode(\PHP_EOL, $lastErrors['errors']));
+            throw new InvalidFormatException(implode(\PHP_EOL, $lastErrors['errors']));
         }
         return \false;
     }
@@ -606,7 +605,7 @@ trait Creator
         if (!$function) {
             return static::rawCreateFromFormat($format, $time, $tz);
         }
-        if (\is_string($function) && \method_exists(static::class, $function)) {
+        if (\is_string($function) && method_exists(static::class, $function)) {
             $function = [static::class, $function];
         }
         return $function(...\func_get_args());
@@ -626,18 +625,18 @@ trait Creator
      */
     public static function createFromIsoFormat($format, $time, $tz = null, $locale = 'en', $translator = null)
     {
-        $format = \preg_replace_callback('/(?<!\\\\)(\\\\{2})*(LTS|LT|[Ll]{1,4})/', function ($match) use($locale, $translator) {
+        $format = preg_replace_callback('/(?<!\\\\)(\\\\{2})*(LTS|LT|[Ll]{1,4})/', function ($match) use ($locale, $translator) {
             [$code] = $match;
             static $formats = null;
             if ($formats === null) {
                 $translator = $translator ?: Translator::get($locale);
                 $formats = ['LT' => static::getTranslationMessageWith($translator, 'formats.LT', $locale, 'h:mm A'), 'LTS' => static::getTranslationMessageWith($translator, 'formats.LTS', $locale, 'h:mm:ss A'), 'L' => static::getTranslationMessageWith($translator, 'formats.L', $locale, 'MM/DD/YYYY'), 'LL' => static::getTranslationMessageWith($translator, 'formats.LL', $locale, 'MMMM D, YYYY'), 'LLL' => static::getTranslationMessageWith($translator, 'formats.LLL', $locale, 'MMMM D, YYYY h:mm A'), 'LLLL' => static::getTranslationMessageWith($translator, 'formats.LLLL', $locale, 'dddd, MMMM D, YYYY h:mm A')];
             }
-            return $formats[$code] ?? \preg_replace_callback('/MMMM|MM|DD|dddd/', function ($code) {
-                return \mb_substr($code[0], 1);
-            }, $formats[\strtoupper($code)] ?? '');
+            return $formats[$code] ?? preg_replace_callback('/MMMM|MM|DD|dddd/', function ($code) {
+                return mb_substr($code[0], 1);
+            }, $formats[strtoupper($code)] ?? '');
         }, $format);
-        $format = \preg_replace_callback('/(?<!\\\\)(\\\\{2})*(' . CarbonInterface::ISO_FORMAT_REGEXP . '|[A-Za-z])/', function ($match) {
+        $format = preg_replace_callback('/(?<!\\\\)(\\\\{2})*(' . CarbonInterface::ISO_FORMAT_REGEXP . '|[A-Za-z])/', function ($match) {
             [$code] = $match;
             static $replacements = null;
             if ($replacements === null) {
@@ -665,10 +664,10 @@ trait Creator
      */
     public static function createFromLocaleFormat($format, $locale, $time, $tz = null)
     {
-        $format = \preg_replace_callback('/(?:\\\\[a-zA-Z]|[bfkqCEJKQRV]){2,}/', static function (array $match) use($locale) : string {
-            $word = \str_replace('\\', '', $match[0]);
+        $format = preg_replace_callback('/(?:\\\\[a-zA-Z]|[bfkqCEJKQRV]){2,}/', static function (array $match) use ($locale): string {
+            $word = str_replace('\\', '', $match[0]);
             $translatedWord = static::translateTimeString($word, $locale, 'en');
-            return $word === $translatedWord ? $match[0] : \preg_replace('/[a-zA-Z]/', '\\\\$0', $translatedWord);
+            return $word === $translatedWord ? $match[0] : preg_replace('/[a-zA-Z]/', '\\\\$0', $translatedWord);
         }, $format);
         return static::rawCreateFromFormat($format, static::translateTimeString($time, $locale, 'en'), $tz);
     }
@@ -708,8 +707,8 @@ trait Creator
         }
         $date = null;
         if (\is_string($var)) {
-            $var = \trim($var);
-            if (!\preg_match('/^P[\\dT]/', $var) && !\preg_match('/^R\\d/', $var) && \preg_match('/[a-z\\d]/i', $var)) {
+            $var = trim($var);
+            if (!preg_match('/^P[\dT]/', $var) && !preg_match('/^R\d/', $var) && preg_match('/[a-z\d]/i', $var)) {
                 $date = static::parse($var);
             }
         }

@@ -15,7 +15,7 @@ if ( Astra_Builder_Helper::is_row_empty( $astra_header_row, 'header', 'desktop' 
 
 	$astra_customizer_editor_row = 'section-' . esc_attr( $astra_header_row ) . '-header-builder';
 
-	$astra_row_label = ( 'primary' === $astra_header_row ) ? 'main' : $astra_header_row;
+	$astra_row_label = 'primary' === $astra_header_row ? 'main' : $astra_header_row;
 
 	?>
 	<div class="ast-<?php echo esc_attr( $astra_row_label ); ?>-header-wrap <?php echo 'primary' === $astra_header_row ? 'main-header-bar-wrap' : ''; ?> ">
@@ -52,7 +52,7 @@ if ( Astra_Builder_Helper::is_row_empty( $astra_header_row, 'header', 'desktop' 
 							}
 							?>
 						</div>
-						<?php } ?>
+					<?php } ?>
 						<?php if ( Astra_Builder_Helper::has_center_column( $astra_header_row ) ) { ?>
 							<div class="site-header-<?php echo esc_attr( $astra_header_row ); ?>-section-center site-header-section ast-flex ast-grid-section-center">
 								<?php

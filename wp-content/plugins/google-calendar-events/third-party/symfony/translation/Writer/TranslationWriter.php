@@ -18,7 +18,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * TranslationWriter writes translation messages.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
- * @internal
  */
 class TranslationWriter implements TranslationWriterInterface
 {
@@ -40,7 +39,7 @@ class TranslationWriter implements TranslationWriterInterface
      */
     public function getFormats()
     {
-        return \array_keys($this->dumpers);
+        return array_keys($this->dumpers);
     }
     /**
      * Writes translation from the catalogue according to the selected format.
@@ -53,12 +52,12 @@ class TranslationWriter implements TranslationWriterInterface
     public function write(MessageCatalogue $catalogue, string $format, array $options = [])
     {
         if (!isset($this->dumpers[$format])) {
-            throw new InvalidArgumentException(\sprintf('There is no dumper associated with format "%s".', $format));
+            throw new InvalidArgumentException(sprintf('There is no dumper associated with format "%s".', $format));
         }
         // get the right dumper
         $dumper = $this->dumpers[$format];
-        if (isset($options['path']) && !\is_dir($options['path']) && !@\mkdir($options['path'], 0777, \true) && !\is_dir($options['path'])) {
-            throw new RuntimeException(\sprintf('Translation Writer was not able to create directory "%s".', $options['path']));
+        if (isset($options['path']) && !is_dir($options['path']) && !@mkdir($options['path'], 0777, \true) && !is_dir($options['path'])) {
+            throw new RuntimeException(sprintf('Translation Writer was not able to create directory "%s".', $options['path']));
         }
         // save
         $dumper->dump($catalogue, $options);

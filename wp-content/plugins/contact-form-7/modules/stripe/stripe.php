@@ -52,7 +52,8 @@ function wpcf7_stripe_enqueue_scripts() {
 		'stripe',
 		'https://js.stripe.com/v3/',
 		array(),
-		null
+		null,
+		array( 'in_footer' => true )
 	);
 
 	$assets = include wpcf7_plugin_path( 'modules/stripe/index.asset.php' );
@@ -111,8 +112,9 @@ function wpcf7_stripe_skip_spam_check( $skip_spam_check, $submission ) {
 		return $skip_spam_check;
 	}
 
-	if ( ! empty( $_POST['_wpcf7_stripe_payment_intent'] ) ) {
-		$pi_id = trim( $_POST['_wpcf7_stripe_payment_intent'] );
+	$pi_id = (string) wpcf7_superglobal_post( '_wpcf7_stripe_payment_intent' );
+
+	if ( $pi_id ) {
 		$payment_intent = $service->api()->retrieve_payment_intent( $pi_id );
 
 		if (
@@ -129,9 +131,9 @@ function wpcf7_stripe_skip_spam_check( $skip_spam_check, $submission ) {
 			$submission->push( 'payment_intent', $pi_id );
 
 			$service->api()->update_payment_intent( $pi_id, array(
-				'metadata' => array(
+				'metadata' => array_merge( $payment_intent['metadata'], array(
 					'wpcf7_submission_timestamp' => $submission->get_meta( 'timestamp' ),
-				),
+				) ),
 			) );
 		}
 	}
@@ -163,8 +165,9 @@ function wpcf7_stripe_verify_payment_intent( $spam, $submission ) {
 		return $spam;
 	}
 
-	if ( ! empty( $_POST['_wpcf7_stripe_payment_intent'] ) ) {
-		$pi_id = trim( $_POST['_wpcf7_stripe_payment_intent'] );
+	$pi_id = (string) wpcf7_superglobal_post( '_wpcf7_stripe_payment_intent' );
+
+	if ( $pi_id ) {
 		$payment_intent = $service->api()->retrieve_payment_intent( $pi_id );
 
 		if (
@@ -243,7 +246,7 @@ function wpcf7_stripe_before_send_mail( $contact_form, &$abort, $submission ) {
 		$submission->set_status( 'payment_required' );
 
 		$submission->set_response(
-			__( "Payment is required. Please pay by credit card.", 'contact-form-7' )
+			__( 'Payment is required. Please pay by credit card.', 'contact-form-7' )
 		);
 	}
 

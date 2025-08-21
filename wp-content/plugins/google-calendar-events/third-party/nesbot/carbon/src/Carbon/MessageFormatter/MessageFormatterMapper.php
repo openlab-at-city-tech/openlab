@@ -17,7 +17,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter\MessageFo
 $transMethod = new ReflectionMethod(MessageFormatterInterface::class, 'format');
 require $transMethod->getParameters()[0]->hasType() ? __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php' : __DIR__ . '/../../../lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php';
 // @codeCoverageIgnoreEnd
-/** @internal */
 final class MessageFormatterMapper extends LazyMessageFormatter
 {
     /**
@@ -30,8 +29,8 @@ final class MessageFormatterMapper extends LazyMessageFormatter
     {
         $this->formatter = $formatter ?? new MessageFormatter();
     }
-    protected function transformLocale(?string $locale) : ?string
+    protected function transformLocale(?string $locale): ?string
     {
-        return $locale ? \preg_replace('/[_@][A-Za-z][a-z]{2,}/', '', $locale) : $locale;
+        return $locale ? preg_replace('/[_@][A-Za-z][a-z]{2,}/', '', $locale) : $locale;
     }
 }

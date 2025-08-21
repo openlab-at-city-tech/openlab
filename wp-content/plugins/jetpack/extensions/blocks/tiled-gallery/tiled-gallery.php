@@ -13,6 +13,7 @@ namespace Automattic\Jetpack\Extensions;
 use Automattic\Jetpack\Blocks;
 use Automattic\Jetpack\Current_Plan as Jetpack_Plan;
 use Automattic\Jetpack\Status;
+use Automattic\Jetpack\Status\Host;
 use Jetpack;
 use Jetpack_Gutenberg;
 
@@ -57,7 +58,8 @@ class Tiled_Gallery {
 		Jetpack_Gutenberg::load_assets_as_required( __DIR__ );
 
 		$is_squareish_layout = self::is_squareish_layout( $attr );
-
+		// For backward compatibility (ensuring Tiled Galleries using now deprecated versions of the block are not affected).
+		// See isVIP() in utils/index.js.
 		$jetpack_plan = Jetpack_Plan::get();
 		wp_localize_script( 'jetpack-gallery-settings', 'jetpack_plan', array( 'data' => $jetpack_plan['product_slug'] ) );
 
@@ -69,8 +71,10 @@ class Tiled_Gallery {
 			 * to the $replace array. This is so that the same find and replace operations can be
 			 * made on the entire $content.
 			 */
-			$find    = array();
-			$replace = array();
+			$find          = array();
+			$replace       = array();
+			$image_index   = 0;
+			$number_images = count( $images[0] );
 
 			foreach ( $images[0] as $image_html ) {
 				if (
@@ -78,6 +82,7 @@ class Tiled_Gallery {
 					&& preg_match( '/data-height="([0-9]+)"/', $image_html, $img_height )
 					&& preg_match( '/src="([^"]+)"/', $image_html, $img_src )
 				) {
+					++$image_index;
 					// Drop img src query string so it can be used as a base to add photon params
 					// for the srcset.
 					$src_parts   = explode( '?', $img_src[1], 2 );
@@ -136,11 +141,13 @@ class Tiled_Gallery {
 						}
 					}
 
+					$img_element = self::interactive_markup( $image_index, $number_images );
+
 					if ( ! empty( $srcset_parts ) ) {
 						$srcset = 'srcset="' . esc_attr( implode( ',', $srcset_parts ) ) . '"';
 
 						$find[]    = $image_html;
-						$replace[] = str_replace( '<img', '<img ' . $srcset, $image_html );
+						$replace[] = str_replace( '<img', $img_element . $srcset, $image_html );
 					}
 				}
 			}
@@ -160,6 +167,33 @@ class Tiled_Gallery {
 		 * @param string $content Tiled Gallery block content.
 		 */
 		return apply_filters( 'jetpack_tiled_galleries_block_content', $content );
+	}
+
+	/**
+	 * Adds tabindex, role and aria-label markup for images that should be interactive (front-end only).
+	 *
+	 * @param integer $image_index Integer The current image index.
+	 * @param integer $number_images Integer The total number of images.
+	 */
+	private static function interactive_markup( $image_index, $number_images ) {
+
+		$host             = new Host();
+		$is_module_active = $host->is_wpcom_simple()
+		? get_option( 'carousel_enable_it' )
+		: Jetpack::is_module_active( 'carousel' );
+
+		if ( $is_module_active ) {
+			$aria_label_content = sprintf(
+				/* Translators: %1$d is the current image index, %2$d is the total number of images. */
+				__( 'Open image %1$d of %2$d in full-screen', 'jetpack' ),
+				$image_index,
+				$number_images
+			);
+			$img_element = '<img role="button" tabindex="0" aria-label="' . esc_attr( $aria_label_content ) . '"';
+		} else {
+			$img_element = '<img ';
+		}
+		return $img_element;
 	}
 
 	/**

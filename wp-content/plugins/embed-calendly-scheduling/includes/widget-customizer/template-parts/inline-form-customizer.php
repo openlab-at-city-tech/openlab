@@ -33,6 +33,13 @@ defined('ABSPATH') || exit;
                                     <option value="yes"><?php esc_html_e('Yes', 'embed-calendly-scheduling'); ?></option>
                                 </select>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="emcs-prefill"><?php esc_html_e('Prefill Fields', 'embed-calendly-scheduling'); ?></label>
+                                <select name="emcs-prefill" class="form-control">
+                                    <option value="no"><?php esc_html_e('No', 'embed-calendly-scheduling'); ?></option>
+                                    <option value="yes"><?php esc_html_e('Yes', 'embed-calendly-scheduling'); ?></option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 </div>

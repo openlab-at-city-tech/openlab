@@ -271,7 +271,7 @@ const FORMATTING_METHODS = {
  * @param {keyof FORMATTING_METHODS}  representation Type of representation
  *                                                   (display, raw, ariaLabel).
  *
- * @return {string?} Shortcut representation.
+ * @return {?string} Shortcut representation.
  */
 function getKeyCombinationRepresentation(shortcut, representation) {
   if (!shortcut) {
@@ -361,7 +361,7 @@ function getShortcutKeyCombination(state, name) {
  * };
  *```
  *
- * @return {string?} Shortcut representation.
+ * @return {?string} Shortcut representation.
  */
 function getShortcutRepresentation(state, name, representation = 'display') {
   const shortcut = getShortcutKeyCombination(state, name);
@@ -394,7 +394,7 @@ function getShortcutRepresentation(state, name, representation = 'display') {
  *     );
  * };
  *```
- * @return {string?} Shortcut description.
+ * @return {?string} Shortcut description.
  */
 function getShortcutDescription(state, name) {
   return state[name] ? state[name].description : null;
@@ -667,7 +667,6 @@ function useShortcutEventMatch() {
 }
 
 ;// ./packages/keyboard-shortcuts/build-module/context.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -741,7 +740,6 @@ function useShortcut(name, callback, {
 ;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// ./packages/keyboard-shortcuts/build-module/components/shortcut-provider.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */

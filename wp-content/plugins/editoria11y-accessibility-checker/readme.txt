@@ -1,8 +1,8 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 2.0.11
-Tested up to: 6.8
+Stable tag: 2.0.12
+Tested up to: 6.9
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,11 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 4. Checker set to dark theme, showing a table header alert
 
 == Changelog ==
+
+= 2.0.12 =
+* Adds custom test for [Buttons without links not flagged in the block editor](https://github.com/itmaybejj/editoria11y-wp/issues/42)
+* Adds [images with role=presentation](https://github.com/itmaybejj/editoria11y/issues/34) to the default ignore list.
+* Fix issue with false positives for links containing both images and text when the link contains space characters.
 
 = 2.0.11 =
 * Resolves PHP error when image ID is not set.

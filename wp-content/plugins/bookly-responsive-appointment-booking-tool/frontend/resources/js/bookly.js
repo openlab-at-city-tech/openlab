@@ -1,6 +1,6 @@
-const booklyJsVersion="24.4";
+const booklyJsVersion="24.9";
 /*!*/
-var bookly = (function ($$O) {
+var bookly = (function ($$V) {
 	'use strict';
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
@@ -29,12 +29,12 @@ var bookly = (function ($$O) {
 	var NATIVE_BIND$7 = functionBindNative$1;
 
 	var FunctionPrototype$5 = Function.prototype;
-	var call$q = FunctionPrototype$5.call;
-	var uncurryThisWithBind$1 = NATIVE_BIND$7 && FunctionPrototype$5.bind.bind(call$q, call$q);
+	var call$s = FunctionPrototype$5.call;
+	var uncurryThisWithBind$1 = NATIVE_BIND$7 && FunctionPrototype$5.bind.bind(call$s, call$s);
 
 	var functionUncurryThis$1 = NATIVE_BIND$7 ? uncurryThisWithBind$1 : function (fn) {
 	  return function () {
-	    return call$q.apply(fn, arguments);
+	    return call$s.apply(fn, arguments);
 	  };
 	};
 
@@ -47,7 +47,7 @@ var bookly = (function ($$O) {
 	};
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global$G =
+	var global$s =
 	  // eslint-disable-next-line es/no-global-this -- safe
 	  check$1(typeof globalThis == 'object' && globalThis) ||
 	  check$1(typeof window == 'object' && window) ||
@@ -62,11 +62,11 @@ var bookly = (function ($$O) {
 
 	var FunctionPrototype$4 = Function.prototype;
 	var apply$7 = FunctionPrototype$4.apply;
-	var call$p = FunctionPrototype$4.call;
+	var call$r = FunctionPrototype$4.call;
 
 	// eslint-disable-next-line es/no-reflect -- safe
-	var functionApply$1 = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND$6 ? call$p.bind(apply$7) : function () {
-	  return call$p.apply(apply$7, arguments);
+	var functionApply$1 = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND$6 ? call$r.bind(apply$7) : function () {
+	  return call$r.apply(apply$7, arguments);
 	});
 
 	var uncurryThis$M = functionUncurryThis$1;
@@ -89,13 +89,13 @@ var bookly = (function ($$O) {
 	};
 
 	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
-	var documentAll$3 = typeof document == 'object' && document.all;
+	var documentAll$1 = typeof document == 'object' && document.all;
 
 	// `IsCallable` abstract operation
 	// https://tc39.es/ecma262/#sec-iscallable
 	// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
-	var isCallable$A = typeof documentAll$3 == 'undefined' && documentAll$3 !== undefined ? function (argument) {
-	  return typeof argument == 'function' || argument === documentAll$3;
+	var isCallable$A = typeof documentAll$1 == 'undefined' && documentAll$1 !== undefined ? function (argument) {
+	  return typeof argument == 'function' || argument === documentAll$1;
 	} : function (argument) {
 	  return typeof argument == 'function';
 	};
@@ -112,10 +112,10 @@ var bookly = (function ($$O) {
 
 	var NATIVE_BIND$5 = functionBindNative$1;
 
-	var call$o = Function.prototype.call;
+	var call$q = Function.prototype.call;
 
-	var functionCall$1 = NATIVE_BIND$5 ? call$o.bind(call$o) : function () {
-	  return call$o.apply(call$o, arguments);
+	var functionCall$1 = NATIVE_BIND$5 ? call$q.bind(call$q) : function () {
+	  return call$q.apply(call$q, arguments);
 	};
 
 	var objectPropertyIsEnumerable$1 = {};
@@ -145,7 +145,7 @@ var bookly = (function ($$O) {
 
 	var uncurryThis$K = functionUncurryThis$1;
 	var fails$I = fails$L;
-	var classof$n = classofRaw$5;
+	var classof$m = classofRaw$5;
 
 	var $Object$a = Object;
 	var split$1 = uncurryThis$K(''.split);
@@ -156,23 +156,23 @@ var bookly = (function ($$O) {
 	  // eslint-disable-next-line no-prototype-builtins -- safe
 	  return !$Object$a('z').propertyIsEnumerable(0);
 	}) ? function (it) {
-	  return classof$n(it) === 'String' ? split$1(it, '') : $Object$a(it);
+	  return classof$m(it) === 'String' ? split$1(it, '') : $Object$a(it);
 	} : $Object$a;
 
 	// we can't use just `it == null` since of `document.all` special case
 	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
-	var isNullOrUndefined$c = function (it) {
+	var isNullOrUndefined$d = function (it) {
 	  return it === null || it === undefined;
 	};
 
-	var isNullOrUndefined$b = isNullOrUndefined$c;
+	var isNullOrUndefined$c = isNullOrUndefined$d;
 
-	var $TypeError$q = TypeError;
+	var $TypeError$s = TypeError;
 
 	// `RequireObjectCoercible` abstract operation
 	// https://tc39.es/ecma262/#sec-requireobjectcoercible
 	var requireObjectCoercible$e = function (it) {
-	  if (isNullOrUndefined$b(it)) throw new $TypeError$q("Can't call method on " + it);
+	  if (isNullOrUndefined$c(it)) throw new $TypeError$s("Can't call method on " + it);
 	  return it;
 	};
 
@@ -193,25 +193,25 @@ var bookly = (function ($$O) {
 	var path$m = {};
 
 	var path$l = path$m;
-	var global$F = global$G;
+	var global$r = global$s;
 	var isCallable$y = isCallable$A;
 
 	var aFunction$1 = function (variable) {
 	  return isCallable$y(variable) ? variable : undefined;
 	};
 
-	var getBuiltIn$f = function (namespace, method) {
-	  return arguments.length < 2 ? aFunction$1(path$l[namespace]) || aFunction$1(global$F[namespace])
-	    : path$l[namespace] && path$l[namespace][method] || global$F[namespace] && global$F[namespace][method];
+	var getBuiltIn$g = function (namespace, method) {
+	  return arguments.length < 2 ? aFunction$1(path$l[namespace]) || aFunction$1(global$r[namespace])
+	    : path$l[namespace] && path$l[namespace][method] || global$r[namespace] && global$r[namespace][method];
 	};
 
-	var engineUserAgent$1 = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
+	var engineUserAgent = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
-	var global$E = global$G;
-	var userAgent$7 = engineUserAgent$1;
+	var global$q = global$s;
+	var userAgent$8 = engineUserAgent;
 
-	var process$4 = global$E.process;
-	var Deno$2 = global$E.Deno;
+	var process$4 = global$q.process;
+	var Deno$2 = global$q.Deno;
 	var versions$1 = process$4 && process$4.versions || Deno$2 && Deno$2.version;
 	var v8$1 = versions$1 && versions$1.v8;
 	var match$1, version$1;
@@ -225,22 +225,22 @@ var bookly = (function ($$O) {
 
 	// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
 	// so check `userAgent` even if `.v8` exists, but 0
-	if (!version$1 && userAgent$7) {
-	  match$1 = userAgent$7.match(/Edge\/(\d+)/);
+	if (!version$1 && userAgent$8) {
+	  match$1 = userAgent$8.match(/Edge\/(\d+)/);
 	  if (!match$1 || match$1[1] >= 74) {
-	    match$1 = userAgent$7.match(/Chrome\/(\d+)/);
+	    match$1 = userAgent$8.match(/Chrome\/(\d+)/);
 	    if (match$1) version$1 = +match$1[1];
 	  }
 	}
 
-	var engineV8Version$1 = version$1;
+	var engineV8Version = version$1;
 
 	/* eslint-disable es/no-symbol -- required for testing */
-	var V8_VERSION$5 = engineV8Version$1;
+	var V8_VERSION$5 = engineV8Version;
 	var fails$H = fails$L;
-	var global$D = global$G;
+	var global$p = global$s;
 
-	var $String$9 = global$D.String;
+	var $String$9 = global$p.String;
 
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 	var symbolConstructorDetection$1 = !!Object.getOwnPropertySymbols && !fails$H(function () {
@@ -261,7 +261,7 @@ var bookly = (function ($$O) {
 	  && !Symbol.sham
 	  && typeof Symbol.iterator == 'symbol';
 
-	var getBuiltIn$e = getBuiltIn$f;
+	var getBuiltIn$f = getBuiltIn$g;
 	var isCallable$x = isCallable$A;
 	var isPrototypeOf$o = objectIsPrototypeOf$1;
 	var USE_SYMBOL_AS_UID$3 = useSymbolAsUid$1;
@@ -271,13 +271,13 @@ var bookly = (function ($$O) {
 	var isSymbol$6 = USE_SYMBOL_AS_UID$3 ? function (it) {
 	  return typeof it == 'symbol';
 	} : function (it) {
-	  var $Symbol = getBuiltIn$e('Symbol');
+	  var $Symbol = getBuiltIn$f('Symbol');
 	  return isCallable$x($Symbol) && isPrototypeOf$o($Symbol.prototype, $Object$9(it));
 	};
 
 	var $String$8 = String;
 
-	var tryToString$9 = function (argument) {
+	var tryToString$a = function (argument) {
 	  try {
 	    return $String$8(argument);
 	  } catch (error) {
@@ -286,64 +286,64 @@ var bookly = (function ($$O) {
 	};
 
 	var isCallable$w = isCallable$A;
-	var tryToString$8 = tryToString$9;
+	var tryToString$9 = tryToString$a;
 
-	var $TypeError$p = TypeError;
+	var $TypeError$r = TypeError;
 
 	// `Assert: IsCallable(argument) is true`
-	var aCallable$g = function (argument) {
+	var aCallable$h = function (argument) {
 	  if (isCallable$w(argument)) return argument;
-	  throw new $TypeError$p(tryToString$8(argument) + ' is not a function');
+	  throw new $TypeError$r(tryToString$9(argument) + ' is not a function');
 	};
 
-	var aCallable$f = aCallable$g;
-	var isNullOrUndefined$a = isNullOrUndefined$c;
+	var aCallable$g = aCallable$h;
+	var isNullOrUndefined$b = isNullOrUndefined$d;
 
 	// `GetMethod` abstract operation
 	// https://tc39.es/ecma262/#sec-getmethod
 	var getMethod$7 = function (V, P) {
 	  var func = V[P];
-	  return isNullOrUndefined$a(func) ? undefined : aCallable$f(func);
+	  return isNullOrUndefined$b(func) ? undefined : aCallable$g(func);
 	};
 
-	var call$n = functionCall$1;
+	var call$p = functionCall$1;
 	var isCallable$v = isCallable$A;
 	var isObject$v = isObject$w;
 
-	var $TypeError$o = TypeError;
+	var $TypeError$q = TypeError;
 
 	// `OrdinaryToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-ordinarytoprimitive
 	var ordinaryToPrimitive$3 = function (input, pref) {
 	  var fn, val;
-	  if (pref === 'string' && isCallable$v(fn = input.toString) && !isObject$v(val = call$n(fn, input))) return val;
-	  if (isCallable$v(fn = input.valueOf) && !isObject$v(val = call$n(fn, input))) return val;
-	  if (pref !== 'string' && isCallable$v(fn = input.toString) && !isObject$v(val = call$n(fn, input))) return val;
-	  throw new $TypeError$o("Can't convert object to primitive value");
+	  if (pref === 'string' && isCallable$v(fn = input.toString) && !isObject$v(val = call$p(fn, input))) return val;
+	  if (isCallable$v(fn = input.valueOf) && !isObject$v(val = call$p(fn, input))) return val;
+	  if (pref !== 'string' && isCallable$v(fn = input.toString) && !isObject$v(val = call$p(fn, input))) return val;
+	  throw new $TypeError$q("Can't convert object to primitive value");
 	};
 
 	var shared$7 = {exports: {}};
 
 	var isPure = true;
 
-	var global$C = global$G;
+	var global$o = global$s;
 
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
 	var defineProperty$9 = Object.defineProperty;
 
 	var defineGlobalProperty$3 = function (key, value) {
 	  try {
-	    defineProperty$9(global$C, key, { value: value, configurable: true, writable: true });
+	    defineProperty$9(global$o, key, { value: value, configurable: true, writable: true });
 	  } catch (error) {
-	    global$C[key] = value;
+	    global$o[key] = value;
 	  } return value;
 	};
 
-	var global$B = global$G;
+	var global$n = global$s;
 	var defineGlobalProperty$2 = defineGlobalProperty$3;
 
 	var SHARED$1 = '__core-js_shared__';
-	var store$7 = global$B[SHARED$1] || defineGlobalProperty$2(SHARED$1, {});
+	var store$7 = global$n[SHARED$1] || defineGlobalProperty$2(SHARED$1, {});
 
 	var sharedStore$1 = store$7;
 
@@ -359,7 +359,7 @@ var bookly = (function ($$O) {
 	  source: 'https://github.com/zloirock/core-js'
 	});
 
-	var sharedExports$1 = shared$7.exports;
+	var sharedExports = shared$7.exports;
 
 	var requireObjectCoercible$c = requireObjectCoercible$e;
 
@@ -393,18 +393,18 @@ var bookly = (function ($$O) {
 	  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString$m(++id$4 + postfix$1, 36);
 	};
 
-	var global$A = global$G;
-	var shared$6 = sharedExports$1;
+	var global$m = global$s;
+	var shared$6 = sharedExports;
 	var hasOwn$l = hasOwnProperty_1$1;
 	var uid$6 = uid$7;
 	var NATIVE_SYMBOL$3 = symbolConstructorDetection$1;
 	var USE_SYMBOL_AS_UID$2 = useSymbolAsUid$1;
 
-	var Symbol$5 = global$A.Symbol;
+	var Symbol$5 = global$m.Symbol;
 	var WellKnownSymbolsStore$1 = shared$6('wks');
 	var createWellKnownSymbol$1 = USE_SYMBOL_AS_UID$2 ? Symbol$5['for'] || Symbol$5 : Symbol$5 && Symbol$5.withoutSetter || uid$6;
 
-	var wellKnownSymbol$z = function (name) {
+	var wellKnownSymbol$y = function (name) {
 	  if (!hasOwn$l(WellKnownSymbolsStore$1, name)) {
 	    WellKnownSymbolsStore$1[name] = NATIVE_SYMBOL$3 && hasOwn$l(Symbol$5, name)
 	      ? Symbol$5[name]
@@ -412,15 +412,15 @@ var bookly = (function ($$O) {
 	  } return WellKnownSymbolsStore$1[name];
 	};
 
-	var call$m = functionCall$1;
+	var call$o = functionCall$1;
 	var isObject$u = isObject$w;
 	var isSymbol$5 = isSymbol$6;
 	var getMethod$6 = getMethod$7;
 	var ordinaryToPrimitive$2 = ordinaryToPrimitive$3;
-	var wellKnownSymbol$y = wellKnownSymbol$z;
+	var wellKnownSymbol$x = wellKnownSymbol$y;
 
-	var $TypeError$n = TypeError;
-	var TO_PRIMITIVE$1 = wellKnownSymbol$y('toPrimitive');
+	var $TypeError$p = TypeError;
+	var TO_PRIMITIVE$1 = wellKnownSymbol$x('toPrimitive');
 
 	// `ToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-toprimitive
@@ -430,9 +430,9 @@ var bookly = (function ($$O) {
 	  var result;
 	  if (exoticToPrim) {
 	    if (pref === undefined) pref = 'default';
-	    result = call$m(exoticToPrim, input, pref);
+	    result = call$o(exoticToPrim, input, pref);
 	    if (!isObject$u(result) || isSymbol$5(result)) return result;
-	    throw new $TypeError$n("Can't convert object to primitive value");
+	    throw new $TypeError$p("Can't convert object to primitive value");
 	  }
 	  if (pref === undefined) pref = 'number';
 	  return ordinaryToPrimitive$2(input, pref);
@@ -443,15 +443,15 @@ var bookly = (function ($$O) {
 
 	// `ToPropertyKey` abstract operation
 	// https://tc39.es/ecma262/#sec-topropertykey
-	var toPropertyKey$7 = function (argument) {
+	var toPropertyKey$6 = function (argument) {
 	  var key = toPrimitive$2(argument, 'string');
 	  return isSymbol$4(key) ? key : key + '';
 	};
 
-	var global$z = global$G;
+	var global$l = global$s;
 	var isObject$t = isObject$w;
 
-	var document$4 = global$z.document;
+	var document$4 = global$l.document;
 	// typeof document.createElement is 'object' in old IE
 	var EXISTS$3 = isObject$t(document$4) && isObject$t(document$4.createElement);
 
@@ -459,24 +459,24 @@ var bookly = (function ($$O) {
 	  return EXISTS$3 ? document$4.createElement(it) : {};
 	};
 
-	var DESCRIPTORS$n = descriptors$1;
+	var DESCRIPTORS$o = descriptors$1;
 	var fails$G = fails$L;
 	var createElement$2 = documentCreateElement$3;
 
 	// Thanks to IE8 for its funny defineProperty
-	var ie8DomDefine$1 = !DESCRIPTORS$n && !fails$G(function () {
+	var ie8DomDefine$1 = !DESCRIPTORS$o && !fails$G(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(createElement$2('div'), 'a', {
 	    get: function () { return 7; }
 	  }).a !== 7;
 	});
 
-	var DESCRIPTORS$m = descriptors$1;
-	var call$l = functionCall$1;
+	var DESCRIPTORS$n = descriptors$1;
+	var call$n = functionCall$1;
 	var propertyIsEnumerableModule$1 = objectPropertyIsEnumerable$1;
 	var createPropertyDescriptor$a = createPropertyDescriptor$b;
 	var toIndexedObject$f = toIndexedObject$g;
-	var toPropertyKey$6 = toPropertyKey$7;
+	var toPropertyKey$5 = toPropertyKey$6;
 	var hasOwn$k = hasOwnProperty_1$1;
 	var IE8_DOM_DEFINE$3 = ie8DomDefine$1;
 
@@ -485,13 +485,13 @@ var bookly = (function ($$O) {
 
 	// `Object.getOwnPropertyDescriptor` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-	objectGetOwnPropertyDescriptor$1.f = DESCRIPTORS$m ? $getOwnPropertyDescriptor$3 : function getOwnPropertyDescriptor(O, P) {
+	objectGetOwnPropertyDescriptor$1.f = DESCRIPTORS$n ? $getOwnPropertyDescriptor$3 : function getOwnPropertyDescriptor(O, P) {
 	  O = toIndexedObject$f(O);
-	  P = toPropertyKey$6(P);
+	  P = toPropertyKey$5(P);
 	  if (IE8_DOM_DEFINE$3) try {
 	    return $getOwnPropertyDescriptor$3(O, P);
 	  } catch (error) { /* empty */ }
-	  if (hasOwn$k(O, P)) return createPropertyDescriptor$a(!call$l(propertyIsEnumerableModule$1.f, O, P), O[P]);
+	  if (hasOwn$k(O, P)) return createPropertyDescriptor$a(!call$n(propertyIsEnumerableModule$1.f, O, P), O[P]);
 	};
 
 	var fails$F = fails$L;
@@ -518,14 +518,14 @@ var bookly = (function ($$O) {
 	var isForced_1$1 = isForced$4;
 
 	var uncurryThis$H = functionUncurryThisClause$1;
-	var aCallable$e = aCallable$g;
+	var aCallable$f = aCallable$h;
 	var NATIVE_BIND$4 = functionBindNative$1;
 
 	var bind$e = uncurryThis$H(uncurryThis$H.bind);
 
 	// optional / simple context binding
 	var functionBindContext$1 = function (fn, that) {
-	  aCallable$e(fn);
+	  aCallable$f(fn);
 	  return that === undefined ? fn : NATIVE_BIND$4 ? bind$e(fn, that) : function (/* ...args */) {
 	    return fn.apply(that, arguments);
 	  };
@@ -533,12 +533,12 @@ var bookly = (function ($$O) {
 
 	var objectDefineProperty$1 = {};
 
-	var DESCRIPTORS$l = descriptors$1;
+	var DESCRIPTORS$m = descriptors$1;
 	var fails$E = fails$L;
 
 	// V8 ~ Chrome 36-
 	// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-	var v8PrototypeDefineBug$1 = DESCRIPTORS$l && fails$E(function () {
+	var v8PrototypeDefineBug$1 = DESCRIPTORS$m && fails$E(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(function () { /* empty */ }, 'prototype', {
 	    value: 42,
@@ -549,21 +549,21 @@ var bookly = (function ($$O) {
 	var isObject$s = isObject$w;
 
 	var $String$7 = String;
-	var $TypeError$m = TypeError;
+	var $TypeError$o = TypeError;
 
 	// `Assert: Type(argument) is Object`
-	var anObject$j = function (argument) {
+	var anObject$k = function (argument) {
 	  if (isObject$s(argument)) return argument;
-	  throw new $TypeError$m($String$7(argument) + ' is not an object');
+	  throw new $TypeError$o($String$7(argument) + ' is not an object');
 	};
 
-	var DESCRIPTORS$k = descriptors$1;
+	var DESCRIPTORS$l = descriptors$1;
 	var IE8_DOM_DEFINE$2 = ie8DomDefine$1;
 	var V8_PROTOTYPE_DEFINE_BUG$3 = v8PrototypeDefineBug$1;
-	var anObject$i = anObject$j;
-	var toPropertyKey$5 = toPropertyKey$7;
+	var anObject$j = anObject$k;
+	var toPropertyKey$4 = toPropertyKey$6;
 
-	var $TypeError$l = TypeError;
+	var $TypeError$n = TypeError;
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
 	var $defineProperty$1 = Object.defineProperty;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
@@ -574,10 +574,10 @@ var bookly = (function ($$O) {
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
-	objectDefineProperty$1.f = DESCRIPTORS$k ? V8_PROTOTYPE_DEFINE_BUG$3 ? function defineProperty(O, P, Attributes) {
-	  anObject$i(O);
-	  P = toPropertyKey$5(P);
-	  anObject$i(Attributes);
+	objectDefineProperty$1.f = DESCRIPTORS$l ? V8_PROTOTYPE_DEFINE_BUG$3 ? function defineProperty(O, P, Attributes) {
+	  anObject$j(O);
+	  P = toPropertyKey$4(P);
+	  anObject$j(Attributes);
 	  if (typeof O === 'function' && P === 'prototype' && 'value' in Attributes && WRITABLE$1 in Attributes && !Attributes[WRITABLE$1]) {
 	    var current = $getOwnPropertyDescriptor$2(O, P);
 	    if (current && current[WRITABLE$1]) {
@@ -590,29 +590,29 @@ var bookly = (function ($$O) {
 	    }
 	  } return $defineProperty$1(O, P, Attributes);
 	} : $defineProperty$1 : function defineProperty(O, P, Attributes) {
-	  anObject$i(O);
-	  P = toPropertyKey$5(P);
-	  anObject$i(Attributes);
+	  anObject$j(O);
+	  P = toPropertyKey$4(P);
+	  anObject$j(Attributes);
 	  if (IE8_DOM_DEFINE$2) try {
 	    return $defineProperty$1(O, P, Attributes);
 	  } catch (error) { /* empty */ }
-	  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError$l('Accessors not supported');
+	  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError$n('Accessors not supported');
 	  if ('value' in Attributes) O[P] = Attributes.value;
 	  return O;
 	};
 
-	var DESCRIPTORS$j = descriptors$1;
+	var DESCRIPTORS$k = descriptors$1;
 	var definePropertyModule$6 = objectDefineProperty$1;
 	var createPropertyDescriptor$9 = createPropertyDescriptor$b;
 
-	var createNonEnumerableProperty$f = DESCRIPTORS$j ? function (object, key, value) {
+	var createNonEnumerableProperty$e = DESCRIPTORS$k ? function (object, key, value) {
 	  return definePropertyModule$6.f(object, key, createPropertyDescriptor$9(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
 	  return object;
 	};
 
-	var global$y = global$G;
+	var global$k = global$s;
 	var apply$6 = functionApply$1;
 	var uncurryThis$G = functionUncurryThisClause$1;
 	var isCallable$t = isCallable$A;
@@ -620,7 +620,7 @@ var bookly = (function ($$O) {
 	var isForced$3 = isForced_1$1;
 	var path$k = path$m;
 	var bind$d = functionBindContext$1;
-	var createNonEnumerableProperty$e = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$d = createNonEnumerableProperty$e;
 	var hasOwn$j = hasOwnProperty_1$1;
 
 	var wrapConstructor$1 = function (NativeConstructor) {
@@ -658,9 +658,9 @@ var bookly = (function ($$O) {
 	  var STATIC = options.stat;
 	  var PROTO = options.proto;
 
-	  var nativeSource = GLOBAL ? global$y : STATIC ? global$y[TARGET] : (global$y[TARGET] || {}).prototype;
+	  var nativeSource = GLOBAL ? global$k : STATIC ? global$k[TARGET] : (global$k[TARGET] || {}).prototype;
 
-	  var target = GLOBAL ? path$k : path$k[TARGET] || createNonEnumerableProperty$e(path$k, TARGET, {})[TARGET];
+	  var target = GLOBAL ? path$k : path$k[TARGET] || createNonEnumerableProperty$d(path$k, TARGET, {})[TARGET];
 	  var targetPrototype = target.prototype;
 
 	  var FORCED, USE_NATIVE, VIRTUAL_PROTOTYPE;
@@ -684,7 +684,7 @@ var bookly = (function ($$O) {
 	    if (USE_NATIVE && typeof targetProperty == typeof sourceProperty) continue;
 
 	    // bind methods to global for calling from export context
-	    if (options.bind && USE_NATIVE) resultProperty = bind$d(sourceProperty, global$y);
+	    if (options.bind && USE_NATIVE) resultProperty = bind$d(sourceProperty, global$k);
 	    // wrap global constructors for prevent changes in this version
 	    else if (options.wrap && USE_NATIVE) resultProperty = wrapConstructor$1(sourceProperty);
 	    // make static versions for prototype methods
@@ -694,21 +694,21 @@ var bookly = (function ($$O) {
 
 	    // add a flag to not completely full polyfills
 	    if (options.sham || (sourceProperty && sourceProperty.sham) || (targetProperty && targetProperty.sham)) {
-	      createNonEnumerableProperty$e(resultProperty, 'sham', true);
+	      createNonEnumerableProperty$d(resultProperty, 'sham', true);
 	    }
 
-	    createNonEnumerableProperty$e(target, key, resultProperty);
+	    createNonEnumerableProperty$d(target, key, resultProperty);
 
 	    if (PROTO) {
 	      VIRTUAL_PROTOTYPE = TARGET + 'Prototype';
 	      if (!hasOwn$j(path$k, VIRTUAL_PROTOTYPE)) {
-	        createNonEnumerableProperty$e(path$k, VIRTUAL_PROTOTYPE, {});
+	        createNonEnumerableProperty$d(path$k, VIRTUAL_PROTOTYPE, {});
 	      }
 	      // export virtual prototype methods
-	      createNonEnumerableProperty$e(path$k[VIRTUAL_PROTOTYPE], key, sourceProperty);
+	      createNonEnumerableProperty$d(path$k[VIRTUAL_PROTOTYPE], key, sourceProperty);
 	      // export real prototype methods
 	      if (options.real && targetPrototype && (FORCED || !targetPrototype[key])) {
-	        createNonEnumerableProperty$e(targetPrototype, key, sourceProperty);
+	        createNonEnumerableProperty$d(targetPrototype, key, sourceProperty);
 	      }
 	    }
 	  }
@@ -729,13 +729,13 @@ var bookly = (function ($$O) {
 
 	// `ToIntegerOrInfinity` abstract operation
 	// https://tc39.es/ecma262/#sec-tointegerorinfinity
-	var toIntegerOrInfinity$9 = function (argument) {
+	var toIntegerOrInfinity$a = function (argument) {
 	  var number = +argument;
 	  // eslint-disable-next-line no-self-compare -- NaN check
 	  return number !== number || number === 0 ? 0 : trunc$1(number);
 	};
 
-	var toIntegerOrInfinity$8 = toIntegerOrInfinity$9;
+	var toIntegerOrInfinity$9 = toIntegerOrInfinity$a;
 
 	var max$5 = Math.max;
 	var min$4 = Math.min;
@@ -743,39 +743,39 @@ var bookly = (function ($$O) {
 	// Helper for a popular repeating case of the spec:
 	// Let integer be ? ToInteger(index).
 	// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
-	var toAbsoluteIndex$8 = function (index, length) {
-	  var integer = toIntegerOrInfinity$8(index);
+	var toAbsoluteIndex$7 = function (index, length) {
+	  var integer = toIntegerOrInfinity$9(index);
 	  return integer < 0 ? max$5(integer + length, 0) : min$4(integer, length);
 	};
 
-	var toIntegerOrInfinity$7 = toIntegerOrInfinity$9;
+	var toIntegerOrInfinity$8 = toIntegerOrInfinity$a;
 
 	var min$3 = Math.min;
 
 	// `ToLength` abstract operation
 	// https://tc39.es/ecma262/#sec-tolength
 	var toLength$4 = function (argument) {
-	  return argument > 0 ? min$3(toIntegerOrInfinity$7(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
+	  return argument > 0 ? min$3(toIntegerOrInfinity$8(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 	};
 
 	var toLength$3 = toLength$4;
 
 	// `LengthOfArrayLike` abstract operation
 	// https://tc39.es/ecma262/#sec-lengthofarraylike
-	var lengthOfArrayLike$f = function (obj) {
+	var lengthOfArrayLike$e = function (obj) {
 	  return toLength$3(obj.length);
 	};
 
 	var toIndexedObject$e = toIndexedObject$g;
-	var toAbsoluteIndex$7 = toAbsoluteIndex$8;
-	var lengthOfArrayLike$e = lengthOfArrayLike$f;
+	var toAbsoluteIndex$6 = toAbsoluteIndex$7;
+	var lengthOfArrayLike$d = lengthOfArrayLike$e;
 
 	// `Array.prototype.{ indexOf, includes }` methods implementation
 	var createMethod$9 = function (IS_INCLUDES) {
 	  return function ($this, el, fromIndex) {
 	    var O = toIndexedObject$e($this);
-	    var length = lengthOfArrayLike$e(O);
-	    var index = toAbsoluteIndex$7(fromIndex, length);
+	    var length = lengthOfArrayLike$d(O);
+	    var index = toAbsoluteIndex$6(fromIndex, length);
 	    var value;
 	    // Array#includes uses SameValueZero equality algorithm
 	    // eslint-disable-next-line no-self-compare -- NaN check
@@ -799,7 +799,7 @@ var bookly = (function ($$O) {
 	  indexOf: createMethod$9(false)
 	};
 
-	var $$N = _export$1;
+	var $$U = _export$1;
 	var $includes$1 = arrayIncludes$1.includes;
 	var fails$D = fails$L;
 
@@ -811,66 +811,66 @@ var bookly = (function ($$O) {
 
 	// `Array.prototype.includes` method
 	// https://tc39.es/ecma262/#sec-array.prototype.includes
-	$$N({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE$1 }, {
+	$$U({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE$1 }, {
 	  includes: function includes(el /* , fromIndex = 0 */) {
 	    return $includes$1(this, el, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var global$x = global$G;
+	var global$j = global$s;
 	var path$j = path$m;
 
-	var getBuiltInPrototypeMethod$g = function (CONSTRUCTOR, METHOD) {
+	var getBuiltInPrototypeMethod$l = function (CONSTRUCTOR, METHOD) {
 	  var Namespace = path$j[CONSTRUCTOR + 'Prototype'];
 	  var pureMethod = Namespace && Namespace[METHOD];
 	  if (pureMethod) return pureMethod;
-	  var NativeConstructor = global$x[CONSTRUCTOR];
+	  var NativeConstructor = global$j[CONSTRUCTOR];
 	  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
 	  return NativePrototype && NativePrototype[METHOD];
 	};
 
-	var getBuiltInPrototypeMethod$f = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$k = getBuiltInPrototypeMethod$l;
 
-	var includes$9 = getBuiltInPrototypeMethod$f('Array', 'includes');
+	var includes$9 = getBuiltInPrototypeMethod$k('Array', 'includes');
 
 	var isObject$r = isObject$w;
-	var classof$m = classofRaw$5;
-	var wellKnownSymbol$x = wellKnownSymbol$z;
+	var classof$l = classofRaw$5;
+	var wellKnownSymbol$w = wellKnownSymbol$y;
 
-	var MATCH$3 = wellKnownSymbol$x('match');
+	var MATCH$3 = wellKnownSymbol$w('match');
 
 	// `IsRegExp` abstract operation
 	// https://tc39.es/ecma262/#sec-isregexp
 	var isRegexp$1 = function (it) {
 	  var isRegExp;
-	  return isObject$r(it) && ((isRegExp = it[MATCH$3]) !== undefined ? !!isRegExp : classof$m(it) === 'RegExp');
+	  return isObject$r(it) && ((isRegExp = it[MATCH$3]) !== undefined ? !!isRegExp : classof$l(it) === 'RegExp');
 	};
 
 	var isRegExp$1 = isRegexp$1;
 
-	var $TypeError$k = TypeError;
+	var $TypeError$m = TypeError;
 
 	var notARegexp$1 = function (it) {
 	  if (isRegExp$1(it)) {
-	    throw new $TypeError$k("The method doesn't accept regular expressions");
+	    throw new $TypeError$m("The method doesn't accept regular expressions");
 	  } return it;
 	};
 
-	var wellKnownSymbol$w = wellKnownSymbol$z;
+	var wellKnownSymbol$v = wellKnownSymbol$y;
 
-	var TO_STRING_TAG$7 = wellKnownSymbol$w('toStringTag');
+	var TO_STRING_TAG$6 = wellKnownSymbol$v('toStringTag');
 	var test$2 = {};
 
-	test$2[TO_STRING_TAG$7] = 'z';
+	test$2[TO_STRING_TAG$6] = 'z';
 
 	var toStringTagSupport$1 = String(test$2) === '[object z]';
 
 	var TO_STRING_TAG_SUPPORT$5 = toStringTagSupport$1;
 	var isCallable$s = isCallable$A;
 	var classofRaw$3 = classofRaw$5;
-	var wellKnownSymbol$v = wellKnownSymbol$z;
+	var wellKnownSymbol$u = wellKnownSymbol$y;
 
-	var TO_STRING_TAG$6 = wellKnownSymbol$v('toStringTag');
+	var TO_STRING_TAG$5 = wellKnownSymbol$u('toStringTag');
 	var $Object$7 = Object;
 
 	// ES3 wrong here
@@ -884,29 +884,29 @@ var bookly = (function ($$O) {
 	};
 
 	// getting tag from ES6+ `Object.prototype.toString`
-	var classof$l = TO_STRING_TAG_SUPPORT$5 ? classofRaw$3 : function (it) {
+	var classof$k = TO_STRING_TAG_SUPPORT$5 ? classofRaw$3 : function (it) {
 	  var O, tag, result;
 	  return it === undefined ? 'Undefined' : it === null ? 'Null'
 	    // @@toStringTag case
-	    : typeof (tag = tryGet$1(O = $Object$7(it), TO_STRING_TAG$6)) == 'string' ? tag
+	    : typeof (tag = tryGet$1(O = $Object$7(it), TO_STRING_TAG$5)) == 'string' ? tag
 	    // builtinTag case
 	    : CORRECT_ARGUMENTS$1 ? classofRaw$3(O)
 	    // ES3 arguments fallback
 	    : (result = classofRaw$3(O)) === 'Object' && isCallable$s(O.callee) ? 'Arguments' : result;
 	};
 
-	var classof$k = classof$l;
+	var classof$j = classof$k;
 
 	var $String$6 = String;
 
 	var toString$l = function (argument) {
-	  if (classof$k(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
+	  if (classof$j(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
 	  return $String$6(argument);
 	};
 
-	var wellKnownSymbol$u = wellKnownSymbol$z;
+	var wellKnownSymbol$t = wellKnownSymbol$y;
 
-	var MATCH$2 = wellKnownSymbol$u('match');
+	var MATCH$2 = wellKnownSymbol$t('match');
 
 	var correctIsRegexpLogic$1 = function (METHOD_NAME) {
 	  var regexp = /./;
@@ -920,7 +920,7 @@ var bookly = (function ($$O) {
 	  } return false;
 	};
 
-	var $$M = _export$1;
+	var $$T = _export$1;
 	var uncurryThis$F = functionUncurryThis$1;
 	var notARegExp$1 = notARegexp$1;
 	var requireObjectCoercible$b = requireObjectCoercible$e;
@@ -931,7 +931,7 @@ var bookly = (function ($$O) {
 
 	// `String.prototype.includes` method
 	// https://tc39.es/ecma262/#sec-string.prototype.includes
-	$$M({ target: 'String', proto: true, forced: !correctIsRegExpLogic$1('includes') }, {
+	$$T({ target: 'String', proto: true, forced: !correctIsRegExpLogic$1('includes') }, {
 	  includes: function includes(searchString /* , position = 0 */) {
 	    return !!~stringIndexOf$1(
 	      toString$k(requireObjectCoercible$b(this)),
@@ -941,9 +941,9 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$e = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$j = getBuiltInPrototypeMethod$l;
 
-	var includes$8 = getBuiltInPrototypeMethod$e('String', 'includes');
+	var includes$8 = getBuiltInPrototypeMethod$j('String', 'includes');
 
 	var isPrototypeOf$n = objectIsPrototypeOf$1;
 	var arrayMethod$1 = includes$9;
@@ -968,7 +968,7 @@ var bookly = (function ($$O) {
 
 	var _includesInstanceProperty$1 = /*@__PURE__*/getDefaultExportFromCjs(includes$5);
 
-	var shared$5 = sharedExports$1;
+	var shared$5 = sharedExports;
 	var uid$5 = uid$7;
 
 	var keys$4 = shared$5('keys');
@@ -1009,12 +1009,12 @@ var bookly = (function ($$O) {
 	};
 
 	var uncurryThis$E = functionUncurryThis$1;
-	var aCallable$d = aCallable$g;
+	var aCallable$e = aCallable$h;
 
 	var functionUncurryThisAccessor = function (object, key, method) {
 	  try {
 	    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-	    return uncurryThis$E(aCallable$d(Object.getOwnPropertyDescriptor(object, key)[method]));
+	    return uncurryThis$E(aCallable$e(Object.getOwnPropertyDescriptor(object, key)[method]));
 	  } catch (error) { /* empty */ }
 	};
 
@@ -1027,16 +1027,16 @@ var bookly = (function ($$O) {
 	var isPossiblePrototype = isPossiblePrototype$1;
 
 	var $String$5 = String;
-	var $TypeError$j = TypeError;
+	var $TypeError$l = TypeError;
 
 	var aPossiblePrototype$1 = function (argument) {
 	  if (isPossiblePrototype(argument)) return argument;
-	  throw new $TypeError$j("Can't set " + $String$5(argument) + ' as a prototype');
+	  throw new $TypeError$l("Can't set " + $String$5(argument) + ' as a prototype');
 	};
 
 	/* eslint-disable no-proto -- safe */
 	var uncurryThisAccessor = functionUncurryThisAccessor;
-	var anObject$h = anObject$j;
+	var anObject$i = anObject$k;
 	var aPossiblePrototype = aPossiblePrototype$1;
 
 	// `Object.setPrototypeOf` method
@@ -1053,7 +1053,7 @@ var bookly = (function ($$O) {
 	    CORRECT_SETTER = test instanceof Array;
 	  } catch (error) { /* empty */ }
 	  return function setPrototypeOf(O, proto) {
-	    anObject$h(O);
+	    anObject$i(O);
 	    aPossiblePrototype(proto);
 	    if (CORRECT_SETTER) setter(O, proto);
 	    else O.__proto__ = proto;
@@ -1114,17 +1114,17 @@ var bookly = (function ($$O) {
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 	objectGetOwnPropertySymbols.f = Object.getOwnPropertySymbols;
 
-	var getBuiltIn$d = getBuiltIn$f;
+	var getBuiltIn$e = getBuiltIn$g;
 	var uncurryThis$C = functionUncurryThis$1;
 	var getOwnPropertyNamesModule$2 = objectGetOwnPropertyNames$1;
 	var getOwnPropertySymbolsModule = objectGetOwnPropertySymbols;
-	var anObject$g = anObject$j;
+	var anObject$h = anObject$k;
 
 	var concat$4 = uncurryThis$C([].concat);
 
 	// all object keys, includes non-enumerable and symbols
-	var ownKeys$1 = getBuiltIn$d('Reflect', 'ownKeys') || function ownKeys(it) {
-	  var keys = getOwnPropertyNamesModule$2.f(anObject$g(it));
+	var ownKeys$1 = getBuiltIn$e('Reflect', 'ownKeys') || function ownKeys(it) {
+	  var keys = getOwnPropertyNamesModule$2.f(anObject$h(it));
 	  var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
 	  return getOwnPropertySymbols ? concat$4(keys, getOwnPropertySymbols(it)) : keys;
 	};
@@ -1158,18 +1158,18 @@ var bookly = (function ($$O) {
 	  return internalObjectKeys$2(O, enumBugKeys$5);
 	};
 
-	var DESCRIPTORS$i = descriptors$1;
+	var DESCRIPTORS$j = descriptors$1;
 	var V8_PROTOTYPE_DEFINE_BUG$2 = v8PrototypeDefineBug$1;
 	var definePropertyModule$4 = objectDefineProperty$1;
-	var anObject$f = anObject$j;
+	var anObject$g = anObject$k;
 	var toIndexedObject$c = toIndexedObject$g;
 	var objectKeys$3 = objectKeys$4;
 
 	// `Object.defineProperties` method
 	// https://tc39.es/ecma262/#sec-object.defineproperties
 	// eslint-disable-next-line es/no-object-defineproperties -- safe
-	objectDefineProperties$1.f = DESCRIPTORS$i && !V8_PROTOTYPE_DEFINE_BUG$2 ? Object.defineProperties : function defineProperties(O, Properties) {
-	  anObject$f(O);
+	objectDefineProperties$1.f = DESCRIPTORS$j && !V8_PROTOTYPE_DEFINE_BUG$2 ? Object.defineProperties : function defineProperties(O, Properties) {
+	  anObject$g(O);
 	  var props = toIndexedObject$c(Properties);
 	  var keys = objectKeys$3(Properties);
 	  var length = keys.length;
@@ -1179,12 +1179,12 @@ var bookly = (function ($$O) {
 	  return O;
 	};
 
-	var getBuiltIn$c = getBuiltIn$f;
+	var getBuiltIn$d = getBuiltIn$g;
 
-	var html$4 = getBuiltIn$c('document', 'documentElement');
+	var html$4 = getBuiltIn$d('document', 'documentElement');
 
 	/* global ActiveXObject -- old IE, WSH */
-	var anObject$e = anObject$j;
+	var anObject$f = anObject$k;
 	var definePropertiesModule$1 = objectDefineProperties$1;
 	var enumBugKeys$4 = enumBugKeys$7;
 	var hiddenKeys$8 = hiddenKeys$b;
@@ -1258,7 +1258,7 @@ var bookly = (function ($$O) {
 	var objectCreate$1 = Object.create || function create(O, Properties) {
 	  var result;
 	  if (O !== null) {
-	    EmptyConstructor$1[PROTOTYPE$1] = anObject$e(O);
+	    EmptyConstructor$1[PROTOTYPE$1] = anObject$f(O);
 	    result = new EmptyConstructor$1();
 	    EmptyConstructor$1[PROTOTYPE$1] = null;
 	    // add "__proto__" for Object.getPrototypeOf polyfill
@@ -1268,13 +1268,13 @@ var bookly = (function ($$O) {
 	};
 
 	var isObject$p = isObject$w;
-	var createNonEnumerableProperty$d = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$c = createNonEnumerableProperty$e;
 
 	// `InstallErrorCause` abstract operation
 	// https://tc39.es/proposal-error-cause/#sec-errorobjects-install-error-cause
 	var installErrorCause$1 = function (O, options) {
 	  if (isObject$p(options) && 'cause' in options) {
-	    createNonEnumerableProperty$d(O, 'cause', options.cause);
+	    createNonEnumerableProperty$c(O, 'cause', options.cause);
 	  }
 	};
 
@@ -1305,7 +1305,7 @@ var bookly = (function ($$O) {
 	  return error.stack !== 7;
 	});
 
-	var createNonEnumerableProperty$c = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$b = createNonEnumerableProperty$e;
 	var clearErrorStack = errorStackClear;
 	var ERROR_STACK_INSTALLABLE = errorStackInstallable;
 
@@ -1315,16 +1315,16 @@ var bookly = (function ($$O) {
 	var errorStackInstall = function (error, C, stack, dropEntries) {
 	  if (ERROR_STACK_INSTALLABLE) {
 	    if (captureStackTrace) captureStackTrace(error, C);
-	    else createNonEnumerableProperty$c(error, 'stack', clearErrorStack(stack, dropEntries));
+	    else createNonEnumerableProperty$b(error, 'stack', clearErrorStack(stack, dropEntries));
 	  }
 	};
 
 	var iterators$1 = {};
 
-	var wellKnownSymbol$t = wellKnownSymbol$z;
+	var wellKnownSymbol$s = wellKnownSymbol$y;
 	var Iterators$b = iterators$1;
 
-	var ITERATOR$b = wellKnownSymbol$t('iterator');
+	var ITERATOR$b = wellKnownSymbol$s('iterator');
 	var ArrayPrototype$f = Array.prototype;
 
 	// check on default Array iterator
@@ -1332,70 +1332,70 @@ var bookly = (function ($$O) {
 	  return it !== undefined && (Iterators$b.Array === it || ArrayPrototype$f[ITERATOR$b] === it);
 	};
 
-	var classof$j = classof$l;
+	var classof$i = classof$k;
 	var getMethod$5 = getMethod$7;
-	var isNullOrUndefined$9 = isNullOrUndefined$c;
+	var isNullOrUndefined$a = isNullOrUndefined$d;
 	var Iterators$a = iterators$1;
-	var wellKnownSymbol$s = wellKnownSymbol$z;
+	var wellKnownSymbol$r = wellKnownSymbol$y;
 
-	var ITERATOR$a = wellKnownSymbol$s('iterator');
+	var ITERATOR$a = wellKnownSymbol$r('iterator');
 
 	var getIteratorMethod$6 = function (it) {
-	  if (!isNullOrUndefined$9(it)) return getMethod$5(it, ITERATOR$a)
+	  if (!isNullOrUndefined$a(it)) return getMethod$5(it, ITERATOR$a)
 	    || getMethod$5(it, '@@iterator')
-	    || Iterators$a[classof$j(it)];
+	    || Iterators$a[classof$i(it)];
 	};
 
-	var call$k = functionCall$1;
-	var aCallable$c = aCallable$g;
-	var anObject$d = anObject$j;
-	var tryToString$7 = tryToString$9;
+	var call$m = functionCall$1;
+	var aCallable$d = aCallable$h;
+	var anObject$e = anObject$k;
+	var tryToString$8 = tryToString$a;
 	var getIteratorMethod$5 = getIteratorMethod$6;
 
-	var $TypeError$i = TypeError;
+	var $TypeError$k = TypeError;
 
 	var getIterator$4 = function (argument, usingIterator) {
 	  var iteratorMethod = arguments.length < 2 ? getIteratorMethod$5(argument) : usingIterator;
-	  if (aCallable$c(iteratorMethod)) return anObject$d(call$k(iteratorMethod, argument));
-	  throw new $TypeError$i(tryToString$7(argument) + ' is not iterable');
+	  if (aCallable$d(iteratorMethod)) return anObject$e(call$m(iteratorMethod, argument));
+	  throw new $TypeError$k(tryToString$8(argument) + ' is not iterable');
 	};
 
-	var call$j = functionCall$1;
-	var anObject$c = anObject$j;
+	var call$l = functionCall$1;
+	var anObject$d = anObject$k;
 	var getMethod$4 = getMethod$7;
 
-	var iteratorClose$4 = function (iterator, kind, value) {
+	var iteratorClose$6 = function (iterator, kind, value) {
 	  var innerResult, innerError;
-	  anObject$c(iterator);
+	  anObject$d(iterator);
 	  try {
 	    innerResult = getMethod$4(iterator, 'return');
 	    if (!innerResult) {
 	      if (kind === 'throw') throw value;
 	      return value;
 	    }
-	    innerResult = call$j(innerResult, iterator);
+	    innerResult = call$l(innerResult, iterator);
 	  } catch (error) {
 	    innerError = true;
 	    innerResult = error;
 	  }
 	  if (kind === 'throw') throw value;
 	  if (innerError) throw innerResult;
-	  anObject$c(innerResult);
+	  anObject$d(innerResult);
 	  return value;
 	};
 
 	var bind$c = functionBindContext$1;
-	var call$i = functionCall$1;
-	var anObject$b = anObject$j;
-	var tryToString$6 = tryToString$9;
+	var call$k = functionCall$1;
+	var anObject$c = anObject$k;
+	var tryToString$7 = tryToString$a;
 	var isArrayIteratorMethod$3 = isArrayIteratorMethod$4;
-	var lengthOfArrayLike$d = lengthOfArrayLike$f;
+	var lengthOfArrayLike$c = lengthOfArrayLike$e;
 	var isPrototypeOf$m = objectIsPrototypeOf$1;
 	var getIterator$3 = getIterator$4;
 	var getIteratorMethod$4 = getIteratorMethod$6;
-	var iteratorClose$3 = iteratorClose$4;
+	var iteratorClose$5 = iteratorClose$6;
 
-	var $TypeError$h = TypeError;
+	var $TypeError$j = TypeError;
 
 	var Result$1 = function (stopped, result) {
 	  this.stopped = stopped;
@@ -1404,7 +1404,7 @@ var bookly = (function ($$O) {
 
 	var ResultPrototype$1 = Result$1.prototype;
 
-	var iterate$c = function (iterable, unboundFunction, options) {
+	var iterate$e = function (iterable, unboundFunction, options) {
 	  var that = options && options.that;
 	  var AS_ENTRIES = !!(options && options.AS_ENTRIES);
 	  var IS_RECORD = !!(options && options.IS_RECORD);
@@ -1414,13 +1414,13 @@ var bookly = (function ($$O) {
 	  var iterator, iterFn, index, length, result, next, step;
 
 	  var stop = function (condition) {
-	    if (iterator) iteratorClose$3(iterator, 'normal', condition);
+	    if (iterator) iteratorClose$5(iterator, 'normal', condition);
 	    return new Result$1(true, condition);
 	  };
 
 	  var callFn = function (value) {
 	    if (AS_ENTRIES) {
-	      anObject$b(value);
+	      anObject$c(value);
 	      return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
 	    } return INTERRUPTED ? fn(value, stop) : fn(value);
 	  };
@@ -1431,10 +1431,10 @@ var bookly = (function ($$O) {
 	    iterator = iterable;
 	  } else {
 	    iterFn = getIteratorMethod$4(iterable);
-	    if (!iterFn) throw new $TypeError$h(tryToString$6(iterable) + ' is not iterable');
+	    if (!iterFn) throw new $TypeError$j(tryToString$7(iterable) + ' is not iterable');
 	    // optimisation for array iterators
 	    if (isArrayIteratorMethod$3(iterFn)) {
-	      for (index = 0, length = lengthOfArrayLike$d(iterable); length > index; index++) {
+	      for (index = 0, length = lengthOfArrayLike$c(iterable); length > index; index++) {
 	        result = callFn(iterable[index]);
 	        if (result && isPrototypeOf$m(ResultPrototype$1, result)) return result;
 	      } return new Result$1(false);
@@ -1443,11 +1443,11 @@ var bookly = (function ($$O) {
 	  }
 
 	  next = IS_RECORD ? iterable.next : iterator.next;
-	  while (!(step = call$i(next, iterator)).done) {
+	  while (!(step = call$k(next, iterator)).done) {
 	    try {
 	      result = callFn(step.value);
 	    } catch (error) {
-	      iteratorClose$3(iterator, 'throw', error);
+	      iteratorClose$5(iterator, 'throw', error);
 	    }
 	    if (typeof result == 'object' && result && isPrototypeOf$m(ResultPrototype$1, result)) return result;
 	  } return new Result$1(false);
@@ -1459,21 +1459,21 @@ var bookly = (function ($$O) {
 	  return argument === undefined ? arguments.length < 2 ? '' : $default : toString$j(argument);
 	};
 
-	var $$L = _export$1;
+	var $$S = _export$1;
 	var isPrototypeOf$l = objectIsPrototypeOf$1;
 	var getPrototypeOf$4 = objectGetPrototypeOf$2;
 	var setPrototypeOf = objectSetPrototypeOf;
 	var copyConstructorProperties = copyConstructorProperties$1;
 	var create$a = objectCreate$1;
-	var createNonEnumerableProperty$b = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$a = createNonEnumerableProperty$e;
 	var createPropertyDescriptor$7 = createPropertyDescriptor$b;
 	var installErrorCause = installErrorCause$1;
 	var installErrorStack = errorStackInstall;
-	var iterate$b = iterate$c;
+	var iterate$d = iterate$e;
 	var normalizeStringArgument = normalizeStringArgument$1;
-	var wellKnownSymbol$r = wellKnownSymbol$z;
+	var wellKnownSymbol$q = wellKnownSymbol$y;
 
-	var TO_STRING_TAG$5 = wellKnownSymbol$r('toStringTag');
+	var TO_STRING_TAG$4 = wellKnownSymbol$q('toStringTag');
 	var $Error = Error;
 	var push$7 = [].push;
 
@@ -1484,14 +1484,14 @@ var bookly = (function ($$O) {
 	    that = setPrototypeOf(new $Error(), isInstance ? getPrototypeOf$4(this) : AggregateErrorPrototype);
 	  } else {
 	    that = isInstance ? this : create$a(AggregateErrorPrototype);
-	    createNonEnumerableProperty$b(that, TO_STRING_TAG$5, 'Error');
+	    createNonEnumerableProperty$a(that, TO_STRING_TAG$4, 'Error');
 	  }
-	  if (message !== undefined) createNonEnumerableProperty$b(that, 'message', normalizeStringArgument(message));
+	  if (message !== undefined) createNonEnumerableProperty$a(that, 'message', normalizeStringArgument(message));
 	  installErrorStack(that, $AggregateError, that.stack, 1);
 	  if (arguments.length > 2) installErrorCause(that, arguments[2]);
 	  var errorsArray = [];
-	  iterate$b(errors, push$7, { that: errorsArray });
-	  createNonEnumerableProperty$b(that, 'errors', errorsArray);
+	  iterate$d(errors, push$7, { that: errorsArray });
+	  createNonEnumerableProperty$a(that, 'errors', errorsArray);
 	  return that;
 	};
 
@@ -1506,33 +1506,33 @@ var bookly = (function ($$O) {
 
 	// `AggregateError` constructor
 	// https://tc39.es/ecma262/#sec-aggregate-error-constructor
-	$$L({ global: true, constructor: true, arity: 2 }, {
+	$$S({ global: true}, {
 	  AggregateError: $AggregateError
 	});
 
-	var global$w = global$G;
+	var global$i = global$s;
 	var isCallable$q = isCallable$A;
 
-	var WeakMap$3 = global$w.WeakMap;
+	var WeakMap$3 = global$i.WeakMap;
 
 	var weakMapBasicDetection$1 = isCallable$q(WeakMap$3) && /native code/.test(String(WeakMap$3));
 
 	var NATIVE_WEAK_MAP$2 = weakMapBasicDetection$1;
-	var global$v = global$G;
+	var global$h = global$s;
 	var isObject$o = isObject$w;
-	var createNonEnumerableProperty$a = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$9 = createNonEnumerableProperty$e;
 	var hasOwn$f = hasOwnProperty_1$1;
 	var shared$4 = sharedStore$1;
 	var sharedKey$4 = sharedKey$7;
 	var hiddenKeys$7 = hiddenKeys$b;
 
 	var OBJECT_ALREADY_INITIALIZED$1 = 'Object already initialized';
-	var TypeError$3 = global$v.TypeError;
-	var WeakMap$2 = global$v.WeakMap;
-	var set$9, get$2, has$2;
+	var TypeError$3 = global$h.TypeError;
+	var WeakMap$2 = global$h.WeakMap;
+	var set$9, get$2, has$7;
 
 	var enforce$1 = function (it) {
-	  return has$2(it) ? get$2(it) : set$9(it, {});
+	  return has$7(it) ? get$2(it) : set$9(it, {});
 	};
 
 	var getterFor$1 = function (TYPE) {
@@ -1560,7 +1560,7 @@ var bookly = (function ($$O) {
 	  get$2 = function (it) {
 	    return store$5.get(it) || {};
 	  };
-	  has$2 = function (it) {
+	  has$7 = function (it) {
 	    return store$5.has(it);
 	  };
 	} else {
@@ -1569,13 +1569,13 @@ var bookly = (function ($$O) {
 	  set$9 = function (it, metadata) {
 	    if (hasOwn$f(it, STATE$1)) throw new TypeError$3(OBJECT_ALREADY_INITIALIZED$1);
 	    metadata.facade = it;
-	    createNonEnumerableProperty$a(it, STATE$1, metadata);
+	    createNonEnumerableProperty$9(it, STATE$1, metadata);
 	    return metadata;
 	  };
 	  get$2 = function (it) {
 	    return hasOwn$f(it, STATE$1) ? it[STATE$1] : {};
 	  };
-	  has$2 = function (it) {
+	  has$7 = function (it) {
 	    return hasOwn$f(it, STATE$1);
 	  };
 	}
@@ -1583,34 +1583,33 @@ var bookly = (function ($$O) {
 	var internalState$1 = {
 	  set: set$9,
 	  get: get$2,
-	  has: has$2,
+	  has: has$7,
 	  enforce: enforce$1,
 	  getterFor: getterFor$1
 	};
 
-	var DESCRIPTORS$h = descriptors$1;
+	var DESCRIPTORS$i = descriptors$1;
 	var hasOwn$e = hasOwnProperty_1$1;
 
 	var FunctionPrototype$3 = Function.prototype;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
-	var getDescriptor$1 = DESCRIPTORS$h && Object.getOwnPropertyDescriptor;
+	var getDescriptor$1 = DESCRIPTORS$i && Object.getOwnPropertyDescriptor;
 
 	var EXISTS$2 = hasOwn$e(FunctionPrototype$3, 'name');
 	// additional protection from minified / mangled / dropped function names
 	var PROPER$1 = EXISTS$2 && (function something() { /* empty */ }).name === 'something';
-	var CONFIGURABLE$2 = EXISTS$2 && (!DESCRIPTORS$h || (DESCRIPTORS$h && getDescriptor$1(FunctionPrototype$3, 'name').configurable));
+	var CONFIGURABLE$2 = EXISTS$2 && (!DESCRIPTORS$i || (DESCRIPTORS$i && getDescriptor$1(FunctionPrototype$3, 'name').configurable));
 
 	var functionName$1 = {
-	  EXISTS: EXISTS$2,
 	  PROPER: PROPER$1,
 	  CONFIGURABLE: CONFIGURABLE$2
 	};
 
-	var createNonEnumerableProperty$9 = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$8 = createNonEnumerableProperty$e;
 
 	var defineBuiltIn$8 = function (target, key, value, options) {
 	  if (options && options.enumerable) target[key] = value;
-	  else createNonEnumerableProperty$9(target, key, value);
+	  else createNonEnumerableProperty$8(target, key, value);
 	  return target;
 	};
 
@@ -1620,9 +1619,9 @@ var bookly = (function ($$O) {
 	var create$9 = objectCreate$1;
 	var getPrototypeOf$3 = objectGetPrototypeOf$2;
 	var defineBuiltIn$7 = defineBuiltIn$8;
-	var wellKnownSymbol$q = wellKnownSymbol$z;
+	var wellKnownSymbol$p = wellKnownSymbol$y;
 
-	var ITERATOR$9 = wellKnownSymbol$q('iterator');
+	var ITERATOR$9 = wellKnownSymbol$p('iterator');
 	var BUGGY_SAFARI_ITERATORS$3 = false;
 
 	// `%IteratorPrototype%` object
@@ -1663,31 +1662,31 @@ var bookly = (function ($$O) {
 	};
 
 	var TO_STRING_TAG_SUPPORT$4 = toStringTagSupport$1;
-	var classof$i = classof$l;
+	var classof$h = classof$k;
 
 	// `Object.prototype.toString` method implementation
 	// https://tc39.es/ecma262/#sec-object.prototype.tostring
 	var objectToString$1 = TO_STRING_TAG_SUPPORT$4 ? {}.toString : function toString() {
-	  return '[object ' + classof$i(this) + ']';
+	  return '[object ' + classof$h(this) + ']';
 	};
 
 	var TO_STRING_TAG_SUPPORT$3 = toStringTagSupport$1;
 	var defineProperty$8 = objectDefineProperty$1.f;
-	var createNonEnumerableProperty$8 = createNonEnumerableProperty$f;
+	var createNonEnumerableProperty$7 = createNonEnumerableProperty$e;
 	var hasOwn$d = hasOwnProperty_1$1;
 	var toString$i = objectToString$1;
-	var wellKnownSymbol$p = wellKnownSymbol$z;
+	var wellKnownSymbol$o = wellKnownSymbol$y;
 
-	var TO_STRING_TAG$4 = wellKnownSymbol$p('toStringTag');
+	var TO_STRING_TAG$3 = wellKnownSymbol$o('toStringTag');
 
-	var setToStringTag$9 = function (it, TAG, STATIC, SET_METHOD) {
+	var setToStringTag$a = function (it, TAG, STATIC, SET_METHOD) {
 	  var target = STATIC ? it : it && it.prototype;
 	  if (target) {
-	    if (!hasOwn$d(target, TO_STRING_TAG$4)) {
-	      defineProperty$8(target, TO_STRING_TAG$4, { configurable: true, value: TAG });
+	    if (!hasOwn$d(target, TO_STRING_TAG$3)) {
+	      defineProperty$8(target, TO_STRING_TAG$3, { configurable: true, value: TAG });
 	    }
 	    if (SET_METHOD && !TO_STRING_TAG_SUPPORT$3) {
-	      createNonEnumerableProperty$8(target, 'toString', toString$i);
+	      createNonEnumerableProperty$7(target, 'toString', toString$i);
 	    }
 	  }
 	};
@@ -1695,7 +1694,7 @@ var bookly = (function ($$O) {
 	var IteratorPrototype$2 = iteratorsCore$1.IteratorPrototype;
 	var create$8 = objectCreate$1;
 	var createPropertyDescriptor$6 = createPropertyDescriptor$b;
-	var setToStringTag$8 = setToStringTag$9;
+	var setToStringTag$9 = setToStringTag$a;
 	var Iterators$9 = iterators$1;
 
 	var returnThis$3 = function () { return this; };
@@ -1703,19 +1702,19 @@ var bookly = (function ($$O) {
 	var iteratorCreateConstructor$1 = function (IteratorConstructor, NAME, next, ENUMERABLE_NEXT) {
 	  var TO_STRING_TAG = NAME + ' Iterator';
 	  IteratorConstructor.prototype = create$8(IteratorPrototype$2, { next: createPropertyDescriptor$6(+!ENUMERABLE_NEXT, next) });
-	  setToStringTag$8(IteratorConstructor, TO_STRING_TAG, false, true);
+	  setToStringTag$9(IteratorConstructor, TO_STRING_TAG, false, true);
 	  Iterators$9[TO_STRING_TAG] = returnThis$3;
 	  return IteratorConstructor;
 	};
 
-	var $$K = _export$1;
-	var call$h = functionCall$1;
+	var $$R = _export$1;
+	var call$j = functionCall$1;
 	var FunctionName$1 = functionName$1;
 	var createIteratorConstructor$1 = iteratorCreateConstructor$1;
 	var getPrototypeOf$2 = objectGetPrototypeOf$2;
-	var setToStringTag$7 = setToStringTag$9;
+	var setToStringTag$8 = setToStringTag$a;
 	var defineBuiltIn$6 = defineBuiltIn$8;
-	var wellKnownSymbol$o = wellKnownSymbol$z;
+	var wellKnownSymbol$n = wellKnownSymbol$y;
 	var Iterators$8 = iterators$1;
 	var IteratorsCore$1 = iteratorsCore$1;
 
@@ -1723,7 +1722,7 @@ var bookly = (function ($$O) {
 	FunctionName$1.CONFIGURABLE;
 	IteratorsCore$1.IteratorPrototype;
 	var BUGGY_SAFARI_ITERATORS$2 = IteratorsCore$1.BUGGY_SAFARI_ITERATORS;
-	var ITERATOR$8 = wellKnownSymbol$o('iterator');
+	var ITERATOR$8 = wellKnownSymbol$n('iterator');
 	var KEYS$1 = 'keys';
 	var VALUES$1 = 'values';
 	var ENTRIES$1 = 'entries';
@@ -1761,7 +1760,7 @@ var bookly = (function ($$O) {
 	    CurrentIteratorPrototype = getPrototypeOf$2(anyNativeIterator.call(new Iterable()));
 	    if (CurrentIteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
 	      // Set @@toStringTag to native iterators
-	      setToStringTag$7(CurrentIteratorPrototype, TO_STRING_TAG, true, true);
+	      setToStringTag$8(CurrentIteratorPrototype, TO_STRING_TAG, true, true);
 	      Iterators$8[TO_STRING_TAG] = returnThis$2;
 	    }
 	  }
@@ -1770,7 +1769,7 @@ var bookly = (function ($$O) {
 	  if (PROPER_FUNCTION_NAME$2 && DEFAULT === VALUES$1 && nativeIterator && nativeIterator.name !== VALUES$1) {
 	    {
 	      INCORRECT_VALUES_NAME = true;
-	      defaultIterator = function values() { return call$h(nativeIterator, this); };
+	      defaultIterator = function values() { return call$j(nativeIterator, this); };
 	    }
 	  }
 
@@ -1785,12 +1784,12 @@ var bookly = (function ($$O) {
 	      if (BUGGY_SAFARI_ITERATORS$2 || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
 	        defineBuiltIn$6(IterablePrototype, KEY, methods[KEY]);
 	      }
-	    } else $$K({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS$2 || INCORRECT_VALUES_NAME }, methods);
+	    } else $$R({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS$2 || INCORRECT_VALUES_NAME }, methods);
 	  }
 
 	  // define iterator
 	  if ((FORCED) && IterablePrototype[ITERATOR$8] !== defaultIterator) {
-	    defineBuiltIn$6(IterablePrototype, ITERATOR$8, defaultIterator, { name: DEFAULT });
+	    defineBuiltIn$6(IterablePrototype, ITERATOR$8, defaultIterator, { });
 	  }
 	  Iterators$8[NAME] = defaultIterator;
 
@@ -1852,10 +1851,10 @@ var bookly = (function ($$O) {
 	// https://tc39.es/ecma262/#sec-createmappedargumentsobject
 	Iterators$7.Arguments = Iterators$7.Array;
 
-	var global$u = global$G;
-	var classof$h = classofRaw$5;
+	var global$g = global$s;
+	var classof$g = classofRaw$5;
 
-	var engineIsNode = classof$h(global$u.process) === 'process';
+	var engineIsNode = classof$g(global$g.process) === 'process';
 
 	var defineProperty$7 = objectDefineProperty$1;
 
@@ -1863,17 +1862,17 @@ var bookly = (function ($$O) {
 	  return defineProperty$7.f(target, name, descriptor);
 	};
 
-	var getBuiltIn$b = getBuiltIn$f;
+	var getBuiltIn$c = getBuiltIn$g;
 	var defineBuiltInAccessor$4 = defineBuiltInAccessor$5;
-	var wellKnownSymbol$n = wellKnownSymbol$z;
-	var DESCRIPTORS$g = descriptors$1;
+	var wellKnownSymbol$m = wellKnownSymbol$y;
+	var DESCRIPTORS$h = descriptors$1;
 
-	var SPECIES$9 = wellKnownSymbol$n('species');
+	var SPECIES$9 = wellKnownSymbol$m('species');
 
 	var setSpecies$4 = function (CONSTRUCTOR_NAME) {
-	  var Constructor = getBuiltIn$b(CONSTRUCTOR_NAME);
+	  var Constructor = getBuiltIn$c(CONSTRUCTOR_NAME);
 
-	  if (DESCRIPTORS$g && Constructor && !Constructor[SPECIES$9]) {
+	  if (DESCRIPTORS$h && Constructor && !Constructor[SPECIES$9]) {
 	    defineBuiltInAccessor$4(Constructor, SPECIES$9, {
 	      configurable: true,
 	      get: function () { return this; }
@@ -1883,11 +1882,11 @@ var bookly = (function ($$O) {
 
 	var isPrototypeOf$k = objectIsPrototypeOf$1;
 
-	var $TypeError$g = TypeError;
+	var $TypeError$i = TypeError;
 
 	var anInstance$7 = function (it, Prototype) {
 	  if (isPrototypeOf$k(Prototype, it)) return it;
-	  throw new $TypeError$g('Incorrect invocation');
+	  throw new $TypeError$i('Incorrect invocation');
 	};
 
 	var uncurryThis$A = functionUncurryThis$1;
@@ -1908,13 +1907,13 @@ var bookly = (function ($$O) {
 	var uncurryThis$z = functionUncurryThis$1;
 	var fails$z = fails$L;
 	var isCallable$n = isCallable$A;
-	var classof$g = classof$l;
-	var getBuiltIn$a = getBuiltIn$f;
+	var classof$f = classof$k;
+	var getBuiltIn$b = getBuiltIn$g;
 	var inspectSource$3 = inspectSource$4;
 
 	var noop$2 = function () { /* empty */ };
-	var empty$2 = [];
-	var construct$1 = getBuiltIn$a('Reflect', 'construct');
+	var empty$1 = [];
+	var construct$1 = getBuiltIn$b('Reflect', 'construct');
 	var constructorRegExp$1 = /^\s*(?:class|function)\b/;
 	var exec$4 = uncurryThis$z(constructorRegExp$1.exec);
 	var INCORRECT_TO_STRING$1 = !constructorRegExp$1.test(noop$2);
@@ -1922,7 +1921,7 @@ var bookly = (function ($$O) {
 	var isConstructorModern$1 = function isConstructor(argument) {
 	  if (!isCallable$n(argument)) return false;
 	  try {
-	    construct$1(noop$2, empty$2, argument);
+	    construct$1(noop$2, empty$1, argument);
 	    return true;
 	  } catch (error) {
 	    return false;
@@ -1931,7 +1930,7 @@ var bookly = (function ($$O) {
 
 	var isConstructorLegacy$1 = function isConstructor(argument) {
 	  if (!isCallable$n(argument)) return false;
-	  switch (classof$g(argument)) {
+	  switch (classof$f(argument)) {
 	    case 'AsyncFunction':
 	    case 'GeneratorFunction':
 	    case 'AsyncGeneratorFunction': return false;
@@ -1959,48 +1958,48 @@ var bookly = (function ($$O) {
 	}) ? isConstructorLegacy$1 : isConstructorModern$1;
 
 	var isConstructor$6 = isConstructor$7;
-	var tryToString$5 = tryToString$9;
+	var tryToString$6 = tryToString$a;
 
-	var $TypeError$f = TypeError;
+	var $TypeError$h = TypeError;
 
 	// `Assert: IsConstructor(argument) is true`
 	var aConstructor$1 = function (argument) {
 	  if (isConstructor$6(argument)) return argument;
-	  throw new $TypeError$f(tryToString$5(argument) + ' is not a constructor');
+	  throw new $TypeError$h(tryToString$6(argument) + ' is not a constructor');
 	};
 
-	var anObject$a = anObject$j;
+	var anObject$b = anObject$k;
 	var aConstructor = aConstructor$1;
-	var isNullOrUndefined$8 = isNullOrUndefined$c;
-	var wellKnownSymbol$m = wellKnownSymbol$z;
+	var isNullOrUndefined$9 = isNullOrUndefined$d;
+	var wellKnownSymbol$l = wellKnownSymbol$y;
 
-	var SPECIES$8 = wellKnownSymbol$m('species');
+	var SPECIES$8 = wellKnownSymbol$l('species');
 
 	// `SpeciesConstructor` abstract operation
 	// https://tc39.es/ecma262/#sec-speciesconstructor
 	var speciesConstructor$2 = function (O, defaultConstructor) {
-	  var C = anObject$a(O).constructor;
+	  var C = anObject$b(O).constructor;
 	  var S;
-	  return C === undefined || isNullOrUndefined$8(S = anObject$a(C)[SPECIES$8]) ? defaultConstructor : aConstructor(S);
+	  return C === undefined || isNullOrUndefined$9(S = anObject$b(C)[SPECIES$8]) ? defaultConstructor : aConstructor(S);
 	};
 
 	var uncurryThis$y = functionUncurryThis$1;
 
 	var arraySlice$7 = uncurryThis$y([].slice);
 
-	var $TypeError$e = TypeError;
+	var $TypeError$g = TypeError;
 
 	var validateArgumentsLength$2 = function (passed, required) {
-	  if (passed < required) throw new $TypeError$e('Not enough arguments');
+	  if (passed < required) throw new $TypeError$g('Not enough arguments');
 	  return passed;
 	};
 
-	var userAgent$6 = engineUserAgent$1;
+	var userAgent$7 = engineUserAgent;
 
 	// eslint-disable-next-line redos/no-vulnerable -- safe
-	var engineIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent$6);
+	var engineIsIos = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent$7);
 
-	var global$t = global$G;
+	var global$f = global$s;
 	var apply$5 = functionApply$1;
 	var bind$b = functionBindContext$1;
 	var isCallable$m = isCallable$A;
@@ -2013,13 +2012,13 @@ var bookly = (function ($$O) {
 	var IS_IOS$1 = engineIsIos;
 	var IS_NODE$3 = engineIsNode;
 
-	var set$8 = global$t.setImmediate;
-	var clear = global$t.clearImmediate;
-	var process$3 = global$t.process;
-	var Dispatch = global$t.Dispatch;
-	var Function$2 = global$t.Function;
-	var MessageChannel = global$t.MessageChannel;
-	var String$1 = global$t.String;
+	var set$8 = global$f.setImmediate;
+	var clear = global$f.clearImmediate;
+	var process$3 = global$f.process;
+	var Dispatch = global$f.Dispatch;
+	var Function$2 = global$f.Function;
+	var MessageChannel = global$f.MessageChannel;
+	var String$1 = global$f.String;
 	var counter = 0;
 	var queue$2 = {};
 	var ONREADYSTATECHANGE = 'onreadystatechange';
@@ -2027,7 +2026,7 @@ var bookly = (function ($$O) {
 
 	fails$y(function () {
 	  // Deno throws a ReferenceError on `location` access without `--location` flag
-	  $location = global$t.location;
+	  $location = global$f.location;
 	});
 
 	var run$1 = function (id) {
@@ -2050,7 +2049,7 @@ var bookly = (function ($$O) {
 
 	var globalPostMessageDefer = function (id) {
 	  // old engines have not location.origin
-	  global$t.postMessage(String$1(id), $location.protocol + '//' + $location.host);
+	  global$f.postMessage(String$1(id), $location.protocol + '//' + $location.host);
 	};
 
 	// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
@@ -2088,14 +2087,14 @@ var bookly = (function ($$O) {
 	  // Browsers with postMessage, skip WebWorkers
 	  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
 	  } else if (
-	    global$t.addEventListener &&
-	    isCallable$m(global$t.postMessage) &&
-	    !global$t.importScripts &&
+	    global$f.addEventListener &&
+	    isCallable$m(global$f.postMessage) &&
+	    !global$f.importScripts &&
 	    $location && $location.protocol !== 'file:' &&
 	    !fails$y(globalPostMessageDefer)
 	  ) {
 	    defer = globalPostMessageDefer;
-	    global$t.addEventListener('message', eventListener, false);
+	    global$f.addEventListener('message', eventListener, false);
 	  // IE8-
 	  } else if (ONREADYSTATECHANGE in createElement$1('script')) {
 	    defer = function (id) {
@@ -2113,20 +2112,18 @@ var bookly = (function ($$O) {
 	}
 
 	var task$1 = {
-	  set: set$8,
-	  clear: clear
-	};
+	  set: set$8};
 
-	var global$s = global$G;
-	var DESCRIPTORS$f = descriptors$1;
+	var global$e = global$s;
+	var DESCRIPTORS$g = descriptors$1;
 
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 	var getOwnPropertyDescriptor$3 = Object.getOwnPropertyDescriptor;
 
 	// Avoid NodeJS experimental warning
 	var safeGetBuiltIn$1 = function (name) {
-	  if (!DESCRIPTORS$f) return global$s[name];
-	  var descriptor = getOwnPropertyDescriptor$3(global$s, name);
+	  if (!DESCRIPTORS$g) return global$e[name];
+	  var descriptor = getOwnPropertyDescriptor$3(global$e, name);
 	  return descriptor && descriptor.value;
 	};
 
@@ -2155,15 +2152,15 @@ var bookly = (function ($$O) {
 
 	var queue$1 = Queue$2;
 
-	var userAgent$5 = engineUserAgent$1;
+	var userAgent$6 = engineUserAgent;
 
-	var engineIsIosPebble = /ipad|iphone|ipod/i.test(userAgent$5) && typeof Pebble != 'undefined';
+	var engineIsIosPebble = /ipad|iphone|ipod/i.test(userAgent$6) && typeof Pebble != 'undefined';
 
-	var userAgent$4 = engineUserAgent$1;
+	var userAgent$5 = engineUserAgent;
 
-	var engineIsWebosWebkit = /web0s(?!.*chrome)/i.test(userAgent$4);
+	var engineIsWebosWebkit = /web0s(?!.*chrome)/i.test(userAgent$5);
 
-	var global$r = global$G;
+	var global$d = global$s;
 	var safeGetBuiltIn = safeGetBuiltIn$1;
 	var bind$a = functionBindContext$1;
 	var macrotask = task$1.set;
@@ -2173,10 +2170,10 @@ var bookly = (function ($$O) {
 	var IS_WEBOS_WEBKIT = engineIsWebosWebkit;
 	var IS_NODE$2 = engineIsNode;
 
-	var MutationObserver = global$r.MutationObserver || global$r.WebKitMutationObserver;
-	var document$3 = global$r.document;
-	var process$2 = global$r.process;
-	var Promise$1 = global$r.Promise;
+	var MutationObserver = global$d.MutationObserver || global$d.WebKitMutationObserver;
+	var document$3 = global$d.document;
+	var process$2 = global$d.process;
+	var Promise$1 = global$d.Promise;
 	var microtask$1 = safeGetBuiltIn('queueMicrotask');
 	var notify$1, toggle, node, promise$4, then;
 
@@ -2228,7 +2225,7 @@ var bookly = (function ($$O) {
 	  // - setTimeout
 	  } else {
 	    // `webpack` dev server bug on IE global methods - use bind(fn, global)
-	    macrotask = bind$a(macrotask, global$r);
+	    macrotask = bind$a(macrotask, global$d);
 	    notify$1 = function () {
 	      macrotask(flush$1);
 	    };
@@ -2257,9 +2254,9 @@ var bookly = (function ($$O) {
 	  }
 	};
 
-	var global$q = global$G;
+	var global$c = global$s;
 
-	var promiseNativeConstructor = global$q.Promise;
+	var promiseNativeConstructor = global$c.Promise;
 
 	/* global Deno -- Deno case */
 	var engineIsDeno = typeof Deno == 'object' && Deno && typeof Deno.version == 'object';
@@ -2271,20 +2268,20 @@ var bookly = (function ($$O) {
 	  && typeof window == 'object'
 	  && typeof document == 'object';
 
-	var global$p = global$G;
+	var global$b = global$s;
 	var NativePromiseConstructor$5 = promiseNativeConstructor;
 	var isCallable$l = isCallable$A;
 	var isForced$2 = isForced_1$1;
 	var inspectSource$2 = inspectSource$4;
-	var wellKnownSymbol$l = wellKnownSymbol$z;
+	var wellKnownSymbol$k = wellKnownSymbol$y;
 	var IS_BROWSER = engineIsBrowser;
 	var IS_DENO = engineIsDeno;
-	var V8_VERSION$4 = engineV8Version$1;
+	var V8_VERSION$4 = engineV8Version;
 
 	var NativePromisePrototype$2 = NativePromiseConstructor$5 && NativePromiseConstructor$5.prototype;
-	var SPECIES$7 = wellKnownSymbol$l('species');
+	var SPECIES$7 = wellKnownSymbol$k('species');
 	var SUBCLASSING = false;
-	var NATIVE_PROMISE_REJECTION_EVENT$1 = isCallable$l(global$p.PromiseRejectionEvent);
+	var NATIVE_PROMISE_REJECTION_EVENT$1 = isCallable$l(global$b.PromiseRejectionEvent);
 
 	var FORCED_PROMISE_CONSTRUCTOR$5 = isForced$2('Promise', function () {
 	  var PROMISE_CONSTRUCTOR_SOURCE = inspectSource$2(NativePromiseConstructor$5);
@@ -2320,19 +2317,19 @@ var bookly = (function ($$O) {
 
 	var newPromiseCapability$2 = {};
 
-	var aCallable$b = aCallable$g;
+	var aCallable$c = aCallable$h;
 
-	var $TypeError$d = TypeError;
+	var $TypeError$f = TypeError;
 
 	var PromiseCapability = function (C) {
 	  var resolve, reject;
 	  this.promise = new C(function ($$resolve, $$reject) {
-	    if (resolve !== undefined || reject !== undefined) throw new $TypeError$d('Bad Promise constructor');
+	    if (resolve !== undefined || reject !== undefined) throw new $TypeError$f('Bad Promise constructor');
 	    resolve = $$resolve;
 	    reject = $$reject;
 	  });
-	  this.resolve = aCallable$b(resolve);
-	  this.reject = aCallable$b(reject);
+	  this.resolve = aCallable$c(resolve);
+	  this.reject = aCallable$c(reject);
 	};
 
 	// `NewPromiseCapability` abstract operation
@@ -2341,14 +2338,14 @@ var bookly = (function ($$O) {
 	  return new PromiseCapability(C);
 	};
 
-	var $$J = _export$1;
+	var $$Q = _export$1;
 	var IS_NODE = engineIsNode;
-	var global$o = global$G;
-	var call$g = functionCall$1;
+	var global$a = global$s;
+	var call$i = functionCall$1;
 	var defineBuiltIn$5 = defineBuiltIn$8;
-	var setToStringTag$6 = setToStringTag$9;
+	var setToStringTag$7 = setToStringTag$a;
 	var setSpecies$3 = setSpecies$4;
-	var aCallable$a = aCallable$g;
+	var aCallable$b = aCallable$h;
 	var isCallable$k = isCallable$A;
 	var isObject$m = isObject$w;
 	var anInstance$6 = anInstance$7;
@@ -2372,13 +2369,13 @@ var bookly = (function ($$O) {
 	var NativePromisePrototype$1 = NativePromiseConstructor$4 && NativePromiseConstructor$4.prototype;
 	var PromiseConstructor = NativePromiseConstructor$4;
 	var PromisePrototype = NativePromisePrototype$1;
-	var TypeError$2 = global$o.TypeError;
-	var document$2 = global$o.document;
-	var process$1 = global$o.process;
+	var TypeError$2 = global$a.TypeError;
+	var document$2 = global$a.document;
+	var process$1 = global$a.process;
 	var newPromiseCapability$1 = newPromiseCapabilityModule$6.f;
 	var newGenericPromiseCapability = newPromiseCapability$1;
 
-	var DISPATCH_EVENT = !!(document$2 && document$2.createEvent && global$o.dispatchEvent);
+	var DISPATCH_EVENT = !!(document$2 && document$2.createEvent && global$a.dispatchEvent);
 	var UNHANDLED_REJECTION = 'unhandledrejection';
 	var REJECTION_HANDLED = 'rejectionhandled';
 	var PENDING = 0;
@@ -2421,7 +2418,7 @@ var bookly = (function ($$O) {
 	      if (result === reaction.promise) {
 	        reject(new TypeError$2('Promise-chain cycle'));
 	      } else if (then = isThenable(result)) {
-	        call$g(then, result, resolve, reject);
+	        call$i(then, result, resolve, reject);
 	      } else resolve(result);
 	    } else reject(value);
 	  } catch (error) {
@@ -2451,14 +2448,14 @@ var bookly = (function ($$O) {
 	    event.promise = promise;
 	    event.reason = reason;
 	    event.initEvent(name, false, true);
-	    global$o.dispatchEvent(event);
+	    global$a.dispatchEvent(event);
 	  } else event = { promise: promise, reason: reason };
-	  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = global$o['on' + name])) handler(event);
+	  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = global$a['on' + name])) handler(event);
 	  else if (name === UNHANDLED_REJECTION) hostReportErrors('Unhandled promise rejection', reason);
 	};
 
 	var onUnhandled = function (state) {
-	  call$g(task, global$o, function () {
+	  call$i(task, global$a, function () {
 	    var promise = state.facade;
 	    var value = state.value;
 	    var IS_UNHANDLED = isUnhandled(state);
@@ -2481,7 +2478,7 @@ var bookly = (function ($$O) {
 	};
 
 	var onHandleUnhandled = function (state) {
-	  call$g(task, global$o, function () {
+	  call$i(task, global$a, function () {
 	    var promise = state.facade;
 	    if (IS_NODE) {
 	      process$1.emit('rejectionHandled', promise);
@@ -2515,7 +2512,7 @@ var bookly = (function ($$O) {
 	      microtask(function () {
 	        var wrapper = { done: false };
 	        try {
-	          call$g(then, value,
+	          call$i(then, value,
 	            bind$9(internalResolve, wrapper, state),
 	            bind$9(internalReject, wrapper, state)
 	          );
@@ -2538,8 +2535,8 @@ var bookly = (function ($$O) {
 	  // 25.4.3.1 Promise(executor)
 	  PromiseConstructor = function Promise(executor) {
 	    anInstance$6(this, PromisePrototype);
-	    aCallable$a(executor);
-	    call$g(Internal, this);
+	    aCallable$b(executor);
+	    call$i(Internal, this);
 	    var state = getInternalPromiseState(this);
 	    try {
 	      executor(bind$9(internalResolve, state), bind$9(internalReject, state));
@@ -2595,16 +2592,16 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	$$J({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
+	$$Q({ global: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR$4 }, {
 	  Promise: PromiseConstructor
 	});
 
-	setToStringTag$6(PromiseConstructor, PROMISE, false, true);
+	setToStringTag$7(PromiseConstructor, PROMISE, false, true);
 	setSpecies$3(PROMISE);
 
-	var wellKnownSymbol$k = wellKnownSymbol$z;
+	var wellKnownSymbol$j = wellKnownSymbol$y;
 
-	var ITERATOR$7 = wellKnownSymbol$k('iterator');
+	var ITERATOR$7 = wellKnownSymbol$j('iterator');
 	var SAFE_CLOSING = false;
 
 	try {
@@ -2651,32 +2648,32 @@ var bookly = (function ($$O) {
 	  NativePromiseConstructor$3.all(iterable).then(undefined, function () { /* empty */ });
 	});
 
-	var $$I = _export$1;
-	var call$f = functionCall$1;
-	var aCallable$9 = aCallable$g;
+	var $$P = _export$1;
+	var call$h = functionCall$1;
+	var aCallable$a = aCallable$h;
 	var newPromiseCapabilityModule$5 = newPromiseCapability$2;
 	var perform$3 = perform$5;
-	var iterate$a = iterate$c;
+	var iterate$c = iterate$e;
 	var PROMISE_STATICS_INCORRECT_ITERATION$3 = promiseStaticsIncorrectIteration;
 
 	// `Promise.all` method
 	// https://tc39.es/ecma262/#sec-promise.all
-	$$I({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$3 }, {
+	$$P({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$3 }, {
 	  all: function all(iterable) {
 	    var C = this;
 	    var capability = newPromiseCapabilityModule$5.f(C);
 	    var resolve = capability.resolve;
 	    var reject = capability.reject;
 	    var result = perform$3(function () {
-	      var $promiseResolve = aCallable$9(C.resolve);
+	      var $promiseResolve = aCallable$a(C.resolve);
 	      var values = [];
 	      var counter = 0;
 	      var remaining = 1;
-	      iterate$a(iterable, function (promise) {
+	      iterate$c(iterable, function (promise) {
 	        var index = counter++;
 	        var alreadyCalled = false;
 	        remaining++;
-	        call$f($promiseResolve, C, promise).then(function (value) {
+	        call$h($promiseResolve, C, promise).then(function (value) {
 	          if (alreadyCalled) return;
 	          alreadyCalled = true;
 	          values[index] = value;
@@ -2690,7 +2687,7 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var $$H = _export$1;
+	var $$O = _export$1;
 	var FORCED_PROMISE_CONSTRUCTOR$2 = promiseConstructorDetection.CONSTRUCTOR;
 	var NativePromiseConstructor$2 = promiseNativeConstructor;
 
@@ -2698,31 +2695,31 @@ var bookly = (function ($$O) {
 
 	// `Promise.prototype.catch` method
 	// https://tc39.es/ecma262/#sec-promise.prototype.catch
-	$$H({ target: 'Promise', proto: true, forced: FORCED_PROMISE_CONSTRUCTOR$2, real: true }, {
+	$$O({ target: 'Promise', proto: true, forced: FORCED_PROMISE_CONSTRUCTOR$2, real: true }, {
 	  'catch': function (onRejected) {
 	    return this.then(undefined, onRejected);
 	  }
 	});
 
-	var $$G = _export$1;
-	var call$e = functionCall$1;
-	var aCallable$8 = aCallable$g;
+	var $$N = _export$1;
+	var call$g = functionCall$1;
+	var aCallable$9 = aCallable$h;
 	var newPromiseCapabilityModule$4 = newPromiseCapability$2;
 	var perform$2 = perform$5;
-	var iterate$9 = iterate$c;
+	var iterate$b = iterate$e;
 	var PROMISE_STATICS_INCORRECT_ITERATION$2 = promiseStaticsIncorrectIteration;
 
 	// `Promise.race` method
 	// https://tc39.es/ecma262/#sec-promise.race
-	$$G({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$2 }, {
+	$$N({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$2 }, {
 	  race: function race(iterable) {
 	    var C = this;
 	    var capability = newPromiseCapabilityModule$4.f(C);
 	    var reject = capability.reject;
 	    var result = perform$2(function () {
-	      var $promiseResolve = aCallable$8(C.resolve);
-	      iterate$9(iterable, function (promise) {
-	        call$e($promiseResolve, C, promise).then(capability.resolve, reject);
+	      var $promiseResolve = aCallable$9(C.resolve);
+	      iterate$b(iterable, function (promise) {
+	        call$g($promiseResolve, C, promise).then(capability.resolve, reject);
 	      });
 	    });
 	    if (result.error) reject(result.value);
@@ -2730,13 +2727,13 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var $$F = _export$1;
+	var $$M = _export$1;
 	var newPromiseCapabilityModule$3 = newPromiseCapability$2;
 	var FORCED_PROMISE_CONSTRUCTOR$1 = promiseConstructorDetection.CONSTRUCTOR;
 
 	// `Promise.reject` method
 	// https://tc39.es/ecma262/#sec-promise.reject
-	$$F({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR$1 }, {
+	$$M({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR$1 }, {
 	  reject: function reject(r) {
 	    var capability = newPromiseCapabilityModule$3.f(this);
 	    var capabilityReject = capability.reject;
@@ -2745,12 +2742,12 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var anObject$9 = anObject$j;
+	var anObject$a = anObject$k;
 	var isObject$l = isObject$w;
 	var newPromiseCapability = newPromiseCapability$2;
 
 	var promiseResolve$2 = function (C, x) {
-	  anObject$9(C);
+	  anObject$a(C);
 	  if (isObject$l(x) && x.constructor === C) return x;
 	  var promiseCapability = newPromiseCapability.f(C);
 	  var resolve = promiseCapability.resolve;
@@ -2758,50 +2755,50 @@ var bookly = (function ($$O) {
 	  return promiseCapability.promise;
 	};
 
-	var $$E = _export$1;
-	var getBuiltIn$9 = getBuiltIn$f;
+	var $$L = _export$1;
+	var getBuiltIn$a = getBuiltIn$g;
 	var IS_PURE$1 = isPure;
 	var NativePromiseConstructor$1 = promiseNativeConstructor;
 	var FORCED_PROMISE_CONSTRUCTOR = promiseConstructorDetection.CONSTRUCTOR;
 	var promiseResolve$1 = promiseResolve$2;
 
-	var PromiseConstructorWrapper = getBuiltIn$9('Promise');
+	var PromiseConstructorWrapper = getBuiltIn$a('Promise');
 	var CHECK_WRAPPER = !FORCED_PROMISE_CONSTRUCTOR;
 
 	// `Promise.resolve` method
 	// https://tc39.es/ecma262/#sec-promise.resolve
-	$$E({ target: 'Promise', stat: true, forced: IS_PURE$1 }, {
+	$$L({ target: 'Promise', stat: true, forced: IS_PURE$1 }, {
 	  resolve: function resolve(x) {
 	    return promiseResolve$1(CHECK_WRAPPER && this === PromiseConstructorWrapper ? NativePromiseConstructor$1 : this, x);
 	  }
 	});
 
-	var $$D = _export$1;
-	var call$d = functionCall$1;
-	var aCallable$7 = aCallable$g;
+	var $$K = _export$1;
+	var call$f = functionCall$1;
+	var aCallable$8 = aCallable$h;
 	var newPromiseCapabilityModule$2 = newPromiseCapability$2;
 	var perform$1 = perform$5;
-	var iterate$8 = iterate$c;
+	var iterate$a = iterate$e;
 	var PROMISE_STATICS_INCORRECT_ITERATION$1 = promiseStaticsIncorrectIteration;
 
 	// `Promise.allSettled` method
 	// https://tc39.es/ecma262/#sec-promise.allsettled
-	$$D({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$1 }, {
+	$$K({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION$1 }, {
 	  allSettled: function allSettled(iterable) {
 	    var C = this;
 	    var capability = newPromiseCapabilityModule$2.f(C);
 	    var resolve = capability.resolve;
 	    var reject = capability.reject;
 	    var result = perform$1(function () {
-	      var promiseResolve = aCallable$7(C.resolve);
+	      var promiseResolve = aCallable$8(C.resolve);
 	      var values = [];
 	      var counter = 0;
 	      var remaining = 1;
-	      iterate$8(iterable, function (promise) {
+	      iterate$a(iterable, function (promise) {
 	        var index = counter++;
 	        var alreadyCalled = false;
 	        remaining++;
-	        call$d(promiseResolve, C, promise).then(function (value) {
+	        call$f(promiseResolve, C, promise).then(function (value) {
 	          if (alreadyCalled) return;
 	          alreadyCalled = true;
 	          values[index] = { status: 'fulfilled', value: value };
@@ -2820,37 +2817,37 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var $$C = _export$1;
-	var call$c = functionCall$1;
-	var aCallable$6 = aCallable$g;
-	var getBuiltIn$8 = getBuiltIn$f;
+	var $$J = _export$1;
+	var call$e = functionCall$1;
+	var aCallable$7 = aCallable$h;
+	var getBuiltIn$9 = getBuiltIn$g;
 	var newPromiseCapabilityModule$1 = newPromiseCapability$2;
 	var perform = perform$5;
-	var iterate$7 = iterate$c;
+	var iterate$9 = iterate$e;
 	var PROMISE_STATICS_INCORRECT_ITERATION = promiseStaticsIncorrectIteration;
 
 	var PROMISE_ANY_ERROR = 'No one promise resolved';
 
 	// `Promise.any` method
 	// https://tc39.es/ecma262/#sec-promise.any
-	$$C({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION }, {
+	$$J({ target: 'Promise', stat: true, forced: PROMISE_STATICS_INCORRECT_ITERATION }, {
 	  any: function any(iterable) {
 	    var C = this;
-	    var AggregateError = getBuiltIn$8('AggregateError');
+	    var AggregateError = getBuiltIn$9('AggregateError');
 	    var capability = newPromiseCapabilityModule$1.f(C);
 	    var resolve = capability.resolve;
 	    var reject = capability.reject;
 	    var result = perform(function () {
-	      var promiseResolve = aCallable$6(C.resolve);
+	      var promiseResolve = aCallable$7(C.resolve);
 	      var errors = [];
 	      var counter = 0;
 	      var remaining = 1;
 	      var alreadyResolved = false;
-	      iterate$7(iterable, function (promise) {
+	      iterate$9(iterable, function (promise) {
 	        var index = counter++;
 	        var alreadyRejected = false;
 	        remaining++;
-	        call$c(promiseResolve, C, promise).then(function (value) {
+	        call$e(promiseResolve, C, promise).then(function (value) {
 	          if (alreadyRejected || alreadyResolved) return;
 	          alreadyResolved = true;
 	          resolve(value);
@@ -2868,12 +2865,12 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var $$B = _export$1;
+	var $$I = _export$1;
 	var newPromiseCapabilityModule = newPromiseCapability$2;
 
 	// `Promise.withResolvers` method
 	// https://github.com/tc39/proposal-promise-with-resolvers
-	$$B({ target: 'Promise', stat: true }, {
+	$$I({ target: 'Promise', stat: true }, {
 	  withResolvers: function withResolvers() {
 	    var promiseCapability = newPromiseCapabilityModule.f(this);
 	    return {
@@ -2884,10 +2881,10 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var $$A = _export$1;
+	var $$H = _export$1;
 	var NativePromiseConstructor = promiseNativeConstructor;
 	var fails$x = fails$L;
-	var getBuiltIn$7 = getBuiltIn$f;
+	var getBuiltIn$8 = getBuiltIn$g;
 	var isCallable$j = isCallable$A;
 	var speciesConstructor = speciesConstructor$2;
 	var promiseResolve = promiseResolve$2;
@@ -2902,9 +2899,9 @@ var bookly = (function ($$O) {
 
 	// `Promise.prototype.finally` method
 	// https://tc39.es/ecma262/#sec-promise.prototype.finally
-	$$A({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
+	$$H({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
 	  'finally': function (onFinally) {
-	    var C = speciesConstructor(this, getBuiltIn$7('Promise'));
+	    var C = speciesConstructor(this, getBuiltIn$8('Promise'));
 	    var isFunction = isCallable$j(onFinally);
 	    return this.then(
 	      isFunction ? function (x) {
@@ -2918,7 +2915,7 @@ var bookly = (function ($$O) {
 	});
 
 	var uncurryThis$x = functionUncurryThis$1;
-	var toIntegerOrInfinity$6 = toIntegerOrInfinity$9;
+	var toIntegerOrInfinity$7 = toIntegerOrInfinity$a;
 	var toString$h = toString$l;
 	var requireObjectCoercible$a = requireObjectCoercible$e;
 
@@ -2929,7 +2926,7 @@ var bookly = (function ($$O) {
 	var createMethod$8 = function (CONVERT_TO_STRING) {
 	  return function ($this, pos) {
 	    var S = toString$h(requireObjectCoercible$a($this));
-	    var position = toIntegerOrInfinity$6(pos);
+	    var position = toIntegerOrInfinity$7(pos);
 	    var size = S.length;
 	    var first, second;
 	    if (position < 0 || position >= size) return CONVERT_TO_STRING ? '' : undefined;
@@ -2946,9 +2943,6 @@ var bookly = (function ($$O) {
 	};
 
 	var stringMultibyte$1 = {
-	  // `String.prototype.codePointAt` method
-	  // https://tc39.es/ecma262/#sec-string.prototype.codepointat
-	  codeAt: createMethod$8(false),
 	  // `String.prototype.at` method
 	  // https://github.com/mathiasbynens/String.prototype.at
 	  charAt: createMethod$8(true)
@@ -3026,12 +3020,12 @@ var bookly = (function ($$O) {
 	};
 
 	var DOMIterables$2 = domIterables$1;
-	var global$n = global$G;
-	var setToStringTag$5 = setToStringTag$9;
+	var global$9 = global$s;
+	var setToStringTag$6 = setToStringTag$a;
 	var Iterators$6 = iterators$1;
 
 	for (var COLLECTION_NAME$1 in DOMIterables$2) {
-	  setToStringTag$5(global$n[COLLECTION_NAME$1], COLLECTION_NAME$1);
+	  setToStringTag$6(global$9[COLLECTION_NAME$1], COLLECTION_NAME$1);
 	  Iterators$6[COLLECTION_NAME$1] = Iterators$6.Array;
 	}
 
@@ -3068,18 +3062,12 @@ var bookly = (function ($$O) {
 	};
 
 	var stringTrim$1 = {
-	  // `String.prototype.{ trimLeft, trimStart }` methods
-	  // https://tc39.es/ecma262/#sec-string.prototype.trimstart
-	  start: createMethod$7(1),
-	  // `String.prototype.{ trimRight, trimEnd }` methods
-	  // https://tc39.es/ecma262/#sec-string.prototype.trimend
-	  end: createMethod$7(2),
 	  // `String.prototype.trim` method
 	  // https://tc39.es/ecma262/#sec-string.prototype.trim
 	  trim: createMethod$7(3)
 	};
 
-	var global$m = global$G;
+	var global$8 = global$s;
 	var fails$w = fails$L;
 	var uncurryThis$v = functionUncurryThis$1;
 	var toString$e = toString$l;
@@ -3087,8 +3075,8 @@ var bookly = (function ($$O) {
 	var whitespaces$5 = whitespaces$7;
 
 	var charAt$3 = uncurryThis$v(''.charAt);
-	var $parseFloat$1 = global$m.parseFloat;
-	var Symbol$4 = global$m.Symbol;
+	var $parseFloat$1 = global$8.parseFloat;
+	var Symbol$4 = global$8.Symbol;
 	var ITERATOR$6 = Symbol$4 && Symbol$4.iterator;
 	var FORCED$5 = 1 / $parseFloat$1(whitespaces$5 + '-0') !== -Infinity
 	  // MS Edge 18- broken with boxed symbols
@@ -3102,12 +3090,12 @@ var bookly = (function ($$O) {
 	  return result === 0 && charAt$3(trimmedString, 0) === '-' ? -0 : result;
 	} : $parseFloat$1;
 
-	var $$z = _export$1;
+	var $$G = _export$1;
 	var $parseFloat = numberParseFloat;
 
 	// `parseFloat` method
 	// https://tc39.es/ecma262/#sec-parsefloat-string
-	$$z({ global: true, forced: parseFloat !== $parseFloat }, {
+	$$G({ global: true, forced: parseFloat !== $parseFloat }, {
 	  parseFloat: $parseFloat
 	});
 
@@ -3123,15 +3111,15 @@ var bookly = (function ($$O) {
 
 	var _parseFloat$1 = /*@__PURE__*/getDefaultExportFromCjs(_parseFloat);
 
-	var global$l = global$G;
+	var global$7 = global$s;
 	var fails$v = fails$L;
 	var uncurryThis$u = functionUncurryThis$1;
 	var toString$d = toString$l;
 	var trim$5 = stringTrim$1.trim;
 	var whitespaces$4 = whitespaces$7;
 
-	var $parseInt$3 = global$l.parseInt;
-	var Symbol$3 = global$l.Symbol;
+	var $parseInt$3 = global$7.parseInt;
+	var Symbol$3 = global$7.Symbol;
 	var ITERATOR$5 = Symbol$3 && Symbol$3.iterator;
 	var hex$1 = /^[+-]?0x/i;
 	var exec$3 = uncurryThis$u(hex$1.exec);
@@ -3146,12 +3134,12 @@ var bookly = (function ($$O) {
 	  return $parseInt$3(S, (radix >>> 0) || (exec$3(hex$1, S) ? 16 : 10));
 	} : $parseInt$3;
 
-	var $$y = _export$1;
+	var $$F = _export$1;
 	var $parseInt$2 = numberParseInt$1;
 
 	// `parseInt` method
 	// https://tc39.es/ecma262/#sec-parseint-string-radix
-	$$y({ global: true, forced: parseInt !== $parseInt$2 }, {
+	$$F({ global: true, forced: parseInt !== $parseInt$2 }, {
 	  parseInt: $parseInt$2
 	});
 
@@ -3167,30 +3155,30 @@ var bookly = (function ($$O) {
 
 	var _parseInt$5 = /*@__PURE__*/getDefaultExportFromCjs(_parseInt$4);
 
-	var classof$f = classofRaw$5;
+	var classof$e = classofRaw$5;
 
 	// `IsArray` abstract operation
 	// https://tc39.es/ecma262/#sec-isarray
 	// eslint-disable-next-line es/no-array-isarray -- safe
 	var isArray$9 = Array.isArray || function isArray(argument) {
-	  return classof$f(argument) === 'Array';
+	  return classof$e(argument) === 'Array';
 	};
 
-	var toPropertyKey$4 = toPropertyKey$7;
+	var toPropertyKey$3 = toPropertyKey$6;
 	var definePropertyModule$3 = objectDefineProperty$1;
 	var createPropertyDescriptor$5 = createPropertyDescriptor$b;
 
-	var createProperty$7 = function (object, key, value) {
-	  var propertyKey = toPropertyKey$4(key);
+	var createProperty$6 = function (object, key, value) {
+	  var propertyKey = toPropertyKey$3(key);
 	  if (propertyKey in object) definePropertyModule$3.f(object, propertyKey, createPropertyDescriptor$5(0, value));
 	  else object[propertyKey] = value;
 	};
 
 	var fails$u = fails$L;
-	var wellKnownSymbol$j = wellKnownSymbol$z;
-	var V8_VERSION$3 = engineV8Version$1;
+	var wellKnownSymbol$i = wellKnownSymbol$y;
+	var V8_VERSION$3 = engineV8Version;
 
-	var SPECIES$6 = wellKnownSymbol$j('species');
+	var SPECIES$6 = wellKnownSymbol$i('species');
 
 	var arrayMethodHasSpeciesSupport$8 = function (METHOD_NAME) {
 	  // We can't use this feature detection in V8 since it causes
@@ -3206,58 +3194,58 @@ var bookly = (function ($$O) {
 	  });
 	};
 
-	var $$x = _export$1;
+	var $$E = _export$1;
 	var isArray$8 = isArray$9;
 	var isConstructor$5 = isConstructor$7;
 	var isObject$k = isObject$w;
-	var toAbsoluteIndex$6 = toAbsoluteIndex$8;
-	var lengthOfArrayLike$c = lengthOfArrayLike$f;
+	var toAbsoluteIndex$5 = toAbsoluteIndex$7;
+	var lengthOfArrayLike$b = lengthOfArrayLike$e;
 	var toIndexedObject$a = toIndexedObject$g;
-	var createProperty$6 = createProperty$7;
-	var wellKnownSymbol$i = wellKnownSymbol$z;
+	var createProperty$5 = createProperty$6;
+	var wellKnownSymbol$h = wellKnownSymbol$y;
 	var arrayMethodHasSpeciesSupport$7 = arrayMethodHasSpeciesSupport$8;
 	var nativeSlice$1 = arraySlice$7;
 
 	var HAS_SPECIES_SUPPORT$5 = arrayMethodHasSpeciesSupport$7('slice');
 
-	var SPECIES$5 = wellKnownSymbol$i('species');
-	var $Array$5 = Array;
+	var SPECIES$5 = wellKnownSymbol$h('species');
+	var $Array$4 = Array;
 	var max$4 = Math.max;
 
 	// `Array.prototype.slice` method
 	// https://tc39.es/ecma262/#sec-array.prototype.slice
 	// fallback for not array-like ES3 strings and DOM objects
-	$$x({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$5 }, {
+	$$E({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$5 }, {
 	  slice: function slice(start, end) {
 	    var O = toIndexedObject$a(this);
-	    var length = lengthOfArrayLike$c(O);
-	    var k = toAbsoluteIndex$6(start, length);
-	    var fin = toAbsoluteIndex$6(end === undefined ? length : end, length);
+	    var length = lengthOfArrayLike$b(O);
+	    var k = toAbsoluteIndex$5(start, length);
+	    var fin = toAbsoluteIndex$5(end === undefined ? length : end, length);
 	    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
 	    var Constructor, result, n;
 	    if (isArray$8(O)) {
 	      Constructor = O.constructor;
 	      // cross-realm fallback
-	      if (isConstructor$5(Constructor) && (Constructor === $Array$5 || isArray$8(Constructor.prototype))) {
+	      if (isConstructor$5(Constructor) && (Constructor === $Array$4 || isArray$8(Constructor.prototype))) {
 	        Constructor = undefined;
 	      } else if (isObject$k(Constructor)) {
 	        Constructor = Constructor[SPECIES$5];
 	        if (Constructor === null) Constructor = undefined;
 	      }
-	      if (Constructor === $Array$5 || Constructor === undefined) {
+	      if (Constructor === $Array$4 || Constructor === undefined) {
 	        return nativeSlice$1(O, k, fin);
 	      }
 	    }
-	    result = new (Constructor === undefined ? $Array$5 : Constructor)(max$4(fin - k, 0));
-	    for (n = 0; k < fin; k++, n++) if (k in O) createProperty$6(result, n, O[k]);
+	    result = new (Constructor === undefined ? $Array$4 : Constructor)(max$4(fin - k, 0));
+	    for (n = 0; k < fin; k++, n++) if (k in O) createProperty$5(result, n, O[k]);
 	    result.length = n;
 	    return result;
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$d = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$i = getBuiltInPrototypeMethod$l;
 
-	var slice$7 = getBuiltInPrototypeMethod$d('Array', 'slice');
+	var slice$7 = getBuiltInPrototypeMethod$i('Array', 'slice');
 
 	var isPrototypeOf$j = objectIsPrototypeOf$1;
 	var method$f = slice$7;
@@ -3280,18 +3268,18 @@ var bookly = (function ($$O) {
 	/* global Bun -- Bun case */
 	var engineIsBun = typeof Bun == 'function' && Bun && typeof Bun.version == 'string';
 
-	var global$k = global$G;
+	var global$6 = global$s;
 	var apply$4 = functionApply$1;
 	var isCallable$i = isCallable$A;
 	var ENGINE_IS_BUN = engineIsBun;
-	var USER_AGENT = engineUserAgent$1;
+	var USER_AGENT = engineUserAgent;
 	var arraySlice$5 = arraySlice$7;
 	var validateArgumentsLength = validateArgumentsLength$2;
 
-	var Function$1 = global$k.Function;
+	var Function$1 = global$6.Function;
 	// dirty IE9- and Bun 0.3.0- checks
 	var WRAP = /MSIE .\./.test(USER_AGENT) || ENGINE_IS_BUN && (function () {
-	  var version = global$k.Bun.version.split('.');
+	  var version = global$6.Bun.version.split('.');
 	  return version.length < 3 || version[0] === '0' && (version[1] < 3 || version[1] === '3' && version[2] === '0');
 	})();
 
@@ -3311,27 +3299,27 @@ var bookly = (function ($$O) {
 	  } : scheduler;
 	};
 
-	var $$w = _export$1;
-	var global$j = global$G;
+	var $$D = _export$1;
+	var global$5 = global$s;
 	var schedulersFix$1 = schedulersFix$2;
 
-	var setInterval = schedulersFix$1(global$j.setInterval, true);
+	var setInterval = schedulersFix$1(global$5.setInterval, true);
 
 	// Bun / IE9- setInterval additional parameters fix
 	// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-setinterval
-	$$w({ global: true, bind: true, forced: global$j.setInterval !== setInterval }, {
+	$$D({ global: true, bind: true, forced: global$5.setInterval !== setInterval }, {
 	  setInterval: setInterval
 	});
 
-	var $$v = _export$1;
-	var global$i = global$G;
+	var $$C = _export$1;
+	var global$4 = global$s;
 	var schedulersFix = schedulersFix$2;
 
-	var setTimeout$3 = schedulersFix(global$i.setTimeout, true);
+	var setTimeout$3 = schedulersFix(global$4.setTimeout, true);
 
 	// Bun / IE9- setTimeout additional parameters fix
 	// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#dom-settimeout
-	$$v({ global: true, bind: true, forced: global$i.setTimeout !== setTimeout$3 }, {
+	$$C({ global: true, bind: true, forced: global$4.setTimeout !== setTimeout$3 }, {
 	  setTimeout: setTimeout$3
 	});
 
@@ -3364,9 +3352,9 @@ var bookly = (function ($$O) {
 	  if (opt[formId].scroll) {
 	    if ($elem.length) {
 	      var elemTop = $elem.offset().top;
-	      var scrollTop = $$O(window).scrollTop();
-	      if (elemTop < $$O(window).scrollTop() || elemTop > scrollTop + window.innerHeight) {
-	        $$O('html,body').animate({
+	      var scrollTop = $$V(window).scrollTop();
+	      if (elemTop < $$V(window).scrollTop() || elemTop > scrollTop + window.innerHeight) {
+	        $$V('html,body').animate({
 	          scrollTop: elemTop - 50
 	        }, 500);
 	      }
@@ -3419,7 +3407,7 @@ var bookly = (function ($$O) {
 	    n = Math.abs(Number(n) || 0).toFixed(c);
 	    c = isNaN(c = Math.abs(c)) ? 2 : c;
 	    d = d === undefined ? '.' : d;
-	    t = t === undefined ? ',' : t;
+	    t = t === undefined ? ',' : t.replace(/&nbsp;/g, '\u00A0');
 	    let s = n < 0 ? '-' : '',
 	      i = String(_parseInt$5(n)),
 	      j = i.length > 3 ? i.length % 3 : 0;
@@ -3428,7 +3416,7 @@ var bookly = (function ($$O) {
 	}
 	function ajax(options, resolve, reject) {
 	  options.data.csrf_token = BooklyL10n.csrf_token;
-	  return $$O.ajax(jQuery.extend({
+	  return $$V.ajax(jQuery.extend({
 	    url: BooklyL10n.ajaxurl,
 	    dataType: 'json',
 	    xhrFields: {
@@ -3459,19 +3447,19 @@ var bookly = (function ($$O) {
 	  return true;
 	}
 
-	var toIntegerOrInfinity$5 = toIntegerOrInfinity$9;
+	var toIntegerOrInfinity$6 = toIntegerOrInfinity$a;
 	var toString$c = toString$l;
 	var requireObjectCoercible$8 = requireObjectCoercible$e;
 
-	var $RangeError = RangeError;
+	var $RangeError$1 = RangeError;
 
 	// `String.prototype.repeat` method implementation
 	// https://tc39.es/ecma262/#sec-string.prototype.repeat
 	var stringRepeat = function repeat(count) {
 	  var str = toString$c(requireObjectCoercible$8(this));
 	  var result = '';
-	  var n = toIntegerOrInfinity$5(count);
-	  if (n < 0 || n === Infinity) throw new $RangeError('Wrong number of repetitions');
+	  var n = toIntegerOrInfinity$6(count);
+	  if (n < 0 || n === Infinity) throw new $RangeError$1('Wrong number of repetitions');
 	  for (;n > 0; (n >>>= 1) && (str += str)) if (n & 1) result += str;
 	  return result;
 	};
@@ -3506,32 +3494,28 @@ var bookly = (function ($$O) {
 	var stringPad = {
 	  // `String.prototype.padStart` method
 	  // https://tc39.es/ecma262/#sec-string.prototype.padstart
-	  start: createMethod$6(false),
-	  // `String.prototype.padEnd` method
-	  // https://tc39.es/ecma262/#sec-string.prototype.padend
-	  end: createMethod$6(true)
-	};
+	  start: createMethod$6(false)};
 
 	// https://github.com/zloirock/core-js/issues/280
-	var userAgent$3 = engineUserAgent$1;
+	var userAgent$4 = engineUserAgent;
 
-	var stringPadWebkitBug = /Version\/10(?:\.\d+){1,2}(?: [\w./]+)?(?: Mobile\/\w+)? Safari\//.test(userAgent$3);
+	var stringPadWebkitBug = /Version\/10(?:\.\d+){1,2}(?: [\w./]+)?(?: Mobile\/\w+)? Safari\//.test(userAgent$4);
 
-	var $$u = _export$1;
+	var $$B = _export$1;
 	var $padStart = stringPad.start;
 	var WEBKIT_BUG = stringPadWebkitBug;
 
 	// `String.prototype.padStart` method
 	// https://tc39.es/ecma262/#sec-string.prototype.padstart
-	$$u({ target: 'String', proto: true, forced: WEBKIT_BUG }, {
+	$$B({ target: 'String', proto: true, forced: WEBKIT_BUG }, {
 	  padStart: function padStart(maxLength /* , fillString = ' ' */) {
 	    return $padStart(this, maxLength, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$c = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$h = getBuiltInPrototypeMethod$l;
 
-	var padStart$3 = getBuiltInPrototypeMethod$c('String', 'padStart');
+	var padStart$3 = getBuiltInPrototypeMethod$h('String', 'padStart');
 
 	var isPrototypeOf$i = objectIsPrototypeOf$1;
 	var method$e = padStart$3;
@@ -3555,10 +3539,10 @@ var bookly = (function ($$O) {
 	var isArray$7 = isArray$9;
 	var isConstructor$4 = isConstructor$7;
 	var isObject$j = isObject$w;
-	var wellKnownSymbol$h = wellKnownSymbol$z;
+	var wellKnownSymbol$g = wellKnownSymbol$y;
 
-	var SPECIES$4 = wellKnownSymbol$h('species');
-	var $Array$4 = Array;
+	var SPECIES$4 = wellKnownSymbol$g('species');
+	var $Array$3 = Array;
 
 	// a part of `ArraySpeciesCreate` abstract operation
 	// https://tc39.es/ecma262/#sec-arrayspeciescreate
@@ -3567,12 +3551,12 @@ var bookly = (function ($$O) {
 	  if (isArray$7(originalArray)) {
 	    C = originalArray.constructor;
 	    // cross-realm fallback
-	    if (isConstructor$4(C) && (C === $Array$4 || isArray$7(C.prototype))) C = undefined;
+	    if (isConstructor$4(C) && (C === $Array$3 || isArray$7(C.prototype))) C = undefined;
 	    else if (isObject$j(C)) {
 	      C = C[SPECIES$4];
 	      if (C === null) C = undefined;
 	    }
-	  } return C === undefined ? $Array$4 : C;
+	  } return C === undefined ? $Array$3 : C;
 	};
 
 	var arraySpeciesConstructor$2 = arraySpeciesConstructor$3;
@@ -3587,7 +3571,7 @@ var bookly = (function ($$O) {
 	var uncurryThis$s = functionUncurryThis$1;
 	var IndexedObject$2 = indexedObject$1;
 	var toObject$a = toObject$d;
-	var lengthOfArrayLike$b = lengthOfArrayLike$f;
+	var lengthOfArrayLike$a = lengthOfArrayLike$e;
 	var arraySpeciesCreate$4 = arraySpeciesCreate$5;
 
 	var push$6 = uncurryThis$s([].push);
@@ -3604,7 +3588,7 @@ var bookly = (function ($$O) {
 	  return function ($this, callbackfn, that, specificCreate) {
 	    var O = toObject$a($this);
 	    var self = IndexedObject$2(O);
-	    var length = lengthOfArrayLike$b(self);
+	    var length = lengthOfArrayLike$a(self);
 	    var boundFunction = bind$8(callbackfn, that);
 	    var index = 0;
 	    var create = specificCreate || arraySpeciesCreate$4;
@@ -3640,9 +3624,6 @@ var bookly = (function ($$O) {
 	  // `Array.prototype.filter` method
 	  // https://tc39.es/ecma262/#sec-array.prototype.filter
 	  filter: createMethod$5(2),
-	  // `Array.prototype.some` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.some
-	  some: createMethod$5(3),
 	  // `Array.prototype.every` method
 	  // https://tc39.es/ecma262/#sec-array.prototype.every
 	  every: createMethod$5(4),
@@ -3651,13 +3632,9 @@ var bookly = (function ($$O) {
 	  find: createMethod$5(5),
 	  // `Array.prototype.findIndex` method
 	  // https://tc39.es/ecma262/#sec-array.prototype.findIndex
-	  findIndex: createMethod$5(6),
-	  // `Array.prototype.filterReject` method
-	  // https://github.com/tc39/proposal-array-filtering
-	  filterReject: createMethod$5(7)
-	};
+	  findIndex: createMethod$5(6)};
 
-	var $$t = _export$1;
+	var $$A = _export$1;
 	var $find = arrayIteration$1.find;
 
 	var FIND = 'find';
@@ -3669,15 +3646,15 @@ var bookly = (function ($$O) {
 
 	// `Array.prototype.find` method
 	// https://tc39.es/ecma262/#sec-array.prototype.find
-	$$t({ target: 'Array', proto: true, forced: SKIPS_HOLES }, {
+	$$A({ target: 'Array', proto: true, forced: SKIPS_HOLES }, {
 	  find: function find(callbackfn /* , that = undefined */) {
 	    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$b = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$g = getBuiltInPrototypeMethod$l;
 
-	var find$4 = getBuiltInPrototypeMethod$b('Array', 'find');
+	var find$4 = getBuiltInPrototypeMethod$g('Array', 'find');
 
 	var isPrototypeOf$h = objectIsPrototypeOf$1;
 	var method$d = find$4;
@@ -3700,7 +3677,7 @@ var bookly = (function ($$O) {
 	var uncurryThis$r = functionUncurryThis$1;
 	var isArray$6 = isArray$9;
 	var isCallable$h = isCallable$A;
-	var classof$e = classofRaw$5;
+	var classof$d = classofRaw$5;
 	var toString$a = toString$l;
 
 	var push$5 = uncurryThis$r([].push);
@@ -3713,7 +3690,7 @@ var bookly = (function ($$O) {
 	  for (var i = 0; i < rawLength; i++) {
 	    var element = replacer[i];
 	    if (typeof element == 'string') push$5(keys, element);
-	    else if (typeof element == 'number' || classof$e(element) === 'Number' || classof$e(element) === 'String') push$5(keys, toString$a(element));
+	    else if (typeof element == 'number' || classof$d(element) === 'Number' || classof$d(element) === 'String') push$5(keys, toString$a(element));
 	  }
 	  var keysLength = keys.length;
 	  var root = true;
@@ -3727,10 +3704,10 @@ var bookly = (function ($$O) {
 	  };
 	};
 
-	var $$s = _export$1;
-	var getBuiltIn$6 = getBuiltIn$f;
+	var $$z = _export$1;
+	var getBuiltIn$7 = getBuiltIn$g;
 	var apply$3 = functionApply$1;
-	var call$b = functionCall$1;
+	var call$d = functionCall$1;
 	var uncurryThis$q = functionUncurryThis$1;
 	var fails$t = fails$L;
 	var isCallable$g = isCallable$A;
@@ -3740,7 +3717,7 @@ var bookly = (function ($$O) {
 	var NATIVE_SYMBOL$2 = symbolConstructorDetection$1;
 
 	var $String$4 = String;
-	var $stringify = getBuiltIn$6('JSON', 'stringify');
+	var $stringify = getBuiltIn$7('JSON', 'stringify');
 	var exec$2 = uncurryThis$q(/./.exec);
 	var charAt$2 = uncurryThis$q(''.charAt);
 	var charCodeAt$1 = uncurryThis$q(''.charCodeAt);
@@ -3752,7 +3729,7 @@ var bookly = (function ($$O) {
 	var hi = /^[\uDC00-\uDFFF]$/;
 
 	var WRONG_SYMBOLS_CONVERSION = !NATIVE_SYMBOL$2 || fails$t(function () {
-	  var symbol = getBuiltIn$6('Symbol')('stringify detection');
+	  var symbol = getBuiltIn$7('Symbol')('stringify detection');
 	  // MS Edge converts symbol values to JSON as {}
 	  return $stringify([symbol]) !== '[null]'
 	    // WebKit converts symbol values to JSON as null
@@ -3773,7 +3750,7 @@ var bookly = (function ($$O) {
 	  if (!isCallable$g($replacer) && (it === undefined || isSymbol$3(it))) return; // IE8 returns string on undefined
 	  args[1] = function (key, value) {
 	    // some old implementations (like WebKit) could pass numbers as keys
-	    if (isCallable$g($replacer)) value = call$b($replacer, this, $String$4(key), value);
+	    if (isCallable$g($replacer)) value = call$d($replacer, this, $String$4(key), value);
 	    if (!isSymbol$3(value)) return value;
 	  };
 	  return apply$3($stringify, null, args);
@@ -3790,7 +3767,7 @@ var bookly = (function ($$O) {
 	if ($stringify) {
 	  // `JSON.stringify` method
 	  // https://tc39.es/ecma262/#sec-json.stringify
-	  $$s({ target: 'JSON', stat: true, arity: 3, forced: WRONG_SYMBOLS_CONVERSION || ILL_FORMED_UNICODE }, {
+	  $$z({ target: 'JSON', stat: true, forced: WRONG_SYMBOLS_CONVERSION || ILL_FORMED_UNICODE }, {
 	    // eslint-disable-next-line no-unused-vars -- required for `.length`
 	    stringify: function stringify(it, replacer, space) {
 	      var args = arraySlice$4(arguments);
@@ -3819,18 +3796,18 @@ var bookly = (function ($$O) {
 
 	var _JSON$stringify = /*@__PURE__*/getDefaultExportFromCjs(stringify);
 
-	var $$r = _export$1;
+	var $$y = _export$1;
 	var repeat$4 = stringRepeat;
 
 	// `String.prototype.repeat` method
 	// https://tc39.es/ecma262/#sec-string.prototype.repeat
-	$$r({ target: 'String', proto: true }, {
+	$$y({ target: 'String', proto: true }, {
 	  repeat: repeat$4
 	});
 
-	var getBuiltInPrototypeMethod$a = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$f = getBuiltInPrototypeMethod$l;
 
-	var repeat$3 = getBuiltInPrototypeMethod$a('String', 'repeat');
+	var repeat$3 = getBuiltInPrototypeMethod$f('String', 'repeat');
 
 	var isPrototypeOf$g = objectIsPrototypeOf$1;
 	var method$c = repeat$3;
@@ -3873,25 +3850,25 @@ var bookly = (function ($$O) {
 	// eslint-disable-next-line es/no-array-prototype-foreach -- safe
 	} : [].forEach;
 
-	var $$q = _export$1;
+	var $$x = _export$1;
 	var forEach$6 = arrayForEach;
 
 	// `Array.prototype.forEach` method
 	// https://tc39.es/ecma262/#sec-array.prototype.foreach
 	// eslint-disable-next-line es/no-array-prototype-foreach -- safe
-	$$q({ target: 'Array', proto: true, forced: [].forEach !== forEach$6 }, {
+	$$x({ target: 'Array', proto: true, forced: [].forEach !== forEach$6 }, {
 	  forEach: forEach$6
 	});
 
-	var getBuiltInPrototypeMethod$9 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$e = getBuiltInPrototypeMethod$l;
 
-	var forEach$5 = getBuiltInPrototypeMethod$9('Array', 'forEach');
+	var forEach$5 = getBuiltInPrototypeMethod$e('Array', 'forEach');
 
 	var parent$p = forEach$5;
 
 	var forEach$4 = parent$p;
 
-	var classof$d = classof$l;
+	var classof$c = classof$k;
 	var hasOwn$b = hasOwnProperty_1$1;
 	var isPrototypeOf$f = objectIsPrototypeOf$1;
 	var method$b = forEach$4;
@@ -3907,22 +3884,22 @@ var bookly = (function ($$O) {
 	var forEach$3 = function (it) {
 	  var own = it.forEach;
 	  return it === ArrayPrototype$c || (isPrototypeOf$f(ArrayPrototype$c, it) && own === ArrayPrototype$c.forEach)
-	    || hasOwn$b(DOMIterables$1, classof$d(it)) ? method$b : own;
+	    || hasOwn$b(DOMIterables$1, classof$c(it)) ? method$b : own;
 	};
 
 	var forEach$2 = forEach$3;
 
 	var _forEachInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(forEach$2);
 
-	var DESCRIPTORS$e = descriptors$1;
+	var DESCRIPTORS$f = descriptors$1;
 	var isArray$5 = isArray$9;
 
-	var $TypeError$c = TypeError;
+	var $TypeError$e = TypeError;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 	var getOwnPropertyDescriptor$2 = Object.getOwnPropertyDescriptor;
 
 	// Safari < 13 does not throw an error in this case
-	var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS$e && !function () {
+	var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS$f && !function () {
 	  // makes no sense without proper strict mode support
 	  if (this !== undefined) return true;
 	  try {
@@ -3935,37 +3912,37 @@ var bookly = (function ($$O) {
 
 	var arraySetLength = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
 	  if (isArray$5(O) && !getOwnPropertyDescriptor$2(O, 'length').writable) {
-	    throw new $TypeError$c('Cannot set read only .length');
+	    throw new $TypeError$e('Cannot set read only .length');
 	  } return O.length = length;
 	} : function (O, length) {
 	  return O.length = length;
 	};
 
-	var $TypeError$b = TypeError;
+	var $TypeError$d = TypeError;
 	var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
 
 	var doesNotExceedSafeInteger$2 = function (it) {
-	  if (it > MAX_SAFE_INTEGER) throw $TypeError$b('Maximum allowed index exceeded');
+	  if (it > MAX_SAFE_INTEGER) throw $TypeError$d('Maximum allowed index exceeded');
 	  return it;
 	};
 
-	var tryToString$4 = tryToString$9;
+	var tryToString$5 = tryToString$a;
 
-	var $TypeError$a = TypeError;
+	var $TypeError$c = TypeError;
 
 	var deletePropertyOrThrow$2 = function (O, P) {
-	  if (!delete O[P]) throw new $TypeError$a('Cannot delete property ' + tryToString$4(P) + ' of ' + tryToString$4(O));
+	  if (!delete O[P]) throw new $TypeError$c('Cannot delete property ' + tryToString$5(P) + ' of ' + tryToString$5(O));
 	};
 
-	var $$p = _export$1;
+	var $$w = _export$1;
 	var toObject$9 = toObject$d;
-	var toAbsoluteIndex$5 = toAbsoluteIndex$8;
-	var toIntegerOrInfinity$4 = toIntegerOrInfinity$9;
-	var lengthOfArrayLike$a = lengthOfArrayLike$f;
+	var toAbsoluteIndex$4 = toAbsoluteIndex$7;
+	var toIntegerOrInfinity$5 = toIntegerOrInfinity$a;
+	var lengthOfArrayLike$9 = lengthOfArrayLike$e;
 	var setArrayLength = arraySetLength;
 	var doesNotExceedSafeInteger$1 = doesNotExceedSafeInteger$2;
 	var arraySpeciesCreate$3 = arraySpeciesCreate$5;
-	var createProperty$5 = createProperty$7;
+	var createProperty$4 = createProperty$6;
 	var deletePropertyOrThrow$1 = deletePropertyOrThrow$2;
 	var arrayMethodHasSpeciesSupport$6 = arrayMethodHasSpeciesSupport$8;
 
@@ -3977,11 +3954,11 @@ var bookly = (function ($$O) {
 	// `Array.prototype.splice` method
 	// https://tc39.es/ecma262/#sec-array.prototype.splice
 	// with adding support of @@species
-	$$p({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$4 }, {
+	$$w({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$4 }, {
 	  splice: function splice(start, deleteCount /* , ...items */) {
 	    var O = toObject$9(this);
-	    var len = lengthOfArrayLike$a(O);
-	    var actualStart = toAbsoluteIndex$5(start, len);
+	    var len = lengthOfArrayLike$9(O);
+	    var actualStart = toAbsoluteIndex$4(start, len);
 	    var argumentsLength = arguments.length;
 	    var insertCount, actualDeleteCount, A, k, from, to;
 	    if (argumentsLength === 0) {
@@ -3991,13 +3968,13 @@ var bookly = (function ($$O) {
 	      actualDeleteCount = len - actualStart;
 	    } else {
 	      insertCount = argumentsLength - 2;
-	      actualDeleteCount = min$2(max$3(toIntegerOrInfinity$4(deleteCount), 0), len - actualStart);
+	      actualDeleteCount = min$2(max$3(toIntegerOrInfinity$5(deleteCount), 0), len - actualStart);
 	    }
 	    doesNotExceedSafeInteger$1(len + insertCount - actualDeleteCount);
 	    A = arraySpeciesCreate$3(O, actualDeleteCount);
 	    for (k = 0; k < actualDeleteCount; k++) {
 	      from = actualStart + k;
-	      if (from in O) createProperty$5(A, k, O[from]);
+	      if (from in O) createProperty$4(A, k, O[from]);
 	    }
 	    A.length = actualDeleteCount;
 	    if (insertCount < actualDeleteCount) {
@@ -4024,9 +4001,9 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$8 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$d = getBuiltInPrototypeMethod$l;
 
-	var splice$4 = getBuiltInPrototypeMethod$8('Array', 'splice');
+	var splice$4 = getBuiltInPrototypeMethod$d('Array', 'splice');
 
 	var isPrototypeOf$e = objectIsPrototypeOf$1;
 	var method$a = splice$4;
@@ -4046,7 +4023,7 @@ var bookly = (function ($$O) {
 
 	var _spliceInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(splice$1);
 
-	var $$o = _export$1;
+	var $$v = _export$1;
 	var $every = arrayIteration$1.every;
 	var arrayMethodIsStrict$2 = arrayMethodIsStrict$4;
 
@@ -4054,15 +4031,15 @@ var bookly = (function ($$O) {
 
 	// `Array.prototype.every` method
 	// https://tc39.es/ecma262/#sec-array.prototype.every
-	$$o({ target: 'Array', proto: true, forced: !STRICT_METHOD$1 }, {
+	$$v({ target: 'Array', proto: true, forced: !STRICT_METHOD$1 }, {
 	  every: function every(callbackfn /* , thisArg */) {
 	    return $every(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$7 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$c = getBuiltInPrototypeMethod$l;
 
-	var every$3 = getBuiltInPrototypeMethod$7('Array', 'every');
+	var every$3 = getBuiltInPrototypeMethod$c('Array', 'every');
 
 	var isPrototypeOf$d = objectIsPrototypeOf$1;
 	var method$9 = every$3;
@@ -4082,20 +4059,20 @@ var bookly = (function ($$O) {
 
 	var _everyInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(every);
 
-	var $$n = _export$1;
+	var $$u = _export$1;
 	var fails$r = fails$L;
 	var isArray$4 = isArray$9;
 	var isObject$i = isObject$w;
 	var toObject$8 = toObject$d;
-	var lengthOfArrayLike$9 = lengthOfArrayLike$f;
+	var lengthOfArrayLike$8 = lengthOfArrayLike$e;
 	var doesNotExceedSafeInteger = doesNotExceedSafeInteger$2;
-	var createProperty$4 = createProperty$7;
+	var createProperty$3 = createProperty$6;
 	var arraySpeciesCreate$2 = arraySpeciesCreate$5;
 	var arrayMethodHasSpeciesSupport$5 = arrayMethodHasSpeciesSupport$8;
-	var wellKnownSymbol$g = wellKnownSymbol$z;
-	var V8_VERSION$2 = engineV8Version$1;
+	var wellKnownSymbol$f = wellKnownSymbol$y;
+	var V8_VERSION$2 = engineV8Version;
 
-	var IS_CONCAT_SPREADABLE = wellKnownSymbol$g('isConcatSpreadable');
+	var IS_CONCAT_SPREADABLE = wellKnownSymbol$f('isConcatSpreadable');
 
 	// We can't use this feature detection in V8 since it causes
 	// deoptimization and serious performance degradation
@@ -4117,7 +4094,7 @@ var bookly = (function ($$O) {
 	// `Array.prototype.concat` method
 	// https://tc39.es/ecma262/#sec-array.prototype.concat
 	// with adding support of @@isConcatSpreadable and @@species
-	$$n({ target: 'Array', proto: true, arity: 1, forced: FORCED$3 }, {
+	$$u({ target: 'Array', proto: true, forced: FORCED$3 }, {
 	  // eslint-disable-next-line no-unused-vars -- required for `.length`
 	  concat: function concat(arg) {
 	    var O = toObject$8(this);
@@ -4127,12 +4104,12 @@ var bookly = (function ($$O) {
 	    for (i = -1, length = arguments.length; i < length; i++) {
 	      E = i === -1 ? O : arguments[i];
 	      if (isConcatSpreadable(E)) {
-	        len = lengthOfArrayLike$9(E);
+	        len = lengthOfArrayLike$8(E);
 	        doesNotExceedSafeInteger(n + len);
-	        for (k = 0; k < len; k++, n++) if (k in E) createProperty$4(A, n, E[k]);
+	        for (k = 0; k < len; k++, n++) if (k in E) createProperty$3(A, n, E[k]);
 	      } else {
 	        doesNotExceedSafeInteger(n + 1);
-	        createProperty$4(A, n++, E);
+	        createProperty$3(A, n++, E);
 	      }
 	    }
 	    A.length = n;
@@ -4140,9 +4117,9 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$6 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$b = getBuiltInPrototypeMethod$l;
 
-	var concat$3 = getBuiltInPrototypeMethod$6('Array', 'concat');
+	var concat$3 = getBuiltInPrototypeMethod$b('Array', 'concat');
 
 	var isPrototypeOf$c = objectIsPrototypeOf$1;
 	var method$8 = concat$3;
@@ -4162,7 +4139,7 @@ var bookly = (function ($$O) {
 
 	var _concatInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(concat);
 
-	var $$m = _export$1;
+	var $$t = _export$1;
 	var $map = arrayIteration$1.map;
 	var arrayMethodHasSpeciesSupport$4 = arrayMethodHasSpeciesSupport$8;
 
@@ -4171,15 +4148,15 @@ var bookly = (function ($$O) {
 	// `Array.prototype.map` method
 	// https://tc39.es/ecma262/#sec-array.prototype.map
 	// with adding support of @@species
-	$$m({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$3 }, {
+	$$t({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$3 }, {
 	  map: function map(callbackfn /* , thisArg */) {
 	    return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$5 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$a = getBuiltInPrototypeMethod$l;
 
-	var map$6 = getBuiltInPrototypeMethod$5('Array', 'map');
+	var map$6 = getBuiltInPrototypeMethod$a('Array', 'map');
 
 	var isPrototypeOf$b = objectIsPrototypeOf$1;
 	var method$7 = map$6;
@@ -4199,7 +4176,7 @@ var bookly = (function ($$O) {
 
 	var _mapInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(map$3);
 
-	var $$l = _export$1;
+	var $$s = _export$1;
 	var $filter$1 = arrayIteration$1.filter;
 	var arrayMethodHasSpeciesSupport$3 = arrayMethodHasSpeciesSupport$8;
 
@@ -4208,15 +4185,15 @@ var bookly = (function ($$O) {
 	// `Array.prototype.filter` method
 	// https://tc39.es/ecma262/#sec-array.prototype.filter
 	// with adding support of @@species
-	$$l({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$2 }, {
+	$$s({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$2 }, {
 	  filter: function filter(callbackfn /* , thisArg */) {
 	    return $filter$1(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$4 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$9 = getBuiltInPrototypeMethod$l;
 
-	var filter$7 = getBuiltInPrototypeMethod$4('Array', 'filter');
+	var filter$7 = getBuiltInPrototypeMethod$9('Array', 'filter');
 
 	var isPrototypeOf$a = objectIsPrototypeOf$1;
 	var method$6 = filter$7;
@@ -4236,7 +4213,7 @@ var bookly = (function ($$O) {
 
 	var _filterInstanceProperty$1 = /*@__PURE__*/getDefaultExportFromCjs(filter$4);
 
-	var $$k = _export$1;
+	var $$r = _export$1;
 	var toObject$7 = toObject$d;
 	var nativeKeys = objectKeys$4;
 	var fails$q = fails$L;
@@ -4245,7 +4222,7 @@ var bookly = (function ($$O) {
 
 	// `Object.keys` method
 	// https://tc39.es/ecma262/#sec-object.keys
-	$$k({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES$2 }, {
+	$$r({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES$2 }, {
 	  keys: function keys(it) {
 	    return nativeKeys(toObject$7(it));
 	  }
@@ -4279,21 +4256,21 @@ var bookly = (function ($$O) {
 	  });
 	};
 
-	var $$j = _export$1;
+	var $$q = _export$1;
 	var $trim = stringTrim$1.trim;
 	var forcedStringTrimMethod = stringTrimForced;
 
 	// `String.prototype.trim` method
 	// https://tc39.es/ecma262/#sec-string.prototype.trim
-	$$j({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
+	$$q({ target: 'String', proto: true, forced: forcedStringTrimMethod('trim') }, {
 	  trim: function trim() {
 	    return $trim(this);
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$3 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$8 = getBuiltInPrototypeMethod$l;
 
-	var trim$4 = getBuiltInPrototypeMethod$3('String', 'trim');
+	var trim$4 = getBuiltInPrototypeMethod$8('String', 'trim');
 
 	var isPrototypeOf$9 = objectIsPrototypeOf$1;
 	var method$5 = trim$4;
@@ -4315,7 +4292,7 @@ var bookly = (function ($$O) {
 	var _trimInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(trim$1);
 
 	/* eslint-disable es/no-array-prototype-indexof -- required for testing */
-	var $$i = _export$1;
+	var $$p = _export$1;
 	var uncurryThis$p = functionUncurryThisClause$1;
 	var $indexOf = arrayIncludes$1.indexOf;
 	var arrayMethodIsStrict$1 = arrayMethodIsStrict$4;
@@ -4327,7 +4304,7 @@ var bookly = (function ($$O) {
 
 	// `Array.prototype.indexOf` method
 	// https://tc39.es/ecma262/#sec-array.prototype.indexof
-	$$i({ target: 'Array', proto: true, forced: FORCED$2 }, {
+	$$p({ target: 'Array', proto: true, forced: FORCED$2 }, {
 	  indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
 	    var fromIndex = arguments.length > 1 ? arguments[1] : undefined;
 	    return NEGATIVE_ZERO
@@ -4337,9 +4314,9 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$2 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$7 = getBuiltInPrototypeMethod$l;
 
-	var indexOf$4 = getBuiltInPrototypeMethod$2('Array', 'indexOf');
+	var indexOf$4 = getBuiltInPrototypeMethod$7('Array', 'indexOf');
 
 	var isPrototypeOf$8 = objectIsPrototypeOf$1;
 	var method$4 = indexOf$4;
@@ -4363,7 +4340,7 @@ var bookly = (function ($$O) {
 	 * Complete step.
 	 */
 	function stepComplete(params) {
-	  let data = $$O.extend({
+	  let data = $$V.extend({
 	      action: 'bookly_render_complete'
 	    }, params),
 	    $container = opt[params.form_id].$container;
@@ -4375,7 +4352,7 @@ var bookly = (function ($$O) {
 	    } else {
 	      var _context;
 	      $container.html(response.html);
-	      let $qc = $$O('.bookly-js-qr', $container),
+	      let $qc = $$V('.bookly-js-qr', $container),
 	        url = BooklyL10n.ajaxurl + (_indexOfInstanceProperty(_context = BooklyL10n.ajaxurl).call(_context, '?') > 0 ? '&' : '?') + 'bookly_order=' + response.bookly_order + '&csrf_token=' + BooklyL10n.csrf_token;
 	      new QRCode($qc.get(0), {
 	        text: response.qr,
@@ -4385,7 +4362,7 @@ var bookly = (function ($$O) {
 	        correctLevel: 1
 	      });
 	      scrollTo($container, params.form_id);
-	      $$O('.bookly-js-start-over', $container).on('click', function (e) {
+	      $$V('.bookly-js-start-over', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -4395,20 +4372,20 @@ var bookly = (function ($$O) {
 	          new_chain: true
 	        });
 	      });
-	      $$O('.bookly-js-download-ics', $container).on('click', function (e) {
+	      $$V('.bookly-js-download-ics', $container).on('click', function (e) {
 	        let ladda = laddaStart(this);
 	        window.location = url + '&action=bookly_add_to_calendar&calendar=ics';
 	        _setTimeout(() => ladda.stop(), 1500);
 	      });
-	      $$O('.bookly-js-download-invoice', $container).on('click', function (e) {
+	      $$V('.bookly-js-download-invoice', $container).on('click', function (e) {
 	        let ladda = laddaStart(this);
 	        window.location = url + '&action=bookly_invoices_download_invoice';
 	        _setTimeout(() => ladda.stop(), 1500);
 	      });
-	      $$O('.bookly-js-add-to-calendar', $container).on('click', function (e) {
+	      $$V('.bookly-js-add-to-calendar', $container).on('click', function (e) {
 	        e.preventDefault();
 	        let ladda = laddaStart(this);
-	        window.open(url + '&action=bookly_add_to_calendar&calendar=' + $$O(this).data('calendar'), '_blank');
+	        window.open(url + '&action=bookly_add_to_calendar&calendar=' + $$V(this).data('calendar'), '_blank');
 	        _setTimeout(() => ladda.stop(), 1500);
 	      });
 	    }
@@ -4439,7 +4416,7 @@ var bookly = (function ($$O) {
 	      opt[params.form_id].status.booking = 'ok';
 	    }
 	    const customJS = response.custom_js;
-	    let $stripe_card_field = $$O('#bookly-stripe-card-field', $container);
+	    let $stripe_card_field = $$V('#bookly-stripe-card-field', $container);
 
 	    // Init stripe intents form
 	    if ($stripe_card_field.length) {
@@ -4455,32 +4432,32 @@ var bookly = (function ($$O) {
 	        var stripe_cvc = elements.create('cardCvc');
 	        stripe_cvc.mount("#bookly-form-" + params.form_id + " #bookly-stripe-card-cvc-field");
 	      } else {
-	        $$O('.pay-card .bookly-js-next-step', $container).prop('disabled', true);
+	        $$V('.pay-card .bookly-js-next-step', $container).prop('disabled', true);
 	        let $details = $stripe_card_field.closest('.bookly-js-details');
-	        $$O('.bookly-form-group', $details).hide();
-	        $$O('.bookly-js-card-error', $details).text('Please call Stripe() with your publishable key. You used an empty string.');
+	        $$V('.bookly-form-group', $details).hide();
+	        $$V('.bookly-js-card-error', $details).text('Please call Stripe() with your publishable key. You used an empty string.');
 	      }
 	    }
-	    var $payments = $$O('.bookly-js-payment', $container),
-	      $apply_coupon_button = $$O('.bookly-js-apply-coupon', $container),
-	      $coupon_input = $$O('input.bookly-user-coupon', $container),
-	      $apply_gift_card_button = $$O('.bookly-js-apply-gift-card', $container),
-	      $gift_card_input = $$O('input.bookly-user-gift', $container),
-	      $apply_tips_button = $$O('.bookly-js-apply-tips', $container),
-	      $applied_tips_button = $$O('.bookly-js-applied-tips', $container),
-	      $tips_input = $$O('input.bookly-user-tips', $container),
-	      $tips_error = $$O('.bookly-js-tips-error', $container),
-	      $deposit_mode = $$O('input[type=radio][name=bookly-full-payment]', $container),
-	      $coupon_info_text = $$O('.bookly-info-text-coupon', $container),
-	      $buttons = $$O('.bookly-gateway-buttons,.bookly-js-details', $container),
+	    var $payments = $$V('.bookly-js-payment', $container),
+	      $apply_coupon_button = $$V('.bookly-js-apply-coupon', $container),
+	      $coupon_input = $$V('input.bookly-user-coupon', $container),
+	      $apply_gift_card_button = $$V('.bookly-js-apply-gift-card', $container),
+	      $gift_card_input = $$V('input.bookly-user-gift', $container),
+	      $apply_tips_button = $$V('.bookly-js-apply-tips', $container),
+	      $applied_tips_button = $$V('.bookly-js-applied-tips', $container),
+	      $tips_input = $$V('input.bookly-user-tips', $container),
+	      $tips_error = $$V('.bookly-js-tips-error', $container),
+	      $deposit_mode = $$V('input[type=radio][name=bookly-full-payment]', $container),
+	      $coupon_info_text = $$V('.bookly-info-text-coupon', $container),
+	      $buttons = $$V('.bookly-gateway-buttons,.bookly-js-details', $container),
 	      $payment_details;
 	    $payments.on('click', function () {
 	      $buttons.hide();
-	      $$O('.bookly-gateway-buttons.pay-' + $$O(this).val(), $container).show();
-	      if ($$O(this).data('with-details') == 1) {
-	        let $parent = $$O(this).closest('.bookly-list');
-	        $payment_details = $$O('.bookly-js-details', $parent);
-	        $$O('.bookly-js-details', $parent).show();
+	      $$V('.bookly-gateway-buttons.pay-' + $$V(this).val(), $container).show();
+	      if ($$V(this).data('with-details') == 1) {
+	        let $parent = $$V(this).closest('.bookly-list');
+	        $payment_details = $$V('.bookly-js-details', $parent);
+	        $$V('.bookly-js-details', $parent).show();
 	      } else {
 	        $payment_details = null;
 	      }
@@ -4490,10 +4467,10 @@ var bookly = (function ($$O) {
 	      let data = {
 	        action: 'bookly_deposit_payments_apply_payment_method',
 	        form_id: params.form_id,
-	        deposit_full: $$O(this).val()
+	        deposit_full: $$V(this).val()
 	      };
-	      $$O(this).hide();
-	      $$O(this).prev().css('display', 'inline-block');
+	      $$V(this).hide();
+	      $$V(this).prev().css('display', 'inline-block');
 	      booklyAjax({
 	        type: 'POST',
 	        data: data
@@ -4524,7 +4501,7 @@ var bookly = (function ($$O) {
 	        $coupon_input.addClass('bookly-error');
 	        $coupon_info_text.html(response.text);
 	        $apply_coupon_button.next('.bookly-label-error').remove();
-	        let $error = $$O('<div>', {
+	        let $error = $$V('<div>', {
 	          class: 'bookly-label-error',
 	          text: response?.error || 'Error'
 	        });
@@ -4552,10 +4529,10 @@ var bookly = (function ($$O) {
 	          form_id: params.form_id
 	        });
 	      }).catch(response => {
-	        if ($$O('.bookly-js-payment[value!=free]', $container).length > 0) {
+	        if ($$V('.bookly-js-payment[value!=free]', $container).length > 0) {
 	          $gift_card_input.addClass('bookly-error');
 	          $apply_gift_card_button.next('.bookly-label-error').remove();
-	          let $error = $$O('<div>', {
+	          let $error = $$V('<div>', {
 	            class: 'bookly-label-error',
 	            text: response?.error || 'Error'
 	          });
@@ -4599,7 +4576,7 @@ var bookly = (function ($$O) {
 	        ladda.stop();
 	      });
 	    });
-	    $$O('.bookly-js-next-step', $container).on('click', function (e) {
+	    $$V('.bookly-js-next-step', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      var ladda = laddaStart(this),
@@ -4608,7 +4585,7 @@ var bookly = (function ($$O) {
 	      // Execute custom JavaScript
 	      if (customJS) {
 	        try {
-	          $$O.globalEval(customJS.next_button);
+	          $$V.globalEval(customJS.next_button);
 	        } catch (e) {
 	          // Do nothing
 	        }
@@ -4621,10 +4598,10 @@ var bookly = (function ($$O) {
 	            data: {
 	              action: 'bookly_create_payment_intent',
 	              card: {
-	                number: $$O('input[name="card_number"]', $payment_details).val(),
-	                cvc: $$O('input[name="card_cvc"]', $payment_details).val(),
-	                exp_month: $$O('select[name="card_exp_month"]', $payment_details).val(),
-	                exp_year: $$O('select[name="card_exp_year"]', $payment_details).val()
+	                number: $$V('input[name="card_number"]', $payment_details).val(),
+	                cvc: $$V('input[name="card_cvc"]', $payment_details).val(),
+	                exp_month: $$V('select[name="card_exp_month"]', $payment_details).val(),
+	                exp_year: $$V('select[name="card_exp_year"]', $payment_details).val()
 	              },
 	              response_url: window.location.pathname + window.location.search.split('#')[0],
 	              form_id: params.form_id,
@@ -4662,8 +4639,8 @@ var bookly = (function ($$O) {
 	                }).then(response => {
 	                  ladda.stop();
 	                  let $stripe_container = $gateway_checked.closest('.bookly-list');
-	                  $$O('.bookly-label-error', $stripe_container).remove();
-	                  $stripe_container.append($$O('<div>', {
+	                  $$V('.bookly-label-error', $stripe_container).remove();
+	                  $stripe_container.append($$V('<div>', {
 	                    class: 'bookly-label-error',
 	                    text: result.error.message || 'Error'
 	                  }));
@@ -4694,7 +4671,7 @@ var bookly = (function ($$O) {
 	        });
 	      }
 	    });
-	    $$O('.bookly-js-back-step', $container).on('click', function (e) {
+	    $$V('.bookly-js-back-step', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      laddaStart(this);
@@ -4750,8 +4727,8 @@ var bookly = (function ($$O) {
 	  if (response.error == 'cart_item_not_available') {
 	    handleErrorCartItemNotAvailable(response, form_id);
 	  } else if (response.error) {
-	    $$O('.bookly-label-error', $gateway_selector).remove();
-	    $gateway_selector.append($$O('<div>', {
+	    $$V('.bookly-label-error', $gateway_selector).remove();
+	    $gateway_selector.append($$V('<div>', {
 	      class: 'bookly-label-error',
 	      text: response?.error_message || 'Error'
 	    }));
@@ -4759,7 +4736,7 @@ var bookly = (function ($$O) {
 	}
 	function retrieveRequest(data, form_id) {
 	  if (data.on_site) {
-	    $$O.ajax({
+	    $$V.ajax({
 	      type: 'GET',
 	      url: data.target_url,
 	      xhrFields: {
@@ -4796,12 +4773,13 @@ var bookly = (function ($$O) {
 	var NATIVE_BIND$3 = functionBindNative;
 
 	var FunctionPrototype$2 = Function.prototype;
-	var call$a = FunctionPrototype$2.call;
-	var uncurryThisWithBind = NATIVE_BIND$3 && FunctionPrototype$2.bind.bind(call$a, call$a);
+	var call$c = FunctionPrototype$2.call;
+	// eslint-disable-next-line es/no-function-prototype-bind -- safe
+	var uncurryThisWithBind = NATIVE_BIND$3 && FunctionPrototype$2.bind.bind(call$c, call$c);
 
 	var functionUncurryThis = NATIVE_BIND$3 ? uncurryThisWithBind : function (fn) {
 	  return function () {
-	    return call$a.apply(fn, arguments);
+	    return call$c.apply(fn, arguments);
 	  };
 	};
 
@@ -4810,29 +4788,30 @@ var bookly = (function ($$O) {
 	var objectIsPrototypeOf = uncurryThis$o({}.isPrototypeOf);
 
 	var check = function (it) {
-	  return it && it.Math == Math && it;
+	  return it && it.Math === Math && it;
 	};
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global$h =
+	var globalThis_1 =
 	  // eslint-disable-next-line es/no-global-this -- safe
 	  check(typeof globalThis == 'object' && globalThis) ||
 	  check(typeof window == 'object' && window) ||
 	  // eslint-disable-next-line no-restricted-globals -- safe
 	  check(typeof self == 'object' && self) ||
 	  check(typeof commonjsGlobal == 'object' && commonjsGlobal) ||
+	  check(typeof commonjsGlobal == 'object' && commonjsGlobal) ||
 	  // eslint-disable-next-line no-new-func -- fallback
-	  (function () { return this; })() || commonjsGlobal || Function('return this')();
+	  (function () { return this; })() || Function('return this')();
 
 	var NATIVE_BIND$2 = functionBindNative;
 
 	var FunctionPrototype$1 = Function.prototype;
 	var apply$1 = FunctionPrototype$1.apply;
-	var call$9 = FunctionPrototype$1.call;
+	var call$b = FunctionPrototype$1.call;
 
-	// eslint-disable-next-line es/no-reflect -- safe
-	var functionApply = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND$2 ? call$9.bind(apply$1) : function () {
-	  return call$9.apply(apply$1, arguments);
+	// eslint-disable-next-line es/no-function-prototype-bind, es/no-reflect -- safe
+	var functionApply = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND$2 ? call$b.bind(apply$1) : function () {
+	  return call$b.apply(apply$1, arguments);
 	});
 
 	var uncurryThis$n = functionUncurryThis;
@@ -4854,25 +4833,14 @@ var bookly = (function ($$O) {
 	  if (classofRaw$1(fn) === 'Function') return uncurryThis$m(fn);
 	};
 
-	var documentAll$2 = typeof document == 'object' && document.all;
-
 	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
-	// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
-	var IS_HTMLDDA = typeof documentAll$2 == 'undefined' && documentAll$2 !== undefined;
-
-	var documentAll_1 = {
-	  all: documentAll$2,
-	  IS_HTMLDDA: IS_HTMLDDA
-	};
-
-	var $documentAll$1 = documentAll_1;
-
-	var documentAll$1 = $documentAll$1.all;
+	var documentAll = typeof document == 'object' && document.all;
 
 	// `IsCallable` abstract operation
 	// https://tc39.es/ecma262/#sec-iscallable
-	var isCallable$f = $documentAll$1.IS_HTMLDDA ? function (argument) {
-	  return typeof argument == 'function' || argument === documentAll$1;
+	// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
+	var isCallable$f = typeof documentAll == 'undefined' && documentAll !== undefined ? function (argument) {
+	  return typeof argument == 'function' || argument === documentAll;
 	} : function (argument) {
 	  return typeof argument == 'function';
 	};
@@ -4884,15 +4852,15 @@ var bookly = (function ($$O) {
 	// Detect IE8's incomplete defineProperty implementation
 	var descriptors = !fails$m(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
-	  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
+	  return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] !== 7;
 	});
 
 	var NATIVE_BIND$1 = functionBindNative;
 
-	var call$8 = Function.prototype.call;
-
-	var functionCall = NATIVE_BIND$1 ? call$8.bind(call$8) : function () {
-	  return call$8.apply(call$8, arguments);
+	var call$a = Function.prototype.call;
+	// eslint-disable-next-line es/no-function-prototype-bind -- safe
+	var functionCall = NATIVE_BIND$1 ? call$a.bind(call$a) : function () {
+	  return call$a.apply(call$a, arguments);
 	};
 
 	var objectPropertyIsEnumerable = {};
@@ -4922,7 +4890,7 @@ var bookly = (function ($$O) {
 
 	var uncurryThis$l = functionUncurryThis;
 	var fails$l = fails$o;
-	var classof$c = classofRaw$2;
+	var classof$b = classofRaw$2;
 
 	var $Object$5 = Object;
 	var split = uncurryThis$l(''.split);
@@ -4933,23 +4901,23 @@ var bookly = (function ($$O) {
 	  // eslint-disable-next-line no-prototype-builtins -- safe
 	  return !$Object$5('z').propertyIsEnumerable(0);
 	}) ? function (it) {
-	  return classof$c(it) == 'String' ? split(it, '') : $Object$5(it);
+	  return classof$b(it) === 'String' ? split(it, '') : $Object$5(it);
 	} : $Object$5;
 
 	// we can't use just `it == null` since of `document.all` special case
 	// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
-	var isNullOrUndefined$7 = function (it) {
+	var isNullOrUndefined$8 = function (it) {
 	  return it === null || it === undefined;
 	};
 
-	var isNullOrUndefined$6 = isNullOrUndefined$7;
+	var isNullOrUndefined$7 = isNullOrUndefined$8;
 
-	var $TypeError$9 = TypeError;
+	var $TypeError$b = TypeError;
 
 	// `RequireObjectCoercible` abstract operation
 	// https://tc39.es/ecma262/#sec-requireobjectcoercible
 	var requireObjectCoercible$6 = function (it) {
-	  if (isNullOrUndefined$6(it)) throw $TypeError$9("Can't call method on " + it);
+	  if (isNullOrUndefined$7(it)) throw new $TypeError$b("Can't call method on " + it);
 	  return it;
 	};
 
@@ -4962,38 +4930,38 @@ var bookly = (function ($$O) {
 	};
 
 	var isCallable$e = isCallable$f;
-	var $documentAll = documentAll_1;
 
-	var documentAll = $documentAll.all;
-
-	var isObject$h = $documentAll.IS_HTMLDDA ? function (it) {
-	  return typeof it == 'object' ? it !== null : isCallable$e(it) || it === documentAll;
-	} : function (it) {
+	var isObject$h = function (it) {
 	  return typeof it == 'object' ? it !== null : isCallable$e(it);
 	};
 
 	var path$c = {};
 
 	var path$b = path$c;
-	var global$g = global$h;
+	var globalThis$l = globalThis_1;
 	var isCallable$d = isCallable$f;
 
 	var aFunction = function (variable) {
 	  return isCallable$d(variable) ? variable : undefined;
 	};
 
-	var getBuiltIn$5 = function (namespace, method) {
-	  return arguments.length < 2 ? aFunction(path$b[namespace]) || aFunction(global$g[namespace])
-	    : path$b[namespace] && path$b[namespace][method] || global$g[namespace] && global$g[namespace][method];
+	var getBuiltIn$6 = function (namespace, method) {
+	  return arguments.length < 2 ? aFunction(path$b[namespace]) || aFunction(globalThis$l[namespace])
+	    : path$b[namespace] && path$b[namespace][method] || globalThis$l[namespace] && globalThis$l[namespace][method];
 	};
 
-	var engineUserAgent = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
+	var globalThis$k = globalThis_1;
 
-	var global$f = global$h;
-	var userAgent$2 = engineUserAgent;
+	var navigator$1 = globalThis$k.navigator;
+	var userAgent$3 = navigator$1 && navigator$1.userAgent;
 
-	var process = global$f.process;
-	var Deno$1 = global$f.Deno;
+	var environmentUserAgent = userAgent$3 ? String(userAgent$3) : '';
+
+	var globalThis$j = globalThis_1;
+	var userAgent$2 = environmentUserAgent;
+
+	var process = globalThis$j.process;
+	var Deno$1 = globalThis$j.Deno;
 	var versions = process && process.versions || Deno$1 && Deno$1.version;
 	var v8 = versions && versions.v8;
 	var match, version;
@@ -5015,19 +4983,18 @@ var bookly = (function ($$O) {
 	  }
 	}
 
-	var engineV8Version = version;
+	var environmentV8Version = version;
 
 	/* eslint-disable es/no-symbol -- required for testing */
-
-	var V8_VERSION$1 = engineV8Version;
+	var V8_VERSION$1 = environmentV8Version;
 	var fails$k = fails$o;
-	var global$e = global$h;
+	var globalThis$i = globalThis_1;
 
-	var $String$3 = global$e.String;
+	var $String$3 = globalThis$i.String;
 
 	// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 	var symbolConstructorDetection = !!Object.getOwnPropertySymbols && !fails$k(function () {
-	  var symbol = Symbol();
+	  var symbol = Symbol('symbol detection');
 	  // Chrome 38 Symbol has incorrect toString conversion
 	  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
 	  // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
@@ -5038,14 +5005,13 @@ var bookly = (function ($$O) {
 	});
 
 	/* eslint-disable es/no-symbol -- required for testing */
-
 	var NATIVE_SYMBOL$1 = symbolConstructorDetection;
 
-	var useSymbolAsUid = NATIVE_SYMBOL$1
-	  && !Symbol.sham
-	  && typeof Symbol.iterator == 'symbol';
+	var useSymbolAsUid = NATIVE_SYMBOL$1 &&
+	  !Symbol.sham &&
+	  typeof Symbol.iterator == 'symbol';
 
-	var getBuiltIn$4 = getBuiltIn$5;
+	var getBuiltIn$5 = getBuiltIn$6;
 	var isCallable$c = isCallable$f;
 	var isPrototypeOf$7 = objectIsPrototypeOf;
 	var USE_SYMBOL_AS_UID$1 = useSymbolAsUid;
@@ -5055,13 +5021,13 @@ var bookly = (function ($$O) {
 	var isSymbol$2 = USE_SYMBOL_AS_UID$1 ? function (it) {
 	  return typeof it == 'symbol';
 	} : function (it) {
-	  var $Symbol = getBuiltIn$4('Symbol');
+	  var $Symbol = getBuiltIn$5('Symbol');
 	  return isCallable$c($Symbol) && isPrototypeOf$7($Symbol.prototype, $Object$4(it));
 	};
 
 	var $String$2 = String;
 
-	var tryToString$3 = function (argument) {
+	var tryToString$4 = function (argument) {
 	  try {
 	    return $String$2(argument);
 	  } catch (error) {
@@ -5070,78 +5036,78 @@ var bookly = (function ($$O) {
 	};
 
 	var isCallable$b = isCallable$f;
-	var tryToString$2 = tryToString$3;
+	var tryToString$3 = tryToString$4;
 
-	var $TypeError$8 = TypeError;
+	var $TypeError$a = TypeError;
 
 	// `Assert: IsCallable(argument) is true`
-	var aCallable$5 = function (argument) {
+	var aCallable$6 = function (argument) {
 	  if (isCallable$b(argument)) return argument;
-	  throw $TypeError$8(tryToString$2(argument) + ' is not a function');
+	  throw new $TypeError$a(tryToString$3(argument) + ' is not a function');
 	};
 
-	var aCallable$4 = aCallable$5;
-	var isNullOrUndefined$5 = isNullOrUndefined$7;
+	var aCallable$5 = aCallable$6;
+	var isNullOrUndefined$6 = isNullOrUndefined$8;
 
 	// `GetMethod` abstract operation
 	// https://tc39.es/ecma262/#sec-getmethod
 	var getMethod$3 = function (V, P) {
 	  var func = V[P];
-	  return isNullOrUndefined$5(func) ? undefined : aCallable$4(func);
+	  return isNullOrUndefined$6(func) ? undefined : aCallable$5(func);
 	};
 
-	var call$7 = functionCall;
+	var call$9 = functionCall;
 	var isCallable$a = isCallable$f;
 	var isObject$g = isObject$h;
 
-	var $TypeError$7 = TypeError;
+	var $TypeError$9 = TypeError;
 
 	// `OrdinaryToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-ordinarytoprimitive
 	var ordinaryToPrimitive$1 = function (input, pref) {
 	  var fn, val;
-	  if (pref === 'string' && isCallable$a(fn = input.toString) && !isObject$g(val = call$7(fn, input))) return val;
-	  if (isCallable$a(fn = input.valueOf) && !isObject$g(val = call$7(fn, input))) return val;
-	  if (pref !== 'string' && isCallable$a(fn = input.toString) && !isObject$g(val = call$7(fn, input))) return val;
-	  throw $TypeError$7("Can't convert object to primitive value");
+	  if (pref === 'string' && isCallable$a(fn = input.toString) && !isObject$g(val = call$9(fn, input))) return val;
+	  if (isCallable$a(fn = input.valueOf) && !isObject$g(val = call$9(fn, input))) return val;
+	  if (pref !== 'string' && isCallable$a(fn = input.toString) && !isObject$g(val = call$9(fn, input))) return val;
+	  throw new $TypeError$9("Can't convert object to primitive value");
 	};
 
-	var shared$3 = {exports: {}};
+	var sharedStore = {exports: {}};
 
-	var global$d = global$h;
+	var globalThis$h = globalThis_1;
 
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
 	var defineProperty$6 = Object.defineProperty;
 
 	var defineGlobalProperty$1 = function (key, value) {
 	  try {
-	    defineProperty$6(global$d, key, { value: value, configurable: true, writable: true });
+	    defineProperty$6(globalThis$h, key, { value: value, configurable: true, writable: true });
 	  } catch (error) {
-	    global$d[key] = value;
+	    globalThis$h[key] = value;
 	  } return value;
 	};
 
-	var global$c = global$h;
+	var globalThis$g = globalThis_1;
 	var defineGlobalProperty = defineGlobalProperty$1;
 
 	var SHARED = '__core-js_shared__';
-	var store$3 = global$c[SHARED] || defineGlobalProperty(SHARED, {});
+	var store$3 = sharedStore.exports = globalThis$g[SHARED] || defineGlobalProperty(SHARED, {});
 
-	var sharedStore = store$3;
-
-	var store$2 = sharedStore;
-
-	(shared$3.exports = function (key, value) {
-	  return store$2[key] || (store$2[key] = value !== undefined ? value : {});
-	})('versions', []).push({
-	  version: '3.31.0',
+	(store$3.versions || (store$3.versions = [])).push({
+	  version: '3.41.0',
 	  mode: 'pure' ,
-	  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
-	  license: 'https://github.com/zloirock/core-js/blob/v3.31.0/LICENSE',
+	  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
+	  license: 'https://github.com/zloirock/core-js/blob/v3.41.0/LICENSE',
 	  source: 'https://github.com/zloirock/core-js'
 	});
 
-	var sharedExports = shared$3.exports;
+	var sharedStoreExports = sharedStore.exports;
+
+	var store$2 = sharedStoreExports;
+
+	var shared$3 = function (key, value) {
+	  return store$2[key] || (store$2[key] = value || {});
+	};
 
 	var requireObjectCoercible$4 = requireObjectCoercible$6;
 
@@ -5175,18 +5141,18 @@ var bookly = (function ($$O) {
 	  return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString$8(++id$3 + postfix, 36);
 	};
 
-	var global$b = global$h;
-	var shared$2 = sharedExports;
+	var globalThis$f = globalThis_1;
+	var shared$2 = shared$3;
 	var hasOwn$a = hasOwnProperty_1;
 	var uid$3 = uid$4;
 	var NATIVE_SYMBOL = symbolConstructorDetection;
 	var USE_SYMBOL_AS_UID = useSymbolAsUid;
 
-	var Symbol$2 = global$b.Symbol;
+	var Symbol$2 = globalThis$f.Symbol;
 	var WellKnownSymbolsStore = shared$2('wks');
 	var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol$2['for'] || Symbol$2 : Symbol$2 && Symbol$2.withoutSetter || uid$3;
 
-	var wellKnownSymbol$f = function (name) {
+	var wellKnownSymbol$e = function (name) {
 	  if (!hasOwn$a(WellKnownSymbolsStore, name)) {
 	    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn$a(Symbol$2, name)
 	      ? Symbol$2[name]
@@ -5194,15 +5160,15 @@ var bookly = (function ($$O) {
 	  } return WellKnownSymbolsStore[name];
 	};
 
-	var call$6 = functionCall;
+	var call$8 = functionCall;
 	var isObject$f = isObject$h;
 	var isSymbol$1 = isSymbol$2;
 	var getMethod$2 = getMethod$3;
 	var ordinaryToPrimitive = ordinaryToPrimitive$1;
-	var wellKnownSymbol$e = wellKnownSymbol$f;
+	var wellKnownSymbol$d = wellKnownSymbol$e;
 
-	var $TypeError$6 = TypeError;
-	var TO_PRIMITIVE = wellKnownSymbol$e('toPrimitive');
+	var $TypeError$8 = TypeError;
+	var TO_PRIMITIVE = wellKnownSymbol$d('toPrimitive');
 
 	// `ToPrimitive` abstract operation
 	// https://tc39.es/ecma262/#sec-toprimitive
@@ -5212,9 +5178,9 @@ var bookly = (function ($$O) {
 	  var result;
 	  if (exoticToPrim) {
 	    if (pref === undefined) pref = 'default';
-	    result = call$6(exoticToPrim, input, pref);
+	    result = call$8(exoticToPrim, input, pref);
 	    if (!isObject$f(result) || isSymbol$1(result)) return result;
-	    throw $TypeError$6("Can't convert object to primitive value");
+	    throw new $TypeError$8("Can't convert object to primitive value");
 	  }
 	  if (pref === undefined) pref = 'number';
 	  return ordinaryToPrimitive(input, pref);
@@ -5225,15 +5191,15 @@ var bookly = (function ($$O) {
 
 	// `ToPropertyKey` abstract operation
 	// https://tc39.es/ecma262/#sec-topropertykey
-	var toPropertyKey$3 = function (argument) {
+	var toPropertyKey$2 = function (argument) {
 	  var key = toPrimitive(argument, 'string');
 	  return isSymbol(key) ? key : key + '';
 	};
 
-	var global$a = global$h;
+	var globalThis$e = globalThis_1;
 	var isObject$e = isObject$h;
 
-	var document$1 = global$a.document;
+	var document$1 = globalThis$e.document;
 	// typeof document.createElement is 'object' in old IE
 	var EXISTS$1 = isObject$e(document$1) && isObject$e(document$1.createElement);
 
@@ -5241,24 +5207,24 @@ var bookly = (function ($$O) {
 	  return EXISTS$1 ? document$1.createElement(it) : {};
 	};
 
-	var DESCRIPTORS$d = descriptors;
+	var DESCRIPTORS$e = descriptors;
 	var fails$j = fails$o;
 	var createElement = documentCreateElement$1;
 
 	// Thanks to IE8 for its funny defineProperty
-	var ie8DomDefine = !DESCRIPTORS$d && !fails$j(function () {
+	var ie8DomDefine = !DESCRIPTORS$e && !fails$j(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(createElement('div'), 'a', {
 	    get: function () { return 7; }
-	  }).a != 7;
+	  }).a !== 7;
 	});
 
-	var DESCRIPTORS$c = descriptors;
-	var call$5 = functionCall;
+	var DESCRIPTORS$d = descriptors;
+	var call$7 = functionCall;
 	var propertyIsEnumerableModule = objectPropertyIsEnumerable;
 	var createPropertyDescriptor$3 = createPropertyDescriptor$4;
 	var toIndexedObject$8 = toIndexedObject$9;
-	var toPropertyKey$2 = toPropertyKey$3;
+	var toPropertyKey$1 = toPropertyKey$2;
 	var hasOwn$9 = hasOwnProperty_1;
 	var IE8_DOM_DEFINE$1 = ie8DomDefine;
 
@@ -5267,13 +5233,13 @@ var bookly = (function ($$O) {
 
 	// `Object.getOwnPropertyDescriptor` method
 	// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
-	objectGetOwnPropertyDescriptor.f = DESCRIPTORS$c ? $getOwnPropertyDescriptor$1 : function getOwnPropertyDescriptor(O, P) {
+	objectGetOwnPropertyDescriptor.f = DESCRIPTORS$d ? $getOwnPropertyDescriptor$1 : function getOwnPropertyDescriptor(O, P) {
 	  O = toIndexedObject$8(O);
-	  P = toPropertyKey$2(P);
+	  P = toPropertyKey$1(P);
 	  if (IE8_DOM_DEFINE$1) try {
 	    return $getOwnPropertyDescriptor$1(O, P);
 	  } catch (error) { /* empty */ }
-	  if (hasOwn$9(O, P)) return createPropertyDescriptor$3(!call$5(propertyIsEnumerableModule.f, O, P), O[P]);
+	  if (hasOwn$9(O, P)) return createPropertyDescriptor$3(!call$7(propertyIsEnumerableModule.f, O, P), O[P]);
 	};
 
 	var fails$i = fails$o;
@@ -5283,8 +5249,8 @@ var bookly = (function ($$O) {
 
 	var isForced$1 = function (feature, detection) {
 	  var value = data[normalize(feature)];
-	  return value == POLYFILL ? true
-	    : value == NATIVE ? false
+	  return value === POLYFILL ? true
+	    : value === NATIVE ? false
 	    : isCallable$9(detection) ? fails$i(detection)
 	    : !!detection;
 	};
@@ -5300,14 +5266,14 @@ var bookly = (function ($$O) {
 	var isForced_1 = isForced$1;
 
 	var uncurryThis$i = functionUncurryThisClause;
-	var aCallable$3 = aCallable$5;
+	var aCallable$4 = aCallable$6;
 	var NATIVE_BIND = functionBindNative;
 
 	var bind$7 = uncurryThis$i(uncurryThis$i.bind);
 
 	// optional / simple context binding
 	var functionBindContext = function (fn, that) {
-	  aCallable$3(fn);
+	  aCallable$4(fn);
 	  return that === undefined ? fn : NATIVE_BIND ? bind$7(fn, that) : function (/* ...args */) {
 	    return fn.apply(that, arguments);
 	  };
@@ -5315,37 +5281,37 @@ var bookly = (function ($$O) {
 
 	var objectDefineProperty = {};
 
-	var DESCRIPTORS$b = descriptors;
+	var DESCRIPTORS$c = descriptors;
 	var fails$h = fails$o;
 
 	// V8 ~ Chrome 36-
 	// https://bugs.chromium.org/p/v8/issues/detail?id=3334
-	var v8PrototypeDefineBug = DESCRIPTORS$b && fails$h(function () {
+	var v8PrototypeDefineBug = DESCRIPTORS$c && fails$h(function () {
 	  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
 	  return Object.defineProperty(function () { /* empty */ }, 'prototype', {
 	    value: 42,
 	    writable: false
-	  }).prototype != 42;
+	  }).prototype !== 42;
 	});
 
 	var isObject$d = isObject$h;
 
 	var $String$1 = String;
-	var $TypeError$5 = TypeError;
+	var $TypeError$7 = TypeError;
 
 	// `Assert: Type(argument) is Object`
-	var anObject$8 = function (argument) {
+	var anObject$9 = function (argument) {
 	  if (isObject$d(argument)) return argument;
-	  throw $TypeError$5($String$1(argument) + ' is not an object');
+	  throw new $TypeError$7($String$1(argument) + ' is not an object');
 	};
 
-	var DESCRIPTORS$a = descriptors;
+	var DESCRIPTORS$b = descriptors;
 	var IE8_DOM_DEFINE = ie8DomDefine;
 	var V8_PROTOTYPE_DEFINE_BUG$1 = v8PrototypeDefineBug;
-	var anObject$7 = anObject$8;
-	var toPropertyKey$1 = toPropertyKey$3;
+	var anObject$8 = anObject$9;
+	var toPropertyKey = toPropertyKey$2;
 
-	var $TypeError$4 = TypeError;
+	var $TypeError$6 = TypeError;
 	// eslint-disable-next-line es/no-object-defineproperty -- safe
 	var $defineProperty = Object.defineProperty;
 	// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
@@ -5356,10 +5322,10 @@ var bookly = (function ($$O) {
 
 	// `Object.defineProperty` method
 	// https://tc39.es/ecma262/#sec-object.defineproperty
-	objectDefineProperty.f = DESCRIPTORS$a ? V8_PROTOTYPE_DEFINE_BUG$1 ? function defineProperty(O, P, Attributes) {
-	  anObject$7(O);
-	  P = toPropertyKey$1(P);
-	  anObject$7(Attributes);
+	objectDefineProperty.f = DESCRIPTORS$b ? V8_PROTOTYPE_DEFINE_BUG$1 ? function defineProperty(O, P, Attributes) {
+	  anObject$8(O);
+	  P = toPropertyKey(P);
+	  anObject$8(Attributes);
 	  if (typeof O === 'function' && P === 'prototype' && 'value' in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
 	    var current = $getOwnPropertyDescriptor(O, P);
 	    if (current && current[WRITABLE]) {
@@ -5372,29 +5338,29 @@ var bookly = (function ($$O) {
 	    }
 	  } return $defineProperty(O, P, Attributes);
 	} : $defineProperty : function defineProperty(O, P, Attributes) {
-	  anObject$7(O);
-	  P = toPropertyKey$1(P);
-	  anObject$7(Attributes);
+	  anObject$8(O);
+	  P = toPropertyKey(P);
+	  anObject$8(Attributes);
 	  if (IE8_DOM_DEFINE) try {
 	    return $defineProperty(O, P, Attributes);
 	  } catch (error) { /* empty */ }
-	  if ('get' in Attributes || 'set' in Attributes) throw $TypeError$4('Accessors not supported');
+	  if ('get' in Attributes || 'set' in Attributes) throw new $TypeError$6('Accessors not supported');
 	  if ('value' in Attributes) O[P] = Attributes.value;
 	  return O;
 	};
 
-	var DESCRIPTORS$9 = descriptors;
+	var DESCRIPTORS$a = descriptors;
 	var definePropertyModule$2 = objectDefineProperty;
 	var createPropertyDescriptor$2 = createPropertyDescriptor$4;
 
-	var createNonEnumerableProperty$7 = DESCRIPTORS$9 ? function (object, key, value) {
+	var createNonEnumerableProperty$6 = DESCRIPTORS$a ? function (object, key, value) {
 	  return definePropertyModule$2.f(object, key, createPropertyDescriptor$2(1, value));
 	} : function (object, key, value) {
 	  object[key] = value;
 	  return object;
 	};
 
-	var global$9 = global$h;
+	var globalThis$d = globalThis_1;
 	var apply = functionApply;
 	var uncurryThis$h = functionUncurryThisClause;
 	var isCallable$8 = isCallable$f;
@@ -5402,8 +5368,10 @@ var bookly = (function ($$O) {
 	var isForced = isForced_1;
 	var path$a = path$c;
 	var bind$6 = functionBindContext;
-	var createNonEnumerableProperty$6 = createNonEnumerableProperty$7;
+	var createNonEnumerableProperty$5 = createNonEnumerableProperty$6;
 	var hasOwn$8 = hasOwnProperty_1;
+	// add debugging info
+
 
 	var wrapConstructor = function (NativeConstructor) {
 	  var Wrapper = function (a, b, c) {
@@ -5440,9 +5408,9 @@ var bookly = (function ($$O) {
 	  var STATIC = options.stat;
 	  var PROTO = options.proto;
 
-	  var nativeSource = GLOBAL ? global$9 : STATIC ? global$9[TARGET] : (global$9[TARGET] || {}).prototype;
+	  var nativeSource = GLOBAL ? globalThis$d : STATIC ? globalThis$d[TARGET] : globalThis$d[TARGET] && globalThis$d[TARGET].prototype;
 
-	  var target = GLOBAL ? path$a : path$a[TARGET] || createNonEnumerableProperty$6(path$a, TARGET, {})[TARGET];
+	  var target = GLOBAL ? path$a : path$a[TARGET] || createNonEnumerableProperty$5(path$a, TARGET, {})[TARGET];
 	  var targetPrototype = target.prototype;
 
 	  var FORCED, USE_NATIVE, VIRTUAL_PROTOTYPE;
@@ -5463,10 +5431,10 @@ var bookly = (function ($$O) {
 	    // export native or implementation
 	    sourceProperty = (USE_NATIVE && nativeProperty) ? nativeProperty : source[key];
 
-	    if (USE_NATIVE && typeof targetProperty == typeof sourceProperty) continue;
+	    if (!FORCED && !PROTO && typeof targetProperty == typeof sourceProperty) continue;
 
 	    // bind methods to global for calling from export context
-	    if (options.bind && USE_NATIVE) resultProperty = bind$6(sourceProperty, global$9);
+	    if (options.bind && USE_NATIVE) resultProperty = bind$6(sourceProperty, globalThis$d);
 	    // wrap global constructors for prevent changes in this version
 	    else if (options.wrap && USE_NATIVE) resultProperty = wrapConstructor(sourceProperty);
 	    // make static versions for prototype methods
@@ -5476,54 +5444,54 @@ var bookly = (function ($$O) {
 
 	    // add a flag to not completely full polyfills
 	    if (options.sham || (sourceProperty && sourceProperty.sham) || (targetProperty && targetProperty.sham)) {
-	      createNonEnumerableProperty$6(resultProperty, 'sham', true);
+	      createNonEnumerableProperty$5(resultProperty, 'sham', true);
 	    }
 
-	    createNonEnumerableProperty$6(target, key, resultProperty);
+	    createNonEnumerableProperty$5(target, key, resultProperty);
 
 	    if (PROTO) {
 	      VIRTUAL_PROTOTYPE = TARGET + 'Prototype';
 	      if (!hasOwn$8(path$a, VIRTUAL_PROTOTYPE)) {
-	        createNonEnumerableProperty$6(path$a, VIRTUAL_PROTOTYPE, {});
+	        createNonEnumerableProperty$5(path$a, VIRTUAL_PROTOTYPE, {});
 	      }
 	      // export virtual prototype methods
-	      createNonEnumerableProperty$6(path$a[VIRTUAL_PROTOTYPE], key, sourceProperty);
+	      createNonEnumerableProperty$5(path$a[VIRTUAL_PROTOTYPE], key, sourceProperty);
 	      // export real prototype methods
 	      if (options.real && targetPrototype && (FORCED || !targetPrototype[key])) {
-	        createNonEnumerableProperty$6(targetPrototype, key, sourceProperty);
+	        createNonEnumerableProperty$5(targetPrototype, key, sourceProperty);
 	      }
 	    }
 	  }
 	};
 
-	var classof$b = classofRaw$2;
+	var classof$a = classofRaw$2;
 
 	// `IsArray` abstract operation
 	// https://tc39.es/ecma262/#sec-isarray
 	// eslint-disable-next-line es/no-array-isarray -- safe
 	var isArray$3 = Array.isArray || function isArray(argument) {
-	  return classof$b(argument) == 'Array';
+	  return classof$a(argument) === 'Array';
 	};
 
-	var wellKnownSymbol$d = wellKnownSymbol$f;
+	var wellKnownSymbol$c = wellKnownSymbol$e;
 
-	var TO_STRING_TAG$3 = wellKnownSymbol$d('toStringTag');
+	var TO_STRING_TAG$2 = wellKnownSymbol$c('toStringTag');
 	var test$1 = {};
 
-	test$1[TO_STRING_TAG$3] = 'z';
+	test$1[TO_STRING_TAG$2] = 'z';
 
 	var toStringTagSupport = String(test$1) === '[object z]';
 
 	var TO_STRING_TAG_SUPPORT$2 = toStringTagSupport;
 	var isCallable$7 = isCallable$f;
 	var classofRaw = classofRaw$2;
-	var wellKnownSymbol$c = wellKnownSymbol$f;
+	var wellKnownSymbol$b = wellKnownSymbol$e;
 
-	var TO_STRING_TAG$2 = wellKnownSymbol$c('toStringTag');
+	var TO_STRING_TAG$1 = wellKnownSymbol$b('toStringTag');
 	var $Object$2 = Object;
 
 	// ES3 wrong here
-	var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) == 'Arguments';
+	var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) === 'Arguments';
 
 	// fallback for IE11 Script Access Denied error
 	var tryGet = function (it, key) {
@@ -5533,20 +5501,20 @@ var bookly = (function ($$O) {
 	};
 
 	// getting tag from ES6+ `Object.prototype.toString`
-	var classof$a = TO_STRING_TAG_SUPPORT$2 ? classofRaw : function (it) {
+	var classof$9 = TO_STRING_TAG_SUPPORT$2 ? classofRaw : function (it) {
 	  var O, tag, result;
 	  return it === undefined ? 'Undefined' : it === null ? 'Null'
 	    // @@toStringTag case
-	    : typeof (tag = tryGet(O = $Object$2(it), TO_STRING_TAG$2)) == 'string' ? tag
+	    : typeof (tag = tryGet(O = $Object$2(it), TO_STRING_TAG$1)) == 'string' ? tag
 	    // builtinTag case
 	    : CORRECT_ARGUMENTS ? classofRaw(O)
 	    // ES3 arguments fallback
-	    : (result = classofRaw(O)) == 'Object' && isCallable$7(O.callee) ? 'Arguments' : result;
+	    : (result = classofRaw(O)) === 'Object' && isCallable$7(O.callee) ? 'Arguments' : result;
 	};
 
 	var uncurryThis$g = functionUncurryThis;
 	var isCallable$6 = isCallable$f;
-	var store$1 = sharedStore;
+	var store$1 = sharedStoreExports;
 
 	var functionToString = uncurryThis$g(Function.toString);
 
@@ -5562,21 +5530,20 @@ var bookly = (function ($$O) {
 	var uncurryThis$f = functionUncurryThis;
 	var fails$g = fails$o;
 	var isCallable$5 = isCallable$f;
-	var classof$9 = classof$a;
-	var getBuiltIn$3 = getBuiltIn$5;
+	var classof$8 = classof$9;
+	var getBuiltIn$4 = getBuiltIn$6;
 	var inspectSource = inspectSource$1;
 
 	var noop$1 = function () { /* empty */ };
-	var empty$1 = [];
-	var construct = getBuiltIn$3('Reflect', 'construct');
+	var construct = getBuiltIn$4('Reflect', 'construct');
 	var constructorRegExp = /^\s*(?:class|function)\b/;
 	var exec$1 = uncurryThis$f(constructorRegExp.exec);
-	var INCORRECT_TO_STRING = !constructorRegExp.exec(noop$1);
+	var INCORRECT_TO_STRING = !constructorRegExp.test(noop$1);
 
 	var isConstructorModern = function isConstructor(argument) {
 	  if (!isCallable$5(argument)) return false;
 	  try {
-	    construct(noop$1, empty$1, argument);
+	    construct(noop$1, [], argument);
 	    return true;
 	  } catch (error) {
 	    return false;
@@ -5585,7 +5552,7 @@ var bookly = (function ($$O) {
 
 	var isConstructorLegacy = function isConstructor(argument) {
 	  if (!isCallable$5(argument)) return false;
-	  switch (classof$9(argument)) {
+	  switch (classof$8(argument)) {
 	    case 'AsyncFunction':
 	    case 'GeneratorFunction':
 	    case 'AsyncGeneratorFunction': return false;
@@ -5627,13 +5594,13 @@ var bookly = (function ($$O) {
 
 	// `ToIntegerOrInfinity` abstract operation
 	// https://tc39.es/ecma262/#sec-tointegerorinfinity
-	var toIntegerOrInfinity$3 = function (argument) {
+	var toIntegerOrInfinity$4 = function (argument) {
 	  var number = +argument;
 	  // eslint-disable-next-line no-self-compare -- NaN check
 	  return number !== number || number === 0 ? 0 : trunc(number);
 	};
 
-	var toIntegerOrInfinity$2 = toIntegerOrInfinity$3;
+	var toIntegerOrInfinity$3 = toIntegerOrInfinity$4;
 
 	var max$2 = Math.max;
 	var min$1 = Math.min;
@@ -5641,44 +5608,44 @@ var bookly = (function ($$O) {
 	// Helper for a popular repeating case of the spec:
 	// Let integer be ? ToInteger(index).
 	// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
-	var toAbsoluteIndex$4 = function (index, length) {
-	  var integer = toIntegerOrInfinity$2(index);
+	var toAbsoluteIndex$3 = function (index, length) {
+	  var integer = toIntegerOrInfinity$3(index);
 	  return integer < 0 ? max$2(integer + length, 0) : min$1(integer, length);
 	};
 
-	var toIntegerOrInfinity$1 = toIntegerOrInfinity$3;
+	var toIntegerOrInfinity$2 = toIntegerOrInfinity$4;
 
 	var min = Math.min;
 
 	// `ToLength` abstract operation
 	// https://tc39.es/ecma262/#sec-tolength
 	var toLength$1 = function (argument) {
-	  return argument > 0 ? min(toIntegerOrInfinity$1(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
+	  var len = toIntegerOrInfinity$2(argument);
+	  return len > 0 ? min(len, 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
 	};
 
 	var toLength = toLength$1;
 
 	// `LengthOfArrayLike` abstract operation
 	// https://tc39.es/ecma262/#sec-lengthofarraylike
-	var lengthOfArrayLike$8 = function (obj) {
+	var lengthOfArrayLike$7 = function (obj) {
 	  return toLength(obj.length);
 	};
 
-	var toPropertyKey = toPropertyKey$3;
+	var DESCRIPTORS$9 = descriptors;
 	var definePropertyModule$1 = objectDefineProperty;
 	var createPropertyDescriptor$1 = createPropertyDescriptor$4;
 
-	var createProperty$3 = function (object, key, value) {
-	  var propertyKey = toPropertyKey(key);
-	  if (propertyKey in object) definePropertyModule$1.f(object, propertyKey, createPropertyDescriptor$1(0, value));
-	  else object[propertyKey] = value;
+	var createProperty$2 = function (object, key, value) {
+	  if (DESCRIPTORS$9) definePropertyModule$1.f(object, key, createPropertyDescriptor$1(0, value));
+	  else object[key] = value;
 	};
 
 	var fails$f = fails$o;
-	var wellKnownSymbol$b = wellKnownSymbol$f;
-	var V8_VERSION = engineV8Version;
+	var wellKnownSymbol$a = wellKnownSymbol$e;
+	var V8_VERSION = environmentV8Version;
 
-	var SPECIES$3 = wellKnownSymbol$b('species');
+	var SPECIES$3 = wellKnownSymbol$a('species');
 
 	var arrayMethodHasSpeciesSupport$2 = function (METHOD_NAME) {
 	  // We can't use this feature detection in V8 since it causes
@@ -5698,64 +5665,70 @@ var bookly = (function ($$O) {
 
 	var arraySlice$3 = uncurryThis$e([].slice);
 
-	var $$h = _export;
+	var $$o = _export;
 	var isArray$2 = isArray$3;
 	var isConstructor$2 = isConstructor$3;
 	var isObject$c = isObject$h;
-	var toAbsoluteIndex$3 = toAbsoluteIndex$4;
-	var lengthOfArrayLike$7 = lengthOfArrayLike$8;
+	var toAbsoluteIndex$2 = toAbsoluteIndex$3;
+	var lengthOfArrayLike$6 = lengthOfArrayLike$7;
 	var toIndexedObject$7 = toIndexedObject$9;
-	var createProperty$2 = createProperty$3;
-	var wellKnownSymbol$a = wellKnownSymbol$f;
+	var createProperty$1 = createProperty$2;
+	var wellKnownSymbol$9 = wellKnownSymbol$e;
 	var arrayMethodHasSpeciesSupport$1 = arrayMethodHasSpeciesSupport$2;
 	var nativeSlice = arraySlice$3;
 
 	var HAS_SPECIES_SUPPORT$1 = arrayMethodHasSpeciesSupport$1('slice');
 
-	var SPECIES$2 = wellKnownSymbol$a('species');
-	var $Array$3 = Array;
+	var SPECIES$2 = wellKnownSymbol$9('species');
+	var $Array$2 = Array;
 	var max$1 = Math.max;
 
 	// `Array.prototype.slice` method
 	// https://tc39.es/ecma262/#sec-array.prototype.slice
 	// fallback for not array-like ES3 strings and DOM objects
-	$$h({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$1 }, {
+	$$o({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT$1 }, {
 	  slice: function slice(start, end) {
 	    var O = toIndexedObject$7(this);
-	    var length = lengthOfArrayLike$7(O);
-	    var k = toAbsoluteIndex$3(start, length);
-	    var fin = toAbsoluteIndex$3(end === undefined ? length : end, length);
+	    var length = lengthOfArrayLike$6(O);
+	    var k = toAbsoluteIndex$2(start, length);
+	    var fin = toAbsoluteIndex$2(end === undefined ? length : end, length);
 	    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
 	    var Constructor, result, n;
 	    if (isArray$2(O)) {
 	      Constructor = O.constructor;
 	      // cross-realm fallback
-	      if (isConstructor$2(Constructor) && (Constructor === $Array$3 || isArray$2(Constructor.prototype))) {
+	      if (isConstructor$2(Constructor) && (Constructor === $Array$2 || isArray$2(Constructor.prototype))) {
 	        Constructor = undefined;
 	      } else if (isObject$c(Constructor)) {
 	        Constructor = Constructor[SPECIES$2];
 	        if (Constructor === null) Constructor = undefined;
 	      }
-	      if (Constructor === $Array$3 || Constructor === undefined) {
+	      if (Constructor === $Array$2 || Constructor === undefined) {
 	        return nativeSlice(O, k, fin);
 	      }
 	    }
-	    result = new (Constructor === undefined ? $Array$3 : Constructor)(max$1(fin - k, 0));
-	    for (n = 0; k < fin; k++, n++) if (k in O) createProperty$2(result, n, O[k]);
+	    result = new (Constructor === undefined ? $Array$2 : Constructor)(max$1(fin - k, 0));
+	    for (n = 0; k < fin; k++, n++) if (k in O) createProperty$1(result, n, O[k]);
 	    result.length = n;
 	    return result;
 	  }
 	});
 
+	var globalThis$c = globalThis_1;
 	var path$9 = path$c;
 
-	var entryVirtual$4 = function (CONSTRUCTOR) {
-	  return path$9[CONSTRUCTOR + 'Prototype'];
+	var getBuiltInPrototypeMethod$6 = function (CONSTRUCTOR, METHOD) {
+	  var Namespace = path$9[CONSTRUCTOR + 'Prototype'];
+	  var pureMethod = Namespace && Namespace[METHOD];
+	  if (pureMethod) return pureMethod;
+	  var NativeConstructor = globalThis$c[CONSTRUCTOR];
+	  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
+	  return NativePrototype && NativePrototype[METHOD];
 	};
 
-	var entryVirtual$3 = entryVirtual$4;
+	var getBuiltInPrototypeMethod$5 = getBuiltInPrototypeMethod$6;
 
-	var slice$3 = entryVirtual$3('Array').slice;
+	var slice$3 = getBuiltInPrototypeMethod$5('Array', 'slice');
 
 	var isPrototypeOf$6 = objectIsPrototypeOf;
 	var method$3 = slice$3;
@@ -5778,10 +5751,10 @@ var bookly = (function ($$O) {
 	var isArray$1 = isArray$3;
 	var isConstructor$1 = isConstructor$3;
 	var isObject$b = isObject$h;
-	var wellKnownSymbol$9 = wellKnownSymbol$f;
+	var wellKnownSymbol$8 = wellKnownSymbol$e;
 
-	var SPECIES$1 = wellKnownSymbol$9('species');
-	var $Array$2 = Array;
+	var SPECIES$1 = wellKnownSymbol$8('species');
+	var $Array$1 = Array;
 
 	// a part of `ArraySpeciesCreate` abstract operation
 	// https://tc39.es/ecma262/#sec-arrayspeciescreate
@@ -5790,12 +5763,12 @@ var bookly = (function ($$O) {
 	  if (isArray$1(originalArray)) {
 	    C = originalArray.constructor;
 	    // cross-realm fallback
-	    if (isConstructor$1(C) && (C === $Array$2 || isArray$1(C.prototype))) C = undefined;
+	    if (isConstructor$1(C) && (C === $Array$1 || isArray$1(C.prototype))) C = undefined;
 	    else if (isObject$b(C)) {
 	      C = C[SPECIES$1];
 	      if (C === null) C = undefined;
 	    }
-	  } return C === undefined ? $Array$2 : C;
+	  } return C === undefined ? $Array$1 : C;
 	};
 
 	var arraySpeciesConstructor = arraySpeciesConstructor$1;
@@ -5810,25 +5783,25 @@ var bookly = (function ($$O) {
 	var uncurryThis$d = functionUncurryThis;
 	var IndexedObject = indexedObject;
 	var toObject$4 = toObject$6;
-	var lengthOfArrayLike$6 = lengthOfArrayLike$8;
+	var lengthOfArrayLike$5 = lengthOfArrayLike$7;
 	var arraySpeciesCreate = arraySpeciesCreate$1;
 
 	var push$4 = uncurryThis$d([].push);
 
 	// `Array.prototype.{ forEach, map, filter, some, every, find, findIndex, filterReject }` methods implementation
 	var createMethod$4 = function (TYPE) {
-	  var IS_MAP = TYPE == 1;
-	  var IS_FILTER = TYPE == 2;
-	  var IS_SOME = TYPE == 3;
-	  var IS_EVERY = TYPE == 4;
-	  var IS_FIND_INDEX = TYPE == 6;
-	  var IS_FILTER_REJECT = TYPE == 7;
-	  var NO_HOLES = TYPE == 5 || IS_FIND_INDEX;
+	  var IS_MAP = TYPE === 1;
+	  var IS_FILTER = TYPE === 2;
+	  var IS_SOME = TYPE === 3;
+	  var IS_EVERY = TYPE === 4;
+	  var IS_FIND_INDEX = TYPE === 6;
+	  var IS_FILTER_REJECT = TYPE === 7;
+	  var NO_HOLES = TYPE === 5 || IS_FIND_INDEX;
 	  return function ($this, callbackfn, that, specificCreate) {
 	    var O = toObject$4($this);
 	    var self = IndexedObject(O);
+	    var length = lengthOfArrayLike$5(self);
 	    var boundFunction = bind$5(callbackfn, that);
-	    var length = lengthOfArrayLike$6(self);
 	    var index = 0;
 	    var create = specificCreate || arraySpeciesCreate;
 	    var target = IS_MAP ? create($this, length) : IS_FILTER || IS_FILTER_REJECT ? create($this, 0) : undefined;
@@ -5857,30 +5830,11 @@ var bookly = (function ($$O) {
 	  // `Array.prototype.forEach` method
 	  // https://tc39.es/ecma262/#sec-array.prototype.foreach
 	  forEach: createMethod$4(0),
-	  // `Array.prototype.map` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.map
-	  map: createMethod$4(1),
 	  // `Array.prototype.filter` method
 	  // https://tc39.es/ecma262/#sec-array.prototype.filter
-	  filter: createMethod$4(2),
-	  // `Array.prototype.some` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.some
-	  some: createMethod$4(3),
-	  // `Array.prototype.every` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.every
-	  every: createMethod$4(4),
-	  // `Array.prototype.find` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.find
-	  find: createMethod$4(5),
-	  // `Array.prototype.findIndex` method
-	  // https://tc39.es/ecma262/#sec-array.prototype.findIndex
-	  findIndex: createMethod$4(6),
-	  // `Array.prototype.filterReject` method
-	  // https://github.com/tc39/proposal-array-filtering
-	  filterReject: createMethod$4(7)
-	};
+	  filter: createMethod$4(2)};
 
-	var $$g = _export;
+	var $$n = _export;
 	var $filter = arrayIteration.filter;
 	var arrayMethodHasSpeciesSupport = arrayMethodHasSpeciesSupport$2;
 
@@ -5889,15 +5843,15 @@ var bookly = (function ($$O) {
 	// `Array.prototype.filter` method
 	// https://tc39.es/ecma262/#sec-array.prototype.filter
 	// with adding support of @@species
-	$$g({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+	$$n({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 	  filter: function filter(callbackfn /* , thisArg */) {
 	    return $filter(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var entryVirtual$2 = entryVirtual$4;
+	var getBuiltInPrototypeMethod$4 = getBuiltInPrototypeMethod$6;
 
-	var filter$3 = entryVirtual$2('Array').filter;
+	var filter$3 = getBuiltInPrototypeMethod$4('Array', 'filter');
 
 	var isPrototypeOf$5 = objectIsPrototypeOf;
 	var method$2 = filter$3;
@@ -5917,12 +5871,12 @@ var bookly = (function ($$O) {
 
 	var _filterInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(filter);
 
-	var classof$8 = classof$a;
+	var classof$7 = classof$9;
 
 	var $String = String;
 
 	var toString$7 = function (argument) {
-	  if (classof$8(argument) === 'Symbol') throw TypeError('Cannot convert a Symbol value to a string');
+	  if (classof$7(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
 	  return $String(argument);
 	};
 
@@ -5950,26 +5904,20 @@ var bookly = (function ($$O) {
 	};
 
 	var stringTrim = {
-	  // `String.prototype.{ trimLeft, trimStart }` methods
-	  // https://tc39.es/ecma262/#sec-string.prototype.trimstart
-	  start: createMethod$3(1),
-	  // `String.prototype.{ trimRight, trimEnd }` methods
-	  // https://tc39.es/ecma262/#sec-string.prototype.trimend
-	  end: createMethod$3(2),
 	  // `String.prototype.trim` method
 	  // https://tc39.es/ecma262/#sec-string.prototype.trim
 	  trim: createMethod$3(3)
 	};
 
-	var global$8 = global$h;
+	var globalThis$b = globalThis_1;
 	var fails$e = fails$o;
 	var uncurryThis$b = functionUncurryThis;
 	var toString$5 = toString$7;
 	var trim = stringTrim.trim;
 	var whitespaces = whitespaces$2;
 
-	var $parseInt$1 = global$8.parseInt;
-	var Symbol$1 = global$8.Symbol;
+	var $parseInt$1 = globalThis$b.parseInt;
+	var Symbol$1 = globalThis$b.Symbol;
 	var ITERATOR$4 = Symbol$1 && Symbol$1.iterator;
 	var hex = /^[+-]?0x/i;
 	var exec = uncurryThis$b(hex.exec);
@@ -5984,12 +5932,12 @@ var bookly = (function ($$O) {
 	  return $parseInt$1(S, (radix >>> 0) || (exec(hex, S) ? 16 : 10));
 	} : $parseInt$1;
 
-	var $$f = _export;
+	var $$m = _export;
 	var $parseInt = numberParseInt;
 
 	// `parseInt` method
 	// https://tc39.es/ecma262/#sec-parseint-string-radix
-	$$f({ global: true, forced: parseInt != $parseInt }, {
+	$$m({ global: true, forced: parseInt !== $parseInt }, {
 	  parseInt: $parseInt
 	});
 
@@ -6006,22 +5954,23 @@ var bookly = (function ($$O) {
 	var _parseInt$1 = /*@__PURE__*/getDefaultExportFromCjs(_parseInt);
 
 	var toIndexedObject$6 = toIndexedObject$9;
-	var toAbsoluteIndex$2 = toAbsoluteIndex$4;
-	var lengthOfArrayLike$5 = lengthOfArrayLike$8;
+	var toAbsoluteIndex$1 = toAbsoluteIndex$3;
+	var lengthOfArrayLike$4 = lengthOfArrayLike$7;
 
 	// `Array.prototype.{ indexOf, includes }` methods implementation
 	var createMethod$2 = function (IS_INCLUDES) {
 	  return function ($this, el, fromIndex) {
 	    var O = toIndexedObject$6($this);
-	    var length = lengthOfArrayLike$5(O);
-	    var index = toAbsoluteIndex$2(fromIndex, length);
+	    var length = lengthOfArrayLike$4(O);
+	    if (length === 0) return !IS_INCLUDES && -1;
+	    var index = toAbsoluteIndex$1(fromIndex, length);
 	    var value;
 	    // Array#includes uses SameValueZero equality algorithm
 	    // eslint-disable-next-line no-self-compare -- NaN check
-	    if (IS_INCLUDES && el != el) while (length > index) {
+	    if (IS_INCLUDES && el !== el) while (length > index) {
 	      value = O[index++];
 	      // eslint-disable-next-line no-self-compare -- NaN check
-	      if (value != value) return true;
+	      if (value !== value) return true;
 	    // Array#indexOf ignores holes, Array#includes - not
 	    } else for (;length > index; index++) {
 	      if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
@@ -6038,7 +5987,7 @@ var bookly = (function ($$O) {
 	  indexOf: createMethod$2(false)
 	};
 
-	var $$e = _export;
+	var $$l = _export;
 	var $includes = arrayIncludes.includes;
 	var fails$d = fails$o;
 
@@ -6050,42 +5999,42 @@ var bookly = (function ($$O) {
 
 	// `Array.prototype.includes` method
 	// https://tc39.es/ecma262/#sec-array.prototype.includes
-	$$e({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE }, {
+	$$l({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE }, {
 	  includes: function includes(el /* , fromIndex = 0 */) {
 	    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
 
-	var entryVirtual$1 = entryVirtual$4;
+	var getBuiltInPrototypeMethod$3 = getBuiltInPrototypeMethod$6;
 
-	var includes$4 = entryVirtual$1('Array').includes;
+	var includes$4 = getBuiltInPrototypeMethod$3('Array', 'includes');
 
 	var isObject$a = isObject$h;
-	var classof$7 = classofRaw$2;
-	var wellKnownSymbol$8 = wellKnownSymbol$f;
+	var classof$6 = classofRaw$2;
+	var wellKnownSymbol$7 = wellKnownSymbol$e;
 
-	var MATCH$1 = wellKnownSymbol$8('match');
+	var MATCH$1 = wellKnownSymbol$7('match');
 
 	// `IsRegExp` abstract operation
 	// https://tc39.es/ecma262/#sec-isregexp
 	var isRegexp = function (it) {
 	  var isRegExp;
-	  return isObject$a(it) && ((isRegExp = it[MATCH$1]) !== undefined ? !!isRegExp : classof$7(it) == 'RegExp');
+	  return isObject$a(it) && ((isRegExp = it[MATCH$1]) !== undefined ? !!isRegExp : classof$6(it) === 'RegExp');
 	};
 
 	var isRegExp = isRegexp;
 
-	var $TypeError$3 = TypeError;
+	var $TypeError$5 = TypeError;
 
 	var notARegexp = function (it) {
 	  if (isRegExp(it)) {
-	    throw $TypeError$3("The method doesn't accept regular expressions");
+	    throw new $TypeError$5("The method doesn't accept regular expressions");
 	  } return it;
 	};
 
-	var wellKnownSymbol$7 = wellKnownSymbol$f;
+	var wellKnownSymbol$6 = wellKnownSymbol$e;
 
-	var MATCH = wellKnownSymbol$7('match');
+	var MATCH = wellKnownSymbol$6('match');
 
 	var correctIsRegexpLogic = function (METHOD_NAME) {
 	  var regexp = /./;
@@ -6099,7 +6048,7 @@ var bookly = (function ($$O) {
 	  } return false;
 	};
 
-	var $$d = _export;
+	var $$k = _export;
 	var uncurryThis$a = functionUncurryThis;
 	var notARegExp = notARegexp;
 	var requireObjectCoercible$2 = requireObjectCoercible$6;
@@ -6110,7 +6059,7 @@ var bookly = (function ($$O) {
 
 	// `String.prototype.includes` method
 	// https://tc39.es/ecma262/#sec-string.prototype.includes
-	$$d({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
+	$$k({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
 	  includes: function includes(searchString /* , position = 0 */) {
 	    return !!~stringIndexOf(
 	      toString$4(requireObjectCoercible$2(this)),
@@ -6120,9 +6069,9 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var entryVirtual = entryVirtual$4;
+	var getBuiltInPrototypeMethod$2 = getBuiltInPrototypeMethod$6;
 
-	var includes$3 = entryVirtual('String').includes;
+	var includes$3 = getBuiltInPrototypeMethod$2('String', 'includes');
 
 	var isPrototypeOf$4 = objectIsPrototypeOf;
 	var arrayMethod = includes$4;
@@ -6149,14 +6098,14 @@ var bookly = (function ($$O) {
 
 	var iterators = {};
 
-	var global$7 = global$h;
+	var globalThis$a = globalThis_1;
 	var isCallable$4 = isCallable$f;
 
-	var WeakMap$1 = global$7.WeakMap;
+	var WeakMap$1 = globalThis$a.WeakMap;
 
 	var weakMapBasicDetection = isCallable$4(WeakMap$1) && /native code/.test(String(WeakMap$1));
 
-	var shared$1 = sharedExports;
+	var shared$1 = shared$3;
 	var uid$2 = uid$4;
 
 	var keys = shared$1('keys');
@@ -6168,28 +6117,28 @@ var bookly = (function ($$O) {
 	var hiddenKeys$6 = {};
 
 	var NATIVE_WEAK_MAP$1 = weakMapBasicDetection;
-	var global$6 = global$h;
+	var globalThis$9 = globalThis_1;
 	var isObject$9 = isObject$h;
-	var createNonEnumerableProperty$5 = createNonEnumerableProperty$7;
+	var createNonEnumerableProperty$4 = createNonEnumerableProperty$6;
 	var hasOwn$7 = hasOwnProperty_1;
-	var shared = sharedStore;
+	var shared = sharedStoreExports;
 	var sharedKey$2 = sharedKey$3;
 	var hiddenKeys$5 = hiddenKeys$6;
 
 	var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
-	var TypeError$1 = global$6.TypeError;
-	var WeakMap = global$6.WeakMap;
-	var set$7, get$1, has$1;
+	var TypeError$1 = globalThis$9.TypeError;
+	var WeakMap = globalThis$9.WeakMap;
+	var set$7, get$1, has$6;
 
 	var enforce = function (it) {
-	  return has$1(it) ? get$1(it) : set$7(it, {});
+	  return has$6(it) ? get$1(it) : set$7(it, {});
 	};
 
 	var getterFor = function (TYPE) {
 	  return function (it) {
 	    var state;
 	    if (!isObject$9(it) || (state = get$1(it)).type !== TYPE) {
-	      throw TypeError$1('Incompatible receiver, ' + TYPE + ' required');
+	      throw new TypeError$1('Incompatible receiver, ' + TYPE + ' required');
 	    } return state;
 	  };
 	};
@@ -6202,7 +6151,7 @@ var bookly = (function ($$O) {
 	  store.set = store.set;
 	  /* eslint-enable no-self-assign -- prototype methods protection */
 	  set$7 = function (it, metadata) {
-	    if (store.has(it)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (store.has(it)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
 	    store.set(it, metadata);
 	    return metadata;
@@ -6210,22 +6159,22 @@ var bookly = (function ($$O) {
 	  get$1 = function (it) {
 	    return store.get(it) || {};
 	  };
-	  has$1 = function (it) {
+	  has$6 = function (it) {
 	    return store.has(it);
 	  };
 	} else {
 	  var STATE = sharedKey$2('state');
 	  hiddenKeys$5[STATE] = true;
 	  set$7 = function (it, metadata) {
-	    if (hasOwn$7(it, STATE)) throw TypeError$1(OBJECT_ALREADY_INITIALIZED);
+	    if (hasOwn$7(it, STATE)) throw new TypeError$1(OBJECT_ALREADY_INITIALIZED);
 	    metadata.facade = it;
-	    createNonEnumerableProperty$5(it, STATE, metadata);
+	    createNonEnumerableProperty$4(it, STATE, metadata);
 	    return metadata;
 	  };
 	  get$1 = function (it) {
 	    return hasOwn$7(it, STATE) ? it[STATE] : {};
 	  };
-	  has$1 = function (it) {
+	  has$6 = function (it) {
 	    return hasOwn$7(it, STATE);
 	  };
 	}
@@ -6233,7 +6182,7 @@ var bookly = (function ($$O) {
 	var internalState = {
 	  set: set$7,
 	  get: get$1,
-	  has: has$1,
+	  has: has$6,
 	  enforce: enforce,
 	  getterFor: getterFor
 	};
@@ -6251,7 +6200,6 @@ var bookly = (function ($$O) {
 	var CONFIGURABLE = EXISTS && (!DESCRIPTORS$8 || (DESCRIPTORS$8 && getDescriptor(FunctionPrototype, 'name').configurable));
 
 	var functionName = {
-	  EXISTS: EXISTS,
 	  PROPER: PROPER,
 	  CONFIGURABLE: CONFIGURABLE
 	};
@@ -6303,7 +6251,7 @@ var bookly = (function ($$O) {
 	var DESCRIPTORS$7 = descriptors;
 	var V8_PROTOTYPE_DEFINE_BUG = v8PrototypeDefineBug;
 	var definePropertyModule = objectDefineProperty;
-	var anObject$6 = anObject$8;
+	var anObject$7 = anObject$9;
 	var toIndexedObject$4 = toIndexedObject$9;
 	var objectKeys$1 = objectKeys$2;
 
@@ -6311,7 +6259,7 @@ var bookly = (function ($$O) {
 	// https://tc39.es/ecma262/#sec-object.defineproperties
 	// eslint-disable-next-line es/no-object-defineproperties -- safe
 	objectDefineProperties.f = DESCRIPTORS$7 && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function defineProperties(O, Properties) {
-	  anObject$6(O);
+	  anObject$7(O);
 	  var props = toIndexedObject$4(Properties);
 	  var keys = objectKeys$1(Properties);
 	  var length = keys.length;
@@ -6321,13 +6269,12 @@ var bookly = (function ($$O) {
 	  return O;
 	};
 
-	var getBuiltIn$2 = getBuiltIn$5;
+	var getBuiltIn$3 = getBuiltIn$6;
 
-	var html$1 = getBuiltIn$2('document', 'documentElement');
+	var html$1 = getBuiltIn$3('document', 'documentElement');
 
 	/* global ActiveXObject -- old IE, WSH */
-
-	var anObject$5 = anObject$8;
+	var anObject$6 = anObject$9;
 	var definePropertiesModule = objectDefineProperties;
 	var enumBugKeys$1 = enumBugKeys$3;
 	var hiddenKeys$3 = hiddenKeys$6;
@@ -6352,7 +6299,8 @@ var bookly = (function ($$O) {
 	  activeXDocument.write(scriptTag(''));
 	  activeXDocument.close();
 	  var temp = activeXDocument.parentWindow.Object;
-	  activeXDocument = null; // avoid memory leak
+	  // eslint-disable-next-line no-useless-assignment -- avoid memory leak
+	  activeXDocument = null;
 	  return temp;
 	};
 
@@ -6401,7 +6349,7 @@ var bookly = (function ($$O) {
 	var objectCreate = Object.create || function create(O, Properties) {
 	  var result;
 	  if (O !== null) {
-	    EmptyConstructor[PROTOTYPE] = anObject$5(O);
+	    EmptyConstructor[PROTOTYPE] = anObject$6(O);
 	    result = new EmptyConstructor();
 	    EmptyConstructor[PROTOTYPE] = null;
 	    // add "__proto__" for Object.getPrototypeOf polyfill
@@ -6441,11 +6389,11 @@ var bookly = (function ($$O) {
 	  } return object instanceof $Object$1 ? ObjectPrototype : null;
 	};
 
-	var createNonEnumerableProperty$4 = createNonEnumerableProperty$7;
+	var createNonEnumerableProperty$3 = createNonEnumerableProperty$6;
 
 	var defineBuiltIn$4 = function (target, key, value, options) {
 	  if (options && options.enumerable) target[key] = value;
-	  else createNonEnumerableProperty$4(target, key, value);
+	  else createNonEnumerableProperty$3(target, key, value);
 	  return target;
 	};
 
@@ -6455,9 +6403,9 @@ var bookly = (function ($$O) {
 	var create$7 = objectCreate;
 	var getPrototypeOf$1 = objectGetPrototypeOf$1;
 	var defineBuiltIn$3 = defineBuiltIn$4;
-	var wellKnownSymbol$6 = wellKnownSymbol$f;
+	var wellKnownSymbol$5 = wellKnownSymbol$e;
 
-	var ITERATOR$3 = wellKnownSymbol$6('iterator');
+	var ITERATOR$3 = wellKnownSymbol$5('iterator');
 	var BUGGY_SAFARI_ITERATORS$1 = false;
 
 	// `%IteratorPrototype%` object
@@ -6498,31 +6446,31 @@ var bookly = (function ($$O) {
 	};
 
 	var TO_STRING_TAG_SUPPORT$1 = toStringTagSupport;
-	var classof$6 = classof$a;
+	var classof$5 = classof$9;
 
 	// `Object.prototype.toString` method implementation
 	// https://tc39.es/ecma262/#sec-object.prototype.tostring
 	var objectToString = TO_STRING_TAG_SUPPORT$1 ? {}.toString : function toString() {
-	  return '[object ' + classof$6(this) + ']';
+	  return '[object ' + classof$5(this) + ']';
 	};
 
 	var TO_STRING_TAG_SUPPORT = toStringTagSupport;
 	var defineProperty$5 = objectDefineProperty.f;
-	var createNonEnumerableProperty$3 = createNonEnumerableProperty$7;
+	var createNonEnumerableProperty$2 = createNonEnumerableProperty$6;
 	var hasOwn$3 = hasOwnProperty_1;
 	var toString$3 = objectToString;
-	var wellKnownSymbol$5 = wellKnownSymbol$f;
+	var wellKnownSymbol$4 = wellKnownSymbol$e;
 
-	var TO_STRING_TAG$1 = wellKnownSymbol$5('toStringTag');
+	var TO_STRING_TAG = wellKnownSymbol$4('toStringTag');
 
-	var setToStringTag$4 = function (it, TAG, STATIC, SET_METHOD) {
-	  if (it) {
-	    var target = STATIC ? it : it.prototype;
-	    if (!hasOwn$3(target, TO_STRING_TAG$1)) {
-	      defineProperty$5(target, TO_STRING_TAG$1, { configurable: true, value: TAG });
+	var setToStringTag$5 = function (it, TAG, STATIC, SET_METHOD) {
+	  var target = STATIC ? it : it && it.prototype;
+	  if (target) {
+	    if (!hasOwn$3(target, TO_STRING_TAG)) {
+	      defineProperty$5(target, TO_STRING_TAG, { configurable: true, value: TAG });
 	    }
 	    if (SET_METHOD && !TO_STRING_TAG_SUPPORT) {
-	      createNonEnumerableProperty$3(target, 'toString', toString$3);
+	      createNonEnumerableProperty$2(target, 'toString', toString$3);
 	    }
 	  }
 	};
@@ -6530,7 +6478,7 @@ var bookly = (function ($$O) {
 	var IteratorPrototype = iteratorsCore.IteratorPrototype;
 	var create$6 = objectCreate;
 	var createPropertyDescriptor = createPropertyDescriptor$4;
-	var setToStringTag$3 = setToStringTag$4;
+	var setToStringTag$4 = setToStringTag$5;
 	var Iterators$5 = iterators;
 
 	var returnThis$1 = function () { return this; };
@@ -6538,19 +6486,19 @@ var bookly = (function ($$O) {
 	var iteratorCreateConstructor = function (IteratorConstructor, NAME, next, ENUMERABLE_NEXT) {
 	  var TO_STRING_TAG = NAME + ' Iterator';
 	  IteratorConstructor.prototype = create$6(IteratorPrototype, { next: createPropertyDescriptor(+!ENUMERABLE_NEXT, next) });
-	  setToStringTag$3(IteratorConstructor, TO_STRING_TAG, false, true);
+	  setToStringTag$4(IteratorConstructor, TO_STRING_TAG, false, true);
 	  Iterators$5[TO_STRING_TAG] = returnThis$1;
 	  return IteratorConstructor;
 	};
 
-	var $$c = _export;
-	var call$4 = functionCall;
+	var $$j = _export;
+	var call$6 = functionCall;
 	var FunctionName = functionName;
 	var createIteratorConstructor = iteratorCreateConstructor;
 	var getPrototypeOf = objectGetPrototypeOf$1;
-	var setToStringTag$2 = setToStringTag$4;
+	var setToStringTag$3 = setToStringTag$5;
 	var defineBuiltIn$2 = defineBuiltIn$4;
-	var wellKnownSymbol$4 = wellKnownSymbol$f;
+	var wellKnownSymbol$3 = wellKnownSymbol$e;
 	var Iterators$4 = iterators;
 	var IteratorsCore = iteratorsCore;
 
@@ -6558,7 +6506,7 @@ var bookly = (function ($$O) {
 	FunctionName.CONFIGURABLE;
 	IteratorsCore.IteratorPrototype;
 	var BUGGY_SAFARI_ITERATORS = IteratorsCore.BUGGY_SAFARI_ITERATORS;
-	var ITERATOR$2 = wellKnownSymbol$4('iterator');
+	var ITERATOR$2 = wellKnownSymbol$3('iterator');
 	var KEYS = 'keys';
 	var VALUES = 'values';
 	var ENTRIES = 'entries';
@@ -6570,12 +6518,15 @@ var bookly = (function ($$O) {
 
 	  var getIterationMethod = function (KIND) {
 	    if (KIND === DEFAULT && defaultIterator) return defaultIterator;
-	    if (!BUGGY_SAFARI_ITERATORS && KIND in IterablePrototype) return IterablePrototype[KIND];
+	    if (!BUGGY_SAFARI_ITERATORS && KIND && KIND in IterablePrototype) return IterablePrototype[KIND];
+
 	    switch (KIND) {
 	      case KEYS: return function keys() { return new IteratorConstructor(this, KIND); };
 	      case VALUES: return function values() { return new IteratorConstructor(this, KIND); };
 	      case ENTRIES: return function entries() { return new IteratorConstructor(this, KIND); };
-	    } return function () { return new IteratorConstructor(this); };
+	    }
+
+	    return function () { return new IteratorConstructor(this); };
 	  };
 
 	  var TO_STRING_TAG = NAME + ' Iterator';
@@ -6585,7 +6536,7 @@ var bookly = (function ($$O) {
 	    || IterablePrototype['@@iterator']
 	    || DEFAULT && IterablePrototype[DEFAULT];
 	  var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
-	  var anyNativeIterator = NAME == 'Array' ? IterablePrototype.entries || nativeIterator : nativeIterator;
+	  var anyNativeIterator = NAME === 'Array' ? IterablePrototype.entries || nativeIterator : nativeIterator;
 	  var CurrentIteratorPrototype, methods, KEY;
 
 	  // fix native
@@ -6593,16 +6544,16 @@ var bookly = (function ($$O) {
 	    CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
 	    if (CurrentIteratorPrototype !== Object.prototype && CurrentIteratorPrototype.next) {
 	      // Set @@toStringTag to native iterators
-	      setToStringTag$2(CurrentIteratorPrototype, TO_STRING_TAG, true, true);
+	      setToStringTag$3(CurrentIteratorPrototype, TO_STRING_TAG, true, true);
 	      Iterators$4[TO_STRING_TAG] = returnThis;
 	    }
 	  }
 
 	  // fix Array.prototype.{ values, @@iterator }.name in V8 / FF
-	  if (PROPER_FUNCTION_NAME && DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
+	  if (PROPER_FUNCTION_NAME && DEFAULT === VALUES && nativeIterator && nativeIterator.name !== VALUES) {
 	    {
 	      INCORRECT_VALUES_NAME = true;
-	      defaultIterator = function values() { return call$4(nativeIterator, this); };
+	      defaultIterator = function values() { return call$6(nativeIterator, this); };
 	    }
 	  }
 
@@ -6617,12 +6568,12 @@ var bookly = (function ($$O) {
 	      if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
 	        defineBuiltIn$2(IterablePrototype, KEY, methods[KEY]);
 	      }
-	    } else $$c({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
+	    } else $$j({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods);
 	  }
 
 	  // define iterator
 	  if ((FORCED) && IterablePrototype[ITERATOR$2] !== defaultIterator) {
-	    defineBuiltIn$2(IterablePrototype, ITERATOR$2, defaultIterator, { name: DEFAULT });
+	    defineBuiltIn$2(IterablePrototype, ITERATOR$2, defaultIterator, { });
 	  }
 	  Iterators$4[NAME] = defaultIterator;
 
@@ -6668,15 +6619,15 @@ var bookly = (function ($$O) {
 	}, function () {
 	  var state = getInternalState$1(this);
 	  var target = state.target;
-	  var kind = state.kind;
 	  var index = state.index++;
 	  if (!target || index >= target.length) {
-	    state.target = undefined;
+	    state.target = null;
 	    return createIterResultObject$3(undefined, true);
 	  }
-	  if (kind == 'keys') return createIterResultObject$3(index, false);
-	  if (kind == 'values') return createIterResultObject$3(target[index], false);
-	  return createIterResultObject$3([index, target[index]], false);
+	  switch (state.kind) {
+	    case 'keys': return createIterResultObject$3(index, false);
+	    case 'values': return createIterResultObject$3(target[index], false);
+	  } return createIterResultObject$3([index, target[index]], false);
 	}, 'values');
 
 	// argumentsList[@@iterator] is %ArrayProto_values%
@@ -6702,29 +6653,11 @@ var bookly = (function ($$O) {
 
 	var objectGetOwnPropertyNamesExternal$1 = {};
 
-	var toAbsoluteIndex$1 = toAbsoluteIndex$4;
-	var lengthOfArrayLike$4 = lengthOfArrayLike$8;
-	var createProperty$1 = createProperty$3;
-
-	var $Array$1 = Array;
-	var max = Math.max;
-
-	var arraySliceSimple = function (O, start, end) {
-	  var length = lengthOfArrayLike$4(O);
-	  var k = toAbsoluteIndex$1(start, length);
-	  var fin = toAbsoluteIndex$1(end === undefined ? length : end, length);
-	  var result = $Array$1(max(fin - k, 0));
-	  for (var n = 0; k < fin; k++, n++) createProperty$1(result, n, O[k]);
-	  result.length = n;
-	  return result;
-	};
-
 	/* eslint-disable es/no-object-getownpropertynames -- safe */
-
-	var classof$5 = classofRaw$2;
+	var classof$4 = classofRaw$2;
 	var toIndexedObject$2 = toIndexedObject$9;
 	var $getOwnPropertyNames$1 = objectGetOwnPropertyNames.f;
-	var arraySlice$2 = arraySliceSimple;
+	var arraySlice$2 = arraySlice$3;
 
 	var windowNames$1 = typeof window == 'object' && window && Object.getOwnPropertyNames
 	  ? Object.getOwnPropertyNames(window) : [];
@@ -6739,7 +6672,7 @@ var bookly = (function ($$O) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 	objectGetOwnPropertyNamesExternal$1.f = function getOwnPropertyNames(it) {
-	  return windowNames$1 && classof$5(it) == 'Window'
+	  return windowNames$1 && classof$4(it) === 'Window'
 	    ? getWindowNames$1(it)
 	    : $getOwnPropertyNames$1(toIndexedObject$2(it));
 	};
@@ -6757,7 +6690,7 @@ var bookly = (function ($$O) {
 
 	var fails$9 = fails$o;
 	var isObject$7 = isObject$h;
-	var classof$4 = classofRaw$2;
+	var classof$3 = classofRaw$2;
 	var ARRAY_BUFFER_NON_EXTENSIBLE$1 = arrayBufferNonExtensible$1;
 
 	// eslint-disable-next-line es/no-object-isextensible -- safe
@@ -6768,7 +6701,7 @@ var bookly = (function ($$O) {
 	// https://tc39.es/ecma262/#sec-object.isextensible
 	var objectIsExtensible$1 = (FAILS_ON_PRIMITIVES$1 || ARRAY_BUFFER_NON_EXTENSIBLE$1) ? function isExtensible(it) {
 	  if (!isObject$7(it)) return false;
-	  if (ARRAY_BUFFER_NON_EXTENSIBLE$1 && classof$4(it) == 'ArrayBuffer') return false;
+	  if (ARRAY_BUFFER_NON_EXTENSIBLE$1 && classof$3(it) === 'ArrayBuffer') return false;
 	  return $isExtensible$1 ? $isExtensible$1(it) : true;
 	} : $isExtensible$1;
 
@@ -6779,7 +6712,7 @@ var bookly = (function ($$O) {
 	  return Object.isExtensible(Object.preventExtensions({}));
 	});
 
-	var $$b = _export;
+	var $$i = _export;
 	var uncurryThis$8 = functionUncurryThis;
 	var hiddenKeys$1 = hiddenKeys$6;
 	var isObject$6 = isObject$h;
@@ -6854,7 +6787,7 @@ var bookly = (function ($$O) {
 	      } return result;
 	    };
 
-	    $$b({ target: 'Object', stat: true, forced: true }, {
+	    $$i({ target: 'Object', stat: true, forced: true }, {
 	      getOwnPropertyNames: getOwnPropertyNamesExternalModule$1.f
 	    });
 	  }
@@ -6871,10 +6804,10 @@ var bookly = (function ($$O) {
 
 	var internalMetadataExports$1 = internalMetadata$1.exports;
 
-	var wellKnownSymbol$3 = wellKnownSymbol$f;
+	var wellKnownSymbol$2 = wellKnownSymbol$e;
 	var Iterators$2 = iterators;
 
-	var ITERATOR$1 = wellKnownSymbol$3('iterator');
+	var ITERATOR$1 = wellKnownSymbol$2('iterator');
 	var ArrayPrototype$2 = Array.prototype;
 
 	// check on default Array iterator
@@ -6882,70 +6815,70 @@ var bookly = (function ($$O) {
 	  return it !== undefined && (Iterators$2.Array === it || ArrayPrototype$2[ITERATOR$1] === it);
 	};
 
-	var classof$3 = classof$a;
+	var classof$2 = classof$9;
 	var getMethod$1 = getMethod$3;
-	var isNullOrUndefined$4 = isNullOrUndefined$7;
+	var isNullOrUndefined$5 = isNullOrUndefined$8;
 	var Iterators$1 = iterators;
-	var wellKnownSymbol$2 = wellKnownSymbol$f;
+	var wellKnownSymbol$1 = wellKnownSymbol$e;
 
-	var ITERATOR = wellKnownSymbol$2('iterator');
+	var ITERATOR = wellKnownSymbol$1('iterator');
 
 	var getIteratorMethod$3 = function (it) {
-	  if (!isNullOrUndefined$4(it)) return getMethod$1(it, ITERATOR)
+	  if (!isNullOrUndefined$5(it)) return getMethod$1(it, ITERATOR)
 	    || getMethod$1(it, '@@iterator')
-	    || Iterators$1[classof$3(it)];
+	    || Iterators$1[classof$2(it)];
 	};
 
-	var call$3 = functionCall;
-	var aCallable$2 = aCallable$5;
-	var anObject$4 = anObject$8;
-	var tryToString$1 = tryToString$3;
+	var call$5 = functionCall;
+	var aCallable$3 = aCallable$6;
+	var anObject$5 = anObject$9;
+	var tryToString$2 = tryToString$4;
 	var getIteratorMethod$2 = getIteratorMethod$3;
 
-	var $TypeError$2 = TypeError;
+	var $TypeError$4 = TypeError;
 
 	var getIterator$2 = function (argument, usingIterator) {
 	  var iteratorMethod = arguments.length < 2 ? getIteratorMethod$2(argument) : usingIterator;
-	  if (aCallable$2(iteratorMethod)) return anObject$4(call$3(iteratorMethod, argument));
-	  throw $TypeError$2(tryToString$1(argument) + ' is not iterable');
+	  if (aCallable$3(iteratorMethod)) return anObject$5(call$5(iteratorMethod, argument));
+	  throw new $TypeError$4(tryToString$2(argument) + ' is not iterable');
 	};
 
-	var call$2 = functionCall;
-	var anObject$3 = anObject$8;
+	var call$4 = functionCall;
+	var anObject$4 = anObject$9;
 	var getMethod = getMethod$3;
 
-	var iteratorClose$2 = function (iterator, kind, value) {
+	var iteratorClose$4 = function (iterator, kind, value) {
 	  var innerResult, innerError;
-	  anObject$3(iterator);
+	  anObject$4(iterator);
 	  try {
 	    innerResult = getMethod(iterator, 'return');
 	    if (!innerResult) {
 	      if (kind === 'throw') throw value;
 	      return value;
 	    }
-	    innerResult = call$2(innerResult, iterator);
+	    innerResult = call$4(innerResult, iterator);
 	  } catch (error) {
 	    innerError = true;
 	    innerResult = error;
 	  }
 	  if (kind === 'throw') throw value;
 	  if (innerError) throw innerResult;
-	  anObject$3(innerResult);
+	  anObject$4(innerResult);
 	  return value;
 	};
 
 	var bind$4 = functionBindContext;
-	var call$1 = functionCall;
-	var anObject$2 = anObject$8;
-	var tryToString = tryToString$3;
+	var call$3 = functionCall;
+	var anObject$3 = anObject$9;
+	var tryToString$1 = tryToString$4;
 	var isArrayIteratorMethod$1 = isArrayIteratorMethod$2;
-	var lengthOfArrayLike$3 = lengthOfArrayLike$8;
+	var lengthOfArrayLike$3 = lengthOfArrayLike$7;
 	var isPrototypeOf$3 = objectIsPrototypeOf;
 	var getIterator$1 = getIterator$2;
 	var getIteratorMethod$1 = getIteratorMethod$3;
-	var iteratorClose$1 = iteratorClose$2;
+	var iteratorClose$3 = iteratorClose$4;
 
-	var $TypeError$1 = TypeError;
+	var $TypeError$3 = TypeError;
 
 	var Result = function (stopped, result) {
 	  this.stopped = stopped;
@@ -6954,7 +6887,7 @@ var bookly = (function ($$O) {
 
 	var ResultPrototype = Result.prototype;
 
-	var iterate$6 = function (iterable, unboundFunction, options) {
+	var iterate$8 = function (iterable, unboundFunction, options) {
 	  var that = options && options.that;
 	  var AS_ENTRIES = !!(options && options.AS_ENTRIES);
 	  var IS_RECORD = !!(options && options.IS_RECORD);
@@ -6964,13 +6897,13 @@ var bookly = (function ($$O) {
 	  var iterator, iterFn, index, length, result, next, step;
 
 	  var stop = function (condition) {
-	    if (iterator) iteratorClose$1(iterator, 'normal', condition);
+	    if (iterator) iteratorClose$3(iterator, 'normal', condition);
 	    return new Result(true, condition);
 	  };
 
 	  var callFn = function (value) {
 	    if (AS_ENTRIES) {
-	      anObject$2(value);
+	      anObject$3(value);
 	      return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
 	    } return INTERRUPTED ? fn(value, stop) : fn(value);
 	  };
@@ -6981,7 +6914,7 @@ var bookly = (function ($$O) {
 	    iterator = iterable;
 	  } else {
 	    iterFn = getIteratorMethod$1(iterable);
-	    if (!iterFn) throw $TypeError$1(tryToString(iterable) + ' is not iterable');
+	    if (!iterFn) throw new $TypeError$3(tryToString$1(iterable) + ' is not iterable');
 	    // optimisation for array iterators
 	    if (isArrayIteratorMethod$1(iterFn)) {
 	      for (index = 0, length = lengthOfArrayLike$3(iterable); length > index; index++) {
@@ -6993,11 +6926,11 @@ var bookly = (function ($$O) {
 	  }
 
 	  next = IS_RECORD ? iterable.next : iterator.next;
-	  while (!(step = call$1(next, iterator)).done) {
+	  while (!(step = call$3(next, iterator)).done) {
 	    try {
 	      result = callFn(step.value);
 	    } catch (error) {
-	      iteratorClose$1(iterator, 'throw', error);
+	      iteratorClose$3(iterator, 'throw', error);
 	    }
 	    if (typeof result == 'object' && result && isPrototypeOf$3(ResultPrototype, result)) return result;
 	  } return new Result(false);
@@ -7005,23 +6938,24 @@ var bookly = (function ($$O) {
 
 	var isPrototypeOf$2 = objectIsPrototypeOf;
 
-	var $TypeError = TypeError;
+	var $TypeError$2 = TypeError;
 
 	var anInstance$5 = function (it, Prototype) {
 	  if (isPrototypeOf$2(Prototype, it)) return it;
-	  throw $TypeError('Incorrect invocation');
+	  throw new $TypeError$2('Incorrect invocation');
 	};
 
-	var $$a = _export;
-	var global$5 = global$h;
+	var $$h = _export;
+	var globalThis$8 = globalThis_1;
 	var InternalMetadataModule$2 = internalMetadataExports$1;
 	var fails$7 = fails$o;
-	var createNonEnumerableProperty$2 = createNonEnumerableProperty$7;
-	var iterate$5 = iterate$6;
+	var createNonEnumerableProperty$1 = createNonEnumerableProperty$6;
+	var iterate$7 = iterate$8;
 	var anInstance$4 = anInstance$5;
 	var isCallable$1 = isCallable$f;
 	var isObject$5 = isObject$h;
-	var setToStringTag$1 = setToStringTag$4;
+	var isNullOrUndefined$4 = isNullOrUndefined$8;
+	var setToStringTag$2 = setToStringTag$5;
 	var defineProperty$3 = objectDefineProperty.f;
 	var forEach$1 = arrayIteration.forEach;
 	var DESCRIPTORS$6 = descriptors;
@@ -7034,7 +6968,7 @@ var bookly = (function ($$O) {
 	  var IS_MAP = CONSTRUCTOR_NAME.indexOf('Map') !== -1;
 	  var IS_WEAK = CONSTRUCTOR_NAME.indexOf('Weak') !== -1;
 	  var ADDER = IS_MAP ? 'set' : 'add';
-	  var NativeConstructor = global$5[CONSTRUCTOR_NAME];
+	  var NativeConstructor = globalThis$8[CONSTRUCTOR_NAME];
 	  var NativePrototype = NativeConstructor && NativeConstructor.prototype;
 	  var exported = {};
 	  var Constructor;
@@ -7051,7 +6985,7 @@ var bookly = (function ($$O) {
 	        type: CONSTRUCTOR_NAME,
 	        collection: new NativeConstructor()
 	      });
-	      if (iterable != undefined) iterate$5(iterable, target[ADDER], { that: target, AS_ENTRIES: IS_MAP });
+	      if (!isNullOrUndefined$4(iterable)) iterate$7(iterable, target[ADDER], { that: target, AS_ENTRIES: IS_MAP });
 	    });
 
 	    var Prototype = Constructor.prototype;
@@ -7059,11 +6993,11 @@ var bookly = (function ($$O) {
 	    var getInternalState = internalStateGetterFor$4(CONSTRUCTOR_NAME);
 
 	    forEach$1(['add', 'clear', 'delete', 'forEach', 'get', 'has', 'set', 'keys', 'values', 'entries'], function (KEY) {
-	      var IS_ADDER = KEY == 'add' || KEY == 'set';
-	      if (KEY in NativePrototype && !(IS_WEAK && KEY == 'clear')) {
-	        createNonEnumerableProperty$2(Prototype, KEY, function (a, b) {
+	      var IS_ADDER = KEY === 'add' || KEY === 'set';
+	      if (KEY in NativePrototype && !(IS_WEAK && KEY === 'clear')) {
+	        createNonEnumerableProperty$1(Prototype, KEY, function (a, b) {
 	          var collection = getInternalState(this).collection;
-	          if (!IS_ADDER && IS_WEAK && !isObject$5(a)) return KEY == 'get' ? undefined : false;
+	          if (!IS_ADDER && IS_WEAK && !isObject$5(a)) return KEY === 'get' ? undefined : false;
 	          var result = collection[KEY](a === 0 ? 0 : a, b);
 	          return IS_ADDER ? this : result;
 	        });
@@ -7078,10 +7012,10 @@ var bookly = (function ($$O) {
 	    });
 	  }
 
-	  setToStringTag$1(Constructor, CONSTRUCTOR_NAME, false, true);
+	  setToStringTag$2(Constructor, CONSTRUCTOR_NAME, false, true);
 
 	  exported[CONSTRUCTOR_NAME] = Constructor;
-	  $$a({ global: true, forced: true }, exported);
+	  $$h({ global: true, forced: true }, exported);
 
 	  if (!IS_WEAK) common.setStrong(Constructor, CONSTRUCTOR_NAME, IS_MAP);
 
@@ -7103,15 +7037,15 @@ var bookly = (function ($$O) {
 	  } return target;
 	};
 
-	var getBuiltIn$1 = getBuiltIn$5;
+	var getBuiltIn$2 = getBuiltIn$6;
 	var defineBuiltInAccessor$2 = defineBuiltInAccessor$3;
-	var wellKnownSymbol$1 = wellKnownSymbol$f;
+	var wellKnownSymbol = wellKnownSymbol$e;
 	var DESCRIPTORS$5 = descriptors;
 
-	var SPECIES = wellKnownSymbol$1('species');
+	var SPECIES = wellKnownSymbol('species');
 
 	var setSpecies$2 = function (CONSTRUCTOR_NAME) {
-	  var Constructor = getBuiltIn$1(CONSTRUCTOR_NAME);
+	  var Constructor = getBuiltIn$2(CONSTRUCTOR_NAME);
 
 	  if (DESCRIPTORS$5 && Constructor && !Constructor[SPECIES]) {
 	    defineBuiltInAccessor$2(Constructor, SPECIES, {
@@ -7126,8 +7060,8 @@ var bookly = (function ($$O) {
 	var defineBuiltIns$4 = defineBuiltIns$5;
 	var bind$3 = functionBindContext;
 	var anInstance$3 = anInstance$5;
-	var isNullOrUndefined$3 = isNullOrUndefined$7;
-	var iterate$4 = iterate$6;
+	var isNullOrUndefined$3 = isNullOrUndefined$8;
+	var iterate$6 = iterate$8;
 	var defineIterator$2 = iteratorDefine;
 	var createIterResultObject$2 = createIterResultObject$4;
 	var setSpecies$1 = setSpecies$2;
@@ -7145,12 +7079,12 @@ var bookly = (function ($$O) {
 	      setInternalState$4(that, {
 	        type: CONSTRUCTOR_NAME,
 	        index: create$5(null),
-	        first: undefined,
-	        last: undefined,
+	        first: null,
+	        last: null,
 	        size: 0
 	      });
 	      if (!DESCRIPTORS$4) that.size = 0;
-	      if (!isNullOrUndefined$3(iterable)) iterate$4(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
+	      if (!isNullOrUndefined$3(iterable)) iterate$6(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
 	    });
 
 	    var Prototype = Constructor.prototype;
@@ -7171,7 +7105,7 @@ var bookly = (function ($$O) {
 	          key: key,
 	          value: value,
 	          previous: previous = state.last,
-	          next: undefined,
+	          next: null,
 	          removed: false
 	        };
 	        if (!state.first) state.first = entry;
@@ -7191,7 +7125,7 @@ var bookly = (function ($$O) {
 	      if (index !== 'F') return state.index[index];
 	      // frozen object case
 	      for (entry = state.first; entry; entry = entry.next) {
-	        if (entry.key == key) return entry;
+	        if (entry.key === key) return entry;
 	      }
 	    };
 
@@ -7202,15 +7136,14 @@ var bookly = (function ($$O) {
 	      clear: function clear() {
 	        var that = this;
 	        var state = getInternalState(that);
-	        var data = state.index;
 	        var entry = state.first;
 	        while (entry) {
 	          entry.removed = true;
-	          if (entry.previous) entry.previous = entry.previous.next = undefined;
-	          delete data[entry.index];
+	          if (entry.previous) entry.previous = entry.previous.next = null;
 	          entry = entry.next;
 	        }
-	        state.first = state.last = undefined;
+	        state.first = state.last = null;
+	        state.index = create$5(null);
 	        if (DESCRIPTORS$4) state.size = 0;
 	        else that.size = 0;
 	      },
@@ -7228,8 +7161,8 @@ var bookly = (function ($$O) {
 	          entry.removed = true;
 	          if (prev) prev.next = next;
 	          if (next) next.previous = prev;
-	          if (state.first == entry) state.first = next;
-	          if (state.last == entry) state.last = prev;
+	          if (state.first === entry) state.first = next;
+	          if (state.last === entry) state.last = prev;
 	          if (DESCRIPTORS$4) state.size--;
 	          else that.size--;
 	        } return !!entry;
@@ -7301,7 +7234,7 @@ var bookly = (function ($$O) {
 	        target: iterated,
 	        state: getInternalCollectionState(iterated),
 	        kind: kind,
-	        last: undefined
+	        last: null
 	      });
 	    }, function () {
 	      var state = getInternalIteratorState(this);
@@ -7312,12 +7245,12 @@ var bookly = (function ($$O) {
 	      // get next entry
 	      if (!state.target || !(state.last = entry = entry ? entry.next : state.state.first)) {
 	        // or finish the iteration
-	        state.target = undefined;
+	        state.target = null;
 	        return createIterResultObject$2(undefined, true);
 	      }
 	      // return step by kind
-	      if (kind == 'keys') return createIterResultObject$2(entry.key, false);
-	      if (kind == 'values') return createIterResultObject$2(entry.value, false);
+	      if (kind === 'keys') return createIterResultObject$2(entry.key, false);
+	      if (kind === 'values') return createIterResultObject$2(entry.value, false);
 	      return createIterResultObject$2([entry.key, entry.value], false);
 	    }, IS_MAP ? 'entries' : 'values', !IS_MAP, true);
 
@@ -7337,8 +7270,352 @@ var bookly = (function ($$O) {
 	  return function Set() { return init(this, arguments.length ? arguments[0] : undefined); };
 	}, collectionStrong$3);
 
+	var tryToString = tryToString$4;
+
+	var $TypeError$1 = TypeError;
+
+	// Perform ? RequireInternalSlot(M, [[SetData]])
+	var aSet$7 = function (it) {
+	  if (typeof it == 'object' && 'size' in it && 'has' in it && 'add' in it && 'delete' in it && 'keys' in it) return it;
+	  throw new $TypeError$1(tryToString(it) + ' is not a set');
+	};
+
+	var caller$3 = function (methodName, numArgs) {
+	  return numArgs === 1 ? function (object, arg) {
+	    return object[methodName](arg);
+	  } : function (object, arg1, arg2) {
+	    return object[methodName](arg1, arg2);
+	  };
+	};
+
+	var getBuiltIn$1 = getBuiltIn$6;
+	var caller$2 = caller$3;
+
+	var Set$2 = getBuiltIn$1('Set');
+	Set$2.prototype;
+
+	var setHelpers = {
+	  Set: Set$2,
+	  add: caller$2('add', 1),
+	  has: caller$2('has', 1),
+	  remove: caller$2('delete', 1)};
+
+	var call$2 = functionCall;
+
+	var iterateSimple$7 = function (record, fn, ITERATOR_INSTEAD_OF_RECORD) {
+	  var iterator = ITERATOR_INSTEAD_OF_RECORD ? record : record.iterator;
+	  var next = record.next;
+	  var step, result;
+	  while (!(step = call$2(next, iterator)).done) {
+	    result = fn(step.value);
+	    if (result !== undefined) return result;
+	  }
+	};
+
+	var iterateSimple$6 = iterateSimple$7;
+
+	var setIterate = function (set, fn, interruptible) {
+	  return interruptible ? iterateSimple$6(set.keys(), fn, true) : set.forEach(fn);
+	};
+
+	var SetHelpers$3 = setHelpers;
+	var iterate$5 = setIterate;
+
+	var Set$1 = SetHelpers$3.Set;
+	var add$3 = SetHelpers$3.add;
+
+	var setClone = function (set) {
+	  var result = new Set$1();
+	  iterate$5(set, function (it) {
+	    add$3(result, it);
+	  });
+	  return result;
+	};
+
+	var setSize = function (set) {
+	  return set.size;
+	};
+
+	// `GetIteratorDirect(obj)` abstract operation
+	// https://tc39.es/proposal-iterator-helpers/#sec-getiteratordirect
+	var getIteratorDirect$1 = function (obj) {
+	  return {
+	    iterator: obj,
+	    next: obj.next,
+	    done: false
+	  };
+	};
+
+	var aCallable$2 = aCallable$6;
+	var anObject$2 = anObject$9;
+	var call$1 = functionCall;
+	var toIntegerOrInfinity$1 = toIntegerOrInfinity$4;
+	var getIteratorDirect = getIteratorDirect$1;
+
+	var INVALID_SIZE = 'Invalid size';
+	var $RangeError = RangeError;
+	var $TypeError = TypeError;
+	var max = Math.max;
+
+	var SetRecord = function (set, intSize) {
+	  this.set = set;
+	  this.size = max(intSize, 0);
+	  this.has = aCallable$2(set.has);
+	  this.keys = aCallable$2(set.keys);
+	};
+
+	SetRecord.prototype = {
+	  getIterator: function () {
+	    return getIteratorDirect(anObject$2(call$1(this.keys, this.set)));
+	  },
+	  includes: function (it) {
+	    return call$1(this.has, this.set, it);
+	  }
+	};
+
+	// `GetSetRecord` abstract operation
+	// https://tc39.es/proposal-set-methods/#sec-getsetrecord
+	var getSetRecord$7 = function (obj) {
+	  anObject$2(obj);
+	  var numSize = +obj.size;
+	  // NOTE: If size is undefined, then numSize will be NaN
+	  // eslint-disable-next-line no-self-compare -- NaN check
+	  if (numSize !== numSize) throw new $TypeError(INVALID_SIZE);
+	  var intSize = toIntegerOrInfinity$1(numSize);
+	  if (intSize < 0) throw new $RangeError(INVALID_SIZE);
+	  return new SetRecord(obj, intSize);
+	};
+
+	var aSet$6 = aSet$7;
+	var SetHelpers$2 = setHelpers;
+	var clone$2 = setClone;
+	var size$4 = setSize;
+	var getSetRecord$6 = getSetRecord$7;
+	var iterateSet$2 = setIterate;
+	var iterateSimple$5 = iterateSimple$7;
+
+	var has$5 = SetHelpers$2.has;
+	var remove$1 = SetHelpers$2.remove;
+
+	// `Set.prototype.difference` method
+	// https://github.com/tc39/proposal-set-methods
+	var setDifference = function difference(other) {
+	  var O = aSet$6(this);
+	  var otherRec = getSetRecord$6(other);
+	  var result = clone$2(O);
+	  if (size$4(O) <= otherRec.size) iterateSet$2(O, function (e) {
+	    if (otherRec.includes(e)) remove$1(result, e);
+	  });
+	  else iterateSimple$5(otherRec.getIterator(), function (e) {
+	    if (has$5(O, e)) remove$1(result, e);
+	  });
+	  return result;
+	};
+
+	var $$g = _export;
+	var difference = setDifference;
+
+	var INCORRECT$4 = true;
+
+	// `Set.prototype.difference` method
+	// https://tc39.es/ecma262/#sec-set.prototype.difference
+	$$g({ target: 'Set', proto: true, real: true, forced: INCORRECT$4 }, {
+	  difference: difference
+	});
+
+	var aSet$5 = aSet$7;
+	var SetHelpers$1 = setHelpers;
+	var size$3 = setSize;
+	var getSetRecord$5 = getSetRecord$7;
+	var iterateSet$1 = setIterate;
+	var iterateSimple$4 = iterateSimple$7;
+
+	var Set = SetHelpers$1.Set;
+	var add$2 = SetHelpers$1.add;
+	var has$4 = SetHelpers$1.has;
+
+	// `Set.prototype.intersection` method
+	// https://github.com/tc39/proposal-set-methods
+	var setIntersection = function intersection(other) {
+	  var O = aSet$5(this);
+	  var otherRec = getSetRecord$5(other);
+	  var result = new Set();
+
+	  if (size$3(O) > otherRec.size) {
+	    iterateSimple$4(otherRec.getIterator(), function (e) {
+	      if (has$4(O, e)) add$2(result, e);
+	    });
+	  } else {
+	    iterateSet$1(O, function (e) {
+	      if (otherRec.includes(e)) add$2(result, e);
+	    });
+	  }
+
+	  return result;
+	};
+
+	var $$f = _export;
+	var intersection = setIntersection;
+
+	var INCORRECT$3 = true;
+
+	// `Set.prototype.intersection` method
+	// https://tc39.es/ecma262/#sec-set.prototype.intersection
+	$$f({ target: 'Set', proto: true, real: true, forced: INCORRECT$3 }, {
+	  intersection: intersection
+	});
+
+	var aSet$4 = aSet$7;
+	var has$3 = setHelpers.has;
+	var size$2 = setSize;
+	var getSetRecord$4 = getSetRecord$7;
+	var iterateSet = setIterate;
+	var iterateSimple$3 = iterateSimple$7;
+	var iteratorClose$2 = iteratorClose$4;
+
+	// `Set.prototype.isDisjointFrom` method
+	// https://tc39.github.io/proposal-set-methods/#Set.prototype.isDisjointFrom
+	var setIsDisjointFrom = function isDisjointFrom(other) {
+	  var O = aSet$4(this);
+	  var otherRec = getSetRecord$4(other);
+	  if (size$2(O) <= otherRec.size) return iterateSet(O, function (e) {
+	    if (otherRec.includes(e)) return false;
+	  }, true) !== false;
+	  var iterator = otherRec.getIterator();
+	  return iterateSimple$3(iterator, function (e) {
+	    if (has$3(O, e)) return iteratorClose$2(iterator, 'normal', false);
+	  }) !== false;
+	};
+
+	var $$e = _export;
+	var isDisjointFrom = setIsDisjointFrom;
+
+	var INCORRECT$2 = true;
+
+	// `Set.prototype.isDisjointFrom` method
+	// https://tc39.es/ecma262/#sec-set.prototype.isdisjointfrom
+	$$e({ target: 'Set', proto: true, real: true, forced: INCORRECT$2 }, {
+	  isDisjointFrom: isDisjointFrom
+	});
+
+	var aSet$3 = aSet$7;
+	var size$1 = setSize;
+	var iterate$4 = setIterate;
+	var getSetRecord$3 = getSetRecord$7;
+
+	// `Set.prototype.isSubsetOf` method
+	// https://tc39.github.io/proposal-set-methods/#Set.prototype.isSubsetOf
+	var setIsSubsetOf = function isSubsetOf(other) {
+	  var O = aSet$3(this);
+	  var otherRec = getSetRecord$3(other);
+	  if (size$1(O) > otherRec.size) return false;
+	  return iterate$4(O, function (e) {
+	    if (!otherRec.includes(e)) return false;
+	  }, true) !== false;
+	};
+
+	var $$d = _export;
+	var isSubsetOf = setIsSubsetOf;
+
+	var INCORRECT$1 = true;
+
+	// `Set.prototype.isSubsetOf` method
+	// https://tc39.es/ecma262/#sec-set.prototype.issubsetof
+	$$d({ target: 'Set', proto: true, real: true, forced: INCORRECT$1 }, {
+	  isSubsetOf: isSubsetOf
+	});
+
+	var aSet$2 = aSet$7;
+	var has$2 = setHelpers.has;
+	var size = setSize;
+	var getSetRecord$2 = getSetRecord$7;
+	var iterateSimple$2 = iterateSimple$7;
+	var iteratorClose$1 = iteratorClose$4;
+
+	// `Set.prototype.isSupersetOf` method
+	// https://tc39.github.io/proposal-set-methods/#Set.prototype.isSupersetOf
+	var setIsSupersetOf = function isSupersetOf(other) {
+	  var O = aSet$2(this);
+	  var otherRec = getSetRecord$2(other);
+	  if (size(O) < otherRec.size) return false;
+	  var iterator = otherRec.getIterator();
+	  return iterateSimple$2(iterator, function (e) {
+	    if (!has$2(O, e)) return iteratorClose$1(iterator, 'normal', false);
+	  }) !== false;
+	};
+
+	var $$c = _export;
+	var isSupersetOf = setIsSupersetOf;
+
+	var INCORRECT = true;
+
+	// `Set.prototype.isSupersetOf` method
+	// https://tc39.es/ecma262/#sec-set.prototype.issupersetof
+	$$c({ target: 'Set', proto: true, real: true, forced: INCORRECT }, {
+	  isSupersetOf: isSupersetOf
+	});
+
+	var aSet$1 = aSet$7;
+	var SetHelpers = setHelpers;
+	var clone$1 = setClone;
+	var getSetRecord$1 = getSetRecord$7;
+	var iterateSimple$1 = iterateSimple$7;
+
+	var add$1 = SetHelpers.add;
+	var has$1 = SetHelpers.has;
+	var remove = SetHelpers.remove;
+
+	// `Set.prototype.symmetricDifference` method
+	// https://github.com/tc39/proposal-set-methods
+	var setSymmetricDifference = function symmetricDifference(other) {
+	  var O = aSet$1(this);
+	  var keysIter = getSetRecord$1(other).getIterator();
+	  var result = clone$1(O);
+	  iterateSimple$1(keysIter, function (e) {
+	    if (has$1(O, e)) remove(result, e);
+	    else add$1(result, e);
+	  });
+	  return result;
+	};
+
+	var $$b = _export;
+	var symmetricDifference = setSymmetricDifference;
+
+	// `Set.prototype.symmetricDifference` method
+	// https://tc39.es/ecma262/#sec-set.prototype.symmetricdifference
+	$$b({ target: 'Set', proto: true, real: true, forced: true }, {
+	  symmetricDifference: symmetricDifference
+	});
+
+	var aSet = aSet$7;
+	var add = setHelpers.add;
+	var clone = setClone;
+	var getSetRecord = getSetRecord$7;
+	var iterateSimple = iterateSimple$7;
+
+	// `Set.prototype.union` method
+	// https://github.com/tc39/proposal-set-methods
+	var setUnion = function union(other) {
+	  var O = aSet(this);
+	  var keysIter = getSetRecord(other).getIterator();
+	  var result = clone(O);
+	  iterateSimple(keysIter, function (it) {
+	    add(result, it);
+	  });
+	  return result;
+	};
+
+	var $$a = _export;
+	var union = setUnion;
+
+	// `Set.prototype.union` method
+	// https://tc39.es/ecma262/#sec-set.prototype.union
+	$$a({ target: 'Set', proto: true, real: true, forced: true }, {
+	  union: union
+	});
+
 	var uncurryThis$7 = functionUncurryThis;
-	var toIntegerOrInfinity = toIntegerOrInfinity$3;
+	var toIntegerOrInfinity = toIntegerOrInfinity$4;
 	var toString$2 = toString$7;
 	var requireObjectCoercible$1 = requireObjectCoercible$6;
 
@@ -7366,9 +7643,6 @@ var bookly = (function ($$O) {
 	};
 
 	var stringMultibyte = {
-	  // `String.prototype.codePointAt` method
-	  // https://tc39.es/ecma262/#sec-string.prototype.codepointat
-	  codeAt: createMethod$1(false),
 	  // `String.prototype.at` method
 	  // https://github.com/mathiasbynens/String.prototype.at
 	  charAt: createMethod$1(true)
@@ -7446,20 +7720,12 @@ var bookly = (function ($$O) {
 	};
 
 	var DOMIterables = domIterables;
-	var global$4 = global$h;
-	var classof$2 = classof$a;
-	var createNonEnumerableProperty$1 = createNonEnumerableProperty$7;
+	var globalThis$7 = globalThis_1;
+	var setToStringTag$1 = setToStringTag$5;
 	var Iterators = iterators;
-	var wellKnownSymbol = wellKnownSymbol$f;
-
-	var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 
 	for (var COLLECTION_NAME in DOMIterables) {
-	  var Collection = global$4[COLLECTION_NAME];
-	  var CollectionPrototype = Collection && Collection.prototype;
-	  if (CollectionPrototype && classof$2(CollectionPrototype) !== TO_STRING_TAG) {
-	    createNonEnumerableProperty$1(CollectionPrototype, TO_STRING_TAG, COLLECTION_NAME);
-	  }
+	  setToStringTag$1(globalThis$7[COLLECTION_NAME], COLLECTION_NAME);
 	  Iterators[COLLECTION_NAME] = Iterators.Array;
 	}
 
@@ -7655,16 +7921,16 @@ var bookly = (function ($$O) {
 	var internalMetadataExports = internalMetadata.exports;
 
 	var $$7 = _export$1;
-	var global$3 = global$G;
+	var global$3 = global$s;
 	var InternalMetadataModule$1 = internalMetadataExports;
 	var fails$3 = fails$L;
-	var createNonEnumerableProperty = createNonEnumerableProperty$f;
-	var iterate$3 = iterate$c;
+	var createNonEnumerableProperty = createNonEnumerableProperty$e;
+	var iterate$3 = iterate$e;
 	var anInstance$2 = anInstance$7;
 	var isCallable = isCallable$A;
 	var isObject$2 = isObject$w;
-	var isNullOrUndefined$2 = isNullOrUndefined$c;
-	var setToStringTag = setToStringTag$9;
+	var isNullOrUndefined$2 = isNullOrUndefined$d;
+	var setToStringTag = setToStringTag$a;
 	var defineProperty = objectDefineProperty$1.f;
 	var forEach = arrayIteration$1.forEach;
 	var DESCRIPTORS$2 = descriptors$1;
@@ -7745,8 +8011,8 @@ var bookly = (function ($$O) {
 	var defineBuiltIns$2 = defineBuiltIns$3;
 	var bind$2 = functionBindContext$1;
 	var anInstance$1 = anInstance$7;
-	var isNullOrUndefined$1 = isNullOrUndefined$c;
-	var iterate$2 = iterate$c;
+	var isNullOrUndefined$1 = isNullOrUndefined$d;
+	var iterate$2 = iterate$e;
 	var defineIterator = iteratorDefine$1;
 	var createIterResultObject = createIterResultObject$7;
 	var setSpecies = setSpecies$4;
@@ -8027,21 +8293,7 @@ var bookly = (function ($$O) {
 	  return definition[1] && fn ? assign(_sliceInstanceProperty$1(_context3 = $$scope.ctx).call(_context3), definition[1](fn(ctx))) : $$scope.ctx;
 	}
 	function get_slot_changes(definition, $$scope, dirty, fn) {
-	  if (definition[2] && fn) {
-	    const lets = definition[2](fn(dirty));
-	    if ($$scope.dirty === undefined) {
-	      return lets;
-	    }
-	    if (typeof lets === 'object') {
-	      const merged = [];
-	      const len = Math.max($$scope.dirty.length, lets.length);
-	      for (let i = 0; i < len; i += 1) {
-	        merged[i] = $$scope.dirty[i] | lets[i];
-	      }
-	      return merged;
-	    }
-	    return $$scope.dirty | lets;
-	  }
+	  if (definition[2] && fn) ;
 	  return $$scope.dirty;
 	}
 
@@ -8155,7 +8407,7 @@ var bookly = (function ($$O) {
 	  };
 	};
 
-	var getBuiltIn = getBuiltIn$f;
+	var getBuiltIn = getBuiltIn$g;
 	var caller = caller$1;
 
 	var Map$1 = getBuiltIn('Map');
@@ -8165,15 +8417,14 @@ var bookly = (function ($$O) {
 	  set: caller('set', 2),
 	  get: caller('get', 1),
 	  has: caller('has', 1),
-	  remove: caller('delete', 1),
 	  proto: Map$1.prototype
 	};
 
 	var $$5 = _export$1;
 	var uncurryThis$4 = functionUncurryThis$1;
-	var aCallable$1 = aCallable$g;
+	var aCallable$1 = aCallable$h;
 	var requireObjectCoercible = requireObjectCoercible$e;
-	var iterate$1 = iterate$c;
+	var iterate$1 = iterate$e;
 	var MapHelpers = mapHelpers;
 	var IS_PURE = isPure;
 
@@ -8255,17 +8506,17 @@ var bookly = (function ($$O) {
 
 	var arraySort = sort$4;
 
-	var userAgent$1 = engineUserAgent$1;
+	var userAgent$1 = engineUserAgent;
 
 	var firefox = userAgent$1.match(/firefox\/(\d+)/i);
 
 	var engineFfVersion = !!firefox && +firefox[1];
 
-	var UA = engineUserAgent$1;
+	var UA = engineUserAgent;
 
 	var engineIsIeOrEdge = /MSIE|Trident/.test(UA);
 
-	var userAgent = engineUserAgent$1;
+	var userAgent = engineUserAgent;
 
 	var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
 
@@ -8273,9 +8524,9 @@ var bookly = (function ($$O) {
 
 	var $$4 = _export$1;
 	var uncurryThis$3 = functionUncurryThis$1;
-	var aCallable = aCallable$g;
+	var aCallable = aCallable$h;
 	var toObject$2 = toObject$d;
-	var lengthOfArrayLike$2 = lengthOfArrayLike$f;
+	var lengthOfArrayLike$2 = lengthOfArrayLike$e;
 	var deletePropertyOrThrow = deletePropertyOrThrow$2;
 	var toString = toString$l;
 	var fails$2 = fails$L;
@@ -8283,7 +8534,7 @@ var bookly = (function ($$O) {
 	var arrayMethodIsStrict = arrayMethodIsStrict$4;
 	var FF = engineFfVersion;
 	var IE_OR_EDGE = engineIsIeOrEdge;
-	var V8 = engineV8Version$1;
+	var V8 = engineV8Version;
 	var WEBKIT = engineWebkitVersion;
 
 	var test = [];
@@ -8377,7 +8628,7 @@ var bookly = (function ($$O) {
 	  }
 	});
 
-	var getBuiltInPrototypeMethod$1 = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod$1 = getBuiltInPrototypeMethod$l;
 
 	var sort$3 = getBuiltInPrototypeMethod$1('Array', 'sort');
 
@@ -8399,8 +8650,8 @@ var bookly = (function ($$O) {
 
 	var _sortInstanceProperty = /*@__PURE__*/getDefaultExportFromCjs(sort);
 
-	var anObject$1 = anObject$j;
-	var iteratorClose = iteratorClose$4;
+	var anObject$1 = anObject$k;
+	var iteratorClose = iteratorClose$6;
 
 	// call something on iterator step with safe closing on error
 	var callWithSafeIterationClosing$1 = function (iterator, fn, value, ENTRIES) {
@@ -8417,8 +8668,8 @@ var bookly = (function ($$O) {
 	var callWithSafeIterationClosing = callWithSafeIterationClosing$1;
 	var isArrayIteratorMethod = isArrayIteratorMethod$4;
 	var isConstructor = isConstructor$7;
-	var lengthOfArrayLike$1 = lengthOfArrayLike$f;
-	var createProperty = createProperty$7;
+	var lengthOfArrayLike$1 = lengthOfArrayLike$e;
+	var createProperty = createProperty$6;
 	var getIterator = getIterator$4;
 	var getIteratorMethod = getIteratorMethod$6;
 
@@ -8488,10 +8739,10 @@ var bookly = (function ($$O) {
 	var defineBuiltIns$1 = defineBuiltIns$3;
 	var getWeakData = internalMetadataExports.getWeakData;
 	var anInstance = anInstance$7;
-	var anObject = anObject$j;
-	var isNullOrUndefined = isNullOrUndefined$c;
+	var anObject = anObject$k;
+	var isNullOrUndefined = isNullOrUndefined$d;
 	var isObject$1 = isObject$w;
-	var iterate = iterate$c;
+	var iterate = iterate$e;
 	var ArrayIterationModule = arrayIteration$1;
 	var hasOwn = hasOwnProperty_1$1;
 	var InternalStateModule = internalState$1;
@@ -8616,7 +8867,7 @@ var bookly = (function ($$O) {
 	};
 
 	var FREEZING = freezing;
-	var global$2 = global$G;
+	var global$2 = global$s;
 	var uncurryThis$1 = functionUncurryThis$1;
 	var defineBuiltIns = defineBuiltIns$3;
 	var InternalMetadataModule = internalMetadataExports;
@@ -8735,7 +8986,7 @@ var bookly = (function ($$O) {
 	var _WeakMap = /*@__PURE__*/getDefaultExportFromCjs(weakMap);
 
 	var $$2 = _export$1;
-	var global$1 = global$G;
+	var global$1 = global$s;
 
 	// `globalThis` object
 	// https://tc39.es/ecma262/#sec-globalthis
@@ -8743,7 +8994,7 @@ var bookly = (function ($$O) {
 	  globalThis: global$1
 	});
 
-	var globalThis$6 = global$G;
+	var globalThis$6 = global$s;
 
 	var parent$4 = globalThis$6;
 
@@ -8818,7 +9069,7 @@ var bookly = (function ($$O) {
 	 * @returns {CSSStyleSheet}
 	 */
 	function append_stylesheet(node, style) {
-	  append( /** @type {Document} */node.head || node, style);
+	  append(/** @type {Document} */node.head || node, style);
 	  return style.sheet;
 	}
 
@@ -9158,7 +9409,7 @@ var bookly = (function ($$O) {
 	      var _context;
 	      // TODO are there situations where events could be dispatched
 	      // in a server (non-DOM) environment?
-	      const event = custom_event( /** @type {string} */type, detail, {
+	      const event = custom_event(/** @type {string} */type, detail, {
 	        cancelable
 	      });
 	      _forEachInstanceProperty(_context = _sliceInstanceProperty$1(callbacks).call(callbacks)).call(_context, fn => {
@@ -9814,8 +10065,8 @@ var bookly = (function ($$O) {
 	/** @typedef {typeof _boolean_attributes[number]} BooleanAttributes */
 
 	var toObject = toObject$d;
-	var toAbsoluteIndex = toAbsoluteIndex$8;
-	var lengthOfArrayLike = lengthOfArrayLike$f;
+	var toAbsoluteIndex = toAbsoluteIndex$7;
+	var lengthOfArrayLike = lengthOfArrayLike$e;
 
 	// `Array.prototype.fill` method implementation
 	// https://tc39.es/ecma262/#sec-array.prototype.fill
@@ -9839,7 +10090,7 @@ var bookly = (function ($$O) {
 	  fill: fill$4
 	});
 
-	var getBuiltInPrototypeMethod = getBuiltInPrototypeMethod$g;
+	var getBuiltInPrototypeMethod = getBuiltInPrototypeMethod$l;
 
 	var fill$3 = getBuiltInPrototypeMethod('Array', 'fill');
 
@@ -10144,11 +10395,11 @@ var bookly = (function ($$O) {
 	      attr(path1, "d", "M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z");
 	      attr(path1, "fill", "currentFill");
 	      attr(svg, "aria-hidden", "true");
-	      attr(svg, "class", svg_class_value = "bookly-inline bookly-text-gray-200 bookly-animate-spin fill-bookly " + ( /*full_size*/ctx[1] ? 'bookly-absolute bookly-inset-0 bookly-h-full bookly-w-full' : 'bookly-w-8 bookly-h-8'));
+	      attr(svg, "class", svg_class_value = "bookly:inline bookly:text-gray-200 bookly:animate-spin fill-bookly " + (/*full_size*/ctx[1] ? 'bookly:absolute bookly:inset-0 bookly:h-full bookly:w-full' : 'bookly:w-8 bookly:h-8'));
 	      attr(svg, "viewBox", "0 0 100 101");
 	      attr(svg, "fill", "none");
 	      attr(svg, "xmlns", "http://www.w3.org/2000/svg");
-	      attr(div, "class", "bookly-flex bookly-flex-col bookly-justify-center bookly-items-center bookly-w-full bookly-loading-mark");
+	      attr(div, "class", "bookly:flex bookly:flex-col bookly:justify-center bookly:items-center bookly:w-full bookly-loading-mark");
 	      attr(div, "style", div_style_value = /*height*/ctx[0] ? 'min-height: ' + /*height*/ctx[0] + 'px;' : 'min-height: 100%;');
 	    },
 	    m(target, anchor) {
@@ -10159,7 +10410,7 @@ var bookly = (function ($$O) {
 	    },
 	    p(ctx, _ref) {
 	      let [dirty] = _ref;
-	      if (dirty & /*full_size*/2 && svg_class_value !== (svg_class_value = "bookly-inline bookly-text-gray-200 bookly-animate-spin fill-bookly " + ( /*full_size*/ctx[1] ? 'bookly-absolute bookly-inset-0 bookly-h-full bookly-w-full' : 'bookly-w-8 bookly-h-8'))) {
+	      if (dirty & /*full_size*/2 && svg_class_value !== (svg_class_value = "bookly:inline bookly:text-gray-200 bookly:animate-spin fill-bookly " + (/*full_size*/ctx[1] ? 'bookly:absolute bookly:inset-0 bookly:h-full bookly:w-full' : 'bookly:w-8 bookly:h-8'))) {
 	        attr(svg, "class", svg_class_value);
 	      }
 	      if (dirty & /*height*/1 && div_style_value !== (div_style_value = /*height*/ctx[0] ? 'min-height: ' + /*height*/ctx[0] + 'px;' : 'min-height: 100%;')) {
@@ -10204,6 +10455,7 @@ var bookly = (function ($$O) {
 	  let t;
 	  let span;
 	  let button_class_value;
+	  let button_disabled_value;
 	  let current;
 	  let mounted;
 	  let dispose;
@@ -10217,14 +10469,15 @@ var bookly = (function ($$O) {
 	      t = space();
 	      span = element("span");
 	      if (default_slot) default_slot.c();
-	      toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(button, "type", "button");
 	      attr(button, "title", /*title*/ctx[2]);
-	      attr(button, "class", button_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border"));
+	      attr(button, "class", button_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border"));
 	      attr(button, "style", /*styles*/ctx[4]);
-	      button.disabled = /*disabled*/ctx[0];
-	      toggle_class(button, "pointer-events-none", /*disabled*/ctx[0]);
-	      toggle_class(button, "bookly-opacity-50", /*disabled*/ctx[0]);
+	      button.disabled = button_disabled_value = /*disabled*/ctx[0] || /*loading*/ctx[3];
+	      toggle_class(button, "bookly:cursor-pointer", ! /*disabled*/ctx[0]);
+	      toggle_class(button, "bookly:pointer-events-none", /*disabled*/ctx[0]);
+	      toggle_class(button, "bookly:opacity-50", /*disabled*/ctx[0]);
 	    },
 	    m(target, anchor) {
 	      insert(target, button, anchor);
@@ -10236,12 +10489,12 @@ var bookly = (function ($$O) {
 	      }
 	      current = true;
 	      if (!mounted) {
-	        dispose = listen(button, "click", stop_propagation( /*click_handler_1*/ctx[20]));
+	        dispose = listen(button, "click", stop_propagation(/*click_handler_1*/ctx[20]));
 	        mounted = true;
 	      }
 	    },
 	    p(ctx, dirty) {
-	      if ( /*loading*/ctx[3]) {
+	      if (/*loading*/ctx[3]) {
 	        if (if_block) {
 	          if (dirty & /*loading*/8) {
 	            transition_in(if_block, 1);
@@ -10261,29 +10514,32 @@ var bookly = (function ($$O) {
 	      }
 	      if (default_slot) {
 	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope( /*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
-	        toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	        toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      }
 	      if (!current || dirty & /*title*/4) {
 	        attr(button, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && button_class_value !== (button_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/96 && button_class_value !== (button_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border"))) {
 	        attr(button, "class", button_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
 	        attr(button, "style", /*styles*/ctx[4]);
 	      }
-	      if (!current || dirty & /*disabled*/1) {
-	        button.disabled = /*disabled*/ctx[0];
+	      if (!current || dirty & /*disabled, loading*/9 && button_disabled_value !== (button_disabled_value = /*disabled*/ctx[0] || /*loading*/ctx[3])) {
+	        button.disabled = button_disabled_value;
 	      }
 	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
-	        toggle_class(button, "pointer-events-none", /*disabled*/ctx[0]);
+	        toggle_class(button, "bookly:cursor-pointer", ! /*disabled*/ctx[0]);
 	      }
 	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
-	        toggle_class(button, "bookly-opacity-50", /*disabled*/ctx[0]);
+	        toggle_class(button, "bookly:pointer-events-none", /*disabled*/ctx[0]);
+	      }
+	      if (!current || dirty & /*classes, buttonClasses, disabled*/97) {
+	        toggle_class(button, "bookly:opacity-50", /*disabled*/ctx[0]);
 	      }
 	    },
 	    i(local) {
@@ -10373,7 +10629,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (193:8) {#if loading}
+	// (194:8) {#if loading}
 	function create_if_block_4$1(ctx) {
 	  let span;
 	  let spinner;
@@ -10387,7 +10643,7 @@ var bookly = (function ($$O) {
 	    c() {
 	      span = element("span");
 	      create_component(spinner.$$.fragment);
-	      attr(span, "class", "bookly-absolute bookly-inset-1");
+	      attr(span, "class", "bookly:absolute bookly:inset-1");
 	    },
 	    m(target, anchor) {
 	      insert(target, span, anchor);
@@ -10429,9 +10685,9 @@ var bookly = (function ($$O) {
 	      t = space();
 	      span = element("span");
 	      if (default_slot) default_slot.c();
-	      toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(div, "title", /*title*/ctx[2]);
-	      attr(div, "class", div_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border bookly-text-center bookly-flex bookly-items-center bookly-justify-center pointer-events-none bookly-opacity-50 bookly-pointer-events-none"));
+	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"));
 	      attr(div, "style", /*styles*/ctx[4]);
 	      attr(div, "disabled", /*disabled*/ctx[0]);
 	    },
@@ -10446,7 +10702,7 @@ var bookly = (function ($$O) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if ( /*loading*/ctx[3]) {
+	      if (/*loading*/ctx[3]) {
 	        if (if_block) {
 	          if (dirty & /*loading*/8) {
 	            transition_in(if_block, 1);
@@ -10466,16 +10722,16 @@ var bookly = (function ($$O) {
 	      }
 	      if (default_slot) {
 	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope( /*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
-	        toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	        toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      }
 	      if (!current || dirty & /*title*/4) {
 	        attr(div, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border bookly-text-center bookly-flex bookly-items-center bookly-justify-center pointer-events-none bookly-opacity-50 bookly-pointer-events-none"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center pointer-events-none bookly:opacity-50 bookly:pointer-events-none"))) {
 	        attr(div, "class", div_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
@@ -10525,9 +10781,9 @@ var bookly = (function ($$O) {
 	      t = space();
 	      span = element("span");
 	      if (default_slot) default_slot.c();
-	      toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	      toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      attr(div, "title", /*title*/ctx[2]);
-	      attr(div, "class", div_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border bookly-text-center bookly-flex bookly-items-center bookly-justify-center"));
+	      attr(div, "class", div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:focus:outline-hidden bookly:cursor-pointer"));
 	      attr(div, "style", /*styles*/ctx[4]);
 	      attr(div, "disabled", /*disabled*/ctx[0]);
 	      attr(div, "role", "button");
@@ -10543,12 +10799,12 @@ var bookly = (function ($$O) {
 	      }
 	      current = true;
 	      if (!mounted) {
-	        dispose = [listen(div, "click", stop_propagation( /*click_handler*/ctx[18])), listen(div, "keypress", stop_propagation( /*keypress_handler*/ctx[19]))];
+	        dispose = [listen(div, "click", stop_propagation(/*click_handler*/ctx[18])), listen(div, "keypress", stop_propagation(/*keypress_handler*/ctx[19]))];
 	        mounted = true;
 	      }
 	    },
 	    p(ctx, dirty) {
-	      if ( /*loading*/ctx[3]) {
+	      if (/*loading*/ctx[3]) {
 	        if (if_block) {
 	          if (dirty & /*loading*/8) {
 	            transition_in(if_block, 1);
@@ -10568,16 +10824,16 @@ var bookly = (function ($$O) {
 	      }
 	      if (default_slot) {
 	        if (default_slot.p && (!current || dirty & /*$$scope*/65536)) {
-	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope( /*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
+	          update_slot_base(default_slot, default_slot_template, ctx, /*$$scope*/ctx[16], !current ? get_all_dirty_from_scope(/*$$scope*/ctx[16]) : get_slot_changes(default_slot_template, /*$$scope*/ctx[16], dirty, null), null);
 	        }
 	      }
 	      if (!current || dirty & /*loading*/8) {
-	        toggle_class(span, "bookly-opacity-0", /*loading*/ctx[3]);
+	        toggle_class(span, "bookly:opacity-0", /*loading*/ctx[3]);
 	      }
 	      if (!current || dirty & /*title*/4) {
 	        attr(div, "title", /*title*/ctx[2]);
 	      }
-	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + ( /*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly-drop-shadow-none bookly-box-border bookly-text-center bookly-flex bookly-items-center bookly-justify-center"))) {
+	      if (!current || dirty & /*classes, buttonClasses*/96 && div_class_value !== (div_class_value = "" + (/*classes*/ctx[5] + " " + /*buttonClasses*/ctx[6] + " bookly:drop-shadow-none bookly:box-border bookly:text-center bookly:flex bookly:items-center bookly:justify-center bookly:focus:outline-hidden bookly:cursor-pointer"))) {
 	        attr(div, "class", div_class_value);
 	      }
 	      if (!current || dirty & /*styles*/16) {
@@ -10624,7 +10880,7 @@ var bookly = (function ($$O) {
 	    c() {
 	      span = element("span");
 	      create_component(spinner.$$.fragment);
-	      attr(span, "class", "bookly-absolute bookly-inset-1");
+	      attr(span, "class", "bookly:absolute bookly:inset-1");
 	    },
 	    m(target, anchor) {
 	      insert(target, span, anchor);
@@ -10663,7 +10919,7 @@ var bookly = (function ($$O) {
 	    c() {
 	      span = element("span");
 	      create_component(spinner.$$.fragment);
-	      attr(span, "class", "bookly-absolute bookly-inset-1");
+	      attr(span, "class", "bookly:absolute bookly:inset-1");
 	    },
 	    m(target, anchor) {
 	      insert(target, span, anchor);
@@ -10695,7 +10951,7 @@ var bookly = (function ($$O) {
 	  const if_block_creators = [create_if_block$4, create_else_block_1];
 	  const if_blocks = [];
 	  function select_block_type(ctx, dirty) {
-	    if ( /*container*/ctx[1] === 'div') return 0;
+	    if (/*container*/ctx[1] === 'div') return 0;
 	    return 1;
 	  }
 	  current_block_type_index = select_block_type(ctx);
@@ -10830,32 +11086,32 @@ var bookly = (function ($$O) {
 	      {
 	        switch (type) {
 	          case 'secondary':
-	            $$invalidate(6, buttonClasses = 'bookly-text-slate-600 bookly-bg-white bookly-border-slate-600');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-50 hover:bookly-bg-slate-400 hover:bookly-border-slate-400');
+	            $$invalidate(6, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-slate-400 bookly:hover:border-slate-400');
 	            break;
 	          case 'white':
-	            $$invalidate(6, buttonClasses = 'bookly-text-slate-600 bookly-bg-white bookly-border-slate-600');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-50 hover:bookly-bg-gray-400 hover:bookly-border-gray-400');
+	            $$invalidate(6, buttonClasses = 'bookly:text-slate-600 bookly:bg-white bookly:border-slate-600');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
 	            break;
 	          case 'transparent':
-	            $$invalidate(6, buttonClasses = (color ? color : 'bookly-text-slate-600') + ' bookly-bg-transparent bookly-border-slate-600');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-50 hover:bookly-bg-gray-400 hover:bookly-border-gray-400');
+	            $$invalidate(6, buttonClasses = (color ? color : 'bookly:text-slate-600') + ' bookly:bg-transparent bookly:border-slate-600');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400 bookly:hover:border-gray-400');
 	            break;
 	          case 'bookly':
-	            $$invalidate(6, buttonClasses = 'text-bookly bookly-bg-white border-bookly');
-	            $$invalidate(15, hover = 'hover:bookly-text-white hover:bg-bookly hover:bookly-opacity-80 hover:border-bookly');
+	            $$invalidate(6, buttonClasses = 'text-bookly bookly:not-hover:bg-white border-bookly');
+	            $$invalidate(15, hover = 'bookly:hover:text-white hover:bg-bookly bookly:hover:opacity-80 hover:border-bookly');
 	            break;
 	          case 'bookly-active':
-	            $$invalidate(6, buttonClasses = 'bg-bookly bookly-text-white border-bookly');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-100 hover:bg-bookly hover:border-bookly');
+	            $$invalidate(6, buttonClasses = 'bg-bookly bookly:text-white border-bookly');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-100 hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'bookly-gray':
-	            $$invalidate(6, buttonClasses = 'text-bookly bookly-bg-gray-200 border-bookly');
-	            $$invalidate(15, hover = 'hover:bookly-text-white hover:bg-bookly hover:border-bookly');
+	            $$invalidate(6, buttonClasses = 'text-bookly bookly:not-hover:bg-gray-200 border-bookly');
+	            $$invalidate(15, hover = 'bookly:hover:text-white hover:bg-bookly hover:border-bookly');
 	            break;
 	          case 'link':
-	            $$invalidate(6, buttonClasses = 'bookly-border-none bookly-rounded-none bookly-p-0 ' + (disabled ? 'bookly-text-gray-600' : 'text-bookly'));
-	            $$invalidate(15, hover = 'hover:bookly-text-gray-600');
+	            $$invalidate(6, buttonClasses = 'bookly:border-none bookly:rounded-none bookly:p-0 bookly:focus:border-none bookly:focus:outline-none ' + (disabled ? 'bookly:text-gray-600' : 'text-bookly'));
+	            $$invalidate(15, hover = 'bookly:hover:text-gray-600');
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
 	            $$invalidate(9, paddings = false);
@@ -10865,7 +11121,7 @@ var bookly = (function ($$O) {
 	            break;
 	          case 'calendar':
 	            $$invalidate(6, buttonClasses = '');
-	            $$invalidate(15, hover = 'hover:bookly-opacity-80');
+	            $$invalidate(15, hover = 'bookly:hover:opacity-80');
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
 	            $$invalidate(9, paddings = false);
@@ -10873,8 +11129,8 @@ var bookly = (function ($$O) {
 	            $$invalidate(11, shadows = false);
 	            break;
 	          case 'calendar-normal':
-	            $$invalidate(6, buttonClasses = 'text-bookly border-bookly bookly-rounded-none bookly-m-0 ' + (disabled ? 'bookly-bg-slate-50 hover:text-bookly' : 'bookly-bg-white'));
-	            $$invalidate(15, hover = 'hover:bg-bookly hover:border-bookly ' + (disabled ? 'hover:text-bookly' : 'hover:bookly-text-white'));
+	            $$invalidate(6, buttonClasses = 'text-bookly border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50 hover:text-bookly' : 'bookly:bg-white'));
+	            $$invalidate(15, hover = 'hover:bg-bookly hover:border-bookly ' + (disabled ? 'hover:text-bookly' : 'bookly:hover:text-white'));
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
 	            $$invalidate(9, paddings = false);
@@ -10882,8 +11138,8 @@ var bookly = (function ($$O) {
 	            $$invalidate(11, shadows = false);
 	            break;
 	          case 'calendar-active':
-	            $$invalidate(6, buttonClasses = 'bg-bookly bookly-text-white border-bookly bookly-rounded-none bookly-m-0');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-200');
+	            $$invalidate(6, buttonClasses = 'bg-bookly bookly:text-white border-bookly bookly:rounded-none bookly:m-0');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-200');
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
 	            $$invalidate(9, paddings = false);
@@ -10891,8 +11147,8 @@ var bookly = (function ($$O) {
 	            $$invalidate(11, shadows = false);
 	            break;
 	          case 'calendar-inactive':
-	            $$invalidate(6, buttonClasses = 'bookly-text-gray-400 border-bookly bookly-rounded-none bookly-m-0 ' + (disabled ? 'bookly-bg-slate-50' : 'bookly-bg-white'));
-	            $$invalidate(15, hover = 'hover:bookly-text-white hover:bookly-bg-gray-400 hover:border-bookly');
+	            $$invalidate(6, buttonClasses = 'bookly:text-gray-400 border-bookly bookly:rounded-none bookly:m-0 ' + (disabled ? 'bookly:bg-slate-50' : 'bookly:bg-white'));
+	            $$invalidate(15, hover = 'bookly:hover:text-white bookly:hover:bg-gray-400 hover:border-bookly');
 	            $$invalidate(7, rounded = false);
 	            $$invalidate(8, bordered = false);
 	            $$invalidate(9, paddings = false);
@@ -10900,51 +11156,51 @@ var bookly = (function ($$O) {
 	            $$invalidate(11, shadows = false);
 	            break;
 	          default:
-	            $$invalidate(6, buttonClasses = 'bookly-text-black bookly-bg-gray-100 bookly-border-gray');
-	            $$invalidate(15, hover = 'hover:bookly-text-slate-50 hover:bookly-bg-gray-400');
+	            $$invalidate(6, buttonClasses = 'bookly:text-black bookly:bg-gray-100 bookly:border-default-border');
+	            $$invalidate(15, hover = 'bookly:hover:text-slate-50 bookly:hover:bg-gray-400');
 	            break;
 	        }
 	        if (!shadows) {
-	          $$invalidate(6, buttonClasses += ' bookly-shadow-none');
+	          $$invalidate(6, buttonClasses += ' bookly:shadow-none');
 	        }
 	        if (!disabled && !loading && shadows) {
-	          $$invalidate(6, buttonClasses += ' active:bookly-shadow-md');
+	          $$invalidate(6, buttonClasses += ' bookly:active:shadow-md');
 	        }
 	        if (!disabled && !loading) {
 	          $$invalidate(6, buttonClasses += ' ' + hover);
 	        }
 	        if (rounded) {
-	          $$invalidate(6, buttonClasses += ' bookly-rounded');
+	          $$invalidate(6, buttonClasses += ' bookly:rounded');
 	        }
 	        if (bordered) {
-	          $$invalidate(6, buttonClasses += ' bookly-border bookly-border-solid');
+	          $$invalidate(6, buttonClasses += ' bookly:border bookly:border-solid');
 	        }
 	        if (paddings) {
 	          switch (size) {
 	            case 'lg':
-	              $$invalidate(6, buttonClasses += ' bookly-px-5 bookly-py-0');
+	              $$invalidate(6, buttonClasses += ' bookly:px-5 bookly:py-0');
 	              break;
 	            default:
-	              $$invalidate(6, buttonClasses += ' bookly-px-4 bookly-py-0');
+	              $$invalidate(6, buttonClasses += ' bookly:px-4 bookly:py-0');
 	              break;
 	          }
 	        }
 	        if (margins) {
-	          $$invalidate(6, buttonClasses += ' bookly-ms-2 bookly-my-0 bookly-me-0');
+	          $$invalidate(6, buttonClasses += ' bookly:ms-2 bookly:my-0 bookly:me-0');
 	        }
 	        switch (size) {
 	          case 'link':
 	          case 'custom':
 	            break;
 	          case 'lg':
-	            $$invalidate(6, buttonClasses += ' bookly-text-xl bookly-h-14');
+	            $$invalidate(6, buttonClasses += ' bookly:text-xl bookly:h-14');
 	            break;
 	          default:
-	            $$invalidate(6, buttonClasses += ' bookly-text-lg bookly-h-10');
+	            $$invalidate(6, buttonClasses += ' bookly:text-lg bookly:h-10');
 	            break;
 	        }
 	        if (margins) {
-	          $$invalidate(6, buttonClasses += ' bookly-relative');
+	          $$invalidate(6, buttonClasses += ' bookly:relative');
 	        }
 	      }
 	    }
@@ -10979,9 +11235,9 @@ var bookly = (function ($$O) {
 	  child_ctx[59] = i;
 	  const constants_0 = /*year*/child_ctx[1] + /*_year*/child_ctx[59] - 4;
 	  child_ctx[57] = constants_0;
-	  const constants_1 = new Date( /*__year*/child_ctx[57], 12, 0);
+	  const constants_1 = new Date(/*__year*/child_ctx[57], 12, 0);
 	  child_ctx[53] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && ( /*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[53].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[53].getFullYear());
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start.getFullYear() > /*_date*/child_ctx[53].getFullYear() || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end.getFullYear() < /*_date*/child_ctx[53].getFullYear());
 	  child_ctx[49] = constants_2;
 	  return child_ctx;
 	}
@@ -10989,11 +11245,11 @@ var bookly = (function ($$O) {
 	  const child_ctx = _sliceInstanceProperty(ctx).call(ctx);
 	  child_ctx[45] = list[i];
 	  child_ctx[56] = i;
-	  const constants_0 = new Date( /*year*/child_ctx[1], /*_month*/child_ctx[56] + 1, 0);
+	  const constants_0 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[56] + 1, 0);
 	  child_ctx[53] = constants_0;
-	  const constants_1 = new Date( /*year*/child_ctx[1], /*_month*/child_ctx[56], 1);
+	  const constants_1 = new Date(/*year*/child_ctx[1], /*_month*/child_ctx[56], 1);
 	  child_ctx[54] = constants_1;
-	  const constants_2 = /*limits*/child_ctx[0] && ( /*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[53] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[54]);
+	  const constants_2 = /*limits*/child_ctx[0] && (/*limits*/child_ctx[0].hasOwnProperty('start') && /*limits*/child_ctx[0].start > /*_date*/child_ctx[53] || /*limits*/child_ctx[0].hasOwnProperty('end') && /*limits*/child_ctx[0].end < /*_end_date*/child_ctx[54]);
 	  child_ctx[49] = constants_2;
 	  return child_ctx;
 	}
@@ -11042,7 +11298,7 @@ var bookly = (function ($$O) {
 	  let if_block0 = /*loading*/ctx[3] && create_if_block_3$1();
 	  button0 = new Button({
 	    props: {
-	      class: "bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-left-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none " + /*controlButtonClasses*/ctx[18],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -11061,7 +11317,7 @@ var bookly = (function ($$O) {
 	  button0.$on("keypress", /*onClickLeft*/ctx[22]);
 	  button1 = new Button({
 	    props: {
-	      class: "bookly-grow bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-middle-button-mark bookly-m-0 bookly-text-lg bookly-shadow-none " + /*controlButtonClasses*/ctx[18],
+	      class: "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -11079,7 +11335,7 @@ var bookly = (function ($$O) {
 	  button1.$on("keypress", /*changeView*/ctx[21]);
 	  button2 = new Button({
 	    props: {
-	      class: "bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-right-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none " + /*controlButtonClasses*/ctx[18],
+	      class: "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18],
 	      type: "calendar",
 	      bordered: false,
 	      rounded: false,
@@ -11099,8 +11355,8 @@ var bookly = (function ($$O) {
 	  const if_block_creators = [create_if_block_1$2, create_if_block_2$2, create_else_block];
 	  const if_blocks = [];
 	  function select_block_type(ctx, dirty) {
-	    if ( /*view*/ctx[8] === 'calendar') return 0;
-	    if ( /*view*/ctx[8] === 'month') return 1;
+	    if (/*view*/ctx[8] === 'calendar') return 0;
+	    if (/*view*/ctx[8] === 'month') return 1;
 	    return 2;
 	  }
 	  current_block_type_index = select_block_type(ctx);
@@ -11120,11 +11376,11 @@ var bookly = (function ($$O) {
 	      t3 = space();
 	      div2 = element("div");
 	      if_block1.c();
-	      attr(div0, "class", "bookly-flex bookly-text-gray-400");
+	      attr(div0, "class", "bookly:flex bookly:text-gray-400");
 	      attr(div0, "role", "group");
-	      attr(div1, "class", div1_class_value = "bookly-w-full bookly-border-b " + /*borderColor*/ctx[13] + " bookly-mb-0.5 bookly-pb-0.5 bookly-calendar-controls-mark" + " svelte-trnmqx");
-	      attr(div2, "class", "bookly-w-full");
-	      attr(div3, "class", div3_class_value = "bookly-w-full bookly-min-h-full bookly-p-0.5 bookly-relative " + /*bgColor*/ctx[11] + " " + /*borderColor*/ctx[13] + " bookly-rounded " + ( /*border*/ctx[6] ? 'bookly-border bookly-p-0.5 bookly-rounded' : '') + " svelte-trnmqx");
+	      attr(div1, "class", div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[13] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-trnmqx");
+	      attr(div2, "class", "bookly:w-full");
+	      attr(div3, "class", div3_class_value = "bookly:w-full bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[11] + " " + /*borderColor*/ctx[13] + " bookly:rounded " + (/*border*/ctx[6] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-trnmqx");
 	    },
 	    m(target, anchor) {
 	      insert(target, div3, anchor);
@@ -11145,7 +11401,7 @@ var bookly = (function ($$O) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if ( /*loading*/ctx[3]) {
+	      if (/*loading*/ctx[3]) {
 	        if (if_block0) {
 	          if (dirty[0] & /*loading*/8) {
 	            transition_in(if_block0, 1);
@@ -11164,7 +11420,7 @@ var bookly = (function ($$O) {
 	        check_outros();
 	      }
 	      const button0_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/262144) button0_changes.class = "bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-left-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none " + /*controlButtonClasses*/ctx[18];
+	      if (dirty[0] & /*controlButtonClasses*/262144) button0_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button0_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('start') && /*month*/ctx[2] <= /*limits*/ctx[0].start.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].start.getFullYear();
 	      if (dirty[0] & /*rtl*/1024 | dirty[1] & /*$$scope*/536870912) {
 	        button0_changes.$$scope = {
@@ -11174,7 +11430,7 @@ var bookly = (function ($$O) {
 	      }
 	      button0.$set(button0_changes);
 	      const button1_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/262144) button1_changes.class = "bookly-grow bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-middle-button-mark bookly-m-0 bookly-text-lg bookly-shadow-none " + /*controlButtonClasses*/ctx[18];
+	      if (dirty[0] & /*controlButtonClasses*/262144) button1_changes.class = "bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18];
 	      if (dirty[0] & /*title*/524288 | dirty[1] & /*$$scope*/536870912) {
 	        button1_changes.$$scope = {
 	          dirty,
@@ -11183,7 +11439,7 @@ var bookly = (function ($$O) {
 	      }
 	      button1.$set(button1_changes);
 	      const button2_changes = {};
-	      if (dirty[0] & /*controlButtonClasses*/262144) button2_changes.class = "bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-right-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none " + /*controlButtonClasses*/ctx[18];
+	      if (dirty[0] & /*controlButtonClasses*/262144) button2_changes.class = "bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer " + /*controlButtonClasses*/ctx[18];
 	      if (dirty[0] & /*loading, limits, month, year*/15) button2_changes.disabled = /*loading*/ctx[3] || /*limits*/ctx[0] && /*limits*/ctx[0].hasOwnProperty('end') && /*month*/ctx[2] >= /*limits*/ctx[0].end.getMonth() && /*year*/ctx[1] === /*limits*/ctx[0].end.getFullYear();
 	      if (dirty[0] & /*rtl*/1024 | dirty[1] & /*$$scope*/536870912) {
 	        button2_changes.$$scope = {
@@ -11192,7 +11448,7 @@ var bookly = (function ($$O) {
 	        };
 	      }
 	      button2.$set(button2_changes);
-	      if (!current || dirty[0] & /*borderColor*/8192 && div1_class_value !== (div1_class_value = "bookly-w-full bookly-border-b " + /*borderColor*/ctx[13] + " bookly-mb-0.5 bookly-pb-0.5 bookly-calendar-controls-mark" + " svelte-trnmqx")) {
+	      if (!current || dirty[0] & /*borderColor*/8192 && div1_class_value !== (div1_class_value = "bookly:w-full bookly:border-b " + /*borderColor*/ctx[13] + " bookly:mb-0.5 bookly:pb-0.5 bookly-calendar-controls-mark" + " svelte-trnmqx")) {
 	        attr(div1, "class", div1_class_value);
 	      }
 	      let previous_block_index = current_block_type_index;
@@ -11215,7 +11471,7 @@ var bookly = (function ($$O) {
 	        transition_in(if_block1, 1);
 	        if_block1.m(div2, null);
 	      }
-	      if (!current || dirty[0] & /*bgColor, borderColor, border*/10304 && div3_class_value !== (div3_class_value = "bookly-w-full bookly-min-h-full bookly-p-0.5 bookly-relative " + /*bgColor*/ctx[11] + " " + /*borderColor*/ctx[13] + " bookly-rounded " + ( /*border*/ctx[6] ? 'bookly-border bookly-p-0.5 bookly-rounded' : '') + " svelte-trnmqx")) {
+	      if (!current || dirty[0] & /*bgColor, borderColor, border*/10304 && div3_class_value !== (div3_class_value = "bookly:w-full bookly:min-h-full bookly:p-0.5 bookly:relative " + /*bgColor*/ctx[11] + " " + /*borderColor*/ctx[13] + " bookly:rounded " + (/*border*/ctx[6] ? 'bookly:border bookly:p-0.5 bookly:rounded' : '') + " svelte-trnmqx")) {
 	        attr(div3, "class", div3_class_value);
 	      }
 	    },
@@ -11296,7 +11552,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (261:16) <Button                         class="bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-left-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                         on:click={onClickLeft}                         on:keypress={onClickLeft}                         container="div"                 >
+	// (261:16) <Button                         class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-left-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         disabled={loading || (limits && limits.hasOwnProperty('start') && month <= limits.start.getMonth() && year === limits.start.getFullYear())}                         on:click={onClickLeft}                         on:keypress={onClickLeft}                         container="div"                 >
 	function create_default_slot_5(ctx) {
 	  let i;
 	  return {
@@ -11325,12 +11581,12 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (274:16) <Button                         class="bookly-grow bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-middle-button-mark bookly-m-0 bookly-text-lg bookly-shadow-none {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         on:click={changeView}                         on:keypress={changeView}                         container="div"                 >
+	// (274:16) <Button                         class="bookly:grow bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-middle-button-mark bookly:m-0 bookly:text-lg bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         on:click={changeView}                         on:keypress={changeView}                         container="div"                 >
 	function create_default_slot_4(ctx) {
 	  let t;
 	  return {
 	    c() {
-	      t = text( /*title*/ctx[19]);
+	      t = text(/*title*/ctx[19]);
 	    },
 	    m(target, anchor) {
 	      insert(target, t, anchor);
@@ -11346,7 +11602,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (286:16) <Button                         class="bookly-grow-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-calendar-right-button-mark bookly-m-0 bookly-px-4 bookly-text-xl bookly-shadow-none {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                         on:click={onClickRight}                         on:keypress={onClickRight}                         container="div"                 >
+	// (286:16) <Button                         class="bookly:grow-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly-calendar-right-button-mark bookly:m-0 bookly:px-4 bookly:text-xl bookly:shadow-none bookly:cursor-pointer {controlButtonClasses}"                         type="calendar"                         bordered={false}                         rounded={false}                         margins={false}                         disabled={loading || (limits && limits.hasOwnProperty('end') && month >= limits.end.getMonth() && year === limits.end.getFullYear())}                         on:click={onClickRight}                         on:keypress={onClickRight}                         container="div"                 >
 	function create_default_slot_3(ctx) {
 	  let i;
 	  return {
@@ -11396,7 +11652,7 @@ var bookly = (function ($$O) {
 	      for (let i = 0; i < each_blocks.length; i += 1) {
 	        each_blocks[i].c();
 	      }
-	      attr(div, "class", "bookly-w-full bookly-text-center bookly-grid bookly-grid-cols-3 bookly-calendar-years-mark");
+	      attr(div, "class", "bookly:w-full bookly:text-center bookly:grid bookly:grid-cols-3 bookly-calendar-years-mark");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -11488,7 +11744,7 @@ var bookly = (function ($$O) {
 	      for (let i = 0; i < each_blocks.length; i += 1) {
 	        each_blocks[i].c();
 	      }
-	      attr(div, "class", "bookly-w-full bookly-text-center bookly-grid bookly-grid-cols-4 bookly-calendar-months-mark");
+	      attr(div, "class", "bookly:w-full bookly:text-center bookly:grid bookly:grid-cols-4 bookly-calendar-months-mark");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -11576,7 +11832,7 @@ var bookly = (function ($$O) {
 	    each_blocks_1[i] = create_each_block_2(get_each_context_2(ctx, each_value_2, i));
 	  }
 	  let each_value = ensure_array_like({
-	    length: _parseInt$1( /*days*/ctx[9].length / 7)
+	    length: _parseInt$1(/*days*/ctx[9].length / 7)
 	  });
 	  let each_blocks = [];
 	  for (let i = 0; i < each_value.length; i += 1) {
@@ -11597,9 +11853,9 @@ var bookly = (function ($$O) {
 	      for (let i = 0; i < each_blocks.length; i += 1) {
 	        each_blocks[i].c();
 	      }
-	      attr(div0, "class", div0_class_value = "bookly-flex bookly-flex-row fw-bold bookly-text-center bookly-text-muted bookly-w-full bookly-border-b " + /*borderColor*/ctx[13] + " bookly-mb-0.5 bookly-py-2 bookly-max-w-full" + " svelte-trnmqx");
-	      attr(div1, "class", "bookly-relative bookly-rounded");
-	      attr(div2, "class", "bookly-w-full bookly-calendar-dates-mark");
+	      attr(div0, "class", div0_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[13] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-trnmqx");
+	      attr(div1, "class", "bookly:relative bookly:rounded");
+	      attr(div2, "class", "bookly:w-full bookly-calendar-dates-mark");
 	    },
 	    m(target, anchor) {
 	      insert(target, div2, anchor);
@@ -11639,12 +11895,12 @@ var bookly = (function ($$O) {
 	        }
 	        each_blocks_1.length = each_value_2.length;
 	      }
-	      if (!current || dirty[0] & /*borderColor*/8192 && div0_class_value !== (div0_class_value = "bookly-flex bookly-flex-row fw-bold bookly-text-center bookly-text-muted bookly-w-full bookly-border-b " + /*borderColor*/ctx[13] + " bookly-mb-0.5 bookly-py-2 bookly-max-w-full" + " svelte-trnmqx")) {
+	      if (!current || dirty[0] & /*borderColor*/8192 && div0_class_value !== (div0_class_value = "bookly:flex bookly:flex-row fw-bold bookly:text-center bookly:text-muted bookly:w-full bookly:border-b " + /*borderColor*/ctx[13] + " bookly:mb-0.5 bookly:py-2 bookly:max-w-full" + " svelte-trnmqx")) {
 	        attr(div0, "class", div0_class_value);
 	      }
 	      if (dirty[0] & /*days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses, onClickDate*/17023488) {
 	        each_value = ensure_array_like({
-	          length: _parseInt$1( /*days*/ctx[9].length / 7)
+	          length: _parseInt$1(/*days*/ctx[9].length / 7)
 	        });
 	        let i;
 	        for (i = 0; i < each_value.length; i += 1) {
@@ -11702,7 +11958,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (363:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (363:28) <Button                                     type="calendar"                                     bordered={false}                                     rounded={false}                                     paddings={false}                                     margins={false}                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     on:click={() => {year = __year; view='month'}}                                     on:keypress={() => {year = __year; view='month'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_2(ctx) {
 	  let t_value = /*__year*/ctx[57] + "";
 	  let t;
@@ -11731,10 +11987,10 @@ var bookly = (function ($$O) {
 	  let t;
 	  let current;
 	  function click_handler_2() {
-	    return /*click_handler_2*/ctx[40]( /*__year*/ctx[57]);
+	    return /*click_handler_2*/ctx[40](/*__year*/ctx[57]);
 	  }
 	  function keypress_handler_2() {
-	    return /*keypress_handler_2*/ctx[41]( /*__year*/ctx[57]);
+	    return /*keypress_handler_2*/ctx[41](/*__year*/ctx[57]);
 	  }
 	  button = new Button({
 	    props: {
@@ -11743,7 +11999,7 @@ var bookly = (function ($$O) {
 	      rounded: false,
 	      paddings: false,
 	      margins: false,
-	      class: "bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14],
 	      disabled: /*_disabled*/ctx[49],
 	      container: "div",
 	      size: "custom",
@@ -11773,7 +12029,7 @@ var bookly = (function ($$O) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/81923) button_changes.class = "bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14];
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/81923) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14];
 	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[49];
 	      if (dirty[0] & /*year*/2 | dirty[1] & /*$$scope*/536870912) {
 	        button_changes.$$scope = {
@@ -11801,7 +12057,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (338:28) <Button                                     type="calendar"                                     class="bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
+	// (338:28) <Button                                     type="calendar"                                     class="bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {buttonClasses}"                                     bordered={false}                                     rounded={false}                                     margins={false}                                     paddings={false}                                     on:click={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     on:keypress={() => {month = _month; dispatch('month-change'); view='calendar'}}                                     disabled={_disabled}                                     container="div"                                     size="custom"                             >
 	function create_default_slot_1(ctx) {
 	  let t_value = /*datePicker*/ctx[4].monthNamesShort[/*_month*/ctx[56]] + "";
 	  let t;
@@ -11830,15 +12086,15 @@ var bookly = (function ($$O) {
 	  let t;
 	  let current;
 	  function click_handler_1() {
-	    return /*click_handler_1*/ctx[38]( /*_month*/ctx[56]);
+	    return /*click_handler_1*/ctx[38](/*_month*/ctx[56]);
 	  }
 	  function keypress_handler_1() {
-	    return /*keypress_handler_1*/ctx[39]( /*_month*/ctx[56]);
+	    return /*keypress_handler_1*/ctx[39](/*_month*/ctx[56]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14],
+	      class: "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14],
 	      bordered: false,
 	      rounded: false,
 	      margins: false,
@@ -11871,7 +12127,7 @@ var bookly = (function ($$O) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/81923) button_changes.class = "bookly-border-none focus:bookly-border-none focus:bookly-outline-none bookly-leading-normal bookly-px-2 bookly-py-0 bookly-m-0 bookly-text-xl bookly-h-16 " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14];
+	      if (dirty[0] & /*limits, year, disabledButtonClasses, buttonClasses*/81923) button_changes.class = "bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:leading-normal bookly:px-2 bookly:py-0 bookly:m-0 bookly:text-xl bookly:h-16 bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + /*buttonClasses*/ctx[14];
 	      if (dirty[0] & /*limits, year*/3) button_changes.disabled = /*_disabled*/ctx[49];
 	      if (dirty[0] & /*datePicker*/16 | dirty[1] & /*$$scope*/536870912) {
 	        button_changes.$$scope = {
@@ -11902,22 +12158,22 @@ var bookly = (function ($$O) {
 	// (303:24) {#each {length: 7} as _, i}
 	function create_each_block_2(ctx) {
 	  let div;
-	  let t_value = /*datePicker*/ctx[4].dayNamesShort[( /*i*/ctx[47] + /*datePicker*/ctx[4].firstDay) % 7] + "";
+	  let t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[47] + /*datePicker*/ctx[4].firstDay) % 7] + "";
 	  let t;
 	  let div_class_value;
 	  return {
 	    c() {
 	      div = element("div");
 	      t = text(t_value);
-	      attr(div, "class", div_class_value = "bookly-flex-1 bookly-px-0 bookly-overflow-hidden bookly-text-sm " + /*textColor*/ctx[12] + " bookly-cursor-default" + " svelte-trnmqx");
+	      attr(div, "class", div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[12] + " bookly:cursor-default" + " svelte-trnmqx");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
 	      append(div, t);
 	    },
 	    p(ctx, dirty) {
-	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[( /*i*/ctx[47] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
-	      if (dirty[0] & /*textColor*/4096 && div_class_value !== (div_class_value = "bookly-flex-1 bookly-px-0 bookly-overflow-hidden bookly-text-sm " + /*textColor*/ctx[12] + " bookly-cursor-default" + " svelte-trnmqx")) {
+	      if (dirty[0] & /*datePicker*/16 && t_value !== (t_value = /*datePicker*/ctx[4].dayNamesShort[(/*i*/ctx[47] + /*datePicker*/ctx[4].firstDay) % 7] + "")) set_data(t, t_value);
+	      if (dirty[0] & /*textColor*/4096 && div_class_value !== (div_class_value = "bookly:flex-1 bookly:px-0 bookly:overflow-hidden bookly:text-sm " + /*textColor*/ctx[12] + " bookly:cursor-default" + " svelte-trnmqx")) {
 	        attr(div, "class", div_class_value);
 	      }
 	    },
@@ -11929,7 +12185,7 @@ var bookly = (function ($$O) {
 	  };
 	}
 
-	// (313:36) <Button                                             type='calendar'                                             class="bookly-text-sm bookly-h-10 bookly-leading-4 bookly-shadow-none bookly-flex-1 bookly-py-2 bookly-px-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                             bordered={false}                                             margins={false}                                             on:click={() => !_disabled && onClickDate(_day)}                                             on:keypress={() => !_disabled && onClickDate(_day)}                                             disabled={_disabled}                                             container="div"                                             size="custom"                                     >
+	// (313:36) <Button                                             type='calendar'                                             class="bookly:text-sm bookly:h-10 bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer {_disabled ? disabledButtonClasses : ''} {_day.active ? activeButtonClasses : (_day.current ? buttonClasses : otherMonthButtonClasses)} {_day.current ? 'bookly-calendar-current-month-mark' : ''}"                                             bordered={false}                                             margins={false}                                             on:click={() => !_disabled && onClickDate(_day)}                                             on:keypress={() => !_disabled && onClickDate(_day)}                                             disabled={_disabled}                                             container="div"                                             size="custom"                                     >
 	function create_default_slot(ctx) {
 	  let t_value = /*_day*/ctx[48].title + "";
 	  let t;
@@ -11956,15 +12212,15 @@ var bookly = (function ($$O) {
 	  let button;
 	  let current;
 	  function click_handler() {
-	    return /*click_handler*/ctx[36]( /*_disabled*/ctx[49], /*_day*/ctx[48]);
+	    return /*click_handler*/ctx[36](/*_disabled*/ctx[49], /*_day*/ctx[48]);
 	  }
 	  function keypress_handler() {
-	    return /*keypress_handler*/ctx[37]( /*_disabled*/ctx[49], /*_day*/ctx[48]);
+	    return /*keypress_handler*/ctx[37](/*_disabled*/ctx[49], /*_day*/ctx[48]);
 	  }
 	  button = new Button({
 	    props: {
 	      type: "calendar",
-	      class: "bookly-text-sm bookly-h-10 bookly-leading-4 bookly-shadow-none bookly-flex-1 bookly-py-2 bookly-px-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + ( /*_day*/ctx[48].active ? /*activeButtonClasses*/ctx[15] : /*_day*/ctx[48].current ? /*buttonClasses*/ctx[14] : /*otherMonthButtonClasses*/ctx[17]) + " " + ( /*_day*/ctx[48].current ? 'bookly-calendar-current-month-mark' : ''),
+	      class: "bookly:text-sm bookly:h-10 bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + (/*_day*/ctx[48].active ? /*activeButtonClasses*/ctx[15] : /*_day*/ctx[48].current ? /*buttonClasses*/ctx[14] : /*otherMonthButtonClasses*/ctx[17]) + " " + (/*_day*/ctx[48].current ? 'bookly-calendar-current-month-mark' : ''),
 	      bordered: false,
 	      margins: false,
 	      disabled: /*_disabled*/ctx[49],
@@ -11991,7 +12247,7 @@ var bookly = (function ($$O) {
 	    p(new_ctx, dirty) {
 	      ctx = new_ctx;
 	      const button_changes = {};
-	      if (dirty[0] & /*days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/246272) button_changes.class = "bookly-text-sm bookly-h-10 bookly-leading-4 bookly-shadow-none bookly-flex-1 bookly-py-2 bookly-px-0 bookly-border-none focus:bookly-border-none focus:bookly-outline-none " + ( /*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + ( /*_day*/ctx[48].active ? /*activeButtonClasses*/ctx[15] : /*_day*/ctx[48].current ? /*buttonClasses*/ctx[14] : /*otherMonthButtonClasses*/ctx[17]) + " " + ( /*_day*/ctx[48].current ? 'bookly-calendar-current-month-mark' : '');
+	      if (dirty[0] & /*days, disabledButtonClasses, activeButtonClasses, buttonClasses, otherMonthButtonClasses*/246272) button_changes.class = "bookly:text-sm bookly:h-10 bookly:leading-4 bookly:shadow-none bookly:flex-1 bookly:py-2 bookly:px-0 bookly:border-none bookly:focus:border-none bookly:focus:outline-none bookly:cursor-pointer " + (/*_disabled*/ctx[49] ? /*disabledButtonClasses*/ctx[16] : '') + " " + (/*_day*/ctx[48].active ? /*activeButtonClasses*/ctx[15] : /*_day*/ctx[48].current ? /*buttonClasses*/ctx[14] : /*otherMonthButtonClasses*/ctx[17]) + " " + (/*_day*/ctx[48].current ? 'bookly-calendar-current-month-mark' : '');
 	      if (dirty[0] & /*days*/512) button_changes.disabled = /*_disabled*/ctx[49];
 	      if (dirty[0] & /*days*/512 | dirty[1] & /*$$scope*/536870912) {
 	        button_changes.$$scope = {
@@ -12038,7 +12294,7 @@ var bookly = (function ($$O) {
 	        each_blocks[i].c();
 	      }
 	      t = space();
-	      attr(div, "class", "bookly-flex bookly-w-full");
+	      attr(div, "class", "bookly:flex bookly:w-full");
 	    },
 	    m(target, anchor) {
 	      insert(target, div, anchor);
@@ -12112,7 +12368,7 @@ var bookly = (function ($$O) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if ( /*show*/ctx[5]) {
+	      if (/*show*/ctx[5]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	          if (dirty[0] & /*show*/32) {
@@ -12190,23 +12446,23 @@ var bookly = (function ($$O) {
 	  switch (layout) {
 	    case 'bg-accent':
 	      bgColor = 'bg-bookly';
-	      textColor = 'bookly-text-white';
+	      textColor = 'bookly:text-white';
 	      borderColor = 'border-bookly';
-	      buttonClasses = 'bookly-text-white bg-bookly-not-hover hover:bookly-bg-white hover:text-bookly';
-	      otherMonthButtonClasses = 'bookly-text-slate-300 bg-bookly-not-hover hover:bookly-bg-white hover:text-bookly';
-	      activeButtonClasses = 'bookly-bg-white text-bookly hover:text-bookly';
+	      buttonClasses = 'bookly:text-white bg-bookly:not-hover bookly:hover:bg-white hover:text-bookly';
+	      otherMonthButtonClasses = 'bookly:text-slate-300 bg-bookly:not-hover bookly:hover:bg-white hover:text-bookly';
+	      activeButtonClasses = 'bookly:bg-white text-bookly hover:text-bookly';
 	      disabledButtonClasses = '';
-	      controlButtonClasses = 'bookly-text-white bg-bookly-not-hover hover:bookly-bg-white hover:text-bookly';
+	      controlButtonClasses = 'bookly:text-white bg-bookly:not-hover bookly:hover:bg-white hover:text-bookly';
 	      break;
 	    default:
-	      bgColor = 'bookly-bg-white';
-	      textColor = 'bookly-text-slate-600 hover:bookly-text-slate-600';
-	      borderColor = 'bookly-border-slate-100';
-	      buttonClasses = 'text-bookly hover:bg-bookly hover:bookly-text-white';
-	      otherMonthButtonClasses = 'bookly-text-slate-400 hover:bg-bookly hover:bookly-text-white';
-	      activeButtonClasses = 'bookly-text-white bg-bookly';
-	      disabledButtonClasses = 'bookly-bg-slate-100';
-	      controlButtonClasses = 'bookly-text-slate-600 hover:bg-bookly hover:bookly-text-white';
+	      bgColor = 'bookly:bg-white';
+	      textColor = 'bookly:text-slate-600 bookly:hover:text-slate-600';
+	      borderColor = 'bookly:border-slate-100';
+	      buttonClasses = 'text-bookly hover:bg-bookly bookly:hover:text-white';
+	      otherMonthButtonClasses = 'bookly:text-slate-400 hover:bg-bookly bookly:hover:text-white';
+	      activeButtonClasses = 'bookly:text-white bg-bookly';
+	      disabledButtonClasses = 'bookly:bg-slate-100';
+	      controlButtonClasses = 'bookly:text-slate-600 hover:bg-bookly bookly:hover:text-white';
 	      break;
 	  }
 	  function forceLoadSchedule() {
@@ -12603,7 +12859,7 @@ var bookly = (function ($$O) {
 	 * Details step.
 	 */
 	function stepDetails(params) {
-	  let data = $$O.extend({
+	  let data = $$V.extend({
 	      action: 'bookly_render_details'
 	    }, params),
 	    $container = opt[params.form_id].$container;
@@ -12622,55 +12878,55 @@ var bookly = (function ($$O) {
 	    if (opt[params.form_id].hasOwnProperty('google_maps') && opt[params.form_id].google_maps.enabled) {
 	      booklyInitGooglePlacesAutocomplete($container);
 	    }
-	    $$O(document.body).trigger('bookly.render.step_detail', [$container]);
+	    $$V(document.body).trigger('bookly.render.step_detail', [$container]);
 	    // Init.
-	    let $guest_info = $$O('.bookly-js-guest', $container),
-	      $phone_field = $$O('.bookly-js-user-phone-input', $container),
-	      $email_field = $$O('.bookly-js-user-email', $container),
-	      $email_confirm_field = $$O('.bookly-js-user-email-confirm', $container),
-	      $birthday_day_field = $$O('.bookly-js-select-birthday-day', $container),
-	      $birthday_month_field = $$O('.bookly-js-select-birthday-month', $container),
-	      $birthday_year_field = $$O('.bookly-js-select-birthday-year', $container),
-	      $address_country_field = $$O('.bookly-js-address-country', $container),
-	      $address_state_field = $$O('.bookly-js-address-state', $container),
-	      $address_postcode_field = $$O('.bookly-js-address-postcode', $container),
-	      $address_city_field = $$O('.bookly-js-address-city', $container),
-	      $address_street_field = $$O('.bookly-js-address-street', $container),
-	      $address_street_number_field = $$O('.bookly-js-address-street_number', $container),
-	      $address_additional_field = $$O('.bookly-js-address-additional_address', $container),
-	      $address_country_error = $$O('.bookly-js-address-country-error', $container),
-	      $address_state_error = $$O('.bookly-js-address-state-error', $container),
-	      $address_postcode_error = $$O('.bookly-js-address-postcode-error', $container),
-	      $address_city_error = $$O('.bookly-js-address-city-error', $container),
-	      $address_street_error = $$O('.bookly-js-address-street-error', $container),
-	      $address_street_number_error = $$O('.bookly-js-address-street_number-error', $container),
-	      $address_additional_error = $$O('.bookly-js-address-additional_address-error', $container),
-	      $birthday_day_error = $$O('.bookly-js-select-birthday-day-error', $container),
-	      $birthday_month_error = $$O('.bookly-js-select-birthday-month-error', $container),
-	      $birthday_year_error = $$O('.bookly-js-select-birthday-year-error', $container),
-	      $full_name_field = $$O('.bookly-js-full-name', $container),
-	      $first_name_field = $$O('.bookly-js-first-name', $container),
-	      $last_name_field = $$O('.bookly-js-last-name', $container),
-	      $notes_field = $$O('.bookly-js-user-notes', $container),
-	      $custom_field = $$O('.bookly-js-custom-field', $container),
-	      $info_field = $$O('.bookly-js-info-field', $container),
-	      $phone_error = $$O('.bookly-js-user-phone-error', $container),
-	      $email_error = $$O('.bookly-js-user-email-error', $container),
-	      $email_confirm_error = $$O('.bookly-js-user-email-confirm-error', $container),
-	      $name_error = $$O('.bookly-js-full-name-error', $container),
-	      $first_name_error = $$O('.bookly-js-first-name-error', $container),
-	      $last_name_error = $$O('.bookly-js-last-name-error', $container),
-	      $captcha = $$O('.bookly-js-captcha-img', $container),
-	      $custom_error = $$O('.bookly-custom-field-error', $container),
-	      $info_error = $$O('.bookly-js-info-field-error', $container),
-	      $modals = $$O('.bookly-js-modal', $container),
-	      $login_modal = $$O('.bookly-js-login', $container),
-	      $cst_modal = $$O('.bookly-js-cst-duplicate', $container),
-	      $verification_modal = $$O('.bookly-js-verification-code', $container),
-	      $verification_code = $$O('#bookly-verification-code', $container),
-	      $next_btn = $$O('.bookly-js-next-step', $container),
-	      $errors = _mapInstanceProperty(_context = $$O([$birthday_day_error, $birthday_month_error, $birthday_year_error, $address_country_error, $address_state_error, $address_postcode_error, $address_city_error, $address_street_error, $address_street_number_error, $address_additional_error, $name_error, $first_name_error, $last_name_error, $phone_error, $email_error, $email_confirm_error, $custom_error, $info_error])).call(_context, $$O.fn.toArray),
-	      $fields = _mapInstanceProperty(_context2 = $$O([$birthday_day_field, $birthday_month_field, $birthday_year_field, $address_city_field, $address_country_field, $address_postcode_field, $address_state_field, $address_street_field, $address_street_number_field, $address_additional_field, $full_name_field, $first_name_field, $last_name_field, $phone_field, $email_field, $email_confirm_field, $custom_field, $info_field])).call(_context2, $$O.fn.toArray);
+	    let $guest_info = $$V('.bookly-js-guest', $container),
+	      $phone_field = $$V('.bookly-js-user-phone-input', $container),
+	      $email_field = $$V('.bookly-js-user-email', $container),
+	      $email_confirm_field = $$V('.bookly-js-user-email-confirm', $container),
+	      $birthday_day_field = $$V('.bookly-js-select-birthday-day', $container),
+	      $birthday_month_field = $$V('.bookly-js-select-birthday-month', $container),
+	      $birthday_year_field = $$V('.bookly-js-select-birthday-year', $container),
+	      $address_country_field = $$V('.bookly-js-address-country', $container),
+	      $address_state_field = $$V('.bookly-js-address-state', $container),
+	      $address_postcode_field = $$V('.bookly-js-address-postcode', $container),
+	      $address_city_field = $$V('.bookly-js-address-city', $container),
+	      $address_street_field = $$V('.bookly-js-address-street', $container),
+	      $address_street_number_field = $$V('.bookly-js-address-street_number', $container),
+	      $address_additional_field = $$V('.bookly-js-address-additional_address', $container),
+	      $address_country_error = $$V('.bookly-js-address-country-error', $container),
+	      $address_state_error = $$V('.bookly-js-address-state-error', $container),
+	      $address_postcode_error = $$V('.bookly-js-address-postcode-error', $container),
+	      $address_city_error = $$V('.bookly-js-address-city-error', $container),
+	      $address_street_error = $$V('.bookly-js-address-street-error', $container),
+	      $address_street_number_error = $$V('.bookly-js-address-street_number-error', $container),
+	      $address_additional_error = $$V('.bookly-js-address-additional_address-error', $container),
+	      $birthday_day_error = $$V('.bookly-js-select-birthday-day-error', $container),
+	      $birthday_month_error = $$V('.bookly-js-select-birthday-month-error', $container),
+	      $birthday_year_error = $$V('.bookly-js-select-birthday-year-error', $container),
+	      $full_name_field = $$V('.bookly-js-full-name', $container),
+	      $first_name_field = $$V('.bookly-js-first-name', $container),
+	      $last_name_field = $$V('.bookly-js-last-name', $container),
+	      $notes_field = $$V('.bookly-js-user-notes', $container),
+	      $custom_field = $$V('.bookly-js-custom-field', $container),
+	      $info_field = $$V('.bookly-js-info-field', $container),
+	      $phone_error = $$V('.bookly-js-user-phone-error', $container),
+	      $email_error = $$V('.bookly-js-user-email-error', $container),
+	      $email_confirm_error = $$V('.bookly-js-user-email-confirm-error', $container),
+	      $name_error = $$V('.bookly-js-full-name-error', $container),
+	      $first_name_error = $$V('.bookly-js-first-name-error', $container),
+	      $last_name_error = $$V('.bookly-js-last-name-error', $container),
+	      $captcha = $$V('.bookly-js-captcha-img', $container),
+	      $custom_error = $$V('.bookly-custom-field-error', $container),
+	      $info_error = $$V('.bookly-js-info-field-error', $container),
+	      $modals = $$V('.bookly-js-modal', $container),
+	      $login_modal = $$V('.bookly-js-login', $container),
+	      $cst_modal = $$V('.bookly-js-cst-duplicate', $container),
+	      $verification_modal = $$V('.bookly-js-verification-code', $container),
+	      $verification_code = $$V('#bookly-verification-code', $container),
+	      $next_btn = $$V('.bookly-js-next-step', $container),
+	      $errors = _mapInstanceProperty(_context = $$V([$birthday_day_error, $birthday_month_error, $birthday_year_error, $address_country_error, $address_state_error, $address_postcode_error, $address_city_error, $address_street_error, $address_street_number_error, $address_additional_error, $name_error, $first_name_error, $last_name_error, $phone_error, $email_error, $email_confirm_error, $custom_error, $info_error])).call(_context, $$V.fn.toArray),
+	      $fields = _mapInstanceProperty(_context2 = $$V([$birthday_day_field, $birthday_month_field, $birthday_year_field, $address_city_field, $address_country_field, $address_postcode_field, $address_state_field, $address_street_field, $address_street_number_field, $address_additional_field, $full_name_field, $first_name_field, $last_name_field, $phone_field, $email_field, $email_confirm_field, $custom_field, $info_field])).call(_context2, $$V.fn.toArray);
 
 	    // Populate form after login.
 	    var populateForm = function (response) {
@@ -12756,18 +13012,18 @@ var bookly = (function ($$O) {
 	          break;
 	        case 'checkboxes':
 	          _findInstanceProperty($row).call($row, 'input').each(function () {
-	            if ($$O(this).prop('checked')) {
-	              value.push($$O(this).val());
+	            if ($$V(this).prop('checked')) {
+	              value.push($$V(this).val());
 	            }
 	          });
 	          break;
 	      }
-	      $$O.each(custom_fields_conditions, function (i, condition) {
-	        let $target = $$O('.bookly-custom-field-row[data-id="' + condition.target + '"]'),
+	      $$V.each(custom_fields_conditions, function (i, condition) {
+	        let $target = $$V('.bookly-custom-field-row[data-id="' + condition.target + '"]'),
 	          target_visibility = $target.is(':visible');
 	        if (_parseInt$5(condition.source) === id) {
 	          let show = false;
-	          $$O.each(value, function (i, v) {
+	          $$V.each(value, function (i, v) {
 	            var _context7, _context8;
 	            if ($row.is(':visible') && (_includesInstanceProperty$1(_context7 = condition.value).call(_context7, v) && condition.equal === '1' || !_includesInstanceProperty$1(_context8 = condition.value).call(_context8, v) && condition.equal !== '1')) {
 	              show = true;
@@ -12781,28 +13037,28 @@ var bookly = (function ($$O) {
 	      });
 	    };
 	    // Conditional custom fields
-	    $$O('.bookly-custom-field-row').on('change', 'select, input[type="checkbox"], input[type="radio"]', function () {
-	      checkCustomFieldConditions($$O(this).closest('.bookly-custom-field-row'));
+	    $$V('.bookly-custom-field-row').on('change', 'select, input[type="checkbox"], input[type="radio"]', function () {
+	      checkCustomFieldConditions($$V(this).closest('.bookly-custom-field-row'));
 	    });
-	    $$O('.bookly-custom-field-row').each(function () {
+	    $$V('.bookly-custom-field-row').each(function () {
 	      var _context9;
-	      const _type = $$O(this).data('type');
+	      const _type = $$V(this).data('type');
 	      if (_includesInstanceProperty$1(_context9 = ['drop-down', 'radio-buttons', 'checkboxes']).call(_context9, _type)) {
 	        if (_type === 'drop-down') {
 	          var _context10;
-	          _findInstanceProperty(_context10 = $$O(this)).call(_context10, 'select').trigger('change');
+	          _findInstanceProperty(_context10 = $$V(this)).call(_context10, 'select').trigger('change');
 	        } else {
 	          var _context11;
-	          _findInstanceProperty(_context11 = $$O(this)).call(_context11, 'input:checked').trigger('change');
+	          _findInstanceProperty(_context11 = $$V(this)).call(_context11, 'input:checked').trigger('change');
 	        }
 	      }
 	    });
 
 	    // Custom fields date fields
 	    let calendars = {};
-	    $$O(document).on('click', function (e) {
+	    $$V(document).on('click', function (e) {
 	      var _context12;
-	      let $calendar = $$O(e.target).closest('.bookly-js-datepicker-calendar-wrap'),
+	      let $calendar = $$V(e.target).closest('.bookly-js-datepicker-calendar-wrap'),
 	        _id;
 	      if ($calendar.length !== 0) {
 	        _id = $calendar.data('id');
@@ -12811,9 +13067,9 @@ var bookly = (function ($$O) {
 	        if (id !== _id) calendars[id].show = false;
 	      });
 	    });
-	    $$O('.bookly-js-cf-date', $container).each(function () {
+	    $$V('.bookly-js-cf-date', $container).each(function () {
 	      var _context13;
-	      let $that = $$O(this),
+	      let $that = $$V(this),
 	        id = $that.attr('id'),
 	        props = {
 	          datePicker: BooklyL10nGlobal.datePicker,
@@ -12828,17 +13084,17 @@ var bookly = (function ($$O) {
 	        $that.val(formatDate$1($that.data('value')));
 	      }
 	      let today = new Date();
-	      if ($$O(this).data('min') !== '') {
-	        let startDate = new Date($$O(this).data('min'));
+	      if ($$V(this).data('min') !== '') {
+	        let startDate = new Date($$V(this).data('min'));
 	        props.limits.start = startDate;
 	        if (startDate > today) {
 	          props.month = startDate.getMonth();
 	          props.year = startDate.getFullYear();
 	        }
 	      }
-	      if ($$O(this).data('max') !== '') {
-	        let endDate = new Date($$O(this).data('max'));
-	        props.limits.end = new Date($$O(this).data('max'));
+	      if ($$V(this).data('max') !== '') {
+	        let endDate = new Date($$V(this).data('max'));
+	        props.limits.end = new Date($$V(this).data('max'));
 	        if (endDate < today) {
 	          props.month = endDate.getMonth();
 	          props.year = endDate.getFullYear();
@@ -12848,7 +13104,7 @@ var bookly = (function ($$O) {
 	        target: _findInstanceProperty(_context13 = $that.parent()).call(_context13, '.bookly-js-datepicker-calendar').get(0),
 	        props: props
 	      });
-	      $$O(this).on('focus', function (e) {
+	      $$V(this).on('focus', function (e) {
 	        calendars[id].show = true;
 	      });
 	      calendars[id].$on('change', function () {
@@ -12861,7 +13117,7 @@ var bookly = (function ($$O) {
 	        preferredCountries: [intlTelInput.country],
 	        initialCountry: intlTelInput.country,
 	        geoIpLookup: function (callback) {
-	          $$O.get('https://ipinfo.io', function () {}, 'jsonp').always(function (resp) {
+	          $$V.get('https://ipinfo.io', function () {}, 'jsonp').always(function (resp) {
 	            var countryCode = resp && resp.country ? resp.country : '';
 	            callback(countryCode);
 	          });
@@ -12873,14 +13129,14 @@ var bookly = (function ($$O) {
 	    $modals.addClass(params.form_id).appendTo($container).on('click', '.bookly-js-close', function (e) {
 	      var _context14, _context15, _context16;
 	      e.preventDefault();
-	      _findInstanceProperty(_context14 = _findInstanceProperty(_context15 = _findInstanceProperty(_context16 = $$O(e.delegateTarget).removeClass('bookly-in')).call(_context16, 'form').trigger('reset').end()).call(_context15, 'input').removeClass('bookly-error').end()).call(_context14, '.bookly-label-error').html('');
+	      _findInstanceProperty(_context14 = _findInstanceProperty(_context15 = _findInstanceProperty(_context16 = $$V(e.delegateTarget).removeClass('bookly-in')).call(_context16, 'form').trigger('reset').end()).call(_context15, 'input').removeClass('bookly-error').end()).call(_context14, '.bookly-label-error').html('');
 	    });
 	    // Login modal.
-	    $$O('.bookly-js-login-show', $container).on('click', function (e) {
+	    $$V('.bookly-js-login-show', $container).on('click', function (e) {
 	      e.preventDefault();
 	      $login_modal.addClass('bookly-in');
 	    });
-	    $$O('button:submit', $login_modal).on('click', function (e) {
+	    $$V('button:submit', $login_modal).on('click', function (e) {
 	      e.preventDefault();
 	      var ladda = Ladda.create(this);
 	      ladda.start();
@@ -12908,34 +13164,34 @@ var bookly = (function ($$O) {
 	      });
 	    });
 	    // Customer duplicate modal.
-	    $$O('button:submit', $cst_modal).on('click', function (e) {
+	    $$V('button:submit', $cst_modal).on('click', function (e) {
 	      e.preventDefault();
 	      $cst_modal.removeClass('bookly-in');
 	      $next_btn.trigger('click', [1]);
 	    });
 	    // Verification code modal.
-	    $$O('button:submit', $verification_modal).on('click', function (e) {
+	    $$V('button:submit', $verification_modal).on('click', function (e) {
 	      e.preventDefault();
 	      $verification_modal.removeClass('bookly-in');
 	      $next_btn.trigger('click');
 	    });
 	    // Facebook login button.
 	    if (opt[params.form_id].hasOwnProperty('facebook') && opt[params.form_id].facebook.enabled && typeof FB !== 'undefined') {
-	      FB.XFBML.parse($$O('.bookly-js-fb-login-button', $container).parent().get(0));
+	      FB.XFBML.parse($$V('.bookly-js-fb-login-button', $container).parent().get(0));
 	      opt[params.form_id].facebook.onStatusChange = function (response) {
 	        if (response.status === 'connected') {
 	          opt[params.form_id].facebook.enabled = false;
 	          opt[params.form_id].facebook.onStatusChange = undefined;
 	          $guest_info.fadeOut('slow', function () {
 	            // Hide buttons in all Bookly forms on the page.
-	            $$O('.bookly-js-fb-login-button').hide();
+	            $$V('.bookly-js-fb-login-button').hide();
 	          });
 	          FB.api('/me', {
 	            fields: 'id,name,first_name,last_name,email'
 	          }, function (userInfo) {
 	            booklyAjax({
 	              type: 'POST',
-	              data: $$O.extend(userInfo, {
+	              data: $$V.extend(userInfo, {
 	                action: 'bookly_pro_facebook_login',
 	                form_id: params.form_id
 	              })
@@ -12951,8 +13207,8 @@ var bookly = (function ($$O) {
 	      e.preventDefault();
 
 	      // Terms and conditions checkbox
-	      let $terms = $$O('.bookly-js-terms', $container),
-	        $terms_error = $$O('.bookly-js-terms-error', $container);
+	      let $terms = $$V('.bookly-js-terms', $container),
+	        $terms_error = $$V('.bookly-js-terms-error', $container);
 	      $terms_error.html('');
 	      if ($terms.length && !$terms.prop('checked')) {
 	        $terms_error.html(terms_error);
@@ -12967,15 +13223,15 @@ var bookly = (function ($$O) {
 	        // Execute custom JavaScript
 	        if (customJS) {
 	          try {
-	            $$O.globalEval(customJS.next_button);
+	            $$V.globalEval(customJS.next_button);
 	          } catch (e) {
 	            // Do nothing
 	          }
 	        }
 
 	        // Customer information fields.
-	        $$O('div.bookly-js-info-field-row', $container).each(function () {
-	          var $this = $$O(this);
+	        $$V('div.bookly-js-info-field-row', $container).each(function () {
+	          var $this = $$V(this);
 	          switch ($this.data('type')) {
 	            case 'text-field':
 	            case 'file':
@@ -13023,12 +13279,12 @@ var bookly = (function ($$O) {
 	          }
 	        });
 	        // Custom fields.
-	        $$O('.bookly-custom-fields-container', $container).each(function () {
-	          let $cf_container = $$O(this),
+	        $$V('.bookly-custom-fields-container', $container).each(function () {
+	          let $cf_container = $$V(this),
 	            key = $cf_container.data('key'),
 	            custom_fields_data = [];
-	          $$O('div.bookly-custom-field-row', $cf_container).each(function () {
-	            var $this = $$O(this);
+	          $$V('div.bookly-custom-field-row', $cf_container).each(function () {
+	            var $this = $$V(this);
 	            if ($this.css('display') !== 'none') {
 	              switch ($this.data('type')) {
 	                case 'text-field':
@@ -13102,7 +13358,7 @@ var bookly = (function ($$O) {
 	            month: $birthday_month_field.val(),
 	            year: $birthday_year_field.val()
 	          },
-	          full_address: $$O('.bookly-js-cst-address-autocomplete', $container).val(),
+	          full_address: $$V('.bookly-js-cst-address-autocomplete', $container).val(),
 	          country: $address_country_field.val(),
 	          state: $address_state_field.val(),
 	          postcode: $address_postcode_field.val(),
@@ -13256,8 +13512,8 @@ var bookly = (function ($$O) {
 	              }
 	            });
 	            if (response.info_fields) {
-	              $$O.each(response.info_fields, function (field_id, message) {
-	                var $div = $$O('div.bookly-js-info-field-row[data-id="' + field_id + '"]', $container);
+	              $$V.each(response.info_fields, function (field_id, message) {
+	                var $div = $$V('div.bookly-js-info-field-row[data-id="' + field_id + '"]', $container);
 	                _findInstanceProperty($div).call($div, '.bookly-js-info-field-error').html(message);
 	                _findInstanceProperty($div).call($div, '.bookly-js-info-field').addClass('bookly-error');
 	                if ($scroll_to === null) {
@@ -13266,10 +13522,10 @@ var bookly = (function ($$O) {
 	              });
 	            }
 	            if (response.custom_fields) {
-	              $$O.each(response.custom_fields, function (key, fields) {
-	                $$O.each(fields, function (field_id, message) {
-	                  var $custom_fields_collector = $$O('.bookly-custom-fields-container[data-key="' + key + '"]', $container);
-	                  var $div = $$O('[data-id="' + field_id + '"]', $custom_fields_collector);
+	              $$V.each(response.custom_fields, function (key, fields) {
+	                $$V.each(fields, function (field_id, message) {
+	                  var $custom_fields_collector = $$V('.bookly-custom-fields-container[data-key="' + key + '"]', $container);
+	                  var $div = $$V('[data-id="' + field_id + '"]', $custom_fields_collector);
 	                  _findInstanceProperty($div).call($div, '.bookly-custom-field-error').html(message);
 	                  _findInstanceProperty($div).call($div, '.bookly-js-custom-field').addClass('bookly-error');
 	                  if ($scroll_to === null) {
@@ -13288,7 +13544,7 @@ var bookly = (function ($$O) {
 	        });
 	      }
 	    });
-	    $$O('.bookly-js-back-step', $container).on('click', function (e) {
+	    $$V('.bookly-js-back-step', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      laddaStart(this);
@@ -13320,7 +13576,7 @@ var bookly = (function ($$O) {
 	        });
 	      }
 	    });
-	    $$O('.bookly-js-captcha-refresh', $container).on('click', function () {
+	    $$V('.bookly-js-captcha-refresh', $container).on('click', function () {
 	      $captcha.css('opacity', '0.5');
 	      booklyAjax({
 	        type: 'POST',
@@ -13340,9 +13596,9 @@ var bookly = (function ($$O) {
 	   * global function to init google places
 	   */
 	  function booklyInitGooglePlacesAutocomplete(bookly_forms) {
-	    bookly_forms = bookly_forms || $$O('.bookly-form .bookly-details-step');
+	    bookly_forms = bookly_forms || $$V('.bookly-form .bookly-details-step');
 	    bookly_forms.each(function () {
-	      initGooglePlacesAutocomplete($$O(this));
+	      initGooglePlacesAutocomplete($$V(this));
 	    });
 	  }
 
@@ -13393,7 +13649,7 @@ var bookly = (function ($$O) {
 	      }, {
 	        selector: '.bookly-js-address-street_number',
 	        val: function () {
-	          return getFieldValueByType('street_number');
+	          return getFieldValueByType('street_number') || getFieldValueByType('premise');
 	        }
 	      }, {
 	        selector: '.bookly-js-address-additional_address',
@@ -13437,7 +13693,7 @@ var bookly = (function ($$O) {
 	      // Record previous step if it was given in params.
 	      opt[params.form_id].cart_prev_step = params.from_step;
 	    }
-	    let data = $$O.extend({
+	    let data = $$V.extend({
 	        action: 'bookly_render_cart'
 	      }, params),
 	      $container = opt[params.form_id].$container;
@@ -13446,14 +13702,14 @@ var bookly = (function ($$O) {
 	    }).then(response => {
 	      $container.html(response.html);
 	      if (error) {
-	        $$O('.bookly-label-error', $container).html(error.message);
-	        $$O('tr[data-cart-key="' + error.failed_key + '"]', $container).addClass('bookly-label-error');
+	        $$V('.bookly-label-error', $container).html(error.message);
+	        $$V('tr[data-cart-key="' + error.failed_key + '"]', $container).addClass('bookly-label-error');
 	      } else {
-	        $$O('.bookly-label-error', $container).hide();
+	        $$V('.bookly-label-error', $container).hide();
 	      }
 	      scrollTo($container, params.form_id);
 	      const customJS = response.custom_js;
-	      $$O('.bookly-js-next-step', $container).on('click', function (e) {
+	      $$V('.bookly-js-next-step', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -13461,7 +13717,7 @@ var bookly = (function ($$O) {
 	        // Execute custom JavaScript
 	        if (customJS) {
 	          try {
-	            $$O.globalEval(customJS.next_button);
+	            $$V.globalEval(customJS.next_button);
 	          } catch (e) {
 	            // Do nothing
 	          }
@@ -13470,7 +13726,7 @@ var bookly = (function ($$O) {
 	          form_id: params.form_id
 	        });
 	      });
-	      $$O('.bookly-add-item', $container).on('click', function (e) {
+	      $$V('.bookly-add-item', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -13480,7 +13736,7 @@ var bookly = (function ($$O) {
 	        });
 	      });
 	      // 'BACK' button.
-	      $$O('.bookly-js-back-step', $container).on('click', function (e) {
+	      $$V('.bookly-js-back-step', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -13511,9 +13767,9 @@ var bookly = (function ($$O) {
 	            });
 	        }
 	      });
-	      $$O('.bookly-js-actions button', $container).on('click', function () {
+	      $$V('.bookly-js-actions button', $container).on('click', function () {
 	        laddaStart(this);
-	        let $this = $$O(this),
+	        let $this = $$V(this),
 	          $cart_item = $this.closest('tr');
 	        switch ($this.data('action')) {
 	          case 'drop':
@@ -13525,24 +13781,24 @@ var bookly = (function ($$O) {
 	              }
 	            }).then(response => {
 	              let remove_cart_key = $cart_item.data('cart-key'),
-	                $trs_to_remove = $$O('tr[data-cart-key="' + remove_cart_key + '"]', $container);
+	                $trs_to_remove = $$V('tr[data-cart-key="' + remove_cart_key + '"]', $container);
 	              $cart_item.delay(300).fadeOut(200, function () {
 	                if (response.data.total_waiting_list) {
-	                  $$O('.bookly-js-waiting-list-price', $container).html(response.data.waiting_list_price);
-	                  $$O('.bookly-js-waiting-list-deposit', $container).html(response.data.waiting_list_deposit);
+	                  $$V('.bookly-js-waiting-list-price', $container).html(response.data.waiting_list_price);
+	                  $$V('.bookly-js-waiting-list-deposit', $container).html(response.data.waiting_list_deposit);
 	                } else {
-	                  $$O('.bookly-js-waiting-list-price', $container).closest('tr').remove();
+	                  $$V('.bookly-js-waiting-list-price', $container).closest('tr').remove();
 	                }
-	                $$O('.bookly-js-subtotal-price', $container).html(response.data.subtotal_price);
-	                $$O('.bookly-js-subtotal-deposit', $container).html(response.data.subtotal_deposit);
-	                $$O('.bookly-js-pay-now-deposit', $container).html(response.data.pay_now_deposit);
-	                $$O('.bookly-js-pay-now-tax', $container).html(response.data.pay_now_tax);
-	                $$O('.bookly-js-total-price', $container).html(response.data.total_price);
-	                $$O('.bookly-js-total-tax', $container).html(response.data.total_tax);
+	                $$V('.bookly-js-subtotal-price', $container).html(response.data.subtotal_price);
+	                $$V('.bookly-js-subtotal-deposit', $container).html(response.data.subtotal_deposit);
+	                $$V('.bookly-js-pay-now-deposit', $container).html(response.data.pay_now_deposit);
+	                $$V('.bookly-js-pay-now-tax', $container).html(response.data.pay_now_tax);
+	                $$V('.bookly-js-total-price', $container).html(response.data.total_price);
+	                $$V('.bookly-js-total-tax', $container).html(response.data.total_tax);
 	                $trs_to_remove.remove();
-	                if ($$O('tr[data-cart-key]').length == 0) {
-	                  $$O('.bookly-js-back-step', $container).hide();
-	                  $$O('.bookly-js-next-step', $container).hide();
+	                if ($$V('tr[data-cart-key]').length == 0) {
+	                  $$V('.bookly-js-back-step', $container).hide();
+	                  $$V('.bookly-js-next-step', $container).hide();
 	                }
 	              });
 	            });
@@ -13566,7 +13822,7 @@ var bookly = (function ($$O) {
 	  if (_repeatInstanceProperty(opt[params.form_id].skip_steps)) {
 	    stepCart(params, error);
 	  } else {
-	    let data = $$O.extend({
+	    let data = $$V.extend({
 	        action: 'bookly_render_repeat'
 	      }, params),
 	      $container = opt[params.form_id].$container;
@@ -13576,27 +13832,27 @@ var bookly = (function ($$O) {
 	      var _context3, _context4;
 	      $container.html(response.html);
 	      scrollTo($container, params.form_id);
-	      let $repeat_enabled = $$O('.bookly-js-repeat-appointment-enabled', $container),
-	        $next_step = $$O('.bookly-js-next-step', $container),
-	        $repeat_container = $$O('.bookly-js-repeat-variants-container', $container),
-	        $variants = $$O('[class^="bookly-js-variant"]', $repeat_container),
-	        $repeat_variant = $$O('.bookly-js-repeat-variant', $repeat_container),
-	        $button_get_schedule = $$O('.bookly-js-get-schedule', $repeat_container),
-	        $variant_weekly = $$O('.bookly-js-variant-weekly', $repeat_container),
-	        $variant_monthly = $$O('.bookly-js-repeat-variant-monthly', $repeat_container),
-	        $date_until = $$O('.bookly-js-repeat-until', $repeat_container),
-	        $repeat_times = $$O('.bookly-js-repeat-times', $repeat_container),
-	        $monthly_specific_day = $$O('.bookly-js-monthly-specific-day', $repeat_container),
-	        $monthly_week_day = $$O('.bookly-js-monthly-week-day', $repeat_container),
-	        $repeat_every_day = $$O('.bookly-js-repeat-daily-every', $repeat_container),
-	        $schedule_container = $$O('.bookly-js-schedule-container', $container),
-	        $days_error = $$O('.bookly-js-days-error', $repeat_container),
-	        $schedule_slots = $$O('.bookly-js-schedule-slots', $schedule_container),
-	        $intersection_info = $$O('.bookly-js-intersection-info', $schedule_container),
-	        $info_help = $$O('.bookly-js-schedule-help', $schedule_container),
-	        $info_wells = $$O('.bookly-well', $schedule_container),
-	        $pagination = $$O('.bookly-pagination', $schedule_container),
-	        $schedule_row_template = $$O('.bookly-schedule-row-template .bookly-schedule-row', $schedule_container),
+	      let $repeat_enabled = $$V('.bookly-js-repeat-appointment-enabled', $container),
+	        $next_step = $$V('.bookly-js-next-step', $container),
+	        $repeat_container = $$V('.bookly-js-repeat-variants-container', $container),
+	        $variants = $$V('[class^="bookly-js-variant"]', $repeat_container),
+	        $repeat_variant = $$V('.bookly-js-repeat-variant', $repeat_container),
+	        $button_get_schedule = $$V('.bookly-js-get-schedule', $repeat_container),
+	        $variant_weekly = $$V('.bookly-js-variant-weekly', $repeat_container),
+	        $variant_monthly = $$V('.bookly-js-repeat-variant-monthly', $repeat_container),
+	        $date_until = $$V('.bookly-js-repeat-until', $repeat_container),
+	        $repeat_times = $$V('.bookly-js-repeat-times', $repeat_container),
+	        $monthly_specific_day = $$V('.bookly-js-monthly-specific-day', $repeat_container),
+	        $monthly_week_day = $$V('.bookly-js-monthly-week-day', $repeat_container),
+	        $repeat_every_day = $$V('.bookly-js-repeat-daily-every', $repeat_container),
+	        $schedule_container = $$V('.bookly-js-schedule-container', $container),
+	        $days_error = $$V('.bookly-js-days-error', $repeat_container),
+	        $schedule_slots = $$V('.bookly-js-schedule-slots', $schedule_container),
+	        $intersection_info = $$V('.bookly-js-intersection-info', $schedule_container),
+	        $info_help = $$V('.bookly-js-schedule-help', $schedule_container),
+	        $info_wells = $$V('.bookly-well', $schedule_container),
+	        $pagination = $$V('.bookly-pagination', $schedule_container),
+	        $schedule_row_template = $$V('.bookly-schedule-row-template .bookly-schedule-row', $schedule_container),
 	        pages_warning_info = response.pages_warning_info,
 	        short_date_format = response.short_date_format,
 	        bound_date = {
@@ -13630,9 +13886,9 @@ var bookly = (function ($$O) {
 	          var $time = '';
 	          if (options.length) {
 	            var prefer;
-	            $time = $$O('<select/>');
-	            $$O.each(options, function (index, option) {
-	              var $option = $$O('<option/>');
+	            $time = $$V('<select/>');
+	            $$V.each(options, function (index, option) {
+	              var $option = $$V('<option/>');
 	              $option.text(option.title).val(option.value);
 	              if (option.disabled) {
 	                $option.attr('disabled', 'disabled');
@@ -13677,17 +13933,17 @@ var bookly = (function ($$O) {
 	            $row = $schedule_row_template.clone();
 	            $row.data('datetime', schedule[i].datetime);
 	            $row.data('index', schedule[i].index);
-	            $$O('> div:first-child', $row).html(schedule[i].index);
-	            $$O('.bookly-schedule-date', $row).html(schedule[i].display_date);
+	            $$V('> div:first-child', $row).html(schedule[i].index);
+	            $$V('.bookly-schedule-date', $row).html(schedule[i].display_date);
 	            if (schedule[i].all_day_service_time !== undefined) {
-	              $$O('.bookly-js-schedule-time', $row).hide();
-	              $$O('.bookly-js-schedule-all-day-time', $row).html(schedule[i].all_day_service_time).show();
+	              $$V('.bookly-js-schedule-time', $row).hide();
+	              $$V('.bookly-js-schedule-all-day-time', $row).html(schedule[i].all_day_service_time).show();
 	            } else {
-	              $$O('.bookly-js-schedule-time', $row).html(schedule[i].display_time).show();
-	              $$O('.bookly-js-schedule-all-day-time', $row).hide();
+	              $$V('.bookly-js-schedule-time', $row).html(schedule[i].display_time).show();
+	              $$V('.bookly-js-schedule-all-day-time', $row).hide();
 	            }
 	            if (schedule[i].another_time) {
-	              $$O('.bookly-schedule-intersect', $row).show();
+	              $$V('.bookly-schedule-intersect', $row).show();
 	            }
 	            if (schedule[i].deleted) {
 	              _findInstanceProperty($row).call($row, '.bookly-schedule-appointment').addClass('bookly-appointment-hidden');
@@ -13695,7 +13951,7 @@ var bookly = (function ($$O) {
 	            $schedule_slots.append($row);
 	          }
 	          if (count > rows_on_page) {
-	            var $btn = $$O('<li/>').append($$O('<a>', {
+	            var $btn = $$V('<li/>').append($$V('<a>', {
 	              href: '#',
 	              text: '«'
 	            }));
@@ -13707,25 +13963,25 @@ var bookly = (function ($$O) {
 	            });
 	            $pagination.html($btn);
 	            for (i = 0, j = 1; i < count; i += 5, j++) {
-	              $btn = $$O('<li/>', {
+	              $btn = $$V('<li/>', {
 	                'data-page': j
-	              }).append($$O('<a>', {
+	              }).append($$V('<a>', {
 	                href: '#',
 	                text: j
 	              }));
 	              $pagination.append($btn);
 	              $btn.on('click', function (e) {
 	                e.preventDefault();
-	                repeat.renderSchedulePage($$O(this).data('page'));
+	                repeat.renderSchedulePage($$V(this).data('page'));
 	              }).keypress(function (e) {
 	                e.preventDefault();
 	                if (e.which == 13 || e.which == 32) {
-	                  repeat.renderSchedulePage($$O(this).data('page'));
+	                  repeat.renderSchedulePage($$V(this).data('page'));
 	                }
 	              });
 	            }
 	            _findInstanceProperty($pagination).call($pagination, 'li:eq(' + page + ')').addClass('active');
-	            $btn = $$O('<li/>').append($$O('<a>', {
+	            $btn = $$V('<li/>').append($$V('<a>', {
 	              href: '#',
 	              text: '»'
 	            }));
@@ -13763,7 +14019,7 @@ var bookly = (function ($$O) {
 	          schedule = data; // it has global scope
 	          // Prefer time is display time selected on step time.
 	          var preferred_time = null;
-	          $$O.each(schedule, function (index, item) {
+	          $$V.each(schedule, function (index, item) {
 	            if (!preferred_time && !item.another_time) {
 	              preferred_time = item.display_time;
 	            }
@@ -13772,9 +14028,9 @@ var bookly = (function ($$O) {
 	          $schedule_container.show();
 	          $next_step.prop('disabled', schedule.length == 0);
 	          $schedule_slots.on('click', 'button[data-action]', function () {
-	            var $schedule_row = $$O(this).closest('.bookly-schedule-row');
+	            var $schedule_row = $$V(this).closest('.bookly-schedule-row');
 	            var row_index = $schedule_row.data('index') - 1;
-	            switch ($$O(this).data('action')) {
+	            switch ($$V(this).data('action')) {
 	              case 'drop':
 	                schedule[row_index].deleted = true;
 	                _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-schedule-appointment').addClass('bookly-appointment-hidden');
@@ -13787,7 +14043,7 @@ var bookly = (function ($$O) {
 	                break;
 	              case 'edit':
 	                _findInstanceProperty($schedule_slots).call($schedule_slots, '.bookly-schedule-row .bookly-js-datepicker-container').each(function () {
-	                  let $row = $$O(this).closest('.bookly-schedule-row'),
+	                  let $row = $$V(this).closest('.bookly-schedule-row'),
 	                    index = $row.data('index') - 1;
 	                  _findInstanceProperty($row).call($row, 'button[data-action="edit"]').show();
 	                  _findInstanceProperty($row).call($row, 'button[data-action="save"]').hide();
@@ -13796,20 +14052,20 @@ var bookly = (function ($$O) {
 	                });
 	                let slots = JSON.parse(schedule[row_index].slots),
 	                  current_date = slots[0][2].split(' ')[0],
-	                  $date = $$O('<input/>', {
+	                  $date = $$V('<input/>', {
 	                    type: 'text',
 	                    value: formatDate$1(current_date, short_date_format)
 	                  }),
-	                  $edit_button = $$O(this),
+	                  $edit_button = $$V(this),
 	                  ladda_round = laddaStart(this);
 	                $date.data('date', current_date);
-	                _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-schedule-date').html($$O.merge($date, $$O('<div class="bookly-relative bookly-w-full bookly-z-10 bookly-js-datepicker-container" style="font-weight: normal;"><div class="bookly-absolute bookly-top-1 bookly-w-72 bookly-p-0 bookly-bg-white bookly-js-datepicker-calendar"></div></div>')));
+	                _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-schedule-date').html($$V.merge($date, $$V('<div class="bookly:relative bookly:w-full bookly:z-10 bookly-js-datepicker-container" style="font-weight: normal;"><div class="bookly:absolute bookly:top-1 bookly:left-0 bookly:w-72 bookly:p-0 bookly:bg-white bookly-js-datepicker-calendar"></div></div>')));
 	                $date = _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-schedule-date input');
 	                if (schedule_calendar) {
 	                  schedule_calendar.$destroy();
 	                }
-	                $$O(document).on('click', function (e) {
-	                  if ($$O(e.target).closest('.bookly-schedule-date').length === 0) {
+	                $$V(document).on('click', function (e) {
+	                  if ($$V(e.target).closest('.bookly-schedule-date').length === 0) {
 	                    schedule_calendar.show = false;
 	                  }
 	                });
@@ -13830,7 +14086,7 @@ var bookly = (function ($$O) {
 	                });
 	                $date.on('change', function () {
 	                  var exclude = [];
-	                  $$O.each(schedule, function (index, item) {
+	                  $$V.each(schedule, function (index, item) {
 	                    if (row_index != index && !item.deleted) {
 	                      exclude.push(item.slots);
 	                    }
@@ -13839,7 +14095,7 @@ var bookly = (function ($$O) {
 	                    type: 'POST',
 	                    data: {
 	                      action: 'bookly_recurring_appointments_get_daily_customer_schedule',
-	                      date: $$O(this).data('date'),
+	                      date: $$V(this).data('date'),
 	                      form_id: params.form_id,
 	                      exclude: exclude
 	                    }
@@ -13864,7 +14120,7 @@ var bookly = (function ($$O) {
 	                $date.trigger('change');
 	                break;
 	              case 'save':
-	                $$O(this).hide();
+	                $$V(this).hide();
 	                _findInstanceProperty($schedule_row).call($schedule_row, 'button[data-action="edit"]').show();
 	                var $date_container = _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-schedule-date'),
 	                  $time_container = _findInstanceProperty($schedule_row).call($schedule_row, '.bookly-js-schedule-time'),
@@ -13882,13 +14138,13 @@ var bookly = (function ($$O) {
 	        isDateMatchesSelections: function (current_date) {
 	          switch ($repeat_variant.val()) {
 	            case 'daily':
-	              if (($repeat_every_day.val() > 6 || $$O.inArray(current_date.format('ddd').toLowerCase(), repeat.week_days) != -1) && current_date.diff(repeat.date_from, 'days') % $repeat_every_day.val() == 0) {
+	              if (($repeat_every_day.val() > 6 || $$V.inArray(current_date.format('ddd').toLowerCase(), repeat.week_days) != -1) && current_date.diff(repeat.date_from, 'days') % $repeat_every_day.val() == 0) {
 	                return true;
 	              }
 	              break;
 	            case 'weekly':
 	            case 'biweekly':
-	              if (($repeat_variant.val() == 'weekly' || current_date.diff(repeat.date_from.clone().startOf('isoWeek'), 'weeks') % 2 == 0) && $$O.inArray(current_date.format('ddd').toLowerCase(), repeat.checked_week_days) != -1) {
+	              if (($repeat_variant.val() == 'weekly' || current_date.diff(repeat.date_from.clone().startOf('isoWeek'), 'weeks') % 2 == 0) && $$V.inArray(current_date.format('ddd').toLowerCase(), repeat.checked_week_days) != -1) {
 	                return true;
 	              }
 	              break;
@@ -13924,10 +14180,10 @@ var bookly = (function ($$O) {
 	          repeat.date_from = moment(date_from.join(','), 'YYYY,M,D');
 	          repeat.week_days = [];
 	          _findInstanceProperty($monthly_week_day).call($monthly_week_day, 'option').each(function () {
-	            repeat.week_days.push($$O(this).val());
+	            repeat.week_days.push($$V(this).val());
 	          });
 	          repeat.checked_week_days = [];
-	          $$O('.bookly-js-week-days input:checked', $repeat_container).each(function () {
+	          $$V('.bookly-js-week-days input:checked', $repeat_container).each(function () {
 	            repeat.checked_week_days.push(this.value);
 	          });
 	          var current_date = repeat.date_from.clone();
@@ -13951,10 +14207,10 @@ var bookly = (function ($$O) {
 	          repeat.date_from = moment(date_from.join(','), 'YYYY,M,D');
 	          repeat.week_days = [];
 	          _findInstanceProperty($monthly_week_day).call($monthly_week_day, 'option').each(function () {
-	            repeat.week_days.push($$O(this).val());
+	            repeat.week_days.push($$V(this).val());
 	          });
 	          repeat.checked_week_days = [];
-	          $$O('.bookly-js-week-days input:checked', $repeat_container).each(function () {
+	          $$V('.bookly-js-week-days input:checked', $repeat_container).each(function () {
 	            repeat.checked_week_days.push(this.value);
 	          });
 	          var current_date = repeat.date_from.clone();
@@ -13984,8 +14240,8 @@ var bookly = (function ($$O) {
 	        }
 	      });
 	      $date_until.val(formatDate$1($date_until.data('value')));
-	      $$O(document).on('click', function (e) {
-	        if ($$O(e.target).closest('.bookly-js-repeat-until-wrap').length === 0) {
+	      $$V(document).on('click', function (e) {
+	        if ($$V(e.target).closest('.bookly-js-repeat-until-wrap').length === 0) {
 	          until_calendar.show = false;
 	        }
 	      });
@@ -13997,8 +14253,8 @@ var bookly = (function ($$O) {
 	        $date_until.val(formatDate$1(until_calendar.date));
 	      });
 	      var open_repeat_onchange = $repeat_enabled.on('change', function () {
-	        $repeat_container.toggle($$O(this).prop('checked'));
-	        if ($$O(this).prop('checked')) {
+	        $repeat_container.toggle($$V(this).prop('checked'));
+	        if ($$V(this).prop('checked')) {
 	          repeat.prepareButtonNextState();
 	        } else {
 	          $next_step.prop('disabled', false);
@@ -14018,15 +14274,15 @@ var bookly = (function ($$O) {
 	          case 'weekly':
 	          //break skipped
 	          case 'biweekly':
-	            $$O('.bookly-js-week-days input[type="checkbox"]', $repeat_container).prop('checked', false).parent().removeClass('active');
+	            $$V('.bookly-js-week-days input[type="checkbox"]', $repeat_container).prop('checked', false).parent().removeClass('active');
 	            _forEachInstanceProperty(_context4 = repeat_params.on).call(_context4, function (val) {
-	              $$O('.bookly-js-week-days input:checkbox[value=' + val + ']', $repeat_container).prop('checked', true);
+	              $$V('.bookly-js-week-days input:checkbox[value=' + val + ']', $repeat_container).prop('checked', true);
 	            });
 	            break;
 	          case 'monthly':
 	            if (repeat_params.on === 'day') {
 	              $variant_monthly.val('specific');
-	              $$O('.bookly-js-monthly-specific-day[value=' + repeat_params.day + ']', $repeat_container).prop('checked', true);
+	              $$V('.bookly-js-monthly-specific-day[value=' + repeat_params.day + ']', $repeat_container).prop('checked', true);
 	            } else {
 	              $variant_monthly.val(repeat_params.on);
 	              $monthly_week_day.val(repeat_params.weekday);
@@ -14049,7 +14305,7 @@ var bookly = (function ($$O) {
 	        $monthly_specific_day.toggle(this.value == 'specific');
 	        repeat.updateRepeatTimes();
 	      }).trigger('change');
-	      $$O('.bookly-js-week-days input', $repeat_container).on('change', function () {
+	      $$V('.bookly-js-week-days input', $repeat_container).on('change', function () {
 	        repeat.updateRepeatTimes();
 	      });
 	      $monthly_specific_day.val(response.date_min[2]);
@@ -14087,7 +14343,7 @@ var bookly = (function ($$O) {
 	          case 'weekly':
 	          case 'biweekly':
 	            data.params.on = [];
-	            $$O('.bookly-js-week-days input[type="checkbox"]:checked', $variant_weekly).each(function () {
+	            $$V('.bookly-js-week-days input[type="checkbox"]:checked', $variant_weekly).each(function () {
 	              data.params.on.push(this.value);
 	            });
 	            if (data.params.on.length == 0) {
@@ -14121,7 +14377,7 @@ var bookly = (function ($$O) {
 	          ladda.stop();
 	        });
 	      });
-	      $$O('.bookly-js-back-step', $container).on('click', function (e) {
+	      $$V('.bookly-js-back-step', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -14144,7 +14400,7 @@ var bookly = (function ($$O) {
 	          }
 	        });
 	      });
-	      $$O('.bookly-js-go-to-cart', $container).on('click', function (e) {
+	      $$V('.bookly-js-go-to-cart', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -14153,7 +14409,7 @@ var bookly = (function ($$O) {
 	          from_step: 'repeat'
 	        });
 	      });
-	      $$O('.bookly-js-next-step', $container).on('click', function (e) {
+	      $$V('.bookly-js-next-step', $container).on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -14161,7 +14417,7 @@ var bookly = (function ($$O) {
 	        // Execute custom JavaScript
 	        if (customJS) {
 	          try {
-	            $$O.globalEval(customJS.next_button);
+	            $$V.globalEval(customJS.next_button);
 	          } catch (e) {
 	            // Do nothing
 	          }
@@ -14244,7 +14500,7 @@ var bookly = (function ($$O) {
 	    data.time_zone = opt[params.form_id].timeZone;
 	    data.time_zone_offset = opt[params.form_id].timeZoneOffset;
 	  }
-	  $$O.extend(data, params);
+	  $$V.extend(data, params);
 	  let columnizerObserver = false;
 	  let lastObserverTime = 0;
 	  let lastObserverWidth = 0;
@@ -14253,10 +14509,10 @@ var bookly = (function ($$O) {
 	  // Build slots html
 	  function prepareSlotsHtml(slots_data, selected_date) {
 	    var response = {};
-	    $$O.each(slots_data, function (group, group_slots) {
+	    $$V.each(slots_data, function (group, group_slots) {
 	      var html = '<button class="bookly-day" value="' + group + '">' + group_slots.title + '</button>';
-	      $$O.each(group_slots.slots, function (id, slot) {
-	        html += '<button value="' + _JSON$stringify(slot.data).replace(/"/g, '&quot;') + '" data-group="' + group + '" class="bookly-hour' + (slot.special_hour ? ' bookly-slot-in-special-hour' : '') + (slot.status == 'waiting-list' ? ' bookly-slot-in-waiting-list' : slot.status == 'booked' ? ' booked' : '') + '"' + (slot.status == 'booked' ? ' disabled' : '') + '>' + '<span class="ladda-label bookly-time-main' + (slot.data[0][2] == selected_date ? ' bookly-bold' : '') + '">' + '<i class="bookly-hour-icon"><span></span></i>' + slot.time_text + '</span>' + '<span class="bookly-time-additional' + (slot.status == 'waiting-list' ? ' bookly-waiting-list' : '') + '"> ' + slot.additional_text + '</span>' + '</button>';
+	      $$V.each(group_slots.slots, function (id, slot) {
+	        html += '<button value="' + _JSON$stringify(slot.data).replace(/"/g, '&quot;') + '" data-group="' + group + '" class="bookly-hour' + (slot.special_hour ? ' bookly-slot-in-special-hour' : '') + (slot.status == 'waiting-list' ? ' bookly-slot-in-waiting-list' : slot.status == 'booked' ? ' booked' : '') + '"' + (slot.status == 'booked' ? ' disabled' : '') + '>' + '<span class="ladda-label bookly-time-main' + (slot.data[0][2] == selected_date ? ' bookly-bold' : '') + '">' + '<i class="bookly-hour-icon"><span></span></i>' + slot.time_text + '<span class="bookly-time-additional' + (slot.status == 'waiting-list' ? ' bookly-waiting-list' : '') + '"> ' + slot.additional_text + '</span></span>' + '</button>';
 	      });
 	      response[group] = html;
 	    });
@@ -14269,10 +14525,10 @@ var bookly = (function ($$O) {
 	  }).then(response => {
 	    BooklyL10n.csrf_token = response.csrf_token;
 	    $container.html(response.html);
-	    var $columnizer_wrap = $$O('.bookly-columnizer-wrap', $container),
-	      $columnizer = $$O('.bookly-columnizer', $columnizer_wrap),
-	      $time_next_button = $$O('.bookly-time-next', $container),
-	      $time_prev_button = $$O('.bookly-time-prev', $container),
+	    var $columnizer_wrap = $$V('.bookly-columnizer-wrap', $container),
+	      $columnizer = $$V('.bookly-columnizer', $columnizer_wrap),
+	      $time_next_button = $$V('.bookly-time-next', $container),
+	      $time_prev_button = $$V('.bookly-time-prev', $container),
 	      $current_screen = null,
 	      slot_height = 36,
 	      column_width = response.time_slots_wide ? 205 : 127,
@@ -14289,7 +14545,7 @@ var bookly = (function ($$O) {
 	      slots = prepareSlotsHtml(response.slots_data, response.selected_date),
 	      customJS = response.custom_js;
 	    // 'BACK' button.
-	    $$O('.bookly-js-back-step', $container).on('click', function (e) {
+	    $$V('.bookly-js-back-step', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      laddaStart(this);
@@ -14309,7 +14565,7 @@ var bookly = (function ($$O) {
 	        });
 	      }
 	    }).toggle(!opt[params.form_id].skip_steps.service || !opt[params.form_id].skip_steps.extras);
-	    $$O('.bookly-js-go-to-cart', $container).on('click', function (e) {
+	    $$V('.bookly-js-go-to-cart', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      laddaStart(this);
@@ -14320,7 +14576,7 @@ var bookly = (function ($$O) {
 	    });
 
 	    // Time zone switcher.
-	    $$O('.bookly-js-time-zone-switcher', $container).on('change', function (e) {
+	    $$V('.bookly-js-time-zone-switcher', $container).on('change', function (e) {
 	      opt[params.form_id].timeZone = this.value;
 	      opt[params.form_id].timeZoneOffset = undefined;
 	      showSpinner();
@@ -14334,10 +14590,10 @@ var bookly = (function ($$O) {
 	      });
 	    });
 	    if (show_calendar) {
-	      let date = response.current_date ? response.first_available_date ? response.first_available_date : response.current_date : response.selected_date ? response.selected_date.substring(0, 10) : $$O('.bookly-js-selected-date', $container).data('value');
+	      let date = response.current_date ? response.first_available_date ? response.first_available_date : response.current_date : response.selected_date ? response.selected_date.substring(0, 10) : $$V('.bookly-js-selected-date', $container).data('value');
 	      loadedMonths.push(moment(date).month() + '-' + moment(date).year());
 	      let _cal = new Calendar({
-	        target: $$O('.bookly-js-slot-calendar', $container).get(0),
+	        target: $$V('.bookly-js-slot-calendar', $container).get(0),
 	        props: {
 	          datePicker: BooklyL10nGlobal.datePicker,
 	          date: date,
@@ -14384,7 +14640,7 @@ var bookly = (function ($$O) {
 	    } else {
 	      // Insert all slots.
 	      var slots_data = '';
-	      $$O.each(slots, function (group, group_slots) {
+	      $$V.each(slots, function (group, group_slots) {
 	        slots_data += group_slots;
 	      });
 	      $columnizer.html(slots_data);
@@ -14397,13 +14653,13 @@ var bookly = (function ($$O) {
 	      }
 
 	      // Calculate number of slots per column.
-	      slots_per_column = _parseInt$5($$O(window).height() / slot_height, 10);
+	      slots_per_column = _parseInt$5($$V(window).height() / slot_height, 10);
 	      if (slots_per_column < 4) {
 	        slots_per_column = 4;
 	      } else if (slots_per_column > 10) {
 	        slots_per_column = 10;
 	      }
-	      var hammertime = $$O('.bookly-time-step', $container).hammer({
+	      var hammertime = $$V('.bookly-time-step', $container).hammer({
 	        swipe_velocity: 0.1
 	      });
 	      hammertime.on('swipeleft', function () {
@@ -14435,11 +14691,11 @@ var bookly = (function ($$O) {
 	          }
 	        } else if (has_more_slots) {
 	          // Do ajax request when there are more slots.
-	          var $button = $$O('> button:last', $columnizer);
+	          var $button = $$V('> button:last', $columnizer);
 	          if ($button.length === 0) {
-	            $button = $$O('.bookly-column:hidden:last > button:last', $columnizer);
+	            $button = $$V('.bookly-column:hidden:last > button:last', $columnizer);
 	            if ($button.length === 0) {
-	              $button = $$O('.bookly-column:last > button:last', $columnizer);
+	              $button = $$V('.bookly-column:last > button:last', $columnizer);
 	            }
 	          }
 
@@ -14458,15 +14714,15 @@ var bookly = (function ($$O) {
 	              // if there are available time
 	              has_more_slots = response.has_more_slots;
 	              var slots_data = '';
-	              $$O.each(prepareSlotsHtml(response.slots_data, response.selected_date), function (group, group_slots) {
+	              $$V.each(prepareSlotsHtml(response.slots_data, response.selected_date), function (group, group_slots) {
 	                slots_data += group_slots;
 	              });
-	              var $html = $$O(slots_data);
+	              var $html = $$V(slots_data);
 	              // The first slot is always a day slot.
 	              // Check if such day slot already exists (this can happen
 	              // because of time zone offset) and then remove the first slot.
 	              var $first_day = $html.eq(0);
-	              if ($$O('button.bookly-day[value="' + $first_day.attr('value') + '"]', $container).length) {
+	              if ($$V('button.bookly-day[value="' + $first_day.attr('value') + '"]', $container).length) {
 	                $html = $html.not(':first');
 	              }
 	              $columnizer.append($html);
@@ -14503,7 +14759,7 @@ var bookly = (function ($$O) {
 	    }
 	    scrollTo($container, params.form_id);
 	    function showSpinner() {
-	      $$O('.bookly-time-screen,.bookly-not-time-screen', $container).addClass('bookly-spin-overlay');
+	      $$V('.bookly-time-screen,.bookly-not-time-screen', $container).addClass('bookly-spin-overlay');
 	      var opts = {
 	        lines: 11,
 	        // The number of lines to draw
@@ -14517,11 +14773,11 @@ var bookly = (function ($$O) {
 	        new Spinner(opts).spin($screens.eq(screen_index).get(0));
 	      } else {
 	        // Calendar not available month.
-	        new Spinner(opts).spin($$O('.bookly-not-time-screen', $container).get(0));
+	        new Spinner(opts).spin($$V('.bookly-not-time-screen', $container).get(0));
 	      }
 	    }
 	    function initSlots() {
-	      var $buttons = $$O('> button', $columnizer),
+	      var $buttons = $$V('> button', $columnizer),
 	        slots_count = 0,
 	        max_slots = 0,
 	        $button,
@@ -14535,13 +14791,13 @@ var bookly = (function ($$O) {
 	          // Create column.
 	          if ($buttons.eq(0).hasClass('bookly-day')) {
 	            slots_count = 1;
-	            $column = $$O('<div class="' + column_class + '" />');
-	            $button = $$O(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
+	            $column = $$V('<div class="' + column_class + '" />');
+	            $button = $$V(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
 	            $button.addClass('bookly-js-first-child');
 	            $column.append($button);
 	          } else {
 	            slots_count++;
-	            $button = $$O(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
+	            $button = $$V(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
 	            // If it is last slot in the column.
 	            if (!$buttons.length || $buttons.eq(0).hasClass('bookly-day')) {
 	              $button.addClass('bookly-last-child');
@@ -14561,7 +14817,7 @@ var bookly = (function ($$O) {
 	         * Create columns for normal mode.
 	         */
 	        while (has_more_slots ? $buttons.length > slots_per_column : $buttons.length) {
-	          $column = $$O('<div class="' + column_class + '" />');
+	          $column = $$V('<div class="' + column_class + '" />');
 	          max_slots = slots_per_column;
 	          if (columns % columns_per_screen == 0 && !$buttons.eq(0).hasClass('bookly-day')) {
 	            // If this is the first column of a screen and the first slot in this column is not day
@@ -14574,7 +14830,7 @@ var bookly = (function ($$O) {
 	              // Skip the last slot if it is day.
 	              break;
 	            }
-	            $button = $$O(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
+	            $button = $$V(_spliceInstanceProperty($buttons).call($buttons, 0, 1));
 	            if (i == 0) {
 	              $button.addClass('bookly-js-first-child');
 	            } else if (i + 1 == max_slots) {
@@ -14589,18 +14845,18 @@ var bookly = (function ($$O) {
 	      /**
 	       * Create screens.
 	       */
-	      var $columns = $$O('> .bookly-column', $columnizer);
+	      var $columns = $$V('> .bookly-column', $columnizer);
 	      while (has_more_slots ? $columns.length >= columns_per_screen : $columns.length) {
-	        $screen = $$O('<div class="bookly-time-screen"/>');
+	        $screen = $$V('<div class="bookly-time-screen"/>');
 	        for (var i = 0; i < columns_per_screen; ++i) {
-	          $column = $$O(_spliceInstanceProperty($columns).call($columns, 0, 1));
+	          $column = $$V(_spliceInstanceProperty($columns).call($columns, 0, 1));
 	          if (i == 0) {
 	            $column.addClass('bookly-js-first-column');
 	            var $first_slot = _findInstanceProperty($column).call($column, '.bookly-js-first-child');
 	            // In the first column the first slot is time.
 	            if (!$first_slot.hasClass('bookly-day')) {
 	              var group = $first_slot.data('group'),
-	                $group_slot = $$O('button.bookly-day[value="' + group + '"]:last', $container);
+	                $group_slot = $$V('button.bookly-day[value="' + group + '"]:last', $container);
 	              // Copy group slot to the first column.
 	              $column.prepend($group_slot.clone());
 	            }
@@ -14609,11 +14865,11 @@ var bookly = (function ($$O) {
 	        }
 	        $columnizer.append($screen);
 	      }
-	      $screens = $$O('.bookly-time-screen', $columnizer);
+	      $screens = $$V('.bookly-time-screen', $columnizer);
 	      if ($current_screen === null) {
 	        $current_screen = $screens.eq(0);
 	      }
-	      $$O('button.bookly-time-skip', $container).off('click').on('click', function (e) {
+	      $$V('button.bookly-time-skip', $container).off('click').on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
 	        laddaStart(this);
@@ -14638,11 +14894,11 @@ var bookly = (function ($$O) {
 	      });
 
 	      // On click on a slot.
-	      $$O('button.bookly-hour', $container).off('click').on('click', function (e) {
+	      $$V('button.bookly-hour', $container).off('click').on('click', function (e) {
 	        requestSessionSave.cancel();
 	        e.stopPropagation();
 	        e.preventDefault();
-	        var $this = $$O(this),
+	        var $this = $$V(this),
 	          data = {
 	            action: 'bookly_session_save',
 	            form_id: params.form_id,
@@ -14658,7 +14914,7 @@ var bookly = (function ($$O) {
 	        // Execute custom JavaScript
 	        if (customJS) {
 	          try {
-	            $$O.globalEval(customJS.next_button);
+	            $$V.globalEval(customJS.next_button);
 	          } catch (e) {
 	            // Do nothing
 	          }
@@ -14691,11 +14947,11 @@ var bookly = (function ($$O) {
 	      });
 
 	      // Columnizer width & height.
-	      $$O('.bookly-time-step', $container).width(columns_per_screen * column_width);
+	      $$V('.bookly-time-step', $container).width(columns_per_screen * column_width);
 	      $columnizer_wrap.height($current_screen.height());
 	    }
 	    function observeResizeColumnizer() {
-	      if ($$O('.bookly-time-step', $container).length > 0) {
+	      if ($$V('.bookly-time-step', $container).length > 0) {
 	        let time = new Date().getTime();
 	        if (time - lastObserverTime > 200) {
 	          let formWidth = $columnizer_wrap.closest('.bookly-form').width();
@@ -14717,7 +14973,7 @@ var bookly = (function ($$O) {
 	      if (column_width > 0) {
 	        let formWidth = $columnizer_wrap.closest('.bookly-form').width();
 	        if (show_calendar) {
-	          let calendarWidth = $$O('.bookly-js-slot-calendar', $container).width();
+	          let calendarWidth = $$V('.bookly-js-slot-calendar', $container).width();
 	          if (formWidth > calendarWidth + column_width + 24) {
 	            columns_per_screen = _parseInt$5((formWidth - calendarWidth - 24) / column_width, 10);
 	          } else {
@@ -14765,18 +15021,18 @@ var bookly = (function ($$O) {
 	    data.time_zone = opt[params.form_id].timeZone;
 	    data.time_zone_offset = opt[params.form_id].timeZoneOffset;
 	  }
-	  $$O.extend(data, params);
+	  $$V.extend(data, params);
 	  booklyAjax({
 	    data
 	  }).then(response => {
 	    BooklyL10n.csrf_token = response.csrf_token;
 	    $container.html(response.html);
 	    scrollTo($container, params.form_id);
-	    let $next_step = $$O('.bookly-js-next-step', $container),
-	      $back_step = $$O('.bookly-js-back-step', $container),
-	      $goto_cart = $$O('.bookly-js-go-to-cart', $container),
-	      $extras_items = $$O('.bookly-js-extras-item', $container),
-	      $extras_summary = $$O('.bookly-js-extras-summary span', $container),
+	    let $next_step = $$V('.bookly-js-next-step', $container),
+	      $back_step = $$V('.bookly-js-back-step', $container),
+	      $goto_cart = $$V('.bookly-js-go-to-cart', $container),
+	      $extras_items = $$V('.bookly-js-extras-item', $container),
+	      $extras_summary = $$V('.bookly-js-extras-summary span', $container),
 	      customJS = response.custom_js,
 	      $this,
 	      $input,
@@ -14792,7 +15048,7 @@ var bookly = (function ($$O) {
 	      // Updating summary
 	      var amount = 0;
 	      $extras_items.each(function (index, elem) {
-	        var $this = $$O(this),
+	        var $this = $$V(this),
 	          multiplier = $this.closest('.bookly-js-extras-container').data('multiplier');
 	        amount += _parseFloat$1($this.data('price')) * _findInstanceProperty($this).call($this, 'input').val() * multiplier;
 	      });
@@ -14803,9 +15059,9 @@ var bookly = (function ($$O) {
 	      }
 	    };
 	    $extras_items.each(function (index, elem) {
-	      var $this = $$O(this);
+	      var $this = $$V(this);
 	      var $input = _findInstanceProperty($this).call($this, 'input');
-	      $$O('.bookly-js-extras-thumb', $this).on('click', function () {
+	      $$V('.bookly-js-extras-thumb', $this).on('click', function () {
 	        extrasChanged($this, $input.val() > $this.data('min_quantity') ? $this.data('min_quantity') : $this.data('min_quantity') == '0' ? 1 : $this.data('min_quantity'));
 	      }).keypress(function (e) {
 	        e.preventDefault();
@@ -14815,7 +15071,7 @@ var bookly = (function ($$O) {
 	      });
 	      _findInstanceProperty($this).call($this, '.bookly-js-count-control').on('click', function () {
 	        var count = _parseInt$5($input.val());
-	        count = $$O(this).hasClass('bookly-js-extras-increment') ? Math.min($this.data('max_quantity'), count + 1) : Math.max($this.data('min_quantity'), count - 1);
+	        count = $$V(this).hasClass('bookly-js-extras-increment') ? Math.min($this.data('max_quantity'), count + 1) : Math.max($this.data('min_quantity'), count - 1);
 	        extrasChanged($this, count);
 	      });
 	      setInputFilter($input.get(0), function (value) {
@@ -14844,19 +15100,19 @@ var bookly = (function ($$O) {
 	      // Execute custom JavaScript
 	      if (customJS) {
 	        try {
-	          $$O.globalEval(customJS.next_button);
+	          $$V.globalEval(customJS.next_button);
 	        } catch (e) {
 	          // Do nothing
 	        }
 	      }
 	      var extras = {};
-	      $$O('.bookly-js-extras-container', $container).each(function () {
-	        var $extras_container = $$O(this);
+	      $$V('.bookly-js-extras-container', $container).each(function () {
+	        var $extras_container = $$V(this);
 	        var chain_id = $extras_container.data('chain');
 	        var chain_extras = {};
 	        // Get checked extras for chain.
 	        _findInstanceProperty($extras_container).call($extras_container, '.bookly-js-extras-item').each(function (index, elem) {
-	          $this = $$O(this);
+	          $this = $$V(this);
 	          $input = _findInstanceProperty($this).call($this, 'input');
 	          if ($input.val() > 0) {
 	            chain_extras[$this.data('id')] = $input.val();
@@ -14971,9 +15227,6 @@ var bookly = (function ($$O) {
 	};
 
 	var objectToArray = {
-	  // `Object.entries` method
-	  // https://tc39.es/ecma262/#sec-object.entries
-	  entries: createMethod(true),
 	  // `Object.values` method
 	  // https://tc39.es/ecma262/#sec-object.values
 	  values: createMethod(false)
@@ -15115,7 +15368,7 @@ var bookly = (function ($$O) {
 	  return {
 	    c() {
 	      div = element("div");
-	      t = text( /*error*/ctx[5]);
+	      t = text(/*error*/ctx[5]);
 	      attr(div, "class", "bookly-label-error");
 	    },
 	    m(target, anchor) {
@@ -15144,7 +15397,7 @@ var bookly = (function ($$O) {
 	  let mounted;
 	  let dispose;
 	  let if_block0 = /*placeholder*/ctx[3] && create_if_block_2$1(ctx);
-	  let each_value = ensure_array_like( /*items*/ctx[4]);
+	  let each_value = ensure_array_like(/*items*/ctx[4]);
 	  let each_blocks = [];
 	  for (let i = 0; i < each_value.length; i += 1) {
 	    each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
@@ -15153,7 +15406,7 @@ var bookly = (function ($$O) {
 	  return {
 	    c() {
 	      label_1 = element("label");
-	      t0 = text( /*label*/ctx[2]);
+	      t0 = text(/*label*/ctx[2]);
 	      t1 = space();
 	      div = element("div");
 	      select = element("select");
@@ -15167,7 +15420,7 @@ var bookly = (function ($$O) {
 	      if_block1_anchor = empty();
 	      attr(label_1, "for", "bookly-rnd-" + /*id*/ctx[6]);
 	      attr(select, "id", "bookly-rnd-" + /*id*/ctx[6]);
-	      if ( /*selected*/ctx[1] === void 0) add_render_callback(() => /*select_change_handler*/ctx[9].call(select));
+	      if (/*selected*/ctx[1] === void 0) add_render_callback(() => /*select_change_handler*/ctx[9].call(select));
 	    },
 	    m(target, anchor) {
 	      insert(target, label_1, anchor);
@@ -15196,7 +15449,7 @@ var bookly = (function ($$O) {
 	    p(ctx, _ref) {
 	      let [dirty] = _ref;
 	      if (dirty & /*label*/4) set_data(t0, /*label*/ctx[2]);
-	      if ( /*placeholder*/ctx[3]) {
+	      if (/*placeholder*/ctx[3]) {
 	        if (if_block0) {
 	          if_block0.p(ctx, dirty);
 	        } else {
@@ -15209,7 +15462,7 @@ var bookly = (function ($$O) {
 	        if_block0 = null;
 	      }
 	      if (dirty & /*items*/16) {
-	        each_value = ensure_array_like( /*items*/ctx[4]);
+	        each_value = ensure_array_like(/*items*/ctx[4]);
 	        let i;
 	        for (i = 0; i < each_value.length; i += 1) {
 	          const child_ctx = get_each_context$1(ctx, each_value, i);
@@ -15229,7 +15482,7 @@ var bookly = (function ($$O) {
 	      if (dirty & /*selected, items, placeholder*/26) {
 	        select_option(select, /*selected*/ctx[1]);
 	      }
-	      if ( /*error*/ctx[5]) {
+	      if (/*error*/ctx[5]) {
 	        if (if_block1) {
 	          if_block1.p(ctx, dirty);
 	        } else {
@@ -15345,11 +15598,11 @@ var bookly = (function ($$O) {
 	  let select_props = {
 	    label: /*l10n*/ctx[16].location_label,
 	    placeholder: /*locationPlaceholder*/ctx[30],
-	    items: _Object$values( /*locations*/ctx[0]),
+	    items: _Object$values(/*locations*/ctx[0]),
 	    selected: /*locationId*/ctx[17],
 	    error: /*locationError*/ctx[34]
 	  };
-	  if ( /*locationEl*/ctx[35] !== void 0) {
+	  if (/*locationEl*/ctx[35] !== void 0) {
 	    select_props.el = /*locationEl*/ctx[35];
 	  }
 	  select = new Select({
@@ -15373,7 +15626,7 @@ var bookly = (function ($$O) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].location_label;
 	      if (dirty[0] & /*locationPlaceholder*/1073741824) select_changes.placeholder = /*locationPlaceholder*/ctx[30];
-	      if (dirty[0] & /*locations*/1) select_changes.items = _Object$values( /*locations*/ctx[0]);
+	      if (dirty[0] & /*locations*/1) select_changes.items = _Object$values(/*locations*/ctx[0]);
 	      if (dirty[0] & /*locationId*/131072) select_changes.selected = /*locationId*/ctx[17];
 	      if (dirty[1] & /*locationError*/8) select_changes.error = /*locationError*/ctx[34];
 	      if (!updating_el && dirty[1] & /*locationEl*/16) {
@@ -15413,7 +15666,7 @@ var bookly = (function ($$O) {
 	    props: {
 	      label: /*l10n*/ctx[16].category_label,
 	      placeholder: /*categoryPlaceholder*/ctx[31],
-	      items: _Object$values( /*categoryItems*/ctx[26]),
+	      items: _Object$values(/*categoryItems*/ctx[26]),
 	      selected: /*categoryId*/ctx[18]
 	    }
 	  });
@@ -15441,7 +15694,7 @@ var bookly = (function ($$O) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].category_label;
 	      if (dirty[1] & /*categoryPlaceholder*/1) select_changes.placeholder = /*categoryPlaceholder*/ctx[31];
-	      if (dirty[0] & /*categoryItems*/67108864) select_changes.items = _Object$values( /*categoryItems*/ctx[26]);
+	      if (dirty[0] & /*categoryItems*/67108864) select_changes.items = _Object$values(/*categoryItems*/ctx[26]);
 	      if (dirty[0] & /*categoryId*/262144) select_changes.selected = /*categoryId*/ctx[18];
 	      select.$set(select_changes);
 	      if (dirty[0] & /*showCategoryInfo, categoryId, categories*/262162) show_if = /*showCategoryInfo*/ctx[4] && /*categoryId*/ctx[18] && /*categories*/ctx[1][/*categoryId*/ctx[18]].hasOwnProperty('info') && /*categories*/ctx[1][/*categoryId*/ctx[18]].info !== '';
@@ -15549,11 +15802,11 @@ var bookly = (function ($$O) {
 	  let select_props = {
 	    label: /*l10n*/ctx[16].service_label,
 	    placeholder: /*servicePlaceholder*/ctx[32],
-	    items: _Object$values( /*serviceItems*/ctx[27]),
+	    items: _Object$values(/*serviceItems*/ctx[27]),
 	    selected: /*serviceId*/ctx[19],
 	    error: /*serviceError*/ctx[36]
 	  };
-	  if ( /*serviceEl*/ctx[37] !== void 0) {
+	  if (/*serviceEl*/ctx[37] !== void 0) {
 	    select_props.el = /*serviceEl*/ctx[37];
 	  }
 	  select = new Select({
@@ -15584,7 +15837,7 @@ var bookly = (function ($$O) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].service_label;
 	      if (dirty[1] & /*servicePlaceholder*/2) select_changes.placeholder = /*servicePlaceholder*/ctx[32];
-	      if (dirty[0] & /*serviceItems*/134217728) select_changes.items = _Object$values( /*serviceItems*/ctx[27]);
+	      if (dirty[0] & /*serviceItems*/134217728) select_changes.items = _Object$values(/*serviceItems*/ctx[27]);
 	      if (dirty[0] & /*serviceId*/524288) select_changes.selected = /*serviceId*/ctx[19];
 	      if (dirty[1] & /*serviceError*/32) select_changes.error = /*serviceError*/ctx[36];
 	      if (!updating_el && dirty[1] & /*serviceEl*/64) {
@@ -15698,11 +15951,11 @@ var bookly = (function ($$O) {
 	  let select_props = {
 	    label: /*l10n*/ctx[16].staff_label,
 	    placeholder: /*staffPlaceholder*/ctx[33],
-	    items: _Object$values( /*staffItems*/ctx[23]),
+	    items: _Object$values(/*staffItems*/ctx[23]),
 	    selected: /*staffId*/ctx[20],
 	    error: /*staffError*/ctx[38]
 	  };
-	  if ( /*staffEl*/ctx[39] !== void 0) {
+	  if (/*staffEl*/ctx[39] !== void 0) {
 	    select_props.el = /*staffEl*/ctx[39];
 	  }
 	  select = new Select({
@@ -15733,7 +15986,7 @@ var bookly = (function ($$O) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].staff_label;
 	      if (dirty[1] & /*staffPlaceholder*/4) select_changes.placeholder = /*staffPlaceholder*/ctx[33];
-	      if (dirty[0] & /*staffItems*/8388608) select_changes.items = _Object$values( /*staffItems*/ctx[23]);
+	      if (dirty[0] & /*staffItems*/8388608) select_changes.items = _Object$values(/*staffItems*/ctx[23]);
 	      if (dirty[0] & /*staffId*/1048576) select_changes.selected = /*staffId*/ctx[20];
 	      if (dirty[1] & /*staffError*/128) select_changes.error = /*staffError*/ctx[38];
 	      if (!updating_el && dirty[1] & /*staffEl*/256) {
@@ -15840,7 +16093,7 @@ var bookly = (function ($$O) {
 	  select = new Select({
 	    props: {
 	      label: /*l10n*/ctx[16].duration_label,
-	      items: _Object$values( /*durationItems*/ctx[24]),
+	      items: _Object$values(/*durationItems*/ctx[24]),
 	      selected: /*duration*/ctx[21]
 	    }
 	  });
@@ -15860,7 +16113,7 @@ var bookly = (function ($$O) {
 	    p(ctx, dirty) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].duration_label;
-	      if (dirty[0] & /*durationItems*/16777216) select_changes.items = _Object$values( /*durationItems*/ctx[24]);
+	      if (dirty[0] & /*durationItems*/16777216) select_changes.items = _Object$values(/*durationItems*/ctx[24]);
 	      if (dirty[0] & /*duration*/2097152) select_changes.selected = /*duration*/ctx[21];
 	      select.$set(select_changes);
 	    },
@@ -15890,7 +16143,7 @@ var bookly = (function ($$O) {
 	  select = new Select({
 	    props: {
 	      label: /*l10n*/ctx[16].nop_label,
-	      items: _Object$values( /*nopItems*/ctx[28]),
+	      items: _Object$values(/*nopItems*/ctx[28]),
 	      selected: /*nop*/ctx[22]
 	    }
 	  });
@@ -15910,7 +16163,7 @@ var bookly = (function ($$O) {
 	    p(ctx, dirty) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].nop_label;
-	      if (dirty[0] & /*nopItems*/268435456) select_changes.items = _Object$values( /*nopItems*/ctx[28]);
+	      if (dirty[0] & /*nopItems*/268435456) select_changes.items = _Object$values(/*nopItems*/ctx[28]);
 	      if (dirty[0] & /*nop*/4194304) select_changes.selected = /*nop*/ctx[22];
 	      select.$set(select_changes);
 	    },
@@ -15940,7 +16193,7 @@ var bookly = (function ($$O) {
 	  select = new Select({
 	    props: {
 	      label: /*l10n*/ctx[16].quantity_label,
-	      items: _Object$values( /*quantityItems*/ctx[29]),
+	      items: _Object$values(/*quantityItems*/ctx[29]),
 	      selected: /*quantity*/ctx[25]
 	    }
 	  });
@@ -15960,7 +16213,7 @@ var bookly = (function ($$O) {
 	    p(ctx, dirty) {
 	      const select_changes = {};
 	      if (dirty[0] & /*l10n*/65536) select_changes.label = /*l10n*/ctx[16].quantity_label;
-	      if (dirty[0] & /*quantityItems*/536870912) select_changes.items = _Object$values( /*quantityItems*/ctx[29]);
+	      if (dirty[0] & /*quantityItems*/536870912) select_changes.items = _Object$values(/*quantityItems*/ctx[29]);
 	      if (dirty[0] & /*quantity*/33554432) select_changes.selected = /*quantity*/ctx[25];
 	      select.$set(select_changes);
 	    },
@@ -16006,7 +16259,7 @@ var bookly = (function ($$O) {
 	      if (if_block) if_block.m(div0, null);
 	    },
 	    p(ctx, dirty) {
-	      if ( /*showDropBtn*/ctx[15]) {
+	      if (/*showDropBtn*/ctx[15]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
@@ -16276,7 +16529,7 @@ var bookly = (function ($$O) {
 	      current = true;
 	    },
 	    p(ctx, dirty) {
-	      if ( /*hasLocationSelect*/ctx[7]) {
+	      if (/*hasLocationSelect*/ctx[7]) {
 	        if (if_block0) {
 	          if_block0.p(ctx, dirty);
 	          if (dirty[0] & /*hasLocationSelect*/128) {
@@ -16295,7 +16548,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasCategorySelect*/ctx[8]) {
+	      if (/*hasCategorySelect*/ctx[8]) {
 	        if (if_block1) {
 	          if_block1.p(ctx, dirty);
 	          if (dirty[0] & /*hasCategorySelect*/256) {
@@ -16314,7 +16567,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasServiceSelect*/ctx[9]) {
+	      if (/*hasServiceSelect*/ctx[9]) {
 	        if (if_block2) {
 	          if_block2.p(ctx, dirty);
 	          if (dirty[0] & /*hasServiceSelect*/512) {
@@ -16333,7 +16586,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasStaffSelect*/ctx[10]) {
+	      if (/*hasStaffSelect*/ctx[10]) {
 	        if (if_block3) {
 	          if_block3.p(ctx, dirty);
 	          if (dirty[0] & /*hasStaffSelect*/1024) {
@@ -16352,7 +16605,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasDurationSelect*/ctx[11]) {
+	      if (/*hasDurationSelect*/ctx[11]) {
 	        if (if_block4) {
 	          if_block4.p(ctx, dirty);
 	          if (dirty[0] & /*hasDurationSelect*/2048) {
@@ -16371,7 +16624,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasNopSelect*/ctx[12]) {
+	      if (/*hasNopSelect*/ctx[12]) {
 	        if (if_block5) {
 	          if_block5.p(ctx, dirty);
 	          if (dirty[0] & /*hasNopSelect*/4096) {
@@ -16390,7 +16643,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasQuantitySelect*/ctx[13]) {
+	      if (/*hasQuantitySelect*/ctx[13]) {
 	        if (if_block6) {
 	          if_block6.p(ctx, dirty);
 	          if (dirty[0] & /*hasQuantitySelect*/8192) {
@@ -16409,7 +16662,7 @@ var bookly = (function ($$O) {
 	        });
 	        check_outros();
 	      }
-	      if ( /*hasDropBtn*/ctx[14]) {
+	      if (/*hasDropBtn*/ctx[14]) {
 	        if (if_block7) {
 	          if_block7.p(ctx, dirty);
 	        } else {
@@ -16723,7 +16976,7 @@ var bookly = (function ($$O) {
 	      }
 	      if (serviceId) {
 	        let valid = false;
-	        $$O.each(locations[locationId].staff, id => {
+	        $$V.each(locations[locationId].staff, id => {
 	          if (serviceId in staff[id].services && lookupLocationId in staff[id].services[serviceId].locations) {
 	            valid = true;
 	            return false;
@@ -16735,8 +16988,8 @@ var bookly = (function ($$O) {
 	      }
 	      if (categoryId) {
 	        let valid = false;
-	        $$O.each(locations[locationId].staff, id => {
-	          $$O.each(staff[id].services, srvId => {
+	        $$V.each(locations[locationId].staff, id => {
+	          $$V.each(staff[id].services, srvId => {
 	            if (services[srvId].category_id === categoryId) {
 	              valid = true;
 	              return false;
@@ -16770,7 +17023,7 @@ var bookly = (function ($$O) {
 	      }
 	      if (staffId) {
 	        let valid = false;
-	        $$O.each(staff[staffId].services, id => {
+	        $$V.each(staff[staffId].services, id => {
 	          if (services[id].category_id === categoryId) {
 	            valid = true;
 	            return false;
@@ -16880,7 +17133,7 @@ var bookly = (function ($$O) {
 	      locationId,
 	      categoryId,
 	      serviceId,
-	      staffIds: staffId ? [staffId] : _mapInstanceProperty($$O).call($$O, staffItems, item => item.id),
+	      staffIds: staffId ? [staffId] : _mapInstanceProperty($$V).call($$V, staffItems, item => item.id),
 	      duration,
 	      nop,
 	      quantity
@@ -16937,27 +17190,27 @@ var bookly = (function ($$O) {
 	        $$invalidate(28, nopItems = {});
 
 	        // Staff
-	        $$O.each(staff, (id, staffMember) => {
+	        $$V.each(staff, (id, staffMember) => {
 	          if (!locationId || id in locations[locationId].staff) {
 	            if (!serviceId) {
 	              if (!categoryId) {
-	                $$invalidate(23, staffItems[id] = $$O.extend({}, staffMember), staffItems);
+	                $$invalidate(23, staffItems[id] = $$V.extend({}, staffMember), staffItems);
 	              } else {
-	                $$O.each(staffMember.services, srvId => {
+	                $$V.each(staffMember.services, srvId => {
 	                  if (services[srvId].category_id === categoryId) {
-	                    $$invalidate(23, staffItems[id] = $$O.extend({}, staffMember), staffItems);
+	                    $$invalidate(23, staffItems[id] = $$V.extend({}, staffMember), staffItems);
 	                    return false;
 	                  }
 	                });
 	              }
 	            } else if (serviceId in staffMember.services) {
-	              $$O.each(staffMember.services[serviceId].locations, (locId, locSrv) => {
+	              $$V.each(staffMember.services[serviceId].locations, (locId, locSrv) => {
 	                if (lookupLocationId && lookupLocationId !== _parseInt$5(locId)) {
 	                  return true;
 	                }
 	                $$invalidate(65, srvMinCapacity = srvMinCapacity ? Math.min(srvMinCapacity, locSrv.min_capacity) : locSrv.min_capacity);
 	                $$invalidate(64, srvMaxCapacity = srvMaxCapacity ? Math.max(srvMaxCapacity, locSrv.max_capacity) : locSrv.max_capacity);
-	                $$invalidate(23, staffItems[id] = $$O.extend({}, staffMember, {
+	                $$invalidate(23, staffItems[id] = $$V.extend({}, staffMember, {
 	                  name: staffMember.name + (staffNameWithPrice && locSrv.price !== null && (lookupLocationId || !servicesPerLocation) ? ' (' + locSrv.price + ')' : ''),
 	                  hidden: collaborativeHideStaff && services[serviceId].type === 'collaborative'
 	                }), staffItems);
@@ -16971,7 +17224,7 @@ var bookly = (function ($$O) {
 
 	        // Add ratings to staff names
 	        if (showRatings) {
-	          $$O.each(staff, (id, staffMember) => {
+	          $$V.each(staff, (id, staffMember) => {
 	            if (staffMember.id in staffItems) {
 	              if (serviceId) {
 	                if (serviceId in staffMember.services && staffMember.services[serviceId].rating) {
@@ -16987,7 +17240,7 @@ var bookly = (function ($$O) {
 	        // Category & service
 	        if (!locationId) {
 	          $$invalidate(26, categoryItems = categories);
-	          $$O.each(services, (id, service) => {
+	          $$V.each(services, (id, service) => {
 	            if (!categoryId || !categorySelected || service.category_id === categoryId) {
 	              if (!staffId || id in staff[staffId].services) {
 	                $$invalidate(27, serviceItems[id] = service, serviceItems);
@@ -16998,8 +17251,8 @@ var bookly = (function ($$O) {
 	          let categoryIds = [],
 	            serviceIds = [];
 	          if (servicesPerLocation) {
-	            $$O.each(staff, stId => {
-	              $$O.each(staff[stId].services, srvId => {
+	            $$V.each(staff, stId => {
+	              $$V.each(staff[stId].services, srvId => {
 	                if (lookupLocationId in staff[stId].services[srvId].locations) {
 	                  categoryIds.push(services[srvId].category_id);
 	                  serviceIds.push(srvId);
@@ -17007,24 +17260,24 @@ var bookly = (function ($$O) {
 	              });
 	            });
 	          } else {
-	            $$O.each(locations[locationId].staff, stId => {
-	              $$O.each(staff[stId].services, srvId => {
+	            $$V.each(locations[locationId].staff, stId => {
+	              $$V.each(staff[stId].services, srvId => {
 	                categoryIds.push(services[srvId].category_id);
 	                serviceIds.push(srvId);
 	              });
 	            });
 	          }
-	          $$O.each(categories, (id, category) => {
-	            if ($$O.inArray(_parseInt$5(id), categoryIds) > -1) {
+	          $$V.each(categories, (id, category) => {
+	            if ($$V.inArray(_parseInt$5(id), categoryIds) > -1) {
 	              $$invalidate(26, categoryItems[id] = category, categoryItems);
 	            }
 	          });
-	          if (categoryId && $$O.inArray(categoryId, categoryIds) === -1) {
+	          if (categoryId && $$V.inArray(categoryId, categoryIds) === -1) {
 	            $$invalidate(18, categoryId = 0);
 	            $$invalidate(61, categorySelected = false);
 	          }
-	          $$O.each(services, (id, service) => {
-	            if ($$O.inArray(id, serviceIds) > -1) {
+	          $$V.each(services, (id, service) => {
+	            if ($$V.inArray(id, serviceIds) > -1) {
 	              if (!categoryId || !categorySelected || service.category_id === categoryId) {
 	                if (!staffId || id in staff[staffId].services) {
 	                  $$invalidate(27, serviceItems[id] = service, serviceItems);
@@ -17210,7 +17463,7 @@ var bookly = (function ($$O) {
 	        index = /*index*/ctx[13];
 	        assign_chainitem();
 	      }
-	      const chainitem_changes = dirty & /*data, items, multiple*/7 ? get_spread_update(chainitem_spread_levels, [dirty & /*data*/2 && get_spread_object( /*data*/ctx[1]), dirty & /*items*/1 && {
+	      const chainitem_changes = dirty & /*data, items, multiple*/7 ? get_spread_update(chainitem_spread_levels, [dirty & /*data*/2 && get_spread_object(/*data*/ctx[1]), dirty & /*items*/1 && {
 	        item: /*item*/ctx[11]
 	      }, dirty & /*items*/1 && {
 	        index: /*index*/ctx[13]
@@ -17289,7 +17542,7 @@ var bookly = (function ($$O) {
 	  let t;
 	  let if_block_anchor;
 	  let current;
-	  let each_value = ensure_array_like( /*items*/ctx[0]);
+	  let each_value = ensure_array_like(/*items*/ctx[0]);
 	  const get_key = ctx => /*item*/ctx[11];
 	  for (let i = 0; i < each_value.length; i += 1) {
 	    let child_ctx = get_each_context(ctx, each_value, i);
@@ -17320,12 +17573,12 @@ var bookly = (function ($$O) {
 	    p(ctx, _ref) {
 	      let [dirty] = _ref;
 	      if (dirty & /*data, items, multiple, els, onDropItem, dispatch*/95) {
-	        each_value = ensure_array_like( /*items*/ctx[0]);
+	        each_value = ensure_array_like(/*items*/ctx[0]);
 	        group_outros();
 	        each_blocks = update_keyed_each(each_blocks, dirty, get_key, 1, ctx, each_value, each_1_lookup, t.parentNode, outro_and_destroy_block, create_each_block, t, get_each_context);
 	        check_outros();
 	      }
-	      if ( /*multiple*/ctx[2]) {
+	      if (/*multiple*/ctx[2]) {
 	        if (if_block) {
 	          if_block.p(ctx, dirty);
 	        } else {
@@ -17445,21 +17698,21 @@ var bookly = (function ($$O) {
 	    data.time_zone = opt[params.form_id].timeZone;
 	    data.time_zone_offset = opt[params.form_id].timeZoneOffset;
 	  }
-	  $$O.extend(data, params);
+	  $$V.extend(data, params);
 	  booklyAjax({
 	    data
 	  }).then(response => {
 	    BooklyL10n.csrf_token = response.csrf_token;
 	    $container.html(response.html);
 	    scrollTo($container, params.form_id);
-	    var $chain = $$O('.bookly-js-chain', $container),
-	      $date_from = $$O('.bookly-js-date-from', $container),
-	      $week_days = $$O('.bookly-js-week-days', $container),
-	      $select_time_from = $$O('.bookly-js-select-time-from', $container),
-	      $select_time_to = $$O('.bookly-js-select-time-to', $container),
-	      $next_step = $$O('.bookly-js-next-step', $container),
-	      $mobile_next_step = $$O('.bookly-js-mobile-next-step', $container),
-	      $mobile_prev_step = $$O('.bookly-js-mobile-prev-step', $container),
+	    var $chain = $$V('.bookly-js-chain', $container),
+	      $date_from = $$V('.bookly-js-date-from', $container),
+	      $week_days = $$V('.bookly-js-week-days', $container),
+	      $select_time_from = $$V('.bookly-js-select-time-from', $container),
+	      $select_time_to = $$V('.bookly-js-select-time-to', $container),
+	      $next_step = $$V('.bookly-js-next-step', $container),
+	      $mobile_next_step = $$V('.bookly-js-mobile-next-step', $container),
+	      $mobile_prev_step = $$V('.bookly-js-mobile-prev-step', $container),
 	      locations = response.locations,
 	      categories = response.categories,
 	      services = response.services,
@@ -17482,7 +17735,7 @@ var bookly = (function ($$O) {
 
 	    // Set up selects.
 	    if (serviceNameWithDuration) {
-	      $$O.each(services, function (id, service) {
+	      $$V.each(services, function (id, service) {
 	        service.name = service.name + ' ( ' + service.duration + ' )';
 	      });
 	    }
@@ -17532,7 +17785,7 @@ var bookly = (function ($$O) {
 	    });
 	    $date_from.data('date_min', response.date_min || true);
 	    let _cal = new Calendar({
-	      target: $$O('.bookly-js-datepicker-calendar', $container).get(0),
+	      target: $$V('.bookly-js-datepicker-calendar', $container).get(0),
 	      props: {
 	        datePicker: BooklyL10nGlobal.datePicker,
 	        date: $date_from.data('value'),
@@ -17548,8 +17801,8 @@ var bookly = (function ($$O) {
 	      }
 	    });
 	    $date_from.val(formatDate$1($date_from.data('value')));
-	    $$O(document).on('click', function (e) {
-	      if ($$O(e.target).closest('.bookly-js-available-date').length === 0) {
+	    $$V(document).on('click', function (e) {
+	      if ($$V(e.target).closest('.bookly-js-available-date').length === 0) {
 	        _cal.show = false;
 	      }
 	    });
@@ -17561,7 +17814,7 @@ var bookly = (function ($$O) {
 	      $date_from.data('changed', true);
 	      $date_from.val(formatDate$1(_cal.date));
 	    });
-	    $$O('.bookly-js-go-to-cart', $container).on('click', function (e) {
+	    $$V('.bookly-js-go-to-cart', $container).on('click', function (e) {
 	      e.stopPropagation();
 	      e.preventDefault();
 	      laddaStart(this);
@@ -17571,44 +17824,44 @@ var bookly = (function ($$O) {
 	      });
 	    });
 	    if (opt[params.form_id].form_attributes.hide_date) {
-	      $$O('.bookly-js-available-date', $container).hide();
+	      $$V('.bookly-js-available-date', $container).hide();
 	    }
 	    if (opt[params.form_id].form_attributes.hide_week_days) {
-	      $$O('.bookly-js-week-days', $container).hide();
+	      $$V('.bookly-js-week-days', $container).hide();
 	    }
 	    if (opt[params.form_id].form_attributes.hide_time_range) {
-	      $$O('.bookly-js-time-range', $container).hide();
+	      $$V('.bookly-js-time-range', $container).hide();
 	    }
 
 	    // time from
 	    $select_time_from.on('change', function () {
-	      var start_time = $$O(this).val(),
+	      var start_time = $$V(this).val(),
 	        end_time = $select_time_to.val(),
-	        $last_time_entry = $$O('option:last', $select_time_from);
+	        $last_time_entry = $$V('option:last', $select_time_from);
 	      $select_time_to.empty();
 
 	      // case when we click on the not last time entry
 	      if ($select_time_from[0].selectedIndex < $last_time_entry.index()) {
 	        // clone and append all next "time_from" time entries to "time_to" list
-	        $$O('option', this).each(function () {
-	          if ($$O(this).val() > start_time) {
-	            $select_time_to.append($$O(this).clone());
+	        $$V('option', this).each(function () {
+	          if ($$V(this).val() > start_time) {
+	            $select_time_to.append($$V(this).clone());
 	          }
 	        });
 	        // case when we click on the last time entry
 	      } else {
 	        $select_time_to.append($last_time_entry.clone()).val($last_time_entry.val());
 	      }
-	      var first_value = $$O('option:first', $select_time_to).val();
+	      var first_value = $$V('option:first', $select_time_to).val();
 	      $select_time_to.val(end_time >= first_value ? end_time : first_value);
 	    });
 	    let stepServiceValidator = function () {
 	      let valid = true,
 	        $scroll_to = null;
-	      $$O(c.validate()).each(function (_, status) {
+	      $$V(c.validate()).each(function (_, status) {
 	        if (!status.valid) {
 	          valid = false;
-	          let $el = $$O(status.el);
+	          let $el = $$V(status.el);
 	          if ($el.is(':visible')) {
 	            $scroll_to = $el;
 	            return false;
@@ -17626,7 +17879,7 @@ var bookly = (function ($$O) {
 	      }
 
 	      // week days
-	      if ($week_days.length && !$$O(':checked', $week_days).length) {
+	      if ($week_days.length && !$$V(':checked', $week_days).length) {
 	        valid = false;
 	        $week_days.addClass('bookly-error');
 	        if ($scroll_to === null) {
@@ -17651,7 +17904,7 @@ var bookly = (function ($$O) {
 	        // Execute custom JavaScript
 	        if (customJS) {
 	          try {
-	            $$O.globalEval(customJS.next_button);
+	            $$V.globalEval(customJS.next_button);
 	          } catch (e) {
 	            // Do nothing
 	          }
@@ -17667,7 +17920,7 @@ var bookly = (function ($$O) {
 	            'optional': 1,
 	            'off': 0
 	          };
-	        $$O.each(c.getValues(), function (_, values) {
+	        $$V.each(c.getValues(), function (_, values) {
 	          let _service = services[values.serviceId];
 	          chain.push({
 	            location_id: values.locationId,
@@ -17684,7 +17937,7 @@ var bookly = (function ($$O) {
 
 	        // Prepare days.
 	        var days = [];
-	        $$O('.bookly-js-week-days input:checked', $container).each(function () {
+	        $$V('.bookly-js-week-days input:checked', $container).each(function () {
 	          days.push(this.value);
 	        });
 	        booklyAjax({
@@ -17729,10 +17982,10 @@ var bookly = (function ($$O) {
 	          laddaStart(this);
 	          $next_step.trigger('click');
 	        } else {
-	          $$O('.bookly-js-mobile-step-1', $container).hide();
-	          $$O('.bookly-stepper li:eq(1)', $container).addClass('bookly-step-active');
-	          $$O('.bookly-stepper li:eq(0)', $container).removeClass('bookly-step-active');
-	          $$O('.bookly-js-mobile-step-2', $container).css('display', 'block');
+	          $$V('.bookly-js-mobile-step-1', $container).hide();
+	          $$V('.bookly-stepper li:eq(1)', $container).addClass('bookly-step-active');
+	          $$V('.bookly-stepper li:eq(0)', $container).removeClass('bookly-step-active');
+	          $$V('.bookly-js-mobile-step-2', $container).css('display', 'block');
 	          scrollTo($container, params.form_id);
 	        }
 	      }
@@ -17744,18 +17997,18 @@ var bookly = (function ($$O) {
 	      _setTimeout(function () {
 	        opt[params.form_id].scroll = false;
 	        $mobile_next_step.trigger('click');
-	        $$O('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
-	        $$O('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
+	        $$V('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
+	        $$V('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
 	      }, 0);
 	      $mobile_prev_step.remove();
 	    } else {
 	      $mobile_prev_step.on('click', function (e) {
 	        e.stopPropagation();
 	        e.preventDefault();
-	        $$O('.bookly-js-mobile-step-1', $container).show();
-	        $$O('.bookly-js-mobile-step-2', $container).hide();
-	        $$O('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
-	        $$O('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
+	        $$V('.bookly-js-mobile-step-1', $container).show();
+	        $$V('.bookly-js-mobile-step-2', $container).hide();
+	        $$V('.bookly-stepper li:eq(0)', $container).addClass('bookly-step-active');
+	        $$V('.bookly-stepper li:eq(1)', $container).removeClass('bookly-step-active');
 	        return false;
 	      });
 	    }
@@ -17769,7 +18022,7 @@ var bookly = (function ($$O) {
 	 */
 	function main (options) {
 	  var _context;
-	  let $container = $$O('#bookly-form-' + options.form_id);
+	  let $container = $$V('#bookly-form-' + options.form_id);
 	  if (!$container.length) {
 	    return;
 	  }
@@ -17841,7 +18094,7 @@ var bookly = (function ($$O) {
 	        }, function (userInfo) {
 	          booklyAjax({
 	            type: 'POST',
-	            data: $$O.extend(userInfo, {
+	            data: $$V.extend(userInfo, {
 	              action: 'bookly_pro_facebook_login',
 	              form_id: options.form_id
 	            })

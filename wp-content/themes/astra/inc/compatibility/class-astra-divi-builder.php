@@ -13,7 +13,7 @@ if ( ! class_exists( 'ET_Builder_Plugin' ) ) {
 /**
  * Astra Divi Builder
  */
-if ( ! class_exists( 'Astra_Divi_Builder' ) ) :
+if ( ! class_exists( 'Astra_Divi_Builder' ) ) {
 
 	/**
 	 * Astra Divi Builder
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_Divi_Builder' ) ) :
 	 * @since 1.4.0
 	 */
 	class Astra_Divi_Builder {
-
 		/**
 		 * Member Variable
 		 *
@@ -60,7 +59,7 @@ if ( ! class_exists( 'Astra_Divi_Builder' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

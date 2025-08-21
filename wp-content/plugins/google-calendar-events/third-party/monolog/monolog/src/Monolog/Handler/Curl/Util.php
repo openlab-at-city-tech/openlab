@@ -32,20 +32,20 @@ final class Util
     public static function execute($ch, int $retries = 5, bool $closeAfterDone = \true)
     {
         while ($retries--) {
-            $curlResponse = \curl_exec($ch);
+            $curlResponse = curl_exec($ch);
             if ($curlResponse === \false) {
-                $curlErrno = \curl_errno($ch);
-                if (\false === \in_array($curlErrno, self::$retriableErrorCodes, \true) || !$retries) {
-                    $curlError = \curl_error($ch);
+                $curlErrno = curl_errno($ch);
+                if (\false === in_array($curlErrno, self::$retriableErrorCodes, \true) || !$retries) {
+                    $curlError = curl_error($ch);
                     if ($closeAfterDone) {
-                        \curl_close($ch);
+                        curl_close($ch);
                     }
-                    throw new \RuntimeException(\sprintf('Curl error (code %d): %s', $curlErrno, $curlError));
+                    throw new \RuntimeException(sprintf('Curl error (code %d): %s', $curlErrno, $curlError));
                 }
                 continue;
             }
             if ($closeAfterDone) {
-                \curl_close($ch);
+                curl_close($ch);
             }
             return $curlResponse;
         }

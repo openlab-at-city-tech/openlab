@@ -130,4 +130,13 @@ class NotificationQueue extends Lib\Base\Entity
         return parent::save();
     }
 
+    public function delete()
+    {
+        $queue_data = json_decode( $this->getData(), true );
+
+        Lib\Notifications\Routine::deleteNotificationAttachmentFiles( $queue_data );
+
+        return parent::delete();
+    }
+
 }

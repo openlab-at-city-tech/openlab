@@ -84,10 +84,11 @@ function wpt_filter_urls( $update, $post_ID ) {
  * @param boolean $repost Is this a repost.
  * @param boolean $ref X.com author Reference.
  * @param string  $service Service being generated for.
+ * @param bool    $custom True if truncating a specific custom pattern.
  *
  * @return string New text.
  */
-function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = false, $service = 'x' ) {
+function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = false, $service = 'x', $custom = false ) {
 	if ( ! $post_ID ) {
 		// If no Post ID, return the update exactly as passed.
 		return $update;
@@ -96,7 +97,8 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 			$post = wpt_post_info( $post_ID );
 		}
 		$variant = get_post_meta( $post_ID, '_wpt_post_template_' . $service, true );
-		if ( '' !== $variant ) {
+		// If this is not a singular custom value, switch to the service variant.
+		if ( '' !== $variant && ! $custom ) {
 			$update = $variant;
 		}
 		// create full unconditional post update - prior to truncation.
@@ -131,7 +133,6 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 		if ( '' !== $append && '' !== $update && ( str_contains( $update, $append ) === false ) ) {
 			$update = $update . ' ' . $append;
 		}
-
 		// there are no tags in this update. Truncate and return.
 		if ( ! wpt_has_tags( $update ) ) {
 			$post_update = mb_substr( $update, 0, $length, $encoding );
@@ -149,7 +150,6 @@ function wpt_truncate_status( $update, $post, $post_ID, $repost = false, $ref = 
 			 */
 			return apply_filters( 'wpt_custom_truncate', $post_update, $update, $post_ID, $repost, 1 );
 		}
-
 		// Replace the template tags with their corresponding values.
 		$post_update = str_ireplace( $tags, $values, $update );
 

@@ -1,7 +1,7 @@
 (function ($) {
     var Schedule = function ($container, options) {
         let obj = this;
-            jQuery.extend(obj.options, options);
+        jQuery.extend(obj.options, options);
 
         // Loads schedule list
         if (options.reload) {
@@ -78,12 +78,12 @@
                             dataType: 'json',
                             success: function (response) {
                                 $('[data-index]', $container).each(function () {
-                                    let $row  = $(this),
+                                    let $row = $(this),
                                         index = $row.data('index'),
                                         $list = $('.bookly-js-breaks-list', $row);
                                     $list.html('');
                                     if (response.data.breaks.hasOwnProperty(index)) {
-                                        response.data.breaks[index].forEach(function(elem) {
+                                        response.data.breaks[index].forEach(function (elem) {
                                             var $html = $.parseHTML(elem);
                                             initBooklyPopover($html);
                                             $list.append($html)
@@ -96,6 +96,12 @@
                             }
                         });
                     })
+                    .on('click', '.bookly-js-clone-schedule a', function (e) {
+                        let from = $(this).closest('.bookly-js-range-row').find('.bookly-js-parent-range-start').val(),
+                            to = $(this).closest('.bookly-js-range-row').find('.bookly-js-parent-range-end').val();
+                        $('#bookly-schedule-container .bookly-js-parent-range-start').val(from).trigger('change');
+                        $('#bookly-schedule-container .bookly-js-parent-range-end').val(to).trigger('change');
+                    })
                     .on('click', '.popover-body .bookly-js-save-break', function (e) {
                         e.preventDefault();
                         // Listener for saving break.
@@ -103,14 +109,14 @@
                             $body = $button.closest('.popover-body'),
                             ladda = rangeTools.ladda(this),
                             data = $.extend({
-                                action    : 'bookly_staff_schedule_handle_break',
+                                action: 'bookly_staff_schedule_handle_break',
                                 csrf_token: BooklyL10nGlobal.csrf_token,
                                 start_time: $('.bookly-js-popover-range-start', $body).val(),
-                                end_time  : $('.bookly-js-popover-range-end', $body).val(),
+                                end_time: $('.bookly-js-popover-range-end', $body).val(),
                             }, $button.data('submit'));
                         let $parentRange = $('.bookly-js-range-row[data-key=' + data.ss_id + ']');
 
-                        data.working_end   = $('.bookly-js-parent-range-end > option:selected', $parentRange).val();
+                        data.working_end = $('.bookly-js-parent-range-end > option:selected', $parentRange).val();
                         data.working_start = $('.bookly-js-parent-range-start > option:selected', $parentRange).val();
                         $.ajax({
                             method: 'POST',
@@ -129,6 +135,8 @@
                                         $('.bookly-js-range-row[data-key=' + data.ss_id + '] .bookly-js-breaks-list', $container)
                                             .append($html);
                                     }
+                                    $button.data('start', data.start_time);
+                                    $button.data('end', data.end_time);
                                     $button.parents('.bookly-popover').booklyPopover('hide');
                                 } else {
                                     if (response.data && response.data.message) {
@@ -159,11 +167,11 @@
                         if ($parentRangeStart.val() == '') {
                             $rangeRow
                                 .find('.bookly-js-hide-on-off').hide().end()
-                                .find('.bookly-js-invisible-on-off').addClass('invisible');
+                                .find('.bookly-js-invisible-on-off').addClass('d-none');
                         } else {
                             $rangeRow
                                 .find('.bookly-js-hide-on-off').show().end()
-                                .find('.bookly-js-invisible-on-off').removeClass('invisible');
+                                .find('.bookly-js-invisible-on-off').removeClass('d-none');
                             rangeTools.hideInaccessibleEndTime($parentRangeStart, $('.bookly-js-parent-range-end', $rangeRow));
                         }
                     })
@@ -202,22 +210,21 @@
         function initBooklyPopover($panel) {
             $('.bookly-js-toggle-popover', $panel)
                 .booklyPopover({
-                    html     : true,
+                    html: true,
                     placement: 'bottom',
                     container: $container,
-                    template : '<div class="bookly-popover mw-100" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
-                    trigger  : 'manual',
-                    content  : function () {
-                        let $button       = $(this),
-                            $popover      = $('.bookly-js-edit-break-body > div', $container).clone(),
+                    template: '<div class="bookly-popover mw-100" role="tooltip"><div class="arrow"></div><div class="popover-body"></div></div>',
+                    trigger: 'manual',
+                    content: function () {
+                        let $button = $(this),
+                            $popover = $('.bookly-js-edit-break-body > div', $container).clone(),
                             $popoverStart = $('.bookly-js-popover-range-start', $popover),
-                            $popoverEnd   = $('.bookly-js-popover-range-end', $popover),
-                            $saveButton   = $('.bookly-js-save-break', $popover),
+                            $popoverEnd = $('.bookly-js-popover-range-end', $popover),
+                            $saveButton = $('.bookly-js-save-break', $popover),
                             force_keep_values = false;
                         if ($button.hasClass('bookly-js-break-interval')) {
-                            let interval = $button.html().trim().split(/ [-–] /);
-                            rangeTools.setVal($popoverStart, interval[0]);
-                            rangeTools.setVal($popoverEnd, interval[1]);
+                            $popoverStart.val($button.data('start'));
+                            $popoverEnd.val($button.data('end'));
                             force_keep_values = true;
                             $saveButton.data('submit', {
                                 id: $button.closest('[data-entity-id]').data('entity-id'),
