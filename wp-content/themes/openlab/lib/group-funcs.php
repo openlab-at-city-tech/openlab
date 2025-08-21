@@ -2691,7 +2691,15 @@ function openlab_filter_groups_query_for_resources( $sql, $sql_parts, $args ) {
 	static $groups_with_resource_badges_ids = null;
 
 	if ( null === $groups_with_resource_badges_ids ) {
-		$resource_badge_keys = [ 'fylc', 'citytech-oer', 'department-model', 'resource' ];
+		$resource_badge_keys = [
+			'fylc', // openlabdev.org
+			'first-year-learning-community', // production
+			'citytech-oer', // openlabdev.org
+			'open-education-resource', // production
+			'department-model',
+			'resource'
+		];
+
 		$resource_badges     = array_filter(
 			\OpenLab\Badges\Badge::get(),
 			function( $badge ) use ( $resource_badge_keys ) {
