@@ -177,5 +177,5 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 	else {
 		$return = su_error_message( 'Custom Gallery', __( 'images not found', 'shortcodes-ultimate' ) );
 	}
-	return $return;
+	return wp_kses_post( $return );
 }

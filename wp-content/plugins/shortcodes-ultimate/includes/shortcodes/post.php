@@ -113,5 +113,5 @@ function su_shortcode_post( $atts = null, $content = null ) {
 		$data = $atts['default'];
 	}
 
-	return $data ? $atts['before'] . $data . $atts['after'] : '';
+	return $data ? wp_kses_post($atts['before'] . $data . $atts['after']) : '';
 }

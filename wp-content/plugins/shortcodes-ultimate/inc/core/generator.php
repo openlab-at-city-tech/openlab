@@ -250,6 +250,7 @@ class Su_Generator {
 			<input type="hidden" name="su-compatibility-mode-prefix" id="su-compatibility-mode-prefix" value="<?php echo su_get_shortcode_prefix(); ?>" />
 			<input type="hidden" name="su-generator-option-skip" id="su-generator-option-skip" value="<?php echo esc_attr( get_option( 'su_option_skip', '' ) ); ?>" />
 			<?php wp_nonce_field( 'su_generator_preset', 'su_generator_presets_nonce' ); ?>
+			<?php wp_nonce_field( 'su_generator_preview', 'su_generator_preview_nonce' ); ?>
 			<div id="su-generator-result" style="display:none"></div>
 		</div>
 	</div>
@@ -337,12 +338,19 @@ class Su_Generator {
 	 * Process AJAX request and generate preview HTML
 	 */
 	public static function preview() {
+		// Check nonce
+		if (
+			empty( $_POST['nonce'] ) ||
+			! wp_verify_nonce( $_POST['nonce'], 'su_generator_preview' )
+		) {
+			return;
+		}
 		// Check authentication
 		self::access();
 		// Output results
 		do_action( 'su/generator/preview/before' );
 		echo '<h5>' . __( 'Preview', 'shortcodes-ultimate' ) . '</h5>';
-		echo do_shortcode( wp_kses_post( wp_unslash( $_POST['shortcode'] ) ) );
+		echo wp_kses_post( do_shortcode( wp_unslash( $_POST['shortcode'] ) ) );
 		echo '<div style="clear:both"></div>';
 		do_action( 'su/generator/preview/after' );
 		die();
