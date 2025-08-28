@@ -89,7 +89,7 @@ add_shortcode( 'dkpdf-pagebreak', 'dkpdf_pagebreak_shortcode' );
  * [dkpdf-columns]text[/dkpdf-columns]
  * https://mpdf.github.io/what-else-can-i-do/columns.html
  *
- * <columns column-count=”n” vAlign=”justify” column-gap=”n” />
+ * <columns column-count="n" vAlign="justify" column-gap="n" />
  * column-count = Number of columns. Anything less than 2 sets columns off. (Required)
  * vAlign = Automatically adjusts height of columns to be equal if set to J or justify. Default Off. (Optional)
  * gap = gap in mm between columns. Default 5. (Optional)
@@ -131,5 +131,7 @@ function dkpdf_columnbreak_shortcode( $atts, $content = null ) {
 	if( $pdf ) {
 		return '<columnbreak />';
 	}
+
+	return '';
 }
 add_shortcode( 'dkpdf-columnbreak', 'dkpdf_columnbreak_shortcode' );
