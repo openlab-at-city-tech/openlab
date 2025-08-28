@@ -147,13 +147,32 @@ class TRP_Addons_List_Table extends WP_List_Table {
         }
 
         elseif ( $item['type'] === 'add-on' ){//this is more complicated as there are multiple cases, I think it should be done through filters in each plugin
-
+            //get license status
+            $license_status = get_option( 'trp_license_status' );
+            //set some default values
             in_array( $this->current_version, $this->section_versions ) ? $disabled = '' : $disabled = 'disabled'; //add disabled if the current version isn't eligible
+            $onclick = '';
 
+            //construct the action URL based on the add-on status
+            $base_url = admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ) );
+            if ( $this->is_add_on_active( $item['slug'] ) )
+                $base_url .= '&trp_add_ons_action=deactivate';
+            else
+                $base_url .= '&trp_add_ons_action=activate';
+            $action_url = esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], $base_url ), 'trp_add_ons_action' ) );
+
+            //if we don't have a valid license we can't activate the add-on and throw a confirmation dialog
             if ( $this->is_add_on_active( $item['slug'] ) ) {
-                $action = '<a class="right button trp-button-secondary" data-slug="' . $item['slug'] . '" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ) . '&trp_add_ons_action=deactivate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Deactivate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
-            } else {
-                $action = '<a class="right button trp-submit-btn" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ). '&trp_add_ons_action=activate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Activate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
+                if ( $license_status !== 'valid' ) {
+                    $onclick = 'onclick="return confirm(\'' . esc_js( __( 'This add-on can not be activated back without a valid license. Are you sure you want to deactivate it?', 'translatepress-multilingual' ) ) . '\')"';
+                }
+                $action = '<a class="right button trp-button-secondary" data-slug="' . $item['slug'] . '" href="'. $action_url .'" '. $onclick .'>' . __('Deactivate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
+            } else{
+                if ( $license_status !== 'valid' ) {
+                    $disabled = 'disabled'; //if the license is not valid, disable the button
+                    $action_url = '';
+                }
+                $action = '<a class="right button trp-submit-btn" '.$disabled.' href="'. $action_url .'">' . __('Activate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
             }
         }
 
@@ -191,6 +210,8 @@ class TRP_Addons_List_Table extends WP_List_Table {
      */
     function add_section(){
         ob_start();
+
+        $license_status = get_option( 'trp_license_status' );
         ?>
         <div class="trp-add-ons-section trp-settings-container">
             <?php if( !empty( $this->section_header ) ): ?>
@@ -252,9 +273,17 @@ class TRP_Addons_List_Table extends WP_List_Table {
                 );
             ?>
             <div class="trp-bulk-actions__wrapper">
-                <a href="<?php echo $activate_url; // phpcs:ignore ?>" class="trp-activate-all"><?php esc_html_e('Activate all', 'translatepress-multilingual'); ?></a>
+                <?php if( $license_status !== 'valid' ): ?>
+                    <span class="trp-activate-all" title="<?php esc_attr_e('A valid license is required to activate add-ons.', 'translatepress-multilingual') ?>"><?php esc_html_e('Activate all', 'translatepress-multilingual'); ?></span>
+                <?php else: ?>
+                    <a href="<?php echo $activate_url; // phpcs:ignore ?>" class="trp-activate-all"><?php esc_html_e('Activate all', 'translatepress-multilingual'); ?></a>
+                <?php endif; ?>
                 <span>/</span>
-                <a href="<?php echo $deactivate_url; // phpcs:ignore ?>" class="trp-deactivate-all"><?php esc_html_e('Deactivate all', 'translatepress-multilingual'); ?></a>
+                <?php if( $license_status !== 'valid' ): ?>
+                    <a href="<?php echo $deactivate_url; // phpcs:ignore ?>" class="trp-deactivate-all" onclick="return confirm('<?php echo esc_js( __( 'Add-ons can not be activated back without a valid license. Are you sure you want to deactivate them?', 'translatepress-multilingual' ) ) ?> ')"><?php esc_html_e('Deactivate all', 'translatepress-multilingual'); ?></a>
+                <?php else: ?>
+                    <a href="<?php echo $deactivate_url; // phpcs:ignore ?>" class="trp-deactivate-all"><?php esc_html_e('Deactivate all', 'translatepress-multilingual'); ?></a>
+                <?php endif; ?>
             </div>
 
             <?php
@@ -273,7 +302,7 @@ class TRP_Addons_List_Table extends WP_List_Table {
 
 
     /**
-     * The function that actually displays all the tables and the surrounding html
+     * The function that actually displays all the tables and the surrounding HTML
      */
     function display_addons(){
         ?>

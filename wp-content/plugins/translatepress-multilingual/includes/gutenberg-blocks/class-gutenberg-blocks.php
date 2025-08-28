@@ -23,7 +23,10 @@ class TRP_Gutenberg_Blocks {
     public function block_editor_enqueue() {
         global $pagenow;
 
-        wp_enqueue_style( 'trp-language-switcher-style', TRP_PLUGIN_URL . 'assets/css/trp-language-switcher.css', array(), TRP_PLUGIN_VERSION );
+        $trp = TRP_Translate_Press::get_trp_instance();
+
+        if ( !$trp->get_component( 'language_switcher_tab' )->is_legacy_enabled() )
+            TRP_Language_Switcher_V2::instance()->enqueue_assets(); // only enqueue the assets if legacy is disabled
 
         if ( $pagenow === 'widgets.php' ) {
             $arrDeps = [ 'wp-blocks', 'wp-dom', 'wp-dom-ready', 'wp-edit-widgets', 'lodash' ];
@@ -33,7 +36,7 @@ class TRP_Gutenberg_Blocks {
             $arrDeps = [ 'wp-blocks', 'wp-dom', 'wp-dom-ready', 'wp-edit-post', 'lodash' ];
         }
 
-        $languagesObject = ( TRP_Translate_Press::get_trp_instance() )->get_component( 'languages' );
+        $languagesObject = $trp->get_component( 'languages' );
 
         $published_languages = $languagesObject->get_language_names( $this->settings['publish-languages'] );
 

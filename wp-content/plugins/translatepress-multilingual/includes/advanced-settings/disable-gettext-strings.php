@@ -42,17 +42,48 @@ function trp_skip_gettext_querying( $skip, $translation, $text, $domain ){
 add_action( 'trp_editor_notices', 'display_message_for_disable_gettext_in_editor', 10, 1 );
 function display_message_for_disable_gettext_in_editor( $trp_editor_notices ) {
     $option = get_option( 'trp_advanced_settings', true );
-    if ( isset( $option['disable_translation_for_gettext_strings'] ) && $option['disable_translation_for_gettext_strings'] === 'yes' ) {
 
+    // Skip if user dismissed it
+    if ( get_user_meta( get_current_user_id(), '_trp_dismissed_gettext_notice', true ) ) {
+        return $trp_editor_notices;
+    }
+
+    if ( isset( $option['disable_translation_for_gettext_strings'] ) && $option['disable_translation_for_gettext_strings'] === 'yes' ) {
         $url = add_query_arg( array(
-            'page'                      => 'trp_advanced_page#debug_options',
+            'page' => 'trp_advanced_page#debug_options',
         ), site_url('wp-admin/admin.php') );
 
-        // maybe change notice color to blue #28B1FF
-        $html = "<div class='trp-notice trp-notice-warning'>";
-        $html .= '<p><strong>' . esc_html__( 'Gettext Strings translation is disabled', 'translatepress-multilingual' ) . '</strong></p>';
+        $ajax_url = admin_url( 'admin-ajax.php' );
 
-        $html .= '<p>' . esc_html__( 'To enable it go to ', 'translatepress-multilingual' ) . '<a class="trp-link-primary" target="_blank" href="' . esc_url( $url ) . '">' . esc_html__( 'TranslatePress->Advanced Settings->Debug->Disable translation for gettext strings', 'translatepress-multilingual' ) . '</a>' . esc_html__(' and uncheck the Checkbox.', 'translatepress-multilingual') .'</p>';
+        $html  = "<div id='trp-gettext-notice' class='trp-notice trp-notice-warning'>";
+
+        $html .= '<p><strong>' . esc_html__( 'Gettext Strings translation is disabled', 'translatepress-multilingual' ) . '</strong></p>';
+        $html .= '<p>' . esc_html__( 'To enable it go to ', 'translatepress-multilingual' ) .
+            '<a class="trp-link-primary" target="_blank" href="' . esc_url( $url ) . '">' .
+            esc_html__( 'TranslatePress->Advanced Settings->Debug->Disable translation for gettext strings', 'translatepress-multilingual' ) .
+            '</a>' . esc_html__(' and uncheck the Checkbox.', 'translatepress-multilingual') .'</p>';
+
+        // Custom dismiss link
+        $html .= '<a href="#" id="trp-dismiss-gettext-notice" class="trp-button-primary">'. esc_html__('Dismiss', 'translatepress-multilingual') .'</a>';
+
+        // Inline JS with ajax URL hardcoded
+        $html .= "<script>
+            document.addEventListener('DOMContentLoaded', function(){
+                var btn = document.getElementById('trp-dismiss-gettext-notice');
+                if (btn) {
+                    btn.addEventListener('click', function(e){
+                        e.preventDefault();
+                        var notice = document.getElementById('trp-gettext-notice');
+                        if (notice) notice.style.display = 'none';
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '" . esc_url( $ajax_url ) . "', true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.send('action=trp_dismiss_gettext_notice');
+                    });
+                }
+            });
+        </script>";
+
         $html .= '</div>';
 
         $trp_editor_notices = $html;
@@ -60,3 +91,11 @@ function display_message_for_disable_gettext_in_editor( $trp_editor_notices ) {
 
     return $trp_editor_notices;
 }
+
+// Handle AJAX dismiss
+add_action( 'wp_ajax_trp_dismiss_gettext_notice', function() {
+    if ( current_user_can( 'edit_posts' ) ) {
+        update_user_meta( get_current_user_id(), '_trp_dismissed_gettext_notice', true );
+    }
+    wp_die();
+});

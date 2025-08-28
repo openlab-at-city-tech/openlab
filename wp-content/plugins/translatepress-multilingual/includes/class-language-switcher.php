@@ -207,9 +207,8 @@ class TRP_Language_Switcher{
      * Hooked on wp_footer.
      */
     public function add_floater_language_switcher() {
-
         // Check if floater language switcher is active and return if not
-        if( $this->settings['trp-ls-floater'] != 'yes' ) {
+        if( $this->settings['trp-ls-floater'] !== 'yes' ) {
             return;
         }
 

@@ -226,6 +226,7 @@ class TRP_Translation_Manager {
             $license_status = trp_get_license_status();
             if ( $license_status != 'valid' && $license_status != 'free-version' ) {
                 $translatepress_product = ( defined( 'TRANSLATE_PRESS' ) ) ? TRANSLATE_PRESS : "TranslatePress";
+                $purchase_text = '';
                 switch ( $license_status ) {
                     case 'expired':
                         {
@@ -236,7 +237,7 @@ class TRP_Translation_Manager {
                                 $button       = esc_html__( 'Get Deal', 'translatepress-multilingual' );
                                 $link         = 'https://translatepress.com/account/?utm_source=tpeditor&utm_medium=clientsite&utm_campaign=BF-2024';
                             } else {
-                                $instructions = esc_html__( 'Please renew your license to continue receiving access to product downloads, automatic updates and support.', 'translatepress-multilingual' );
+                                $instructions = esc_html__( 'Please renew your license to continue receiving access to TranslatePress AI, premium addons, automatic updates and support.', 'translatepress-multilingual' );
                                 $button       = esc_html__( 'Renew Now', 'translatepress-multilingual' );
                                 $link         = 'https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpeditor&utm_campaign=TP-Renewal';
                             }
@@ -246,7 +247,7 @@ class TRP_Translation_Manager {
                     case 'revoked':
                         {
                             $status_text  = wp_kses( sprintf( __( 'Your %s license was <span class="trp-license-status-emphasized">refunded</span>.', 'translatepress-multilingual' ), '<strong>' . $translatepress_product . '</strong>' ), array( 'strong' => array(),'span' => array( 'class' => array() ) ) );
-                            $instructions = esc_html__( 'Please purchase a new license to continue receiving access to product downloads, automatic updates and support.', 'translatepress-multilingual' );
+                            $instructions = esc_html__( 'Please purchase a new license to continue receiving access to TranslatePress AI, premium addons, automatic updates and support.', 'translatepress-multilingual' );
                             $button       = esc_html__( 'Purchase a new license', 'translatepress-multilingual' );
                             $link = 'https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpeditor&utm_campaign=TP-Refund';
                             break;
@@ -258,8 +259,8 @@ class TRP_Translation_Manager {
                     //  case 'no_activations_left':
                     default:
                         {
-                            $status_text  = wp_kses( sprintf( __( 'Your %s license is <span class="trp-license-status-emphasized">empty or incorrect</span>.', 'translatepress-multilingual' ), '<strong>' . $translatepress_product . '</strong>' ), array( 'strong' => array(),'span' => array( 'class' => array() ) ) );
-                            $instructions = esc_html__( 'Please enter a valid license to continue receiving access to product downloads, automatic updates and support.', 'translatepress-multilingual' );
+                            $status_text  = wp_kses( sprintf( __( 'Your %s license is <span class="trp-license-status-emphasized">missing or invalid</span>.', 'translatepress-multilingual' ), '<strong>' . $translatepress_product . '</strong>' ), array( 'strong' => array(),'span' => array( 'class' => array() ) ) );
+                            $instructions = sprintf( esc_html__( 'Please enter a valid license to get access to TranslatePress AI, premium addons, automatic updates and support. Need a license key? %1$sPurchase one now%2$s', 'translatepress-multilingual' ), '<a href="https://translatepress.com/pricing/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=pro-no-active-license" target="_blank">', '</a>' );
                             $button       = esc_html__( 'Enter a valid license', 'translatepress-multilingual' );
                             $link         = admin_url( 'admin.php?page=trp_license_key' );
                             break;

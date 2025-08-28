@@ -240,12 +240,13 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
             $license        = $this->get_api_key();
             $status         = get_option( 'trp_license_status' );
             if ( $status === 'valid' ) {
+                require_once("class-mtapi-customer.php");
                 $mtapi_server = new TRP_MTAPI_Customer( $this->get_api_url() );
                 $site_status  = $mtapi_server->lookup_site( $license, home_url() );
                 if ( !empty( $site_status ) && !empty( $site_status['status'] ) && $site_status['status'] === "active" ) {
                     $is_error       = false;
                     $return_message = '';
-                    
+
                     // If API key is valid and site is active, allow re-enabling translations for paid licenses
                     if ( !$this->is_free_license() ) {
                         $this->set_free_license_translation_disabled(false);
@@ -439,7 +440,7 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
      */
     private function is_free_license() {
         $license_details = get_option('trp_license_details');
-        if (isset($license_details['valid'][0]->item_name) && 
+        if (isset($license_details['valid'][0]->item_name) &&
             $license_details['valid'][0]->item_name === 'TranslatePress') {
             return true;
         }

@@ -21,8 +21,18 @@
     $trp_addons_listing->tooltip_header = __( 'TranslatePress Add-ons', 'translatepress-multilingual' );
     $trp_addons_listing->tooltip_content = sprintf( __( 'You must first purchase this version to have access to the addon %1$shere%2$s', 'translatepress-multilingual' ), '<a target="_blank" href="'. trp_add_affiliate_id_to_link('https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=add-on-page&utm_campaign=TRP').'">', '</a>' );
 
+    //for Pro versions we need to check if the license is valid
+    $trp = TRP_Translate_Press::get_trp_instance();
+    if( !in_array( 'TranslatePress', $trp->tp_product_name ) ){
+        $license_status = get_option('trp_license_status');
+        if ($license_status === 'invalid')
+            $trp_addons_listing->tooltip_content = sprintf(__('You need an active license to have access to the addon. Renew or purchase a new one %1$shere%2$s.', 'translatepress-multilingual'), '<a target="_blank" href="https://translatepress.com/pricing/?utm_source=tp-addons&utm_medium=client-site&utm_campaign=expired-license">', '</a>');
+        else if ($license_status == false) {
+            $trp_addons_listing->tooltip_content = sprintf(__('Please %1$senter your license%2$s key first, to activate this addon.', 'translatepress-multilingual'), '<a target="_blank" href="' . admin_url('admin.php?page=trp_license_key') . '">', '</a>');
+        }
+    }
 
-    //Add Advanced section
+    //Add an Advanced section
     $trp_addons_listing->section_header = array( 'title' => __('Advanced Add-ons', 'translatepress-multilingual' ), 'description' => __('These addons extend your translation plugin and are available in the Developer, Business and Personal plans.', 'translatepress-multilingual')  );
     $trp_addons_listing->section_versions = array( 'TranslatePress - Dev', 'TranslatePress - Personal', 'TranslatePress - Business', 'TranslatePress - Developer' );
 

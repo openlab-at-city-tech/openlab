@@ -44,6 +44,7 @@ class TRP_Translate_Press{
     protected $woocommerce_emails;
     protected $preferred_user_language;
     protected $gutenberg_blocks;
+    protected $language_switcher_tab;
 
     public $tp_product_name = array();
     public static $translate_press = null;
@@ -69,13 +70,13 @@ class TRP_Translate_Press{
         define( 'TRP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'TRP_PLUGIN_BASE', plugin_basename( __DIR__ . '/index.php' ) );
         define( 'TRP_PLUGIN_SLUG', 'translatepress-multilingual' );
-        define( 'TRP_PLUGIN_VERSION', '2.9.19' );
+        define( 'TRP_PLUGIN_VERSION', '2.10.2' );
 
 	    wp_cache_add_non_persistent_groups(array('trp'));
 
         $this->load_dependencies();
         $this->initialize_components();
-        $this->get_tp_product_name();
+        $this->set_tp_product_name();
         $this->define_admin_hooks();
         $this->define_frontend_hooks();
     }
@@ -105,6 +106,7 @@ class TRP_Translate_Press{
         require_once TRP_PLUGIN_DIR . 'includes/class-languages.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-translation-render.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-language-switcher.php';
+        require_once TRP_PLUGIN_DIR . 'includes/class-language-switcher-v2.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-machine-translator.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-machine-translator-logger.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-query.php';
@@ -145,6 +147,7 @@ class TRP_Translate_Press{
         require_once TRP_PLUGIN_DIR . 'includes/class-plugin-optin.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-preferred-user-language.php';
         require_once TRP_PLUGIN_DIR . 'includes/gutenberg-blocks/class-gutenberg-blocks.php';
+        require_once TRP_PLUGIN_DIR . 'includes/class-language-switcher-tab.php';
 
         if ( did_action( 'elementor/loaded' ) )
             require_once TRP_PLUGIN_DIR . 'includes/class-elementor-language-for-blocks.php';
@@ -168,9 +171,10 @@ class TRP_Translate_Press{
         $this->machine_translation_tab    = new TRP_Machine_Translation_Tab( $this->settings->get_settings() );
         $this->machine_translation_tab->load_engines();
 
+        $this->language_switcher_tab      = new TRP_Language_Switcher_Tab( $this->settings->get_settings() );
+
         $this->translation_render         = new TRP_Translation_Render( $this->settings->get_settings() );
         $this->url_converter              = new TRP_Url_Converter( $this->settings->get_settings() );
-        $this->language_switcher          = new TRP_Language_Switcher( $this->settings->get_settings(), $this );
         $this->query                      = new TRP_Query( $this->settings->get_settings() );
         $this->machine_translator_logger  = new TRP_Machine_Translator_Logger( $this->settings->get_settings() );
         $this->translation_manager        = new TRP_Translation_Manager( $this->settings->get_settings() );
@@ -198,16 +202,20 @@ class TRP_Translate_Press{
         if ( version_compare( $wp_version, "5.0.0", ">=" ) && apply_filters( 'trp_initialize_gutenberg_blocks', true ) ) {
             $this->gutenberg_blocks = new TRP_Gutenberg_Blocks( $this->settings->get_settings() );
         }
+
     }
 
-    /**
+    /**Made this function static so it can be called without initializing this class
+     *
      * We use this function to detect if we have any addons that require a license
+     * Used throughout the plugin to detect the version for notifications, license checks, different messages.
+     * Sets $this->tp_product_name that is different from TRANSLATE_PRESS constant.
      */
-    public function get_tp_product_name(){
+    public static function set_tp_product_name_static(){
 
-        //don't do nothing in frontend
-        if( !is_admin() )
-            return;
+        // by default, set tp_product_name is not set.
+        // will be overwritten by active plugin names OR based on TRANSLATE_PRESS constant
+        $tp_product_name = array();
 
         // the names of your product should match the download names in EDD exactly
         // The order is important because we only match the last one.
@@ -218,30 +226,53 @@ class TRP_Translate_Press{
             "translatepress-personal"      => "TranslatePress Personal",
         );
         $active_plugins = get_option('active_plugins');
+        $last_found_product_name = array();
         foreach ( $trp_all_tp_product_names as $trp_tp_product_folder => $trp_tp_product_name ){
             foreach( $active_plugins as $active_plugin ){
                 if( strpos( $active_plugin, $trp_tp_product_folder.'/' ) === 0 ){
-                    $this->tp_product_name[$trp_tp_product_folder] = $trp_tp_product_name;
+                    $last_found_product_name = array($trp_tp_product_folder => $trp_tp_product_name);
                     break;
                 }
             }
         }
+        $tp_product_name = $last_found_product_name;
 
-        // Only define the last found product name. We can only have ONE product name.
-        if(!empty($this->tp_product_name)) {
-            $this->tp_product_name = array(end($this->tp_product_name));
+
+        /*
+         * For the dev version simulate the business version
+         *
+         * TRANSLATE_PRESS possible values:
+         * TranslatePress
+         * TranslatePress - Dev
+         * TranslatePress - Personal
+         * TranslatePress - Business
+         * TranslatePress - Developer
+         */
+        if (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress - Dev') {
+            $tp_product_name = array("translatepress-business" => "TranslatePress Business");
+        } elseif (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress') {
+            $tp_product_name = array("translatepress-multilingual" => "TranslatePress");
+        } elseif (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress - Personal') {
+            $tp_product_name = array("translatepress-personal" => "TranslatePress Personal");
+        } elseif (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress - Business') {
+            $tp_product_name = array("translatepress-business" => "TranslatePress Business");
+        } elseif (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress - Developer') {
+            $tp_product_name = array("translatepress-developer" => "TranslatePress Developer");
         }
 
-        //for the dev version simulate PRO version active
-        if( ( defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress - Dev' ) ){
-            $this->tp_product_name = array(); // only one product name
-            $this->tp_product_name["translatepress-business"] = "TranslatePress Business";
-        } elseif (defined('TRANSLATE_PRESS') && TRANSLATE_PRESS === 'TranslatePress' ){
-            $this->tp_product_name = array(); // only one product name
-            $this->tp_product_name["translatepress-multilingual"] = "TranslatePress";
+        // default fallback, if tp_product_name not yet set, force set it to TranslatePress business
+        if (!$tp_product_name) {
+            $tp_product_name = array("translatepress-business" => "TranslatePress Business");
         }
+
+        return $tp_product_name;
+
     }
 
+    // duplicate wrapper for the static function set_tp_product_name_static
+    public function set_tp_product_name(){
+        $this->tp_product_name = self::set_tp_product_name_static();
+    }
     /**
      * Hooks methods used in admin area.
      */
@@ -254,6 +285,7 @@ class TRP_Translate_Press{
         $this->loader->add_action( 'trp_settings_navigation_tabs', $this->settings, 'add_navigation_tabs' );
         $this->loader->add_action( 'trp_settings_navigation_tabs', $this->settings, 'add_svg_icons' );
         $this->loader->add_action( 'trp_language_selector', $this->settings, 'languages_selector', 10, 1 );
+        $this->loader->add_action( 'plugins_loaded', $this->settings, 'disable_languages_selector', 10, 1 );
 
 	    $this->loader->add_action( 'trp_settings_tabs', $this->advanced_tab, 'add_advanced_tab_to_settings', 10, 1 );
 	    $this->loader->add_action( 'admin_menu', $this->advanced_tab, 'add_submenu_page_advanced' );
@@ -309,6 +341,7 @@ class TRP_Translate_Press{
 	    $this->loader->add_action( 'admin_init', $this->upgrade, 'show_admin_notice' );
 	    $this->loader->add_action( 'admin_init', $this->upgrade, 'show_notification_about_add_ons_removal' );
         $this->loader->add_action( 'admin_init', $this->upgrade, 'trp_prepare_options_for_database_optimization' );
+        $this->loader->add_action( 'admin_init', $this->upgrade, 'show_language_switcher_v2_intro_notice' );
 	    $this->loader->add_action( 'admin_enqueue_scripts', $this->upgrade, 'enqueue_update_script', 10, 1 );
 	    $this->loader->add_action( 'wp_ajax_trp_update_database', $this->upgrade, 'trp_update_database' );
 
@@ -322,7 +355,6 @@ class TRP_Translate_Press{
                 $this->loader->add_filter('pre_set_site_transient_update_plugins', $this->plugin_updater, 'check_license');
             }
             $this->loader->add_action('admin_init', $this->plugin_updater, 'deactivate_license');
-            $this->loader->add_action('admin_notices', $this->plugin_updater, 'admin_activation_notices');
         }
 
         /* add license page */
@@ -380,22 +412,25 @@ class TRP_Translate_Press{
         $this->loader->add_filter( "trp_translateable_strings", $this->translation_render, 'antispambot_infinite_detection_fix', 10, 6 );
         $this->loader->add_filter( "trp_allow_machine_translation_for_string", $this->translation_render, 'allow_machine_translation_for_string', 10, 4 );
         $this->loader->add_filter( "trp_allow_machine_translation_for_string", $this->translation_render, 'skip_automatic_translation_for_no_auto_translation_selector', 10, 5 );
-        $this->loader->add_action( "init", $this->translation_render, 'add_callbacks_for_translating_rest_api', 10, 4 );
+        $this->loader->add_filter( "rest_pre_echo_response", $this->translation_render, 'handle_generic_rest_api_translations', 10, 3 );
         $this->loader->add_filter( "oembed_response_data", $this->translation_render, 'oembed_response_data', 10, 4 );
 
         /* add custom containers for post content and pots title so we can identify string that are part of them */
         $this->loader->add_filter( "the_content", $this->translation_render, 'wrap_with_post_id', 1000 );
         $this->loader->add_filter( "the_title", $this->translation_render, 'wrap_with_post_id', 1000, 2 );
 
-
-
-
-        $this->loader->add_action( 'wp_enqueue_scripts', $this->language_switcher, 'enqueue_language_switcher_scripts' );
-        $this->loader->add_action( 'wp_footer', $this->language_switcher, 'add_floater_language_switcher' );
-        $this->loader->add_filter( 'init', $this->language_switcher, 'register_ls_menu_switcher' );
-        $this->loader->add_action( 'wp_get_nav_menu_items', $this->language_switcher, 'ls_menu_permalinks', 10, 3 );
-        add_shortcode( 'language-switcher', array( $this->language_switcher, 'language_switcher' ) );
-
+        // Load the appropriate language switcher conditionally
+        if ( $this->language_switcher_tab->is_legacy_enabled() ) {
+            $this->language_switcher = new TRP_Language_Switcher( $this->settings->get_settings(), $this );
+            $this->loader->add_action( 'wp_enqueue_scripts', $this->language_switcher, 'enqueue_language_switcher_scripts' );
+            $this->loader->add_action( 'wp_footer', $this->language_switcher, 'add_floater_language_switcher' );
+            $this->loader->add_filter( 'init', $this->language_switcher, 'register_ls_menu_switcher' );
+            $this->loader->add_action( 'wp_get_nav_menu_items', $this->language_switcher, 'ls_menu_permalinks', 10, 3 );
+            add_shortcode( 'language-switcher', [ $this->language_switcher, 'language_switcher' ] );
+        } else {
+            $this->language_switcher = TRP_Language_Switcher_V2::instance( $this->settings->get_settings(), $this );
+            $this->loader->add_action( 'init', $this->language_switcher, 'init', 1 );
+        }
 
         $this->loader->add_action( 'trp_translation_manager_footer', $this->translation_manager, 'enqueue_scripts_and_styles' );
         $this->loader->add_filter( 'template_include', $this->translation_manager, 'translation_editor', 99999 );

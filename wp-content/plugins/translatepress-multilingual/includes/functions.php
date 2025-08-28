@@ -769,6 +769,10 @@ function trp_translate( $content, $language = null, $prevent_over_translation = 
     return $translated_custom_content;
 }
 
+/**
+ * Function that returns the license status of the TranslatePress plugin.
+ * @return string
+ */
 function trp_get_license_status(){
     $license_details = get_option( 'trp_license_details' );
     $is_demosite = ( strpos(site_url(), 'https://demo.translatepress.com' ) !== false );
@@ -955,5 +959,25 @@ function trp_remove_prefix($prefix = '', $string = '') {
         }
     }
     // If the prefix is not at the start, return the path unchanged
+    return $string;
+}
+
+/**
+ * Obfuscate sensitive data in JSON response strings.
+ *
+ * @param string $string The JSON response string.
+ * @return string The modified JSON response string with obfuscated sensitive data.
+ */
+function trp_obfuscate_sensitive_data_in_json_response( $string ) {
+    $response_data = json_decode( $string, true );
+    if ( json_last_error() === JSON_ERROR_NONE ) {
+        if ( isset( $response_data['customer_name'] ) ) {
+            $response_data['customer_name'] = substr($response_data['customer_name'], 0, 2) . str_repeat('*', strlen($response_data['customer_name']) - 5) . substr($response_data['customer_name'], -3);
+        }
+        if ( isset( $response_data['customer_email'] ) ) {
+            $response_data['customer_email'] = substr($response_data['customer_email'], 0, 2) . str_repeat('*', strlen($response_data['customer_email']) - 5) . substr($response_data['customer_email'], -3);
+        }
+        $string = json_encode( $response_data );
+    }
     return $string;
 }

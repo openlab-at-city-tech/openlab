@@ -284,6 +284,7 @@ class TRP_Advanced_Tab {
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/disable-gettext-strings.php');
         //we can remove this at some point
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/load-legacy-seo-pack.php');
+        include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/load-legacy-language-switcher.php');
 
 	}
 

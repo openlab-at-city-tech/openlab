@@ -116,6 +116,10 @@ class TRP_Upgrade {
                 $this->set_publish_languages_from_translation_languages();
             }
 
+            if ( version_compare( $stored_database_version, '2.10', '<') ) {
+                $this->migrate_to_language_switcher_v2();
+            }
+
             /**
              * Write an upgrading function above this comment to be executed only once: while updating plugin to a higher version.
              * Use example condition: version_compare( $stored_database_version, '2.9.9', '<=')
@@ -1626,6 +1630,209 @@ class TRP_Upgrade {
             $trp_settings['publish-languages'] = $trp_settings['translation-languages'];
             update_option( 'trp_settings', $trp_settings );
         }
+    }
+
+    /**
+     * Seed Language Switcher V2 settings on version change for upgraded sites.
+     * - New installs (no stored version) are ignored (defaults applied later by LS tab).
+     * - Upgrades: ensure option exists and enable legacy mode.
+     *
+     */
+    public function migrate_to_language_switcher_v2(): void {
+        // Seed from defaults or existing option
+        $defaults = TRP_Language_Switcher_Tab::default_switcher_config();
+        $cfg = get_option('trp_language_switcher_settings', null);
+        if ( !is_array($cfg) || empty($cfg) ) {
+            $cfg = $defaults;
+        }
+
+        // Ensure branches exist
+        foreach (['floater','shortcode','menu'] as $scope) {
+            if ( empty($cfg[$scope]) || !is_array($cfg[$scope]) ) {
+                $cfg[$scope] = $defaults[$scope];
+            }
+            if ( empty( $cfg[$scope]['layoutCustomizer'] ) || !is_array( $cfg[$scope]['layoutCustomizer'] ) ) {
+                $cfg[$scope]['layoutCustomizer'] = $defaults[$scope]['layoutCustomizer'];
+            }
+            foreach (['desktop','mobile'] as $device) {
+                if ( empty( $cfg[$scope]['layoutCustomizer'][$device] ) || !is_array( $cfg[$scope]['layoutCustomizer'][$device] ) ) {
+                    $cfg[$scope]['layoutCustomizer'][$device] = $defaults[$scope]['layoutCustomizer'][$device];
+                }
+            }
+        }
+
+        // Local utilities
+        $map_preset = static function( string $preset ): array {
+            switch ( $preset ) {
+                case 'full-names':        return ['flagIconPosition' => 'hide',   'languageNames' => 'full'];
+                case 'short-names':       return ['flagIconPosition' => 'hide',   'languageNames' => 'short'];
+                case 'flags-full-names':  return ['flagIconPosition' => 'before', 'languageNames' => 'full'];
+                case 'flags-short-names': return ['flagIconPosition' => 'before', 'languageNames' => 'short'];
+                case 'only-flags':        return ['flagIconPosition' => 'before', 'languageNames' => 'none'];
+                default:                  return ['flagIconPosition' => 'before', 'languageNames' => 'full'];
+            }
+        };
+
+        $apply_layout = static function ( array $layout, array $pairs ): array {
+            foreach ( [ 'desktop', 'mobile' ] as $device ) {
+                if ( ! isset( $layout[ $device ] ) || ! is_array( $layout[ $device ] ) ) {
+                    $layout[ $device ] = [];
+                }
+                foreach ( $pairs as $k => $v ) {
+                    $layout[ $device ][ $k ] = $v; // force overwrite
+                }
+            }
+            return $layout;
+        };
+
+        $cfg['floater']['enabled'] = $this->settings['trp-ls-floater'] === 'yes';
+
+        // Map legacy presets -> new layout options
+        $shortcode_preset = isset($this->settings['shortcode-options']) ? sanitize_key($this->settings['shortcode-options']) : '';
+        $cfg['shortcode']['layoutCustomizer'] = $apply_layout(
+            $cfg['shortcode']['layoutCustomizer'],
+            $map_preset($shortcode_preset)
+        );
+
+        $menu_preset = isset($this->settings['menu-options']) ? sanitize_key($this->settings['menu-options']) : '';
+        $cfg['menu']['layoutCustomizer'] = $apply_layout(
+            $cfg['menu']['layoutCustomizer'],
+            $map_preset($menu_preset)
+        );
+
+        $floater_preset = isset($this->settings['floater-options']) ? sanitize_key($this->settings['floater-options']) : '';
+        $cfg['floater']['layoutCustomizer'] = $apply_layout(
+            $cfg['floater']['layoutCustomizer'],
+            $map_preset($floater_preset)
+        );
+
+        // ===== Floater position → layoutCustomizer (both devices) =====
+        $allowed_positions = ['bottom-right','bottom-left','top-right','top-left'];
+        $position = isset($this->settings['floater-position']) ? sanitize_key($this->settings['floater-position']) : '';
+        if ( !in_array($position, $allowed_positions, true) ) {
+            $position = $defaults['floater']['layoutCustomizer']['desktop']['position'];
+        }
+        $cfg['floater']['layoutCustomizer'] = $apply_layout(
+            $cfg['floater']['layoutCustomizer'],
+            ['position' => $position]
+        );
+
+        // Floater color scheme
+        $color_scheme   = isset($this->settings['floater-color']) ? sanitize_key($this->settings['floater-color']) : 'light';
+
+        if ( $color_scheme === 'dark' ) {
+            $cfg['floater']['bgColor']        = '#000000';
+            $cfg['floater']['bgHoverColor']   = '#444444';
+            $cfg['floater']['textColor']      = '#ffffff';
+            $cfg['floater']['textHoverColor'] = '#eeeeee';
+            $cfg['floater']['borderColor']    = 'transparent';
+        } else {
+            $cfg['floater']['bgColor']        = '#ffffff';
+            $cfg['floater']['bgHoverColor']   = '#0000000D';
+            $cfg['floater']['textColor']      = '#143852';
+            $cfg['floater']['textHoverColor'] = '#1D2327';
+            $cfg['floater']['borderColor']    = '#1438521A';
+        }
+
+        $cfg['floater']['showPoweredBy'] = ( isset($this->settings['trp-ls-show-poweredby']) && $this->settings['trp-ls-show-poweredby'] === 'yes' );
+
+        // Advanced settings -> new flags (only if missing)
+        $adv_settings = ( isset($this->settings['trp_advanced_settings']) && is_array($this->settings['trp_advanced_settings']) )
+            ? $this->settings['trp_advanced_settings']
+            : [];
+
+        if ( !isset($cfg['shortcode']['clickLanguage']) ) {
+            $cfg['shortcode']['clickLanguage'] =
+                ( isset($adv_settings['open_language_switcher_shortcode_on_click']) && $adv_settings['open_language_switcher_shortcode_on_click'] === 'yes' );
+        }
+
+        if ( !isset($cfg['floater']['oppositeLanguage']) ) {
+            $cfg['floater']['oppositeLanguage'] =
+                ( isset($adv_settings['show_opposite_flag_language_switcher_shortcode']) && $adv_settings['show_opposite_flag_language_switcher_shortcode'] === 'yes' );
+        }
+
+        $adv_settings['load_legacy_language_switcher'] = 'yes';
+
+        update_option( 'trp_advanced_settings', $adv_settings );
+        update_option( 'trp_language_switcher_settings', $cfg );
+        update_option( 'trp_ls_v2_migrated_from_legacy', 'yes' );
+    }
+
+    /**
+     * If user migrated from the legacy switcher, register a dismissible admin notice.
+     */
+    public function show_language_switcher_v2_intro_notice() : void {
+        if ( ! is_admin() || ! current_user_can( apply_filters( 'trp_settings_capability', 'manage_options' ) ) )
+            return;
+
+        $notification_id = 'trp_ls_v2_intro';
+
+        // Dismissed
+        if ( get_user_meta( get_current_user_id(), $notification_id . '_dismiss_notification', true ) )
+            return;
+
+        $migrated = get_option( 'trp_ls_v2_migrated_from_legacy', 'no' ) === 'yes';
+
+        if ( !$migrated )
+            return;
+
+        $settings_url = add_query_arg(
+            [ 'trp_dismiss_admin_notification' => $notification_id ],
+            admin_url( 'admin.php?page=trp_language_switcher' )
+        );
+
+        $logo_url     = trailingslashit( TRP_PLUGIN_URL ) . 'assets/images/tp-logo.png';
+        $dismiss_link = '<a style="text-decoration:none;z-index:100;" href="' .
+            esc_url( add_query_arg( [ 'trp_dismiss_admin_notification' => $notification_id ] ) ) .
+            '" type="button" class="notice-dismiss"><span class="screen-reader-text">' .
+            esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) .
+            '</span></a>';
+
+        $docs_url = 'https://translatepress.com/docs/settings/language-switcher/';
+
+        $css = '
+            .trp-ls-v2-card{display:grid;gap:8px;padding:10px;}
+            .trp-ls-v2-header{display:flex;align-items:center;gap:8px;}
+            .trp-ls-v2-card .trp-ls-v2-logo img{max-width:36px;}
+            .trp-ls-v2-card .trp-ls-v2-heading{margin:0;font-size:16px;line-height:1.3;}
+            .trp-ls-v2-card .trp-ls-v2-desc{margin:0;color:#3c434a;}
+            .trp-ls-v2-card .trp-ls-v2-cta{margin:0;display:flex;align-items:center;gap:15px;}
+            .trp-ls-v2-card .trp-ls-v2-cta .trp-submit-btn{color:#ffffff; background:#2271B1;border-radius:5px;font-size:14px;border:1px solid #2271B1;padding:4px 12px;min-height:40px;cursor:pointer;}
+            .trp-ls-v2-card .trp-ls-v2-cta .trp-submit-btn:hover{background:transparent !important;color:#2271B1;border-color:#2271B1}
+            .trp-ls-v2-card .trp-ls-v2-cta .trp-doc-link{font-size:14px;text-decoration:none;color:#2271B1}
+            .trp-ls-v2-card .trp-ls-v2-cta .trp-doc-link:hover{text-decoration:underline}
+        ';
+
+        add_action( 'admin_head', function () use ( $css ) : void {
+            echo '<style id="trp-ls-v2-admin-css">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        });
+
+        $message = '<div class="trp-ls-v2-card">';
+        $message .=   '<div class="trp-ls-v2-header">';
+        $message .=       '<div class="trp-ls-v2-logo"><img src="' . esc_url( $logo_url ) . '" alt="TranslatePress logo" /></div>';
+        $message .=       '<p class="trp-ls-v2-heading"><strong>' . esc_html__( 'Brand-new Language Switcher Settings are here!', 'translatepress-multilingual' ) . '</strong></p>';
+        $message .=   '</div>';
+        $message .=   '<p class="trp-ls-v2-desc">'
+                        . esc_html__( 'Explore pre-made templates, switch colors, flag styles, spacing, layouts & more. Use the live preview to perfect your switcher in seconds.', 'translatepress-multilingual' )
+                    . '</p>';
+
+        $message .=   '<div class="trp-ls-v2-cta">'
+                    .     '<a class="trp-submit-btn button" href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Start customizing', 'translatepress-multilingual' ) . '</a>'
+                    .     '<a class="trp-doc-link" href="' . esc_url( $docs_url ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Read documentation', 'translatepress-multilingual' ) . '</a>'
+                  .   '</div>';
+
+        $message .=   $dismiss_link;
+        $message .= '</div>';
+
+        $notifications = TRP_Plugin_Notifications::get_instance();
+        $notifications->add_notification(
+            $notification_id,
+            $message,
+            'trp-notice notice notice-info is-dismissible',
+            false,
+            [ 'translate-press' ],
+            true
+        );
     }
 
 }

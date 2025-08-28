@@ -127,10 +127,14 @@
 </div>
 
 <p class="trp-add-language-error-container trp-settings-warning" style="display: none;"></p>
-<?php if ( count( $this->settings['translation-languages'] ) >= 2 ) : ?>
-    <div class="trp-upgrade-notice-table__wrapper">
-        <div class="trp-upgrade-notice">
-            <span class="trp-upgrade-notice-text"><?php esc_html_e( 'Adding more than two languages is a paid feature. Upgrade TranslatePress and unlock more premium features.', 'translatepress-multilingual') ?> </span>
+<div class="trp-upgrade-notice-table__wrapper" <?php if ( count( $this->settings['translation-languages'] ) < 2 ) echo ' style="display:none"'; ?> >
+    <div class="trp-upgrade-notice">
+        <?php
+        $trp = TRP_Translate_Press::get_trp_instance();
+        if( in_array( 'TranslatePress', $trp->tp_product_name ) ){  ?>
+            <span class="trp-upgrade-notice-text">
+                <?php esc_html_e( 'Adding more than two languages is a paid feature. Upgrade TranslatePress and unlock more premium features.', 'translatepress-multilingual'); ?>
+            </span>
             <a href="https://translatepress.com/pricing/">
                 <span class="trp-upgrade-notice-button">
                     <span> Upgrade now </span>
@@ -139,6 +143,27 @@
                     </svg>
                 </span>
             </a>
-        </div>
+            <?php
+        }
+        else{
+            // for PRO versions we need other warning messages
+            ?>
+            <span class="trp-upgrade-notice-text">
+            <?php
+            $license_status = get_option( 'trp_license_status' );
+            if( empty($license_status) ){
+                printf( esc_html__('Please %1$senter your license%2$s key first to add more languages.', 'translatepress-multilingual'), '<a href="' . esc_url( admin_url('admin.php?page=trp_license_key') ) . '">', '</a>');
+            }
+            elseif( $license_status !== 'valid' ){
+                printf( esc_html__('You need an active license to add more languages. Verify in your %1$saccount%2$s that your license is valid', 'translatepress-multilingual'), '<a target="_blank" href="https://translatepress.com/account/?utm_source=tp-website-languages&utm_medium=client-site&utm_campaign=expired-license">', '</a>');
+            }
+            elseif( $license_status === 'valid' ){
+                printf( esc_html__('To Add more languages activate the Multiple Languages Addon', 'translatepress-multilingual') );
+            }
+            ?>
+            </span>
+            <?php
+        }
+        ?>
     </div>
-<?php endif; ?>
+</div>

@@ -36,7 +36,7 @@ class TRP_Add_General_Notices{
     }
 
 
-    // Display a notice that can be dismissed in case the serial number is inactive
+    // Display a notice that can be dismissed in case the license key is inactive
     function add_admin_notice() {
         global $current_user;
         global $pagenow;
@@ -83,7 +83,7 @@ Class TRP_Plugin_Notifications {
     private static $_instance = null;
     private $prefix = 'trp';
     private $menu_slug = 'options-general.php';
-    public $pluginPages = array( 'translate-press', 'trp_addons_page', 'trp_license_key', 'trp_advanced_page', 'trp_machine_translation', 'trp_test_machine_api' );
+    public $pluginPages = array( 'translate-press', 'trp_addons_page', 'trp_license_key', 'trp_advanced_page', 'trp_machine_translation', 'trp_test_machine_api', 'trp_language_switcher' );
 
     protected function __construct() {
         add_action( 'admin_init', array( $this, 'dismiss_admin_notifications' ), 200 );
@@ -171,7 +171,7 @@ Class TRP_Plugin_Notifications {
      *
      *
      */
-    public function add_notification( $notification_id = '', $notification_message = '', $notification_class = 'update-nag', $count_in_menu = true, $count_in_submenu = array(), $show_in_all_backend = false, $non_dismissable = false ) {
+    public function add_notification( $notification_id = '', $notification_message = '', $notification_class = 'update-nag', $count_in_menu = true, $count_in_submenu = array(), $show_in_all_backend = false, $force_show = false ) {
 
         if( empty( $notification_id ) )
             return;
@@ -179,21 +179,14 @@ Class TRP_Plugin_Notifications {
         if( empty( $notification_message ) )
             return;
 
-        global $current_user;
-
         /**
          * added a $show_in_all_backend argument in version 1.4.6  that allows some notifications to be displayed on all the pages not just the plugin pages
          * we needed it for license notifications
+         *
+         * if you want a notification that is non-dismissable on is_plugin_page() dismissable on the rest of the pages, simply do the verification where
+         * TRP_Plugin_Notifications->add_notification() is called
+         *
          */
-        $force_show = false;
-        if( get_user_meta( $current_user->ID, $notification_id . '_dismiss_notification' ) ) {
-            if( !$non_dismissable && !($this->is_plugin_page() && $show_in_all_backend) ){
-                return;
-            }
-            else{
-                $force_show = true; //if $show_in_all_backend is true then we ignore the dismiss on plugin pages, but on the rest of the pages it can be dismissed
-            }
-        }
 
         $this->notifications[$notification_id] = array(
             'id' 	  		   => $notification_id,
@@ -337,6 +330,7 @@ class TRP_Trigger_Plugin_Notifications{
 
         /* License Notifications */
         $license_details = get_option( 'trp_license_details' );
+        $license_status = get_option( 'trp_license_status' );
         $is_demosite = ( strpos(site_url(), 'https://demo.translatepress.com' ) !== false );
         $trp             = TRP_Translate_Press::get_trp_instance();
         $tp_product_name = reset($trp->tp_product_name);
@@ -346,7 +340,7 @@ class TRP_Trigger_Plugin_Notifications{
             /* this must be unique */
             $notification_id = 'trp_invalid_license';
             $message = '<p style="padding-right:30px;">';
-            $message .= sprintf( __('Your <strong>TranslatePress</strong> serial number is invalid or missing. <br/>Please %1$sregister your copy%2$s to receive access to automatic updates and support. Need a license key? %3$sPurchase one now%4$s' , 'translatepress-multilingual' ), "<a href='". admin_url('/admin.php?page=trp_license_key') ."'>", "</a>", "<a href='https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-SN-Purchase' target='_blank' class='button-primary'>", "</a>" );
+            $message .= sprintf( __('Your <strong>TranslatePress</strong> license is missing or invalid. <br/>Please %1$sregister your copy%2$s to enable automatic website translation via TranslatePress AI, premium addons, automatic updates and support. Need a license key? %3$sPurchase one now%4$s' , 'translatepress-multilingual' ), "<a href='". admin_url('/admin.php?page=trp_license_key') ."'>", "</a>", "<a href='https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=pro-no-active-license' target='_blank' class='button-primary'>", "</a>" );
             if ( !$notifications->is_plugin_page() ) {
                 //make sure to use the trp_dismiss_admin_notification arg
                 $message .= '<a style="text-decoration: none;z-index:100;" href="' . add_query_arg( array( 'trp_dismiss_admin_notification' => $notification_id ) ) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
@@ -375,15 +369,15 @@ class TRP_Trigger_Plugin_Notifications{
                     $license_detail->error == 'disabled' ||
                     $license_detail->error == 'key_mismatch'
                 )
-                    $message .= sprintf( __('Your <strong>TranslatePress</strong> serial number is invalid or missing. <br/>Please %1$sregister your copy%2$s to receive access to automatic updates and support. Need a license key? %3$sPurchase one now%4$s' , 'translatepress-multilingual' ), "<a href='". admin_url('/admin.php?page=trp_license_key') ."'>", "</a>", "<a href='https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-SN-Purchase' target='_blank' class='button-primary'>", "</a>" );
+                    $message .= sprintf( __('Your <strong>TranslatePress</strong> license is missing or invalid. <br/>Please %1$sregister your copy%2$s to enable automatic website translation via TranslatePress AI, premium addons, automatic updates and support. Need a license key? %3$sPurchase one now%4$s' , 'translatepress-multilingual' ), "<a href='". admin_url('/admin.php?page=trp_license_key') ."'>", "</a>", "<a href='https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=pro-no-active-license' target='_blank' class='button-primary'>", "</a>" );
                 elseif( $license_detail->error == 'site_inactive' )
-                    $message .= __( 'Your license is not active for this URL. Re-enable it from <a target="_blank" href="https://translatepress.com/account/">https://translatepress.com/account</a> -> Manage Sites.', 'translatepress-multilingual' );
+                    $message .= __( 'Your license is disabled for this URL. Re-enable it from <a target="_blank" href="https://translatepress.com/account/">https://translatepress.com/account</a> -> Manage Sites.', 'translatepress-multilingual' );
                 elseif( $license_detail->error == 'no_activations_left' )
                     $message .= sprintf( __('You have reached the activation limit for your <strong>%1$s</strong> license. <br/>Manage your active sites from %2$s your account %3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
                 elseif( $license_detail->error == 'item_name_mismatch' )
-                    $message .= sprintf( __('This license is for a different version of TranslatePress than your installed <strong>%1$s</strong> version. <br/>Please use the correct key from %2$s your account %3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
+                    $message .= sprintf( __('License key mismatch. The license you entered doesn’t match the <strong>%1$s</strong> version you have installed. <br/>Please check that you’ve installed the correct version for your license from your %2$sTranslatePress account%3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
                 elseif( $license_detail->error == 'expired' )
-                    $message .= sprintf( __('Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to product downloads, automatic updates and support. %3$sRenew now %4$s' , 'translatepress-multilingual' ), "<a href='https://www.translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal' target='_blank'>", "</a>", "<a href='https://www.translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal' target='_blank' class='button-primary'>", "</a>" );
+                    $message .= sprintf( __('Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to automatic translations via TranslatePress AI, premium addons, product downloads, and automatic updates. %3$sRenew now %4$s' , 'translatepress-multilingual' ), "<a href='https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=expired-license' target='_blank'>", "</a>", "<a href='https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=expired-license' target='_blank' class='button-primary'>", "</a>" );
                 else {
                     $license_error = __("Error: ", "translatepress-multilingual");
                     if (!empty($license_detail->error)){
@@ -413,7 +407,7 @@ class TRP_Trigger_Plugin_Notifications{
 
                         /* this must be unique */
                         $notification_id = 'trp_will_expire_license';
-                        $message = '<p style="padding-right:30px;">' . sprintf( __( 'Your <strong>TranslatePress</strong> license will expire on %1$s. Please %2$sRenew Your Licence%3$s to continue receiving access to product downloads, automatic updates and support.', 'translatepress-multilingual'), date_i18n( get_option( 'date_format' ), strtotime( $license_detail->expires, current_time( 'timestamp' ) ) ), '<a href="https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal" target="_blank">', '</a>'). '</p>';
+                        $message = '<p style="padding-right:30px;">' . sprintf( __( 'Your <strong>TranslatePress</strong> license will expire on %1$s. Please %2$sRenew Your Licence%3$s to continue receiving access to automatic translations via TP AI, premium addons, product downloads and automatic updates. %4$sRenew Now%5$s', 'translatepress-multilingual'), date_i18n( get_option( 'date_format' ), strtotime( $license_detail->expires, current_time( 'timestamp' ) ) ), '<a href="https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal" target="_blank">', '</a>', "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal' target='_blank' class='button-primary'>", "</a>"). '</p>';
 
                         if ( !$notifications->is_plugin_page() ) {
                             //make sure to use the trp_dismiss_admin_notification arg
@@ -423,10 +417,91 @@ class TRP_Trigger_Plugin_Notifications{
                             $force_show = true; //ignore dismissal on own plugin pages
                         }
                         if (!isset($_GET['trp_sl_activation'])) {
-                            $notifications->add_notification($notification_id, $message, 'trp-notice notice notice-info is-dismissible', true, array('translate-press'), $force_show);
+                            $notifications->add_notification($notification_id, $message, 'trp-notice notice notice-info is-dismissible', true, array('translate-press'), false, $force_show);
                         }
                     }
                 }
+            }
+        }
+
+        // If the license is invalid and the translation engine is DeepL or TP AI, show a notification only on the paid versions
+        if( !in_array( 'TranslatePress', $trp->tp_product_name ) ) {
+            if (isset($this->settings['trp_machine_translation_settings']['machine-translation']) && $this->settings['trp_machine_translation_settings']['machine-translation'] === 'yes') {
+                if (isset($this->settings['trp_machine_translation_settings']['translation-engine']) && ($this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl' || $this->settings['trp_machine_translation_settings']['translation-engine'] === 'mtapi')) {
+
+                    $message = '';
+                    $force_show = true;
+
+                    if ($this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl')
+                        $engine_name = 'DeepL';
+                    else
+                        $engine_name = 'TranslatePress AI';
+
+                    if (empty($license_status)) {
+                        $notification_id = 'trp_' . $this->settings['trp_machine_translation_settings']['translation-engine'] . '_missing_license';
+                        $message = '<p style="padding-right:30px;">';
+                        $message .= sprintf(
+                            __('Please %1$senter%2$s your license key to enable %3$s automatic translation.', 'translatepress-multilingual'),
+                            '<a href="' . admin_url('/admin.php?page=trp_license_key') . '">',
+                            '</a>',
+                            $engine_name
+                        );
+
+                        if (!$notifications->is_plugin_page()) {
+                            //make sure to use the trp_dismiss_admin_notification arg
+                            $message .= '<a style="text-decoration: none;z-index:100;" href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
+                            $force_show = false;
+                        } else {
+                            $force_show = true; //ignore dismissal on own plugin pages
+                        }
+
+                        $message .= '</p>';
+                    } elseif ($license_status !== 'valid') {
+                        $notification_id = 'trp_' . $this->settings['trp_machine_translation_settings']['translation-engine'] . '_invalid_license';
+                        $message = '<p style="padding-right:30px;">';
+                        $message .= sprintf(
+                            __('%1$s automatic translation requires an active license. Please %2$srenew%3$s your license or purchase a new one %4$shere%5$s.', 'translatepress-multilingual'),
+                            $engine_name,
+                            '<a href="https://translatepress.com/account/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=expired-license">',
+                            '</a>',
+                            '<a href="https://translatepress.com/pricing/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=deepl" target="_blank">',
+                            '</a>'
+                        );
+
+                        if (!$notifications->is_plugin_page()) {
+                            //make sure to use the trp_dismiss_admin_notification arg
+                            $message .= '<a style="text-decoration: none;z-index:100;" href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
+                            $force_show = false;
+                        } else {
+                            $force_show = true; //ignore dismissal on own plugin pages
+                        }
+                        $message .= '</p>';
+                    }
+
+                    if (!empty($message))
+                        $notifications->add_notification($notification_id, $message, 'trp-notice notice error', true, array('translate-press'), true, $force_show);
+                }
+            }
+        }
+
+        /*
+         * Non-free license low quota notification
+         */
+        if ( !empty($license_details) && !$is_demosite && !$free_version && $license_status === 'valid' ) {
+            // Use cached quota that's updated during translation operations
+            $cached_quota = get_transient('trp_mtapi_cached_quota');
+            if ( $cached_quota !== false && is_numeric($cached_quota) && $cached_quota > 0 && $cached_quota < 25000 ) {
+                $notification_id = 'trp_low_quota_warning';
+                $message = '<p style="padding-right:30px;">';
+                $message .= sprintf( 
+                    __('You have less than 5,000 TranslatePress AI words remaining. To continue automatically translating your website, please %spurchase additional AI words at a discount from your account%s.', 'translatepress-multilingual'),
+                    '<a href="https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=lowquota&utm_campaign=TP-License-Check" target="_blank">',
+                    '</a>'
+                );
+                $message .= '<a style="text-decoration: none;z-index:100;" href="' . add_query_arg( array( 'trp_dismiss_admin_notification' => $notification_id ) ) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
+                $message .= '</p>';
+                
+                $notifications->add_notification( $notification_id, $message, 'trp-notice notice notice-warning', true, array('translate-press'), true, false );
             }
         }
 
@@ -449,17 +524,17 @@ class TRP_Trigger_Plugin_Notifications{
                     $license_detail->error == 'disabled' ||
                     $license_detail->error == 'key_mismatch'
                 )
-                    $message .= sprintf( __('You do not have a valid license for <strong>TranslatePress</strong>. %1$sGet one for free%2$s to get access to TranslatePress AI.' , 'translatepress-multilingual' ), "<a href='https://translatepress.com/tp-ai-free/?utm_source=wpbackend&utm_medium=clientsite&utm_content=license-page&utm_campaign=tpaifree' target='_blank'>", "</a>" );
+                    $message .= sprintf( __('You do not have a valid license for <strong>TranslatePress</strong>. %1$sGet one for free%2$s to get access to TranslatePress AI.' , 'translatepress-multilingual' ), "<a href='https://translatepress.com/ai-free/?utm_source=wpbackend&utm_medium=clientsite&utm_content=license-page&utm_campaign=tpaifree' target='_blank'>", "</a>" );
                 elseif( $license_detail->error == 'site_inactive' )
-                    $message .= __( 'Your license is not active for this URL. Re-enable it from <a target="_blank" href="https://translatepress.com/account/">https://translatepress.com/account</a> -> Manage Sites.', 'translatepress-multilingual' );
+                    $message .= __( 'Your license is disabled for this URL. Re-enable it from <a target="_blank" href="https://translatepress.com/account/">https://translatepress.com/account</a> -> Manage Sites.', 'translatepress-multilingual' );
                 elseif( $license_detail->error == 'no_activations_left' )
                     $message .= sprintf( __('You have reached the activation limit for your <strong>%1$s</strong> license. <br/>Manage your active sites from %2$s your account %3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
                 elseif( $license_detail->error == 'item_name_mismatch' )
-                    $message .= sprintf( __('This license is for a different version of TranslatePress than your installed <strong>%1$s</strong> version. <br/>Please use the correct key from %2$s your account %3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
+                    $message .= sprintf( __('License key mismatch. The license you entered doesn’t match the <strong>%1$s</strong> version you have installed. <br/>Please check that you’ve installed the correct version for your license from your %2$sTranslatePress account%3$s.' , 'translatepress-multilingual' ), $tp_product_name, "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' >", "</a>" );
                 elseif( $license_detail->error == 'website_already_on_free_license' )
                     $message .= sprintf( __('This website is already activated under a free license. Each website can only use one free license. Please upgrade to a premium plan for more TranslatePress AI words from %1$s your account %2$s.' , 'translatepress-multilingual' ),  "<a href='https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-License-Check' target='_blank' class='button-primary' >", "</a>" );
                 elseif( $license_detail->error == 'expired' )
-                    $message .= sprintf( __('Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to product downloads, automatic updates and support. %3$sRenew now %4$s' , 'translatepress-multilingual' ), "<a href='https://www.translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal' target='_blank'>", "</a>", "<a href='https://www.translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TP-Renewal' target='_blank' class='button-primary'>", "</a>" );
+                    $message .= sprintf( __('Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to automatic translations via TranslatePress AI, premium addons, product downloads, and automatic updates. %3$sRenew now %4$s' , 'translatepress-multilingual' ), "<a href='https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=expired-license' target='_blank'>", "</a>", "<a href='https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=expired-license' target='_blank' class='button-primary'>", "</a>" );
                 else {
                     $license_error = __(" Error: ", "translatepress-multilingual");
                     if (!empty($license_detail->error)){
@@ -507,7 +582,7 @@ class TRP_Trigger_Plugin_Notifications{
 
 
 	    /*
-		 *  Machine translation enabled and  quota is met.
+		 *  Machine translation enabled and quota are met.
 		 */
         $trp = TRP_Translate_Press::get_trp_instance();
         if ( ! $this->settings_obj )
@@ -538,9 +613,11 @@ class TRP_Trigger_Plugin_Notifications{
         $machine_translator = $trp->get_component( 'machine_translator' );
 
         if ($machine_translator != null ) {
+            $correct_key = $machine_translator->is_correct_api_key();
             if ( apply_filters( 'trp_mt_available_supported_languages_show_notice', true, $this->settings['translation-languages'], $this->settings ) &&
                 'yes' === $this->settings['trp_machine_translation_settings']['machine-translation'] &&
                 !$machine_translator->check_languages_availability( $this->settings['translation-languages'] )
+                && $correct_key
             ) {
                 /* this must be unique */
                 $notification_id = 'trp_mt_unsupported_languages';
@@ -559,7 +636,7 @@ class TRP_Trigger_Plugin_Notifications{
          * Black Friday
          * 
          * Showing this to:
-         *   free users
+         *   free users or
          *   users that have expired or disabled licenses
          */
         if( trp_bf_show_promotion() ){

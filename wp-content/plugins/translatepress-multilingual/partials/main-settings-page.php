@@ -87,8 +87,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="trp-settings-container">
+            <?php if ( $is_legacy_switcher ) : ?>
+                <div class="trp-settings-container">
                 <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Language Switcher', 'translatepress-multilingual' ); ?></h3>
                 <div class="trp-settings-separator"></div>
 
@@ -159,6 +159,7 @@
                     <?php do_action ( 'trp_extra_settings', $this->settings ); ?>
                 </div>
             </div>
+            <?php endif; ?>
 
             <?php
             $email_course_dismissed = get_user_meta( get_current_user_id(), 'trp_email_course_dismissed', true );
