@@ -1,6 +1,61 @@
-### 2.9.11.1
+### 2.9.16 | 2025-08-21
+- Added settings to the Radio and Checkbox fields to replace the list column Ready Classes.
+- Added sanitization to the enableEnhancedUI property in GF_Field_Select to be consistent with GF_Field_Multiselect.
+- Added the [gform_entries_filter_count_queries](https://docs.gravityforms.com/gform_entries_filter_count_queries/) filter, which can be used to add queries for custom filter links for the entries list page.
+- Added the [gform_honeypot_input_name](https://docs.gravityforms.com/gform_honeypot_input_name/) filter, so the input name used by the honeypot input can be customized.
+- Updated the [gform_filter_links_entry_list](https://docs.gravityforms.com/gform_filter_links_entry_list/) filter, so the entry counts are passed as the 4th param.
+- Fixed a JavaScript error that can occur on form render when themes and plugins output unexpected content in the admin-ajax.php response.
+- Fixed a PHP warning that occurs on third-party admin pages that use the id query argument when a script that requires the gf_vars variable has been enqueued.
+- Fixed a bug that causes the reset button on the field map setting to sometimes display on top of other elements.
+- Fixed an issue that can cause ACF fields to trigger form submissions when editing a post.
+- Fixed an issue where all the rows of a List type field can be deleted if the delete row buttons are clicked in quick succession.
+- Fixed the entry detail page to display an error message if the entry id query argument is invalid. Credit: The Gravity Wiz Team.
+- Fixed an issue where data is not saved when conditional rules match against empty Consent field.
+- Fixed an issue where required indicator is displayed for Consent field in entry edit view when field label is hidden.
+- Fixed an issue where the results page is not displaying the charts correctly in RTL languages.
+- Fixed an issue with the legacy post creation feature that impacted the performance of all form submissions.
+- Fixed class attribute being declared twice for single product base price input when quantity field is disabled.
+- AF: Fixed an issue where the wp_inline_script_attributes filter is not impacting the script tag for the JavaScript gform.extensions variable.
+- AF: Updated the entries list page to include filter links for the various payment statuses.
+- API: Updated the $step attribute used with the text $input_type settings field to be public.
+- API: Fixed issue where the placeholder attribute was not working correctly in the Settings API.
+
+### 2.9.15 | 2025-08-07
+- Added the [gform_enable_download_nocache_headers](https://docs.gravityforms.com/gform_enable_download_nocache_headers/) filter to allow developers to enable or disable the no-cache headers for file downloads. Credit: The GravityKit Team.
+- Added the [gform_email_field_rejectable_values](https://docs.gravityforms.com/gform_email_field_rejectable_values/) filter, which can be used to provide an array of values or partial values that the email field should reject during validation.
+- Added security enhancements.
+- Fixed the time field value not being saved and PHP notices on submission if a form contains administrative time field with dynamic population enabled.
+- Fixed a PHP fatal error that can occur in some hosting environments when the form is saved via Ajax in the form editor.
+- Updated the message displayed when the user has exceeded the license verification rate limit to be more informative.
+- Updated messages in the form editor and form settings page to provide more information about the upcoming deprecation of Ready Classes in version 3.1.0.
+- Updated the UI of dialogs and flyouts.
+- Updated background processor error handler priority to increase chances of fatal errors being logged.
+- Removed notifications from form templates.
+- API: Added inline documentation for the Theme Framework CSS API.
+- API: Fixed an issue with the JS gform.product.getPaymentAmount() method that returns the wrong payment amount in certain situations.
+
+### 2.9.14 | 2025-07-24
+- Added the constant [GF_ENABLE_NOTIFICATION_EMAIL_HEADER](https://docs.gravityforms.com/gf_enable_notification_email_header) and filter [gform_notification_email_header](https://docs.gravityforms.com/gform_notification_email_header) to allow enabling and setting of `X-Gravity-Forms-Source` email header.
+- Added alt attribute to the checked indicator image in the consent field for improved accessibility.
+- Fixed an issue where the "Subscription Created" notification is not sent in some situations.
+- Fixed setting of default value for email confirmation input when field has conditional logic enabled.
+- Fixed an issue where the "Select All" choice for Multiple Choice fields is rendered incorrectly.
+- Fixed an issue where forms can't be saved in the form editor when third-party add-ons introduce invalid JSON syntax to the form object.
+- AF: Fixed an issue where the save success message can be displayed when the edit feed page is redirected to from another add-on.
+- API: Updated `GF_Field::get_value_entry_detail()` to display an inline error message on the entry detail page when the field uses an array-based value and the add-on that includes the field is inactive or hasn't defined it's own `get_value_entry_detail` method.
+- API: Fixed a display issue with checkbox type setting choice labels.
+
+### 2.9.13 | 2025-07-11
+- Updated the image choice file upload UI to account for file upload component updates.
+- Updated the help page to be more accessible.
+
+### 2.9.12 | 2025-07-10
+- Added merge tags on the "Send To: Enter Email" notification setting. Credit: The GravityKit Team.
+- Updated the legacy Akismet spam check during form submission to run via the [`gform_entry_is_spam`](https://docs.gravityforms.com/gform_entry_is_spam/) filter in preparation for version 1.1.0 of the Akismet add-on.
+- Fixed rendering of calculated product in form editor when quantity is disabled.
 - Fixed an issue where the recent forms list used by the form switcher is not updated when the admin toolbar menu is disabled.
 - Fixed an issue in reCAPTCHA that prevents the form from being submitted when the reCAPTCHA API keys are invalid on the settings page.
+- Removed the mock-data endpoint from production environments.
 
 ### 2.9.11 | 2025-06-26
 - Added a top-level heading to all admin pages to improve accessibility.

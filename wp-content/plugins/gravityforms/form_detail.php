@@ -2368,7 +2368,38 @@ class GFFormDetail {
 							<?php
 							do_action( 'gform_field_appearance_settings', 500, $form_id );
 							?>
+							<li class="display_choices_columns_setting field_setting">
+								<input type="checkbox" id="field_display_in_columns" onclick="SetDisplayInColumns(false, this.checked)" onkeypress="SetDisplayInColumns(false, this.checked)"/>
+								<label for="field_display_in_columns" class="inline">
+									<?php esc_html_e( 'Display in columns', 'gravityforms' ); ?>
+									<?php  gform_tooltip( 'form_field_display_choices_in_columns' ); ?>
+								</label>
+								<div id="display_in_columns_container">
+									<label for="field_display_columns" class="section_label">
+										<?php esc_html_e( 'Number of Columns', 'gravityforms' ); ?>
+									</label>
+									<select id="field_display_columns" onchange="SetFieldProperty( 'displayColumns', jQuery(this).val() ); RefreshSelectedFieldPreview();" onkeypress="SetFieldProperty( 'displayColumns', jQuery(this).val() ); RefreshSelectedFieldPreview();">
+										<option value="1"><?php esc_html_e( '1 Column', 'gravityforms' ); ?></option>
+										<option value="2"><?php esc_html_e( '2 Columns', 'gravityforms' ); ?></option>
+										<option value="3"><?php esc_html_e( '3 Columns', 'gravityforms' ); ?></option>
+										<option value="4"><?php esc_html_e( '4 Columns', 'gravityforms' ); ?></option>
+										<option value="5"><?php esc_html_e( '5 Columns', 'gravityforms' ); ?></option>
+									</select>
+									<fieldset style="margin-top:0.9375rem;">
+										<legend class="section_label">
+											<?php esc_html_e( 'Column Sort Direction', 'gravityforms' ); ?>
+											<?php  gform_tooltip( 'form_field_column_sort_direction' ); ?>
+										</legend>
+										<div>
+											<input type="radio" name="display_choice_alignment" id="display_choice_alignment_horizontal" value="horizontal" onclick="SetFieldProperty( 'displayAlignment' , jQuery(this).val() ); RefreshSelectedFieldPreview();" onkeypress="SetFieldProperty( 'alignment', jQuery(this).val() ); RefreshSelectedFieldPreview();"/>
+											<label for="display_choice_alignment_horizontal" class="inline"><?php esc_html_e( 'Across', 'gravityforms' ); ?></label>
 
+											<input type="radio" name="display_choice_alignment" id="display_choice_alignment_vertical" value="vertical" onclick="SetFieldProperty( 'displayAlignment' , jQuery(this).val() ); RefreshSelectedFieldPreview();" onkeypress="SetFieldProperty( 'alignment', jQuery(this).val() ); RefreshSelectedFieldPreview();"/>
+											<label for="display_choice_alignment_vertical" class="inline"><?php esc_html_e( 'Down', 'gravityforms' ); ?></label>
+										</div>
+									</fieldset>
+								</div>
+							</li>
 						</ul>
 
 						<button tabindex="0" id="advanced_tab_toggle" class="panel-block-tabs__toggle">
@@ -3457,14 +3488,6 @@ class GFFormDetail {
 			return false;
 		}
 
-		// If user has dismissed the notice, don't show it.
-		if ( rgar( $_COOKIE, 'gform-alert-editor-deprecated-classes' ) ) {
-			$forms = explode( ',', $_COOKIE['gform-alert-editor-deprecated-classes'] );
-			if ( in_array( $form['id'], $forms ) ) {
-				return false;
-			}
-		}
-
 		$deprecated_classes = array(
 			'gf_inline',
 			'gf_left_half',
@@ -3476,6 +3499,24 @@ class GFFormDetail {
 			'gf_second_quarter',
 			'gf_third_quarter',
 			'gf_fourth_quarter',
+			'gf_scroll_text',
+			'gf_hide_ampm',
+			'gf_hide_charleft',
+			'gf_alert_green',
+			'gf_alert_red',
+			'gf_alert_yellow',
+			'gf_alert_gray',
+			'gf_alert_blue',
+			'gf_simple_horizontal',
+			'gf_invisible',
+			'gf_list_2col',
+			'gf_list_3col',
+			'gf_list_4col',
+			'gf_list_5col',
+			'gf_list_2col_vertical',
+			'gf_list_3col_vertical',
+			'gf_list_4col_vertical',
+			'gf_list_5col_vertical',
 		);
 
 		foreach ( $form['fields'] as $field ) {
@@ -3504,31 +3545,23 @@ class GFFormDetail {
 		}
 
 		?>
-		<div class="gform-alert" data-js="gform-alert" data-gform-alert-cookie="gform-alert-editor-deprecated-classes">
+		<div class="gform-alert" data-js="gform-alert">
 			<span class="gform-alert__icon gform-icon gform-icon--campaign" aria-hidden="true"></span>
 			<div class="gform-alert__message-wrap">
 				<p class="gform-alert__message" tabindex="0">
-					<?php echo esc_html_e( 'This form uses deprecated Ready Classes. These will be removed in Gravity Forms 3.1. Adding columns is easier than ever with the new Drag and Drop Layout Editor.', 'gravityforms' ); ?>
+					<?php echo esc_html_e( 'This form uses Ready Classes, which will be removed in Gravity Forms 3.1. You can now use settings or code snippets to achieve the same results.', 'gravityforms' ); ?>
 				</p>
 				<a
 					class="gform-alert__cta gform-button gform-button--white gform-button--size-xs"
-					href="https://docs.gravityforms.com/working-with-columns/"
+					href="https://docs.gravityforms.com/migrating-your-forms-from-ready-classes/"
 					target="_blank"
-					title="<?php esc_attr_e( 'Working with Columns in the Form Editor in Gravity Forms 2.5', 'gravityforms' ); ?>"
+					title="<?php esc_attr_e( 'Deprecation of Ready Classes in Gravity Forms 3.1', 'gravityforms' ); ?>"
 				>
 					<?php esc_html_e( 'Learn More', 'gravityforms' ); ?>
 					<span class="screen-reader-text"><?php echo esc_html__('(opens in a new tab)', 'gravityforms'); ?></span>&nbsp;
 					<span class="gform-icon gform-icon--external-link"></span>
 				</a>
 			</div>
-			<button
-				class="gform-alert__dismiss"
-				aria-label="<?php esc_html_e( 'Dismiss notification', 'gravityforms' ); ?>"
-				title="<?php esc_html_e( 'Dismiss notification', 'gravityforms' ); ?>"
-				data-js="gform-alert-dismiss-trigger"
-			>
-				<span class="gform-icon gform-icon--delete"></span>
-			</button>
 		</div>
 		<?php
 	}
