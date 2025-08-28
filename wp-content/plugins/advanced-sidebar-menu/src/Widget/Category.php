@@ -3,7 +3,6 @@
 namespace Advanced_Sidebar_Menu\Widget;
 
 use Advanced_Sidebar_Menu\Menus\Category as CategoryMenu;
-use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
 
 /**
  * Creates a Widget of parent Child Categories
@@ -19,10 +18,11 @@ use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
  * @phpstan-type DEFAULTS \Required<\Pick<CATEGORY_SETTINGS,'title'|'exclude'|'display_all'|'include_childless_parent'|'include_parent'|'levels'|'new_widget'|'single'>>
  * @formatter:on
  *
+ * @implements Widget<CATEGORY_SETTINGS, DEFAULTS>
  * @implements WidgetWithId<CATEGORY_SETTINGS, DEFAULTS>
  * @extends \WP_Widget<CATEGORY_SETTINGS>
  */
-class Category extends \WP_Widget implements WidgetWithId {
+class Category extends \WP_Widget implements Widget, WidgetWithId {
 	/**
 	 * @use Checkbox<CATEGORY_SETTINGS>
 	 */

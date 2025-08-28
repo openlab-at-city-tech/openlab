@@ -10,6 +10,8 @@ use Advanced_Sidebar_Menu\Utils;
  *
  * @since        9.6.0
  *
+ * @phpstan-require-implements Widget
+ *
  * @template SETTINGS of array<string, mixed>
  */
 trait Checkbox {

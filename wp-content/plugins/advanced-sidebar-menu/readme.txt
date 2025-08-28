@@ -3,9 +3,9 @@ Contributors: onpointplugins, Mat Lipe
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, page menus, category menus, sidebars, hierarchy
 Requires at least: 6.2.0
-Tested up to: 6.8.1
+Tested up to: 6.8.2
 Requires PHP: 7.4.0
-Stable tag: 9.7.0
+Stable tag: 9.7.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Fully automatic sidebar menus.
@@ -22,7 +22,58 @@ Blocks are available to display menus where you need them. Look for the "Advance
 
 **Developed and Supported by <a href="https://onpointplugins.com/advanced-sidebar-menu/" target="_blank">OnPoint Plugins</a>.**
 
-<h3>Features</h3>
+### Documentation
+
+The official documentation for the plugin <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/">may be found here</a>.
+
+### Demo
+An interactive demonstration of the generated menu structure <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/#interactive-demo">may be found here</a>.
+
+You may also use the [Live Preview](https://wordpress.org/plugins/advanced-sidebar-menu/?preview=1) to use a playground site to test the plugin.
+
+### How It Works
+
+When your users view a page or category, the Advanced Sidebar Menu plugin will calculate the related content based on what you have selected using the standard WordPress parent selectors.
+
+The menu will be different for every page that displays the Advanced Sidebar Blocks because the menu is generated specifically to the current page.
+
+##### Depending on "Pages" block options, the menu will display:
+
+- The current page.
+- Parent page.
+- Child pages.
+- Grandparent pages.
+- Grandchild pages.
+- First level child pages related to the current item.
+
+##### Depending on "Categories" block options, the menu will display:
+
+- The current category.
+- Parent category.
+- Child categories.
+- Grandparent categories.
+- Grandchild categories.
+- First level child categories related to the current item.
+
+### Menu Locations
+
+##### Blocks may be added to:
+
+- Page/post content.
+- Widget areas.
+- Theme customizer.
+- Site Editor.
+- Really anywhere blocks are supported.
+
+##### Classic widgets are also available for areas like:
+
+- Elementor.
+- Beaver Builder.
+- Sites that have classic widgets enabled.
+
+
+### Features
+
 * Page and Category menu Gutenberg blocks.
 * Page and Category menu widgets.
 * Option to display or not display the highest level parent page or category.
@@ -34,7 +85,8 @@ Blocks are available to display menus where you need them. Look for the "Advance
 * Option to display or not display categories on single posts.
 * Ability to display each single post's category in a new widget/block or in same list.
 
-<h3>Page Menu Options</h3>
+### Page Menu Options
+
 * Display the highest level parent page.
 * Display menu when there is only the parent page.
 * Order pages by (date, title, page order).
@@ -42,7 +94,8 @@ Blocks are available to display menus where you need them. Look for the "Advance
 * Always display child Pages.
 * Levels of child pages to display when always display child pages is checked.
 
-<h3>Category Menu Options</h3>
+### Category Menu Options
+
 * Display the highest level parent category.
 * Display menu when there is only the parent category.
 * Display categories on single posts.
@@ -51,25 +104,22 @@ Blocks are available to display menus where you need them. Look for the "Advance
 * Always display child categories.
 * Levels of Categories to display when always display child categories is checked.
 
-<h3>Included Language Translations</h3>
+### Included Language Translations
+
 * English (en_US).
 * French (fr_FR).
 * German (de_DE).
 * Spanish (es_ES).
 
-<h3>Documentation</h3>
-The official documentation for the plugin <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/">may be found here</a>.
+### Developers
 
-<h3>Demo</h3>
-In interactive demonstration of the generated menu structure <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/#interactive-demo">may be found here</a>.
-
-<h3>Developers</h3>
 Developer docs <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">may be found here</a>.
 
-<h3>Contribute</h3>
-Send pull requests via the <a target="_blank" href="https://github.com/lipemat/advanced-sidebar-menu">GitHub Repo</a>
+### Contribute
 
-<h3>Go PRO</h3>
+Send pull requests via <a target="_blank" href="https://github.com/lipemat/advanced-sidebar-menu">GitHub Repo</a>
+
+### Go PRO
 Our <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org">PRO version</a> brings additional functionality to this plugin. Check out [the demo](https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-pro-demo/?utm_source=readme&utm_campaign=demo&utm_medium=dot-org) to see if the PRO version is useful for you.
 
 * Navigation menu widget.
@@ -128,7 +178,7 @@ Manual Installation
 
 = The menu won't show up?
 
-The menu in this plugin are smart enough to not show up on pages or categories where the only thing that would display is the title. While it may appear like the menu is broken, it is actually doing what it is intended to do.
+The menu in this plugin is smart enough to not show up on pages or categories where the only thing that would display is the title. While it may appear like the menu is broken, it is actually doing what it is intended to do.
 
 The most common causes for this confusion come from one of these reasons:
 1. The incorrect menu was selected. Categories have their own widget/block as pages have their own widget/block.
@@ -140,7 +190,7 @@ The most common causes for this confusion come from one of these reasons:
 
 You may add CSS to your theme's style.css to change the way the menu looks.
 
-For example the following CSS would:
+For example, the following CSS would:
 1. Remove the dot to the left of the menu item.
 2. Change the link color.
 3. Add a background on hover.
@@ -165,9 +215,15 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 
 = Does the menu change for each page you are on? =
 
-Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
+Yes. Based on whatever page post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+
+= 9.7.1 =
+* Established a migration plan for removing the `WidgetWithId` interface.
+* Improved GitHub Actions workflows security.
+* Updated node packages to resolve vulnerabilities.
+* Tested to WordPress Core 6.8.2.
 
 = 9.7.0 =
 * Added new individual block icons.
@@ -182,7 +238,7 @@ Yes. Based on whatever page, post or category you are on, the menu will change a
 * Required the PRO version 9.6.1+.
 * Tested to WordPress core 6.8.0.
 
-= 9.6.4 = 
+= 9.6.4 =
 * Improved labels and positions in block settings.
 * Added original plugin author to the readme.
 * Updated dompurify to version 3.2.4 to resolve dependency vulnerabilities.
@@ -203,7 +259,7 @@ Yes. Based on whatever page, post or category you are on, the menu will change a
 * Fixed double up of block shadow in previews.
 * Tested to WordPress Core 6.7.0.
 
-= 9.6.1 = 
+= 9.6.1 =
 * Introduce JEST unit testings for the basic version.
 * Improved the automated testing suite.
 * Improved deployment workflows.
