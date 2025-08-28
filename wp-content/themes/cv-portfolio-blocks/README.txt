@@ -3,7 +3,7 @@ Contributors: wpradiant
 Tags: grid-layout, one-column, two-columns, right-sidebar, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, education
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 1.2.6
+Stable tag: 1.2.9
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -15,6 +15,22 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you.
 
 == Changelog ==
+
+= Version 1.2.9 =
+- Resolved minor bugs.
+
+= Version 1.2.8 =
+- Updated blog-sidebar-on-left template.
+- Updated blog-sidebar-on-right template.
+- Updated pot file.
+
+= Version 1.2.7 =
+- Added testimonials section.
+- Added faq section.
+- Added about us section.
+- Added news section.
+- Resolved css error for about section img.
+- Added wow js license and animate css license.
 
 = Version 1.2.6 =
 - Added WordClever – AI Content Writer plugin activation process on get started button.
@@ -201,9 +217,18 @@ Google Web Fonts ( Poppins, Lato, Roboto, Marhey, jost ) By Google - https://goo
 * Jost, This is the normal family, Licensed under Open Font License, https://fonts.google.com/specimen/Jost?query=Jost
 
 TGM PLugin
-
 * [GNU General Public License v2.0]
 * https://github.com/TGMPA/TGM-Plugin-Activation
+
+WOW JS
+* Copyright 2016, Matthieu Aussaguel License: GPLv3
+* https://github.com/matthieua/WOW
+* https://github.com/matthieua/WOW/blob/master/README.md
+
+Animate CSS
+* Copyright 2021 Daniel Eden License: 2.1
+* https://github.com/animate-css/animate.css
+* https://github.com/animate-css/animate.css/blob/main/LICENSE
 
 License for images: https://pxhere.com/
 
@@ -216,6 +241,22 @@ Source: https://pxhere.com/en/photo/1594675
 License: CC0 1.0 Universal (CC0 1.0)
 License URL: https://pxhere.com/en/license
 Source: https://pxhere.com/en/photo/1578401
+
+License: CC0 1.0 Universal (CC0 1.0)
+License URL: https://pxhere.com/license
+Source: https://pxhere.com/en/photo/1278242
+
+License: CC0 1.0 Universal (CC0 1.0)
+License URL: https://pxhere.com/license
+Source: https://pxhere.com/en/photo/1573329
+
+License: CC0 1.0 Universal (CC0 1.0)
+License URL: https://pxhere.com/license
+Source: https://pxhere.com/en/photo/759740
+
+License: CC0 1.0 Universal (CC0 1.0)
+License URL: https://pxhere.com/license
+Source: https://pxhere.com/en/photo/884257
 
 == Theme License & Copyright ==
 
