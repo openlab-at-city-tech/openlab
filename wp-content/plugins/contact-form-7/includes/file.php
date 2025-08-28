@@ -326,18 +326,25 @@ function wpcf7_maybe_add_random_dir( $dir ) {
  * @return string Directory path.
  */
 function wpcf7_upload_tmp_dir() {
+	static $output = '';
+
+	if ( $output ) {
+		return $output;
+	}
+
 	if ( defined( 'WPCF7_UPLOADS_TMP_DIR' ) ) {
 		$dir = path_join( WP_CONTENT_DIR, WPCF7_UPLOADS_TMP_DIR );
 		wp_mkdir_p( $dir );
 
 		if ( wpcf7_is_file_path_in_content_dir( $dir ) ) {
-			return $dir;
+			return $output = $dir;
 		}
 	}
 
 	$dir = path_join( wpcf7_upload_dir( 'dir' ), 'wpcf7_uploads' );
 	wp_mkdir_p( $dir );
-	return $dir;
+
+	return $output = $dir;
 }
 
 
@@ -421,12 +428,13 @@ function wpcf7_file_display_warning_message( $page, $action, $object ) {
 	$uploads_dir = wpcf7_upload_tmp_dir();
 
 	if ( ! is_dir( $uploads_dir ) or ! wp_is_writable( $uploads_dir ) ) {
-		$message = sprintf(
-			/* translators: %s: the path of the temporary folder */
-			__( 'This contact form has file uploading fields, but the temporary folder for the files (%s) does not exist or is not writable. You can create the folder or change its permission manually.', 'contact-form-7' ),
-			$uploads_dir
+		wp_admin_notice(
+			sprintf(
+				/* translators: %s: the path of the temporary folder */
+				__( 'This contact form has file uploading fields, but the temporary folder for the files (%s) does not exist or is not writable. You can create the folder or change its permission manually.', 'contact-form-7' ),
+				$uploads_dir
+			),
+			array( 'type' => 'warning' )
 		);
-
-		wp_admin_notice( esc_html( $message ), array( 'type' => 'warning' ) );
 	}
 }
