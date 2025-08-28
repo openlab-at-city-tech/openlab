@@ -261,10 +261,10 @@ main .nv-shop {
 .woocommerce-error,
 .woocommerce-message {
   display: flex;
-  align-items: center;
-  flex-direction: column-reverse;
-  text-align: center;
-  padding: 15px;
+  align-items: start;
+  flex-direction: column;
+  text-align: start;
+  padding: 15px 15px 15px 45px;
   --btnfs: $text-sm;
   --primarybtnpadding: 10px 15px;
   --primarybtnborderwidth: 3px;
@@ -283,6 +283,7 @@ main .nv-shop {
   margin-top: 15px;
   white-space: normal;
   margin-left: auto;
+  text-align: center;
 }
 
 .woocommerce .woocommerce-message,
@@ -1473,10 +1474,9 @@ body.woocommerce-account table.order_details td {
   .woocommerce-info,
   .woocommerce-error,
   .woocommerce-message {
-    flex-direction: row-reverse;
-    justify-content: flex-end;
     text-align: left;
     padding-left: 60px;
+    align-items: center;
   }
   .woocommerce-info a,
   .woocommerce-info .button,
@@ -1494,9 +1494,24 @@ body.woocommerce-account table.order_details td {
   .woocommerce-message::before {
     display: flex;
     top: 0;
-    align-items: center;
     height: 100%;
     color: #fff;
+  }
+  .woocommerce-info,
+  .woocommerce-message {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+  }
+  .woocommerce-info::before,
+  .woocommerce-message::before {
+    align-items: center;
+  }
+  .woocommerce-error {
+    flex-direction: column-reverse;
+  }
+  .woocommerce-error::before {
+    align-items: start;
+    padding-top: 15px;
   }
   .nv-woo-filters .nv-sidebar-toggle + .woocommerce-ordering select {
     max-width: unset;

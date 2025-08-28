@@ -79,7 +79,7 @@ class Featured_Plugins extends Abstract_Module {
 		}
 		add_filter( 'themeisle_sdk_plugin_api_filter_registered', '__return_true' );
 
-		add_filter( 'plugins_api_result', [ $this, 'filter_plugin_api_results' ], 10, 3 );
+		add_filter( 'plugins_api_result', [ $this, 'filter_plugin_api_results' ], 11, 3 );
 
 		// Enqueue inline JS only on plugin-install.php.
 		add_action( 'admin_enqueue_scripts', [ $this, 'maybe_add_inline_js' ] );
@@ -212,7 +212,7 @@ class Featured_Plugins extends Abstract_Module {
 		$filtered_from_optimole = $this->get_plugins_filtered_from_author( $args, $optimole_filter_slugs, 'Optimole' );
 		$featured               = array_merge( $featured, $filtered_from_optimole );
 
-		$themeisle_filter_slugs  = apply_filters( 'themeisle_sdk_themeisle_filter_slugs', [ 'otter-blocks' ] );
+		$themeisle_filter_slugs  = apply_filters( 'themeisle_sdk_themeisle_filter_slugs', [ 'otter-blocks', 'wp-cloudflare-page-cache' ] );
 		$filtered_from_themeisle = $this->get_plugins_filtered_from_author( $args, $themeisle_filter_slugs );
 		$featured                = array_merge( $featured, $filtered_from_themeisle );
 
