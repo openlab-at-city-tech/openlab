@@ -79,15 +79,18 @@ function fse_freelancer_portfolio_test_guide() {
 			<div class="right-inner">
 				<div class="pro-boxes">
 					<h4><?php esc_html_e('Get Theme Bundle', 'fse-freelancer-portfolio'); ?></h4>
+					<p><?php esc_html_e('60+ Premium WordPress Themes', 'fse-freelancer-portfolio'); ?></p>
+					<p class="main-bundle-price" ><strong class="cancel-bundle-price"><?php esc_html_e('$2340', 'fse-freelancer-portfolio'); ?></strong><span class="bundle-price"><?php esc_html_e('$86', 'fse-freelancer-portfolio'); ?></span></p>
 					<img role="img" src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/get-started/images/bundle.png" alt="bundle image" />
 					<p><?php esc_html_e('SUMMER SALE: ', 'fse-freelancer-portfolio'); ?><strong><?php esc_html_e('Extra 20%', 'fse-freelancer-portfolio'); ?></strong><?php esc_html_e(' OFF on WordPress Theme Bundle Use Code: ', 'fse-freelancer-portfolio'); ?><strong><?php esc_html_e('“HEAT20”', 'fse-freelancer-portfolio'); ?></strong></p>
-					<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_PRO_THEME_BUNDLE ); ?>" target="_blank"><?php esc_html_e('Get Theme Bundle For ', 'fse-freelancer-portfolio'); ?><span><?php esc_html_e('$86', 'fse-freelancer-portfolio'); ?></span><?php esc_html_e(' $68', 'fse-freelancer-portfolio'); ?></a>
+					<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_PRO_THEME_BUNDLE ); ?>" target="_blank"><?php esc_html_e('Get Theme Bundle For ', 'fse-freelancer-portfolio'); ?><span><?php esc_html_e('$86', 'fse-freelancer-portfolio'); ?></a>
 				</div>
-				<div class="pro-boxes">
-					<h4><?php esc_html_e('FSE Freelancer Portfolio Pro', 'fse-freelancer-portfolio'); ?></h4>
+				<div class="pro-boxes pro-theme-container">
+					<h4><?php esc_html_e('Fse Freelancer Portfolio Pro', 'fse-freelancer-portfolio'); ?></h4>
+					<p class="pro-theme-price" ><?php esc_html_e('$39', 'fse-freelancer-portfolio'); ?></p>
 					<img role="img" src="<?php echo esc_url(get_template_directory_uri()); ?>/inc/get-started/images/premium.png" alt="premium image" />
 					<p><?php esc_html_e('SUMMER SALE: ', 'fse-freelancer-portfolio'); ?><strong><?php esc_html_e('Extra 25%', 'fse-freelancer-portfolio'); ?></strong><?php esc_html_e(' OFF on WordPress Block Themes! Use Code: ', 'fse-freelancer-portfolio'); ?><strong><?php esc_html_e('“SUMMER25”', 'fse-freelancer-portfolio'); ?></strong></p>
-					<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_BUY_NOW ); ?>" target="_blank"><?php esc_html_e('Upgrade To Pro', 'fse-freelancer-portfolio'); ?></a>
+					<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_BUY_NOW ); ?>" target="_blank"><?php esc_html_e('Upgrade To Pro At Just at $29.25', 'fse-freelancer-portfolio'); ?></a>
 				</div>
 				<div class="pro-boxes last-pro-box">
 					<h4><?php esc_html_e('View All Our Themes', 'fse-freelancer-portfolio'); ?></h4>

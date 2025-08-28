@@ -191,6 +191,28 @@
     display: block;
     margin: 20px 0 0 0;
 }
+.right-main-box .bundle-price{
+    margin-left: 15px;
+    font-weight: 600;
+    font-size: 30px;
+}
+.right-main-box .cancel-bundle-price{
+    text-decoration: line-through;
+    font-size: 16px;
+}
+.right-main-box .main-bundle-price{
+    margin-top: 10px;
+}
+.pro-theme-container{
+    position: relative;
+}
+.pro-theme-container .pro-theme-price{
+    position: absolute;
+    font-size: 32px;
+    font-weight: 600;
+    top: 50px;
+    right: 35px;
+}
 /*media*/
 @media screen and (max-width:1699px){
     .wrapper-outer{

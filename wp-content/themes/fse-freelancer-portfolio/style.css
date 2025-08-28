@@ -7,7 +7,7 @@ Description: FSE Freelancer Portfolio is a visually appealing and feature-rich W
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 5.6
-Version: 3.0.2
+Version: 3.0.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: fse-freelancer-portfolio
@@ -1310,6 +1310,10 @@ body.single .wp-block-post-content.is-layout-constrained > :where(:not(.alignlef
 -------------------------------------------------------- */
 .archieve-post{
   position: relative;
+}
+.wp-block-post-featured-image .wp-post-image{
+  max-width: 350px;
+  max-height: 350px;
 }
 .blog-date-box{
   position: absolute;
@@ -2708,6 +2712,9 @@ nav .wp-block-page-list > .wp-block-navigation-item a:before {
   .error-heading{
     font-size: 250px !important;
   }
+  .woocommerce ul.products[class*=columns-] li.product, .woocommerce-page ul.products[class*=columns-] li.product {
+    width: 100%;
+  }
 }
 @media screen and (max-width: 550px) {
     .error-heading {
@@ -3235,7 +3242,13 @@ body:not(.home) .wp-block-post-template > li{
   margin-top: 0px !important; 
 }
 
-
+.single-product .woocommerce-product-gallery .wp-post-image{
+  max-width: 350px;
+  max-height: 350px;
+}
+.single-product form.cart{
+  display: flex;
+}
 .lower-header {
   margin-bottom: 0;
 }
