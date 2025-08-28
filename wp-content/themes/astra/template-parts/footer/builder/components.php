@@ -40,6 +40,7 @@ switch ( $astra_component_slug ) {
 					'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 					'data-section' => 'sidebar-widgets-footer-widget-1',
 					'aria-label'   => 'Footer Widget 1',
+					'role'         => 'region',
 				)
 			)
 		);
@@ -65,6 +66,7 @@ switch ( $astra_component_slug ) {
 					'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 					'data-section' => 'sidebar-widgets-footer-widget-2',
 					'aria-label'   => 'Footer Widget 2',
+					'role'         => 'region',
 				)
 			)
 		);
@@ -90,6 +92,7 @@ switch ( $astra_component_slug ) {
 					'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 					'data-section' => 'sidebar-widgets-footer-widget-3',
 					'aria-label'   => 'Footer Widget 3',
+					'role'         => 'region',
 				)
 			)
 		);
@@ -115,6 +118,7 @@ switch ( $astra_component_slug ) {
 					'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 					'data-section' => 'sidebar-widgets-footer-widget-4',
 					'aria-label'   => 'Footer Widget 4',
+					'role'         => 'region',
 				)
 			)
 		);

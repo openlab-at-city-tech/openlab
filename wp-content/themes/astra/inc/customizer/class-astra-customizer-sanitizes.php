@@ -95,7 +95,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			// Define allowed tags and attributes.
 			$allowed_tags = apply_filters( 'astra_custom_svg_allowed_tags', array( 'a', 'circle', 'clippath', 'defs', 'style', 'desc', 'ellipse', 'fegaussianblur', 'filter', 'foreignobject', 'g', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'svg', 'switch', 'symbol', 'text', 'textpath', 'title', 'tspan', 'use' ) );
 
-			$allowed_attributes = apply_filters( 'astra_custom_svg_allowed_attributes', array( 'class', 'clip-path', 'clip-rule', 'fill-opacity', 'fill-rule', 'filter', 'id', 'mask', 'opacity', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'style', 'systemlanguage', 'transform', 'href', 'xlink:href', 'xlink:title', 'cx', 'cy', 'r', 'requiredfeatures', 'clippathunits', 'type', 'rx', 'ry', 'color-interpolation-filters', 'stddeviation', 'filterres', 'filterunits', 'primitiveunits', 'x', 'y', 'font-size', 'display', 'font-family', 'font-style', 'font-weight', 'text-anchor', 'marker-end', 'marker-mid', 'marker-start', 'x1', 'x2', 'y1', 'y2', 'gradienttransform', 'gradientunits', 'spreadmethod', 'markerheight', 'markerunits', 'markerwidth', 'orient', 'preserveaspectratio', 'refx', 'refy', 'maskcontentunits', 'maskunits', 'd', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'fx', 'fy', 'offset', 'stop-color', 'stop-opacity', 'xmlns', 'xmlns:se', 'xmlns:xlink', 'xml:space', 'method', 'spacing', 'startoffset', 'dx', 'dy', 'rotate', 'textlength', 'viewbox' ) );
+			$allowed_attributes = apply_filters( 'astra_custom_svg_allowed_attributes', array( 'width', 'height', 'fill', 'class', 'clip-path', 'clip-rule', 'fill-opacity', 'fill-rule', 'filter', 'id', 'mask', 'opacity', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'style', 'systemlanguage', 'transform', 'href', 'xlink:href', 'xlink:title', 'cx', 'cy', 'r', 'requiredfeatures', 'clippathunits', 'type', 'rx', 'ry', 'color-interpolation-filters', 'stddeviation', 'filterres', 'filterunits', 'primitiveunits', 'x', 'y', 'font-size', 'display', 'font-family', 'font-style', 'font-weight', 'text-anchor', 'marker-end', 'marker-mid', 'marker-start', 'x1', 'x2', 'y1', 'y2', 'gradienttransform', 'gradientunits', 'spreadmethod', 'markerheight', 'markerunits', 'markerwidth', 'orient', 'preserveaspectratio', 'refx', 'refy', 'maskcontentunits', 'maskunits', 'd', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'fx', 'fy', 'offset', 'stop-color', 'stop-opacity', 'xmlns', 'xmlns:se', 'xmlns:xlink', 'xml:space', 'method', 'spacing', 'startoffset', 'dx', 'dy', 'rotate', 'textlength', 'viewbox' ) );
 
 			$is_encoded = false;
 
@@ -214,6 +214,50 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			return $sanitized;
 		}
 		/* Strip code ends */
+
+		/**
+		 * Sanitize Social Icons using existing logo SVG sanitization.
+		 * This function processes the social icons array and uses sanitize_logo_svg_icon() for each item.
+		 *
+		 * @param array $input Social icons array.
+		 * @return array Sanitized social icons array.
+		 * @since 4.11.8
+		 */
+		public static function sanitize_social_icons( $input ) {
+			if ( ! isset( $input['items'] ) || ! is_array( $input['items'] ) ) {
+				return $input;
+			}
+
+			// Process each social icon item
+			foreach ( $input['items'] as $key => $item ) {
+				if ( ! is_array( $item ) ) {
+					continue;
+				}
+
+				// If this item has icon data (either icon-library or custom), sanitize it
+				if ( isset( $item['icon_type'] ) && ( isset( $item['icon'] ) || isset( $item['custom_svg'] ) ) ) {
+					if ( 'custom' === $item['icon_type'] ) {
+						$input['items'][ $key ]['custom_svg'] = isset( $item['custom_svg'] ) ? self::sanitize_svg_code( $item['custom_svg'] ) : '';
+						if ( ! isset( $input['items'][ $key ]['icon'] ) && isset( $item['id'] ) ) {
+							$input['items'][ $key ]['icon'] = $item['id'];
+						}
+					} else {
+						$input['items'][ $key ]['icon'] = isset( $item['icon'] ) && is_string( $item['icon'] ) ? sanitize_text_field( $item['icon'] ) : ( isset( $item['id'] ) ? sanitize_text_field( $item['id'] ) : '' );
+						// Remove custom_svg if switching to icon-library
+						if ( isset( $input['items'][ $key ]['custom_svg'] ) ) {
+							unset( $input['items'][ $key ]['custom_svg'] );
+						}
+					}
+					$input['items'][ $key ]['icon_type'] = in_array( $item['icon_type'], array( 'icon-library', 'custom' ), true ) ? $item['icon_type'] : 'icon-library';
+				} elseif ( isset( $item['id'] ) && ! isset( $item['icon'] ) && ! isset( $item['custom_svg'] ) ) {
+					// Fallback for items without icon_type - assume icon-library
+					$input['items'][ $key ]['icon']      = sanitize_text_field( $item['id'] );
+					$input['items'][ $key ]['icon_type'] = 'icon-library';
+				}
+			}
+
+			return $input;
+		}
 
 		/**
 		 * Sanitize Integer

@@ -69,7 +69,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 			if ( isset( $args['pages_with_children'][ $page->ID ] ) ) {
 				$css_class[] = 'menu-item-has-children';
 				$icon        = Astra_Icons::get_icons( 'arrow' );
-				$icon        = '<span role="presentation" class="dropdown-menu-toggle ast-header-navigation-arrow" tabindex="0">' . $icon . '</span>';
+				$icon        = '<span role="presentation" class="dropdown-menu-toggle ast-header-navigation-arrow" tabindex="0" aria-haspopup="true">' . $icon . '</span>';
 				// Add toggle button if menu is from Astra.
 				if ( true === is_object( $args ) ) {
 					if ( isset( $args->theme_location ) &&
@@ -81,6 +81,8 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 							'ast-menu-toggle',
 							array(
 								'aria-expanded' => 'false',
+								'aria-haspopup' => 'true',
+								'aria-label'    => 'Toggle menu',
 							),
 							$page
 						) . '><span class="screen-reader-text">' . __( 'Menu Toggle', 'astra' ) . '</span>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';
@@ -91,6 +93,8 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 							'ast-menu-toggle',
 							array(
 								'aria-expanded' => 'false',
+								'aria-haspopup' => 'true',
+								'aria-label'    => 'Toggle menu',
 							),
 							$page
 						) . '><span class="screen-reader-text">' . __( 'Menu Toggle', 'astra' ) . '</span>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';

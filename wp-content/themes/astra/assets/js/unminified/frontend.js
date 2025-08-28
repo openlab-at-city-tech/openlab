@@ -251,16 +251,9 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		var triggerType = event.currentTarget.trigger_type;
 		var popupWrap = document.getElementById( 'ast-mobile-popup' );
 
-		const menuToggleClose = document.getElementById('menu-toggle-close');
-
-		if( menuToggleClose ) {
-			menuToggleClose.focus();
-		}
-
         if ( ! body.classList.contains( 'ast-popup-nav-open' ) ) {
 			body.classList.add( 'ast-popup-nav-open' );
         }
-
 
 		if ( ! body.classList.contains( 'ast-main-header-nav-open' ) && 'mobile' !== triggerType ) {
 			body.classList.add( 'ast-main-header-nav-open' );
@@ -280,9 +273,14 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			popupWrap.querySelector( '.ast-desktop-popup-content' ).style.display = 'none';
 			popupWrap.querySelector( '.ast-mobile-popup-content' ).style.display = 'block';
 		}
-		this.style.display = 'none';
+		if (event && event.currentTarget && event.currentTarget.style) {
+			event.currentTarget.style.display = 'none';
+		}
 
 		popupWrap.classList.add( 'active', 'show' );
+
+		const menuToggleClose = document.getElementById( 'menu-toggle-close' );
+		menuToggleClose?.focus();
 	}
 
 	/**
@@ -363,42 +361,93 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			var popupClose = document.getElementById( 'menu-toggle-close' ),
 				popupInner = document.querySelector( '.ast-mobile-popup-inner' );
 
-				if ( undefined === popupInner || null === popupInner  ){
-					return; // if toggel button component is not loaded.
-				}
-				popupLinks = popupInner.getElementsByTagName('a');
-
-			for ( var item = 0;  item < popupTriggerMobile.length; item++ ) {
-
-				popupTriggerMobile[item].removeEventListener("click", astraNavMenuToggle, false);
-				// Open the Popup when click on trigger
-				popupTriggerMobile[item].removeEventListener("click", popupTriggerClick);
-				popupTriggerMobile[item].addEventListener("click", popupTriggerClick, false);
-				popupTriggerMobile[item].trigger_type = 'mobile';
-
+			if ( undefined === popupInner || null === popupInner ) {
+				return; // if toggel button component is not loaded.
 			}
-			for ( var item = 0;  item < popupTriggerDesktop.length; item++ ) {
+			popupLinks = popupInner.getElementsByTagName( 'a' );
 
-				popupTriggerDesktop[item].removeEventListener("click", astraNavMenuToggle, false);
+			// --- Focus Trap Implementation Start ---
+			document.removeEventListener( 'keydown', astraOffcanvasTrapTabKey );
+
+			function astraOffcanvasTrapTabKey( e ) {
+				let popup = document.getElementById( 'ast-mobile-popup' );
+				if ( ! popup || ! popup.classList.contains( 'active' ) || e.key !== 'Tab' ) {
+					return;
+				}
+				let focusableElements = popupInner.querySelectorAll(
+					'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				);
+				focusableElements = Array.prototype.filter.call( focusableElements, function ( element ) {
+					return (
+						element.offsetWidth > 0 && element.offsetHeight > 0 && window.getComputedStyle( element ).visibility !== 'hidden'
+					);
+				} );
+				if ( focusableElements.length === 0 ) return;
+				let firstElement = focusableElements[ 0 ];
+				let lastElement = focusableElements[ focusableElements.length - 1 ];
+				if ( e.shiftKey && document.activeElement === firstElement ) {
+					e.preventDefault();
+					lastElement.focus();
+				} else if ( ! e.shiftKey && document.activeElement === lastElement ) {
+					e.preventDefault();
+					firstElement.focus();
+				}
+			}
+			document.addEventListener( 'keydown', astraOffcanvasTrapTabKey );
+
+			// Remove focus trap when menu is closed
+			function removeAstraOffcanvasTrap() {
+				document.removeEventListener( 'keydown', astraOffcanvasTrapTabKey );
+			}
+			if ( popupClose ) {
+				popupClose.addEventListener( 'click', removeAstraOffcanvasTrap );
+			}
+			document.addEventListener( 'keyup', function ( event ) {
+				if ( event.keyCode === 27 ) {
+					removeAstraOffcanvasTrap();
+				}
+			} );
+			document.addEventListener( 'click', function ( event ) {
+				let target = event.target;
+				let modal = document.querySelector( '.ast-mobile-popup-drawer.active .ast-mobile-popup-overlay' );
+				if ( target === modal ) {
+					removeAstraOffcanvasTrap();
+				}
+			} );
+
+			for ( var item = 0; item < popupTriggerMobile.length; item++ ) {
+				popupTriggerMobile[ item ].removeEventListener( 'click', astraNavMenuToggle, false );
 				// Open the Popup when click on trigger
-				popupTriggerDesktop[item].removeEventListener("click", popupTriggerClick);
-				popupTriggerDesktop[item].addEventListener("click", popupTriggerClick, false);
-				popupTriggerDesktop[item].trigger_type = 'desktop';
-
+				popupTriggerMobile[ item ].removeEventListener( 'click', popupTriggerClick );
+				popupTriggerMobile[ item ].addEventListener( 'click', function(event) {
+					popupTriggerClick(event);
+					const menu = document.querySelector('.ast-mobile-popup-drawer.active');
+					if (!menu) {
+						removeAstraOffcanvasTrap();
+					}
+				}, false );
+				popupTriggerMobile[ item ].trigger_type = 'mobile';
+			}
+			for ( var item = 0; item < popupTriggerDesktop.length; item++ ) {
+				popupTriggerDesktop[ item ].removeEventListener( 'click', astraNavMenuToggle, false );
+				// Open the Popup when click on trigger
+				popupTriggerDesktop[ item ].removeEventListener( 'click', popupTriggerClick );
+				popupTriggerDesktop[ item ].addEventListener( 'click', popupTriggerClick, false );
+				popupTriggerDesktop[ item ].trigger_type = 'desktop';
 			}
 
 			// Getting menu toggle button element.
-			const menuToggleButton = document.querySelector('.ast-button-wrap .menu-toggle');
+			const menuToggleButton = document.querySelector( '.ast-button-wrap .menu-toggle' );
 
 			//Close Popup on CLose Button Click.
-			popupClose.addEventListener("click", function( e ) {
+			popupClose.addEventListener( 'click', function ( e ) {
 				document.getElementById( 'ast-mobile-popup' ).classList.remove( 'active', 'show' );
-				updateTrigger(this);
+				updateTrigger( this );
 				menuToggleButton?.focus();
-			});
+			} );
 
 			// Close Popup if esc is pressed.
-			document.addEventListener( 'keyup', function (event) {
+			document.addEventListener( 'keyup', function ( event ) {
 				// 27 is keymap for esc key.
 				if ( event.keyCode === 27 ) {
 					event.preventDefault();
@@ -406,11 +455,10 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 					updateTrigger();
 					menuToggleButton?.focus();
 				}
-			});
+			} );
 
 			// Close Popup on outside click.
-			document.addEventListener('click', function (event) {
-
+			document.addEventListener( 'click', function ( event ) {
 				var target = event.target;
 				var modal = document.querySelector( '.ast-mobile-popup-drawer.active .ast-mobile-popup-overlay' );
 				if ( target === modal ) {
@@ -418,13 +466,20 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 					updateTrigger();
 					menuToggleButton?.focus();
 				}
-			});
+			} );
 
 			// Close Popup on # link click inside Popup.
 			for ( let link = 0, len = popupLinks.length; link < len; link++ ) {
-				if( null !== popupLinks[link].getAttribute("href") && ( popupLinks[link].getAttribute("href").startsWith('#') || -1 !== popupLinks[link].getAttribute("href").search("#") ) && ( ! popupLinks[link].parentElement.classList.contains('menu-item-has-children') || ( popupLinks[link].parentElement.classList.contains('menu-item-has-children') && document.querySelector('header.site-header').classList.contains('ast-builder-menu-toggle-icon') ) ) ){
-					popupLinks[link].addEventListener( 'click', triggerToggleClose, true );
-					popupLinks[link].headerType = 'off-canvas';
+				if (
+					null !== popupLinks[ link ].getAttribute( 'href' ) &&
+					( popupLinks[ link ].getAttribute( 'href' ).startsWith( '#' ) ||
+						-1 !== popupLinks[ link ].getAttribute( 'href' ).search( '#' ) ) &&
+					( ! popupLinks[ link ].parentElement.classList.contains( 'menu-item-has-children' ) ||
+						( popupLinks[ link ].parentElement.classList.contains( 'menu-item-has-children' ) &&
+							document.querySelector( 'header.site-header' ).classList.contains( 'ast-builder-menu-toggle-icon' ) ) )
+				) {
+					popupLinks[ link ].addEventListener( 'click', triggerToggleClose, true );
+					popupLinks[ link ].headerType = 'off-canvas';
 				}
 			}
 
@@ -483,8 +538,6 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			AstraToggleSetup();
 		}
 
-		accountPopupTrigger();
-
 	}
 
 	function triggerToggleClose( event ) {
@@ -529,8 +582,6 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		document.addEventListener( 'astMobileHeaderTypeChange', updateHeaderType, false );
 
 		init();
-
-		accountPopupTrigger();
 
 	} );
 
@@ -633,38 +684,6 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			body.classList.add("ast-header-break-point");
 			body.classList.remove("ast-desktop");
 			astraTriggerEvent(body, "astra-header-responsive-disabled")
-		}
-	}
-
-	var accountPopupTrigger = function () {
-		// Account login form popup.
-		var header_account_trigger =  document.querySelectorAll( '.ast-account-action-login' );
-
-		if (!header_account_trigger.length) {
-			return;
-		}
-
-		const formWrapper = document.querySelector('#ast-hb-account-login-wrap');
-
-		if (!formWrapper) {
-			return;
-		}
-
-		const formCloseBtn = document.querySelector('#ast-hb-login-close');
-
-		header_account_trigger.forEach(function(_trigger) {
-			_trigger.addEventListener('click', function(e) {
-				e.preventDefault();
-
-				formWrapper.classList.add('show');
-			});
-		});
-
-		if (formCloseBtn) {
-			formCloseBtn.addEventListener('click', function(e) {
-				e.preventDefault();
-				formWrapper.classList.remove('show');
-			});
 		}
 	}
 
@@ -1453,16 +1472,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
- /*
-    * Close any open mobile navigation when a menu link is clicked.
-	* This is to ensure that the mobile navigation is closed when a menu link is clicked
-	* Used Jquery here as a exception becase plane js will not work due to Missing delegation.
-    */
-	jQuery( document ).on( 'click', '.main-header-bar-navigation a', function() {
-		if ( jQuery( 'body' ).hasClass( 'ast-main-header-nav-open' ) ) {
-				jQuery( '.main-header-menu-toggle.toggled' ).removeClass( 'toggled' );
-				jQuery( '.main-header-bar-navigation.toggle-on' ).removeClass( 'toggle-on' ).css( 'display', '' );
-				jQuery( 'body' ).removeClass( 'ast-main-header-nav-open' );
-		}
-	} );

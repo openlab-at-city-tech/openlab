@@ -527,31 +527,19 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 					$_configs,
 					array(
 						/**
-						 * Notice - Transparent meta header enabled on page.
+						 * Notice with Link - Transparent meta header enabled on page.
 						 */
 						array(
-							'name'            => ASTRA_THEME_SETTINGS . '[ast-callback-notice-header-transparent-meta-enabled]',
+							'name'            => ASTRA_THEME_SETTINGS . '[ast-callback-notice-header-transparent-meta-enabled-with-link]',
 							'type'            => 'control',
-							'control'         => 'ast-description',
+							'control'         => 'ast-description-with-link',
 							'section'         => 'section-header-builder-layout',
 							'priority'        => 1,
 							'active_callback' => array( $this, 'is_transparent_header_enabled' ),
 							'help'            => $this->get_help_text_notice( 'transparent-meta' ),
-						),
-
-						/**
-						 * Notice Link - Transparent meta header enabled on page.
-						 */
-						array(
-							'name'            => ASTRA_THEME_SETTINGS . '[ast-callback-notice-header-transparent-header-meta-link]',
-							'type'            => 'control',
-							'control'         => 'ast-customizer-link',
-							'section'         => 'section-header-builder-layout',
-							'priority'        => 1,
 							'link_type'       => 'section',
 							'linked'          => 'section-transparent-header',
 							'link_text'       => '<u>' . __( 'Customize Transparent Header', 'astra' ) . '</u>',
-							'active_callback' => array( $this, 'is_transparent_header_enabled' ),
 						),
 
 						/**
@@ -641,7 +629,7 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 					$notice = __( 'Logo is set in the Transparent Header Section. Click below to customize it.', 'astra' );
 					break;
 				case 'transparent-meta':
-					$notice = __( 'This page uses the Transparent Header. Click below to customize it.', 'astra' );
+					$notice = __( 'This page uses the Transparent Header. Click below to customize.', 'astra' );
 					break;
 				default:
 					$notice = '';

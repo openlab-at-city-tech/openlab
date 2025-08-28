@@ -707,6 +707,12 @@ final class Astra_Builder_Helper {
 		// Add an additional item conditionally.
 		if ( ! defined( 'ASTRA_EXT_VER' ) ) {
 			$pro_header_desktop_items = array(
+				'divider-1'         => array(
+					'name'    => __( 'Divider 1', 'astra' ),
+					'icon'    => 'minus',
+					'section' => 'section-hb-divider-1',
+					'pro'     => true,
+				),
 				'divider-2'         => array(
 					'name'    => __( 'Divider 2', 'astra' ),
 					'icon'    => 'minus',
@@ -800,6 +806,11 @@ final class Astra_Builder_Helper {
 		// Add an additional item conditionally.
 		if ( ! defined( 'ASTRA_EXT_VER' ) ) {
 			$pro_footer_desktop_items = array(
+				'divider-1' => array(
+					'name' => __( 'Divider 1', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
 				'divider-2' => array(
 					'name' => __( 'Divider 2', 'astra' ),
 					'icon' => 'minus',

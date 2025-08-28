@@ -1436,19 +1436,19 @@ function hasWordPressWidgetBlockEditor() {
 
 	// Check if anchors should be loaded in the CSS for headings.
 	if (true == astraCustomizer.includeAnchorsInHeadindsCss) {
-		astra_responsive_font_size('astra-settings[font-size-h1]', 'h1, .entry-content h1, .entry-content h1 a', true, '.ast-sg-typo-field[data-for="h1"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h2]', 'h2, .entry-content h2, .entry-content h2 a', true, '.ast-sg-typo-field[data-for="h2"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h3]', 'h3, .entry-content h3, .entry-content h3 a', true, '.ast-sg-typo-field[data-for="h3"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h4]', 'h4, .entry-content h4, .entry-content h4 a', true, '.ast-sg-typo-field[data-for="h4"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h5]', 'h5, .entry-content h5, .entry-content h5 a', true, '.ast-sg-typo-field[data-for="h5"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h6]', 'h6, .entry-content h6, .entry-content h6 a', true, '.ast-sg-typo-field[data-for="h6"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h1]', 'h1, .entry-content :where(h1), .entry-content :where(h1) a', true, '.ast-sg-typo-field[data-for="h1"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h2]', 'h2, .entry-content :where(h2), .entry-content :where(h2) a', true, '.ast-sg-typo-field[data-for="h2"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h3]', 'h3, .entry-content :where(h3), .entry-content :where(h3) a', true, '.ast-sg-typo-field[data-for="h3"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h4]', 'h4, .entry-content :where(h4), .entry-content :where(h4) a', true, '.ast-sg-typo-field[data-for="h4"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h5]', 'h5, .entry-content :where(h5), .entry-content :where(h5) a', true, '.ast-sg-typo-field[data-for="h5"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h6]', 'h6, .entry-content :where(h6), .entry-content :where(h6) a', true, '.ast-sg-typo-field[data-for="h6"] .ast-sg-font-size');
 	} else {
-		astra_responsive_font_size('astra-settings[font-size-h1]', 'h1, .entry-content h1', true, '.ast-sg-typo-field[data-for="h1"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h2]', 'h2, .entry-content h2', true, '.ast-sg-typo-field[data-for="h2"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h3]', 'h3, .entry-content h3', true, '.ast-sg-typo-field[data-for="h3"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h4]', 'h4, .entry-content h4', true, '.ast-sg-typo-field[data-for="h4"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h5]', 'h5, .entry-content h5', true, '.ast-sg-typo-field[data-for="h5"] .ast-sg-font-size');
-		astra_responsive_font_size('astra-settings[font-size-h6]', 'h6, .entry-content h6', true, '.ast-sg-typo-field[data-for="h6"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h1]', 'h1, .entry-content :where(h1)', true, '.ast-sg-typo-field[data-for="h1"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h2]', 'h2, .entry-content :where(h2)', true, '.ast-sg-typo-field[data-for="h2"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h3]', 'h3, .entry-content :where(h3)', true, '.ast-sg-typo-field[data-for="h3"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h4]', 'h4, .entry-content :where(h4)', true, '.ast-sg-typo-field[data-for="h4"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h5]', 'h5, .entry-content :where(h5)', true, '.ast-sg-typo-field[data-for="h5"] .ast-sg-font-size');
+		astra_responsive_font_size('astra-settings[font-size-h6]', 'h6, .entry-content :where(h6)', true, '.ast-sg-typo-field[data-for="h6"] .ast-sg-font-size');
 	}
 
 	// paragraph margin bottom.
@@ -1485,31 +1485,31 @@ function hasWordPressWidgetBlockEditor() {
 			if ( 'color-typo' == astraCustomizer.elementor_default_color_font_setting || 'typo' == astraCustomizer.elementor_default_color_font_setting ) {
 				astra_css('astra-settings[headings-line-height]', 'line-height', '.elementor-widget-heading h1.elementor-heading-title, .elementor-widget-heading h2.elementor-heading-title, .elementor-widget-heading h3.elementor-heading-title, .elementor-widget-heading h4.elementor-heading-title, .elementor-widget-heading h5.elementor-heading-title, .elementor-widget-heading h6.elementor-heading-title');
 			}
-			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a');
+			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a');
 		} else {
 			if ( 'color-typo' == astraCustomizer.elementor_default_color_font_setting || 'typo' == astraCustomizer.elementor_default_color_font_setting ) {
 				astra_css('astra-settings[headings-line-height]', 'line-height', '.elementor-widget-heading h1.elementor-heading-title, .elementor-widget-heading h2.elementor-heading-title, .elementor-widget-heading h3.elementor-heading-title, .elementor-widget-heading h4.elementor-heading-title, .elementor-widget-heading h5.elementor-heading-title, .elementor-widget-heading h6.elementor-heading-title');
 			}
-			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a');
+			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, .entry-content :where(h1), h2, .entry-content :where(h2), h3, .entry-content :where(h3), h4, .entry-content :where(h4), h5, .entry-content :where(h5), h6, .entry-content :where(h6), .site-title, .site-title a');
 		}
 	} else {
 		if (true == astraCustomizer.includeAnchorsInHeadindsCss) {
-			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a');
+			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a');
 		} else {
-			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a');
+			astra_css('astra-settings[headings-line-height]', 'line-height', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .site-title, .site-title a');
 		}
 	}
 
 	// Check if anchors should be loaded in the CSS for headings.
 	if (true == astraCustomizer.includeAnchorsInHeadindsCss) {
-		astra_generate_outside_font_family_css('astra-settings[headings-font-family]', 'h1, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a');
-		astra_generate_font_weight_css( 'astra-settings[headings-font-family]', 'astra-settings[headings-font-weight]', 'font-weight', 'h1, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a' );
-		astra_font_extras_css( 'headings-font-extras', '.entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a' );
+		astra_generate_outside_font_family_css('astra-settings[headings-font-family]', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a');
+		astra_generate_font_weight_css( 'astra-settings[headings-font-family]', 'astra-settings[headings-font-weight]', 'font-weight', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a' );
+		astra_font_extras_css( 'headings-font-extras', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a' );
 
 	} else {
-		astra_generate_outside_font_family_css('astra-settings[headings-font-family]', 'h1, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a');
-		astra_generate_font_weight_css( 'astra-settings[headings-font-family]', 'astra-settings[headings-font-weight]', 'font-weight', 'h1, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a' );
-		astra_font_extras_css( 'headings-font-extras', '.entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a' );
+		astra_generate_outside_font_family_css('astra-settings[headings-font-family]', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .site-title, .site-title a');
+		astra_generate_font_weight_css( 'astra-settings[headings-font-family]', 'astra-settings[headings-font-weight]', 'font-weight', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .site-title, .site-title a' );
+		astra_font_extras_css( 'headings-font-extras', 'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .site-title, .site-title a' );
 	}
 
 	// Global link

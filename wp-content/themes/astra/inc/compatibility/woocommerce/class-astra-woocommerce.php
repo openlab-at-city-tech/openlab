@@ -2733,6 +2733,7 @@ if ( ! class_exists( 'Astra_Woocommerce' ) ) {
 						outline: 0;
 						font-weight: 400;
 						z-index: 3;
+						position: relative;
 					}
 
 					.woocommerce-js .quantity .minus {

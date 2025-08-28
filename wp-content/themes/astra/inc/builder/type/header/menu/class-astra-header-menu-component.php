@@ -105,10 +105,16 @@ class Astra_Header_Menu_Component {
 		$items_wrap .= '</div>';
 		$items_wrap .= '</nav>';
 
+		// Generate a unique menu ID based on context.
+		$unique_suffix = '';
+		if ( 'desktop' !== $device ) {
+			$unique_suffix = '-' . $device;
+		}
+
 		// Fallback Menu if primary menu not set.
 		$fallback_menu_args = array(
 			'theme_location' => $theme_location,
-			'menu_id'        => apply_filters( 'astra_header_menu_ul_id', 'ast-hf-menu-' . $index ),
+			'menu_id'        => apply_filters( 'astra_header_menu_ul_id', 'ast-hf-menu-' . $index . $unique_suffix ),
 			'menu_class'     => 'main-navigation ast-inline-flex',
 			'container'      => 'div',
 			'before'         => '<ul class="' . esc_attr( implode( ' ', $menu_classes ) ) . '">',
@@ -128,7 +134,7 @@ class Astra_Header_Menu_Component {
 			/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$nav_menu_markup = wp_nav_menu(
 				array(
-					'menu_id'         => apply_filters( 'astra_header_menu_ul_id', 'ast-hf-menu-' . $index ),
+					'menu_id'         => apply_filters( 'astra_header_menu_ul_id', 'ast-hf-menu-' . $index . $unique_suffix ),
 					'menu_class'      => esc_attr( implode( ' ', $menu_classes ) ),
 					'container'       => 'div',
 					'container_class' => 'main-header-bar-navigation',

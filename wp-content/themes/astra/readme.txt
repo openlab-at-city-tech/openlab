@@ -5,7 +5,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-menu, custom-logo, entertainment, featured-images, full-width-template, one-column, two-columns, left-sidebar, e-commerce, right-sidebar, custom-colors, editor-style, featured-images, full-width-template, microformats, post-formats, rtl-language-support, theme-options, threaded-comments, translation-ready, blog
 Tested up to: 6.8
 Requires PHP: 5.3
-Stable tag: 4.11.5
+Stable tag: 4.11.10
 
 Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio, business website and WooCommerce storefront.
 
@@ -138,4 +138,4 @@ For more details on YouTube’s data collection, please refer to their Terms of 
 
 We take plugin security extremely seriously. If you discover a security vulnerability, please report it in a safe and responsible manner.
 
-You can report the issue through our [Bug Bounty Program](https://brainstormforce.com/bug-bounty-program/). We collaborate with Patchstack to provide opportunities for researchers to report vulnerabilities. The Patchstack team will help validate, triage, and handle any reported security issues.
+You can report the issue through our [Bug Bounty Program](https://brainstormforce.com/bug-bounty-program/).

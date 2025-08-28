@@ -1,5 +1,39 @@
 *** Astra Changelog ***
 
+2025-08-20 - version 4.11.10
+* Improvement: Fixed duplicate menu IDs in navigation components to improve WCAG 2.0 accessibility compliance.
+* Improvement: Enhanced accessibility to prevent screen readers from announcing fly-out navigation content when it is hidden.
+* Fix: Resolved Astra dashboard compatibility issue with the Gutenberg plugin where sprintf was not defined.
+* Fix: Resolved minor UI styling issues in Customizer controls.
+* Fix: Corrected an issue where the post title appeared in the Elementor editor even when disabled, ensuring proper sync with Elementor’s Hide Title option.
+
+2025-08-11 - version 4.11.9
+* Improvement: Compatibility with Spectra V3.
+* Improvement: Improved accessibility of Header Builder elements, particularly the toggle menu.
+* Improvement: Improved compatibility with the GenerateBlocks plugin to ensure proper styling from block settings.
+* Fix: Resolved syncing issue between Astra meta settings in the WP and the Elementor editor for newly created pages.
+
+2025-07-30 - version 4.11.8
+* New: Added an option to use custom SVG code in the Social Icons widget.
+* Improvement: Enhanced off-canvas menu keyboard navigation with proper focus management and ESC key support (WCAG 2.1 compliance).
+* Fix: Resolved an alignment issue with the WooCommerce mini cart item count.
+* Fix: Resolved an issue where the remove icon for taxonomy options displayed raw SVG HTML in the Customizer control.
+* Fix: Resolved an issue where the "Dropdown Target Link" option closed the menu panel instead of opening the corresponding submenu.
+* Fix: Unwanted Cart markup visible inside the customizer before the footer area.
+
+2025-07-17 - version 4.11.7
+* Updated the NPS Survey library to incorporate the latest enhancements.
+
+2025-07-16 - version 4.11.6
+* Improvement: Updated live search results background to use a dynamic color variable for better dark mode support.
+* Improvement: Improved accessibility by assigning explicit roles to the header and footer widget areas to ensure proper landmark structure.
+* Improvement: Added a filter to exclude specific post types (such as SureForms) from Astra meta key registration to avoid errors.
+* Improvement: Prevented WooCommerce-related CSS selectors from dynamic CSS when WooCommerce is not installed or activated, reducing unnecessary output and improving code cleanliness.
+* Improvement: Added consistent button styling across the editor and frontend on a fresh setup.
+* Fix: Resolved a quantity update button conflict with Beaver Themer.
+* Fix: Resolved an issue where WPForms styling incorrectly applied dark mode CSS when the File Generation option was enabled.
+* Fix: Resolved a layout conflict between the WooPack Off-Canvas Cart module and the Beaver Themer header in Astra.
+
 2025-07-01 - version 4.11.5
 * This version includes an updated package to ensure compatibility with Astra UTM links on wp.org.
 

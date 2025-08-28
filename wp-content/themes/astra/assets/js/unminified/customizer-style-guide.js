@@ -50,6 +50,21 @@
 			api.state('astra-style-guide-status').set('loaded');
 		});
 
+		// Bind the click event to the button to focus on the style guide section.
+		const urlParams = new URLSearchParams( window.location.search );
+		const autofocus = urlParams.get( 'autofocus' );
+
+		if ( autofocus === 'astra-tour' ) {
+			let hasTriggered = false; // flag to ensure it only fires once
+			wp.customize.previewer.bind( 'ready', () => {
+				if ( hasTriggered ) {
+					return; // if already triggered, do nothing
+				}
+
+				button.trigger( 'click' );
+				hasTriggered = true; // set the flag to true after triggering
+			} );
+		}
 	});
 
 	// development code.

@@ -142,6 +142,8 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 			$post_types['fl-theme-layout'] = 'fl-theme-layout';
 
+			$excluded_post_types = self::get_excluded_meta_post_types();
+
 			$metabox_name = sprintf(
 				// Translators: %s is the theme name.
 				__( '%s Settings', 'astra' ),
@@ -151,7 +153,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 			// Enable for all posts.
 			foreach ( $post_types as $type ) {
 
-				if ( 'attachment' !== $type ) {
+				if ( 'attachment' !== $type && ! in_array( $type, $excluded_post_types, true ) ) {
 					add_meta_box(
 						'astra_settings_meta_box',              // Id.
 						$metabox_name,                          // Title.
@@ -480,7 +482,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 		/**
 		 * Metabox Save
 		 *
-		 * @param  number $post_id Post ID.
+		 * @param  int $post_id Post ID.
 		 * @return void
 		 */
 		public function save_meta_box( $post_id ) {
@@ -493,6 +495,13 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 			// Exits script depending on save status.
 			if ( $is_autosave || $is_revision || ! $is_valid_nonce ) {
+				return;
+			}
+
+			// Added Check if current post type is excluded from Astra meta settings.
+			$post_type           = get_post_type( $post_id );
+			$excluded_post_types = self::get_excluded_meta_post_types();
+			if ( $post_type && in_array( $post_type, $excluded_post_types, true ) ) {
 				return;
 			}
 
@@ -536,9 +545,11 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 				// Store values.
 				if ( $meta_value ) {
+					/** @psalm-suppress InvalidArgument */
 					update_post_meta( $post_id, $key, $meta_value );
 
 					// Update meta key (flag) as old user migration is already completed at this point.
+					/** @psalm-suppress InvalidArgument */
 					update_post_meta( $post_id, 'astra-migrate-meta-layouts', 'set' );
 				} else {
 
@@ -572,6 +583,11 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 			$post_type = get_post_type();
 
 			if ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) && ASTRA_ADVANCED_HOOKS_POST_TYPE === $post_type ) {
+				return;
+			}
+
+			$excluded_post_types = self::get_excluded_meta_post_types();
+			if ( $post_type && in_array( $post_type, $excluded_post_types, true ) ) {
 				return;
 			}
 
@@ -1049,6 +1065,26 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 		 */
 		public function register_meta_settings() {
 			$meta = self::get_meta_option();
+
+			// Get current post type in a way that works for both REST and admin.
+			$post_type = null;
+			if ( isset( $_REQUEST['post_type'] ) && is_string( $_REQUEST['post_type'] ) ) {
+				$post_type = sanitize_key( $_REQUEST['post_type'] );
+			} elseif ( isset( $_REQUEST['post'] ) ) {
+				$post_id   = absint( $_REQUEST['post'] );
+				$post_type = get_post_type( $post_id );
+			} elseif ( function_exists( 'get_current_screen' ) ) {
+				$screen = get_current_screen();
+				/** @psalm-suppress RedundantConditionGivenDocblockType */
+				if ( $screen && isset( $screen->post_type ) ) {
+					$post_type = $screen->post_type;
+				}
+			}
+
+			$excluded_post_types = self::get_excluded_meta_post_types();
+			if ( $post_type && in_array( $post_type, $excluded_post_types, true ) ) {
+				return;
+			}
 
 			register_post_meta(
 				'',
@@ -1843,6 +1879,21 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 					),
 				)
 			);
+		}
+
+		/**
+		 * Get post types excluded from Astra meta registration.
+		 *
+		 * @since 4.11.6
+		 * @return array
+		 */
+		public static function get_excluded_meta_post_types() {
+			/**
+			 * Filter to exclude post types from Astra meta registration.
+			 *
+			 * @param array $excluded_post_types Array of post types to exclude.
+			 */
+			return apply_filters( 'astra_excluded_meta_post_types', array( 'sureforms_form' ) );
 		}
 	}
 }

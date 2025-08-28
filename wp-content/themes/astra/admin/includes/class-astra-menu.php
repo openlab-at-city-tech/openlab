@@ -909,21 +909,6 @@ class Astra_Menu {
 			);
 		}
 
-		$extensions[] = array(
-			'title'       => 'Google Analytics for WooCommerce',
-			'subtitle'    => __( 'Boost sales with WooCommerce analytics.', 'astra' ),
-			'status'      => self::get_plugin_status( 'woocommerce-google-analytics-integration/woocommerce-google-analytics-integration.php' ),
-			'slug'        => 'woocommerce-google-analytics-integration',
-			'path'        => 'woocommerce-google-analytics-integration/woocommerce-google-analytics-integration.php',
-			'redirection' => admin_url( 'admin.php?page=wc-settings&tab=integration&section=google_analytics' ),
-			'ratings'     => '(110+)',
-			'activations' => '200,000 +',
-			'logoPath'    => array(
-				'internal_icon' => false,
-				'icon_path'     => 'https://ps.w.org/woocommerce-google-analytics-integration/assets/icon-256x256.png',
-			),
-		);
-
 		return $extensions;
 	}
 

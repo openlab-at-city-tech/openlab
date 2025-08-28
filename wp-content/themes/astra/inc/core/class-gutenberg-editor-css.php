@@ -130,6 +130,8 @@ if ( ! class_exists( 'Gutenberg_Editor_CSS' ) ) {
 			$h6_text_transform  = astra_get_font_extras( astra_get_option( 'font-extras-h6' ), 'text-transform' );
 			$h6_letter_spacing  = astra_get_font_extras( astra_get_option( 'font-extras-h6' ), 'letter-spacing', 'letter-spacing-unit' );
 			$h6_text_decoration = astra_get_font_extras( astra_get_option( 'font-extras-h6' ), 'text-decoration' );
+			/** @psalm-suppress PossiblyNullPropertyFetch */
+			$post_type = get_current_screen() ? get_current_screen()->post_type : '';
 
 			// Checking if font weight is different in GB editor.
 			if ( 'inherit' === $h1_font_weight ) {
@@ -466,11 +468,6 @@ if ( ! class_exists( 'Gutenberg_Editor_CSS' ) ) {
 					'padding-left'               => astra_responsive_spacing( $theme_btn_padding, 'left', 'desktop' ),
 				),
 
-				// Margin bottom same as applied on frontend.
-				'.editor-styles-wrapper .is-root-container.block-editor-block-list__layout > .wp-block-heading' => array(
-					'margin-bottom' => '20px',
-				),
-
 				/**
 				 * Site title (Page Title) on Block Editor.
 				 */
@@ -482,6 +479,18 @@ if ( ! class_exists( 'Gutenberg_Editor_CSS' ) ) {
 					'text-transform' => esc_attr( $site_title_text_transform ),
 				),
 			);
+
+			// Margin bottom same as applied on frontend.
+			if ( 'post' === $post_type && apply_filters( 'astra_improvise_single_post_design', Astra_Dynamic_CSS::astra_4_6_0_compatibility() ) ) {
+				$desktop_css['.editor-styles-wrapper :where(.is-root-container.block-editor-block-list__layout) > :is(.wp-block-heading, h1, h2, h3, h4, h5, h6)'] = array(
+					'margin-top'    => '1.5em',
+					'margin-bottom' => 'calc(0.3em + 10px);',
+				);
+			} else {
+				$desktop_css['.editor-styles-wrapper .is-root-container.block-editor-block-list__layout > :is(.wp-block-heading, [class*="wp-block-spectra"]:where(h1, h2 ,h3 ,h4 ,h5 ,h6))'] = array(
+					'margin-bottom' => '20px',
+				);
+			}
 
 			if ( false === $improve_gb_ui ) {
 				$desktop_css['.editor-post-title__block,.editor-default-block-appender,.block-editor-block-list__block'] = array(

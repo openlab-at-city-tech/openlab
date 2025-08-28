@@ -1263,3 +1263,19 @@ function astra_theme_background_updater_4_10_0() {
 		}
 	}
 }
+
+/**
+ * Background updater function for theme v4.11.6
+ *
+ * @since 4.11.6
+ * @return void
+ */
+function astra_theme_background_updater_4_11_6() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	// Set button consistency backward compatibility flag.
+	if ( ! isset( $theme_options['btn-consist-comp'] ) ) {
+		$theme_options['btn-consist-comp'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}

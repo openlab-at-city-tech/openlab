@@ -30,6 +30,10 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) {
 		 * @since 1.0.0
 		 */
 		private function __construct() {
+			// Bail early if not in admin area.
+			if ( ! is_admin() ) {
+				return;
+			}
 
 			// Allow users to disable NPS survey via a filter && return early if the user does not have admin access.
 			if ( ! current_user_can( 'manage_options' ) || apply_filters( 'astra_nps_survey_disable', false ) ) {
@@ -106,11 +110,14 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) {
 						// Step 1 i.e rating input.
 						'logo' => esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg'),
 						'plugin_name' => __( 'Astra', 'astra' ),
-						'nps_rating_message' => __( 'How likely are you to recommend #pluginname to your friends or colleagues?', 'astra' ),
+						'nps_rating_title' => __( 'Quick Question', 'astra' ),
+						'nps_rating_message' => __( 'How would you rate Astra? Love it, hate it, or somewhere in between? Your honest answer helps us understand how were doing.', 'astra' ),
+						'rating_min_label' => __( 'Hate it', 'astra' ),
+						'rating_max_label' => __( 'Love it', 'astra' ),
 
 						// Step 2A i.e. positive.
 						'feedback_title' => __( 'Thanks a lot for your feedback! 😍', 'astra' ),
-						'feedback_content' => __( 'Could you please do us a favor and give us a 5-star rating on WordPress? It would help others choose Astra with confidence. Thank you!', 'astra' ),
+						'feedback_content' => __( 'Thanks for using Astra! Got feedback or suggestions to make it even better? We’d love to hear from you.', 'astra' ),
 						'plugin_rating_link' => esc_url( 'https://wordpress.org/support/theme/astra/reviews/#new-post' ),
 						'plugin_rating_button_string' => __( 'Rate the Theme', 'astra' ),
 

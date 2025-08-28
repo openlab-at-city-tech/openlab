@@ -112,6 +112,8 @@ function astra_breadcrumb_section_dynamic_css( $dynamic_css, $dynamic_css_filter
 
 	if ( 'unicode' === $breadcrumb_separator_selector ) {
 		$current_selected_separator = $breadcrumb_separator;
+	} elseif ( 'custom' === $breadcrumb_separator_selector ) {
+		$current_selected_separator = $breadcrumb_separator;
 	} else {
 		$current_selected_separator = $breadcrumb_separator_selector;
 	}
