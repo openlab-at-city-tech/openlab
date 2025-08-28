@@ -1,0 +1,58 @@
+///////////////////////////////
+///////// Variables //////////
+//////////////////////////////
+$font__main: sans-serif;
+$font__code: Monaco, Consolas, 'Andale Mono', 'DejaVu Sans Mono', monospace;
+$font__pre: 'Courier 10 Pitch', Courier, monospace;
+$font__line-height-body: 1.5;
+$font__line-height-pre: 1.6;
+
+//Colors
+$primary-color: rgb(255, 55, 0);
+$secondary-color: rgb(22, 41, 55);
+$white: rgb(255, 255, 255);
+$black: rgb(0, 0, 0);
+$almost-white: rgb(247, 247, 247);
+$light-grey: rgb(221, 221, 221);
+$mid-grey: rgb(153, 153, 153);
+$grey: rgb(127, 127, 127);
+
+$blue: rgb(0, 114, 172);
+$green: rgb(114, 182, 61);
+
+$red: rgb(227, 35, 27);
+$wp-grey: rgb(241, 241, 241);
+$dark: rgb(35, 40, 45);
+//Dimensions
+$header-height: 120px;
+$input-height: 35px;
+$tab-width: 150px;
+//Utilities
+$border-radius: 3px;
+
+$font_size_tab: 13px;
+
+$white: #ffffff;
+$beige_light: #f7f7f7;
+$black: #000000;
+$green: #7cc048;
+$green_alt: #95dc5e;
+$grey: #666666;
+$grey_dark: #6b6e72;
+$grey_dark_2: #dddddd;
+$red: #e02626;
+$red_alt: #f85959;
+
+$primary_color: $red;
+$primary_button_color: $primary_color;
+$primary_button_color_hover: $green_alt;
+
+$danger_button_color: $red;
+$danger_button_color_hover: $red_alt;
+
+$color_bg: #f1f1f1;
+
+$header-height: 120px;
+$navbar-height: 50px;
+
+$border-radius-main: 6px;

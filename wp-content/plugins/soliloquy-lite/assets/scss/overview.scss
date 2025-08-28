@@ -1,0 +1,175 @@
+@import 'vars';
+@import 'icons';
+@import 'header';
+@import 'global';
+@import 'chosen';
+
+/* ==========================================================================
+   Metabox Styles
+   ========================================================================== */
+.post-type-soliloquy {
+	#wpbody-content h1 {
+		display: block;
+		margin: 0;
+		padding-left: 20px;
+		padding-right: 20px;
+		line-height: 40px;
+		font-size: 20px;
+		font-weight: 400;
+		background-color: $white;
+		height: 45px;
+		margin-left: -20px;
+		margin-right: -20px;
+	}
+	.page-title-action {
+		display: inline-block;
+		margin-left: 4px;
+		padding: 4px 8px;
+	    top: -47px;
+		margin-bottom: -38px;
+		left: 150px;
+		text-decoration: none;
+		border: none;
+		color: $primary-color;
+		border-radius: 0;
+		background: none;
+		text-shadow: none;
+		font-weight: 600;
+		font-size: 13px;
+		&:hover,
+		&:active{
+			position: relative;
+			top: -47px;
+			margin-bottom: -38px;
+			left: 150px;
+		}
+		&:hover {
+			background: none;
+			color: $mid-grey;
+		}
+		&:before {
+			display: inline-block;
+			font-family: 'soliloquy';
+			content: '\0050';
+			margin-right: 5px;
+			vertical-align: middle;
+		}
+	}
+	.wrap {
+		margin-top: 0px !important;
+	}
+	input[type='checkbox'] {
+		background-color: $white;
+		border: 1px solid $light-grey;
+		box-shadow: none;
+		margin-right: 10px;
+	}
+	input[type='checkbox']:checked {
+		background-color: $green;
+		border-color: $green;
+	}
+	input[type='checkbox']:checked:before {
+		color: $white !important;
+	}
+	/* ==========================================================================
+	   Post Filters
+	   ========================================================================== */
+	ul.subsubsub {
+		/**
+		* Re-establish the left and right margins, so there's spacing between the Admin Menu
+		* and the content
+		*/
+		margin: 0 0 20px 0;
+		padding-left: 0px;
+	}
+	.column-image {
+		width: 85px !important;
+	}
+	/* ==========================================================================
+	   Post Table Form
+	   ========================================================================== */
+	form#posts-filter {
+		/**
+		* Table Navigation (Bulk Actions, Dates, SEO Score dropdowns etc)
+		*/
+		div.tablenav.top {
+			margin: 0 0 8px 0;
+		}
+
+		/**
+		* Reduce our global custom button sizes so they align with inputs
+		*/
+		.button {
+			height: 28px;
+			line-height: 26px;
+		}
+	}
+
+	/* ==========================================================================
+     Quick Edit
+     ========================================================================== */
+	#wpbody-content {
+		.inline-edit-row {
+			fieldset {
+				input[type='text'],
+				input[type='number'],
+				input[type='password'] {
+					background-color: $white;
+					border: 1px solid #ddd;
+					-webkit-box-shadow: none;
+					box-shadow: none;
+					color: #32373c;
+					height: $input-height;
+					outline: none;
+					-webkit-transition: 0.05s border-color ease-in-out;
+					transition: 0.05s border-color ease-in-out;
+					min-width: 210px;
+					max-width: 350px;
+					width: 100%;
+					border-radius: $border-radius;
+					padding-right: 0;
+				}
+				select {
+					min-width: 275px;
+				}
+				span.title {
+					font-style: normal;
+					font-weight: 600;
+					font-size: 13px;
+					min-width: 140px;
+				}
+			}
+		}
+		td.colspanchange {
+			/**
+			* Left Col (Title, Slug, Date, Password)
+			*/
+			fieldset.inline-edit-col-left {
+				fieldset.inline-edit-date {
+					display: none;
+				}
+				div.inline-edit-group:last-child {
+					display: none;
+				}
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media screen and (max-width: 782px) {
+}
+
+tr.type-soliloquy {
+	th {
+		padding: 20px inherit !important;
+	}
+	td {
+		padding: 20px inherit;
+	}
+}
+.soliloquy-count {
+	display: none;
+}

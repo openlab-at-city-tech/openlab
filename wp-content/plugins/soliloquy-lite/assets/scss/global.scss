@@ -1,0 +1,227 @@
+@import 'vars';
+
+#soliloquy-settings-content {
+	input:not([type='checkbox']) {
+		background-color: $white;
+		border: 1px solid #ddd;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		color: #32373c;
+		height: $input-height;
+		outline: none;
+		-webkit-transition: 0.05s border-color ease-in-out;
+		transition: 0.05s border-color ease-in-out;
+	}
+	input[type='checkbox']:checked {
+		-color: $primary-color;
+	}
+	textarea {
+		width: 100%;
+	}
+	input[type='password'] {
+		&.soliloquy-input {
+			background-color: $white;
+			border: 1px solid #ddd;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			color: #32373c;
+			outline: none;
+			-webkit-transition: 0.05s border-color ease-in-out;
+			transition: 0.05s border-color ease-in-out;
+		}
+	}
+}
+input[type='password'] {
+	&.soliloquy-input {
+		background-color: $white;
+		border: 1px solid #ddd;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		height: $input-height;
+		color: #32373c;
+		outline: none;
+		-webkit-transition: 0.05s border-color ease-in-out;
+		transition: 0.05s border-color ease-in-out;
+	}
+}
+pre.soliloquy-code {
+	background-color: $light-grey;
+	border-radius: $border-radius;
+	padding: 15px;
+}
+.soliloquy-clipboard {
+	display: block;
+	text-decoration: underline !important;
+	padding-top: 8px;
+	font-size: 11px;
+	outline: 0 !important;
+	&:focus {
+		outline-style: none;
+		box-shadow: none;
+		border-color: transparent;
+	}
+}
+.soliloquy-code {
+	display: block;
+	background-color: $almost-white;
+	border-radius: 3px;
+	padding: 10px !important;
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.soliloquy-list-inline {
+	margin: 0;
+	list-style: none;
+	li {
+		display: inline-block;
+		margin-right: 5px;
+		&:last-child {
+			margin-right: 0 !important;
+		}
+	}
+}
+.soliloquy-yt {
+	iframe {
+		max-width: 100%;
+		height: auto;
+	}
+}
+.soliloquy-hidden {
+	display: none !important;
+}
+.soliloquy-hideme {
+	visibility: hidden;
+}
+.soliloquy-no-border {
+	border: none !important;
+}
+.soliloquy-right {
+	float: right;
+}
+.soliloquy-left {
+	float: left;
+}
+.soliloquy-clearfix {
+	clear: both;
+	display: block;
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+	width: 0;
+}
+.no-margin {
+	margin: 0 !important;
+}
+
+.no-margin-top {
+	margin-top: 0 !important;
+}
+
+.no-margin-bottom {
+	margin-bottom: 0 !important;
+}
+/* Add this attribute to the element that needs a tooltip */
+[data-soliloquy-tooltip] {
+	position: relative;
+	z-index: 2;
+	cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-soliloquy-tooltip]:before,
+[data-soliloquy-tooltip]:after {
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-soliloquy-tooltip]:before {
+	position: absolute;
+	bottom: 120%;
+	left: 50%;
+	margin-bottom: 5px;
+	margin-left: -35px;
+	padding: 7px;
+	width: 60px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color: #000;
+	color: #fff;
+	content: attr(data-soliloquy-tooltip);
+	text-align: center;
+	font-size: 12px;
+	line-height: 1.2;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-soliloquy-tooltip]:after {
+	position: absolute;
+	bottom: 120%;
+	left: 50%;
+	width: 0;
+	margin-left: -5px;
+	border-top: 5px solid #000;
+	border-right: 5px solid transparent;
+	border-left: 5px solid transparent;
+	content: ' ';
+	font-size: 0;
+	line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-soliloquy-tooltip]:hover:before,
+[data-soliloquy-tooltip]:hover:after {
+	visibility: visible;
+	opacity: 1;
+}
+[class*='soliloquy-grid-'] {
+	float: left;
+	margin-left: 2%;
+	input[type='text'] {
+		width: 100% !important;
+	}
+}
+.soliloquy-grid-1 {
+	width: 6.5%;
+}
+.soliloquy-grid-2 {
+	width: 15%;
+}
+.soliloquy-grid-3 {
+	width: 23.5%;
+}
+.soliloquy-grid-4 {
+	width: 32%;
+}
+.soliloquy-grid-5 {
+	width: 40.5%;
+}
+.soliloquy-grid-6 {
+	width: 49%;
+}
+.soliloquy-grid-7 {
+	width: 57.5%;
+}
+.soliloquy-grid-8 {
+	width: 66%;
+}
+.soliloquy-grid-9 {
+	width: 74.5%;
+}
+.soliloquy-grid-10 {
+	width: 83%;
+}
+.soliloquy-grid-11 {
+	width: 91.5%;
+}
+.soliloquy-grid-12 {
+	width: 100%;
+}
+
+.soliloquy-first {
+	margin-left: 0px;
+}

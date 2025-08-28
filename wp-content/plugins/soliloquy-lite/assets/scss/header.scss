@@ -1,0 +1,26 @@
+#soliloquy-header-temp {
+	position: relative;
+}
+#soliloquy-top-notification {
+	position: relative;
+	background-color: $secondary-color;
+	text-align: center;
+	color: $white;
+	height: 40px;
+	margin-left: -20px;
+	vertical-align: middle;
+	p {
+		margin: 0;
+		padding: 0;
+		line-height: 40px;
+		font-size: 16px;
+	}
+	a {
+		color: $white;
+	}
+	.soliloquy-dismiss {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+}
