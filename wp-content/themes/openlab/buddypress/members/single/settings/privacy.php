@@ -108,7 +108,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 			<div class="panel-body">
 				<div class="panel-subheading">Display Name</div>
 				<div class="privacy-panel-options">
-					<p>Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Because your Display Name is public, you don't need to use your real name or your full name. Your Display Name can be changed at any time by editing your profile. ← links to edit profile screen.</p>
+					<p>Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Because your Display Name is public, you don't need to use your real name or your full name. Your Display Name can be changed at any time by <a href="<?php echo esc_url( bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ) ); ?>">editing your profile</a>.</p>
 				</div>
 
 				<div class="panel-subheading">Username</div>
