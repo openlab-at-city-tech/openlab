@@ -23,6 +23,9 @@ class Meow_WPMC_Parsers {
 
 		if ( class_exists( 'WPSEO_Options' ) )
 			require_once( 'parsers/wpseo.php' );
+
+		if ( class_exists( 'Meow_MGL_Core' ) )
+			require_once( 'parsers/meow_gallery.php' );
 	}
 }
 

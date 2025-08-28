@@ -2,6 +2,7 @@
 
 class Meow_WPMC_Core {
 
+	
 	public $admin = null;
 	public $is_rest = false;
 	public $is_cli = false;
@@ -15,11 +16,13 @@ class Meow_WPMC_Core {
 	public $upload_path = null; // /www/wp-content/uploads (path to uploads)
 	public $upload_url = null; // wp-content/uploads (uploads without domain)
 	private $option_name = 'wpmc_options';
+	private $nonce = null; // Nonce for the REST API
 
 	private $regex_file = '/[A-Za-z0-9-_,.\(\)\s]+[.]{1}(MIMETYPES)/';
 
 	private $refcache = array();
 	private $use_cached_references = false;
+	private $progress_key = 'wpmc_progress';
 	private $cached_ids_key = 'wpmc_cached_ids';
 	private $cached_urls_key = 'wpmc_cached_urls';
 
@@ -99,6 +102,18 @@ class Meow_WPMC_Core {
 
 	function init() {
 		remove_action( 'wp_scheduled_delete', 'wp_scheduled_delete' );
+	}
+
+	public function get_nonce( $force = false ) {
+		if ( !$force && !is_user_logged_in() ) {
+			return null;
+		}
+		if ( isset( $this->nonce ) ) {
+			return $this->nonce;
+		}
+
+		$this->nonce = wp_create_nonce( 'wp_rest' );
+		return $this->nonce;
 	}
 
 	function initialize_parsers() {
@@ -1514,11 +1529,13 @@ class Meow_WPMC_Core {
 		if ( !empty( $id ) ) {
 
 			if( $this->use_cached_references ) {
-				$cached_ids = $this->get_cached_ids();
-				if ( !in_array( $id, $cached_ids ) ) {
-					$this->add_cached_id( $id );
+
+				$added = $this->add_cached_id( $id );
+				if ( $added ) {
 					array_push( $this->refcache, array( 'id' => $id, 'url' => null, 'type' => $type, 'origin' => $origin ) );
 				}
+				
+				
 			}
 
 			if( !$this->use_cached_references ) {
@@ -1535,11 +1552,11 @@ class Meow_WPMC_Core {
 
 			if( $this->use_cached_references ) {
 
-				$cached_urls = $this->get_cached_urls();
-				if ( !in_array( $url, $cached_urls ) ) {
-					$this->add_cached_url( $url );
+				$added = $this->add_cached_url( $url );
+				if ( $added ) {
 					array_push( $this->refcache, array( 'id' => null, 'url' => $url, 'type' => $type, 'origin' => $origin ) );
 				}
+
 			}
 
 			if( !$this->use_cached_references ) {
@@ -1550,27 +1567,29 @@ class Meow_WPMC_Core {
 
 	}
 
+	//* Let's only use transient to avoid PHP memory issues. Commented out the CLI version.
 	private function get_cached_ids() {
-		if( !$this->is_cli ) {
+		//if( !$this->is_cli ) {
 			$cached_ids = get_transient($this->cached_ids_key);
 			return $cached_ids !== false ? $cached_ids : array();
-		}
+		//}
 
-		if( $this->is_cli ) {
-			return $this->cached_ids_cli;
-		}
+		
+		// if( $this->is_cli ) {
+		// 	return $this->cached_ids_cli;
+		// }
 		
 	}
 
 	private function get_cached_urls() {
-		if( !$this->is_cli ) {
+		//if( !$this->is_cli ) {
 			$cached_urls = get_transient($this->cached_urls_key);
 			return $cached_urls !== false ? $cached_urls : array();
-		}
+		//}
 
-		if( $this->is_cli ) {
-			return $this->cached_urls_cli;
-		}
+		// if( $this->is_cli ) {
+		// 	return $this->cached_urls_cli;
+		// }
 	}
 
 	private function add_cached_id($id) {
@@ -1578,35 +1597,42 @@ class Meow_WPMC_Core {
 		if ( !in_array( $id, $cached_ids ) ) {
 			$cached_ids[] = $id;
 
-			if( $this->is_cli ) {
-				$this->cached_ids_cli[] = $id;
-			}
+			// if( $this->is_cli ) {
+			// 	$this->cached_ids_cli[] = $id;
+			// }
 
-			if( !$this->is_cli ) {
+			//if( !$this->is_cli ) {
 				set_transient( $this->cached_ids_key, $cached_ids, 0 );
-			}
+			//}
+
+			return true;
 			
 		}
+
+		return false;
 	}
 
 	private function add_cached_url($url) {
 		$cached_urls = $this->get_cached_urls();
-		if (!in_array($url, $cached_urls)) {
+		if ( !in_array( $url, $cached_urls ) ) {
 			$cached_urls[] = $url;
 
-			if( $this->is_cli ) {
-				$this->cached_urls_cli[] = $url;
-			}
-			if ( !$this->is_cli ) {
+			// if( $this->is_cli ) {
+			// 	$this->cached_urls_cli[] = $url;
+			// }
+			//if ( !$this->is_cli ) {
 				set_transient($this->cached_urls_key, $cached_urls, 0);
-			}
+			//}
 			
+			return true;
 		}
+
+		return false;
 	}
 
 	function reset_cached_references() {
-		delete_transient($this->cached_ids_key);
-		delete_transient($this->cached_urls_key);
+		delete_transient( $this->cached_ids_key );
+		delete_transient( $this->cached_urls_key );
 
 		$this->cached_ids_cli = array();
 		$this->cached_urls_cli = array();
@@ -1655,6 +1681,36 @@ class Meow_WPMC_Core {
 		}
 	}
 
+	function reset_progress() {
+		// Reset the progress by deleting the transient.
+		delete_transient( $this->progress_key );
+	}
+
+	function clear_step_progress() {
+		// Clear step progress when scanning completes
+		delete_transient( $this->progress_key );
+	}
+
+	function save_progress( $step, $data = array() ) {
+		// Save progress with step and optional data
+		// Data can include type, limit, limitSize, and any other progress information
+		$progress = array(
+			'step' => $step,
+			'time' => time(),
+			'data' => $data
+		);
+
+		set_transient( $this->progress_key, $progress, 0 );
+	}
+
+	function get_progress() {
+		return get_transient( $this->progress_key );
+	}
+
+	function get_step_progress() {
+		$options = $this->get_all_options();
+		return isset( $options['step_progress'] ) ? $options['step_progress'] : null;
+	}
 
 	// The cache containing the references is wrote to the DB.
 	function write_references() {
@@ -1912,12 +1968,12 @@ class Meow_WPMC_Core {
 		return $file;
 	}
 
-	/*
-		Check if the file or the Media ID is used in the install.
-		That file or ID will be checked against the database of references created by the plugin
-		by the parsers.
-	*/
-	public function reference_exists( $file, $mediaId ) {
+	/**
+	 * Check if the file or the Media ID is used in the install.
+	 * That file or ID will be checked against the database of references created by the plugin
+	 * by the parsers.
+	 */
+	function reference_exists( $file, $mediaId ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . "mclean_refs";
@@ -2259,6 +2315,11 @@ class Meow_WPMC_Core {
 		if ( $hasChanges ) {
 			update_option( $this->option_name , $options );
 		}
+
+		// Dynamically added options
+		//TODO: we should have a rest route to fetch this instead of using the options directly. This is temporary.
+		$options['scan_progress'] = get_transient( $this->progress_key );
+
 		return $options;
 	}
 

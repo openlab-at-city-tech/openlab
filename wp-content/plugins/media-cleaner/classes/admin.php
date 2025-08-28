@@ -40,7 +40,8 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
 
     // Options
     $options = array_merge( $this->core->get_all_options(), [
-      'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : []
+      'incompatible_plugins' => Meow_WPMC_Support::get_issues(),
+      'native_plugins'       => Meow_WPMC_Support::get_natives(),
     ] );
 
     // Localize and options

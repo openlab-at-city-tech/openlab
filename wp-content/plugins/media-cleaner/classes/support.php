@@ -1,12 +1,42 @@
 <?php
 
-class Meow_WPMC_Support {        
+class Meow_WPMC_Support {     
+  
+  static function get_natives() {
+    $natives = array();
+
+   	if ( class_exists( 'WooCommerce' ) )
+      array_push( $natives, 'WooCommerce' );
+
+		if ( class_exists( 'Attachments' ) )
+      array_push( $natives, 'Attachments' );
+
+		if ( class_exists( 'MetaSliderPlugin' ) || class_exists( 'MetaSliderPro' ) )  
+      array_push( $natives, 'Meta Slider' );
+
+		if ( function_exists( 'mc_show_sidebar' ) )
+      array_push( $natives, 'My Calendar' );
+
+		if ( class_exists( 'Mega_Menu' ) )
+     array_push( $natives, 'Mega Menu' );
+
+		if ( class_exists( 'WPSEO_Options' ) ) 
+      array_push( $natives, 'Yoast SEO' );
+
+    if ( class_exists( 'Meow_MGL_Core' ) )
+      array_push( $natives, 'Meow Gallery' );
+
+    return $natives;
+  }
         
   static function get_issues() {
     $unsupported = array();
 
-    if ( class_exists( 'ACF' ) || function_exists( 'acfw_globals' ) )
+    if ( class_exists( 'ACF' ) )
       array_push( $unsupported, 'ACF' );
+
+    if ( function_exists( 'acfw_globals' ) )
+      array_push( $unsupported, 'ACF Widgets' );
 
     if ( function_exists( '_et_core_find_latest' ) )
       array_push( $unsupported, 'Divi' );
@@ -14,10 +44,10 @@ class Meow_WPMC_Support {
     if ( class_exists( 'Vc_Manager' ) )
       array_push( $unsupported, 'Visual Composer' );
 
-    if ( function_exists( 'fusion_builder_map' ) )
+    if ( defined( 'FUSION_BUILDER_VERSION' ) || defined( 'FUSION_CORE_VERSION' ) || has_action( 'avada_author_info' ) )
       array_push( $unsupported, 'Fusion Builder' );
 
-    if ( function_exists( 'elementor_load_plugin_textdomain' ) )
+    if ( defined( 'ELEMENTOR_VERSION' ) )
       array_push( $unsupported, 'Elementor' );
 
     if ( class_exists( 'FLBuilderModel' ) )
@@ -37,6 +67,9 @@ class Meow_WPMC_Support {
 
     if ( class_exists( 'X_Bootstrap' ) )
       array_push( $unsupported, 'Theme X' );
+
+    if ( class_exists( 'Easy_Real_Estate' ) )
+      array_push( $unsupported, 'Easy Real Estate' );
 
     if ( class_exists( 'SiteOrigin_Panels' ) )
       array_push( $unsupported, 'SiteOrigin PageBuilder' );
@@ -68,12 +101,16 @@ class Meow_WPMC_Support {
     if ( class_exists( 'ImageMapPro' ) )
       array_push( $unsupported, 'Image Map Pro' );
 
-    if ( class_exists( 'YOOtheme\Builder\Wordpress\BuilderListener' ) ) {
+    if ( class_exists( 'YOOtheme\\Builder' ) ) {
       array_push( $unsupported, 'YooTheme Builder' );
     }
 
     if ( class_exists( 'geodirectory' ) ) {
       array_push( $unsupported, 'GeoDirectory' );
+    }
+
+    if ( class_exists( 'Modula' ) ) {
+      array_push( $unsupported, 'Modula Gallery' );
     }
 
 		if ( class_exists( 'JustifiedImageGrid' ) ) {
@@ -144,6 +181,10 @@ class Meow_WPMC_Support {
       array_push( $unsupported, 'Photo Gallery (10Web)' );
 		}
 
+    if ( class_exists( 'Google\Web_Stories\Plugin' ) ) {
+      array_push( $unsupported, 'Web Stories' );
+    }
+
     if ( function_exists( 'rwmb_get_object_fields' ) ) {
       array_push( $unsupported, 'Metabox' );
 		}
@@ -195,6 +236,11 @@ class Meow_WPMC_Support {
 		if ( defined( 'BRICKS_VERSION' ) ) {
       array_push( $unsupported, 'Bricks Builder' );
 		}
+
+    // W3 Total Cache
+    if ( defined( 'W3TC_VERSION' ) ) {
+      array_push( $unsupported, 'W3 Total Cache' );
+    }
 
     // Spectra
 		if ( defined( 'UAGB_PLUGIN_SHORT_NAME' ) ) {
