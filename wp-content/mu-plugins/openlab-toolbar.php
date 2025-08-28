@@ -43,7 +43,7 @@ class OpenLab_Admin_Bar {
 		// Logged-in only
 		if ( is_user_logged_in() ) {
 
-			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 9999999 );
+			add_action( 'admin_bar_menu', array( $this, 'modify_howdy' ), 9999999 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_notifications_hook' ), 5 );
 
@@ -174,9 +174,9 @@ class OpenLab_Admin_Bar {
 	}
 
 	/**
-	 * Change 'Howdy' message to 'Hi'
+	 * Modifies the 'Howdy' link, changing it to 'Hi', adding the My OpenLab logo, and changing the link.
 	 */
-	public function change_howdy_to_hi( $wp_admin_bar ) {
+	public function modify_howdy( $wp_admin_bar ) {
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
 
 		$title = sprintf(
@@ -189,6 +189,7 @@ class OpenLab_Admin_Bar {
 			array(
 				'id'    => 'my-account',
 				'title' => $title,
+				'href'  => bp_members_get_user_url( bp_loggedin_user_id() ),
 				'meta'  => array(
 					'class' => 'user-display-name',
 				),
