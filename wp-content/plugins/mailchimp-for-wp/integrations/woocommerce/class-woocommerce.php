@@ -102,6 +102,7 @@ class MC4WP_WooCommerce_Integration extends MC4WP_Integration
                 'type' => 'checkbox',
                 'label' => $this->get_label_text(),
                 'optionalLabel' => $this->get_label_text(),
+                'show_in_order_confirmation' => false,
             ]
         );
     }
