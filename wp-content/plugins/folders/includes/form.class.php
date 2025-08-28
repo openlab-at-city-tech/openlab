@@ -74,7 +74,7 @@ class  WCP_Forms
                     <?php if ($showInPage == "yes") { ?>
                         <a href="#" class="view-shortcodes folder-tooltip" data-folder-tooltip="<?php esc_html_e("Press Ctrl+K to view keyboard shortcuts", 'folders'); ?>"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></a>
                     <?php } ?>
-                    <a href="javascript:;" class="add-new-folder" id="add-new-folder">
+                    <a href="#" class="add-new-folder" id="add-new-folder">
                         <span class="create_new_folder"><i class="pfolder-add-folder"></i></span> <span><?php esc_html_e("New Folder", 'folders'); ?></span>
                     </a>
                 </div>
@@ -86,14 +86,14 @@ class  WCP_Forms
                         <input type="checkbox" id="folder-hide-show-checkbox">
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php /*esc_html_e("Rename", 'folders'); */?></span> </a>
+                        <a href="#" id="inline-update"><span class="icon pfolder-edit"></span> <span class="text"><?php /*esc_html_e("Rename", 'folders'); */?></span> </a>
                     </li>
                     <li>
-                        <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php /*esc_html_e("Delete", 'folders'); */?></span> </a>
+                        <a href="#" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php /*esc_html_e("Delete", 'folders'); */?></span> </a>
                     </li>-->
                     <?php if ($isOld) { ?>
                         <li>
-                            <a href="javascript:;" class="expand-collapse folder-tooltip" id="expand-collapse-list" data-folder-tooltip="<?php esc_html_e("Expand", 'folders'); ?>">
+                            <a href="#" class="expand-collapse folder-tooltip" id="expand-collapse-list" data-folder-tooltip="<?php esc_html_e("Expand", 'folders'); ?>">
                                 <span class="icon pfolder-arrow-down"></span><!-- <span class="text"><?php /*esc_html_e("Expand", 'folders'); */?></span>-->
                             </a>
                         </li>
@@ -109,7 +109,7 @@ class  WCP_Forms
                         <div class="form-options">
                             <ul>
                                 <li class="last folder-order">
-                                    <a data-folder-tooltip="Sort Folders" href="javascript:;" id="sort-order-list" class="sort-folder-order folder-tooltip">
+                                    <a data-folder-tooltip="Sort Folders" href="#" id="sort-order-list" class="sort-folder-order folder-tooltip">
                                         <span class="icon pfolder-arrow-sort"></span><!-- <span class="text"><?php /*esc_html_e("Sort", 'folders'); */?></span>-->
                                     </a>
                                     <div class="folder-sort-menu <?php echo ($isOld) ? "" : "is-pro" ?>">

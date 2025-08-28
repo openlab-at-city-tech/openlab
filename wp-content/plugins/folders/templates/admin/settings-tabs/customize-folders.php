@@ -374,7 +374,7 @@
                     <div class="wcp-custom-form">
                         <div class="form-title">
                             <?php esc_html_e("Folders", 'folders'); ?>
-                            <a href="javascript:;" class="add-new-folder" id="add-new-folder">
+                            <a href="#" class="add-new-folder" id="add-new-folder">
                                 <span class="create_new_folder"><i class="pfolder-add-folder"></i></span>
                                 <span><?php esc_html_e("New Folder", 'folders'); ?></span>
                             </a>
@@ -389,32 +389,32 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="javascript:;" id="inline-update"><span class="icon pfolder-edit-folder"><span class="path2"></span></span> <span class="text"><?php esc_html_e("Rename", 'folders'); ?></span> </a>
+                                    <a href="#" id="inline-update"><span class="icon pfolder-edit-folder"><span class="path2"></span></span> <span class="text"><?php esc_html_e("Rename", 'folders'); ?></span> </a>
                                 </li>
                                 <li>
-                                    <a href="javascript:;" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", 'folders'); ?></span> </a>
+                                    <a href="#" id="inline-remove"><span class="icon pfolder-remove"></span> <span class="text"><?php esc_html_e("Delete", 'folders'); ?></span> </a>
                                 </li>
                                 <li class="last">
-                                    <a href="javascript:;" id="expand-collapse-list" data-tooltip="Expand"><span class="icon pfolder-arrow-down"></span></a>
+                                    <a href="#" id="expand-collapse-list" data-tooltip="Expand"><span class="icon pfolder-arrow-down"></span></a>
                                 </li>
                                 <li class="last">
-                                    <a href="javascript:;" ><span class="icon pfolder-arrow-sort"></span></a>
+                                    <a href="#" ><span class="icon pfolder-arrow-sort"></span></a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div class="shadow-box">
                         <div class="header-posts">
-                            <a href="javascript:;" class="all-posts active-item-link"><?php esc_html_e("All Files", 'folders'); ?> <span class="total-count">215</span></a>
+                            <a href="#" class="all-posts active-item-link"><?php esc_html_e("All Files", 'folders'); ?> <span class="total-count">215</span></a>
                         </div>
                         <div class="un-categorised-items  ui-droppable">
-                            <a href="javascript:;" class="un-categorized-posts"><?php esc_html_e("Unassigned Files", 'folders'); ?> <span class="total-count total-empty">191</span> </a>
+                            <a href="#" class="un-categorized-posts"><?php esc_html_e("Unassigned Files", 'folders'); ?> <span class="total-count total-empty">191</span> </a>
                         </div>
                         <div class="separator"></div>
                         <ul class="folder-list">
-                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 1", 'folders'); ?></span><span class="total-count">20</span><span class="clear"></span></a></li>
-                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 2", 'folders'); ?></span><span class="total-count">13</span><span class="clear"></span></a></li>
-                            <li><a href="javascript:;"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 3", 'folders'); ?></span><span class="total-count">5</span><span class="clear"></span></a></li>
+                            <li><a href="#"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 1", 'folders'); ?></span><span class="total-count">20</span><span class="clear"></span></a></li>
+                            <li><a href="#"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 2", 'folders'); ?></span><span class="total-count">13</span><span class="clear"></span></a></li>
+                            <li><a href="#"><i class="wcp-icon pfolder-folder-close"></i> <span><?php esc_html_e("Folder 3", 'folders'); ?></span><span class="total-count">5</span><span class="clear"></span></a></li>
                         </ul>
                         <div class="separator"></div>
                         <div class="media-buttons">

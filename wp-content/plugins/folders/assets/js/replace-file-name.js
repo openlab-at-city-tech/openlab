@@ -11,7 +11,7 @@
     }
 }(function ($, undefined) {
     $(document).ready(function(){
-        var appendString = "<div class='folders-undo-notification' id='name-change-success'><div class='folders-undo-body' style='padding: 0'><a href='javascript:;' class='close-undo-box'><span></span></a><div class='folders-undo-header' style='padding: 0'></div></div></div>";
+        var appendString = "<div class='folders-undo-notification' id='name-change-success'><div class='folders-undo-body' style='padding: 0'><a href='#' class='close-undo-box'><span></span></a><div class='folders-undo-header' style='padding: 0'></div></div></div>";
         $("body").append(appendString);
         $(document).on("click", ".folder-replace-checkbox", function(){
             if($(this).is(":checked")) {

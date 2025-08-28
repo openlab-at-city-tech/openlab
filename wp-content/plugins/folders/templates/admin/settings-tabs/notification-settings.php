@@ -87,15 +87,15 @@ if($setting_page == "notification-settings") {
                                     <input type="email" required name="notification_setting[notification_email][]" value="<?php echo esc_attr($email) ?>" />
                                 </div>
                                 <div class="email-test-button">
-                                    <a href="javascript:;" class="send-test-email"><?php esc_html_e("Test", "folders"); ?></a>
+                                    <a href="#" class="send-test-email"><?php esc_html_e("Test", "folders"); ?></a>
                                 </div>
                                 <div class="email-remove-button">
-                                    <a href="javascript:;" class="remove-email"><?php esc_html_e("Remove", "folders"); ?></a>
+                                    <a href="#" class="remove-email"><?php esc_html_e("Remove", "folders"); ?></a>
                                 </div>
                             </div>
                         <?php } ?>
                         <div class="notification-email add-email-button">
-                            <a href="javascript:;" class="add-email-notification" ><?php esc_html_e("+ Add another email", "folders"); ?></a>
+                            <a href="#" class="add-email-notification" ><?php esc_html_e("+ Add another email", "folders"); ?></a>
                         </div>
                     </div>
                     <div class="mail-settings">

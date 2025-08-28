@@ -38,15 +38,15 @@ $email = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] == "playground.w
                     </svg>
                 </div>
                 <input id="folder_update_status" autocomplete="off" value="<?php echo esc_attr($email) ?>" placeholder="Email address">
-                <button href="javascript:;" class="button button-primary form-submit-btn yes befirst-btn"><?php esc_html_e('Sign Up', 'folders'); ?></button>
+                <button href="#" class="button button-primary form-submit-btn yes befirst-btn"><?php esc_html_e('Sign Up', 'folders'); ?></button>
                 <p id="suggestion"></p>
             </div>
             <!--div class="update-form-skip-button">
-                <button href="javascript:;" class="button button-secondary form-cancel-btn no">Skip</button>
+                <button href="#" class="button button-secondary form-cancel-btn no">Skip</button>
             </div-->
         </div>
         <div class="update-notice-latter">
-            <span><a href="javascript:;" class="form-cancel-btn no"><?php esc_html_e('No, I will do it later', 'folders'); ?></a></span>
+            <span><a href="#" class="form-cancel-btn no"><?php esc_html_e('No, I will do it later', 'folders'); ?></a></span>
         </div>
         <div class="update-notice">
             <?php esc_html_e('You can remove yourself from the list whenever you want, no strings attached', 'folders'); ?>

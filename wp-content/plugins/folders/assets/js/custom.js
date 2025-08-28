@@ -1464,18 +1464,18 @@ jQuery(document).ready(function(){
 			jQuery(".dynamic-menu").remove();
 			jQuery(".active-menu").removeClass("active-menu");
             menuHtml = "<div class='dynamic-menu'><ul>" +
-                        "<li class='new-folder'><a href='javascript:;'><span class=''><i class='pfolder-add-folder'></i></span> New Folder</a></li>" +
-                        "<li class='rename-folder'><a href='javascript:;'><span class=''><i class='pfolder-edit'></i></span> Rename</a></li>" +
+                        "<li class='new-folder'><a href='#'><span class=''><i class='pfolder-add-folder'></i></span> New Folder</a></li>" +
+                        "<li class='rename-folder'><a href='#'><span class=''><i class='pfolder-edit'></i></span> Rename</a></li>" +
                         "<li class='sticky-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class='sticky-pin'><i class='pfolder-pin'></i></span>Sticky Folder (Pro)</a></li>" +
-                        "<li class='mark-folder'><a href='javascript:;'><span class=''><i class='pfolder-star'></i></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>"+
-                        "<li class='duplicate-folder'><a href='javascript:;'><span class=''><i class='pfolder-clone'></i></span> Duplicate folder</a></li>";
+                        "<li class='mark-folder'><a href='#'><span class=''><i class='pfolder-star'></i></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>"+
+                        "<li class='duplicate-folder'><a href='#'><span class=''><i class='pfolder-clone'></i></span> Duplicate folder</a></li>";
 
             /* checking for attachments */
             hasPosts = parseInt(jQuery(this).closest("li.route").find("h3.title:first > .total-count").text());
             if(wcp_settings.post_type == "attachment" && hasPosts) {
                 menuHtml += "<li class='download-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class=''><i class='pfolder-zip-file'></i></span> Download Zip (Pro)</a></li>";
             }
-				menuHtml += "<li class='remove-folder'><a href='javascript:;'><span class=''><i class='pfolder-remove'></i></span> Delete</a></li>" +
+				menuHtml += "<li class='remove-folder'><a href='#'><span class=''><i class='pfolder-remove'></i></span> Delete</a></li>" +
                         "</ul></div>";
 			jQuery(this).after(menuHtml);
 			jQuery(this).parents("li.route").addClass("active-menu");
@@ -1713,17 +1713,17 @@ jQuery(document).ready(function(){
 			jQuery(".dynamic-menu").remove();
 			jQuery(".active-menu").removeClass("active-menu");
             menuHtml = "<div class='dynamic-menu'><ul>" +
-                        "<li class='new-folder'><a href='javascript:;'><span class=''><i class='pfolder-add-folder'></i></span> New Folder</a></li>" +
-                        "<li class='rename-folder'><a href='javascript:;'><span class=''><i class='pfolder-edit'></i></span> Rename</a></li>" +
+                        "<li class='new-folder'><a href='#'><span class=''><i class='pfolder-add-folder'></i></span> New Folder</a></li>" +
+                        "<li class='rename-folder'><a href='#'><span class=''><i class='pfolder-edit'></i></span> Rename</a></li>" +
                         "<li class='sticky-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class='sticky-pin'><i class='pfolder-pin'></i></span>Sticky Folder (Pro)</a></li>" +
-                        "<li class='mark-folder'><a href='javascript:;'><span class=''><i class='pfolder-star'></i></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>" +
-                        "<li class='duplicate-folder'><a href='javascript:;'><span class=''><i class='pfolder-clone'></i></span> Duplicate folder</a></li>";
+                        "<li class='mark-folder'><a href='#'><span class=''><i class='pfolder-star'></i></span>" + ((isHigh) ? " Remove Star" : "Add a Star") + "</a></li>" +
+                        "<li class='duplicate-folder'><a href='#'><span class=''><i class='pfolder-clone'></i></span> Duplicate folder</a></li>";
 
             hasPosts = parseInt(jQuery(this).closest("li.route").find("h3.title:first > .total-count").text());
             if(wcp_settings.post_type == "attachment" && hasPosts) {
                 menuHtml += "<li class='download-folder'><a target='_blank' href='"+wcp_settings.upgrade_url+"'><span class=''><i class='pfolder-zip-file'></i></span> Download Zip (Pro)</a></li>";
             }
-            menuHtml += "<li class='remove-folder'><a href='javascript:;'><span class=''><i class='pfolder-remove'></i></span> Delete</a></li>" +
+            menuHtml += "<li class='remove-folder'><a href='#'><span class=''><i class='pfolder-remove'></i></span> Delete</a></li>" +
                         "</ul></div>";
 			jQuery(this).closest("h3.title").after(menuHtml);
 			jQuery(this).parents("li.route").addClass("active-menu");

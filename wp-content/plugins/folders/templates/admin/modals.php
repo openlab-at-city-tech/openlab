@@ -16,7 +16,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <form action="" method="post" id="save-folder-form">
                     <div id="add-update-folder-title" class="add-update-folder-title">
@@ -44,7 +44,7 @@ if (! defined('ABSPATH')) {
                         </div>
                     </div>
                     <div class="folder-form-buttons">
-                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                         <button type="submit" class="form-submit-btn" id="save-folder-data" style="width: 160px"><?php esc_html_e("Submit", "folders") ?></button>
                     </div>
                 </form>
@@ -56,7 +56,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <form action="" method="post" id="update-folder-form">
                     <div id="update-folder-title" class="add-update-folder-title">
@@ -73,7 +73,7 @@ if (! defined('ABSPATH')) {
                         <span class="dashicons dashicons-info"></span> <?php esc_html_e("Please enter folder name", "folders") ?>
                     </div>
                     <div class="folder-form-buttons">
-                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                         <button type="submit" class="form-submit-btn" id="update-folder-data" style="width: 160px"><?php esc_html_e("Submit", "folders") ?></button>
                     </div>
                 </form>
@@ -85,7 +85,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title" id="remove-folder-message">
                     <?php esc_html_e("Are you sure you want to delete the selected folder?", "folders") ?>
@@ -94,8 +94,8 @@ if (! defined('ABSPATH')) {
                     <?php esc_html_e("Items in the folder will not be deleted.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("No, Keep it", "folders") ?></a>
-                    <a href="javascript:;" class="form-submit-btn" id="remove-folder-item"><?php esc_html_e("Yes, Delete it!", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("No, Keep it", "folders") ?></a>
+                    <a href="#" class="form-submit-btn" id="remove-folder-item"><?php esc_html_e("Yes, Delete it!", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title" id="folder-limitation-message">
 
@@ -114,7 +114,7 @@ if (! defined('ABSPATH')) {
                     <?php esc_html_e("Unlock unlimited amount of folders by activating license key.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                     <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
                 </div>
             </div>
@@ -125,13 +125,13 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title" id="error-folder-popup-message">
 
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Close", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("Close", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -141,7 +141,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
                     <?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
@@ -150,7 +150,7 @@ if (! defined('ABSPATH')) {
                     <?php esc_html_e("Hey, it looks like you want to create sub-folders on Folders. Sub-folders is a premium feature. Upgrade to Pro to create, access and organize your files with sub-folders.", "folders") ?>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                     <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
                 </div>
             </div>
@@ -161,7 +161,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
                     <?php esc_html_e("Sub-folders is a pro feature", "folders") ?>
@@ -177,7 +177,7 @@ if (! defined('ABSPATH')) {
                     <label for="do_not_show_again"><input type="checkbox" id="do_not_show_again" <?php checked($check_status, 1) ?>> <?php esc_html_e("Don't show this popup again", "folders") ?></label>
                 </div>
                 <div class="folder-form-buttons">
-                    <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                     <a href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>" target="_blank" class="form-submit-btn"><?php esc_html_e("Upgrade to Pro", "folders") ?></a>
                 </div>
             </div>
@@ -188,7 +188,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
                     <?php esc_html_e("Confirm your change", "folders") ?>
@@ -198,8 +198,8 @@ if (! defined('ABSPATH')) {
                 </div>
                 <div class="folder-form-buttons">
                     <input type="hidden" id="unassigned_folders" />
-                    <a href="javascript:;" class="form-cancel-btn remove-from-all-folders" id="remove-from-all-folders"><?php esc_html_e("From all folders", "folders") ?></a>
-                    <a href="javascript:;" class="form-submit-btn remove-from-current-folder" id="remove-from-current-folder"><?php esc_html_e("Just from this folder", "folders") ?></a>
+                    <a href="#" class="form-cancel-btn remove-from-all-folders" id="remove-from-all-folders"><?php esc_html_e("From all folders", "folders") ?></a>
+                    <a href="#" class="form-submit-btn remove-from-current-folder" id="remove-from-current-folder"><?php esc_html_e("Just from this folder", "folders") ?></a>
                 </div>
             </div>
         </div>
@@ -209,7 +209,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content">
             <div class="popup-form-data">
                 <div class="close-popup-button">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="add-update-folder-title">
                     <?php esc_html_e("Add a new folder", "folders") ?>
@@ -238,7 +238,7 @@ if (! defined('ABSPATH')) {
             <div class="popup-form-content">
                 <div class="popup-form-data">
                     <div class="close-popup-button">
-                        <a class="" href="javascript:;"><span></span></a>
+                        <a class="" href="#"><span></span></a>
                     </div>
                     <div class="popup-folder-title">
                         <?php esc_html_e("Select Folder", "folders") ?>
@@ -249,7 +249,7 @@ if (! defined('ABSPATH')) {
                         </select>
                     </div>
                     <div class="folder-form-buttons">
-                        <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
+                        <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", "folders") ?></a>
                         <button type="submit" class="form-submit-btn" id="move-to-folder" style="width: 200px"><?php esc_html_e("Move to Folder", "folders") ?></button>
                     </div>
                 </div>
@@ -259,7 +259,7 @@ if (! defined('ABSPATH')) {
 
     <div class="folders-undo-notification" id="do-undo">
         <div class="folders-undo-body">
-            <a href="javascript:;" class="close-undo-box"><span></span></a>
+            <a href="#" class="close-undo-box"><span></span></a>
             <div class="folders-undo-header"><?php esc_html_e("Action performed successfully", "folders") ?></div>
             <div class="folders-undo-body"><?php printf(esc_html__("Your action has been successfully completed. Click the %1\$sUndo%2\$s button to reverse the action", "folders"), "<b>", "</b>"); ?></div>
             <div class="folders-undo-footer"><button class="undo-button" type="button"><?php esc_html_e("Undo", "folders") ?></button></div>
@@ -268,7 +268,7 @@ if (! defined('ABSPATH')) {
 
     <div class="folders-undo-notification" id="undo-done">
         <div class="folders-undo-body" style="padding: 0">
-            <a href="javascript:;" class="close-undo-box"><span></span></a>
+            <a href="#" class="close-undo-box"><span></span></a>
             <div class="folders-undo-header" style="color: #014737; padding: 0"><?php esc_html_e("Action reversed successfully", "folders") ?></div>
         </div>
     </div>
@@ -280,7 +280,7 @@ if (! defined('ABSPATH')) {
             <div class="popup-form-content upgrade-modal">
                 <div class="folder-modal-content" style="position: relative;">
                     <div class="close-popup-button">
-                        <a class="upgrade-model-button" href="javascript:;"><span></span></a>
+                        <a class="upgrade-model-button" href="#"><span></span></a>
                     </div>
                     <img style="width: auto; margin: 0 auto" src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/upgrade-image.png") ?>">
                     <div class="upgrade-title"><?php esc_html_e("Great job! 🎉", "folders"); ?></div>
@@ -313,7 +313,7 @@ if (! defined('ABSPATH')) {
             <div class="popup-form-content upgrade-modal rating-modal">
                 <div class="folder-modal-content" style="position: relative;">
                     <div class="close-popup-button">
-                        <a class="hide-upgrade-modal" href="javascript:;" ><span></span></a>
+                        <a class="hide-upgrade-modal" href="#" ><span></span></a>
                     </div>
                     <img class="rating-logo" style="width: auto; margin: 0 auto" src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/folder-icon.png") ?>">
                     <div class="rating-modal-steps active" id="step-1">
@@ -374,7 +374,7 @@ if (! defined('ABSPATH')) {
         <div class="popup-form-content" style="padding: 20px 0 0;">
             <div class="folder-modal-content" style="position: relative;">
                 <div class="close-popup-button" style="padding: 0 20px;">
-                    <a class="" href="javascript:;"><span></span></a>
+                    <a class="" href="#"><span></span></a>
                 </div>
                 <div class="import-plugin-title" style="font-weight: bold; padding: 0 0 20px 0; font-size: 16px;"><?php esc_html_e("Keyboard shortcuts (Ctrl+K)", 'folders'); ?></div>
                 <div class="plugin-import-table" style="padding: 0 20px 10px; max-height: calc(100vh - 160px); overflow-y: auto;">
