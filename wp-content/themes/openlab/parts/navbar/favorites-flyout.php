@@ -29,7 +29,7 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 			<?php if ( $user_favorites ) : ?>
 				<?php foreach ( $user_favorites as $user_favorite ) : ?>
 					<li class="drawer-item">
-						<a class="truncate-on-the-fly" data-basevalue="30" href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
+						<a class="truncate-on-the-fly" data-basevalue="34" href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
 							<?php echo esc_html( $user_favorite->get_group_name() ); ?>
 						</a>
 					</li>
