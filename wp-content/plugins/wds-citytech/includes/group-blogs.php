@@ -2513,3 +2513,19 @@ function openlab_get_invisible_post_ids( $blog_id = null ) {
 
 	return $post_ids[ $blog_id ];
 }
+
+/**
+ * Filters the delete_site_email_content message.
+ *
+ * @param string $message The email message.
+ */
+function openlab_filter_delete_site_email_content( $message ) {
+	$message = str_replace(
+		'your current site and username are gone forever',
+		'your current site and URL are gone forever',
+		$message
+	);
+
+	return $message;
+}
+add_filter( 'delete_site_email_content', 'openlab_filter_delete_site_email_content' );
