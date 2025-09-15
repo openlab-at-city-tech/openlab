@@ -31,7 +31,7 @@ function bp_blogs_record_nonmember_comment( $comment_id, $is_approved ) {
 	if ( !empty( $post->post_password ) )
 		return false;
 
-	if ( (int)get_blog_option( $comment->blog_id, 'blog_public' ) || !bp_core_is_multisite() ) {
+	if ( (int)get_blog_option( $comment->blog_id, 'blog_public' ) || ! is_multisite() ) {
 		/* Record in activity streams */
 		$comment_link = get_permalink( $comment->comment_post_ID ) . '#comment-' . $comment_id;
 
