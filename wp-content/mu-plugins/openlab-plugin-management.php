@@ -95,6 +95,7 @@ function openlab_get_hidden_plugins() {
 		'simple-pull-quote/simple-pull-quote.php',
 		'slideshare/slideshare.php',
 		'social/social.php',
+		'soliloquy-lite/soliloquy-lite.php', // #3573
 		'static-html-output-plugin/wp2static.php',
 		'stout-google-calendar/stout-google-calendar.php',
 		'sz-google/sz-google.php',
