@@ -92,6 +92,6 @@ function su_shortcode_user( $atts = null, $content = null ) {
 
 	$data = su_safely_apply_user_filter( $atts['filter'], $data );
 
-	return $data ? $atts['before'] . $data . $atts['after'] : '';
+	return $data ? wp_kses_post($atts['before'] . $data . $atts['after']) : '';
 
 }

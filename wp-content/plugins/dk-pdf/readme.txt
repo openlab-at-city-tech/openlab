@@ -4,40 +4,38 @@ Tags: pdf, wordpress pdf generator, pdf generator, woocommerce pdf, post to pdf
 Requires at least: 3.9.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.0.0
+Stable tag: 2.0.2
 License: MIT
 
 DK PDF allows your site visitors generate PDF files from WordPress posts, pages, custom post types and WooCommerce products using a button.
 
 == Description ==
 
-DK PDF allows your site visitors generate PDF files from WordPress posts, pages, custom post types and WooCommerce products using a button.
+**Transform your WordPress content into professional PDF documents**
 
-== New in version 2.0 ==
+Generate stunning, brand-consistent PDF files from your WordPress posts, pages, custom post types, and WooCommerce products with just one click. Perfect for content creators, businesses, and developers who need reliable PDF generation.
 
-New template set which allows you to select the content to display in the PDF, including single and archive templates. It also supports WooCommerce products including single, shop and archive pages.
+[Homepage](https://dinamiko.dev/plugins/dk-pdf-wordpress-pdf-generator/) | [View Demo](https://demo-dk-pdf.dinamiko.dev/) | [Documentation](https://dinamiko.dev/docs-categories/dk-pdf-documentation/) | [YouTube](https://www.youtube.com/playlist?list=PLWqrakko3Z0T0As28ucC9YUoi_Ciju6u1)
 
 [youtube https://youtu.be/ZQoXLbu5ldI]
 
-[Homepage](https://dinamiko.dev/plugins/dk-pdf-wordpress-pdf-generator/) | [View Demo](https://demo-dk-pdf.dinamiko.dev/) | [Documentation](https://dinamiko.dev/docs-categories/dk-pdf-documentation/)
+== Powerful features that deliver results ==
 
-[youtube https://youtu.be/OWxMnfYJZxM]
+* Multi-Content Generation: Create PDFs from posts, pages, custom post types, taxonomies, and WooCommerce products
+* Selective Content Display: Choose exactly what appears in your PDFs - featured images, post dates, authors, categories, and more
+* WooCommerce Integration: Include product details like prices, SKUs, categories, and more
+* Header & Footer Control: Add logo, custom text, and branding elements to headers and footers
+* Custom CSS Support: Apply your own styling to match your brand perfectly
+* Smart Content Control: Use powerful shortcodes to hide sections, create column layouts, and add page breaks exactly where you need them
+* Template Overrides: Create custom templates in your theme for complete design control
+* WordPress Hooks: Extensive filter and action hooks for advanced customization
 
-== Professional ==
+== Perfect for every use case ==
 
-Create professional looking PDF documents including header and footer. Make the PDF follow your brand style adding a logo and custom CSS.
-
-== Customizable ==
-
-[youtube https://youtu.be/CME0jZ06Pis]
-
-[Fine-tune content display](https://dinamiko.dev/docs-categories/dk-pdf-shortcodes/) by hiding parts, adding column layouts or page breaks via shortcodes.
-
-== Developer Friendly ==
-
-[youtube https://youtu.be/FBSL9rFaspM]
-
-[PDF templates are 100% customizable](https://dinamiko.dev/docs/how-to-use-dk-pdf-templates-in-your-theme/) meaning that developers can add any content that a WordPress template can render: custom fields, form fields, WooCommerce product data, you name it.
+* Content Creators & Bloggers: Transform your best blog posts into downloadable PDFs for lead magnets or offline reading.
+* E-commerce Sites: Create product catalogs and detailed product sheets from your WooCommerce products.
+* Developers: Build custom PDF solutions for clients using template overrides and WordPress hooks.
+* Educational Sites: Convert course materials, lessons, and resources into portable PDF formats.
 
 == Installation ==
 
@@ -62,6 +60,12 @@ Installing "DK PDF" can be done either by searching for "DK PDF" via the "Plugin
 11. Disable PDF Button Metabox
 
 == Changelog ==
+
+= 2.0.2 =
+- Fix - Wrong post content in single templates.
+
+= 2.0.1 =
+- Fix - Broken shortcodes after 2.0.0 upgrade.
 
 = 2.0.0 =
 * Enhancement - New template system and content display including archive and single templates.

@@ -181,7 +181,7 @@ if ( ! class_exists( 'Astra_Woo_Shop_Layout_Configs' ) ) {
 						array(
 							'category' => __( 'Category', 'astra' ),
 						),
-						$ratings,
+						$ratings
 					),
 					'divider'           => array( 'ast_class' => 'ast-section-spacing' ),
 				),

@@ -11,6 +11,8 @@ namespace Advanced_Sidebar_Menu\Widget;
  *
  * @since                 9.5.0
  *
+ * @phpstan-require-implements Widget
+ *
  * @template SETTINGS of array<string, mixed>
  * @template DEFAULTS of array<key-of<SETTINGS>, mixed>
  */

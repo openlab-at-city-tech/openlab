@@ -84,7 +84,10 @@ class TRP_Gettext_Manager {
 		/* on ajax hooks from frontend that have the init hook ( we found WooCommerce has it ) apply it earlier */
 		if ( $is_ajax_on_frontend || apply_filters( 'trp_apply_gettext_early', false ) ) {
 			add_action( 'wp_loaded', array( $this, 'apply_gettext_filter' ) );
-		} else {//otherwise start from the wp_head hook
+		} else if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ){ //if we have a block theme we need to start from template_redirect hook
+            add_action( 'template_redirect', array( $this, 'apply_gettext_filter' ), 10 );
+        }
+        else {//otherwise start from the wp_head hook
 			add_action( 'wp_head', array( $this, 'apply_gettext_filter' ), 100 );
 		}
 

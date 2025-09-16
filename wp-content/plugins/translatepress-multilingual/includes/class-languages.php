@@ -17,7 +17,6 @@ class TRP_Languages{
 	protected $settings;
 	protected $is_admin_request;
 
-
     /**
      * Returns array of all possible languages.
      *
@@ -92,6 +91,7 @@ class TRP_Languages{
 		if ( empty( $this->wp_languages ) ){
 			require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
 			$this->wp_languages = wp_get_available_translations();
+
 			if ( count( $this->wp_languages ) == 0 ) {
 				$this->wp_languages = $this->get_wp_languages_backup();
 			}

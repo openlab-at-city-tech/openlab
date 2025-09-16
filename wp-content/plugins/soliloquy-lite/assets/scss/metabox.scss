@@ -1,0 +1,1526 @@
+//Import all vars
+@import 'vars';
+/* ==========================================================================
+   Icon Font
+   ========================================================================== */
+@import 'icons';
+
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+@import 'header';
+
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
+@import 'global';
+@import 'chosen';
+
+@import 'media-edit';
+
+/* ==========================================================================
+   Tabs Styles
+   ========================================================================== */
+.soliloquy-tab{
+	display: none;
+}
+.soliloquy-tab-active{
+	display: block;
+}
+/* ==========================================================================
+   Metabox Styles
+   ========================================================================== */
+
+.post-type-soliloquy{
+	#wp-link-wrap{
+		z-index: 180105 !important;
+	}
+	#wp-link-backdrop{
+		z-index: 160105 !important;
+
+	}
+	.page-title-action {
+		display: inline-block;
+		margin-left: 4px;
+		padding: 4px 8px;
+		top: -55px;
+		margin-bottom: -55px;
+		left: 190px;
+		text-decoration: none;
+		border: none;
+		color: $primary-color;
+		border-radius: 0;
+		background: none;
+		text-shadow: none;
+		font-weight: 600;
+		font-size: 13px;
+		&:hover,
+		&:active{
+			position: relative;
+			top: -55px;
+			margin-bottom: -55px;
+			left: 190px;
+		}
+		&:hover {
+			background: none;
+			color: $mid-grey;
+		}
+		&:before {
+			display: inline-block;
+			font-family: 'soliloquy';
+			content: '\0050';
+			margin-top: -3px;
+			margin-right: 8px;
+			vertical-align: middle;
+		}
+	}
+	#wpbody-content h1{
+          display: block;
+          margin: 0;
+          padding-left: 20px;
+          padding-right: 20px;
+          line-height: 45px;
+          font-size: 20px;
+          font-weight: 400;
+          background-color: $white;
+          height: 45px;
+          margin-left: -20px;
+          margin-right: -20px;
+          margin-bottom: 20px;
+
+     }
+
+	.wrap{
+		margin-top: 0px !important;
+
+	}
+}
+.soliloquy-spinner {
+    float: none;
+    display: inline-block;
+    margin-top: 0;
+}
+/* ==========================================================================
+	Soliloquy Uploader
+========================================================================== */
+#soliloquy-uploader{
+	margin-top: 20px;
+	box-sizing: border-box;
+	#soliloquy-slider-type-tabs{
+		margin-bottom: -1px;
+		box-sizing: border-box;
+		/**
+		* Clearfix
+		*/
+		&:after {
+		    content: "";
+		    display: table;
+		    clear: both;
+	}
+	}
+	.soliloquy-type-tab{
+		position: relative;
+		z-index: 2;
+		width: 49.8%;
+		display: block;
+		text-align: center;
+		text-decoration: none;
+		font-size: 16px;
+		font-weight: 600;
+		line-height: 55px;
+		margin: 0;
+		height: 55px;
+		color: $mid-grey;
+		background-color: $almost-white;
+		border: 1px solid #e5e5e5;
+		box-sizing: border-box;
+		border-top-left-radius: 3px;
+		border-top-right-radius: 3px;
+		input {
+		    display: none;
+		}
+		&:first-child{
+			float: left;
+			border-left: 1px solid #e5e5e5;
+		}
+		&:last-child{
+			border-right: 1px solid #e5e5e5;
+			float: right;
+		}
+		&.soliloquy-tab-nav-active{
+			background-color: white;
+			color: $dark;
+			border-bottom: none;
+			&:before{
+				color: $primary-color;
+			}
+		}
+	}
+	.soliloquy-tab-container{
+		padding: 20px;
+		position: relative;
+		min-width: 255px;
+		min-height: 245px;
+		border: 1px solid #e5e5e5;
+		background: #fff;
+	}
+	h2.soliloquy-type-label{
+		text-align: center;
+		padding: 0;
+		margin: 20px 0;
+		span{
+			font-size: 24px;
+		}
+	}
+	/**
+	* External Gallery Types
+	*/
+	ul#soliloquy-types-nav {
+		text-align: center;
+
+		li {
+		    display: inline-block;
+		    margin: 0 20px 0 0;
+		    vertical-align: top;
+
+		    &:last-child {
+		        margin: 0;
+		    }
+
+		    label {
+		        float: left;
+		        width: 110px;
+
+		        input {
+		            display: none;
+		        }
+		        div.icon {
+		            width: 110px;
+		            height: 110px;
+		            margin: 0 0 10px 0;
+		            border: 1px solid #ddd;
+		            background-size: 64px 64px;
+		            background-position: center;
+		            background-repeat: no-repeat;
+		        }
+		        div.title {
+		            font-weight: 700;
+		        }
+		    }
+
+		    /**
+		    * Hover State
+		    * Selected State
+		    */
+		    &:hover,
+		    &.soliloquy-active {
+		        label {
+		            div.icon {
+		                background-color: #f7fcf3;
+		                border-color: #7cc048;
+		            }
+		        }
+		    }
+
+		    /**
+		    * Featured Content
+		    */
+		    &#soliloquy-type-fc {
+		        label {
+		            div.icon {
+		                background-image: url(../images/fc.png);
+		            }
+		        }
+		    }
+
+		    /**
+		    * Instagram
+		    */
+		    &#soliloquy-type-instagram {
+		        label {
+		            div.icon {
+		                background-image: url(../images/instagram.png);
+		            }
+		        }
+		    }
+		    /**
+		    * Instagram
+		    */
+		    &#soliloquy-type-wc {
+		        label {
+		            div.icon {
+		                background-image: url(../images/woo.png);
+		            }
+		        }
+		    }
+		}
+
+	}
+    #plupload-upload-ui {
+		/**
+		* Hide the uploader until the drag-drop class is added to it i.e. it has initialised
+		* This stops the user seeing a flash as the drag/drop area repositions itself on load
+		*/
+		display: block;
+		    /**
+		    * Now the uploader is ready, display it
+		    */
+		    display: block;
+			 #drag-drop-area{
+				 border: 3px dashed rgb(215,215,215);
+				 border-radius: 6px;
+			 }
+			.drag-drop-info{
+				font-size: 24px;
+				color: $dark;
+			}
+
+		    .drag-drop-inside {
+		        width: 520px;
+		        margin-top: 40px;
+
+		        p.drag-drop-buttons {
+		            text-align: left;
+		        }
+
+		        .soliloquy-progress-bar {
+		            display: none;
+		            width: 100%;
+		            position: relative;
+		            height: 10px;
+		            width: 100%;
+		            margin: 10px auto;
+		            border-radius: 10px;
+		            background: #dfdfdf;
+		            background: rgba(0,0,0,.1);
+
+		            div {
+		                height: 10px;
+		                min-width: 20px;
+		                width: 0;
+		                background: #aaa;
+		                background: rgba(0,0,0,.2);
+		                border-radius: 10px;
+		                -webkit-transition: width 300ms;
+		                -moz-transition: width 300ms;
+		                -ms-transition: width 300ms;
+		                -o-transition: width 300ms;
+		                transition: width 300ms;
+		            }
+		        }
+		    }
+
+		.button{
+			background: $almost-white;
+			border: 1px solid;
+			border-color: $light-grey;
+			-webkit-box-shadow:none;
+			box-shadow: none;
+			color: $grey;
+			text-decoration: none;
+			text-shadow: none;
+			font-weight: bold;
+			height: $input-height;
+			font-size: 13px;
+			padding: 0 20px 1px;
+			&:hover{
+				background: $almost-white;
+				border-color: $mid-grey;
+				color: $dark;
+			}
+
+		}
+		a.soliloquy-media-library.button {
+		    display: block;
+		    position: absolute;
+		    margin: 0 auto;
+		    left: 250px;
+		    right: 0;
+		    line-height: 32px;
+		    width: 240px;
+		    top: 110px;
+		    text-align: center;
+		}
+
+		p.upload-flash-bypass {
+		    display: none;
+		}
+	}
+    p.max-upload-size{
+	    margin-bottom: 0;
+    }
+}
+#soliloquy-codepanel{
+	.soliloquy-clipboard{
+		text-align: right;
+	}
+}
+/* ==========================================================================
+	Soliloquy Settings
+========================================================================== */
+#soliloquy-slider-settings{
+	margin-top: 20px;
+	position: relative;
+	min-width: 255px;
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    background: $almost-white;
+	width: 100%;
+	a{ text-decoration: none; }
+	/**
+	* Clearfix
+	*/
+	&:after {
+	    content: "";
+	    display: table;
+	    clear: both;
+	}
+	#soliloquy-settings-tabs{
+        width: $tab-width;
+        margin: 0;
+        padding: 0;
+        border-right: 1px solid #ddd;
+		.soliloquy-setting-tab{
+			float: left;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+			a{
+				float: left;
+				width: 110px;
+				margin: 0 20px;
+				padding: 20px 0;
+				text-decoration: none;
+				color: $mid-grey;
+				border-bottom: 1px solid $light-grey;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				transition: none;
+				-webkit-transition: none;
+				&:focus{
+					outline-style:none;
+					box-shadow:none;
+					border-color:transparent;
+				}
+				&:before{
+					display: inline-block;
+					font-family: 'soliloquy';
+					font-style: normal;
+					font-weight: normal;
+					font-size: 15px;
+					line-height: 1.5;
+					vertical-align: middle;
+					margin-right: 8px;
+					padding-left: 4px;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+				}
+			}
+			&:hover,
+			&.soliloquy-tab-nav-active{
+				background-color: $white;
+				margin-right: -1px;
+				margin-top: -1px;
+				border-top: 1px solid $light-grey;
+				border-bottom: 1px solid $light-grey;
+
+				a{
+					border-bottom: none;
+					&:before{
+						color: $primary-color;
+					}
+				}
+
+			}
+		}
+		#soliloquy-tab-nav-slider a:before{ content:'\0042'; }
+		#soliloquy-tab-nav-config a:before{ content:'\0041'; }
+		#soliloquy-tab-nav-mobile a:before{ content:'\0046'; }
+		#soliloquy-tab-nav-pinterest a:before{ content:'\0043'; }
+		#soliloquy-tab-nav-thumbnails a:before{ content:'\004b'; }
+		#soliloquy-tab-nav-schedule a:before{ content:'\0058'; }
+		#soliloquy-tab-nav-misc a:before{ content:'\0045'; }
+		#soliloquy-tab-nav-lightbox a:before{ content:'\0044'; }
+		#soliloquy-tab-nav-carousel a:before{ content:'\0059'; }
+
+
+	}
+	#soliloquy-settings-content{
+     margin: 0 0 0 $tab-width;
+		padding: 20px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        background: $white;
+        #soliloquy-empty-slider{
+          position: relative;
+	        background-color: $almost-white;
+	        min-height: 350px;
+	        width: 100%;
+	        text-align: center;
+	        border-radius: $border-radius;
+			div{
+				max-width: 450px;
+				max-height: 150px;
+				margin: auto;
+				position: absolute;
+				top: 0; left: 0; bottom: 0; right: 0;
+
+			}
+			img{
+				max-width: 336px;
+			}
+
+        }
+        .soliloquy-external-req{
+	        border: 1px solid $primary-color;
+	        border-radius: $border-radius;
+	        padding: 30px;
+	        h2{
+		        font-size: 20px;
+		        margin: 0;
+		        padding: 0;
+	        }
+        }
+        .soliloquy-slide-header{
+	        label{
+		        font-weight: 600;
+	        }
+	        .soliloquy-clear-selected{
+		        display: none;
+		        margin-left: 15px;
+	        }
+        }
+        .soliloquy-help{
+	        font-size: 14px;
+	        a{
+		        margin-left: 5px;
+	        }
+        }
+        .soliloquy-bulk-actions{
+	        display: none;
+	        margin-bottom: 20px;
+        }
+
+        table.form-table {
+          clear: none;
+        }
+        .soliloquy-config-header{
+			border-bottom: 1px solid $light-grey;
+			padding-bottom: 30px;
+			margin-bottom: 30px;
+        }
+		h2.soliloquy-intro{
+			margin: 0 !important;
+			padding: 0;
+			border-bottom: none;
+
+		}
+		.soliloquy-intro{
+			font-size: 16px !important;
+			font-weight: bold;
+			margin: 0;
+
+
+		}
+        .soliloquy-display-toggle{
+	        position: absolute;
+			right: 20px;
+			top: 20px;
+			/* Position tooltip above the element */
+			[data-soliloquy-tooltip]:before {
+			  position: absolute;
+			  bottom: 120%;
+			  left: 50%;
+			  margin-bottom: 5px;
+			  margin-left: -35px;
+			  padding: 7px;
+			  width: 120px;
+			  -webkit-border-radius: 3px;
+			  -moz-border-radius: 3px;
+			  border-radius: 3px;
+			  background-color: #000;
+			  color: #fff;
+			  content: attr(data-soliloquy-tooltip);
+			  text-align: center;
+			  font-size: 12px;
+			  line-height: 1.2;
+			}
+			li.helper{
+				.dashicons{
+					font-size: 24px;
+					margin-top: -5px;
+					color: $light-grey;
+					&:hover{
+						color: $dark;
+
+					}
+				}
+			}
+			li.soliloquy-select{
+				width: 200px;
+				margin-right: 15px;
+				.chosen-container{
+					margin-top: -10px;
+				}
+			}
+			li:not(.soliloquy-select){
+				a{
+					color: $light-grey;
+					i:before{
+						font-size: 16px;
+					}
+					&.active-display{
+						color: $dark;
+					}
+				}
+			}
+        }
+        .soliloquy-select-all{
+	        margin: 20px 8px 20px 0px;
+
+        }
+        .soliloquy-slides-delete{
+	        margin-right: 10px;
+        }
+		.soliloquy-switch {
+			display: inline-block;
+			background: #ccc;
+			border-radius: 18px;
+			width: 32px;
+			height: 18px;
+			position: relative;
+			vertical-align: middle;
+			transition: background 0.25s;
+			&:before,
+			&:after {
+				content: "";
+			}
+			&:before {
+				display: block;
+				background: linear-gradient(to bottom, #fff 0%,#eee 100%);
+				border-radius: 50%;
+				box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+				width: 16px;
+				height: 16px;
+				position: absolute;
+				top: 1px;
+				left: 1px;
+				transition: left 0.25s;
+			}
+			.soliloquy-toggle:hover &:before {
+				background: linear-gradient(to bottom, #fff 0%,#fff 100%);
+				box-shadow: 0 0 0 1px rgba(0,0,0,0.5);
+			}
+
+		}
+		input[type='checkbox']:checked + .soliloquy-switch {
+			background: #3871AC;
+			&:before {
+				left: 15px;
+			}
+		}
+		input[type='checkbox'] {
+			position: absolute;
+			visibility: hidden;
+		}
+		.description {
+			margin-left: 5px;
+			position: relative;
+			top: 2px;
+		}
+		input[type="text"],
+		input[type="number"],
+		input[type="password"]{
+			background-color: $white;
+			border: 1px solid #ddd;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+			color: #32373c;
+			height: $input-height;
+			outline: none;
+			-webkit-transition: 0.05s border-color ease-in-out;
+			transition: 0.05s border-color ease-in-out;
+	     min-width: 210px;
+	     max-width: 350px;
+			width: 92%;
+			border-radius: $border-radius;
+			padding-right: 0;
+		}
+		#soliloquy-config-mobile-width,
+		#soliloquy-config-mobile-height,
+		#soliloquy-config-slider-height,
+		#soliloquy-config-slider-width{
+			max-width: 166px;
+	     min-width: 75px;
+
+		}
+		th{
+	     //min-width: 210px;
+			//max-width: 100%;
+	     padding-right: 0;
+		}
+		.description{
+			font-size: 13px;
+			line-height: 1.5;
+		}
+		#soliloquy-output {
+	     margin: 0 0 10px;
+			padding: 0;
+			list-style: none;
+			li{
+				background-color: $white;
+				margin: 0;
+				list-style: none;
+				border: 1px solid #cecece;
+				-moz-border-radius: 3px;
+				-webkit-border-radius: 3px;
+				border-radius: $border-radius;
+				-moz-background-clip: padding;
+				-webkit-background-clip: padding-box;
+				background-clip: padding-box;
+				-moz-box-shadow: 0 1px 2px rgba(0,0,0,.06);
+				-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.06);
+				box-shadow: 0 1px 2px rgba(0,0,0,.06);
+				cursor: move;
+				position: relative;
+				h3{
+					display: block;
+					margin: 0;
+					padding: 0;
+					text-overflow: ellipsis;
+				}
+				&.soliloquy-status-pending {
+					//background-color: #faebcc;
+					//border-color: #8a6d3b;
+				}
+				&.soliloquy-status-active {
+				    //background-color: #dff0d8;
+				  //  border-color: #3c763d;
+				}
+				&.ui-sortable-helper{
+					border: 2px solid #1e8cbe;
+				}
+				.soliloquy-draft-slide.grid-status,
+				.soliloquy-active-slide.grid-status,
+				.soliloquy-remove-slide,
+				.soliloquy-modify-slide{
+				    display: block;
+				    height: 25px;
+				    outline: none;
+				    position: absolute;
+				    width: 25px;
+				    z-index: 20;
+				    color: $white;
+					text-align: center;
+					line-height: 25px;
+					vertical-align: middle;
+					border-radius: $border-radius;
+					i:before{
+						margin: 0;
+						font-size: 10px;
+					}
+				}
+				.soliloquy-draft-slide.grid-status,
+				.soliloquy-active-slide.grid-status{
+					span:before{
+						font-size: 16px;
+						vertical-align: middle;
+					}
+				}
+				.soliloquy-active-slide.grid-status {
+					background-color: #74b445;
+				}
+				.soliloquy-draft-slide.grid-status {
+					background-color: #ffa93b;
+				}
+				.soliloquy-remove-slide {
+					background-color: $red;
+				}
+				.soliloquy-modify-slide {
+					background-color: $blue;
+
+				}
+				&.dropzone {
+					background: transparent;
+					border: 2px dashed $light-grey;
+					-moz-box-shadow: none;
+					-webkit-box-shadow: none;
+					box-shadow: none;
+				}
+			}
+			&.soliloquy-grid{
+				li{
+				    display: inline-block;
+					width: 150px;
+					margin: 0 30px 30px 0;
+					.soliloquy-item-img{
+					    display: block;
+					    margin: 0 auto auto auto;
+					    top: 0;
+					    left: 0;
+					    right: 0;
+					    bottom: 0;
+					    max-width: 150px;
+					    max-height: 150px;
+					}
+					.soliloquy-video-wrap,
+					.soliloquy-html-wrap {
+						position: relative;
+						width: 150px;
+						height: 150px;
+					}
+					.soliloquy-video-inside,
+					.soliloquy-html-inside {
+						width: 150px;
+						height: 150px;
+						display: table;
+						position: absolute;
+						max-width: 100%;
+						max-height: 100%;
+						cursor: move;
+					}
+					.soliloquy-video-table,
+					.soliloquy-html-table {
+						display: table-cell;
+						vertical-align: middle;
+						text-align: center;
+						cursor: move;
+					}
+				    span.overlay {
+					    max-height: 15px;
+					    max-width: 40px;
+						display: block;
+						position: absolute;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 10px;
+						margin: auto;
+						padding: 4px 8px;
+						background: rgba(255,255,255,0.8);
+						z-index: 2;
+						text-align: center;
+						border-radius: $border-radius;
+					}
+					.soliloquy-item-info{
+					    h3{
+							display: block;
+							border-top: 1px solid $light-grey;
+							background-color: $almost-white;
+							margin: 0;
+							padding: 8px 4px;
+							text-align: center;
+							font-size: 13px;
+							max-width: 150px;
+							overflow:hidden;
+							white-space:nowrap;
+							text-overflow: ellipsis;
+						}
+						img{
+							display: none;
+						}
+					}
+				    /**
+				    * Selected Icon
+				    */
+				    a.check {
+				        display: none;
+				        position: absolute;
+						margin: auto;
+						top: 0;
+						left: 0;
+						bottom: 0;
+						right: 0;
+						width: 24px;
+				        height: 24px;
+				        background-color: $green;
+				        -webkit-box-shadow: 0 0 0 1px $white,0 0 0 2px  $green;
+				        box-shadow: 0 0 0 1px $white,0 0 0 2px  $green;
+				        z-index: 10;
+				        div.media-modal-icon {
+				            width: 15px;
+				            height: 15px;
+				          //  background-image: url('../../../../../wp-includes/images/uploader-icons-2x.png');
+				            margin: 5px 0 0 5px;
+				            background-position: -21px 0;
+
+				        }
+					}
+				    /**
+				    * Selected state
+				    */
+				    &.selected {
+				        border: 1px solid $green;
+
+				        a.check {
+				            display: block;
+				        }
+				    }
+					.soliloquy-active-slide.grid-status,
+					.soliloquy-draft-slide.grid-status{
+						display: block;
+						bottom: 40px;
+						left: 5px;
+					}
+					.soliloquy-active-slide.list-status,
+					.soliloquy-draft-slide.list-status{
+						display: none;
+					}
+					.soliloquy-remove-slide {
+					    left: 5px;
+					    top: 5px;
+					}
+					.soliloquy-modify-slide {
+					    right: 5px;
+					    top: 5px;
+
+					}
+				}
+			}
+		    &.soliloquy-list{
+				li{
+				    display: inline-block;
+				    min-height: 100px;
+				    padding: 20px;
+				    margin-bottom: 10px;
+				    width: 100%;
+				    box-sizing: border-box;
+				    span.overlay {
+						display: none;
+					}
+					.soliloquy-video-wrap{
+						float: left;
+						height: 75px;
+						width: 75px;
+					    margin-left: 20px;
+
+						.soliloquy-item-img{
+							float: none;
+							margin-left: 0;
+						}
+					}
+				    .soliloquy-item-img{
+					    margin-left: 20px;
+					    position: relative;
+					    float: left;
+						max-width: 75px;
+						max-height: 75px;
+				    }
+				    .soliloquy-item-info{
+							position: absolute;
+							margin: auto 0;
+							top:0;
+							bottom:0;
+							left: 160px;
+							height: 30px;
+
+						h3{
+
+						}
+						img{
+							margin-top: -20px;
+							max-width: 100px;
+							margin-bottom: 10px;
+						}
+					}
+				    /**
+				    * Selected Icon
+				    */
+				    a.check {
+				        display: block;
+				        position: relative;
+				        float: left;
+						margin: auto 0;
+						width: 25px;
+				        height: 25px;
+				        margin-top: 25px;
+				        background-color:$white;
+						border: 1px solid $light-grey;
+
+				        div.media-modal-icon {
+				            width: 15px;
+				            display: none;
+				            height: 15px;
+				            margin: 5px 0 0 5px;
+				            background-position: -21px 0;
+				        }
+				    }
+				    /**
+				    * Selected state
+				    */
+				    &.selected {
+				        border: 1px solid $green;
+				        a.check {
+				          background-color: $green;
+					        display: block;
+					        div.media-modal-icon {
+				               display: block;
+							}
+				        }
+				    }
+					.soliloquy-active-slide.grid-status,
+					.soliloquy-draft-slide.grid-status{
+						display: none;
+					}
+					.soliloquy-active-slide.list-status,
+					.soliloquy-draft-slide.list-status{
+						display: block;
+						margin-top: 10px;
+						font-weight: 600;
+						color: black;
+						&:hover{
+							text-decoration: none;
+							color: black;
+						}
+
+					}
+					.soliloquy-active-slide.list-status{
+						span{
+							margin-left: 5px;
+							border-radius: 3px;
+							padding: 3px 5px;
+							background-color: #74b445;
+							color: white;
+						}
+					}
+					.soliloquy-draft-slide.list-status{
+						span{
+							margin-left: 5px;
+							border-radius: 3px;
+							padding: 3px 5px;
+							background-color: #ffa93b;
+							color: white;
+						}
+					}
+					.soliloquy-remove-slide {
+					    right: 8px;
+					    top: 8px;
+					}
+					.soliloquy-modify-slide {
+					    right: 40px;
+					    top: 8px;
+
+					}
+
+				}
+			}
+
+		}
+		&:after {
+          content: "";
+            display: table;
+            clear: both;
+		}
+	}
+}
+/* ==========================================================================
+	Soliloquy Settings
+========================================================================== */
+
+
+/* ==========================================================================
+   Plupload Styles
+   ========================================================================== */
+#soliloquy-plupload-upload-ui {
+    position: relative;
+}
+
+#soliloquy-drag-drop-area {
+    border: 4px dashed #bbb;
+    height: 200px;
+}
+
+#soliloquy-plupload-upload-ui.drag-over #soliloquy-drag-drop-area {
+    border-color: #83b4d8;
+}
+
+#soliloquy-slider-settings .soliloquy-progress-bar {
+    display: none;
+    width: 100%;
+    position: relative;
+    height: 10px;
+    width: 100%;
+    margin: 10px auto;
+    border-radius: 10px;
+    background: #dfdfdf;
+    background: rgba(0,0,0,.1);
+}
+
+#soliloquy-slider-settings .soliloquy-progress-bar div {
+    height: 10px;
+    min-width: 20px;
+    width: 0;
+    background: #aaa;
+    background: rgba(0,0,0,.2);
+    border-radius: 10px;
+    -webkit-transition: width 300ms;
+    -moz-transition: width 300ms;
+    -ms-transition: width 300ms;
+    -o-transition: width 300ms;
+    transition: width 300ms;
+}
+
+#soliloquy .upload-flash-bypass {
+    display: none;
+}
+
+#soliloquy .max-upload-size {
+    display: block;
+    margin: 10px 0;
+}
+
+.soliloquy-media-frame .soliloquy-accepted-urls {
+	clear: both;
+	overflow: hidden;
+}
+
+.soliloquy-media-frame .soliloquy-accepted-urls span {
+	display: block;
+}
+
+.soliloquy-media-frame .soliloquy-column {
+	float: left;
+	width: 32%;
+	margin-right: 2%;
+}
+
+.soliloquy-media-frame .soliloquy-column.soliloquy-last {
+    margin-right: 0;
+}
+
+.soliloquy-media-frame .soliloquy-video-info {
+	background-color: #ffffe0;
+	border: 1px solid #e6db55;
+	padding: 15px;
+	margin-bottom: 16px;
+}
+
+.soliloquy-media-frame .soliloquy-video-info p {
+    margin-top: 0;
+}
+
+#soliloquy-html-slides .soliloquy-delete-html-slide,
+#soliloquy-video-slides .soliloquy-delete-video-slide {
+	float: right;
+}
+
+/* ==========================================================================
+   Attachments Media
+   ========================================================================== */
+.attachments-browser{
+	&.soliloquy-videos,
+	&.soliloquy-html{
+		a.soliloquy-item-collapse{
+			position: absolute;
+			top: 10px;
+			right: 20px;
+			font-size: 13px;
+			color: black;
+			font-weight: 600;
+			text-decoration: none
+		}
+		.button-soliloquy-delete{
+			color: $white;
+		}
+		.soliloquy-item-setting  {
+			clear: both;
+			text-align: left !important;
+			margin-bottom: 15px;
+			.code-title{
+				text-align: left !important;
+			}
+			label {
+				clear: both;
+				width: 100%;
+				text-align: left;
+
+				strong {
+					text-align: left;
+				}
+			}
+			.soliloquy-media-button{
+				a{
+					float: right;
+					clear: both;
+				}
+			}
+			input[type=text],
+			textarea {
+				width: 100%;
+				clear: both;
+			}
+			.soliloquy-input-group{
+				input[type=text],
+				textarea {
+					width: 87%;
+					clear: both;
+				}
+			}
+		}
+		.soliloquy-item-footer{
+			display: block;
+			margin-top: 20px;
+			a{
+				float: right;
+
+			}
+			}
+	}
+	&.soliloquy-videos {
+		div.media-toolbar {
+			border-bottom: 1px solid $light-grey;
+			div.media-toolbar-primary {
+				button.soliloquy-videos-add {
+					float: right;
+					margin-top: 10px;
+				}
+			}
+		}
+		.soliloquy-video-items{
+			position: relative;
+			margin-right: 300px;
+			width: 100%;
+			height: 100%
+		}
+		/**
+		* Videos
+		*/
+		ul.soliloquy-videos-attachments {
+			top: 70px;
+			padding: 2px 20px 20px;
+			/**
+			* Video
+			*/
+			li.soliloquy-videos-attachment {
+				width: 100%;
+				background-color: $wp-grey;
+				border: 1px solid $light-grey;
+				padding: 20px;
+				margin-bottom: 2em;
+				padding-top: 2em;
+
+
+
+			}
+		}
+
+		/**
+		* Sidebar
+		*/
+		.soliloquy-gallery-accepted-urls {
+			clear: both;
+			overflow: hidden;
+
+			span {
+				display: block;
+			}
+		}
+	}
+
+	&.soliloquy-html {
+		div.media-toolbar {
+			border-bottom: 1px solid $light-grey;
+			div.media-toolbar-primary {
+				button.soliloquy-html-add {
+					float: right;
+					margin-top: 10px;
+				}
+			}
+		}
+		.soliloquy-html-items{
+			position: relative;
+			margin-right: 300px;
+			width: 100%;
+			height: 100%
+		}
+	/**
+	* HTML
+	*/
+	ul.soliloquy-html-attachments {
+			top: 70px;
+			padding: 2px 20px 20px;
+		li.soliloquy-html-attachment {
+			width: 100%;
+			background-color: $wp-grey;
+			border: 1px solid $light-grey;
+			padding: 20px;
+			margin-bottom: 2em;
+			padding-top: 2em;
+			.CodeMirror{
+				border: 1px solid $light-grey;
+				text-align: left !important;
+			}
+
+
+		}
+	}
+
+
+}
+
+	/**
+	* Sidebar
+	*/
+	.soliloquy-accepted-urls {
+		clear: both;
+		overflow: hidden;
+		.title{
+			margin-bottom: -15px;
+		}
+		span {
+			display: block;
+		}
+	}
+}
+#soliloquy-meta-edit{
+	.right{
+		border-right: 1px solid #ccc !important;
+	}
+}
+/* ==========================================================================
+   Attachment Editor
+   ========================================================================== */
+.soliloquy-meta-container {
+	/**
+	* Media Modal Backdrop
+	*/
+	.media-modal-backdrop {
+		z-index: 15999;
+	}
+
+	/**
+	* Media Modal
+	*/
+	.media-modal {
+		/* Adjust z-index so link window in Visual Editor will display above the attachment editor */
+		z-index: 16000;
+
+		/**
+		* Navigation Buttons
+		*/
+		button.right {
+			border-right: 1px solid #ddd !important;
+		}
+
+		/**
+		* Preview Area
+		* - Set max-width and height of image, to allow thumbnails addon to display below the image correctly
+		*/
+		.attachment-media-view {
+			div.thumbnail-image {
+				img.details-image {
+					max-width: 50%;
+					max-height: 70%;
+				}
+			}
+		}
+
+		/**
+		* Settings Labels + Fields
+		* - left align labels
+		* - increase width of text inputs
+		* - force inputs to drop to new line below ~ 960px viewport
+		*/
+		.setting {
+			margin: 0 0 20px 0;
+			padding: 0 0 20px 0;
+			border-bottom: 1px solid #ddd;
+			/**
+			* Label
+			*/
+			span.name {
+				font-size: 14px;
+				font-weight: 600;
+				min-width: 20%;
+				text-align: left;
+			}
+
+			/**
+			* Inputs
+			*/
+			input[type=text] {
+				width: 75%;
+			}
+			textarea {
+				height: 150px;
+			}
+
+			/**
+			* Visual Editor
+			*/
+			.wp-editor-wrap {
+				float: right;
+				width: 75%;
+			}
+		}
+
+		/**
+		* CodeMirror Setting
+		*/
+		.code {
+			margin-bottom: 20px;
+		}
+
+		/**
+		* Actions
+		*/
+		div.actions {
+			a.button {
+				display: inline-block;
+			}
+		}
+	}
+}
+
+/**
+* Responsive Media Queries
+*/
+@media only screen and (max-width: 959px) {
+	.soliloquy-meta-container {
+		.setting {
+			/**
+			* Label
+			*/
+			span.name {
+				width: 100%;
+				max-width: 100%;
+				min-width: 100%;
+			}
+
+			/**
+			* Inputs
+			*/
+			input[type=text] {
+				width: 100%;
+			}
+			input[type=checkbox] {
+				clear: both;
+			}
+
+			/**
+			* Visual Editor
+			*/
+			.wp-editor-wrap {
+				float: left;
+				width: 100%;
+			}
+		}
+	}
+}
+
+/**
+* RTL
+*/
+body.rtl {
+	#soliloquy {
+		/**
+		* Meta Icon
+		*/
+		.soliloquy-meta-icon {
+			right: auto;
+			left: 0;
+		}
+
+		/**
+		* Tabs
+		*/
+		#soliloquy-tabs-nav {
+			li {
+				float: right;
+				margin: 0 0 -1px 10px;
+			}
+		}
+
+		/**
+		* Slides
+		*/
+		#soliloquy-output {
+			li {
+				float: right;
+				margin: 0 0 10px 10px;
+			}
+		}
+	}
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+@media screen and (max-width: 1100px) {
+#soliloquy-uploader{
+
+	   #plupload-upload-ui {
+		   #drag-drop-area{
+			   height: 208px;
+	           }
+	           .drag-drop-inside {
+	               width: 100%;
+	               margin-top: 20px;
+
+	               p.drag-drop-buttons {
+		               margin-top: 10px;
+	                   text-align: center;
+	               }
+	           }
+	       a.soliloquy-media-library.button {
+	           left: 0;
+	           right: 0;
+	           width: 235px;
+	           top: 145px;
+	       }
+	   }
+	}
+}
+
+@media screen and (max-width: 768px) {
+     .media-sidebar{
+	  display: none;
+	  }
+	#soliloquy-slider-settings{
+	#soliloquy-settings-content{
+     margin: 0 0 0 50px;
+		padding: 20px;
+      }
+
+	#soliloquy-settings-tabs{
+        width: 50px;
+        margin: 0;
+        padding: 0;
+        border-right: 1px solid #ddd;
+		.soliloquy-setting-tab{
+			a{
+				width: 30px;
+				margin: 0 10px;
+				padding: 10px 0;
+				span{
+					display: none;
+				}
+			}
+		}
+	}
+}
+}
+/* ==========================================================================
+   Retina Styles
+   ========================================================================== */
+@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+     a.check .media-modal-icon {
+         background-image: url('../../../../../wp-includes/images/uploader-icons-2x.png') !important;
+         -webkit-background-size: 134px 15px;
+         background-size: 134px 15px;
+     }
+ }
+
+  /* ==========================================================================
+   Misc Styles
+   ========================================================================== */
+#poststuff h2.soliloquy-code-panel-title {
+	padding-left: 0;
+	padding-right: 0;
+}
+.post-upload-ui a.soliloquy-media-library.button {
+	display: none;
+}

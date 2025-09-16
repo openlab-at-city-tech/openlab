@@ -36,7 +36,7 @@ function astra_live_search_css( $dynamic_css ) {
 			height: auto;
 			overflow-x: hidden;
 			overflow-y: auto;
-			background: #fff;
+			background: var(--ast-global-color-primary, --ast-global-color-4);
 			z-index: 999999;
 			border-radius: 4px;
 			border: 1px solid var(--ast-border-color);

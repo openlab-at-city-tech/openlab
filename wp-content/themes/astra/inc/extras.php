@@ -542,7 +542,7 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 	// Render arrow icon for special menu appearance or on pro deactivation or nav menu extension deactivation.
 	if ( $is_special_menu || $is_nav_menu_extension_inactive || ! defined( 'ASTRA_EXT_VER' ) ) {
 		$custom_tabindex  = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'tabindex="0"' : '';
-		$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" >' . $icon . '</span>';
+		$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" aria-haspopup="true">' . $icon . '</span>';
 	}
 
 	foreach ( $item->classes as $value ) {

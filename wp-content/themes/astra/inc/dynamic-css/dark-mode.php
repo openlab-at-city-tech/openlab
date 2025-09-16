@@ -68,7 +68,6 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 			$dark_palette_common_dynamic_css = array_merge(
 				$dark_palette_common_dynamic_css,
 				array(
-
 					' .astra-dark-mode-enable .woocommerce-js label, .astra-dark-mode-enable .woocommerce-js legend' => array(
 						'color' => 'var(--ast-global-color-3)',
 					),
@@ -79,7 +78,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background-color' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'color'            => 'var(--ast-global-color-3)',
 					),
-				),
+				)
 			);
 		}
 
@@ -94,14 +93,14 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background'   => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'border-color' => 'var(--ast-border-color)',
 					),
-					':root body' => array(
+					':root body.astra-dark-mode-enable' => array(
 						'--wpforms-field-background-color' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'--wpforms-label-sublabel-color'   => 'var(--ast-global-color-2)',
 						'--wpforms-label-color'            => 'var(--ast-global-color-2)',
 						'--wpforms-field-text-color'       => 'var(--ast-global-color-2)',
 						'--wpforms-field-border-color'     => 'var(--ast-border-color)',
 					),
-				),
+				)
 			);
 		}
 
@@ -115,7 +114,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					'.astra-dark-mode-enable .cfvsw-swatches-option' => array(
 						'background' => 'var(--ast-global-color-5 )',
 					),
-				),
+				)
 			);
 		}
 
@@ -145,23 +144,19 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					' .astra-dark-mode-enable .gform-theme--framework input[type]:where(:not(.gform-text-input-reset):not([type=hidden])):where(:not(.gform-theme__disable):not(.gform-theme__disable *):not(.gform-theme__disable-framework):not(.gform-theme__disable-framework *))' => array(
 						'--gf-local-bg-color'     => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'--gf-local-border-color' => 'var(--ast-border-color)',
-
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework input[type]:where(:not(.gform-text-input-reset):not([type=hidden])):where(:not(.gform-theme__disable):not(.gform-theme__disable *):not(.gform-theme__disable-framework):not(.gform-theme__disable-framework *)):hover' => array(
 						'--gf-local-bg-color'      => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'--gf-ctrl-bg-color-focus' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework input[type]:where(:not(.gform-text-input-reset):not([type=hidden])):where(:not(.gform-theme__disable):not(.gform-theme__disable *):not(.gform-theme__disable-framework):not(.gform-theme__disable-framework *)):focus' => array(
 						'--gf-ctrl-bg-color-focus' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework .gfield--type-image_choice.gfield--image-choice-appearance-card .gchoice .gform-field-label' => array(
 						'--gf-local-color' => 'var(--ast-global-color-2)',
 					),
 
-				),
+				)
 			);
 		}
 
@@ -177,7 +172,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'color'        => 'var(--ast-global-color-2)',
 						'border-color' => 'var(--ast-border-color)',
 					),
-				),
+				)
 			);
 		}
 
@@ -188,7 +183,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					'.astra-dark-mode-enable .buddypress-wrap .bp-feedback' => array(
 						'background' => 'transparent',
 					),
-				),
+				)
 			);
 		}
 
@@ -200,7 +195,6 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background' => 'transparent',
 						'color'      => 'var(--ast-global-color-2)',
 					),
-
 					'.astra-dark-mode-enable #bbpress-forums div.even, .astra-dark-mode-enable #bbpress-forums ul.even' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'color'      => 'var(--ast-global-color-2)',
@@ -212,7 +206,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background-color' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'color'            => 'var(--ast-global-color-2)',
 					),
-				),
+				)
 			);
 		}
 
@@ -223,7 +217,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					'body #srfm-single-page-container' => array(
 						'--srfm-bg-color' => 'var( --ast-global-color-primary, --ast-global-color-4 )',
 					),
-				),
+				)
 			);
 		}
 
@@ -245,7 +239,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'color'      => 'var(--ast-global-color-2)',
 					),
-				),
+				)
 			);
 		}
 
@@ -267,23 +261,18 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'background' => 'var( --ast-global-color-subtle-background, --ast-global-color-7 )',
 						'color'      => 'var(--ast-global-color-2)',
 					),
-
 					'.learndash .learndash_course_content .lessons_list .notcompleted:before' => array(
 						'color' => 'var(--ast-global-color-1)',
 					),
-
 					'body #quiz_list>div:nth-of-type(odd)' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					'.astra-dark-mode-enable #learndash_lessons, .astra-dark-mode-enable #learndash_quizzes, .astra-dark-mode-enable #learndash_profile, .astra-dark-mode-enable #learndash_lesson_topics_list > div' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					'.astra-dark-mode-enable #learndash_profile' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					'.astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-name, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-list-item-expanded:before, .astra-dark-mode-enable .learndash-wrapper .ld-table-list a.ld-table-list-item-preview, .astra-dark-mode-enable .learndash-wrapper .ld-breadcrumbs, .astra-dark-mode-enable .learndash-wrapper .ld-table-list a.ld-table-list-item-preview, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-items, .astra-dark-mode-enable .learndash-wrapper .ld-table-list.ld-no-pagination, .astra-dark-mode-enable .learndash-wrapper .wpProQuiz_content .wpProQuiz_response, .astra-dark-mode-enable .learndash-wrapper .wpProQuiz_graded_points, .astra-dark-mode-enable .learndash-wrapper .wpProQuiz_points, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-list-item-expanded .ld-progress, .astra-dark-mode-enable  .learndash-wrapper .ld-table-list .ld-table-list-footer, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item .ld-table-list-title a, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item-preview a, .astra-dark-mode-enable .wpProQuiz_modal_window, .astra-dark-mode-enable #wpProQuiz_user_content table.wp-list-table tbody tr.categoryTr th, .astra-dark-mode-enable #wpProQuiz_user_content table.wp-list-table tfoot tr th, .astra-dark-mode-enable#wpProQuiz_user_content .wpProQuiz_response ' => array(
 						'background'   => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'border-color' => 'var(--ast-border-color)',
@@ -306,15 +295,12 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					' .astra-dark-mode-enable .ld-propanel-widget-reporting table tr th, .astra-dark-mode-enable .ld-propanel-widget-progress-chart div.propanel-admin-row div.col-1-2 div.title, .astra-dark-mode-enable .ld-propanel-widget-progress-chart div.propanel-admin-row div.col-1-2:last-child div.title, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-footer' => array(
 						'background' => 'var( --ast-global-color-alternate-background, --ast-global-color-6 )',
 					),
-
 					' .astra-dark-mode-enable .ld-propanel-widget-overview .propanel-stat .stat-label a' => array(
 						'color' => 'var(--ast-global-color-2)',
 					),
-
 					' .astra-dark-mode-enable .ld-propanel-widget-filtering .filter-selection.filter-section-date>input, .astra-dark-mode-enable .ld-propanel-widget-reporting table tbody' => array(
 						'border-color' => 'var(--ast-border-color)',
 					),
-
 					' .astra-dark-mode-enable .flatpickr-calendar, .astra-dark-mode-enable .flatpickr-day, .astra-dark-mode-enable .flatpickr-weekday, .astra-dark-mode-enable .flatpickr-current-month .flatpickr-monthDropdown-months' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 						'color'      => 'var(--ast-global-color-2)',
@@ -322,8 +308,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					' .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-search .ld-item-search-wrapper' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
-				),
+				)
 			);
 		}
 
@@ -350,9 +335,6 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					' .astra-dark-mode-enable .select2-container .select2-selection--single, .astra-dark-mode-enable .select2-dropdown, .astra-dark-mode-enable select, .astra-dark-mode-enable .lifterlms .llms-checkout-wrapper .llms-checkout-col.llms-col-2' => array(
 						'border-color' => 'var(--ast-border-color)',
 					),
-					// ' .astra-dark-mode-enable .lesson-template-default .wp-block-group.has-background' => array(
-					// 'color' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
-					// ),
 					' .astra-dark-mode-enable .wpforms-container input[type=range] ' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 ) !important',
 					),
@@ -360,30 +342,24 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 					' .astra-dark-mode-enable .ast-lifterlms-container .llms-loop .llms-loop-item, .astra-dark-mode-enable .ast-lifterlms-container .llms-loop .llms-loop-item .llms-loop-item-content ' => array(
 						'background' => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 					),
-
 					' .astra-dark-mode-enable .ast-lifterlms-container .llms-loop .llms-loop-item .llms-loop-item-content, .astra-dark-mode-enable .llms-loop-item-content .llms-loop-title, .astra-dark-mode-enable .llms-loop-item-content .llms-meta, .astra-dark-mode-enable .llms-loop-item-content .llms-author, .astra-dark-mode-enable .llms-loop-item-content .llms-featured-pricing ' => array(
 						'background'   => 'var( --ast-global-color-primary, --ast-global-color-4 )',
 						'border-color' => 'var(--ast-border-color)',
 						'color'        => 'var(--ast-global-color-2)',
 					),
-
 					' .astra-dark-mode-enable .ast-container .llms-loop-item-content .llms-loop-title:hover, .astra-dark-mode-enable .ast-lifterlms-container .llms-loop-item-content .llms-loop-title:hover, .astra-dark-mode-enable .llms-student-dashboard .llms-loop-item-content .llms-loop-title:hover' => array(
 						'color' => 'var(--ast-global-color-1)',
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework .gform-field-label:where(:not(.gform-theme__disable):not(.gform-theme__disable *):not(.gform-theme__disable-framework):not(.gform-theme__disable-framework *))' => array(
 						'--gf-ctrl-label-color-primary' => 'var(--ast-global-color-2)',
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework .gfield_description:where(:not(.gform-theme__disable):not(.gform-theme__disable *):not(.gform-theme__disable-framework):not(.gform-theme__disable-framework *)), .astra-dark-mode-enable .gform-theme--framework .gfield--type-product .ginput_product_price' => array(
 						'--gf-ctrl-desc-color' => 'var(--ast-global-color-2)',
 					),
-
 					' .astra-dark-mode-enable .gform-theme--framework .gfield--type-product .ginput_product_price' => array(
 						'--gf-field-prod-price-color' => 'var(--ast-global-color-2)',
 					),
-
-				),
+				)
 			);
 		}
 
@@ -481,7 +457,7 @@ function astra_dark_palette_css( $dynamic_css, $force = false ) {
 						'--sc-input-border-color-focus'    => 'var( --ast-global-color-secondary, --ast-global-color-5 ) ',
 						'--sc-input-border-color-disabled' => 'var( --ast-global-color-secondary, --ast-global-color-5 ) ',
 					),
-				),
+				)
 			);
 		}
 

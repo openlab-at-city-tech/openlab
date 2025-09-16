@@ -19,7 +19,6 @@ class TRP_Machine_Translation_Tab {
 
     /*
     * Add new tab to TP settings
-    *
     * Hooked to trp_settings_tabs
     */
     public function add_tab_to_navigation( $tabs ){
@@ -36,7 +35,6 @@ class TRP_Machine_Translation_Tab {
 
     /*
     * Add submenu for advanced page tab
-    *
     * Hooked to admin_menu
     */
     public function add_submenu_page() {
@@ -156,7 +154,7 @@ class TRP_Machine_Translation_Tab {
     }
 
     public function get_active_engine( ){
-        // This $default is just a fail safe. Should never be used. The real default is set in TRP_Settings->set_options function
+        // This $default is just a fail-safe. Should never be used. The real default is set in TRP_Settings->set_options function
         $default = 'TRP_MTAPI_Machine_Translator';
 
         if( empty( $this->settings['trp_machine_translation_settings']['translation-engine'] ) )
@@ -208,14 +206,12 @@ class TRP_Machine_Translation_Tab {
         $trp_languages = $trp->get_component( 'languages' );
 
         $correct_key = $machine_translator->is_correct_api_key();
-        $display_recheck_button = false;
 
         if ( 'yes' === $this->settings['trp_machine_translation_settings']['machine-translation'] &&
             !empty( $machine_translator->get_api_key() ) &&
             !$machine_translator->check_languages_availability($this->settings['translation-languages']) &&
-            $correct_key != null
+            $correct_key
         ){
-            $display_recheck_button = true;
             $language_names = $trp_languages->get_language_names( $this->settings['translation-languages'], 'english_name' );
 
             ?>

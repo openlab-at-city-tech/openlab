@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap");
+
+/* Floating switcher */
+.trp-floating-switcher {
+    display: flex;
+    flex-direction: column-reverse;
+    position: fixed;
+    z-index: 99999;
+    overflow: hidden;
+    padding: var(--switcher-padding, 10px);
+    border: var(--border, none);
+    border-radius: var(--border-radius, 8px);
+    background: var(--bg, #fff);
+    width: var(--switcher-width, auto);
+    top: var(--top, unset);
+    right: var(--right, unset);
+    bottom: var(--bottom, unset);
+    left: var(--left, unset);
+    font-family: "Outfit", sans-serif !important;
+    box-shadow: 0 10px 20px 0 #0000000D;
+}
+
+.trp-floating-switcher .trp-switcher-dropdown-list {
+    flex-direction: column-reverse;
+}
+
+.trp-switcher-position-top.trp-floating-switcher {
+    flex-direction: column;
+}
+
+.trp-floating-switcher.trp-switcher-position-top:not(.trp-ls-inline) .trp-language-switcher-inner,
+.trp-floating-switcher.trp-switcher-position-top .trp-switcher-dropdown-list {
+    flex-direction: column;
+}
+
+/* Inline variant */
+div.trp-ls-inline .trp-language-switcher-inner {
+    flex-direction: row;
+}
+
+.trp-ls-inline.trp-opposite-language .trp-language-item {
+    width: 100%;
+}
+
+/* Powered by */
+#trp-floater-powered-by {
+    color: var(--text, #b3b3b3);
+    font-size: 12px;
+    text-align: center;
+    padding: 0 5px;
+}
+
+#trp-floater-powered-by a {
+    color: var(--text, #b3b3b3);
+}
+
+.trp-switcher-position-bottom #trp-floater-powered-by {
+    border-top: 1px solid var(--text, #747474);
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.trp-switcher-position-top #trp-floater-powered-by {
+    border-bottom: 1px solid var(--text, #747474);
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+/* Shortcode switcher */
+.trp-shortcode-switcher__wrapper {
+    position: relative;
+    border: none;
+}
+
+.trp-shortcode-switcher {
+    position: static;
+    display: inline-block;
+    overflow: hidden;
+    padding: 10px 0;
+    border: var(--border, none);
+    border-radius: var(--border-radius, 5px);
+    background: var(--bg, #fff);
+    width: auto;
+    box-shadow: none;
+    font-family: "Outfit", sans-serif;
+}
+
+.trp-shortcode-switcher.trp-open-on-click {
+    cursor: pointer;
+}
+
+.trp-shortcode-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+}
+
+.trp-current-language-item__wrapper {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    justify-content: space-between;
+}
+
+/* Shared by both */
+.trp-language-switcher-inner {
+    display: flex;
+}
+
+.trp-floating-switcher .trp-language-switcher-inner {
+    flex-direction: column-reverse;
+}
+
+.trp-shortcode-switcher .trp-language-switcher-inner {
+    flex-direction: column;
+}
+
+.trp-switcher-dropdown-list {
+    display: flex;
+    overflow-y: hidden; /* closed state */
+    transition: max-height 0.2s linear;
+    max-height: 0;
+    transition-duration: var(--transition-duration);
+    gap: 5px;
+}
+
+.trp-shortcode-switcher .trp-switcher-dropdown-list {
+    flex-direction: column;
+}
+
+/* OPEN STATE — scroll the LIST (floating & shortcode) */
+.trp-ls-dropdown.is-open .trp-switcher-dropdown-list,
+.trp-ls-dropdown[aria-expanded="true"] .trp-switcher-dropdown-list,
+.trp-shortcode-switcher.trp-open-on-hover.is-open .trp-switcher-dropdown-list,
+.trp-shortcode-switcher[aria-expanded="true"] .trp-switcher-dropdown-list {
+    overflow-y: auto;
+    max-height: min(350px, 70vh);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--text) transparent;
+}
+
+.trp-ls-dropdown.is-transitioning .trp-switcher-dropdown-list,
+.trp-shortcode-switcher.is-transitioning .trp-switcher-dropdown-list {
+    overflow-y: hidden !important;
+}
+
+.trp-shortcode-arrow {
+    pointer-events: none;
+}
+
+.trp-shortcode-switcher.is-open .trp-shortcode-arrow {
+    transform: rotate(180deg);
+}
+
+.trp-shortcode-overlay:focus { outline: none; }
+.trp-shortcode-overlay:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+/* Links inside (optional) */
+.trp-shortcode-overlay .trp-language-item:focus { outline: none; }
+.trp-shortcode-overlay .trp-language-item:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
+}
+
+/* Items */
+.trp-language-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 5px 5px 16px;
+    text-decoration: none;
+    min-height: 19px;
+    box-sizing: content-box;
+}
+
+.trp-language-item:hover {
+    background: var(--bg-hover, #f3f3f3);
+}
+
+.trp-language-item:hover .trp-language-item-name {
+    color: var(--text-hover, #000);
+}
+
+.trp-language-item__current {
+    pointer-events: none;
+    cursor: default;
+}
+
+.trp-language-item-name {
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text, #000);
+    font-size: var(--font-size, 14px);
+    line-height: 1.2;
+}
+
+.trp-flag-image {
+    border-radius: var(--flag-radius, 0);
+    aspect-ratio: var(--aspect-ratio, 4/3);
+    width: var(--flag-size, 18px);
+    display: inline-block;
+}
+
+.trp-menu-ls-label .trp-flag-image {
+    margin: -2px 3px;
+}
+
+.trp-custom-flag {
+    width: var(--flag-size, 18px);
+    height: auto;
+    aspect-ratio: var(--aspect-ratio, 4/3);
+    border-radius: var(--flag-radius, 2px);
+    object-fit: cover;
+}
+
+/* WebKit scrollbar styling on the ACTUAL scrollable element */
+.trp-switcher-dropdown-list::-webkit-scrollbar { width: 6px; }
+.trp-switcher-dropdown-list::-webkit-scrollbar-track { background: transparent; }
+.trp-switcher-dropdown-list::-webkit-scrollbar-thumb {
+    background-color: var(--text);
+    border-radius: 4px;
+}
+
+.trp-switcher-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-hover);
+}
+
+/* Menu item */
+.trp-flag-rounded {
+    border-radius: 9999px;
+    aspect-ratio: 1 / 1;
+}
+
+.trp-ls-name {
+    padding-left: 5px;
+}
+
+
+
+
+/* Legacy Language Switcher shortcode css rules
+ * Useful for displaying the Automatic Language Detection language switcher
+*/
+
+
+.trp_ald_ls_container img.trp-flag-image{
+    padding-top: 0 !important;
+}
+
+.trp_ald_ls_container .trp-language-switcher{
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    border: 0;
+
+    box-sizing: border-box;
+}
+
+
+.trp_ald_ls_container .trp-language-switcher > div {
+    box-sizing: border-box;
+
+    padding-right: 20px;
+    padding-bottom: 3px;
+    padding-left: 13px;
+
+    border: 1px solid #c1c1c1;
+    border-radius: 3px;
+
+    background-color: #fff;
+}
+
+.trp_ald_ls_container .trp-language-switcher > div > a {
+    display: block;
+    padding: 2px;
+    border-radius: 3px;
+    color: rgb(7, 105, 173);
+}
+
+.trp_ald_ls_container .trp-language-switcher > div > a:hover {
+    background: #f1f1f1;
+}
+.trp_ald_ls_container .trp-language-switcher > div > a.trp-ls-shortcode-disabled-language {
+    cursor: default;
+}
+.trp_ald_ls_container .trp-language-switcher > div > a.trp-ls-shortcode-disabled-language:hover {
+    background: none;
+}
+
+.trp_ald_ls_container .trp-language-switcher > div > a > img{
+    display: inline;
+    margin: 0 3px;
+    width: 18px;
+    height: 12px;
+    border-radius: 0;
+}
+
+.trp_ald_ls_container .trp-language-switcher .trp-ls-shortcode-current-language{
+    display: inline-block;
+}
+.trp_ald_ls_container .trp-language-switcher:focus .trp-ls-shortcode-current-language,
+.trp_ald_ls_container .trp-language-switcher:hover .trp-ls-shortcode-current-language{
+    visibility: hidden;
+}
+
+.trp_ald_ls_container .trp-language-switcher .trp-ls-shortcode-language{
+    display: inline-block;
+    height: 1px;
+    overflow: hidden;
+    visibility: hidden;
+    z-index: 1;
+
+    max-height: 250px;
+    overflow-y: auto;
+    left: 0;
+    top: 0;
+    min-height: auto;
+}
+
+.trp_ald_ls_container .trp-language-switcher:focus .trp-ls-shortcode-language,
+.trp_ald_ls_container .trp-language-switcher:hover .trp-ls-shortcode-language{
+    visibility: visible;
+    max-height: 250px;
+    height: auto;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: inline-block !important;
+    min-height: auto;
+}
+
+#trp_ald_x_button{
+    z-index: 0 !important;
+}

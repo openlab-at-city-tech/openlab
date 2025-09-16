@@ -32,7 +32,10 @@ function astra_single_post_css( $dynamic_css ) {
 		:root {
 			--ast-single-post-border: #e1e8ed;
 		}
-		.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 {
+		.entry-content > * {
+			margin-bottom: 1.5em;
+		}
+		.entry-content :where(h1, h2, h3, h4, h5, h6) {
 			margin-top: 1.5em;
 			margin-bottom: calc(0.3em + 10px);
 		}
@@ -43,9 +46,6 @@ function astra_single_post_css( $dynamic_css ) {
 		.ast-row.comment-textarea fieldset.comment-form-comment {
 			border: none;
 			padding: unset;
-			margin-bottom: 1.5em;
-		}
-		.entry-content > * {
 			margin-bottom: 1.5em;
 		}
 		.entry-content .wp-block-image,

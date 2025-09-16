@@ -1761,7 +1761,9 @@ class GFCommon {
 						$field_value = false;
 					}
 
-					$field_value = self::encode_shortcodes( $field_value );
+					if ( $field_value !== false ) {
+						$field_value = self::encode_shortcodes( $field_value );
+					}
 
 					$field_value = apply_filters( 'gform_merge_tag_filter', $field_value, $merge_tag, $options, $field, $raw_field_value, $format );
 
@@ -2423,6 +2425,28 @@ class GFCommon {
 
 		$headers['Content-type'] = "Content-type: {$content_type}; charset=" . get_option( 'blog_charset' );
 
+		$source_header_enabled = defined( 'GF_ENABLE_NOTIFICATION_EMAIL_HEADER' ) && GF_ENABLE_NOTIFICATION_EMAIL_HEADER;
+		$source_header         = $source_header_enabled ? 'site=' . get_site_url() : '';
+
+		/**
+		 * Filters the notification email source header value.
+		 *
+		 * @since 2.9.14
+		 *
+		 * @param string $header       The source header value. Defaults to `site={site_url}`, if the `GF_ENABLE_NOTIFICATION_EMAIL_HEADER` constant is used.
+		 * @param array  $notification The current notification object.
+		 * @param array  $entry        The current entry object.
+		 */
+		$source_header = gf_apply_filters( array(
+			'gform_notification_email_header',
+			rgar( $entry, 'form_id' ),
+			rgar( $notification, 'id' ),
+		), $source_header, $notification, $entry );
+
+		if ( ! empty( $source_header ) ) {
+			$headers['X-Gravity-Forms-Source'] = 'X-Gravity-Forms-Source: ' . $source_header;
+		}
+
 		$abort_email = false;
 
 		/**
@@ -2497,7 +2521,7 @@ class GFCommon {
 		 * @param string $to             Recipient address
 		 * @param string $subject        Subject line
 		 * @param string $message        Message body
-		 * @param string $headers        Email headers
+		 * @param array  $headers        Email headers
 		 * @param string $attachments    Email attachments
 		 * @param string $message_format Format of the email.  Ex: text, html
 		 * @param string $from           Address of the sender
@@ -3943,11 +3967,6 @@ Content-Type: text/html;
 
 		$type = RGFormsModel::get_input_type( $field );
 		switch ( $type ) {
-
-			case 'honeypot':
-				return "<div class='ginput_container'><input name='input_{$id}' id='{$field_id}' type='text' value='' autocomplete='new-password'/></div>";
-				break;
-
 			case 'adminonly_hidden' :
 				$inputs = $field->get_entry_inputs();
 
@@ -4577,30 +4596,25 @@ Content-Type: text/html;
 		self::timer_start( __METHOD__ );
 		$is_spam = false;
 
-		if ( self::akismet_enabled( $form_id ) ) {
-			$is_spam = self::is_akismet_spam( $form, $entry );
-			self::log_debug( __METHOD__ . '(): Result from Akismet: ' . json_encode( $is_spam ) );
-			if ( $is_spam ) {
-				self::set_spam_filter( $form_id, __( 'Akismet Spam Filter', 'gravityforms' ), '' );
-			}
+		$akismet_callback = array( __CLASS__, 'entry_is_spam_akismet' );
+		if ( has_filter( 'gform_entry_is_spam', $akismet_callback ) === false ) {
+			add_filter( 'gform_entry_is_spam', $akismet_callback, 90, 3 );
 		}
 
-		$gform_entry_is_spam_args = array( 'gform_entry_is_spam', $form_id );
-		if ( gf_has_filter( $gform_entry_is_spam_args ) ) {
-			GFCommon::log_debug( __METHOD__ . '(): Executing functions hooked to gform_entry_is_spam.' );
-			/**
-			 * Allows submissions to be flagged as spam by custom methods.
-			 *
-			 * @since 1.8.17
-			 * @since 2.4.17 Moved from GFFormDisplay::handle_submission().
-			 *
-			 * @param bool  $is_spam Indicates if the submission has been flagged as spam.
-			 * @param array $form    The form currently being processed.
-			 * @param array $entry   The entry currently being processed.
-			 */
-			$is_spam = gf_apply_filters( $gform_entry_is_spam_args, $is_spam, $form, $entry );
-			self::log_debug( __METHOD__ . '(): Result from gform_entry_is_spam filter: ' . json_encode( $is_spam ) );
-		}
+		GFCommon::log_debug( __METHOD__ . '(): Executing functions hooked to gform_entry_is_spam.' );
+
+		/**
+		 * Allows submissions to be flagged as spam by custom methods.
+		 *
+		 * @since 1.8.17
+		 * @since 2.4.17 Moved from GFFormDisplay::handle_submission().
+		 *
+		 * @param bool  $is_spam Indicates if the submission has been flagged as spam.
+		 * @param array $form    The form currently being processed.
+		 * @param array $entry   The entry currently being processed.
+		 */
+		$is_spam = gf_apply_filters( array( 'gform_entry_is_spam', $form_id ), $is_spam, $form, $entry );
+		self::log_debug( __METHOD__ . '(): Result from gform_entry_is_spam filter: ' . json_encode( $is_spam ) );
 
 		if ( $use_cache ) {
 			GFFormDisplay::$submission[ $form_id ]['is_spam'] = $is_spam;
@@ -4643,7 +4657,49 @@ Content-Type: text/html;
 		return $spam_enabled;
 	}
 
+	/**
+	 * Callback for gform_entry_is_spam; performs the Akimset spam check.
+	 *
+	 * @since 2.9.12 Moved to a filter callback from GFCommon::is_spam_entry().
+	 *
+	 * @param bool  $is_spam Indicates if the submission has been flagged as spam.
+	 * @param array $form    The form currently being processed.
+	 * @param array $entry   The entry currently being processed.
+	 *
+	 * @return bool
+	 */
+	public static function entry_is_spam_akismet( $is_spam, $form, $entry ) {
+		if ( $is_spam ) {
+			return $is_spam;
+		}
+
+		$form_id = (int) rgar( $form, 'id' );
+		if ( ! self::akismet_enabled( $form_id ) ) {
+			return $is_spam;
+		}
+
+		$is_spam = self::is_akismet_spam( $form, $entry );
+		self::log_debug( __METHOD__ . '(): Result from Akismet: ' . json_encode( $is_spam ) );
+		if ( $is_spam ) {
+			self::set_spam_filter( $form_id, __( 'Akismet Spam Filter', 'gravityforms' ), '' );
+		}
+
+		return $is_spam;
+	}
+
+	/**
+	 * Determines if the Akismet integration is available.
+	 *
+	 * @since unknown
+	 * @since 2.9.12 Disable the integration when the Akismet Add-On (that communicates directly with the Akismet API) is active.
+	 *
+	 * @return bool
+	 */
 	public static function has_akismet() {
+		if ( function_exists( 'gf_akismet' ) && method_exists( gf_akismet(), 'initalize_api' ) ) {
+			return false;
+		}
+
 		$akismet_exists = function_exists( 'akismet_http_post' ) || method_exists( 'Akismet', 'http_post' );
 
 		return $akismet_exists;
@@ -5708,16 +5764,16 @@ Content-Type: text/html;
 
 		$gf_vars['FieldAdded'] = '&nbsp;' . esc_html__( 'field added to form', 'gravityforms' ); // Added field to form
 
-        if ( ( is_admin() && rgget( 'id' ) ) || ( self::is_form_editor() && rgpost( 'form_id' ) ) ) {
+		if ( ( is_admin() && rgget( 'id' ) ) || ( self::is_form_editor() && rgpost( 'form_id' ) ) ) {
+			$form_id = absint( rgget( 'id' ) ?: rgpost( 'form_id' ) );
+			$form    = GFFormsModel::get_form_meta( $form_id );
+			if ( $form ) {
+				$gf_vars['mergeTags'] = GFCommon::get_merge_tags( rgar( $form, 'fields', array() ), '', false );
 
-			$form_id              = ( rgget( 'id' ) ) ? rgget( 'id' ) : rgpost( 'form_id' );
-			$form                 = RGFormsModel::get_form_meta( $form_id );
-			$gf_vars['mergeTags'] = GFCommon::get_merge_tags( $form['fields'], '', false );
-
-			$address_field                 = new GF_Field_Address();
-			$gf_vars['addressTypes']       = $address_field->get_address_types( $form['id'] );
-			$gf_vars['defaultAddressType'] = $address_field->get_default_address_type( $form['id'] );
-
+				$address_field                 = new GF_Field_Address();
+				$gf_vars['addressTypes']       = $address_field->get_address_types( $form_id );
+				$gf_vars['defaultAddressType'] = $address_field->get_default_address_type( $form_id );
+			}
 			$gf_vars['idString'] = __( 'ID: ', 'gravityforms' );
 		}
 
@@ -6098,9 +6154,17 @@ Content-Type: text/html;
 		<?php
 	}
 
+	/**
+	 * Outputs the gf_vars variable if a script that requires it has been enqueued.
+	 *
+	 * @since unknown
+	 * @since 2.9.16 Updated to use self::get_inline_script_tag().
+	 *
+	 * @return void
+	 */
 	public static function maybe_output_gf_vars() {
 		if ( self::requires_gf_vars() ) {
-			echo '<script type="text/javascript">' . self::gf_vars( false ) . '</script>';
+			echo self::get_inline_script_tag( self::gf_vars( false ), false );
 		}
 	}
 
@@ -6181,6 +6245,9 @@ Content-Type: text/html;
 
 	// used by the gfFieldFilterUI() jQuery plugin
 	public static function get_field_filter_settings( $form ) {
+		if ( ! self::form_has_fields( $form ) ) {
+			return array();
+		}
 
 		$exclude_types = array( 'rank', 'page', 'html' );
 
@@ -6246,7 +6313,7 @@ Content-Type: text/html;
 			$field_filters[] = $filter_settings;
 		}
 
-		$form_id            = $form['id'];
+		$form_id            = rgar( $form, 'id' );
 		$entry_meta_filters = self::get_entry_meta_filter_settings( $form_id );
 		$field_filters      = array_merge( $field_filters, $entry_meta_filters );
 		$field_filters      = array_values( $field_filters ); // reset the numeric keys in case some filters have been unset
@@ -6262,9 +6329,7 @@ Content-Type: text/html;
 		 * @param array $field_filters The form field, entry properties, and entry meta filter settings.
 		 * @param array $form          The form object the filter settings have been prepared for.
 		 */
-		$field_filters = apply_filters( 'gform_field_filters', $field_filters, $form );
-
-		return $field_filters;
+		return apply_filters( 'gform_field_filters', $field_filters, $form );
 	}
 
 	public static function get_entry_info_filter_settings() {
@@ -8106,6 +8171,60 @@ Content-Type: text/html;
 	 */
 	public static function output_default_css() {
 		return (bool) ( ! GFCommon::is_frontend_default_css_disabled() || GFCommon::is_form_editor() || GFCommon::is_entry_detail() );
+	}
+
+	/**
+	 * Sends a success JSON response with a delimiter indicating the beginning and end of the JSON string.
+	 *
+	 * @since 2.9.16
+	 *
+	 * @param mixed $data The data to be sent in the JSON response.
+	 *
+	 * @return void
+	 */
+	public static function send_json_success( $data ) {
+		$response = array( 'success' => true );
+
+		if ( isset( $data ) ) {
+			$response['data'] = $data;
+		}
+
+		self::send_json( $response );
+	}
+
+	/**
+	 * Sends an error JSON response with a delimiter indicating the beginning and end of the JSON string.
+	 *
+	 * @since 2.9.16
+	 *
+	 * @param mixed $data The data to be sent in the JSON response.
+	 *
+	 * @return void
+	 */
+	public static function send_json_error( $data ) {
+		$response = array( 'success' => false );
+
+		if ( isset( $data ) ) {
+			$response['data'] = $data;
+		}
+
+		self::send_json( $response );
+	}
+
+	/**
+	 * Sends a JSON response with a delimiter indicating the beginning and end of the JSON string.
+	 *
+	 * @since 2.9.16
+	 *
+	 * @param array $response The response data to be sent in the JSON response.
+	 *
+	 * @return void
+	 */
+	public static function send_json( $response ) {
+		// Outputting JSON content with delimiters.
+		echo '<!-- gf:json_start -->' . wp_json_encode( $response ) . '<!-- gf:json_end -->';
+
+		wp_die( '', '', array( 'response' => null ) );
 	}
 
 }

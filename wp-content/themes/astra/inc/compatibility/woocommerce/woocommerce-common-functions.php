@@ -52,7 +52,7 @@ if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) {
 				global $product;
 				$product_categories = function_exists( 'wc_get_product_category_list' ) ? wc_get_product_category_list( get_the_ID(), ';', '', '' ) : $product->get_categories( ';', '', '' );
 
-				$product_categories = html_entity_decode( wp_strip_all_tags( $product_categories ) );
+				$product_categories = html_entity_decode( wp_strip_all_tags( $product_categories ), ENT_COMPAT );
 				if ( $product_categories ) {
 					list( $parent_cat ) = explode( ';', $product_categories );
 					echo apply_filters( 'astra_woo_shop_product_categories', esc_html( $parent_cat ), get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

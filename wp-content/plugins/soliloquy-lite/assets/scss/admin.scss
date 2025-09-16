@@ -1,0 +1,654 @@
+/* ==========================================================================
+   admin.css loads on all Soliloquy Administration Screens:
+   - WP_List_Tables
+   - Add New
+   - Albums
+   - Settings
+   - NextGEN Import
+
+   Any styles that will be used by all of the above (or are useful to be included
+   for future use) should be added to this file:
+   - Header and Logo
+   - WordPress Red Button
+   ========================================================================== */
+
+/* ==========================================================================
+   Imports
+   ========================================================================== */
+@import 'vars';
+@import 'mixins';
+body.post-type-soliloquy {
+	#wpcontent {
+		min-height: 80vh;
+		display: flex;
+		flex-direction: column;
+	}
+#wpfooter {
+	position: relative;
+	margin-top: auto;
+	.soliloquy-footer-promotion {
+		text-align: center;
+		font-weight: 400;
+			font-size: 13px;
+		   line-height: normal;
+		color: #646970;
+		padding: 30px 0;
+		margin-bottom: 20px;
+
+	}
+	.soliloquy-footer-promotion-links {
+		margin: 10px 0;
+		color: #646970;
+		span {
+				color: #c3c4c7;
+				padding: 0 7px;
+		}
+	}
+	.soliloquy-footer-promotion-links,
+	.soliloquy-footer-promotion-social {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.soliloquy-footer-promotion-social {
+		gap: 10px;
+		margin: 0;
+	}
+}
+}
+/* ==========================================================================
+  Header
+========================================================================== */
+#soliloquy-header-temp {
+	   position: relative;
+	   display: none;
+}
+
+#soliloquy-header {
+	   display: flex;
+	   justify-content: space-between;
+	   align-items: center;   /* <---- NEW    */
+	   @include mq(xxs) {
+		   padding-top: 46px;
+	   }
+
+	   h1.soliloquy-logo {
+		   margin: 0;
+		   margin-left: 20px;
+
+		   img {
+			   /**
+			   * Image width and height (image is 2x so this ensures it displays correctly)
+			   */
+			   max-width: 339px;
+
+			   /**
+			   * Responsive - ensure the logo doesn't exceed the header dimensions
+			   */
+			   @include mq(xs) {
+				   width: 90%;
+			   }
+		   }
+	   }
+	   .soliloquy-right {
+		   padding-right: 20px;
+
+	   }
+	   .soliloquy-notifications-inbox {
+		position: relative;
+		&[data-count]:after {
+			background: $red;
+			border-radius: 50%;
+			bottom: 100%;
+			color: #fff;
+			content: attr(data-count);
+			display: block;
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 12px;
+			font-weight: 700;
+			height: 16px;
+			left: 100%;
+			line-height: 18px;
+			min-width: 16px;
+			position: absolute;
+			text-align: center;
+			transform: translate(-40%, 30%);
+		}
+	}
+}
+/* ==========================================================================
+  Header
+========================================================================== */
+.soliloquy-nav-tab-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 30px;
+	margin: 0 0 20px -20px;
+	padding: 0 20px;
+	background-color: #ffffff;
+	list-style: none;
+	font-size: 14px;
+	font-weight: 400;
+	li {
+		margin: 0;
+		padding: 0;
+		a {
+			display: block;
+			padding: 15px 0 12px 0;
+			line-height: 30px;
+			border-bottom: 3px solid #ffffff;
+			box-shadow: none;
+			color: #2c3338;
+			text-decoration: none;
+		}
+	}
+	.soliloquy-nav-tab:hover,
+	.soliloquy-nav-tab-active {
+		border-bottom: 4px solid $secondary-color;
+	}
+}
+   /* ==========================================================================
+	  Notifications Sidebar
+	  ========================================================================== */
+   .soliloquy-notifications-close,
+   .soliloquy-notifications-inbox {
+	   &:hover {
+		   cursor: pointer;
+	   }
+   }
+   .soliloquy-notifications-drawer {
+	   box-sizing: border-box;
+	   background: $white;
+	   bottom: 0;
+	   position: fixed;
+	   right: -400px;
+	   top: 32px;
+	   transition: right 300ms ease 0s,visibility 0s ease 400ms;
+	   visibility: hidden;
+	   width: 400px;
+	   z-index: 1100;
+	   border: 1px solid #DDDDDD;
+	   .soliloquy-notifications-open & {
+		   right: 0;
+		   transition: right 300ms ease 0s, visibility 0s ease 0ms;
+		   visibility: visible;
+	   }
+   }
+
+   .soliloquy-notifications-overlay {
+	   background-color: rgba(0, 0, 0, 0.3);
+	   bottom: 0;
+	   display: none;
+	   left: 0;
+	   opacity: .5;
+	   position: fixed;
+	   right: 0;
+	   top: 46px;
+	   transition: .5s;
+	   z-index: 1052;
+
+	   .folded & {
+		   left: 36px;
+	   }
+
+	   .soliloquy-notifications-open & {
+		   display: block;
+	   }
+
+
+	   @media screen and (min-width: 783px) {
+		   left: 36px;
+
+		   .admin-bar & {
+			   top: 32px;
+		   }
+	   }
+
+	   @media screen and (min-width: 961px) {
+		   left: 160px;
+
+		   .folded & {
+			   left: 36px;
+		   }
+	   }
+   }
+
+   .soliloquy-notifications-header {
+	   background: #EEEEEE;
+	   border-bottom: 1px solid #DDDDDD;
+	   padding: 18px 40px 18px 20px;
+
+	   .soliloquy-notifications-close {
+		   position: absolute;
+		   right: 18px;
+		   top: 22px;
+
+		   path {
+			   fill: #3C434A;
+		   }
+	   }
+
+	   h3 {
+		   color: #3C434A;
+		   display: inline-block;
+		   font-size: 14px;
+		   font-weight: 700;
+		   line-height: 21px;
+		   margin: 0 10px 0 0;
+	   }
+   }
+
+   .soliloquy-notifications-list {
+	   height: calc(100% - 130px);
+	   overflow: auto;
+
+	   ul {
+		   margin: 0;
+	   }
+
+	   li {
+		   border-bottom: 1px solid #DDDDDD;
+		   display: flex;
+		   margin: 0;
+		   padding: 24px;
+		   font-size: 14px;
+		   color: #3C434A99;
+		   &:first-child {
+			   border-top: none;
+		   }
+
+		   h4 {
+			   color: hsl(210, 10%, 26%);
+			   ;
+			   font-size: 14px;
+			   font-weight: 600;
+			   line-height: 21px;
+			   margin: 0;
+		   }
+	   }
+
+	   p {
+		   color: #3C434A99;
+		   font-size: 14px;
+		   margin: 8px 0;
+		   margin-bottom: 20px;
+		   &.soliloquy-start {
+			   font-size: 12px;
+		   }
+	   }
+	   .soliloquy-button {
+		   padding: 8px 14px;
+		   border-radius: 4px;
+		   text-decoration: none;
+		   font-size: 12px;
+		   &.soliloquy-button-primary {
+			   background-color: $primary-color;
+			   color: $white;
+		   }
+		   &.soliloquy-button-secondary {
+			   border: 1px solid #DDDDDD;
+		   }
+	   }
+
+   }
+   .soliloquy-button-text {
+	   font-size: 12px;
+	   color: #3C434AB2;
+   }
+   .soliloquy-notification-actions {
+	   .soliloquy-button {
+		   margin-right: 10px;
+	   }
+   }
+
+   .soliloquy-notifications-footer {
+	   border-top: 1px solid #DDDDDD;
+	   padding: 24px 27px;
+	   text-align: right;
+   }
+
+   #soliloquy-dismissed-title,
+   #soliloquy-notifications-show-active,
+   .soliloquy-notifications-dismissed {
+	   display: none;
+   }
+
+   .show-dismissed {
+	   #soliloquy-notifications-show-dismissed,
+	   .soliloquy-notifications-active,
+	   #soliloquy-active-title {
+		   display: none;
+	   }
+
+	   #soliloquy-notifications-show-active,
+	   #soliloquy-dismissed-title {
+		   display: inline-block;
+	   }
+
+	   .soliloquy-notifications-dismissed {
+		   display: block;
+	   }
+   }
+
+   .soliloquy-notifications-dismissed {
+	   .soliloquy-notification-dismiss {
+		   display: none;
+	   }
+   }
+
+   .soliloquy-notification-icon {
+	   margin-right: 10px;
+   }
+   #soliloquy-header-temp {
+	position: relative;
+}
+#soliloquy-top-notification {
+	position: relative;
+	background-color: $secondary-color;
+	text-align: center;
+	color: $white;
+	height: 40px;
+	margin-left: -20px;
+	vertical-align: middle;
+	p {
+		margin: 0;
+		padding: 0;
+		line-height: 40px;
+		font-size: 16px;
+	}
+	a {
+		color: $white;
+	}
+	.soliloquy-dismiss {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+}
+#soliloquy-header {
+	background-color: rgb(240, 240, 240);
+	height: $header-height;
+	margin-left: -20px;
+	#soliloquy-logo {
+		margin: 0;
+		padding-top: 25px;
+		line-height: $header-height;
+		margin-left: 20px;
+		a {
+			display: inline-flex;
+			box-shadow: none;
+		}
+		a:focus-visible {
+			outline: 1px solid $secondary-color;
+		}
+		img {
+			max-width: 288px;
+		}
+	}
+}
+.wp-core-ui {
+	.soliloquy-primary-button,
+	.button-soliloquy {
+		background: $primary-color;
+		border-color: $primary-color;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		color: $white;
+		text-decoration: none;
+		font-weight: 500;
+		text-shadow: none;
+		line-height: 15px;
+		height: $input-height;
+		font-size: 13px;
+		padding: 0 20px 1px;
+		&:focus,
+		&:hover {
+			background: $primary-color;
+			border-color: $primary-color;
+			color: $white;
+			opacity: 0.8;
+			box-shadow: none;
+		}
+	}
+	.button-soliloquy-secondary {
+		background: $almost-white;
+		border: 1px solid;
+		border-color: $light-grey;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		color: $dark;
+		text-decoration: none;
+		text-shadow: none;
+		font-weight: bold;
+		height: $input-height;
+		font-size: 13px;
+		padding: 0 20px 1px;
+		&:focus,
+		&:hover {
+			background: $almost-white;
+			border-color: $mid-grey;
+			color: $dark;
+			box-shadow: none;
+
+		}
+	}
+	.button-soliloquy-delete {
+		background: $red;
+		border: 1px solid;
+		border-color: $red;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		color: $white;
+		text-decoration: none;
+		text-shadow: none;
+		font-weight: bold;
+		height: 35px;
+		font-size: 13px;
+		padding: 0 20px 1px;
+		&:focus,
+		&:hover {
+			background: $red;
+			color: $white;
+			opacity: 0.8;
+			box-shadow: none;
+		}
+	}
+	a.button-soliloquy,
+	a.button-soliloquy-secondary,
+	a.button-soliloquy-delete {
+		line-height: 32px;
+	}
+}
+.soliloquy-settings-tab {
+	padding: 20px;
+	box-sizing: border-box;
+	#soliloquy-refresh-submit {
+		margin-left: 10px;
+	}
+
+	.soliloquy-hideme {
+		display: none;
+	}
+	/**
+	* Clearing
+	*/
+	.soliloquy-clear {
+	    clear: both;
+
+		&:after {
+		    clear: both;
+		    content: '.';
+		    display: block;
+		    height: 0;
+		    line-height: 0;
+		    overflow: auto;
+		    visibility: hidden;
+		    zoom: 1;
+		}
+	}
+
+	.soliloquy-gallery {
+	    margin: 15px 0 20px;
+	}
+
+    th {
+     width: 170px;
+      padding-right: 40px;
+		@include mq(xs) {
+			width: auto;
+		}
+    }
+    input[type="text"],
+	input[type="number"],
+	input[type="password"],
+	select,
+	textarea {
+	    width: 350px;
+	    padding-right: 0;
+		border: 1px solid #00000026;
+		@include mq(xs) {
+			width: 100%;
+		}
+		font-size: 14px;
+	}
+    input[type="text"],
+	input[type="number"],
+	input[type="password"] {
+		height: 40px;
+		@include mq(xs) {
+			height: auto;
+		}
+	}
+	.button {
+		&.soliloquy-verify-submit {
+			height: 39px;
+		}
+	}
+	.green {
+		color: #37993B;
+	}
+	/**
+	* Copy to Clipboard Button
+	*/
+	a.soliloquy-clipboard {
+		width: 33px;
+		padding: 0;
+	}
+	/**
+	* Submit Button
+	*/
+	#soliloquy-settings-submit {
+		margin: 40px 0 0 0px;
+	}
+
+	/**
+	* Refresh
+	*/
+	#soliloquy-refresh-submit {
+     vertical-align: baseline;
+	}
+	.soliloquy-external-req{
+	    border: 1px solid $primary-color;
+	    border-radius: 4px;
+	    padding: 30px;
+	    h2{
+	        font-size: 20px;
+	        margin: 0;
+	        padding: 0;
+	    }
+	}
+	.soliloquy-external-req-active{
+	    border: 1px solid $green;
+	    background-color:  $white;
+	    border-radius: 4px;
+	    padding: 30px;
+	    h2{
+	        font-size: 20px;
+	        font-weight: 600;
+	        margin: 0;
+	        padding: 0;
+	    }
+	}
+	.form-table {
+		th, td {
+			padding-top: 25px;
+			padding-bottom: 25px;
+		}
+		th {
+			@include mq(sm) {
+				padding-top: 40px;
+				padding-bottom: 10px;
+				padding-right: 0px !important;
+			}
+			@include mq(xs) {
+				padding-top: 40px;
+				padding-bottom: 10px;
+				padding-right: 0px !important;
+			}
+		}
+		tr#soliloquy-settings-key-box th { /* bit of a hack */
+			@include mq(sm) {
+				padding-top: 20px;
+			}
+			@include mq(xs) {
+				padding-top: 20px;
+			}
+		}
+		td {
+			@include mq(sm) {
+				padding-top: 0;
+				padding-right: 0px;
+			}
+			@include mq(xs) {
+				padding-top: 0;
+				padding-right: 0px;
+			}
+			p {
+				margin-bottom: 15px;
+			}
+		}
+		#soliloquy-image-gallery-settings-title {
+			h3 {
+				font-size: 17px;
+			}
+			p {
+				font-size: 14px;
+				color: #3C434AB2;
+			}
+		}
+		tr {
+			border-bottom: 1px solid #ddd;
+		}
+		tr.no-bottom-border,
+		tr.title {
+			border-bottom: 0;
+			label {
+				font-size: 14px;
+			}
+			h6 {
+				font-size: 14px;
+				line-height: 16px;
+				margin: 5px auto;
+			}
+		}
+	}
+		table.form-table {
+			tr:first-of-type th,
+			tr:first-of-type td {
+				padding-top: 0;
+			}
+			input[type=checkbox] {
+				margin-top: 0px; /* was 10px 4/12/19 */
+				float: left;
+			}
+
+		}
+
+	.description {
+		color: #3C434AB2;
+		font-size: 14px;
+		margin-top: 0px;
+		margin-bottom: 15px;
+
+	}
+}

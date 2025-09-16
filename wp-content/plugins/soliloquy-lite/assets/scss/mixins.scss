@@ -1,0 +1,90 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/**
+* Media Query
+*/
+
+@mixin mq($breakpoint) {
+	$mq-xxs: '(max-width: 599px)';
+	$mq-xs: '(min-width: 600px) and (max-width: 767px)';
+	$mq-sm: '(min-width: 768px) and (max-width: 991px)';
+	$mq-md: '(min-width: 992px) and (max-width: 1199px)';
+	$mq-lg: '(min-width: 1200px)';
+
+	@if $breakpoint == xxs {
+		@media #{$mq-xxs} {
+			@content;
+		}
+	}
+	@if $breakpoint == xs {
+		@media #{$mq-xs} {
+			@content;
+		}
+	} @else if $breakpoint == sm {
+		@media #{$mq-sm} {
+			@content;
+		}
+	} @else if $breakpoint == md {
+		@media #{$mq-md} {
+			@content;
+		}
+	} @else if $breakpoint == lg {
+		@media #{$mq-lg} {
+			@content;
+		}
+	}
+}
+
+/**
+* Border-Radius
+*/
+
+$prefixes: -webkit-, -moz-, -o-, '';
+
+@mixin borderRadius($size...) {
+	@if length($size) == 1 {
+		@each $prefix in $prefixes {
+			#{$prefix}border-radius: $size;
+		}
+	} @else {
+		@include customBorderRadius($size...);
+	}
+}
+
+@mixin customBorderRadius(
+	$topLeft: 0,
+	$topRight: 0,
+	$bottomRight: 0,
+	$bottomLeft: 0
+) {
+	@each $prefix in $prefixes {
+		@if $prefix == '-moz-' {
+			@if $topLeft != 0 {
+				-moz-border-radius-topleft: $topLeft;
+			}
+			@if $topRight != 0 {
+				-moz-border-radius-topright: $topRight;
+			}
+			@if $bottomRight != 0 {
+				-moz-border-radius-bottomright: $bottomRight;
+			}
+			@if $bottomLeft != 0 {
+				-moz-border-radius-bottomleft: $bottomLeft;
+			}
+		} @else {
+			@if $topLeft != 0 {
+				#{$prefix}border-top-left-radius: $topLeft;
+			}
+			@if $topRight != 0 {
+				#{$prefix}border-top-right-radius: $topRight;
+			}
+			@if $bottomRight != 0 {
+				#{$prefix}border-bottom-right-radius: $bottomRight;
+			}
+			@if $bottomLeft != 0 {
+				#{$prefix}border-bottom-left-radius: $bottomLeft;
+			}
+		}
+	}
+}

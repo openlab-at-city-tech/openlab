@@ -1,0 +1,120 @@
+//Import all vars
+@import 'vars';
+/* ==========================================================================
+   Soliloquy Icons
+   ========================================================================== */
+@import 'icons';
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+@import 'header';
+/* ==========================================================================
+   Global Styles
+   ========================================================================== */
+@import 'global';
+@import 'chosen';
+/* ==========================================================================
+   Settings Styles
+   ========================================================================== */
+#soliloquy-tabs-nav{
+	background-color: $white;
+	padding: 0;
+	margin: 0;
+	height: 50px;
+	box-sizing: border-box;
+	margin-left: -20px;
+	.nav-tab{
+		margin: 0;
+		background-color: $white;
+		border: none;
+		line-height: 40px;
+		border-right: 1px solid $light-grey;
+		&:first-child{
+			margin-left: 20px;
+			border-left: 1px solid $light-grey;
+		}
+		&:focus{
+			outline-style:none;
+			box-shadow:none;
+			border-color:transparent;			
+		}
+	}
+	.nav-tab-active{
+		background-color: $wp-grey;
+		border: none
+	}
+}
+.soliloquy-settings-table{
+	tr{
+		border-bottom: 1px solid $light-grey;
+		th{
+			padding-top: 40px;
+		}
+		td{
+			padding: 40px 0;
+		}
+	}
+}
+#soliloquy-settings{
+	.soliloquy {
+	    margin: 15px 0 20px;
+	}
+	.soliloquy-tab {
+		display: none;
+		&.soliloquy-active {
+			display: block;
+		}
+		th {
+		    width: 210px;
+		    padding-right: 0;
+		}
+
+	}
+	input[type="text"],
+	input[type="number"],
+	input[type="password"],
+	select,
+	textarea{
+	    width: 350px;
+	    padding-right: 0;		
+	}
+	.soliloquy-clear {
+	    clear: both;
+	}	
+	.soliloquy-clear:after {
+	    clear: both;
+	    content: '.';
+	    display: block;
+	    height: 0;
+	    line-height: 0;
+	    overflow: auto;
+	    visibility: hidden;
+	    zoom: 1;
+	}
+
+}
+#soliloquy-refresh-submit{
+	margin-top: -10px;
+}
+.soliloquy-external-req{
+    border: 1px solid $primary-color;
+    border-radius: $border-radius;
+    padding: 30px;
+    h2{
+        font-size: 20px;
+        margin: 0;
+        padding: 0;
+    }
+}
+.soliloquy-external-req-active{
+    border: 1px solid $green;
+    background-color:  $white;  
+    border-radius: $border-radius;
+    padding: 30px;
+    h2{
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+    }
+}

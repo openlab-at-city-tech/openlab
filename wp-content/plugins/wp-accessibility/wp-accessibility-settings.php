@@ -5,7 +5,7 @@
  * @category Settings
  * @package  WP Accessibility
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/wp-accessibility/
  */
 
@@ -31,7 +31,9 @@ function wpa_admin_styles() {
 		wp_enqueue_style( 'wpa-styles', plugins_url( 'css/wpa-styles.css', __FILE__ ), array( 'farbtastic' ), $version );
 		wp_enqueue_style( 'wp-color-picker' );
 		// Enqueue WP Accessibility admin scripts.
-		wp_enqueue_script( 'wpa-admin', plugins_url( 'js/wpa-admin.js', __FILE__ ), array( 'wp-color-picker' ), $version, true );
+		if ( isset( $_GET['page'] ) && 'wp-accessibility' === $_GET['page'] ) {
+			wp_enqueue_script( 'wpa-admin', plugins_url( 'js/wpa-admin.js', __FILE__ ), array( 'wp-color-picker' ), $version, true );
+		}
 	}
 }
 
@@ -559,14 +561,11 @@ function wpa_admin_settings() {
 							<div class="inside">
 								<?php wpa_accessible_theme(); ?>
 								<form method="post" action="<?php echo admin_url( 'admin.php?page=wp-accessibility' ); ?>">
-									<fieldset>
-										<legend><?php _e( 'Remove title attributes from:', 'wp-accessibility' ); ?></legend>
-										<ul>
-											<li><input type="checkbox" id="rta_from_tag_clouds" name="rta_from_tag_clouds" <?php checked( get_option( 'rta_from_tag_clouds' ), 'on' ); ?>/>
-											<label for="rta_from_tag_clouds"><?php _e( 'Tag clouds', 'wp-accessibility' ); ?></label>
-											</li>
-										</ul>
-									</fieldset>
+									<ul>
+										<li><input type="checkbox" id="rta_from_tag_clouds" name="rta_from_tag_clouds" <?php checked( get_option( 'rta_from_tag_clouds' ), 'on' ); ?>/>
+										<label for="rta_from_tag_clouds"><?php _e( 'Remove title attributes from:', 'wp-accessibility' ); ?> <?php _e( 'Tag clouds', 'wp-accessibility' ); ?></label>
+										</li>
+									</ul>
 									<p>
 										<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>" />
 										<input type="hidden" name="action" value="rta" />

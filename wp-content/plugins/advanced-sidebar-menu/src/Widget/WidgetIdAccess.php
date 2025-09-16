@@ -3,7 +3,7 @@
 namespace Advanced_Sidebar_Menu\Widget;
 
 /**
- * Trait for the `Widget\Id` interface.
+ * Trait for the `WidgetId` interface.
  *
  * Allows access to the properties of \WP_Widget.
  *
@@ -16,6 +16,7 @@ namespace Advanced_Sidebar_Menu\Widget;
  * @property-read bool|string  $id
  * @property-read bool|int     $number
  *
+ * @phpstan-require-implements WidgetId
  */
 trait WidgetIdAccess {
 	/**

@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES5", // Target ES5 for compatibility with older browsers.
+    "module": "ESNext", // Use ESNext for module resolution.
+    "lib": ["DOM", "ES5", "ES2015", "ES2016", "ES2017"], // Include libraries for DOM and ECMAScript.
+    "moduleResolution": "Node", // Node module resolution.
+    "jsx": "react", // JSX support for React.
+    "allowJs": true, // Allow JavaScript files.
+    "strict": true, // Enable all strict type-checking options.
+    "esModuleInterop": true, // Enable interoperation between ES Modules and CommonJS.
+    "skipLibCheck": true, // Skip type checking of declaration files.
+    "resolveJsonModule": true, // Allow importing JSON modules.
+    "forceConsistentCasingInFileNames": true, // Ensure consistent casing in file names.
+    "outDir": "./blocks/soliloquy", // Output directory.
+    "rootDir": "./blocks_src/soliloquy", // Root directory.
+    "baseUrl": "./", // Base URL.
+    "paths": {
+      "@components/*": ["./blocks_src/soliloquy/components/*"], // Path alias for components.
+      "@styles/*": ["./blocks_src/soliloquy/scss/*"], // Path alias for styles.
+      "@types/*": ["./blocks_src/soliloquy/types/*"] // Path alias for types.
+    },
+    "typeRoots": ["node_modules/@types"], // Type roots.
+    "types": [
+      "wordpress__components", // Type definitions for @wordpress/components.
+      "wordpress__block-editor", // Type definitions for @wordpress/block-editor.
+      "wordpress__blocks", // Type definitions for @wordpress/blocks.
+      "wordpress__element", // Type definitions for @wordpress/element.
+      "wordpress__i18n" // Type definitions for @wordpress/i18n.
+    ]
+  },
+  "include": ["blocks_src/soliloquy/**/*.ts", "blocks_src/soliloquy/**/*.tsx"], // Include TypeScript files.
+  "exclude": ["node_modules", "blocks/soliloquy"] // Exclude directories.
+}

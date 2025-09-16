@@ -57,12 +57,7 @@ html {
   vertical-align: middle;
 }
 
-.edit-post-visual-editor .entry-content h1,
-.edit-post-visual-editor .entry-content h2,
-.edit-post-visual-editor .entry-content h3,
-.edit-post-visual-editor .entry-content h4,
-.edit-post-visual-editor .entry-content h5,
-.edit-post-visual-editor .entry-content h6 {
+.edit-post-visual-editor .entry-content :where(h1, h2, h3, h4, h5, h6) {
   margin-bottom: 20px;
 }
 
@@ -389,7 +384,8 @@ html .edit-widgets-main-block-list :where(.wp-block) {
 /**
  * Modern Gutenberg editor improved UI/UX.
  */
-body .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper > * + *, body .editor-styles-wrapper .block-editor-block-list__layout.is-root-container > * + * {
+body .editor-styles-wrapper :where(.edit-post-visual-editor__post-title-wrapper) > * + *,
+body .editor-styles-wrapper :where(.block-editor-block-list__layout.is-root-container) > * + * {
   margin-block-start: 0;
 }
 

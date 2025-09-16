@@ -52,7 +52,7 @@ if ( ! class_exists( 'Astra_Elementor' ) ) {
 		 * Constructor
 		 */
 		public function __construct() {
-			add_action( 'wp', array( $this, 'elementor_default_setting' ), 20 );
+			add_action( 'elementor/documents/register_controls', array( $this, 'elementor_default_setting' ) );
 			add_action( 'elementor/preview/init', array( $this, 'elementor_default_setting' ) );
 			add_action( 'elementor/preview/enqueue_styles', array( $this, 'elementor_overlay_zindex' ) );
 			add_action( 'elementor/editor/before_enqueue_scripts', array( $this, 'elementor_add_scripts' ) );

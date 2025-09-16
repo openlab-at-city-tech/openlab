@@ -7,7 +7,7 @@ if ( !defined('ABSPATH' ) )
 /**
  * Class TRP_Machine_Translator
  *
- * Facilitates Machine Translation calls
+ * Facilitates Machine Translation calls.
  */
 class TRP_Machine_Translator {
     protected $settings;
@@ -52,6 +52,12 @@ class TRP_Machine_Translator {
             if ( empty( $languages ) ){
                 // can be used to simply know if machine translation is available
                 return true;
+            }
+
+            // If the license is invalid and the translation engine is DeepL,return false
+            $license_status = get_option( 'trp_license_status' );
+            if ( $license_status !== 'valid' && isset( $this->settings['trp_machine_translation_settings']['translation-engine'] ) && $this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl' ) {
+                return false;
             }
 
             return $this->check_languages_availability($languages);
@@ -124,7 +130,7 @@ class TRP_Machine_Translator {
     /**
      *
      * @deprecated
-     * Check the automatic translation API keys for Google Translate and DeepL.
+     * Check the automatic translation API keys for Google Translate and DeepL
      *
      * @param TRP_Translate_Press $machine_translator Machine translator instance.
      * @param string $translation_engine              The translation engine (can be google_translate_v2 and deepl).
@@ -341,12 +347,16 @@ class TRP_Machine_Translator {
                 $strings[$key] = trp_do_these_shortcodes( $strings[$key], $shortcode_tags_to_execute );
             }
 
-            if ( $this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl' && defined( 'TRP_DL_PLUGIN_VERSION' ) && TRP_DL_PLUGIN_VERSION === '1.0.0' ) {
-                // backwards compatibility with deepl version 1.0.0 which doesn't have the third function parameter $source_language_code
-                $machine_strings = $this->translate_array($strings, $target_language_code);
-            }else {
-                $machine_strings = $this->translate_array($strings, $target_language_code, $source_language_code);
+            if ( $this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl' ) {
+
+                // if we don't have a valid license, return an empty array
+                $license_status = get_option( 'trp_license_status' );
+                if( $license_status !== 'valid' ){
+                    return array();
+                }
             }
+
+            $machine_strings = $this->translate_array($strings, $target_language_code, $source_language_code);
 
             $machine_strings_return_array = array();
             if (!empty($machine_strings)) {

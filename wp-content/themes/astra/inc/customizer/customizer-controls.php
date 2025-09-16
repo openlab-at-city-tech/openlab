@@ -19,4 +19,5 @@ require $astra_control_dir . '/typography/class-astra-control-typography.php';
 require_once $astra_control_dir . '/logo-svg-icon/class-astra-control-logo-svg-icon.php';
 require $astra_control_dir . '/description/class-astra-control-description.php';
 require $astra_control_dir . '/customizer-link/class-astra-control-customizer-link.php';
+require $astra_control_dir . '/description-with-link/class-astra-control-description-with-link.php';
 // @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound

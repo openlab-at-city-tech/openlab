@@ -358,6 +358,7 @@ function astra_off_canvas_static_css() {
 			right: 99999rem;
 			transition: opacity 0.25s ease-in, left 0s 0.25s, right 0s 0.25s;
 			opacity: 0;
+			visibility: hidden;
 		}
 		.ast-mobile-popup-drawer .ast-mobile-popup-inner {
 			width: 100%;

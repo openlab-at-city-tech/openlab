@@ -405,6 +405,6 @@ function su_shortcode_button($atts = null, $content = null)
 
 	su_query_asset('css', 'su-shortcodes');
 
-	return $before . '<a href="' . esc_url(su_do_attribute($atts['url'])) . '" class="' . esc_attr(implode(' ', $classes)) . '" style="' . esc_attr(implode(';', $a_css)) . '" target="_' . esc_attr($atts['target']) . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . esc_attr(implode(';', $span_css)) . '">' . do_shortcode(stripcslashes($content)) . $desc . '</span></a>' . $after;
+	return $before . '<a href="' . esc_url(su_do_attribute($atts['url'])) . '" class="' . esc_attr(implode(' ', $classes)) . '" style="' . esc_attr(implode(';', $a_css)) . '" target="_' . esc_attr($atts['target']) . '"' . $atts['onclick'] . $atts['rel'] . $atts['title'] . $atts['id'] . $atts['download'] . '><span style="' . esc_attr(implode(';', $span_css)) . '">' . wp_kses_post(do_shortcode(stripcslashes($content))) . $desc . '</span></a>' . $after;
 
 }

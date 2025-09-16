@@ -2444,3 +2444,81 @@ function trp_compatibility_profile_builder_redirect( $redirect_url ) {
 
 add_filter( 'wppb_register_redirect', 'trp_compatibility_profile_builder_redirect' );
 add_filter( 'wppb_edit_profile_redirect', 'trp_compatibility_profile_builder_redirect' );
+
+/**
+ * Compatibility with WPBakery in edit mode. It adds parameters to the URL that get processed by get_url_for_language and should not.
+ */
+add_filter('trp_curpageurl', 'trp_wpbackery_compatibility_remove_params_curpageurl');
+add_filter('trp_get_url_for_language', 'trp_wpbackery_compatibility_remove_params', 10, 3);
+
+function trp_wpbackery_compatibility_remove_params($url, $language, $args) {
+    return trp_wpbackery_compatibility_strip_params($url);
+}
+
+function trp_wpbackery_compatibility_remove_params_curpageurl($url) {
+    return trp_wpbackery_compatibility_strip_params($url);
+}
+
+function trp_wpbackery_compatibility_strip_params($url) {
+    // Only proceed if WPBakery is active
+    if (!class_exists('Vc_Manager')) {
+        return $url;
+    }
+
+    $params_to_remove = array('vc_editable', 'vc_post_id', '_vcnonce');
+
+    // Use TranslatePress URI class for proper URL handling
+    $uri = new \TranslatePress\Uri($url);
+    
+    // Return original URL if no query parameters exist
+    if (!$uri->hasQueryParam()) {
+        return $url;
+    }
+
+    $query_string = $uri->getQuery();
+    
+    // Check if any WPBakery params are present before processing
+    $has_wpbakery_params = false;
+    foreach ($params_to_remove as $param) {
+        if (strpos($query_string, $param . '=') !== false) {
+            $has_wpbakery_params = true;
+            break;
+        }
+    }
+
+    // Return original URL if no WPBakery params are found
+    if (!$has_wpbakery_params) {
+        return $url;
+    }
+
+    // Parse and clean query parameters
+    $query = array();
+    parse_str($query_string, $query);
+    
+    foreach ($params_to_remove as $param) {
+        unset($query[$param]);
+    }
+
+    // Set the cleaned query back to the URI
+    $new_query = http_build_query($query);
+    $uri->setQuery($new_query);
+
+    return $uri->getUri();
+}
+
+/**
+ * Add compatibility fix for LiteSpeed Cache and it's ESI feature
+ * https://docs.litespeedtech.com/lscache/lscwp/cache/#esi-tab
+ * @param $url
+ * @return mixed|string
+ */
+function trp_use_lightspeedcache_esi_referer($url){
+    if( strpos($url, 'lsesi=') > 0 && !empty($_SERVER['ESI_REFERER']) ){
+        return esc_url_raw($_SERVER['ESI_REFERER']);
+    }
+
+    return $url;
+}
+if (class_exists('LiteSpeed\ESI')) {
+    add_filter('trp_curpageurl', 'trp_use_lightspeedcache_esi_referer');
+}

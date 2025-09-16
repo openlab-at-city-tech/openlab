@@ -1,0 +1,34 @@
+/*!
+  * vue-router v4.5.1
+  * (c) 2025 Eduardo San Martin Morote
+  * @license MIT
+  */
+
+/*!
+* VueCodemirror v6.1.1
+* Copyright (c) Surmon. All rights reserved.
+* Released under the MIT License.
+* Surmon
+*/
+
+/*! #__NO_SIDE_EFFECTS__ */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
+
+/**
+* @vue/runtime-core v3.5.20
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/runtime-dom v3.5.20
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/shared v3.5.20
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/

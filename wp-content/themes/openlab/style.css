@@ -7912,6 +7912,12 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   font-size: 16px;
   font-weight: normal;
 }
+.openlab-navbar-drawer #favorites-flyout .drawer-list li a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .pagination {
   margin: 0;
 }

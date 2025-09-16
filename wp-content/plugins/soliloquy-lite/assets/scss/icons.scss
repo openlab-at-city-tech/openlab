@@ -1,0 +1,47 @@
+//Soliloquy Icon Font
+@font-face {
+    font-family: 'soliloquy';
+    src: url('../fonts/soliloquy.eot');
+    src: url('../fonts/soliloquy.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/soliloquy.woff') format('woff'),
+         url('../fonts/soliloquy.ttf') format('truetype'),
+         url('../fonts/soliloquy.svg#soliloquy') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+//Soliloquy Icon Class
+[class*='soliloquy-icon-']:before{
+	display: inline-block;
+   font-family: 'soliloquy';
+   font-style: normal;
+   font-weight: normal;
+   font-size: 13px;
+   line-height: 1.5;
+   margin-right: 8px;   
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+//All of Soliloquy Admin Icons
+.soliloquy-icon-configuration:before{content:'\0041';}
+.soliloquy-icon-soliloquy:before{content:'\0042';}
+.soliloquy-icon-pinterest:before{content:'\0043';}
+.soliloquy-icon-lightbox:before{content:'\0044';}
+.soliloquy-icon-misc:before{content:'\0045';}
+.soliloquy-icon-mobile:before{content:'\0046';}
+.soliloquy-icon-pagination:before{content:'\0047';}
+.soliloquy-icon-proofing:before{content:'\0048';}
+.soliloquy-icon-slideshow:before{content:'\0049';}
+.soliloquy-icon-tags:before{content:'\004a';}
+.soliloquy-icon-thumbnails:before{content:'\004b';}
+.soliloquy-icon-video:before{content:'\004c';}
+.soliloquy-icon-watermark:before{content:'\004d';}
+.soliloquy-icon-cloud-download:before{content:'\004e';}
+.soliloquy-icon-toggle-on:before{content:'\004f';}
+.soliloquy-icon-plus-circle:before{content:'\0050';}
+.soliloquy-icon-list:before{content:'\0052';}
+.soliloquy-icon-grid:before{content:'\0053';}
+.soliloquy-icon-pencil:before{content:'\0055';}
+.soliloquy-icon-close:before{content:'\0056';}
+.soliloquy-icon-check:before{content:'\0057';}
+.soliloquy-icon-schedule:before{content:'\0058';}
+.soliloquy-icon-carousel:before{content:'\0059';}

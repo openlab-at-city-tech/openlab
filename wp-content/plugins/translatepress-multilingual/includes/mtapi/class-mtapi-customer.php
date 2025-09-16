@@ -16,8 +16,7 @@ class TRP_MTAPI_Customer {
 	}
 
 	public function lookup_site( $key, $url ) {
-
-		return $this->request( 'POST', 'sites/lookup', [ 'key' => $key, 'url' => trailingslashit($url) ] );
+        return $this->request( 'POST', 'sites/lookup', [ 'key' => $key, 'url' => trailingslashit($url) ] );
 	}
 
 	public function lookup_license( $key ) {

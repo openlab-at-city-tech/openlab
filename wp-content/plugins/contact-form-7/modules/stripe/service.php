@@ -143,18 +143,14 @@ class WPCF7_Stripe extends WPCF7_Service {
 	public function admin_notice( $message = '' ) {
 		if ( 'invalid' === $message ) {
 			wp_admin_notice(
-				wp_kses_data( sprintf(
-					'<strong>%1$s</strong>: %2$s',
-					__( 'Error', 'contact-form-7' ),
-					__( 'Invalid key values.', 'contact-form-7' )
-				) ),
+				__( '<strong>Error:</strong> Invalid key values.', 'contact-form-7' ),
 				array( 'type' => 'error' )
 			);
 		}
 
 		if ( 'success' === $message ) {
 			wp_admin_notice(
-				wp_kses_data( __( 'Settings saved.', 'contact-form-7' ) ),
+				__( 'Settings saved.', 'contact-form-7' ),
 				array( 'type' => 'success' )
 			);
 		}
@@ -216,7 +212,7 @@ class WPCF7_Stripe extends WPCF7_Service {
 			) );
 
 			$formatter->append_preformatted(
-				esc_html( __( 'Setup Integration', 'contact-form-7' ) )
+				esc_html( __( 'Setup integration', 'contact-form-7' ) )
 			);
 
 			$formatter->end_tag( 'p' );

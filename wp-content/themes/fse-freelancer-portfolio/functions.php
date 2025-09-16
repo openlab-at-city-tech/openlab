@@ -49,6 +49,10 @@ if ( ! function_exists( 'fse_freelancer_portfolio_styles' ) ) :
 
 		wp_enqueue_script( 'fse-freelancer-portfolio-custom-script', get_theme_file_uri( '/assets/js/custom-script.js' ), array( 'jquery' ), true );
 
+		wp_enqueue_style( 'animate-css', esc_url(get_template_directory_uri()).'/assets/css/animate.css' );
+
+		wp_enqueue_script( 'jquery-wow', esc_url(get_template_directory_uri()) . '/assets/js/wow.js', array('jquery') );
+
 		wp_enqueue_style( 'dashicons' );
 
 		wp_style_add_data( 'fse-freelancer-portfolio-style', 'rtl', 'replace' );
@@ -72,6 +76,9 @@ require get_template_directory() . '/inc/block-filters.php';
 
 // Svg icons
 require get_template_directory() . '/inc/icon-function.php';
+
+// TGM plugin
+require get_template_directory() . '/inc/tgm/tgm.php';
 
 // Customizer
 require get_template_directory() . '/inc/customizer.php';

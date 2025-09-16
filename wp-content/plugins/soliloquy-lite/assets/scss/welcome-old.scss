@@ -1,0 +1,1200 @@
+@import 'vars';
+@import 'header';
+body.soliloquy_page_soliloquy-lite-welcome,
+body.soliloquy_page_soliloquy-lite-get-started,
+body.soliloquy_page_soliloquy-lite-upgrade,
+body.soliloquy_page_soliloquy-lite-partners,
+body.soliloquy_page_soliloquy-lite-litevspro {
+	background-color: rgb(255, 255, 255);
+	#soliloquy-header {
+		height: 160px;
+	}
+	.nav-tab-wrapper {
+		border: none;
+		margin-top: -50px;
+	}
+	.nav-tab {
+		font-size: 16px;
+		border: none;
+		background: transparent;
+		padding: 10px 24px;
+		font-weight: 400;
+		margin-left: 20px;
+	}
+	.nav-tab-active {
+		background-color: white;
+		font-weight: 600;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+	}
+}
+
+.soliloquy-welcome-wrap {
+	padding: 30px 60px;
+	.nav-tab-wrapper {
+		a {
+			font-weight: 400;
+			font-size: 18px;
+			line-height: 24px;
+		}
+		a.nav-tab-active {
+			font-weight: 600;
+		}
+	}
+	.nav-tab {
+		margin-right: 0.85em;
+	}
+
+	.soliloquy-title {
+		width: 100%;
+		margin-bottom: 20px;
+
+		h1.welcome-header {
+			background: none;
+			font-size: 42px;
+			font-weight: 400;
+			padding-left: 0;
+			span {
+				color: #7cc048;
+				margin-right: -10px;
+				text-indent: 0;
+				line-height: 1;
+				font-size: 33px;
+			}
+		}
+		h1.welcome-header,
+		.about-text {
+			text-indent: 10px;
+		}
+		.about-text {
+			font-size: 21px;
+			line-height: 32px;
+			font-weight: 200;
+		}
+	}
+
+	.soliloquy-welcome-sidebar {
+		float: right;
+		width: 20%;
+		padding: 15px;
+
+		.sidebox {
+			background: #e6e6e6;
+			padding: 20px;
+			font-size: 14px;
+			margin-bottom: 20px;
+			h4 {
+				font-weight: 600;
+				line-height: 1.3;
+				color: #000;
+				margin: 0 0 10px 0;
+			}
+			input[type='password'],
+			input[type='text'],
+			input[type='email'] {
+				width: 100%;
+			}
+			input[type='submit'],
+			input[type='button'] {
+				margin: 10px 0 0;
+			}
+
+			.form-row {
+				input[type='checkbox'] {
+					margin: 2px;
+				}
+				label {
+					margin-left: 5px;
+					font-size: 12px;
+				}
+				margin: 2px 0;
+				width: 100%;
+				font-size: 14px;
+				line-break: 14px;
+			}
+			&.warning {
+				background: #950303;
+				color: white;
+				h4 {
+					color: #ffae00;
+				}
+				p {
+					strong {
+						color: #ffae00;
+					}
+				}
+			}
+		}
+		sidebox:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+
+	.soliloquy-wrap {
+		padding: 20px;
+	}
+}
+.soliloquy-panel {
+	display: flex;
+	background: white;
+	padding: 60px;
+	font-size: 16px;
+	line-height: 25px;
+	margin-bottom: 60px;
+
+	h2 {
+		font-size: 2em;
+		font-weight: 500;
+		line-height: 1.2em;
+		margin-top: 0;
+		margin-bottom: 0;
+		text-transform: capitalize;
+	}
+	p {
+		font-size: 16px;
+		line-height: 20px;
+		a {
+			font-weight: 500;
+			color: $secondary-color;
+			text-decoration: none;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+	}
+	ul {
+		list-style: disc;
+		list-style-position: inside;
+		&.list-of-links {
+			list-style: none;
+			a {
+				color: #7cc048;
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+	.feature-photo-column {
+		padding-left: 30px;
+		display: inherit;
+		img {
+			width: 100%;
+			margin: auto;
+		}
+		&.photo-left {
+			padding-left: 0;
+			padding-right: 30px;
+		}
+	}
+	&.mini-panel {
+		.feature-photo-column {
+			padding-top: 10px;
+			a {
+				margin: 0 auto;
+				height: auto;
+			}
+			img {
+				width: auto;
+				margin: 0 auto;
+			}
+		}
+	}
+}
+/*------------------------------------------------------------------------------
+* 1.0 Welcome Screen
+*----------------------------------------------------------------------------*/
+
+/*
+* 1.1 Version Badge
+*/
+
+.about-wrap .soliloquybadge {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.index_page_soliloquycredits code,
+.index_page_soliloquyabout code {
+	background-color: #e0e0e0;
+	color: #636363;
+	font-size: 1em;
+}
+
+@media only screen and (max-width: 500px) {
+	.about-wrap .soliloquybadge {
+		position: relative;
+		margin: 10px auto;
+		top: auto;
+		right: auto;
+	}
+}
+
+/*
+* 1.2 About Panel
+*/
+
+body.post-type-soliloquy div.wrap.about-wrap {
+	padding-top: 20px;
+	padding-left: 20px;
+
+	h1.welcome-header {
+		background: none;
+		font-size: 42px;
+		font-weight: 400;
+		padding-left: 0;
+	}
+	h1.welcome-header,
+	.about-text {
+		text-indent: 10px;
+	}
+
+	.nav-tab {
+		padding: 15px;
+	}
+}
+
+/*
+* 1.2.1 Headline Feature
+*/
+.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline-feature {
+	margin-bottom: 2em;
+	margin-top: 3em;
+	padding: 2em 3em;
+}
+
+.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline {
+	margin: 0 auto;
+	width: 45em;
+}
+
+.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline span.dashicons {
+	background-color: #f1f1f1;
+	color: #d84800;
+	clear: left;
+	font-size: 100px;
+	float: left;
+	height: 100px;
+	line-height: 100px;
+	margin: 0 15px 15px 0;
+	text-align: center;
+	width: 100px;
+}
+
+.soliloquy_page_soliloquy-support {
+	.headline-title {
+		font-size: 2.2em;
+		font-weight: 300;
+		line-height: 2;
+		margin: 1em 0 1em;
+		text-align: center;
+	}
+}
+
+.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline-feature p {
+	font-size: 1.15em;
+	margin: 1.15em auto 0.6em 0;
+}
+
+.soliloquy_page_soliloquy-lite-welcome,
+.soliloquy_page_soliloquy-lite-get-started,
+.soliloquy_page_soliloquy-support {
+	.soliloquy-features-section,
+	.soliloquy-recent-section {
+		border-bottom: 1px solid #ccc;
+		clear: both;
+		margin-bottom: 20px;
+		margin-top: 10px;
+		overflow: hidden;
+		padding-bottom: 2em;
+		word-break: break-word;
+
+		p {
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		img {
+			margin-bottom: 20px;
+		}
+
+		code {
+			word-break: break-all;
+		}
+
+		span.dashicons {
+			/* DELETE */
+			background-color: #fff;
+			border-radius: 50%;
+			clear: left;
+			color: #d84800;
+			font-size: 50px;
+			float: left;
+			height: 80px;
+			line-height: 80px;
+			margin: 0 15px 15px 0;
+			text-align: center;
+			width: 80px;
+		}
+
+		img.icon {
+			background-color: transparent;
+			clear: left;
+			font-size: 50px;
+			float: left;
+			// height: 80px;
+			line-height: 80px;
+			margin: 0 15px 15px 0;
+			text-align: center;
+			width: 80px;
+		}
+
+		h4.feature-title {
+			color: #7cc048;
+			font-size: 1.35em;
+			margin-bottom: 0.6em;
+			margin-top: 0;
+		}
+
+		span.badge {
+			font-size: 0.7em;
+			font-weight: 500;
+			display: inline-block;
+			text-transform: uppercase;
+			background-color: #7cc048;
+			color: white;
+			padding: 3px 5px;
+			border-radius: 15%;
+		}
+
+		.headline-title {
+			font-size: 25px;
+			font-weight: 400;
+			line-height: 1.5;
+			margin: 1em auto 2em;
+			text-align: center;
+			color: #000;
+		}
+
+		.soliloquy-feature-with-images {
+			border-bottom: 1px solid #ccc;
+			margin-bottom: 5em;
+			padding-bottom: 2em;
+		}
+
+		.soliloquy-feature code {
+			font-size: 0.95em;
+			line-height: 1.5;
+		}
+
+		.soliloquy-big-icon {
+			font-size: 80px;
+			float: left;
+			margin-left: 10px;
+			&.soliloquy-leaf {
+				color: #7cc048;
+			}
+		}
+	}
+
+	.soliloquy-feature .feature-title {
+		font-size: 1em;
+		line-height: 1.5;
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+}
+
+/*------------------------------------------------------------------------------
+* 2.0 Addon Screen
+*----------------------------------------------------------------------------*/
+body.soliloquy_page_soliloquy-lite-welcome-addons {
+	#wpfooter {
+		position: relative;
+	}
+	.soliloquy-addons-area.unlicensed {
+		h3 {
+			display: none;
+		}
+	}
+	#soliloquy-addons .soliloquy-addons-area .soliloquy-addon p {
+		font-size: 18px;
+	}
+}
+
+/*------------------------------------------------------------------------------
+* 3.0 Upgrade Screen
+*----------------------------------------------------------------------------*/
+.soliloquy-lite-updates-panel {
+	display: block;
+	background-color: rgb(245, 245, 245);
+	border-radius: 6px;
+}
+.soliloquy-pro-updates-panel {
+	display: block;
+}
+.soliloquy-pro-updates-features {
+	display: flex;
+	.soliloquy-feature {
+		display: flex;
+		flex-direction: column;
+		align-self: center;
+		padding: 20px;
+		text-align: center;
+		img {
+			max-height: 125px;
+			width: auto;
+			align-self: center;
+			margin-bottom: 15px;
+		}
+	}
+}
+.upgrade-wrap {
+	text-align: center;
+	margin-bottom: 60px;
+	h2 {
+		font-size: 32px;
+		line-height: 28px;
+		font-weight: 400;
+		margin: 35px auto 10px auto;
+	}
+	h4.headline-subtitle {
+		font-size: 24px;
+		line-height: 24px;
+		font-weight: 200;
+		margin: 20px auto;
+		display: block;
+	}
+	a.button {
+		font-size: 21px;
+		height: 50px;
+		line-height: 48px;
+	}
+}
+.upgrade-list {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	column-gap: 30px;
+	border-radius: 6px;
+	padding: 60px;
+	background: rgb(245, 245, 245);
+	.interior {
+		background: $white;
+		border-radius: 6px;
+		padding: 30px;
+		text-align: center;
+		margin-bottom: 30px;
+		height: 354px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		a {
+			text-decoration: none;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			vertical-align: middle;
+			img {
+				max-height: 125px;
+			}
+			h5 {
+				font-size: 16px;
+				color: rgb(0, 0, 0);
+			}
+			p {
+				font-size: 18px;
+				color: rgb(0, 0, 0);
+			}
+		}
+	}
+
+	li {
+		width: 50%;
+		margin: 20px auto;
+		float: left;
+		display: block;
+		font-size: 16px;
+		line-height: 18px;
+		min-height: 315px;
+
+		h5 {
+			font-size: 18px;
+			line-height: 24px;
+			margin: 20px auto;
+			font-weight: 700;
+			a {
+				text-decoration: none;
+				color: $black;
+			}
+		}
+		p {
+			margin: 0;
+		}
+	}
+}
+.upgrade-video {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+}
+.upgrade-video iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/*------------------------------------------------------------------------------
+* 4.0 Lite vs Pro
+*----------------------------------------------------------------------------*/
+
+body.soliloquy_page_soliloquy-lite-litevspro {
+	.soliloquy-get-started-main {
+		width: 100%;
+	}
+}
+
+#soliloquy-admin-litevspro {
+	.centered {
+		text-align: center;
+	}
+	h1 {
+		font-size: 34px;
+		line-height: 32px;
+	}
+	p.centered {
+		font-size: 18px;
+		line-height: 21px;
+	}
+	&.wrap {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.litevspro-table-header {
+		background: #fff;
+	}
+	.soliloquy-admin-litevspro-section {
+		margin: 0 0 30px 0;
+		padding: 30px;
+		line-height: 2;
+		&.no-bottom {
+			margin-bottom: 0;
+			padding-bottom: 0;
+		}
+		&.litevspro-table-header {
+			padding-bottom: 30px;
+		}
+	}
+	table tr td {
+		border-bottom: 1px solid #dddddd;
+		border-right: 1px solid #dddddd;
+		padding: 30px;
+		vertical-align: top;
+		width: 33%;
+		p {
+			font-size: 18px;
+			line-height: 24px;
+		}
+	}
+	table tr td:last-child {
+		border-right: 0;
+	}
+	table {
+		border-bottom: 0;
+	}
+	.soliloquy-admin-litevspro-section-hero {
+		border-top: 0;
+		font-size: 16px;
+		line-height: 18px;
+		p {
+			text-align: center;
+			font-size: 16px;
+			line-height: 18px;
+		}
+		.call-to-action {
+			font-size: 21px;
+			font-weight: 500;
+			text-align: center;
+			.button {
+				font-size: 28px;
+				height: 60px;
+				line-height: 58px;
+			}
+		}
+		span.soliloquy-deal {
+			font-weight: 500;
+			color: green;
+		}
+	}
+	.soliloquy-admin-litevspro-section-table {
+		padding-left: 0;
+		padding-right: 0;
+		padding-top: 0;
+		table {
+			width: 100%;
+			background: rgb(245, 245, 245);
+			tr td:first-child {
+				border-left: 1px solid #dddddd;
+				border-bottom-color: rgb(221, 221, 221);
+				border-bottom-style: solid;
+				border-bottom-width: 1px;
+			}
+			tr td:last-child {
+				border-right: 1px solid #dddddd;
+				border-bottom-color: rgb(221, 221, 221);
+				border-bottom-style: solid;
+				border-bottom-width: 1px;
+				background-color: #f3f9fe;
+			}
+			tr:first-child td {
+				border-top: 1px solid #ddd;
+			}
+			th {
+				text-align: left;
+				font-weight: 600;
+				font-size: 18px;
+				padding-left: 30px;
+				padding-bottom: 20px;
+				padding-top: 20px;
+				border-top: 1px solid #dddddd;
+				border-right: 1px solid #dddddd;
+				vertical-align: middle;
+			}
+			th:last-child {
+				border-right: 1px solid #dddddd;
+			}
+			th:first-child {
+				border-left: 1px solid #dddddd;
+			}
+			td {
+				background: #fff;
+				strong {
+					display: block;
+				}
+			}
+			p {
+				background-repeat: no-repeat;
+				background-size: 15px auto;
+				background-position: 0 6px;
+				margin: 0;
+			}
+			p.features-full {
+				padding-left: 30px;
+				background-position: 0 4px;
+				background-image: url(../images/icons/litevspro/tick.svg);
+			}
+			p.features-none {
+				padding-left: 30px;
+				background-position: 6px 6px;
+				background-image: url(../images/icons/litevspro/cross_red.svg);
+				background-size: 15px auto;
+			}
+			p.features-partial {
+				padding-left: 30px;
+				background-position: 6px 6px;
+				background-size: 15px auto;
+				background-image: url(../images/icons/litevspro/cross.svg);
+			}
+		}
+	}
+}
+
+/*------------------------------------------------------------------------------
+* 5.0 Getting Started (Revised)
+*----------------------------------------------------------------------------*/
+
+.soliloquy-get-started-section {
+	margin-top: 20px;
+	.centered {
+		text-align: center;
+	}
+
+	.soliloquy-admin-get-started-panel {
+		background: url('../images/soliloquy-pattern.jpg') repeat repeat;
+		color: $white;
+		border-radius: 6px;
+
+		h3 {
+			padding: 0;
+			margin: 0 0 10px 0;
+		}
+		h2,
+		h3 {
+			color: white;
+		}
+		p {
+			font-size: 18px;
+			line-height: 1.5;
+			margin: 30px 0;
+		}
+		.button.soliloquy-button {
+			font-size: 21px;
+			height: 50px;
+			line-height: 48px;
+		}
+		.feature-photo-column {
+			padding-left: 30px;
+			max-width: 360px;
+			min-width: 350px;
+			display: inherit;
+			img {
+				width: 100%;
+				margin: auto;
+			}
+			&.photo-left {
+				padding-left: 0;
+				padding-right: 30px;
+			}
+		}
+	}
+	.soliloquy-admin-upgrade-panel {
+		background-color: rgb(245, 245, 245);
+		border-radius: 6px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+		overflow: hidden;
+		font-size: 18px;
+		p {
+			font-size: 18px;
+		}
+		.feature-photo-column {
+			position: relative;
+			margin-right: -120px;
+			margin-bottom: -540px;
+			width: 100%;
+			img {
+				position: absolute;
+				right: -30px;
+				top: 0;
+			}
+		}
+		.button.soliloquy-button {
+			font-size: 21px;
+			height: 50px;
+			line-height: 48px;
+		}
+	}
+	.soliloquy-admin-docs-panel {
+		background-color: rgb(245, 245, 245);
+		border-radius: 6px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+		overflow: hidden;
+		font-size: 18px;
+		.soliloquy-admin-header {
+			display: flex;
+			vertical-align: middle;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+		}
+	}
+
+	.soliloquy-admin-get-started-banner {
+		display: flex;
+		background: black;
+		color: white;
+		padding: 10px 25px;
+		margin-bottom: 60px;
+		border-radius: 6px;
+		align-items: center;
+		.banner-text {
+			display: block;
+			margin: 0;
+			padding: 10px 0 0 0;
+			text-align: center;
+			font-size: 1.5em;
+			text-align: left;
+			h3 {
+				font-size: 1.5em;
+				line-height: 1.3em;
+				margin: 5px auto;
+				color: white;
+			}
+		}
+		.banner-button {
+			margin-left: auto;
+			max-width: 33%;
+			height: 100%;
+			// padding: 0 0 10px 0;
+			// text-align: center;
+			vertical-align: middle;
+			a {
+				height: auto;
+				padding: 15px 25px;
+				font-size: 1.45em;
+				display: block;
+				margin: auto;
+			}
+		}
+	}
+	.soliloquy-help-section {
+		.button.soliloquy-button {
+			height: 40px;
+			line-height: 40px;
+			font-size: 18px;
+		}
+	}
+}
+
+.soliloquy-admin-3-col {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 0px;
+	.soliloquy-cols {
+		flex-grow: 1;
+		width: 26%;
+		text-align: center;
+		background-color: rgb(245, 245, 245);
+		border-radius: 6px;
+		padding: 3%;
+		margin-left: 20px;
+		&:first-child {
+			margin-left: 0;
+		}
+		h3 {
+			font-size: 24px;
+		}
+		p {
+			max-width: 80%;
+			font-size: 16px;
+			margin: 20px auto;
+		}
+	}
+}
+
+.lionsher-partners-wrap {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 30px;
+	padding-top: 30px;
+}
+.lionsher-partners {
+	background-color: #f5f5f5;
+	margin-bottom: 30px;
+	border-radius: 6px;
+}
+.lionsher-partners-main {
+	display: flex;
+	flex-direction: row;
+	padding: 30px 30px 20px;
+	flex-grow: 1;
+	text-align: left;
+	height: 120px;
+	h3 {
+		padding-top: 0;
+		margin-top: 0;
+	}
+	img {
+		padding-right: 15px;
+	}
+}
+.lionsher-partners-footer {
+	display: flex;
+	text-align: left;
+	align-items: center;
+	vertical-align: middle;
+	padding: 20px;
+	border-top: 1px solid rgb(230, 230, 230);
+
+	.lionsher-partners-install-wrap {
+		margin-left: auto;
+	}
+	.spinner {
+		display: none;
+	}
+	.lionsher-partners-button {
+		font-size: 16px !important;
+		height: 40px !important;
+		line-height: 38px !important;
+		border-radius: 6px !important;
+	}
+}
+
+.lionsher-partner-status {
+	font-weight: bold;
+	span {
+		font-weight: normal;
+	}
+}
+
+/*------------------------------------------------------------------------------
+* 1.0 Media Queries
+*----------------------------------------------------------------------------*/
+
+@media screen and (max-width: 800px) {
+	.upgrade-list {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	.lionsher-partners-wrap {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	.soliloquy-admin-3-col,
+	.soliloquy-pro-updates-features {
+		display: block;
+	}
+	.feature-photo-column img {
+		display: none;
+	}
+	.soliloquy-panel {
+		display: block;
+	}
+	.soliloquy-get-started-section .soliloquy-admin-upgrade-panel {
+		display: flex;
+		overflow: visible;
+	}
+	.soliloquy-admin-3-col {
+		.soliloquy-cols {
+			width: 100%;
+			margin: 0;
+			margin-bottom: 30px;
+		}
+	}
+	.soliloquy-welcome-wrap {
+		.soliloquy-welcome-sidebar {
+			float: none;
+			width: 100%;
+			padding: 0;
+		}
+		.soliloquy-welcome-main {
+			float: none;
+			width: 100%;
+		}
+
+		.soliloquy-title {
+			h1.welcome-header {
+				line-height: 42px;
+			}
+			h1.welcome-header,
+			.about-text {
+				text-indent: 0;
+			}
+		}
+	}
+
+	.soliloquyheadline-feature,
+	.soliloquy-features-section,
+	.soliloquy-recent-section {
+		margin-left: 20px;
+		margin-right: 20px;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline-feature {
+		padding: 0;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline {
+		margin: 0;
+		width: 97%;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-features-section {
+		clear: both;
+		margin-bottom: 0;
+		margin-top: 2em;
+		padding-bottom: 2em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature-with-images {
+		margin-bottom: 2em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.headline-title {
+		margin-bottom: 1em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-recent-section
+		.changelog-title {
+		font-size: 1.25em;
+		line-height: 1.5;
+		margin-bottom: 0.5em;
+		margin-top: 0.5em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.feature-title,
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-recent-section .title {
+		font-size: 1.25em;
+		line-height: 1.25;
+		margin-top: 0.6em;
+		text-align: left;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature,
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature-imaged {
+		clear: both;
+		float: left;
+		margin-bottom: 1em;
+		margin-top: 1em;
+		margin-right: 0;
+		padding-right: 1em;
+		width: 100%;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature-imaged
+		p {
+		font-size: 1em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature
+		span {
+		margin-top: 0.33em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-feature.opposite
+		.feature-title,
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-feature.opposite p {
+		float: none;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-recent-section {
+		clear: both;
+		margin-bottom: 2em;
+		margin-top: 2em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-recent {
+		margin-bottom: 0;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-recent-section
+		.changelog-title {
+		margin-bottom: 0.5em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-recent .title {
+		font-size: 1em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-recent p {
+		margin-bottom: 1em;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-recent-section
+		.two-col
+		> div,
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-recent-section
+		.three-col
+		.col {
+		margin-top: 0;
+		padding-bottom: 0.5em;
+		width: 100%;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquythree-column
+		.soliloquycolumn {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 1400px) {
+	.lionsher-partners-wrap {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.soliloquy-admin-get-started-banner.middle,
+	.soliloquy-admin-get-started-banner.bottom {
+		.banner-text {
+			padding: 10px 0 0 10px;
+			h3 {
+				line-height: 1.3em;
+			}
+		}
+		.banner-button {
+			margin-right: 10px;
+			a {
+				font-size: 16px;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 1120px) {
+	.soliloquy-admin-get-started-banner.middle,
+	.soliloquy-admin-get-started-banner.bottom {
+		.banner-button {
+			a {
+				font-size: 14px;
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 360px) {
+	.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline {
+		text-align: center;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline span.dashicons {
+		clear: none;
+		font-size: 80px;
+		float: none;
+		height: 80px;
+		line-height: 80px;
+		margin: 0 auto;
+		width: 80px;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquyheadline-feature
+		.headline-title,
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.headline-title {
+		font-size: 1.5em;
+		line-height: 1.5;
+		text-align: left;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquyheadline-feature
+		.headline-title {
+		margin: 1em 0 0;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome .soliloquyheadline-feature p {
+		margin: 1.15em auto 0.6em 0;
+		text-align: left;
+		width: auto;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.soliloquy-feature {
+		text-align: center;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		span.dashicons {
+		float: none;
+	}
+
+	.soliloquy_page_soliloquy-lite-welcome
+		.soliloquy-features-section
+		.feature-title,
+	.soliloquy_page_soliloquy-lite-welcome .soliloquy-features-section p {
+		margin-left: 0;
+		text-align: left;
+	}
+}

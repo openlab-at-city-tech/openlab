@@ -60,8 +60,8 @@ class Su_Assets {
 			true
 		);
 		// Magnific Popup
-		wp_register_style( 'magnific-popup', plugins_url( 'vendor/magnific-popup/magnific-popup.css', SU_PLUGIN_FILE ), false, '1.1.0', 'all' );
-		wp_register_script( 'magnific-popup', plugins_url( 'vendor/magnific-popup/magnific-popup.js', SU_PLUGIN_FILE ), array( 'jquery' ), '1.1.0', true );
+		wp_register_style( 'magnific-popup', plugins_url( 'vendor/magnific-popup/magnific-popup.css', SU_PLUGIN_FILE ), false, '1.2.0', 'all' );
+		wp_register_script( 'magnific-popup', plugins_url( 'vendor/magnific-popup/magnific-popup.js', SU_PLUGIN_FILE ), array( 'jquery' ), '1.2.0', true );
 		// Swiper
 		if ( ! get_option( 'su_option_hide_deprecated' ) ) {
 			wp_register_script( 'swiper', plugins_url( 'vendor/swiper/swiper.js', SU_PLUGIN_FILE ), array( 'jquery' ), '2.6.1', true );

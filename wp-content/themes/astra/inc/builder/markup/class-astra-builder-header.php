@@ -444,7 +444,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 					! is_checkout() &&
 					( 'redirect' !== $responsive_cart_action || // Prevent flyout markup when 'redirect' option is selected.
 					'redirect' !== $desktop_cart_action )
-				) || Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' )
+				) || ( Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) && class_exists( 'Easy_Digital_Downloads' ) )
 			) {
 				Astra_Builder_UI_Controller::render_mobile_cart_flyout_markup();
 			}

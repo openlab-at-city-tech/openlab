@@ -72,6 +72,10 @@ if ( ! function_exists( 'cv_portfolio_blocks_styles' ) ) :
 
 		wp_style_add_data( 'cv-portfolio-blocks-style', 'rtl', 'replace' );
 
+		wp_enqueue_style('cv-portfolio-blocks-swiper-css',
+		esc_url(get_template_directory_uri()) . '/assets/css/swiper-bundle.css',
+		array()
+		);
 	}
 
 endif;
@@ -91,6 +95,17 @@ function cv_portfolio_blocks_scripts() {
         null, 
         true // Load in footer
     );
+
+    wp_enqueue_script( 
+		'cv-portfolio-blocks-custom', esc_url(get_template_directory_uri()) . '/assets/js/custom.js', 
+		array('jquery') 
+	);
+	wp_enqueue_script(
+		'cv-portfolio-blocks-swiper-js',
+		esc_url(get_template_directory_uri()) . '/assets/js/swiper-bundle.js',
+		array(),
+		true
+	);
 }
 add_action( 'wp_enqueue_scripts', 'cv_portfolio_blocks_scripts' );
 

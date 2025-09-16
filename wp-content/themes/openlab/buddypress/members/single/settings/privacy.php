@@ -12,7 +12,10 @@ $profile_args = [
 
 $social_fields = openlab_social_media_fields();
 
-$field_ids = [];
+$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
+
+// This is a trick: -78 stands for the 'department' field and lets us save the settings.
+$field_ids = [ -78 ];
 
 do_action( 'bp_before_member_settings_template' ); ?>
 
@@ -27,11 +30,19 @@ do_action( 'bp_before_member_settings_template' ); ?>
 
 			<div class="panel-body">
 				<p>Adjust the settings below to choose who can see what on your OpenLab profile.</p>
+				<div class="panel-subheading">My Profile</div>
 
-				<?php if ( bp_has_profile( $profile_args ) ) : ?>
-					<div class="panel-subheading">My Profile</div>
+				<div class="privacy-panel-options">
+					<div class="privacy-panel-option">
+						<label for="field-visibility-settings-select--78"><?php echo esc_html( $dept_label ); ?></label>
 
-					<div class="privacy-panel-options">
+						<div class="field-visibility-options">
+							<span>Who can see this?</span>
+							<?php openlab_xprofile_field_visibility_selector( -78, false ); ?>
+						</div>
+					</div>
+
+					<?php if ( bp_has_profile( $profile_args ) ) : ?>
 						<?php while ( bp_profile_groups() ) :  ?>
 							<?php bp_the_profile_group(); ?>
 
@@ -78,8 +89,8 @@ do_action( 'bp_before_member_settings_template' ); ?>
 							</div>
 
 						<?php endforeach; ?>
-					</div>
-				<?php endif; ?>
+					<?php endif; ?>
+				</div>
 
 				<input type="hidden" name="profile-privacy-field-ids" value="<?php echo esc_attr( implode( ',', $field_ids ) ); ?>" />
 
@@ -108,7 +119,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 			<div class="panel-body">
 				<div class="panel-subheading">Display Name</div>
 				<div class="privacy-panel-options">
-					<p>Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Because your Display Name is public, you don't need to use your real name or your full name. Your Display Name can be changed at any time by editing your profile. ← links to edit profile screen.</p>
+					<p>Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Because your Display Name is public, you don't need to use your real name or your full name. Your Display Name can be changed at any time by <a href="<?php echo esc_url( bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ) ); ?>">editing your profile</a>.</p>
 				</div>
 
 				<div class="panel-subheading">Username</div>

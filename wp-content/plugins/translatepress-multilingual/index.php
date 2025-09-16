@@ -3,14 +3,14 @@
 Plugin Name: TranslatePress - Multilingual
 Plugin URI: https://translatepress.com/
 Description: Experience a better way of translating your WordPress site using a visual front-end translation editor, with full support for WooCommerce and site builders.
-Version: 2.9.19
+Version: 2.10.2
 Author: Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban
 Author URI: https://cozmoslabs.com/
 Text Domain: translatepress-multilingual
 Domain Path: /languages
 License: GPL2
 WC requires at least: 2.5.0
-WC tested up to: 9.9.4
+WC tested up to: 10.1.1
 
 == Copyright ==
 Copyright 2017 Cozmoslabs (www.cozmoslabs.com)
@@ -82,5 +82,9 @@ function trp_plugin_activation_redirect( $plugin ){
 }
 
 //This is for the DEV version
-if( file_exists(plugin_dir_path( __FILE__ ) . '/index-dev.php') )
-    include_once( plugin_dir_path( __FILE__ ) . '/index-dev.php');
+if( file_exists(plugin_dir_path( __FILE__ ) . '/index-dev.php') ){
+   if(!array_key_exists('translatepress-multilingual', TRP_Translate_Press::set_tp_product_name_static() )){
+        // we only include this in instances where we simulate the business/developer version
+        include_once( plugin_dir_path( __FILE__ ) . '/index-dev.php');
+    }
+}

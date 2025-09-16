@@ -6,8 +6,8 @@
   },
   "advanced-sidebar-menu-admin.min.js": {
     "src": "advanced-sidebar-menu-admin.min.js",
-    "integrity": "sha384-NpmkLENzDCVvrRkfTA9Nd3nysrxTKGKteGPozagXhMnkWupwO10B5B40mVA2cNc9",
-    "hash": "e2e833b99cf07374d872"
+    "integrity": "sha384-ZghacarYzYby36ee+f+iChQJDS6R9lGMCAz9EIWZHVoNax+/dodK2y79Xf0/Oxbi",
+    "hash": "35142238905fb34dc7d4"
   },
   "advanced-sidebar-menu-block-editor.min.css": {
     "src": "advanced-sidebar-menu-block-editor.min.css",
@@ -16,17 +16,17 @@
   },
   "advanced-sidebar-menu-block-editor.min.js": {
     "src": "advanced-sidebar-menu-block-editor.min.js",
-    "integrity": "sha384-KkaF2VPBRrriYio0pvpzN+M91wWQY9ReSfYMgyMe37bW3aFoss5BZheFsoaHNTQu",
-    "hash": "c13e52d0013e9b49a3c2"
+    "integrity": "sha384-yXzAtM8lEpNpo/LdHGrrUA3AMXWXCJXYw4GORJ9Q2ng6BFyHiOq+QYqivE+XiDPw",
+    "hash": "420675995c8f5aa6346c"
   },
   "advanced-sidebar-menu-block-editor.min.js.LICENSE.txt": {
     "src": "advanced-sidebar-menu-block-editor.min.js.LICENSE.txt",
-    "integrity": "sha384-vmCYferUztjInXmDu6R+aHuzPh/NIEmbPyX2y5y3WKfcOtQEHadNFAc+1O4qhcuU",
-    "hash": "0e67918023e14ddf52c9"
+    "integrity": "sha384-BHDF6hAYJimOZSqLjd+pM3wkQsmnRqcjUUdCOmu0ok+hAV8ouff0Sc9S3tzL8E5i",
+    "hash": "37f8245c7cb3647d45be"
   },
   "advanced-sidebar-menu-debug.min.js": {
     "src": "advanced-sidebar-menu-debug.min.js",
-    "integrity": "sha384-HBi8DXCokXNzYBLkzOS90xP03JzBETmZ6lPVsGc08BHXn/SF4Tq9opgHUjHaHfa5",
-    "hash": "91a04933b377c67abca7"
+    "integrity": "sha384-Nso8mo2jiRE9jn6+dJLFCL71oYsYXTCcHvS0hanLDE2QEOs2hbGVm+ntYH+8sA9p",
+    "hash": "539413a19a9b698a0505"
   }
 }

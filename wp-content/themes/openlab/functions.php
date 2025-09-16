@@ -461,10 +461,27 @@ function openlab_xprofile_field_visibility_selector( $field_id = null, $include_
  * @param string $type    The type of definition (e.g. 'member-role')
  * @param string $label   The label for the definition.
  * @param string $content The content of the definition.
+ * @param array  $opts    Additional options.
  */
-function openlab_render_collapsible_definition( $type, $label, $content ) {
+function openlab_render_collapsible_definition( $type, $label, $content, $opts = [] ) {
+	$defaults = array(
+		'expanded' => false,
+	);
+
+	$r = wp_parse_args( $opts, $defaults );
+
+	$classes = [
+		'collapsible-definition',
+		$type . '-definition',
+		'col-sm-24',
+	];
+
+	if ( $r['expanded'] ) {
+		$classes[] = 'show-definition-text';
+	}
+
 	?>
-	<div class="collapsible-definition <?php echo esc_attr( $type ); ?>-definition col-sm-24">
+	<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<div class="collapsible-definition-label <?php echo esc_attr( $type ); ?>-definition-label">
 			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 			<span><?php echo esc_html( $label ); ?></span>

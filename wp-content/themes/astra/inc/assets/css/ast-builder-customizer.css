@@ -1065,16 +1065,7 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     box-shadow: none;
 }
 
-.ahfb-responsive-control-bar .floating-controls .components-button {
-    height: 18px;
-    padding-top: 0;
-    padding-bottom: 0;
-    box-shadow: none;
-}
-
 .ahfb-responsive-control-bar .floating-controls .components-button svg {
-    height: 13px;
-    width: 16px;
     fill: none;
 }
 
@@ -1448,7 +1439,6 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 }
 
 .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity {
-    border-radius: 0;
     border-right: 1px solid #A0AEC0;
 }
 
@@ -1508,6 +1498,17 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     box-shadow: none !important;
  }
 
+/* Social Icons Custom SVG Controls */
+.customize-control-ast-social-icons .ast-social-icon-type-selection {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.customize-control-ast-social-icons .ast-social-custom-svg-textarea {
+    width: 100%;
+    height: 96px;
+}
+
 .ahfb-sorter-drop .ahfb-sorter-item.sortable-chosen {
     border-color: var( --ast-customizer-color-1 );
 }
@@ -1520,7 +1521,6 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     border-radius: 3px;
     gap: 14px;
     background: var( --ast-customizer-color-9 );
-    height: 275px;
 }
 
 .ahfb-sorter-item-panel-content.expanded-below {
@@ -1850,6 +1850,11 @@ button.components-button.ahfb-sorter-item-expand {
     padding-right: 4px;
     width: 28px;
     height: 28px;
+}
+
+/* Target custom SVGs with stroke attribute to remove fill */
+.ahfb-sorter-drop-social_item_group .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity .custom-svg svg[stroke] {
+    fill: none;
 }
 
 .ahfb-sorter-drop-social_item_group .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity.item-is-hidden {

@@ -366,7 +366,7 @@ class folders_replace_media {
             </style>
             <div class="folders-undo-notification success" id="media-success">
                 <div class="folders-undo-body">
-                    <a href="javascript:;" class="close-undo-box"><span></span></a>
+                    <a href="#" class="close-undo-box"><span></span></a>
                     <div class="folders-undo-header"><?php esc_html_e( 'File successfully replaced', 'folders' ); ?></div>
                     <div class="folders-undo-body" style="padding:0"><?php esc_html_e( 'The file has been successfully replaced using the file replacement feature', 'folders' ); ?></div>
                 </div>
@@ -419,7 +419,7 @@ class folders_replace_media {
                         <div class="popup-form-content">
                             <div class="popup-form-data">
                                 <div class="close-popup-button">
-                                    <a class="" href="javascript:;"><span></span></a>
+                                    <a class="" href="#"><span></span></a>
                                 </div>
                                 <form action="" method="post" id="save-folder-form">
                                     <div class="add-update-folder-title">Rewrite wp-config.php to enable Trash</div>
@@ -427,7 +427,7 @@ class folders_replace_media {
                                         To enable Trash functionality in Media, Add the following one line <code>define( 'MEDIA_TRASH', true );</code> in <a href="https://wordpress.org/support/article/editing-wp-config-php/" rel="noopener noreferrer" target="_blank">wp-config.php</a> file just before the line that says "That’s all, stop editing!"
                                     </div>
                                     <div class="folder-form-buttons">
-                                        <a href="javascript:;" class="form-cancel-btn">I'll do it manually</a>
+                                        <a href="#" class="form-cancel-btn">I'll do it manually</a>
                                         <button type="submit" class="form-submit-btn write-in-config-file">Automatically write this line</button>
                                     </div>
                                 </form>
@@ -439,7 +439,7 @@ class folders_replace_media {
                             <div class="popup-form-content">
                                 <div class="popup-form-data">
                                     <div class="close-popup-button">
-                                        <a class="" href="javascript:;"><span></span></a>
+                                        <a class="" href="#"><span></span></a>
                                     </div>
                                     <div class="add-update-folder-title">
                                         Something went wrong

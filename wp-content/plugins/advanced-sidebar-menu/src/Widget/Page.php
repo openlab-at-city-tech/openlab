@@ -18,10 +18,11 @@ use Advanced_Sidebar_Menu\Utils;
  * @phpstan-type DEFAULTS \Required<\Pick<PAGE_SETTINGS,'display_all'|'exclude'|'include_childless_parent'|'include_parent'|'levels'|'order_by'|'title'>>
  * @formatter:on
  *
+ * @implements Widget<PAGE_SETTINGS, DEFAULTS>
  * @implements WidgetWithId<PAGE_SETTINGS, DEFAULTS>
  * @extends \WP_Widget<PAGE_SETTINGS>
  */
-class Page extends \WP_Widget implements WidgetWithId {
+class Page extends \WP_Widget implements Widget, WidgetWithId {
 	/**
 	 * @use Checkbox<PAGE_SETTINGS>
 	 */

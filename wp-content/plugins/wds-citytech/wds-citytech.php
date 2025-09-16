@@ -1847,7 +1847,7 @@ add_filter(
 );
 
 /**
- * Show 'Account Deleted' for the user name of deleted comment authors.
+ * Show 'Former OpenLab Member' for the user name of deleted comment authors.
  *
  * @param string $author The comment author.
  * @param int	$comment_ID The comment ID.
@@ -1864,7 +1864,7 @@ function openlab_deleted_comment_author_name( $author, $comment_ID, $comment ) {
 		return $author;
 	}
 
-	return 'Account Deleted';
+	return 'Former OpenLab Member';
 }
 add_filter( 'get_comment_author', 'openlab_deleted_comment_author_name', 10, 3 );
 

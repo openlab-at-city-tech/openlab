@@ -360,57 +360,132 @@ class TRP_Translation_Render{
         return $data;
     }
 
-    /**
-     * Function that translates the content excerpt and post title in the REST API
-     * @param $response
-     * @return mixed
-     */
-    public function handle_rest_api_translations($response){
-    	if ( isset( $response->data ) ) {
-            $trp = TRP_Translate_Press::get_trp_instance();
-            $url_converter = $trp->get_component( 'url_converter' );
-            $language = $url_converter->get_lang_from_url_string( $url_converter->cur_page_url() );
+	/**
+	 * Handle generic REST API translations using configurable rules
+     * hooked on rest_pre_echo_response in class-translate-press.php
+	 * @param array $result
+	 * @param WP_REST_Server $server
+	 * @param WP_REST_Request $request
+	 * @return array
+	 */
+	public function handle_generic_rest_api_translations( $result, $server, $request ) {
+        $trp = TRP_Translate_Press::get_trp_instance();
+        $url_converter = $trp->get_component( 'url_converter' );
+        $language = $url_converter->get_lang_from_url_string( $url_converter->cur_page_url() );
 
-            if ( $language == $this->settings['default-language'] || $language == null) {
-                return $response; // exit early in default language.
-            }
+        if ( $language == $this->settings['default-language'] || $language == null ) {
+            return $result; // exit early in default language.
+        }
 
-            if ( isset( $response->data['name'] ) ){
-                $response->data['name'] = $this->translate_page( $response->data['name'] );
-            }
-		    if (isset($response->data['title']['rendered'])) {
-			    $response->data['title']['rendered'] = $this->translate_page( $response->data['title']['rendered'] );
-		    }
-		    if (isset($response->data['excerpt']['rendered'])) {
-			    $response->data['excerpt']['rendered'] = $this->translate_page( $response->data['excerpt']['rendered'] );
-		    }
-		    if (isset($response->data['content']['rendered'])) {
-			    $response->data['content']['rendered'] = $this->translate_page( $response->data['content']['rendered'] );
-		    }
-            if ( isset( $response->data['description'] ) ) {
-			    $response->data['description'] = $this->translate_page( $response->data['description'] );
-		    }
-            if ( isset( $response->data['slug'] ) && class_exists( 'TRP_Slug_Query' ) ) {
-                $trp_slug_query = new TRP_Slug_Query();
-                $slug_array = array( $response->data['slug'] );
-                $translated_slugs = $trp_slug_query->get_translated_slugs_from_original( $slug_array, $language );
+		// Get REST API translation configuration
+		$translation_config = $this->get_rest_api_translation_config();
+		
+		// Check if this request matches any configured REST API paths
+		$route = $request->get_route();
+		$matching_config = $this->find_matching_rest_api_config( $route, $translation_config );
+		
+		if ( ! $matching_config ) {
+			return $result; // No translation rules for this route
+		}
 
-                if ( !empty( $translated_slugs ) && isset( $translated_slugs[$response->data['slug']] ) ) {
-                    $response->data['slug'] = $translated_slugs[$response->data['slug']];
-                }
-            }
-	    }
-        return $response;
-    }
+		// Translate the REST API response data using the matching configuration
+		if ( is_array( $result ) ) {
+			$max_depth = apply_filters( 'trp_rest_api_translation_max_depth', 5 );
+			$result = $this->translate_rest_api_data_recursive( $result, $matching_config, $language, 0, $max_depth );
+		}
+
+		return $result;
+	}
 
 	/**
-	 * Apply translation filters for REST API response
+	 * Get REST API translation configuration
+	 * @return array
 	 */
-	public function add_callbacks_for_translating_rest_api(){
-        $post_types = array_merge(["comment"], get_post_types(), get_taxonomies());
+	private function get_rest_api_translation_config() {
+		$default_config = array(
+            'wp/v2/search' => array( 'title' ), // Search API
+            'wp/v2/comments' => array( 'content' ), // Comments API
+			'wc/store/' => array( 'name', 'description', 'short_description' ) // WooCommerce Store API
+		);
+		
+		// Add all WordPress post types dynamically
+		$post_types = get_post_types( array( 'public' => true, 'show_in_rest' => true ), 'objects' );
 		foreach ( $post_types as $post_type ) {
-			add_filter( 'rest_prepare_'. $post_type, array( $this, 'handle_rest_api_translations' ) );
+			$rest_base = $post_type->rest_base ? $post_type->rest_base : $post_type->name;
+			$default_config['wp/v2/' . $rest_base] = array( 'title', 'content', 'excerpt', 'name', 'description' );
 		}
+		
+		// Add all taxonomies dynamically
+		$taxonomies = get_taxonomies( array( 'public' => true, 'show_in_rest' => true ), 'objects' );
+		foreach ( $taxonomies as $taxonomy ) {
+			$rest_base = $taxonomy->rest_base ? $taxonomy->rest_base : $taxonomy->name;
+			$default_config['wp/v2/' . $rest_base] = array( 'name', 'description' );
+		}
+		
+		return apply_filters( 'trp_rest_api_translation_config', $default_config );
+	}
+
+	/**
+	 * Find matching configuration for a REST API route
+	 * @param string $route
+	 * @param array $config
+	 * @return array|false
+	 */
+	private function find_matching_rest_api_config( $route, $config ) {
+		foreach ( $config as $pattern => $keys ) {
+			if ( strpos( $route, $pattern ) !== false ) {
+				return $keys;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Recursively translate REST API data based on configuration
+	 * @param array $data
+	 * @param array $translatable_keys
+	 * @param string $language
+	 * @param int $current_depth
+	 * @param int $max_depth
+	 * @return array
+	 */
+	private function translate_rest_api_data_recursive( $data, $translatable_keys, $language, $current_depth = 0, $max_depth = 5 ) {
+		if ( $current_depth >= $max_depth || ! is_array( $data ) ) {
+			return $data;
+		}
+
+		foreach ( $translatable_keys as $field ) {
+			// Check for direct field first
+			if ( isset( $data[$field] ) && is_string( $data[$field] ) ) {
+				$data[$field] = $this->translate_page( $data[$field] );
+			}
+			// For title, content, excerpt - also check .rendered subfield
+			elseif ( in_array( $field, array( 'title', 'content', 'excerpt' ) ) ) {
+				if ( isset( $data[$field]['rendered'] ) && is_string( $data[$field]['rendered'] ) ) {
+					$data[$field]['rendered'] = $this->translate_page( $data[$field]['rendered'] );
+				}
+			}
+		}
+
+		// Handle arrays and nested objects recursively
+		foreach ( $data as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$data[$key] = $this->translate_rest_api_data_recursive( $value, $translatable_keys, $language, $current_depth + 1, $max_depth );
+			}
+		}
+
+		// Handle special case for slug translation if available
+		if ( isset( $data['slug'] ) && is_string( $data['slug'] ) && class_exists( 'TRP_Slug_Query' ) ) {
+			$trp_slug_query = new TRP_Slug_Query();
+			$slug_array = array( $data['slug'] );
+			$translated_slugs = $trp_slug_query->get_translated_slugs_from_original( $slug_array, $language );
+
+			if ( !empty( $translated_slugs ) && isset( $translated_slugs[$data['slug']] ) ) {
+				$data['slug'] = $translated_slugs[$data['slug']];
+			}
+		}
+
+		return $data;
 	}
 
     /**
@@ -446,6 +521,9 @@ class TRP_Translation_Render{
             $this->url_converter = $trp->get_component('url_converter');
         }
 
+        if( $this->url_converter->is_sitemap_path( $this->url_converter->cur_page_url( false )) ){
+            return $output;
+        }
 
         /* make sure we only translate on the rest_prepare_$post_type filter in REST requests and not the whole json */
 
@@ -454,7 +532,10 @@ class TRP_Translation_Render{
          */
         global $wp_rewrite;
         if( is_object($wp_rewrite) ) {
-            if( strpos( $this->url_converter->cur_page_url( false ), get_rest_url() ) !== false && strpos( current_filter(), 'rest_prepare_' ) !== 0 && current_filter() !== 'oembed_response_data' ){
+            if( strpos( $this->url_converter->cur_page_url( false ), get_rest_url() ) !== false
+                && current_filter() !== 'oembed_response_data'
+                && current_filter() !== 'rest_pre_echo_response' )
+            {
                 $trpremoved = $this->remove_trp_html_tags( $output );
                 return $trpremoved;
             }
@@ -1088,6 +1169,11 @@ class TRP_Translation_Render{
         // force custom links to have the correct language
         foreach( $html->find('a[href!="#"]') as $a_href)  {
             $a_href->href = apply_filters( 'trp_href_from_translated_page', $a_href->href, $this->settings['default-language'] );
+
+            if($a_href->href === true){
+                $a_href->href = ''; // an empty href <a href>Link</a> causes href to be true instead of empty string. Exit early and do not use get_url_for_lang() on it.
+                continue;
+            }
 
             $url = trim($a_href->href);
 

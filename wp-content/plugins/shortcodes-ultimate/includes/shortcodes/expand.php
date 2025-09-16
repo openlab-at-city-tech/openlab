@@ -127,12 +127,12 @@ function su_shortcode_expand( $atts = null, $content = null ) {
 
 	// Prepare less link
 	$less = $atts['hide_less'] !== 'yes'
-		? '<div class="su-expand-link su-expand-link-less" style="text-align:' . esc_attr( $atts['link_align'] ) . '"><a href="javascript:;" style="color:' . esc_attr( $atts['link_color'] ) . ';border-color:' . esc_attr( $atts['link_color'] ) . '">' . $less_icon . '<span style="border-color:' . esc_attr( $atts['link_color'] ) . '">' . $atts['less_text'] . '</span></a></div>'
+		? '<div class="su-expand-link su-expand-link-less" style="text-align:' . esc_attr( $atts['link_align'] ) . '"><a href="javascript:;" style="color:' . esc_attr( $atts['link_color'] ) . ';border-color:' . esc_attr( $atts['link_color'] ) . '">' . $less_icon . '<span style="border-color:' . esc_attr( $atts['link_color'] ) . '">' . wp_kses_post( $atts['less_text'] ) . '</span></a></div>'
 		: '';
 
 	su_query_asset( 'css', 'su-shortcodes' );
 	su_query_asset( 'js', 'su-shortcodes' );
 
-	return '<div class="su-expand su-expand-collapsed su-expand-link-style-' . esc_attr( $atts['link_style'] ) . su_get_css_class( $atts ) . '" data-height="' . esc_attr( $atts['height'] ) . '"><div class="su-expand-content su-u-trim" style="color:' . esc_attr( $atts['text_color'] ) . ';max-height:' . intval( $atts['height'] ) . 'px;overflow:hidden">' . do_shortcode( $content ) . '</div><div class="su-expand-link su-expand-link-more" style="text-align:' . esc_attr( $atts['link_align'] ) . '"><a href="javascript:;" style="color:' . esc_attr( $atts['link_color'] ) . ';border-color:' . esc_attr( $atts['link_color'] ) . '">' . $more_icon . '<span style="border-color:' . esc_attr( $atts['link_color'] ) . '">' . $atts['more_text'] . '</span></a></div>' . $less . '</div>';
+	return '<div class="su-expand su-expand-collapsed su-expand-link-style-' . esc_attr( $atts['link_style'] ) . su_get_css_class( $atts ) . '" data-height="' . esc_attr( $atts['height'] ) . '"><div class="su-expand-content su-u-trim" style="color:' . esc_attr( $atts['text_color'] ) . ';max-height:' . intval( $atts['height'] ) . 'px;overflow:hidden">' . wp_kses_post(do_shortcode( $content )) . '</div><div class="su-expand-link su-expand-link-more" style="text-align:' . esc_attr( $atts['link_align'] ) . '"><a href="javascript:;" style="color:' . esc_attr( $atts['link_color'] ) . ';border-color:' . esc_attr( $atts['link_color'] ) . '">' . $more_icon . '<span style="border-color:' . esc_attr( $atts['link_color'] ) . '">' . wp_kses_post( $atts['more_text'] ) . '</span></a></div>' . $less . '</div>';
 
 }

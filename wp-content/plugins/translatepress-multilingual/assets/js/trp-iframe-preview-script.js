@@ -28,22 +28,24 @@ function TRP_Iframe_Preview(){
             }
 
             if( typeof this.href != "undefined" && this.href != '' ) {
-                if (this.action != '' && this.href.indexOf('void(0)') === -1) {
-                    if (is_link_previewable(this) && !this.getAttribute('href').startsWith('#')) {
-                        this.href = update_query_string('trp-edit-translation', 'preview', this.getAttribute('href'));
-                        /* pass on trp-view-as parameters to all links that also have preview parameter */
-                        if( typeof URL == 'function' && window.location.href.search("trp-view-as=") >= 0 && window.location.href.search("trp-view-as-nonce=") >= 0 ){
-                            var currentUrl = new URL(window.location.href);
-                            this.href = update_query_string('trp-view-as', currentUrl.searchParams.get("trp-view-as"), this.href);
-                            this.href = update_query_string('trp-view-as-nonce', currentUrl.searchParams.get("trp-view-as-nonce"), this.href);
-                        }
-
-                    } else {
-                        jQuery(this).on('click',
-                            function (event) {
-                                event.preventDefault();
+                if ( this.hasAttribute('href') && this.getAttribute('href') !== null ) {
+                    if (this.action != '' && this.href.indexOf('void(0)') === -1) {
+                        if (is_link_previewable(this) && !this.getAttribute('href').startsWith('#')) {
+                            this.href = update_query_string('trp-edit-translation', 'preview', this.getAttribute('href'));
+                            /* pass on trp-view-as parameters to all links that also have preview parameter */
+                            if (typeof URL == 'function' && window.location.href.search("trp-view-as=") >= 0 && window.location.href.search("trp-view-as-nonce=") >= 0) {
+                                var currentUrl = new URL(window.location.href);
+                                this.href = update_query_string('trp-view-as', currentUrl.searchParams.get("trp-view-as"), this.href);
+                                this.href = update_query_string('trp-view-as-nonce', currentUrl.searchParams.get("trp-view-as-nonce"), this.href);
                             }
-                        );
+
+                        } else {
+                            jQuery(this).on('click',
+                                function (event) {
+                                    event.preventDefault();
+                                }
+                            );
+                        }
                     }
                 }
             }

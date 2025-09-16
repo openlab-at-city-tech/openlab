@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: CV Portfolio Blocks 1.2.6\n"
+"Project-Id-Version: CV Portfolio Blocks 1.2.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/cv-portfolio-blocks\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-23T17:21:55+05:30\n"
+"POT-Creation-Date: 2025-07-31T13:18:58+05:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: cv-portfolio-blocks\n"
@@ -686,6 +686,42 @@ msgstr ""
 msgid "The page you are looking for doesnt exist or has been moved. Try another url or go to the site homepage."
 msgstr ""
 
+#: patterns/about-us-section.php
+msgctxt "Pattern title"
+msgid "About Us Section"
+msgstr ""
+
+#: patterns/about-us-section.php:11
+msgid "About Us Section"
+msgstr ""
+
+#: patterns/about-us-section.php:41
+#: patterns/footer-default.php:17
+msgid "About Us"
+msgstr ""
+
+#: patterns/about-us-section.php:45
+msgid "We want to give you the best services"
+msgstr ""
+
+#: patterns/about-us-section.php:49
+#: patterns/faq-section.php:25
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s"
+msgstr ""
+
+#: patterns/about-us-section.php:59
+msgid "Guaranteed Results"
+msgstr ""
+
+#: patterns/about-us-section.php:63
+#: patterns/about-us-section.php:77
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+msgstr ""
+
+#: patterns/about-us-section.php:73
+msgid "Quality Services"
+msgstr ""
+
 #: patterns/banner.php
 msgctxt "Pattern title"
 msgid "Banner"
@@ -711,6 +747,51 @@ msgstr ""
 msgid "CONTACT ME"
 msgstr ""
 
+#: patterns/faq-section.php
+msgctxt "Pattern title"
+msgid "FAQ Section"
+msgstr ""
+
+#: patterns/faq-section.php:11
+msgid "FAQ Section"
+msgstr ""
+
+#: patterns/faq-section.php:17
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: patterns/faq-section.php:21
+msgid "Have Any Questions For Us?"
+msgstr ""
+
+#: patterns/faq-section.php:35
+msgid "What services does your agency offer?"
+msgstr ""
+
+#: patterns/faq-section.php:36
+#: patterns/faq-section.php:42
+#: patterns/faq-section.php:48
+#: patterns/faq-section.php:54
+#: patterns/faq-section.php:60
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/faq-section.php:41
+msgid "Who do you work with?"
+msgstr ""
+
+#: patterns/faq-section.php:47
+msgid "Do you offer customized marketing packages?"
+msgstr ""
+
+#: patterns/faq-section.php:53
+msgid "Can you help us improve our SEO rankings?"
+msgstr ""
+
+#: patterns/faq-section.php:59
+msgid "Do you manage social media accounts?"
+msgstr ""
+
 #: patterns/footer-default.php
 msgctxt "Pattern title"
 msgid "Footer Default"
@@ -718,10 +799,6 @@ msgstr ""
 
 #: patterns/footer-default.php:11
 msgid "Footer Default"
-msgstr ""
-
-#: patterns/footer-default.php:17
-msgid "About Us"
 msgstr ""
 
 #: patterns/footer-default.php:21
@@ -762,6 +839,23 @@ msgstr ""
 
 #: patterns/footer-default.php:83
 msgid "WordPress"
+msgstr ""
+
+#: patterns/news-section.php
+msgctxt "Pattern title"
+msgid "News Section"
+msgstr ""
+
+#: patterns/news-section.php:11
+msgid "News Section"
+msgstr ""
+
+#: patterns/news-section.php:19
+msgid "News & Blogs"
+msgstr ""
+
+#: patterns/news-section.php:23
+msgid "Our Latest News & blogs"
 msgstr ""
 
 #: patterns/post-category-section.php
@@ -843,6 +937,74 @@ msgstr ""
 #: patterns/search.php
 msgctxt "Pattern title"
 msgid "Search"
+msgstr ""
+
+#: patterns/testimonials-section.php
+msgctxt "Pattern title"
+msgid "Testimonials Section"
+msgstr ""
+
+#: patterns/testimonials-section.php:11
+msgid "Testimonials Section"
+msgstr ""
+
+#: patterns/testimonials-section.php:23
+msgid "Testimonials"
+msgstr ""
+
+#: patterns/testimonials-section.php:27
+msgid "What Say Clients"
+msgstr ""
+
+#: patterns/testimonials-section.php:48
+#: patterns/testimonials-section.php:62
+#: patterns/testimonials-section.php:76
+#: patterns/testimonials-section.php:90
+#: patterns/testimonials-section.php:104
+#: patterns/testimonials-section.php:118
+msgid "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/testimonials-section.php:52
+#: patterns/testimonials-section.php:122
+msgid "Jean Kalvin"
+msgstr ""
+
+#: patterns/testimonials-section.php:56
+msgid "Manager"
+msgstr ""
+
+#: patterns/testimonials-section.php:66
+msgid "Alex Morgan"
+msgstr ""
+
+#: patterns/testimonials-section.php:70
+#: patterns/testimonials-section.php:126
+msgid "CEO"
+msgstr ""
+
+#: patterns/testimonials-section.php:80
+msgid "Jordan Blake"
+msgstr ""
+
+#: patterns/testimonials-section.php:84
+msgid "Director"
+msgstr ""
+
+#: patterns/testimonials-section.php:94
+msgid "Taylor Reed"
+msgstr ""
+
+#: patterns/testimonials-section.php:98
+msgid "Product Manager"
+msgstr ""
+
+#: patterns/testimonials-section.php:108
+msgid "Casey Bennett"
+msgstr ""
+
+#: patterns/testimonials-section.php:112
+msgid "Operations Manager"
 msgstr ""
 
 #: styles/blue.json

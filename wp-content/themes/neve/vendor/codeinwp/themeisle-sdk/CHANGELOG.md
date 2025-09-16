@@ -1,3 +1,8 @@
+##### [Version 3.3.47](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.46...v3.3.47) (2025-07-21)
+
+- Fixed review link
+- Fixed plugins ranking
+
 ##### [Version 3.3.46](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.45...v3.3.46) (2025-05-16)
 
 - Add masteriyo recommandation

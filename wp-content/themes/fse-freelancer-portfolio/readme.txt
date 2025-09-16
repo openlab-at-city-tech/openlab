@@ -204,6 +204,17 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 = 3.0.2 (Released: May 30, 2025) =
 * Added style variations.
 
+= 3.0.3 (Released: August 2, 2025) =
+* Added css for shop page.
+* Added header footer for woocommerce template.
+* Added animation for posts.
+* Added css for post image.
+* Updated getstarted.
+
+= 3.0.4 (Released: August 11, 2025) =
+* Fixed minor front-end styling issues.
+* Added creta testimonial showcase plugin recommendation.
+
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023
@@ -233,6 +244,20 @@ Google Web Fonts ( Montserrat ) By Google - https://google.com
 Copyright, fontawesome 
 CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
 https://fontawesome.com/
+
+* WOW JS
+Matthieu Aussaguel
+Copyright 2016, Matthieu Aussaguel
+https://github.com/matthieua/WOW
+License: GPLv3
+https://github.com/matthieua/WOW/blob/master/README.md
+
+* Animate CSS
+Daniel Eden
+Copyright 2021 Daniel Eden
+https://github.com/animate-css/animate.css
+License: 2.1
+https://github.com/animate-css/animate.css/blob/main/LICENSE
 
 * Images
 

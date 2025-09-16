@@ -93,7 +93,7 @@ mg -> Malagasy
 ml -> Malayalam
 si -> Sinhala
 st -> Sesotho
-su -> Sudanese
+su -> Sundanese
 tg -> Tajik
 uz -> Uzbek
 am -> Amharic

@@ -1,0 +1,765 @@
+# Copyright (C) 2015 Responsive WordPress Slider - Soliloquy Lite
+# This file is distributed under the same license as the Responsive WordPress Slider - Soliloquy Lite package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Responsive WordPress Slider - Soliloquy Lite 2.4.0.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/soliloquy-lite\n"
+"POT-Creation-Date: 2015-09-09 16:52:33+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/admin/common.php:91
+msgid ""
+"Soliloquy Lite is now rocking v2! <strong>You need to upgrade your legacy v1 "
+"sliders to v2.</strong> <a href=\"%s\">Click here to begin the upgrade "
+"process.</a>"
+msgstr ""
+
+#: includes/admin/common.php:111
+msgid "Congratulations! You have upgraded your sliders successfully!"
+msgstr ""
+
+#: includes/admin/editor.php:75
+msgid "Add Slider"
+msgstr ""
+
+#: includes/admin/editor.php:130
+msgid "Choose Your Slider"
+msgstr ""
+
+#: includes/admin/editor.php:146
+msgid "Slider ID #%s"
+msgstr ""
+
+#: includes/admin/editor.php:161 includes/admin/metaboxes.php:648
+#: includes/admin/metaboxes.php:1071
+msgid "Helpful Tips"
+msgstr ""
+
+#: includes/admin/editor.php:162
+msgid "Choosing Your Slider"
+msgstr ""
+
+#: includes/admin/editor.php:163
+msgid ""
+"To choose your slider, simply click on one of the boxes to the left. The "
+"\"Insert Slider\" button will be activated once you have selected a slider."
+msgstr ""
+
+#: includes/admin/editor.php:164
+msgid "Inserting Your Slider"
+msgstr ""
+
+#: includes/admin/editor.php:165
+msgid ""
+"To insert your slider into the editor, click on the \"Insert Slider\" button "
+"below."
+msgstr ""
+
+#: includes/admin/editor.php:177
+msgid "Cancel Slider Insertion"
+msgstr ""
+
+#: includes/admin/editor.php:180
+msgid "Insert Slider"
+msgstr ""
+
+#: includes/admin/media.php:63
+msgid ""
+"The web browser on your device cannot be used to upload files. You may be "
+"able to use the <a href=\"%s\">native app for your device</a> instead."
+msgstr ""
+
+#: includes/admin/media.php:105
+msgid "Drop images here"
+msgstr ""
+
+#: includes/admin/media.php:106
+msgctxt "Uploader: Drop images here - or - Select Images"
+msgid "or"
+msgstr ""
+
+#: includes/admin/media.php:108
+msgid "Select Images"
+msgstr ""
+
+#: includes/admin/media.php:118 includes/admin/media.php:120
+msgid "Upload"
+msgstr ""
+
+#: includes/admin/media.php:121
+msgid "Cancel"
+msgstr ""
+
+#: includes/admin/media.php:127
+msgid "Maximum upload file size: %d%s."
+msgstr ""
+
+#: includes/admin/media.php:132
+msgid ""
+"Your browser has some limitations uploading large files with the multi-file "
+"uploader. Please use the browser uploader for files over 100MB."
+msgstr ""
+
+#: includes/admin/metaboxes.php:131
+msgid "Click Here to Insert Slides from Other Sources"
+msgstr ""
+
+#: includes/admin/metaboxes.php:133
+msgid "HTML Slide Code"
+msgstr ""
+
+#: includes/admin/metaboxes.php:134
+msgid "HTML Slide Title"
+msgstr ""
+
+#: includes/admin/metaboxes.php:135
+msgid "Enter HTML slide title here..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:136
+msgid ""
+"<!-- Enter your HTML code here for this slide (you can delete this line). -->"
+msgstr ""
+
+#: includes/admin/metaboxes.php:137
+msgid "HTML Slide Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:138
+msgid "Enter your HTML thumbnail URL here..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:139
+msgid "Choose HTML Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:140
+msgid "Remove HTML Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:141
+msgid "Choose a HTML Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:142 includes/admin/metaboxes.php:169
+msgid "Select Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:143
+msgid "You must select a file to import before continuing."
+msgstr ""
+
+#: includes/admin/metaboxes.php:145
+msgid "Inserting..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:152
+msgid "Are you sure you want to remove this slide from the slider?"
+msgstr ""
+
+#: includes/admin/metaboxes.php:154
+msgid "Remove"
+msgstr ""
+
+#: includes/admin/metaboxes.php:156
+msgid "Saving..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:159
+msgid "Video Slide Caption"
+msgstr ""
+
+#: includes/admin/metaboxes.php:160
+msgid "Video Slide Title"
+msgstr ""
+
+#: includes/admin/metaboxes.php:161
+msgid "Enter video slide title here..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:162
+msgid "Video Slide URL"
+msgstr ""
+
+#: includes/admin/metaboxes.php:163
+msgid "Video Slide Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:164
+msgid "Enter your video thumbnail URL here..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:165
+msgid "Choose Video Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:166
+msgid "Remove Video Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:167
+msgid "Enter your video URL here..."
+msgstr ""
+
+#: includes/admin/metaboxes.php:168
+msgid "Choose a Video Thumbnail"
+msgstr ""
+
+#: includes/admin/metaboxes.php:226
+msgid "Allowed Files"
+msgstr ""
+
+#: includes/admin/metaboxes.php:288 includes/admin/settings.php:95
+msgid "Soliloquy Settings"
+msgstr ""
+
+#: includes/admin/metaboxes.php:393
+msgid "Images"
+msgstr ""
+
+#: includes/admin/metaboxes.php:394
+msgid "Config"
+msgstr ""
+
+#: includes/admin/metaboxes.php:399
+msgid "Misc"
+msgstr ""
+
+#: includes/admin/metaboxes.php:418
+msgid ""
+"The GD or Imagick libraries are not installed on your server. Soliloquy "
+"requires at least one (preferably Imagick) in order to crop images and may "
+"not work properly without it. Please contact your webhost and ask them to "
+"compile GD or Imagick for your PHP install."
+msgstr ""
+
+#: includes/admin/metaboxes.php:426
+msgid "Slider Type"
+msgstr ""
+
+#: includes/admin/metaboxes.php:452
+msgid "Default"
+msgstr ""
+
+#: includes/admin/metaboxes.php:495
+msgid ""
+"<em>Want to make your slider workflow even better?</em> By upgrading to "
+"Soliloquy Pro, you can get access to numerous other features, including: "
+"<strong>a fully featured slider widget</strong>, <strong>media library "
+"support</strong>, <strong>thumbnail and carousel support</strong>, "
+"<strong>dynamic sliders on the fly</strong>, <strong>complete slider API</"
+"strong>, <strong>powerful slider documentation</strong>, <strong>full mobile "
+"and Retina support</strong>, <strong>dedicated customer support</strong> and "
+"so much more! <a href=\"http://soliloquywp.com/lite/?"
+"utm_source=liteplugin&utm_medium=link&utm_campaign=WordPress\" title=\"Click "
+"here to upgrade to Soliloquy Pro!\" target=\"_blank\">Click here to upgrade "
+"to Soliloquy Pro!</a>"
+msgstr ""
+
+#: includes/admin/metaboxes.php:542
+msgid "(click the icon to open and close the overlay dialog)"
+msgstr ""
+
+#: includes/admin/metaboxes.php:543
+msgid "Click here to view meta information about this slider."
+msgstr ""
+
+#: includes/admin/metaboxes.php:545
+msgid ""
+"You can place this slider anywhere into your posts, pages, custom post types "
+"or widgets by using <strong>one</strong> of the shortcode(s) below:"
+msgstr ""
+
+#: includes/admin/metaboxes.php:550
+msgid ""
+"You can also place this slider into your template files by using "
+"<strong>one</strong> of the template tag(s) below:"
+msgstr ""
+
+#: includes/admin/metaboxes.php:578 includes/admin/metaboxes.php:591
+msgid "Insert Slides into Slider"
+msgstr ""
+
+#: includes/admin/metaboxes.php:582
+msgid "Image Slides"
+msgstr ""
+
+#: includes/admin/metaboxes.php:620
+msgid "Search"
+msgstr ""
+
+#: includes/admin/metaboxes.php:623
+msgid "Load More Images from Library"
+msgstr ""
+
+#: includes/admin/metaboxes.php:649
+msgid "Selecting Images"
+msgstr ""
+
+#: includes/admin/metaboxes.php:650
+msgid ""
+"You can insert any image from your Media Library into your slider. If the "
+"image you want to insert is not shown on the screen, you can either click on "
+"the \"Load More Images from Library\" button to load more images or use the "
+"search box to find the images you are looking for."
+msgstr ""
+
+#: includes/admin/metaboxes.php:671
+msgid ""
+"The settings below adjust the basic configuration options for the slider "
+"display."
+msgstr ""
+
+#: includes/admin/metaboxes.php:676
+msgid "Slider Theme"
+msgstr ""
+
+#: includes/admin/metaboxes.php:684
+msgid "Sets the theme for the slider display."
+msgstr ""
+
+#: includes/admin/metaboxes.php:689
+msgid "Slider Dimensions"
+msgstr ""
+
+#: includes/admin/metaboxes.php:692 includes/admin/metaboxes.php:732
+msgid "px"
+msgstr ""
+
+#: includes/admin/metaboxes.php:693
+msgid "Sets the width and height dimensions for the slider."
+msgstr ""
+
+#: includes/admin/metaboxes.php:698
+msgid "Slider Transition"
+msgstr ""
+
+#: includes/admin/metaboxes.php:706
+msgid "Sets the type of transition for the slider."
+msgstr ""
+
+#: includes/admin/metaboxes.php:711
+msgid "Slider Transition Duration"
+msgstr ""
+
+#: includes/admin/metaboxes.php:714 includes/admin/metaboxes.php:723
+msgid "ms"
+msgstr ""
+
+#: includes/admin/metaboxes.php:715
+msgid ""
+"Sets the amount of time between each slide transition <strong>(in "
+"milliseconds)</strong>."
+msgstr ""
+
+#: includes/admin/metaboxes.php:720
+msgid "Slider Transition Speed"
+msgstr ""
+
+#: includes/admin/metaboxes.php:724
+msgid ""
+"Sets the transition speed when moving from one slide to the next <strong>(in "
+"milliseconds)</strong>."
+msgstr ""
+
+#: includes/admin/metaboxes.php:729
+msgid "Slider Gutter"
+msgstr ""
+
+#: includes/admin/metaboxes.php:733
+msgid ""
+"Sets the gutter between the slider and your content based on slider position."
+msgstr ""
+
+#: includes/admin/metaboxes.php:738
+msgid "Crop Images in Slider?"
+msgstr ""
+
+#: includes/admin/metaboxes.php:742
+msgid ""
+"Enables or disables image cropping based on slider dimensions "
+"<strong>(recommended)</strong>."
+msgstr ""
+
+#: includes/admin/metaboxes.php:747
+msgid "ARIA Live Value"
+msgstr ""
+
+#: includes/admin/metaboxes.php:755
+msgid ""
+"Accessibility: Defines the priority with which screen readers should treat "
+"updates to this slider."
+msgstr ""
+
+#: includes/admin/metaboxes.php:762
+msgid ""
+"<em>Want to do even more with your slider display?</em> By upgrading to "
+"Soliloquy Pro, you can get access to numerous other slider display features, "
+"including: <strong>full YouTube, Vimeo and Wistia video integration</"
+"strong>, <strong>custom HTML slides that can hold ANYTHING</strong>, "
+"<strong>custom slider themes</strong>, <strong>mobile specific image assets "
+"for blazing fast load times</strong>, <strong>control over navigation arrows "
+"and dots</strong>, <strong>pause/play functionality</strong>, "
+"<strong>hardware accelerated CSS transitions</strong>, <strong>slider "
+"randomization</strong> and so much more! <a href=\"http://soliloquywp.com/"
+"lite/?utm_source=liteplugin&utm_medium=link&utm_campaign=WordPress\" title="
+"\"Click here to upgrade to Soliloquy Pro!\" target=\"_blank\">Click here to "
+"upgrade to Soliloquy Pro!</a>"
+msgstr ""
+
+#: includes/admin/metaboxes.php:780
+msgid ""
+"The settings below adjust the miscellaneous settings for the slider lightbox "
+"display."
+msgstr ""
+
+#: includes/admin/metaboxes.php:785
+msgid "Slider Title"
+msgstr ""
+
+#: includes/admin/metaboxes.php:789
+msgid "Internal slider title for identification in the admin."
+msgstr ""
+
+#: includes/admin/metaboxes.php:794
+msgid "Slider Slug"
+msgstr ""
+
+#: includes/admin/metaboxes.php:798
+msgid ""
+"<strong>Unique</strong> internal slider slug for identification and advanced "
+"slider queries."
+msgstr ""
+
+#: includes/admin/metaboxes.php:803
+msgid "Custom Slider Classes"
+msgstr ""
+
+#: includes/admin/metaboxes.php:806
+msgid "Enter custom slider CSS classes here, one per line."
+msgstr ""
+
+#: includes/admin/metaboxes.php:807
+msgid "Adds custom CSS classes to this slider. Enter one class per line."
+msgstr ""
+
+#: includes/admin/metaboxes.php:812
+msgid "Enable RTL Support?"
+msgstr ""
+
+#: includes/admin/metaboxes.php:816
+msgid ""
+"Enables or disables RTL support in Soliloquy for right-to-left languages."
+msgstr ""
+
+#: includes/admin/metaboxes.php:823
+msgid ""
+"<em>Want to take your sliders further?</em> By upgrading to Soliloquy Pro, "
+"you can get access to numerous other features, including: <strong>a fully-"
+"integrated import/export module for your sliders</strong>, <strong>custom "
+"CSS controls for each slider</strong>, <strong>lightbox and featured content "
+"support</strong> and so much more! <a href=\"http://soliloquywp.com/lite/?"
+"utm_source=liteplugin&utm_medium=link&utm_campaign=WordPress\" title=\"Click "
+"here to upgrade to Soliloquy Pro!\" target=\"_blank\">Click here to upgrade "
+"to Soliloquy Pro!</a>"
+msgstr ""
+
+#: includes/admin/metaboxes.php:984
+msgid "Remove Image Slide from Slider?"
+msgstr ""
+
+#: includes/admin/metaboxes.php:985
+msgid "Modify Image Slide"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1013
+msgid "Edit Metadata"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1023
+msgid "Image Title"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1026
+msgid "Sets the image title attribute for the image."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1031
+msgid "Image Alt Text"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1034
+msgid ""
+"The image alt text is used for SEO. You should probably fill this one out!"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1040
+msgid "Image Hyperlink"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1043
+msgid ""
+"The image hyperlink determines what opens once the image is clicked. If left "
+"empty, no link will be added."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1049
+msgid "Open Link in New Tab"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1052
+msgid "If enabled, opens the Image Hyperlink in a new browser window/tab."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1058
+msgid "Image Caption"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1061
+msgid "Image captions can take any type of HTML."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1072
+msgid "Images and SEO"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1073
+msgid ""
+"Images are a small but important part of your overall SEO strategy. In order "
+"to get the most SEO benefits from your slider, it is recommended that you "
+"fill out each applicable field with SEO friendly information about the image."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1074
+msgid "Image Hyperlinks"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1075
+msgid ""
+"The image hyperlink field is used when you click on an image in the slider."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1076
+msgid "Image Captions"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1077
+msgid ""
+"Captions can take any type of HTML content, such as <code>form</code>, "
+"<code>iframe</code> and <code>h1</code> tags."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1078
+msgid "Saving and Exiting"
+msgstr ""
+
+#: includes/admin/metaboxes.php:1079
+msgid ""
+"Click on the button below to save your image metadata. You can close this "
+"window by either clicking on the \"X\" above or hitting the <code>esc</code> "
+"key on your keyboard."
+msgstr ""
+
+#: includes/admin/metaboxes.php:1087
+msgid "Save Metadata"
+msgstr ""
+
+#: includes/admin/posttype.php:76
+msgid "Title"
+msgstr ""
+
+#: includes/admin/posttype.php:77
+msgid "Shortcode"
+msgstr ""
+
+#: includes/admin/posttype.php:78
+msgid "Template Tag"
+msgstr ""
+
+#: includes/admin/posttype.php:79
+msgid "Number of Images"
+msgstr ""
+
+#: includes/admin/posttype.php:80
+msgid "Last Modified"
+msgstr ""
+
+#: includes/admin/posttype.php:81
+msgid "Date"
+msgstr ""
+
+#: includes/admin/posttype.php:159 includes/admin/posttype.php:162
+msgid "Soliloquy slider updated."
+msgstr ""
+
+#: includes/admin/posttype.php:160
+msgid "Soliloquy slider custom field updated."
+msgstr ""
+
+#: includes/admin/posttype.php:161
+msgid "Soliloquy slider custom field deleted."
+msgstr ""
+
+#: includes/admin/posttype.php:163
+msgid "Soliloquy slider restored to revision from %s."
+msgstr ""
+
+#: includes/admin/posttype.php:164
+msgid "Soliloquy slider published."
+msgstr ""
+
+#: includes/admin/posttype.php:165
+msgid "Soliloquy slider saved."
+msgstr ""
+
+#: includes/admin/posttype.php:166
+msgid "Soliloquy slider submitted."
+msgstr ""
+
+#: includes/admin/posttype.php:167
+msgid "Soliloquy slider scheduled for: <strong>%1$s</strong>."
+msgstr ""
+
+#: includes/admin/posttype.php:167
+msgid "M j, Y @ G:i"
+msgstr ""
+
+#: includes/admin/posttype.php:168
+msgid "Soliloquy slider draft updated."
+msgstr ""
+
+#: includes/admin/settings.php:96
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/settings.php:199
+msgid "Upgrade"
+msgstr ""
+
+#: includes/admin/settings.php:216
+msgid ""
+"You have upgraded to v2 of Soliloquy. You need to upgrade your sliders using "
+"our custom upgrading tool. Click on the button below to start the process."
+msgstr ""
+
+#: includes/admin/settings.php:217
+msgid "Click Here to Start the Upgrade Process"
+msgstr ""
+
+#: includes/global/common.php:63
+msgid "Base"
+msgstr ""
+
+#: includes/global/common.php:68
+msgid "Classic"
+msgstr ""
+
+#: includes/global/common.php:89
+msgid "Fade"
+msgstr ""
+
+#: includes/global/common.php:109
+msgid "Off"
+msgstr ""
+
+#: includes/global/common.php:113
+msgid "Polite"
+msgstr ""
+
+#: includes/global/common.php:117
+msgid "Assertive"
+msgstr ""
+
+#: includes/global/common.php:232
+msgid ""
+"No image editor could be selected. Please verify with your webhost that you "
+"have either the GD or Imagick image library compiled with your PHP install "
+"on your server."
+msgstr ""
+
+#: includes/global/common.php:335
+msgid "No image URL specified for cropping."
+msgstr ""
+
+#: includes/global/common.php:354
+msgid "No file could be found for the image URL specified."
+msgstr ""
+
+#: includes/global/common.php:362 includes/global/common.php:374
+msgid ""
+"The dimensions of the original image could not be retrieved for cropping."
+msgstr ""
+
+#: includes/global/posttype.php:52
+msgid "Soliloquy Sliders"
+msgstr ""
+
+#: includes/global/posttype.php:53 includes/global/posttype.php:63
+msgid "Soliloquy"
+msgstr ""
+
+#: includes/global/posttype.php:54
+msgid "Add New"
+msgstr ""
+
+#: includes/global/posttype.php:55
+msgid "Add New Soliloquy Slider"
+msgstr ""
+
+#: includes/global/posttype.php:56
+msgid "Edit Soliloquy Slider"
+msgstr ""
+
+#: includes/global/posttype.php:57
+msgid "New Soliloquy Slider"
+msgstr ""
+
+#: includes/global/posttype.php:58
+msgid "View Soliloquy Slider"
+msgstr ""
+
+#: includes/global/posttype.php:59
+msgid "Search Soliloquy Sliders"
+msgstr ""
+
+#: includes/global/posttype.php:60
+msgid "No Soliloquy sliders found."
+msgstr ""
+
+#: includes/global/posttype.php:61
+msgid "No Soliloquy sliders found in trash."
+msgstr ""
+
+#: soliloquy-lite.php:430
+msgid ""
+"Sorry, but your version of WordPress does not meet Soliloquy Lite's required "
+"version of <strong>3.5.1</strong> to run properly. The plugin has been "
+"deactivated. <a href=\"%s\">Click here to return to the Dashboard</a>."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Responsive WordPress Slider - Soliloquy Lite"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://soliloquywp.com"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Soliloquy is best responsive WordPress slider plugin. This is the lite "
+"version."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Thomas Griffin"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://thomasgriffinmedia.com"
+msgstr ""

@@ -929,6 +929,17 @@ function cuny_member_profile_header() {
 						$department = openlab_generate_department_name( $user_units );
 						$dept_label = in_array( $account_type, array( 'student', 'alumni' ), true ) ? 'Major Program of Study' : 'Department';
 
+						// We store the department privacy setting in index -78.
+
+						$hidden_fields_for_user = bp_xprofile_get_hidden_fields_for_user( bp_displayed_user_id() );
+						$show_department_field  = ! in_array( -78, $hidden_fields_for_user, true );
+
+						// Nuke the department value to ensure it doesn't show.
+						if ( ! $show_department_field ) {
+							$department = '';
+						}
+
+
 						$field_index = -1;
 
 						?>
@@ -1036,8 +1047,6 @@ function cuny_member_profile_header() {
 						<?php
 						// Social fields are handled separately
 						$social_fields = openlab_social_media_fields();
-
-						$hidden_fields_for_user = bp_xprofile_get_hidden_fields_for_user( bp_displayed_user_id() );
 						?>
 
 						<?php foreach ( $social_fields as $field_slug => $field_data ) : ?>
@@ -2391,7 +2400,16 @@ function openlab_privacy_settings_save_cb() {
 
 	check_admin_referer( 'bp_settings_privacy' );
 
-	$profile_privacy_field_ids = ! empty( $_POST['profile-privacy-field-ids'] ) ? wp_parse_id_list( $_POST['profile-privacy-field-ids'] ) : [];
+	$profile_privacy_field_ids = [];
+	if ( ! empty( $_POST['profile-privacy-field-ids'] ) ) {
+		$raw_field_ids = explode( ',', sanitize_text_field( wp_unslash( $_POST['profile-privacy-field-ids'] ) ) );
+		foreach ( $raw_field_ids as $raw_field_id ) {
+			if ( is_numeric( $raw_field_id ) ) {
+				$profile_privacy_field_ids[] = (int) $raw_field_id;
+			}
+		}
+	}
+
 	foreach ( $profile_privacy_field_ids as $profile_privacy_field_id ) {
 		$post_key = 'field_' . $profile_privacy_field_id . '_visibility' ;
 		$visibility = isset( $_POST[ $post_key ] ) ? sanitize_text_field( $_POST[ $post_key ] ) : '';

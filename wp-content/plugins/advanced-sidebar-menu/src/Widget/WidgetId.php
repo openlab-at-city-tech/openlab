@@ -3,8 +3,13 @@
 namespace Advanced_Sidebar_Menu\Widget;
 
 /**
- * @author OnPoint Plugins
- * @since  9.6.0
+ * @author  OnPoint Plugins
+ * @since   9.6.0
+ *
+ * @todo    Add methods directly to the `Widget` interface once the minimum PRO version is 9.9.0+.
+ *          and delete this interface.
+ *
+ * @internal
  *
  * @phpstan-template SETTINGS of array<string, mixed>
  */

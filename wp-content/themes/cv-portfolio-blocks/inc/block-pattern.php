@@ -64,6 +64,10 @@ class Block_Patterns {
 		$patterns = array(
 			'banner',
 			'post-category-section',
+			'about-us-section',
+			'testimonials-section',
+			'faq-section',		
+			'news-section',
 			'primary-sidebar',
 			'404-page',
 			'search',

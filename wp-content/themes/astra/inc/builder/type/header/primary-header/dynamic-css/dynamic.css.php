@@ -51,7 +51,10 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 
 	$parse_css .= astra_parse_css( $common_css_output );
 
-	if ( Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) || Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) ) {
+	if (
+		( Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) && defined( 'WC_VERSION' ) ) ||
+		( Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) && defined( 'EDD_VERSION' ) )
+	) {
 		$common_css_cart_output = array(
 			'.ast-desktop .ast-primary-header-bar .ast-header-woo-cart, .ast-desktop .ast-primary-header-bar .ast-header-edd-cart' => array(
 				'line-height' => astra_get_css_value( $hb_header_height_desktop, 'px' ),

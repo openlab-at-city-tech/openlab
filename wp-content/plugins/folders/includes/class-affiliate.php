@@ -192,7 +192,7 @@ class Folder_affiliate_program
             <div class="notice notice-info chaty-notice <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate">
                 <p><?php
                     $message = esc_html__("Hi there, you've been using %1\$s for a while now. Do you know that %2\$s has an affiliate program? Join now and get %3\$s ", "folders");
-                    printf(esc_attr($message), esc_attr($this->pluginName), "<b>".esc_attr($this->pluginName)."</b>", "<b>".esc_html__("25% lifetime commission", "folders")."</b>") ?> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> <?php esc_html_e("Dismiss", "folders") ?></a></p>
+                    printf(esc_attr($message), esc_attr($this->pluginName), "<b>".esc_attr($this->pluginName)."</b>", "<b>".esc_html__("25% lifetime commission", "folders")."</b>") ?> <a href="#" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> <?php esc_html_e("Dismiss", "folders") ?></a></p>
                 <div class="clear clearfix"></div>
                 <a class="button button-primary <?php echo esc_attr($this->pluginSlug) ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo esc_url($_SERVER['HTTP_HOST']) ?>"><?php esc_html_e("Tell me more", "folders") ?> <span class="dashicons dashicons-arrow-right-alt"></span></a>
             </div>
@@ -201,9 +201,9 @@ class Folder_affiliate_program
                     <button class="<?php echo esc_attr($this->pluginSlug) ?>-close-affiliate-popup"><span class="dashicons dashicons-no-alt"></span></button>
                     <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-title"><?php esc_html_e("Would you like us to remind you about this later?", "folders") ?></div>
                     <div class="<?php echo esc_attr($this->pluginSlug) ?>-affiliate-options">
-                        <a href="javascript:;" data-days="3"><?php esc_html_e("Remind me in 3 days", "folders") ?></a>
-                        <a href="javascript:;" data-days="10"><?php esc_html_e("Remind me in 10 days", "folders") ?></a>
-                        <a href="javascript:;" data-days="-1" class="dismiss"><?php esc_html_e("Don't remind me about this", "folders") ?></a>
+                        <a href="#" data-days="3"><?php esc_html_e("Remind me in 3 days", "folders") ?></a>
+                        <a href="#" data-days="10"><?php esc_html_e("Remind me in 10 days", "folders") ?></a>
+                        <a href="#" data-days="-1" class="dismiss"><?php esc_html_e("Don't remind me about this", "folders") ?></a>
                     </div>
                 </div>
             </div>

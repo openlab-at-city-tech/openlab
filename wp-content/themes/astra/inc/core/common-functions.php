@@ -188,7 +188,7 @@ if ( ! function_exists( 'astra_get_font_css_value' ) ) {
 					 *
 					 * @since 4.8.10
 					 */
-					$disable_px_to_rem = apply_filters( 'astra_disable_px_to_rem_conversion', false );
+					$disable_px_to_rem = apply_filters( 'astra_disable_px_to_rem_conversion', astra_get_option( 'disable-px-to-rem-conversion', false ) );
 
 					if ( $disable_px_to_rem ) {
 						$css_val = esc_attr( $value ) . $unit;
@@ -1364,8 +1364,13 @@ if ( ! function_exists( 'astra_get_pro_url' ) ) {
 			$astra_pro_url = add_query_arg( 'utm_source', sanitize_text_field( $source ), $astra_pro_url );
 		}
 
+		static $utm_ready_link_callback = null;
+		if ( null === $utm_ready_link_callback ) {
+			$utm_ready_link_callback = is_callable( array( 'BSF_UTM_Analytics', 'get_utm_ready_link' ) );
+		}
+
 		// Modify the utm_source parameter using the UTM ready link function to include tracking information.
-		if ( is_callable( 'BSF_UTM_Analytics::get_utm_ready_link' ) ) {
+		if ( $utm_ready_link_callback ) {
 			$astra_pro_url = BSF_UTM_Analytics::get_utm_ready_link( $astra_pro_url, 'astra' );
 		}
 
@@ -1382,9 +1387,13 @@ if ( ! function_exists( 'astra_get_pro_url' ) ) {
 		$astra_pro_url = apply_filters( 'astra_get_pro_url', $astra_pro_url, $url );
 		$astra_pro_url = remove_query_arg( 'bsf', $astra_pro_url );
 
-		$ref = get_option( 'astra_partner_url_param', '' );
-		if ( ! empty( $ref ) ) {
-			$astra_pro_url = add_query_arg( 'bsf', sanitize_text_field( $ref ), $astra_pro_url );
+		static $partner_ref = null;
+		if ( null === $partner_ref ) {
+			$partner_ref = get_option( 'astra_partner_url_param', '' );
+		}
+
+		if ( ! empty( $partner_ref ) ) {
+			$astra_pro_url = add_query_arg( 'bsf', sanitize_text_field( $partner_ref ), $astra_pro_url );
 		}
 
 		return $astra_pro_url;
@@ -2186,4 +2195,75 @@ function astra_icon_selector_svg( $icon, $echo = false, $default = '' ) {
 	}
 
 	echo wp_kses( $svg, Astra_Icons::allowed_svg_args() );
+}
+
+// Check if the function astra_parse_selector exists to avoid redeclaration.
+if ( ! function_exists( 'astra_parse_selector' ) ) {
+	/**
+	 * Parses selectors and conditionally removes plugin-specific selectors.
+	 * Usage:
+	 * ```
+	 * $selectors = '.class1, .class2, .class3';
+	 * $filtered  = astra_parse_selector( $selectors, 'wc' );
+	 * ```
+	 *
+	 * @param string       $selectors       Full selector string (comma-separated).
+	 * @param string|array $keywords  Keywords to filter out selectors. If a string is provided, it will be converted to an array.
+	 *
+	 * @return string Final selector string.
+	 * @since 4.11.6
+	 */
+	function astra_parse_selector( $selectors, $keywords = '' ) {
+		$selector_array     = explode( ',', $selectors );
+		$filtered_selectors = array();
+
+		// If $keywords is a string, convert it to an array.
+		if ( is_string( $keywords ) ) {
+			$keywords = array( $keywords );
+		}
+
+		foreach ( $selector_array as $selector ) {
+			$selector        = trim( $selector );
+			$ignore_selector = false;
+
+			foreach ( $keywords as $keyword ) {
+				switch ( $keyword ) {
+					case 'wc':
+					case 'woocommerce':
+						if ( ! defined( 'WC_VERSION' ) && strpos( $selector, 'woocommerce' ) !== false ) {
+							$ignore_selector = true;
+							break 2;
+						}
+						break;
+
+					case 'el':
+					case 'elementor':
+						if ( ! defined( 'ELEMENTOR_VERSION' ) && strpos( $selector, 'elementor' ) !== false ) {
+							$ignore_selector = true;
+							break 2;
+						}
+						break;
+
+					// Add more cases here for other plugins.
+				}
+			}
+
+			if ( ! $ignore_selector ) {
+				$filtered_selectors[] = $selector;
+			}
+		}
+
+		return implode( ', ', $filtered_selectors );
+	}
+}
+
+/**
+ * Check if the button consistency compatibility is enabled.
+ *
+ * @return bool true|false.
+ * @since 4.11.6
+ */
+function astra_button_consistency_compatibility() {
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_get_option_btn-consist-comp', isset( $astra_settings['btn-consist-comp'] ) ? false : true );
 }

@@ -263,7 +263,7 @@ $redirectURL = admin_url("admin.php?page=wcp_folders_settings&setting_page=folde
     <div class="popup-form-content">
         <div class="folder-modal-content">
             <div class="close-popup-button close-remove-folders">
-                <a class="" href="javascript:;"><span></span></a>
+                <a class="" href="#"><span></span></a>
             </div>
             <div class="folder-title"><?php esc_html_e("Import Folder Structure", 'folders'); ?></div>
             <div class="folder-note"><?php esc_html_e("The following folders will be imported to your plugin", "folders"); ?></div>
@@ -288,7 +288,7 @@ $redirectURL = admin_url("admin.php?page=wcp_folders_settings&setting_page=folde
                 <?php esc_html_e('Clicking “Import” will create the imported folders to your Folders plugin and will enable the plugin for all the categories above', "folders"); ?>
             </div>
             <div class="folder-import-buttons">
-                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
+                <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
                 <button type="button" class="form-cancel-btn import-json-file check-for-sub"><?php esc_html_e("Import", 'folders'); ?></button>
             </div>
         </div>
@@ -298,12 +298,12 @@ $redirectURL = admin_url("admin.php?page=wcp_folders_settings&setting_page=folde
     <div class="popup-form-content">
         <div class="folder-modal-content">
             <div class="close-popup-button close-remove-folders">
-                <a class="" href="javascript:;"><span></span></a>
+                <a class="" href="#"><span></span></a>
             </div>
             <div class="folder-title"><?php esc_html_e("Subfolders will be converted into main folders", 'folders'); ?></div>
             <div class="folder-note"><?php printf(esc_html__("As subfolders are only available in the %1\$s of Folders, all of the subfolders will be converted into the main folders.", "folders"), "<a target='_blank' href='".esc_url($this->getFoldersUpgradeURL())."'>".esc_html__("Pro version", "folders")."</a>"); ?></div>
             <div class="folder-import-buttons">
-                <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
+                <a href="#" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
                 <button type="button" class="form-cancel-btn import-json-file"><?php esc_html_e("Continue", 'folders'); ?></button>
             </div>
         </div>

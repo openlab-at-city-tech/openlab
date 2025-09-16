@@ -627,8 +627,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h1, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a, .site-title, .site-title a',
-					'h1, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6, .site-title, .site-title a'
+					'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a, .site-title, .site-title a',
+					'h1, h2, h3, h4, h5, h6, .entry-content :where(h1, h2, h3, h4, h5, h6), .site-title, .site-title a'
 				)                                        => astra_get_font_array_css( astra_get_option( 'headings-font-family' ), astra_get_option( 'headings-font-weight' ), array(), 'headings-font-extras' ),
 
 				'.ast-site-identity .site-title a'       => array(
@@ -675,8 +675,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without anchors.
 				self::conditional_headings_css_selectors(
-					'h1, .entry-content h1, .entry-content h1 a',
-					'h1, .entry-content h1'
+					'h1, .entry-content :where(h1), .entry-content :where(h1) a',
+					'h1, .entry-content :where(h1)'
 				)                                        => array(
 					'font-size'       => astra_responsive_font( $heading_h1_font_size, 'desktop' ),
 					'font-weight'     => astra_get_css_value( $h1_font_weight, 'font' ),
@@ -689,8 +689,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h2, .entry-content h2, .entry-content h2 a',
-					'h2, .entry-content h2'
+					'h2, .entry-content :where(h2), .entry-content :where(h2) a',
+					'h2, .entry-content :where(h2)'
 				)                                        => array(
 					'font-size'       => astra_responsive_font( $heading_h2_font_size, 'desktop' ),
 					'font-weight'     => astra_get_css_value( $h2_font_weight, 'font' ),
@@ -703,8 +703,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h3, .entry-content h3, .entry-content h3 a',
-					'h3, .entry-content h3'
+					'h3, .entry-content :where(h3), .entry-content :where(h3) a',
+					'h3, .entry-content :where(h3)'
 				)                                        => array(
 					'font-size'       => astra_responsive_font( $heading_h3_font_size, 'desktop' ),
 					'font-weight'     => astra_get_css_value( $h3_font_weight, 'font' ),
@@ -717,20 +717,20 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h4, .entry-content h4, .entry-content h4 a',
-					'h4, .entry-content h4'
+					'h4, .entry-content :where(h4), .entry-content :where(h4) a',
+					'h4, .entry-content :where(h4)'
 				)                                        => $h4_properties,
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h5, .entry-content h5, .entry-content h5 a',
-					'h5, .entry-content h5'
+					'h5, .entry-content :where(h5), .entry-content :where(h5) a',
+					'h5, .entry-content :where(h5)'
 				)                                        => $h5_properties,
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h6, .entry-content h6, .entry-content h6 a',
-					'h6, .entry-content h6'
+					'h6, .entry-content :where(h6), .entry-content :where(h6) a',
+					'h6, .entry-content :where(h6)'
 				)                                        => $h6_properties,
 
 				// Global CSS.
@@ -741,8 +741,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select selectors with annchors or withour anchors for text color.
 				self::conditional_headings_css_selectors(
-					'body, h1, .entry-title a, .entry-content h1, .entry-content h1 a, h2, .entry-content h2, .entry-content h2 a, h3, .entry-content h3, .entry-content h3 a, h4, .entry-content h4, .entry-content h4 a, h5, .entry-content h5, .entry-content h5 a, h6, .entry-content h6, .entry-content h6 a',
-					'body, h1, .entry-title a, .entry-content h1, h2, .entry-content h2, h3, .entry-content h3, h4, .entry-content h4, h5, .entry-content h5, h6, .entry-content h6'
+					'body, h1, h2, h3, h4, h5, h6, .entry-title a, .entry-content :where(h1, h2, h3, h4, h5, h6), .entry-content :where(h1, h2, h3, h4, h5, h6) a',
+					'body, h1, h2, h3, h4, h5, h6, .entry-title a, .entry-content :where(h1, h2, h3, h4, h5, h6)'
 				)                                        => array(
 					'color' => esc_attr( $text_color ),
 				),
@@ -935,7 +935,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				);
 
 				$reset_underline_from_anchors = self::unset_builder_elements_underline();
-				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
+				$buttons_exclusion_selectors  = astra_parse_selector(
+					$button_styling_improved
+						? '.ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link'
+						: '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link',
+					array( 'wc', 'el' )
+				);
 
 				$excluding_anchor_selectors = $reset_underline_from_anchors ? $buttons_exclusion_selectors : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, a.ast-post-filter-single, .ast-single-post .wp-block-button.is-style-outline .wp-block-button__link, div.ast-custom-button, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
 
@@ -952,8 +957,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Accessibility options.
 			$enable_site_accessibility        = astra_get_option( 'site-accessibility-toggle', false );
-			$html_selectors_focus_visible     = '.ast-search-menu-icon.slide-search a:focus-visible:focus-visible, .astra-search-icon:focus-visible, #close:focus-visible, a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible, #close:focus-visible, .button.search-submit:focus-visible, #search_submit:focus, .normal-search:focus-visible, .ast-header-account-wrap:focus-visible, .woocommerce .ast-on-card-button.ast-quick-view-trigger:focus, .astra-cart-drawer-close:focus, .ast-single-variation:focus, .ast-woocommerce-product-gallery__image:focus, .ast-button:focus';
-			$html_selectors_focus_only_inputs = 'input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="reset"]:focus, input[type="search"]:focus, input[type="number"]:focus, textarea:focus, .wp-block-search__input:focus, [data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus, .ast-mobile-popup-drawer.active .menu-toggle-close:focus, .woocommerce-ordering select.orderby:focus, #ast-scroll-top:focus, #coupon_code:focus, .woocommerce-page #comment:focus, .woocommerce #reviews #respond input#submit:focus, .woocommerce a.add_to_cart_button:focus, .woocommerce .button.single_add_to_cart_button:focus, .woocommerce .woocommerce-cart-form button:focus, .woocommerce .woocommerce-cart-form__cart-item .quantity .qty:focus, .woocommerce .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce #order_comments:focus, .woocommerce #place_order:focus, .woocommerce .woocommerce-address-fields .woocommerce-address-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce .woocommerce-MyAccount-content form button:focus, .woocommerce .woocommerce-MyAccount-content .woocommerce-EditAccountForm .woocommerce-form-row .woocommerce-Input.input-text:focus, .woocommerce .ast-woocommerce-container .woocommerce-pagination ul.page-numbers li a:focus, body #content .woocommerce form .form-row .select2-container--default .select2-selection--single:focus, #ast-coupon-code:focus, .woocommerce.woocommerce-js .quantity input[type=number]:focus, .woocommerce-js .woocommerce-mini-cart-item .quantity input[type=number]:focus, .woocommerce p#ast-coupon-trigger:focus';
+			$html_selectors_focus_visible     = astra_parse_selector( '.ast-search-menu-icon.slide-search a:focus-visible:focus-visible, .astra-search-icon:focus-visible, #close:focus-visible, a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible, #close:focus-visible, .button.search-submit:focus-visible, #search_submit:focus, .normal-search:focus-visible, .ast-header-account-wrap:focus-visible, .woocommerce .ast-on-card-button.ast-quick-view-trigger:focus, .astra-cart-drawer-close:focus, .ast-single-variation:focus, .ast-woocommerce-product-gallery__image:focus, .ast-button:focus, .woocommerce-product-gallery--with-images [data-controls="prev"]:focus-visible, .woocommerce-product-gallery--with-images [data-controls="next"]:focus-visible', 'wc' );
+			$html_selectors_focus_only_inputs = astra_parse_selector( 'input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="reset"]:focus, input[type="search"]:focus, input[type="number"]:focus, textarea:focus, .wp-block-search__input:focus, [data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus, .ast-mobile-popup-drawer.active .menu-toggle-close:focus, .woocommerce-ordering select.orderby:focus, #ast-scroll-top:focus, #coupon_code:focus, .woocommerce-page #comment:focus, .woocommerce #reviews #respond input#submit:focus, .woocommerce a.add_to_cart_button:focus, .woocommerce .button.single_add_to_cart_button:focus, .woocommerce .woocommerce-cart-form button:focus, .woocommerce .woocommerce-cart-form__cart-item .quantity .qty:focus, .woocommerce .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce #order_comments:focus, .woocommerce #place_order:focus, .woocommerce .woocommerce-address-fields .woocommerce-address-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce .woocommerce-MyAccount-content form button:focus, .woocommerce .woocommerce-MyAccount-content .woocommerce-EditAccountForm .woocommerce-form-row .woocommerce-Input.input-text:focus, .woocommerce .ast-woocommerce-container .woocommerce-pagination ul.page-numbers li a:focus, body #content .woocommerce form .form-row .select2-container--default .select2-selection--single:focus, #ast-coupon-code:focus, .woocommerce.woocommerce-js .quantity input[type=number]:focus, .woocommerce-js .woocommerce-mini-cart-item .quantity input[type=number]:focus, .woocommerce p#ast-coupon-trigger:focus', 'wc' );
 
 			if ( $enable_site_accessibility ) {
 				$outline_style = astra_get_option( 'site-accessibility-highlight-type' );
@@ -1281,7 +1286,9 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				require_once ASTRA_THEME_DIR . 'inc/dynamic-css/live-search.php'; // PHPCS:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			}
 
-			if ( Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) || Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) ) {
+			if ( ( Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) && defined( 'WC_VERSION' ) ) ||
+				( Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) && defined( 'EDD_VERSION' ) )
+			) {
 				$parse_css .= Astra_Enqueue_Scripts::trim_css( self::load_cart_static_css() );
 
 				$parse_css .= astra_parse_css(
@@ -2763,8 +2770,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$file_block_button_selector             = ! $block_editor_legacy_setup || $improve_gb_ui ? ', body .wp-block-file .wp-block-file__button' : '';
 				$file_block_button_hover_selector       = ! $block_editor_legacy_setup || $improve_gb_ui ? ', body .wp-block-file .wp-block-file__button:hover, body .wp-block-file .wp-block-file__button:focus' : '';
 				$search_page_btn_selector               = true === $update_customizer_strctural_defaults ? ', .search .search-submit' : '';
-				$woo_btns_selector                      = true === self::astra_woo_support_global_settings() ? ', .woocommerce-js a.button, .woocommerce button.button, .woocommerce .woocommerce-message a.button, .woocommerce #respond input#submit.alt, .woocommerce input.button.alt, .woocommerce input.button,.woocommerce input.button:disabled, .woocommerce input.button:disabled[disabled], .woocommerce input.button:disabled:hover, .woocommerce input.button:disabled[disabled]:hover, .woocommerce #respond input#submit, .woocommerce button.button.alt.disabled, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link, .wc-block-grid__product-onsale, [CLASS*="wc-block"] button, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping), .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout, .woocommerce button.button.alt.disabled.wc-variation-selection-needed, [CLASS*="wc-block"] .wc-block-components-button' : '';
-				$woo_btns_hover_selector                = true === self::astra_woo_support_global_settings() ? ', .woocommerce-js a.button:hover, .woocommerce button.button:hover, .woocommerce .woocommerce-message a.button:hover,.woocommerce #respond input#submit:hover,.woocommerce #respond input#submit.alt:hover, .woocommerce input.button.alt:hover, .woocommerce input.button:hover, .woocommerce button.button.alt.disabled:hover, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link:hover, [CLASS*="wc-block"] button:hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping):hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout:hover, .woocommerce button.button.alt.disabled.wc-variation-selection-needed:hover, [CLASS*="wc-block"] .wc-block-components-button:hover, [CLASS*="wc-block"] .wc-block-components-button:focus' : '';
+				$woo_btns_selector                      = defined( 'WC_VERSION' ) && true === self::astra_woo_support_global_settings() ? ', .woocommerce-js a.button, .woocommerce button.button, .woocommerce .woocommerce-message a.button, .woocommerce #respond input#submit.alt, .woocommerce input.button.alt, .woocommerce input.button,.woocommerce input.button:disabled, .woocommerce input.button:disabled[disabled], .woocommerce input.button:disabled:hover, .woocommerce input.button:disabled[disabled]:hover, .woocommerce #respond input#submit, .woocommerce button.button.alt.disabled, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link, .wc-block-grid__product-onsale, [CLASS*="wc-block"] button, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping), .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout, .woocommerce button.button.alt.disabled.wc-variation-selection-needed, [CLASS*="wc-block"] .wc-block-components-button' : '';
+				$woo_btns_hover_selector                = defined( 'WC_VERSION' ) && true === self::astra_woo_support_global_settings() ? ', .woocommerce-js a.button:hover, .woocommerce button.button:hover, .woocommerce .woocommerce-message a.button:hover,.woocommerce #respond input#submit:hover,.woocommerce #respond input#submit.alt:hover, .woocommerce input.button.alt:hover, .woocommerce input.button:hover, .woocommerce button.button.alt.disabled:hover, .wc-block-grid__products .wc-block-grid__product .wp-block-button__link:hover, [CLASS*="wc-block"] button:hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping):hover, .woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons a.checkout:hover, .woocommerce button.button.alt.disabled.wc-variation-selection-needed:hover, [CLASS*="wc-block"] .wc-block-components-button:hover, [CLASS*="wc-block"] .wc-block-components-button:focus' : '';
 				$v4_2_2_core_form_btns_styling_selector = true === self::astra_core_form_btns_styling() ? ', #comments .submit, .search .search-submit' : '';
 
 				/**
@@ -3705,48 +3712,48 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h1, .entry-content h1, .entry-content h1 a',
-					'h1, .entry-content h1'
+					'h1, .entry-content :where(h1), .entry-content :where(h1) a',
+					'h1, .entry-content :where(h1)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h1_font_size, 'tablet', $heading_font_size_comp ? '' : 30 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h2, .entry-content h2, .entry-content h2 a',
-					'h2, .entry-content h2'
+					'h2, .entry-content :where(h2), .entry-content :where(h2) a',
+					'h2, .entry-content :where(h2)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h2_font_size, 'tablet', $heading_font_size_comp ? '' : 25 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h3, .entry-content h3, .entry-content h3 a',
-					'h3, .entry-content h3'
+					'h3, .entry-content :where(h3), .entry-content :where(h3) a',
+					'h3, .entry-content :where(h3)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h3_font_size, 'tablet', $heading_font_size_comp ? '' : 20 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h4, .entry-content h4, .entry-content h4 a',
-					'h4, .entry-content h4'
+					'h4, .entry-content :where(h4), .entry-content :where(h4) a',
+					'h4, .entry-content :where(h4)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h4_font_size, 'tablet' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h5, .entry-content h5, .entry-content h5 a',
-					'h5, .entry-content h5'
+					'h5, .entry-content :where(h5), .entry-content :where(h5) a',
+					'h5, .entry-content :where(h5)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h5_font_size, 'tablet' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h6, .entry-content h6, .entry-content h6 a',
-					'h6, .entry-content h6'
+					'h6, .entry-content :where(h6), .entry-content :where(h6) a',
+					'h6, .entry-content :where(h6)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h6_font_size, 'tablet' ),
 				),
@@ -3810,48 +3817,48 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h1, .entry-content h1, .entry-content h1 a',
-					'h1, .entry-content h1'
+					'h1, .entry-content :where(h1), .entry-content :where(h1) a',
+					'h1, .entry-content :where(h1)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h1_font_size, 'mobile', $heading_font_size_comp ? '' : 30 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h2, .entry-content h2, .entry-content h2 a',
-					'h2, .entry-content h2'
+					'h2, .entry-content :where(h2), .entry-content :where(h2) a',
+					'h2, .entry-content :where(h2)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h2_font_size, 'mobile', $heading_font_size_comp ? '' : 25 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h3, .entry-content h3, .entry-content h3 a',
-					'h3, .entry-content h3'
+					'h3, .entry-content :where(h3), .entry-content :where(h3) a',
+					'h3, .entry-content :where(h3)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h3_font_size, 'mobile', $heading_font_size_comp ? '' : 20 ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h4, .entry-content h4, .entry-content h4 a',
-					'h4, .entry-content h4'
+					'h4, .entry-content :where(h4), .entry-content :where(h4) a',
+					'h4, .entry-content :where(h4)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h4_font_size, 'mobile' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h5, .entry-content h5, .entry-content h5 a',
-					'h5, .entry-content h5'
+					'h5, .entry-content :where(h5), .entry-content :where(h5) a',
+					'h5, .entry-content :where(h5)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h5_font_size, 'mobile' ),
 				),
 
 				// Conditionally select the css selectors with or without achors.
 				self::conditional_headings_css_selectors(
-					'h6, .entry-content h6, .entry-content h6 a',
-					'h6, .entry-content h6'
+					'h6, .entry-content :where(h6), .entry-content :where(h6) a',
+					'h6, .entry-content :where(h6)'
 				)                                => array(
 					'font-size' => astra_responsive_font( $heading_h6_font_size, 'mobile' ),
 				),
@@ -4008,7 +4015,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				 */
 				$parse_css .= astra_parse_css(
 					array(
-						'.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6' => array(
+						'.entry-content :where(h1, h2, h3, h4, h5, h6)' => array(
 							'clear' => 'none',
 						),
 					)
@@ -5823,7 +5830,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.3);
 					font-size: 11px;
 					padding-right: 0px;
-					padding-left: 2px;
+					padding-left: 1px;
 					line-height: 17px;
 					letter-spacing: -.5px;
 					height: 18px;
@@ -5917,7 +5924,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.3);
 					font-size: 11px;
 					padding-left: 0px;
-					padding-right: 2px;
+					padding-right: 1px;
 					line-height: 17px;
 					letter-spacing: -.5px;
 					height: 18px;
@@ -6140,7 +6147,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'padding'       => '30px',
 					'border-radius' => '4px',
 				),
-				'button, .ast-button, .button, input[type="button"], input[type="reset"], input[type="submit"]' => array(
+				'button, .ast-button, .button, input[type="button"], input[type="reset"], input[type="submit"]' . ( astra_button_consistency_compatibility() ? ', a:where(.wp-block-button__link)' : '' ) => array(
 					'border-radius' => '4px',
 					'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
 				),

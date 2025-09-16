@@ -4,7 +4,7 @@ Author: Translate AI Multilingual Solutions
 Tags: translate, translator, multilingual, translation, language
 Requires at least: 2.8.1
 Tested up to: 6.8
-Stable tag: 3.0.8
+Stable tag: 3.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://gtranslate.io/?xyz=998#pricing
@@ -71,7 +71,15 @@ Please check our [FAQ](https://gtranslate.io/?xyz=998#faq) to get quick answers.
 * User Dashboard with Analytics
 * Live Chat Support
 
-[Download GTranslate](https://gtranslate.io/?xyz=998#pricing)
+**See also**
+
+If you are looking for unlimited, high-quality automatic translations, check out [TranslateX](https://translatex.com) - an automatic translation API offering unlimited translation for your website or application.
+
+We also offer integration plugins:
+**[TranslateX for Loco Translate](https://wordpress.org/plugins/translatex-for-loco-translate/)** - integrate TranslateX API directly into Loco Translate for seamless, unlimited automatic translations.
+**[TranslateX for TranslatePress](https://wordpress.org/plugins/translatex-for-translatepress/)** - bring unlimited automatic translation to TranslatePress using TranslateX API.
+
+These solutions make it easy to supercharge your WordPress multilingual setup with TranslateX's secure and affordable API.
 
 **GTranslate Wordpress Demo**
 [youtube https://www.youtube.com/watch?v=9mtC3LFBErY]
@@ -98,6 +106,7 @@ You can select from the list of available menus in which menu the language selec
 **3. Shortcode in Menu**
 You can create a new Custom Link menu item with URL = #, Link Text = English and add the following shortcode in the Description: `[gt-link lang="en" label="English" widget_look="flags_name"]`
 Where widget_look can be one of the following: `flags`, `flags_code`, `flags_name`, `lang_codes`, `lang_names`
+Make sure to enable "Description" under "Show advanced menu properties" in "Screen Options" dropdown on top of the screen.
 
 **4. Use GTranslate shortcode**
 You can use `[gtranslate]` shortcode anywhere on your website including posts, pages, text widgets.
@@ -152,7 +161,7 @@ The proofreading service will be done by a native speakers and if you want to ta
 You can get an instant website translation estimate by using our [Website Word Counter](https://gtranslate.io/website-translation-quote) tool.
 
 = Which languages are supported? =
-Here is the list: Afrikaans, Albanian, Amharic, Arabic, Armenian, Azerbaijani, Basque, Belarusian, Bengali, Bosnian, Bulgarian, Catalan, Cebuano, Chichewa, Chinese (Simplified), Chinese (Traditional), Corsican, Croatian, Czech, Danish, Dutch, English, Esperanto, Estonian, Filipino, Finnish, French, Frisian, Galician, Georgian, German, Greek, Gujarati, Haitian Creole, Hausa, Hawaiian, Hebrew, Hindi, Hmong, Hungarian, Icelandic, Igbo, Indonesian, Irish, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Kurdish (Kurmanji), Kyrgyz, Lao, Latin, Latvian, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar (Burmese), Nepali, Norwegian, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Samoan, Scottish Gaelic, Serbian, Sesotho, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sudanese, Swahili, Swedish, Tajik, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Xhosa, Yiddish, Yoruba, Zulu
+Here is the list: Afrikaans, Albanian, Amharic, Arabic, Armenian, Azerbaijani, Basque, Belarusian, Bengali, Bosnian, Bulgarian, Catalan, Cebuano, Chichewa, Chinese (Simplified), Chinese (Traditional), Corsican, Croatian, Czech, Danish, Dutch, English, Esperanto, Estonian, Filipino, Finnish, French, Frisian, Galician, Georgian, German, Greek, Gujarati, Haitian Creole, Hausa, Hawaiian, Hebrew, Hindi, Hmong, Hungarian, Icelandic, Igbo, Indonesian, Irish, Italian, Japanese, Javanese, Kannada, Kazakh, Khmer, Korean, Kurdish (Kurmanji), Kyrgyz, Lao, Latin, Latvian, Lithuanian, Luxembourgish, Macedonian, Malagasy, Malay, Malayalam, Maltese, Maori, Marathi, Mongolian, Myanmar (Burmese), Nepali, Norwegian, Pashto, Persian, Polish, Portuguese, Punjabi, Romanian, Russian, Samoan, Scottish Gaelic, Serbian, Sesotho, Shona, Sindhi, Sinhala, Slovak, Slovenian, Somali, Spanish, Sundanese, Swahili, Swedish, Tajik, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Uzbek, Vietnamese, Welsh, Xhosa, Yiddish, Yoruba, Zulu
 
 = Is GTranslate SEO compatible? =
 Our free version doesn't give any SEO advantage.
@@ -216,11 +225,13 @@ Updates are done seamlessly. Since the translations are hosted on our server we 
 = Do I need to pay for Google Translate API key usage? =
 No, we provide the automatic translations for free.
 
-In our free version we provide Phrase Based machine translations from Google Translate. While in our paid versions we provide you state of the art Neural Translations from Google Translate. We also do not have limits on the number of words on your website unlike other translate plugins.
+In our free version, we provide Phrase Based machine translations from Google Translate. In our paid versions, you get state-of-the-art Neural Translations. We also do not limit the number of words or translated pageviews on your website, unlike other translate plugins.
 
-Unlike other plugins like TranslatePress or Weglot you do not pay for automatic translations additionally.
+Unlike other plugins such as TranslatePress or Weglot, you do not pay additionally for automatic translations.
 
-By the way we alse offer a cost effective approach for improving the website translations. You can get a automatic translation post-editing service from us, which will be done by a native speaker or order a professional translation. You can get an instant estimate for your website on [Website Translation Quote](https://gtranslate.io/website-translation-quote)
+We also offer a cost-effective approach for improving website translations: you can request an automatic translation post-editing service (done by a native speaker), or order a professional translation. Get an instant estimate for your website at our [Website Translation Quote](https://gtranslate.io/website-translation-quote).
+
+If you need unlimited, fast, and affordable automatic translation, check out [TranslateX](https://translatex.com) - our automatic translation API that offers unlimited translation for your website or app. We also provide integration plugins for [Loco Translate](https://wordpress.org/plugins/translatex-for-loco-translate/) and [TranslatePress](https://wordpress.org/plugins/translatex-for-translatepress/) to easily bring TranslateX's unlimited API into other popular translation plugins.
 
 = Can I test before making a payment? =
 Yes, we have a 15 days free trial for our new customers.
@@ -247,6 +258,10 @@ If you want us to translate your website professionally or provide you a proofre
 8. User Dashboard (paid)
 
 == Changelog ==
+= 3.0.9 =
+* Updated localization strings on the GTranslate plugin settings page.
+* Added information about TranslateX - unlimited automatic translation API, and integration plugins for Loco Translate and TranslatePress.
+
 = 3.0.8 =
 * Fixed current URL for hreflang tags when WordPress is installed in a sub-folder
 * Changed sessionStorage to localStorage for more persistence when auto switching language

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "soliloquy/soliloquywp",
+  "version": "0.1.0",
+  "title": "Soliloquy",
+  "category": "widgets",
+  "description": "Select a Slider below to add it to your page.",
+  "example": {},
+  "supports": {
+    "html": true,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "textdomain": "soliloquywp",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./main.css",
+  "style": "file:./style-main.css",
+  "keywords": [
+    "Slider",
+    "Photo",
+    "Carosuel"
+  ],
+  "attributes": {
+    "sliderId": {
+      "type": "number",
+      "default": null
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    },
+    "soliloquy_gutenberg_data": {
+      "type": "string",
+      "default": ""
+    }
+  }
+}

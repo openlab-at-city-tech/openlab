@@ -53,10 +53,6 @@ jQuery( function() {
                 return;
             }
 
-            if ( jQuery( "#trp-languages-table .trp-language" ).length >= 2 && jQuery( '.trp-language-selector-limited' ).length ){
-                jQuery(".trp-upsell-multiple-languages").show('fast');
-                return;
-            }
 
             if ( _this.error_check( new_language ) === true ){
                 return;
@@ -102,6 +98,10 @@ jQuery( function() {
             new_option.find( '.trp-remove-language__container' ).last().click( _this.remove_language );
 
             jQuery( '#trp-new-language.trp-add-new-language-row' ).remove();
+
+            if ( jQuery( "#trp-languages-table .trp-language" ).length >= 2 ){
+                jQuery(".trp-upgrade-notice-table__wrapper").show();
+            }
         };
 
         this.change_language = function( event ){

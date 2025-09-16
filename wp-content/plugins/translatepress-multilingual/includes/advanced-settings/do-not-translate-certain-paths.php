@@ -52,6 +52,9 @@ function trp_test_current_slug( &$current_slug, &$array_slugs ) {
     // Explode get params
     $current_slug = explode( '?', $current_slug );
 
+    $settings          = get_option( 'trp_settings', false );
+    $default_lang_slug_if_subdir_on_default = false;
+
     // If get params then store in $current_slug the part thats important to us
     if( isset( $current_slug[1] ) ){
         $current_get  = $current_slug[1];
@@ -60,8 +63,13 @@ function trp_test_current_slug( &$current_slug, &$array_slugs ) {
         $current_slug = $current_slug[0];
     }
 
-    // Test if current slug should be home. If not then split the slug on "/" and save the individual strings in $array_slugs
-    if( empty( $current_slug ) || $current_slug == '/' || $current_slug == '' ){
+    // we need to check the default language slug as well for {{home)) if the "Use a subdirectory for the default language" is checked
+    if ( isset( $settings['add-subdirectory-to-default-language'] ) && $settings['add-subdirectory-to-default-language'] == 'yes' ){
+        $default_lang_slug_if_subdir_on_default = $settings['url-slugs'][$settings['default-language']];
+    }
+        // Test if current slug should be home. If not then split the slug on "/" and save the individual strings in $array_slugs
+    if( empty( $current_slug ) || $current_slug == '/' || $current_slug == '' || ( !empty( $default_lang_slug_if_subdir_on_default )
+            && $current_slug == $default_lang_slug_if_subdir_on_default )){
         $array_slugs[0] = "{{home}}";
         $current_slug = "{{home}}";
     }
