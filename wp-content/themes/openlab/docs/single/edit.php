@@ -192,6 +192,10 @@ if ( bp_is_group() ) {
 
 							<?php wp_nonce_field('bp_docs_save') ?>
 
+							<?php if ( $doc_id ) : ?>
+								<?php wp_nonce_field( 'bp_docs_edit_'. $doc_id, 'bp_docs_edit_nonce' ); ?>
+							<?php endif; ?>
+
 							<?php /* Very important! Saving existing docs will not work without this */ ?>
 							<input type="hidden" id="doc_id" name="doc_id" value="<?php echo esc_attr( $doc_id ); ?>" />
 
