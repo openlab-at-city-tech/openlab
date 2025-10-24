@@ -66,6 +66,11 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 		$mob_h_alignment  = '' !== $mob_h_alignment ? $mob_h_alignment : 'left';
 	}
 
+	// Flip horizontal alignment for RTL so saved left/right mirror automatically.
+	$desk_h_alignment = astra_flip_rtl_alignment( $desk_h_alignment );
+	$tab_h_alignment  = astra_flip_rtl_alignment( $tab_h_alignment );
+	$mob_h_alignment  = astra_flip_rtl_alignment( $mob_h_alignment );
+
 	$elements_gap   = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-elements-gap', 10 );
 	$banner_padding = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-padding', class_exists( 'WooCommerce' ) && 'product' === $current_post_type ? Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-spacing' ) : Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
 	$banner_margin  = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-margin' );
@@ -300,7 +305,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 			$selector . ' .ast-container h1' => array(
 				'font-size' => astra_responsive_font( $banner_title_font_size, 'tablet' ),
 			),
-			$selector . ' *'                 => array(
+			$selector . ' .ast-container *'  => array(
 				'font-size' => astra_responsive_font( $banner_text_font_size, 'tablet' ),
 			),
 		);
@@ -324,7 +329,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 			$selector . ' .ast-container h1' => array(
 				'font-size' => astra_responsive_font( $banner_title_font_size, 'mobile' ),
 			),
-			$selector . ' *'                 => array(
+			$selector . ' .ast-container *'  => array(
 				'font-size' => astra_responsive_font( $banner_text_font_size, 'mobile' ),
 			),
 		);
@@ -416,7 +421,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 		.ast-archive-entry-banner[data-banner-layout="layout-1"] {
 			background: inherit;
 			padding: 20px 0;
-			text-align: left;
+			text-align: ' . astra_flip_rtl_alignment( 'left' ) . ';
 		}
 	';
 

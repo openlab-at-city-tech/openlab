@@ -125,6 +125,9 @@ if ( ! class_exists( 'Astra_Nps_Notice' ) ) {
 						'plugin_rating_title' => __( 'Thank you for your feedback', 'astra' ),
 						'plugin_rating_content' => __( 'We value your input. How can we improve your experience?', 'astra' ),
 					),
+					'privacy_policy'  => array(
+						'disable' => true, // Enable when we have a privacy policy url.
+					),
 				)
 			);
 		}

@@ -139,6 +139,18 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 	$tab_h_alignment    = isset( $horz_alignment['tablet'] ) ? $horz_alignment['tablet'] : '';
 	$mob_h_alignment    = isset( $horz_alignment['mobile'] ) ? $horz_alignment['mobile'] : '';
 
+	// Default alignment for layout-1 when not set.
+	if ( 'layout-1' === $layout_type ) {
+		$desk_h_alignment = '' !== $desk_h_alignment ? $desk_h_alignment : 'left';
+		$tab_h_alignment  = '' !== $tab_h_alignment ? $tab_h_alignment : 'left';
+		$mob_h_alignment  = '' !== $mob_h_alignment ? $mob_h_alignment : 'left';
+	}
+
+	// Flip horizontal alignment for RTL so saved left/right mirror automatically.
+	$desk_h_alignment = astra_flip_rtl_alignment( $desk_h_alignment );
+	$tab_h_alignment  = astra_flip_rtl_alignment( $tab_h_alignment );
+	$mob_h_alignment  = astra_flip_rtl_alignment( $mob_h_alignment );
+
 	$banner_padding = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-padding', Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
 	$banner_margin  = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-margin' );
 

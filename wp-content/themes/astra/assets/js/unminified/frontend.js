@@ -228,16 +228,20 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		buttons.forEach(button => {
 			if (allToggled) {
 				button.classList.remove('toggled');
+				button.setAttribute('aria-expanded', 'false');
 			} else {
 				button.classList.add('toggled');
+				button.setAttribute('aria-expanded', 'true');
 			}
 		});
 	}
 	
 	document.addEventListener('click', function (e) {
 		const button = e.target.closest('.menu-toggle');
-		if (button) {
+		if (button && mobileHeaderType === 'dropdown') {
 			button.classList.toggle('toggled');
+			const isToggled = button.classList.contains('toggled');
+			button.setAttribute('aria-expanded', isToggled ? 'true' : 'false');
 			syncToggledClass();
 		}
 	});
@@ -328,6 +332,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		for ( var item = 0;  item < popupTrigger.length; item++ ) {
 
 			popupTrigger[item].classList.remove( 'toggled' );
+			popupTrigger[item].setAttribute('aria-expanded', 'false');
 
 			popupTrigger[item].style.display = 'flex';
 		}
@@ -420,6 +425,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 				// Open the Popup when click on trigger
 				popupTriggerMobile[ item ].removeEventListener( 'click', popupTriggerClick );
 				popupTriggerMobile[ item ].addEventListener( 'click', function(event) {
+					event.currentTarget.setAttribute('aria-expanded', 'true');
 					popupTriggerClick(event);
 					const menu = document.querySelector('.ast-mobile-popup-drawer.active');
 					if (!menu) {
@@ -432,7 +438,10 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 				popupTriggerDesktop[ item ].removeEventListener( 'click', astraNavMenuToggle, false );
 				// Open the Popup when click on trigger
 				popupTriggerDesktop[ item ].removeEventListener( 'click', popupTriggerClick );
-				popupTriggerDesktop[ item ].addEventListener( 'click', popupTriggerClick, false );
+				popupTriggerDesktop[ item ].addEventListener( 'click', function(event) {
+					event.currentTarget.setAttribute('aria-expanded', 'true');
+					popupTriggerClick(event);
+				}, false );
 				popupTriggerDesktop[ item ].trigger_type = 'desktop';
 			}
 
@@ -443,7 +452,10 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			popupClose.addEventListener( 'click', function ( e ) {
 				document.getElementById( 'ast-mobile-popup' ).classList.remove( 'active', 'show' );
 				updateTrigger( this );
-				menuToggleButton?.focus();
+				// Don't focus if we're in an iframe (e.g., Beaver Builder editor)
+				if ( window.self === window.top ) {
+					menuToggleButton?.focus();
+				}
 			} );
 
 			// Close Popup if esc is pressed.
@@ -978,7 +990,9 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 		// Hide menu toggle button if menu is empty and return early.
 		if (!menu) {
-			button.style.display = 'none';
+			if (!button.classList.contains('custom-logo-link')) {
+				button.style.display = 'none';
+			}
 			return;
 		}
 

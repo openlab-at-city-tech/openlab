@@ -150,9 +150,12 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 				add_editor_style( 'assets/css/' . $dir_name . '/editor-style' . $file_prefix . '.css' );
 			}
 
-			if ( apply_filters( 'astra_fullwidth_oembed', true ) ) {
+			if ( apply_filters( 'astra_fullwidth_oembed', false ) ) {
 				// Filters the oEmbed process to run the responsive_oembed_wrapper() function.
 				add_filter( 'embed_oembed_html', array( $this, 'responsive_oembed_wrapper' ), 10, 3 );
+			} else {
+				// Enable support for responsive embedded content.
+				add_theme_support( 'responsive-embeds' );
 			}
 
 			// WooCommerce.

@@ -160,7 +160,62 @@ if ( ! class_exists( 'Astra_Builder_UI_Controller' ) ) {
 				// First applying wpautop to handle paragraphs, then removing extra <p> around shortcodes.
 				$content = shortcode_unautop( wpautop( $content ) );
 
-				echo do_shortcode( wp_kses_post( $content ) );
+				$allowed_html = wp_kses_allowed_html( 'post' );
+
+				// Add here additional tags that weren't working if you got something.
+				$additional_tags = array(
+					'select'   => array(
+						'name'     => true,
+						'id'       => true,
+						'class'    => true,
+						'multiple' => true,
+						'size'     => true,
+						'required' => true,
+						'disabled' => true,
+						'style'    => true,
+					),
+					'option'   => array(
+						'value'    => true,
+						'selected' => true,
+						'disabled' => true,
+						'class'    => true,
+						'id'       => true,
+					),
+					'optgroup' => array(
+						'label'    => true,
+						'disabled' => true,
+						'class'    => true,
+					),
+					'iframe'   => array(
+						'src'             => true,
+						'width'           => true,
+						'height'          => true,
+						'frameborder'     => true,
+						'allowfullscreen' => true,
+						'style'           => true,
+						'title'           => true,
+						'loading'         => true,
+						'referrerpolicy'  => true,
+						'sandbox'         => true,
+						'class'           => true,
+						'id'              => true,
+					),
+				);
+
+				$allowed_html = array_merge( $allowed_html, $additional_tags );
+
+				/**
+				 * Filter allowed HTML tags for HTML widget content.
+				 *
+				 * @param array $allowed_html Array of allowed HTML tags and attributes.
+				 * @param string $content The HTML content being filtered.
+				 * @since 4.11.11
+				 *
+				 * @psalm-suppress TooManyArguments
+				 */
+				$allowed_html = apply_filters( 'astra_html_widget_allowed_html', $allowed_html, $content );
+
+				echo do_shortcode( wp_kses( $content, $allowed_html ) );
 				echo '</div>';
 				echo '</div>';
 			}

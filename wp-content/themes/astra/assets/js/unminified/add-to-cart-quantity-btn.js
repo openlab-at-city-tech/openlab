@@ -74,6 +74,10 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
 
             // Add plus and minus icons.
             $qty_parent = $quantityBoxes.parentElement;
+
+            // Remove existing plus and minus placeholders.
+            document.querySelectorAll( '.ast-qty-placeholder' )?.forEach( ( placeholder ) => placeholder?.remove() );
+            
             $qty_parent.classList.add( 'buttons_added' );
 
             const minusBtn = `<span class="screen-reader-text">${ astra_qty_btn.minus_qty }</span><a href="javascript:void(0)" id="minus_qty-${ i }" class="minus %s">-</a>`;
@@ -112,7 +116,7 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
             let objbody = document.getElementsByTagName('BODY')[0];
             let cart = document.getElementsByClassName('cart')[0];
 
-            if (objbody.classList.contains('single-product') && !cart.classList.contains('grouped_form')) {
+            if (objbody.classList.contains('single-product') && cart && !cart.classList.contains('grouped_form')) {
                 let quantityInput = document.querySelector('.woocommerce input[type=number].qty');
                 // Check for single product page.
                 if (quantityInput) {

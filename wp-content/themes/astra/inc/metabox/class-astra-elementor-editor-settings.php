@@ -56,6 +56,21 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 				return;
 			}
 
+			// Get post ID.
+			$post_id = 0;
+			if ( isset( $_REQUEST['post'] ) ) {
+				$post_id = absint( $_REQUEST['post'] );
+			}
+			if ( isset( $_REQUEST['editor_post_id'] ) ) {
+				$post_id = absint( $_REQUEST['editor_post_id'] );
+			}
+
+			$post_type = get_post_type( $post_id );
+			// Bail if post type is excluded.
+			if ( ! $post_id || in_array( $post_type, self::get_excluded_post_types(), true ) ) {
+				return;
+			}
+
 			$this->init_hooks();
 		}
 
@@ -923,9 +938,35 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 				empty( $elementor_settings )
 					? delete_post_meta( $post_id, '_elementor_page_settings' )
 					: update_post_meta( $post_id, '_elementor_page_settings', $elementor_settings );
+
+				// Regenerate Elementor CSS cache to update --page-title-display variable.
+				if ( class_exists( '\Elementor\Plugin' ) ) {
+					/** @psalm-suppress UndefinedClass */
+					\Elementor\Plugin::$instance->files_manager->clear_cache();
+				}
 			}
 		}
 
+		/**
+		 * Get excluded post types for Astra Meta setting in Elementor editor.
+		 *
+		 * @since 4.11.11
+		 * @return array
+		 */
+		public static function get_excluded_post_types() {
+			/**
+			 * Filter to exclude post types from rendering Astra Meta setting in Elementor editor.
+			 *
+			 * @param array $excluded_post_types Array of post types to exclude.
+			 */
+			return apply_filters(
+				'astra_elementor_editor_excluded_post_types',
+				array(
+					'astra-advanced-hook', // Astra Theme Builder Advanced Layout.
+					'elementskit_template', // ElementsKit Template.
+				)
+			);
+		}
 	}
 }
 

@@ -101,6 +101,43 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		}
 
 		/**
+		 * Get the Astra onboarding link
+		 * if the Starter Templates plugin version is >= 4.4.36.
+		 *
+		 * @return string Onboarding link URL if condition matches, otherwise empty string.
+		 */
+		public static function get_astra_onboarding_link() {
+			// Load plugin.php functions if not already available.
+			if ( ! function_exists( 'get_plugins' ) ) {
+				if ( ! defined( 'ABSPATH' ) ) {
+					return '';
+				}
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			}
+
+			$onboarding_link = admin_url( 'admin.php?page=astra-onboarding' );
+			$st_version      = '';
+
+			$all_plugins = get_plugins();
+
+			// First check Premium Starter Templates.
+			if ( isset( $all_plugins['astra-pro-sites/astra-pro-sites.php'] ) ) {
+				$st_version = isset( $all_plugins['astra-pro-sites/astra-pro-sites.php']['Version'] ) ? $all_plugins['astra-pro-sites/astra-pro-sites.php']['Version'] : '';
+			}
+			// Otherwise check Starter Templates.
+			elseif ( isset( $all_plugins['astra-sites/astra-sites.php'] ) ) {
+				$st_version = isset( $all_plugins['astra-sites/astra-sites.php']['Version'] ) ? $all_plugins['astra-sites/astra-sites.php']['Version'] : '';
+			}
+
+			// If version is lower than 4.4.38, return empty.
+			if ( $st_version && version_compare( $st_version, '4.4.38', '<' ) ) {
+				return '';
+			}
+
+			return $onboarding_link;
+		}
+
+		/**
 		 * Add custom megamenu fields data to the menu.
 		 *
 		 * @param int    $id menu item id.
@@ -141,6 +178,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 			$localize = array(
 				'ajaxUrl'                            => admin_url( 'admin-ajax.php' ),
 				'astraSitesLink'                     => admin_url( 'themes.php?page=starter-templates' ),
+				'astraOnboardingLink'                => self::get_astra_onboarding_link(),
 				'recommendedPluiginActivatingText'   => __( 'Activating', 'astra' ) . '&hellip;',
 				'recommendedPluiginDeactivatingText' => __( 'Deactivating', 'astra' ) . '&hellip;',
 				'recommendedPluiginActivateText'     => __( 'Activate', 'astra' ),
@@ -188,7 +226,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 				$ele_image_path                      = ASTRA_THEME_URI . 'inc/assets/images/ele-logo.svg';
 				$ai_image_path                       = ASTRA_THEME_URI . 'inc/assets/images/ai-logo.svg';
 				$ast_sites_notice_btn                = self::astra_sites_notice_button();
-				$ast_sites_notice_btn['button_text'] = __( 'Let’s Get Started with Starter Templates', 'astra' );
+				$ast_sites_notice_btn['button_text'] = __( 'Start Building Now', 'astra' );
 
 				if ( file_exists( WP_PLUGIN_DIR . '/astra-sites/astra-sites.php' ) && is_plugin_inactive( 'astra-sites/astra-sites.php' ) && is_plugin_inactive( 'astra-pro-sites/astra-pro-sites.php' ) ) {
 					$ast_sites_notice_btn['class'] .= ' button button-primary';
@@ -211,7 +249,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 									<div class="notice-actions">
 										<button class="%4$s" %5$s %6$s %7$s %8$s %9$s %10$s> %11$s </button>
 									</div>
-									<p class="sub-notice-description astra-notice-close">%13$s</p>
+									<p class="sub-notice-description">%13$s</p>
 								</div>
 								<div class="ast-col-right">
 									<img src="%12$s" alt="Starter Templates" />
@@ -223,9 +261,9 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 									</div>
 								</div>
 							</div>',
-						__( 'Thank you for choosing the Astra theme!', 'astra' ),
-						__( 'Build Your Dream Site in Minutes With AI 🚀', 'astra' ),
-						__( 'Say goodbye to the days of spending weeks designing and building your website. With Astra and our Starter Templates plugin, you can now create professional-grade websites in minutes.', 'astra' ),
+						__( 'Thank you for choosing Astra!', 'astra' ),
+						__( 'Your Website, Ready in Minutes - Let’s Start!', 'astra' ),
+						__( 'No complicated setup, no waiting - just a smooth, hassle-free way to bring your website to life. Follow a few quick steps, and you’ll be up and running in no time!', 'astra' ),
 						esc_attr( $ast_sites_notice_btn['class'] ),
 						'href="' . astra_get_prop( $ast_sites_notice_btn, 'link', '' ) . '"',
 						'data-slug="' . astra_get_prop( $ast_sites_notice_btn, 'data_slug', '' ) . '"',
@@ -235,7 +273,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 						'data-activating-text="' . astra_get_prop( $ast_sites_notice_btn, 'activating_text', '' ) . '"',
 						esc_html( $ast_sites_notice_btn['button_text'] ),
 						$image_path,
-						__( 'I want to build this website from scratch', 'astra' ),
+						__( 'By clicking <b>"Start Building Now,"</b> you agree to install and activate the <b>Starter Templates</b> plugin.', 'astra' ),
 						__( '300+ Templates', 'astra' ),
 						$gb_image_path,
 						$ele_image_path,

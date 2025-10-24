@@ -1,11 +1,44 @@
 *** Astra Changelog ***
 
+2025-10-07 - version 4.11.13
+* Improvement: Added lazy-loading for Google Fonts in Customizer to improve performance and reduce extra PHP memory consume by loading fonts via AJAX only when needed.
+* Improvement: Added LifterLMS compatibility on course catalog page.
+* Improvement: Improved post filter color settings spacing.
+* Fix: Fixed incorrect aspect ratios for Vimeo and YouTube embeds.
+* Fix: Fixed JavaScript error 'wc_add_to_cart_params is not defined' when using EDD cart widget in header builder.
+* Fix: Resolved an issue where the Off-Canvas Menu did not work correctly with the Sticky Header.
+
+2025-09-16 - version 4.11.12
+* New: Streamlined onboarding flow for quicker setup and an easier path to building websites with Astra and Starter Templates.
+* Improvement: Added LifterLMS compatibility on the course catalog page.
+* Improvement: Optimized mobile menu initialization to use DOMContentLoaded instead of window.load for faster responsiveness on content-heavy pages.
+* Improvement: Added consistency for empty cart button styling in WooCommerce mini cart.
+* Fix: Resolved issue where the logo disappeared when the primary menu was empty by ensuring the custom logo remains visible regardless of menu state.
+* Fix: Corrected the aria-expanded attribute not updating for mobile menu toggle buttons in flyout and fullscreen header types.
+* Fix: Resolved issue with padding not applying on single and archive pages.
+* Fix: Corrected misaligned color picker in Related Posts → Design → Content Colors options.
+
+2025-09-09 - version 4.11.11
+* Improvement: Enhanced the loading performance of the Quantity Plus and Minus buttons by using placeholders.
+* Improvement: Updated archive, special, and single pages to automatically swap left/right positioning for full RTL compatibility.
+* Improvement: Refined the Site Identity section UI in the Style Guide for better clarity and usability.
+* Improvement: Added a new astra_elementor_use_default_settings filter to allow skipping Elementor-specific modifications for empty posts.
+* Improvement: Dark palettes (e.g., palette 4) are now correctly detected and styled as dark mode even if colors are customized.
+* Improvement: Resolved custom SVG attribute conflicts to improve SVG UI rendering.
+* Improvement: Added the astra_html_widget_allowed_html filter to allow custom HTML elements in header/footer HTML widgets.
+* Fix: Resolved an issue where the copyright element’s bottom margin was not applied across all devices.
+* Fix: Fixed an issue where HTML select/option elements were displayed as plain text in header/footer HTML widgets.
+* Fix: Corrected responsive font sizing for text in the Archive Title section.
+* Fix: Corrected a dynamic CSS issue in the Search Page Title section.
+* Fix: Fixed Elementor CSS cache issue where page title display settings were not updated after saving posts.
+
 2025-08-20 - version 4.11.10
 * Improvement: Fixed duplicate menu IDs in navigation components to improve WCAG 2.0 accessibility compliance.
 * Improvement: Enhanced accessibility to prevent screen readers from announcing fly-out navigation content when it is hidden.
-* Fix: Resolved Astra dashboard compatibility issue with the Gutenberg plugin where sprintf was not defined.
+* Fix: Resolved the Astra dashboard compatibility issue with the Gutenberg plugin, where sprintf was not defined.
 * Fix: Resolved minor UI styling issues in Customizer controls.
 * Fix: Corrected an issue where the post title appeared in the Elementor editor even when disabled, ensuring proper sync with Elementor’s Hide Title option.
+* Fix: Corrected content scrolling issue in Beaver Builder editor when the header off-canvas flyout menu is enabled.
 
 2025-08-11 - version 4.11.9
 * Improvement: Compatibility with Spectra V3.

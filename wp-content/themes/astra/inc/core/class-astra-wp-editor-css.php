@@ -700,7 +700,7 @@ class Astra_WP_Editor_CSS {
 		}
 
 		// Boxed, Content-Boxed, page title alignment with Spectra Container Blocks.
-		$desktop_css['.ast-separate-container .editor-styles-wrapper .block-editor-block-list__layout.is-root-container > .uagb-is-root-container'] = array(
+		$desktop_css['.ast-separate-container .editor-styles-wrapper .block-editor-block-list__layout.is-root-container > :is(.uagb-is-root-container, .spectra-is-root-container)'] = array(
 			'max-width' => 'var(--wp--custom--ast-content-width-size)',
 		);
 
@@ -930,7 +930,7 @@ class Astra_WP_Editor_CSS {
 				'text-decoration' => 'none',
 				'font-size'       => '1.25rem',
 			);
-			$desktop_css['.ast-plain-container.ast-no-sidebar .editor-styles-wrapper .is-root-container.block-editor-block-list__layout > .alignwide.uagb-is-root-container '] = array(
+			$desktop_css['.ast-plain-container.ast-no-sidebar .editor-styles-wrapper .is-root-container.block-editor-block-list__layout > .alignwide:is(.uagb-is-root-container, .spectra-is-root-container)']                                      = array(
 				'max-width' => $container_width_comp,
 			);
 			$desktop_css['.ast-separate-container .editor-styles-wrapper .block-editor-block-list__layout.is-root-container .alignwide, .ast-plain-container .editor-styles-wrapper .block-editor-block-list__layout.is-root-container .alignwide'] = array(

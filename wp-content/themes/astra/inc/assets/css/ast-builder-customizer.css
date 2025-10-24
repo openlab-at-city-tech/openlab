@@ -1812,7 +1812,7 @@ button.components-button.ahfb-sorter-item-expand {
 }
 
 #customize-theme-controls .accordion-section-content {
-    color: var(--ast-customizer-color-5);
+    color: var( --ast-customizer-text-color );
 }
 
 .ahfb-popover-social-list .components-button-group.ahfb-radio-container-control {

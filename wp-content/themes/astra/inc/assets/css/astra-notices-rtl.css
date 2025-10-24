@@ -1,3 +1,15 @@
+#astra-sites-on-active {
+	font-family: "Figtree", "Inter", sans-serif;
+	padding: 0;
+	border: none;
+	box-shadow: none;
+	border-radius: 4px;
+}
+
+#astra-sites-on-active .astra-notice-container {
+	padding: 2rem;
+}
+
 .astra-review-notice-container {
 	display: flex;
 	align-items: center;
@@ -89,7 +101,7 @@
 #astra-sites-on-active .button.updated-message:before,
 #astra-sites-on-active .button.installed:before,
 #astra-sites-on-active .button.installing:before {
-	margin: 4px -1px 0px 5px;
+	margin: 0 0 0 5px;
 }
 
 .wp-core-ui .astra-notice-wrapper:has(.ast-welcome-banner) {
@@ -98,8 +110,8 @@
 .ast-welcome-banner {
 	width: 100%;
 	display: flex;
-	gap: 40px;
-	justify-content: center;
+	gap: 2rem;
+	justify-content: space-between;
 	overflow: hidden;
 }
 .ast-col-left {
@@ -108,10 +120,9 @@
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: center;
-	padding: 40px 28px 40px 0px;
 }
 .ast-col-right {
-	width: 50%;
+	max-width: 50%;
 	display: flex;
 	position: relative;
     flex-direction: column;
@@ -123,48 +134,47 @@
 	position: relative;
 }
 .ast-welcome-banner .notice-title {
-	color: #1e293b;
+	color: #141338;
 	font-size: 30px;
+	line-height: 38px;
 	font-weight: 600;
-	line-height: 40px;
-	letter-spacing: -0.2px;
-	margin-top: 12px;
-	margin-bottom: 12px;
 	padding: 0;
+	margin-top: 0px;
+	margin-bottom: 0.375rem;
+	
 }
 .ast-welcome-banner .description {
-	color: #475569;
-	font-size: 16px;
-	line-height: 28px;
+	color: #6F6B99;
+	font-size: 14px;
+	line-height: 20px;
 	margin-top: 0px;
-	margin-bottom: 32px;
+	margin-bottom: 1.75rem;
 	padding: 0px;
 }
 #astra-sites-on-active .astra-notice-container .notice-actions > button {
 	border-radius: 6px;
-	background: #046bd2;
+	background: #5C2EDE;
 	padding: 12px 24px;
 	/* shadow/sm */
 	color: white;
 	box-shadow: none;
 	border: none;
-	font-size: 16px;
-	font-weight: 500;
-	line-height: 24px;
+	font-size: 14px;
+	line-height: 20px;
+	font-weight: 600;
 }
 .ast-welcome-banner .sub-notice-title {
 	display: flex;
 	flex-direction: column;
 	align-self: stretch;
-	color: #646970;
+	color: #6F6B99;
 	font-size: 14px;
-	line-height: 22px;
-	margin: 0;
+	line-height: 20px;
+	margin: 0 0 1.75rem;
 	padding: 0;
 }
-.astra-notice-container:has(.ast-welcome-banner) {
-    padding-top: 0;
-    padding-bottom: 0;
+.ast-welcome-banner .notice-actions {
+	margin-bottom: 1.75rem;
 }
 .ast-welcome-banner .notice-actions button {
     font-size: 14px;
@@ -173,15 +183,15 @@
     padding: 12px 24px;
 }
 p.sub-notice-description {
-    color: #475569;
-    font-size: 13px;
-    line-height: 20px;
-    text-decoration: underline;
-    cursor: pointer;
-    margin: 0;
-    padding: 16px 0 0;
+	color: #6F6B99;
+    font-size: 12px;
+    line-height: 16px;
+	padding: 0;
+	margin: 0;
 }
 .ast-st-sites-cta {
+	width: fit-content;
+	max-width: 320px;
 	border: 1px solid #fff;
     border-radius: 9999px;
     display: flex;
@@ -196,6 +206,7 @@ p.sub-notice-description {
     bottom: 40px;
     background: rgb(228 228 228 / 50%);
     backdrop-filter: blur(4px);
+	display: none; /* maybe show it in future */
 }
 
 .ast-st-sites-cta .ast-page-builder-ico {
@@ -215,62 +226,34 @@ p.sub-notice-description {
     padding-left: 6px;
     border-left: 1px solid #fff;
 }
-#astra-sites-on-active {
-	padding: 0;
-}
+
 @media screen and (max-width: 1199px) {
+	#astra-sites-on-active .astra-notice-container {
+		padding: 1.5rem;
+	}
 	.ast-col-right {
 		display: none;
 	}
 	.ast-col-left {
 		width: 100%;
-		padding: 20px 24px;
 		align-items: unset;
+		padding: 0.5rem 0;
 	}
 	#astra-sites-on-active .astra-notice-container .notice-actions > button {
 		width: 100%;
-	}
-}
-@media screen and (max-width: 782px) {
-	.ast-col-left {
-		width: 100%;
-		font-size: 14px;
-		align-items: unset;
-		padding-right: 15px;
-		padding-left: 15px;
-	}
-	#astra-sites-on-active .astra-notice-container .notice-actions > button {
-		font-size: 14px;
-		width: 100%;
-	}
-	.ast-welcome-banner .notice-title {
-		font-size: 22px;
-	}
-	.ast-welcome-banner .sub-notice-title,
-	.ast-welcome-banner .description {
-		font-size: 14px;
-		line-height: 24px;
-	}
-}
-
-@media screen and (min-width: 1199px) and (max-width: 1700px) {
-	.ast-welcome-banner {
-		max-height: 350px;
-	}
-	.ast-col-left {
-		width: 45%;
-	}
-	.ast-col-right {
-		width: 65%;
-	}
-	#astra-sites-on-active .astra-notice-container .notice-actions > button {
-		font-size: 14px;
 	}
 	.ast-welcome-banner .notice-title {
 		font-size: 24px;
 		line-height: 36px;
 	}
-	.ast-welcome-banner .sub-notice-title {
-		font-size: 13px;
+}
+
+@media screen and (max-width: 782px) {
+	#astra-sites-on-active .astra-notice-container {
+		padding: 1rem;
+	}
+	.ast-welcome-banner .notice-title {
+		font-size: 20px;
+		line-height: 30px;
 	}
 }

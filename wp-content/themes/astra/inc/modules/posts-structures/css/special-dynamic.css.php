@@ -39,7 +39,7 @@ function astra_special_archive_dynamic_css( $dynamic_css, $dynamic_css_filtered 
 		if ( $layout_2_active ) {
 			$selector = '.search .ast-archive-entry-banner';
 		} else {
-			$selector = '.search .ast-archive-description';
+			$selector = '.search .ast-container section.ast-archive-description';
 		}
 
 		$horizontal_alignment = astra_get_option( $title_section . '-horizontal-alignment' );
@@ -52,6 +52,11 @@ function astra_special_archive_dynamic_css( $dynamic_css, $dynamic_css_filtered 
 			$tab_h_alignment  = '' !== $tab_h_alignment ? $tab_h_alignment : 'left';
 			$mob_h_alignment  = '' !== $mob_h_alignment ? $mob_h_alignment : 'left';
 		}
+
+		// Flip horizontal alignment for RTL so saved left/right mirror automatically.
+		$desk_h_alignment = astra_flip_rtl_alignment( $desk_h_alignment );
+		$tab_h_alignment  = astra_flip_rtl_alignment( $tab_h_alignment );
+		$mob_h_alignment  = astra_flip_rtl_alignment( $mob_h_alignment );
 
 		$elements_gap   = astra_get_option( $title_section . '-elements-gap', 10 );
 		$banner_padding = astra_get_option( $title_section . '-banner-padding', Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
@@ -309,7 +314,7 @@ function astra_special_archive_dynamic_css( $dynamic_css, $dynamic_css_filtered 
 		.ast-archive-entry-banner[data-banner-layout="layout-1"] {
 			background: inherit;
 			padding: 20px 0;
-			text-align: left;
+			text-align: ' . astra_flip_rtl_alignment( 'left' ) . ';
 		}
 	';
 
