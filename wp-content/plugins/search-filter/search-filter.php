@@ -5,7 +5,7 @@ Plugin URI: https://free.searchandfilter.com/
 Description: Search and Filtering system for Pages, Posts, Categories, Tags and Taxonomies
 Author: Code Amp
 Author URI: https://codeamp.com
-Version: 1.2.17
+Version: 1.2.18
 Text Domain: searchandfilter
 License: GPLv2
 */
@@ -370,16 +370,6 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 			remove_filter( 'posts_where', 'limit_date_range_query' );
 		}
 
-		public function fix_blank_search( $query ) {
-			// TODO - needs to be re-implemented.
-			// phpcs:disable WordPress.Security.NonceVerification.Missing
-			if ( ( isset( $_GET['s'] ) ) && ( empty( $_GET['s'] ) ) && ( $query->is_main_query() ) ) {
-				$query->is_search = true;
-				$query->is_home   = false;
-			}
-			// phpcs:enable WordPress.Security.NonceVerification.Missing
-		}
-
 		public function filter_query_post_date( $query ) {
 			global $wp_query;
 			if ( ( $query->is_main_query() ) && ( ! is_admin() ) ) {
@@ -497,9 +487,14 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 		 * check to see if form has been submitted and handle vars
 		*/
 		public function check_posts() {
-			// phpcs:disable WordPress.Security.NonceVerification.Missing
+			if ( ! isset( $_POST['_searchandfilter_nonce'] ) || ! wp_verify_nonce( $_POST['_searchandfilter_nonce'], 'searchandfilter_form' ) ) {
+				return; // Exit early if nonce verification fails
+			}
+			
 			if ( isset( $_POST[ SF_FPRE . 'submitted' ] ) ) {
 				if ( $_POST[ SF_FPRE . 'submitted' ] === '1' ) {
+					// Verify nonce for CSRF protection
+					
 					// Set var to confirm the form was posted.
 					$this->has_form_posted = true;
 				}
@@ -856,7 +851,7 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 				// drop down... so add (if any) the post types to a hidden attribute.
 				if ( ( $post_types !== '' ) && ( is_array( $post_types ) ) ) {
 					foreach ( $post_types as $post_type ) {
-						$returnvar .= '<input type="hidden" name="' . SF_FPRE . 'post_types[]" value="' . esc_attr( $post_type ) . '" />';
+						$returnvar .= '<input type="hidden" name="' . esc_attr( SF_FPRE ) . 'post_types[]" value="' . esc_attr( $post_type ) . '" />';
 					}
 				}
 			}
@@ -871,7 +866,7 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 						$returnvar .= '<h4>' . wp_kses_post( $labels[ $i ] ) . '</h4>';
 					}
 					$clean_searchterm = esc_attr( $this->searchterm );
-					$returnvar       .= '<input type="text" name="' . SF_FPRE . 'search" placeholder="' . esc_attr( $search_placeholder ) . '" value="' . esc_attr( $clean_searchterm ) . '">';
+					$returnvar       .= '<input type="text" name="' . esc_attr( SF_FPRE ) . 'search" placeholder="' . esc_attr( $search_placeholder ) . '" value="' . esc_attr( $clean_searchterm ) . '">';
 					$returnvar       .= '</li>';
 				} elseif ( $field === 'post_types' ) {
 					// Build field array.
@@ -888,14 +883,17 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 			$returnvar .= '<li>';
 
 			if ( $add_search_param === 1 ) {
-				$returnvar .= '<input type="hidden" name="' . SF_FPRE . 'add_search_param" value="1" />';
+				$returnvar .= '<input type="hidden" name="' . esc_attr( SF_FPRE ) . 'add_search_param" value="1" />';
 			}
 
 			if ( $empty_search_url !== '' ) {
-				$returnvar .= '<input type="hidden" name="' . SF_FPRE . 'empty_search_url" value="' . esc_url( html_entity_decode( $empty_search_url ) ) . '" />';
+				$returnvar .= '<input type="hidden" name="' . esc_attr( SF_FPRE ) . 'empty_search_url" value="' . esc_url( html_entity_decode( $empty_search_url ) ) . '" />';
 			}
 
-			$returnvar .= '<input type="hidden" name="' . SF_FPRE . 'submitted" value="1"><input type="submit" value="' . esc_attr( $submitlabel ) . '"></li>';
+			// Add nonce field for CSRF protection
+			$returnvar .= wp_nonce_field( 'searchandfilter_form', '_searchandfilter_nonce', true, false );
+
+			$returnvar .= '<input type="hidden" name="' . esc_attr( SF_FPRE ) . 'submitted" value="1"><input type="submit" value="' . esc_attr( $submitlabel ) . '"></li>';
 			$returnvar .= '</ul>';
 			$returnvar .= '</div></form>';
 
