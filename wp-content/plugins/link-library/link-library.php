@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Link Library
-Plugin URI: http://wordpress.org/extend/plugins/link-library/
+Plugin URI: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.8.3
+Version: 7.8.4
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
