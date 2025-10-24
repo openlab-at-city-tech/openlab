@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley  
 Tags: download manager, file manager, digital store, ecommerce, password protection  
 Requires at least: 5.5  
-Tested up to: 6.8  
-Stable tag: 5.1.0
+Tested up to: 6.8
+Stable tag: 5.1.4
 License: GPLv3  
 Requires PHP: 7.6  
 
@@ -24,7 +24,7 @@ https://www.youtube.com/watch?v=xEbliDziMrU&list=PLM2tOjfhVrZfvMiJ3ib1GqvWBpYpBe
 * [Google Drive](https://download-monitor.com/extensions/google-drive/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Google+drive): Lets you use the files hosted on your Google Drive as Download Monitor files.
 * [Advanced Access Manager](https://download-monitor.com/extensions/advanced-access-manager/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Advanced+access+manager): Create advanced download limitations per download and on a global level.
 * [Email Notification](https://download-monitor.com/extensions/email-notification/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Email+notification): Trigger an email notification whenever one of your files is downloaded.
-* [Page Addon](https://www.download-monitor.com/extensions/page-addon/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Page+addon): List downloads, categories, tags, and show info pages about each of your resources using a simple shortcode.
+* [Document Library Manage](https://download-monitor.com/kb/page-addon/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Page+addon): Display files in fast, searchable tables or grids with sorting, filters, and flexible styling. Your documents, easy to find.
 * Lock downloads option: Set restrictions to your download functionality using [MailChimp Lock](https://www.download-monitor.com/extensions/mailchimp-lock/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Mailchimp+lock), [Email Lock](https://www.download-monitor.com/extensions/email-lock/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Email+lock), [CAPTCHA](https://download-monitor.com/extensions/captcha/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Captcha), 
 * [Gravity Forms Gated Content](https://www.download-monitor.com/extensions/gravity-forms/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Gravity+forms): easily create a download gate with Gravity Forms. Require users to fill-in a form before accessing a download.
 * [Ninja Forms Lock](https://download-monitor.com/extensions/ninja-forms/?utm_source=wordpress.org&utm_medium=link&utm_campaign=description&utm_term=Ninja+forms): if you are an user of Ninja Forms, you can also use this to require users to fill-in of a form before accesing a download.
@@ -114,6 +114,23 @@ Admin hits are not counted, log out and try again!
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 5.1.4 - 07.10.2025 =
+Changed: Removed DLM Pro upsell.
+Added: Upsell for DLM Document Library Manager.
+Fixed: Log meta values not saving when creating a download log.
+Update: Optimized database cleanup for expired cookies.
+
+= 5.1.3 - 18.09.2025 =
+Update: Improved Reports widget and Reports page UI/UX.
+Update: Reports upsells now display with the correct filters design.
+Fix: Download meta values were sometimes not saved correctly when using WPML.
+
+= 5.1.2 - 05.09.2025 =
+Fixed: Start session only on download-related requests.
+
+= 5.1.1 - 01.09.2025 =
+Fixed: Removed stray debugger statements.
+
 = 5.1.0 - 27.08.2025 =
 * Changed: Reworked the reports interface improving speed, design and accuracy.
 
