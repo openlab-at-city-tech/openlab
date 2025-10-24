@@ -3,17 +3,17 @@ Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library
 Requires at least: 3.0.0
 Tested up to: 6.8
-Stable tag: 3.1.3
+Stable tag: 3.1.5
 Plugin URI: https://premio.io/downloads/folders/
 License: GPLv3
 
-🔥 With the Folders WordPress plugin create unlimited folders, organize & manage your Media Library files, Pages & Posts in folders 📁
+Create unlimited folders with the Folders WordPress plugin, organize & manage your Media Library files, Pages & Posts in folders 📁
 
 == Description ==
 
 <a href="https://premio.io/help/folders/?utm_source=wordpressorg" target="_blank" title="Support">Support</a> | <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Demo</a> | <a href="https://premio.io/?utm_source=wordpressorg" target="_blank" title="WordPress plugins">Recommended Plugins</a> | <a href="https://premio.io/downloads/folders/?utm_source=wordpressorg" target="_blank" title="Folders Pro"><strong>Upgrade to Pro ⭐</strong></a>
 
-Create <strong>Unlimited Folders</strong> In The Free Version 🎉
+= Create <strong>Unlimited Folders</strong> with The Free Folders Plugin Version 🎉 =
 
 Folders is a WordPress plugin that enables users to organize all of their Pages, Posts, and Media files in folders. Easily drag and drop items into directories and change the folders tree view (hierarchy). Check out <a href="https://premio.io/downloads/folders" target="_blank" title="Folders pro plans"><strong>Folders Pro Plans</strong></a>.
 
@@ -225,6 +225,21 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 3.1.5 =
+Fixed the following bugs:
+Compatibility issue with the W3 Total Cache plugin
+WebP files can now be replaced correctly
+
+= 3.1.4 =
+Added a download button on media items.
+Improved file upload UI - now includes progress display while uploading.
+Enhanced replace media behavior - when replacing a file, the title now updates alongside the filename.
+Mobile usability - the plugin is now scrollable and easier to use on mobile devices.
+Polylang compatibility - folder count now refreshes correctly when "All languages" is selected.
+Tutor LMS conflict - fixed compatibility issue with the Tutor LMS Certificate Builder.
+WordPress plugins page - resolved UI issues affecting the Folders interface in the plugins page.
+Error logs - fixed Folders-related errors appearing in server logs.
 
 = 3.1.3 =
 WordPress playground folders creation bug fixed

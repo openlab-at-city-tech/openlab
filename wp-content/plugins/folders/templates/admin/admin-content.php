@@ -64,6 +64,35 @@ if (!isset($customize_folders['default_icon_color']) || empty($customize_folders
 <?php if (!isset($customize_folders['bulk_organize_button_color']) || empty($customize_folders['bulk_organize_button_color'])) {
     $customize_folders['bulk_organize_button_color'] = "#f51366";
 } ?>
+
+
+/* Folders  Downlaod Pogress */
+
+.folder-rounded-progress svg circle { 
+    stroke: <?php echo esc_attr($customize_folders['new_folder_color']) ?> !important;
+}
+.folder-rounded-progress svg path,
+.folders-file-icon svg path { 
+    stroke: <?php echo esc_attr($customize_folders['new_folder_color']) ?> !important;
+}
+.folders-progress-completed {
+    background: linear-gradient(90deg, <?php echo esc_attr($customize_folders['new_folder_color']) ?> 0%, <?php echo esc_attr($customize_folders['new_folder_color']) ?> 100%) !important; 
+}
+.folders-progress-uploading {
+    background: linear-gradient(90deg, <?php echo esc_attr($customize_folders['new_folder_color']) ?> 0%, <?php echo esc_attr($customize_folders['new_folder_color']) ?> 100%) !important; 
+}
+.folders-status-completed {
+    color: <?php echo esc_attr($customize_folders['new_folder_color']) ?> !important;
+}
+.folders-file-name-clickable:hover {
+   color:  <?php echo esc_attr($customize_folders['new_folder_color']) ?>;
+}
+.folders-upload-close:hover {
+    background-color:  <?php echo esc_attr($customize_folders['new_folder_color']) ?>30 !important;
+}
+/* Folders  Downlaod Pogress */
+
+
 button.button.organize-button { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
 button.button.organize-button:hover { background-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; border-color: <?php echo esc_attr($customize_folders['bulk_organize_button_color']) ?>; }
 <?php if (!isset($customize_folders['folder_bg_color']) || empty($customize_folders['folder_bg_color'])) {
@@ -170,7 +199,7 @@ if (!empty($post_type)) {
     if (empty($activeItem) || $activeItem == "") {
         $active_all_class = "active-item";
     }
-}
+} 
 $horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customize_folders['enable_horizontal_scroll'] == "on") ? "hor-scroll" : "";
 ?>
 <div id="wcp-content" class="<?php echo esc_attr(isset($display_status) && $display_status == "hide" ? "hide-folders-area" : "")  ?>" >

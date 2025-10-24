@@ -257,6 +257,30 @@ if (! defined('ABSPATH')) {
         </form>
     </div>
 
+         <!-- Folder Popup for bulk download upgrade -->
+      <div class="folder-popup-form" id="upgrade-to-folder-bulk-download"> 
+        <div class="popup-form-content"> 
+             <span class="bg-effect"></span>
+            <div class="popup-form-data">
+                <!-- <div class="close-popup-button">
+                    <a class="" href="javascript:;"><span></span></a>
+                </div> -->
+                <div class="popup-folder-title">
+                    <h3><?php esc_html_e("Get more out of Folders 🚀", "folders") ?></h3>
+                    <p><img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/check-circle.svg") ?>"> <span><?php esc_html_e("Download multiple files with one click by upgrading Folders!", "folders") ?></span></p>
+                </div> 
+                <div class="folder-popup-buttons">
+                    <a href="#" class="form-cancel-btn"><?php esc_html_e("Download files one by one", "folders") ?></a>
+                    <a target="_blank" href="<?php echo admin_url("admin.php?page=folders-upgrade-to-pro") ?>" class="btn-update-to-pro">
+                        <img src="<?php echo esc_url(WCP_FOLDER_URL."assets/images/pro-crown.svg") ?>">
+                        <span><?php esc_html_e("Upgrade to pro", "folders") ?></span>
+                    </a>
+                </div>
+            </div>
+        </div> 
+    </div>
+     <!-- Folder Popup for bulk download upgrade -->
+     
     <div class="folders-undo-notification" id="do-undo">
         <div class="folders-undo-body">
             <a href="#" class="close-undo-box"><span></span></a>

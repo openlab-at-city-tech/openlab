@@ -1218,12 +1218,12 @@ class folders_replace_media {
                     wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
                 }
 
-                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif', 'svg'])) {
-                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                if(!in_array($ext, ['jpg', 'png', 'jpeg', 'gif', 'svg', 'webp'])) {
+                    wp_die(esc_html__("Only image files can be replaced.", "folders"));
                 }
 
-                if(!in_array($file['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'])) {
-                    wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                if(!in_array($file['type'], ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'])) {
+                    wp_die(esc_html__("Only image files can be replaced.", "folders"));
                 }
 
                 if($file_ext == "svg" || $file['type'] == 'image/svg+xml') {

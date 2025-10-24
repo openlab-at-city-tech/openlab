@@ -236,7 +236,7 @@ class WCP_Folder_Plugins
                         'update_count_callback' => '_update_generic_term_count',
                     ];
                     $terms    = get_terms($arg);
-                    $position = count($terms);
+                    $position = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? count($terms) : 0;
 
                     if ($plugin == 'mediamatic' || $plugin == 'happyfiles') {
                         $meta_key = "";
@@ -343,7 +343,7 @@ class WCP_Folder_Plugins
                         'update_count_callback' => '_update_generic_term_count',
                     ];
                     $terms    = get_terms($arg);
-                    $position = count($terms);
+                    $position = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? count($terms) : 0;
 
                     update_term_meta($new_term['term_id'], 'wcp_custom_order', intval($position));
 

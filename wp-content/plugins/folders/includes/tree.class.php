@@ -77,12 +77,18 @@ class WCP_Tree
         }
 
         $terms = get_terms($arg);
+        
+        // Check if get_terms returned an error
+        if (is_wp_error($terms)) {
+            return ''; // Skip processing if taxonomy is invalid
+        }
+    
 
         $string        = "";
         $sticky_string = "";
         $child         = 0;
         $isAjax        = (defined('DOING_AJAX') && DOING_AJAX) ? 1 : 0;
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             $child = count($terms);
             foreach ($terms as $key => $term) {
                 if (!empty($orderBy) && !empty($order)) {
@@ -203,7 +209,7 @@ class WCP_Tree
         $selected_term = get_option("selected_".$postType."_folder");
 
         $string = "";
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 if(isset($term->term_id) && isset($term->name)) {
                     $selected = ($selected_term == $term->term_id) ? "selected" : "";
