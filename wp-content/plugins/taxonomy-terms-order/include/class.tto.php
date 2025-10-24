@@ -180,10 +180,10 @@
                 {
                     global $wpdb;
                     
-                    if  ( ! wp_verify_nonce( $_POST['nonce'], 'update-taxonomy-order' ) )
+                    if  ( ! isset ( $_POST['nonce'] ) ||  ! wp_verify_nonce( $_POST['nonce'], 'update-taxonomy-order' ) )
                         die();
                      
-                    $data               = stripslashes($_POST['order']);
+                    $data               = isset ( $_POST['order'] )  ?   stripslashes($_POST['order'])   :   "";
                     $unserialised_data  = json_decode($data, TRUE);
                             
                     if (is_array($unserialised_data))

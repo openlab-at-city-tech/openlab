@@ -10,8 +10,8 @@
                 {
                     global $wpdb, $wp_locale;
                     
-                    $taxonomy = isset($_GET['taxonomy']) ? sanitize_key($_GET['taxonomy']) : '';
-                    $post_type = isset($_GET['post_type']) ? sanitize_key($_GET['post_type']) : '';
+                    $taxonomy = isset($_GET['taxonomy']) ? sanitize_key($_GET['taxonomy']) : '';    //phpcs:ignore  WordPress.Security.NonceVerification.Recommended  
+                    $post_type = isset($_GET['post_type']) ? sanitize_key($_GET['post_type']) : ''; //phpcs:ignore  WordPress.Security.NonceVerification.Recommended 
                     if(empty($post_type))
                         {
                             $screen = get_current_screen();
@@ -39,7 +39,7 @@
 
                     ?>
                     <div class="wrap">
-                        <h2><?php _e( "Taxonomy Order", 'taxonomy-terms-order' ) ?></h2>
+                        <h2><?php esc_html_e( "Taxonomy Order", 'taxonomy-terms-order' ) ?></h2>
 
                         <?php TTO_functions::info_box() ?>
                         
@@ -47,7 +47,7 @@
                         
                         <noscript>
                             <div class="error message">
-                                <p><?php _e( "This plugin can't work without javascript, because it's use drag and drop and AJAX.", 'taxonomy-terms-order' ) ?></p>
+                                <p><?php esc_html_e( "This plugin can't work without javascript, because it's use drag and drop and AJAX.", 'taxonomy-terms-order' ) ?></p>
                             </div>
                         </noscript>
 
@@ -71,7 +71,7 @@
                         
                         ?>
                         
-                        <form action="<?php echo $current_section_parent_file ?>" method="get" id="to_form">
+                        <form action="<?php echo esc_attr ( $current_section_parent_file ) ?>" method="get" id="to_form">
                             <input type="hidden" name="page" value="to-interface-<?php echo esc_attr($post_type) ?>" />
                             <?php
                         
@@ -101,11 +101,11 @@
                         
                                     ?>
                                     
-                                    <h2 class="subtitle"><?php echo ucfirst($post_type_data->labels->name) ?> <?php _e( "Taxonomies", 'taxonomy-terms-order' ) ?></h2>
+                                    <h2 class="subtitle"><?php echo esc_attr ( ucfirst($post_type_data->labels->name) ) ?> <?php esc_html_e( "Taxonomies", 'taxonomy-terms-order' ) ?></h2>
                                     <table cellspacing="0" class="wp-list-taxonomy">
                                         <thead>
                                         <tr>
-                                            <th style="" class="column-cb check-column" id="cb" scope="col">&nbsp;</th><th style="" class="" id="author" scope="col"><?php _e( "Taxonomy Title", 'taxonomy-terms-order' ) ?></th><th style="" class="manage-column" id="categories" scope="col"><?php _e( "Total Posts", 'taxonomy-terms-order' ) ?></th>    </tr>
+                                            <th style="" class="column-cb check-column" id="cb" scope="col">&nbsp;</th><th style="" class="" id="author" scope="col"><?php esc_html_e( "Taxonomy Title", 'taxonomy-terms-order' ) ?></th><th style="" class="manage-column" id="categories" scope="col"><?php esc_html_e( "Total Posts", 'taxonomy-terms-order' ) ?></th>    </tr>
                                         </thead>
 
            
@@ -127,8 +127,8 @@
                                                                      
                                                     ?>
                                                         <tr valign="top" class="<?php if ($alternate === TRUE) {echo 'alternate ';} ?>" id="taxonomy-<?php echo esc_attr($taxonomy)  ?>">
-                                                                <th class="check-column" scope="row"><input type="radio" onclick="to_change_taxonomy(this)" value="<?php echo $post_type_taxonomy ?>" <?php if ($post_type_taxonomy == $taxonomy) {echo 'checked="checked"';} ?> name="taxonomy">&nbsp;</th>
-                                                                <td class="categories column-categories"><b><?php echo $taxonomy_info->label ?></b> (<?php echo  $taxonomy_info->labels->singular_name; ?>)</td>
+                                                                <th class="check-column" scope="row"><input type="radio" onclick="to_change_taxonomy(this)" value="<?php echo esc_attr ( $post_type_taxonomy ) ?>" <?php if ($post_type_taxonomy == $taxonomy) {echo 'checked="checked"';} ?> name="taxonomy">&nbsp;</th>
+                                                                <td class="categories column-categories"><b><?php echo esc_attr ( $taxonomy_info->label ) ?></b> (<?php echo esc_attr ( $taxonomy_info->labels->singular_name ); ?>)</td>
                                                                 <td class="categories column-categories"><?php echo count($taxonomy_terms) ?></td>
                                                         </tr>
                                                     
@@ -152,9 +152,9 @@
                                             <p class="actions">
               
                                                 <span class="img_spacer">&nbsp;
-                                                    <img alt="" src="<?php echo TOURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
+                                                    <img alt="" src="<?php echo esc_url ( TOURL . "/images/wpspin_light.gif" ) ?>" class="waiting pto_ajax_loading" style="display: none;">
                                                 </span>
-                                                <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                                <a href="javascript:;" class="save-order button-primary"><?php esc_html_e('Update', 'taxonomy-terms-order') ?></a>
                                             </p>
                                         </div>
                                         
@@ -177,8 +177,8 @@
                             <div id="nav-menu-footer">
                                 <div class="major-publishing-actions">
                                         <div class="alignright actions">
-                                            <img alt="" src="<?php echo TOURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
-                                            <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                            <img alt="" src="<?php echo esc_url ( TOURL . "/images/wpspin_light.gif" ) ?>" class="waiting pto_ajax_loading" style="display: none;">
+                                            <a href="javascript:;" class="save-order button-primary"><?php esc_html_e('Update', 'taxonomy-terms-order') ?></a>
                                         </div>
                                         
                                         <div class="clear"></div>
@@ -229,7 +229,7 @@
                                         //serialize the array
                                         var serialize_data = JSON.stringify( convArrToObj(mySortable));
                                                                                                     
-                                        jQuery.post( ajaxurl, { action:'update-taxonomy-order', order: serialize_data, nonce : '<?php echo wp_create_nonce( 'update-taxonomy-order' ); ?>' }, function() {
+                                        jQuery.post( ajaxurl, { action:'update-taxonomy-order', order: serialize_data, nonce : '<?php echo esc_attr ( wp_create_nonce( 'update-taxonomy-order' ) ); ?>' }, function() {
                                             jQuery("#ajax-response").html('<div class="message updated fade"><p><?php esc_html_e ( "Items Order Updated", 'taxonomy-terms-order' ) ?></p></div>');
                                             jQuery("#ajax-response div").delay(3000).hide("slow");
                                             jQuery('img.pto_ajax_loading').hide();
@@ -248,7 +248,7 @@
                 }
             
             
-            function listTerms($taxonomy) 
+            function listTerms( $taxonomy ) 
                     {
 
                         // Query pages.
@@ -256,9 +256,11 @@
                                     'orderby'       =>  'term_order',
                                     'depth'         =>  0,
                                     'child_of'      => 0,
-                                    'hide_empty'    =>  0
+                                    'hide_empty'    =>  0,
+                                    
+                                    'taxonomy'   => $taxonomy,
                         );
-                        $taxonomy_terms = get_terms($taxonomy, $args);
+                        $taxonomy_terms = get_terms( $args );
 
                         $output = '';
                         if (count($taxonomy_terms) > 0)
@@ -266,7 +268,7 @@
                                 $output = $this->TOwalkTree($taxonomy_terms, $args['depth'], $args);    
                             }
 
-                        echo $output; 
+                        echo $output;   //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped  
                         
                     }
                 
