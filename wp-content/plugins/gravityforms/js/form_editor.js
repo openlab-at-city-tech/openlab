@@ -128,7 +128,7 @@ function InitializeEditor() {
 	jQuery( '.field_settings' ).accordion( gform.options.jqEditorAccordions );
 	jQuery( '#add_fields_menu .panel-block-tabs__wrapper' ).accordion( gform.options.jqAddFieldAccordions );
 	jQuery( '.panel-block-tabs' ).find( '.panel-block-tabs__toggle' ).each( function( i, element ) {
-		jQuery( element ).append( '<i></i>' );
+		jQuery( element ).append( '<i aria-hidden="true"></i>' );
 	} );
 	ResetFieldAccordions();
 
@@ -252,35 +252,17 @@ function InitializeFieldSettings(){
 		});
 
 	//add onclick event to disable placeholder when the rich text editor is on
-	jQuery('#field_rich_text_editor').on('click keypress', function(){
+	jQuery('#field_rich_text_editor').on( 'click keypress', function() {
 			var field = GetSelectedField();
-			if (this.checked ){
-				var disablePlaceHolder = true;
-
-				//see if a field is using this in conditional logic and warn it will not work with rich text editor
-				if ( HasConditionalLogicDependency(field.id,field.value) ){
-					gform.instances.dialogConfirmAsync(gf_vars.conditionalLogicWarningTitle, gf_vars.conditionalLogicRichTextEditorWarning).then((confirmed) => {
-						if (!confirmed) {
-							jQuery('#field_rich_text_editor').prop('checked', false);
-							disablePlaceHolder = false;
-						}
-						if (disablePlaceHolder) {
-							jQuery('#field_placeholder, #field_placeholder_textarea').prop('disabled', true);
-							jQuery('span#placeholder_warning').css('display', 'block');
-						}
-					});
-				}
-
-				if (disablePlaceHolder){
-					jQuery('#field_placeholder, #field_placeholder_textarea').prop('disabled', true);
-					jQuery('span#placeholder_warning').css('display','block');
-				}
+			if ( this.checked ) {
+				conditionalLogicWarningDependency( field )
+				SetFieldAccessibilityWarning( 'rich_text_editor_setting', 'above' );
+			} else {
+				jQuery( '#field_placeholder, #field_placeholder_textarea').prop( 'disabled', false );
+				jQuery( 'span#placeholder_warning').css('display','none' );
+				ResetFieldAccessibilityWarning( 'rich_text_editor_setting' );
 			}
-			else{
-				jQuery('#field_placeholder, #field_placeholder_textarea').prop('disabled', false);
-				jQuery('span#placeholder_warning').css('display','none');
-			}
-		});
+	});
 
 	jQuery('.prepopulate_field_setting')
 		.on('input propertychange', '.field_input_name', function(){
@@ -525,6 +507,39 @@ function InitializeFieldSettings(){
 			return;
 		}
 	});
+}
+
+/**
+ * Checks if the given field is a dependency in conditional logic and warns the user if enabling the rich text editor may break logic.
+ * If a dependency is found, prompts the user for confirmation.
+ * If not confirmed, disables the rich text editor and resets accessibility warnings.
+ * Disables the placeholder input and shows a warning if the rich text editor is enabled.
+ *
+ * @since 2.9.19
+ *
+ * @param {Object} field The field object to check for conditional logic dependencies.
+ *
+ * @returns {Promise}
+ *
+ **/
+async function conditionalLogicWarningDependency( field ) {
+	const hasDependency = await HasConditionalLogicDependency( field.id, field.value );
+
+	if (hasDependency) {
+		const confirmed = await gform.instances.dialogConfirmAsync(
+			gf_vars.conditionalLogicWarningTitle,
+			gf_vars.conditionalLogicRichTextEditorWarning
+		)
+		if ( ! confirmed ) {
+			jQuery( '#field_rich_text_editor' ).prop( 'checked', false );
+			ToggleRichTextEditor( false );
+			ResetFieldAccessibilityWarning( 'rich_text_editor_setting' );
+			return;
+		}
+	}
+
+	jQuery( '#field_placeholder, #field_placeholder_textarea' ).prop( 'disabled', true );
+	jQuery( 'span#placeholder_warning' ).css( 'display', 'block' );
 }
 
 /**
@@ -854,19 +869,7 @@ function LoadFieldSettings() {
 	jQuery("#gfield_display_caption").prop("checked", field.displayCaption == true ? true : false);
 	jQuery("#gfield_display_description").prop("checked", field.displayDescription == true ? true : false);
 
-	var customFieldExists = CustomFieldExists(field.postCustomFieldName);
-	jQuery("#field_custom_field_name_select")[0].selectedIndex = 0;
-
-	jQuery("#field_custom_field_name_text").val("");
-	if (customFieldExists)
-		jQuery("#field_custom_field_name_select").val(field.postCustomFieldName);
-	else
-		jQuery("#field_custom_field_name_text").val(field.postCustomFieldName);
-
-	if (customFieldExists)
-		jQuery("#field_custom_existing").prop("checked", true);
-	else
-		jQuery("#field_custom_new").prop("checked", true);
+	jQuery("#field_custom_field_name_text").val( field.postCustomFieldName == undefined ? "" : field.postCustomFieldName );
 
 	ToggleCustomField(true);
 
@@ -1241,6 +1244,9 @@ function LoadFieldSettings() {
 		SetFieldAccessibilityWarning('multiselect', 'above');
 	}
 
+	if (field.useRichTextEditor === true) {
+		SetFieldAccessibilityWarning( 'rich_text_editor_setting', 'above' );
+	}
 	if (field.labelPlacement === 'hidden_label') {
 		SetFieldAccessibilityWarning('label_placement_setting', 'above');
 	}
@@ -1843,10 +1849,15 @@ function SetPageButton(button_name){
 }
 
 function ToggleCustomField( isInit ){
-
 	var isExisting = jQuery("#field_custom_existing").is(":checked");
-	show_element = isExisting ? "#field_custom_field_name_select" : "#field_custom_field_name_text"
-	hide_element = isExisting ? "#field_custom_field_name_text"  : "#field_custom_field_name_select";
+
+  if ( isInit ) {
+    isExisting = true;
+    jQuery("#field_custom_existing").prop("checked", true);
+  }
+
+  show_element = isExisting ? "#gform-post-custom-select-container" : "#field_custom_field_name_text"
+	hide_element = isExisting ? "#field_custom_field_name_text"  : "#gform-post-custom-select-container";
 
 	jQuery(hide_element).hide();
 	jQuery(show_element).show();
@@ -2990,19 +3001,6 @@ function TogglePercentageConfirmationText( isInit ){
 	else{
 		jQuery('.percentage_confirmation_page_name_setting').hide();
 	}
-}
-
-function CustomFieldExists(name){
-	if(!name)
-		return true;
-
-	var options = jQuery("#field_custom_field_name_select option");
-	for(var i=0; i<options.length; i++)
-	{
-		if(options[i].value == name)
-			return true;
-	}
-	return false;
 }
 
 function IsStandardMask(value){

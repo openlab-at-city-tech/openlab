@@ -1,5 +1,7 @@
 <?php
 
+use Gravity_Forms\Gravity_Forms\Honeypot;
+
 if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
@@ -398,86 +400,49 @@ class GFFormDisplay {
 		}
 	}
 
+	/**
+	 * Uploads temporary files for the current form.
+	 *
+	 * @since unknown
+	 * @since 2.9.18 Updated to use GF_Field_FileUpload::upload_submission_tmp_files().
+	 *
+	 * @param array $form  The form currently being processed.
+	 * @param array $files The existing files parsed from the gform_uploaded_files input.
+	 *
+	 * @return array
+	 */
 	private static function upload_files( $form, $files ) {
+		$form_id = absint( rgar( $form, 'id' ) );
 
-		$form_upload_path = GFFormsModel::get_upload_path( $form['id'] );
-		GFCommon::log_debug( "GFFormDisplay::upload_files(): Upload path {$form_upload_path}" );
+		// Creating the tmp folder if it does not exist.
+		$target_path = rgar( GFFormsModel::get_tmp_upload_location( $form_id ), 'path' );
+		if ( empty( $target_path ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): Aborting; GFFormsModel::get_tmp_upload_location() returned an empty path.' );
 
-		//Creating temp folder if it does not exist
-		$tmp_location  = GFFormsModel::get_tmp_upload_location( $form['id'] );
-		$target_path   = $tmp_location['path'];
+			return $files;
+		}
+
 		if ( ! is_dir( $target_path ) && wp_mkdir_p( $target_path ) ) {
 			GFCommon::recursive_add_index_file( $target_path );
 		}
 
 		foreach ( $form['fields'] as $field ) {
-			$input_name = "input_{$field->id}";
-
-			//skip fields that are not file upload fields or that don't have a file to be uploaded or that have failed validation
-			$input_type = RGFormsModel::get_input_type( $field );
-			if ( ! in_array( $input_type, array( 'fileupload', 'post_image' ) ) || $field->multipleFiles ) {
+			if ( ! $field instanceof GF_Field_FileUpload ) {
 				continue;
 			}
 
-			/*if ( $field->failed_validation || empty( $_FILES[ $input_name ]['name'] ) ) {
-				GFCommon::log_debug( "GFFormDisplay::upload_files(): Skipping field: {$field->label}({$field->id} - {$field->type})." );
-				continue;
-			}*/
-
-			if ( $field->failed_validation ) {
-				GFCommon::log_debug( "GFFormDisplay::upload_files(): Skipping field because it failed validation: {$field->label}({$field->id} - {$field->type})." );
-				continue;
+			$input_name     = 'input_' . absint( $field->id );
+			$existing_files = rgar( $files, $input_name );
+			if ( empty( $existing_files ) || ! is_array( $existing_files ) ) {
+				$existing_files = array();
 			}
 
-			if ( empty( $_FILES[ $input_name ]['name'] ) ) {
-				GFCommon::log_debug( "GFFormDisplay::upload_files(): Skipping field because a file could not be found: {$field->label}({$field->id} - {$field->type})." );
-				continue;
-			}
-
-			$file_name = $_FILES[ $input_name ]['name'];
-			if ( GFCommon::file_name_has_disallowed_extension( $file_name ) ) {
-				GFCommon::log_debug( __METHOD__ . "(): Illegal file extension: {$file_name}" );
-				continue;
-			}
-
-			$allowed_extensions = ! empty( $field->allowedExtensions ) ? GFCommon::clean_extensions( explode( ',', strtolower( $field->allowedExtensions ) ) ) : array();
-
-			if ( ! empty( $allowed_extensions ) ) {
-				if ( ! GFCommon::match_file_extension( $file_name, $allowed_extensions ) ) {
-					GFCommon::log_debug( __METHOD__ . "(): The uploaded file type is not allowed: {$file_name}" );
-					continue;
-				}
-			}
-
-			/**
-			 * Allows the disabling of file upload whitelisting
-			 *
-			 * @param bool false Set to 'true' to disable whitelisting.  Defaults to 'false'.
-			 */
-			$whitelisting_disabled = apply_filters( 'gform_file_upload_whitelisting_disabled', false );
-
-			if ( empty( $allowed_extensions ) && ! $whitelisting_disabled ) {
-				// Whitelist the file type
-
-				$valid_file_name = GFCommon::check_type_and_ext( $_FILES[ $input_name ], $file_name );
-
-				if ( is_wp_error( $valid_file_name ) ) {
-					GFCommon::log_debug( __METHOD__ . "(): The uploaded file type is not allowed: {$file_name}" );
-					continue;
-				}
-			}
-
-			$file_info = RGFormsModel::get_temp_filename( $form['id'], $input_name );
-			GFCommon::log_debug( 'GFFormDisplay::upload_files(): Temp file info: ' . print_r( $file_info, true ) );
-
-			if ( $file_info && move_uploaded_file( $_FILES[ $input_name ]['tmp_name'], $target_path . $file_info['temp_filename'] ) ) {
-				GFFormsModel::set_permissions( $target_path . $file_info['temp_filename'] );
-				$files[ $input_name ] = $file_info['uploaded_filename'];
-				GFCommon::log_debug( "GFFormDisplay::upload_files(): File uploaded successfully: {$file_info['uploaded_filename']}" );
-			} else {
-				GFCommon::log_error( "GFFormDisplay::upload_files(): File could not be uploaded: tmp_name: {$_FILES[ $input_name ]['tmp_name']} - target location: " . $target_path . $file_info['temp_filename'] );
+			$files[ $input_name ] = array_merge( $existing_files, $field->upload_submission_tmp_files() );
+			if ( empty( $files[ $input_name ] ) ) {
+				unset( $files[ $input_name ] );
 			}
 		}
+
 		return $files;
 	}
 
@@ -1096,8 +1061,8 @@ class GFFormDisplay {
 		}
 
 		$partial_entry = $submitted_values = $review_page_done = false;
-		if ( isset( $_GET['gf_token'] ) ) {
-			$incomplete_submission_info = GFFormsModel::get_draft_submission_values( $_GET['gf_token'] );
+		if ( isset( $_GET['gf_token'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$incomplete_submission_info = GFFormsModel::get_draft_submission_values( sanitize_text_field( wp_unslash( $_GET['gf_token'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( rgar( $incomplete_submission_info, 'form_id' ) == $form_id ) {
 				$submission_details_json                  = $incomplete_submission_info['submission'];
 				$submission_details                       = json_decode( $submission_details_json, true );
@@ -1253,7 +1218,7 @@ class GFFormDisplay {
 
 				// Separate the CSS classes.
 				$form_css_classes = explode( ' ', $form_css_class );
-				$form_css_classes = array_filter( $form_css_classes );
+				$form_css_classes = array_filter( $form_css_classes ); // nosemgrep audit.php.lang.misc.array-filter-no-callback
 
 				// Append _wrapper to each class.
 				foreach ( $form_css_classes as &$wrapper_class ) {
@@ -1341,7 +1306,7 @@ class GFFormDisplay {
 			$form_string .= gf_apply_filters( array( 'gform_form_tag', $form_id ), "<form method='post' enctype='multipart/form-data' {$target} id='gform_{$form_id}' {$form_css_class} action='{$action}' data-formid='{$form_id}' novalidate>", $form );
 
 			// If Save and Continue token was provided but expired/invalid, display error message.
-			if ( isset( $_GET['gf_token'] ) && ! is_array( $incomplete_submission_info ) ) {
+			if ( isset( $_GET['gf_token'] ) && ! is_array( $incomplete_submission_info ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 				/**
 				 * Modify the error message displayed when an expired/invalid Save and Continue link is used.
@@ -1396,11 +1361,6 @@ class GFFormDisplay {
 			$form_string .= "<{$tag} id='gform_fields_{$form_id}' class='" . GFCommon::get_ul_classes( $form ) . "'>";
 
 			if ( is_array( $form['fields'] ) ) {
-
-				// Add honeypot field if Honeypot is enabled.
-				$honeypot_handler = GFForms::get_service_container()->get( Gravity_Forms\Gravity_Forms\Honeypot\GF_Honeypot_Service_Provider::GF_HONEYPOT_HANDLER );
-				$form             = $honeypot_handler->maybe_add_honeypot_field( $form );
-
 				$form_string .= self::get_fields( $form, $field_values, $submitted_values );
 			}
 			$form_string .= "</{$tag}>";
@@ -1559,7 +1519,7 @@ class GFFormDisplay {
 
 			$form_string = gf_apply_filters( array( 'gform_get_form_filter', $form_id ), $form_string, $form );
 
-			if ( isset( $_GET['gform_debug'] ) || GFCommon::is_preview() ) {
+			if ( isset( $_GET['gform_debug'] ) || GFCommon::is_preview() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				GFCommon::log_debug( __METHOD__ . sprintf( '(): Preparing form (#%d) markup completed in %F seconds.', $form_id, GFCommon::timer_end( __METHOD__ ) ) );
 			}
 
@@ -1631,6 +1591,7 @@ class GFFormDisplay {
 	 * Get the markup for a colletion of fields in a form. If $page_number is specified, only the markup for the fields on that page will be returned. Otherwise, the markup for all fields in the form will be returned.
 	 *
 	 * @since 2.9.5
+	 * @since 2.9.18 Made the honeypot the first field on the form.
 	 *
 	 * @param array $form             The current form object.
 	 * @param array $field_values     The array of field values to populate the form with.
@@ -1643,8 +1604,17 @@ class GFFormDisplay {
 
 		$fields = $page_number == 0 ? $form['fields'] : self::get_fields_by_page( $form, $page_number );
 
-		$markup = '';
+		$markup       = '';
+		$has_honeypot = false;
+
 		foreach ( $fields as $field ) {
+			if ( $field instanceof GF_Field_Honeypot ) {
+				if ( $has_honeypot ) {
+					continue;
+				} else {
+					$has_honeypot = true;
+				}
+			}
 
 			$field->set_context_property( 'rendering_form', true );
 			$field->conditionalLogicFields = self::get_conditional_logic_fields( $form, $field->id );
@@ -1665,13 +1635,29 @@ class GFFormDisplay {
 
 			$markup .= self::get_row_spacer( $field, $form );
 		}
-		return $markup;
+
+		if ( $has_honeypot || ( $page_number !== 0 && $page_number !== 1 ) ) {
+			return $markup;
+		}
+
+		/** @var Honeypot\GF_Honeypot_Handler $honeypot_handler */
+		$honeypot_handler = GFForms::get_service_container()->get( Honeypot\GF_Honeypot_Service_Provider::GF_HONEYPOT_HANDLER );
+
+		if ( ! $honeypot_handler->is_honeypot_enabled( $form ) ) {
+			return $markup;
+		}
+
+		// Adding the honeypot as the first field.
+		$honeypot_field = $honeypot_handler->get_honeypot_field( $form );
+		$field_value    = GFFormsModel::get_field_value( $honeypot_field );
+
+		return self::get_field( $honeypot_field, $field_value, false, $form ) . $markup;
 	}
 
 	/**
 	 * Gets the fields for a specific page in a form.
 	 *
-	 * since 2.9.5
+	 * @since 2.9.5
 	 *
 	 * @param array $form        The form object.
 	 * @param int   $page_number The page number to get fields for.
@@ -1679,16 +1665,19 @@ class GFFormDisplay {
 	 * @return array Returns an array of fields belonging to the specified page.
 	 */
 	public static function get_fields_by_page( $form, $page_number ) {
-
 		$fields = array();
 		foreach ( $form['fields'] as $field ) {
-			$belongs_to_page  = $field->pageNumber == $page_number;
-			$is_page_footer   = $field->type == 'page' && $field->pageNumber == $page_number + 1;
+			$field_page_number = absint( $field->pageNumber );
+			$belongs_to_page   = $field_page_number === $page_number;
+			$is_page_footer    = $field->type === 'page' && $field_page_number === $page_number + 1;
 
-			if ( $belongs_to_page || $is_page_footer ) {
+			if ( $belongs_to_page || $is_page_footer || ( $field instanceof GF_Field_Honeypot && ! empty( $fields ) ) ) {
 				$fields[] = $field;
+			} elseif ( ! empty( $fields ) ) {
+				break;
 			}
 		}
+
 		return $fields;
 	}
 
@@ -1713,7 +1702,7 @@ class GFFormDisplay {
 		$form_string = gf_apply_filters( array( 'gform_footer_init_scripts_filter', $form_id ), $form_string, $form, $current_page );
 
 		if ( ! isset( $_init_forms[ $form_id ] ) ) {
-			echo $form_string;
+			echo $form_string; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			if ( ! is_array( $_init_forms ) ) {
 				$_init_forms = array();
 			}
@@ -1854,7 +1843,7 @@ class GFFormDisplay {
 		}
 		$save_inputs = '';
 		if ( rgars( $form, 'save/enabled' ) ) {
-			$resume_token = isset( $_POST['gform_resume_token'] ) ? $_POST['gform_resume_token'] : rgget( 'gf_token' );
+			$resume_token = isset( $_POST['gform_resume_token'] ) ? wp_unslash( $_POST['gform_resume_token'] ) : rgget( 'gf_token' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$resume_token = sanitize_key( $resume_token );
 			$save_inputs  = "<input type='hidden' class='gform_hidden' name='gform_save' id='gform_save_{$form_id}' value='' />
                              <input type='hidden' class='gform_hidden' name='gform_resume_token' id='gform_resume_token_{$form_id}' value='{$resume_token}' />";
@@ -1941,7 +1930,7 @@ class GFFormDisplay {
 	 */
 	public static function is_empty( $field, $form_id = 0 ) {
 
-		if ( empty( $_POST[ 'is_submit_' . $field->formId ] ) ) {
+		if ( empty( $_POST[ 'is_submit_' . $field->formId ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return true;
 		}
 
@@ -2315,7 +2304,7 @@ class GFFormDisplay {
 	 * @return string The confirmation message.
 	 */
 	public static function get_confirmation_message( $confirmation, $form, $entry, $aux_data = array() ) {
-		$ajax   = isset( $_POST['gform_ajax'] );
+		$ajax   = isset( $_POST['gform_ajax'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$anchor = self::get_anchor( $form, $ajax );
 		$anchor = $anchor['tag'];
 
@@ -2428,7 +2417,7 @@ class GFFormDisplay {
 		}
 
 		// Prevent tampering with the submitted form
-		if ( empty( $_POST[ 'is_submit_' . $form_id ] ) ) {
+		if ( empty( $_POST[ 'is_submit_' . $form_id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			GFCommon::log_debug( __METHOD__ . "(): Aborting. The is_submit_{$form_id} input is empty." );
 
 			return false;
@@ -2601,6 +2590,7 @@ class GFFormDisplay {
 				'hiddenproduct',
 				'consent',
 			) ) ? esc_html__( 'Please enter a valid value.', 'gravityforms' ) : esc_html__( 'Invalid selection. Please select from the available choices.', 'gravityforms' );
+			$field->set_context_property( 'failed_state_validation', true );
 		} else {
 			// Running the field type specific validation.
 			$field->validate( $value, $form );
@@ -2792,11 +2782,11 @@ class GFFormDisplay {
 
 		if ( ! isset( $_gf_state ) ) {
 
-			if ( empty( $_POST["state_{$form_id}"] ) || ! is_string( $_POST["state_{$form_id}"] ) ) {
+			if ( empty( $_POST["state_{$form_id}"] ) || ! is_string( $_POST["state_{$form_id}"] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				return true;
 			}
 
-			$state = json_decode( base64_decode( $_POST[ "state_{$form_id}" ] ), true );
+			$state = json_decode( base64_decode( $_POST[ "state_{$form_id}" ] ), true ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 			if ( ! $state || ! is_array( $state ) || sizeof( $state ) != 2 ) {
 				return true;
@@ -5006,13 +4996,13 @@ class GFFormDisplay {
 	}
 
 	public static function handle_save_email_confirmation( $form, $ajax ) {
-		$resume_email = $_POST['gform_resume_email'];
+		$resume_email = rgpost( 'gform_resume_email' );
 		if ( ! GFCommon::is_valid_email( $resume_email ) ) {
 			GFCommon::log_debug( 'GFFormDisplay::handle_save_email_confirmation(): Invalid email address: ' . $resume_email );
 
 			return new WP_Error( 'invalid_email' );
 		}
-		$resume_token       = $_POST['gform_resume_token'];
+		$resume_token       = rgpost( 'gform_resume_token' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, 
 		$submission_details = GFFormsModel::get_draft_submission_values( $resume_token );
 		$submission_json    = $submission_details['submission'];
 		$submission         = json_decode( $submission_json, true );
@@ -5053,7 +5043,7 @@ class GFFormDisplay {
 	}
 
 	public static function handle_save_confirmation( $form, $resume_token, $confirmation_message, $ajax ) {
-		$resume_email = isset( $_POST['gform_resume_email'] ) ? $_POST['gform_resume_email'] : null;
+		$resume_email = isset( $_POST['gform_resume_email'] ) ? sanitize_email( wp_unslash( $_POST['gform_resume_email'] ) ) : null; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$confirmation_message = self::maybe_sanitize_confirmation_message( $confirmation_message );
 		$confirmation_message = self::replace_save_variables( $confirmation_message, $form, $resume_token, $resume_email );
@@ -5189,11 +5179,11 @@ class GFFormDisplay {
 	 * @return bool|int False or the ID of the form being processed.
 	 */
 	public static function is_submit_form_id_valid( $ajax_form_id = null ) {
-		if ( empty( $_POST['gform_submit'] ) ) {
+		if ( empty( $_POST['gform_submit'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return false;
 		}
 
-		$form_id = absint( $_POST['gform_submit'] );
+		$form_id = absint( $_POST['gform_submit'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( $form_id === 0 || rgpost( 'is_submit_' . $form_id ) !== '1' ) {
 			return false;
@@ -5266,7 +5256,7 @@ class GFFormDisplay {
 		}
 
 		$args = false;
-		if ( ! self::is_iframe_submission_method() || ! isset( $_POST['gform_ajax'] ) ) {
+		if ( ! self::is_iframe_submission_method() || ! isset( $_POST['gform_ajax'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return false;
 		}
 
@@ -5457,6 +5447,7 @@ class GFFormDisplay {
 	 * Gets a list of validation errors.
 	 *
 	 * @since 2.5
+	 * @since 2.9.18 Added support for getting the message from the field validation_summary_message context property.
 	 *
 	 * @param array $form   Current form being displayed.
 	 * @param array $values Submitted values.
@@ -5465,16 +5456,23 @@ class GFFormDisplay {
 	 */
 	public static function get_validation_errors( $form, $values ) {
 		$errors = array();
-		foreach ( $form['fields'] as $field ) {
 
-			/* @var GF_Field $field */
-			if ( ( $field->failed_validation && ! empty( $field->validation_message ) ) ) {
-				$errors[] = array(
-					'field_label'       => $field->get_field_label( true, $values ),
-					'field_selector'    => '#field_' . $form['id'] . '_' . $field->id,
-					'message'           => $field->validation_message,
-				);
+		/* @var GF_Field $field */
+		foreach ( $form['fields'] as $field ) {
+			if ( ! $field->failed_validation ) {
+				continue;
 			}
+
+			$message = $field->validation_message ?: $field->get_context_property( 'validation_summary_message' );
+			if ( empty( $message ) ) {
+				continue;
+			}
+
+			$errors[] = array(
+				'field_label'    => $field->get_field_label( true, $values ),
+				'field_selector' => '#field_' . $form['id'] . '_' . $field->id,
+				'message'        => $message,
+			);
 		}
 
 		/**
