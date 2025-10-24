@@ -3,9 +3,9 @@
 Plugin Name: WP Reading Progress
 Plugin URI: https://github.com/joerivanveen/wp-reading-progress
 Description: Light weight customizable reading progress bar. Great UX on longreads. Includes estimated reading time (beta).
-Version: 1.6.0
+Version: 1.6.1
 Requires at least: 4.9
-Tested up to: 6.5
+Tested up to: 6.8
 Requires PHP: 5.6
 Author: Joeri van Veen
 Author URI: https://wp-developer.eu
@@ -15,7 +15,7 @@ Domain Path: /languages/
 */
 defined( 'ABSPATH' ) || die();
 // This is plugin nr. 6 by Ruige hond. It identifies as: ruigehond006.
-const RUIGEHOND006_VERSION = '1.6.0';
+const RUIGEHOND006_VERSION = '1.6.1';
 // Register install hook
 register_activation_hook( __FILE__, 'ruigehond006_install' );
 // Startup the plugin
@@ -36,7 +36,7 @@ function ruigehond006_run() {
 		add_action( 'add_meta_boxes', 'ruigehond006_meta_box_add' ); // in the box the user can activate the bar for a single post
 		add_action( 'save_post', 'ruigehond006_meta_box_save' );
 	} else {
-		wp_enqueue_script( 'ruigehond006_javascript', plugin_dir_url( __FILE__ ) . 'wp-reading-progress.min.js', false, RUIGEHOND006_VERSION );
+		wp_enqueue_script( 'ruigehond006_javascript', plugin_dir_url( __FILE__ ) . 'wp-reading-progress.min.js', false, RUIGEHOND006_VERSION, true );
 	}
 }
 
@@ -75,8 +75,8 @@ function ruigehond006_start() {
 	/**
 	 * separate ert section...
 	 */
-	if (isset($options['use_ert'])) {
-		if (isset($options['ert_speed']) && (int) $options['ert_speed'] > 0) {
+	if ( isset( $options['use_ert'] ) ) {
+		if ( isset( $options['ert_speed'] ) && (int) $options['ert_speed'] > 0 ) {
 			if ( isset( $options['use_ert_shortcode'] ) ) {
 				add_shortcode( 'wp-reading-progress-ert', 'ruigehond006_shortcode' );
 			}
@@ -107,7 +107,7 @@ function ruigehond006_ert( $content = null, $args = null ) {
 	if ( isset( $options['ert_speed'] ) && (int) $options['ert_speed'] > 0 ) {
 		$speed = (int) $options['ert_speed'];
 	}
-	$minutes = max( 1, round( $time =  (str_word_count( strip_tags( $post->post_content ) ) / $speed), 0 ) );
+	$minutes = max( 1, round( $time = ( str_word_count( wp_strip_all_tags( $post->post_content ) ) / $speed ), 0 ) );
 	if (
 		isset( $options['ert_snippet'] )
 		&& 1 === substr_count( ( $str = $options['ert_snippet'] ), '%d' )
@@ -116,7 +116,7 @@ function ruigehond006_ert( $content = null, $args = null ) {
 	} else {
 		$str = sprintf( '%d” read', $minutes );
 	}
-	$snippet = sprintf("<span class='wp-reading-progress-ert post-$post->ID' data-ert='$time' data-minutes='$minutes'>%s</span>", $str);
+	$snippet = sprintf( "<span class='wp-reading-progress-ert post-$post->ID' data-ert='$time' data-minutes='$minutes'>%s</span>", $str );
 
 	if ( $content ) {
 		return "$snippet $content";
@@ -159,7 +159,9 @@ function ruigehond006_meta_box( $post, $obj ) {
 }
 
 function ruigehond006_meta_box_save( $post_id ) {
-	if ( ! isset( $_POST['ruigehond006_nonce'] ) || ! wp_verify_nonce( $_POST['ruigehond006_nonce'], 'ruigehond006_save' ) ) {
+	if ( ! isset( $_POST['ruigehond006_nonce'] )
+	     || ! wp_verify_nonce( sanitize_title( wp_unslash( $_POST['ruigehond006_nonce'] ) ), 'ruigehond006_save' )
+	) {
 		return;
 	}
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
@@ -205,17 +207,17 @@ function ruigehond006_settings() {
 		ruigehond006_add_defaults();
 		$option = get_option( 'ruigehond006' );
 	}
-	// @since 1.5.4: check if the required placeholders are in the translated string
-	$string = esc_html__( 'Use %s or %s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.', 'wp-reading-progress' );
-	if ( 3 !== count( explode( '%s', $string ) ) ) {
-		$string = 'Use %s or %s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.';
+	/* @since 1.5.4: check if the required placeholders are in the translated string */
+	/* translators: %1$s: link for top, %1$s: link for bottom */
+	$string = esc_html__( 'Use %1$s or %2$s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.', 'wp-reading-progress' );
+	if ( false === strpos($string, '%1$s') || false === strpos($string, '%2$s') ) {
+		$string = 'Use %1$s or %2$s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.';
 	}
 	ruigehond006_add_settings_field(
 		'bar_attach',
 		'text',
 		esc_html__( 'Stick the bar to this element', 'wp-reading-progress' ), // title
 		$option,
-		// #translators: two links are inserted that set the value accordingly, 'top' and 'bottom'
 		sprintf( $string, '<a>top</a>', '<a>bottom</a>' ) . ' ' . esc_html__( 'Multiple selectors can be separated by commas, the bar will be attached to the first one visible.', 'wp-reading-progress' )
 	);
 	ruigehond006_add_settings_field(
@@ -238,9 +240,10 @@ function ruigehond006_settings() {
 //        $option,
 //        sprintf(__('Depends on a certain class added to the body or html container, including one of the following strings: %s', 'wp-reading-progress'), '*dark-mode*, *night-mode*')
 //    );
-	// @since 1.5.4: check if the required placeholders are in the translated string
-	$string = esc_html__( 'Thickness based on screen height is recommended, e.g. %s. But you can also use pixels, e.g. %s.', 'wp-reading-progress' );
-	if ( 3 !== count( explode( '%s', $string ) ) ) {
+	/* @since 1.5.4: check if the required placeholders are in the translated string */
+	/* translators: %1$s: link to insert .5vh, %2$s: link to insert 6px */
+	$string = esc_html__( 'Thickness based on screen height is recommended, e.g. %1$s. But you can also use pixels, e.g. %2$s.', 'wp-reading-progress' );
+	if ( false === strpos($string, '%1$s') || false === strpos($string, '%2$s') ) {
 		$string = 'Thickness based on screen height is recommended, e.g. %s. But you can also use pixels, e.g. %s.';
 	}
 	ruigehond006_add_settings_field(
@@ -281,12 +284,11 @@ function ruigehond006_settings() {
 				$post_types = $args['option']['post_types'];
 			}
 			foreach ( get_post_types( array( 'public' => true ) ) as $post_type ) {
-				$post_type = htmlentities( $post_type, ENT_QUOTES );
-				echo "<label><input type=\"checkbox\" name=\"ruigehond006[post_types][]\" value=\"$post_type\"";
+				echo '<label><input type="checkbox" name="ruigehond006[post_types][]" value="', esc_html( $post_type ), '"';
 				if ( in_array( $post_type, $post_types ) ) {
 					echo ' checked="checked"';
 				}
-				echo "/>$post_type</label><br/>";
+				echo '/>', esc_html( $post_type ), '</label><br/>';
 			}
 			echo '<div class="ruigehond006 explanation"><em>';
 			echo esc_html__( 'For unchecked post types you can enable the reading progress bar per post on the post edit page.', 'wp-reading-progress' );
@@ -331,7 +333,7 @@ function ruigehond006_settings() {
 		esc_html__( 'Check to activate ert, leave unchecked if you have ert in your theme.', 'wp-reading-progress' ),
 		'ert_settings'
 	);
-	if (isset($option['use_ert'])) {
+	if ( isset( $option['use_ert'] ) ) {
 		ruigehond006_add_settings_field(
 			'use_ert_shortcode',
 			'checkbox',
@@ -361,6 +363,7 @@ function ruigehond006_settings() {
 			'text-short',
 			esc_html__( 'Snippet text', 'wp-reading-progress' ), // title
 			$option,
+			/* translators: %d is literal %d, will not be replaced */
 			esc_html__( 'Define your own text here. Mandatory placeholder `%d` will display the minutes.', 'wp-reading-progress' ),
 			'ert_settings'
 		);
@@ -375,7 +378,7 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 			switch ( $args['type'] ) {
 				case 'checkbox':
 					echo '<label><input type="checkbox" name="ruigehond006[';
-					echo htmlentities( $args['name'], ENT_QUOTES );
+					echo esc_attr( $args['name'] );
 					echo ']"';
 					if ( $args['value'] ) {
 						echo ' checked="checked"';
@@ -389,16 +392,16 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 					return;
 				case 'color':
 					echo '<input type="text" class="ruigehond006_colorpicker" name="ruigehond006[';
-					echo htmlentities( $args['name'], ENT_QUOTES );
+					echo esc_attr( $args['name'] );
 					echo ']" value="';
-					echo htmlentities( $args['value'], ENT_QUOTES );
+					echo esc_attr( $args['value'] );
 					echo '"/>';
 					break;
 				default: // regular input
 					echo '<input type="text" name="ruigehond006[';
-					echo htmlentities( $args['name'], ENT_QUOTES );
+					echo esc_attr( $args['name'] );
 					echo ']" value="';
-					echo htmlentities( $args['value'], ENT_QUOTES );
+					echo esc_attr( $args['value'] );
 					if ( 'text-short' !== $args['type'] ) {
 						echo '" class="regular-text';
 					}
@@ -509,7 +512,7 @@ function ruigehond006_settings_validate( $input ) {
 			case 'bar_attach':
 			case 'ert_snippet':
 			case 'aria_label':
-				$options[ $key ] = strip_tags( $value );
+				$options[ $key ] = wp_strip_all_tags( $value );
 				break;
 			case 'ert_speed':
 				$options[ $key ] = (int) $value;
@@ -534,7 +537,7 @@ function ruigehond006_add_defaults() {
 		'bar_color'  => '#f1592a',
 		'bar_height' => '.5vh',
 		'post_types' => array( 'post' ),
-	), null, true );
+	), '', true );
 }
 
 function ruigehond006_install() {
