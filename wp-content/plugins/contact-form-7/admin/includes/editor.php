@@ -31,24 +31,25 @@ class WPCF7_Editor {
 
 		$formatter = new WPCF7_HTMLFormatter();
 
-		$formatter->append_start_tag( 'nav' );
-
-		$formatter->append_start_tag( 'ul', array(
+		$formatter->append_start_tag( 'nav', array(
 			'id' => 'contact-form-editor-tabs',
+			'role' => 'tablist',
+			'aria-label' => __( 'Contact form editor tabs', 'contact-form-7' ),
+			'data-active-tab' => absint( array_search(
+				$active_panel_id, array_keys( $this->panels ), true
+			) ),
 		) );
 
 		foreach ( $this->panels as $panel_id => $panel ) {
 			$active = $panel_id === $active_panel_id;
 
-			$formatter->append_start_tag( 'li', array(
+			$formatter->append_start_tag( 'button', array(
+				'type' => 'button',
+				'role' => 'tab',
+				'aria-selected' => $active ? 'true' : 'false',
+				'aria-controls' => $panel_id,
 				'id' => sprintf( '%s-tab', $panel_id ),
-				'class' => $active ? 'active' : null,
 				'tabindex' => $active ? '0' : '-1',
-				'data-panel' => $panel_id,
-			) );
-
-			$formatter->append_start_tag( 'a', array(
-				'href' => sprintf( '#%s', $panel_id ),
 			) );
 
 			$formatter->append_preformatted( esc_html( $panel['title'] ) );
@@ -60,8 +61,12 @@ class WPCF7_Editor {
 			$active = $panel_id === $active_panel_id;
 
 			$formatter->append_start_tag( 'section', array(
+				'role' => 'tabpanel',
+				'aria-labelledby' => sprintf( '%s-tab', $panel_id ),
 				'id' => $panel_id,
-				'class' => 'contact-form-editor-panel' . ( $active ? ' active' : '' ),
+				'class' => 'contact-form-editor-panel',
+				'tabindex' => '0',
+				'hidden' => ! $active,
 			) );
 
 			if ( is_callable( $panel['callback'] ) ) {
@@ -77,12 +82,9 @@ class WPCF7_Editor {
 
 function wpcf7_editor_panel_form( $post ) {
 	$description = sprintf(
-		/* translators: %s: link labeled 'Editing form template' */
-		esc_html( __( 'You can edit the form template here. For details, see %s.', 'contact-form-7' ) ),
-		wpcf7_link(
-			__( 'https://contactform7.com/editing-form-template/', 'contact-form-7' ),
-			__( 'Editing form template', 'contact-form-7' )
-		)
+		/* translators: %s: URL to support page about the form template */
+		__( 'You can edit the form template here. For details, see <a href="%s">Editing form template</a>.', 'contact-form-7' ),
+		__( 'https://contactform7.com/editing-form-template/', 'contact-form-7' )
 	);
 
 	$formatter = new WPCF7_HTMLFormatter();
@@ -201,12 +203,9 @@ function wpcf7_editor_box_mail( $post, $options = '' ) {
 	$formatter->append_start_tag( 'legend' );
 
 	$description = sprintf(
-		/* translators: %s: link labeled 'Setting up mail' */
-		esc_html( __( 'You can edit the mail template here. For details, see %s.', 'contact-form-7' ) ),
-		wpcf7_link(
-			__( 'https://contactform7.com/setting-up-mail/', 'contact-form-7' ),
-			__( 'Setting up mail', 'contact-form-7' )
-		)
+		/* translators: %s: URL to support page about the email template */
+		__( 'You can edit the email template here. For details, see <a href="%s">Setting up mail</a>.', 'contact-form-7' ),
+		__( 'https://contactform7.com/setting-up-mail/', 'contact-form-7' )
 	);
 
 	$formatter->append_preformatted( $description );
@@ -456,12 +455,9 @@ function wpcf7_editor_box_mail( $post, $options = '' ) {
 
 function wpcf7_editor_panel_messages( $post ) {
 	$description = sprintf(
-		/* translators: %s: link labeled 'Editing messages' */
-		esc_html( __( 'You can edit messages used in various situations here. For details, see %s.', 'contact-form-7' ) ),
-		wpcf7_link(
-			__( 'https://contactform7.com/editing-messages/', 'contact-form-7' ),
-			__( 'Editing messages', 'contact-form-7' )
-		)
+		/* translators: %s: URL to support page about the messages editor */
+		__( 'You can edit messages used in various situations here. For details, see <a href="%s">Editing messages</a>.', 'contact-form-7' ),
+		__( 'https://contactform7.com/editing-messages/', 'contact-form-7' )
 	);
 
 	$messages = wpcf7_messages();
@@ -520,12 +516,9 @@ function wpcf7_editor_panel_messages( $post ) {
 
 function wpcf7_editor_panel_additional_settings( $post ) {
 	$description = sprintf(
-		/* translators: %s: link labeled 'Additional settings' */
-		esc_html( __( 'You can add customization code snippets here. For details, see %s.', 'contact-form-7' ) ),
-		wpcf7_link(
-			__( 'https://contactform7.com/additional-settings/', 'contact-form-7' ),
-			__( 'Additional settings', 'contact-form-7' )
-		)
+		/* translators: %s: URL to support page about the additional settings editor */
+		__( 'You can add customization code snippets here. For details, see <a href="%s">Additional settings</a>.', 'contact-form-7' ),
+		__( 'https://contactform7.com/additional-settings/', 'contact-form-7' )
 	);
 
 	$formatter = new WPCF7_HTMLFormatter();
