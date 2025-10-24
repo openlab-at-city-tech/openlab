@@ -1,7 +1,4 @@
-/**
- * Basic styling for admin
- * This file is part of the Name Directory plugin for WordPress
- */
+/* Admin styling for the Name Directory plugin for WordPress */
 table.name_directory_names td {
     border-bottom: 1px solid #F0F0F0;
 }
@@ -21,7 +18,6 @@ table.name-directory td.post-title.page-title.column-title strong span {
 .name_directory_embed_code {
     display: none;
 }
-
 .name_directory_embed_code input {
     text-align: center;
     padding: 8px 5px;
@@ -41,8 +37,6 @@ table.name-directory td.post-title.page-title.column-title strong span {
 }
 
 
-
-
 /* Toggle switch */
 .name_directory_switch {
     position: relative;
@@ -50,7 +44,6 @@ table.name-directory td.post-title.page-title.column-title strong span {
     width: 45px;
     height: 26px;
 }
-
 .name_directory_switch input {
     opacity: 0;
     width: 0;
@@ -69,7 +62,6 @@ table.name-directory td.post-title.page-title.column-title strong span {
     -webkit-transition: .4s;
     transition: .4s;
 }
-
 .name_directory_slider:before {
     position: absolute;
     border-radius: 50%;
@@ -86,11 +78,9 @@ table.name-directory td.post-title.page-title.column-title strong span {
 input:checked + .name_directory_slider {
     background-color: #2271b1;
 }
-
 input:focus + .name_directory_slider {
     box-shadow: 0 0 1px #2271b1;
 }
-
 input:checked + .name_directory_slider:before {
     -webkit-transform: translateX(19px);
     -ms-transform: translateX(19px);

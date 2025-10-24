@@ -6,8 +6,8 @@ Donate link: https://ko-fi.com/jeroenpeters
 Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 6.8
-Stable tag: 1.30.1
+Tested up to: 6.9
+Stable tag: 1.30.2
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -188,10 +188,12 @@ Yes, every now and then I come across an installed version of the plugin. Here i
 1. [Dutch Budgie website - How to name your bird](https://www.parkietenvilla.nl/namenlijst/)
 1. [Alabama Orthopaedic Society - Member list](https://aosdocs.com/find-an-orthopaedist/)
 1. [Convertus - Paid Search Terms](https://www.convertus.com/search-glossary/)
-1. [SBS ShopRI - Vendor List](http://sbsshopri.com/vendors/vendor-listing-2018/)
-1. [Coin Collector Blog](http://coinsblog.ws/collectors-reference/numismatic-dictionary)
 1. [Venlo's Waordeboek (Dutch Limburgian Dialect Dictionary)](https://veldekevenlo.nl/waordebook/)
-1. [Dutch Winetasting Terms](https://www.winesessions.nl/proefterminologie/)
+1. [Donegal Member Directory (multiple directories)](https://thisisdonegal.ie/members-directory/)
+1. [Prairie Health (multiple columns and icons)](https://prairiemountainhealth.ca/programs-and-services/personal-care-homes/locations/)
+1. [International Association of Oil & Gas Producers](https://iogpeurope.org/glossary/)
+1. [Coin Collector Blog](https://coinsblog.ws/collectors-reference/numismatic-dictionary)
+1. [SBS ShopRI - Vendor List](https://sbsshopri.com/vendors/vendor-listing-2018/)
 1. [Certficate Holders in Ghana](https://idmcghana.com/index.php/certificat-directory/)
 1. [Tuscany Cookie Class Terms](https://tuscany-cooking-class.com/italian-to-english-cooking-dictionary/)
 
@@ -263,6 +265,12 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.30.2 | October 11, 2025 =
+ * Enhancement: Tested with WordPress 6.9
+ * Enhancement: Revised the demo/showcase list
+ * Enhancement: Tested and ehhanced the directory with large amounts of names
+ * Enhancement: Removed Internet Explorer support from the admin javascript and removed IE notice
 
 = 1.30.1 | April 11, 2025 =
  * Enhancement: Use admin-ajax as JS variable

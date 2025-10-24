@@ -36,17 +36,9 @@ function name_directory_exportTableToCSV(table, filename)
 
     }).get().join(tmpRowDelim).split(tmpRowDelim).join(rowDelim).split(tmpColDelim).join(colDelim) + '"';
 
-    // Data URI
+    // Force the data to download
     const csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-
-    if (window.navigator.msSaveBlob)  // IE 10+
-    {
-        window.navigator.msSaveOrOpenBlob(new Blob([csv], {type: "text/plain;charset=utf-8;"}), "name_directory_export.csv")
-    }
-    else
-    {
-        jQuery(this).attr({ 'download': filename, 'href': csvData, 'target': '_blank' });
-    }
+    jQuery(this).attr({ 'download': filename, 'href': csvData, 'target': '_blank' });
 }
 
 /* Save a named preference to a cookie */
