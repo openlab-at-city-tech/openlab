@@ -130,6 +130,11 @@ class Meow_WPMC_Rest
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_retrieve_files' )
 			) );
+			register_rest_route( $this->namespace, '/retrieve_hash_duplicates', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_retrieve_hash_duplicates' )
+			) );
 			register_rest_route( $this->namespace, '/check_targets', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -305,6 +310,8 @@ class Meow_WPMC_Rest
 		}
 		else if ( $source === 'media' ) {
 			$finished = $this->engine->extractRefsFromLibrary( $limit, $limitsize, $message, $post_id );
+		}else if ( $source === 'duplicates' ) {
+			$finished = $this->engine->extractRefsFromDuplicates( $limit, $limitsize );
 		}
 		else {
 			return new WP_REST_Response( [ 
@@ -328,6 +335,26 @@ class Meow_WPMC_Rest
 		if( $new_token ) {
 			$response['new_token'] = $new_token;
 		}
+
+		return new WP_REST_Response( $response, 200 );
+	}
+
+	function rest_retrieve_hash_duplicates() {
+
+		$hashes = $this->engine->get_hash_duplicates();
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
+		$response = [ 
+			'success' => true, 
+			'message' => sprintf( __( "Retrieved %d hash duplicates.", 'media-cleaner' ), count( $hashes ) ),
+			'data' => [
+				'results' => $hashes
+			],
+		];
 
 		return new WP_REST_Response( $response, 200 );
 	}
@@ -484,6 +511,12 @@ class Meow_WPMC_Rest
 				// else {
 				// 	$this->core->log( "👻 Nothing found." );
 				// }
+			} else if( $method == 'duplicates' ) {
+				$this->core->log( "🔎 Checking Duplicate #{$piece}..." );
+				$result = ( $this->engine->check_duplicates( $piece ) ? 1 : 0 );
+				if ( $result ) {
+					$success += $result;
+				}
 			}
 			//$this->core->log();
 			$this->core->timeout_check_additem();
@@ -792,6 +825,17 @@ class Meow_WPMC_Rest
 			else if ( $orderBy === 'postId' ) {
 				$orderSql = 'ORDER BY postId ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
 			}
+			else if ( $orderBy === 'time' ) {
+				$orderSql = 'ORDER BY time ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+			else if ( $orderBy === 'path' ) {
+				$orderSql = 'ORDER BY path ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+			else if ( $orderBy === 'size' ) {
+				$orderSql = 'ORDER BY size ' . ( $order === 'asc' ? 'ASC' : 'DESC' );
+			}
+
+
 			$whereSql = '';
 			if ( $filterBy == 'issues' ) {
 				$whereSql = 'WHERE ignored = 0 AND deleted = 0';
@@ -849,7 +893,7 @@ class Meow_WPMC_Rest
 
 			if ( empty( $search ) ) {
 				$entries = $wpdb->get_results( 
-					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
+					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue, time
 						FROM $table_scan
 						$whereSql
 						$orderSql
@@ -859,7 +903,7 @@ class Meow_WPMC_Rest
 			}
 			else {
 				$entries = $wpdb->get_results( 
-					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue
+					$wpdb->prepare( "SELECT id, type, postId, path, size, ignored, deleted, issue, time
 						FROM $table_scan
 						$whereSql
 						AND path LIKE %s
