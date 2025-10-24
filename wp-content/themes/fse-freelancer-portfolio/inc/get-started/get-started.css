@@ -78,7 +78,7 @@
     text-decoration: none;
     border: none;
     outline: none;
-    padding: 5px 10px;
+    padding: 8px 10px;
     text-align: center;
 }
 .link-buttons a:hover,
@@ -239,6 +239,13 @@
     .last-pro-box img{
         height: 80px;
     }
+    .pro-theme-container .pro-theme-price{
+        position: static;
+        margin-top: 0 !important;
+    }
+    .pro-boxes h4{
+        margin-bottom: 0 !important;
+    }
 }
 @media screen and (max-width:1299px){
     .wrapper-outer{
@@ -350,8 +357,14 @@
 .dash-notice .get-start-btn{
     background: #17B169;
     border-color: #17B169;
+    color: #fff !important;
 }
 .dash-notice .bundle-btn{
     background: #6664e4;
     border-color: #6664e4;
+}
+.dash-notice .get-start-btn:hover{
+    background: #135e96;
+    border-color: #135e96;
+    color: #fff;
 }

@@ -7,11 +7,11 @@ Description: FSE Freelancer Portfolio is a visually appealing and feature-rich W
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 5.6
-Version: 3.0.4
+Version: 3.0.7
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: fse-freelancer-portfolio
-Tags: blog, portfolio, photography, one-column, two-columns, left-sidebar, right-sidebar, block-patterns, block-styles, custom-background, custom-logo, custom-menu, featured-images, footer-widgets, full-site-editing, threaded-comments, wide-blocks, translation-ready
+Tags: blog, portfolio, photography, one-column, two-columns, left-sidebar, right-sidebar, block-patterns, block-styles, custom-background, custom-logo, custom-header, full-width-template, custom-menu, featured-images, footer-widgets, full-site-editing, threaded-comments, wide-blocks, translation-ready
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned.
@@ -894,6 +894,19 @@ body.page-template-blank .wp-site-blocks main {
   font-size: var(--wp--custom--typography--font-size--section-title);
   line-height: 1.5; }
 
+.page-content .wp-block-quote:not(.is-style-plain):before{
+  content: none;
+}
+.page-content .wp-block-quote{
+  text-align: left;
+}
+.page-content blockquote{
+  padding-top: 0 !important;
+}
+.page-content blockquote p{
+  font-size:var(--wp--preset--font-size--normal) ;
+  color: var(--wp--preset--color--heading)!important;
+}
 /* --- WP Block Navigation Main
 -------------------------------------------------------- */
 .wp-block-navigation .wp-block-navigation-item a:hover,
@@ -3324,7 +3337,14 @@ body:not(.home) .wp-block-post-template > li{
     flex-basis: 40% !important;
   }
 }
-
+@media screen and (min-width:1100px)and (max-width:1400px){
+  .lower-header .wp-block-site-title a,.lower-header .wp-block-site-title{
+    font-size: 16px !important;
+  }
+  .lower-header{
+    gap: 5px !important;
+  }
+}
 @media screen and (max-width:599px){
   .rights-box{
     display: block !important;

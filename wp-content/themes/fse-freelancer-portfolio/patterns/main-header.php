@@ -23,9 +23,6 @@
 
 <!-- wp:navigation-link {"label":"Portfolio","type":"","url":"#","kind":"custom","isTopLevelLink":true} /-->
 
-<!-- wp:navigation-link {"label":"Blogs","type":"","url":"#","kind":"custom","isTopLevelLink":true} /-->
-
-<!-- wp:navigation-link {"label":"Contact us","type":"","url":"#","kind":"custom","isTopLevelLink":true} /-->
 <!-- /wp:navigation --></div>
 <!-- /wp:column -->
 
