@@ -434,7 +434,7 @@ class Promotions extends Abstract_Module {
 		$has_neve_from_promo       = get_option( $this->option_neve, false );
 		$has_enough_attachments    = $this->has_min_media_attachments();
 		$has_enough_old_posts      = $this->has_old_posts();
-		$is_min_php_8_1            = version_compare( PHP_VERSION, '8.1', '>=' );
+		$is_min_php_7_4            = version_compare( PHP_VERSION, '7.4', '>=' );
 		$has_feedzy                = defined( 'FEEDZY_BASEFILE' ) || $this->is_plugin_installed( 'feedzy-rss-feedss' );
 		$had_feedzy_from_promo     = get_option( $this->option_feedzy, false );
 		$has_masteriyo             = defined( 'MASTERIYO_VERSION' ) || $this->is_plugin_installed( 'learning-management-system' );
@@ -538,7 +538,7 @@ class Promotions extends Abstract_Module {
 			],
 			'hyve'                       => [
 				'hyve-plugins-install' => [
-					'env'    => $is_min_php_8_1 && ! $has_hyve && ! $had_hyve_from_promo && $has_hyve_conditions,
+					'env'    => $is_min_php_7_4 && ! $has_hyve && ! $had_hyve_from_promo && $has_hyve_conditions,
 					'screen' => 'plugin-install',
 				],
 			],
