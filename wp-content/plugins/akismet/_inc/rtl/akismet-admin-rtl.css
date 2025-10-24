@@ -1,4 +1,4 @@
-/* This file was automatically generated on Mar 24 2025 16:58:29 */
+/* This file was automatically generated on Jun 19 2025 22:31:12 */
 
 body {
 	--akismet-color-charcoal: #272635;
@@ -21,7 +21,7 @@ body {
 
 /* UI components */
 .akismet-new-feature {
-	background-color: var(--akismet-color-light-green);
+	background-color: var(--akismet-color-mid-green);
 	border-radius: 4px;
 	color: var(--akismet-color-white);
 	font-size: 10px;

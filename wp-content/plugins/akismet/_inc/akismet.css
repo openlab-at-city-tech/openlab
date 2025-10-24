@@ -487,6 +487,7 @@ div.error.akismet-usage-limit-alert {
 
 #akismet-plugin-container .akismet-usage-limit-cta a {
 	color: #d63638;
+	background: #fafafa;
 }
 
 @media (max-width: 550px) {

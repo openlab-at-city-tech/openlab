@@ -514,7 +514,9 @@ class Akismet_REST_API {
 						// We have one single match, as hoped for.
 						Akismet::log( 'Found matching comment.', $comments );
 
-						$current_status = wp_get_comment_status( $comments[0] );
+						$comment = $comments[0];
+
+						$current_status = wp_get_comment_status( $comment );
 
 						$result = $webhook_comment['result'];
 
@@ -524,14 +526,14 @@ class Akismet_REST_API {
 							// The comment should be classified as spam.
 							if ( 'spam' != $current_status ) {
 								// The comment is not classified as spam. If Akismet was the one to act on it, move it to spam.
-								if ( Akismet::last_comment_status_change_came_from_akismet( $comments[0]->comment_ID ) ) {
+								if ( Akismet::last_comment_status_change_came_from_akismet( $comment->comment_ID ) ) {
 									Akismet::log( 'Comment is not spam; marking as spam.' );
 
-									wp_spam_comment( $comments[0] );
-									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-spam' );
+									wp_spam_comment( $comment );
+									Akismet::update_comment_history( $comment->comment_ID, '', 'webhook-spam' );
 								} else {
 									Akismet::log( 'Comment is not spam, but it has already been manually handled by some other process.' );
-									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-spam-noaction' );
+									Akismet::update_comment_history( $comment->comment_ID, '', 'webhook-spam-noaction' );
 								}
 							}
 						} elseif ( 'false' == $result ) {
@@ -542,16 +544,46 @@ class Akismet_REST_API {
 								Akismet::log( 'Comment is spam.' );
 
 								// The comment is classified as spam. If Akismet was the one to label it as spam, unspam it.
-								if ( Akismet::last_comment_status_change_came_from_akismet( $comments[0]->comment_ID ) ) {
+								if ( Akismet::last_comment_status_change_came_from_akismet( $comment->comment_ID ) ) {
 									Akismet::log( 'Akismet marked it as spam; unspamming.' );
 
-									wp_unspam_comment( $comments[0] );
-									akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-ham' );
+									wp_unspam_comment( $comment );
+
+									akismet::update_comment_history( $comment->comment_ID, '', 'webhook-ham' );
 								} else {
 									Akismet::log( 'Comment is not spam, but it has already been manually handled by some other process.' );
-									Akismet::update_comment_history( $comments[0]->comment_ID, '', 'webhook-ham-noaction' );
+									Akismet::update_comment_history( $comment->comment_ID, '', 'webhook-ham-noaction' );
+								}
+							} else if ( 'unapproved' == $current_status ) {
+								Akismet::log( 'Comment is pending.' );
+
+								// The comment is in Pending. If Akismet was the one to put it there, approve it (but only if the site
+								// settings dictate that).
+								if ( Akismet::last_comment_status_change_came_from_akismet( $comment->comment_ID ) ) {
+									Akismet::log( 'Akismet marked it as Pending; approving.' );
+
+									if ( check_comment( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent, $comment->comment_type ) ) {
+										wp_set_comment_status( $comment->comment_ID, 1 );
+									}
+
+									akismet::update_comment_history( $comment->comment_ID, '', 'webhook-ham' );
+								} else {
+									Akismet::log( 'Comment is not spam, but it has already been manually handled by some other process.' );
+									Akismet::update_comment_history( $comment->comment_ID, '', 'webhook-ham-noaction' );
 								}
 							}
+
+							$moderation_email_was_delayed = get_comment_meta( $comment->comment_ID, 'akismet_delayed_moderation_email', true );
+
+							if ( $moderation_email_was_delayed ) {
+								Akismet::log( 'Moderation email was delayed for comment #' . $comment->comment_ID . '; sending now.' );
+
+								delete_comment_meta( $comment->comment_ID, 'akismet_delayed_moderation_email' );
+								wp_new_comment_notify_moderator( $comment->comment_ID );
+								wp_new_comment_notify_postauthor( $comment->comment_ID );
+							}
+
+							delete_comment_meta( $comment->comment_ID, 'akismet_delay_moderation_email' );
 						}
 
 						$response['comments'][ $guid ] = array( 'status' => 'success' );
