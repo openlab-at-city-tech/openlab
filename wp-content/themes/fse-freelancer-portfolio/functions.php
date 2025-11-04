@@ -65,6 +65,29 @@ endif;
 
 add_action( 'wp_enqueue_scripts', 'fse_freelancer_portfolio_styles' );
 
+/* Enqueue admin-notice-script js */
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook !== 'appearance_page_fse-freelancer-portfolio') return;
+
+    wp_enqueue_script('admin-notice-script', get_template_directory_uri() . '/get-started/js/admin-notice-script.js', ['jquery'], null, true);
+    wp_localize_script('admin-notice-script', 'pluginInstallerData', [
+        'ajaxurl'     => admin_url('admin-ajax.php'),
+        'nonce'       => wp_create_nonce('install_cretatestimonial_nonce'), // Match this with PHP nonce check
+        'redirectUrl' => admin_url('themes.php?page=fse-freelancer-portfolio-guide-page'),
+    ]);
+});
+
+add_action('wp_ajax_check_creta_testimonial_activation', function () {
+    include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    $fse_freelancer_portfolio_plugin_file = 'creta-testimonial-showcase/creta-testimonial-showcase.php';
+
+    if (is_plugin_active($fse_freelancer_portfolio_plugin_file)) {
+        wp_send_json_success(['active' => true]);
+    } else {
+        wp_send_json_success(['active' => false]);
+    }
+});
+
 // Add block patterns
 require get_template_directory() . '/inc/block-patterns.php';
 
@@ -101,11 +124,42 @@ function fse_freelancer_portfolio_admin_notice() {
 
 	    if( ! current_user_can( 'manage_options' ) ){
 	        return;
-	    } if($current_screen->base != 'appearance_page_fse-freelancer-portfolio-guide-page' ) { ?>
+	    } if($current_screen->base != 'appearance_page_fse-freelancer-portfolio-guide-page' && $current_screen->base != 'toplevel_page_cretats-theme-showcase' ) { ?>
 
 	    <div class="notice notice-success dash-notice">
 	        <h1><?php esc_html_e('Hey, Thank you for installing FSE Freelancer Portfolio Theme!', 'fse-freelancer-portfolio'); ?></h1>
-	        <p><a class="button button-primary customize load-customize hide-if-no-customize get-start-btn" href="<?php echo esc_url( admin_url( 'themes.php?page=fse-freelancer-portfolio-guide-page' ) ); ?>"><?php esc_html_e('Navigate Getstart', 'fse-freelancer-portfolio'); ?></a> 
+	        <p><a href="javascript:void(0);" id="install-activate-button" class="button admin-button info-button get-start-btn">
+				   <?php echo __('Nevigate Getstart', 'fse-freelancer-portfolio'); ?>
+				</a>
+
+				<script type="text/javascript">
+				document.getElementById('install-activate-button').addEventListener('click', function () {
+				    const fse_freelancer_portfolio_button = this;
+				    const fse_freelancer_portfolio_redirectUrl = '<?php echo esc_url(admin_url("themes.php?page=fse-freelancer-portfolio-guide-page")); ?>';
+				    // First, check if plugin is already active
+				    jQuery.post(ajaxurl, { action: 'check_creta_testimonial_activation' }, function (response) {
+				        if (response.success && response.data.active) {
+				            // Plugin already active — just redirect
+				            window.location.href = fse_freelancer_portfolio_redirectUrl;
+				        } else {
+				            // Show Installing & Activating only if not already active
+				            fse_freelancer_portfolio_button.textContent = 'Nevigate Getstart';
+
+				            jQuery.post(ajaxurl, {
+				                action: 'install_and_activate_creta_testimonial_plugin',
+				                nonce: '<?php echo wp_create_nonce("install_activate_nonce"); ?>'
+				            }, function (response) {
+				                if (response.success) {
+				                    window.location.href = fse_freelancer_portfolio_redirectUrl;
+				                } else {
+				                    alert('Failed to activate the plugin.');
+				                    fse_freelancer_portfolio_button.textContent = 'Try Again';
+				                }
+				            });
+				        }
+				    });
+				});
+				</script>
 	        	<a class="button button-primary site-edit" href="<?php echo esc_url( admin_url( 'site-editor.php' ) ); ?>"><?php esc_html_e('Site Editor', 'fse-freelancer-portfolio'); ?></a> 
 				<a class="button button-primary buy-now-btn" href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_BUY_NOW ); ?>" target="_blank"><?php esc_html_e('Buy Pro', 'fse-freelancer-portfolio'); ?></a>
 				<a class="button button-primary bundle-btn" href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_PRO_THEME_BUNDLE ); ?>" target="_blank"><?php esc_html_e('Get Bundle', 'fse-freelancer-portfolio'); ?></a>

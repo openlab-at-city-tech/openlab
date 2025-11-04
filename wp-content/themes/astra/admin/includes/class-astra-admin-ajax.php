@@ -80,6 +80,7 @@ class Astra_Admin_Ajax {
 		add_action( 'wp_ajax_astra_analytics_optin_status', array( $this, 'astra_analytics_optin_status' ) );
 		add_action( 'wp_ajax_astra_recommended_plugin_activate', array( $this, 'required_plugin_activate' ) );
 		add_action( 'wp_ajax_astra_recommended_plugin_deactivate', array( $this, 'required_plugin_deactivate' ) );
+		add_action( 'wp_ajax_astra_load_google_fonts', array( $this, 'load_google_fonts' ) );
 	}
 
 	/**
@@ -463,6 +464,38 @@ class Astra_Admin_Ajax {
 				'message' => esc_html__( 'Plugin Successfully Deactivated', 'astra' ),
 			)
 		);
+	}
+
+	/**
+	 * AJAX handler for loading Google Fonts data
+	 *
+	 * @since 4.11.13
+	 * @return void
+	 */
+	public function load_google_fonts() {
+		if ( ! current_user_can( 'customize' ) ) {
+			wp_send_json_error(
+				array(
+					'success' => false,
+					'message' => $this->get_error_msg( 'permission' ),
+				)
+			);
+		}
+
+		check_ajax_referer( 'astra_customizer_nonce', 'nonce' );
+
+		$google_fonts = Astra_Font_Families::get_google_fonts();
+		$custom_fonts = Astra_Font_Families::get_custom_fonts();
+
+		$response = array(
+			'success' => true,
+			'data'    => array(
+				'google' => $google_fonts,
+				'custom' => $custom_fonts,
+			),
+		);
+
+		wp_send_json_success( $response );
 	}
 }
 

@@ -47,17 +47,5 @@
         }
       ]
     }
-  },
-  "styles": {
-    "elements": {
-      "heading": {
-        "typography": {
-          "fontFamily": "var(--wp--preset--font-family--noto-sans)"
-        }
-      }
-    },
-    "typography": {
-      "fontFamily": "var(--wp--preset--font-family--noto-sans)"
-    }
   }
 }

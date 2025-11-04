@@ -19,7 +19,7 @@ body {
 
 /* UI components */
 .akismet-new-feature {
-	background-color: var(--akismet-color-light-green);
+	background-color: var(--akismet-color-mid-green);
 	border-radius: 4px;
 	color: var(--akismet-color-white);
 	font-size: 10px;

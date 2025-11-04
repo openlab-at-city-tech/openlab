@@ -47,7 +47,11 @@ class Dismissable_Messages {
 		$message['page']         = $page;
 
 		if ( $sticky ) {
-			$sticky_messages         = get_option( 'gform_sticky_admin_messages', array() );
+			$sticky_messages = get_option( 'gform_sticky_admin_messages', array() );
+			if ( ! is_array( $sticky_messages ) ) {
+				$sticky_messages = array();
+			}
+
 			$sticky_messages[ $key ] = $message;
 			update_option( 'gform_sticky_admin_messages', $sticky_messages );
 		} else {
@@ -63,8 +67,15 @@ class Dismissable_Messages {
 	 * @since 2.5.7
 	 */
 	public function remove( $key ) {
-		$key             = sanitize_key( $key );
 		$sticky_messages = get_option( 'gform_sticky_admin_messages', array() );
+		if ( ! is_array( $sticky_messages ) ) {
+			delete_option( 'gform_sticky_admin_messages' );
+
+			return;
+		}
+
+		$key = sanitize_key( $key );
+
 		foreach ( $sticky_messages as $sticky_key => $sticky_message ) {
 			if ( $key == sanitize_key( $sticky_message['key'] ) ) {
 				unset( $sticky_messages[ $sticky_key ] );
@@ -85,8 +96,8 @@ class Dismissable_Messages {
 		$messages = get_option( 'gform_sticky_admin_messages', array() );
 		$map      = $this->internal_messages_map();
 
-		if ( empty( $messages ) ) {
-			return $messages;
+		if ( empty( $messages ) || ! is_array( $messages ) ) {
+			return array();
 		}
 
 		return array_map( function ( $message ) use ( $map ) {
@@ -115,7 +126,7 @@ class Dismissable_Messages {
 		if ( ! $messages ) {
 			$messages        = self::$dismissible_messages;
 			$sticky_messages = $this->get_sticky_messages();
-			if ( is_array( $sticky_messages ) ) {
+			if ( ! empty( $sticky_messages ) ) {
 				$messages = array_merge( $messages, $sticky_messages );
 				$messages = array_values( $messages );
 			}
@@ -155,11 +166,11 @@ class Dismissable_Messages {
 
 				$need_script = true;
 				?>
-				<div class="notice below-h1 notice-<?php echo $class; ?> is-dismissible gf-notice"
-				     data-gf_dismissible_key="<?php echo $message['key'] ?>"
-				     data-gf_dismissible_nonce="<?php echo wp_create_nonce( 'gf_dismissible_nonce' ) ?>">
+				<div class="notice below-h1 notice-<?php echo esc_attr( $class ); ?> is-dismissible gf-notice"
+				     data-gf_dismissible_key="<?php echo esc_attr( $message['key'] ) ?>"
+				     data-gf_dismissible_nonce="<?php echo esc_attr( wp_create_nonce( 'gf_dismissible_nonce' ) ) ?>">
 					<p>
-						<?php echo $message['text']; ?>
+						<?php echo $message['text']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</p>
 				</div>
 				<?php

@@ -5,7 +5,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-menu, custom-logo, entertainment, featured-images, full-width-template, one-column, two-columns, left-sidebar, e-commerce, right-sidebar, custom-colors, editor-style, featured-images, full-width-template, microformats, post-formats, rtl-language-support, theme-options, threaded-comments, translation-ready, blog
 Tested up to: 6.8
 Requires PHP: 5.3
-Stable tag: 4.11.10
+Stable tag: 4.11.13
 
 Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio, business website and WooCommerce storefront.
 
@@ -17,7 +17,7 @@ It offers special features and templates so it works perfectly with all page bui
 
 Looking for a perfect base theme? Look no further. Astra is fast, fully customizable and WooCommerce ready theme that you can use for building any kind of website!
 
-The Astra WordPress theme is lightning-fast and highly customizable. It has over 1 million downloads and the only theme in the world with 5,700+ five-star reviews! 
+The Astra WordPress theme is lightning-fast and highly customizable. It has over 1 million downloads and the only theme in the world with 6,000+ five-star reviews! 
 
 It’s ideal for professional web designers, solopreneurs, small businesses, eCommerce, membership sites and any type of website.
 

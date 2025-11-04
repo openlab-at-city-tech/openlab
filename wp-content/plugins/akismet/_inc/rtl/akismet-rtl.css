@@ -1,4 +1,4 @@
-/* This file was automatically generated on Feb 01 2025 01:02:26 */
+/* This file was automatically generated on Jun 19 2025 22:00:12 */
 
 .wp-admin.jetpack_page_akismet-key-config, .wp-admin.settings_page_akismet-key-config {
 	background-color:#f3f6f8;
@@ -489,6 +489,7 @@ div.error.akismet-usage-limit-alert {
 
 #akismet-plugin-container .akismet-usage-limit-cta a {
 	color: #d63638;
+	background: #fafafa;
 }
 
 @media (max-width: 550px) {

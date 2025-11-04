@@ -125,6 +125,25 @@ $maxUploadSize = str_replace(["K", "M", "G", "T", "P"],[" KB", " MB", " GB", " T
                         </div>
                     </div>
 
+                    <!-- Replace Title wrap -->
+                    <div class="replace-name-settings">
+                        <div class="replace-name-settings-left">
+                            <label for="replacement_title_option"
+                                class="replace-file-title"><?php esc_html_e("Replace Title", "folders"); ?></label>
+                            <label for="replacement_title_option"
+                                class="replace-desc"><?php esc_html_e("Also replace file title with new file name", "folders"); ?></label>
+                        </div>
+                        <div class="replace-name-settings-right">
+                            <div class="inline-switch">
+                                <input type="hidden" name="replacement_title_option" value="0" class="sr-only">
+                                <input type="checkbox" name="replacement_title_option" id="replacement_title_option"
+                                    value="1" class="sr-only">
+                                <label for="replacement_title_option" class="inline-checkbox"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Replace Title wrap end -->
+
                     <div class="replace-name-settings">
                         <div class="replace-name-settings-left">
                             <label class="replace-file-title"><?php esc_html_e("Replace Date", "folders"); ?></label>

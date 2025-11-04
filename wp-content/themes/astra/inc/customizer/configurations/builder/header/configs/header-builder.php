@@ -691,36 +691,49 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 		 * Option: Pro options
 		 */
 		$_configs[] = array(
-			'name'     => ASTRA_THEME_SETTINGS . '[header-builder-pro-items]',
-			'type'     => 'control',
-			'control'  => 'ast-upgrade',
-			'campaign' => 'header-builder',
-			'choices'  => array(
+			'name'      => ASTRA_THEME_SETTINGS . '[header-builder-pro-items]',
+			'type'      => 'control',
+			'control'   => 'ast-upgrade',
+			'campaign'  => 'header-builder',
+			'choices'   => array(
+				// 'one'    => array(
+				// 'title' => __( 'Sticky header', 'astra' ),
+				// ),
+				// 'two'    => array(
+				// 'title' => __( 'Divider element', 'astra' ),
+				// ),
+				// 'three'  => array(
+				// 'title' => __( 'Language Switcher', 'astra' ),
+				// ),
+				// 'four'   => array(
+				// 'title' => __( 'Toggle Button element', 'astra' ),
+				// ),
+				// 'five'   => array(
+				// 'title' => __( 'Clone, Delete options', 'astra' ),
+				// ),
+				// 'seven'  => array(
+				// 'title' => __( 'More design options', 'astra' ),
+				// ),
 				'one'   => array(
-					'title' => __( 'Sticky header', 'astra' ),
+					'title' => __( 'Color switcher to add dark mode', 'astra' ),
 				),
 				'two'   => array(
-					'title' => __( 'Divider element', 'astra' ),
+					'title' => __( 'Mega-menus for better navigation', 'astra' ),
 				),
 				'three' => array(
-					'title' => __( 'Language Switcher', 'astra' ),
+					'title' => __( 'Different menus for logged-in users', 'astra' ),
 				),
 				'four'  => array(
-					'title' => __( 'Toggle Button element', 'astra' ),
-				),
-				'five'  => array(
-					'title' => __( 'Clone, Delete options', 'astra' ),
-				),
-				'seven' => array(
-					'title' => __( 'More design options', 'astra' ),
+					'title' => __( 'Advanced buttons, icons, search & more', 'astra' ),
 				),
 			),
-			'section'  => 'section-header-builder-layout',
-			'default'  => '',
-			'priority' => 999,
-			'context'  => array(),
-			'title'    => __( 'Make an instant connection with amazing site headers', 'astra' ),
-			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
+			'section'   => 'section-header-builder-layout',
+			'default'   => '',
+			'priority'  => 999,
+			'context'   => array(),
+			'title'     => __( 'Better Header = Better UX = More clicks', 'astra' ),
+			'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+			'thumbnail' => ASTRA_THEME_URI . 'inc/assets/images/customizer/header-builder.png',
 		);
 	}
 

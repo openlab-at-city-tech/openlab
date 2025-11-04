@@ -673,8 +673,8 @@ class Astra_Breadcrumb_Trail {
 			$this->add_post_terms( $post_id, $this->post_taxonomy[ $post->post_type ] );
 		}
 		// End with the post title.
-		if ( $post_title = single_post_title( '', false ) ) {
-
+		$post_title = single_post_title( '', false );
+		if ( $post_title ) {
 			if ( ( 1 < get_query_var( 'page' ) || is_paged() ) || ( get_option( 'page_comments' ) && 1 < absint( get_query_var( 'cpage' ) ) ) ) {
 				$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_permalink( $post_id ) ), $post_title );
 			}

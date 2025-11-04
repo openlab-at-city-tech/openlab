@@ -45,7 +45,9 @@ if ( ! class_exists( 'Astra_Site_Layout_Configs' ) ) {
 							'operator' => '==',
 							'value'    => 'ast-full-width-layout',
 						),
-					) : array(),
+					) : array(
+						Astra_Builder_Helper::$general_tab_config,
+					),
 					'suffix'      => 'px',
 					'input_attrs' => array(
 						'min'  => 768,

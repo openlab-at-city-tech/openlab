@@ -693,7 +693,7 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 				do_action( 'dlm_downloading', $download, $version, $file_path );
 				// Set the cookie to prevent multiple download logs in download window of 60 seconds.
 				// Do this only for non-XHR downloads as XHR downloads are logged through AJAX request
-				if ( WP_DLM::dlm_window_logging() && ! $this->check_for_xhr() ) {
+				if ( WP_DLM::dlm_window_logging() && ! $this->check_for_xhr() && ! $is_redirect ) {
 					// Set cookie here to prevent "Cannot modify header information - headers already sent" error
 					// in non-XHR downloads.
 					$this->dlm_logging->log( $download, $version, 'completed', true, $referrer );
@@ -734,7 +734,6 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 							);
 					} elseif ( $sympath && false !== strpos( $file_path, $sympath ) ) { // File is in the uploads' folder but in symlinked directory, so we need to create the correct URL.
 						// Set the URL for the uploads' folder.
-						var_dump('$file_path');
 						$file_path
 							= str_replace(
 								str_replace(
@@ -759,7 +758,7 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 						$file_path = download_monitor()
 							->service( 'file_manager' )
 							->check_symbolic_links( $file_path, true );
-						var_dump($file_path);
+
 						$file_path
 							= str_replace(
 								trailingslashit( ABSPATH ),

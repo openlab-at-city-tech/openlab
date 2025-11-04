@@ -116,7 +116,7 @@
 
 			// Check if the cleaned font exists in the Google fonts array.
 			var googleFontValue = splitFont[0].replace(pattern, '');
-			if ( 'undefined' != typeof AstFontFamilies.google[ googleFontValue ] ) {
+			if ( 'undefined' != typeof AstFontFamilies && 'undefined' != typeof AstFontFamilies.google && 'undefined' != typeof AstFontFamilies.google[ googleFontValue ] ) {
 				fontValue = googleFontValue;
 			}
 
@@ -138,14 +138,14 @@
 			var weightObject        = [ '400', '600' ];
 			if ( fontValue == 'inherit' ) {
 				weightObject = [ '100','200','300','400','normal','500','600','700','800','900' ];
-			} else if ( 'undefined' != typeof AstFontFamilies.system[ fontValue ] ) {
+			} else if ( 'undefined' != typeof AstFontFamilies && 'undefined' != typeof AstFontFamilies.system && 'undefined' != typeof AstFontFamilies.system[ fontValue ] ) {
 				weightObject = AstFontFamilies.system[ fontValue ].weights;
-			} else if ( 'undefined' != typeof AstFontFamilies.google[ fontValue ] ) {
+			} else if ( 'undefined' != typeof AstFontFamilies && 'undefined' != typeof AstFontFamilies.google && 'undefined' != typeof AstFontFamilies.google[ fontValue ] ) {
 				weightObject = AstFontFamilies.google[ fontValue ][0];
 				weightObject = Object.keys(weightObject).map(function(k) {
 				  return weightObject[k];
 				});
-			} else if ( 'undefined' != typeof AstFontFamilies.custom[ fontValue ] ) {
+			} else if ( 'undefined' != typeof AstFontFamilies && 'undefined' != typeof AstFontFamilies.custom && 'undefined' != typeof AstFontFamilies.custom[ fontValue ] ) {
 				weightObject = AstFontFamilies.custom[ fontValue ].weights;
 			}
 

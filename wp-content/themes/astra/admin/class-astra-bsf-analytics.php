@@ -166,9 +166,87 @@ class Astra_BSF_Analytics {
 			'preloading_local_fonts'       => isset( $admin_dashboard_settings['preload_local_fonts'] ) && $admin_dashboard_settings['preload_local_fonts'] ? 'yes' : 'no',
 		);
 
+		// Add onboarding analytics data.
+		self::add_astra_onboarding_analytics_data( $astra_stats );
+
 		$stats_data['plugin_data']['astra'] = array_merge_recursive( $stats_data['plugin_data']['astra'], $astra_stats );
 
 		return $stats_data;
+	}
+
+	/**
+	 * Add Astra onboarding analytics data.
+	 *
+	 * @param array $astra_stats Reference to the astra stats data.
+	 *
+	 * @since 4.11.12
+	 * @return array
+	 */
+	public static function add_astra_onboarding_analytics_data( &$astra_stats ) {
+		// Get onboarding analytics data from option.
+		/** @psalm-suppress UndefinedClass */
+		$option_name     = is_callable( '\One_Onboarding\Core\Register::get_option_name' )
+			? \One_Onboarding\Core\Register::get_option_name( 'astra' )
+			: 'astra_onboarding';
+		$onboarding_data = get_option( $option_name, array() );
+
+		// Return if no onboarding data.
+		if ( empty( $onboarding_data ) || ! is_array( $onboarding_data ) ) {
+			return;
+		}
+
+		// Process skipped screens.
+		if ( isset( $onboarding_data['screens'] ) && is_array( $onboarding_data['screens'] ) ) {
+			// Determine the last screen.
+			$last_screen = isset( $onboarding_data['completion_screen'] ) ? $onboarding_data['completion_screen'] : 'done';
+
+			// Transform the screen keys to their descriptive names.
+			$skipped_screens = array();
+			foreach ( $onboarding_data['screens'] as $screen ) {
+				if ( ! isset( $screen['id'] ) ) {
+					continue;
+				}
+
+				$screen_id = $screen['id'];
+
+				// Break if we've reached the last screen.
+				if ( $screen_id === $last_screen ) {
+					break;
+				}
+
+				$skipped = isset( $screen['skipped'] ) ? $screen['skipped'] : $screen_id !== $last_screen;
+				if ( $skipped ) {
+					$skipped_screens[] = $screen_id;
+				}
+			}
+
+			// Add the skipped screens as an array.
+			$astra_stats['onboarding_skipped_screens'] = $skipped_screens;
+		}
+
+		// Process pro features.
+		if ( isset( $onboarding_data['pro_features'] ) && is_array( $onboarding_data['pro_features'] ) ) {
+			$astra_stats['onboarding_selected_pro_features'] = $onboarding_data['pro_features'];
+		}
+
+		// Process selected starter templates builder.
+		$astra_stats['onboarding_selected_st_builder'] = isset( $onboarding_data['starter_templates_builder'] ) ? $onboarding_data['starter_templates_builder'] : '';
+
+		// Process selected addons
+		if ( isset( $onboarding_data['selected_addons'] ) && is_array( $onboarding_data['selected_addons'] ) ) {
+			$astra_stats['onboarding_selected_addons'] = $onboarding_data['selected_addons'];
+		}
+
+		// Onboarding Completion Status.
+		$astra_stats['boolean_values']['onboarding_completed'] = isset( $onboarding_data['completion_screen'] ) && ! empty( $onboarding_data['completion_screen'] );
+		if ( $astra_stats['boolean_values']['onboarding_completed'] ) {
+			$astra_stats['onboarding_completion_screen'] = isset( $onboarding_data['completion_screen'] ) ? $onboarding_data['completion_screen'] : '';
+		}
+
+		// Onboarding Exit Status.
+		if ( isset( $onboarding_data['exited_early'] ) ) {
+			$astra_stats['boolean_values']['onboarding_exited_early'] = (bool) $onboarding_data['exited_early'];
+		}
 	}
 
 	/**

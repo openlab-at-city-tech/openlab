@@ -225,20 +225,7 @@ class Meow_WPMC_Core {
 			}
 
 			else if ( is_array( $m ) ) {
-				// If it's an array with a width, probably that the index is the Media ID
-				if ( isset( $m['width'] ) && is_numeric( $k ) ) {
-
-					if ( !empty( $filters ) && is_array( $filters ) && !in_array( $k, $filters ) ) {
-						continue;
-					}
-
-					if ( $k > 0 )
-					{
-						array_push( $ids, $k );
-					}
-
-					continue;
-				}
+				
 				
 				if ( $recursive ) {
 					// If it's an array, we need to go deeper
@@ -706,15 +693,7 @@ class Meow_WPMC_Core {
 			$this->array_to_ids_or_urls( $block, $ids, $urls, true, $keys );
 
 		}
-		
-		// $this->get_from_meta(
-		// 	$data,
-		// 	$keys,
-		// 	$ids,
-		// 	$urls
-		// );
-
-		
+				
 		
 	}
 	// Parse a meta, visit all the arrays, look for the attributes, fill $ids and $urls arrays
@@ -1344,7 +1323,7 @@ class Meow_WPMC_Core {
 			}
 			// Move file to the trash
 			else  if ( $this->trash_file( $issue->path ) ) {
-				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0, time = NOW() WHERE id = %d", $id ) );
 				return true;
 			}
 
@@ -1377,7 +1356,7 @@ class Meow_WPMC_Core {
 					}
 				}
 				wp_update_post( array( 'ID' => $issue->postId, 'post_type' => 'wmpc-trash' ) );
-				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0 WHERE id = %d", $id ) );
+				$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET deleted = 1, ignored = 0, time = NOW() WHERE id = %d", $id ) );
 				return true;
 			}
 		}
@@ -1435,15 +1414,15 @@ class Meow_WPMC_Core {
 			// to make sure the original file is not deleted if a size exists for it.
 			// With media, all URLs should be without resolution to make sure it matches Media.
 			if ( $this->current_method == 'files' ) {
-				$this->add_reference( null, $url, $type, $origin );
-				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin );
+				$this->add_reference( null, $url, $type, $origin, $extra );
+				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin, $extra );
 			}
 			else {
 				// 2021/11/08: I added this, the problem is that sometimes users create image filenames with the resolution
 				// in it, even though it is the original.
-				$this->add_reference( null, $url, $type, $origin );
+				$this->add_reference( null, $url, $type, $origin, $extra );
 
-				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin );
+				$this->add_reference( 0, $this->clean_url_from_resolution( $url ), $type, $origin, $extra );
 			}
 		}
 	}
@@ -1521,6 +1500,16 @@ class Meow_WPMC_Core {
 	// The references are actually not being added directly in the DB, they are being pushed
 	// into a cache ($this->refcache).
 	private function add_reference( $id, $url, $type, $origin = null, $extra = null ) {
+
+		$force_no_cache = $extra && isset( $extra['force_no_cache'] ) ? $extra['force_no_cache'] : false;
+		$force_cache = $extra && isset( $extra['force_cache'] ) ? $extra['force_cache'] : false;
+		if ( $force_no_cache ) {
+			$this->use_cached_references = false;
+		}
+
+		if ( $force_cache ) {
+			$this->use_cached_references = true;
+		}
 
 		if ( !empty( $origin ) ) {
 			$type = $type . " [$origin]";

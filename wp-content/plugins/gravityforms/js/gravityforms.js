@@ -706,7 +706,9 @@ function gformDeleteUploadedFile(formId, fieldId, deleteButton){
 
     var fileIndex = jQuery(deleteButton).parent().index();
 
-    parent.find(".ginput_preview").eq(fileIndex).remove();
+    var filePreview = jQuery( deleteButton ).closest( '.ginput_preview' )[0];
+    var fileId = filePreview.id;
+    filePreview.remove();
 
     //displaying single file upload field
     parent.find('input[type="file"],.validation_message,#extensions_message_' + formId + '_' + fieldId).removeClass("gform_hidden");
@@ -728,10 +730,16 @@ function gformDeleteUploadedFile(formId, fieldId, deleteButton){
             if( $multfile.length > 0 ) {
                 files[inputName].splice(fileIndex, 1);
                 var settings = $multfile.data('settings');
-                var max = settings.gf_vars.max_files;
-                jQuery("#" + settings.gf_vars.message_id).html('');
-                if(files[inputName].length < max)
-                    gfMultiFileUploader.toggleDisabled(settings, false);
+                var count = files[ inputName ].length;
+                if ( count === 0 ) {
+                    jQuery( '#' + settings.gf_vars.message_id ).html('');
+                    gfMultiFileUploader.toggleDisabled( settings, false );
+                } else {
+                    jQuery( '#error_' + fileId ).remove(); // Removing the file-specific validation message.
+                    var max = settings.gf_vars.max_files;
+                    if ( count < max )
+                        gfMultiFileUploader.toggleDisabled( settings, false );
+                }
 
             } else {
                 files[inputName] = null;
@@ -2937,14 +2945,16 @@ function gformValidateFileSize( field, max_file_size ) {
             } else if (err.code === plupload.FILE_SIZE_ERROR) {
                 addMessage(up.settings.gf_vars.message_id, err.file.name + " - " + strings.file_exceeds_limit);
             } else {
-                var m = "Error: " + err.code +
-                    ", Message: " + err.message +
-                    (err.file ? ", File: " + err.file.name : "");
+                const errorResponse = JSON.parse( err.response );
+                const errorCode = errorResponse?.error?.code || err.code;
+                const errorMessage = errorResponse?.error?.message || err.message;
+                const filePart = err.file?.name ? `${ err.file.name } - ` : '';
+                const m = `${ filePart }${ strings.error }: ${ errorCode }, ${ strings.message }: ${ errorMessage }`;
 
                 addMessage(up.settings.gf_vars.message_id, m);
             }
             $('#' + err.file.id ).html('');
-
+            up.removeFile( err.file );
             up.refresh(); // Reposition Flash
         });
 
@@ -3013,6 +3023,7 @@ function gformValidateFileSize( field, max_file_size ) {
 
 			if (file.percent == 100) {
 				if (response.status && response.status == 'ok') {
+					response.data.id = file.id;
 					addFile(fieldId, response.data);
 				} else {
 					addMessage(up.settings.gf_vars.message_id, strings.unknown_error + ': ' + file.name);

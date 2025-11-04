@@ -2263,19 +2263,28 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			}
 
 			$static_layout_css = array(
-				'.ast-separate-container #primary, .ast-separate-container #secondary' => array(
-					'padding' => '1.5em 0',
-				),
-				'#primary, #secondary' => array(
-					'padding' => '1.5em 0',
-					'margin'  => 0,
-				),
 				'.ast-left-sidebar #content > .ast-container' => array(
 					'display'        => 'flex',
 					'flex-direction' => 'column-reverse',
 					'width'          => '100%',
 				),
 			);
+
+			/**
+			 * Backward compatibility: Apply static padding for legacy installs only.
+			 * Legacy = false $update_customizer_strctural_defaults → old padding kept.
+			 * New installs = true → modern structural defaults.
+			 * Applies to non-archive pages only. @see astra_check_is_structural_setup()
+			 */
+			if ( ! is_singular() && ! is_archive() && ! is_home() && false === $update_customizer_strctural_defaults ) {
+				$static_layout_css['.ast-separate-container #primary, .ast-separate-container #secondary'] = array(
+					'padding' => '1.5em 0',
+				);
+				$static_layout_css['#primary, #secondary'] = array(
+					'padding' => '1.5em 0',
+					'margin'  => 0,
+				);
+			}
 
 			// Fix: Prevent layout shrink issue on the Shop page with elementor loop builder.
 			if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
@@ -4199,9 +4208,12 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 					$blog_layout_list_css_responsive = array();
 
-					$blog_layout_list_css_responsive[ '.ast-separate-container ' . $bl_selector . ' .post-content' ] = array(
-						'padding' => '0',
-					);
+					// Apply responsive CSS only if Astra Pro is active.
+					if ( defined( 'ASTRA_EXT_VER' ) ) {
+						$blog_layout_list_css_responsive[ '.ast-separate-container ' . $bl_selector . ' .post-content' ] = array(
+							'padding' => '0',
+						);
+					}
 
 					$blog_layout_list_css_responsive[ $bl_selector . ' .ast-blog-featured-section' ] = array(
 						'margin-bottom' => '1.5em',
@@ -5525,11 +5537,13 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$link_h_color       = astra_get_option( 'link-h-color' );
 			$btn_bg_h_color     = astra_get_option( 'button-bg-h-color', '', $link_h_color );
 
-			$normal_border_color = $btn_border_color ? $btn_border_color : $btn_bg_color;
-			$hover_border_color  = $btn_border_h_color ? $btn_border_h_color : $btn_bg_h_color;
-			$is_site_rtl         = is_rtl();
-			$ltr_left            = $is_site_rtl ? 'right' : 'left';
-			$ltr_right           = $is_site_rtl ? 'left' : 'right';
+			$normal_border_color     = $btn_border_color ? $btn_border_color : $btn_bg_color;
+			$hover_border_color      = $btn_border_h_color ? $btn_border_h_color : $btn_bg_h_color;
+			$is_site_rtl             = is_rtl();
+			$ltr_left                = $is_site_rtl ? 'right' : 'left';
+			$ltr_right               = $is_site_rtl ? 'left' : 'right';
+			$empty_cart_btn_selector = self::astra_4_11_12_compatibility() ? '' : ',
+				.ast-site-header-cart .ast-site-header-cart-data .ast-mini-cart-empty .woocommerce-mini-cart__buttons a.button';
 
 			$cart_static_css = '
 			.ast-site-header-cart .cart-container,
@@ -5976,8 +5990,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				}
 
 				.woocommerce-js .astra-cart-drawer .astra-cart-drawer-content .woocommerce-mini-cart__buttons .button:not(.checkout):not(.ast-continue-shopping),
-				.ast-site-header-cart .widget_shopping_cart .buttons .button:not(.checkout),
-				.ast-site-header-cart .ast-site-header-cart-data .ast-mini-cart-empty .woocommerce-mini-cart__buttons a.button {
+				.ast-site-header-cart .widget_shopping_cart .buttons .button:not(.checkout)' . $empty_cart_btn_selector . ' {
 					background-color: transparent;
 					border-style: solid;
 					border-width: 1px;
@@ -6436,5 +6449,17 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
 			return apply_filters( 'astra_get_option_enable-4-8-9-compatibility', isset( $astra_settings['enable-4-8-9-compatibility'] ) ? false : true );
 		}
+
+		/**
+		 * In 4.11.12 empty cart button compatibility.
+		 *
+		 * @return bool true|false.
+		 * @since 4.11.12
+		 */
+		public static function astra_4_11_12_compatibility() {
+			$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+			return apply_filters( 'astra_get_option_enable-4-11-12-compatibility', isset( $astra_settings['enable-4-11-12-compatibility'] ) ? false : true );
+		}
+
 	}
 }

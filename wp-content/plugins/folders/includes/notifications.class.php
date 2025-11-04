@@ -174,6 +174,21 @@ class Folders_Notifications_Free
         }
         return $default_settings;
     }
+	
+	/**
+     * Checks if an array is numeric.
+     *
+     * @param array $arr The array to be checked.
+     *
+     * @return bool Returns true if the array is numeric, false otherwise.
+     */
+    function is_numeric_array(array $arr)
+    {
+        if ($arr === []) {
+            return true;
+        }
+        return array_keys($arr) === range(0, count($arr) - 1);
+    }
 
 }
 if(class_exists("Folders_Notifications_Free")) {

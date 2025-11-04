@@ -85,6 +85,7 @@
 			$init = $message.data('init');
 			var activatingText = astra.recommendedPluiginActivatingText;
 			var astraSitesLink = astra.astraSitesLink;
+			const astraOnboardingLink = astra?.astraOnboardingLink;
 			var astraPluginRecommendedNonce = astra.astraPluginManagerNonce;
 
 			$message.removeClass( 'install-now installed button-disabled updated-message' )
@@ -112,7 +113,8 @@
 
 						$message.parent('.ast-addon-link-wrapper').parent('.astra-recommended-plugin').addClass('active');
 
-						jQuery(document).trigger( 'ast-after-plugin-active', [astraSitesLink, activatedSlug] );
+						const redirectionLink = astraOnboardingLink || astraSitesLink;
+						jQuery(document).trigger( 'ast-after-plugin-active', [ redirectionLink, activatedSlug ] );
 
 					} else {
 
@@ -162,7 +164,7 @@
 		/**
 		 * After plugin active redirect and deactivate activation notice
 		 */
-		_disableActivcationNotice: function( event, astraSitesLink, activatedSlug )
+		_disableActivcationNotice: function( event, redirectionLink, activatedSlug )
 		{
 			event.preventDefault();
 
@@ -170,7 +172,12 @@
 				if ( 'undefined' != typeof AstraNotices ) {
 			    	AstraNotices._ajax( 'astra-sites-on-active', '' );
 				}
-				window.location.href = astraSitesLink + '&ast-disable-activation-notice';
+				const disableActivationNoticeParam = redirectionLink?.includes( 'onboarding' ) ? '' : '&ast-disable-activation-notice';
+				
+				// Add delay to prevent plugin activation hook from interfering with redirect
+				setTimeout( function() {
+					window.location.href = redirectionLink + disableActivationNoticeParam;
+				}, 1000 );
 			}
 		},
 	};

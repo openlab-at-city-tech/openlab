@@ -326,6 +326,11 @@
 
 	// Using jQuery here because WooCommerce and the variation swatches plugin rely on jQuery for AJAX handling and DOM updates.
 	jQuery(document).ready(function ($) {
+		// Check if WooCommerce parameters are available before proceeding.
+		if (typeof wc_add_to_cart_params === 'undefined') {
+			return;
+		}
+
 		// Listening for WooCommerce's default 'added_to_cart' and 'astra_refresh_cart_fragments' both events.
 		$(document.body).on('added_to_cart astra_refresh_cart_fragments', function (event, fragments, cart_hash) {
 			// Refreshing WooCommerce cart fragments.

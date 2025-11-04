@@ -1264,11 +1264,11 @@ function name_directory_export()
     echo '</tbody></table>';
 
     /* Notify the user of possible not-working export functionality */
-    if(stripos($_SERVER['HTTP_USER_AGENT'], 'Chrome') === false && stripos($_SERVER['HTTP_USER_AGENT'], 'Firefox') === false)
+    if(stripos($_SERVER['HTTP_USER_AGENT'], 'WebKit') === false && stripos($_SERVER['HTTP_USER_AGENT'], 'Firefox') === false)
     {
         echo '<div class="notice notice-warning"><p>';
-        echo __('Name Directory Export works best in Mozilla Firefox, Google Chrome and Internet Explorer 10+.', 'name-directory') . ' ';
-        echo __('If you encounter problems (or it does not export) in Internet Explorer or Microsoft Edge, please try another browser.', 'name-directory');
+        echo __('Name Directory Export works best in modern browsers.', 'name-directory') . ' ';
+        echo __('If you encounter problems (or it does not export) in browsers like Internet Explorer or older, please try another browser.', 'name-directory');
         echo '</div>';
     }
 

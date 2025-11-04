@@ -126,6 +126,7 @@ class Two_Factor_Totp extends Two_Factor_Provider {
 	 * Enqueue scripts
 	 *
 	 * @codeCoverageIgnore
+	 * @param string $hook_suffix Hook suffix.
 	 */
 	public function enqueue_assets( $hook_suffix ) {
 		$environment_prefix = file_exists( TWO_FACTOR_DIR . '/dist' ) ? '/dist' : '';
@@ -255,7 +256,7 @@ class Two_Factor_Totp extends Two_Factor_Provider {
 		 * @param WP_User $user     The user object.
 		 */
 		$totp_url = apply_filters( 'two_factor_totp_url', $totp_url, $user );
-		$totp_url = esc_url( $totp_url, array( 'otpauth' ) );
+		$totp_url = esc_url_raw( $totp_url, array( 'otpauth' ) );
 
 		return $totp_url;
 	}
@@ -392,10 +393,10 @@ class Two_Factor_Totp extends Two_Factor_Provider {
 
 							$error.find('p').text( errorMessage );
 
-							$( '#enabled-Two_Factor_Totp' ).prop( 'checked', false );
+							$( '#enabled-Two_Factor_Totp' ).prop( 'checked', false ).trigger('change');
 							$('#two-factor-totp-authcode').val('');
 						} ).then( function( response ) {
-							$( '#enabled-Two_Factor_Totp' ).prop( 'checked', true );
+							$( '#enabled-Two_Factor_Totp' ).prop( 'checked', true ).trigger('change');
 							$( '#two-factor-totp-options' ).html( response.html );
 						} );
 					} );

@@ -995,7 +995,11 @@ class WCP_Folders
         }
 
         if($isForFolders) {
-            global $wpdb;
+            global $wpdb, $polylang;
+
+            // Check if Polylang is active or not.
+            $polylang_is_active = function_exists("pll_get_post_translations") && function_exists("pll_is_translated_post_type");
+            
             if (!is_array($terms) && count($terms) < 1) {
                 return $terms;
             }
@@ -1038,7 +1042,7 @@ class WCP_Folders
                         );
                         $trash_count = apply_filters("premio_folder_item_in_taxonomy", $term->term_id, $arg);
                     } else {
-                        if ($trash_count == null && isset($trash_folders[$term->term_taxonomy_id])) {
+                        if ($trash_count == null && isset($trash_folders[$term->term_taxonomy_id]) && !$polylang_is_active) {
                             $trash_count = $trash_folders[$term->term_taxonomy_id];
                         } else if ($trash_count == null) {
 
@@ -2186,6 +2190,11 @@ class WCP_Folders
             );
             // Free/Pro URL Change
             wp_enqueue_style('folders-media', WCP_FOLDER_URL.'assets/css/media.min.css', [], WCP_FOLDER_VERSION);
+
+            // Media Progress Style
+            wp_enqueue_style('folders-media-progress', WCP_FOLDER_URL .'assets/css/progress.css', array(), WCP_FOLDER_VERSION);
+
+
         } else if (!self::is_active_for_screen() && self::is_for_this_post_type('attachment')) {
 
             $status = apply_filters("check_media_status_for_folders", true);
@@ -2433,7 +2442,7 @@ class WCP_Folders
             ]
         );
         $hierarchical_terms = [];
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 if (!empty($term) && isset($term->term_id)) {
                     $term->term_name      = $term->name;
@@ -2474,7 +2483,7 @@ class WCP_Folders
                 ],
             ]
         );
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 if (isset($term->name)) {
                     $term->name           = $separator." ".$term->name;
@@ -3856,7 +3865,7 @@ class WCP_Folders
             ]
         );
 
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 self::remove_folder_child_items($term->term_id, $post_type);
             }
@@ -4571,8 +4580,7 @@ class WCP_Folders
 
                     $foldersArray[] = $folder_item;
                 }//end if
-
-                $folders = $postData['folders'];
+                $folders = (isset($postData['folders']) && is_array($postData['folders'])) ? $postData['folders'] : [];
                 if(is_array($folders) && count($folders) > 0) {
                     foreach($folders as $folder) {
                         $order++;
@@ -4971,7 +4979,7 @@ class WCP_Folders
                         AND ELPM.meta_key = '_elementor_is_screenshot') ";
         }
         if(defined("W3TC")) {
-            $join .= "LEFT JOIN ".$wpdb->postmeta." AS WTCPM
+            $join .= " LEFT JOIN ".$wpdb->postmeta." AS WTCPM
                 ON ( P.ID = WTCPM.post_id
                 AND WTCPM.meta_key = 'w3tc_imageservice_file' )";
         }
@@ -5275,7 +5283,7 @@ class WCP_Folders
                 ]
             );
 
-            if ($terms) {
+            if (!empty($terms) && !is_wp_error($terms)) {
                 foreach ($terms as $term) {
                     if (isset($term->trash_count) && !empty($term->trash_count)) {
                         if ($type == 'attachment') {
@@ -5440,8 +5448,8 @@ class WCP_Folders
         if (empty($show_in_page)) {
             $show_in_page = "hide";
         }
-
-        if ($show_in_page == "show") {
+        
+		if ( $show_in_page == "show" && ! empty( $terms ) && ! is_wp_error( $terms ) ){
             echo '<div class="tree-structure-content '.esc_attr($class).'"><div class="tree-structure" id="list-folder-'.esc_attr($termId).'" data-id="'.esc_attr($termId).'">';
             echo '<ul>';
             foreach ($terms as $term) {
@@ -7437,7 +7445,7 @@ class WCP_Folders
                         ],
                     ]
                 );
-                if (!empty($terms)) {
+                if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
                     foreach ($terms as $term) {
                         $order = get_term_meta($term->term_id, "wcp_custom_order", true);
                         if (empty($order) || $order == null) {

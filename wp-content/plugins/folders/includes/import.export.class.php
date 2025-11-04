@@ -153,7 +153,7 @@ class Folders_Import_Export
 
         $terms = get_terms($args);
         $hierarchical_terms = [];
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 if (!empty($term) && isset($term->term_id)) {
                     $folder_info       = get_term_meta($term->term_id, "folder_info", true);
@@ -216,7 +216,7 @@ class Folders_Import_Export
 
         $terms = get_terms($args);
         $hierarchical_terms_1 = [];
-        if (!empty($terms)) {
+        if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
             foreach ($terms as $term) {
                 if (isset($term->name)) {
                     $main_term['name'] = $term->name;

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'ASTRA_THEME_VERSION', '4.11.10' );
+define( 'ASTRA_THEME_VERSION', '4.11.13' );
 define( 'ASTRA_THEME_SETTINGS', 'astra-settings' );
 define( 'ASTRA_THEME_DIR', trailingslashit( get_template_directory() ) );
 define( 'ASTRA_THEME_URI', trailingslashit( esc_url( get_template_directory_uri() ) ) );
@@ -45,7 +45,7 @@ require_once ASTRA_THEME_DIR . 'inc/core/class-astra-icons.php';
 define( 'ASTRA_WEBSITE_BASE_URL', 'https://wpastra.com' );
 
 /**
- * ToDo: Deprecate constants in future versions as they are no longer used in the codebase.
+ * Deprecate constants in future versions as they are no longer used in the codebase.
  */
 define( 'ASTRA_PRO_UPGRADE_URL', ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'dashboard', 'upgrade' ) : 'https://woocommerce.com/products/astra-pro/' );
 define( 'ASTRA_PRO_CUSTOMIZER_UPGRADE_URL', ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'upgrade' ) : 'https://woocommerce.com/products/astra-pro/' );
@@ -98,6 +98,7 @@ require_once ASTRA_THEME_DIR . 'inc/template-tags.php';
 require_once ASTRA_THEME_DIR . 'inc/widgets.php';
 require_once ASTRA_THEME_DIR . 'inc/core/theme-hooks.php';
 require_once ASTRA_THEME_DIR . 'inc/admin-functions.php';
+require_once ASTRA_THEME_DIR . 'inc/class-astra-memory-limit-notice.php';
 require_once ASTRA_THEME_DIR . 'inc/core/sidebar-manager.php';
 
 /**

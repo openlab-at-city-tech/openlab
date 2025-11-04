@@ -1,10 +1,10 @@
 === Search & Filter ===
 Contributors: DesignsAndCode, codeamp
 Donate link:
-Tags: category, filter, taxonomy, search, wordpress, post type, post date
+Tags: category, filter, taxonomy, search, tag
 Requires at least: 3.5
-Tested up to: 6.7
-Stable tag: 1.2.17
+Tested up to: 6.8
+Stable tag: 1.2.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,10 @@ For basic usage, you can also have a look at the [documentation](https://free.se
 
 == Frequently Asked Questions ==
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/41ff9d26-399c-4798-94bf-67965ca8e2e8)
+
 = How can I xxxxx ? =
 
 The documentation has been updated to include examples almost all configurable options with screenshots - please refer to the [Search & Filter Docs](https://free.searchandfilter.com/?utm_campaign=wordpress.org&utm_source=wordpress.org&utm_medium=docslink).
@@ -33,6 +37,9 @@ The documentation has been updated to include examples almost all configurable o
 4. Example of Search & Filter using a post type filter
 
 == Changelog ==
+
+= 1.2.18 =
+* Security enhancement - prevent unauthorised redirects when submitting the form.
 
 = 1.2.17 =
 * Fixed - PHP notice about frmqreserved not being initialised.

@@ -1,6 +1,17 @@
 Changelog
 =========
 
+#### 4.10.8 - Oct 21, 2025
+
+- Show warning to administrators if a form is showing but Mailchimp API key is not set.
+- Update third-party JS dependencies.
+
+
+#### 4.10.7 - Sep 05, 2025
+
+- Handle renewing lists through server-side redirect instead of JS component.
+
+
 #### 4.10.6 - Jul 23, 2025
 
 - [WooCommerce Checkout] Fix checkbox from showing up in order confirmation email if using Checkout Block.

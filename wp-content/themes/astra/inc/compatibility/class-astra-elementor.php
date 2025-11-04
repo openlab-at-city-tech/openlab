@@ -241,6 +241,20 @@ if ( ! class_exists( 'Astra_Elementor' ) ) {
 				if ( empty( $post->post_content ) && $this->is_elementor_activated( $id ) ) {
 
 					update_post_meta( $id, '_astra_content_layout_flag', 'disabled' );
+
+					/**
+					 * Filter to use default settings instead of applying Elementor-specific modifications.
+					 *
+					 * @param bool $use_default_settings Default false. When true, skip all Elementor modifications.
+					 * @param int  $post_id              Current post ID.
+					 * @since 4.11.11
+					 */
+					$use_default_settings = apply_filters( 'astra_elementor_use_default_settings', false, $id );
+
+					if ( $use_default_settings ) {
+						return;
+					}
+
 					update_post_meta( $id, 'site-post-title', 'disabled' );
 					update_post_meta( $id, 'ast-title-bar-display', 'disabled' );
 					update_post_meta( $id, 'ast-featured-img', 'disabled' );

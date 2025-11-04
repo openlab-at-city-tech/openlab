@@ -290,33 +290,43 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 
 	if ( astra_showcase_upgrade_notices() ) {
 		$_configs[] = array(
-			'name'     => ASTRA_THEME_SETTINGS . '[footer-builder-pro-items]',
-			'type'     => 'control',
-			'control'  => 'ast-upgrade',
-			'campaign' => 'footer-builder',
-			'choices'  => array(
+			'name'      => ASTRA_THEME_SETTINGS . '[footer-builder-pro-items]',
+			'type'      => 'control',
+			'control'   => 'ast-upgrade',
+			'campaign'  => 'footer-builder',
+			'choices'   => array(
+				// 'two'   => array(
+				// 'title' => __( 'Divider element', 'astra' ),
+				// ),
+				// 'three' => array(
+				// 'title' => __( 'Language Switcher element', 'astra' ),
+				// ),
+				// 'five'  => array(
+				// 'title' => __( 'Clone, Delete element options', 'astra' ),
+				// ),
+				// 'six'   => array(
+				// 'title' => __( 'Increased element count', 'astra' ),
+				// ),
+				// 'seven' => array(
+				// 'title' => __( 'More design options', 'astra' ),
+				// ),
+				'one'   => array(
+					'title' => __( 'Advanced Customization Options', 'astra' ),
+				),
 				'two'   => array(
-					'title' => __( 'Divider element', 'astra' ),
+					'title' => __( 'Multiple Widgets, Buttons, Dividers', 'astra' ),
 				),
 				'three' => array(
-					'title' => __( 'Language Switcher element', 'astra' ),
-				),
-				'five'  => array(
-					'title' => __( 'Clone, Delete element options', 'astra' ),
-				),
-				'six'   => array(
-					'title' => __( 'Increased element count', 'astra' ),
-				),
-				'seven' => array(
-					'title' => __( 'More design options', 'astra' ),
+					'title' => __( 'Color & Typography Options', 'astra' ),
 				),
 			),
-			'section'  => 'section-footer-builder-layout',
-			'default'  => '',
-			'context'  => array(),
-			'priority' => 999,
-			'title'    => __( 'Finish your page on a high with amazing website footers', 'astra' ),
-			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
+			'section'   => 'section-footer-builder-layout',
+			'default'   => '',
+			'context'   => array(),
+			'priority'  => 999,
+			'title'     => __( 'Get Advanced Footer Controls', 'astra' ),
+			'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+			'thumbnail' => ASTRA_THEME_URI . 'inc/assets/images/customizer/footer-builder.png',
 		);
 	}
 

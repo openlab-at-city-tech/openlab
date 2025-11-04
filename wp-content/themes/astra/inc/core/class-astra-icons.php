@@ -46,8 +46,8 @@ class Astra_Icons {
 	 */
 	public static function allowed_svg_args() {
 		return array(
-			'span'  => array( 'class' => array() ),
-			'svg'   => array(
+			'span'     => array( 'class' => array() ),
+			'svg'      => array(
 				'xmlns:xlink'       => array(),
 				'version'           => array(),
 				'id'                => array(),
@@ -63,12 +63,80 @@ class Astra_Icons {
 				'width'             => array(),
 				'height'            => array(),
 				'viewbox'           => array(),
+				'fill'              => array(),
+				'stroke'            => array(),
+				'stroke-width'      => array(),
+				'stroke-linecap'    => array(),
+				'stroke-linejoin'   => array(),
 			),
-			'g'     => array( 'fill' => array() ),
-			'title' => array( 'title' => array() ),
-			'path'  => array(
-				'd'    => array(),
-				'fill' => array(),
+			'title'    => array( 'title' => array() ),
+			'g'        => array(
+				'fill'      => array(),
+				'stroke'    => array(),
+				'transform' => array(),
+			),
+			'path'     => array(
+				'd'            => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+				'fill-rule'    => array(),
+			),
+			'circle'   => array(
+				'cx'           => array(),
+				'cy'           => array(),
+				'r'            => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'rect'     => array(
+				'x'            => array(),
+				'y'            => array(),
+				'width'        => array(),
+				'height'       => array(),
+				'rx'           => array(),
+				'ry'           => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'line'     => array(
+				'x1'           => array(),
+				'y1'           => array(),
+				'x2'           => array(),
+				'y2'           => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'polygon'  => array(
+				'points'       => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'polyline' => array(
+				'points'       => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'ellipse'  => array(
+				'cx'           => array(),
+				'cy'           => array(),
+				'rx'           => array(),
+				'ry'           => array(),
+				'fill'         => array(),
+				'stroke'       => array(),
+				'stroke-width' => array(),
+			),
+			'defs'     => array(),
+			'clipPath' => array(
+				'id' => array(),
+			),
+			'use'      => array(
+				'xlink:href' => array(),
+				'href'       => array(), // modern SVG2.
 			),
 		);
 	}

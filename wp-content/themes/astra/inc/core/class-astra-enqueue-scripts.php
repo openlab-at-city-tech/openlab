@@ -189,7 +189,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				}
 
 				if ( ( class_exists( 'Easy_Digital_Downloads' ) && Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) ) ||
-					( class_exists( 'WooCommerce' ) && Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) ) ) {
+					( class_exists( 'WooCommerce' ) && Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) && self::should_load_woocommerce_js() ) ) {
 					$default_assets['js']['astra-mobile-cart'] = 'mobile-cart';
 				}
 
@@ -199,7 +199,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 					$default_assets['js']['astra-live-search'] = 'live-search';
 				}
 
-				if ( class_exists( 'WooCommerce' ) ) {
+				if ( class_exists( 'WooCommerce' ) && self::should_load_woocommerce_js() ) {
 					if ( is_product() && astra_get_option( 'single-product-sticky-add-to-cart' ) ) {
 						$default_assets['js']['astra-sticky-add-to-cart'] = 'sticky-add-to-cart';
 					}
@@ -245,6 +245,28 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 
 			Astra_Fonts::add_font( $heading_font_family, $heading_font_weight );
 			Astra_Fonts::add_font( $heading_font_family, $heading_font_variant );
+		}
+
+		/**
+		 * Check if WooCommerce JS assets should be loaded based on filter settings
+		 *
+		 * @return bool Whether WooCommerce JS should be loaded
+		 * @since 4.11.13
+		 */
+		public static function should_load_woocommerce_js() {
+			// Allow users to disable WooCommerce JS loading on specific pages/posts/post types
+			return apply_filters( 'astra_load_woocommerce_js', true );
+		}
+
+		/**
+		 * Check if WooCommerce CSS assets should be loaded based on filter settings
+		 *
+		 * @return bool Whether WooCommerce CSS should be loaded
+		 * @since 4.11.13
+		 */
+		public static function should_load_woocommerce_css() {
+			// Allow users to disable WooCommerce CSS loading on specific pages/posts/post types
+			return apply_filters( 'astra_load_woocommerce_css', true );
 		}
 
 		/**
@@ -362,8 +384,14 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				// Register & Enqueue Scripts.
 				foreach ( $scripts as $key => $script ) {
 
+					// Set dependencies based on script type.
+					$dependencies = array();
+					if ( 'astra-mobile-cart' === $key && class_exists( 'WooCommerce' ) ) {
+						$dependencies = array( 'jquery', 'wc-add-to-cart' );
+					}
+
 					// Register.
-					wp_register_script( $key, $js_uri . $script . $file_prefix . '.js', array(), ASTRA_THEME_VERSION, true );
+					wp_register_script( $key, $js_uri . $script . $file_prefix . '.js', $dependencies, ASTRA_THEME_VERSION, true );
 
 					// Enqueue.
 					wp_enqueue_script( $key );
@@ -447,7 +475,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				wp_localize_script( 'astra-live-search', 'astra_search', apply_filters( 'astra_search_js_localize', $astra_live_search_localize_data ) );
 			}
 
-			if ( class_exists( 'woocommerce' ) ) {
+			if ( class_exists( 'woocommerce' ) && self::should_load_woocommerce_js() ) {
 				$is_astra_pro = function_exists( 'astra_has_pro_woocommerce_addon' ) ? astra_has_pro_woocommerce_addon() : false;
 
 				$astra_shop_add_to_cart_localize_data = array(

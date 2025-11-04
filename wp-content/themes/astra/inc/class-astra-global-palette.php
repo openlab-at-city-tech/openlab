@@ -231,32 +231,18 @@ class Astra_Global_Palette {
 	 * @return string|null Palette key if found, otherwise null.
 	 */
 	public static function astra_get_active_global_palette() {
-		$active_global_palette_key = '';
-		// Get the current palette option from global color palette.
-		$astra_options = astra_get_options();
-		if ( isset( $astra_options['global-color-palette']['palette'] ) ) {
-			$current_palette = $astra_options['global-color-palette']['palette'];
-
-			$default_palettes = self::get_default_color_palette()['palettes'] ?? array();
-
-			// Loop through the default palettes to match the selected palette.
-			foreach ( $default_palettes as $palette_key => $palette_colors ) {
-				if ( $current_palette === $palette_colors ) {
-					$active_global_palette_key = $palette_key;
-					break;
-				}
-			}
-		}
+		$palettes_data   = astra_get_palette_colors();
+		$current_palette = isset( $palettes_data['currentPalette'] ) ? $palettes_data['currentPalette'] : 'palette_1';
 
 		/**
 		 * Filters the active global palette key.
 		 *
-		 * @param string $active_global_palette_key The active global palette key.
+		 * @param string $current_palette The active global palette key.
 		 *
 		 * @return string The filtered active global palette key.
 		 * @since 4.10.0
 		 */
-		return apply_filters( 'astra_get_active_global_palette_key', $active_global_palette_key );
+		return apply_filters( 'astra_get_active_global_palette_key', $current_palette );
 	}
 
 	/**

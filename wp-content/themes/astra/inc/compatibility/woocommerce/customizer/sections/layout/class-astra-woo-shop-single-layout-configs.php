@@ -607,42 +607,52 @@ if ( ! class_exists( 'Astra_Woo_Shop_Single_Layout_Configs' ) ) {
 				if ( astra_showcase_upgrade_notices() ) {
 					// Learn More link if Astra Pro is not activated.
 					$_configs[] = array(
-						'name'     => ASTRA_THEME_SETTINGS . '[ast-woo-single-product-pro-items]',
-						'type'     => 'control',
-						'control'  => 'ast-upgrade',
-						'campaign' => 'woocommerce',
-						'choices'  => array(
+						'name'      => ASTRA_THEME_SETTINGS . '[ast-woo-single-product-pro-items]',
+						'type'      => 'control',
+						'control'   => 'ast-upgrade',
+						'campaign'  => 'woocommerce',
+						'choices'   => array(
+							// 'two'   => array(
+							// 'title' => __( 'More product galleries', 'astra' ),
+							// ),
+							// 'three' => array(
+							// 'title' => __( 'Sticky product summary', 'astra' ),
+							// ),
+							// 'five'  => array(
+							// 'title' => __( 'Product description layouts', 'astra' ),
+							// ),
+							// 'six'   => array(
+							// 'title' => __( 'Related, Upsell product controls', 'astra' ),
+							// ),
+							// 'seven' => array(
+							// 'title' => __( 'Extras option for product structure', 'astra' ),
+							// ),
+							// 'eight' => array(
+							// 'title' => __( 'More typography options', 'astra' ),
+							// ),
+							// 'nine'  => array(
+							// 'title' => __( 'More color options', 'astra' ),
+							// ),
+							// 'one'   => array(
+							// 'title' => __( 'More design controls', 'astra' ),
+							// ),
+							'one'   => array(
+								'title' => __( ' Advanced Gallery Layouts', 'astra' ),
+							),
 							'two'   => array(
-								'title' => __( 'More product galleries', 'astra' ),
+								'title' => __( ' Smooth Zoom & Sticky Image Effects', 'astra' ),
 							),
 							'three' => array(
-								'title' => __( 'Sticky product summary', 'astra' ),
-							),
-							'five'  => array(
-								'title' => __( 'Product description layouts', 'astra' ),
-							),
-							'six'   => array(
-								'title' => __( 'Related, Upsell product controls', 'astra' ),
-							),
-							'seven' => array(
-								'title' => __( 'Extras option for product structure', 'astra' ),
-							),
-							'eight' => array(
-								'title' => __( 'More typography options', 'astra' ),
-							),
-							'nine'  => array(
-								'title' => __( 'More color options', 'astra' ),
-							),
-							'one'   => array(
-								'title' => __( 'More design controls', 'astra' ),
+								'title' => __( ' Upsells, Related & Recently Viewed Products', 'astra' ),
 							),
 						),
-						'section'  => 'section-woo-shop-single',
-						'default'  => '',
-						'priority' => 999,
-						'title'    => __( 'Extra conversion options for store product pages means extra profit!', 'astra' ),
-						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
-						'context'  => array(),
+						'section'   => 'section-woo-shop-single',
+						'default'   => '',
+						'priority'  => 999,
+						'title'     => __( 'Get Full Control Over Product Pages', 'astra' ),
+						'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+						'context'   => array(),
+						'thumbnail' => ASTRA_THEME_URI . 'inc/assets/images/customizer/woo-single.png',
 					);
 				}
 			}

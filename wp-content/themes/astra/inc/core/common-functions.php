@@ -2267,3 +2267,28 @@ function astra_button_consistency_compatibility() {
 	$astra_settings = astra_get_options();
 	return apply_filters( 'astra_get_option_btn-consist-comp', isset( $astra_settings['btn-consist-comp'] ) ? false : true );
 }
+
+// Flip horizontal alignment for RTL so saved left/right mirror automatically.
+if ( ! function_exists( 'astra_flip_rtl_alignment' ) ) {
+	/**
+	 * Flip horizontal alignment for RTL so saved left/right mirror automatically.
+	 *
+	 * @param string $alignment The alignment value to flip (left, right, or other).
+	 * @return string The flipped alignment value for RTL or original value.
+	 * @since 4.11.11
+	 */
+	function astra_flip_rtl_alignment( $alignment ) {
+		if ( ! is_rtl() ) {
+			return $alignment;
+		}
+
+		switch ( $alignment ) {
+			case 'left':
+				return 'right';
+			case 'right':
+				return 'left';
+			default:
+				return $alignment;
+		}
+	}
+}

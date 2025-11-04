@@ -5,7 +5,7 @@ Tested up to: 6.8
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: blog, portfolio, photography, one-column, two-columns, left-sidebar, right-sidebar, block-patterns, block-styles, custom-background, custom-logo, custom-menu, featured-images, footer-widgets, full-site-editing, threaded-comments, wide-blocks, translation-ready
+Tags: blog, portfolio, photography, one-column, two-columns, left-sidebar, right-sidebar, block-patterns, block-styles, custom-background, custom-logo, custom-header, full-width-template, custom-menu, featured-images, footer-widgets, full-site-editing, threaded-comments, wide-blocks, translation-ready
 
 == Description ==
 
@@ -215,6 +215,18 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 * Fixed minor front-end styling issues.
 * Added creta testimonial showcase plugin recommendation.
 
+= 3.0.5 (Released: September, 2025) =
+* Added tags.
+* Resolved minor bugs.
+
+= 3.0.6 (Released: September, 2025) =
+* Added creta testimonial showcase plugin activation on Getstart button.
+* Resolved error for page.html.
+* Resolved css error for preview.
+
+= 3.0.7 (Released: October, 2025) =
+* Resolved minor css errors.
+
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023
@@ -258,6 +270,12 @@ Copyright 2021 Daniel Eden
 https://github.com/animate-css/animate.css
 License: 2.1
 https://github.com/animate-css/animate.css/blob/main/LICENSE
+
+* TGM PLugin
+GaryJones Copyright (C) 1989, 1991
+https://github.com/TGMPA/TGM-Plugin-Activation/blob/develop/LICENSE.md
+License: GNU General Public License v2.0
+https://github.com/TGMPA/TGM-Plugin-Activation
 
 * Images
 
