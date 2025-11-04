@@ -1,0 +1,1 @@
+!function(){"use strict";var t=document.querySelector(".is-style-scroll-to-top .wp-element-button");t&&(window.addEventListener("scroll",(function(){window.scrollY>300?(t.style.opacity="1",t.style.visibility="visible"):(t.style.opacity="0",t.style.visibility="hidden")})),t.addEventListener("click",(function(){window.scrollTo({top:0,behavior:"smooth"})})))}();
