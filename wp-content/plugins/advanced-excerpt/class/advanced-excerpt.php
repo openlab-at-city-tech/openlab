@@ -243,8 +243,15 @@ class Advanced_Excerpt {
 	}
 
 	function filter_excerpt( $content ) {
+		// OpenLab: Prevent recursion.
+		remove_filter( 'get_the_excerpt', array( $this, 'filter_excerpt' ) );
+
 		$this->filter_type = 'excerpt';
-		return $this->filter( $content );
+		$filtered_content = $this->filter( $content );
+
+		add_filter( 'get_the_excerpt', array( $this, 'filter_excerpt' ) );
+
+		return $filtered_content;
 	}
 
 	function filter( $content ) {
