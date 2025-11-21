@@ -34,3 +34,6 @@
 [submodule "wp-content/plugins/openlab-text-to-speech"]
 	path = wp-content/plugins/openlab-text-to-speech
 	url = git@github.com:openlab-at-city-tech/openlab-text-to-speech
+[submodule "wp-content/themes/red-dragon-portfolio"]
+	path = wp-content/themes/red-dragon-portfolio
+	url = https://github.com/beckej13820/red-dragon-portfolio
