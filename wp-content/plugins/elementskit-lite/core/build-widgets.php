@@ -20,7 +20,7 @@ class Build_Widgets {
 	public function __construct() {
 
 		new \ElementsKit_Lite\Widgets\Init\Enqueue_Scripts();
-		$this->widgets = \ElementsKit_Lite\Config\Widget_List::instance()->get_list( 'active' );
+		$this->widgets = \ElementsKit_Lite\Config\Widget_List::instance()->get_list( 'full' );
 
 		// check if the widget is exists
 		foreach ( $this->widgets as $widget ) {
@@ -32,15 +32,20 @@ class Build_Widgets {
 
 
 	public function add_widget( $widget_config ) {
-
 		$widget_dir = (
-			isset( $widget_config['path'] ) 
-			? $widget_config['path'] 
+			isset( $widget_config['path'] )
+			? $widget_config['path']
 			: \ElementsKit_Lite::widget_dir() . $widget_config['slug'] . '/'
 		);
 
-		include $widget_dir . $widget_config['slug'] . '.php';
-		include $widget_dir . $widget_config['slug'] . '-handler.php';
+		$widget_file_path = $widget_dir . $widget_config['slug'] . '.php';
+		$widget_handler_file_path = $widget_dir . $widget_config['slug'] . '-handler.php';
+		if (!file_exists($widget_file_path) && !file_exists($widget_handler_file_path)) {
+			return;
+		}
+
+		include $widget_file_path;
+		include $widget_handler_file_path;
 
 		$base_class_name = (
 			( isset( $widget_config['base_class_name'] ) )

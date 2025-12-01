@@ -48,19 +48,13 @@ class Onboard_Status {
 		// finish on-boarding
 		$this->finish_onboard();
 
-		if ( isset( $_POST['settings']['tut_term'] ) && $_POST['settings']['tut_term'] == 'user_agreed' ) {
-			Plugin_Data_Sender::instance()->send( 'diagnostic-data' ); // send non-sensitive diagnostic data and details about plugin usage.
-		}
-
-		if ( isset( $_POST['settings']['newsletter_email'] ) && ! empty( $_POST['settings']['newsletter_email'] ) ) {
-
+		if ( ! empty( $_POST['settings']['newsletter_email'] ) && is_email( $_POST['settings']['newsletter_email'] ) ) {
 			$data = array(
 				'email'           => sanitize_email( wp_unslash( $_POST['settings']['newsletter_email'] ) ),
-				'environment_id'  => 1,
-				'contact_list_id' => 1,
+				'slug'            => 'elementskit-lite',
 			);
 
-			Plugin_Data_Sender::instance()->sendAutomizyData( 'email-subscribe', $data );
+			$response = Plugin_Data_Sender::instance()->sendEmailSubscribeData( 'plugin-subscribe', $data );
 		}
 	}
 
@@ -102,5 +96,4 @@ class Onboard_Status {
 			add_option( $this->optionKey, $this->optionValue );
 		}
 	}
-
 }

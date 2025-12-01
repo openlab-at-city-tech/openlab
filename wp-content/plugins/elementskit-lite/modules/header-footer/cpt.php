@@ -40,6 +40,8 @@ class Cpt {
 			'show_in_nav_menus'   => false,
 			'exclude_from_search' => true,
 			'capability_type'     => 'page',
+			'show_in_rest'       => true,
+			'rest_base'           => 'elementskit-template',
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'thumbnail', 'elementor' ),
 		);
@@ -69,6 +71,7 @@ class Cpt {
 
 		return $single_template;
 	}
+
 }
 
 new Cpt();

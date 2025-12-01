@@ -38,8 +38,11 @@ class Plugin {
 		// Enqueue frontend scripts.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend' ) );
 
-		// migrate old settings db to new format
+		// migrate old settings db to new format.
 		new Compatibility\Data_Migration\Settings_Db();
+
+		// compatibility for element manager.
+		new Compatibility\Element_Manager\Init();
 
 		// Enqueue admin scripts.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin' ) );
@@ -60,7 +63,7 @@ class Plugin {
 		( new Core\Activation_Actions() )->init();
 
 		add_action( 'wp_head', array( $this, 'add_meta_for_search_excluded' ) );
-		
+
 		// Register ElementsKit supported widgets to Elementor from 3rd party plugins.
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ), 1050 );
 
@@ -74,7 +77,7 @@ class Plugin {
 		\Wpmet\Libs\Forms::instance();
 
 		$is_pro_active = in_array( 'elementskit/elementskit.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
-		
+
 		if ( is_admin() && Libs\Framework\Classes\Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'yes' ) == 'yes' ) {
 			$filter_string = \ElementsKit_Lite::active_plugins();
 			/**
@@ -100,8 +103,8 @@ class Plugin {
 
 			/**
 			 *  Ask for rating
-			 *  A rating notice will appear depends on 
-			 *  @set_first_appear_day methods 
+			 *  A rating notice will appear depends on
+			 *  @set_first_appear_day methods
 			 */
 			\Wpmet\Libs\Rating::instance( 'elementskit-lite' )
 			->set_plugin( 'ElementsKit', 'https://wpmet.com/wordpress.org/rating/elementskit' )
@@ -179,7 +182,7 @@ class Plugin {
 				array(
 					'target' => '_blank',
 					'style'  => 'color: #FCB214; font-weight: bold;',
-				) 
+				)
 			)
 			->call();
 		}
@@ -244,7 +247,7 @@ class Plugin {
 				'popup-builder-block/popup-builder-block.php' => [
 					'name' => esc_html__('PopupKit', 'elementskit-lite'),
 					'url'  => 'https://wordpress.org/plugins/popup-builder-block/',
-					'icon' => 'https://ps.w.org/popup-builder-block/assets/icon-256x256.png?rev=3187075',
+					'icon' => 'https://ps.w.org/popup-builder-block/assets/icon-256x256.png?rev=3316844',
 					'desc' => esc_html__('Design popups that convert, right in your WordPress dashboard.', 'elementskit-lite'),
 					'docs' => 'https://wpmet.com/docs/gutenkit/',
 				],
@@ -301,8 +304,8 @@ class Plugin {
 		 *
 		 */
 		if (
-			class_exists('WooCommerce') 
-			&& !class_exists('EmailKit') 
+			class_exists('WooCommerce')
+			&& !class_exists('EmailKit')
 			&& !did_action('edit_with_emailkit_loaded')
 			&& class_exists('\Wpmet\Libs\Emailkit')
 			&& $user_consent
@@ -312,18 +315,18 @@ class Plugin {
 
 		/**
 		 * Initializes the Template Library of the Gutenkit plugin
-		 * 
+		 *
 		 * This code block checks if certain conditions are met and then initializes the Template Library of the Gutenkit plugin.
-		 * 
+		 *
 		 * Conditions:
 		 * - The action 'edit_with_gutenkit_loaded' has not been performed yet.
 		 * - The class '\ElementsKit_Lite\Libs\Template_Library\Init' exists.
 		 * - The setting 'ekit_user_consent_for_banner' in the Utils class is set to 'yes'.
 		 * - The plugin 'gutenkit-blocks-addon' is not active or install.
-		 * 
-		 * If any of the above conditions are met, the Template Library is initialized by creating a new instance of 
+		 *
+		 * If any of the above conditions are met, the Template Library is initialized by creating a new instance of
 		 * the class '\ElementsKit_Lite\Libs\Template_Library\Init'.
-		 * 
+		 *
 		 * @since 3.1.4
 		 */
 		if ($user_consent && class_exists('\ElementsKit_Lite\Libs\Template_Library\Init') && !did_action('gutenkit/init')) {
@@ -397,7 +400,7 @@ class Plugin {
 		wp_enqueue_style( 'fontawesome' );
 		wp_enqueue_style( 'elementskit-font-css-admin' );
 		wp_enqueue_style( 'elementskit-init-css-admin' );
-		
+
 		wp_enqueue_script( 'ekit-admin-core', \ElementsKit_Lite::lib_url() . 'framework/assets/js/ekit-admin-core.js', array( 'jquery' ), \ElementsKit_Lite::version(), true );
 
 		$data['rest_url'] = get_rest_url();

@@ -89,6 +89,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		if ( isset( $this->request['ids'] ) ) {
 			$ids                    = explode( ',', $this->request['ids'] );
 			$query_args['post__in'] = $ids;
+			$query_args['posts_per_page'] = 200;
 		}
 		if ( isset( $this->request['s'] ) ) {
 			$query_args['s'] = $this->request['s'];

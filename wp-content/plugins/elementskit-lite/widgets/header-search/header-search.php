@@ -98,8 +98,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                     'size' => '20',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_navsearch-button' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .ekit_navsearch-button svg'    => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .ekit_navsearch-button :is(i, svg)' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
 
             ]
@@ -129,8 +128,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                     'label' =>esc_html__( 'Color', 'elementskit-lite' ),
                     'type' => Controls_Manager::COLOR,
                     'selectors' => [
-                        '{{WRAPPER}} .ekit_navsearch-button, {{WRAPPER}} .ekit_search-button i' => 'color: {{VALUE}};',
-                        '{{WRAPPER}} .ekit_navsearch-button svg path, {{WRAPPER}} .ekit_search-button svg path'   => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                        '{{WRAPPER}} .ekit_navsearch-button, {{WRAPPER}} .ekit_search-button' => 'color: {{VALUE}}; fill: {{VALUE}};',
                     ],
                 ]
             );
@@ -159,8 +157,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                     'label' =>esc_html__( 'Color', 'elementskit-lite' ),
                     'type' => Controls_Manager::COLOR,
                     'selectors' => [
-                        '{{WRAPPER}} .ekit_navsearch-button:hover, {{WRAPPER}} .ekit_search-button:hover i' => 'color: {{VALUE}};',
-                        '{{WRAPPER}} .ekit_navsearch-button:hover svg path, {{WRAPPER}} .ekit_search-button:hover svg path'   => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+                        '{{WRAPPER}} .ekit_navsearch-button:hover, {{WRAPPER}} .ekit_search-button:hover' => 'color: {{VALUE}}; fill: {{VALUE}};',
                     ],
                 ]
             );
@@ -177,7 +174,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
             );
             $this->end_controls_tab();
         $this->end_controls_tabs();
-		
+
         $this->add_group_control(
             Group_Control_Border::get_type(),
             [
@@ -476,7 +473,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button i' => 'font-size: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}};', 
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button i' => 'font-size: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}};',
                     '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button svg' => 'font-size: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
@@ -690,7 +687,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
         $language_prefix = (!function_exists('pll_current_language') ? '' : pll_current_language());
 
 		$ekit_search_link = apply_filters('ekit_search_link', home_url( '/'.$language_prefix ));
-		$placeholder_and_label = $settings['ekit_search_placeholder_text']; 
+		$placeholder_and_label = $settings['ekit_search_placeholder_text'];
         ?>
         <a href="#ekit_modal-popup-<?php echo esc_attr($this->get_id()); ?>" class="ekit_navsearch-button ekit-modal-popup" aria-label="navsearch-button">
             <?php

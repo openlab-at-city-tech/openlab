@@ -603,7 +603,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-funfact .elementskit-funfact-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementskit-funfact .funfact-icon svg path'    => 'stroke: {{VALUE}}; fill: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-funfact .funfact-icon svg'    => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -701,6 +701,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 		$this->end_controls_tab();
 
 		$this->end_controls_tabs();
+
 		$this->add_responsive_control(
 			'ekit_funfact_icon_size',
 			[
@@ -718,11 +719,12 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-funfact-icon' => 'font-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .elementskit-funfact svg'  => 'max-width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .funfact-icon svg'  => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 				'separator' => 'before',
 			]
 		);
+
 		$this->add_responsive_control(
 			'ekit_funfact_icon_space',
 			[
@@ -754,10 +756,6 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 						'min' => 0,
 						'max' => 100,
 					],
-				],
-				'default'   => [
-					'size' => 15,
-					'unit' => 'px',
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-funfact-icon, {{WRAPPER}} .elementskit-funfact svg' => 'padding: {{SIZE}}{{UNIT}};',
@@ -1333,36 +1331,18 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 
 			<div class="elementskit-funfact-inner <?php echo !empty($settings['ekit_funfact_icon_position']) ? esc_attr($settings['ekit_funfact_icon_position']) : ''; ?>">
 				<?php if(($settings['ekit_funfact_icon_type'] == 'image_icon') || ($settings['ekit_funfact_icon_type'] == 'icon')) : ?>
-					<div class="funfact-icon"> <?php
-
+					<div class="funfact-icon">
+						<?php
 						if($settings['ekit_funfact_icon_type'] == 'image_icon') :
 							echo wp_kses($image_html, \ElementsKit_Lite\Utils::get_kses_array());
 						endif;
 
-
-						if($settings['ekit_funfact_icon_type'] == 'icon') : ?>
-							<i <?php echo $this->get_render_attribute_string('icon'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by elementor ?>></i>
-
-							<?php
-							// new icon
-							$migrated = isset($settings['__fa4_migrated']['ekit_funfact_icons']);
-							// Check if its a new widget without previously selected icon using the old Icon control
-							$is_new = empty($settings['ekit_funfact_icon']);
-							if($is_new || $migrated) {
-								// new icon
-								Icons_Manager::render_icon($settings['ekit_funfact_icons'], [
-									'aria-hidden' => 'true',
-									'class'       => 'elementskit-funfact-icon',
-								]);
-							} else {
-								?>
-								<i class="<?php echo esc_attr($settings['ekit_funfact_icon']); ?> elementskit-funfact-icon"
-								   aria-hidden="true"></i>
-								<?php
-							}
-
+						if($settings['ekit_funfact_icon_type'] == 'icon') :
+							Icons_Manager::render_icon($settings['ekit_funfact_icons'], [
+								'aria-hidden' => 'true',
+								'class'       => 'elementskit-funfact-icon',
+							]);
 						endif; ?>
-
 					</div>
 				<?php endif; ?>
 				

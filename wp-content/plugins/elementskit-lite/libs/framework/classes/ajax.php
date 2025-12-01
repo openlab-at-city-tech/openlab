@@ -41,6 +41,9 @@ class Ajax {
 				$widget_prepared_list[ $widget_slug ] = $widget;
 			}
 
+			// Allow to filter widget status
+			apply_filters( 'elementskit/widgets/status/update', $widget_prepared_list );
+
 			$this->utils->save_option( 'widget_list', $widget_prepared_list );
 		}
 
@@ -66,8 +69,14 @@ class Ajax {
 			$this->utils->save_option( 'user_data', empty( $_POST['user_data'] ) ? array() : map_deep( wp_unslash( $_POST['user_data'] ) , 'wp_filter_nohtml_kses' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It will sanitize by wp_filter_nohtml_kses function
 		}
 
+		// Enable inline SVG by default if not set
+		if ( ! isset( $_POST['user_data']['inline_svg']['is_enable'] ) ) {
+			$_POST['user_data']['inline_svg']['is_enable'] = 1;
+			$this->utils->save_option( 'user_data', empty( $_POST['user_data'] ) ? array() : map_deep( wp_unslash( $_POST['user_data'] ) , 'wp_filter_nohtml_kses' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It will sanitize by wp_filter_nohtml_kses function
+		}
+
 		if ( isset( $_POST['settings'] ) ) {
-			$this->utils->save_settings( empty( $_POST['settings'] ) ? array() : map_deep( wp_unslash( $_POST['settings'] ) , 'sanitize_text_field' )  ); 
+			$this->utils->save_settings( empty( $_POST['settings'] ) ? array() : map_deep( wp_unslash( $_POST['settings'] ) , 'sanitize_text_field' )  );
 		}
 
 		do_action( 'elementskit/admin/after_save' );
@@ -116,23 +125,23 @@ class Ajax {
 	public static function plugin_activate_message($plugin_slug) {
 		$plugins_message = [
 			'setup_configurations' => esc_html__('Setup Configurations', 'elementskit-lite'),
-			'elementskit-lite/elementskit-lite.php' => esc_html__('Page Builder Elements Installed', 'elementskit-lite'),
-			'getgenie/getgenie.php' => esc_html__('AI Content & SEO Tool Installed', 'elementskit-lite'),
-			'shopengine/shopengine.php' => esc_html__('WooCommerce Builder Installed', 'elementskit-lite'),
-			'metform/metform.php' => esc_html__('Form Builder Installed', 'elementskit-lite'),
-			'emailkit/EmailKit.php' => esc_html__('Email Customizer Installed', 'elementskit-lite'),
-			'wp-social/wp-social.php' => esc_html__('Social Integration Installed', 'elementskit-lite'),
-			'wp-ultimate-review/wp-ultimate-review.php' => esc_html__('Review Management Installed', 'elementskit-lite'),
+			'elementskit-lite/elementskit-lite.php' => esc_html__('Page Builder Elements Activated', 'elementskit-lite'),
+			'getgenie/getgenie.php' => esc_html__('AI Content & SEO Tool Activated', 'elementskit-lite'),
+			'shopengine/shopengine.php' => esc_html__('WooCommerce Builder Activated', 'elementskit-lite'),
+			'metform/metform.php' => esc_html__('Form Builder Activated', 'elementskit-lite'),
+			'emailkit/EmailKit.php' => esc_html__('Email Customizer Activated', 'elementskit-lite'),
+			'wp-social/wp-social.php' => esc_html__('Social Integration Activated', 'elementskit-lite'),
+			'wp-ultimate-review/wp-ultimate-review.php' => esc_html__('Review Management Activated', 'elementskit-lite'),
 			'wp-fundraising-donation/wp-fundraising.php' => esc_html__('Fundraising & Donations', 'elementskit-lite'),
-			'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => esc_html__('Page Builder Blocks Installed', 'elementskit-lite'),
-			'popup-builder-block/popup-builder-block.php' => esc_html__('Popup Builder Installed', 'elementskit-lite'),
-			'table-builder-block/table-builder-block.php' => esc_html__('Table Builder Installed', 'elementskit-lite'),
+			'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => esc_html__('Page Builder Blocks Activated', 'elementskit-lite'),
+			'popup-builder-block/popup-builder-block.php' => esc_html__('Popup Builder Activated', 'elementskit-lite'),
+			'table-builder-block/table-builder-block.php' => esc_html__('Table Builder Activated', 'elementskit-lite'),
 		];
 
 		if ( array_key_exists( $plugin_slug, $plugins_message ) ) {
 			return esc_html( $plugins_message[$plugin_slug] );
 		} else {
-			return esc_html__( 'Plugin Installed', 'elementskit-lite' );
+			return esc_html__( 'Plugin Activated', 'elementskit-lite' );
 		}
 	}
 
