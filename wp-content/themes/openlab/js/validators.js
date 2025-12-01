@@ -27,22 +27,24 @@
         }
     });
 
-    var iffRecursion = false;
-    window.Parsley.addValidator('iff', {
-        validateString: function (value, requirement, instance) {
-            var $partner = $(requirement);
-            var isValid = $partner.val() == value;
-
-            if (iffRecursion) {
-                iffRecursion = false;
-            } else {
-                iffRecursion = true;
-                $partner.parsley().validate();
+    // Revalidate confirm fields when primary fields change.
+    // This ensures that when email/password is updated after the confirm field,
+    // the confirm field's equalto validation is re-checked.
+    $( document ).ready( function() {
+        $( '#signup_email' ).on( 'input blur', function() {
+            var $confirm = $( '#signup_email_confirm' );
+            if ( $confirm.val().length > 0 ) {
+                $confirm.parsley().validate();
             }
+        } );
 
-            return isValid;
-        }
-    });
+        $( '#signup_password' ).on( 'input blur', function() {
+            var $confirm = $( '#signup_password_confirm' );
+            if ( $confirm.val().length > 0 ) {
+                $confirm.parsley().validate();
+            }
+        } );
+    } );
 
 		window.Parsley.addValidator( 'passwordStrength', {
 			validateString: function( value ) {
