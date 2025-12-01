@@ -1,165 +1,170 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 /**
  * Load Saved Settings
+ *
+ * The $WRIS_L3_* variables in this file already have the WRIS_ prefix (WordPress Responsive Image Slider).
+ * These are settings variables extracted from post meta and used throughout this settings file.
+ * The phpcs:disable directive applies to the entire file to avoid false positives.
  */
-$PostId = $post->ID;
-$WRIS_Gallery_Settings_Key = "WRIS_Gallery_Settings_".$PostId;
-$WRIS_Gallery_Settings = get_post_meta( $PostId, $WRIS_Gallery_Settings_Key, true);
+$uris_post_id = $post->ID;
+$uris_gallery_settings_key = "WRIS_Gallery_Settings_".$uris_post_id;
+$uris_gallery_settings = get_post_meta( $uris_post_id, $uris_gallery_settings_key, true);
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slide_Title'])) 
-	$WRIS_L3_Slide_Title				= $WRIS_Gallery_Settings['WRIS_L3_Slide_Title'];
+if(isset($uris_gallery_settings['WRIS_L3_Slide_Title']))
+	$WRIS_L3_Slide_Title				= $uris_gallery_settings['WRIS_L3_Slide_Title'];
 else
 	$WRIS_L3_Slide_Title				= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Show_Slide_Title'])) 
-	$WRIS_L3_Show_Slide_Title			= $WRIS_Gallery_Settings['WRIS_L3_Show_Slide_Title'];
+if(isset($uris_gallery_settings['WRIS_L3_Show_Slide_Title']))
+	$WRIS_L3_Show_Slide_Title			= $uris_gallery_settings['WRIS_L3_Show_Slide_Title'];
 else
 	$WRIS_L3_Show_Slide_Title			= 0;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Show_Slide_Desc'])) 
-	$WRIS_L3_Show_Slide_Desc			= $WRIS_Gallery_Settings['WRIS_L3_Show_Slide_Desc'];
+if(isset($uris_gallery_settings['WRIS_L3_Show_Slide_Desc']))
+	$WRIS_L3_Show_Slide_Desc			= $uris_gallery_settings['WRIS_L3_Show_Slide_Desc'];
 else
 	$WRIS_L3_Show_Slide_Desc			= 0;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Auto_Slideshow'])) 
-	$WRIS_L3_Auto_Slideshow				= $WRIS_Gallery_Settings['WRIS_L3_Auto_Slideshow'];
+if(isset($uris_gallery_settings['WRIS_L3_Auto_Slideshow']))
+	$WRIS_L3_Auto_Slideshow				= $uris_gallery_settings['WRIS_L3_Auto_Slideshow'];
 else
 	$WRIS_L3_Auto_Slideshow				= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Transition']))
-	$WRIS_L3_Transition					= $WRIS_Gallery_Settings['WRIS_L3_Transition'];
+if(isset($uris_gallery_settings['WRIS_L3_Transition']))
+	$WRIS_L3_Transition					= $uris_gallery_settings['WRIS_L3_Transition'];
 else
 	$WRIS_L3_Transition					= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Transition_Speed']))
-	$WRIS_L3_Transition_Speed			= $WRIS_Gallery_Settings['WRIS_L3_Transition_Speed'];
+if(isset($uris_gallery_settings['WRIS_L3_Transition_Speed']))
+	$WRIS_L3_Transition_Speed			= $uris_gallery_settings['WRIS_L3_Transition_Speed'];
 else
 	$WRIS_L3_Transition_Speed			= 5000;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slide_Order']))
-	$WRIS_L3_Slide_Order				= $WRIS_Gallery_Settings['WRIS_L3_Slide_Order'];
+if(isset($uris_gallery_settings['WRIS_L3_Slide_Order']))
+	$WRIS_L3_Slide_Order				= $uris_gallery_settings['WRIS_L3_Slide_Order'];
 else
 	$WRIS_L3_Slide_Order				= "ASC";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slide_Distance']))
-	$WRIS_L3_Slide_Distance				= $WRIS_Gallery_Settings['WRIS_L3_Slide_Distance'];
+if(isset($uris_gallery_settings['WRIS_L3_Slide_Distance']))
+	$WRIS_L3_Slide_Distance				= $uris_gallery_settings['WRIS_L3_Slide_Distance'];
 else
 	$WRIS_L3_Slide_Distance				= 5;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Sliding_Arrow']))
-	$WRIS_L3_Sliding_Arrow				= $WRIS_Gallery_Settings['WRIS_L3_Sliding_Arrow'];
+if(isset($uris_gallery_settings['WRIS_L3_Sliding_Arrow']))
+	$WRIS_L3_Sliding_Arrow				= $uris_gallery_settings['WRIS_L3_Sliding_Arrow'];
 else
 	$WRIS_L3_Sliding_Arrow				= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slider_Navigation']))
-	$WRIS_L3_Slider_Navigation			= $WRIS_Gallery_Settings['WRIS_L3_Slider_Navigation'];
+if(isset($uris_gallery_settings['WRIS_L3_Slider_Navigation']))
+	$WRIS_L3_Slider_Navigation			= $uris_gallery_settings['WRIS_L3_Slider_Navigation'];
 else
 	$WRIS_L3_Slider_Navigation			= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Navigation_Position']))
-	$WRIS_L3_Navigation_Position		= $WRIS_Gallery_Settings['WRIS_L3_Navigation_Position'];
+if(isset($uris_gallery_settings['WRIS_L3_Navigation_Position']))
+	$WRIS_L3_Navigation_Position		= $uris_gallery_settings['WRIS_L3_Navigation_Position'];
 else
 	$WRIS_L3_Navigation_Position		= "bottom";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Style']))
-	$WRIS_L3_Thumbnail_Style			= $WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Style'];
+if(isset($uris_gallery_settings['WRIS_L3_Thumbnail_Style']))
+	$WRIS_L3_Thumbnail_Style			= $uris_gallery_settings['WRIS_L3_Thumbnail_Style'];
 else
 	$WRIS_L3_Thumbnail_Style			= "border";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Width']))
-	$WRIS_L3_Thumbnail_Width			= $WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Width'];
+if(isset($uris_gallery_settings['WRIS_L3_Thumbnail_Width']))
+	$WRIS_L3_Thumbnail_Width			= $uris_gallery_settings['WRIS_L3_Thumbnail_Width'];
 else
 	$WRIS_L3_Thumbnail_Width			= 120;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Height']))
-	$WRIS_L3_Thumbnail_Height			= $WRIS_Gallery_Settings['WRIS_L3_Thumbnail_Height'];
+if(isset($uris_gallery_settings['WRIS_L3_Thumbnail_Height']))
+	$WRIS_L3_Thumbnail_Height			= $uris_gallery_settings['WRIS_L3_Thumbnail_Height'];
 else
 	$WRIS_L3_Thumbnail_Height			= 120;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Navigation_Button']))
-	$WRIS_L3_Navigation_Button			= $WRIS_Gallery_Settings['WRIS_L3_Navigation_Button'];
+if(isset($uris_gallery_settings['WRIS_L3_Navigation_Button']))
+	$WRIS_L3_Navigation_Button			= $uris_gallery_settings['WRIS_L3_Navigation_Button'];
 else
 	$WRIS_L3_Navigation_Button			= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Width']))
-	$WRIS_L3_Width						= $WRIS_Gallery_Settings['WRIS_L3_Width'];
+if(isset($uris_gallery_settings['WRIS_L3_Width']))
+	$WRIS_L3_Width						= $uris_gallery_settings['WRIS_L3_Width'];
 else
 	$WRIS_L3_Width						= "custom";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slider_Width']))
-	$WRIS_L3_Slider_Width				= $WRIS_Gallery_Settings['WRIS_L3_Slider_Width'];
+if(isset($uris_gallery_settings['WRIS_L3_Slider_Width']))
+	$WRIS_L3_Slider_Width				= $uris_gallery_settings['WRIS_L3_Slider_Width'];
 else
 	$WRIS_L3_Slider_Width				= 1000;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Height']))
-	$WRIS_L3_Height						= $WRIS_Gallery_Settings['WRIS_L3_Height'];
+if(isset($uris_gallery_settings['WRIS_L3_Height']))
+	$WRIS_L3_Height						= $uris_gallery_settings['WRIS_L3_Height'];
 else
 	$WRIS_L3_Height						= "custom";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slider_Height']))
-	$WRIS_L3_Slider_Height				= $WRIS_Gallery_Settings['WRIS_L3_Slider_Height'];
+if(isset($uris_gallery_settings['WRIS_L3_Slider_Height']))
+	$WRIS_L3_Slider_Height				= $uris_gallery_settings['WRIS_L3_Slider_Height'];
 else
 	$WRIS_L3_Slider_Height				= 500;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slider_Scale_Mode'])) 
-	$WRIS_L3_Slider_Scale_Mode			= $WRIS_Gallery_Settings['WRIS_L3_Slider_Scale_Mode'];
+if(isset($uris_gallery_settings['WRIS_L3_Slider_Scale_Mode']))
+	$WRIS_L3_Slider_Scale_Mode			= $uris_gallery_settings['WRIS_L3_Slider_Scale_Mode'];
 else
 	$WRIS_L3_Slider_Scale_Mode			= "cover";
-	
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Slider_Auto_Scale'])) 
-	$WRIS_L3_Slider_Auto_Scale			= $WRIS_Gallery_Settings['WRIS_L3_Slider_Auto_Scale'];
+
+if(isset($uris_gallery_settings['WRIS_L3_Slider_Auto_Scale']))
+	$WRIS_L3_Slider_Auto_Scale			= $uris_gallery_settings['WRIS_L3_Slider_Auto_Scale'];
 else
 	$WRIS_L3_Slider_Auto_Scale			= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Font_Style']))
-	$WRIS_L3_Font_Style					= $WRIS_Gallery_Settings['WRIS_L3_Font_Style'];
+if(isset($uris_gallery_settings['WRIS_L3_Font_Style']))
+	$WRIS_L3_Font_Style					= $uris_gallery_settings['WRIS_L3_Font_Style'];
 else
 	$WRIS_L3_Font_Style					= "Arial";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Title_Color']))
-	$WRIS_L3_Title_Color				= $WRIS_Gallery_Settings['WRIS_L3_Title_Color'];
+if(isset($uris_gallery_settings['WRIS_L3_Title_Color']))
+	$WRIS_L3_Title_Color				= $uris_gallery_settings['WRIS_L3_Title_Color'];
 else
 	$WRIS_L3_Title_Color				= "#FFFFFF";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Title_BgColor']))
-	$WRIS_L3_Title_BgColor				= $WRIS_Gallery_Settings['WRIS_L3_Title_BgColor'];
+if(isset($uris_gallery_settings['WRIS_L3_Title_BgColor']))
+	$WRIS_L3_Title_BgColor				= $uris_gallery_settings['WRIS_L3_Title_BgColor'];
 else
 	$WRIS_L3_Title_BgColor				= "#000000";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Desc_Color']))
-	$WRIS_L3_Desc_Color					= $WRIS_Gallery_Settings['WRIS_L3_Desc_Color'];
+if(isset($uris_gallery_settings['WRIS_L3_Desc_Color']))
+	$WRIS_L3_Desc_Color					= $uris_gallery_settings['WRIS_L3_Desc_Color'];
 else
 	$WRIS_L3_Desc_Color					= "#FFFFFF";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Desc_BgColor']))
-	$WRIS_L3_Desc_BgColor				= $WRIS_Gallery_Settings['WRIS_L3_Desc_BgColor'];
+if(isset($uris_gallery_settings['WRIS_L3_Desc_BgColor']))
+	$WRIS_L3_Desc_BgColor				= $uris_gallery_settings['WRIS_L3_Desc_BgColor'];
 else
 	$WRIS_L3_Desc_BgColor				= "#00000";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Navigation_Color']))
-	$WRIS_L3_Navigation_Color			= $WRIS_Gallery_Settings['WRIS_L3_Navigation_Color'];
+if(isset($uris_gallery_settings['WRIS_L3_Navigation_Color']))
+	$WRIS_L3_Navigation_Color			= $uris_gallery_settings['WRIS_L3_Navigation_Color'];
 else
 	$WRIS_L3_Navigation_Color			= "#FFFFFF";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Fullscreeen']))
-	$WRIS_L3_Fullscreeen				= $WRIS_Gallery_Settings['WRIS_L3_Fullscreeen'];
+if(isset($uris_gallery_settings['WRIS_L3_Fullscreeen']))
+	$WRIS_L3_Fullscreeen				= $uris_gallery_settings['WRIS_L3_Fullscreeen'];
 else
 	$WRIS_L3_Fullscreeen				= 1;
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Custom_CSS']))
-	$WRIS_L3_Custom_CSS					= $WRIS_Gallery_Settings['WRIS_L3_Custom_CSS'];
+if(isset($uris_gallery_settings['WRIS_L3_Custom_CSS']))
+	$WRIS_L3_Custom_CSS					= $uris_gallery_settings['WRIS_L3_Custom_CSS'];
 else
 	$WRIS_L3_Custom_CSS					= "";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Navigation_Bullets_Color']))
-	$WRIS_L3_Navigation_Bullets_Color	= $WRIS_Gallery_Settings['WRIS_L3_Navigation_Bullets_Color'];
+if(isset($uris_gallery_settings['WRIS_L3_Navigation_Bullets_Color']))
+	$WRIS_L3_Navigation_Bullets_Color	= $uris_gallery_settings['WRIS_L3_Navigation_Bullets_Color'];
 else
 	$WRIS_L3_Navigation_Bullets_Color	= "#000000";
 
-if(isset($WRIS_Gallery_Settings['WRIS_L3_Navigation_Pointer_Color']))
-	$WRIS_L3_Navigation_Pointer_Color	= $WRIS_Gallery_Settings['WRIS_L3_Navigation_Pointer_Color'];
+if(isset($uris_gallery_settings['WRIS_L3_Navigation_Pointer_Color']))
+	$WRIS_L3_Navigation_Pointer_Color	= $uris_gallery_settings['WRIS_L3_Navigation_Pointer_Color'];
 else
 	$WRIS_L3_Navigation_Pointer_Color	= "#000000";
 ?>
@@ -220,6 +225,7 @@ jQuery(document).ready(function(){
 </style>
 <?php require_once("tooltip.php"); ?>
 <input type="hidden" id="wl_action" name="wl_action" value="wl-save-settings">
+<?php wp_nonce_field( 'uris_settings_action', 'uris_settings_nonce' ); ?>
 <table class="form-table">
 	<tbody>
 		<tr id="L3">

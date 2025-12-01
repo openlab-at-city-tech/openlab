@@ -56,7 +56,8 @@ jQuery(function(jQuery) {
 			};
 			var data = {
 				action: 'uris_get_thumbnail',
-				imageid: id
+				imageid: id,
+				nonce: uris_ajax_object.nonce
 			};
 			jQuery.post(ajaxurl, data, function(response) {
 				uris_slider.admin_thumb_ul.append(response);

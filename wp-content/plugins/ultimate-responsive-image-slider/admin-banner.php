@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 wp_enqueue_style( 'uris-feature-notice-css', URIS_PLUGIN_URL . 'assets/css/uris-feature-notice.css', array(), '1.2', 'all' );
-wp_enqueue_style('uris-bootstrap-min', URIS_PLUGIN_URL.'assets/css/bootstrap-latest/bootstrap.css');
+wp_enqueue_style('uris-bootstrap-min', URIS_PLUGIN_URL.'assets/css/bootstrap-latest/bootstrap.css', array(), '3.3.7', 'all' );
 ?>
 <div class="row col-md-12 wpfrank_banner">
 	<div class="col-md-6 col-sm-12 wpfrank_banner_img">
