@@ -6,5 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
+    'Inpsyde\\Modularity\\' => array($vendorDir . '/inpsyde/modularity/src'),
     'Dinamiko\\DKPDF\\Vendor\\' => array($baseDir . '/lib/packages'),
+    'Dinamiko\\DKPDF\\' => array($baseDir . '/modules'),
 );

@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: DK PDF
- * Version: 2.0.2
+ * Version: 2.2.0
  * Description: WordPress to PDF made easy.
  * Author: Emili Castells
  * Author URI: https://dinamiko.dev
@@ -13,97 +13,64 @@
  * Domain Path: /languages/
  */
 
+declare( strict_types=1 );
+
+namespace Dinamiko\DKPDF;
+
+use Dinamiko\DKPDF\Admin\AdminModule;
+use Dinamiko\DKPDF\ButtonVisibility\ButtonVisibilityModule;
+use Dinamiko\DKPDF\Core\CoreModule;
+use Dinamiko\DKPDF\Frontend\FrontendModule;
+use Dinamiko\DKPDF\PDF\PDFModule;
+use Dinamiko\DKPDF\Shortcode\ShortcodeModule;
+use Dinamiko\DKPDF\Template\TemplateModule;
+use Dinamiko\DKPDF\WooCommerce\WooCommerceModule;
+use Dinamiko\DKPDF\Vendor\Inpsyde\Modularity\Package;
+use Dinamiko\DKPDF\Vendor\Inpsyde\Modularity\Properties\PluginProperties;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'DKPDF' ) ) {
+! defined( 'DKPDF_VERSION' ) && define( 'DKPDF_VERSION', '2.2.0' );
+! defined( 'DKPDF_PLUGIN_DIR' ) && define( 'DKPDF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+! defined( 'DKPDF_PLUGIN_URL' ) && define( 'DKPDF_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+! defined( 'DKPDF_PLUGIN_FILE' ) && define( 'DKPDF_PLUGIN_FILE', __FILE__ );
 
-    #[AllowDynamicProperties]
-	final class DKPDF {
+function plugin(): Package {
+	static $package;
 
-		private static $instance;
+	if ( ! $package ) {
+		$properties = PluginProperties::new( __FILE__ );
+		$package    = Package::new( $properties )
+		                     ->addModule( new CoreModule() )
+		                     ->addModule( new TemplateModule() )
+		                     ->addModule( new AdminModule() )
+		                     ->addModule( new FrontendModule() )
+		                     ->addModule( new ShortcodeModule() )
+		                     ->addModule( new PDFModule() )
+		                     ->addModule( new WooCommerceModule() )
+		                     ->addModule( new ButtonVisibilityModule() );
 
-		public static function instance() {
-
-			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof DKPDF ) ) {
-
-				self::$instance = new DKPDF;
-
-				self::$instance->setup_constants();
-
-				add_action( 'plugins_loaded', array( self::$instance, 'dkpdf_load_textdomain' ) );
-
-				self::$instance->includes();
-
-			}
-
-			return self::$instance;
-
+		$modules = apply_filters( 'dkpdf_modules', [] );
+		foreach ( $modules as $module ) {
+			$package->addModule( $module );
 		}
-
-		public function dkpdf_load_textdomain() {
-
-			load_plugin_textdomain( 'dkpdf', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-
-		}
-
-		private function setup_constants() {
-
-			if ( ! defined( 'DKPDF_VERSION' ) ) {
-				define( 'DKPDF_VERSION', '2.0.2' );
-			}
-			if ( ! defined( 'DKPDF_PLUGIN_DIR' ) ) {
-				define( 'DKPDF_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-			}
-			if ( ! defined( 'DKPDF_PLUGIN_URL' ) ) {
-				define( 'DKPDFPLUGIN_URL', plugin_dir_url( __FILE__ ) );
-			}
-			if ( ! defined( 'DKPDF_PLUGIN_FILE' ) ) {
-				define( 'DKPDF_PLUGIN_FILE', __FILE__ );
-			}
-
-		}
-
-		private function includes() {
-
-			// settings / metaboxes
-			if ( is_admin() ) {
-
-				require_once DKPDF_PLUGIN_DIR . 'includes/class-dkpdf-settings.php';
-				$settings = new DKPDF_Settings( $this );
-
-				require_once DKPDF_PLUGIN_DIR . 'includes/class-dkpdf-admin-api.php';
-				$this->admin = new DKPDF_Admin_API();
-
-				require_once DKPDF_PLUGIN_DIR . 'includes/dkpdf-metaboxes.php';
-
-			}
-
-			// load css / js
-			require_once DKPDF_PLUGIN_DIR . 'includes/dkpdf-load-js-css.php';
-
-			// functions
-			require_once DKPDF_PLUGIN_DIR . 'includes/dkpdf-functions.php';
-
-			// shortcodes
-			require_once DKPDF_PLUGIN_DIR . 'includes/class-dkpdf-template-loader.php';
-			require_once DKPDF_PLUGIN_DIR . 'includes/dkpdf-shortcodes.php';
-
-		}
-
-		public function __clone() {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'dkpdf' ), DKPDF_VERSION );
-		}
-
-		public function __wakeup() {
-            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?', 'dkpdf' ), DKPDF_VERSION );
-		}
-
 	}
 
+	/** @var Package $package */
+	return $package;
 }
 
-DKPDF::instance();
+add_action(
+	'plugins_loaded',
+	static function (): void {
+		if ( is_readable( __DIR__ . '/vendor/autoload.php' ) ) {
+			include_once __DIR__ . '/vendor/autoload.php';
+		}
+
+		plugin()->boot();
+
+		Container::init( plugin()->container() );
+	}
+);
