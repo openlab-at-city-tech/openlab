@@ -145,12 +145,11 @@ $account_type_options = array_map(
 									data-parsley-required-message="Email is required."
 									data-parsley-type="email"
 									data-parsley-group="email"
-									data-parsley-iff="#signup_email_confirm"
-									data-parsley-iff-message=""
 									data-parsley-errors-container="#signup_email_error"
 									/>
 
 								<label class="control-label" for="signup_email_confirm"><span class="label-text">Confirm Email Address</span> <span class="label-gloss">(required)</span></label>
+								<div id="signup_email_confirm_error" class="error-container"></div>
 								<input
 									class="form-control email-autocomplete"
 									type="text"
@@ -161,7 +160,8 @@ $account_type_options = array_map(
 									data-parsley-required
 									data-parsley-required-message="Confirming your email is required."
 									data-parsley-type="email"
-									data-parsley-iff-message="Email addresses must match."
+									data-parsley-equalto="#signup_email"
+									data-parsley-equalto-message="Email addresses must match."
 									data-parsley-group="email"
 									data-parsley-errors-container="#signup_email_confirm_error"
 									/>
@@ -247,8 +247,6 @@ $account_type_options = array_map(
 										data-parsley-required
 										data-parsley-required-message="Password is required."
 										data-parsley-group="password"
-										data-parsley-iff="#signup_password_confirm"
-										data-parsley-iff-message=""
 										data-parsley-password-strength=""
 										data-parsley-errors-container="#signup_password_error"
 										/>
@@ -272,8 +270,8 @@ $account_type_options = array_map(
 									data-parsley-required
 									data-parsley-required-message="Confirming your password is required."
 									data-parsley-group="password"
-									data-parsley-iff="#signup_password"
-									data-parsley-iff-message="Passwords must match."
+									data-parsley-equalto="#signup_password"
+									data-parsley-equalto-message="Passwords must match."
 									data-parsley-errors-container="#signup_password_confirm_error"
 									/>
 							</div>
