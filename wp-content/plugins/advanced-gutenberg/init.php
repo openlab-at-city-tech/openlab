@@ -16,24 +16,7 @@ if (! function_exists('advg_language_domain_init')) {
      */
     function advg_language_domain_init()
     {
-        // First, unload textdomain - Based on https://core.trac.wordpress.org/ticket/34213#comment:26
-        unload_textdomain('advanced-gutenberg');
-
-        // Load override language file first if available from version 2.3.11 and older
-        if (file_exists(WP_LANG_DIR . '/plugins/' . 'advanced-gutenberg' . '-' . get_locale() . '.override.mo')) {
-            load_textdomain(
-                'advanced-gutenberg',
-                WP_LANG_DIR . '/plugins/' . 'advanced-gutenberg' . '-' . get_locale() . '.override.mo'
-            );
-        }
-
-        // Call the core translations from plugins languages/ folder
-        if (file_exists(plugin_dir_path(__FILE__) . 'languages/' . 'advanced-gutenberg' . '-' . get_locale() . '.mo')) {
-            load_textdomain(
-                'advanced-gutenberg',
-                plugin_dir_path(__FILE__) . 'languages/' . 'advanced-gutenberg' . '-' . get_locale() . '.mo'
-            );
-        }
+        load_plugin_textdomain('advanced-gutenberg', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
         wp_set_script_translations(
             'editor',

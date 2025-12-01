@@ -23,7 +23,7 @@ if (! function_exists('register_block_type')) {
         esc_html__('Gutenberg is not detected! Activate it or', 'advanced-gutenberg')
         . ': <a href="' . esc_attr($gutenbergInstallUrl) . '">' . esc_html__(
             'Install Gutenberg Now!',
-            'advanced-gutenberg' 
+            'advanced-gutenberg'
         ) . '</a>'
     );
     exit;
@@ -60,6 +60,8 @@ if ($saved_settings === false) {
         'reusable_blocks'             => 1
     ));
 }
+
+update_option('advgb_maybe_new_blocks', intval(true), false);
 
 /* Delete deprecated options
  * @todo - Remove in 4.0 */

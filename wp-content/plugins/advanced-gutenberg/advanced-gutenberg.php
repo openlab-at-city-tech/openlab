@@ -4,7 +4,7 @@
  * Plugin Name: PublishPress Blocks
  * Plugin URI: https://publishpress.com/blocks/
  * Description: PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor.
- * Version: 3.3.2
+ * Version: 3.6.0
  * Author: PublishPress
  * Author URI: https://publishpress.com/
  * Text Domain: advanced-gutenberg
@@ -66,7 +66,7 @@ if (class_exists('PublishPressInstanceProtection\\Config')) {
 if (! defined('ADVANCED_GUTENBERG_LOADED')) {
     define('ADVANCED_GUTENBERG_LOADED', true);
     if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-        define('ADVANCED_GUTENBERG_VERSION', '3.3.2');
+        define('ADVANCED_GUTENBERG_VERSION', '3.6.0');
     }
 
     if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
@@ -75,6 +75,10 @@ if (! defined('ADVANCED_GUTENBERG_LOADED')) {
 
     if (! defined('ADVANCED_GUTENBERG_BASE_PATH')) {
         define('ADVANCED_GUTENBERG_BASE_PATH', __DIR__);
+    }
+
+    if (! defined('ADVANCED_GUTENBERG_UPGRADE_LINK')) {
+        define('ADVANCED_GUTENBERG_UPGRADE_LINK', 'https://publishpress.com/links/blocks-menu');
     }
 
     /**

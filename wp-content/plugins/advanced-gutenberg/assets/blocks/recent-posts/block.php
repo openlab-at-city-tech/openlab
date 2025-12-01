@@ -211,66 +211,107 @@ function advgbRenderBlockRecentPosts($attributes)
                 $postHtml .= sprintf('<div class="advgb-text-after-title">%s</div>', wp_kses_post($attributes['textAfterTitle']));
             }
 
-            if (
-                advgbCheckElementDisplay($attributes['displayAuthor'], $attributes['displayAuthorFor'], $key)
-                || advgbCheckElementDisplayStr($postDate, $attributes['postDateFor'], $key)
+            if(
+                advgbCheckElementDisplay( $attributes['displayAuthor'], $attributes['displayAuthorFor'], $key )
+                || advgbCheckElementDisplayStr( $postDate, $attributes['postDateFor'], $key )
                 || ( !empty($postDateDisplay) )
                 || (
                     $post_type === 'post'
-                    && advgbCheckElementDisplay($attributes['displayCommentCount'], $attributes['displayCommentCountFor'], $key)
+                    && advgbCheckElementDisplay( $attributes['displayCommentCount'], $attributes['displayCommentCountFor'], $key )
                 )
             ) {
                 $postHtml .= '<div class="advgb-post-info">';
-                if (advgbCheckElementDisplay($attributes['displayAuthor'], $attributes['displayAuthorFor'], $key)) {
-                    $coauthors          = advgbGetCoauthors(array( 'id' => $post->ID ));
-                    $authorLinkNewTab   = isset($attributes['authorLinkNewTab']) && $attributes['authorLinkNewTab'] ? '_blank' : '_self';
-                    if (! empty($coauthors)) {
-                        $index = 0;
-                        foreach ($coauthors as $coauthor) {
-                                    $postHtml .= sprintf('<a href="%1$s" class="advgb-post-author" target="%3$s">%2$s</a>', esc_url($coauthor['link']), esc_html($coauthor['display_name']), $authorLinkNewTab);
-                            if ($index++ < count($coauthors) - 1) {
-                                $postHtml .= '<span>, </span>';
+
+                $infoItems = array();
+                $separator = isset($attributes['hideInfoSeparators']) && $attributes['hideInfoSeparators']
+                    ? ''
+                    : (isset($attributes['infoSectionSeparator']) ? $attributes['infoSectionSeparator'] : ' ');
+
+                // Build info items based on order
+                $order = isset($attributes['infoSectionOrder']) ? $attributes['infoSectionOrder'] : array('author', 'date', 'comments');
+
+                foreach($order as $item) {
+                    switch($item) {
+                        case 'author':
+                            if (advgbCheckElementDisplay($attributes['displayAuthor'], $attributes['displayAuthorFor'], $key)) {
+                                $coauthors = advgbGetCoauthors( array( 'id' => $post->ID ) );
+                                $authorLinkNewTab = isset($attributes['authorLinkNewTab']) && $attributes['authorLinkNewTab'] ? '_blank' : '_self';
+                                $authorHtml = '';
+
+                                if ( ! empty( $coauthors ) ) {
+                                    $index = 0;
+                                    foreach ( $coauthors as $coauthor ) {
+                                        $authorHtml .= sprintf(
+                                            '<a href="%1$s" class="advgb-post-author" target="%3$s">%2$s</a>',
+                                            esc_url( $coauthor['link'] ),
+                                            esc_html( $coauthor['display_name'] ),
+                                            $authorLinkNewTab
+                                        );
+                                        if ( $index++ < count( $coauthors ) - 1 ) {
+                                            $authorHtml .= '<span>, </span>';
+                                        }
+                                    }
+                                } else {
+                                    $authorHtml = sprintf(
+                                        '<a href="%1$s" class="advgb-post-author" target="%3$s">%2$s</a>',
+                                        get_author_posts_url($post->post_author),
+                                        get_the_author_meta('display_name', $post->post_author),
+                                        $authorLinkNewTab
+                                    );
+                                }
+                                $infoItems[] = $authorHtml;
                             }
-                        }
-                    } else {
-                        $postHtml .= sprintf('<a href="%1$s" class="advgb-post-author" target="%3$s">%2$s</a>', get_author_posts_url($post->post_author), get_the_author_meta('display_name', $post->post_author), $authorLinkNewTab);
+                            break;
+
+                        case 'date':
+                            if (advgbCheckElementDisplayStr($postDate, $attributes['postDateFor'], $key)) {
+                                $postDateFormat = isset($attributes['postDateFormat']) ? $attributes['postDateFormat'] : '';
+                                $displayTime = isset($attributes['displayTime']) && $attributes['displayTime'];
+                                $customFormat = isset($attributes['customDateFormat']) && !empty($attributes['customDateFormat'])
+                                    ? $attributes['customDateFormat']
+                                    : null;
+                                $showPrefix = isset($attributes['showDatePrefix']) ? $attributes['showDatePrefix'] : true;
+
+                                if ( $postDateFormat === 'absolute' ) {
+                                    $format = $customFormat ?: ($displayTime ? ( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) : get_option( 'date_format' ));
+
+                                    if ( $postDate === 'created' ) {
+                                        $dateDisplay = get_the_date( $format, $post->ID);
+                                        $prefix = $showPrefix ? (isset($attributes['absoluteDateCreatedPrefix']) ? $attributes['absoluteDateCreatedPrefix'] : esc_html__('Posted on', 'advanced-gutenberg')) : '';
+                                    } else {
+                                        $dateDisplay = get_the_modified_date( $format, $post->ID);
+                                        $prefix = $showPrefix ? (isset($attributes['absoluteDateUpdatedPrefix']) ? $attributes['absoluteDateUpdatedPrefix'] : esc_html__('Updated on', 'advanced-gutenberg')) : '';
+                                    }
+
+                                    $dateDisplay = $prefix ? $prefix . ' ' . $dateDisplay : $dateDisplay;
+                                } else {
+                                    if ( $postDate === 'created' ) {
+                                        $relativePrefix = $showPrefix ? (isset($attributes['relativeDateCreatedPrefix']) ? $attributes['relativeDateCreatedPrefix'] : esc_html__('Posted', 'advanced-gutenberg')) : '';
+                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( get_the_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
+                                    } else {
+                                        $relativePrefix = $showPrefix ? (isset($attributes['relativeDateUpdatedPrefix']) ? $attributes['relativeDateUpdatedPrefix'] : esc_html__('Updated', 'advanced-gutenberg')) : '';
+                                        $dateDisplay = ($relativePrefix ? $relativePrefix . ' ' : '') . human_time_diff( get_the_modified_date( 'U', $post->ID ) ) . ' ' . esc_html__( 'ago', 'advanced-gutenberg');
+                                    }
+                                }
+
+                                $infoItems[] = sprintf('<span class="advgb-post-datetime">%1$s</span>', $dateDisplay);
+                            }
+                            break;
+
+                        case 'comments':
+                            if ($post_type === 'post' && advgbCheckElementDisplay($attributes['displayCommentCount'], $attributes['displayCommentCountFor'], $key)) {
+                                $count = get_comments_number( $post );
+                                $infoItems[] = sprintf(
+                                    '<span class="advgb-post-comments"><span class="dashicons dashicons-admin-comments"></span>(%d)</span>',
+                                    $count
+                                );
+                            }
+                            break;
                     }
                 }
 
-                if (advgbCheckElementDisplayStr($postDate, $attributes['postDateFor'], $key)) {
-                    $postDateFormat     = isset($attributes['postDateFormat']) ? $attributes['postDateFormat'] : '';
-                    $displayTime        = isset($attributes['displayTime']) && $attributes['displayTime'];
-                    $format             = $displayTime ? ( get_option('date_format') . ' ' . get_option('time_format') ) : get_option('date_format');
-                    if ($postDateFormat === 'absolute') {
-                        if ($postDate === 'created') {
-                            $postDateDisplay = esc_html__('Posted on', 'advanced-gutenberg') . ' ' . get_the_date($format, $post->ID);
-                        } else {
-                            $postDateDisplay = esc_html__('Updated on', 'advanced-gutenberg') . ' ' . get_the_modified_date($format, $post->ID);
-                        }
-                    } else {
-                                // Relative date format
-                        if ($postDate === 'created') {
-                            $postDateDisplay = esc_html__('Posted', 'advanced-gutenberg') . ' ' . human_time_diff(get_the_date('U', $post->ID)) . ' ' . esc_html__('ago', 'advanced-gutenberg');
-                        } else {
-                            $postDateDisplay = esc_html__('Updated', 'advanced-gutenberg') . ' ' . human_time_diff(get_the_modified_date('U', $post->ID)) . ' ' . esc_html__('ago', 'advanced-gutenberg');
-                        }
-                    }
-                }
-
-                if (! empty($postDateDisplay)) {
-                    $postHtml .= sprintf('<span class="advgb-post-datetime">%1$s</span>', $postDateDisplay);
-                }
-
-                if (
-                    $post_type === 'post'
-                    && advgbCheckElementDisplay($attributes['displayCommentCount'], $attributes['displayCommentCountFor'], $key)
-                ) {
-                    $count = get_comments_number($post);
-                    $postHtml .= sprintf('<span class="advgb-post-comments"><span class="dashicons dashicons-admin-comments"></span>(%d)</span>', $count);
-                }
-
-                $postHtml .= '</div>';
-        // end advgb-post-info
+                $postHtml .= implode($separator, $infoItems);
+                $postHtml .= '</div>'; // end advgb-post-info
             }
 
             if (
@@ -412,6 +453,10 @@ function advgbRenderBlockRecentPosts($attributes)
         $blockClass .= ' ' . esc_html($attributes['id']);
     }
 
+    if (isset($attributes['removeDateTimeSeparator']) && $attributes['removeDateTimeSeparator']) {
+        $blockClass .= ' advgb-no-datetime-separator';
+    }
+
     $blockHtml = sprintf('<div class="advgb-recent-posts-block %2$s"><div class="advgb-recent-posts">%1$s</div></div>', $postHtml, esc_attr($blockClass));
     return $blockHtml;
 }
@@ -496,6 +541,48 @@ function advgbRegisterBlockRecentPosts()
                 'type' => 'number',
                 'default' => 1,
             ),
+
+            'customDateFormat' => array(
+                'type' => 'string',
+                'default' => '',
+            ),
+            'infoSectionOrder' => array(
+                'type' => 'array',
+                'default' => array('author', 'date', 'comments'),
+            ),
+            'infoSectionSeparator' => array(
+                'type' => 'string',
+                'default' => ' ',
+            ),
+            'hideInfoSeparators' => array(
+                'type' => 'boolean',
+                'default' => false,
+            ),
+            'removeDateTimeSeparator' => array(
+                'type' => 'boolean',
+                'default' => false,
+            ),
+            'absoluteDateCreatedPrefix' => array(
+                'type' => 'string',
+                'default' => esc_html__('Posted on', 'advanced-gutenberg'),
+            ),
+            'absoluteDateUpdatedPrefix' => array(
+                'type' => 'string',
+                'default' => esc_html__('Updated on', 'advanced-gutenberg'),
+            ),
+            'relativeDateCreatedPrefix' => array(
+                'type' => 'string',
+                'default' => esc_html__('Posted', 'advanced-gutenberg'),
+            ),
+            'relativeDateUpdatedPrefix' => array(
+                'type' => 'string',
+                'default' => esc_html__('Updated', 'advanced-gutenberg'),
+            ),
+            'showDatePrefix' => array(
+                'type' => 'boolean',
+                'default' => true,
+            ),
+
             'displayAuthor' => array(
                 'type' => 'boolean',
                 'default' => false,
@@ -1093,7 +1180,7 @@ function advgbGetSeriesOrder($post)
     // Series 2.11.4+ meta_key now uses _series_part_${id}
     if (
                  function_exists('publishpress_multi_series_supported')
-        && publishpress_multi_series_supported() 
+        && publishpress_multi_series_supported()
     ) {
 // Get the terms array from a post so later we can get the term id
         $terms = wp_get_post_terms($post['id'], 'series');
@@ -1288,7 +1375,7 @@ function advgbSetSeriesOrderREST($args, $request)
         // Series 2.11.4+ meta_key now uses _series_part_${id}
         if (
                  function_exists('publishpress_multi_series_supported')
-            && publishpress_multi_series_supported() 
+            && publishpress_multi_series_supported()
         ) {
             $ids = array_map('intval', $request['series']);
             foreach ($ids as $id) {
@@ -1376,7 +1463,7 @@ function advgbSeriesOrderSort()
             // Series 2.11.4+ meta_key now uses _series_part_${id}
             if (
                  function_exists('publishpress_multi_series_supported')
-                && publishpress_multi_series_supported() 
+                && publishpress_multi_series_supported()
             ) {
 // Make sure series are selected
                 if (

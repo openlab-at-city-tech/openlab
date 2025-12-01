@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'v3.6.0',
+        'version' => '3.6.0.0',
+        'reference' => '52f195ad34448142cc681cef8cc412d8542a5558',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,18 +11,18 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'v3.6.0',
+            'version' => '3.6.0.0',
+            'reference' => '52f195ad34448142cc681cef8cc412d8542a5558',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'matomo/device-detector' => array(
-            'pretty_version' => '6.4.6',
-            'version' => '6.4.6.0',
-            'reference' => '6f07f615199851548db47a900815d2ea2cdcde08',
+            'pretty_version' => '6.4.7',
+            'version' => '6.4.7.0',
+            'reference' => 'e53eed31bb1530851feebe52bd64c3451da19e77',
             'type' => 'library',
             'install_path' => __DIR__ . '/../matomo/device-detector',
             'aliases' => array(),
@@ -40,7 +40,7 @@
         'piwik/device-detector' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '6.4.6',
+                0 => '6.4.7',
             ),
         ),
         'publishpress/instance-protection' => array(
@@ -89,9 +89,9 @@
             'dev_requirement' => false,
         ),
         'publishpress/wordpress-version-notices' => array(
-            'pretty_version' => '2.1.4',
-            'version' => '2.1.4.0',
-            'reference' => '7b32b0183e37b512a84231b730476834bd8755d0',
+            'pretty_version' => '2.1.5',
+            'version' => '2.1.5.0',
+            'reference' => 'caf37ca4705f89b882c1e53d9e592939568df944',
             'type' => 'library',
             'install_path' => __DIR__ . '/../publishpress/wordpress-version-notices',
             'aliases' => array(),
