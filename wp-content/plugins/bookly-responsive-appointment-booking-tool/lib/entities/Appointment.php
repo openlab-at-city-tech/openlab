@@ -189,7 +189,7 @@ class Appointment extends Lib\Base\Entity
                 ->setAppointmentId( $this->getId() )
                 ->setCustomerId( $ca_data[ $id ]['id'] )
                 ->setCustomFields( json_encode( $ca_data[ $id ]['custom_fields'] ) )
-                ->setExtras( json_encode( $ca_data[ $id ]['extras'] ) )
+                ->setExtras( json_encode( array_filter( $ca_data[ $id ]['extras'], function( $value ) { return $value > 0; } ) ) )
                 ->setStatus( $ca_data[ $id ]['status'] )
                 ->setNumberOfPersons( $ca_data[ $id ]['number_of_persons'] )
                 ->setNotes( $ca_data[ $id ]['notes'] )

@@ -29,7 +29,7 @@ class Page extends Lib\Base\Component
 
             wp_localize_script( 'bookly-cloud-billing.js', 'BooklyL10n', array(
                 'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-                'processing' => __( 'Processing...', 'bookly' ),
+                'processing' => __( 'Processing', 'bookly' ) . '…',
                 'emptyTable' => __( 'No data available in table', 'bookly' ),
                 'loadingRecords' => __( 'Loading...', 'bookly' ),
                 'datePicker' => Lib\Utils\DateTime::datePickerOptions(),

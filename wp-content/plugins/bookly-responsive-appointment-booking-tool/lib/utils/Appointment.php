@@ -52,7 +52,7 @@ class Appointment
         $created_from
     )
     {
-        $response = array( 'success' => false, 'alert_errors' => array() );
+        $response = array( 'success' => false, 'alert_errors' => array(), 'appointments' => array() );
         if ( ! $service_id ) {
             // Custom service.
             $service_id = null;
@@ -90,12 +90,30 @@ class Appointment
 
         $total_number_of_persons = 0;
         $max_extras_duration = 0;
-        $extras_consider_duration = (bool) Lib\Proxy\ServiceExtras::considerDuration();
+        $allowed_extras = array();
+        $extras_consider_duration = false;
+        if ( Lib\Config::serviceExtrasActive() ) {
+            foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service_id ) ?: array() as $extras ) {
+                $allowed_extras[] = $extras->getId();
+            }
+            $extras_consider_duration = (bool) ( $allowed_extras && Lib\Proxy\ServiceExtras::considerDuration() );
+        }
+
         $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array(
             CustomerAppointment::STATUS_PENDING,
             CustomerAppointment::STATUS_APPROVED
         ) );
+        $customer_ids = array();
         foreach ( $customers as $i => $customer ) {
+            $filtered_extras = array();
+            if ( $allowed_extras && $customer['extras'] ) {
+                foreach ( $customer['extras'] as $id => $data ) {
+                    if ( in_array( $id, $allowed_extras ) ) {
+                        $filtered_extras[ $id ] = $data;
+                    }
+                }
+            }
+            $customers[ $i ]['extras'] = $filtered_extras;
             if ( in_array( $customer['status'], $busy_statuses ) ) {
                 $total_number_of_persons += $customer['number_of_persons'];
                 if ( $extras_consider_duration ) {
@@ -106,6 +124,7 @@ class Appointment
                 }
             }
             $customers[ $i ]['created_from'] = ( $created_from == 'backend' ) ? 'backend' : 'frontend';
+            $customer_ids[] = $customer['id'];
         }
         if ( $service_id ) {
             $staff_service = new Lib\Entities\StaffService();
@@ -240,6 +259,11 @@ class Appointment
                                         $queue = Lib\Proxy\WaitingList::handleFreePlace( $queue, $ca );
                                     }
                                 }
+                                $response['appointments'][] = array(
+                                    'id' => $appointment->getId(),
+                                    'start_date' => $appointment->getStartDate(),
+                                    'end_date' => $appointment->getEndDate(),
+                                );
                             }
                         }
                         if ( $customer['payment_action'] == 'create' && $customer['payment_for'] == 'series' ) {
@@ -401,6 +425,15 @@ class Appointment
                     }
 
                     self::_deleteSentReminders( $appointment, $modified );
+                    $response['appointments'][] = array(
+                        'id' => $appointment->getId(),
+                        'staff_id' => $appointment->getStaffId(),
+                        'service_id' => (int) $appointment->getServiceId(),
+                        'custom_service_name' => $appointment->getCustomServiceName(),
+                        'customer_ids' => array_unique( $customer_ids ),
+                        'start_date' => $appointment->getStartDate(),
+                        'end_date' => $appointment->getEndDate(),
+                    );
                 } else {
                     $response['errors'] = array( 'db' => __( 'Could not save appointment in database.', 'bookly' ) );
                 }
@@ -409,6 +442,66 @@ class Appointment
         update_user_meta( get_current_user_id(), 'bookly_appointment_form_send_notifications', $notification );
 
         return $response;
+    }
+
+    public static function delete(
+        $appointment_id,
+        $notification = true,
+        $reason = null
+    )
+    {
+        $queue = new NotificationList();
+
+        if ( $notification ) {
+            $ca_list = Lib\Entities\CustomerAppointment::query()
+                ->where( 'appointment_id', $appointment_id )
+                ->find();
+            /** @var Lib\Entities\CustomerAppointment $ca */
+            foreach ( $ca_list as $ca ) {
+                switch ( $ca->getStatus() ) {
+                    case Lib\Entities\CustomerAppointment::STATUS_CANCELLED:
+                    case Lib\Entities\CustomerAppointment::STATUS_REJECTED:
+                    case Lib\Entities\CustomerAppointment::STATUS_DONE:
+                        continue 2;
+                    case Lib\Entities\CustomerAppointment::STATUS_PENDING:
+                    case Lib\Entities\CustomerAppointment::STATUS_WAITLISTED:
+                        $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_REJECTED );
+                        break;
+                    case Lib\Entities\CustomerAppointment::STATUS_APPROVED:
+                        $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_CANCELLED );
+                        break;
+                    default:
+                        $busy_statuses = Lib\Proxy\CustomStatuses::prepareBusyStatuses( array() );
+                        if ( in_array( $ca->getStatus(), $busy_statuses ) ) {
+                            $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_CANCELLED );
+                        } else {
+                            $ca->setStatus( Lib\Entities\CustomerAppointment::STATUS_REJECTED );
+                        }
+                }
+                Lib\Notifications\Booking\Sender::sendForCA( $ca, null, array( 'cancellation_reason' => $reason ), false, $queue );
+            }
+        }
+
+        $appointment = Lib\Entities\Appointment::find( $appointment_id );
+        if ( $appointment ) {
+            $appointment->delete();
+        }
+
+        $response = array();
+        $list = $queue->getList();
+        if ( $list ) {
+            $db_queue = new Lib\Entities\NotificationQueue();
+            $db_queue
+                ->setData( json_encode( array( 'all' => $list ) ) )
+                ->save();
+
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue->getInfo() );
+        }
+
+        return array(
+            'success' => true,
+            'data' => $response,
+        );
     }
 
     /**

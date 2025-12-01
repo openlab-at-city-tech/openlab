@@ -50,6 +50,7 @@ class Page extends Lib\Base\Component
                 array(
                     'moment_format_date_time' => Lib\Utils\DateTime::convertFormat( 'date', Lib\Utils\DateTime::FORMAT_MOMENT_JS ) . ' ' . Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
                     'areYouSure' => __( 'Are you sure?', 'bookly' ),
+                    'acceptable_characters' => __( 'Acceptable characters are', 'bookly' ) . ': a-z A-Z 0-9 . & @ - + _ ! % # [space] *',
                     'country' => $cloud->account->getCountry(),
                     'current_tab' => $current_tab,
                     'intlTelInput' => array(
@@ -68,7 +69,7 @@ class Page extends Lib\Base\Component
                     'emptyTable' => __( 'No data available in table', 'bookly' ),
                     'loadingRecords' => __( 'Loading...', 'bookly' ),
                     'quick_search' => __( 'Quick search', 'bookly' ),
-                    'processing' => __( 'Processing...', 'bookly' ),
+                    'processing' => __( 'Processing', 'bookly' ) . '…',
                     'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
                     'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
                     'edit' => __( 'Edit', 'bookly' ),

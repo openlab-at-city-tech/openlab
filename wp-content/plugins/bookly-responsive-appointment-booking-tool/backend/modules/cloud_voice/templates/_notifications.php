@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Lib\Utils\Common;
-use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Notices;
 use Bookly\Lib\Utils\Tables;
@@ -45,8 +44,7 @@ use Bookly\Lib\Utils\Tables;
         </div>
     </div>
 
-
-    <table id="bookly-js-notification-list" class="table table-striped w-100">
+    <table id="bookly-notification-list" class="table table-striped w-100">
         <thead>
         <tr>
             <?php foreach ( $datatable['settings']['columns'] as $column => $show ) : ?>
@@ -59,7 +57,6 @@ use Bookly\Lib\Utils\Tables;
                 <?php endif ?>
             <?php endforeach ?>
             <th width="75"></th>
-            <th width="16"><?php Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
         </tr>
         </thead>
     </table>

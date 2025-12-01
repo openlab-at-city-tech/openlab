@@ -5,7 +5,6 @@ jQuery(function ($) {
         $mergeListContainer = $('#bookly-merge-list'),
         $mergeList = $customersList.clone().prop('id', '').find('th:last').remove().end().appendTo($mergeListContainer),
         $filter = $('#bookly-filter'),
-        $checkAllButton = $('#bookly-check-all'),
         $newCustomerBtn = $('#bookly-new-customer'),
         $selectForMergeButton = $('#bookly-select-for-merge'),
         $mergeWithButton = $('[data-target="#bookly-merge-dialog"]'),
@@ -131,20 +130,9 @@ jQuery(function ($) {
                 render: function(data, type, row, meta) {
                     return '<button type="button" class="btn btn-default" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
                 }
-            },
-            {
-                data: null,
-                responsivePriority: 1,
-                orderable: false,
-                searchable: false,
-                render: function(data, type, row, meta) {
-                    return '<div class="custom-control custom-checkbox">' +
-                        '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
-                        '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
-                        '</div>';
-                }
             }
         ]),
+        add_checkbox_column: true
     });
 
     /**
@@ -162,17 +150,9 @@ jQuery(function ($) {
         })
     });
 
-    /**
-     * Select all customers.
-     */
-    $checkAllButton.on('change', function () {
-        $customersList.find('tbody input:checkbox').prop('checked', this.checked);
-    });
-
     $customersList
         // On customer select.
         .on('change', 'tbody input:checkbox', function () {
-            $checkAllButton.prop('checked', $customersList.find('tbody input:not(:checked)').length == 0);
             $mergeWithButton.prop('disabled', $customersList.find('tbody input:checked').length != 1);
         })
         // Edit customer.

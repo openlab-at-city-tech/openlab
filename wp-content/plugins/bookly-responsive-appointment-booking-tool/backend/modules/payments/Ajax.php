@@ -50,8 +50,8 @@ class Ajax extends Lib\Base\Ajax
         foreach ( $payments as $payment ) {
             $details = json_decode( $payment['details'], true );
 
-            $paid_title = Lib\Utils\Price::format( $payment['paid'] );
-            if ( $payment['paid'] != $payment['total'] ) {
+            $paid_title = Lib\Utils\Price::format( $payment['paid'] + $payment['child_paid'] );
+            if ( $payment['paid'] + $payment['child_paid'] != $payment['total'] ) {
                 $paid_title = sprintf( __( '%s of %s', 'bookly' ), $paid_title, Lib\Utils\Price::format( $payment['total'] ) );
             }
 
@@ -73,7 +73,7 @@ class Ajax extends Lib\Base\Ajax
                 'subtotal' => Lib\Utils\Price::format( $details['subtotal']['price'] ),
             );
 
-            $total += $payment['paid'];
+            $total += $payment['paid'] + $payment['child_paid'];
         }
 
         wp_send_json( array(
@@ -101,6 +101,7 @@ class Ajax extends Lib\Base\Ajax
         $payment_ids = array_map( 'intval', self::parameter( 'data', array() ) );
         /** @var Lib\Entities\Payment $payment */
         foreach ( Lib\Entities\Payment::query()->whereIn( 'id', $payment_ids )->find() as $payment ) {
+            Lib\Payment\Proxy\Events::redeemReservedAttendees( $payment );
             $payment->delete();
         }
         wp_send_json_success();
@@ -109,12 +110,24 @@ class Ajax extends Lib\Base\Ajax
     private static function getPaymentQuery( $filter )
     {
         $query = Lib\Entities\Payment::query( 'p' )
-            ->select( 'p.id, p.created_at, p.type, p.paid, p.total, p.status, p.details, c.full_name AS customer, st.full_name AS provider, s.title AS service, a.start_date' )
+            ->select( 'p.id, p.created_at, p.type, p.paid, p.child_paid, p.total, p.status, p.details, c.full_name AS customer, st.full_name AS provider, s.title AS service, a.start_date' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.payment_id = p.id' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )
-            ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' )
-            ->leftJoin( 'Service', 's', 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)' )
-            ->leftJoin( 'Staff', 'st', 'st.id = a.staff_id' )
+            ->leftJoin( 'Appointment', 'a', 'a.id = ca.appointment_id' );
+
+        $staff_join_query = 'st.id = a.staff_id';
+        $service_join_query = 's.id = COALESCE(ca.compound_service_id, ca.collaborative_service_id, a.service_id)';
+        if ( Lib\Config::packagesActive() ) {
+            $query
+                ->leftJoin( 'Package', 'package', 'package.payment_id = p.id', '\BooklyPackages\Lib\Entities' );
+            $staff_join_query .= ' OR st.id = package.staff_id';
+            $service_join_query .= ' OR s.id = package.service_id';
+        }
+
+        $query
+            ->leftJoin( 'Service', 's', $service_join_query )
+            ->leftJoin( 'Staff', 'st', $staff_join_query )
+            ->where( 'p.parent_id', null )
             ->groupBy( 'p.id' );
 
         // Filters.
@@ -145,7 +158,7 @@ class Ajax extends Lib\Base\Ajax
         }
 
         if ( $filter['customer'] != '' ) {
-            $query->where( 'ca.customer_id', $filter['customer'] );
+            $query->where( 'p.customer_id', $filter['customer'] );
         }
 
         if ( $filter['start_date'] === 'null' ) {

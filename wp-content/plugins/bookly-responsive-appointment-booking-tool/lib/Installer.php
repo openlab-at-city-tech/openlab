@@ -474,6 +474,7 @@ class Installer extends Base\Installer
             'bookly_advanced_time_slot_length_minutes' => '',
             'bookly_advanced_slot_date_format' => 'D, M d',
             'bookly_dashboard_based_on_appointment' => 'created_at',
+            'bookly_temporary_logs_mobile_staff_cabinet' => '0',
         );
     }
 
@@ -567,8 +568,7 @@ class Installer extends Base\Installer
                 `icalendar_days_before` INT NOT NULL DEFAULT 365,
                 `icalendar_days_after`  INT NOT NULL DEFAULT 365,
                 `color`                 VARCHAR(255) NOT NULL DEFAULT "#dddddd",
-                `gateways`              VARCHAR(255) DEFAULT NULL,
-                `cloud_msc_token`       VARCHAR(32) DEFAULT NULL
+                `gateways`              VARCHAR(255) DEFAULT NULL
             ) ENGINE = INNODB
             ' . $charset_collate
         );
@@ -734,6 +734,7 @@ class Installer extends Base\Installer
                 `to_admin`       TINYINT(1) NOT NULL DEFAULT 0,
                 `to_custom`      TINYINT(1) NOT NULL DEFAULT 0,
                 `custom_recipients` VARCHAR(255) DEFAULT NULL,
+                `to_organizer`   TINYINT(1) NOT NULL DEFAULT 0,
                 `attach_ics`     TINYINT(1) NOT NULL DEFAULT 0,
                 `attach_invoice` TINYINT(1) NOT NULL DEFAULT 0,
                 `settings`       TEXT NULL
@@ -846,12 +847,15 @@ class Installer extends Base\Installer
         $wpdb->query(
             'CREATE TABLE IF NOT EXISTS `' . Entities\Payment::getTableName() . '` (
                 `id`           INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `customer_id`  INT UNSIGNED DEFAULT NULL,
+                `parent_id`    INT UNSIGNED DEFAULT NULL,
                 `coupon_id`    INT UNSIGNED DEFAULT NULL,
                 `gift_card_id` INT UNSIGNED DEFAULT NULL,
                 `type`         ENUM("local","free","paypal","authorize_net","stripe","2checkout","payu_biz","payu_latam","payson","mollie","woocommerce","cloud_stripe","cloud_square") NOT NULL DEFAULT "local",
                 `total`        DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `tax`          DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `paid`         DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+                `child_paid`   DECIMAL(10,2) NOT NULL DEFAULT 0.00,
                 `paid_type`    ENUM("in_full","deposit") NOT NULL DEFAULT "in_full",
                 `gateway_price_correction` DECIMAL(10,2) NULL DEFAULT 0.00,
                 `status`       ENUM("pending","completed","rejected","refunded") NOT NULL DEFAULT "completed",
@@ -867,6 +871,16 @@ class Installer extends Base\Installer
                 FOREIGN KEY (order_id)
                 REFERENCES ' . Entities\Order::getTableName() . '(id)
                 ON DELETE SET NULL
+                ON UPDATE CASCADE,
+            CONSTRAINT
+                FOREIGN KEY (customer_id)
+                REFERENCES ' . Entities\Customer::getTableName() . '(id)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE,
+            CONSTRAINT
+                FOREIGN KEY (parent_id)
+                REFERENCES ' . Entities\Payment::getTableName() . '(id)
+                ON DELETE CASCADE
                 ON UPDATE CASCADE
             ) ENGINE = INNODB
             ' . $charset_collate
@@ -978,7 +992,6 @@ class Installer extends Base\Installer
             'CREATE TABLE IF NOT EXISTS `' . Entities\Shop::getTableName() . '` (
                 `id`          INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `plugin_id`   INT UNSIGNED NOT NULL,
-                `type`        ENUM("plugin","bundle") NOT NULL DEFAULT "plugin",
                 `highlighted` TINYINT(1) NOT NULL DEFAULT 0,
                 `priority`    INT UNSIGNED DEFAULT 0,
                 `demo_url`    VARCHAR(255) DEFAULT NULL,
@@ -989,11 +1002,15 @@ class Installer extends Base\Installer
                 `icon`        VARCHAR(255) NOT NULL,
                 `image`       VARCHAR(255) NOT NULL,
                 `price`       DECIMAL(10,2) NOT NULL,
+                `sub_price`   VARCHAR(64),
                 `sales`       INT UNSIGNED NOT NULL,
                 `rating`      DECIMAL(10,2) NOT NULL,
                 `reviews`     INT UNSIGNED NOT NULL,
                 `published`   DATETIME NOT NULL,
                 `seen`        TINYINT(1) NOT NULL DEFAULT 0,
+                `license`     VARCHAR(32) DEFAULT NULL,
+                `bundle_plugins` TEXT DEFAULT NULL,
+                `visible`     TINYINT DEFAULT 1,
                 `created_at`  DATETIME NOT NULL
             ) ENGINE = INNODB
             ' . $charset_collate
@@ -1104,6 +1121,22 @@ class Installer extends Base\Installer
                 `created_at` DATETIME NOT NULL
              ) ENGINE = INNODB
              ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\Auth::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `staff_id` INT UNSIGNED NULL,
+                `wp_user_id` INT UNSIGNED NULL,
+                `token` VARCHAR(32) NOT NULL,
+                `created_at` DATETIME NOT NULL,
+            CONSTRAINT
+                FOREIGN KEY (staff_id)
+                REFERENCES ' . Entities\Staff::getTableName() . '(id)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE
+            ) ENGINE = INNODB
+            ' . $charset_collate
         );
     }
 

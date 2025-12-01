@@ -7,7 +7,7 @@ use BooklyPackages\Lib\DataHolders\Booking\Package;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Booking;
-use Bookly\Lib\Proxy As BooklyProxy;
+use Bookly\Lib\Proxy as BooklyProxy;
 
 abstract class Sender extends Booking\BaseSender
 {
@@ -20,6 +20,14 @@ abstract class Sender extends Booking\BaseSender
     {
         if ( Config::proActive() ) {
             Proxy\Pro::sendCombinedToClient( $order );
+            if ( Config::eventsActive() ) {
+                foreach ( $order->getItems() as $item ) {
+                    if ( $item->isEventAttendee() ) {
+                        BooklyProxy\Events::sendNotifications( $order );
+                        break;
+                    }
+                }
+            }
         }
 
         $codes = new Codes( $order );
@@ -37,7 +45,7 @@ abstract class Sender extends Booking\BaseSender
             } elseif ( $item->isPackage() ) {
                 /** @var Package $item */
                 BooklyProxy\Packages::sendNotifications( $item );
-            } elseif ( $item->isGiftCard() ) {
+            } elseif ( $item->isGiftCard() || $item->isEventAttendee() ) {
                 // ok
             } else {
                 // Notify client.

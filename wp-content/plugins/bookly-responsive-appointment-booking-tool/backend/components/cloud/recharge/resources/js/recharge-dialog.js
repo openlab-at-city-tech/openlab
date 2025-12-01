@@ -15,6 +15,16 @@ jQuery(function ($) {
             accepted: $('#bookly-recharge-accepted', $modal).hide(),
             cancelled: $('#bookly-recharge-cancelled', $modal).hide(),
         },
+        $promo_section = $('.bookly-js-promo-section', slides.payment),
+        promo = {
+            $add: $('.bookly-js-add-promo', $modal),
+            $remove: $('.bookly-js-remove-promo', $modal),
+            $code: $('.bookly-js-promo-code', $promo_section),
+            $apply: $('.bookly-js-apply-promo', $promo_section),
+            $error: $('.bookly-js-promo-error', $promo_section),
+            $success: $('.bookly-js-promo-success', slides.payment),
+            $success_info: $('.bookly-js-promo-success-info', slides.payment),
+        },
         $rechargeModalActivator = $('.bookly-js-recharge-dialog-activator'),
         payment = {type: '', data: {}},
         $recharge = $('[data-recharge]'),
@@ -166,6 +176,76 @@ jQuery(function ($) {
         }
     });
 
+    promo.$add.on('click', function () {
+        promo.$add.hide();
+        promo.$remove.hide();
+        $promo_section.show();
+    });
+
+    promo.$remove.on('click', function () {
+        promo.$remove.hide();
+        promo.$success.hide();
+        promo.$code.val('');
+        $promo_section.show();
+    });
+
+    promo.$apply.on('click', function () {
+        const ladda = Ladda.create(this);
+        ladda.start();
+        promo.$error.hide();
+        promo.$success.hide();
+        
+        $.ajax({
+            method: 'POST',
+            url: ajaxurl,
+            data: {
+                action: 'bookly_verify_cloud_promo_code',
+                csrf_token: BooklyL10nGlobal.csrf_token,
+                promo_code: promo.$code.val(),
+            },
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $promo_section.hide();
+                    promo.$success_info.html('');
+                    if (response.data['type'] === 'percentage') {
+                        let bonusValue = parseFloat(response.data.bonus).toString() + '%';
+                        let message = BooklyRechargeDialogL10n.promo_percentage_info.replace('%s', bonusValue);
+                        promo.$success_info.html(message);
+                    }
+                    promo.$success.show();
+                    promo.$remove.show();
+                } else {
+                    promo.$error.show();
+                }
+                ladda.stop();
+            },
+            error: function () {
+                promo.$error.show();
+                ladda.stop();
+            }
+        });
+    });
+
+    promo.$code.on('input', function () {
+        const hasValue = $(this).val().trim().length > 0;
+        promo.$apply.prop('disabled', !hasValue);
+    });
+
+    promo.$code.on('keydown', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            promo.$apply.trigger('click');
+        }
+    });
+
+    function getValidatedPromoCode() {
+        if (promo.$success.is(':visible')) {
+            return promo.$code.val();
+        }
+        return '';
+    }
+
     function showSlide(slide) {
         $.each(slides, function () {
             this.hide();
@@ -178,6 +258,14 @@ jQuery(function ($) {
                 !BooklyRechargeDialogL10n.no_card.includes(BooklyRechargeDialogL10n.country)
             );
             slides.payment.find('.bookly-js-action').text(BooklyRechargeDialogL10n.payment[payment.type].action);
+
+            promo.$remove.hide();
+            promo.$add.show();
+            $promo_section.hide();
+            promo.$error.hide();
+            promo.$success.hide();
+            promo.$code.val('');
+            promo.$apply.prop('disabled', true);
         }
 
         return slides[slide].show();
@@ -195,6 +283,7 @@ jQuery(function ($) {
                 url: document.URL.split('#')[0],
                 csrf_token: BooklyL10nGlobal.csrf_token,
                 recharge: payment.recharge.id,
+                promo_code: getValidatedPromoCode()
             },
             dataType: 'json',
             success: function (response) {
@@ -220,7 +309,8 @@ jQuery(function ($) {
                 action: 'bookly_init_auto_recharge_paypal',
                 url: document.URL.split('#')[0],
                 csrf_token: BooklyL10nGlobal.csrf_token,
-                recharge: payment.recharge.id
+                recharge: payment.recharge.id,
+                promo_code: getValidatedPromoCode()
             },
             dataType: 'json',
             success: function (response) {
@@ -251,6 +341,7 @@ jQuery(function ($) {
                 action: 'bookly_create_stripe_checkout_session',
                 csrf_token: BooklyL10nGlobal.csrf_token,
                 recharge: payment.recharge.id,
+                promo_code: getValidatedPromoCode(),
                 mode: payment.type === 'manual' ? 'payment' : 'setup',
                 url: document.URL.split('#')[0],
             },

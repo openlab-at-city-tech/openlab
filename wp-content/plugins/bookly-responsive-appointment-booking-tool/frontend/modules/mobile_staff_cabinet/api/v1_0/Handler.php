@@ -1,5 +1,5 @@
 <?php
-namespace Bookly\Frontend\Modules\MobileStaffCabinet;
+namespace Bookly\Frontend\Modules\MobileStaffCabinet\Api\V1_0;
 
 use Bookly\Lib;
 use Bookly\Lib\Config;
@@ -12,101 +12,63 @@ use Bookly\Lib\Slots\DatePoint;
 use Bookly\Lib\Utils\Common;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Appointment as UtilAppointment;
+use Bookly\Frontend\Modules\MobileStaffCabinet\Api;
+use Bookly\Frontend\Modules\MobileStaffCabinet\Api\Exceptions;
 
-class Response10
+class Handler extends Api\ApiHandler
 {
-    /** @var Staff */
-    protected $staff;
-    /** @var array */
-    protected $params;
-    /** @var array */
-    protected $result = array();
-    /** @var int */
-    protected $http_status = 200;
-    /** @var bool */
-    protected $error_code = 0;
-    /** @var string */
-    protected $error_message = 'ERROR';
-    /** @var array */
-    protected $error_data = array();
-
     /**
-     * @param Entities\Staff $staff
-     * @param array $params
+     * @param string $role
+     * @param Lib\Base\Request $request
+     * @param Api\IResponse $response
      */
-    public function __construct( $staff, $params )
+    public function __construct( $role, Lib\Base\Request $request, Api\IResponse $response )
     {
-        $this->staff = $staff;
-        $this->params = $params;
+        $this->role = $role;
+        $this->request = $request;
+        $this->setParams( $request->get( 'params', array() ) );
+        $this->response = $response;
     }
 
-    public function init()
+    public function setStaff( $staff )
     {
-//        $pre_generated = get_option( 'bookly_appointments_displayed_time_slots' ) === 'all';
-//        $type = Service::TYPE_SIMPLE;
-//        $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
-//        $max_duration  = 0;
+        $this->staff = $staff;
+        $this->staff && Lib\Utils\Log::setAuthor( $staff->getFullName() );
+    }
 
-//        $services = array();
-//        foreach ( $this->staff->getServicesData( $type ) as $row ) {
-//            /** @var Lib\Entities\StaffService $staff_service */
-//            $staff_service = $row['staff_service'];
-//            /** @var Service $service */
-//            $service = $row['service'];
-//
-//            $sub_services = $service->getSubServices();
-//            if ( $type == Service::TYPE_SIMPLE || ! empty( $sub_services ) ) {
-//                if ( $staff_service->getLocationId() === null || Lib\Proxy\Locations::prepareStaffLocationId( $staff_service->getLocationId(), $staff_service->getStaffId() ) == $staff_service->getLocationId() ) {
-//                    if ( ! in_array( $service->getId(), array_map( function ( $service ) { return $service['id']; }, $services ) ) ) {
-//                        $service_data = array(
-//                            'id' => (int) $service->getId(),
-//                            'name' => $service->getTitle(),
-//                            'name_d' => $service->getTitle() . ' (' . DateTime::secondsToInterval( $service->getDuration() ) . ')',
-//                            'duration' => (int) $service->getDuration(),
-//                            'locations' => (object) array(
-//                                ( $staff_service->getLocationId() ?: 0 ) => array(
-//                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-//                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
-//                                ),
-//                            ),
-//                        );
-//                        $max_duration = max( $max_duration, $service->getUnitsMax() * $service->getDuration() );
-//                        // Prepare time slots if service has custom time slots length.
-//                        if ( ! $appointments_time_delimiter && $pre_generated && ( $ts_length = (int) $service->getSlotLength() ) ) {
-//                            $time_end = max( $service->getUnitsMax() * $service->getDuration() + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
-//                            $service_data['custom_time_slots'] = $this->generateSlots( 0, $time_end, $ts_length );
-//                        } else {
-//                            $service_data['custom_time_slots'] = false;
-//                        }
-//                        $services[] = $service_data;
-//                    } else {
-////                        array_walk( $services, function ( &$item ) use ( $staff_service, $service ) {
-////                            if ( $item['id'] == $service->getId() ) {
-////                                $item['locations'][ $staff_service->getLocationId() ?: 0 ] = array(
-////                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-////                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
-////                                );
-////                            }
-////                        } );
-//                    }
-//                }
-//            }
-//        }
-//        $slots = array( 'start' => array() );
-//
-//        if ( $pre_generated ) {
-//            $ts_length = $appointments_time_delimiter > 0 ? $appointments_time_delimiter : Lib\Config::getTimeSlotLength();
-//            $time_end = max( $max_duration + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
-//
-//            $slots = $this->generateSlots( 0, $time_end, $ts_length );
-//        }
-//        $bounding = Lib\Config::getBoundingDaysForPickadate();
+    public function setWpUser( $wp_user )
+    {
+        $this->wp_user = $wp_user;
+        if ( $wp_user ) {
+            Lib\Utils\Log::setAuthor( $wp_user->display_name );
+        }
+    }
+
+    protected function init()
+    {
+        $me = array(
+            'email' => '',
+            'full_name' => '',
+            'role' => $this->role,
+            'img' => $this->staff ? Lib\Utils\Common::getAttachmentUrl( $this->staff->getAttachmentId(), 'thumbnail' ) : '',
+        );
+
+        switch ( $this->role ) {
+            case self::ROLE_SUPERVISOR:
+                $me['full_name'] = $this->wp_user->display_name;
+                $me['email'] = $this->wp_user->user_email;
+                if ( ! $me['img'] && get_option( 'show_avatars' ) ) {
+                    $me['img'] = get_avatar_url( $this->wp_user->user_email ) ?: '';
+                }
+                break;
+            case self::ROLE_STAFF:
+                $me['full_name'] = $this->staff->getFullName();
+                $me['email'] = $this->staff->getEmail();
+                break;
+        }
 
         $this->result = array(
-            'me' => array(
-                'email' => $this->staff->getEmail(),
-                'full_name' => $this->staff->getFullName(),
-            ),
+            'me' => $me,
             'settings' => array(
 //                'slots' => array(
 //                    'server_side' => ! $pre_generated,
@@ -136,7 +98,7 @@ class Response10
         );
     }
 
-    public function appointment()
+    protected function appointment()
     {
         $response = array( 'data' => array() );
         $appointment = new Appointment();
@@ -154,23 +116,12 @@ class Response10
                     a.location_id,
                     a.online_meeting_provider,
                     a.online_meeting_id' )
-//                ->addSelect( sprintf( '%s AS min_capacity, %s AS max_capacity',
-//                    Lib\Proxy\Shared::prepareStatement( 1, 'MIN(ss.capacity_min)', 'StaffService' ),
-//                    Lib\Proxy\Shared::prepareStatement( 1, 'MAX(ss.capacity_max)', 'StaffService' )
-//                ) )
                 ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
-//                ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id AND ss.location_id <=> a.location_id' )
                 ->where( 'a.id', $appointment->getId() )
             ;
 
-//            if ( ! Lib\Proxy\Locations::servicesPerLocationAllowed() ) {
-//                $query
-//                    ->addSelect( 'ss.location_id' )
-//                    ->where( 'ss.location_id', null );
-//            }
-
             // Determine display time zone
-            $display_tz = Common::getCurrentUserTimeZone();
+            $display_tz = Common::getStaffTimeZone( $this->staff );
             $wp_tz = Lib\Config::getWPTimeZone();
 
             // Fetch appointment,
@@ -182,14 +133,15 @@ class Response10
             }
 
             $response['data']['id'] = (int) $appointment->getId();
+            $response['data']['staff_id'] = (int) $appointment->getStaffId();
             $response['data']['total_number_of_persons'] = (int) $info['total_number_of_persons'];
-//            $response['data']['min_capacity'] = (int) $info['min_capacity'];
-//            $response['data']['max_capacity'] = (int) $info['max_capacity'];
             $response['data']['start_date'] = $info['start_date'];
             $response['data']['end_date'] = $info['end_date'];
             $response['data']['service_id'] = (int) $info['service_id'];
             $response['data']['internal_note'] = $info['internal_note'];
             $response['data']['location_id'] = (int) $info['location_id'];
+            $response['data']['custom_service_name'] = $info['custom_service_name'];
+            $response['data']['custom_service_price'] = (float) $info['custom_service_price'];
 
             $customers = CustomerAppointment::query( 'ca' )
                 ->select( 'ca.id,
@@ -264,12 +216,13 @@ class Response10
         $this->result = $response['data'];
     }
 
-    public function checkAppointmentTime()
+    protected function checkAppointmentTime()
     {
         $appointment_id = (int) $this->param( 'id', 0 );
         $service_id = (int) $this->param( 'service_id' );
         $customer_appointments = $this->param( 'customer_appointments', array() );
         $start_date = $this->param( 'start_date' );
+        $location_id = (int) $this->param( 'location_id' );
         foreach ( $customer_appointments as &$ca ) {
             if ( isset( $ca['id'] ) ) {
                 $ca['ca_id'] = $ca['id'];
@@ -299,13 +252,21 @@ class Response10
                 $end_date = DatePoint::fromStr( $start_date )->modify( $service->getDuration() )->format( 'Y-m-d H:i:s' );
             }
         }
+        if ( $this->role === self::ROLE_SUPERVISOR ) {
+            $staff_id = $this->param( 'staff_id' );
+            if ( ! $staff_id ) {
+                throw new Exceptions\ParameterException( 'staff_id', $this->param( 'staff_id' ) );
+            }
+        } else {
+            $staff_id = $this->staff->getId();
+        }
 
         $result = UtilAppointment::checkTime( $appointment_id,
             $start_date,
             $end_date,
-            (int) $this->staff->getId(),
-            (int) $this->param( 'service_id' ),
-            null,
+            (int) $staff_id,
+            $service_id,
+            $location_id,
             $customer_appointments
         );
 
@@ -314,7 +275,7 @@ class Response10
         $this->result = $result;
     }
 
-    public function saveAppointment()
+    protected function saveAppointment()
     {
         $appointment_id = (int) $this->param( 'id', 0 );
         $location_id = (int) $this->param( 'location_id', 0 );
@@ -322,11 +283,21 @@ class Response10
         $notification = $this->param( 'notification', false );
         $custom_service_name = trim( $this->param( 'custom_service_name', '' ) );
         $custom_service_price = trim( $this->param( 'custom_service_price', '' ) );
+        if ( $this->role === self::ROLE_SUPERVISOR ) {
+            $staff_id = $this->param( 'staff_id' );
+            if ( ! $staff_id ) {
+                throw new Exceptions\ParameterException( 'staff_id', $this->param( 'staff_id' ) );
+            }
+        } else {
+            $staff_id = $this->staff->getId();
+        }
+
+        $skip_date = 0;
         $service = $service_id
             ? Service::find( $service_id )
             : null;
         if ( ! $service && ! $custom_service_name ) {
-            throw new ParameterException( 'service_id', $this->param( 'service_id' ) );
+            throw new Exceptions\ParameterException( 'service_id', $this->param( 'service_id' ) );
         }
 
         $customer_appointments = $this->param( 'customer_appointments', array() );
@@ -355,14 +326,25 @@ class Response10
             }
         }
 
+        if ( ! $skip_date && $this->staff ) {
+            $display_tz = Common::getStaffTimeZone( $this->staff );
+            // Determine display time zone,
+            // and shift the dates to WP time zone if needed
+            $wp_tz = Lib\Config::getWPTimeZone();
+            if ( $display_tz !== $wp_tz ) {
+                $start_date = DateTime::convertTimeZone( $start_date, $display_tz, $wp_tz );
+                $end_date = DateTime::convertTimeZone( $end_date, $display_tz, $wp_tz );
+            }
+        }
+
         $response = UtilAppointment::save(
             $appointment_id,
-            (int) $this->staff->getId(),
+            (int) $staff_id,
             $service_id,
             $custom_service_name,
             $custom_service_price,
             $location_id,
-            0,
+            $skip_date,
             $start_date,
             $end_date,
             array( 'enabled' => 0 ),
@@ -378,12 +360,31 @@ class Response10
 
             $this->result = $response;
         } else {
-            $this->error_code = 400;
-            $this->error_data = $response['errors'];
+            throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
         }
     }
 
-    public function appointments()
+    protected function deleteAppointment()
+    {
+        $appointment_id = (int) $this->param( 'id', 0 );
+        $notification = $this->param( 'notification', false );
+        $reason = $this->param( 'reason', '' );
+        if ( $this->role === self::ROLE_STAFF ) {
+            $staff_id = Appointment::query()->where( 'id', $appointment_id )->fetchVar( 'staff_id' );
+            if ( $staff_id != $this->staff->getId() ) {
+                throw new Exceptions\ApiException( 'FORBIDDEN', 403 );
+            }
+        }
+
+        $response = UtilAppointment::delete( $appointment_id, $notification, $reason );
+        if ( $response['success'] ) {
+            $this->result = $response['data'];
+        } else {
+            throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
+        }
+    }
+
+    protected function appointments()
     {
         $one_day = new \DateInterval( 'P1D' );
         $list = array();
@@ -392,14 +393,19 @@ class Response10
         $location_ids = array();
 
         // Determine display time zone
-        $display_tz = Common::getCurrentUserTimeZone();
+        $display_tz = Common::getStaffTimeZone( $this->staff );
 
         // Due to possibly different time zones of staff members expand start and end dates
         // to provide 100% coverage of the requested date range
         $start_date->sub( $one_day );
         $end_date->add( $one_day );
 
-        $query = \Bookly\Backend\Modules\Calendar\Ajax::getAppointmentsQueryForCalendar( array( $this->staff ), $start_date, $end_date, $location_ids );
+        $staff_list = array( $this->staff );
+        if ( $this->role === self::ROLE_SUPERVISOR ) {
+            $staff_list = $this->getStaffListByRole( false, $this->param( 'staff_ids' ) ?: array() );
+        }
+
+        $query = \Bookly\Backend\Modules\Calendar\Ajax::getAppointmentsQueryForCalendar( $staff_list, $start_date, $end_date, $location_ids );
         $query->addSelect( 'a.service_id' );
         $records = \Bookly\Backend\Modules\Calendar\Ajax::getAppointmentsForCalendar( $query );
 
@@ -430,6 +436,7 @@ class Response10
         foreach ( $appointments as $appointment ) {
             $list[] = array(
                 'id' => (int) $appointment['id'],
+                'staff_id' => (int) $appointment['staff_id'],
                 'start_date' => $appointment['start_date'],
                 'end_date' => $appointment['end_date'],
                 'service' => array(
@@ -446,9 +453,9 @@ class Response10
         $this->result = $list ?: array();
     }
 
-    public function customers()
+    protected function customers()
     {
-        $list = Entities\Customer::query()->select( 'id, first_name, last_name, email, phone, notes, group_id' )
+        $list = Entities\Customer::query()->select( 'id, first_name, last_name, email, phone, notes, group_id, attachment_id' )
             ->sortBy( 'full_name' )
             ->fetchArray() ?: array();
 
@@ -456,12 +463,14 @@ class Response10
             $item['id'] = (int) $item['id'];
             $item['group_id'] = (int) $item['group_id'];
             $item['timezone'] = Lib\Proxy\Pro::getLastCustomerTimezone( $item['id'] );
+            $item['img'] = Lib\Utils\Common::getAttachmentUrl( $item['attachment_id'], 'full' );
+            unset( $item['attachment_id'] );
         } );
 
         $this->result = $list;
     }
 
-    public function saveCustomer()
+    protected function saveCustomer()
     {
         if ( $this->param( 'id' ) ) {
             $customer = Entities\Customer::find( $this->param( 'id' ) );
@@ -478,14 +487,19 @@ class Response10
             ->setNotes( $this->param( 'notes', '' ) )
             ->save();
 
-        $this->result = array(
-            'id' => (int) $customer->getId(),
-            'first_name' => $customer->getFirstName(),
-            'last_name' => $customer->getLastName(),
-        );
+        if ( $customer->isLoaded() ) {
+            $this->result = array(
+                'id' => (int) $customer->getId(),
+                'first_name' => $customer->getFirstName(),
+                'last_name' => $customer->getLastName(),
+            );
+        } else {
+            global $wpdb;
+            throw new Exceptions\BooklyException( $wpdb->last_error );
+        }
     }
 
-    public function slots()
+    protected function slots()
     {
         $service_id = $this->param( 'service_id' );
         $service = Service::find( $service_id );
@@ -516,7 +530,7 @@ class Response10
         );
     }
 
-    public function availableSlots()
+    protected function availableSlots()
     {
         $staff_ids = array( $this->staff->getId() );
         $service_id = $this->param( 'service_id' );
@@ -580,37 +594,76 @@ class Response10
         $this->result = $result;
     }
 
-    public function services()
+    /**
+     * @deprecated Bookly 25.1
+     */
+    protected function services()
     {
-//        $pre_generated = get_option( 'bookly_appointments_displayed_time_slots' ) === 'all';
+        $this->staffList();
+        $this->result = $this->result ? $this->result[0]['services'] : array();
+    }
+
+    protected function staffList()
+    {
+        /** @var Staff[] $list */
+        $list = $this->getStaffListByRole();
+
         $type = Service::TYPE_SIMPLE;
-//        $appointments_time_delimiter = get_option( 'bookly_appointments_time_delimiter', 0 ) * MINUTE_IN_SECONDS;
-//        $max_duration  = 0;
 
-        $services = array();
-        foreach ( $this->staff->getServicesData( $type ) as $row ) {
-            /** @var Lib\Entities\StaffService $staff_service */
-            $staff_service = $row['staff_service'];
-            /** @var Service $service */
-            $service = $row['service'];
+        $staff_list = array();
 
-            $sub_services = $service->getSubServices();
-            if ( $type == Service::TYPE_SIMPLE || ! empty( $sub_services ) ) {
-                if ( $staff_service->getLocationId() === null || Lib\Proxy\Locations::prepareStaffLocationId( $staff_service->getLocationId(), $staff_service->getStaffId() ) == $staff_service->getLocationId() ) {
-                    if ( ! in_array( $service->getId(), array_map( function ( $service ) { return $service['id']; }, $services ) ) ) {
-                        $service_data = array(
-                            'id' => (int) $service->getId(),
-                            'name' => $service->getTitle(),
-                            'name_d' => $service->getTitle() . ' (' . DateTime::secondsToInterval( $service->getDuration() ) . ')',
-                            'duration' => (int) $service->getDuration(),
-                            'locations' => array(
-                                array(
-                                    'id' => (int) $staff_service->getLocationId() ?: 0,
-                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
+        foreach ( $list as $staff ) {
+            $staff_item = array(
+                'id' => (int) $staff->getId(),
+                'full_name' => $staff->getFullName(),
+                'email' => $staff->getEmail(),
+                'phone' => $staff->getPhone(),
+                'img' => Lib\Utils\Common::getAttachmentUrl( $staff->getAttachmentId(), 'full' ),
+                'services' => array(),
+                'locations' => array(),
+            );
+
+            $staff_locations = Lib\Proxy\Locations::findByStaffId( $staff->getId() ) ?: array();
+            foreach ( $staff_locations as $location ) {
+                $staff_item['locations'][] = (int) $location->getId();
+            }
+
+            $services = array();
+            foreach ( $staff->getServicesData( $type ) as $row ) {
+                /** @var Lib\Entities\StaffService $staff_service */
+                $staff_service = $row['staff_service'];
+                /** @var Service $service */
+                $service = $row['service'];
+
+                $sub_services = $service->getSubServices();
+                if ( $type == Service::TYPE_SIMPLE || ! empty( $sub_services ) ) {
+                    if ( $staff_service->getLocationId() === null || Lib\Proxy\Locations::prepareStaffLocationId( $staff_service->getLocationId(), $staff_service->getStaffId() ) == $staff_service->getLocationId() ) {
+                        if ( ! in_array( $service->getId(), array_map( function ( $service ) { return $service['id']; }, $services ) ) ) {
+                            $service_data = array(
+                                'id' => (int) $service->getId(),
+                                'name' => $service->getTitle(),
+                                'name_d' => $service->getTitle() . ' (' . DateTime::secondsToInterval( $service->getDuration() ) . ')',
+                                'duration' => (int) $service->getDuration(),
+                                'locations' => array(
+                                    array(
+                                        'id' => (int) $staff_service->getLocationId() ?: 0,
+                                        'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
+                                        'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
+                                    ),
                                 ),
-                            ),
-                        );
+                                'extras' => array(),
+                            );
+                            foreach ( Lib\Proxy\ServiceExtras::findByServiceId( $service->getId() ) ?: array() as $extras ) {
+                                $service_data['extras'][] = array(
+                                    'id' => (int) $extras->getId(),
+                                    'name' => $extras->getTitle(),
+                                    'price' => (float) $extras->getPrice(),
+                                    'min_quantity' => (int) $extras->getMinQuantity(),
+                                    'max_quantity' => (int) $extras->getMaxQuantity(),
+                                    'img' => Lib\Utils\Common::getAttachmentUrl( $extras->getAttachmentId(), 'full' ),
+                                );
+                            }
+
 //                        $max_duration = max( $max_duration, $service->getUnitsMax() * $service->getDuration() );
 //                        // Prepare time slots if service has custom time slots length.
 //                        if ( ! $appointments_time_delimiter && $pre_generated && ( $ts_length = (int) $service->getSlotLength() ) ) {
@@ -619,32 +672,35 @@ class Response10
 //                        } else {
 //                            $service_data['custom_time_slots'] = false;
 //                        }
-                        $services[] = $service_data;
-                    } else {
-                        array_walk( $services, function ( &$item ) use ( $staff_service, $service ) {
-                            if ( $item['id'] == $service->getId() ) {
-                                $item['locations'][] = array(
-                                    'id' => (int) $staff_service->getLocationId() ?: 0,
-                                    'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
-                                    'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
-                                );
-                            }
-                        } );
+                            $services[] = $service_data;
+                        } else {
+                            array_walk( $services, function ( &$item ) use ( $staff_service, $service ) {
+                                if ( $item['id'] == $service->getId() ) {
+                                    $item['locations'][] = array(
+                                        'id' => (int) $staff_service->getLocationId() ?: 0,
+                                        'capacity_min' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMin() : 1,
+                                        'capacity_max' => Lib\Config::groupBookingActive() ? (int) $staff_service->getCapacityMax() : 1,
+                                    );
+                                }
+                            } );
+                        }
                     }
                 }
             }
+            $staff_item['services'] = $services;
+            $staff_list[] = $staff_item;
         }
 
-        $this->result = $services;
+        $this->result = $staff_list;
     }
 
-    public function sendNotifications()
+    protected function notifications()
     {
         Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( $this->param( 'notifications', array() ), $this->param( 'type', 'all' ), $this->param( 'token' ) );
         $this->result = array( 'success' => true );
     }
 
-    public function settings()
+    protected function settings()
     {
         $result = array();
         $keys = array( 'addons', 'customer_appointment', 'customer_groups', 'locations' );
@@ -685,11 +741,19 @@ class Response10
 
             if ( $key === 'locations' ) {
                 $locations = array();
-                foreach ( Lib\Proxy\Locations::findByStaffId( $this->staff->getId() ) ?: array() as $location ) {
-                    $locations[] = array(
-                        'id' => (int) $location->getId(),
-                        'name' => $location->getName(),
-                    );
+                $staff_list = $this->getStaffListByRole();
+                $exist_locations = array();
+                foreach ( $staff_list as $staff ) {
+                    $list = Lib\Proxy\Locations::findByStaffId( $staff->getId() )?: array();
+                    foreach ( $list as $location ) {
+                        if ( ! in_array( $location->getId(), $exist_locations ) ) {
+                            $exist_locations[] = $location->getId();
+                            $locations[] = array(
+                                'id' => (int) $location->getId(),
+                                'name' => $location->getName(),
+                            );
+                        }
+                    }
                 }
                 $result[ $key ] = $locations;
                 continue;
@@ -699,7 +763,7 @@ class Response10
         $this->result = $result;
     }
 
-    public function deleteNotificationsAttachmentFiles()
+    protected function deleteAttachments()
     {
         /** @var Lib\Entities\NotificationQueue $queue */
         $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $this->param( 'token' ) )->where( 'sent', 0 )->findOne();
@@ -710,58 +774,6 @@ class Response10
         }
 
         $this->result = array( 'success' => true );
-    }
-
-    public function setError( $code, $message = null, $http_status = null, $error_data = null )
-    {
-        $this->error_code = $code;
-        if ( $message ) {
-            $this->error_message = $message;
-        }
-        if ( $http_status ) {
-            $this->http_status = $http_status;
-        }
-        if ( $error_data ) {
-            $this->error_data = $error_data;
-        }
-    }
-
-    public function render()
-    {
-        if ( $this->error_code > 0 ) {
-            $data = array(
-                'error' => array(
-                    'code' => $this->error_code,
-                    'message' => $this->error_message,
-                ),
-            );
-            if ( $this->error_data ) {
-                $data['error']['data'] = $this->error_data;
-            }
-        } else {
-            $data = array( 'result' => $this->result );
-        }
-
-        if ( ! headers_sent() ) {
-            header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ) );
-            header( 'X-Bookly-V: ' . Lib\Plugin::getVersion() );
-            if ( null !== $this->http_status ) {
-                status_header( $this->http_status );
-            }
-        }
-
-        echo wp_json_encode( $data, 0 );
-
-        if ( wp_doing_ajax() ) {
-            wp_die( '', '', array( 'response' => null, ) );
-        } else {
-            die;
-        }
-    }
-
-    protected function param( $name, $default = null )
-    {
-        return array_key_exists( $name, $this->params ) ? stripslashes_deep( $this->params[ $name ] ) : $default;
     }
 
     /**
@@ -801,18 +813,22 @@ class Response10
             'custom_fields' => array(),
             'extras' => array(),
         );
-        $ca = array_merge( $ca, $default );
+        $ca += $default;
         $customer_appointment = $ca['ca_id']
             ? CustomerAppointment::find( $ca['ca_id'] )
             : array();
         if ( $customer_appointment ) {
             $fields = $customer_appointment->getFields();
             foreach ( $default as $key => $value ) {
-                $ca[ $key ] = $fields[ $key ];
+                if ( ! array_key_exists( $key, $ca ) ) {
+                    $ca[ $key ] = $fields[ $key ];
+                }
             }
-            $json_values = array( 'custom_fields', 'extras', );
+            $json_values = array( 'custom_fields', 'extras' );
             foreach ( $json_values as $key ) {
-                $ca[ $key ] = json_decode( $ca[ $key ], true );
+                if ( ! is_array( $ca[ $key ] ) ) {
+                    $ca[ $key ] = json_decode( $ca[ $key ], true );
+                }
             }
         } else {
             unset( $ca['ca_id'] );
@@ -825,7 +841,7 @@ class Response10
      * @param string $key
      * @param string $format
      * @return string
-     * @throws ParameterException
+     * @throws Exceptions\ParameterException
      */
     protected function getDateFormattedParameter( $key, $format )
     {
@@ -833,9 +849,9 @@ class Response10
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @return \DateTime
-     * @throws ParameterException
+     * @throws Exceptions\ParameterException
      */
     protected function getDateTimeParameter( $key )
     {
@@ -846,9 +862,41 @@ class Response10
                     return $date_time;
                 }
             }
-            throw new ParameterException( $key, $this->param( $key ) );
+            throw new Exceptions\ParameterException( $key, $this->param( $key ) );
         } catch ( \Error $e ) {
-            throw new ParameterException( $key, $this->param( $key ) );
+            throw new Exceptions\ParameterException( $key, $this->param( $key ) );
         }
+    }
+
+    /**
+     * @param bool $return_ids
+     * @param array|null $filter_by_ids
+     * @return array
+     */
+    protected function getStaffListByRole( $return_ids = false, $filter_by_ids = array() )
+    {
+        $staff_list = array();
+
+        if ( $this->role === self::ROLE_SUPERVISOR ) {
+            $query = Lib\Entities\Staff::query()
+                ->whereNot( 'visibility', 'archive' );
+            if ( $filter_by_ids && is_array( $filter_by_ids ) ) {
+                $query->whereIn( 'id', $filter_by_ids );
+            }
+
+            if ( $return_ids ) {
+                $staff_list = $query->fetchCol( 'id' );
+            } else {
+                $staff_list = $query->find();
+            }
+        } elseif ( $this->role === self::ROLE_STAFF ) {
+            if ( $return_ids ) {
+                $staff_list = array( $this->staff->getId() );
+            } else {
+                $staff_list = array( $this->staff );
+            }
+        }
+
+        return $staff_list;
     }
 }

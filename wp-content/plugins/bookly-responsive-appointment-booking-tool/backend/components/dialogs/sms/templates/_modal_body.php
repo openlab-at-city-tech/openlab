@@ -32,6 +32,7 @@ use Bookly\Backend\Components\Controls\Inputs;
                 <?php Inputs::renderCheckBox( __( 'Client', 'bookly' ), 1, null, array( 'name' => 'notification[to_customer]' ) ) ?>
                 <?php Inputs::renderCheckBox( __( 'Staff', 'bookly' ), 1, null, array( 'name' => 'notification[to_staff]' ) ) ?>
                 <?php Inputs::renderCheckBox( __( 'Administrators', 'bookly' ), 1, null, array( 'name' => 'notification[to_admin]' ) ) ?>
+                <?php Inputs::renderCheckBox( __( 'Organizer', 'bookly' ), 1, null, array( 'name' => 'notification[to_organizer]' ) ) ?>
                 <?php Inputs::renderCheckBox( __( 'Custom', 'bookly' ), 1, null, array( 'name' => 'notification[to_custom]' ) ) ?>
                 <div class="bookly-js-custom-recipients">
                     <textarea name="notification[custom_recipients]" rows="2" class="form-control"></textarea>

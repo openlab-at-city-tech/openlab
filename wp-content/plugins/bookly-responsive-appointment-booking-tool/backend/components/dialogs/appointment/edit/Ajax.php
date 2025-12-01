@@ -269,7 +269,7 @@ class Ajax extends Lib\Base\Ajax
                     ca.compound_token,
                     ca.time_zone,
                     ca.time_zone_offset,
-                    p.paid    AS payment,
+                    p.paid + p.child_paid AS payment,
                     p.total   AS payment_total,
                     p.type    AS payment_type,
                     p.details AS payment_details,

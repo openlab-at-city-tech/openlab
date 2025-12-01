@@ -13,7 +13,7 @@ jQuery(function ($) {
         $service_filter = $('#bookly-filter-service'),
         $status_filter = $('#bookly-filter-status'),
         $payment_total = $('#bookly-payment-total'),
-        $delete_button = $('#bookly-delete'),
+        $delete_button = $('#bookly-payments-list-delete-button'),
         $download_invoice = $('#bookly-download-invoices'),
         urlParts = document.URL.split('#'),
         columns = [],
@@ -200,18 +200,6 @@ jQuery(function ($) {
             return buttons + '<button type="button" class="btn btn-default" data-action="show-payment" data-payment_id="' + row.id + '"><i class="fas fa-fw fa-list-alt mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.details + '…</span></button></div>';
         }
     });
-    columns.push({
-        data: null,
-        responsivePriority: 1,
-        orderable: false,
-        searchable: false,
-        render: function (data, type, row, meta) {
-            return '<div class="custom-control custom-checkbox">' +
-                '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
-                '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
-                '</div>';
-        }
-    });
 
     columns[0].responsivePriority = 0;
 
@@ -248,42 +236,11 @@ jQuery(function ($) {
                 return json.data;
             }
         },
-        columns: columns
-    });
-
-    dt.on('order', function () {
-        let order = [];
-        dt.order().forEach(function (data) {
-            order.push({
-                column: columns[data[0]].data,
-                order: data[1]
-            });
-        });
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'bookly_update_table_order',
-                table: 'payments',
-                csrf_token: BooklyL10nGlobal.csrf_token,
-                order: order
-            },
-            dataType: 'json'
-        });
-    });
-
-    /**
-     * Select all coupons.
-     */
-    $check_all_button.on('change', function () {
-        $payments_list.find('tbody input:checkbox').prop('checked', this.checked);
+        columns: columns,
+        add_checkbox_column: true,
     });
 
     $payments_list
-        // On coupon select.
-        .on('change', 'tbody input:checkbox', function () {
-            $check_all_button.prop('checked', $payments_list.find('tbody input:not(:checked)').length == 0);
-        })
         // Show invoice
         .on('click', '[data-action=view-invoice]', function () {
             window.location = $download_invoice.data('action') + '&invoices=' + $(this).data('payment_id');

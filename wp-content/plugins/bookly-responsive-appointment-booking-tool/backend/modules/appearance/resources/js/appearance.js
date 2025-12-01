@@ -163,7 +163,7 @@ jQuery(function ($) {
         );
         $('.bookly-details-step label').css('color', color);
         $('.bookly-card-form label').css('color', color);
-        $('.bookly-nav-tabs .ladda-button, .bookly-nav-steps .ladda-button, .bookly-btn, .bookly-round, .bookly-square').css('background-color', color);
+        $('.bookly-nav-tabs .ladda-button, .bookly-nav-steps .ladda-button, .bookly-btn, .bookly-round').css('background-color', color);
         $('.bookly-triangle').css('border-bottom-color', color);
     };
 

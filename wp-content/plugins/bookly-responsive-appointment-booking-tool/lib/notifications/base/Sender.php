@@ -9,7 +9,7 @@ abstract class Sender extends Reminder
      * Get instant notifications of given type.
      *
      * @param string $type
-     * @return array
+     * @return Notification[]
      */
     public static function getNotifications( $type )
     {
@@ -33,7 +33,7 @@ abstract class Sender extends Reminder
                     if ( $notification->getToCustomer() ) {
                         $result['client'][] = $notification;
                     }
-                    if ( $notification->getToStaff() || $notification->getToAdmin() || $notification->getToCustom() ) {
+                    if ( $notification->getToStaff() || $notification->getToAdmin() || $notification->getToCustom() || $notification->getToOrganizer() ) {
                         $result['staff'][] = $notification;
                     }
                 }

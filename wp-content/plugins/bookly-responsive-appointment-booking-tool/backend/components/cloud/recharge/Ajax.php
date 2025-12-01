@@ -11,7 +11,11 @@ class Ajax extends Lib\Base\Ajax
     public static function initAutoRechargePaypal()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $url = $cloud->account->getBillingAgreementUrl( self::parameter( 'recharge' ), self::parameter( 'url' ) );
+        $url = $cloud->account->getBillingAgreementUrl(
+            self::parameter( 'recharge' ),
+            self::parameter( 'promo_code' ),
+            self::parameter( 'url' )
+        );
         if ( $url !== false ) {
             wp_send_json_success( array( 'paypal_preapproval' => $url ) );
         } else {
@@ -32,6 +36,7 @@ class Ajax extends Lib\Base\Ajax
         $cloud = Lib\Cloud\API::getInstance();
         $result = $cloud->account->createStripeCheckoutSession(
             self::parameter( 'recharge' ),
+            self::parameter( 'promo_code' ),
             self::parameter( 'mode' ),
             self::parameter( 'url' )
         );
@@ -56,6 +61,7 @@ class Ajax extends Lib\Base\Ajax
         $cloud = Lib\Cloud\API::getInstance();
         $order_url = $cloud->account->createPayPalOrder(
             self::parameter( 'recharge' ),
+            self::parameter( 'promo_code' ),
             self::parameter( 'url' )
         );
 
@@ -83,5 +89,13 @@ class Ajax extends Lib\Base\Ajax
         } else {
             wp_send_json_error( array( 'message' => sprintf( __( 'Can\'t disable Auto-Recharge, please contact us at %s', 'bookly' ), '<a href="mailto:support@bookly.info">support@bookly.info</a>' ) ) );
         }
+    }
+
+    public static function verifyCloudPromoCode()
+    {
+        $result = Lib\Cloud\API::getInstance()->account->verifyPromoCode( self::parameter( 'promo_code' ) );
+        $result
+            ? wp_send_json( $result )
+            : wp_send_json_error();
     }
 }

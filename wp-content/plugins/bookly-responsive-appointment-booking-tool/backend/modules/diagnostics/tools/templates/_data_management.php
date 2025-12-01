@@ -20,7 +20,7 @@ $tables = array( 'appointments' => false, 'payments' => false, 'files' => true, 
                     <?php endforeach ?>
                     <div class="bookly-dropdown-divider"></div>
                     <div class="px-3 py-2">
-                        <?php Inputs::renderCheckBox( 'Safe export', null, false, array( 'name' => 'safe' ) ) ?>
+                        <?php Inputs::renderCheckBox( 'Safe&nbsp;export&nbsp;(without&nbsp;credentials)', null, false, array( 'name' => 'safe' ) ) ?>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@ $tables = array( 'appointments' => false, 'payments' => false, 'files' => true, 
                 <button type="button" class="btn btn-primary bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
                 <div class="bookly-dropdown-menu overflow-hidden bookly-js-tables-dropdown">
                     <div class="px-3 py-2">
-                        <?php Inputs::renderCheckBox( 'Safe import', null, true, array( 'name' => 'safe' ) ) ?>
+                        <?php Inputs::renderCheckBox( 'Safe&nbsp;import&nbsp;(without&nbsp;credentials)', null, true, array( 'name' => 'safe' ) ) ?>
                     </div>
                 </div>
             </div>

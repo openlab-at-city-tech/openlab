@@ -623,8 +623,8 @@ class Ajax extends Lib\Base\Ajax
             'created_at' => current_time( 'mysql' ),
         ) );
 
-        foreach ( $rollback_data as $key => $value ) {
-            if ( is_array( $rollback_data[ $key ] ) && count( $rollback_data[ $key ] ) > 0 ) {
+        foreach ( $rollback_data as $value ) {
+            if ( is_array( $value ) && count( $value ) > 0 ) {
                 update_option( 'bookly_import_rollback_data', $rollback_data );
                 break;
             }

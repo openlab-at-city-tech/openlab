@@ -1,7 +1,4 @@
-<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
-use Bookly\Lib\Utils\Common;
-
-?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-modal bookly-fade bookly-js-modal bookly-js-verification-code">
     <div class="bookly-modal-dialog">
         <div class="bookly-modal-content bookly-js-modal-content">

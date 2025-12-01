@@ -24,7 +24,7 @@ class Range
      * @param IPoint $end
      * @param RangeData $data
      */
-    public function __construct( IPoint $start, IPoint $end, RangeData $data = null )
+    public function __construct( IPoint $start, IPoint $end, $data = null )
     {
         $this->start = $start;
         $this->end   = $end;
@@ -169,7 +169,7 @@ class Range
      * @param self $removed
      * @return RangeCollection
      */
-    public function subtract( self $range, self &$removed = null )
+    public function subtract( self $range, &$removed = null )
     {
         $collection = new RangeCollection();
 

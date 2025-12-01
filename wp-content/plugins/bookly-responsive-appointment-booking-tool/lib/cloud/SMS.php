@@ -6,14 +6,14 @@ use Bookly\Lib\Utils;
 
 class SMS extends Base
 {
-    const CANCEL_SENDER_ID    = '/1.0/users/%token%/sender-ids/cancel'; //GET
-    const CHANGE_SMS_STATUS   = '/1.0/users/%token%/sms';               //PATCH
-    const GET_PRICES          = '/1.0/prices';                          //GET
+    const CANCEL_SENDER_ID = '/1.0/users/%token%/sender-ids/cancel'; //GET
+    const CHANGE_SMS_STATUS = '/1.0/users/%token%/sms';               //PATCH
+    const GET_PRICES = '/1.0/prices';                          //GET
     const GET_SENDER_IDS_LIST = '/1.0/users/%token%/sender-ids';        //GET
-    const GET_SMS_LIST        = '/1.1/users/%token%/sms-list';          //POST
-    const REQUEST_SENDER_ID   = '/1.0/users/%token%/sender-ids';        //POST
-    const RESET_SENDER_ID     = '/1.0/users/%token%/sender-ids/reset';  //GET
-    const SEND_SMS            = '/1.1/users/%token%/sms';               //POST
+    const GET_SMS_LIST = '/1.1/users/%token%/sms-list';          //POST
+    const REQUEST_SENDER_ID = '/1.0/users/%token%/sender-ids';        //POST
+    const RESET_SENDER_ID = '/1.0/users/%token%/sender-ids/reset';  //GET
+    const SEND_SMS = '/1.1/users/%token%/sms';               //POST
 
     /** @var array */
     protected $sender_id;
@@ -24,7 +24,7 @@ class SMS extends Base
      * @param string $phone_number
      * @param string $message
      * @param string $impersonal_message
-     * @param int    $type_id
+     * @param int $type_id
      * @return bool
      */
     public function sendSms( $phone_number, $message, $impersonal_message, $type_id = null )
@@ -51,8 +51,9 @@ class SMS extends Base
                     if ( array_key_exists( 'notify_low_balance', $response ) && $response['notify_low_balance'] ) {
                         $this->api->dispatch( Events::ACCOUNT_LOW_BALANCE );
                     }
-                    if ( array_key_exists( 'gateway_status' , $response ) ) {
-                        if ( in_array( $response['gateway_status'], array( 1, 10, 11, 12, 13 ) ) ) {  /* @see SMS::getSmsList */
+                    if ( array_key_exists( 'gateway_status', $response ) ) {
+                        if ( in_array( $response['gateway_status'], array( 1, 10, 11, 12, 13 ) ) ) {
+                            /* @see SMS::getSmsList */
 
                             return true;
                         } elseif ( $response['gateway_status'] == 3 ) {
@@ -88,6 +89,7 @@ class SMS extends Base
 
             return true;
         }
+
         return false;
     }
 
@@ -108,7 +110,13 @@ class SMS extends Base
             $phone_number = ltrim( $phone_number, '0' );
         } else {
             // Default country code can contain not permitted characters. Remove everything except numbers.
-            $phone_number = ltrim( preg_replace( '/\D/', '', get_option( 'bookly_cst_default_country_code', '' ) ), '0' )  . ltrim( $phone_number, '0' );
+            $default_country_code = ltrim( preg_replace( '/\D/', '', get_option( 'bookly_cst_default_country_code', '' ) ), '0' );
+            $phone_number = ltrim( $phone_number, '0' );
+
+            if ( $default_country_code && strpos( $phone_number, $default_country_code ) !== 0 ) {
+                // If a phone number does not start with default country code, prepend it.
+                $phone_number = $default_country_code . $phone_number;
+            }
         }
 
         // Finally remove "+" if there were any among digits.
@@ -140,7 +148,7 @@ class SMS extends Base
                     $item['date'] = Utils\DateTime::formatDate( $date_time );
                     $item['time'] = Utils\DateTime::formatTime( $date_time );
                     $item['message'] = nl2br( preg_replace( '/([^\s]{50})+/U', '$1 ', htmlspecialchars( $item['message'] ) ) );
-                    $item['phone']   = '+' . $item['phone'];
+                    $item['phone'] = '+' . $item['phone'];
                     $item['charge'] = $item['charge'] === null ? '' : rtrim( $item['charge'], '0' );
                     $item['info'] = $item['info'] === null ? '' : nl2br( htmlspecialchars( $item['info'] ) );
                     switch ( $item['status'] ) {
@@ -360,8 +368,10 @@ class SMS extends Base
     public function translateError( $error_code )
     {
         switch ( $error_code ) {
-            case 'ERROR_INVALID_SENDER_ID': return __( 'Incorrect sender ID', 'bookly' );
-            default: return null;
+            case 'ERROR_INVALID_SENDER_ID':
+                return __( 'Incorrect sender ID', 'bookly' );
+            default:
+                return null;
         }
     }
 
@@ -372,7 +382,7 @@ class SMS extends Base
     {
         $sms = $this;
 
-        $this->api->listen( Events::ACCOUNT_PROFILE_LOADED, function ( $response ) use ( $sms ) {
+        $this->api->listen( Events::ACCOUNT_PROFILE_LOADED, function( $response ) use ( $sms ) {
             if ( isset( $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ] ) ) {
                 $sms->sender_id = $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ]['sender_id'];
                 $sms->setUndeliveredSmsCount( $response['account'][ Account::PRODUCT_SMS_NOTIFICATIONS ]['undelivered_count'] );
@@ -381,11 +391,11 @@ class SMS extends Base
             }
         } );
 
-        $this->api->listen( Events::ACCOUNT_PROFILE_NOT_LOADED, function () use ( $sms ) {
+        $this->api->listen( Events::ACCOUNT_PROFILE_NOT_LOADED, function() use ( $sms ) {
             $sms->setUndeliveredSmsCount( 0 );
         } );
 
-        $this->api->listen( Events::ACCOUNT_LOGGED_OUT, function () use ( $sms ) {
+        $this->api->listen( Events::ACCOUNT_LOGGED_OUT, function() use ( $sms ) {
             $sms->setUndeliveredSmsCount( 0 );
         } );
     }

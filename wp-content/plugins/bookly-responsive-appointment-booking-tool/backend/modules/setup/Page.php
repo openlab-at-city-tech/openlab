@@ -79,7 +79,7 @@ class Page extends Lib\Base\Component
                 'welcome_text' => sprintf( '%s<br/><br/>%s<br/><br/>%s',
                     __( 'As the ultimate appointment booking plugin for online scheduling, Bookly is designed to help you effortlessly manage your booking calendar, services, and client base.', 'bookly' ),
                     __( 'This introduction will guide you through the essential configuration steps to get you started quickly. ', 'bookly' ),
-                    sprintf( __( 'You can optionally skip this wizard and refer to %s or watch our %s to learn the basics and get the most out of Bookly.', 'bookly' ), sprintf( '<a href="%s" target="_blank">%s</a>', 'https://api.booking-wp-plugin.com/go/bookly-help-center', __( 'Bookly Help Center', 'bookly' ) ), sprintf( '<a href="%s" target="_blank">%s</a>', 'https://api.booking-wp-plugin.com/go/bookly-youtube', __( 'Video Tutorials', 'bookly' ) ) )
+                    sprintf( __( 'You can optionally skip this wizard and refer to %s or watch our %s to learn the basics and get the most out of Bookly.', 'bookly' ), sprintf( '<a href="%s" target="_blank">%s</a>', 'https://hub.bookly.pro/go/bookly-help-center', __( 'Bookly Help Center', 'bookly' ) ), sprintf( '<a href="%s" target="_blank">%s</a>', 'https://hub.bookly.pro/go/bookly-youtube', __( 'Video Tutorials', 'bookly' ) ) )
                 ),
                 'business_hours' => __( 'Set your company business hours. This schedule will serve as a template for all new staff members.', 'bookly' ),
                 'to' => __( 'to', 'bookly' ),
@@ -90,7 +90,7 @@ class Page extends Lib\Base\Component
                 'cloud_text' => sprintf( '%s<br/><br/>%s<br/><br/>%s<br/><br/>%s',
                     __( 'Bookly Cloud is an integral part of the Bookly booking system, offering a range of additional products and features for efficient appointment management and automation.', 'bookly' ),
                     __( 'Features like SMS Notifications, Zapier integration, Stripe and Square Payments, Gift Cards, Voice and WhatsApp Notifications are designed to enhance your operations and boost your online business.', 'bookly' ),
-                    sprintf( __( 'Discover the full range of <a href="%s" target="_blank">powerful tools here</a>.', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-cloud-overview' ),
+                    sprintf( __( 'Discover the full range of <a href="%s" target="_blank">powerful tools here</a>.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-cloud-overview' ),
                     __( 'Sign up today and enjoy a welcome bonus! ', 'bookly' )
                 ),
                 'create_account' => __( 'Create an account', 'bookly' ),
@@ -125,7 +125,7 @@ class Page extends Lib\Base\Component
                     'string_4' => __( 'Create a new page in WordPress.', 'bookly' ),
                     'string_5' => sprintf( __( 'Insert the following shortcode: %s', 'bookly' ), '<input type="text" class="form-control d-inline" value="[bookly-form]" readonly style="max-width: 124px;">' ),
                     'string_6' => __( 'Save the page and visit it to see your booking form in action.', 'bookly' ),
-                    'string_7' => sprintf( __( 'Have questions? Visit our %s or reach out to our %s.', 'bookly' ), sprintf( '<a href="https://support.booking-wp-plugin.com/hc/en-us/articles/212800185">%s</a>', __( 'Help center', 'bookly' ) ), sprintf( '<a href="https://api.booking-wp-plugin.com/go/bookly-request-support">%s</a>', __( 'Support Team', 'bookly' ) ) ),
+                    'string_7' => sprintf( __( 'Have questions? Visit our %s or reach out to our %s.', 'bookly' ), sprintf( '<a href="https://support.booking-wp-plugin.com/hc/en-us/articles/212800185">%s</a>', __( 'Help center', 'bookly' ) ), sprintf( '<a href="https://hub.bookly.pro/go/bookly-request-support">%s</a>', __( 'Support Team', 'bookly' ) ) ),
                 ),
             ),
         ) ) );

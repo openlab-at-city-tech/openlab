@@ -1,5 +1,5 @@
 <?php
-namespace Bookly\Frontend\Modules\MobileStaffCabinet;
+namespace Bookly\Frontend\Modules\MobileStaffCabinet\Api\Exceptions;
 
 class ParameterException extends \Exception
 {

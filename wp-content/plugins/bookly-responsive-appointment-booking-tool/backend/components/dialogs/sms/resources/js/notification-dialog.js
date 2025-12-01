@@ -1,11 +1,12 @@
 jQuery(function ($) {
     window.BooklyNotificationDialog = function () {
-        let $notificationList = $('#bookly-js-notification-list'),
+        let $notificationList = $('#bookly-notification-list'),
             $btnNewNotification = $('#bookly-js-new-notification'),
             $modalNotification = $('#bookly-js-notification-modal'),
             containers = {
                 settings: $('#bookly-js-settings-container', $modalNotification),
-                statuses: $('.bookly-js-statuses-container', $modalNotification),
+                appointment_statuses: $('.bookly-js-statuses-container', $modalNotification),
+                payment_statuses: $('.bookly-js-payment-statuses-container', $modalNotification),
                 services: $('.bookly-js-services-container', $modalNotification),
                 recipient: $('.bookly-js-recipient-container', $modalNotification),
                 message: $('#bookly-js-message-container', $modalNotification),
@@ -20,7 +21,7 @@ jQuery(function ($) {
             $btnSaveNotification = $('.bookly-js-save', $modalNotification),
             $helpType = $('.bookly-js-help-block', containers.settings),
             $codes = $('table.bookly-js-codes', $modalNotification),
-            $status = $("select[name='notification[settings][status]']", containers.settings),
+            $appointment_status = $("select[name='notification[settings][status]']", containers.settings),
             $defaultStatuses,
             useTinyMCE = BooklyNotificationDialogL10n.gateway == 'email' && typeof (tinyMCE) !== 'undefined',
             notification = {
@@ -55,6 +56,7 @@ jQuery(function ($) {
                 }
                 containers.message.siblings('a[data-toggle=bookly-collapse]').html(BooklyNotificationDialogL10n.title.container);
                 $('.bookly-js-services', containers.settings).booklyDropdown();
+                $('.bookly-js-payment-statuses', containers.settings).booklyDropdown();
                 $('.modal-title', $modalNotification).html(BooklyNotificationDialogL10n.title.edit);
             });
 
@@ -87,7 +89,8 @@ jQuery(function ($) {
                     recipients = $selected.data('recipients'),
                     showAttach = $selected.data('attach') || [],
                     hideServices = true,
-                    hideStatuses = true,
+                    hideAppointmentStatuses = true,
+                    hidePaymentStatuses = true,
                     notification_type = $selected.val()
                 ;
 
@@ -98,7 +101,7 @@ jQuery(function ($) {
                     case 'appointment_reminder':
                     case 'ca_status_changed':
                     case 'ca_status_changed_recurring':
-                        hideStatuses = false;
+                        hideAppointmentStatuses = false;
                         hideServices = false;
                         break;
                     case 'customer_birthday':
@@ -107,7 +110,7 @@ jQuery(function ($) {
                         break;
                     case 'new_booking':
                     case 'new_booking_recurring':
-                        hideStatuses = false;
+                        hideAppointmentStatuses = false;
                         hideServices = false;
                         break;
                     case 'new_booking_combined':
@@ -115,6 +118,10 @@ jQuery(function ($) {
                         break;
                     case 'new_package':
                     case 'package_deleted':
+                    case 'ticket_deleted':
+                        break;
+                    case 'new_attendees':
+                        hidePaymentStatuses = false;
                         break;
                     case 'staff_day_agenda':
                         $("input[name='notification[settings][option]'][value=3]", containers.settings).prop('checked', true);
@@ -123,8 +130,9 @@ jQuery(function ($) {
                         break;
                 }
 
-                containers.statuses.toggle(!hideStatuses);
+                containers.appointment_statuses.toggle(!hideAppointmentStatuses);
                 containers.services.toggle(!hideServices);
+                containers.payment_statuses.toggle(!hidePaymentStatuses);
 
                 switch (set[0]) {
                     case 'bidirectional':
@@ -144,7 +152,7 @@ jQuery(function ($) {
                 }
 
                 // Hide/un hide recipient
-                $.each(['customer', 'staff', 'admin', 'custom'], function (index, value) {
+                $.each(['customer', 'staff', 'admin', 'custom', 'organizer'], function (index, value) {
                     $("[name$='[to_" + value + "]']:checkbox", containers.recipient).closest('.custom-control').toggle(recipients.indexOf(value) != -1);
                 });
 
@@ -171,6 +179,7 @@ jQuery(function ($) {
             });
 
         $('.bookly-js-services', $modalNotification).booklyDropdown({});
+        $('.bookly-js-payment-statuses', $modalNotification).booklyDropdown({});
 
         $btnNewNotification.off()
             .on('click', function () {
@@ -277,17 +286,17 @@ jQuery(function ($) {
             $("input[name='notification[name]']", containers.settings).val(data.name);
             $("input[name='notification[active]'][value=" + data.active + "]", containers.settings).prop('checked', true);
             if ($defaultStatuses) {
-                $status.html($defaultStatuses);
+                $appointment_status.html($defaultStatuses);
             } else {
-                $defaultStatuses = $status.html();
+                $defaultStatuses = $appointment_status.html();
             }
             if (data.settings.status !== null) {
-                if ($status.find('option[value="' + data.settings.status + '"]').length > 0) {
-                    $status.val(data.settings.status);
+                if ($appointment_status.find('option[value="' + data.settings.status + '"]').length > 0) {
+                    $appointment_status.val(data.settings.status);
                 } else {
                     var custom_status = data.settings.status.charAt(0).toUpperCase() + data.settings.status.slice(1);
 
-                    $status.append($("<option></option>", {
+                    $appointment_status.append($("<option></option>", {
                         value: data.settings.status,
                         text: custom_status.replace(/\-/g, ' ')
                     })).val(data.settings.status);
@@ -296,6 +305,7 @@ jQuery(function ($) {
 
             $("input[name='notification[settings][services][any]'][value='" + data.settings.services.any + "']", containers.settings).prop('checked', true);
             $('.bookly-js-services', containers.settings).booklyDropdown('setSelected', data.settings.services.ids);
+            $('.bookly-js-payment-statuses', containers.settings).booklyDropdown('setSelected', data.settings.hasOwnProperty('payment_statuses') ? data.settings.payment_statuses : []);
 
             $("input[name='notification[settings][option]'][value=" + data.settings.option + "]", containers.settings).prop('checked', true);
             $("select[name='notification[settings][offset_hours]']", containers.settings).val(data.settings.offset_hours);
@@ -309,6 +319,7 @@ jQuery(function ($) {
             $("input[name='notification[to_staff]']", containers.settings).prop('checked', data.to_staff == '1');
             $("input[name='notification[to_customer]']", containers.settings).prop('checked', data.to_customer == '1');
             $("input[name='notification[to_admin]']", containers.settings).prop('checked', data.to_admin == '1');
+            $("input[name='notification[to_organizer]']", containers.settings).prop('checked', data.to_organizer == '1');
             $("input[name='notification[to_custom]']", containers.settings).prop('checked', data.to_custom == '1');
             $("input[name='notification[to_custom]']", containers.settings)
                 .on('change', function () {
@@ -352,7 +363,9 @@ jQuery(function ($) {
                 $whatsapTemplates[0].appendChild(new Option());
                 for (var key in BooklyNotificationDialogL10n.templates) {
                     let tpl = BooklyNotificationDialogL10n.templates[key],
-                        status = BooklyNotificationDialogL10n.statuses.hasOwnProperty(tpl.status) ? BooklyNotificationDialogL10n.statuses[tpl.status] : (tpl.status.charAt(0) + tpl.status.substring(1).toLowerCase().replaceAll('_', ' '));
+                        status = BooklyNotificationDialogL10n.statuses.hasOwnProperty(tpl.status)
+                            ? BooklyNotificationDialogL10n.statuses[tpl.status]
+                            : (tpl.status.charAt(0) + tpl.status.substring(1).toLowerCase().replaceAll('_', ' '));
 
                     $whatsapTemplates[0].appendChild(new Option(tpl.name + ' (' + tpl.language + ') - ' + status, key));
                 }

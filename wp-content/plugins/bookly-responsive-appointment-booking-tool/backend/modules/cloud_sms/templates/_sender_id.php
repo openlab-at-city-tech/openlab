@@ -20,7 +20,7 @@ use Bookly\Backend\Components\Controls\Buttons;
                 <?php Buttons::render( 'bookly-cancel-sender_id', 'btn btn-danger', __( 'Cancel request', 'bookly' ) . '…', array( 'style' => 'display:none' ) ) ?>
             </div>
         </form>
-        <small class="form-text text-muted"><?php esc_html_e( 'Can only contain letters or digits (up to 11 characters).', 'bookly' ) ?></small>
+        <small class="form-text text-muted"><?php esc_html_e( 'Can only contain letters or digits (up to 11 characters).', 'bookly' ) ?> <?php esc_html_e( 'Acceptable characters are', 'bookly' ) ?>: a-z A-Z 0-9 . & @ - + _ ! % # [space] *</small>
     </div>
     <div class="col-md-4 form-row justify-content-end mt-5">
         <?php Dialogs\TableSettings\Dialog::renderButton( 'sms_sender', 'BooklyL10n', esc_attr( add_query_arg( 'tab', 'sender_id' ) ) ) ?>

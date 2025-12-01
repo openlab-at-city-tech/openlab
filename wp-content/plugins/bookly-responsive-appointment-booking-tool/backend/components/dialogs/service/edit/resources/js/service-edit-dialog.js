@@ -1,6 +1,6 @@
 jQuery(function ($) {
     'use strict';
-    let $servicesList = $('#services-list'),
+    let $servicesList = $('#bookly-services-list'),
         $serviceDialog = $('#bookly-edit-service-modal'),
         $containers = $('.bookly-js-service-containers .tab-pane > div'),
         $serviceLoading = $('.bookly-js-service-containers > .bookly-js-loading', $serviceDialog),

@@ -106,7 +106,10 @@ class Codes
             ),
             'mobile_staff_cabinet' => array(
                 'access_token' => array( 'description' => __( 'Access token', 'bookly' ) ),
-            )
+            ),
+            'order' => array(
+                'order_id' => array( 'description' => __( 'Order ID', 'bookly' ) ),
+            ),
         );
         $this->codes['appointments_list'] = array(
             'appointments' => array(

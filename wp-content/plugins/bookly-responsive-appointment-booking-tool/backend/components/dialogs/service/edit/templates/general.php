@@ -3,6 +3,7 @@ use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib\Entities\Service;
 use Bookly\Lib\Utils\Advertisement;
 use Bookly\Lib\Config;
+use Bookly\Lib\Utils\Common;
 
 /**
  * @var array $service
@@ -20,10 +21,10 @@ $service_id = $service['id'];
         <div class="col-md-auto">
             <div id="bookly-js-service-image">
                 <div class="form-group">
-                    <?php $img = wp_get_attachment_image_src( $service['attachment_id'], 'thumbnail' ) ?>
+                    <?php $img = Common::getAttachmentUrl( $service['attachment_id'], 'thumbnail' ) ?>
 
                     <div class="bookly-js-image bookly-thumb<?php echo esc_attr( $img ? ' bookly-thumb-with-image' : '' ) ?>"
-                         style="<?php echo esc_attr( $img ? 'background-image: url(' . $img[0] . '); background-size: cover;' : '' ) ?>"
+                         style="<?php echo esc_attr( $img ? 'background-image: url(' . $img . '); background-size: cover;' : '' ) ?>"
                     >
                         <i class="fas fa-fw fa-4x fa-camera mt-2 text-white w-100"></i>
                         <?php if ( current_user_can( 'upload_files' ) ) : ?>
@@ -125,6 +126,6 @@ $service_id = $service['id'];
     <div class="form-group">
         <label for="bookly-service-info"><?php esc_html_e( 'Info', 'bookly' ) ?></label>
         <textarea class="form-control" id="bookly-service-info" name="info" rows="3" type="text"><?php echo $service['info'] === null ? '' : esc_textarea( $service['info'] ) ?></textarea>
-        <small class="form-text text-muted"><?php printf( __( 'This text can be inserted into notifications with %s code.', 'bookly' ), '{service_info}' ) ?></small>
+        <small class="form-text text-muted"><?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly' ), '{service_info}' ) ?></small>
     </div>
 </div>

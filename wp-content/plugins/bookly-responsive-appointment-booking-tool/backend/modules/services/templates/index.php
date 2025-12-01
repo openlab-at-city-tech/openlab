@@ -46,7 +46,7 @@ use Bookly\Backend\Components\Dialogs;
                 </div>
             </div>
 
-            <table id="services-list" class="table table-striped w-100">
+            <table id="bookly-services-list" class="table table-striped w-100">
                 <thead>
                 <tr>
                     <?php if ( Proxy\Shared::prepareServiceTypes( array() ) ) : ?>
@@ -59,13 +59,12 @@ use Bookly\Backend\Components\Dialogs;
                         <?php endif ?>
                     <?php endforeach ?>
                     <th width="75"></th>
-                    <th width="16"><?php Controls\Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
                 </tr>
                 </thead>
             </table>
 
             <div class="text-right mt-3">
-                <?php Controls\Buttons::renderDelete( 'bookly-delete', null, null, array( 'disabled' => 'disabled' ) ) ?>
+                <?php Controls\Buttons::renderDelete( 'bookly-services-list-delete-button' ) ?>
             </div>
         </div>
     </div>

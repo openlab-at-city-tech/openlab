@@ -558,20 +558,6 @@ jQuery(function ($) {
             },
         ];
 
-        if (url_params.hasOwnProperty('debug')) {
-            columns.push({
-                data: null,
-                responsivePriority: 1,
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return '<div class="custom-control custom-checkbox">' +
-                        '<input value="' + row.id + '" id=bookly-logs-"' + row.id + '" type="checkbox" class="custom-control-input">' +
-                        '<label for=bookly-logs-"' + row.id + '" class="custom-control-label"></label>' +
-                        '</div>';
-                }
-            });
-        }
-
         dt_logs = booklyDataTables.init($logsTable, {order: [{column: 'id', order: 'desc'}]},
             {
                 ajax: {
@@ -589,11 +575,16 @@ jQuery(function ($) {
                     }
                 },
                 columns: columns,
+                add_checkbox_column: url_params.hasOwnProperty('debug')
             });
     });
 
-    let $checkAllLogs = $('#bookly-check-all', $logsTable),
-        $restoreButton = $('#bookly-logs-restore');
+    $('.bookly-js-reload-log').on('click', function (e) {
+        e.preventDefault();
+        dt_logs.ajax.reload(null,false);
+    });
+
+    let $restoreButton = $('#bookly-logs-restore');
 
     function toggleRestoreButton() {
         let $_checkboxes = $('td input[type=checkbox]:checked');
@@ -615,10 +606,6 @@ jQuery(function ($) {
 
     $logsTable.on('change', 'td input[type=checkbox]', function () {
         toggleRestoreButton();
-    });
-
-    $checkAllLogs.on('change', function () {
-        $logsTable.find('tbody input:checkbox').prop('checked', this.checked).trigger('change');
     });
 
     $restoreButton.on('click', function () {

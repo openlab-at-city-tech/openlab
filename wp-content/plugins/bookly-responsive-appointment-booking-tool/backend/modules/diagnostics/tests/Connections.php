@@ -83,7 +83,7 @@ class Connections extends Test
                         if ( isset( $error_data['headers'] ) ) {
                             $message .= '<span class="badge badge-primary">Headers</span>';
                             if ( is_array( $error_data['headers'] ) ) {
-                                $message .= '<pre>' . json_encode( $error_data['headers'], JSON_PRETTY_PRINT ) . '</pre>';
+                                $message .= '<pre>' . json_encode( $error_data['headers'], 128 ) . '</pre>';
                             } else {
                                 $message .= $error_data['headers'];
                             }

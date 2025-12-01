@@ -30,7 +30,7 @@ class Page extends Lib\Base\Component
             'settingsSaved' => __( 'Settings saved.', 'bookly' ),
             'areYouSure' => __( 'Are you sure?', 'bookly' ),
             'noResults' => __( 'No records.', 'bookly' ),
-            'processing' => __( 'Processing...', 'bookly' ),
+            'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'zeroRecordsAlt' => __( 'No matching records found', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),

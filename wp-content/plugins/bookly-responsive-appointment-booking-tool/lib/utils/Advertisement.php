@@ -11,10 +11,10 @@ abstract class Advertisement
             if ( ! $ads || ! is_array( $ads ) ) {
                 $ad_data = array(
                     'texts' => array(
-                        'content' => sprintf( __( 'To get access to more <a href="%s" target="_blank">features</a>, lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly.', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-addon-pro' ),
+                        'content' => sprintf( __( 'To get access to more <a href="%s" target="_blank">features</a>, lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-addon-pro' ),
                         'button' => __( 'Upgrade', 'bookly' ),
                     ),
-                    'button_url' => 'https://api.booking-wp-plugin.com/go/bookly-pricing',
+                    'button_url' => 'https://hub.bookly.pro/go/bookly-pricing',
                 );
             } else {
                 foreach ( $ads as $ad ) {

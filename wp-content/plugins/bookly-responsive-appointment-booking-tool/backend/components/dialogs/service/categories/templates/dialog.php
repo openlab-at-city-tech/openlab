@@ -55,7 +55,7 @@ use Bookly\Backend\Components\Controls\Elements;
                             <input type="hidden" name="id" value=""/>
                             <textarea class="form-control" name="info" rows="2"></textarea>
                             <small class="form-text text-muted">
-                                <?php esc_html_e( 'This text can be inserted into notifications with {category_info} code', 'bookly' ) ?>
+                                <?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly' ), '{category_info}' ) ?>
                             </small>
                         </div>
                     </div>

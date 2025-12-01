@@ -62,7 +62,7 @@ use Bookly\Lib\Utils;
  */
 ?>
 <div class="col-auto">
-    <a href="<?php echo esc_url( 'https://api.booking-wp-plugin.com/go/' . $page_slug ) ?>" id="bookly-help-btn" target="_blank" class="btn btn-default" title="<?php esc_attr_e( 'Documentation', 'bookly' ) ?>">
+    <a href="<?php echo esc_url( 'https://hub.bookly.pro/go/' . $page_slug ) ?>" id="bookly-help-btn" target="_blank" class="btn btn-default" title="<?php esc_attr_e( 'Documentation', 'bookly' ) ?>">
         <i class="far fa-question-circle"></i><span class="d-none d-lg-inline ml-2"><?php esc_html_e( 'Documentation', 'bookly' ) ?></span>
     </a>
 </div>

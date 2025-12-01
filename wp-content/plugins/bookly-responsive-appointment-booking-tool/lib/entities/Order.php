@@ -20,7 +20,7 @@ class Order extends Lib\Base\Entity
     /**
      * @return array
      */
-    public function getCaItems()
+    public function getItems()
     {
         $records = CustomerAppointment::query( 'ca' )
             ->select( 's.id AS service_id, MIN(a.start_date) AS start_date, MAX(a.end_date) AS end_date, a.custom_service_name, a.location_id, s.title AS service_title, ca.id AS ca_id' )
@@ -41,11 +41,12 @@ class Order extends Lib\Base\Entity
                 $data[] = array(
                     'title' => $appointment['service_id'] === null ? $appointment['custom_service_name'] : Common::getTranslatedString( 'service_' . $appointment['service_id'], $appointment['service_title'] ),
                     'item' => $item,
+                    'type' => 'appointment'
                 );
             }
         }
 
-        return $data;
+        return Proxy\Shared::prepareOrderItems( $data, $this );
     }
 
     /**************************************************************************

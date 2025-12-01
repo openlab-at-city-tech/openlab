@@ -110,9 +110,12 @@ class Logs extends Tool
         $options = array();
         if ( Lib\Config::proActive() ) {
             $options[] = Lib\Utils\Log::OPTION_GOOGLE;
-        }
-        if ( Lib\Config::outlookCalendarActive() ) {
-            $options[] = Lib\Utils\Log::OPTION_OUTLOOK;
+            if ( Lib\Config::outlookCalendarActive() ) {
+                $options[] = Lib\Utils\Log::OPTION_OUTLOOK;
+            }
+            if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) ) {
+                $options[] = Lib\Utils\Log::OPTION_MOBILE_STAFF_CABINET;
+            }
         }
 
         return $options;

@@ -350,7 +350,7 @@ abstract class Plugin
      */
     public static function getPurchaseCodeOption()
     {
-        return static::getPrefix() . 'envato_purchase_code';
+        return static::getPrefix() . 'purchase_code';
     }
 
     /**
@@ -451,10 +451,6 @@ abstract class Plugin
 
             return $plugins;
         } );
-
-        if ( Lib\Config::proActive() ) {
-            PluginPro::registerHooks( $plugin_class );
-        }
     }
 
     /**

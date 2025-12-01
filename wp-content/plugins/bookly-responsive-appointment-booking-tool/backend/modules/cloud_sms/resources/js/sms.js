@@ -66,7 +66,6 @@ jQuery(function ($) {
     $("[href='#campaigns']").one('click', function () {
         let $container = $('#campaigns'),
             $add_campaign = $('#bookly-js-new-campaign', $container),
-            $check_all_button = $('#bookly-cam-check-all', $container),
             $list = $('#bookly-campaigns', $container),
             $filter = $('#bookly-filter', $container),
             $delete_button = $('#bookly-delete', $container),
@@ -160,7 +159,7 @@ jQuery(function ($) {
                 },
             },
             columns: columns,
-            row_with_checkbox: true
+            add_checkbox_column: true
         });
 
         $add_campaign
@@ -188,20 +187,6 @@ jQuery(function ($) {
             BooklyCampaignDialog.runCampaign(data.id, function () {
                 dt_campaigns.ajax.reload(null, false);
             })
-        });
-
-        /**
-         * Select all mailing lists.
-         */
-        $check_all_button.on('change', function () {
-            $list.find('tbody input:checkbox').prop('checked', this.checked);
-        });
-
-        /**
-         * On campaign select.
-         */
-        $list.on('change', 'tbody input:checkbox', function () {
-            $check_all_button.prop('checked', $list.find('tbody input:not(:checked)').length == 0);
         });
 
         /**
@@ -342,21 +327,7 @@ jQuery(function ($) {
                 }
             },
             columns: ml.columns,
-            row_with_checkbox: true
-        });
-
-        /**
-         * Select all mailing lists.
-         */
-        ml.$check_all_button.on('change', function () {
-            ml.$list.find('tbody input:checkbox').prop('checked', this.checked);
-        });
-
-        /**
-         * On mailing list select.
-         */
-        ml.$list.on('change', 'tbody input:checkbox', function () {
-            ml.$check_all_button.prop('checked', ml.$list.find('tbody input:not(:checked)').length == 0);
+            add_checkbox_column: true
         });
 
         /**
@@ -408,20 +379,6 @@ jQuery(function ($) {
             if (show) {
                 mr.columns.push({data: column, render: $.fn.dataTable.render.text()});
             }
-        });
-
-        /**
-         * Select all recipients.
-         */
-        mr.$check_all_button.on('change', function () {
-            mr.$list.find('tbody input:checkbox').prop('checked', this.checked);
-        });
-
-        /**
-         * On recipient select.
-         */
-        mr.$list.on('change', 'tbody input:checkbox', function () {
-            mr.$check_all_button.prop('checked', mr.$list.find('tbody input:not(:checked)').length == 0);
         });
 
         /**
@@ -503,7 +460,7 @@ jQuery(function ($) {
                         language: {
                             zeroRecords: BooklyL10n.zeroRecords,
                         },
-                        row_with_checkbox: true
+                        add_checkbox_column: true
                     });
                 } else {
                     mr.dt.ajax.reload(null, false);
@@ -783,7 +740,29 @@ jQuery(function ($) {
             });
         }
 
-        $request_sender_id.on('click', function () {
+        function validateSenderId(sender_id) {
+            var pattern = /^[a-zA-Z0-9\.\&\@\-\+\_\!\%\#\s\*]*$/;
+            return pattern.test(sender_id);
+        }
+
+        $sender_id.on('input', function() {
+            let value = $(this).val();
+            if (value !== '' && !validateSenderId(value)) {
+                $(this).addClass('is-invalid');
+                $request_sender_id.prop('disabled', true);
+            } else {
+                $(this).removeClass('is-invalid');
+                $request_sender_id.prop('disabled', false);
+            }
+        });
+
+        $request_sender_id.on('click', function() {
+            let sender_id_value = $sender_id.val();
+            if (!validateSenderId(sender_id_value)) {
+                booklyAlert({error: [BooklyL10n.acceptable_characters]});
+                return false;
+            }
+
             let ladda = Ladda.create(this);
             ladda.start();
             $.ajax({
@@ -791,10 +770,10 @@ jQuery(function ($) {
                 data: {
                     action: 'bookly_request_sender_id',
                     csrf_token: BooklyL10nGlobal.csrf_token,
-                    sender_id: $sender_id.val()
+                    sender_id: sender_id_value
                 },
                 dataType: 'json',
-                success: function (response) {
+                success: function(response) {
                     if (response.success) {
                         booklyAlert({success: [BooklyL10n.sender_id.sent]});
                         $request_sender_id.hide();
@@ -805,7 +784,7 @@ jQuery(function ($) {
                         booklyAlert({error: [response.data.message]});
                     }
                 }
-            }).always(function () {
+            }).always(function() {
                 ladda.stop();
             });
         });

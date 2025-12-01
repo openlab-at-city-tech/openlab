@@ -25,6 +25,24 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * @param string $key
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getGreedy( $key, $default = null )
+    {
+        if ( $this->has( $key ) ) {
+            return $this->values[ $key ];
+        }
+        foreach ( $this->values as $k => $v ) {
+            if ( strtolower( $k ) === strtolower( $key ) ) {
+                return $v;
+            }
+        }
+        return $default;
+    }
+
+    /**
+     * @param string $key
      * @return Collection
      */
     public function getCollection( $key )

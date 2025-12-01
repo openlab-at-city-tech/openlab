@@ -148,7 +148,7 @@ class RangeCollection implements \IteratorAggregate
      * @param self $removed
      * @return static
      */
-    public function subtract( Range $range, self &$removed = null )
+    public function subtract( Range $range, &$removed = null )
     {
         $new_collection = new static();
 

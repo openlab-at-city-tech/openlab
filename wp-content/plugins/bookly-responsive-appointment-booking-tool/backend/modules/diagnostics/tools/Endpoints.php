@@ -75,9 +75,12 @@ class Endpoints extends Tool
                             break;
                         case Account::PRODUCT_MOBILE_STAFF_CABINET;
                             $expected_endpoint = $api->getProduct( $product )->getEndPoint();
-                            $list = Lib\Entities\Staff::query()->whereNot( 'cloud_msc_token', null )->fetchCol( 'cloud_msc_token' );
-                            foreach ( $endpoint as $cloud_msc_token => $point ) {
-                                if ( in_array( $cloud_msc_token, $list ) && strcasecmp( $point, $expected_endpoint ) != 0 ) {
+                            $list = Lib\Entities\Staff::query( 's' )
+                                ->leftJoin( 'Auth', 'a', 'a.staff_id = s.id' )
+                                ->whereNot( 'a.token', null )
+                                ->fetchCol( 'token' );
+                            foreach ( $endpoint as $token => $point ) {
+                                if ( in_array( $token, $list ) && strcasecmp( $point, $expected_endpoint ) != 0 ) {
                                     $this->troubles[ $product ] = array(
                                         'current' => $point,
                                         'expected' => $expected_endpoint,

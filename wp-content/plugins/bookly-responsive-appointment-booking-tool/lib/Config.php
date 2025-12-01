@@ -34,6 +34,7 @@ use Bookly\Lib\Utils\Price;
  * @method static bool multiplyAppointmentsActive()    Check whether Multiply Appointments add-on is active or not.
  * @method static bool outlookCalendarActive()         Check whether Outlook Calendar add-on is active or not.
  * @method static bool packagesActive()                Check whether Packages add-on is active or not.
+ * @method static bool eventsActive()                  Check whether Events add-on is active or not.
  * @method static bool paypalCheckoutActive()          Check whether PayPal checkout add-on is active or not.
  * @method static bool paypalPaymentsStandardActive()  Check whether PayPal payments standard add-on is active or not.
  * @method static bool paysonActive()                  Check whether Payson add-on is active or not.
@@ -115,7 +116,7 @@ abstract class Config
                 'recurrence_enabled' => (int) $row['recurrence_enabled'],
                 'recurrence_frequencies' => $row['recurrence_frequencies'],
                 'min_time_prior_booking' => array( (int) $min_time_prior_booking->format( 'Y' ), (int) $min_time_prior_booking->format( 'n' ) - 1, (int) $min_time_prior_booking->format( 'j' ), ),
-                'tags' => $row['tags'] ? json_decode( $row['tags'] ) : array(),
+                'tags' => isset( $row['tags'] ) ? json_decode( $row['tags'], true ) : array(),
             );
 
             $result = Proxy\Shared::prepareCategoryService( $result, $row );
@@ -178,11 +179,7 @@ abstract class Config
         foreach ( $query->fetchArray() as $row ) {
             $staff_name = Utils\Common::getTranslatedString( 'staff_' . $row['id'], $row['full_name'] );
             $staff_info = $row['info'] == '' ? '' : Utils\Common::getTranslatedString( 'staff_' . $row['id'] . '_info', $row['info'] );
-            if ( $row['attachment_id'] != '' && $img = wp_get_attachment_image_src( $row['attachment_id'], 'full' ) ) {
-                $staff_image_url = $img[0];
-            } else {
-                $staff_image_url = '';
-            }
+            $staff_image_url = Common::getAttachmentUrl( $row['attachment_id'], 'full' );
             $staff_codes = array(
                 'staff_name' => $staff_name,
                 'staff_info' => $staff_info,

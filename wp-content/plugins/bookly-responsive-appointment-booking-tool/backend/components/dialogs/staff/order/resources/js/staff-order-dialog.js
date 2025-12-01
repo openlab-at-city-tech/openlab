@@ -29,7 +29,7 @@ jQuery(function($) {
     var $dialog = $('#bookly-staff-order-modal'),
         $list = $('#bookly-list', $dialog),
         $template = $('#bookly-staff-template'),
-        $table = $('#services-list'),
+        $table = $('#bookly-services-list'),
         $save = $('#bookly-save', $dialog)
     ;
 

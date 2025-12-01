@@ -151,6 +151,9 @@
                     };
                 }
             }],
+            eventFilter: function (info) {
+                return !['dayGridMonth', 'timeGridWeek', 'listWeek'].includes(info.view.type) || !info.event.extendedProps.resources_only;
+            },
             eventBackgroundColor: '#ccc',
             eventMouseEnter: function (arg) {
                 arg.jsEvent.stopPropagation();
@@ -161,52 +164,51 @@
                 if (arg.event.display === 'auto' && arg.view.type !== 'listWeek') {
                     let $existing_popover = $event.find('.bookly-ec-popover')
                     if (!$existing_popover.length) {
-                        let offset = $event.offset();
-                        let $popover, $arrow;
-                        if (offset.left > window.innerWidth / 2) {
-                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover bookly-popover-right">')
-                            $arrow = $('<div class="arrow" style="right: 8px;"></div><div class="bookly-arrow-background"></div>');
-                        } else {
-                            $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
-                            $arrow = $('<div class="arrow" style="left:8px;"></div><div class="bookly-arrow-background"></div>');
-                        }
+                        let $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
+                        let $arrow = $('<div class="arrow"></div><div class="bookly-arrow-background"></div>');
                         let $body = $('<div class="popover-body">');
                         let $buttons = allowEditAppointment ? popoverButtons(arg) : '';
+
                         $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '200px'});
                         $popover.append($arrow).append($body);
                         $event.append($popover);
+                    }
 
-                        let popover_height = $popover.outerHeight(),
-                            $calendar_container = $event.closest('.ec-body').length ? $event.closest('.ec-body') : $event.closest('.ec-all-day'),
-                            container_top = $calendar_container.offset().top,
-                            event_width = $event.outerWidth()
-                        ;
+                    let $popover = $event.find('.bookly-ec-popover'),
+                        $arrow = $popover.find('.arrow'),
+                        offset = $event.offset(),
+                        popover_height = $popover.outerHeight(),
+                        $calendar_container = $event.closest('.ec-body').length ? $event.closest('.ec-body') : $event.closest('.ec-all-day'),
+                        container_top = $calendar_container.offset().top,
+                        event_width = $event.outerWidth(),
+                        popover_right = offset.left > window.innerWidth / 2;
 
-                        $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
+                    $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
 
-                        if (container_top > offset.top - popover_height) {
-                            // Popover on side of event
-                            $popover.css('top', (Math.max(container_top, offset.top) - $(document).scrollTop()) + 'px');
-                            if ($popover.hasClass('bookly-popover-right')) {
-                                $popover.removeClass('bs-popover-top').addClass('bs-popover-left');
-                                $popover.css('left', (offset.left - $popover.outerWidth()) + 'px');
-                                $arrow.css('right', '-8px');
-                            } else {
-                                $popover.removeClass('bs-popover-top').addClass('bs-popover-right');
-                                $popover.css('left', Math.min(offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32) + 'px');
-                                $arrow.css('left', '-8px');
-                            }
+                    if (container_top > offset.top - popover_height) {
+                        // Popover onside of the event
+                        $popover.css('top', (Math.max(container_top, offset.top) - $(document).scrollTop()) + 'px');
+                        if (popover_right) {
+                            $popover.removeClass('bs-popover-top').removeClass('bs-popover-right').addClass('bs-popover-left');
+                            $popover.css('left', (offset.left - $popover.outerWidth()) + 'px');
+                            $arrow.css('right', '-8px');
                         } else {
-                            // Popover on top of event
-                            let
-                                top = Math.max(popover_height + 40, Math.max(container_top, offset.top) - $(document).scrollTop());
+                            $popover.removeClass('bs-popover-top').removeClass('bs-popover-left').addClass('bs-popover-right');
+                            $popover.css('left', Math.min(offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32) + 'px');
+                            $arrow.css('left', '-8px');
+                        }
+                    } else {
+                        // Popover on top of the event
+                        let top = Math.max(popover_height + 40, Math.max(container_top, offset.top) - $(document).scrollTop());
 
-                            $popover.css('top', (top - popover_height - 4) + 'px')
-                            if ($popover.hasClass('bookly-popover-right')) {
-                                $popover.css('left', (offset.left + event_width - $popover.outerWidth()) + 'px');
-                            } else {
-                                $popover.css('left', (offset.left + 2) + 'px');
-                            }
+                        $popover.css('top', (top - popover_height - 5) + 'px')
+                        $popover.removeClass('bs-popover-left').removeClass('bs-popover-right').addClass('bs-popover-top');
+                        if (popover_right) {
+                            $popover.css('left', (offset.left + event_width - $popover.outerWidth()) + 'px');
+                            $arrow.css('right', '8px');
+                        } else {
+                            $popover.css('left', (offset.left + 2) + 'px');
+                            $arrow.css('left', '8px');
                         }
                     }
                 }
@@ -253,42 +255,47 @@
                     return;
                 }
                 arg.jsEvent.stopPropagation();
+
                 if (allowEditAppointment) {
-                    let visible_staff_id;
-                    if (arg.view.type === 'resourceTimeGridDay') {
-                        visible_staff_id = 0;
+                    if (arg.event.extendedProps.type === 'event') {
+                        BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
                     } else {
-                        visible_staff_id = obj.options.getCurrentStaffId();
-                    }
-                    BooklyAppointmentDialog.showDialog(
-                        arg.event.id,
-                        null,
-                        null,
-                        function (event) {
-                            if (event == 'refresh') {
-                                calendar.refetchEvents();
-                            } else {
-                                if (event.start === null) {
-                                    // Task
-                                    calendar.removeEventById(event.id);
+                        let visible_staff_id;
+                        if (arg.view.type === 'resourceTimeGridDay') {
+                            visible_staff_id = 0;
+                        } else {
+                            visible_staff_id = obj.options.getCurrentStaffId();
+                        }
+                        BooklyAppointmentDialog.showDialog(
+                            arg.event.id,
+                            null,
+                            null,
+                            function (event) {
+                                if (event == 'refresh') {
+                                    calendar.refetchEvents();
                                 } else {
-                                    if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
-                                        // Update event in calendar.
+                                    if (event.start === null) {
+                                        // Task
                                         calendar.removeEventById(event.id);
-                                        calendar.addEvent(event);
                                     } else {
-                                        // Switch to the event owner tab.
-                                        jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
+                                        if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
+                                            // Update event in calendar.
+                                            calendar.removeEventById(event.id);
+                                            calendar.addEvent(event);
+                                        } else {
+                                            // Switch to the event owner tab.
+                                            jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
+                                        }
                                     }
                                 }
-                            }
 
-                            if (locationChanged) {
-                                calendar.refetchEvents();
-                                locationChanged = false;
+                                if (locationChanged) {
+                                    calendar.refetchEvents();
+                                    locationChanged = false;
+                                }
                             }
-                        }
-                    );
+                        );
+                    }
                 }
             },
             dateClick: function (arg) {
@@ -348,63 +355,74 @@
         function popoverButtons(arg) {
             const $buttons = arg.view.type === 'listWeek' ? $('<div class="mt-2 d-flex"></div>') : $('<div class="mt-2 d-flex justify-content-end border-top pt-2"></div>');
             let props = arg.event.extendedProps;
-            $buttons.append($('<button class="btn btn-success btn-sm mr-1">').append('<i class="far fa-fw fa-edit">'));
-            if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+            if (props.hasOwnProperty('type') && props.type === 'event') {
                 $buttons.append(
-                    $('<a class="btn btn-default btn-sm mr-1">').append('<i class="fas fa-fw fa-link">')
-                        .attr('title', obj.options.l10n.recurring_appointments.title)
+                    $('<a class="btn btn-success btn-sm mr-1">').append('<i class="fas fa-fw fa-users">')
+                        .attr('title', obj.options.l10n.events.attendees)
                         .on('click', function (e) {
                             e.stopPropagation();
-                            BooklySeriesDialog.showDialog({
-                                series_id: props.series_id,
-                                done: function () {
-                                    calendar.refetchEvents();
-                                }
-                            });
+                            BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
                         })
                 );
-            }
-            if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+            } else {
+                $buttons.append($('<button class="btn btn-success btn-sm mr-1">').append('<i class="far fa-fw fa-edit">'));
+                if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                    $buttons.append(
+                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="fas fa-fw fa-link">')
+                            .attr('title', obj.options.l10n.recurring_appointments.title)
+                            .on('click', function (e) {
+                                e.stopPropagation();
+                                BooklySeriesDialog.showDialog({
+                                    series_id: props.series_id,
+                                    done: function () {
+                                        calendar.refetchEvents();
+                                    }
+                                });
+                            })
+                    );
+                }
+                if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+                    $buttons.append(
+                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-list-alt">')
+                            .attr('title', obj.options.l10n.waiting_list.title)
+                    );
+                }
+                if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
+                    $buttons.append(
+                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-calendar-alt">')
+                            .attr('title', obj.options.l10n.packages.title)
+                            .on('click', function (e) {
+                                e.stopPropagation();
+                                if (obj.options.l10n.packages.active == '1' && props.package_id) {
+                                    $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
+                                        calendar.refetchEvents();
+                                    }]);
+                                }
+                            })
+                    );
+                }
                 $buttons.append(
-                    $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-list-alt">')
-                        .attr('title', obj.options.l10n.waiting_list.title)
-                );
-            }
-            if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
-                $buttons.append(
-                    $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-calendar-alt">')
-                        .attr('title', obj.options.l10n.packages.title)
+                    $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
+                        .attr('title', obj.options.l10n.delete)
                         .on('click', function (e) {
                             e.stopPropagation();
-                            if (obj.options.l10n.packages.active == '1' && props.package_id) {
-                                $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
-                                    calendar.refetchEvents();
-                                }]);
+                            // Localize contains only string values
+                            if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                                $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
+                            } else {
+                                new BooklyConfirmDeletingAppointment({
+                                        action: 'bookly_delete_appointment',
+                                        appointment_id: arg.event.id,
+                                        csrf_token: BooklyL10nGlobal.csrf_token
+                                    },
+                                    function (response) {
+                                        calendar.removeEventById(arg.event.id);
+                                    }
+                                );
                             }
                         })
                 );
             }
-            $buttons.append(
-                $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
-                    .attr('title', obj.options.l10n.delete)
-                    .on('click', function (e) {
-                        e.stopPropagation();
-                        // Localize contains only string values
-                        if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                            $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
-                        } else {
-                            new BooklyConfirmDeletingAppointment({
-                                    action: 'bookly_delete_appointment',
-                                    appointment_id: arg.event.id,
-                                    csrf_token: BooklyL10nGlobal.csrf_token
-                                },
-                                function (response) {
-                                    calendar.removeEventById(arg.event.id);
-                                }
-                            );
-                        }
-                    })
-            );
 
             return $buttons;
         }
@@ -458,7 +476,7 @@
 
         let dateSetFromDatePicker = false;
 
-        calendar = new window.EventCalendar($container.get(0), $.extend(true, {}, settings, obj.options.calendar));
+        calendar = EventCalendar.create($container.get(0), $.extend(true, {}, settings, obj.options.calendar));
 
         $('.ec-toolbar .ec-title', $container).on('click', function () {
             let picker = $(this).data('daterangepicker');

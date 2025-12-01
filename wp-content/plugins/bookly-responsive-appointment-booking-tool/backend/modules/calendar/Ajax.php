@@ -54,6 +54,7 @@ class Ajax extends Page
             $query = self::getAppointmentsQueryForCalendar( $staff_members, $start_date, $end_date, $location_ids );
             $appointments = self::buildAppointmentsForCalendar( $query, $display_tz );
             $result = array_merge( $result, $appointments );
+            $result = Proxy\Events::buildEventsForCalendar( $result, $staff_members, $start_date, $end_date, $location_ids );
             $schedule = self::buildStaffSchedule( $staff_members, $start_date, $end_date, $location_ids );
             $result = array_merge( $result, $schedule );
         }
@@ -83,7 +84,7 @@ class Ajax extends Page
      */
     public static function getAppointmentsQueryForCalendar( $staff_members, \DateTime $start_date, \DateTime $end_date, $location_ids )
     {
-        $staff_ids = array_map( function ( $staff ) {
+        $staff_ids = array_map( function( $staff ) {
             return $staff->getId();
         }, $staff_members );
 
@@ -133,7 +134,7 @@ class Ajax extends Page
 
         // Load special days.
         $special_days = array();
-        $staff_ids = array_map( function ( $staff ) {
+        $staff_ids = array_map( function( $staff ) {
             return $staff->getId();
         }, $staff_members );
         $schedule = Lib\Proxy\SpecialDays::getSchedule( $staff_ids, $start_date, $end_date ) ?: array();
@@ -147,8 +148,7 @@ class Ajax extends Page
                 : array();
             if ( ! $location_ids
                 || in_array( 'all', $location_ids, false )
-                || in_array( Lib\Proxy\Locations::prepareStaffSpecialDaysLocationId( $day['location_id'], $day['staff_id'] ) ?: null, $staff_location_ids, true ) )
-            {
+                || in_array( Lib\Proxy\Locations::prepareStaffSpecialDaysLocationId( $day['location_id'], $day['staff_id'] ) ?: null, $staff_location_ids, true ) ) {
                 $special_days[ $day['staff_id'] ][ $day['date'] ][] = $day;
             }
         }

@@ -206,7 +206,7 @@ class ShortCode extends Lib\Base\ShortCode
             Errors::CART_ITEM_NOT_AVAILABLE => Lib\Utils\Common::getTranslatedOption( Lib\Config::showStepCart() ? 'bookly_l10n_step_cart_slot_not_available' : 'bookly_l10n_step_time_slot_not_available' ),
             Errors::PAY_LOCALLY_NOT_AVAILABLE => __( 'Pay locally is not available.', 'bookly' ),
             Errors::INVALID_GATEWAY => __( 'Invalid gateway.', 'bookly' ),
-            Errors::PAYMENT_ERROR => __( 'Error.', 'bookly' ),
+            Errors::PAYMENT_ERROR => __( 'Error', 'bookly' ) . '.',
             Errors::INCORRECT_USERNAME_PASSWORD => __( 'Incorrect username or password.' ),
         );
 

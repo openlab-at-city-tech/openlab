@@ -1,7 +1,6 @@
 jQuery(function ($) {
     let $staffList = $('#bookly-staff-list'),
-        $checkAllButton = $('#bookly-check-all'),
-        $deleteButton = $('#bookly-delete'),
+        $deleteButton = $('#bookly-staff-list-delete-button'),
         $deleteModal = $('.bookly-js-delete-cascade-confirm'),
         $staffCount = $('.bookly-js-staff-count'),
         filters = {
@@ -77,18 +76,6 @@ jQuery(function ($) {
             return '<button type="button" class="btn btn-default" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
         }
     });
-    columns.push({
-        data: null,
-        responsivePriority: 1,
-        orderable: false,
-        searchable: false,
-        render: function (data, type, row, meta) {
-            return '<div class="custom-control custom-checkbox mt-1">' +
-                '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
-                '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
-                '</div>';
-        }
-    });
 
     columns[0].responsivePriority = 0;
 
@@ -126,24 +113,10 @@ jQuery(function ($) {
             if (data.visibility == 'archive') {
                 $(row).addClass('text-muted');
             }
-        }
+        },
+        add_checkbox_column: true,
     });
 
-    /**
-     * Select all appointments.
-     */
-    $checkAllButton.on('change', function () {
-        $staffList.find('tbody input:checkbox').prop('checked', this.checked);
-        $deleteButton.prop('disabled', $staffList.find('tbody input:checked').length === 0);
-    });
-
-    /**
-     * On appointment select.
-     */
-    $staffList.on('change', 'tbody input:checkbox', function () {
-        $checkAllButton.prop('checked', $staffList.find('tbody input:not(:checked)').length === 0);
-        $deleteButton.prop('disabled', $staffList.find('tbody input:checked').length === 0);
-    });
 
     $deleteButton.on('click', function () {
         $deleteModal.booklyModal('show');
@@ -213,4 +186,10 @@ jQuery(function ($) {
     filters.visibility.on('change', onChangeFilter);
     filters.archived.on('change', onChangeFilter);
     filters.category.on('change', onChangeFilter);
+
+    $('#bookly-duplicate-staff-dialog-show').on('click', function () {
+        BooklyDuplicateStaffDialog.showDialog(function(){
+            dt.ajax.reload();
+        });
+    });
 });

@@ -22,7 +22,7 @@ use Bookly\Lib\Config;
 </div>
 <div class="row">
     <div class="col">
-        <table id="bookly-js-notification-list" class="table table-striped w-100">
+        <table id="bookly-notification-list" class="table table-striped w-100">
             <thead>
             <tr>
                 <?php foreach ( $datatables['email_notifications']['settings']['columns'] as $column => $show ) : ?>
@@ -35,7 +35,6 @@ use Bookly\Lib\Config;
                     <?php endif ?>
                 <?php endforeach ?>
                 <th width="75"></th>
-                <th width="16"><?php Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
             </tr>
             </thead>
         </table>

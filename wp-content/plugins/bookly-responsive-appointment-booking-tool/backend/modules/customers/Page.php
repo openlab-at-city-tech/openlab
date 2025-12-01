@@ -27,12 +27,12 @@ class Page extends Lib\Base\Component
 
         wp_localize_script( 'bookly-customers.js', 'BooklyL10n', array(
             'infoFields' => Lib\Proxy\CustomerInformation::getFieldsWhichMayHaveData() ?: array(),
-            'tagsData' => Lib\Proxy\Pro::getTagsData() ?: array(),
+            'tagsData' => Lib\Proxy\Pro::getTagsData( 'customer' ) ?: array(),
             'edit' => __( 'Edit', 'bookly' ),
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
             'wp_users' => get_users( array( 'fields' => array( 'ID', 'display_name' ), 'orderby' => 'display_name' ) ),
             'zeroRecords' => __( 'No customers found.', 'bookly' ),
-            'processing' => __( 'Processing...', 'bookly' ),
+            'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
             'edit_customer' => __( 'Edit customer', 'bookly' ),

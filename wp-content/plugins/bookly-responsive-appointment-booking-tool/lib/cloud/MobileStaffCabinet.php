@@ -15,23 +15,26 @@ class MobileStaffCabinet extends Product
     const PATCH_ACCESS_KEY        = '/1.0/users/%token%/products/mobile-staff-cabinet/access/key';                //PATCH
 
     /**
-     * Grant auth key for staff
+     * Grant auth key
      *
-     * @param Lib\Entities\Staff $staff
+     * @param Lib\Entities\Auth $auth
+     * @param string $auth_email
      *
      * @return boolean
      */
-    public function grantKey( Lib\Entities\Staff $staff )
+    public function grantKey( Lib\Entities\Auth $auth, $auth_email )
     {
         $data = array(
             'endpoint' => $this->getEndPoint(),
-            'email' => $staff->getEmail(),
+            'email' => $auth_email,
         );
 
         $response = $this->api
             ->sendPostRequest( self::GRANT_ACCESS_KEY, $data );
         if ( $response ) {
-            $staff->setMobileStaffCabinetToken( $response['key'] )->save();
+            $auth
+                ->setToken( $response['key'] )
+                ->save();
 
             return true;
         }
@@ -43,16 +46,16 @@ class MobileStaffCabinet extends Product
      * Assign to current access_key endpoint and email
      *
      * @param string $access_key
-     * @param Lib\Entities\Staff $staff
+     * @param string $email
      *
      * @return boolean
      */
-    public function patchKey( $access_key, Lib\Entities\Staff $staff )
+    public function patchKey( $access_key, $email )
     {
         $data = array(
             'access_key' => $access_key,
             'endpoint' => $this->getEndPoint(),
-            'email' => $staff->getEmail(),
+            'email' => $email,
         );
 
         return $this->api

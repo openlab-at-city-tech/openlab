@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls;
-use Bookly\Backend\Components\Support;
 use Bookly\Backend\Components\Dialogs;
+use Bookly\Backend\Components\Support;
 use Bookly\Lib;
 
 /** @var array $datatables */
@@ -34,7 +34,7 @@ use Bookly\Lib;
                     <div class="col-12 col-sm-auto">
                         <?php Controls\Buttons::renderDefault( null, 'w-100 mb-3', __( 'Staff members order', 'bookly' ), array( 'data-toggle' => 'bookly-modal', 'data-target' => '#bookly-staff-order-modal', 'disabled' => 'disabled' ), true ) ?>
                     </div>
-                    <?php Dialogs\Staff\Categories\Proxy\Pro::renderAdd() ?>
+                    <?php Dialogs\Staff\Proxy\Pro::renderAdd() ?>
                     <div class="col-auto">
                         <?php Controls\Buttons::renderAdd( 'bookly-js-new-staff', 'w-100 mb-3', __( 'Add staff', 'bookly' ) ) ?>
                     </div>
@@ -83,14 +83,13 @@ use Bookly\Lib;
                         <?php endif ?>
                     <?php endforeach ?>
                     <th width="85"></th>
-                    <th width="16"><?php Controls\Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
                 </tr>
                 </thead>
             </table>
 
             <div class="text-right mt-3">
                 <?php if ( Lib\Utils\Common::isCurrentUserAdmin() ): ?>
-                    <?php Controls\Buttons::renderDelete( 'bookly-delete', null, null, array( 'disabled' => 'disabled' ) ) ?>
+                <?php Controls\Buttons::renderDelete( 'bookly-staff-list-delete-button' ) ?>
                 <?php endif ?>
             </div>
         </div>
@@ -98,7 +97,8 @@ use Bookly\Lib;
 
     <?php Dialogs\Common\CascadeDelete::render() ?>
     <?php Dialogs\Common\UnsavedChanges::render() ?>
-    <?php Dialogs\Staff\Categories\Proxy\Pro::renderDialog() ?>
+    <?php Dialogs\Staff\Proxy\Pro::renderCategoriesDialog() ?>
+    <?php Dialogs\Staff\Proxy\Pro::renderDuplicateDialog() ?>
     <?php Dialogs\Staff\Edit\Dialog::render() ?>
     <?php Dialogs\Staff\Order\Dialog::render() ?>
     <?php Dialogs\Staff\Edit\Proxy\Packages::renderStaffServicesTip() ?>

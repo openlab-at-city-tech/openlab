@@ -19,7 +19,7 @@ use Bookly\Backend\Modules\Settings\Proxy;
             Inputs::renderNumber( 'bookly_gen_max_days_for_booking', __( 'Number of days available for booking', 'bookly' ), __( 'Set how far in the future the clients can book appointments.', 'bookly' ), 1, 1 );
             Selects::renderSingle( 'bookly_gen_use_client_time_zone', __( 'Display available time slots in client\'s time zone', 'bookly' ), __( 'The value is taken from client\'s browser.', 'bookly' ) );
             Selects::renderSingle( 'bookly_gen_allow_staff_edit_profile', __( 'Allow staff members to edit their profiles', 'bookly' ), __( 'If this option is enabled then all staff members who are associated with WordPress users will be able to edit their own profiles, services, schedule and days off.', 'bookly' ) );
-            Selects::renderSingle( 'bookly_gen_link_assets_method', __( 'Method to include Bookly JavaScript and CSS files on the page', 'bookly' ), sprintf( __( 'Select method how to include Bookly JavaScript and CSS files on the page. For more information, see the <a href="%s" target="_blank">documentation</a> page.', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-settings-general' ), array(
+            Selects::renderSingle( 'bookly_gen_link_assets_method', __( 'Method to include Bookly JavaScript and CSS files on the page', 'bookly' ), sprintf( __( 'Select method how to include Bookly JavaScript and CSS files on the page. For more information, see the <a href="%s" target="_blank">documentation</a> page.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-settings-general' ), array(
                 array(
                     'enqueue',
                     __( 'All pages', 'bookly' ),
@@ -39,7 +39,7 @@ use Bookly\Backend\Modules\Settings\Proxy;
             </div>
             <?php
             Selects::renderSingle( 'bookly_gen_badge_consider_news', __( 'Show news notifications', 'bookly' ), __( 'If enabled, News notification icon will be displayed', 'bookly' ) );
-            Selects::renderSingle( 'bookly_email_gateway', __( 'Mail gateway', 'bookly' ), sprintf( __( 'Select a mail gateway that will be used to send email notifications. For more information, see the <a href="%s" target="_blank">documentation</a> page.', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-settings-smtp' ), array( array( 'wp', __( 'WordPress mail', 'bookly' ), 0 ), array( 'smtp', 'SMTP', 0 ) ), array( 'data-expand' => 'smtp' ) );
+            Selects::renderSingle( 'bookly_email_gateway', __( 'Mail gateway', 'bookly' ), sprintf( __( 'Select a mail gateway that will be used to send email notifications. For more information, see the <a href="%s" target="_blank">documentation</a> page.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-settings-smtp' ), array( array( 'wp', __( 'WordPress mail', 'bookly' ), 0 ), array( 'smtp', 'SMTP', 0 ) ), array( 'data-expand' => 'smtp' ) );
             ?>
             <div id="bookly-smtp-settings"
                  class="border-left mt-3 ml-4 pl-3 bookly_email_gateway-expander"<?php if ( get_option( 'bookly_email_gateway', 'wp' ) === 'wp' ) : ?> style="display:none;"<?php endif ?>>

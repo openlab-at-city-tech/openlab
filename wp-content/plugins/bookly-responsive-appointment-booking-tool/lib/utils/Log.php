@@ -13,10 +13,25 @@ abstract class Log
 
     const OPTION_OUTLOOK = 'bookly_temporary_logs_outlook';
     const OPTION_GOOGLE = 'bookly_temporary_logs_google';
+    const OPTION_MOBILE_STAFF_CABINET = 'bookly_temporary_logs_mobile_staff_cabinet';
+
+    /** @var string|null */
+    protected static $author_name;
 
     public static function getTypes()
     {
-        return array( self::OPTION_OUTLOOK, self::OPTION_GOOGLE );
+        $options = array();
+        if ( Lib\Config::proActive() ) {
+            $options[] = Lib\Utils\Log::OPTION_GOOGLE;
+            if ( Lib\Config::outlookCalendarActive() ) {
+                $options[] = Lib\Utils\Log::OPTION_OUTLOOK;
+            }
+            if ( Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET ) ) {
+                $options[] = Lib\Utils\Log::OPTION_MOBILE_STAFF_CABINET;
+            }
+        }
+
+        return $options;
     }
 
     /**
@@ -26,7 +41,7 @@ abstract class Log
      * @param string $details
      * @param string $ref
      * @param string $comment
-     * @return void|bool
+     * @return void
      */
     public static function common( $action = null, $target = null, $target_id = null, $details = null, $ref = null, $comment = null )
     {
@@ -37,7 +52,7 @@ abstract class Log
      * @param $entity
      * @param string $action
      * @param string $comment
-     * @return void|bool
+     * @return void
      */
     public static function fromBacktrace( $entity, $action = self::ACTION_UPDATE, $comment = '' )
     {
@@ -143,7 +158,12 @@ abstract class Log
 
     public static function getLogOptionTitle( $option )
     {
-        return substr( $option, strrpos( $option, '_' ) + 1 );
+        return str_replace( '_', ' ', substr( $option, strrpos( $option, '_logs_' ) + 6 ) );
+    }
+
+    public static function setAuthor( $name )
+    {
+        self::$author_name = $name;
     }
 
     /**
@@ -151,8 +171,11 @@ abstract class Log
      */
     private static function getAuthor()
     {
-        $author_id = get_current_user_id();
+        if ( self::$author_name === null ) {
+            $author_id = get_current_user_id();
+            self::setAuthor( $author_id ? ( trim( get_user_meta( $author_id, 'first_name', true ) . ' ' . get_user_meta( $author_id, 'last_name', true ) ) ?: get_user_meta( $author_id, 'nickname', true ) ) : '' );
+        }
 
-        return $author_id ? ( trim( get_user_meta( $author_id, 'first_name', true ) . ' ' . get_user_meta( $author_id, 'last_name', true ) ) ?: get_user_meta( $author_id, 'nickname', true ) ) : '';
+        return self::$author_name;
     }
 }
