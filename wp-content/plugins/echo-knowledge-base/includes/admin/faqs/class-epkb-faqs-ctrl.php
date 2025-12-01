@@ -58,6 +58,7 @@ class EPKB_FAQs_Ctrl {
 		$faq_html = EPKB_FAQs_Page::display_question( [
 			'faq_id'        => $faq->ID,
 			'title'         => $faq->post_title,
+			'date'          => $faq->post_date,
 			'add_icon'      => true,
 			'order_icon'    => true,
 			'include_icon'  => true,

@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Updated": [
+                "Aggiornato"
+            ],
+            "Error": [
+                "Errore"
+            ],
+            "No posts found to sync": [
+                "Nessun post trovato da sincronizzare"
+            ],
+            "Pending": [
+                "In attesa"
+            ],
+            "of": [
+                "di"
+            ],
+            "errors": [
+                "errori"
+            ],
+            "with": [
+                "con"
+            ],
+            "Sync canceled": [
+                "Sincronizzazione annullata"
+            ],
+            "Failed to cancel sync": [
+                "Impossibile annullare la sincronizzazione"
+            ],
+            "A sync job is already running.": [
+                "È già in esecuzione un lavoro di sincronizzazione."
+            ],
+            "Failed to start sync": [
+                "Impossibile avviare la sincronizzazione"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "È richiesta una chiave API OpenAI per sincronizzare i contenuti. Si prega di configurarla nelle Impostazioni Generali."
+            ],
+            "Sync Method": [
+                "Metodo di sincronizzazione"
+            ],
+            "Basic Timer": [
+                "Timer di base"
+            ],
+            "Select All Filtered Records": [
+                "Seleziona tutti i record filtrati"
+            ],
+            "Select All Records": [
+                "Seleziona tutti i record"
+            ],
+            "Outdated": [
+                "Obsoleto"
+            ],
+            "Added": [
+                "Aggiunto"
+            ],
+            "Selected": [
+                "Selezionato"
+            ],
+            "Records": [
+                "Record"
+            ],
+            "selected records": [
+                "record selezionati"
+            ],
+            "Sync in Progress": [
+                "Sincronizzazione in corso"
+            ],
+            "Cancel Sync": [
+                "Annulla sincronizzazione"
+            ],
+            "API key required": [
+                "Chiave API richiesta"
+            ],
+            "Select at least one item to sync": [
+                "Seleziona almeno un elemento da sincronizzare"
+            ],
+            "Start Sync": [
+                "Avvia sincronizzazione"
+            ],
+            "Sync started successfully! ": [
+                "Sincronizzazione avviata con successo!"
+            ],
+            "Starting sync...": [
+                "Avvio della sincronizzazione..."
+            ],
+            "Retrying failed posts:": [
+                "Riprova dei post non riusciti:"
+            ],
+            "Processing": [
+                "Elaborazione in corso"
+            ],
+            "posts": [
+                "post"
+            ],
+            "Completed! Processed": [
+                "Completato! Elaborato"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "La sincronizzazione si è interrotta dopo 5 errori consecutivi. Elaborato"
+            ],
+            "posts with": [
+                "post con"
+            ],
+            "total errors": [
+                "errori totali"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "Sincronizzazione programmata, in attesa di avvio..."
+            ]
+        }
+    }
+}

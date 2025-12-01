@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Settings saved successfully": [
+                "Налаштування успішно збережено"
+            ],
+            "Saving...": [
+                "Збереження..."
+            ],
+            "Save Settings": [
+                "Зберегти налаштування"
+            ],
+            "Failed to save settings": [
+                "Не вдалося зберегти налаштування"
+            ],
+            "Sending...": [
+                "Відправляємо..."
+            ],
+            "Test email sent successfully": [
+                "Тестовий електронний лист успішно надіслано"
+            ],
+            "Failed to send test email": [
+                "Не вдалося надіслати тестовий електронний лист"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Не вдалося надіслати тестовий електронний лист. Будь ласка, перевірте з'єднання."
+            ]
+        }
+    }
+}

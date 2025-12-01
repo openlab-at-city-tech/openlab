@@ -6,6 +6,9 @@ function epkb_get_block_attributes( $block_name ) {
 			'kb_id' => [
 				'type' => 'number'
 			],
+			'kb_ai_collection_id' => [
+				'type' => 'number'
+			],
 			'ml_search_layout' => [
 				'type' => 'string'
 			],
@@ -1651,8 +1654,25 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'string'
 			]
 		],
+		'ai-advanced-search' => [
+			'kb_id' => [
+				'type' => 'number'
+			],
+			'block_full_width_toggle' => [
+				'type' => 'string'
+			],
+			'block_max_width' => [
+				'type' => 'number'
+			],
+			'custom_css_class' => [
+				'type' => 'string'
+			]
+		],
 		'advanced-search' => [
 			'kb_id' => [
+				'type' => 'number'
+			],
+			'kb_ai_collection_id' => [
 				'type' => 'number'
 			],
 			'search_multiple_kbs_toggle' => [

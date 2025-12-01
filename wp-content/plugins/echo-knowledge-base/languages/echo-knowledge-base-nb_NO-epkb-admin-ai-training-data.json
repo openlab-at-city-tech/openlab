@@ -1,0 +1,261 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "to": [
+                "til"
+            ],
+            "Back": [
+                "Tilbake"
+            ],
+            "Save": [
+                "Lagre"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Saving...": [
+                "Lagrer..."
+            ],
+            "Collection name cannot be empty": [
+                "Samlingens navn kan ikke være tomt"
+            ],
+            "Data Collection": [
+                "Datainnsamling"
+            ],
+            "Note updated successfully": [
+                "Notatet ble oppdatert"
+            ],
+            "Note deleted successfully": [
+                "Notatet ble slettet"
+            ],
+            "Delete": [
+                "Slett"
+            ],
+            "Delete Selected": [
+                "Slett valgte"
+            ],
+            "Failed to create collection": [
+                "Klarte ikke å opprette samling"
+            ],
+            "How to get started": [
+                "Slik kommer du i gang"
+            ],
+            "Choose Training Data": [
+                "Velg maskinlæringsdata"
+            ],
+            "Pick the content types to include.": [
+                "Velg innholdstyper som skal inkluderes."
+            ],
+            "Send Data to AI": [
+                "Send data til KI"
+            ],
+            "Select items in the table, then sync them.": [
+                "Velg elementer i tabellen, og synkroniser dem."
+            ],
+            "Other Actions": [
+                "Andre handlinger"
+            ],
+            "Rename the collection or delete items.": [
+                "Gi nytt navn til samlingen eller slett elementer."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Tips: Start med et lite sett for å teste flyten."
+            ],
+            "Failed to load note content": [
+                "Feil ved lasting av notatinnhold"
+            ],
+            "Please enter both title and content for the note": [
+                "Vennligst skriv inn både tittel og innhold for notatet"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "Kunne ikke slette notatet. Oppdater siden og prøv igjen."
+            ],
+            "Delete Note": [
+                "Slett notat"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "Er du sikker på at du vil slette dette notatet? Denne handlingen kan ikke angres."
+            ],
+            "Failed to delete note": [
+                "Mislyktes i å slette notatet"
+            ],
+            "Edit Note": [
+                "Rediger notat"
+            ],
+            "Add Note": [
+                "Legg til notat"
+            ],
+            "Loading note content...": [
+                "Laster inn notatinnhold..."
+            ],
+            "Note Title": [
+                "Notat-tittel"
+            ],
+            "Enter note title...": [
+                "Skriv inn notat-tittel..."
+            ],
+            "Note Content": [
+                "Notatinnhold"
+            ],
+            "Enter note content...": [
+                "Skriv inn notatinnhold..."
+            ],
+            "Deleting...": [
+                "Sletter..."
+            ],
+            "Save Note": [
+                "Lagre notat"
+            ],
+            "Collection name updated successfully": [
+                "Samlingens navn oppdatert"
+            ],
+            "Failed to update collection name": [
+                "Kunne ikke oppdatere samlingsnavnet"
+            ],
+            "Delete Collection": [
+                "Slett samling"
+            ],
+            "Are you sure you want to delete this collection?": [
+                "Er du sikker på at du vil slette denne samlingen?"
+            ],
+            "Type the collection name to confirm:": [
+                "Skriv inn samlingsnavnet for å bekrefte:"
+            ],
+            "Enter collection name": [
+                "Skriv inn samlingsnavn"
+            ],
+            "Collection deleted successfully": [
+                "Samlingen ble slettet"
+            ],
+            "Failed to delete collection": [
+                "Kunne ikke slette samlingen"
+            ],
+            "Please select at least one data type": [
+                "Vennligst vel minst én datatype"
+            ],
+            "Data added successfully": [
+                "Data ble lagt til"
+            ],
+            "Failed to add data": [
+                "Kunne ikke legge til data"
+            ],
+            "Choose an Action": [
+                "Velg en handling"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Kan ikke endre handlinger mens synkronisering pågår"
+            ],
+            "Add Training Data": [
+                "Legg til maskinlæringsdata"
+            ],
+            "Cannot navigate while sync is in progress": [
+                "Kan ikke navigere mens synkronisering pågår"
+            ],
+            "Adding data to:": [
+                "Legger til data til:"
+            ],
+            "Choose which content types you want to include in your AI training data.": [
+                "Velg hvilke innholdstyper du vil inkludere i AI-maskinlæringsdataene."
+            ],
+            "Access Manager Notice": [
+                "Tilgangsbehandler-varsel"
+            ],
+            "Currently only publicly accessible articles can be uploaded to AI. Articles with access restrictions will not be included in the training data.": [
+                "For øyeblikket kan bare offentlige artikler lastes opp til AI. Artikler med tilgangsbegrensninger vil ikke være inkludert i treningsdataene."
+            ],
+            "Loading content types...": [
+                "Laster inn innholdstyper..."
+            ],
+            "available": [
+                "tilgjengelig"
+            ],
+            "added": [
+                "lagt til"
+            ],
+            "excluded": [
+                "ekskludert"
+            ],
+            "No eligible content": [
+                "Ingen kvalifisert innhold"
+            ],
+            "No published content available": [
+                "Ingen publisert innhold tilgjengelig"
+            ],
+            "All eligible items already added to collection": [
+                "Alle kvalifiserte elementer er allerede lagt til i samlingen"
+            ],
+            "No content types available.": [
+                "Ingen innholdstyper tilgjengelige."
+            ],
+            "Adding Data...": [
+                "Legger til data..."
+            ],
+            "Add Data": [
+                "Legg til data"
+            ],
+            "Notes": [
+                "Notater"
+            ],
+            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
+                "Legg til tilpassede notater for å hjelpe AI med spesifikk informasjon, retningslinjer eller kontekst som kanskje ikke finnes i innholdet ditt."
+            ],
+            "Select items from the table and choose a sync method to update your AI training data.": [
+                "Velg elementer fra tabellen og velg en synkroniseringsmetode for å oppdatere AI-maskinlæringsdataene."
+            ],
+            "Manage your collection settings and data.": [
+                "Administrer samlingsinnstillingene og dataene."
+            ],
+            "Collection Name": [
+                "Samlingnavn"
+            ],
+            "Change the display name for this collection.": [
+                "Endre visningsnavnet for denne samlingen."
+            ],
+            "Unable to delete items. Please refresh the page and try again.": [
+                "Kan ikke slette elementer. Oppdater siden og prøv igjen."
+            ],
+            "Selected Records": [
+                "Valgte poster"
+            ],
+            "Delete the selected training data items from this collection.": [
+                "Slett de valgte maskinlæringsdataene fra denne samlingen."
+            ],
+            "This will permanently delete all training data in this collection.": [
+                "Dette vil permanent slette alle maskinlæringsdataene i denne samlingen."
+            ],
+            "Note added successfully": [
+                "Notatet ble lagt til"
+            ],
+            "AI Features Pro is not properly configured. Please ensure the plugin is activated.": [
+                "AI Features Pro er ikke riktig konfigurert. Vennligst sørg for at pluginet er aktivert."
+            ],
+            "Failed to save note": [
+                "Kunne ikke lagre notat"
+            ],
+            "Unable to determine next collection ID": [
+                "Kan ikke fastslå neste samlings-ID"
+            ],
+            "Creating new collection...": [
+                "Oppretter ny samling..."
+            ],
+            "Collection created successfully": [
+                "Samlingen ble opprettet"
+            ],
+            "Sync in progress. Please wait...": [
+                "Synkronisering pågår. Vennligst vent..."
+            ],
+            "No collections available. Click \"Add New\" to create one.": [
+                "Ingen samlinger tilgjengelige. Klikk \"Legg til ny\" for å opprette en."
+            ],
+            "No training data configuration available.": [
+                "Ingen konfigurasjon for maskinlæringsdata tilgjengelig."
+            ]
+        }
+    }
+}

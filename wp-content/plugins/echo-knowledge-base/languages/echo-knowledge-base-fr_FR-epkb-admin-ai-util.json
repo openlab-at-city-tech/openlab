@@ -1,0 +1,69 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Close": [
+                "Fermer"
+            ],
+            "Cancel": [
+                "Annuler"
+            ],
+            "Loading...": [
+                "Chargement..."
+            ],
+            "General Settings": [
+                "Paramètres généraux"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "Votre session a expiré. Veuillez actualiser la page."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "Trop de requêtes. Veuillez patienter un moment et réessayer."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "Une erreur inattendue est survenue. Veuillez réessayer."
+            ],
+            "Confirm Action": [
+                "Confirmer l'action"
+            ],
+            "Are you sure you want to proceed?": [
+                "Êtes-vous sûr de vouloir continuer ?"
+            ],
+            "Confirm": [
+                "Confirmer"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "Pour utiliser les fonctionnalités d’IA, configurez votre clé API et acceptez l’accord de confidentialité des données dans"
+            ],
+            "Session Expired": [
+                "Session expirée"
+            ],
+            "Refresh Page": [
+                "Actualiser la page"
+            ],
+            "No results found": [
+                "Aucun résultat trouvé"
+            ],
+            "Tutorial": [
+                "Tutoriel"
+            ],
+            "Learn how to use this feature": [
+                "Découvrez comment utiliser cette fonctionnalité"
+            ],
+            "Tutorial Screenshot": [
+                "Capture d’écran du tutoriel"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "Voici un tutoriel expliquant comment utiliser cette fonctionnalité."
+            ],
+            "Close Tutorial": [
+                "Fermer le tutoriel"
+            ]
+        }
+    }
+}

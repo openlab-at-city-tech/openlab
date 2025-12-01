@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "AI Search": [
+                "Pesquisa IA"
+            ],
+            "All": [
+                "Todos"
+            ],
+            "Disabled": [
+                "Desativado"
+            ],
+            "AI Chat": [
+                "AI Chat"
+            ],
+            "OpenAI API Key": [
+                "Chave de API da OpenAI"
+            ],
+            "AI logs cleared successfully": [
+                "Registos de IA limpos com sucesso"
+            ],
+            "Debug mode updated successfully": [
+                "Modo de depuração atualizado com sucesso"
+            ],
+            "Refresh": [
+                "Atualizar"
+            ],
+            "Status:": [
+                "Estado:"
+            ],
+            "Warnings": [
+                "Avisos"
+            ],
+            "Info": [
+                "Informação"
+            ],
+            "Failed to update debug mode": [
+                "Falha ao atualizar o modo de depuração"
+            ],
+            "Error updating debug mode": [
+                "Erro ao atualizar o modo de depuração"
+            ],
+            "Failed to load PHP logs": [
+                "Falha ao carregar registos PHP"
+            ],
+            "Error loading PHP logs": [
+                "Erro ao carregar registos PHP"
+            ],
+            "Failed to load WP logs": [
+                "Falha ao carregar registos do WordPress"
+            ],
+            "Error loading WP logs": [
+                "Erro ao carregar registos do WordPress"
+            ],
+            "Failed to load AI logs": [
+                "Falha ao carregar registos de IA"
+            ],
+            "Error loading AI logs": [
+                "Erro ao carregar registos de IA"
+            ],
+            "Failed to clear AI logs": [
+                "Falha ao limpar registos de IA"
+            ],
+            "Error clearing AI logs": [
+                "Erro ao limpar registos de IA"
+            ],
+            "Debug Mode": [
+                "Modo de depuração"
+            ],
+            "Enable Debug Mode": [
+                "Ativar o modo de depuração"
+            ],
+            " (Localhost detected)": [
+                "(Localhost detetado)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Ative o modo de depuração para visualizar os registos do sistema e solucionar problemas de IA. Isto irá carregar ferramentas de depuração adicionais."
+            ],
+            "AI Information": [
+                "Informação sobre IA"
+            ],
+            "Missing API Key": [
+                "Chave de API ausente"
+            ],
+            "Data Collections": [
+                "Coleções de dados"
+            ],
+            "Unnamed Collection": [
+                "Coleção sem nome"
+            ],
+            "Vector Store:": [
+                "Armazenamento de Vetores:"
+            ],
+            "Created": [
+                "Criado"
+            ],
+            "Not created": [
+                "Não criado"
+            ],
+            "Total Records:": [
+                "Registos totais:"
+            ],
+            "Added:": [
+                "Adicionado:"
+            ],
+            "Updated:": [
+                "Atualizado:"
+            ],
+            "Outdated:": [
+                "Desatualizado:"
+            ],
+            "Error:": [
+                "Erro:"
+            ],
+            "Pending:": [
+                "Pendente:"
+            ],
+            "No data collections found.": [
+                "Não foram encontradas coleções de dados."
+            ],
+            "System Information": [
+                "Informação do sistema"
+            ],
+            "Download Debug Info": [
+                "Baixar informações de depuração"
+            ],
+            "Logs": [
+                "Registos"
+            ],
+            "PHP Error Log": [
+                "Registo de Erros PHP"
+            ],
+            "Fatal Errors": [
+                "Erros fatais"
+            ],
+            "Notices": [
+                "Avisos"
+            ],
+            "AI Related Only": [
+                "Apenas relacionado com IA"
+            ],
+            "Latest at top": [
+                "Mais recentes no topo"
+            ],
+            "No logs found.": [
+                "Não foram encontrados registos."
+            ],
+            "WordPress Error Log": [
+                "Registo de Erros do WordPress"
+            ],
+            "AI Activity Log": [
+                "Registo de Atividades de IA"
+            ],
+            "Clear Log": [
+                "Limpar registo"
+            ],
+            "All Levels": [
+                "Todos os Níveis"
+            ],
+            "Errors Only": [
+                "Apenas Erros"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "O modo de depuração está desativado. Ative-o acima para ver informações de depuração."
+            ]
+        }
+    }
+}

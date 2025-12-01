@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Demo Article": [
+                "डेमो लेख"
+            ],
+            "Categories": [
+                "श्रेणियाँ"
+            ],
+            "Article Content": [
+                "डॉक्यूमेंटेशन पेज सामग्री"
+            ],
+            "Analyzing...": [
+                "विश्लेषण हो रहा है..."
+            ],
+            "Content Gaps Analysis": [
+                "सामग्री की कमी का विश्लेषण"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "एआई-समर्थित टैग सुझाव"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "गैप विश्लेषण केवल AI सुविधाओं के एड-ऑन के साथ उपलब्ध है."
+            ],
+            "Readability": [
+                "पठनीयता"
+            ],
+            "Tag added successfully": [
+                "टैग सफलतापूर्वक जोड़ा गया।"
+            ],
+            "Tag removed successfully": [
+                "टैग सफलतापूर्वक हटाया गया।"
+            ],
+            "Tag updated successfully": [
+                "टैग सफलतापूर्वक अपडेट किया गया।"
+            ],
+            "Add New Tag": [
+                "नया टैग जोड़ें"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "टैग"
+            ],
+            "Edit Article": [
+                "लेख संपादित करें"
+            ],
+            "View Article": [
+                "लेख देखें"
+            ],
+            "Failed to save tag changes": [
+                "टैग परिवर्तन सहेजने में विफल"
+            ],
+            "Failed to add tag": [
+                "टैग जोड़ने में विफल"
+            ],
+            "Failed to remove tag": [
+                "टैग हटाने में विफल"
+            ],
+            "Failed to remove tags": [
+                "टैग हटाने में विफल"
+            ],
+            "Failed to update tag": [
+                "टैग अपडेट करने में विफल"
+            ],
+            "Not Analyzed": [
+                "विश्लेषण नहीं किया गया"
+            ],
+            "Demo Analysis Data": [
+                "डेमो विश्लेषण डेटा"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "यह डेमो लेख है जिसमें प्रदर्शन के लिए नमूना एनालिटिक्स डेटा है। वास्तविक कंटेंट एनालिसिस परिणाम देखने के लिए अपने स्वयं के लेख बनाएं।."
+            ],
+            "Loading analysis details...": [
+                "विश्लेषण विवरण लोड हो रहा है..."
+            ],
+            "No analysis details available for this article.": [
+                "इस लेख के लिए कोई विश्लेषण विवरण उपलब्ध नहीं है।."
+            ],
+            "Content Gaps": [
+                "कंटेंट गैप्स"
+            ],
+            "Overall Score": [
+                "कुल स्कोर"
+            ],
+            "Article Importance": [
+                "लेख का महत्व"
+            ],
+            "Readability analysis completed": [
+                "पठनीयता विश्लेषण पूर्ण हो गया"
+            ],
+            "Failed to run readability analysis": [
+                "पठनीयता विश्लेषण चलाने में विफल रहा"
+            ],
+            "Re-analyze": [
+                "पुनः विश्लेषण करें"
+            ],
+            "Readability Analysis": [
+                "पठनीयता विश्लेषण"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "कोई पठनीयता समस्या नहीं मिली। लेख स्पष्ट है और अच्छी तरह लिखा गया है।."
+            ],
+            "Analysis Error": [
+                "विश्लेषण त्रुटि"
+            ],
+            "An error occurred during readability analysis.": [
+                "पठनीयता विश्लेषण के दौरान एक त्रुटि हो गई।."
+            ],
+            "Retrying analysis...": [
+                "पुनः विश्लेषण किया जा रहा है..."
+            ],
+            "Retry Analysis": [
+                "पुनः विश्लेषण करें"
+            ],
+            "Analyzing article readability...": [
+                "लेख की पठनीयता का विश्लेषण किया जा रहा है..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "नीचे दिए गए बटन पर क्लिक करके इस लेख की पठनीयता AI का उपयोग करके विश्लेषण करें."
+            ],
+            "Run Readability Analysis": [
+                "पढ़ने में आसानी का विश्लेषण चलाएं"
+            ],
+            "No article content available": [
+                "डॉक्यूमेंटेशन पेज सामग्री उपलब्ध नहीं है"
+            ],
+            "Content Gaps analysis completed": [
+                "सामग्री के अंतर विश्लेषण पूरा हुआ"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "सामग्री के अंतर विश्लेषण चलाने में विफल रहा"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "कोई सामग्री के अंतर नहीं मिले। डॉक्यूमेंटेशन पेज पूरी तरह से समग्र प्रतीत होता है।."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "सामग्री के अंतर विश्लेषण के दौरान एक त्रुटि हुई।."
+            ],
+            "Learn More About AI Features": [
+                "AI सुविधाओं के बारे में अधिक जानें"
+            ],
+            "Analyzing article for content gaps...": [
+                "डॉक्यूमेंटेशन पेज के लिए सामग्री के अंतर का विश्लेषण किया जा रहा है..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "AI के साथ इस डॉक्यूमेंटेशन पेज के लिए गायब सामग्री का विश्लेषण करने के लिए नीचे दिए गए बटन पर क्लिक करें।."
+            ],
+            "Run Content Gaps Analysis": [
+                "सामग्री के अंतर विश्लेषण चलाएं"
+            ],
+            "Tags analysis completed": [
+                "टैग विश्लेषण पूर्ण हुआ"
+            ],
+            "Failed to run tags analysis": [
+                "टैग विश्लेषण चलाने में विफल रहा"
+            ],
+            "Re-analyze Tags": [
+                "टैग का पुनः विश्लेषण करें"
+            ],
+            "Tag Count": [
+                "टैग गिनती"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "टैगों की संख्या अनुशंसित सीमा (3-10) के भीतर है।."
+            ],
+            "Tag Relevance": [
+                "टैग प्रासंगिकता"
+            ],
+            "Not Applicable due to missing tags": [
+                "टैग की कमी के कारण लागू नहीं"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "सभी टैग प्रासंगिक हैं और डॉक्यूमेंटेशन पेज सामग्री में दिखाई देते हैं।."
+            ],
+            "Tag Format": [
+                "टैग स्वरूप"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "सभी टैग सही ढंग से फ़ॉर्मैट किए गए हैं और सबसे अच्छी प्रथाओं का पालन करते हैं।."
+            ],
+            "Duplicate Tags": [
+                "डुप्लिकेट टैग"
+            ],
+            "No duplicate or similar tags found.": [
+                "कोई डुप्लिकेट या समान टैग नहीं मिला।."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "डॉक्यूमेंटेशन पेज के पास सही संख्या में श्रेणियाँ (1-3) हैं।."
+            ],
+            "Add": [
+                "जोड़ें"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "AI सामग्री विश्लेषण के आधार पर, इन टैग्स को जोड़ने पर विचार करें:"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "AI सुविधाओं का ऐड-ऑन प्राप्त करें ताकि AI-चालित टैग सुझाव अनलॉक हों।."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "इस डॉक्यूमेंटेशन पेज के लिए इस समय टैग सुझाव उपलब्ध नहीं हैं।."
+            ],
+            "Broad Tags": [
+                "व्यापक टैग"
+            ],
+            "(General categories)": [
+                "(सामान्य श्रेणियाँ)"
+            ],
+            "Specific Tags": [
+                "विशिष्ट टैग"
+            ],
+            "(Detailed topics)": [
+                "(विस्तृत विषय)"
+            ],
+            "Article Tags": [
+                "डॉक्यूमेंटेशन टैग"
+            ],
+            "Restore tag": [
+                "टैग पुनर्स्थापित करें"
+            ],
+            "Mark for deletion": [
+                "हटाने के लिए चिह्नित करें"
+            ],
+            "No tags": [
+                "कोई टैग नहीं"
+            ],
+            "Remove tag": [
+                "टैग हटाएं"
+            ],
+            "Tag name": [
+                "टैग नाम"
+            ],
+            "Tag Best Practices": [
+                "टैग सर्वोत्तम प्रथाएं"
+            ],
+            "Guidelines:": [
+                "दिशानिर्देश:"
+            ],
+            "Relevant & Keyword-Rich:": [
+                "प्रासंगिक एवं कीवर्ड-सम्पन्न:"
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "वर्णनात्मक टैगों का प्रयोग करें जो सामग्री और खोज शब्दों से मेल खाते हों।."
+            ],
+            "Avoid Duplicates:": [
+                "डुप्लिकेट से बचें:"
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "श्रेणी के नाम टैग के रूप में दोहराने से बचें (या इसके विपरीत)."
+            ],
+            "Reuse Consistently:": [
+                "सुसंगत तरीके से पुनः उपयोग करें:"
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "रणनीति पर टिके रहें; हर पोस्ट के लिए अनन्य टैग से बचें ताकि 'tag bloat' रोका जा सके (पतले पन्ने SEO को नुकसान पहुँचाते हैं)। टैग कई पोस्ट को समूहित करें; पतले आर्काइव्स (≤2 पोस्ट) को noindex रखें।."
+            ],
+            "Keep Short:": [
+                "छोटा रखें:"
+            ],
+            "1–3 words, reusable.": [
+                "1–3 शब्द, पुनः उपयोग योग्य."
+            ],
+            "Editor Checklist:": [
+                "एडिटर चेकलिस्ट:"
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "≥3 पोस्ट समूह (अब या जल्द)?"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "1–3 शब्द, मौजूदा टैग/श्रेणियों से भिन्न?"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "नए टैग के बजाय पर्यायवाची टैग मिलाएं?"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "पतला हो तो noindex करें; विवरण के साथ पर्याप्त हो तो इंडेक्स करें?"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "ध्यान दें: सेव करना टैग आर्काइव पेज रीडायरेक्ट अपडेट करेगा (ऐच्छिक)"
+            ],
+            "Save Changes": [
+                "परिवर्तनों को सहेजें"
+            ]
+        }
+    }
+}

@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "AI Search": [
+                "AI Søg"
+            ],
+            "All": [
+                "Alle"
+            ],
+            "Disabled": [
+                "Deaktiveret"
+            ],
+            "AI Chat": [
+                "AI chat"
+            ],
+            "OpenAI API Key": [
+                "OpenAI API-nøgle"
+            ],
+            "Debug mode updated successfully": [
+                "Debug-tilstand opdateret med succes"
+            ],
+            "Refresh": [
+                "Opdater"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Warnings": [
+                "Advarsler"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Failed to update debug mode": [
+                "Kunne ikke opdatere fejlfindingstilstand"
+            ],
+            "Error updating debug mode": [
+                "Fejl ved opdatering af fejlfindingstilstand"
+            ],
+            "Failed to load PHP logs": [
+                "Kunne ikke indlæse PHP-logfiler"
+            ],
+            "Error loading PHP logs": [
+                "Fejl ved indlæsning af PHP-logfiler"
+            ],
+            "Failed to load WP logs": [
+                "Kunne ikke indlæse WP-logfiler"
+            ],
+            "Error loading WP logs": [
+                "Fejl ved indlæsning af WP-logfiler"
+            ],
+            "Failed to load AI logs": [
+                "Kunne ikke indlæse AI-logfiler"
+            ],
+            "Error loading AI logs": [
+                "Fejl ved indlæsning af AI-logfiler"
+            ],
+            "All AI logs cleared successfully": [
+                "Alle AI-logfiler er ryddet"
+            ],
+            "Failed to clear AI logs": [
+                "Kunne ikke rydde AI-logfiler"
+            ],
+            "Error clearing AI logs": [
+                "Fejl ved rydning af AI-logfiler"
+            ],
+            "Debug Mode": [
+                "Fejlfindings-tilstand"
+            ],
+            "Enable Debug Mode": [
+                "Aktiver fejlfindingstilstand"
+            ],
+            " (Localhost detected)": [
+                "(Lokalhost opdaget)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Aktiver fejlfindingstilstand for at se systemlogfiler og fejlfinde AI-funktioner. Dette vil indlæse yderligere fejlfindingværktøjer."
+            ],
+            "AI Information": [
+                "AI-information"
+            ],
+            "Missing API Key": [
+                "Manglende API-nøgle"
+            ],
+            "Data Collections": [
+                "Datasamlinger"
+            ],
+            "Unnamed Collection": [
+                "Unavngivet samling"
+            ],
+            "Vector Store:": [
+                "Vektorlager:"
+            ],
+            "Created": [
+                "Oprettet"
+            ],
+            "Not created": [
+                "Ikke oprettet"
+            ],
+            "Total Records:": [
+                "Samlede poster:"
+            ],
+            "Added:": [
+                "Tilføjet:"
+            ],
+            "Updated:": [
+                "Opdateret:"
+            ],
+            "Outdated:": [
+                "Forældet:"
+            ],
+            "Error:": [
+                "Fejl:"
+            ],
+            "Pending:": [
+                "Afventer:"
+            ],
+            "No data collections found.": [
+                "Ingen datasamlinger fundet."
+            ],
+            "System Information": [
+                "Systemoplysninger"
+            ],
+            "Download Debug Info": [
+                "Download fejlfindingoplysninger"
+            ],
+            "Logs": [
+                "Logfiler"
+            ],
+            "PHP Error Log": [
+                "PHP-fejllog"
+            ],
+            "Fatal Errors": [
+                "Kritiske fejl"
+            ],
+            "Notices": [
+                "Meddelelser"
+            ],
+            "AI Related Only": [
+                "Kun AI-relateret"
+            ],
+            "Latest at top": [
+                "Nyeste øverst"
+            ],
+            "No logs found.": [
+                "Ingen logfiler fundet."
+            ],
+            "WordPress Error Log": [
+                "WordPress-fejllog"
+            ],
+            "AI Activity Log": [
+                "AI-aktivitetslog"
+            ],
+            "Clear Log": [
+                "Ryd log"
+            ],
+            "All Levels": [
+                "Alle niveauer"
+            ],
+            "Errors Only": [
+                "Kun fejl"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Fejlfindings-tilstand er deaktiveret. Aktivér den ovenfor for at se fejlfindingoplysninger."
+            ]
+        }
+    }
+}

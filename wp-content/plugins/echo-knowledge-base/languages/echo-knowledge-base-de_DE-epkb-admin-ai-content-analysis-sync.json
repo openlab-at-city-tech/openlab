@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Cancel": [
+                "Abbrechen"
+            ],
+            "articles": [
+                "Dokumentationsseiten"
+            ],
+            "Analyze Content": [
+                "Inhalt analysieren"
+            ],
+            "No articles found to analyze": [
+                "Keine KB-Artikel zum Analysieren gefunden"
+            ],
+            "of": [
+                "von"
+            ],
+            "Analysis canceled": [
+                "Analyse abgebrochen"
+            ],
+            "Failed to cancel analysis": [
+                "Analyse abbrechen fehlgeschlagen"
+            ],
+            "Calculating...": [
+                "Berechnung läuft..."
+            ],
+            "Analysis failed": [
+                "Analyse fehlgeschlagen"
+            ],
+            "Content analysis completed successfully!": [
+                "Inhaltsanalyse erfolgreich abgeschlossen!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Wiederholungsversuch beim Kontakt mit OpenAI ausgeschöpft."
+            ],
+            "Failed to start analysis": [
+                "Analyse konnte nicht gestartet werden"
+            ],
+            "Analysis Job Running": [
+                "Analyse läuft"
+            ],
+            "Wait": [
+                "Warten"
+            ],
+            "articles selected for analysis": [
+                "Für die Analyse ausgewählte Dokumentationsseiten"
+            ],
+            "Analysis in Progress": [
+                "Analyse läuft derzeit"
+            ],
+            "Stop Analysis": [
+                "Analyse stoppen"
+            ],
+            "Starting analysis...": [
+                "Analyse wird gestartet..."
+            ],
+            "article": [
+                "Dokumentationsseite"
+            ],
+            "Analyzing": [
+                "Analysiere"
+            ],
+            "Completed! Analyzed": [
+                "Abgeschlossen! Analysiert"
+            ],
+            "error": [
+                "Fehler"
+            ],
+            "errors": [
+                "Fehler"
+            ],
+            "with": [
+                "mit"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analyse nach Fehlern gestoppt. Analysiert"
+            ],
+            "Remaining Time:": [
+                "Verbleibende Zeit:"
+            ]
+        }
+    }
+}

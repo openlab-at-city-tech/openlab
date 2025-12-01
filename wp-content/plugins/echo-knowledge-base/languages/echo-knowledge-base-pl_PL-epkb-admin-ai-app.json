@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Go to General Settings": [
+                "Przejdź do ustawień ogólnych"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Aby korzystać z funkcji AI, skonfiguruj klucz API i zaakceptuj umowę o ochronie prywatności w Ustawieniach ogólnych, a następnie włącz AI Wyszukiwanie lub AI Czat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Aby korzystać z danych treningowych, proszę włączyć AI Czat lub AI Wyszukiwanie w odpowiednich kartach."
+            ],
+            "Data Collection": [
+                "Zbiór danych"
+            ],
+            "OpenAI API Key Required": [
+                "Wymagany klucz API OpenAI"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Aby korzystać z funkcji AI, należy skonfigurować klucz API OpenAI."
+            ],
+            "Configure API Key": [
+                "Skonfiguruj klucz API"
+            ],
+            "Failed to load tab data": [
+                "Nie udało się załadować danych zakładki"
+            ],
+            "Unknown tab": [
+                "Nieznana zakładka"
+            ],
+            "AI Configuration": [
+                "Konfiguracja AI"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Błąd: nie skonfigurowano żadnych zakładek. Proszę sprawdzić konfigurację."
+            ],
+            "New training data collection created": [
+                "Nowa kolekcja danych treningowych została utworzona"
+            ],
+            "Failed to create collection": [
+                "Nie udało się utworzyć kolekcji"
+            ],
+            "AI features must be enabled to access this tab": [
+                "Funkcje AI muszą być włączone, aby uzyskać dostęp do tej zakładki"
+            ],
+            "Reloading page...": [
+                "Przeładowywanie strony..."
+            ]
+        }
+    }
+}

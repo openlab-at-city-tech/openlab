@@ -1,0 +1,15 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
+                "${ builderName } がアクティブな間、ナレッジベースエディターは無効になっています。代わりにナレッジベースの設定へ移動しますか？"
+            ]
+        }
+    }
+}

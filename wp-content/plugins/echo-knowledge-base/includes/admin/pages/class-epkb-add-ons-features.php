@@ -296,23 +296,12 @@ class EPKB_Add_Ons_Features {
 			'type'              => 'new-feature'
 		);
 
-		$features['2021.03.01'] = array(
-			'plugin'            => esc_html__( 'KB Core', 'echo-knowledge-base'),
-			'title'             => esc_html__( 'Simple Search Analytics', 'echo-knowledge-base'),
-			'description'       => '<p>' . esc_html__( 'Show a basic count of searches with articles found and with no results.', 'echo-knowledge-base') . '</p>',
-			'image'             => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/03/new-features-basic-search-analytics.jpg',
-			'learn_more_url'    => admin_url('edit.php?post_type=epkb_post_type_1&page=epkb-plugin-analytics'),
-			'button_name'       => esc_html__( 'Try Now!', 'echo-knowledge-base'),
-			'plugin-type'       => 'core',
-			'type'              => 'new-feature'
-		);
-
 		$features['2021.02.01'] = array(
 			'plugin'            => esc_html__( 'KB Core', 'echo-knowledge-base'),
 			'title'             => esc_html__( 'Print Article', 'echo-knowledge-base'),
 			'description'       => '<p>' . esc_html__( 'Display a print button so that users can easily print the article and save it as a PDF file. The printed article excludes the redundant site header and footer.', 'echo-knowledge-base') . '</p>',
 			'image'             => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/01/featured-screenshots-print-button.jpg',
-			'learn_more_url'    => ( epkb_get_instance()->kb_config_obj->get_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'print_button_enable', null ) == 'on' ) ? EPKB_Need_Help_Features::get_settings_link( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'settings', 'labels', '', 'print_button' ) : 'https://www.echoknowledgebase.com/documentation/print-button/',
+			'learn_more_url'    => ( epkb_get_instance()->kb_config_obj->get_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'print_button_enable', null ) == 'on' ) ? admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Config_DB::DEFAULT_KB_ID ) . '&page=epkb-kb-configuration#settings__labels____print_button' ) : 'https://www.echoknowledgebase.com/documentation/print-button/',
 			'button_name'       => esc_html__( 'Try Now!', 'echo-knowledge-base'),
 			'plugin-type'       => 'core',
 			'type'              => 'new-feature'
@@ -400,7 +389,7 @@ class EPKB_Add_Ons_Features {
 
 		$features['2019.12.ac'] = array(
 			'plugin'            => esc_html__( 'KB Core', 'echo-knowledge-base'),
-			'title'             =>__(  'New Option to Show Articles Above Categories', 'echo-knowledge-base'),
+			'title'             => esc_html__( 'New Option to Show Articles Above Categories', 'echo-knowledge-base'),
 			'description'       => '<p>' . esc_html__( 'On the Main Page (or Sidebar if you have the Elegant Layout add-on) the article can now be configured to appear above their peer categories and sub-categories.', 'echo-knowledge-base') . '</p>',
 			'image'             => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/03/new-features-article-category-sequence-2.jpg',
 			'learn_more_url'    => '',
@@ -538,7 +527,7 @@ class EPKB_Add_Ons_Features {
 		$features_list = array();
 		foreach ( $features as $date => $feature ) {
 			$season = explode('.', $date);
-			$key =  esc_html__( 'Year' ) . ' ' . $season[0];
+			$key =  esc_html__( 'Year', 'echo-knowledge-base' ) . ' ' . $season[0];
 			$features_list[$key][$date] = $feature;
 		}
 
@@ -601,7 +590,7 @@ class EPKB_Add_Ons_Features {
 						echo '<span class="epkb-fnf__header__widget"> <i class="epkbfa epkbfa-puzzle-piece " aria-hidden="true"></i>' . esc_html__( 'Widget', 'echo-knowledge-base') . '</span>';
 						break;
 				} ?>
-				<h3 class="epkb-fnf__header__title"><?php esc_html_e( $args['title']); ?></h3>
+				<h3 class="epkb-fnf__header__title"><?php echo esc_html( $args['title'] ); ?></h3>
 			</div>		<?php
 			if ( isset( $args['image']) ) { ?>
 				<div class="featured_img epkb-fnf__img">

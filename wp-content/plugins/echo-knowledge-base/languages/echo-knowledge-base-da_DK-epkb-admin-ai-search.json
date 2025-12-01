@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Search Results": [
+                "Søgeresultater"
+            ],
+            "Page": [
+                "Side"
+            ],
+            "Settings saved successfully": [
+                "Indstillinger gemt"
+            ],
+            "Cancel": [
+                "Annuller"
+            ],
+            "Date:": [
+                "Dato:"
+            ],
+            "Next": [
+                "Næste"
+            ],
+            "Previous": [
+                "Forrige"
+            ],
+            "Saving...": [
+                "Gemmer..."
+            ],
+            "Search History": [
+                "Søgehistorik"
+            ],
+            "Search Settings": [
+                "Søgeindstillinger"
+            ],
+            "Single Column": [
+                "Én kolonne"
+            ],
+            "Left Column": [
+                "Venstre kolonne"
+            ],
+            "Right Column": [
+                "Højre kolonne"
+            ],
+            "Middle Column": [
+                "Midterkolonne"
+            ],
+            "Feedback": [
+                "Feedback"
+            ],
+            "AI Assistant": [
+                "AI-assistent"
+            ],
+            "Save Settings": [
+                "Gem indstillinger"
+            ],
+            "Delete": [
+                "Slet"
+            ],
+            "Delete Selected": [
+                "Slet valgte"
+            ],
+            "of": [
+                "af"
+            ],
+            "Reset": [
+                "Nulstil"
+            ],
+            "Refreshing...": [
+                "Opdaterer..."
+            ],
+            "Refresh": [
+                "Opdater"
+            ],
+            "Time": [
+                "Tid"
+            ],
+            "User": [
+                "Bruger"
+            ],
+            "Searching server for more results...": [
+                "Søger serveren efter flere resultater..."
+            ],
+            "User:": [
+                "Bruger:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Er du sikker på, at du vil nulstille til standardinstruktioner?"
+            ],
+            "Reset Instructions": [
+                "Nulstil instruktioner"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Er du sikker på, at du vil nulstille til standardinstruktioner? Dine brugerdefinerede instruktioner vil gå tabt."
+            ],
+            "Reset to Default": [
+                "Nulstil til standard"
+            ],
+            "Failed to save settings": [
+                "Kunne ikke gemme indstillinger"
+            ],
+            "Go to Settings": [
+                "Gå til Indstillinger"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "Er du sikker på, at du vil slette de valgte søgninger?"
+            ],
+            "Delete Search History": [
+                "Slet søgehistorik"
+            ],
+            "Deleting searches...": [
+                "Sletter søgninger..."
+            ],
+            "Search history refreshed successfully": [
+                "Søgehistorikken er opdateret"
+            ],
+            "Search queries...": [
+                "Søgeforespørgsler..."
+            ],
+            "Loading search history...": [
+                "Indlæser søgehistorik..."
+            ],
+            "No searches found": [
+                "Ingen søgninger fundet"
+            ],
+            "Search Query": [
+                "Søgeforespørgsel"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Contact request submitted": [
+                "Kontaktanmodning indsendt"
+            ],
+            "User Needs Help": [
+                "Bruger har brug for hjælp"
+            ],
+            "Positive feedback": [
+                "Positiv feedback"
+            ],
+            "Negative feedback": [
+                "Negativ feedback"
+            ],
+            "Search Details": [
+                "Søgedetaljer"
+            ],
+            "Select a search to view details": [
+                "Vælg en søgning for at se detaljer"
+            ],
+            "Search Information": [
+                "Søginformation"
+            ],
+            "Query:": [
+                "Forespørgsel:"
+            ],
+            "Results Count:": [
+                "Antal resultater:"
+            ],
+            "Contact Request": [
+                "Kontaktanmodning"
+            ],
+            "Name:": [
+                "Navn:"
+            ],
+            "Email:": [
+                "E-mail:"
+            ],
+            "Vote:": [
+                "Stemme:"
+            ],
+            "Positive": [
+                "Positiv"
+            ],
+            "Negative": [
+                "Negativ"
+            ],
+            "Search Interaction": [
+                "Søgeinteraktion"
+            ],
+            "AI Response": [
+                "AI-svar"
+            ],
+            "✓ Clicked": [
+                "✓ Klikket"
+            ],
+            "Relevance:": [
+                "Relevans:"
+            ],
+            "No sections added yet": [
+                "Ingen sektioner tilføjet endnu"
+            ],
+            "-- Select Section --": [
+                "-- Vælg Sektion --"
+            ],
+            "Add Section": [
+                "Tilføj sektion"
+            ],
+            "Failed to load search history": [
+                "Kunne ikke indlæse søgehistorik"
+            ],
+            "Searches deleted successfully": [
+                "Søgninger slettet"
+            ],
+            "Failed to delete searches": [
+                "Fejl ved sletning af søgninger"
+            ],
+            "AI Search is Disabled": [
+                "AI Søgning er deaktiveret"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "For at se søgehistorikken skal du aktivere AI Søgning i fanen Indstillinger."
+            ]
+        }
+    }
+}

@@ -15,6 +15,11 @@ class EPKB_ML_Search {
 		$this->kb_config = $kb_config;
 		$this->setting_prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) || $is_kb_block ? '' : 'article_';
 		$this->is_kb_block = $is_kb_block;
+
+		// Mark that search box is rendered for AI search results dialog output
+		if ( EPKB_AI_Utilities::is_ai_search_advanced_enabled() ) {
+			EPKB_AI_Search_Results_Display::mark_search_box_rendered();
+		}
 	}
 
 	/**
@@ -24,8 +29,9 @@ class EPKB_ML_Search {
 
 		<!-- Classic Search Layout -->
 		<div id="epkb-ml-search-classic-layout">    <?php
-			$this->display_search_title();  ?>
-			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" action="/"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?>>
+			$this->display_search_title();
+			$collection_id_attr = ' data-collection-id="' . $this->kb_config['kb_ai_collection_id'] . '"';  ?>
+			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_id_attr; ?>>
 				<input type="hidden" id="epkb_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>" >
 
 				<!-- Search Input Box -->
@@ -51,8 +57,9 @@ class EPKB_ML_Search {
 
 		<!-- Modern Search Layout -->
 		<div id="epkb-ml-search-modern-layout">    <?php
-			$this->display_search_title();  ?>
-			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" action="/"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?>>
+			$this->display_search_title();
+			$collection_id_attr = ' data-collection-id="' . $this->kb_config['kb_ai_collection_id'] . '"';  ?>
+			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_id_attr; ?>>
 				<input type="hidden" id="epkb_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>" >
 
 				<!-- Search Input Box -->
@@ -227,70 +234,5 @@ class EPKB_ML_Search {
 		}
 
 		return $output;
-	}
-
-	/**
-	 * Returns HTML for given search results
-	 *
-	 * @param $search_results
-	 * @param $kb_config
-	 * @return string
-	 */
-	public static function display_search_results_html( $search_results, $kb_config ) {
-
-		if ( EPKB_Utilities::is_article_search_synced( $kb_config ) || EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
-			$show_article_excerpt = $kb_config['search_result_mode'] == 'title_excerpt';
-		} else {
-			$show_article_excerpt = $kb_config['article_search_result_mode'] == 'title_excerpt';
-		}
-
-		$title_style_escaped = '';
-		$icon_style_escaped  = '';
-		if ( $kb_config['search_box_results_style'] == 'on' && EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
-			$setting_names = EPKB_Core_Utilities::get_style_setting_name( $kb_config['kb_main_page_layout'] );
-			$title_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $setting_names['article_font_color'] , $kb_config );
-			$icon_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $setting_names['article_icon_color'] , $kb_config );
-		}
-
-		ob_start(); ?>
-
-		<ul>    <?php
-			foreach ( $search_results as $article ) {
-
-				$article_url = get_permalink( $article->ID );
-				if ( empty( $article_url ) || is_wp_error( $article_url ) ) {
-					continue;
-				}
-
-				// linked articles have their own icon
-				$article_title_icon = 'ep_font_icon_document';
-				if ( has_filter( 'eckb_single_article_filter' ) ) {
-					$article_title_icon = apply_filters( 'eckb_article_icon_filter', $article_title_icon, $article->ID );
-					$article_title_icon = empty( $article_title_icon ) ? 'epkbfa-file-text-o' : $article_title_icon;
-				}
-
-				// linked articles have open in new tab option
-				$new_tab_escaped = '';
-				if ( EPKB_Utilities::is_link_editor_enabled() ) {
-					$link_editor_config = EPKB_Utilities::get_postmeta( $article->ID, 'kblk-link-editor-data', [], true );
-					$new_tab_escaped = empty( $link_editor_config['open-new-tab'] ) ? '' : 'target="_blank"';
-				}    ?>
-
-				<li>
-					<a href="<?php echo esc_url( $article_url ); ?>" <?php echo $new_tab_escaped; ?> class="epkb-ml-article-container" data-kb-article-id="<?php echo esc_attr( $article->ID ); ?>" <?php echo empty( $new_tab_escaped ) ? '' : 'rel="noopener noreferrer"'; ?>>
-						<span class="epkb-article-inner" <?php echo $title_style_escaped; ?>>
-							<span class="epkb-article__icon epkbfa <?php echo esc_attr( $article_title_icon ); ?>" aria-hidden="true" <?php echo $icon_style_escaped; ?>></span>
-							<span class="epkb-article__text"><?php echo esc_html( $article->post_title ); ?>    <?php
-								if ( $show_article_excerpt && ! empty( $article->post_excerpt ) ) {	?>
-									<span class="epkb-article__excerpt"><?php echo esc_html( $article->post_excerpt ); ?></span>                            <?php
-								}   ?>
-							</span>
-						</span>
-					</a>
-				</li>   <?php
-			}   ?>
-		</ul>   <?php
-
-		return ob_get_clean();
 	}
 }

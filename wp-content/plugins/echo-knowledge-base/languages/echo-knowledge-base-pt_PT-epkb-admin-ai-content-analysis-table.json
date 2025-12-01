@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Título"
+            ],
+            "Status": [
+                "Estado"
+            ],
+            "All": [
+                "Todos"
+            ],
+            "Close": [
+                "Fechar"
+            ],
+            "Recent": [
+                "Recentes"
+            ],
+            "Cancel": [
+                "Cancelar"
+            ],
+            "selected": [
+                "selecionado"
+            ],
+            "Next": [
+                "Próximo"
+            ],
+            "Previous": [
+                "Anterior"
+            ],
+            "Today": [
+                "Hoje"
+            ],
+            "Yesterday": [
+                "Ontem"
+            ],
+            "Loading...": [
+                "A carregar..."
+            ],
+            "Page": [
+                "Página"
+            ],
+            "Delete": [
+                "Apagar"
+            ],
+            "of": [
+                "de"
+            ],
+            "Searching...": [
+                "A pesquisar..."
+            ],
+            "Refreshing...": [
+                "A atualizar..."
+            ],
+            "Refresh": [
+                "Atualizar"
+            ],
+            "Failed to fetch analysis data": [
+                "Falha ao recuperar dados de análise"
+            ],
+            "Data refreshed successfully": [
+                "Dados atualizados com sucesso"
+            ],
+            "Delete Selected Items": [
+                "Eliminar itens selecionados"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Tem a certeza de que pretende eliminar os itens selecionados?"
+            ],
+            "Items deleted successfully": [
+                "Itens eliminados com sucesso"
+            ],
+            "Unknown error occurred": [
+                "Ocorreu um erro desconhecido"
+            ],
+            "No articles need analysis": [
+                "Não há artigos que precisem de análise"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "Todos os artigos foram analisados. Ótimo trabalho!"
+            ],
+            "No articles need improvement": [
+                "Não há artigos que precisem de melhorias"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "Todos os artigos analisados têm pontuações acima de 80%. Excelente!"
+            ],
+            "No recent articles": [
+                "Não há artigos recentes"
+            ],
+            "No articles have been modified recently.": [
+                "Nenhum artigo foi modificado recentemente."
+            ],
+            "No articles found": [
+                "Não foram encontrados artigos"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "Não há artigos disponíveis nesta Base de Conhecimento. Crie alguns artigos para começar a analisar."
+            ],
+            "To Analyze": [
+                "Analisar"
+            ],
+            "To Improve": [
+                "Melhorar"
+            ],
+            "Search by title...": [
+                "Pesquisar por título..."
+            ],
+            "Loading content analysis data...": [
+                "A carregar dados de análise de conteúdo..."
+            ],
+            "Score": [
+                "Pontuação"
+            ],
+            "Sort": [
+                "Ordenar"
+            ],
+            "Importance": [
+                "Importância"
+            ],
+            "Last Modified": [
+                "Última modificação"
+            ],
+            "No articles match your search": [
+                "Não há artigos que correspondam à sua pesquisa"
+            ],
+            "View detailed analysis": [
+                "Ver análise detalhada"
+            ],
+            "days ago": [
+                "dias atrás"
+            ],
+            "week ago": [
+                "há uma semana"
+            ],
+            "weeks ago": [
+                "há semanas"
+            ],
+            "Content Analysis Error": [
+                "Erro de análise de conteúdo"
+            ],
+            "ERROR": [
+                "ERRO"
+            ],
+            "Article ID:": [
+                "ID do Artigo:"
+            ],
+            "Error Processing Content Analysis": [
+                "Erro ao processar a análise de conteúdo"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "Este artigo não pôde ser analisado. Por favor, tente novamente ou verifique o conteúdo do artigo em busca de problemas."
+            ]
+        }
+    }
+}

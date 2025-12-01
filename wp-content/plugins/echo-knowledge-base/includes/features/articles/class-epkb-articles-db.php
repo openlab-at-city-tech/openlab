@@ -34,11 +34,6 @@ class EPKB_Articles_DB {
 		}
 
 		$order = $order_by == 'title' ? 'ASC' : 'DESC';
-
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
-
-		$nof_articles = ! is_wp_error( $kb_config ) && $kb_config['archive_content_articles_nof_articles_displayed'] > $nof_articles ? $kb_config['archive_content_articles_nof_articles_displayed'] : $nof_articles;
-
 		$query_args = array(
 			'post_type' => EPKB_KB_Handler::get_post_type( $kb_id ),
 			'posts_per_page' => $nof_articles,
@@ -80,6 +75,7 @@ class EPKB_Articles_DB {
 		$where_post_status_escaped = ' (' . $where_post_status_escaped . ') ';
 
 		// Get only Published articles
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 		if ( ! is_wp_error( $kb_config ) && EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
 			$order_by = $order_by == 'title' ? 'post_title' : 'post_date';
 			return $wpdb->get_results( $wpdb->prepare( " SELECT * " .

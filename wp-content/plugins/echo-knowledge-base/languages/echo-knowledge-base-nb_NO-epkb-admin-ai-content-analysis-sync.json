@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Cancel": [
+                "Avbryt"
+            ],
+            "articles": [
+                "artikler"
+            ],
+            "Analyze Content": [
+                "Analyser innhold"
+            ],
+            "No articles found to analyze": [
+                "Fant ingen artikler å analysere"
+            ],
+            "of": [
+                "av"
+            ],
+            "Analysis canceled": [
+                "Analysen avbrutt"
+            ],
+            "Failed to cancel analysis": [
+                "Klarte ikke å avbryte analysen"
+            ],
+            "Calculating...": [
+                "Beregner..."
+            ],
+            "Analysis failed": [
+                "Analysen mislyktes"
+            ],
+            "Content analysis completed successfully!": [
+                "Innholdsanalyse fullført med suksess!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Gjentaksgrensen nådd under kontakt med OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Klarte ikke å starte analysen"
+            ],
+            "Analysis Job Running": [
+                "Analysejobb pågår"
+            ],
+            "Wait": [
+                "Vent"
+            ],
+            "articles selected for analysis": [
+                "artikler valgt for analyse"
+            ],
+            "Analysis in Progress": [
+                "Analyse pågår"
+            ],
+            "Stop Analysis": [
+                "Stopp analyse"
+            ],
+            "Starting analysis...": [
+                "Starter analyse..."
+            ],
+            "article": [
+                "KB-artikkel"
+            ],
+            "Analyzing": [
+                "Analyserer"
+            ],
+            "Completed! Analyzed": [
+                "Fullført! Analysert"
+            ],
+            "error": [
+                "feil"
+            ],
+            "errors": [
+                "feil"
+            ],
+            "with": [
+                "med"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analysen stoppet etter feil. Analysert"
+            ],
+            "Remaining Time:": [
+                "Gjenstående tid:"
+            ]
+        }
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings saved successfully": [
+                "सेटिंग्स सफलतापूर्वक सहेजी गईं"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
+            ],
+            "Save Settings": [
+                "सेटिंग्स सहेजें"
+            ],
+            "Failed to save settings": [
+                "सेटिंग्स सहेजने में असफल"
+            ],
+            "Sending...": [
+                "भेज रहा है..."
+            ],
+            "Test email sent successfully": [
+                "टेस्ट ईमेल सफलतापूर्वक भेजा गया"
+            ],
+            "Failed to send test email": [
+                "टेस्ट ईमेल भेजना विफल रहा"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "टेस्ट ईमेल भेजना विफल रहा। कृपया अपना कनेक्शन जांचें।."
+            ]
+        }
+    }
+}

@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "es_ES",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Updated": [
+                "Actualizado"
+            ],
+            "Error": [
+                "Error"
+            ],
+            "No posts found to sync": [
+                "No se encontraron publicaciones para sincronizar"
+            ],
+            "Pending": [
+                "Pendiente"
+            ],
+            "of": [
+                "de"
+            ],
+            "errors": [
+                "errores"
+            ],
+            "with": [
+                "con"
+            ],
+            "Sync canceled": [
+                "Sincronización cancelada"
+            ],
+            "Failed to cancel sync": [
+                "No se pudo cancelar la sincronización"
+            ],
+            "A sync job is already running.": [
+                "Ya se está ejecutando una tarea de sincronización."
+            ],
+            "Failed to start sync": [
+                "No se pudo iniciar la sincronización"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "Se requiere la clave de API de OpenAI para sincronizar el contenido. Configúrela en Configuración general."
+            ],
+            "Sync Method": [
+                "Método de sincronización"
+            ],
+            "Basic Timer": [
+                "Temporizador básico"
+            ],
+            "Select All Filtered Records": [
+                "Seleccionar todos los registros filtrados"
+            ],
+            "Select All Records": [
+                "Seleccionar todos los registros"
+            ],
+            "Outdated": [
+                "Desactualizado"
+            ],
+            "Added": [
+                "Añadido"
+            ],
+            "Selected": [
+                "Seleccionado"
+            ],
+            "Records": [
+                "Registros"
+            ],
+            "selected records": [
+                "registros seleccionados"
+            ],
+            "Sync in Progress": [
+                "Sincronización en curso"
+            ],
+            "Cancel Sync": [
+                "Cancelar sincronización"
+            ],
+            "API key required": [
+                "Clave de API requerida"
+            ],
+            "Select at least one item to sync": [
+                "Seleccione al menos un elemento para sincronizar"
+            ],
+            "Start Sync": [
+                "Iniciar sincronización"
+            ],
+            "Sync started successfully! ": [
+                "¡Sincronización iniciada con éxito!"
+            ],
+            "Starting sync...": [
+                "Iniciando sincronización..."
+            ],
+            "Retrying failed posts:": [
+                "Reintentando publicaciones fallidas:"
+            ],
+            "Processing": [
+                "Procesando"
+            ],
+            "posts": [
+                "Publicaciones"
+            ],
+            "Completed! Processed": [
+                "¡Completado! Procesado"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "La sincronización se detuvo tras 5 errores consecutivos. Procesado"
+            ],
+            "posts with": [
+                "publicaciones con"
+            ],
+            "total errors": [
+                "errores totales"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "Sincronización programada, esperando para comenzar..."
+            ]
+        }
+    }
+}

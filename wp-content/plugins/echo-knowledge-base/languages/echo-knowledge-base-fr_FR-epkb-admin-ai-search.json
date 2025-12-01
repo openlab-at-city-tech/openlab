@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Search Results": [
+                "Résultats de recherche"
+            ],
+            "Page": [
+                "Page"
+            ],
+            "Settings saved successfully": [
+                "Paramètres enregistrés avec succès"
+            ],
+            "Cancel": [
+                "Annuler"
+            ],
+            "Date:": [
+                "Date :"
+            ],
+            "Next": [
+                "Suivant"
+            ],
+            "Previous": [
+                "Précédent"
+            ],
+            "Saving...": [
+                "Sauvegarde en cours..."
+            ],
+            "Search History": [
+                "Historique des recherches"
+            ],
+            "Search Settings": [
+                "Paramètres de recherche"
+            ],
+            "Single Column": [
+                "Colonne unique"
+            ],
+            "Left Column": [
+                "Colonne de gauche"
+            ],
+            "Right Column": [
+                "Colonne de droite"
+            ],
+            "Middle Column": [
+                "Colonne du milieu"
+            ],
+            "Feedback": [
+                "Commentaires"
+            ],
+            "AI Assistant": [
+                "Assistant IA"
+            ],
+            "Save Settings": [
+                "Enregistrer les paramètres"
+            ],
+            "Delete": [
+                "Supprimer"
+            ],
+            "Delete Selected": [
+                "Supprimer la sélection"
+            ],
+            "of": [
+                "de"
+            ],
+            "Reset": [
+                "Réinitialiser"
+            ],
+            "Refreshing...": [
+                "Actualisation..."
+            ],
+            "Refresh": [
+                "Actualiser"
+            ],
+            "Time": [
+                "Heure"
+            ],
+            "User": [
+                "Utilisateur"
+            ],
+            "Searching server for more results...": [
+                "Recherche de résultats supplémentaires sur le serveur..."
+            ],
+            "User:": [
+                "Utilisateur:"
+            ],
+            "Status:": [
+                "État:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Êtes-vous sûr de vouloir réinitialiser les instructions par défaut ?"
+            ],
+            "Reset Instructions": [
+                "Réinitialiser les instructions"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Êtes-vous sûr de vouloir réinitialiser les instructions par défaut ? Vos instructions personnalisées seront perdues."
+            ],
+            "Reset to Default": [
+                "Réinitialiser par défaut"
+            ],
+            "Failed to save settings": [
+                "Échec de l'enregistrement des paramètres"
+            ],
+            "Go to Settings": [
+                "Aller dans les Paramètres"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "Êtes-vous sûr de vouloir supprimer les recherches sélectionnées ?"
+            ],
+            "Delete Search History": [
+                "Supprimer l’historique des recherches"
+            ],
+            "Deleting searches...": [
+                "Suppression des recherches…."
+            ],
+            "Search history refreshed successfully": [
+                "L’historique des recherches a été actualisé avec succès"
+            ],
+            "Search queries...": [
+                "Requêtes de recherche…."
+            ],
+            "Loading search history...": [
+                "Chargement de l’historique des recherches…."
+            ],
+            "No searches found": [
+                "Aucune recherche trouvée"
+            ],
+            "Search Query": [
+                "Requête de recherche"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Contact request submitted": [
+                "Demande de contact envoyée"
+            ],
+            "User Needs Help": [
+                "L'utilisateur a besoin d'aide"
+            ],
+            "Positive feedback": [
+                "Avis positifs"
+            ],
+            "Negative feedback": [
+                "Avis négatifs"
+            ],
+            "Search Details": [
+                "Détails de la recherche"
+            ],
+            "Select a search to view details": [
+                "Sélectionnez une recherche pour afficher les détails"
+            ],
+            "Search Information": [
+                "Informations sur la recherche"
+            ],
+            "Query:": [
+                "Requête :"
+            ],
+            "Results Count:": [
+                "Nombre de résultats :"
+            ],
+            "Contact Request": [
+                "Demande de contact"
+            ],
+            "Name:": [
+                "Nom:"
+            ],
+            "Email:": [
+                "E-mail:"
+            ],
+            "Vote:": [
+                "Vote:"
+            ],
+            "Positive": [
+                "Positif"
+            ],
+            "Negative": [
+                "Négatif"
+            ],
+            "Search Interaction": [
+                "Interaction de recherche"
+            ],
+            "AI Response": [
+                "Réponse IA"
+            ],
+            "✓ Clicked": [
+                "✓ Cliqué"
+            ],
+            "Relevance:": [
+                "Pertinence :"
+            ],
+            "No sections added yet": [
+                "Aucune section ajoutée pour le moment"
+            ],
+            "-- Select Section --": [
+                "-- Sélectionner une section --"
+            ],
+            "Add Section": [
+                "Ajouter une section"
+            ],
+            "Failed to load search history": [
+                "Échec du chargement de l'historique des recherches"
+            ],
+            "Searches deleted successfully": [
+                "Recherches supprimées avec succès"
+            ],
+            "Failed to delete searches": [
+                "Échec de la suppression des recherches"
+            ],
+            "AI Search is Disabled": [
+                "La recherche IA est désactivée"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "Pour afficher l'historique des recherches, veuillez activer la recherche IA dans l'onglet Paramètres."
+            ]
+        }
+    }
+}

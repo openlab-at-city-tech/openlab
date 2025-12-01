@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "AI Search": [
+                "IA Recherche"
+            ],
+            "All": [
+                "Tous"
+            ],
+            "Disabled": [
+                "Désactivé"
+            ],
+            "AI Chat": [
+                "IA Chat"
+            ],
+            "OpenAI API Key": [
+                "Clé API OpenAI"
+            ],
+            "Debug mode updated successfully": [
+                "Mode de débogage mis à jour avec succès"
+            ],
+            "Refresh": [
+                "Actualiser"
+            ],
+            "Status:": [
+                "État:"
+            ],
+            "Warnings": [
+                "Avertissements"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Failed to update debug mode": [
+                "Échec de la mise à jour du mode de débogage"
+            ],
+            "Error updating debug mode": [
+                "Erreur lors de la mise à jour du mode de débogage"
+            ],
+            "Failed to load PHP logs": [
+                "Échec du chargement des journaux PHP"
+            ],
+            "Error loading PHP logs": [
+                "Erreur lors du chargement des journaux PHP"
+            ],
+            "Failed to load WP logs": [
+                "Échec du chargement des journaux WordPress"
+            ],
+            "Error loading WP logs": [
+                "Erreur lors du chargement des journaux WordPress"
+            ],
+            "Failed to load AI logs": [
+                "Échec du chargement des journaux d'IA"
+            ],
+            "Error loading AI logs": [
+                "Erreur lors du chargement des journaux d'IA"
+            ],
+            "All AI logs cleared successfully": [
+                "Tous les journaux d'IA effacés avec succès"
+            ],
+            "Failed to clear AI logs": [
+                "Échec de la suppression des journaux d'IA"
+            ],
+            "Error clearing AI logs": [
+                "Erreur lors de la suppression des journaux d'IA"
+            ],
+            "Debug Mode": [
+                "Mode de débogage"
+            ],
+            "Enable Debug Mode": [
+                "Activer le mode de débogage"
+            ],
+            " (Localhost detected)": [
+                "(Localhost détecté)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Activez le mode de débogage pour afficher les journaux système et dépanner les fonctionnalités d'IA. Cela chargera des outils de débogage supplémentaires."
+            ],
+            "AI Information": [
+                "Informations sur l'IA"
+            ],
+            "Missing API Key": [
+                "Clé API manquante"
+            ],
+            "Data Collections": [
+                "Collections de données"
+            ],
+            "Unnamed Collection": [
+                "Collection sans nom"
+            ],
+            "Vector Store:": [
+                "Stockage vectoriel:"
+            ],
+            "Created": [
+                "Créé"
+            ],
+            "Not created": [
+                "Non créé"
+            ],
+            "Total Records:": [
+                "Nombre total d'enregistrements:"
+            ],
+            "Added:": [
+                "Ajouté:"
+            ],
+            "Updated:": [
+                "Mis à jour:"
+            ],
+            "Outdated:": [
+                "Obsolète:"
+            ],
+            "Error:": [
+                "Erreur:"
+            ],
+            "Pending:": [
+                "En attente:"
+            ],
+            "No data collections found.": [
+                "Aucune collection de données trouvée."
+            ],
+            "System Information": [
+                "Informations système"
+            ],
+            "Download Debug Info": [
+                "Télécharger les informations de débogage"
+            ],
+            "Logs": [
+                "Journaux"
+            ],
+            "PHP Error Log": [
+                "Journal des erreurs PHP"
+            ],
+            "Fatal Errors": [
+                "Erreurs fatales"
+            ],
+            "Notices": [
+                "Avis"
+            ],
+            "AI Related Only": [
+                "Uniquement lié à l'IA"
+            ],
+            "Latest at top": [
+                "Les plus récents en haut"
+            ],
+            "No logs found.": [
+                "Aucun journal trouvé."
+            ],
+            "WordPress Error Log": [
+                "Journal des erreurs WordPress"
+            ],
+            "AI Activity Log": [
+                "Journal d'activité IA"
+            ],
+            "Clear Log": [
+                "Vider le journal"
+            ],
+            "All Levels": [
+                "Tous les niveaux"
+            ],
+            "Errors Only": [
+                "Erreurs uniquement"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Le mode de débogage est désactivé. Activez-le ci-dessus pour afficher les informations de débogage."
+            ]
+        }
+    }
+}

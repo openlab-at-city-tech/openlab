@@ -1,0 +1,69 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Close": [
+                "閉じる"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "Loading...": [
+                "読み込み中…"
+            ],
+            "General Settings": [
+                "一般設定"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "セッションの有効期限が切れました。ページを更新してください。."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "リクエストが多すぎます。しばらく待ってからもう一度お試しください。."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "予期しないエラーが発生しました。もう一度お試しください。."
+            ],
+            "Confirm Action": [
+                "操作を確認"
+            ],
+            "Are you sure you want to proceed?": [
+                "この操作を続行してもよろしいですか？"
+            ],
+            "Confirm": [
+                "確認"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "AI機能を使用するには、APIキーを設定し、データプライバシー規約に同意してください。"
+            ],
+            "Session Expired": [
+                "セッションが期限切れです。"
+            ],
+            "Refresh Page": [
+                "ページを更新"
+            ],
+            "No results found": [
+                "結果が見つかりませんでした。"
+            ],
+            "Tutorial": [
+                "チュートリアル"
+            ],
+            "Learn how to use this feature": [
+                "この機能の使い方を学ぶ"
+            ],
+            "Tutorial Screenshot": [
+                "チュートリアルのスクリーンショット"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "これはこの機能の使い方を説明するチュートリアルです。."
+            ],
+            "Close Tutorial": [
+                "チュートリアルを閉じる"
+            ]
+        }
+    }
+}

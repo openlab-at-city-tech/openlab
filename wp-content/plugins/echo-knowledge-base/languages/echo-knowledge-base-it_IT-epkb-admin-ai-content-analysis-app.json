@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Loading...": [
+                "Caricamento..."
+            ],
+            "AI Features Required": [
+                "Funzionalità IA necessarie"
+            ],
+            "Go to AI Settings": [
+                "Vai alle Impostazioni IA"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "Le funzionalità IA non sono abilitate. Abilita le funzionalità IA per utilizzare l'Analisi dei contenuti."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Impossibile caricare la configurazione dell'Analisi dei contenuti."
+            ],
+            "Content Analysis component not loaded.": [
+                "Il componente Analisi dei contenuti non è stato caricato."
+            ]
+        }
+    }
+}

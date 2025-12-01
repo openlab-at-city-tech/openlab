@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Error": [
+                "Fehler"
+            ],
+            "Analyze Content": [
+                "Inhalt analysieren"
+            ],
+            "Improve Content": [
+                "Inhalt verbessern"
+            ],
+            "Improve": [
+                "Verbessern"
+            ],
+            "Demo Analytics": [
+                "Demo-Analytik"
+            ],
+            "Actions": [
+                "Aktionen"
+            ],
+            "Analyzing": [
+                "Analysiere"
+            ],
+            "No articles found": [
+                "Keine Dokumentationsseiten gefunden"
+            ],
+            "To Analyze": [
+                "Analysieren"
+            ],
+            "To Improve": [
+                "Verbessern"
+            ],
+            "Please select exactly one article to improve": [
+                "Bitte wählen Sie genau eine Dokumentationsseite zur Verbesserung aus"
+            ],
+            "Demo Data Displayed": [
+                "Demo-Daten angezeigt"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "Dies sind Demo-Nutzungsstatistiken und Berichte, die zu Demonstrationszwecken angezeigt werden. Sobald Sie neue Dokumentationsseiten erstellen, können Sie diese analysieren, um echte Inhaltsanalyse-Ergebnisse zu sehen."
+            ],
+            "Select All That Need Analysis": [
+                "Alle auswählen, die eine Analyse benötigen"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Analysieren (Sync nicht geladen)"
+            ],
+            "Score Legend": [
+                "Punktzahl-Legende"
+            ],
+            "Excellent": [
+                "Ausgezeichnet"
+            ],
+            "Good": [
+                "Gut"
+            ],
+            "Below 60%": [
+                "Unter 60 Prozent"
+            ],
+            "Needs Improvement": [
+                "Verbesserung erforderlich"
+            ],
+            "Importance Legend": [
+                "Legende der Wichtigkeit"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "Basierend auf den Ansichten der Dokumentationsseiten – je höher die Ansichten, desto höher die Priorität."
+            ],
+            "Status Legend": [
+                "Status-Legende"
+            ],
+            "Not analyzed or updated": [
+                "Weder analysiert noch aktualisiert"
+            ],
+            "Score below 80%": [
+                "Punktzahl unter 80%"
+            ],
+            "Done": [
+                "Fertig"
+            ],
+            "Completed": [
+                "Abgeschlossen"
+            ],
+            "Ignored": [
+                "Ignoriert"
+            ],
+            "Not important now": [
+                "Derzeit nicht wichtig"
+            ],
+            "In progress": [
+                "In Bearbeitung"
+            ],
+            "Failed - retry needed": [
+                "Fehlgeschlagen – erneuter Versuch erforderlich"
+            ],
+            "Invalid status": [
+                "Ungültiger Status"
+            ],
+            "Failed to update article status": [
+                "Fehler beim Aktualisieren des Status der Dokumentationsseite"
+            ],
+            "Error updating article status": [
+                "Fehler beim Aktualisieren des Status der Dokumentationsseite"
+            ],
+            "Ignore": [
+                "Ignorieren"
+            ],
+            "Remove": [
+                "Entfernen"
+            ],
+            "Loading articles...": [
+                "Lade Dokumentationsseiten..."
+            ],
+            "Important and Low Score": [
+                "Wichtige und niedrige Punktzahl"
+            ],
+            "Top Important": [
+                "Wichtigste"
+            ],
+            "Lowest Score": [
+                "Niedrigste Punktzahl"
+            ],
+            "Recently Analyzed": [
+                "Kürzlich analysiert"
+            ],
+            "Unknown sub-tab": [
+                "Unbekannter Unter-Tab"
+            ]
+        }
+    }
+}

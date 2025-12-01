@@ -172,6 +172,7 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'General', 'echo-knowledge-base' ),
 						'fields' => array(
 							'kb_id' => $kb_id_setting,
+							'kb_ai_collection_id' => EPKB_Blocks_Settings::get_kb_ai_collection_id_setting(),
 
 							// Search multiple KBs
 							'search_multiple_kbs_toggle' => array(

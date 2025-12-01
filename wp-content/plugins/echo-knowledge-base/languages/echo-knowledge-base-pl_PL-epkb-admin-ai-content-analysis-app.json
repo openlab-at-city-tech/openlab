@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Loading...": [
+                "Ładowanie..."
+            ],
+            "AI Features Required": [
+                "Wymagane funkcje AI"
+            ],
+            "Go to AI Settings": [
+                "Przejdź do ustawień AI"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "Funkcje AI nie są włączone. Włącz funkcje AI, aby korzystać z analizy treści."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Nie udało się wczytać konfiguracji analizy treści."
+            ],
+            "Content Analysis component not loaded.": [
+                "Komponent analizy treści nie został załadowany."
+            ]
+        }
+    }
+}

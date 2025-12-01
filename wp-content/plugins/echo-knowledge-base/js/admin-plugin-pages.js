@@ -7,8 +7,72 @@ jQuery(document).ready(function($) {
 		$( '#wpwrap' ).addClass( 'epkb-admin__wpwrap' );
 	}
 
+	// Handle Frontend Editor button click when no KB Main Page exists
+	$( '.epkb-btn-no-kb-main-page' ).on( 'click', function(e) {
+		e.preventDefault();
+		var setupWizardUrl = $( this ).data( 'setup-wizard-url' );
+		
+		// Create and show custom dialog
+		var dialogHtml = 
+			'<div id="epkb-no-kb-main-page-dialog" class="epkb-dialog-box-form epkb-dialog-box-form--active">' +
+				'<div class="epkb-dbf__header">' +
+					'<h4>' + ( epkb_vars.no_kb_main_page_title || 'Setup Required' ) + '</h4>' +
+				'</div>' +
+				'<div class="epkb-dbf__body">' +
+					( epkb_vars.no_kb_main_page_msg || 'KB Main Page is not set. Please run the Setup Wizard first to create a KB Main Page. Would you like to run the Setup Wizard now?' ) +
+				'</div>' +
+				'<div class="epkb-dbf__footer">' +
+					'<div class="epkb-dbf__footer__accept epkb-dbf__footer__accept--success">' +
+						'<span class="epkb-accept-button epkb-dbf__footer__accept__btn">' +
+							( epkb_vars.setup_wizard_btn_text || 'Run Setup Wizard' ) +
+						'</span>' +
+					'</div>' +
+					'<div class="epkb-dbf__footer__cancel">' +
+						'<span class="epkb-dbf__footer__cancel__btn">' + ( epkb_vars.cancel_text || 'Cancel' ) + '</span>' +
+					'</div>' +
+				'</div>' +
+				'<div class="epkb-dbf__close epkbfa epkbfa-times"></div>' +
+			'</div>' +
+			'<div class="epkb-dialog-box-form-black-background"></div>';
+		
+		// Add dialog to body
+		$( 'body' ).append( dialogHtml );
+		
+		// Handle Accept button
+		$( '#epkb-no-kb-main-page-dialog .epkb-dbf__footer__accept__btn' ).on( 'click', function() {
+			window.location.href = setupWizardUrl;
+		});
+		
+		// Handle Cancel and Close buttons
+		$( '#epkb-no-kb-main-page-dialog .epkb-dbf__footer__cancel__btn, #epkb-no-kb-main-page-dialog .epkb-dbf__close' ).on( 'click', function() {
+			$( '#epkb-no-kb-main-page-dialog' ).remove();
+			$( '.epkb-dialog-box-form-black-background' ).remove();
+		});
+	});
+
 	let remove_message_timeout = false;
 	let $confirmation_dialog = $( '#epkb-admin-page-reload-confirmation' );
+	
+	// Initialize TinyMCE for sidebar intro text if it exists on page load
+	setTimeout( function() {
+		if ( typeof tinymce !== 'undefined' && $( '#epkb_sidebar_main_page_intro_text' ).length && ! tinymce.get( 'epkb_sidebar_main_page_intro_text' ) ) {
+			// Check if WordPress has already initialized the editor settings
+			if ( typeof tinyMCEPreInit !== 'undefined' && tinyMCEPreInit.mceInit && tinyMCEPreInit.mceInit.epkb_sidebar_main_page_intro_text ) {
+				// Use WordPress's pre-configured settings
+				tinymce.init( tinyMCEPreInit.mceInit.epkb_sidebar_main_page_intro_text );
+			} else {
+				// Fallback initialization
+				tinymce.execCommand( 'mceAddEditor', true, 'epkb_sidebar_main_page_intro_text' );
+			}
+			
+			// Switch to visual mode after init
+			setTimeout( function() {
+				if ( $( '#epkb_sidebar_main_page_intro_text-tmce' ).length ) {
+					$( '#epkb_sidebar_main_page_intro_text-tmce' ).trigger( 'click' );
+				}
+			}, 100 );
+		}
+	}, 500 );
 
 
 	/*************************************************************************************************
@@ -73,7 +137,7 @@ jQuery(document).ready(function($) {
 				action: 'epkb_save_access_control',
 				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
 				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
-				admin_eckb_access_need_help_read: $( '#admin_eckb_access_need_help_read input[type="radio"]:checked' ).val(),
+				admin_eckb_access_content_analysis: $( '#admin_eckb_access_content_analysis input[type="radio"]:checked' ).val(),
 				admin_eckb_access_search_analytics_read: $( '#admin_eckb_access_search_analytics_read input[type="radio"]:checked' ).val(),
 				admin_eckb_access_addons_news_read: $( '#admin_eckb_access_addons_news_read input[type="radio"]:checked' ).val(),
 				admin_eckb_access_order_articles_write: $( '#admin_eckb_access_order_articles_write input[type="radio"]:checked' ).val(),
@@ -87,6 +151,48 @@ jQuery(document).ready(function($) {
 				}
 			}
 		);
+	});
+	
+	// Save Sidebar Introduction Text (using form submit like KB Nickname)
+	$( document ).on( 'submit', '#epkb-sidebar-intro-text__form', function(e) {
+		e.preventDefault();
+		
+		let form = $( this );
+		
+		// Get content from TinyMCE editor or textarea depending on active tab
+		let intro_text = '';
+		
+		// Check if we're in visual mode (TinyMCE active) or text/code mode
+		let isVisualMode = false;
+		if ( typeof tinymce !== 'undefined' && tinymce.get( 'epkb_sidebar_main_page_intro_text' ) ) {
+			// Check if TinyMCE is currently hidden (text mode) or visible (visual mode)
+			let editor = tinymce.get( 'epkb_sidebar_main_page_intro_text' );
+			isVisualMode = !editor.isHidden();
+		}
+		
+		if ( isVisualMode && typeof tinymce !== 'undefined' && tinymce.get( 'epkb_sidebar_main_page_intro_text' ) ) {
+			// Visual mode: get content from TinyMCE
+			intro_text = tinymce.get( 'epkb_sidebar_main_page_intro_text' ).getContent();
+		} else {
+			// Text/Code mode or no TinyMCE: get content directly from textarea
+			intro_text = form.find( '#epkb_sidebar_main_page_intro_text' ).val();
+		}
+		
+		let postData = {
+			action: 'epkb_save_sidebar_intro_text',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			sidebar_main_page_intro_text: intro_text,
+			epkb_kb_id: $( '#epkb-list-of-kbs' ).val()
+		};
+		
+		epkb_send_ajax( postData, function( response ) {
+			$( '.eckb-top-notice-message' ).remove();
+			if ( typeof response.message !== 'undefined' ) {
+				$( 'body' ).append( response.message );
+			}
+		} );
+		
+		return false;
 	});
 
 	// open panel
@@ -294,6 +400,40 @@ jQuery(document).ready(function($) {
 		// Change class for active Boxes List
 		$( '#epkb-admin__boxes-list__' + parent_list_key ).find( '.epkb-setting-box__list' ).removeClass( active_secondary_boxes_list_class );
 		$( '#epkb-setting-box__list-' + list_key ).addClass( active_secondary_boxes_list_class );
+		
+		// Reinitialize TinyMCE editor for sidebar intro text when "Other" tab is clicked
+		if ( list_key === 'tools__other' && typeof tinymce !== 'undefined' ) {
+			// Small delay to ensure DOM is ready
+			setTimeout( function() {
+				// Get the current value from the textarea
+				let currentValue = $( '#epkb_sidebar_main_page_intro_text' ).val();
+				
+				// Remove existing editor instance if exists
+				if ( tinymce.get( 'epkb_sidebar_main_page_intro_text' ) ) {
+					tinymce.execCommand( 'mceRemoveEditor', true, 'epkb_sidebar_main_page_intro_text' );
+				}
+				
+				// Reinitialize the editor using WordPress settings
+				if ( typeof tinyMCEPreInit !== 'undefined' && tinyMCEPreInit.mceInit && tinyMCEPreInit.mceInit.epkb_sidebar_main_page_intro_text ) {
+					tinymce.init( tinyMCEPreInit.mceInit.epkb_sidebar_main_page_intro_text );
+				} else {
+					tinymce.execCommand( 'mceAddEditor', true, 'epkb_sidebar_main_page_intro_text' );
+				}
+				
+				// Set the content and switch to visual mode after initialization
+				setTimeout( function() {
+					if ( tinymce.get( 'epkb_sidebar_main_page_intro_text' ) ) {
+						if ( currentValue ) {
+							tinymce.get( 'epkb_sidebar_main_page_intro_text' ).setContent( currentValue );
+						}
+						// Switch to visual mode
+						if ( $( '#epkb_sidebar_main_page_intro_text-tmce' ).length ) {
+							$( '#epkb_sidebar_main_page_intro_text-tmce' ).trigger( 'click' );
+						}
+					}
+				}, 100 );
+			}, 200 );
+		}
 
 		// Update anchor
 		window.location.hash = '#' + list_key;
@@ -403,6 +543,8 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function() {
 				location.reload();
 			} );
+
+			return false;
 		});
 
 		// SHOW LOGS
@@ -419,6 +561,8 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function() {
 				location.reload();
 			} );
+
+			return false;
 		});
 
 		// RESET LOGS
@@ -435,6 +579,8 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function() {
 				location.reload();
 			} );
+
+			return false;
 		});
 
 		// TOGGLE ADVANCED SEARCH DEBUG
@@ -451,6 +597,8 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function() {
 				location.reload();
 			} );
+
+			return false;
 		});
 
 		// RESET SEQUENCE
@@ -471,6 +619,8 @@ jQuery(document).ready(function($) {
 					$( 'body' ).append( response.message );
 				}
 			} );
+
+			return false;
 		} );
 
 		// SHOW SEQUENCE
@@ -648,21 +798,15 @@ jQuery(document).ready(function($) {
 			return false;
 		});
 
-		// Tools Settings Form handler
-		$( '#epkb-tools-settings-form' ).on( 'submit', function( e ) {
+		// KB Nickname
+		$( document ).on( 'submit', '#epkb-kb-nickname__form', function( e ) {
 			e.preventDefault();
-			
 			let form = $( this );
 			let postData = {
-				action: 'epkb_save_tools_settings',
+				action: 'epkb_save_kb_name',
 				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
-				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
-				template_main_page_display_title: form.find( 'input[name="template_main_page_display_title"]' ).is(':checked') ? 'on' : 'off',
-				
-				'general_typography[font-family]': form.find( '.epkb-input-custom-dropdown__option--selected' ).attr( 'data-value' ),
 				kb_name: form.find( 'input[name="kb_name"]' ).val(),
-				frontend_editor_switch_visibility_toggle: form.find( 'input[name="frontend_editor_switch_visibility_toggle"]' ).is(':checked') ? 'on' : 'off',
-				epkb_ml_custom_css: form.find( 'textarea[name="epkb_ml_custom_css"]' ).val()
+				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
 			};
 
 			epkb_send_ajax( postData, function( response ) {
@@ -673,6 +817,37 @@ jQuery(document).ready(function($) {
 			} );
 
 			return false;
+		});
+		
+		// Switch to KB Template button handler
+		$( document ).on( 'click', '.epkb-switch-to-kb-template', function( e ) {
+			e.preventDefault();
+			
+			let button = $( this );
+			let kb_id = button.data( 'kb-id' );
+			
+			let postData = {
+				action: 'epkb_switch_kb_template',
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+				epkb_kb_id: kb_id,
+				template_type: 'kb_templates'
+			};
+			
+			epkb_send_ajax( postData, function( response ) {
+				$( '.eckb-top-notice-message' ).remove();
+				
+				// Show success message
+				if ( typeof response.message !== 'undefined' ) {
+					$( 'body' ).append( response.message );
+				}
+				
+				// Reload page if requested
+				if ( response.reload === true ) {
+					setTimeout( function() {
+						location.reload();
+					}, 1000 );
+				}
+			} );
 		});
 		
 		// Update typography font family hidden input when font is selected
@@ -719,6 +894,53 @@ jQuery(document).ready(function($) {
 	 *
 	 ************************************************************************************************/
 	let epkb_editor_update_timer = false;
+
+	// Search functionality for available questions
+	$( document ).on( 'input keyup', '#epkb-available-questions-search-input', function() {
+		let searchTerm = $( this ).val().toLowerCase().trim();
+		let visibleCount = 0;
+		
+		// Search through all FAQ questions in the available questions container
+		$( '#epkb-available-questions-container .epkb-faq-question' ).each( function() {
+			let $question = $( this );
+			let questionTitle = $question.find( '.epkb-faq-question__title' ).text().toLowerCase();
+			
+			// Check if question is already hidden because it's in the current group
+			let isInGroup = $question.hasClass( 'epkb-faq-question--hide' );
+			
+			if ( isInGroup ) {
+				// Keep it hidden if it's already in the group
+				return;
+			}
+			
+			// Show/hide based on search term
+			if ( searchTerm === '' || questionTitle.indexOf( searchTerm ) !== -1 ) {
+				$question.removeClass( 'epkb-faq-question--search-hide' );
+				visibleCount++;
+			} else {
+				$question.addClass( 'epkb-faq-question--search-hide' );
+			}
+		});
+		
+		// Show/hide the "No available Questions" message
+		if ( visibleCount === 0 ) {
+			$( '#epkb-available-questions-container .epkb-faq-questions-list-empty' ).addClass( 'epkb-faq-questions-list-empty--active' );
+		} else {
+			$( '#epkb-available-questions-container .epkb-faq-questions-list-empty' ).removeClass( 'epkb-faq-questions-list-empty--active' );
+		}
+	});
+
+	// Clear search when opening a group for editing
+	$( document ).on( 'click', '#epkb-kb-faqs-page-container .epkb-faq-group-container .epkb-faq-group-head__edit, #epkb-faq-create-group', function() {
+		$( '#epkb-available-questions-search-input' ).val( '' ).trigger( 'input' );
+	});
+
+	// Handle sort toggle (unchecked = Recent/date, checked = ABC/alphabetical)
+	$( document ).on( 'change', '#epkb-faq-sort-toggle', function() {
+		let isAlphabetical = $( this ).is( ':checked' );
+		$( this ).attr( 'data-sort', isAlphabetical ? 'alphabetical' : 'date' );
+		sort_faqs_in_all_lists();
+	});
 
 	let faq_question_form = {
 		faq_id: 0,
@@ -1641,18 +1863,36 @@ jQuery(document).ready(function($) {
 
 	// Sort FAQs in all lists
 	function sort_faqs_in_all_lists() {
-
+		// Get current sort mode
+		let sortMode = $( '#epkb-faq-sort-toggle' ).attr( 'data-sort' ) || 'date';
+		
 		// Sort FAQs in available FAQs list
 		if ( $( '#epkb-available-questions-container .epkb-faq-question' ).length > 1 ) {
 			$( '#epkb-available-questions-container .epkb-faq-question' ).sort( function( a, b ) {
-				return $( a ).find( '.epkb-faq-question__title' ).text() > $( b ).find( '.epkb-faq-question__title' ).text() ? 1 : -1;
+				if ( sortMode === 'alphabetical' ) {
+					// Sort alphabetically by title
+					return $( a ).find( '.epkb-faq-question__title' ).text() > $( b ).find( '.epkb-faq-question__title' ).text() ? 1 : -1;
+				} else {
+					// Sort by date (newest first)
+					let dateA = $( a ).attr( 'data-date' ) || '1970-01-01';
+					let dateB = $( b ).attr( 'data-date' ) || '1970-01-01';
+					return dateB.localeCompare( dateA );
+				}
 			} ).appendTo( '#epkb-available-questions-container .epkb-available-questions-body' );
 		}
 
 		// Sort FAQs in all FAQs list (call sort() even if there is one FAQ is available to update columns properly)
 		if ( $( '#epkb-all-faqs-container .epkb-faq-question' ).length > 0 ) {
 			$( '#epkb-all-faqs-container .epkb-faq-question' ).sort( function( a, b ) {
-				return $( a ).find( '.epkb-faq-question__title' ).text() > $( b ).find( '.epkb-faq-question__title' ).text() ? 1 : -1;
+				if ( sortMode === 'alphabetical' ) {
+					// Sort alphabetically by title
+					return $( a ).find( '.epkb-faq-question__title' ).text() > $( b ).find( '.epkb-faq-question__title' ).text() ? 1 : -1;
+				} else {
+					// Sort by date (newest first)
+					let dateA = $( a ).attr( 'data-date' ) || '1970-01-01';
+					let dateB = $( b ).attr( 'data-date' ) || '1970-01-01';
+					return dateB.localeCompare( dateA );
+				}
 			} ).appendTo( '#epkb-all-faqs-container .epkb-body-col--right' );
 			while ( $( '#epkb-all-faqs-container .epkb-body-col--left .epkb-faq-question' ).length < $( '#epkb-all-faqs-container .epkb-body-col--right .epkb-faq-question' ).length ) {
 				$( $( '#epkb-all-faqs-container .epkb-body-col--right .epkb-faq-question' )[0] ).appendTo( $( '#epkb-all-faqs-container .epkb-body-col--left' ) );
@@ -2438,10 +2678,9 @@ jQuery(document).ready(function($) {
 		kb_config.epkb_kb_id = $( '#epkb-list-of-kbs' ).val();
 
 		// Force reload page if:
-		// - is modular Main Page
-		// - AND Main Page search module is not present
+		// - Main Page search module is not present
 		// - AND Article Page search in sync with Main Page search
-		if ( ! $( '#modular_main_page_toggle' ).length && ! $( '.epkb-admin__form-tab-content--module-selection [data-value="search"].epkb-input-custom-dropdown__option--selected' ).length && $( '[name="article_search_sync_toggle"]:checked' ).length ) {
+		if ( ! $( '.epkb-admin__form-tab-content--module-selection [data-value="search"].epkb-input-custom-dropdown__option--selected' ).length && $( '[name="article_search_sync_toggle"]:checked' ).length ) {
 			reload_page = true;
 		}
 
@@ -2476,7 +2715,7 @@ jQuery(document).ready(function($) {
 	$( document ).on( 'click', '.epkb-admin__kb__form-save__button', save_config_tab_settings );
 
 	// Allow only one active sidebar
-	$( '.epkb-input[name="article_nav_sidebar_type_left"]' ).change( function() {
+	$( '.epkb-input[name="article_nav_sidebar_type_left"]' ).on( 'change', function() {
 		if ( $( this ).closest( '.epkb-admin__select-field' ).css( 'display' ) === 'none' ) {
 			return;
 		}
@@ -2485,7 +2724,7 @@ jQuery(document).ready(function($) {
 			$( this ).click();
 		}
 	});
-	$( '.epkb-input[name="article_nav_sidebar_type_right"]' ).change( function() {
+	$( '.epkb-input[name="article_nav_sidebar_type_right"]' ).on( 'change', function() {
 		if ( $( this ).closest( '.epkb-admin__select-field' ).css( 'display' ) === 'none' ) {
 			return;
 		}
@@ -2832,28 +3071,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	/*************************************************************************************************
-	 *
-	 *          Change Modular Main Page
-	 *
-	 ************************************************************************************************/
-	$( document ).on( 'click', '#modular_main_page_toggle .epkb-settings-control-toggle', function() {
-		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-kb-modular-main-page--active' );
-		$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_modular_main_page_toggle );
-		return false;
-	});
-
-	// Initialize confirmation button for Modular Main Page toggle
-	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-kb-modular-main-page--active .epkb-dbf__footer__accept__btn', function() {
-
-		// Apply changes for Modular Main Page
-		let modular_main_page_toggle = $( 'input[name="modular_main_page_toggle"]' );
-		modular_main_page_toggle.prop( 'checked', ! modular_main_page_toggle.prop( 'checked' ) );
-
-		// Hide confirmation dialog and save settings with page reload
-		$confirmation_dialog.removeClass( 'epkb-dialog-box-form--active epkb-kb-modular-main-page--active' );
-		save_config_tab_settings( false, true );
-	} );
 
 	// Deactivate confirmation box for Main Page layout
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-kb-modular-main-page--active .epkb-dbf__footer__cancel__btn', function() {
@@ -3384,4 +3601,381 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		$( '[data-target="faq-shortcodes"]' ).trigger( 'click' );
 	} );
+});
+
+// Dashboard Page Features - wrapped in separate jQuery ready
+jQuery(document).ready(function($) {
+	
+	/*********************************************************************************************
+	 * 
+	 * Dashboard Page - Vote for Features
+	 * 
+	 *********************************************************************************************/
+	
+	// Vote for Features dialog functionality
+	let voteDialog = null;
+	
+	$("#epkb-open-vote-dialog").on("click", function() {
+		if (!voteDialog) {
+			voteDialog = $("#epkb-vote-dialog").dialog({
+				modal: true,
+				width: 600,
+				maxWidth: "90%",
+				height: "auto",
+				maxHeight: "80vh",
+				resizable: false,
+				dialogClass: "epkb-vote-features-dialog",
+				buttons: [
+					{
+						text: "Submit Vote",
+						class: "epkb-btn-vote-submit-dialog",
+						click: function() {
+							$("#epkb-kb-vote-features-form").submit();
+						}
+					},
+					{
+						text: "Cancel",
+						click: function() {
+							$(this).dialog("close");
+						}
+					}
+				],
+				open: function() {
+					$(".ui-widget-overlay").on("click", function() {
+						voteDialog.dialog("close");
+					});
+				}
+			});
+		} else {
+			voteDialog.dialog("open");
+		}
+	});
+	
+	// Vote form submission
+	$("#epkb-kb-vote-features-form").on("submit", function(e) {
+		e.preventDefault();
+		
+		const $form = $(this);
+		const $message = $form.find(".epkb-vote-message");
+		const $submitBtn = $(".epkb-btn-vote-submit-dialog");
+		const formData = new FormData(this);
+		
+		// Add nonce and action
+		formData.append("_wpnonce_epkb_ajax_action", epkb_vars.nonce);
+		formData.append("action", "epkb_kb_vote_for_features");
+		
+		// Disable submit button and show loading
+		$submitBtn.prop("disabled", true).html("<span class=\"epkbfa epkbfa-spinner epkb-icon-spin\"></span> Submitting...");
+		$message.hide().removeClass("epkb-vote-success epkb-vote-error");
+		
+		$.ajax({
+			url: ajaxurl,
+			type: "POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(response) {
+				if (response.success) {
+					$message.addClass("epkb-vote-success").html(response.data.message).fadeIn();
+					
+					// Close dialog after short delay
+					setTimeout(function() {
+						if (voteDialog) {
+							voteDialog.dialog("close");
+						}
+						// Reset form for next use
+						$form[0].reset();
+						$(".epkb-vote-other-input").hide();
+						$message.hide();
+					}, 2000);
+				} else {
+					$message.addClass("epkb-vote-error").html(response.data || "An error occurred. Please try again.").fadeIn();
+				}
+			},
+			error: function() {
+				$message.addClass("epkb-vote-error").html("Failed to submit vote. Please try again.").fadeIn();
+			},
+			complete: function() {
+				$submitBtn.prop("disabled", false).text("Submit Vote");
+			}
+		});
+	});
+	
+	// Show/hide custom feature input
+	$(document).on("change", "input[name=\"features[]\"][value=\"custom-feature\"]", function() {
+		if ($(this).is(":checked")) {
+			$(".epkb-vote-other-input").slideDown();
+		} else {
+			$(".epkb-vote-other-input").slideUp();
+			$("textarea[name=\"other_feature_text\"]").val("");
+		}
+	});
+
+	/*********************************************************************************************
+	 *
+	 * AI Search Results - Column Sections Manager
+	 *
+	 *********************************************************************************************/
+
+	// Add section to column
+	$( document ).on( 'click', '.epkb-btn-add-section', function() {
+		const $manager = $( this ).closest( '.epkb-search-results-column-manager' );
+		const $select = $manager.find( '.epkb-section-select' );
+		const sectionId = $select.val();
+
+		if ( ! sectionId ) {
+			return;
+		}
+
+		const sectionName = $select.find( 'option:selected' ).text();
+		const $list = $manager.find( '.epkb-sections-list' );
+
+		// Remove "no sections" message if present
+		$list.find( '.epkb-no-sections' ).remove();
+
+		// Add new section item
+		const $newItem = $( '<li class="epkb-section-item" data-section-id="' + sectionId + '">' +
+			'<span class="epkb-section-name">' + sectionName + '</span>' +
+			'<div class="epkb-section-actions">' +
+				'<button type="button" class="epkb-btn-move-up"><i class="epkbfa epkbfa-arrow-up"></i></button>' +
+				'<button type="button" class="epkb-btn-move-down"><i class="epkbfa epkbfa-arrow-down"></i></button>' +
+				'<button type="button" class="epkb-btn-remove"><i class="epkbfa epkbfa-times"></i></button>' +
+			'</div>' +
+		'</li>' );
+
+		$list.append( $newItem );
+
+		// Reset select
+		$select.val( '' );
+
+		// Update hidden input
+		updateColumnSectionsInput( $manager );
+
+		// Update button states
+		updateMoveButtonStates( $manager );
+	});
+
+	// Remove section from column
+	$( document ).on( 'click', '.epkb-btn-remove', function() {
+		const $item = $( this ).closest( '.epkb-section-item' );
+		const $manager = $item.closest( '.epkb-search-results-column-manager' );
+		const $list = $manager.find( '.epkb-sections-list' );
+
+		$item.remove();
+
+		// Add "no sections" message if list is empty
+		if ( $list.find( '.epkb-section-item' ).length === 0 ) {
+			$list.append( '<li class="epkb-no-sections">No sections added yet</li>' );
+		}
+
+		// Update hidden input
+		updateColumnSectionsInput( $manager );
+
+		// Update button states
+		updateMoveButtonStates( $manager );
+	});
+
+	// Move section up
+	$( document ).on( 'click', '.epkb-btn-move-up', function() {
+		const $item = $( this ).closest( '.epkb-section-item' );
+		const $prev = $item.prev( '.epkb-section-item' );
+
+		if ( $prev.length ) {
+			$item.insertBefore( $prev );
+
+			const $manager = $item.closest( '.epkb-search-results-column-manager' );
+			updateColumnSectionsInput( $manager );
+			updateMoveButtonStates( $manager );
+		}
+	});
+
+	// Move section down
+	$( document ).on( 'click', '.epkb-btn-move-down', function() {
+		const $item = $( this ).closest( '.epkb-section-item' );
+		const $next = $item.next( '.epkb-section-item' );
+
+		if ( $next.length ) {
+			$item.insertAfter( $next );
+
+			const $manager = $item.closest( '.epkb-search-results-column-manager' );
+			updateColumnSectionsInput( $manager );
+			updateMoveButtonStates( $manager );
+		}
+	});
+
+	// Update hidden input with current sections order
+	function updateColumnSectionsInput( $manager ) {
+		const sections = [];
+		$manager.find( '.epkb-section-item' ).each( function() {
+			sections.push( $( this ).data( 'section-id' ) );
+		});
+
+		$manager.find( '.epkb-column-sections-input' ).val( JSON.stringify( sections ) );
+	}
+
+	// Update move button states based on position
+	function updateMoveButtonStates( $manager ) {
+		const $items = $manager.find( '.epkb-section-item' );
+		const totalItems = $items.length;
+
+		$items.each( function( index ) {
+			const $item = $( this );
+			$item.find( '.epkb-btn-move-up' ).prop( 'disabled', index === 0 );
+			$item.find( '.epkb-btn-move-down' ).prop( 'disabled', index === totalItems - 1 );
+		});
+	}
+
+	// Update column width options when number of columns changes
+	$( document ).on( 'change', '.epkb-ai-search-results-num-columns select', function() {
+		const numColumns = $( this ).val();
+		const $widthsSelect = $( '.epkb-ai-search-results-column-widths select' );
+
+		// Define width options for each column configuration
+		const widthOptions = {
+			'1': { '100': 'Full Width' },
+			'2': {
+				'25-75': '25% / 75%',
+				'30-70': '30% / 70%',
+				'35-65': '35% / 65%',
+				'50-50': '50% / 50%'
+			},
+			'3': {
+				'25-50-25': '25% / 50% / 25%',
+				'30-40-30': '30% / 40% / 30%',
+				'35-30-35': '35% / 30% / 35%'
+			}
+		};
+
+		// Update width select options
+		const options = widthOptions[numColumns] || {};
+		$widthsSelect.empty();
+
+		$.each( options, function( value, label ) {
+			$widthsSelect.append( $( '<option>', {
+				value: value,
+				text: label
+			}));
+		});
+
+		// Show/hide column configuration fields
+		$( '.epkb-ai-search-results-column-2' ).toggle( numColumns >= 2 );
+		$( '.epkb-ai-search-results-column-3' ).toggle( numColumns >= 3 );
+	});
+
+	/*************************************************************************************************
+	 *
+	 *          DASHBOARD FEATURES CAROUSEL & IMAGE ZOOM
+	 *
+	 ************************************************************************************************/
+
+	// Only initialize if carousel exists
+	if ( $( '.epkb-features-carousel' ).length ) {
+		var currentSlide = 0;
+		var totalSlides = $( '.epkb-feature-slide' ).length;
+		var carouselInterval = null;
+
+		// Function to show specific slide
+		function showSlide( slideIndex ) {
+			// Wrap around if needed
+			if ( slideIndex >= totalSlides ) {
+				currentSlide = 0;
+			} else if ( slideIndex < 0 ) {
+				currentSlide = totalSlides - 1;
+			} else {
+				currentSlide = slideIndex;
+			}
+
+			// Hide all slides
+			$( '.epkb-feature-slide' ).removeClass( 'epkb-feature-slide--active' );
+			$( '.epkb-carousel-dot' ).removeClass( 'epkb-carousel-dot--active' );
+
+			// Show current slide
+			$( '.epkb-feature-slide[data-slide="' + currentSlide + '"]' ).addClass( 'epkb-feature-slide--active' );
+			$( '.epkb-carousel-dot[data-slide="' + currentSlide + '"]' ).addClass( 'epkb-carousel-dot--active' );
+		}
+
+		// Previous button click
+		$( document ).on( 'click', '.epkb-carousel-btn--prev', function() {
+			showSlide( currentSlide - 1 );
+		});
+
+		// Next button click
+		$( document ).on( 'click', '.epkb-carousel-btn--next', function() {
+			showSlide( currentSlide + 1 );
+		});
+
+		// Dot click
+		$( document ).on( 'click', '.epkb-carousel-dot', function() {
+			var slideIndex = parseInt( $( this ).data( 'slide' ) );
+			showSlide( slideIndex );
+		});
+
+		// Keyboard navigation
+		$( document ).on( 'keydown', function(e) {
+			if ( $( '.epkb-features-carousel' ).length ) {
+				if ( e.key === 'ArrowLeft' || e.keyCode === 37 ) {
+					showSlide( currentSlide - 1 );
+				} else if ( e.key === 'ArrowRight' || e.keyCode === 39 ) {
+					showSlide( currentSlide + 1 );
+				}
+			}
+		});
+
+		// Auto-advance carousel every 7.5 seconds (optional - remove if not wanted)
+		carouselInterval = setInterval( function() {
+			showSlide( currentSlide + 1 );
+		}, 7500 );
+
+		// Pause auto-advance on hover
+		$( document ).on( 'mouseenter', '.epkb-features-carousel-wrapper', function() {
+			if ( carouselInterval ) {
+				clearInterval( carouselInterval );
+				carouselInterval = null;
+			}
+		});
+
+		// Resume auto-advance on mouse leave
+		$( document ).on( 'mouseleave', '.epkb-features-carousel-wrapper', function() {
+			if ( ! carouselInterval ) {
+				carouselInterval = setInterval( function() {
+					showSlide( currentSlide + 1 );
+				}, 7500 );
+			}
+		});
+	}
+
+	// Handle zoomable image clicks (including zoom icon and image itself)
+	$( document ).on( 'click', '.epkb-zoomable-image, .epkb-zoom-icon', function(e) {
+		e.stopPropagation();
+		var $container = $( this ).closest( '.epkb-feature-image-container' );
+		var $img = $container.find( '.epkb-zoomable-image' );
+		var modal = $( '#epkb-image-zoom-modal' );
+		var modalImg = $( '#epkb-zoomed-image' );
+		var zoomSrc = $img.data( 'zoom-src' );
+
+		modal.addClass( 'epkb-modal-active' );
+		modalImg.attr( 'src', zoomSrc );
+	});
+
+	// Close modal when clicking on the X button
+	$( document ).on( 'click', '.epkb-image-zoom-close', function() {
+		$( '#epkb-image-zoom-modal' ).removeClass( 'epkb-modal-active' );
+	});
+
+	// Close modal when clicking outside the image
+	$( document ).on( 'click', '#epkb-image-zoom-modal', function(e) {
+		if ( $( e.target ).is( '#epkb-image-zoom-modal' ) ) {
+			$( this ).removeClass( 'epkb-modal-active' );
+		}
+	});
+
+	// Close modal with ESC key (updated to not interfere with carousel)
+	$( document ).on( 'keydown', function(e) {
+		if ( e.key === 'Escape' || e.keyCode === 27 ) {
+			if ( $( '#epkb-image-zoom-modal' ).hasClass( 'epkb-modal-active' ) ) {
+				$( '#epkb-image-zoom-modal' ).removeClass( 'epkb-modal-active' );
+			}
+		}
+	});
+
 });

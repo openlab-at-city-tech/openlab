@@ -18,7 +18,7 @@ class EPKB_Layout_Article_Sidebar extends EPKB_Layout {
 	public function display_article_sidebar( $kb_config, $show_only_current_category=false, $current_category_id=null ) {
 
 		// ONLY used to set up class and generate categories and articles sequence
-		$this->display_non_modular_kb_main_page( $kb_config );
+		$this->setup_kb_main_page( $kb_config );
 
 		// Category Archive Page has current category id empty
 		if ( $show_only_current_category && empty( $current_category_id ) ) {
@@ -459,9 +459,5 @@ class EPKB_Layout_Article_Sidebar extends EPKB_Layout {
 			} ';
 
 		return $output;
-	}
-
-	protected function generate_non_modular_kb_main_page() {
-		// not used
 	}
 }

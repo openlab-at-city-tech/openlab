@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Learn more": [
+                "Дізнатися більше"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "Vote for Top 3 Features": [
+                "Голосуйте за топ-3 функції"
+            ],
+            "First Name": [
+                "Ім'я"
+            ],
+            "(optional)": [
+                "(необов'язково)"
+            ],
+            "Email": [
+                "Email"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "Не вдалося відправити голос. Будь ласка, спробуйте ще раз."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "Крок 1: Налаштування ключа API та конфіденційності"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "Додайте свій ключ API OpenAI та прийміть угоду про конфіденційність даних."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "Крок 2: Увімкніть AI Чат та/або AI Пошук"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "Увімкніть функції AI Пошук або AI Чат для вашого сайту."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "Крок 3: Додати дані для машинного навчання та синхронізувати"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "Виберіть вміст і синхронізуйте його з OpenAI для обробки AI."
+            ],
+            "Go to Settings": [
+                "Перейти до Налаштувань"
+            ],
+            "Completed": [
+                "Завершено"
+            ],
+            "Warnings": [
+                "Попередження"
+            ],
+            "Welcome to AI Features!": [
+                "Ласкаво просимо до функцій AI!"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "Давайте налаштуємо для вас AI-чат та AI-пошук за кілька кроків."
+            ],
+            "Complete Your Setup": [
+                "Завершіть налаштування"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "Ще кілька кроків, щоб увімкнути AI-функції:"
+            ],
+            "Setup Steps": [
+                "Кроки налаштування"
+            ],
+            "Configure API Key & Privacy": [
+                "Налаштування API-ключа та конфіденційності"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "Додайте свій API-ключ OpenAI та прийміть угоду про конфіденційність даних"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "Увімкнути AI-чат та/або AI-пошук"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "Увімкніть функції AI-пошуку або AI-чат для вашого сайту"
+            ],
+            "Enable AI Features": [
+                "Увімкнути AI-функції"
+            ],
+            "Add Training Data & Sync": [
+                "Додати дані для навчання та синхронізувати"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "Виберіть вміст і синхронізуйте його з OpenAI для обробки за допомогою AI"
+            ],
+            "Go to Training Data": [
+                "Перейти до даних для навчання"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "Допоможіть нам визначити пріоритетність функцій, надайте інформацію:"
+            ],
+            "Describe Your Feature Request": [
+                "Опишіть ваш запит на функцію"
+            ],
+            "Please describe the feature you would like to see...": [
+                "Будь ласка, опишіть функцію, яку хочете бачити..."
+            ],
+            "Submit Vote": [
+                "Надіслати голос"
+            ],
+            "Please describe the feature you would like to see.": [
+                "Будь ласка, опишіть функцію, яку хочете бачити."
+            ],
+            "Please enter a valid email address.": [
+                "Будь ласка, введіть дійсну адресу електронної пошти."
+            ],
+            "Please select at least one feature to vote for.": [
+                "Будь ласка, оберіть щонайменше одну функцію для голосування."
+            ],
+            "Submitting your vote...": [
+                "Надсилаємо ваш голос..."
+            ],
+            "Thank you for voting!": [
+                "Дякуємо за ваш голос!"
+            ],
+            "An error occurred. Please try again.": [
+                "Сталася помилка. Будь ласка, спробуйте ще раз."
+            ],
+            "Latest AI Updates": [
+                "Останні оновлення штучного інтелекту"
+            ],
+            "Select the features you would like to see implemented:": [
+                "Виберіть функції, які ви хочете бачити реалізованими:"
+            ],
+            "Released": [
+                "Випущено"
+            ],
+            "feature selected": [
+                "функцію обрано"
+            ],
+            "features selected": [
+                "Вибрані функції"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "Примітка: Ваші відгуки допомагають нам визначати пріоритети розробки. Функції можуть змінюватися."
+            ]
+        }
+    }
+}

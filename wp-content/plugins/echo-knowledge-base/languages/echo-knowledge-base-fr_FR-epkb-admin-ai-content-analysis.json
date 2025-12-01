@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Error": [
+                "Erreur"
+            ],
+            "Analyze Content": [
+                "Analyser le contenu"
+            ],
+            "Improve Content": [
+                "Améliorer le contenu"
+            ],
+            "Improve": [
+                "Améliorer"
+            ],
+            "Demo Analytics": [
+                "Analyses de démonstration"
+            ],
+            "Actions": [
+                "Actions"
+            ],
+            "Analyzing": [
+                "Analyse en cours"
+            ],
+            "No articles found": [
+                "Aucun article trouvé"
+            ],
+            "To Analyze": [
+                "Analyser"
+            ],
+            "To Improve": [
+                "À améliorer"
+            ],
+            "Please select exactly one article to improve": [
+                "Veuillez sélectionner exactement un article à améliorer"
+            ],
+            "Demo Data Displayed": [
+                "Données de démonstration affichées"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "Ces données d’analyse de démonstration sont affichées à des fins de démonstration. Une fois que vous créez de nouveaux articles, vous pouvez les analyser pour voir les résultats réels de l’analyse du contenu."
+            ],
+            "Select All That Need Analysis": [
+                "Sélectionnez tout ce qui nécessite une analyse"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Analyser (Synchronisation non chargée)"
+            ],
+            "Score Legend": [
+                "Légende du score"
+            ],
+            "Excellent": [
+                "Excellent"
+            ],
+            "Good": [
+                "Bon"
+            ],
+            "Below 60%": [
+                "Inférieur à 60 %"
+            ],
+            "Needs Improvement": [
+                "À améliorer"
+            ],
+            "Importance Legend": [
+                "Légende de l’importance"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "Basé sur les vues des articles - plus il y a de vues, plus la priorité est élevée."
+            ],
+            "Status Legend": [
+                "Légende du statut"
+            ],
+            "Not analyzed or updated": [
+                "Non analysé ni mis à jour"
+            ],
+            "Score below 80%": [
+                "Score inférieur à 80 %"
+            ],
+            "Done": [
+                "Terminé"
+            ],
+            "Completed": [
+                "Complété"
+            ],
+            "Ignored": [
+                "Ignoré"
+            ],
+            "Not important now": [
+                "Pas important pour le moment"
+            ],
+            "In progress": [
+                "En cours"
+            ],
+            "Failed - retry needed": [
+                "Échec - réessai nécessaire"
+            ],
+            "Invalid status": [
+                "Statut invalide"
+            ],
+            "Failed to update article status": [
+                "Échec de la mise à jour du statut de l’article"
+            ],
+            "Error updating article status": [
+                "Erreur lors de la mise à jour du statut de l’article"
+            ],
+            "Ignore": [
+                "Ignorer"
+            ],
+            "Remove": [
+                "Supprimer"
+            ],
+            "Loading articles...": [
+                "Chargement des articles..."
+            ],
+            "Important and Low Score": [
+                "Important et score faible"
+            ],
+            "Top Important": [
+                "Les plus importants"
+            ],
+            "Lowest Score": [
+                "Score le plus bas"
+            ],
+            "Recently Analyzed": [
+                "Récemment analysé"
+            ],
+            "Unknown sub-tab": [
+                "Sous-onglet inconnu"
+            ]
+        }
+    }
+}

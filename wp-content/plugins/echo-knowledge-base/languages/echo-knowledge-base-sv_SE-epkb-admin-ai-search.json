@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Search Results": [
+                "Sökresultat"
+            ],
+            "Page": [
+                "Sida"
+            ],
+            "Settings saved successfully": [
+                "Inställningar sparades"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Date:": [
+                "Datum:"
+            ],
+            "Next": [
+                "Nästa"
+            ],
+            "Previous": [
+                "Föregående"
+            ],
+            "Saving...": [
+                "Sparar …"
+            ],
+            "Search History": [
+                "Sökhistorik"
+            ],
+            "Search Settings": [
+                "Sökinställningar"
+            ],
+            "Single Column": [
+                "En kolumn"
+            ],
+            "Left Column": [
+                "Vänster kolumn"
+            ],
+            "Right Column": [
+                "Höger kolumn"
+            ],
+            "Middle Column": [
+                "Mittenkolumn"
+            ],
+            "Feedback": [
+                "Återkoppling"
+            ],
+            "AI Assistant": [
+                "AI-assistent"
+            ],
+            "Save Settings": [
+                "Spara inställningar"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "Delete Selected": [
+                "Ta bort valda"
+            ],
+            "of": [
+                "av"
+            ],
+            "Reset": [
+                "Återställ"
+            ],
+            "Refreshing...": [
+                "Uppdaterar..."
+            ],
+            "Refresh": [
+                "Uppdatera"
+            ],
+            "Time": [
+                "Tid"
+            ],
+            "User": [
+                "Användare"
+            ],
+            "Searching server for more results...": [
+                "Söker efter fler resultat från servern..."
+            ],
+            "User:": [
+                "Användare:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Är du säker på att du vill återställa till standardinstruktioner؟"
+            ],
+            "Reset Instructions": [
+                "Återställ instruktioner"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Är du säker på att du vill återställa till standardinstruktioner? Dina anpassade instruktioner kommer att gå förlorade."
+            ],
+            "Reset to Default": [
+                "Återställ till standard"
+            ],
+            "Failed to save settings": [
+                "Misslyckades med att spara inställningar"
+            ],
+            "Go to Settings": [
+                "Gå till Inställningar"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "Är du säker på att du vill radera de markerade sökningarna?"
+            ],
+            "Delete Search History": [
+                "Radera sökhistorik"
+            ],
+            "Deleting searches...": [
+                "Raderar sökningar..."
+            ],
+            "Search history refreshed successfully": [
+                "Sökhistoriken uppdaterades framgångsrikt"
+            ],
+            "Search queries...": [
+                "Sökfrågor..."
+            ],
+            "Loading search history...": [
+                "Laddar sökhistoriken..."
+            ],
+            "No searches found": [
+                "Inga sökningar hittades"
+            ],
+            "Search Query": [
+                "Sökfråga"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Contact request submitted": [
+                "Kontaktförfrågan skickad"
+            ],
+            "User Needs Help": [
+                "Användaren behöver hjälp"
+            ],
+            "Positive feedback": [
+                "Positiv feedback"
+            ],
+            "Negative feedback": [
+                "Negativ feedback"
+            ],
+            "Search Details": [
+                "Sökdetaljer"
+            ],
+            "Select a search to view details": [
+                "Välj en sökning för att visa detaljer"
+            ],
+            "Search Information": [
+                "Sökinformation"
+            ],
+            "Query:": [
+                "Fråga:"
+            ],
+            "Results Count:": [
+                "Antal resultat:"
+            ],
+            "Contact Request": [
+                "Kontaktförfrågan"
+            ],
+            "Name:": [
+                "Namn:"
+            ],
+            "Email:": [
+                "E-post:"
+            ],
+            "Vote:": [
+                "Rösta:"
+            ],
+            "Positive": [
+                "Positiv"
+            ],
+            "Negative": [
+                "Negativ"
+            ],
+            "Search Interaction": [
+                "Sökinteraktion"
+            ],
+            "AI Response": [
+                "AI-svar"
+            ],
+            "✓ Clicked": [
+                "✓ Klickat"
+            ],
+            "Relevance:": [
+                "Relevans:"
+            ],
+            "No sections added yet": [
+                "Inga avsnitt har lagts till än"
+            ],
+            "-- Select Section --": [
+                "-- Välj avsnitt --"
+            ],
+            "Add Section": [
+                "Lägg till avsnitt"
+            ],
+            "Failed to load search history": [
+                "Misslyckades med att ladda sökhistoriken"
+            ],
+            "Searches deleted successfully": [
+                "Sökningar raderades framgångsrikt"
+            ],
+            "Failed to delete searches": [
+                "Misslyckades med att radera sökningar"
+            ],
+            "AI Search is Disabled": [
+                "AI Sök är inaktiverat"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "För att visa sökhistoriken, vänligen aktivera AI Sök i Inställningar-fliken."
+            ]
+        }
+    }
+}

@@ -24,10 +24,48 @@ class EPKB_Admin_UI_Access {
 		'admin_eckb_access_frontend_editor_write',
 		'admin_eckb_access_search_analytics_read',
 		'admin_eckb_access_order_articles_write',
-		'admin_eckb_access_need_help_read',
+		'admin_eckb_access_content_analysis',
 		'admin_eckb_access_addons_news_read',
 		'admin_eckb_access_faqs_write',
+		'admin_eckb_access_ai_feature',
 	);
+
+	/**
+	 * Check if a post is eligible for AI training data.
+	 * Centralizes all eligibility checks for posts being added to AI training.
+	 *
+	 * @param WP_Post|int $post Post object or post ID
+	 * @return true|WP_Error True if eligible, WP_Error with reason if not
+	 */
+	public static function is_post_eligible_for_ai_training( $post ) {
+		
+		// Get post object if ID was passed
+		if ( is_numeric( $post ) ) {
+			$post = get_post( $post );
+		}
+		
+		// Validate post object
+		if ( ! $post || ! is_object( $post ) || empty( $post->ID ) ) {
+			return new WP_Error( 'invalid_post', __( 'Invalid post object', 'echo-knowledge-base' ) );
+		}
+		
+		// Check post status
+		if ( $post->post_status !== 'publish' ) {
+			return new WP_Error( 'post_not_published', __( 'Post is not published', 'echo-knowledge-base' ) );
+		}
+		
+		// Check if post is password protected
+		if ( ! empty( $post->post_password ) ) {
+			return new WP_Error( 'post_password_protected', __( 'Post is password protected', 'echo-knowledge-base' ) );
+		}
+		
+		// Check if it's a linked article (from echo-links-editor plugin)
+		if ( $post->post_mime_type === 'kb_link' ) {
+			return new WP_Error( 'linked_article', __( 'Linked articles are excluded from AI training data', 'echo-knowledge-base' ) );
+		}
+
+		return true;
+	}
 
 	/**
 	 * Check if the current user has access to the current context
@@ -265,16 +303,16 @@ class EPKB_Admin_UI_Access {
 						: self::get_admin_capability(),
 					'options'       => self::get_access_control_options( true ) ) ) );
 
-		// Box: Need Help?
+		// Box: Content Analysis
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_need_help_read']['label'],
+				'title' => $kb_config_specs['admin_eckb_access_content_analysis']['label'],
 				'html' => self::radio_buttons_vertical_access_control( array(
-					'name'          => 'admin_eckb_access_need_help_read',
+					'name'          => 'admin_eckb_access_content_analysis',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
 					'return_html'   => true,
-					'value'       => self::is_capability_in_allowed_list( $kb_config['admin_eckb_access_need_help_read'], $kb_id )
-						? $kb_config['admin_eckb_access_need_help_read']
+					'value'       => self::is_capability_in_allowed_list( $kb_config['admin_eckb_access_content_analysis'], $kb_id )
+						? $kb_config['admin_eckb_access_content_analysis']
 						: self::get_admin_capability(),
 					'options'       => self::get_access_control_options( true ) ) ) );
 

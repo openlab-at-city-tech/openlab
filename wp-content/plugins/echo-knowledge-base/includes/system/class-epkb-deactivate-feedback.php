@@ -79,7 +79,7 @@ class EPKB_Deactivate_Feedback {
 		// send feedback
 		$api_params = array(
 			'epkb_action'       => 'epkb_process_user_feedback',
-			'feedback_type'     => get_transient( '_epkb_plugin_activated' ) ? 'Recently activated' : 'Some time ago',
+			'feedback_type'     => get_transient( '_epkb_plugin_activated' ) ? 'recently_activated' : 'old_activation',
 			'feedback_input'    => $feedback,
 			'plugin_name'       => 'KB',
 			'plugin_version'    => class_exists('Echo_Knowledge_Base') ? Echo_Knowledge_Base::$version : 'N/A',

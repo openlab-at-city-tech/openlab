@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "AI Search": [
+                "AI Sök"
+            ],
+            "All": [
+                "Alla"
+            ],
+            "Disabled": [
+                "Inaktiverad"
+            ],
+            "AI Chat": [
+                "AI chatt"
+            ],
+            "OpenAI API Key": [
+                "OpenAI API-nyckel"
+            ],
+            "Debug mode updated successfully": [
+                "Felsökningsläget uppdaterades"
+            ],
+            "Refresh": [
+                "Uppdatera"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Warnings": [
+                "Varningar"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Failed to update debug mode": [
+                "Misslyckades med att uppdatera felsökningsläget"
+            ],
+            "Error updating debug mode": [
+                "Fel vid uppdatering av felsökningsläget"
+            ],
+            "Failed to load PHP logs": [
+                "Misslyckades med att läsa PHP-loggar"
+            ],
+            "Error loading PHP logs": [
+                "Fel vid läsning av PHP-loggar"
+            ],
+            "Failed to load WP logs": [
+                "Misslyckades med att läsa WP-loggar"
+            ],
+            "Error loading WP logs": [
+                "Fel vid läsning av WP-loggar"
+            ],
+            "Failed to load AI logs": [
+                "Misslyckades med att läsa AI-loggar"
+            ],
+            "Error loading AI logs": [
+                "Fel vid läsning av AI-loggar"
+            ],
+            "All AI logs cleared successfully": [
+                "Alla AI-loggar rensades"
+            ],
+            "Failed to clear AI logs": [
+                "Misslyckades med att rensa AI-loggar"
+            ],
+            "Error clearing AI logs": [
+                "Fel vid rensning av AI-loggar"
+            ],
+            "Debug Mode": [
+                "Felsökningsläge"
+            ],
+            "Enable Debug Mode": [
+                "Aktivera felsökningsläge"
+            ],
+            " (Localhost detected)": [
+                "(Lokalhost upptäckt)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Aktivera felsökningsläge för att visa systemloggar och felsöka AI-funktioner. Detta laddar in ytterligare felsökningsverktyg."
+            ],
+            "AI Information": [
+                "AI-information"
+            ],
+            "Missing API Key": [
+                "API-nyckel saknas"
+            ],
+            "Data Collections": [
+                "Datasamlingar"
+            ],
+            "Unnamed Collection": [
+                "Namnlös samling"
+            ],
+            "Vector Store:": [
+                "Vektorlager:"
+            ],
+            "Created": [
+                "Skapat"
+            ],
+            "Not created": [
+                "Ej skapad"
+            ],
+            "Total Records:": [
+                "Totalt antal poster:"
+            ],
+            "Added:": [
+                "Lagt till:"
+            ],
+            "Updated:": [
+                "Uppdaterat:"
+            ],
+            "Outdated:": [
+                "Föråldrad:"
+            ],
+            "Error:": [
+                "Fel:"
+            ],
+            "Pending:": [
+                "Väntar:"
+            ],
+            "No data collections found.": [
+                "Inga datasamlingar hittades."
+            ],
+            "System Information": [
+                "Systeminformation"
+            ],
+            "Download Debug Info": [
+                "Ladda ner felsökningsinformation"
+            ],
+            "Logs": [
+                "Loggar"
+            ],
+            "PHP Error Log": [
+                "PHP-fel-logg"
+            ],
+            "Fatal Errors": [
+                "Allvarliga fel"
+            ],
+            "Notices": [
+                "Meddelanden"
+            ],
+            "AI Related Only": [
+                "Endast AI-relaterat"
+            ],
+            "Latest at top": [
+                "Senaste överst"
+            ],
+            "No logs found.": [
+                "Inga loggar hittades."
+            ],
+            "WordPress Error Log": [
+                "WordPress-fel-logg"
+            ],
+            "AI Activity Log": [
+                "AI-aktivitetslogg"
+            ],
+            "Clear Log": [
+                "Rensa logg"
+            ],
+            "All Levels": [
+                "Alla nivåer"
+            ],
+            "Errors Only": [
+                "Endast fel"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Felsökningsläge är inaktiverat. Aktivera det ovan för att visa felsökningsinformation."
+            ]
+        }
+    }
+}

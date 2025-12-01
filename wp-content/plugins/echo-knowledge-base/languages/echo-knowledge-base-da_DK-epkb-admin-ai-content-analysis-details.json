@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Demo Article": [
+                "Demoartikel"
+            ],
+            "Categories": [
+                "Kategorier"
+            ],
+            "Article Content": [
+                "Artiklens indhold"
+            ],
+            "Analyzing...": [
+                "Analyserer..."
+            ],
+            "Content Gaps Analysis": [
+                "Analyse af indholdshuller"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "AI-drevne tagforslag"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "Gap-analyse er kun tilgængelig med AI-funktioner-tilføjelsen."
+            ],
+            "Readability": [
+                "Læsbarhed"
+            ],
+            "Tag added successfully": [
+                "Tag tilføjet"
+            ],
+            "Tag removed successfully": [
+                "Tag fjernet"
+            ],
+            "Tag updated successfully": [
+                "Tag opdateret"
+            ],
+            "Add New Tag": [
+                "Tilføj nyt tag"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "Tags"
+            ],
+            "Edit Article": [
+                "Rediger artikel"
+            ],
+            "View Article": [
+                "Vis artikel"
+            ],
+            "Failed to save tag changes": [
+                "Kunne ikke gemme ændringer af tags"
+            ],
+            "Failed to add tag": [
+                "Kunne ikke tilføje tag"
+            ],
+            "Failed to remove tag": [
+                "Kunne ikke fjerne tag"
+            ],
+            "Failed to remove tags": [
+                "Kunne ikke fjerne tags"
+            ],
+            "Failed to update tag": [
+                "Kunne ikke opdatere tag"
+            ],
+            "Not Analyzed": [
+                "Ikke analyseret"
+            ],
+            "Demo Analysis Data": [
+                "Demoanalyseoplysninger"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "Dette er en demonstrationsartikel med eksempeldata til analyse for demonstrationsformål. Opret dine egne artikler for at se de faktiske resultater af indholdsanalysen."
+            ],
+            "Loading analysis details...": [
+                "Indlæser analyseoplysninger..."
+            ],
+            "No analysis details available for this article.": [
+                "Ingen analyseoplysninger tilgængelige for denne artikel."
+            ],
+            "Content Gaps": [
+                "Indholdshuller"
+            ],
+            "Overall Score": [
+                "Samlet score"
+            ],
+            "Article Importance": [
+                "Artikelens vigtighed"
+            ],
+            "Readability analysis completed": [
+                "Læsbarhedsanalyse afsluttet"
+            ],
+            "Failed to run readability analysis": [
+                "Kunne ikke gennemføre læsbarhedsanalysen"
+            ],
+            "Re-analyze": [
+                "Genanalyser"
+            ],
+            "Readability Analysis": [
+                "Læsbarhedsanalyse"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "Ingen læsbarhedsproblemer fundet. Artiklen er klar og velskrevet."
+            ],
+            "Analysis Error": [
+                "Analysefejl"
+            ],
+            "An error occurred during readability analysis.": [
+                "Der opstod en fejl under læsbarhedsanalysen."
+            ],
+            "Retrying analysis...": [
+                "Prøver analysen igen..."
+            ],
+            "Retry Analysis": [
+                "Prøv analysen igen"
+            ],
+            "Analyzing article readability...": [
+                "Analyserer artiklens læsbarhed..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "Klik på knappen nedenfor for at analysere denne artikels læsbarhed ved hjælp af AI."
+            ],
+            "Run Readability Analysis": [
+                "Kør læsbarhedsanalyse"
+            ],
+            "No article content available": [
+                "Ingen artikelindhold til rådighed"
+            ],
+            "Content Gaps analysis completed": [
+                "Analyse af indholdsgab gennemført"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "Det lykkedes ikke at køre analysen af indholdsgab"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "Ingen indholdsgab fundet. Artiklen synes at være dækkende."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "Der opstod en fejl under analysen af indholdsgab."
+            ],
+            "Learn More About AI Features": [
+                "Lær mere om AI-funktioner"
+            ],
+            "Analyzing article for content gaps...": [
+                "Analyserer artikel for indholdsgab..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "Klik på knappen nedenfor for at analysere denne artikel for manglende indhold ved hjælp af AI."
+            ],
+            "Run Content Gaps Analysis": [
+                "Kør analyse af indholdsgab"
+            ],
+            "Tags analysis completed": [
+                "Tagsanalyse gennemført"
+            ],
+            "Failed to run tags analysis": [
+                "Det lykkedes ikke at køre tagsanalysen"
+            ],
+            "Re-analyze Tags": [
+                "Genanalyser tags"
+            ],
+            "Tag Count": [
+                "Antal tags"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "Antallet af tags ligger inden for det anbefalede område (3-10)."
+            ],
+            "Tag Relevance": [
+                "Tags relevans"
+            ],
+            "Not Applicable due to missing tags": [
+                "Ikke relevant på grund af manglende tags"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "Alle tags er relevante og fremgår af artiklens indhold."
+            ],
+            "Tag Format": [
+                "Tagformat"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "Alle tags er korrekt formateret og følger bedste praksis."
+            ],
+            "Duplicate Tags": [
+                "Duplikerede tags"
+            ],
+            "No duplicate or similar tags found.": [
+                "Ingen duplikerede eller lignende tags fundet."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "Artiklen har det rette antal kategorier (1-3)."
+            ],
+            "Add": [
+                "Tilføj"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "Baseret på AI-indholdsanalyse, overvej at tilføje disse tags:"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "Få AI Features-tilføjelsesmodulet til at låse op for AI-drevne tagforslag."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "Ingen tagforslag til denne artikel i øjeblikket."
+            ],
+            "Broad Tags": [
+                "Bredere tags"
+            ],
+            "(General categories)": [
+                "(Generelle kategorier)"
+            ],
+            "Specific Tags": [
+                "Specifikke tags"
+            ],
+            "(Detailed topics)": [
+                "(Detaljerede emner)"
+            ],
+            "Article Tags": [
+                "Artikel-tags"
+            ],
+            "Restore tag": [
+                "Gendan tag"
+            ],
+            "Mark for deletion": [
+                "Markér til sletning"
+            ],
+            "No tags": [
+                "Ingen tags"
+            ],
+            "Remove tag": [
+                "Fjern tag"
+            ],
+            "Tag name": [
+                "Tagnavn"
+            ],
+            "Tag Best Practices": [
+                "Bedste praksis for tags"
+            ],
+            "Guidelines:": [
+                "Retningslinjer:"
+            ],
+            "Relevant & Keyword-Rich:": [
+                "Relevant og rig på søgeord:"
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "Brug beskrivende tags, der matcher indhold og søgeord."
+            ],
+            "Avoid Duplicates:": [
+                "Undgå dubletter:"
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "Genbrug ikke kategorinavne som tags (eller omvendt)."
+            ],
+            "Reuse Consistently:": [
+                "Genbrug konsekvent:"
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "Hold dig til en strategi; undgå unikke tags pr. indlæg for at forhindre \"tag bloat\" (tynde sider skader SEO). Tags bør gruppere flere indlæg; noindex tynde arkiver (≤2 indlæg)."
+            ],
+            "Keep Short:": [
+                "Hold det kort:"
+            ],
+            "1–3 words, reusable.": [
+                "1–3 ord, genanvendelige."
+            ],
+            "Editor Checklist:": [
+                "Redaktørens tjekliste:"
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "Grupperer du ≥3 indlæg (nu eller snart)?"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "1–3 ord, forskellige fra eksisterende tags/kategorier?"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "Flet synonymer i stedet for nye tags?"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "Noindex hvis tyndt; indekser hvis det er væsentligt med en beskrivelse?"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "Bemærk: Gem vil opdatere omdirigeringer for tag-arkivsiden (valgfrit)"
+            ],
+            "Save Changes": [
+                "Gem ændringer"
+            ]
+        }
+    }
+}

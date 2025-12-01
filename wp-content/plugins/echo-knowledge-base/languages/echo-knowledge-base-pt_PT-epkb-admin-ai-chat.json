@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings": [
+                "Definições"
+            ],
+            "Settings saved successfully": [
+                "Configurações guardadas com sucesso"
+            ],
+            "Cancel": [
+                "Cancelar"
+            ],
+            "Saving...": [
+                "A guardar..."
+            ],
+            "Go to General Settings": [
+                "Ir para Configurações Gerais"
+            ],
+            "Chat History": [
+                "Histórico de Chat"
+            ],
+            "API Configuration": [
+                "Configuração da API"
+            ],
+            "AI Assistant": [
+                "Assistente de IA"
+            ],
+            "Save Settings": [
+                "Guardar Configurações"
+            ],
+            "Delete": [
+                "Apagar"
+            ],
+            "Delete Selected": [
+                "Apagar Selecionados"
+            ],
+            "Reset": [
+                "Redefinir"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Tem a certeza de que pretende eliminar as conversas selecionadas?"
+            ],
+            "Delete Conversations": [
+                "Eliminar Conversas"
+            ],
+            "Deleting conversations...": [
+                "A eliminar conversas..."
+            ],
+            "Conversations refreshed successfully": [
+                "Conversas atualizadas com sucesso"
+            ],
+            "Search conversations...": [
+                "Pesquisar conversas..."
+            ],
+            "Refreshing...": [
+                "A atualizar..."
+            ],
+            "Refresh": [
+                "Atualizar"
+            ],
+            "Loading conversations...": [
+                "A carregar conversas..."
+            ],
+            "No conversations found": [
+                "Não foram encontradas conversas"
+            ],
+            "Time": [
+                "Hora"
+            ],
+            "User": [
+                "Utilizador"
+            ],
+            "Conversation": [
+                "Conversa"
+            ],
+            "Searching server for more results...": [
+                "A pesquisar no servidor por mais resultados..."
+            ],
+            "Conversation Details": [
+                "Detalhes da conversa"
+            ],
+            "Select a conversation to view details": [
+                "Selecione uma conversa para ver os detalhes"
+            ],
+            "Conversation Info": [
+                "Informação da conversa"
+            ],
+            "User:": [
+                "Utilizador:"
+            ],
+            "Started:": [
+                "Iniciado:"
+            ],
+            "Messages:": [
+                "Mensagens:"
+            ],
+            "Status:": [
+                "Estado:"
+            ],
+            "Rating:": [
+                "Avaliação:"
+            ],
+            "Full Conversation": [
+                "Conversa completa"
+            ],
+            "No messages in this conversation.": [
+                "Não há mensagens nesta conversa."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Tem a certeza de que pretende redefinir as instruções para o padrão?"
+            ],
+            "Reset Instructions": [
+                "Redefinir Instruções"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Tem a certeza de que pretende redefinir as instruções para o padrão? As suas instruções personalizadas serão perdidas."
+            ],
+            "Reset to Default": [
+                "Redefinir para o padrão"
+            ],
+            "Failed to load conversations": [
+                "Falha ao carregar conversas"
+            ],
+            "Failed to save settings": [
+                "Falha ao guardar definições"
+            ],
+            "Conversations deleted successfully": [
+                "Conversas eliminadas com sucesso"
+            ],
+            "Failed to delete conversations": [
+                "Falha ao eliminar conversas"
+            ],
+            "AI Chat is Disabled": [
+                "IA Chat está desativado"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "Para ver o histórico de IA Chat, ative IA Chat na aba Configurações."
+            ],
+            "Go to Settings": [
+                "Ir para Configurações"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "A chave da API OpenAI não está configurada. Por favor configure-a nas Configurações Gerais para usar os recursos de IA Chat."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Por favor aceite o acordo de privacidade de dados nas Configurações Gerais para usar os recursos de IA Chat."
+            ],
+            "AI Chat Tutorial": [
+                "Tutorial IA Chat"
+            ],
+            "Learn how to configure and use the AI Chat feature to provide instant support to your users.": [
+                "Aprenda a configurar e usar o recurso IA Chat para fornecer suporte instantâneo aos seus utilizadores."
+            ],
+            "AI Chat Tutorial Screenshot": [
+                "Captura de tela do Tutorial IA Chat"
+            ],
+            "<h4>Getting Started with AI Chat</h4><ul><li>Enable AI Chat in the Settings tab</li><li>Configure your chat widget appearance and behavior</li><li>View conversation history to see how users interact with your AI assistant</li><li>Customize the AI instructions to match your support style</li></ul>": [
+                "<h4>Começar com IA Chat</h4><ul><li>Ative IA Chat na aba Configurações</li><li>Configure a aparência e o comportamento do seu widget de chat</li><li>Ver o histórico de conversas para ver como os utilizadores interagem com o seu assistente de IA</li><li>Personalize as instruções de IA para corresponder ao seu estilo de suporte</li></ul>"
+            ]
+        }
+    }
+}

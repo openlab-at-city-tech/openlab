@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Learn More": [
+                "Дізнатись більше"
+            ],
+            "Get Started": [
+                "Почати"
+            ],
+            "Copied!": [
+                "Скопійовано!"
+            ],
+            "Copy": [
+                "Копіювати"
+            ],
+            "All features unlocked": [
+                "Усі функції розблоковано"
+            ],
+            "Use Code:": [
+                "Застосуйте код:"
+            ],
+            "Unlock Premium AI Features": [
+                "Розблокуйте преміум-функції штучного інтелекту"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "Підніміть вашу базу знань на новий рівень за допомогою розширених можливостей штучного інтелекту"
+            ],
+            "Premium Features": [
+                "Преміум-функції"
+            ],
+            "Choose Your Plan": [
+                "Оберіть ваш план"
+            ],
+            "Flexible pricing to match your needs": [
+                "Гнучке ціноутворення, яке відповідає вашим потребам"
+            ],
+            "What Our Customers Say": [
+                "Що говорять наші клієнти"
+            ],
+            "Get AI Features": [
+                "Отримати функції ШІ"
+            ]
+        }
+    }
+}

@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "AI Search": [
+                "AI खोज"
+            ],
+            "All": [
+                "सभी"
+            ],
+            "Disabled": [
+                "निष्क्रिय"
+            ],
+            "AI Chat": [
+                "एआई चैट"
+            ],
+            "OpenAI API Key": [
+                "OpenAI API कुंजी"
+            ],
+            "Debug mode updated successfully": [
+                "डिबग मोड सफलतापूर्वक अपडेट किया गया"
+            ],
+            "Refresh": [
+                "ताज़ा करें"
+            ],
+            "Status:": [
+                "स्थिति:"
+            ],
+            "Warnings": [
+                "चेतावनाएं"
+            ],
+            "Info": [
+                "सूचना"
+            ],
+            "Failed to update debug mode": [
+                "डिबग मोड अपडेट करने में असफल"
+            ],
+            "Error updating debug mode": [
+                "डिबग मोड अपडेट करते समय त्रुटि"
+            ],
+            "Failed to load PHP logs": [
+                "PHP लॉग लोड करने में असफल"
+            ],
+            "Error loading PHP logs": [
+                "PHP लॉग लोड करते समय त्रुटि"
+            ],
+            "Failed to load WP logs": [
+                "WP लॉग लोड करने में असफल"
+            ],
+            "Error loading WP logs": [
+                "WP लॉग लोड करते समय त्रुटि"
+            ],
+            "Failed to load AI logs": [
+                "AI लॉग लोड करने में असफल"
+            ],
+            "Error loading AI logs": [
+                "AI लॉग लोड करते समय त्रुटि"
+            ],
+            "All AI logs cleared successfully": [
+                "सभी एआई लॉग सफलतापूर्वक साफ कर दिए गए"
+            ],
+            "Failed to clear AI logs": [
+                "AI लॉग साफ़ करने में असफल"
+            ],
+            "Error clearing AI logs": [
+                "AI लॉग साफ़ करते समय त्रुटि"
+            ],
+            "Debug Mode": [
+                "डिबग मोड"
+            ],
+            "Enable Debug Mode": [
+                "डिबग मोड सक्षम करें"
+            ],
+            " (Localhost detected)": [
+                "(लोकलहोस्ट का पता चला)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "सिस्टम लॉग देखने और AI फीचर्स को ट्रबलशूट करने के लिए डिबग मोड सक्षम करें। इससे अतिरिक्त डिबग टूल लोड होंगे।."
+            ],
+            "AI Information": [
+                "एआई जानकारी"
+            ],
+            "Missing API Key": [
+                "API कुंजी गायब है"
+            ],
+            "Data Collections": [
+                "डेटा संग्रह"
+            ],
+            "Unnamed Collection": [
+                "अनाम संग्रह"
+            ],
+            "Vector Store:": [
+                "वेक्टर स्टोर:"
+            ],
+            "Created": [
+                "बनाया गया"
+            ],
+            "Not created": [
+                "बनाया नहीं गया"
+            ],
+            "Total Records:": [
+                "कुल रिकॉर्ड:"
+            ],
+            "Added:": [
+                "जोड़ा गया:"
+            ],
+            "Updated:": [
+                "अपडेट किया गया:"
+            ],
+            "Outdated:": [
+                "पुराना:"
+            ],
+            "Error:": [
+                "त्रुटि:"
+            ],
+            "Pending:": [
+                "लंबित:"
+            ],
+            "No data collections found.": [
+                "डेटा संग्रह नहीं मिला।."
+            ],
+            "System Information": [
+                "सिस्टम जानकारी"
+            ],
+            "Download Debug Info": [
+                "डिबग जानकारी डाउनलोड करें"
+            ],
+            "Logs": [
+                "लॉग"
+            ],
+            "PHP Error Log": [
+                "PHP त्रुटि लॉग"
+            ],
+            "Fatal Errors": [
+                "घातक त्रुटियाँ"
+            ],
+            "Notices": [
+                "सूचनाएं"
+            ],
+            "AI Related Only": [
+                "केवल एआई से संबंधित"
+            ],
+            "Latest at top": [
+                "शीर्ष पर नवीनतम"
+            ],
+            "No logs found.": [
+                "कोई लॉग नहीं मिला।."
+            ],
+            "WordPress Error Log": [
+                "वर्डप्रेस त्रुटि लॉग"
+            ],
+            "AI Activity Log": [
+                "एआई गतिविधि लॉग"
+            ],
+            "Clear Log": [
+                "लॉग साफ़ करें"
+            ],
+            "All Levels": [
+                "सभी स्तर"
+            ],
+            "Errors Only": [
+                "केवल त्रुटियाँ"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "डिबग मोड अक्षम है. ऊपर इसे सक्षम करें ताकि डिबग जानकारी देखें."
+            ]
+        }
+    }
+}

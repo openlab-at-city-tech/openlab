@@ -150,7 +150,7 @@ class EPKB_Input_Filter {
 		return new WP_Error( 'invalid_input', ' ' . implode( " ", $errors ) );
 	}
 
-	private function filter_input_field( $value, $field_spec ) {
+	public function filter_input_field( $value, $field_spec ) {
 
 		// further sanitize the field
 		switch ( $field_spec['type'] ) {
@@ -221,16 +221,17 @@ class EPKB_Input_Filter {
 			$text = '';
 		}
 
-		if ( strlen( $text ) > $field_spec['max'] ) {
-			$nof_chars_to_remove = strlen( $text ) - $field_spec['max'];
+		if ( mb_strlen( $text, 'UTF-8' ) > $field_spec['max'] ) {
+			$nof_chars_to_remove = mb_strlen( $text, 'UTF-8' ) - $field_spec['max'];
 
 			/* translators: %d: number of characters to remove by user when entering too long string. */
 			$msg = sprintf( _n( 'The value is too long. Remove %s character.', 'The value is too long. Remove %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error( 'filter_text_big', $msg );
 		}
 
-		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( strlen( $text ) > 0 && strlen( $text ) < $field_spec['min'] ) ) {
-			$nof_chars_to_remove = $field_spec['min'] - strlen( $text );
+		$min_len = empty( $field_spec['min'] ) ? 0 : ( $field_spec['min'] > 1 ? 1 : $field_spec['min'] );
+		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( mb_strlen( $text, 'UTF-8' ) > 0 && mb_strlen( $text, 'UTF-8' ) < $min_len ) ) {
+			$nof_chars_to_remove = $min_len - mb_strlen( $text, 'UTF-8' );
 
 			/* translators: %d: number of characters to add by user when entering too short string. */
 			$msg = sprintf( _n( 'The value is too short. Add at least %s character.', 'The value is too short. Add at least %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
@@ -445,15 +446,15 @@ class EPKB_Input_Filter {
 			$text = '';
 		}
 
-		if ( strlen( $text ) > $field_spec['max'] ) {
-			$nof_chars_to_remove = strlen($text) - $field_spec['max'];
+		if ( mb_strlen( $text, 'UTF-8' ) > $field_spec['max'] ) {
+			$nof_chars_to_remove = mb_strlen( $text, 'UTF-8' ) - $field_spec['max'];
 			/* translators: %d: number of characters to remove by user when entering too long string. */
 			$msg = sprintf( _n( 'The value is too long. Remove %s character.', 'The value is too long. Remove %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error('filter_text_big', $msg );
 		}
 
-		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( strlen( $text ) > 0 && strlen( $text ) < $field_spec['min'] ) ) {
-			$nof_chars_to_remove = $field_spec['min'] - strlen($text);
+		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( mb_strlen( $text, 'UTF-8' ) > 0 && mb_strlen( $text, 'UTF-8' ) < $field_spec['min'] ) ) {
+			$nof_chars_to_remove = $field_spec['min'] - mb_strlen( $text, 'UTF-8' );
 			/* translators: %d: number of characters to add by user when entering too short string. */
 			$msg = sprintf( _n( 'The value is too short. Add at least %s character.', 'The value is too short. Add at least %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error('filter_text_small', $msg );

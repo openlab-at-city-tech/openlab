@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Cancel": [
+                "Annuler"
+            ],
+            "articles": [
+                "Articles"
+            ],
+            "Analyze Content": [
+                "Analyser le contenu"
+            ],
+            "No articles found to analyze": [
+                "Aucun article trouvé à analyser"
+            ],
+            "of": [
+                "de"
+            ],
+            "Analysis canceled": [
+                "Analyse annulée"
+            ],
+            "Failed to cancel analysis": [
+                "Échec de l'annulation de l'analyse"
+            ],
+            "Calculating...": [
+                "Calcul en cours..."
+            ],
+            "Analysis failed": [
+                "Échec de l'analyse"
+            ],
+            "Content analysis completed successfully!": [
+                "Analyse de contenu terminée avec succès !"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Limite de réessai atteinte lors de la connexion à OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Échec du démarrage de l’analyse"
+            ],
+            "Analysis Job Running": [
+                "Analyse en cours"
+            ],
+            "Wait": [
+                "Patientez"
+            ],
+            "articles selected for analysis": [
+                "Articles sélectionnés pour l'analyse"
+            ],
+            "Analysis in Progress": [
+                "Analyse en cours"
+            ],
+            "Stop Analysis": [
+                "Arrêter l'analyse"
+            ],
+            "Starting analysis...": [
+                "Démarrage de l'analyse..."
+            ],
+            "article": [
+                "Article"
+            ],
+            "Analyzing": [
+                "Analyse en cours"
+            ],
+            "Completed! Analyzed": [
+                "Terminé ! Analysé"
+            ],
+            "error": [
+                "erreur"
+            ],
+            "errors": [
+                "erreurs"
+            ],
+            "with": [
+                "avec"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analyse arrêtée après des erreurs. Analysé"
+            ],
+            "Remaining Time:": [
+                "Temps restant :"
+            ]
+        }
+    }
+}

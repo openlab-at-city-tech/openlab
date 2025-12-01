@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn more": [
+                "Scopri di più"
+            ],
+            "Cancel": [
+                "Annulla"
+            ],
+            "Vote for Top 3 Features": [
+                "Vota per le prime 3 funzionalità"
+            ],
+            "First Name": [
+                "Nome"
+            ],
+            "(optional)": [
+                "(facoltativo)"
+            ],
+            "Email": [
+                "E-mail"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "Impossibile inviare il voto. Per favore riprova."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "Passo 1: Configura la chiave API e la privacy"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "Aggiungi la tua chiave API OpenAI e accetta l'accordo sulla privacy dei dati."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "Passo 2: Abilita AI Chat e/o AI Ricerca"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "Abilita le funzionalità AI Ricerca o AI Chat per il tuo sito."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "Passo 3: Aggiungi Dati di Apprendimento Automatico e Sincronizza"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "Seleziona contenuti e sincronizzali con OpenAI per l'elaborazione IA."
+            ],
+            "Go to Settings": [
+                "Vai alle Impostazioni"
+            ],
+            "Completed": [
+                "Completato"
+            ],
+            "Warnings": [
+                "Avvertenze"
+            ],
+            "Welcome to AI Features!": [
+                "Benvenuto nelle funzionalità IA!"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "Configura la chat e la ricerca basate su IA in pochi semplici passaggi."
+            ],
+            "Complete Your Setup": [
+                "Completa la configurazione"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "Ancora pochi passaggi per abilitare le funzionalità IA:"
+            ],
+            "Setup Steps": [
+                "Passaggi di configurazione"
+            ],
+            "Configure API Key & Privacy": [
+                "Configura chiave API e privacy"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "Aggiungi la tua chiave API OpenAI e accetta l'accordo sulla privacy dei dati"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "Abilita IA Chat e/o IA Ricerca"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "Abilita le funzionalità IA Ricerca o Chat per il tuo sito"
+            ],
+            "Enable AI Features": [
+                "Abilita funzionalità IA"
+            ],
+            "Add Training Data & Sync": [
+                "Aggiungi Dati di Addestramento e Sincronizza"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "Seleziona contenuti e sincronizzali con OpenAI per l'elaborazione IA"
+            ],
+            "Go to Training Data": [
+                "Vai ai Dati di Addestramento"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "Aiutaci a dare priorità alle funzionalità fornendo le tue informazioni:"
+            ],
+            "Describe Your Feature Request": [
+                "Descrivi la tua richiesta di funzionalità"
+            ],
+            "Please describe the feature you would like to see...": [
+                "Per favore descrivi la funzionalità che vorresti vedere..."
+            ],
+            "Submit Vote": [
+                "Invia voto"
+            ],
+            "Please describe the feature you would like to see.": [
+                "Per favore descrivi la funzionalità che vorresti vedere."
+            ],
+            "Please enter a valid email address.": [
+                "Per favore inserisci un indirizzo email valido."
+            ],
+            "Please select at least one feature to vote for.": [
+                "Seleziona almeno una funzionalità per votare."
+            ],
+            "Submitting your vote...": [
+                "Invio del tuo voto..."
+            ],
+            "Thank you for voting!": [
+                "Grazie per aver votato!"
+            ],
+            "An error occurred. Please try again.": [
+                "Si è verificato un errore. Per favore riprova."
+            ],
+            "Latest AI Updates": [
+                "Ultimi aggiornamenti IA"
+            ],
+            "Select the features you would like to see implemented:": [
+                "Seleziona le funzionalità che vorresti vedere implementate:"
+            ],
+            "Released": [
+                "Rilasciato"
+            ],
+            "feature selected": [
+                "funzionalità selezionata"
+            ],
+            "features selected": [
+                "funzionalità selezionate"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "Nota: Il tuo feedback ci aiuta a dare priorità allo sviluppo. Le funzionalità sono soggette a modifiche."
+            ]
+        }
+    }
+}

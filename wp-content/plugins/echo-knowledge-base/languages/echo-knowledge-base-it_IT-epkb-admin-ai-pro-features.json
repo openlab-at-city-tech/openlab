@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "Scopri di più"
+            ],
+            "Copied!": [
+                "Copiato!"
+            ],
+            "Copy": [
+                "Copia"
+            ],
+            "All features unlocked": [
+                "Tutte le funzionalità sbloccate"
+            ],
+            "Get Started": [
+                "Inizia"
+            ],
+            "Use Code:": [
+                "Usa codice:"
+            ],
+            "Unlock Premium AI Features": [
+                "Sblocca funzionalità IA premium"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "Porta la tua base di conoscenza al livello successivo con funzionalità IA avanzate"
+            ],
+            "Premium Features": [
+                "Funzionalità premium"
+            ],
+            "Choose Your Plan": [
+                "Scegli il tuo piano"
+            ],
+            "Flexible pricing to match your needs": [
+                "Prezzi flessibili per soddisfare le tue esigenze"
+            ],
+            "What Our Customers Say": [
+                "Cosa dicono i nostri clienti"
+            ],
+            "Get AI Features": [
+                "Ottieni funzionalità IA"
+            ]
+        }
+    }
+}

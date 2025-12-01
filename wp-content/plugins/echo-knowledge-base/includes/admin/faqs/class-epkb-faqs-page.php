@@ -236,8 +236,8 @@ class EPKB_FAQs_Page {
 		$faqs_list = get_posts( [
 			'post_type'         => EPKB_FAQs_CPT_Setup::FAQS_POST_TYPE,
 			'posts_per_page'    => -1,
-			'orderby'           => 'post_title',
-			'order'             => 'ASC',
+			'orderby'           => 'post_date',
+			'order'             => 'DESC',
 			'fields'            => 'id=>name',
 		] );
 
@@ -438,8 +438,8 @@ class EPKB_FAQs_Page {
 		$all_faqs_list = get_posts( [
 			'post_type'         => EPKB_FAQs_CPT_Setup::FAQS_POST_TYPE,
 			'posts_per_page'    => 1000,
-			'orderby'           => 'post_title',
-			'order'             => 'ASC',
+			'orderby'           => 'post_date',
+			'order'             => 'DESC',
 		] );
 
 		ob_start();     ?>
@@ -501,6 +501,22 @@ class EPKB_FAQs_Page {
 			<div id="epkb-available-questions-container">
 				<div class="epkb-available-questions-head">
 					<div class="epkb-available-questions-head__title"><?php esc_html_e( 'Questions not in your current group', 'echo-knowledge-base' ); ?></div>
+					<div class="epkb-available-questions-head__sort">
+						<div class="epkb-sort-toggle">
+							<span class="epkb-sort-toggle__label epkb-sort-toggle__label--recent"><?php esc_html_e( 'Recent', 'echo-knowledge-base' ); ?></span>
+							<label class="epkb-sort-toggle__switch">
+								<input type="checkbox" id="epkb-faq-sort-toggle" class="epkb-faq-sort-toggle" data-sort="date">
+								<span class="epkb-sort-toggle__slider"></span>
+							</label>
+							<span class="epkb-sort-toggle__label epkb-sort-toggle__label--abc"><?php esc_html_e( 'ABC', 'echo-knowledge-base' ); ?></span>
+						</div>
+					</div>
+				</div>
+				<div class="epkb-available-questions-search">
+					<input type="text" id="epkb-available-questions-search-input" 
+						   class="epkb-available-questions-search__input" 
+						   placeholder="<?php esc_attr_e( 'Search available questions...', 'echo-knowledge-base' ); ?>" />
+					<span class="epkb-available-questions-search__icon epkbfa epkbfa-search"></span>
 				</div>
 				<div class="epkb-available-questions-body">
 					<div class="epkb-faq-questions-list-empty"><?php esc_html_e( 'No available Questions.', 'echo-knowledge-base' ); ?></div> <?php
@@ -508,6 +524,7 @@ class EPKB_FAQs_Page {
 						self::display_question( array(
 							'faq_id'        => $faq->ID,
 							'title'         => $faq->post_title,
+							'date'          => $faq->post_date,
 							'add_icon'      => true,
 							'order_icon'    => true,
 							'include_icon'  => true,
@@ -547,7 +564,7 @@ class EPKB_FAQs_Page {
 			ob_start();
 		}   ?>
 
-		<div class="epkb-faq-question epkb-faq-question--<?php echo esc_attr( $args['faq_id'] ); ?> epkb-faq-question--modern" data-faq-id="<?php echo esc_attr( $args['faq_id'] ); ?>">			<?php
+		<div class="epkb-faq-question epkb-faq-question--<?php echo esc_attr( $args['faq_id'] ); ?> epkb-faq-question--modern" data-faq-id="<?php echo esc_attr( $args['faq_id'] ); ?>"<?php echo isset( $args['date'] ) ? ' data-date="' . esc_attr( $args['date'] ) . '"' : ''; ?>>			<?php
 			if ( isset( $args['order_icon'] ) ) {  ?>
 				<div class="epkb-faq-question__action-order">
 					<div class="epkb-faq-question__order-icon epkbfa epkbfa-bars"></div>
@@ -947,8 +964,8 @@ class EPKB_FAQs_Page {
 						<?php esc_html_e( 'Select All Groups', 'echo-knowledge-base' ); ?>
 					</label>
 				</div>
-				<div class="epkb-all-groups-count">
-					<?php echo esc_html( sprintf( _n( '%d group selected', '%d groups selected', $groups_count, 'echo-knowledge-base' ), $groups_count ) ); ?>
+				<div class="epkb-all-groups-count">					<?php
+					echo $groups_count . ' ' . esc_html__( 'selected', 'echo-knowledge-base' ); ?>
 				</div>
 			</div>
 			

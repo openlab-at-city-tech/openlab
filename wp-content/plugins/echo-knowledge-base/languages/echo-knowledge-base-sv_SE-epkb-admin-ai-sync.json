@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Updated": [
+                "Uppdaterad"
+            ],
+            "Error": [
+                "Fel"
+            ],
+            "No posts found to sync": [
+                "Inga inlägg hittades för att synkronisera"
+            ],
+            "Pending": [
+                "Väntande"
+            ],
+            "of": [
+                "av"
+            ],
+            "errors": [
+                "fel"
+            ],
+            "with": [
+                "med"
+            ],
+            "Sync canceled": [
+                "Synkronisering avbruten"
+            ],
+            "Failed to cancel sync": [
+                "Misslyckades med att avbryta synkroniseringen"
+            ],
+            "A sync job is already running.": [
+                "En synkronisering pågår redan."
+            ],
+            "Failed to start sync": [
+                "Misslyckades med att starta synkroniseringen"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "OpenAI API-nyckel krävs för att synkronisera innehåll. Vänligen konfigurera den i Allmänna inställningar."
+            ],
+            "Sync Method": [
+                "Synkroniseringsmetod"
+            ],
+            "Basic Timer": [
+                "Grundläggande timer"
+            ],
+            "Select All Filtered Records": [
+                "Välj alla filtrerade poster"
+            ],
+            "Select All Records": [
+                "Välj alla poster"
+            ],
+            "Outdated": [
+                "Föråldrad"
+            ],
+            "Added": [
+                "Tillagt"
+            ],
+            "Selected": [
+                "Markerad"
+            ],
+            "Records": [
+                "Poster"
+            ],
+            "selected records": [
+                "valda poster"
+            ],
+            "Sync in Progress": [
+                "Synkronisering pågår"
+            ],
+            "Cancel Sync": [
+                "Avbryt synkronisering"
+            ],
+            "API key required": [
+                "API-nyckel krävs"
+            ],
+            "Select at least one item to sync": [
+                "Välj minst ett objekt att synkronisera"
+            ],
+            "Start Sync": [
+                "Starta synkronisering"
+            ],
+            "Sync started successfully! ": [
+                "Synkronisering startade framgångsrikt!"
+            ],
+            "Starting sync...": [
+                "Startar synkronisering..."
+            ],
+            "Retrying failed posts:": [
+                "Återförsöker misslyckade inlägg:"
+            ],
+            "Processing": [
+                "Bearbetar"
+            ],
+            "posts": [
+                "inlägg"
+            ],
+            "Completed! Processed": [
+                "Slutfört! Bearbetade"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "Synkronisering stoppades efter 5 upprepade fel. Bearbetade"
+            ],
+            "posts with": [
+                "inlägg med"
+            ],
+            "total errors": [
+                "totala fel"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "Synkronisering schemalagd, väntar på att starta..."
+            ]
+        }
+    }
+}

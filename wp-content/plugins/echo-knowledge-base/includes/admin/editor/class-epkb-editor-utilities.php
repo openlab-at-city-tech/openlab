@@ -9,35 +9,6 @@
 class EPKB_Editor_Utilities {
 
 	/**
-	 * Determine what page are we editing in the visual Editor
-	 * @return string
-	 */
-	public static function epkb_front_end_editor_type() {
-		global $post;
-
-		$editor_type = '';
-
-		if ( is_archive() ) {
-
-			$editor_type = 'archive-page';
-
-		} else if ( ! empty( $post ) && $post->post_type == 'page' && EPKB_Utilities::is_kb_main_page() ) {
-
-			$editor_type =  EPKB_Utilities::is_advanced_search_enabled() && EPKB_Utilities::get( 'kbsearch' ) ? 'search-page' : 'main-page';
-
-			if ( $editor_type == 'main-page' && EPKB_Block_Utilities::current_post_has_kb_blocks() ) {
-				$editor_type = 'block-main-page';
-			}
-
-		} else if ( ! empty( $post ) && EPKB_KB_Handler::is_kb_post_type( $post->post_type ) ) {
-			
-			$editor_type = 'article-page';
-		}
-
-		return $editor_type;
-	}
-
-	/**
 	 * Check if the current page is actively rendering the current page on the frontend.
 	 *
 	 * Supported builders:
@@ -136,11 +107,11 @@ class EPKB_Editor_Utilities {
 	}
 
 	public static function initialize_advanced_search_box( $use_main_page_settings = true ) {
-		if ( EPKB_Utilities::is_advanced_search_enabled() && class_exists( 'ASEA_Search_Box_View' ) ) {
+		if ( EPKB_Utilities::is_advanced_search_enabled() && class_exists( 'ASEA_Search_Box_View' ) ) { /* @disregard PREFIX */
 			global $asea_use_main_page_settings;
 			$asea_use_main_page_settings = $use_main_page_settings;	// for AJAX request we need to hard-code the value here
 			/**@disregard P1009 */
-			new ASEA_Search_Box_View();		// TODO: move to KB Utilities Constants
+			new ASEA_Search_Box_View();	/* @disregard PREFIX */	// TODO: move to KB Utilities Constants
 		}
 	}
 }

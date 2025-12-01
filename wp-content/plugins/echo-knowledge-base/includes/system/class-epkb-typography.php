@@ -1267,8 +1267,8 @@ class EPKB_Typography {
 			
 		}
 		
-		error_log(var_export($php_fonts_data, true));
-		error_log(var_export($php_fonts_10_links, true));
+		//error_log(var_export($php_fonts_data, true));
+		//error_log(var_export($php_fonts_10_links, true));
 	}
 
 	/**

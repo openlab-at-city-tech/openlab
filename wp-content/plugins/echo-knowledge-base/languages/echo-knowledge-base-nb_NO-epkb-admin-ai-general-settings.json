@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings saved successfully": [
+                "Innstillinger lagret"
+            ],
+            "Saving...": [
+                "Lagrer..."
+            ],
+            "Save Settings": [
+                "Lagre innstillinger"
+            ],
+            "Failed to save settings": [
+                "Kunne ikke lagre innstillinger"
+            ],
+            "Sending...": [
+                "Sender..."
+            ],
+            "Test email sent successfully": [
+                "Test-e-post sendt vellykket"
+            ],
+            "Failed to send test email": [
+                "Mislyktes i å sende test-e-post"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Mislyktes i å sende test-e-post. Vennligst sjekk tilkoblingen."
+            ]
+        }
+    }
+}

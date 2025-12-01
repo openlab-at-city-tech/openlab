@@ -1,0 +1,69 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Close": [
+                "Lukk"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Loading...": [
+                "Laster..."
+            ],
+            "General Settings": [
+                "Generelle innstillinger"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "Økten din har utløpt. Oppdater siden."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "For mange forespørsler. Vennligst vent et øyeblikk og prøv igjen."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "En uventet feil oppstod. Vennligst prøv igjen."
+            ],
+            "Confirm Action": [
+                "Bekreft handling"
+            ],
+            "Are you sure you want to proceed?": [
+                "Er du sikker på at du vil fortsette?"
+            ],
+            "Confirm": [
+                "Bekreft"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "For å bruke AI-funksjoner, vennligst konfigurer API-nøkkelen din og godta personvernavtalen i"
+            ],
+            "Session Expired": [
+                "Økten utløpt"
+            ],
+            "Refresh Page": [
+                "Oppdater siden"
+            ],
+            "No results found": [
+                "Ingen resultater funnet"
+            ],
+            "Tutorial": [
+                "Veiledning"
+            ],
+            "Learn how to use this feature": [
+                "Lær hvordan du bruker denne funksjonen"
+            ],
+            "Tutorial Screenshot": [
+                "Veiledningsskjermbilde"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "Dette er en veiledning som forklarer hvordan du bruker denne funksjonen."
+            ],
+            "Close Tutorial": [
+                "Lukk veiledningen"
+            ]
+        }
+    }
+}

@@ -207,17 +207,9 @@ class EPKB_KB_Wizard_Setup {
 					<!------- Wizard Content ---------->
 					<div class="epkb-wizard-content">   <?php
 
-						if ( $this->kb_config['modular_main_page_toggle'] == 'off' ) {
-							$notification_escaped = EPKB_HTML_Forms::notification_box_middle( array(
-								'type' => 'error',
-								'desc' => esc_html__( 'Please switch to Modules in Settings UI before proceeding with Setup Wizard', 'echo-knowledge-base' ),
-							), true );
-							echo $notification_escaped;
-						} else {
-							foreach ( $setup_steps_config as $step_index => $step_config ) {
-								//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								echo $step_config['content_escaped'];
-							}
+						foreach ( $setup_steps_config as $step_index => $step_config ) {
+							//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo $step_config['content_escaped'];
 						}		  ?>
 
 					</div>
@@ -272,9 +264,6 @@ class EPKB_KB_Wizard_Setup {
 			</div>
 
 		</div>		<?php
-
-		// Report error form
-		EPKB_HTML_Admin::display_report_admin_error_form();
 
 		// Success message
 		EPKB_HTML_Forms::dialog_confirm_action( [
@@ -839,31 +828,28 @@ class EPKB_KB_Wizard_Setup {
 		$kb_id = $this->kb_config['id'];
 		$main_page_has_blocks = EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config );
 
+		// Check if a page builder is installed
+		$has_page_builder = EPKB_Site_Builders::has_page_builder_enabled();
+		$builder_name = $this->get_detected_builder_name();
+
 		ob_start();	?>
 		<div id="epkb-wsb-step-<?php echo esc_attr( $step_number ); ?>-panel" class="epkb-wc-step-panel eckb-wizard-step-<?php echo esc_attr( $step_number ); ?>">
 			<div class="epkb-setup-wizard-features-choices-list">
 
-				<!-- Need Help -->
-				<div class="epkb-setup-wizard-features-choice-info">
-					<p><?php if ( $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ) {
-								esc_html_e( 'Knowledge Base - lists all categories and articles. Display it with blocks or the shortcode — both include visual editors.', 'echo-knowledge-base' );
-								} ?></p>
-					<p><?php if ( $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ) {
-								esc_html_e( 'Need help deciding between Blocks and Shortcodes?', 'echo-knowledge-base' );
-					 		 } else if ( $main_page_has_blocks ) {
-								esc_html_e( 'First Knowledge Base uses Blocks.', 'echo-knowledge-base' );
-					 		 } else {
-								esc_html_e( 'First Knowledge Base uses Shortcode.', 'echo-knowledge-base' );
-							 } ?></p>
-					<p><a class="epkb-setup-wizard-features-choice-info-link" href="https://www.echoknowledgebase.com/documentation/kb-blocks/" target="_blank"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' );  ?></a></p>
-				</div>  <?php
+				<h2 class="epkb-setup-wizard-features-choices-title"><?php esc_html_e( 'Two Ways to Display Your Knowledge Base', 'echo-knowledge-base' ); ?></h2>
 
-				if (  $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID || $main_page_has_blocks  ) {
-					$this->get_blocks_option( true );
-					$this->get_shortcode_option( false );
+				<?php
+
+				// Preselect shortcode option if page builder is detected
+				if ( $has_page_builder ) {
+					$this->get_shortcode_option( true, 1, $builder_name );
+					$this->get_blocks_option( false, 2 );
+				} elseif ( $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID || $main_page_has_blocks ) {
+					$this->get_blocks_option( true, 1 );
+					$this->get_shortcode_option( false, 2, $builder_name );
 				} else {
-					$this->get_shortcode_option( true );
-					$this->get_blocks_option( false );
+					$this->get_shortcode_option( true, 1, $builder_name );
+					$this->get_blocks_option( false, 2 );
 				} ?>
 
 			</div>
@@ -872,15 +858,15 @@ class EPKB_KB_Wizard_Setup {
 		return ob_get_clean();
 	}
 
-	private function get_blocks_option( $is_preselected ) {	?>
+	private function get_blocks_option( $is_preselected, $option_number = 1 ) {	?>
 		<!-- Use Blocks -->
 		<div class="epkb-setup-wizard-features-choice <?php echo $is_preselected ? 'epkb-setup-wizard-features-choice--active' : ''; ?>">
-				<div class="epkb-setup-wizard-features-choice__header"><span><?php esc_html_e( 'Use WordPress Blocks', 'echo-knowledge-base' ); ?></span><span class="epkb-setup-wizard-features-choice__header-label"><?php esc_html_e( 'Recommended', 'echo-knowledge-base' ); ?></span></div>
+				<div class="epkb-setup-wizard-features-choice__header"><span><?php echo esc_html( sprintf( __( 'Option %d - Use WordPress Blocks', 'echo-knowledge-base' ), $option_number ) ); ?></span><span class="epkb-setup-wizard-features-choice__header-label"><?php esc_html_e( 'Recommended', 'echo-knowledge-base' ); ?></span></div>
 				<div class="epkb-setup-wizard-features-choice__body">
 					<img alt="Blocks" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/blocks-choice.jpg' ); ?>">
 				</div>
-				<p class="epkb-setup-wizard-features-choice__footer"><?php echo esc_html__( 'Use KB blocks to display your Knowledge Base and use Gutenberg block editor to customize it.', 'echo-knowledge-base' ) . ' ' .
-																					esc_html__( 'Choose this option if you use WordPress blocks for your pages.', 'echo-knowledge-base' ); ?></p>
+				<p class="epkb-setup-wizard-features-choice__footer"><?php echo esc_html__( 'Choose this option if you use WordPress blocks for your pages.', 'echo-knowledge-base' ); ?></p>
+				<p><a class="epkb-setup-wizard-features-choice__learn-more" href="https://www.echoknowledgebase.com/documentation/kb-blocks/#Introduction-to-WordPress-Blocks" target="_blank"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a></p>
 				<label class="epkb-setup-wizard-features-choice__option__label">
 				<input type="radio" name="epkb-main-page-type" value="kb-blocks"<?php checked( $is_preselected ); ?>>
 			</label>
@@ -888,19 +874,53 @@ class EPKB_KB_Wizard_Setup {
 
 	}
 	
-	private function get_shortcode_option( $is_preselected ) {	?>
+	private function get_shortcode_option( $is_preselected, $option_number = 1, $builder_name = '' ) {
+		// Generate description based on whether a specific builder is detected
+		if ( ! empty( $builder_name ) ) {
+			$description = sprintf( esc_html__( 'Because %s is installed, the KB Shortcode option is recommended.', 'echo-knowledge-base' ), '<strong>' . $builder_name . '</strong>' );
+		} else {
+			$description = esc_html__( 'Choose this option if you use page builders such as Elementor or Divi.', 'echo-knowledge-base' );
+		}
+		?>
 		<!-- Use Shortcode -->
 		<div class="epkb-setup-wizard-features-choice <?php echo $is_preselected ? 'epkb-setup-wizard-features-choice--active' : ''; ?>">
-			<div class="epkb-setup-wizard-features-choice__header"><span><?php esc_html_e( 'Use Shortcode', 'echo-knowledge-base' ); ?></span></div>
+			<div class="epkb-setup-wizard-features-choice__header"><span><?php echo esc_html( sprintf( __( 'Option %d - Use Shortcodes', 'echo-knowledge-base' ), $option_number ) ); ?></span></div>
 			<div class="epkb-setup-wizard-features-choice__body">
 				<img alt="Shortcode" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/shortcode-choice.jpg' ); ?>">
 			</div>
-			<p class="epkb-setup-wizard-features-choice__footer"><?php echo esc_html__( 'Use the KB Shortcode to display your Knowledge Base, and customize it using the KB Configuration admin page.', 'echo-knowledge-base' ) .
-																				esc_html__( 'Choose this option if you use page builders such as Elementor and Divi.', 'echo-knowledge-base' );; ?></p>
+			<p class="epkb-setup-wizard-features-choice__footer"><?php echo wp_kses_post( $description ); ?></p>
+			<p><a class="epkb-setup-wizard-features-choice__learn-more" href="https://www.echoknowledgebase.com/documentation/knowledge-base-shortcode/#crel-597" target="_blank"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a></p>
 			<label class="epkb-setup-wizard-features-choice__option__label">
 			<input type="radio" name="epkb-main-page-type" value="kb-shortcode"<?php checked( $is_preselected ); ?>>
 			</label>
 		</div>	<?php
+	}
+
+	/**
+	 * Get the name of the detected page builder
+	 *
+	 * @return string
+	 */
+	private function get_detected_builder_name() {
+		if ( EPKB_Site_Builders::is_elementor_enabled() ) {
+			return esc_html__( 'Elementor', 'echo-knowledge-base' );
+		}
+		if ( EPKB_Site_Builders::is_divi_enabled() ) {
+			return esc_html__( 'Divi', 'echo-knowledge-base' );
+		}
+		if ( EPKB_Site_Builders::is_wpb_enabled() ) {
+			return esc_html__( 'WPBakery Page Builder', 'echo-knowledge-base' );
+		}
+		if ( EPKB_Site_Builders::is_vc_enabled() ) {
+			return esc_html__( 'Visual Composer', 'echo-knowledge-base' );
+		}
+		if ( EPKB_Site_Builders::is_beaver_enabled() ) {
+			return esc_html__( 'Beaver Builder', 'echo-knowledge-base' );
+		}
+		if ( EPKB_Site_Builders::is_so_enabled() ) {
+			return esc_html__( 'SiteOrigin Builder', 'echo-knowledge-base' );
+		}
+		return '';
 	}
 
 	/**
@@ -1122,8 +1142,13 @@ class EPKB_KB_Wizard_Setup {
 
 									foreach ( $layout_config['presets'] as $preset_name => $preset_config ) {    ?>
 										<!-- Preset -->
-										<div class="epkb-setup-wizard-module-preset<?php echo empty( $preset_config['preselected'] ) ? '' : ' ' . 'epkb-setup-wizard-module-preset--active'; ?> epkb-setup-wizard-module-preset--<?php echo esc_attr( $preset_name ); ?>">
-											<img src="<?php echo esc_url( $preset_config['image_url'] ); ?>" alt="">
+										<div class="epkb-setup-wizard-module-preset<?php echo empty( $preset_config['preselected'] ) ? '' : ' ' . 'epkb-setup-wizard-module-preset--active'; ?> epkb-setup-wizard-module-preset--<?php echo esc_attr( $preset_name ); ?>" data-layout="<?php echo esc_attr( $layout_name ); ?>" data-preset="<?php echo esc_attr( $preset_name ); ?>">
+											<div class="epkb-setup-wizard-module-preset__preview">
+												<div class="epkb-setup-wizard-module-preset__preview-loading">
+													<div class="epkb-setup-wizard-module-preset__preview-loading__spinner"></div>
+													<div class="epkb-setup-wizard-module-preset__preview-loading__text"><?php esc_html_e( 'Loading Preview...', 'echo-knowledge-base' ); ?></div>
+												</div>
+											</div>
 										</div>  <?php
 									}   ?>
 								</div>  <?php
@@ -1317,62 +1342,48 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Basic'] = [
 			'preselected' => $main_page_layout == 'Basic',
 			'presets' => [
-				'office' => [
-					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-office.jpg',
-					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
-				],
 				'organized' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-organized.jpg',
+					'preselected'   => true,
 					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
+				'office' => [
+					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
+				],
 				'creative' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-creative.jpg',
 					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'image' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-image.jpg',
 					'title'         => esc_html__( 'Image', 'echo-knowledge-base' ),
 				],
 				'informative' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-informative.jpg',
 					'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
 				],
 				'formal' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-formal.jpg',
 					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
 				],
 				'elegant' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-elegant.jpg',
 					'title'         => esc_html__( 'Elegant', 'echo-knowledge-base' ),
 				],
 				'icon_focused' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-organized-no-icons.jpg',
 					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
 				],
 				'bright' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-bright.jpg',
 					'title'         => esc_html__( 'Bright', 'echo-knowledge-base' ),
 				],
 				'compact' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-compact.jpg',
 					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
 				],
 				'sharp' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-sharp.jpg',
 					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
 				'simple' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-simple.jpg',
 					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 				'modern' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-modern.jpg',
 					'title'         => esc_html__( 'Modern', 'echo-knowledge-base' ),
 				],
-				'gray' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-gray.jpg',
-					'title'         => esc_html__( 'Gray', 'echo-knowledge-base' ),
+				'teal' => [
+					'title'         => esc_html__( 'Teal', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1382,57 +1393,44 @@ class EPKB_KB_Wizard_Setup {
 			'preselected' => $main_page_layout == 'Tabs',
 			'presets' => [
 
-				'office_tabs' => [
-					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-office.jpg',
-					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
-				],
 				'organized_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-organized.jpg',
+					'preselected'   => true,
 					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
+				'office_tabs' => [
+					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
+				],
 				'modern_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-modern.jpg',
 					'title'         => esc_html__( 'Modern', 'echo-knowledge-base' ),
 				],
 				'image_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-image.jpg',
 					'title'         => esc_html__( 'Image', 'echo-knowledge-base' ),
 				],
 				'informative_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-informative.jpg',
 					'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
 				],
 				'creative_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-creative.jpg',
 					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'formal_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-formal.jpg',
 					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
 				],
 				'compact_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-compact.jpg',
 					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
 				],
 				'sharp_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-sharp.jpg',
 					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
 				'elegant_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-elegant.jpg',
 					'title'         => esc_html__( 'Elegant', 'echo-knowledge-base' ),
 				],
 				'icon_focused_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-organized-no-icons.jpg',
 					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
 				],
 				'simple_tabs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-simple.jpg',
 					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 				'clean' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-clean.jpg',
 					'title'         => esc_html__( 'Clean', 'echo-knowledge-base' ),
 				],
 			],
@@ -1444,43 +1442,33 @@ class EPKB_KB_Wizard_Setup {
 			'presets' => [
 				'office_categories' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-office.jpg',
 					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
 				],
 				'corporate' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-corporate.jpg',
 					'title'         => esc_html__( 'Corporate', 'echo-knowledge-base' ),
 				],
 				'creative_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-creative.jpg',
 					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'business' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-business.jpg',
 					'title'         => esc_html__( 'Business', 'echo-knowledge-base' ),
 				],
 				'minimalistic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-minimalistic.jpg',
 					'title'         => esc_html__( 'Minimalistic', 'echo-knowledge-base' ),
 				],
 				'sharp_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-sharp.jpg',
 					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
 				'icon_focused_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-no-icons.jpg',
 					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
 				],
 				'compact_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-compact.jpg',
 					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
 				],
 				'formal_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-formal.jpg',
 					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
 				],
 				'simple_categories' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-simple.jpg',
 					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 			],
@@ -1490,29 +1478,23 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Classic'] = [
 			'preselected' => $main_page_layout == 'Classic',
 			'presets' => [
-				'standard_classic' => [
+				'organized_classic' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-standard.jpg',
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
+				],
+				'standard_classic' => [
 					'title'         => esc_html__( 'Standard', 'echo-knowledge-base' ),
 				],
 				'sharp_classic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-sharp.jpg',
 					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
-				'organized_classic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-organized.jpg',
-					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
-				],
 				'creative_classic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-creative.jpg',
 					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'simple_classic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-simple.jpg',
 					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 				'icon_focused_classic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-no-icons.jpg',
 					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
 				],
 			],
@@ -1522,29 +1504,23 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Drill-Down'] = [
 			'preselected' => $main_page_layout == 'Drill-Down',
 			'presets' => [
-				'standard_drill_down' => [
+				'organized_drill_down' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-standard.jpg',
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
+				],
+				'standard_drill_down' => [
 					'title'         => esc_html__( 'Standard', 'echo-knowledge-base' ),
 				],
 				'sharp_drill_down' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-sharp.jpg',
 					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
-				'organized_drill_down' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-organized.jpg',
-					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
-				],
 				'creative_drill_down' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-creative.jpg',
 					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'simple_drill_down' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-simple.jpg',
 					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 				'icon_focused_drill_down' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-no-icons.jpg',
 					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
 				],
 			],
@@ -1559,27 +1535,21 @@ class EPKB_KB_Wizard_Setup {
 				'presets' => [
 					'grid_basic' => [
 						'preselected'   => true,
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-basic.jpg',
 						'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 					],
 					'grid_demo_5' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-informative.jpg',
 						'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
 					],
 					'grid_demo_6' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-simple.jpg',
 						'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 					],
 					'grid_demo_8' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-simple-2.jpg',
 						'title'         => esc_html__( 'Simple 2', 'echo-knowledge-base' ),
 					],
 					'grid_demo_7' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-left-icon.jpg',
 						'title'         => esc_html__( 'Left Icon Style', 'echo-knowledge-base' ),
 					],
 					'grid_demo_9' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-icon-squares.jpg',
 						'title'         => esc_html__( 'Icon Squares', 'echo-knowledge-base' ),
 					],
 				],
@@ -1591,23 +1561,18 @@ class EPKB_KB_Wizard_Setup {
 				'presets' => [
 					'sidebar_basic' => [
 						'preselected'   => true,
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-basic.jpg',
 						'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 					],
 					'sidebar_colapsed' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-collapsed.jpg',
 						'title'         => esc_html__( 'Collapsed', 'echo-knowledge-base' ),
 					],
 					'sidebar_formal' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-formal.jpg',
 						'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
 					],
 					'sidebar_compact' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-compact.jpg',
 						'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
 					],
 					'sidebar_plain' => [
-						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-plain.jpg',
 						'title'         => esc_html__( 'Plain', 'echo-knowledge-base' ),
 					],
 				],

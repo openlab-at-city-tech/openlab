@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Loading...": [
+                "Indlæser..."
+            ],
+            "AI Features Required": [
+                "AI-funktioner krævet"
+            ],
+            "Go to AI Settings": [
+                "Gå til AI-indstillinger"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "AI-funktionerne er ikke aktiveret. Aktivér venligst AI-funktionerne for at bruge Indholdsanalysen."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Kunne ikke indlæse konfigurationen for Indholdsanalysen."
+            ],
+            "Content Analysis component not loaded.": [
+                "Indholdsanalysen-komponenten er ikke indlæst."
+            ]
+        }
+    }
+}

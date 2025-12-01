@@ -165,7 +165,7 @@ class EPKB_Convert {
 		}
 
 		$post_type_label = EPKB_Utilities::get_post_type_label( $post_type_object );
-		$mapping_title = sprintf( '%s %s', esc_html__( 'Map Categories and Tags from', 'echo-knowledge-base' ), $post_type_label ) . ': '; ?>
+		$mapping_title = esc_html__( 'Map Categories and Tags froms', 'echo-knowledge-base' ) . ': ' . $post_type_label; ?>
 
 		<div class="epkb-author-mapping-container">
 		<div class="epkb-author-mapping__header">

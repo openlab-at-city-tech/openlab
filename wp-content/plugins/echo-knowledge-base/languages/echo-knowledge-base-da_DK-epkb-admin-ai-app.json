@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Go to General Settings": [
+                "Gå til Generelle indstillinger"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "For at bruge AI-funktioner, konfigurer venligst din API-nøgle og accepter data-privatlivsaftalen i Generelle indstillinger, og aktiver derefter AI Søgning eller AI chat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "For at bruge træningsdata, aktiver venligst enten AI chat eller AI Søgning i deres respektive faner."
+            ],
+            "Data Collection": [
+                "Dataindsamling"
+            ],
+            "OpenAI API Key Required": [
+                "OpenAI API-nøgle påkrævet"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "For at bruge AI-funktioner skal du konfigurere din OpenAI API-nøgle."
+            ],
+            "Configure API Key": [
+                "Konfigurer API-nøgle"
+            ],
+            "Failed to load tab data": [
+                "Kunne ikke indlæse fane-data"
+            ],
+            "Unknown tab": [
+                "Ukendt fane"
+            ],
+            "AI Configuration": [
+                "AI-konfiguration"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Fejl: Ingen faner konfigureret. Kontroller konfigurationen."
+            ],
+            "New training data collection created": [
+                "Ny indsamling af træningsdata oprettet"
+            ],
+            "Failed to create collection": [
+                "Fejl ved oprettelse af samling"
+            ],
+            "AI features must be enabled to access this tab": [
+                "AI-funktioner skal aktiveres for at få adgang til denne fane"
+            ],
+            "Reloading page...": [
+                "Genindlæser siden..."
+            ]
+        }
+    }
+}

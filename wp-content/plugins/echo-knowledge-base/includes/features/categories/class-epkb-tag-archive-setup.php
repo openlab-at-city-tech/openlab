@@ -346,7 +346,49 @@ class EPKB_Tag_Archive_Setup {
 	}
 
 	private static function get_navigation( $args ) {
-        do_action( 'eckb-article-v2-elay_sidebar', $args );
+
+		$navigation_type = $args['config']['archive_sidebar_navigation_type'];
+
+		// Categories Focused Layout navigation
+		if ( $navigation_type == 'navigation-categories' ) {
+			self::display_categories_sidebar( $args['config'] );
+
+		// Current category and everything below
+		} else if ( $navigation_type == 'navigation-current-category' ) {
+
+			$core_nav_sidebar = new EPKB_Layout_Article_Sidebar();
+			$core_nav_sidebar->display_article_sidebar( $args['config'], true );
+
+		// Elegant Layouts Article-like Navigation
+		} else if ( $navigation_type == 'navigation-all-categories' && EPKB_Utilities::is_elegant_layouts_enabled() ) {
+			do_action( 'eckb-article-v2-elay_sidebar', $args );
+
+		// core Article-like Navigation
+		} else if ( $navigation_type == 'navigation-all-categories' ) {
+			$core_nav_sidebar = new EPKB_Layout_Article_Sidebar();
+			$core_nav_sidebar->display_article_sidebar( $args['config'] );
+		}
+	}
+
+	/**
+	 * For Category Focused Layout show categories in the sidebar
+	 * Note: Tags are not hierarchical, so this shows all categories
+	 *
+	 * @param $kb_config
+	 */
+	private static function display_categories_sidebar( $kb_config ) {
+
+		$term = EPKB_Utilities::get_current_term();
+		if ( empty( $term ) ) {
+			return;
+		}
+
+		// Since tags are not hierarchical, we'll show top-level categories
+		$parent_category_id = 0;
+		$active_id = 0;
+
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo EPKB_Layout_Category_Sidebar::get_layout_categories_list( $kb_config['id'], $kb_config, $parent_category_id, $active_id );
 	}
 
 

@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Demo Article": [
+                "Demoartikel"
+            ],
+            "Categories": [
+                "Kategorier"
+            ],
+            "Article Content": [
+                "Artikelinnehåll"
+            ],
+            "Analyzing...": [
+                "Analyserar …"
+            ],
+            "Content Gaps Analysis": [
+                "Analys av innehållsgap"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "AI-drivna taggförslag"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "Gapanalys är endast tillgänglig med tillägget AI Features."
+            ],
+            "Readability": [
+                "Läsbarhet"
+            ],
+            "Tag added successfully": [
+                "Etikett tillagd"
+            ],
+            "Tag removed successfully": [
+                "Etikett borttagen"
+            ],
+            "Tag updated successfully": [
+                "Tagg uppdaterades framgångsrikt"
+            ],
+            "Add New Tag": [
+                "Lägg till ny etikett"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "Etiketter"
+            ],
+            "Edit Article": [
+                "Redigera artikel"
+            ],
+            "View Article": [
+                "Visa artiklar"
+            ],
+            "Failed to save tag changes": [
+                "Misslyckades med att spara taggändringar"
+            ],
+            "Failed to add tag": [
+                "Misslyckades med att lägga till tagg"
+            ],
+            "Failed to remove tag": [
+                "Misslyckades med att ta bort tagg"
+            ],
+            "Failed to remove tags": [
+                "Misslyckades med att ta bort taggar"
+            ],
+            "Failed to update tag": [
+                "Misslyckades med att uppdatera tagg"
+            ],
+            "Not Analyzed": [
+                "Ej analyserad"
+            ],
+            "Demo Analysis Data": [
+                "Demonstrationsdata för analys"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "Det här är en demonstrationsartikel med provdata för analysändamål. Skapa dina egna artiklar för att se riktiga resultat av innehållsanalysen."
+            ],
+            "Loading analysis details...": [
+                "Laddar analysdetaljer..."
+            ],
+            "No analysis details available for this article.": [
+                "Inga analysdetaljer tillgängliga för den här artikeln."
+            ],
+            "Content Gaps": [
+                "Innehållsgap"
+            ],
+            "Overall Score": [
+                "Totalpoäng"
+            ],
+            "Article Importance": [
+                "Artikelns betydelse"
+            ],
+            "Readability analysis completed": [
+                "Läsbarhetsanalys avslutad"
+            ],
+            "Failed to run readability analysis": [
+                "Misslyckades med att köra läsbarhetsanalysen"
+            ],
+            "Re-analyze": [
+                "Analysera igen"
+            ],
+            "Readability Analysis": [
+                "Läsbarhetsanalys"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "Inga läsbarhetsproblem hittades. Artikeln är tydlig och välskriven."
+            ],
+            "Analysis Error": [
+                "Analysfel"
+            ],
+            "An error occurred during readability analysis.": [
+                "Ett fel uppstod under läsbarhetsanalysen."
+            ],
+            "Retrying analysis...": [
+                "Återförsöker analys..."
+            ],
+            "Retry Analysis": [
+                "Återförsök av analysen"
+            ],
+            "Analyzing article readability...": [
+                "Analyserar artikelns läsbarhet..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "Klicka på knappen nedan för att analysera den här artikelns läsbarhet med AI."
+            ],
+            "Run Readability Analysis": [
+                "Kör läsbarhetsanalys"
+            ],
+            "No article content available": [
+                "Inget artikelinnehåll är tillgängligt"
+            ],
+            "Content Gaps analysis completed": [
+                "Innehållsgap-analys genomförd"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "Misslyckades med att köra innehållsgap-analys"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "Inga innehållsgap hittades. Artikeln verkar vara heltäckande."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "Ett fel uppstod under innehållsgap-analys."
+            ],
+            "Learn More About AI Features": [
+                "Lär dig mer om AI-funktioner"
+            ],
+            "Analyzing article for content gaps...": [
+                "Analyserar artikel för innehållsgap..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "Klicka på knappen nedan för att analysera den här artikeln för saknat innehåll med AI."
+            ],
+            "Run Content Gaps Analysis": [
+                "Kör innehållsgap-analys"
+            ],
+            "Tags analysis completed": [
+                "Tagganalys genomförd"
+            ],
+            "Failed to run tags analysis": [
+                "Misslyckades med att köra tagganalys"
+            ],
+            "Re-analyze Tags": [
+                "Återanalysera taggar"
+            ],
+            "Tag Count": [
+                "Antal taggar"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "Antalet taggar är inom det rekommenderade intervallet (3-10)."
+            ],
+            "Tag Relevance": [
+                "Taggrelevans"
+            ],
+            "Not Applicable due to missing tags": [
+                "Ej tillämplig på grund av saknade taggar"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "Alla taggar är relevanta och förekommer i artikeln."
+            ],
+            "Tag Format": [
+                "Taggformat"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "Alla taggar är korrekt formaterade och följer bästa praxis."
+            ],
+            "Duplicate Tags": [
+                "Duplicerade taggar"
+            ],
+            "No duplicate or similar tags found.": [
+                "Inga duplicerade eller liknande taggar hittades."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "Artikeln har rätt antal kategorier (1-3)."
+            ],
+            "Add": [
+                "Lägg till"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "Baserat på AI-innehållsanalys, överväg att lägga till dessa taggar:"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "Få tillägget AI-funktioner för att låsa upp AI-drivna taggförslag."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "Inga taggförslag tillgängliga för denna artikel för närvarande."
+            ],
+            "Broad Tags": [
+                "Breda taggar"
+            ],
+            "(General categories)": [
+                "(Allmänna kategorier)"
+            ],
+            "Specific Tags": [
+                "Specifika taggar"
+            ],
+            "(Detailed topics)": [
+                "(Detaljerade ämnen)"
+            ],
+            "Article Tags": [
+                "Artikeltaggar"
+            ],
+            "Restore tag": [
+                "Återställ tagg"
+            ],
+            "Mark for deletion": [
+                "Markera för radering"
+            ],
+            "No tags": [
+                "Inga taggar"
+            ],
+            "Remove tag": [
+                "Ta bort tagg"
+            ],
+            "Tag name": [
+                "Taggnamn"
+            ],
+            "Tag Best Practices": [
+                "Bästa praxis för taggar"
+            ],
+            "Guidelines:": [
+                "Riktlinjer:"
+            ],
+            "Relevant & Keyword-Rich:": [
+                "Relevant och nyckelordsrik:"
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "Använd beskrivande taggar som matchar innehåll och sökord."
+            ],
+            "Avoid Duplicates:": [
+                "Undvik dubbletter:"
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "Använd inte namn på kategorier som taggar (eller tvärtom)."
+            ],
+            "Reuse Consistently:": [
+                "Återanvänd konsekvent:"
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "Följ en strategi; undvik unika taggar per inlägg för att förhindra 'taggbloat' (tunna sidor skadar SEO). Taggar bör gruppera flera inlägg; indexera inte tunna arkiv (≤2 inlägg)."
+            ],
+            "Keep Short:": [
+                "Håll det kort:"
+            ],
+            "1–3 words, reusable.": [
+                "1–3 ord, återanvändbara."
+            ],
+            "Editor Checklist:": [
+                "Redigeringschecklista:"
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "Gruppera 3 eller fler inlägg (nu eller snart)?"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "1–3 ord, skiljer sig från befintliga taggar/kategorier?"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "Slå ihop synonymer istället för nya taggar?"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "Indexera inte om innehållet är tunt; indexera om det är väsentligt och har en beskrivning"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "Obs: Spara ändringar uppdaterar omdirigeringar för taggarkivsidan (valfritt)"
+            ],
+            "Save Changes": [
+                "Spara ändringar"
+            ]
+        }
+    }
+}

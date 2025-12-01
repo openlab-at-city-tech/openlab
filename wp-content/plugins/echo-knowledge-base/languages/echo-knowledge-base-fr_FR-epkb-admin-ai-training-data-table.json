@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Title": [
+                "Titre"
+            ],
+            "Filter": [
+                "Filtre"
+            ],
+            "Status": [
+                "État"
+            ],
+            "All": [
+                "Tous"
+            ],
+            "Page": [
+                "Page"
+            ],
+            "Close": [
+                "Fermer"
+            ],
+            "Cancel": [
+                "Annuler"
+            ],
+            "selected": [
+                "sélectionné"
+            ],
+            "Article": [
+                "Article"
+            ],
+            "Updated": [
+                "Mis à jour"
+            ],
+            "Next": [
+                "Suivant"
+            ],
+            "Previous": [
+                "Précédent"
+            ],
+            "Loading...": [
+                "Chargement..."
+            ],
+            "Error": [
+                "Erreur"
+            ],
+            "Pending": [
+                "En attente"
+            ],
+            "Delete": [
+                "Supprimer"
+            ],
+            "of": [
+                "de"
+            ],
+            "Refreshing...": [
+                "Actualisation..."
+            ],
+            "Refresh": [
+                "Actualiser"
+            ],
+            "Searching server for more results...": [
+                "Recherche de résultats supplémentaires sur le serveur..."
+            ],
+            "Data refreshed successfully": [
+                "Les données ont été mises à jour avec succès"
+            ],
+            "Delete Selected Items": [
+                "Supprimer les éléments sélectionnés"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Êtes-vous sûr de vouloir supprimer les éléments sélectionnés ?"
+            ],
+            "Items deleted successfully": [
+                "Éléments supprimés avec succès"
+            ],
+            "Sort": [
+                "Trier"
+            ],
+            "Completed": [
+                "Complété"
+            ],
+            "Outdated": [
+                "Obsolète"
+            ],
+            "Added": [
+                "Ajouté"
+            ],
+            "Failed to load training data": [
+                "Échec du chargement des données d'apprentissage"
+            ],
+            "Failed to delete items": [
+                "Échec de la suppression des éléments"
+            ],
+            "Delete Items": [
+                "Supprimer les éléments"
+            ],
+            "Syncing": [
+                "Synchronisation en cours"
+            ],
+            "Canceled": [
+                "Annulé"
+            ],
+            "How to get started": [
+                "Comment démarrer"
+            ],
+            "Choose Training Data": [
+                "Choisir les données d'apprentissage"
+            ],
+            "Pick the content types to include.": [
+                "Sélectionnez les types de contenu à inclure."
+            ],
+            "Send Data to AI": [
+                "Envoyer les données à l'IA"
+            ],
+            "Select items in the table, then sync them.": [
+                "Sélectionnez les éléments dans le tableau, puis synchronisez-les."
+            ],
+            "Other Actions": [
+                "Autres actions"
+            ],
+            "Rename the collection or delete items.": [
+                "Renommer la collection ou supprimer des éléments."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Astuce : Commencez avec un petit ensemble pour tester le flux."
+            ],
+            "Sync": [
+                "Synchroniser"
+            ],
+            "Sync Complete": [
+                "Synchronisation terminée"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "Rechercher par titre, type, URL ou ID..."
+            ],
+            "Preparing sync...": [
+                "Préparation de la synchronisation..."
+            ],
+            "Loading training data...": [
+                "Chargement des données d'apprentissage..."
+            ],
+            "Type": [
+                "Type"
+            ],
+            "No training data found": [
+                "Aucune donnée d'apprentissage trouvée"
+            ],
+            "Edit note": [
+                "Modifier la note"
+            ],
+            "View Error": [
+                "Afficher l'erreur"
+            ],
+            "View content": [
+                "Afficher le contenu"
+            ],
+            "KB Files": [
+                "Fichiers de la base de connaissances"
+            ],
+            "Never": [
+                "Jamais"
+            ],
+            "Error Details": [
+                "Détails de l’erreur"
+            ],
+            "Failed to load content": [
+                "Échec du chargement du contenu"
+            ],
+            "Post ID:": [
+                "ID de l’article:"
+            ],
+            "Loading content...": [
+                "Chargement du contenu..."
+            ],
+            "Error Processing Content": [
+                "Erreur lors du traitement du contenu"
+            ],
+            "Original Content": [
+                "Contenu d'origine"
+            ],
+            "Processed Content": [
+                "Contenu traité"
+            ],
+            "No content available": [
+                "Aucun contenu disponible"
+            ],
+            "No processed content available": [
+                "Aucun contenu traité disponible"
+            ]
+        }
+    }
+}

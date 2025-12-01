@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Error": [
+                "त्रुटि"
+            ],
+            "Analyze Content": [
+                "सामग्री विश्लेषण करें"
+            ],
+            "Improve Content": [
+                "सामग्री में सुधार करें"
+            ],
+            "Improve": [
+                "सुधारें"
+            ],
+            "Demo Analytics": [
+                "डेमो उपयोग आँकड़े और रिपोर्टिंग"
+            ],
+            "Actions": [
+                "क्रियाएं"
+            ],
+            "Analyzing": [
+                "विश्लेषण किया जा रहा है"
+            ],
+            "No articles found": [
+                "कोई लेख नहीं मिला"
+            ],
+            "To Analyze": [
+                "विश्लेषण करें"
+            ],
+            "To Improve": [
+                "सुधारें"
+            ],
+            "Please select exactly one article to improve": [
+                "कृपया सुधार के लिए केवल एक डॉक्यूमेंटेशन पेज चुनें"
+            ],
+            "Demo Data Displayed": [
+                "डेमो डेटा दिखाया गया"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "यह प्रदर्शन के लिए दिखाए गए डेमो विश्लेषण डेटा है। एक बार आप नई डॉक्यूमेंटेशन पेज बनाते हैं, आप उनका विश्लेषण कर सकते हैं ताकि वास्तविक सामग्री विश्लेषण परिणाम देख सकें।."
+            ],
+            "Select All That Need Analysis": [
+                "जिनमें विश्लेषण की जरूरत है, सभी चुनें"
+            ],
+            "Analyze (Sync not loaded)": [
+                "विश्लेषण करें (सिंक लोड नहीं हुआ)"
+            ],
+            "Score Legend": [
+                "स्कोर विवरण"
+            ],
+            "Excellent": [
+                "उत्कृष्ट"
+            ],
+            "Good": [
+                "अच्छा"
+            ],
+            "Below 60%": [
+                "60% से नीचे"
+            ],
+            "Needs Improvement": [
+                "सुधार की आवश्यकता"
+            ],
+            "Importance Legend": [
+                "महत्व की व्याख्या"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "डॉक्यूमेंटेशन पेज देखने के आधार पर - अधिक दृश्य का मतलब अधिक प्राथमिकता है।."
+            ],
+            "Status Legend": [
+                "स्थिति का स्पष्टीकरण"
+            ],
+            "Not analyzed or updated": [
+                "विश्लेषण नहीं किया गया या अद्यतन नहीं किया गया"
+            ],
+            "Score below 80%": [
+                "80% से कम स्कोर"
+            ],
+            "Done": [
+                "समाप्त"
+            ],
+            "Completed": [
+                "पूर्ण"
+            ],
+            "Ignored": [
+                "अनदेखा किया गया"
+            ],
+            "Not important now": [
+                "अभी महत्वपूर्ण नहीं"
+            ],
+            "In progress": [
+                "प्रगति में"
+            ],
+            "Failed - retry needed": [
+                "असफल - पुनः प्रयास आवश्यक"
+            ],
+            "Invalid status": [
+                "अमान्य स्थिति"
+            ],
+            "Failed to update article status": [
+                "लेख की स्थिति अपडेट नहीं हो सकी"
+            ],
+            "Error updating article status": [
+                "लेख की स्थिति अपडेट करते समय त्रुटि"
+            ],
+            "Ignore": [
+                "अनदेखा करें"
+            ],
+            "Remove": [
+                "हटाएं"
+            ],
+            "Loading articles...": [
+                "लेख लोड हो रहे हैं..."
+            ],
+            "Important and Low Score": [
+                "महत्वपूर्ण और कम स्कोर"
+            ],
+            "Top Important": [
+                "सबसे महत्वपूर्ण"
+            ],
+            "Lowest Score": [
+                "सबसे कम स्कोर"
+            ],
+            "Recently Analyzed": [
+                "हाल ही में विश्लेषण किया गया"
+            ],
+            "Unknown sub-tab": [
+                "अज्ञात उप-टैब"
+            ]
+        }
+    }
+}

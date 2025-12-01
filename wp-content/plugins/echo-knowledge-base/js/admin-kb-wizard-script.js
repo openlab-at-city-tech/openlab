@@ -355,15 +355,19 @@ jQuery(document).ready(function($) {
 				opacity: 0.8,
 				placeholder: 'epkb-sortable-placeholder',
 			});
-			
-			// Order Categories
-			$('.epkb-wizard-ordering-ordering-preview .eckb-categories-list, .epkb-wizard-ordering-ordering-preview .elay-sidebar__cat-container').sortable({
+
+			// Order Categories - make individual category sections (epkb_cat_*) sortable across all rows
+			$('.epkb-wizard-ordering-ordering-preview .epkb-section-container').sortable({
+				items: 'section[id^="epkb_cat_"]',
 				axis: 'x,y',
 				forceHelperSize: true,
 				forcePlaceholderSize: true,
-				// handle: '.epkb-sortable-articles',
 				opacity: 0.8,
 				placeholder: 'epkb-sortable-placeholder',
+				stop: function(event, ui) {
+					// Reorganize categories to ensure max 3 per row
+					epkb_reorganize_category_rows();
+				}
 			});
 			
 			// Order Sub-categories
@@ -404,6 +408,58 @@ jQuery(document).ready(function($) {
 		$('.epkb-wizard-ordering-ordering-preview .epkb-category-level-2-3').on('click', function(){
 			$(this).parent().children('ul').toggleClass('active');
 		});
+	}
+
+	// Reorganize categories to ensure correct number per row based on column setting
+	function epkb_reorganize_category_rows() {
+		let $rows = $('.epkb-wizard-ordering-ordering-preview .epkb-ml__module-categories-articles__row');
+		let $categoriesList = $('.epkb-wizard-ordering-ordering-preview .eckb-categories-list');
+
+		// Determine max categories per row from class (default to 3)
+		let maxPerRow = 3;
+		if ($categoriesList.hasClass('epkb-one-col')) {
+			maxPerRow = 1;
+		} else if ($categoriesList.hasClass('epkb-two-col')) {
+			maxPerRow = 2;
+		} else if ($categoriesList.hasClass('epkb-three-col')) {
+			maxPerRow = 3;
+		} else if ($categoriesList.hasClass('epkb-four-col')) {
+			maxPerRow = 4;
+		}
+
+		// Collect all categories in order
+		let $allCategories = $('.epkb-wizard-ordering-ordering-preview section[id^="epkb_cat_"]');
+
+		// Redistribute categories across rows, respecting column count
+		let categoryIndex = 0;
+		$rows.each(function() {
+			let $row = $(this);
+			let categoriesInRow = 0;
+
+			// Place up to maxPerRow categories in this row
+			while (categoryIndex < $allCategories.length && categoriesInRow < maxPerRow) {
+				$allCategories.eq(categoryIndex).appendTo($row);
+				categoryIndex++;
+				categoriesInRow++;
+			}
+		});
+
+		// If there are more categories than can fit in existing rows, add them to new rows
+		if (categoryIndex < $allCategories.length) {
+			let $lastRow = $rows.last();
+			while (categoryIndex < $allCategories.length) {
+				// Check if we need a new row
+				if ($lastRow.children('section[id^="epkb_cat_"]').length >= maxPerRow) {
+					// Create a new row
+					let $newRow = $('<div class="epkb-ml__module-categories-articles__row"></div>');
+					$rows.last().after($newRow);
+					$lastRow = $newRow;
+					$rows = $('.epkb-wizard-ordering-ordering-preview .epkb-ml__module-categories-articles__row');
+				}
+				$allCategories.eq(categoryIndex).appendTo($lastRow);
+				categoryIndex++;
+			}
+		}
 	}
 
 	
@@ -623,10 +679,12 @@ jQuery(document).ready(function($) {
 	function epkb_get_new_main_page_sequence() {
 		let new_sequence = '';
 
-		// make virtual tree and sort articles when artiles on the top of the categories
-		if ($('.epkb-wizard-ordering-ordering-preview').find('#epkb-content-container').length) {
+		// make virtual tree and sort articles when articles on the top of the categories
+		// New modular structure (#epkb-modular-main-page-container)
+		let $contentContainer = $('.epkb-wizard-ordering-ordering-preview').find('#epkb-content-container');
+		if ($contentContainer.length) {
 			// not sidebar template
-			$('.epkb-wizard-ordering-ordering-preview').append('<div class="epkb-virtual-articles" style="display:none!important;">' + $('.epkb-wizard-ordering-ordering-preview').find('#epkb-content-container').html() + '</div>');
+			$('.epkb-wizard-ordering-ordering-preview').append('<div class="epkb-virtual-articles" style="display:none!important;">' + $contentContainer.html() + '</div>');
 
 			$('.epkb-virtual-articles').find('ul.epkb-articles').each(function(){
 				// check if we have articles on the top - move them to the bottom

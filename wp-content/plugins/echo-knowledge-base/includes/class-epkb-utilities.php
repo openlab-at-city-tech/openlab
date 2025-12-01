@@ -302,6 +302,28 @@ class EPKB_Utilities {
 		return $output;
 	}
 
+	/**
+	 * Safely create a DateTime object with exception handling
+	 *
+	 * @param string $datetime String representing the date/time (default: 'now')
+	 * @param DateTimeZone|null $timezone Optional timezone object (default: null - uses WP timezone)
+	 *
+	 * @return DateTime|null DateTime object on success, null on failure
+	 */
+	public static function create_datetime( $datetime = 'now', $timezone = null ) {
+
+		// Use WordPress timezone if not provided
+		if ( $timezone === null ) {
+			$timezone = wp_timezone();
+		}
+
+		try {
+			return new DateTime( $datetime, $timezone );
+		} catch ( Exception $e ) {
+			return null;
+		}
+	}
+
 
 	/**************************************************************************************************************************
 	 *
@@ -506,9 +528,17 @@ class EPKB_Utilities {
 	 */
 	public static function sanitize_hex_color( $color ) {
 
-		// if the color is an empty string, return it as-is
+		// keep original semantics for empty/non-string
 		if ( '' === $color || ! is_string( $color ) ) {
 			return '';
+		}
+
+		$color = trim( $color );
+
+		// allow CSS variables from theme.json palettes, e.g. var(--wp--preset--color--contrast)
+		// (using strpos === 0 to ensure it starts with 'var(' for security)
+		if ( 0 === strpos( $color, 'var(' ) ) {
+			return sanitize_text_field( $color );
 		}
 
 		// This regex pattern checks for:
@@ -522,7 +552,7 @@ class EPKB_Utilities {
 		//   |[A-Fa-f0-9]{8})       OR matches exactly 8 hex chars (including alpha)
 		// $                        End of string
 		if ( preg_match( '/^#(?:[A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/', $color ) ) {
-			return $color;
+			return strtolower( $color );
 		}
 
 		// If the input doesn't match any of the valid formats, return default gray color.
@@ -539,28 +569,24 @@ class EPKB_Utilities {
 	public static function sanitize_get_id( $id ) {
 
 		if ( empty( $id ) || is_wp_error( $id ) ) {
-			EPKB_Logging::add_log( 'Error occurred (01)' );
 			return new WP_Error( 'E001', 'invalid ID' );
 		}
 
 		if ( is_array( $id ) ) {
 			if ( ! isset( $id['id']) ) {
-				EPKB_Logging::add_log( 'Error occurred (02)' );
 				return new WP_Error('E002', 'invalid ID' );
 			}
 
 			$id_value = $id['id'];
 			if ( ! self::is_positive_int( $id_value ) ) {
-				EPKB_Logging::add_log( 'Error occurred (03)', $id_value );
-				return new WP_Error( 'E003', 'invalid ID' );
+				return new WP_Error( 'E003', 'invalid ID: ' . self::get_variable_string( $id_value ) );
 			}
 
 			return (int) $id_value;
 		}
 
 		if ( ! self::is_positive_int( $id ) ) {
-			EPKB_Logging::add_log( 'Error occurred (04)', $id );
-			return new WP_Error( 'E004', 'invalid ID' );
+			return new WP_Error( 'E004', 'invalid ID: ' . self::get_variable_string( $id ) );
 		}
 
 		return (int) $id;
@@ -984,7 +1010,6 @@ class EPKB_Utilities {
  												 ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)",
 												$option_name, $serialized_value, 'no' ) );
 		if ( $result === false ) {
-			EPKB_Logging::add_log( 'Failed to update option', $option_name );
 			return new WP_Error( '435', 'Failed to update option ' . $option_name );
 		}
 
@@ -1278,11 +1303,6 @@ class EPKB_Utilities {
 
 	public static function mb_strtolower( $string ) {
 		return function_exists( 'mb_strtolower' ) ? mb_strtolower( $string ) : strtolower( $string );
-	}
-
-	public static function is_logged_on() {
-		$user = self::get_current_user();
-		return ! empty( $user );
 	}
 
 	/**
@@ -1833,6 +1853,7 @@ class EPKB_Utilities {
 			case 'cr'.'el' : return self::is_creative_addons_widgets_enabled();
 			case 'am'.'gp' : return self::is_groups_enabled();
 			case 'am'.'cr' : return self::is_custom_roles_enabled();
+			case 'ai'.'fp' : return self::is_ai_features_pro_enabled();
 			default: return false;
 		}
 	}
@@ -1973,9 +1994,8 @@ class EPKB_Utilities {
 		// Log email errors if need
 		$error_message = esc_html__( 'Failed to send the email.', 'echo-knowledge-base' );
 
-		/** $epkb_email_error @ WP_Error */
+		/** @var WP_Error $epkb_email_error */
 		if ( is_wp_error( $epkb_email_error ) ) {
-			EPKB_Logging::add_log( 'Email error: ' . $epkb_email_error->get_error_message() );
 			$error_message = $epkb_email_error->get_error_message();
 		}
 
@@ -2508,5 +2528,13 @@ class EPKB_Utilities {
 
 		// Compare hosts (case-insensitive)
 		return strcasecmp( $site_host, $url_host ) === 0;
+	}
+
+	/**
+	 * Check if AI Features Pro plugin is enabled
+	 * @return bool True if AI Features Pro is active
+	 */
+	public static function is_ai_features_pro_enabled() {
+		return defined( 'AI_FEATURES_PRO_PLUGIN_NAME' );
 	}
 }

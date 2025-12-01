@@ -212,7 +212,7 @@ class EPKB_KB_Config_Category {
 								} else {
 									$dimension = $width . $height;
 								}
-								echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key, $image_size ) . '>' . esc_html( ucwords( esc_html__( $key, 'echo-knowledge-base' ) ) ) . ' (' . esc_html( $dimension ) . 'px)</option>';
+								echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key, $image_size ) . '>' . esc_html( ucwords( $key ) ) . ' (' . esc_html( $dimension ) . 'px)</option>';
 							}
 						} ?>
 					</select>

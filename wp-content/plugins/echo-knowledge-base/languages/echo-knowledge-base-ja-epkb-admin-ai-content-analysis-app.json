@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Loading...": [
+                "読み込み中…"
+            ],
+            "AI Features Required": [
+                "AI機能が必要です"
+            ],
+            "Go to AI Settings": [
+                "AI設定へ移動"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "AI 機能が有効になっていません。コンテンツ分析を使用するには AI 機能を有効にしてください。."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "コンテンツ分析の設定の読み込みに失敗しました。."
+            ],
+            "Content Analysis component not loaded.": [
+                "コンテンツ分析コンポーネントが読み込まれていません。."
+            ]
+        }
+    }
+}

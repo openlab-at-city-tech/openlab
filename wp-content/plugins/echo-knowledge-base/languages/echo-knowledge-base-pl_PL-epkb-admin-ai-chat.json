@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Settings": [
+                "Ustawienia"
+            ],
+            "Page": [
+                "Strona"
+            ],
+            "Settings saved successfully": [
+                "Ustawienia zapisane pomyślnie"
+            ],
+            "Cancel": [
+                "Anuluj"
+            ],
+            "Next": [
+                "Następne"
+            ],
+            "Previous": [
+                "Poprzednie"
+            ],
+            "Saving...": [
+                "Zapisywanie..."
+            ],
+            "Go to General Settings": [
+                "Przejdź do ustawień ogólnych"
+            ],
+            "Chat History": [
+                "Historia czatu"
+            ],
+            "API Configuration": [
+                "Konfiguracja API"
+            ],
+            "AI Assistant": [
+                "Asystent AI"
+            ],
+            "Save Settings": [
+                "Zapisz ustawienia"
+            ],
+            "Delete": [
+                "Usuń"
+            ],
+            "Delete Selected": [
+                "Usuń wybrane"
+            ],
+            "of": [
+                "z"
+            ],
+            "Reset": [
+                "Resetuj"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Czy na pewno chcesz usunąć wybrane rozmowy?"
+            ],
+            "Delete Conversations": [
+                "Usuń rozmowy"
+            ],
+            "Deleting conversations...": [
+                "Usuwanie rozmów..."
+            ],
+            "Conversations refreshed successfully": [
+                "Rozmowy zostały pomyślnie odświeżone"
+            ],
+            "Search conversations...": [
+                "Wyszukiwanie rozmów..."
+            ],
+            "Refreshing...": [
+                "Odświeżanie..."
+            ],
+            "Refresh": [
+                "Odśwież"
+            ],
+            "Loading conversations...": [
+                "Ładowanie rozmów..."
+            ],
+            "No conversations found": [
+                "Nie znaleziono rozmów"
+            ],
+            "Time": [
+                "Czas"
+            ],
+            "User": [
+                "Użytkownik"
+            ],
+            "Conversation": [
+                "Rozmowa"
+            ],
+            "Searching server for more results...": [
+                "Wyszukiwanie kolejnych wyników na serwerze..."
+            ],
+            "Conversation Details": [
+                "Szczegóły konwersacji"
+            ],
+            "Select a conversation to view details": [
+                "Wybierz rozmowę, aby wyświetlić szczegóły"
+            ],
+            "Conversation Info": [
+                "Informacje o rozmowie"
+            ],
+            "User:": [
+                "Użytkownik:"
+            ],
+            "Started:": [
+                "Rozpoczęto:"
+            ],
+            "Messages:": [
+                "Wiadomości:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Rating:": [
+                "Ocena:"
+            ],
+            "Full Conversation": [
+                "Pełna konwersacja"
+            ],
+            "No messages in this conversation.": [
+                "Brak wiadomości w tej konwersacji."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Czy na pewno chcesz zresetować instrukcje do wartości domyślnych?"
+            ],
+            "Reset Instructions": [
+                "Resetuj instrukcje"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Czy na pewno chcesz zresetować instrukcje do wartości domyślnych? Twoje niestandardowe instrukcje zostaną utracone."
+            ],
+            "Reset to Default": [
+                "Resetuj do wartości domyślnych"
+            ],
+            "Failed to load conversations": [
+                "Nie udało się wczytać konwersacji"
+            ],
+            "Failed to save settings": [
+                "Nie udało się zapisać ustawień"
+            ],
+            "Conversations deleted successfully": [
+                "Konwersacje zostały pomyślnie usunięte"
+            ],
+            "Failed to delete conversations": [
+                "Nie udało się usunąć konwersacji"
+            ],
+            "AI Chat is Disabled": [
+                "AI czat jest wyłączony"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "Aby wyświetlić historię czatu, włącz AI czat w zakładce Ustawienia."
+            ],
+            "Go to Settings": [
+                "Przejdź do Ustawień"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "Klucz API OpenAI nie jest skonfigurowany. Skonfiguruj go w Ustawieniach ogólnych, aby korzystać z funkcji AI czat."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Proszę zaakceptować umowę o ochronie danych osobowych w Ustawieniach ogólnych, aby korzystać z funkcji AI czat."
+            ]
+        }
+    }
+}

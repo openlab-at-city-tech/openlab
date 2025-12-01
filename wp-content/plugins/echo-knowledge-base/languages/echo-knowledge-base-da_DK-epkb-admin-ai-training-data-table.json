@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Titel"
+            ],
+            "Filter": [
+                "Filter"
+            ],
+            "Status": [
+                "Status"
+            ],
+            "All": [
+                "Alle"
+            ],
+            "Page": [
+                "Side"
+            ],
+            "Close": [
+                "Luk"
+            ],
+            "Cancel": [
+                "Annuller"
+            ],
+            "selected": [
+                "valgt"
+            ],
+            "Article": [
+                "Artikel"
+            ],
+            "Updated": [
+                "Opdateret"
+            ],
+            "Next": [
+                "Næste"
+            ],
+            "Previous": [
+                "Forrige"
+            ],
+            "Loading...": [
+                "Indlæser..."
+            ],
+            "Error": [
+                "Fejl"
+            ],
+            "Pending": [
+                "Afventer"
+            ],
+            "Delete": [
+                "Slet"
+            ],
+            "of": [
+                "af"
+            ],
+            "Refreshing...": [
+                "Opdaterer..."
+            ],
+            "Refresh": [
+                "Opdater"
+            ],
+            "Searching server for more results...": [
+                "Søger serveren efter flere resultater..."
+            ],
+            "Data refreshed successfully": [
+                "Data opdateret med succes"
+            ],
+            "Delete Selected Items": [
+                "Slet valgte elementer"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Er du sikker på, at du vil slette de valgte elementer?"
+            ],
+            "Items deleted successfully": [
+                "De valgte elementer er slettet"
+            ],
+            "Sort": [
+                "Sortér"
+            ],
+            "Completed": [
+                "Fuldført"
+            ],
+            "Outdated": [
+                "Forældet"
+            ],
+            "Added": [
+                "Tilføjet"
+            ],
+            "Failed to load training data": [
+                "Kunne ikke indlæse maskinlæringsdata"
+            ],
+            "Failed to delete items": [
+                "Kunne ikke slette elementer"
+            ],
+            "Delete Items": [
+                "Slet elementer"
+            ],
+            "Syncing": [
+                "Synkroniserer"
+            ],
+            "Canceled": [
+                "Annulleret"
+            ],
+            "How to get started": [
+                "Sådan kommer du i gang"
+            ],
+            "Choose Training Data": [
+                "Vælg maskinlæringsdata"
+            ],
+            "Pick the content types to include.": [
+                "Vælg de indholdstyper, der skal inkluderes."
+            ],
+            "Send Data to AI": [
+                "Send data til AI"
+            ],
+            "Select items in the table, then sync them.": [
+                "Vælg posterne i tabellen, og synkroniser dem."
+            ],
+            "Other Actions": [
+                "Andre handlinger"
+            ],
+            "Rename the collection or delete items.": [
+                "Omdøb samlingen eller slet emnerne."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Tip: Start med et lille sæt for at teste flowet."
+            ],
+            "Sync": [
+                "Synkroniser"
+            ],
+            "Sync Complete": [
+                "Synkronisering fuldført"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "Søg efter titel, type, URL eller ID..."
+            ],
+            "Preparing sync...": [
+                "Forbereder synkronisering..."
+            ],
+            "Loading training data...": [
+                "Indlæser maskinlæringsdata..."
+            ],
+            "Type": [
+                "Type"
+            ],
+            "No training data found": [
+                "Ingen maskinlæringsdata fundet"
+            ],
+            "Edit note": [
+                "Rediger note"
+            ],
+            "View Error": [
+                "Vis fejl"
+            ],
+            "View content": [
+                "Vis indhold"
+            ],
+            "KB Files": [
+                "KB-filer"
+            ],
+            "Never": [
+                "Aldrig"
+            ],
+            "Error Details": [
+                "Fejloplysninger"
+            ],
+            "Failed to load content": [
+                "Kunne ikke indlæse indhold"
+            ],
+            "Post ID:": [
+                "Indlæg-ID:"
+            ],
+            "Loading content...": [
+                "Indlæser indhold..."
+            ],
+            "Error Processing Content": [
+                "Fejl ved behandling af indhold"
+            ],
+            "Original Content": [
+                "Originalt indhold"
+            ],
+            "Processed Content": [
+                "Behandlet indhold"
+            ],
+            "No content available": [
+                "Intet indhold tilgængeligt"
+            ],
+            "No processed content available": [
+                "Intet behandlet indhold tilgængeligt"
+            ]
+        }
+    }
+}

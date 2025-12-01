@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "AI Search": [
+                "Wyszukiwanie AI"
+            ],
+            "All": [
+                "Wszystko"
+            ],
+            "Disabled": [
+                "Wyłączone"
+            ],
+            "AI Chat": [
+                "AI Czat"
+            ],
+            "OpenAI API Key": [
+                "Klucz API OpenAI"
+            ],
+            "Debug mode updated successfully": [
+                "Tryb debugowania WordPressa został pomyślnie zaktualizowany"
+            ],
+            "Refresh": [
+                "Odśwież"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Warnings": [
+                "Ostrzeżenia"
+            ],
+            "Info": [
+                "Informacja"
+            ],
+            "Failed to update debug mode": [
+                "Nie udało się zaktualizować trybu debugowania"
+            ],
+            "Error updating debug mode": [
+                "Błąd aktualizacji trybu debugowania"
+            ],
+            "Failed to load PHP logs": [
+                "Nie udało się wczytać logów PHP"
+            ],
+            "Error loading PHP logs": [
+                "Błąd wczytywania logów PHP"
+            ],
+            "Failed to load WP logs": [
+                "Nie udało się wczytać logów WordPressa"
+            ],
+            "Error loading WP logs": [
+                "Błąd wczytywania logów WordPressa"
+            ],
+            "Failed to load AI logs": [
+                "Nie udało się wczytać logów AI"
+            ],
+            "Error loading AI logs": [
+                "Błąd wczytywania logów AI"
+            ],
+            "All AI logs cleared successfully": [
+                "Wszystkie logi AI zostały pomyślnie wyczyszczone"
+            ],
+            "Failed to clear AI logs": [
+                "Nie udało się wyczyścić logów AI"
+            ],
+            "Error clearing AI logs": [
+                "Błąd czyszczenia logów AI"
+            ],
+            "Debug Mode": [
+                "Tryb debugowania"
+            ],
+            "Enable Debug Mode": [
+                "Włącz tryb debugowania"
+            ],
+            " (Localhost detected)": [
+                "(Wykryto lokalny host)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Włącz tryb debugowania, aby przeglądać logi systemowe i rozwiązywać problemy z funkcjami AI. To załaduje dodatkowe narzędzia debugowania."
+            ],
+            "AI Information": [
+                "Informacje o AI"
+            ],
+            "Missing API Key": [
+                "Brak klucza API"
+            ],
+            "Data Collections": [
+                "Zbiory danych"
+            ],
+            "Unnamed Collection": [
+                "Nieznana kolekcja"
+            ],
+            "Vector Store:": [
+                "Magazyn wektorów:"
+            ],
+            "Created": [
+                "Utworzono"
+            ],
+            "Not created": [
+                "Nie utworzono"
+            ],
+            "Total Records:": [
+                "Łączna liczba rekordów:"
+            ],
+            "Added:": [
+                "Dodano:"
+            ],
+            "Updated:": [
+                "Zaktualizowano:"
+            ],
+            "Outdated:": [
+                "Przestarzałe:"
+            ],
+            "Error:": [
+                "Błąd:"
+            ],
+            "Pending:": [
+                "Oczekujące:"
+            ],
+            "No data collections found.": [
+                "Nie znaleziono zestawów danych."
+            ],
+            "System Information": [
+                "Informacje o systemie"
+            ],
+            "Download Debug Info": [
+                "Pobierz informacje debugowe"
+            ],
+            "Logs": [
+                "Dzienniki"
+            ],
+            "PHP Error Log": [
+                "Dziennik błędów PHP"
+            ],
+            "Fatal Errors": [
+                "Błędy krytyczne"
+            ],
+            "Notices": [
+                "Powiadomienia"
+            ],
+            "AI Related Only": [
+                "Tylko związane z SI"
+            ],
+            "Latest at top": [
+                "Najnowsze na górze"
+            ],
+            "No logs found.": [
+                "Nie znaleziono logów."
+            ],
+            "WordPress Error Log": [
+                "Dziennik błędów WordPressa"
+            ],
+            "AI Activity Log": [
+                "Dziennik aktywności SI"
+            ],
+            "Clear Log": [
+                "Wyczyść dziennik"
+            ],
+            "All Levels": [
+                "Wszystkie poziomy"
+            ],
+            "Errors Only": [
+                "Tylko błędy"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Tryb debugowania jest wyłączony. Włącz go powyżej, aby wyświetlić informacje debugowe."
+            ]
+        }
+    }
+}

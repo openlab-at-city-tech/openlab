@@ -14,6 +14,9 @@ class EPKB_Blocks_Setup {
 		if ( EPKB_Utilities::is_advanced_search_enabled() ) {
 			new EPKB_Advanced_Search_Block();
 		}
+		if ( EPKB_AI_Utilities::is_ai_features_pro_enabled() ) {
+			new EPKB_AI_Advanced_Search_Block();
+		}
 		new EPKB_Search_Block();
 
 		// show pro blocks next

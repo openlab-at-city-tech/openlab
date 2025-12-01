@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "Lär dig mer"
+            ],
+            "Copied!": [
+                "Kopierad!"
+            ],
+            "Copy": [
+                "Kopiera"
+            ],
+            "All features unlocked": [
+                "Alla funktioner har låsts upp"
+            ],
+            "Get Started": [
+                "Kom igång"
+            ],
+            "Use Code:": [
+                "Använd kod:"
+            ],
+            "Unlock Premium AI Features": [
+                "Lås upp premium-AI-funktioner"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "Ta din kunskapsbas till nästa nivå med avancerade AI-funktioner"
+            ],
+            "Premium Features": [
+                "Premiumfunktioner"
+            ],
+            "Choose Your Plan": [
+                "Välj din plan"
+            ],
+            "Flexible pricing to match your needs": [
+                "Flexibel prissättning som passar dina behov"
+            ],
+            "What Our Customers Say": [
+                "Vad våra kunder säger"
+            ],
+            "Get AI Features": [
+                "Få AI-funktioner"
+            ]
+        }
+    }
+}

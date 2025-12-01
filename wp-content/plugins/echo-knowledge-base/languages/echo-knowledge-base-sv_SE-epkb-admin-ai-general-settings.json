@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings saved successfully": [
+                "Inställningar sparades"
+            ],
+            "Saving...": [
+                "Sparar …"
+            ],
+            "Save Settings": [
+                "Spara inställningar"
+            ],
+            "Failed to save settings": [
+                "Misslyckades med att spara inställningar"
+            ],
+            "Sending...": [
+                "Skickar..."
+            ],
+            "Test email sent successfully": [
+                "Test-e-post skickades framgångsrikt"
+            ],
+            "Failed to send test email": [
+                "Misslyckades med att skicka test-e-post"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Misslyckades med att skicka test-e-post. Kontrollera din uppkoppling."
+            ]
+        }
+    }
+}

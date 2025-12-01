@@ -1,0 +1,261 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "to": [
+                "तक"
+            ],
+            "Back": [
+                "वापस"
+            ],
+            "Save": [
+                "सहेजें"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
+            ],
+            "Collection name cannot be empty": [
+                "संग्रह का नाम खाली नहीं हो सकता"
+            ],
+            "Data Collection": [
+                "डेटा संग्रह"
+            ],
+            "Note updated successfully": [
+                "नोट सफलतापूर्वक अपडेट किया गया।"
+            ],
+            "Note deleted successfully": [
+                "नोट सफलतापूर्वक हटाई गई।"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "Delete Selected": [
+                "चयनित को हटाएं"
+            ],
+            "Failed to create collection": [
+                "संग्रह बनाने में असफल रहा।"
+            ],
+            "How to get started": [
+                "शुरू कैसे करें"
+            ],
+            "Choose Training Data": [
+                "Machine learning data चुनें"
+            ],
+            "Pick the content types to include.": [
+                "शामिल करने के लिए सामग्री प्रकार चुनें।."
+            ],
+            "Send Data to AI": [
+                "एआई में डेटा भेजें"
+            ],
+            "Select items in the table, then sync them.": [
+                "तालिका में आइटम चुनें, फिर उन्हें सिंक करें."
+            ],
+            "Other Actions": [
+                "अन्य क्रियाएं"
+            ],
+            "Rename the collection or delete items.": [
+                "संग्रह का नाम बदलें या आइटम हटाएं."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "टिप: प्रवाह का परीक्षण करने के लिए छोटे सेट से शुरू करें."
+            ],
+            "Failed to load note content": [
+                "नोट सामग्री लोड करने में विफल रहा"
+            ],
+            "Please enter both title and content for the note": [
+                "कृपया नोट के लिए शीर्षक और सामग्री दोनों दर्ज करें"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "नोट हटाने में असमर्थ। कृपया पृष्ठ को फिर से लोड करें और फिर से प्रयास करें।."
+            ],
+            "Delete Note": [
+                "नोट हटाएं"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "क्या आप सच में इस नोट को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।."
+            ],
+            "Failed to delete note": [
+                "नोट हटाने में विफल रहा"
+            ],
+            "Edit Note": [
+                "नोट संपादित करें"
+            ],
+            "Add Note": [
+                "नोट जोड़ें"
+            ],
+            "Loading note content...": [
+                "नोट की सामग्री लोड हो रही है..."
+            ],
+            "Note Title": [
+                "नोट का शीर्षक"
+            ],
+            "Enter note title...": [
+                "नोट शीर्षक दर्ज करें..."
+            ],
+            "Note Content": [
+                "नोट की सामग्री"
+            ],
+            "Enter note content...": [
+                "नोट सामग्री दर्ज करें..."
+            ],
+            "Deleting...": [
+                "हटाया जा रहा है..."
+            ],
+            "Save Note": [
+                "नोट सहेजें"
+            ],
+            "Collection name updated successfully": [
+                "संग्रह का नाम सफलतापूर्वक अपडेट किया गया"
+            ],
+            "Failed to update collection name": [
+                "संग्रह के नाम को अपडेट करने में विफल रहा"
+            ],
+            "Delete Collection": [
+                "संग्रह हटाएं"
+            ],
+            "Are you sure you want to delete this collection?": [
+                "क्या आप सच में इस संग्रह को हटाना चाहते हैं?"
+            ],
+            "Type the collection name to confirm:": [
+                "पुष्टि करने के लिए संग्रह का नाम टाइप करें:"
+            ],
+            "Enter collection name": [
+                "संग्रह नाम दर्ज करें"
+            ],
+            "Collection deleted successfully": [
+                "संग्रह सफलतापूर्वक हटाया गया"
+            ],
+            "Failed to delete collection": [
+                "संग्रह हटाने में विफल रहा"
+            ],
+            "Please select at least one data type": [
+                "कृपया कम से कम एक डेटा प्रकार चुनें"
+            ],
+            "Data added successfully": [
+                "डेटा सफलतापूर्वक जोड़ा गया"
+            ],
+            "Failed to add data": [
+                "डेटा जोड़ना विफल रहा"
+            ],
+            "Choose an Action": [
+                "क्रिया चुनें"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "सिंक प्रगति के दौरान क्रियाओं को बदला नहीं जा सकता"
+            ],
+            "Add Training Data": [
+                "प्रशिक्षण डेटा जोड़ें"
+            ],
+            "Cannot navigate while sync is in progress": [
+                "सिंक प्रगति के दौरान नेविगेशन नहीं किया जा सकता"
+            ],
+            "Adding data to:": [
+                "डेटा जोड़ना:"
+            ],
+            "Choose which content types you want to include in your AI training data.": [
+                "अपने AI प्रशिक्षण डेटा में आप किन कंटेंट प्रकारों को शामिल करना चाहते हैं?."
+            ],
+            "Access Manager Notice": [
+                "एक्सेस मैनेजर सूचना"
+            ],
+            "Currently only publicly accessible articles can be uploaded to AI. Articles with access restrictions will not be included in the training data.": [
+                "वर्तमान में केवल सार्वजनिक रूप से सुलभ लेख एआई में अपलोड किए जा सकते हैं। एक्सेस प्रतिबंध वाले लेख मशीन लर्निंग डेटा में शामिल नहीं होंगे।."
+            ],
+            "Loading content types...": [
+                "सामग्री प्रकार लोड हो रहा है..."
+            ],
+            "available": [
+                "उपलब्ध"
+            ],
+            "added": [
+                "जोड़ा गया"
+            ],
+            "excluded": [
+                "निकाला गया"
+            ],
+            "No eligible content": [
+                "कोई योग्य सामग्री नहीं"
+            ],
+            "No published content available": [
+                "कोई प्रकाशित सामग्री उपलब्ध नहीं है"
+            ],
+            "All eligible items already added to collection": [
+                "सभी योग्य आइटम पहले से संग्रह में जोड़े जा चुके हैं"
+            ],
+            "No content types available.": [
+                "कोई सामग्री प्रकार उपलब्ध नहीं है।."
+            ],
+            "Adding Data...": [
+                "डेटा जोड़ रहा है..."
+            ],
+            "Add Data": [
+                "डेटा जोड़ें"
+            ],
+            "Notes": [
+                "नोट्स"
+            ],
+            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
+                "एआई को विशिष्ट जानकारी, दिशानिर्देश या संदर्भ के साथ प्रशिक्षित करने में मदद करने के लिए अपने अनुसार नोट जोड़ें जो आपकी सामान्य सामग्री में न हो।."
+            ],
+            "Select items from the table and choose a sync method to update your AI training data.": [
+                "टेबल से आइटम चुनें और अपने एआई मशीन लर्निंग डेटा को अपडेट करने के लिए एक सिंक विधि चुनें."
+            ],
+            "Manage your collection settings and data.": [
+                "अपने संग्रह की सेटिंग्स और डेटा का प्रबंधन करें।."
+            ],
+            "Collection Name": [
+                "संग्रह नाम"
+            ],
+            "Change the display name for this collection.": [
+                "इस संग्रह के प्रदर्शन नाम को बदलें।."
+            ],
+            "Unable to delete items. Please refresh the page and try again.": [
+                "आइटम हटाने में असमर्थ। कृपया पृष्ठ ताज़ा करें और फिर से प्रयास करें।."
+            ],
+            "Selected Records": [
+                "चयनित रिकॉर्ड्स"
+            ],
+            "Delete the selected training data items from this collection.": [
+                "इस संग्रह से चयनित मशीन लर्निंग डेटा आइटम हटाएं।."
+            ],
+            "This will permanently delete all training data in this collection.": [
+                "यह इस संग्रह में सभी मशीन लर्निंग डेटा को स्थायी रूप से हटा देगा।."
+            ],
+            "Note added successfully": [
+                "नोट सफलतापूर्वक जोड़ा गया"
+            ],
+            "AI Features Pro is not properly configured. Please ensure the plugin is activated.": [
+                "AI Features Pro सही तरीके से कॉन्फ़िगर नहीं किया गया है। कृपया सुनिश्चित करें कि प्लगइन सक्रिय है।."
+            ],
+            "Failed to save note": [
+                "नोट सहेजना असफल रहा।"
+            ],
+            "Unable to determine next collection ID": [
+                "अगला संग्रह आईडी निर्धारित नहीं किया जा सका।"
+            ],
+            "Creating new collection...": [
+                "नई संग्रह बना रहा है..."
+            ],
+            "Collection created successfully": [
+                "संग्रह सफलतापूर्वक बन गया"
+            ],
+            "Sync in progress. Please wait...": [
+                "समन्वय प्रगति पर है। कृपया प्रतीक्षा करें..."
+            ],
+            "No collections available. Click \"Add New\" to create one.": [
+                "कोई संग्रह उपलब्ध नहीं है। एक बनाने के लिए 'नया जोड़ें' पर क्लिक करें।."
+            ],
+            "No training data configuration available.": [
+                "प्रशिक्षण डेटा कॉन्फ़िगरेशन उपलब्ध नहीं है."
+            ]
+        }
+    }
+}

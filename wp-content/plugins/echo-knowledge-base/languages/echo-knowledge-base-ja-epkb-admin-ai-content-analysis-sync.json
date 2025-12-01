@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Cancel": [
+                "キャンセル"
+            ],
+            "articles": [
+                "記事"
+            ],
+            "Analyze Content": [
+                "コンテンツを分析"
+            ],
+            "No articles found to analyze": [
+                "分析する記事が見つかりませんでした"
+            ],
+            "of": [
+                "の"
+            ],
+            "Analysis canceled": [
+                "分析がキャンセルされました"
+            ],
+            "Failed to cancel analysis": [
+                "分析のキャンセルに失敗しました"
+            ],
+            "Calculating...": [
+                "分析中..."
+            ],
+            "Analysis failed": [
+                "分析に失敗しました"
+            ],
+            "Content analysis completed successfully!": [
+                "コンテンツ分析が正常に完了しました！"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "OpenAIへの接続時にリトライ上限に達しました。."
+            ],
+            "Failed to start analysis": [
+                "分析の開始に失敗しました"
+            ],
+            "Analysis Job Running": [
+                "分析ジョブ実行中"
+            ],
+            "Wait": [
+                "待機"
+            ],
+            "articles selected for analysis": [
+                "分析対象として選択された記事"
+            ],
+            "Analysis in Progress": [
+                "分析を実行中"
+            ],
+            "Stop Analysis": [
+                "分析を停止"
+            ],
+            "Starting analysis...": [
+                "分析を開始しています..."
+            ],
+            "article": [
+                "ドキュメント"
+            ],
+            "Analyzing": [
+                "分析中"
+            ],
+            "Completed! Analyzed": [
+                "完了しました。分析済み"
+            ],
+            "error": [
+                "エラー"
+            ],
+            "errors": [
+                "エラー"
+            ],
+            "with": [
+                "と"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "エラーの後に分析を停止しました。分析済み"
+            ],
+            "Remaining Time:": [
+                "残り時間："
+            ]
+        }
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Close": [
+                "Fechar"
+            ],
+            "Cancel": [
+                "Cancelar"
+            ],
+            "Loading...": [
+                "A carregar..."
+            ],
+            "General Settings": [
+                "Configurações Gerais"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "A sua sessão expirou. Por favor, atualize a página."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "Muitas solicitações. Por favor, aguarde um momento e tente novamente."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "Ocorreu um erro inesperado. Por favor, tente novamente."
+            ],
+            "Confirm Action": [
+                "Confirmar"
+            ],
+            "Are you sure you want to proceed?": [
+                "Tem a certeza de que pretende continuar?"
+            ],
+            "Confirm": [
+                "Confirmar"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "Para usar os recursos de IA, configure a sua chave de API e aceite o acordo de privacidade de dados em"
+            ],
+            "Session Expired": [
+                "Sessão expirada"
+            ],
+            "Refresh Page": [
+                "Atualizar página"
+            ],
+            "No results found": [
+                "Nenhum resultado encontrado"
+            ],
+            "Tutorial": [
+                "Tutorial"
+            ],
+            "Learn how to use this feature": [
+                "Aprenda a usar este recurso"
+            ],
+            "Tutorial Screenshot": [
+                "Captura de ecrã do tutorial"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "Este é um tutorial que explica como usar este recurso."
+            ],
+            "Close Tutorial": [
+                "Fechar o tutorial"
+            ],
+            "Show Tutorial": [
+                "Mostrar o tutorial"
+            ]
+        }
+    }
+}

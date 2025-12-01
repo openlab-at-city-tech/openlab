@@ -7,6 +7,94 @@
  */
 class EPKB_KB_Demo_Data {
 
+	public function __construct() {
+		add_filter( 'eckb_analytics_get_search_demo_data', array( $this, 'provide_search_demo_data' ), 10, 2 );
+		add_filter( 'eckb_analytics_get_rating_demo_data', array( $this, 'provide_rating_demo_data' ), 10, 2 );
+	}
+
+	/**
+	 * Provide demo search data to Advanced Search add-on via filter
+	 *
+	 * @param null $data
+	 * @param int $kb_id
+	 * @return array|null
+	 */
+	public function provide_search_demo_data( $data, $kb_id ) {
+
+		// Only provide demo data if this KB is using demo data
+		if ( ! self::is_demo_data( $kb_id ) ) {
+			return $data;
+		}
+
+		$demo_popular = self::get_demo_popular_searches();
+		$demo_no_results = self::get_demo_no_results_searches();
+		$demo_stats = self::get_demo_search_statistics();
+
+		$most_popular_searches = array();
+		foreach ( $demo_popular as $search ) {
+			$most_popular_searches[] = array( esc_html( $search['term'] ), $search['times'] );
+		}
+
+		$no_results_searches = array();
+		foreach ( $demo_no_results as $search ) {
+			$no_results_searches[] = array( esc_html( $search['term'] ), $search['times'] );
+		}
+
+		return array(
+			'most_popular_searches' => $most_popular_searches,
+			'no_results_searches' => $no_results_searches,
+			'stats_data' => $demo_stats,
+		);
+	}
+
+	/**
+	 * Provide demo rating data to Article Rating add-on via filter
+	 *
+	 * @param null $data
+	 * @param int $kb_id
+	 * @return array|null
+	 */
+	public function provide_rating_demo_data( $data, $kb_id ) {
+
+		// Only provide demo data if this KB is using demo data
+		if ( ! self::is_demo_data( $kb_id ) ) {
+			return $data;
+		}
+
+		$demo_best_rated = self::get_demo_best_rated_articles();
+		$demo_most_rated = self::get_demo_most_rated_articles();
+		$demo_worst_rated = self::get_demo_worst_rated_articles();
+		$demo_least_rated = self::get_demo_least_rated_articles();
+
+		$best_rated_articles_data = array();
+		foreach ( $demo_best_rated as $article ) {
+			$best_rated_articles_data[] = array( esc_html( $article['title'] ), $article['avg_rating'] );
+		}
+
+		$most_rated_articles_data = array();
+		foreach ( $demo_most_rated as $article ) {
+			$most_rated_articles_data[] = array( esc_html( $article['title'] ), $article['times'] );
+		}
+
+		$worst_rated_articles_data = array();
+		foreach ( $demo_worst_rated as $article ) {
+			$worst_rated_articles_data[] = array( esc_html( $article['title'] ), $article['avg_rating'] );
+		}
+
+		$least_rated_articles_data = array();
+		foreach ( $demo_least_rated as $article ) {
+			$least_rated_articles_data[] = array( esc_html( $article['title'] ), $article['times'] );
+		}
+
+		return array(
+			'best_rated_articles_data' => $best_rated_articles_data,
+			'most_rated_articles_data' => $most_rated_articles_data,
+			'worst_rated_articles_data' => $worst_rated_articles_data,
+			'least_rated_articles_data' => $least_rated_articles_data,
+			'number_of_rated_articles' => 1547,
+		);
+	}
+
 	public static function create_sample_categories_and_articles( $new_kb_id, $kb_main_page_layout ) {
 
 		$articles_seq_meta = [];
@@ -229,15 +317,15 @@ class EPKB_KB_Demo_Data {
 	private static function get_category_description( $category_name ) {
 		switch ( $category_name ) {
 			case esc_html__( 'Sales and Marketing', 'echo-knowledge-base' ):
-				return esc_html__( 'Strategies for promoting products and reaching customers.', 'echo-knowledge-base' );
+				return esc_html__( 'Innovative strategies for promoting products and effectively reaching new customers.', 'echo-knowledge-base' );
 			case esc_html__( 'Operations and Logistics', 'echo-knowledge-base' ):
-				return esc_html__( 'Streamline processes for efficient business operations.', 'echo-knowledge-base' );
+				return esc_html__( 'Streamline processes for efficient, agile, and scalable business operations.', 'echo-knowledge-base' );
 			case esc_html__( 'Human Resources', 'echo-knowledge-base' ):
 				return esc_html__( 'Policies, procedures, and support for effective workforce management.', 'echo-knowledge-base' );
 			case esc_html__( 'Finance and Expenses', 'echo-knowledge-base' ):
 				return esc_html__( 'Efficiently manage finances, track expenditure accurately, and optimize budgets.', 'echo-knowledge-base' );
 			case esc_html__( 'IT Support', 'echo-knowledge-base' ):
-				return esc_html__( 'Technical assistance and solutions for digital infrastructure.', 'echo-knowledge-base' );
+				return esc_html__( 'Comprehensive technical assistance and forward‑thinking solutions for resilient digital infrastructure.', 'echo-knowledge-base' );
 			case esc_html__( 'Professional Development', 'echo-knowledge-base' ):
 				return esc_html__( 'Enhance skills, explore career growth opportunities, and foster professional development.', 'echo-knowledge-base' );
 			case esc_html__( 'Department Resources', 'echo-knowledge-base' ):
@@ -568,5 +656,824 @@ class EPKB_KB_Demo_Data {
 		}
 
 		return $faq_id;
+	}
+
+	/**
+	 * Check if the current KB has demo data or user data
+	 *
+	 * @param int $kb_id
+	 * @return bool True if demo data, false if user data
+	 */
+	public static function is_demo_data( $kb_id ) {
+
+		$articles_seq_meta = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, null, true );
+		if ( empty( $articles_seq_meta ) ) {
+			return true; // Show demo data if no articles exist
+		}
+
+		$categories_seq_meta = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, null, true );
+		if ( empty( $categories_seq_meta ) ) {
+			return true; // Show demo data if no categories exist
+		}
+
+		// Get top categories
+		$top_categories = [];
+		foreach( $categories_seq_meta as $category_id => $sub_categories ) {
+			if ( ! empty( $articles_seq_meta[$category_id][0] ) ) {
+				$top_categories[$category_id] = $articles_seq_meta[$category_id][0];
+			}
+		}
+
+		// Check if current top categories match demo tab categories
+		if ( ! array_diff( array_values( $top_categories ), self::get_tab_top_categories() ) ) {
+			return true; // We have demo tab categories
+		}
+
+		// Check if current top categories match demo non-tab categories
+		if ( ! array_diff( array_values( $top_categories ), self::get_non_tab_top_categories() ) ) {
+			return true; // We have demo non-tab categories
+		}
+
+		return false; // User has custom data
+	}
+
+	/**
+	 * Get demo weekly views data for analytics
+	 *
+	 * @param int $weeks_back Number of weeks to generate data for (default: 12)
+	 * @return array Array of weekly data with 'week_label' and 'total_views'
+	 */
+	public static function get_demo_weekly_views_data( $weeks_back = 12 ) {
+
+		$now = EPKB_Utilities::create_datetime();
+		if ( $now === null ) {
+			return array();
+		}
+		$weekly_data = array();
+
+		// Base views with gradual growth trend
+		$base_views = 450;
+
+		for ( $i = $weeks_back - 1; $i >= 0; $i-- ) {
+			$week_date = clone $now;
+			$week_date->modify( "-{$i} weeks" );
+
+			// Add growth trend (5% per week) with random variation
+			$growth_factor = 1 + ( ( $weeks_back - $i ) * 0.05 );
+			$random_variation = wp_rand( 85, 115 ) / 100; // ±15% variation
+			$total_views = round( $base_views * $growth_factor * $random_variation );
+
+			$weekly_data[] = array(
+				'week_label'  => $week_date->format( 'M j, Y' ),
+				'total_views' => $total_views,
+			);
+		}
+
+		return $weekly_data;
+	}
+
+	/**
+	 * Get demo weekly searches data for analytics
+	 *
+	 * @param int $weeks_back Number of weeks to generate data for (default: 12)
+	 * @return array Array of weekly data with 'week_label' and 'total_searches'
+	 */
+	public static function get_demo_weekly_searches_data( $weeks_back = 12 ) {
+
+		$now = EPKB_Utilities::create_datetime();
+		if ( $now === null ) {
+			return array();
+		}
+		$weekly_data = array();
+
+		// Base searches with gradual growth trend
+		$base_searches = 180;
+
+		for ( $i = $weeks_back - 1; $i >= 0; $i-- ) {
+			$week_date = clone $now;
+			$week_date->modify( "-{$i} weeks" );
+
+			// Add growth trend (4% per week) with random variation
+			$growth_factor = 1 + ( ( $weeks_back - $i ) * 0.04 );
+			$random_variation = wp_rand( 80, 120 ) / 100; // ±20% variation
+			$total_searches = round( $base_searches * $growth_factor * $random_variation );
+
+			$weekly_data[] = array(
+				'week_label'     => $week_date->format( 'M j, Y' ),
+				'total_searches' => $total_searches,
+			);
+		}
+
+		return $weekly_data;
+	}
+
+	/**
+	 * Get demo weekly ratings data for analytics
+	 *
+	 * @param int $weeks_back Number of weeks to generate data for (default: 12)
+	 * @return array Array of weekly data with 'week_label', 'positive_ratings', and 'negative_ratings'
+	 */
+	public static function get_demo_weekly_ratings_data( $weeks_back = 12 ) {
+
+		$now = EPKB_Utilities::create_datetime();
+		if ( $now === null ) {
+			return array();
+		}
+		$weekly_data = array();
+
+		// Base ratings with improvement trend (more positive over time)
+		$base_positive = 35;
+		$base_negative = 15;
+
+		for ( $i = $weeks_back - 1; $i >= 0; $i-- ) {
+			$week_date = clone $now;
+			$week_date->modify( "-{$i} weeks" );
+
+			// Positive ratings grow faster, negative ratings decline
+			$positive_growth = 1 + ( ( $weeks_back - $i ) * 0.06 );
+			$negative_decline = 1 - ( ( $weeks_back - $i ) * 0.02 );
+
+			$positive_variation = wp_rand( 85, 115 ) / 100;
+			$negative_variation = wp_rand( 85, 115 ) / 100;
+
+			$positive_ratings = round( $base_positive * $positive_growth * $positive_variation );
+			$negative_ratings = max( 5, round( $base_negative * $negative_decline * $negative_variation ) );
+
+			$weekly_data[] = array(
+				'week_label'       => $week_date->format( 'M j, Y' ),
+				'positive_ratings' => $positive_ratings,
+				'negative_ratings' => $negative_ratings,
+			);
+		}
+
+		return $weekly_data;
+	}
+
+	/**
+	 * Get demo period comparison data (this period vs previous period)
+	 *
+	 * @param string $period 'week', 'month', or 'year'
+	 * @return array Array with 'current_period', 'previous_period', 'change_percent', 'is_positive'
+	 */
+	public static function get_demo_period_comparison_data( $period = 'month' ) {
+
+		$now = EPKB_Utilities::create_datetime();
+		if ( $now === null ) {
+			return array();
+		}
+
+		// Define labels based on period
+		if ( $period === 'week' ) {
+			$current_label = 'This Week';
+			$previous_label = 'Last Week';
+			$current_views = wp_rand( 520, 580 );
+			$growth_percent = wp_rand( 8, 15 );
+		} elseif ( $period === 'month' ) {
+			$current_label = 'This Month';
+			$previous_label = 'Last Month';
+			$current_views = wp_rand( 2200, 2500 );
+			$growth_percent = wp_rand( 12, 20 );
+		} else {
+			$current_label = 'This Year';
+			$previous_label = 'Last Year';
+			$current_views = wp_rand( 24000, 28000 );
+			$growth_percent = wp_rand( 25, 35 );
+		}
+
+		$previous_views = round( $current_views / ( 1 + ( $growth_percent / 100 ) ) );
+
+		return array(
+			'current_period'    => array(
+				'label' => $current_label,
+				'views' => $current_views,
+			),
+			'previous_period'   => array(
+				'label' => $previous_label,
+				'views' => $previous_views,
+			),
+			'change_percent'    => $growth_percent,
+			'is_positive'       => true,
+		);
+	}
+
+	/**
+	 * Get demo growth rate data for all periods
+	 *
+	 * @return array Array with 'weekly', 'monthly', 'yearly' comparison data
+	 */
+	public static function get_demo_growth_rate_data() {
+
+		return array(
+			'weekly'  => self::get_demo_period_comparison_data( 'week' ),
+			'monthly' => self::get_demo_period_comparison_data( 'month' ),
+			'yearly'  => self::get_demo_period_comparison_data( 'year' ),
+		);
+	}
+
+	/**
+	 * Get demo day-of-week pattern data
+	 *
+	 * @return array Array with day-of-week averages
+	 */
+	public static function get_demo_day_of_week_data() {
+
+		// Typical business pattern: higher on weekdays, lower on weekends
+		return array(
+			array( 'label' => 'Sunday', 'avg_views' => 45.3 ),
+			array( 'label' => 'Monday', 'avg_views' => 82.7 ),
+			array( 'label' => 'Tuesday', 'avg_views' => 91.2 ),
+			array( 'label' => 'Wednesday', 'avg_views' => 95.8 ),
+			array( 'label' => 'Thursday', 'avg_views' => 88.4 ),
+			array( 'label' => 'Friday', 'avg_views' => 76.1 ),
+			array( 'label' => 'Saturday', 'avg_views' => 38.6 ),
+		);
+	}
+
+	/**
+	 * Get demo article engagement distribution data
+	 *
+	 * @return array Array with distribution segments
+	 */
+	public static function get_demo_engagement_distribution_data() {
+
+		// Realistic distribution showing healthy content with some low performers
+		return array(
+			array( 'label' => '0 Views', 'count' => 8 ),
+			array( 'label' => '1-10 Views', 'count' => 15 ),
+			array( 'label' => '11-50 Views', 'count' => 22 ),
+			array( 'label' => '51-100 Views', 'count' => 18 ),
+			array( 'label' => '101-500 Views', 'count' => 12 ),
+			array( 'label' => '500+ Views', 'count' => 5 ),
+		);
+	}
+
+	/**
+	 * Get demo most viewed articles with categories
+	 *
+	 * @param int $limit Number of articles to return (default: 100)
+	 * @return array Array of articles with 'title', 'views', 'category', 'url'
+	 */
+	public static function get_demo_most_viewed_articles( $limit = 100 ) {
+
+		$demo_articles = array(
+			array( 'title' => 'Introduction to Our Sales Process', 'category' => 'Sales and Marketing', 'views' => 1247 ),
+			array( 'title' => 'Creating Effective Marketing Campaigns', 'category' => 'Sales and Marketing', 'views' => 1092 ),
+			array( 'title' => 'Using the CRM Software', 'category' => 'Sales and Marketing', 'views' => 987 ),
+			array( 'title' => 'Inventory Management Best Practices', 'category' => 'Operations and Logistics', 'views' => 876 ),
+			array( 'title' => 'Understanding the Supply Chain', 'category' => 'Operations and Logistics', 'views' => 754 ),
+			array( 'title' => 'Safety Protocols in the Workplace', 'category' => 'Operations and Logistics', 'views' => 698 ),
+			array( 'title' => 'Onboarding Checklist for New Hires', 'category' => 'Human Resources', 'views' => 643 ),
+			array( 'title' => 'Understanding Your Benefits Package', 'category' => 'Human Resources', 'views' => 587 ),
+			array( 'title' => 'Performance Review Guidelines', 'category' => 'Human Resources', 'views' => 521 ),
+			array( 'title' => 'Submitting Expense Reports', 'category' => 'Finance and Expenses', 'views' => 498 ),
+			array( 'title' => 'Travel Expense Guidelines', 'category' => 'Finance and Expenses', 'views' => 467 ),
+			array( 'title' => 'Year-End Tax Information for Employees', 'category' => 'Finance and Expenses', 'views' => 412 ),
+			array( 'title' => 'Getting Started with Your Work Computer', 'category' => 'IT Support', 'views' => 389 ),
+			array( 'title' => 'How to Request IT Support', 'category' => 'IT Support', 'views' => 356 ),
+			array( 'title' => 'Security Protocols for Safe Computing', 'category' => 'IT Support', 'views' => 324 ),
+			array( 'title' => 'Identifying Training Opportunities', 'category' => 'Professional Development', 'views' => 298 ),
+			array( 'title' => 'Mentorship Programs Overview', 'category' => 'Professional Development', 'views' => 276 ),
+			array( 'title' => 'Setting Career Goals', 'category' => 'Professional Development', 'views' => 245 ),
+		);
+
+		return array_slice( $demo_articles, 0, $limit );
+	}
+
+	/**
+	 * Get demo articles with zero engagement
+	 *
+	 * @return array Array of articles with 'title' and 'views' (always 0)
+	 */
+	public static function get_demo_zero_engagement_articles() {
+
+		return array(
+			array( 'title' => 'Advanced Budget Forecasting Techniques', 'views' => 0 ),
+			array( 'title' => 'Quarterly Strategic Planning Process', 'views' => 0 ),
+			array( 'title' => 'Internal Communication Protocol Updates', 'views' => 0 ),
+		);
+	}
+
+	/**
+	 * Get demo outlier articles (high and low performers)
+	 *
+	 * @return array Array with 'high_performers', 'low_performers', 'mean', 'std_dev'
+	 */
+	public static function get_demo_outlier_articles() {
+
+		return array(
+			'high_performers' => array(
+				array( 'title' => 'Introduction to Our Sales Process', 'views' => 1247, 'z_score' => 3.45 ),
+				array( 'title' => 'Creating Effective Marketing Campaigns', 'views' => 1092, 'z_score' => 2.87 ),
+				array( 'title' => 'Using the CRM Software', 'views' => 987, 'z_score' => 2.51 ),
+			),
+			'low_performers' => array(
+				array( 'title' => 'Annual Compliance Training Requirements', 'views' => 42, 'z_score' => -1.85 ),
+				array( 'title' => 'Office Furniture Replacement Procedures', 'views' => 38, 'z_score' => -1.92 ),
+				array( 'title' => 'Conference Room Booking Guidelines', 'views' => 31, 'z_score' => -2.03 ),
+			),
+			'mean'            => 456.3,
+			'std_dev'         => 287.5,
+		);
+	}
+
+	/**
+	 * Get demo most improved articles
+	 *
+	 * @return array Array of articles with improvement data
+	 */
+	public static function get_demo_most_improved_articles() {
+
+		return array(
+			array(
+				'title'           => 'Security Protocols for Safe Computing',
+				'current_views'   => 324,
+				'previous_views'  => 156,
+				'absolute_change' => 168,
+				'percent_change'  => 107.7,
+			),
+			array(
+				'title'           => 'Understanding Your Benefits Package',
+				'current_views'   => 587,
+				'previous_views'  => 341,
+				'absolute_change' => 246,
+				'percent_change'  => 72.1,
+			),
+			array(
+				'title'           => 'How to Request IT Support',
+				'current_views'   => 356,
+				'previous_views'  => 218,
+				'absolute_change' => 138,
+				'percent_change'  => 63.3,
+			),
+			array(
+				'title'           => 'Travel Expense Guidelines',
+				'current_views'   => 467,
+				'previous_views'  => 312,
+				'absolute_change' => 155,
+				'percent_change'  => 49.7,
+			),
+			array(
+				'title'           => 'Mentorship Programs Overview',
+				'current_views'   => 276,
+				'previous_views'  => 189,
+				'absolute_change' => 87,
+				'percent_change'  => 46.0,
+			),
+		);
+	}
+
+	/**
+	 * Get demo category analytics data
+	 *
+	 * @return array Array of categories with article count and total views
+	 */
+	public static function get_demo_category_analytics() {
+
+		return array(
+			array( 'category' => 'Sales and Marketing', 'article_count' => 3, 'total_views' => 3326 ),
+			array( 'category' => 'Operations and Logistics', 'article_count' => 3, 'total_views' => 2328 ),
+			array( 'category' => 'Human Resources', 'article_count' => 3, 'total_views' => 1751 ),
+			array( 'category' => 'Finance and Expenses', 'article_count' => 3, 'total_views' => 1377 ),
+			array( 'category' => 'IT Support', 'article_count' => 3, 'total_views' => 1069 ),
+			array( 'category' => 'Professional Development', 'article_count' => 3, 'total_views' => 819 ),
+		);
+	}
+
+	/**
+	 * Get demo tag analytics data
+	 *
+	 * @return array Array of tags with article count and total views
+	 */
+	public static function get_demo_tag_analytics() {
+
+		return array(
+			array( 'tag' => 'Getting Started', 'article_count' => 5, 'total_views' => 3847 ),
+			array( 'tag' => 'Best Practices', 'article_count' => 4, 'total_views' => 2892 ),
+			array( 'tag' => 'Guidelines', 'article_count' => 6, 'total_views' => 2567 ),
+			array( 'tag' => 'Policies', 'article_count' => 4, 'total_views' => 1923 ),
+			array( 'tag' => 'Training', 'article_count' => 3, 'total_views' => 1456 ),
+			array( 'tag' => 'Procedures', 'article_count' => 5, 'total_views' => 1234 ),
+			array( 'tag' => 'Quick Reference', 'article_count' => 3, 'total_views' => 987 ),
+			array( 'tag' => 'Advanced', 'article_count' => 2, 'total_views' => 542 ),
+		);
+	}
+
+	/**
+	 * Get demo best rated articles data
+	 *
+	 * @return array Array of articles with ratings
+	 */
+	public static function get_demo_best_rated_articles() {
+		return array(
+			array( 'title' => 'Introduction to Our Sales Process', 'avg_rating' => 4.8 ),
+			array( 'title' => 'Creating Effective Marketing Campaigns', 'avg_rating' => 4.7 ),
+			array( 'title' => 'Using the CRM Software', 'avg_rating' => 4.6 ),
+			array( 'title' => 'Inventory Management Best Practices', 'avg_rating' => 4.5 ),
+			array( 'title' => 'Understanding the Supply Chain', 'avg_rating' => 4.5 ),
+			array( 'title' => 'Onboarding Checklist for New Hires', 'avg_rating' => 4.4 ),
+			array( 'title' => 'Understanding Your Benefits Package', 'avg_rating' => 4.3 ),
+			array( 'title' => 'Getting Started with Your Work Computer', 'avg_rating' => 4.2 ),
+			array( 'title' => 'How to Request IT Support', 'avg_rating' => 4.1 ),
+			array( 'title' => 'Setting Career Goals', 'avg_rating' => 4.0 ),
+		);
+	}
+
+	/**
+	 * Get demo most rated articles data
+	 *
+	 * @return array Array of articles with rating counts
+	 */
+	public static function get_demo_most_rated_articles() {
+		return array(
+			array( 'title' => 'Introduction to Our Sales Process', 'times' => 234 ),
+			array( 'title' => 'Creating Effective Marketing Campaigns', 'times' => 198 ),
+			array( 'title' => 'Using the CRM Software', 'times' => 187 ),
+			array( 'title' => 'Inventory Management Best Practices', 'times' => 156 ),
+			array( 'title' => 'Understanding the Supply Chain', 'times' => 143 ),
+			array( 'title' => 'Onboarding Checklist for New Hires', 'times' => 132 ),
+			array( 'title' => 'Understanding Your Benefits Package', 'times' => 121 ),
+			array( 'title' => 'Safety Protocols in the Workplace', 'times' => 109 ),
+			array( 'title' => 'Performance Review Guidelines', 'times' => 98 ),
+			array( 'title' => 'Submitting Expense Reports', 'times' => 87 ),
+		);
+	}
+
+	/**
+	 * Get demo worst rated articles data
+	 *
+	 * @return array Array of articles with low ratings
+	 */
+	public static function get_demo_worst_rated_articles() {
+		return array(
+			array( 'title' => 'Advanced Budget Forecasting Techniques', 'avg_rating' => 2.1 ),
+			array( 'title' => 'Quarterly Strategic Planning Process', 'avg_rating' => 2.3 ),
+			array( 'title' => 'Internal Communication Protocol Updates', 'avg_rating' => 2.5 ),
+			array( 'title' => 'Office Furniture Replacement Procedures', 'avg_rating' => 2.7 ),
+			array( 'title' => 'Conference Room Booking Guidelines', 'avg_rating' => 2.8 ),
+		);
+	}
+
+	/**
+	 * Get demo least rated articles data
+	 *
+	 * @return array Array of articles with fewest ratings
+	 */
+	public static function get_demo_least_rated_articles() {
+		return array(
+			array( 'title' => 'Advanced Budget Forecasting Techniques', 'times' => 12 ),
+			array( 'title' => 'Quarterly Strategic Planning Process', 'times' => 15 ),
+			array( 'title' => 'Internal Communication Protocol Updates', 'times' => 18 ),
+			array( 'title' => 'Office Furniture Replacement Procedures', 'times' => 21 ),
+			array( 'title' => 'Conference Room Booking Guidelines', 'times' => 24 ),
+			array( 'title' => 'Annual Compliance Training Requirements', 'times' => 27 ),
+		);
+	}
+
+	/**
+	 * Check if a specific article is a demo article
+	 *
+	 * @param int $article_id Article ID to check
+	 * @return bool True if article is a demo article, false otherwise
+	 */
+	public static function is_demo_article( $article_id ) {
+
+		// Get the article
+		$article = get_post( $article_id );
+		if ( ! $article ) {
+			return false;
+		}
+
+		// Get KB ID from article post type
+		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $article->post_type );
+		if ( empty( $kb_id ) ) {
+			return false;
+		}
+
+		// First check if this KB has demo data
+		if ( ! self::is_demo_data( $kb_id ) ) {
+			return false;
+		}
+
+		// Get list of demo article titles
+		$demo_article_titles = self::get_demo_article_titles();
+
+		// Check if article title matches any demo article title
+		return in_array( $article->post_title, $demo_article_titles );
+	}
+
+	/**
+	 * Get all demo article titles
+	 *
+	 * @return array Array of demo article title strings
+	 */
+	private static function get_demo_article_titles() {
+		return array(
+			esc_html__('Introduction to Our Sales Process', 'echo-knowledge-base' ),
+			esc_html__('Creating Effective Marketing Campaigns', 'echo-knowledge-base' ),
+			esc_html__('Using the CRM Software', 'echo-knowledge-base' ),
+			esc_html__('Inventory Management Best Practices', 'echo-knowledge-base' ),
+			esc_html__('Understanding the Supply Chain', 'echo-knowledge-base' ),
+			esc_html__('Safety Protocols in the Workplace', 'echo-knowledge-base' ),
+			esc_html__('Onboarding Checklist for New Hires', 'echo-knowledge-base' ),
+			esc_html__('Understanding Your Benefits Package', 'echo-knowledge-base' ),
+			esc_html__('Performance Review Guidelines', 'echo-knowledge-base' ),
+			esc_html__('Submitting Expense Reports', 'echo-knowledge-base' ),
+			esc_html__('Travel Expense Guidelines', 'echo-knowledge-base' ),
+			esc_html__('Year-End Tax Information for Employees', 'echo-knowledge-base' ),
+			esc_html__('Getting Started with Your Work Computer', 'echo-knowledge-base' ),
+			esc_html__('How to Request IT Support', 'echo-knowledge-base' ),
+			esc_html__('Security Protocols for Safe Computing', 'echo-knowledge-base' ),
+			esc_html__('Identifying Training Opportunities', 'echo-knowledge-base' ),
+			esc_html__('Mentorship Programs Overview', 'echo-knowledge-base' ),
+			esc_html__('Setting Career Goals', 'echo-knowledge-base' ),
+		);
+	}
+
+	/**
+	 * Get demo Tags Usage analytics data
+	 *
+	 * @return array Demo tags usage data
+	 */
+	public static function get_demo_tags_usage_data() {
+		return array(
+			'version' => '1.0',
+			'score' => 85,
+			'kb_category_count' => 1,
+			'tag_count' => 5,
+			'tags' => array( 'Getting Started', 'Best Practices', 'Guidelines', 'Training', 'Procedures' ),
+			'current_tags' => array(),
+			'suggested_tags' => array( 'Employee Resources', 'Onboarding', 'Workplace' ),
+			'recommended_tags' => array(
+				array(
+					'priority' => 'medium',
+					'type' => 'ai_suggestions',
+					'message' => __( 'AI-powered tag suggestions based on content analysis:', 'echo-knowledge-base' ),
+					'suggested_tags' => array( 'Employee Resources', 'Onboarding', 'Workplace' )
+				)
+			),
+			'tag_analysis' => array(
+				'count_score' => array( 'score' => 100, 'issues' => array() ),
+				'format_score' => array( 'score' => 100, 'issues' => array() ),
+				'duplicate_score' => array( 'score' => 100, 'issues' => array(), 'duplicates' => array() ),
+				'category_score' => array( 'score' => 100, 'issues' => array() ),
+				'relevance_score' => array(
+					'score' => 85,
+					'issues' => array(),
+					'irrelevant_tags' => array(),
+					'weak_tags' => array(),
+					'strong_matches' => 4,
+					'weak_matches' => 1
+				),
+				'ai_suggestions' => array(
+					'score' => 100,
+					'issues' => array(),
+					'suggestions' => array( 'Employee Resources', 'Onboarding', 'Workplace' ),
+					'ai_feature_unavailable' => false,
+					'ai_error' => null
+				)
+			),
+			'analyzed_at' => current_time( 'mysql' ),
+			'is_demo' => true
+		);
+	}
+
+	/**
+	 * Get demo Readability analytics data
+	 *
+	 * @return array Demo readability data
+	 */
+	public static function get_demo_readability_data() {
+		return array(
+			'version' => '1.0',
+			'score' => 90,
+			'status' => 'analyzed',
+			'issues' => array(
+				array(
+					'issue_type' => 'Complexity',
+					'problematic_text' => 'The comprehensive onboarding process encompasses a multitude of procedural steps and documentation requirements.',
+					'explanation' => 'This sentence is overly complex and could be simplified. Suggested rewrite: "The onboarding process includes several steps and required documents."'
+				),
+				array(
+					'issue_type' => 'Jargon',
+					'problematic_text' => 'Utilize the synergistic framework for optimal stakeholder engagement.',
+					'explanation' => 'This sentence contains business jargon that may confuse readers. Suggested rewrite: "Use the framework to engage with stakeholders effectively."'
+				)
+			),
+			'ai_feature_unavailable' => false,
+			'analyzed_at' => current_time( 'mysql' ),
+			'is_demo' => true
+		);
+	}
+
+	/**
+	 * Get demo popular search terms
+	 *
+	 * @return array Array of search terms with counts
+	 */
+	public static function get_demo_popular_searches() {
+		return array(
+			array( 'term' => 'sales process', 'times' => 342 ),
+			array( 'term' => 'CRM software', 'times' => 298 ),
+			array( 'term' => 'benefits', 'times' => 276 ),
+			array( 'term' => 'expense report', 'times' => 254 ),
+			array( 'term' => 'onboarding', 'times' => 231 ),
+			array( 'term' => 'IT support', 'times' => 198 ),
+			array( 'term' => 'performance review', 'times' => 176 ),
+			array( 'term' => 'inventory management', 'times' => 165 ),
+			array( 'term' => 'security protocols', 'times' => 143 ),
+			array( 'term' => 'marketing campaign', 'times' => 132 ),
+		);
+	}
+
+	/**
+	 * Get demo no results search terms
+	 *
+	 * @return array Array of search terms with no results
+	 */
+	public static function get_demo_no_results_searches() {
+		return array(
+			array( 'term' => 'remote work policy', 'times' => 45 ),
+			array( 'term' => 'parking permits', 'times' => 38 ),
+			array( 'term' => 'team building activities', 'times' => 32 ),
+			array( 'term' => 'holiday schedule', 'times' => 27 ),
+			array( 'term' => 'company swag', 'times' => 21 ),
+			array( 'term' => 'gym membership', 'times' => 18 ),
+			array( 'term' => 'pet policy', 'times' => 15 ),
+			array( 'term' => 'bike storage', 'times' => 12 ),
+		);
+	}
+
+	/**
+	 * Get demo search statistics
+	 *
+	 * @return array Array with search statistics
+	 */
+	public static function get_demo_search_statistics() {
+		return array(
+			'total_searches' => array( 'Total Searches', 2543 ),
+			'total_no_results_searches' => array( 'Total No Results Searches', 208 ),
+		);
+	}
+
+	/**
+	 * Get demo data for specific AI Search Results section (core sections only)
+	 * Pro sections are handled by AI Features PRO
+	 *
+	 * @param string $section_id Section identifier
+	 * @param array $data Request data with 'query' and 'kb_id'
+	 * @return array Section data with 'has_content', 'html', 'data'
+	 */
+	public static function get_ai_search_results_section_demo_data( $section_id, $data ) {
+
+		$query = isset( $data['query'] ) ? $data['query'] : '';
+		$query_display = trim( (string) $query );
+		if ( '' === $query_display ) {
+			$query_display = __( 'your knowledge base', 'echo-knowledge-base' );
+		}
+
+		switch ( $section_id ) {
+			case 'ai-answer':
+				$section_name = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_ai_answer_name' );
+
+				$html  = '<div class="epkb-ai-sr-ai-answer-text">';
+				$html .= '<p>' . sprintf( esc_html__( 'Based on your search for "%s", here\'s what your team should focus on:', 'echo-knowledge-base' ), esc_html( $query_display ) ) . '</p>';
+				$html .= '<p>' . esc_html__( 'Use this quick summary to keep the onboarding process on track:', 'echo-knowledge-base' ) . '</p>';
+				$html .= '<ul>';
+				$html .= '<li><strong>' . esc_html__( 'Confirm employee details', 'echo-knowledge-base' ) . ':</strong> ' . esc_html__( 'Verify personal information, tax forms, and direct deposit preferences.', 'echo-knowledge-base' ) . '</li>';
+				$html .= '<li><strong>' . esc_html__( 'Assign onboarding tasks', 'echo-knowledge-base' ) . ':</strong> ' . esc_html__( 'Share the new hire checklist and track completion dates.', 'echo-knowledge-base' ) . '</li>';
+				$html .= '<li><strong>' . esc_html__( 'Communicate key policies', 'echo-knowledge-base' ) . ':</strong> ' . esc_html__( 'Highlight remote work rules, security standards, and time-off guidelines.', 'echo-knowledge-base' ) . '</li>';
+				$html .= '<li><strong>' . esc_html__( 'Plan first-week touchpoints', 'echo-knowledge-base' ) . ':</strong> ' . esc_html__( 'Schedule introductions with HR, IT, and the hiring manager.', 'echo-knowledge-base' ) . '</li>';
+				$html .= '</ul>';
+				$html .= '<p>' . esc_html__( 'Share these steps with the employee and loop in HR support if questions come up.', 'echo-knowledge-base' ) . '</p>';
+				$html .= '</div>';
+
+				// Create database record even for demo data so chat_id is available for record-feedback and submit-contact-support
+				$demo_answer = wp_strip_all_tags( $html );
+				$session_id = EPKB_AI_Security::get_or_create_session();
+				$language = EPKB_Language_Utilities::detect_current_language();
+				$mode = EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? 'advanced_search' : 'search';
+
+				$conversation = new EPKB_AI_Conversation_Model( array(
+					'user_id'    => get_current_user_id(),
+					'mode'       => $mode,
+					'chat_id'    => 'search_' . EPKB_AI_Utilities::generate_uuid_v4(),
+					'session_id' => $session_id,
+					'widget_id'  => 1,
+					'language'   => $language['locale'],
+					'ip'         => EPKB_AI_Utilities::get_hashed_ip()
+				) );
+
+				$conversation->add_message( 'user', $query );
+				$conversation->add_message( 'assistant', $demo_answer, array( 'demo_mode' => true ) );
+
+				$repository = new EPKB_AI_Messages_DB();
+				$repository->save_conversation( $conversation );
+
+				return array(
+					'has_content' => true,
+					'html' => EPKB_AI_Search_Results_Handler::get_section_wrapper( $html, 'ai-answer', $section_name ),
+					'data' => array(
+						'query' => $query,
+						'chat_id' => $conversation->get_chat_id(),
+						'source' => 'demo'
+					)
+				);
+
+			case 'matching-articles':
+				$section_name = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_matching_articles_name' );
+
+				$articles = array(
+					array(
+						'id' => 101,
+						'title' => __( 'Complete the New Hire Checklist', 'echo-knowledge-base' ),
+						'url' => '#',
+						'excerpt' => __( 'Step-by-step instructions and deadlines for onboarding paperwork.', 'echo-knowledge-base' )
+					),
+					array(
+						'id' => 102,
+						'title' => __( 'Set Up Payroll and Benefits Access', 'echo-knowledge-base' ),
+						'url' => '#',
+						'excerpt' => __( 'How to enter direct deposit, tax elections, and benefits selections.', 'echo-knowledge-base' )
+					),
+					array(
+						'id' => 103,
+						'title' => __( 'Prepare Orientation Day Resources', 'echo-knowledge-base' ),
+						'url' => '#',
+						'excerpt' => __( 'Checklist for equipment requests, system access, and welcome materials.', 'echo-knowledge-base' )
+					)
+				);
+
+				$html = '<ul class="epkb-ai-sr-articles-list">';
+				foreach ( $articles as $article ) {
+					$html .= '<li class="epkb-ai-sr-article-item">';
+					$html .= '<a href="' . esc_url( $article['url'] ) . '" class="epkb-ai-sr-article-link" data-kb-article-id="' . esc_attr( $article['id'] ) . '">';
+					$html .= '<h4 class="epkb-ai-sr-article-title">' . esc_html( $article['title'] ) . '</h4>';
+					$html .= '<p class="epkb-ai-sr-article-excerpt">' . esc_html( $article['excerpt'] ) . '</p>';
+					$html .= '</a>';
+					$html .= '</li>';
+				}
+				$html .= '</ul>';
+
+				return array(
+					'has_content' => true,
+					'html' => EPKB_AI_Search_Results_Handler::get_section_wrapper( $html, 'matching-articles', $section_name ),
+					'data' => array(
+						'articles' => $articles,
+						'count' => count( $articles )
+					)
+				);
+
+			case 'contact-us':
+				$button_text = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_contact_support_button_text', 'Contact Support' );
+				$section_name = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_contact_us_name', 'Contact Us' );
+
+				$html  = '<div class="epkb-ai-sr-contact-box">';
+				$html .= '<p class="epkb-ai-sr-contact-message">' . esc_html__( 'Couldn\'t find what you were looking for?', 'echo-knowledge-base' ) . '</p>';
+				$html .= '<p class="epkb-ai-sr-contact-description">' . esc_html__( 'Our support team is here to help. Reach out and we\'ll respond as soon as possible.', 'echo-knowledge-base' ) . '</p>';
+
+				// Hidden form fields
+				$html .= '<div class="epkb-ai-sr-contact-form" style="display: none;">';
+				$html .= '<div class="epkb-ai-sr-contact-field">';
+				$html .= '<label for="epkb-ai-sr-contact-name">' . esc_html__( 'Name', 'echo-knowledge-base' ) . '</label>';
+				$html .= '<input type="text" id="epkb-ai-sr-contact-name" class="epkb-ai-sr-contact-input" required />';
+				$html .= '</div>';
+				$html .= '<div class="epkb-ai-sr-contact-field">';
+				$html .= '<label for="epkb-ai-sr-contact-email">' . esc_html__( 'Email', 'echo-knowledge-base' ) . '</label>';
+				$html .= '<input type="email" id="epkb-ai-sr-contact-email" class="epkb-ai-sr-contact-input" required />';
+				$html .= '</div>';
+				$html .= '</div>';
+
+				$html .= '<button class="epkb-ai-sr-contact-button">' . esc_html( $button_text ) . '</button>';
+				$html .= '</div>';
+
+				return array(
+					'has_content' => true,
+					'html' => EPKB_AI_Search_Results_Handler::get_section_wrapper( $html, 'contact-us', $section_name ),
+					'data' => array(
+						'query' => $query
+					)
+				);
+
+			case 'feedback':
+				$section_name = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_feedback_name' );
+
+				$html  = '<div class="epkb-ai-sr-feedback-widget">';
+				$html .= '<p class="epkb-ai-sr-feedback-question">' . esc_html__( 'Was this answer helpful?', 'echo-knowledge-base' ) . '</p>';
+				$html .= '<div class="epkb-ai-sr-feedback-buttons">';
+				$html .= '<button class="epkb-ai-sr-feedback-btn epkb-ai-sr-feedback-btn--up" data-vote="up"><span class="epkbfa epkbfa-thumbs-up"></span> ' . esc_html__( 'Yes', 'echo-knowledge-base' ) . '</button>';
+				$html .= '<button class="epkb-ai-sr-feedback-btn epkb-ai-sr-feedback-btn--down" data-vote="down"><span class="epkbfa epkbfa-thumbs-down"></span> ' . esc_html__( 'No', 'echo-knowledge-base' ) . '</button>';
+				$html .= '</div>';
+				$html .= '</div>';
+
+				return array(
+					'has_content' => true,
+					'html' => EPKB_AI_Search_Results_Handler::get_section_wrapper( $html, 'feedback', $section_name ),
+					'data' => array()
+				);
+
+			default:
+				// For any unknown sections, return empty content
+				return array( 'has_content' => false, 'html' => '', 'data' => array() );
+		}
 	}
 }

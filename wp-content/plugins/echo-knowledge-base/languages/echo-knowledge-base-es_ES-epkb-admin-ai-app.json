@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "es_ES",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Go to General Settings": [
+                "Ir a la Configuración General"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Para usar funciones de IA, configure su clave API y acepte el acuerdo de privacidad de datos en Configuración General, luego habilite IA Search o IA Chat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Para usar IA Chat o IA Search, habilite IA Chat o IA Search en sus pestañas respectivas."
+            ],
+            "Data Collection": [
+                "Recopilación de datos"
+            ],
+            "OpenAI API Key Required": [
+                "Se requiere la clave API de OpenAI"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Para usar las funciones de IA, necesita configurar su clave API de OpenAI."
+            ],
+            "Configure API Key": [
+                "Configurar clave API"
+            ],
+            "Failed to load tab data": [
+                "Error al cargar datos de la pestaña"
+            ],
+            "Unknown tab": [
+                "Pestaña desconocida"
+            ],
+            "AI Configuration": [
+                "Configuración de IA"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Error: No hay pestañas configuradas. Por favor, verifique la configuración."
+            ],
+            "New training data collection created": [
+                "Nueva recopilación de datos de entrenamiento creada"
+            ],
+            "Failed to create collection": [
+                "Error al crear la colección"
+            ],
+            "AI features must be enabled to access this tab": [
+                "Las funciones de IA deben estar habilitadas para acceder a esta pestaña"
+            ],
+            "Reloading page...": [
+                "Recargando la página..."
+            ]
+        }
+    }
+}

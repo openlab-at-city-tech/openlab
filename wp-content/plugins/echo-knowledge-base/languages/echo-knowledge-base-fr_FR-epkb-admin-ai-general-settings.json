@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Settings saved successfully": [
+                "Paramètres enregistrés avec succès"
+            ],
+            "Saving...": [
+                "Sauvegarde en cours..."
+            ],
+            "Save Settings": [
+                "Enregistrer les paramètres"
+            ],
+            "Failed to save settings": [
+                "Échec de l'enregistrement des paramètres"
+            ],
+            "Sending...": [
+                "Envoi..."
+            ],
+            "Test email sent successfully": [
+                "E-mail de test envoyé avec succès"
+            ],
+            "Failed to send test email": [
+                "Échec de l'envoi de l'e-mail de test"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Échec de l'envoi de l'e-mail de test. Veuillez vérifier votre connexion."
+            ]
+        }
+    }
+}

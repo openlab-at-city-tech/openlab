@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Search Results": [
+                "検索結果"
+            ],
+            "Page": [
+                "固定ページ"
+            ],
+            "Settings saved successfully": [
+                "設定が正常に保存されました"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "Date:": [
+                "日付:"
+            ],
+            "Next": [
+                "次"
+            ],
+            "Previous": [
+                "前"
+            ],
+            "Saving...": [
+                "保存中..."
+            ],
+            "Search History": [
+                "検索履歴"
+            ],
+            "Search Settings": [
+                "検索設定"
+            ],
+            "Single Column": [
+                "1列"
+            ],
+            "Left Column": [
+                "左列"
+            ],
+            "Right Column": [
+                "右列"
+            ],
+            "Middle Column": [
+                "中央列"
+            ],
+            "Feedback": [
+                "フィードバック"
+            ],
+            "AI Assistant": [
+                "AIアシスタント"
+            ],
+            "Save Settings": [
+                "設定を保存"
+            ],
+            "Delete": [
+                "削除"
+            ],
+            "Delete Selected": [
+                "選択した項目を削除"
+            ],
+            "of": [
+                "の"
+            ],
+            "Reset": [
+                "リセット"
+            ],
+            "Refreshing...": [
+                "更新しています..."
+            ],
+            "Refresh": [
+                "更新"
+            ],
+            "Time": [
+                "時間"
+            ],
+            "User": [
+                "ユーザー"
+            ],
+            "Searching server for more results...": [
+                "サーバーから追加の結果を検索しています..."
+            ],
+            "User:": [
+                "ユーザー:"
+            ],
+            "Status:": [
+                "ステータス:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "デフォルトの指示にリセットしてもよろしいですか？"
+            ],
+            "Reset Instructions": [
+                "指示をリセット"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "デフォルトの指示にリセットしてもよろしいですか？カスタム指示は失われます。."
+            ],
+            "Reset to Default": [
+                "デフォルトに戻す"
+            ],
+            "Failed to save settings": [
+                "設定の保存に失敗しました"
+            ],
+            "Go to Settings": [
+                "設定へ移動"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "選択した検索を削除してもよろしいですか？"
+            ],
+            "Delete Search History": [
+                "検索履歴を削除"
+            ],
+            "Deleting searches...": [
+                "検索を削除中..."
+            ],
+            "Search history refreshed successfully": [
+                "検索履歴を正常に更新しました。"
+            ],
+            "Search queries...": [
+                "検索クエリ..."
+            ],
+            "Loading search history...": [
+                "検索履歴を読み込み中..."
+            ],
+            "No searches found": [
+                "検索は見つかりませんでした"
+            ],
+            "Search Query": [
+                "検索クエリ"
+            ],
+            "Info": [
+                "情報"
+            ],
+            "Contact request submitted": [
+                "お問い合わせが送信されました"
+            ],
+            "User Needs Help": [
+                "サポートが必要なユーザー"
+            ],
+            "Positive feedback": [
+                "ポジティブなフィードバック"
+            ],
+            "Negative feedback": [
+                "否定的なフィードバック"
+            ],
+            "Search Details": [
+                "検索の詳細"
+            ],
+            "Select a search to view details": [
+                "詳細を表示するには検索を選択してください"
+            ],
+            "Search Information": [
+                "検索情報"
+            ],
+            "Query:": [
+                "クエリ："
+            ],
+            "Results Count:": [
+                "結果件数："
+            ],
+            "Contact Request": [
+                "お問い合わせ"
+            ],
+            "Name:": [
+                "名前："
+            ],
+            "Email:": [
+                "メールアドレス："
+            ],
+            "Vote:": [
+                "投票："
+            ],
+            "Positive": [
+                "肯定的"
+            ],
+            "Negative": [
+                "否定的"
+            ],
+            "Search Interaction": [
+                "検索の操作"
+            ],
+            "AI Response": [
+                "AI の応答"
+            ],
+            "✓ Clicked": [
+                "✓ クリック済み"
+            ],
+            "Relevance:": [
+                "関連性："
+            ],
+            "No sections added yet": [
+                "まだセクションが追加されていません"
+            ],
+            "-- Select Section --": [
+                "-- セクションを選択 --"
+            ],
+            "Add Section": [
+                "セクションを追加"
+            ],
+            "Failed to load search history": [
+                "検索履歴の読み込みに失敗しました"
+            ],
+            "Searches deleted successfully": [
+                "検索履歴を正常に削除しました"
+            ],
+            "Failed to delete searches": [
+                "検索の削除に失敗しました"
+            ],
+            "AI Search is Disabled": [
+                "AI 検索は無効です"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "検索履歴を表示するには、設定タブで AI 検索を有効にしてください。."
+            ]
+        }
+    }
+}

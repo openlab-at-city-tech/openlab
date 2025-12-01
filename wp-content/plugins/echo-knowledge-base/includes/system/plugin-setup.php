@@ -56,6 +56,12 @@ function epkb_deactivation() {
 
 	// Clear the permalinks to remove our post type's rules
 	flush_rewrite_rules( false );
-
+	
+	// Clear any single event hooks
+	wp_unschedule_hook( 'epkb_ai_run_sync' );
+	wp_unschedule_hook( 'epkb_ai_run_cleanup_now' );
+	
+	// Clear any sync locks
+	delete_transient( 'epkb_ai_sync_lock' );
 }
 register_deactivation_hook( Echo_Knowledge_Base::$plugin_file, 'epkb_deactivation' );

@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "AI Search": [
+                "Пошук ШІ"
+            ],
+            "All": [
+                "Всі"
+            ],
+            "Disabled": [
+                "Вимкнено"
+            ],
+            "AI Chat": [
+                "AI чат"
+            ],
+            "OpenAI API Key": [
+                "Ключ API OpenAI"
+            ],
+            "AI logs cleared successfully": [
+                "Журнали ШІ успішно очищено"
+            ],
+            "Debug mode updated successfully": [
+                "Режим налагодження успішно оновлено"
+            ],
+            "Refresh": [
+                "Оновити"
+            ],
+            "Status:": [
+                "Статус:"
+            ],
+            "Warnings": [
+                "Попередження"
+            ],
+            "Info": [
+                "Інформація"
+            ],
+            "Failed to update debug mode": [
+                "Не вдалося оновити режим налагодження"
+            ],
+            "Error updating debug mode": [
+                "Помилка оновлення режиму налагодження"
+            ],
+            "Failed to load PHP logs": [
+                "Не вдалося завантажити журнали PHP"
+            ],
+            "Error loading PHP logs": [
+                "Помилка завантаження журналів PHP"
+            ],
+            "Failed to load WP logs": [
+                "Не вдалося завантажити журнали WordPress"
+            ],
+            "Error loading WP logs": [
+                "Помилка завантаження журналів WordPress"
+            ],
+            "Failed to load AI logs": [
+                "Не вдалося завантажити журнали ШІ"
+            ],
+            "Error loading AI logs": [
+                "Помилка завантаження журналів ШІ"
+            ],
+            "Failed to clear AI logs": [
+                "Не вдалося очистити журнали ШІ"
+            ],
+            "Error clearing AI logs": [
+                "Помилка очищення журналів ШІ"
+            ],
+            "Debug Mode": [
+                "Режим налагодження"
+            ],
+            "Enable Debug Mode": [
+                "Увімкнути режим налагодження"
+            ],
+            " (Localhost detected)": [
+                "(Виявлено локальний хост)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Увімкніть режим налагодження, щоб переглядати системні журнали та усувати проблеми з функціями ШІ. Це завантажить додаткові інструменти налагодження."
+            ],
+            "AI Information": [
+                "Інформація про ШІ"
+            ],
+            "Missing API Key": [
+                "Відсутній API-ключ"
+            ],
+            "Data Collections": [
+                "Збірки даних"
+            ],
+            "Unnamed Collection": [
+                "Безіменна колекція"
+            ],
+            "Vector Store:": [
+                "Векторне сховище:"
+            ],
+            "Created": [
+                "Створено"
+            ],
+            "Not created": [
+                "Не створено"
+            ],
+            "Total Records:": [
+                "Усього записів:"
+            ],
+            "Added:": [
+                "Додано:"
+            ],
+            "Updated:": [
+                "Оновлено:"
+            ],
+            "Outdated:": [
+                "Застаріло:"
+            ],
+            "Error:": [
+                "Помилка:"
+            ],
+            "Pending:": [
+                "Очікує:"
+            ],
+            "No data collections found.": [
+                "Збірки даних не знайдено."
+            ],
+            "System Information": [
+                "Інформація системи"
+            ],
+            "Download Debug Info": [
+                "Завантажити інформацію для відлагодження"
+            ],
+            "Logs": [
+                "Журнали"
+            ],
+            "PHP Error Log": [
+                "Журнал помилок PHP"
+            ],
+            "Fatal Errors": [
+                "Фатальні помилки"
+            ],
+            "Notices": [
+                "Повідомлення"
+            ],
+            "AI Related Only": [
+                "Тільки щодо ШІ"
+            ],
+            "Latest at top": [
+                "Найновіші зверху"
+            ],
+            "No logs found.": [
+                "Журнали не знайдено."
+            ],
+            "WordPress Error Log": [
+                "Журнал помилок WordPress"
+            ],
+            "AI Activity Log": [
+                "Журнал активності ШІ"
+            ],
+            "Clear Log": [
+                "Очистити журнал"
+            ],
+            "All Levels": [
+                "Усі рівні"
+            ],
+            "Errors Only": [
+                "Тільки помилки"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Режим налагодження вимкнено. Увімкніть його вище, щоб переглянути інформацію для налагодження."
+            ]
+        }
+    }
+}

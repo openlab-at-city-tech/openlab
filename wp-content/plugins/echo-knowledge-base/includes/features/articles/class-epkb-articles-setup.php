@@ -28,8 +28,6 @@ class EPKB_Articles_Setup {
 
 		global $epkb_password_checked, $eckb_is_kb_main_page;
 
-		$is_modular = $kb_config['modular_main_page_toggle'] == 'on';
-
 		if ( empty( $epkb_password_checked ) && post_password_required() ) {
 			return get_the_password_form();
 		}
@@ -95,7 +93,7 @@ class EPKB_Articles_Setup {
 		 * For Modular page, the Article Page width is not required since sidebar layout is nested inside the module row.
 		 */
 		$article_container_structure_version = 'eckb-article-page-container-v2';
-		if ( $is_modular && $eckb_is_kb_main_page ) {
+		if ( $eckb_is_kb_main_page ) {
 			$article_container_structure_version = 'epkb-ml-sidebar-layout-inner';
 		} ?>
 
@@ -126,6 +124,9 @@ class EPKB_Articles_Setup {
 		</div><!-- /#eckb-article-page-container-v2 -->
 
 		<style id="eckb-article-styles" type="text/css"><?php echo EPKB_Utilities::minify_css( self::$styles ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></style>   <?php
+
+		$frontend_editor = new EPKB_Frontend_Editor();
+		$frontend_editor->generate_page_content( $kb_config, 'article-page' );
 
 		$article_content = ob_get_clean();
 
@@ -209,19 +210,31 @@ class EPKB_Articles_Setup {
 	 */
 	public static function search_box( $args ) {
 
-		$is_modular_page = $args['config']['modular_main_page_toggle'] == 'on';
 		$is_sidebar_layout = $args['config']['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT;
-		$is_kb_main_page_search_off = $is_modular_page ? ! EPKB_Core_Utilities::is_module_present( $args['config'], 'search' ) : $args['config']['search_layout'] == 'epkb-search-form-0';
+		$is_kb_main_page_search_off = ! EPKB_Core_Utilities::is_module_present( $args['config'], 'search' );
+		$is_article_search_settings_off = $args['config']['article_search_toggle'] == 'off';
 
 		// SEARCH BOX OFF: no search box if Article Page search is off except Sidebar Layout that behaves like the Main Page
-		$is_article_search_off = $is_sidebar_layout ? $is_kb_main_page_search_off : $args['config']['article_search_toggle'] == 'off';
+		$is_article_search_off = $is_sidebar_layout ? $is_kb_main_page_search_off : $is_article_search_settings_off;
 		if ( $is_article_search_off ) {
 			return;
 		}
 
-		// The Sidebar layout on Modular KB Main Page will not output search box as Modular Search will be shown instead
-		if ( EPKB_Utilities::is_kb_main_page() && $is_sidebar_layout && $is_modular_page ) {
+		// The Sidebar layout will not output search box as Modular Search will be shown instead
+		if ( EPKB_Utilities::is_kb_main_page() && $is_sidebar_layout ) {
 			return;
+		}
+
+		// SEARCH BOX OFF: user uses blocks on KB Main Page so user has option to disable search on Article Page
+		if ( $is_article_search_settings_off && EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $args['config'] ) ) {
+			return;
+			/* $main_page = get_post( EPKB_KB_Handler::get_first_kb_main_page_id( $args['config'] ) );
+			if ( ! empty( $main_page ) ) {
+				$kb_main_page_block_layout = EPKB_Block_Utilities::get_kb_block_layout( $main_page );
+				if ( ! empty( $kb_main_page_block_layout ) ) {
+					return;
+				}
+			} */
 		}
 
 		EPKB_KB_Search::get_search_form_output( $args['config'] );

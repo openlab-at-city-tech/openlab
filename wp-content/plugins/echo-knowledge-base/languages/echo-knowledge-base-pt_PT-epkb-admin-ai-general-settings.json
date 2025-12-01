@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings saved successfully": [
+                "Configurações guardadas com sucesso"
+            ],
+            "Saving...": [
+                "A guardar..."
+            ],
+            "Save Settings": [
+                "Guardar Configurações"
+            ],
+            "Failed to save settings": [
+                "Falha ao guardar definições"
+            ],
+            "Sending...": [
+                "A enviar..."
+            ],
+            "Test email sent successfully": [
+                "E-mail de teste enviado com sucesso"
+            ],
+            "Failed to send test email": [
+                "Falhou o envio do e-mail de teste"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Falhou o envio do e-mail de teste. Por favor, verifique a sua conexão."
+            ]
+        }
+    }
+}

@@ -147,6 +147,7 @@ final class EPKB_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'General', 'echo-knowledge-base' ),
 						'fields' => array(
 							'kb_id' => EPKB_Blocks_Settings::get_kb_id_setting(),
+							'kb_ai_collection_id' => EPKB_Blocks_Settings::get_kb_ai_collection_id_setting(),
 							'ml_search_layout' => array(
 								'setting_type' => 'select_buttons_string',
 							),

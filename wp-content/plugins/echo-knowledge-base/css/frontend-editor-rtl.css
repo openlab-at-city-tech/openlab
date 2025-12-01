@@ -1,0 +1,8 @@
+[dir=rtl] #epkb-fe__editor .epkb-input-custom-dropdown__options-list {
+  right: unset;
+  left: 0;
+}
+[dir=rtl] #epkb-fe__editor .epkb-admin__color-field .button {
+  padding-left: unset;
+  padding-right: 2.5em;
+}

@@ -13,7 +13,7 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 	/**
 	 * Generate content of the KB main page
 	 */
-	public function generate_non_modular_kb_main_page() { ?>
+	public function generate_kb_main_page() { ?>
 		<div id="epkb-modular-main-page-container" role="main" aria-labelledby="epkb-modular-main-page-container" class="epkb-css-full-reset <?php echo esc_attr( EPKB_Utilities::get_active_theme_classes() ); ?>">			<?php
 			$this->display_modular_container(); ?>
 		</div>   <?php
@@ -165,23 +165,34 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 			// generate layout
 			$layout_output = '';
 
-			// handle Elegant layouts
-			if ( EPKB_Layouts_Setup::is_elay_layout( $layout ) ) {
-				ob_start();
-				if ( $layout == EPKB_Layout::SIDEBAR_LAYOUT ) {
-					apply_filters( 'sidebar_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $this->articles_seq_data, $this->sidebar_layout_content );
-				} else {
-					apply_filters( strtolower( $layout ) . '_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $this->articles_seq_data );
-				}
-				$layout_output = ob_get_clean();
-				if ( ! empty( $layout_output ) ) {
-					//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo $layout_output;
-				}
+		// handle Elegant layouts
+		if ( EPKB_Layouts_Setup::is_elay_layout( $layout ) ) {
+			
+			// pass wizard demo icons to Elegant Layouts via articles_seq_data
+			$articles_seq_data_with_icons = $this->articles_seq_data;
+			if ( ! empty( $this->wizard_demo_icons ) ) {
+				$articles_seq_data_with_icons['__wizard_demo_icons'] = $this->wizard_demo_icons;
 			}
+			
+			ob_start();
+			if ( $layout == EPKB_Layout::SIDEBAR_LAYOUT ) {
+				apply_filters( 'sidebar_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $articles_seq_data_with_icons, $this->sidebar_layout_content );
+			} else {
+				apply_filters( strtolower( $layout ) . '_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $articles_seq_data_with_icons );
+			}
+			$layout_output = ob_get_clean();
+			if ( ! empty( $layout_output ) ) {
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $layout_output;
+			}
+		}
 
 			// handle Core layouts and default
 			if ( empty( $layout_output ) ) {
+				// pass wizard demo icons to the layout handler
+				if ( ! empty( $this->wizard_demo_icons ) ) {
+					$handler->wizard_demo_icons = $this->wizard_demo_icons;
+				}
 				$handler->display_categories_and_articles( $this->kb_config, $this->category_seq_data, $this->articles_seq_data );
 			}
 
@@ -400,9 +411,9 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 						case 'Categories':
 							$output .= EPKB_Layout_Categories::get_inline_styles( $kb_config );
 							break;
-						case 'Classic':
-							$output .= EPKB_Layout_Classic::get_inline_styles( $kb_config );
-							break;
+					case 'Classic':
+						$output .= EPKB_Layout_Classic::get_inline_styles( $kb_config );
+						break;
 						case 'Drill-Down':
 							$output .= EPKB_Layout_Drill_Down::get_inline_styles( $kb_config );
 							break;
@@ -607,6 +618,10 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 		} else {
 			$this->category_seq_data = $seq_meta['categories_seq_meta'];
 			$this->articles_seq_data = $seq_meta['articles_seq_meta'];
+			// store wizard demo icons if provided
+			if ( ! empty( $seq_meta['category_icons'] ) ) {
+				$this->wizard_demo_icons = $seq_meta['category_icons'];
+			}
 		}
 
 		// for WPML filter categories and articles given active language

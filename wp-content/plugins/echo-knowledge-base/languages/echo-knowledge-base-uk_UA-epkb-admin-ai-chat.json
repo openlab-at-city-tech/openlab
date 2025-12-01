@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Settings": [
+                "Налаштування"
+            ],
+            "Settings saved successfully": [
+                "Налаштування успішно збережено"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "Saving...": [
+                "Збереження..."
+            ],
+            "Go to General Settings": [
+                "Перейдіть до Загальних налаштувань"
+            ],
+            "Chat History": [
+                "Історія чату"
+            ],
+            "API Configuration": [
+                "Налаштування API"
+            ],
+            "AI Assistant": [
+                "ШІ-помічник"
+            ],
+            "Save Settings": [
+                "Зберегти налаштування"
+            ],
+            "Delete": [
+                "Видалити"
+            ],
+            "Delete Selected": [
+                "Видалити обрані"
+            ],
+            "Reset": [
+                "Скинути"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Ви впевнені, що хочете видалити обрані розмови?"
+            ],
+            "Delete Conversations": [
+                "Видалити розмови"
+            ],
+            "Deleting conversations...": [
+                "Видалення розмов..."
+            ],
+            "Conversations refreshed successfully": [
+                "Розмови успішно оновлено"
+            ],
+            "Search conversations...": [
+                "Пошук розмов..."
+            ],
+            "Refreshing...": [
+                "Оновлення..."
+            ],
+            "Refresh": [
+                "Оновити"
+            ],
+            "Loading conversations...": [
+                "Завантаження розмов..."
+            ],
+            "No conversations found": [
+                "Розмови не знайдено"
+            ],
+            "Time": [
+                "Час"
+            ],
+            "User": [
+                "Користувач"
+            ],
+            "Conversation": [
+                "Розмова"
+            ],
+            "Searching server for more results...": [
+                "Пошук додаткових результатів на сервері..."
+            ],
+            "Conversation Details": [
+                "Деталі розмови"
+            ],
+            "Select a conversation to view details": [
+                "Виберіть розмову, щоб переглянути деталі"
+            ],
+            "Conversation Info": [
+                "Інформація про розмову"
+            ],
+            "User:": [
+                "Користувач:"
+            ],
+            "Started:": [
+                "Почато:"
+            ],
+            "Messages:": [
+                "Повідомлення:"
+            ],
+            "Status:": [
+                "Статус:"
+            ],
+            "Rating:": [
+                "Рейтинг:"
+            ],
+            "Full Conversation": [
+                "Повна розмова"
+            ],
+            "No messages in this conversation.": [
+                "У цій розмові немає повідомлень."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Ви впевнені, що хочете скинути до інструкцій за замовчуванням?"
+            ],
+            "Reset Instructions": [
+                "Скинути інструкції"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Ви впевнені, що хочете скинути до інструкцій за замовчуванням? Ваші персоналізовані інструкції будуть втрачені."
+            ],
+            "Reset to Default": [
+                "Скинути за замовчуванням"
+            ],
+            "Failed to load conversations": [
+                "Не вдалося завантажити розмови"
+            ],
+            "Failed to save settings": [
+                "Не вдалося зберегти налаштування"
+            ],
+            "Conversations deleted successfully": [
+                "Розмови успішно видалено"
+            ],
+            "Failed to delete conversations": [
+                "Не вдалося видалити розмови"
+            ],
+            "AI Chat is Disabled": [
+                "AI Чат вимкнено"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "Щоб переглянути історію чату, увімкніть AI Чат на вкладці Налаштування."
+            ],
+            "Go to Settings": [
+                "Перейти до Налаштувань"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "Ключ API OpenAI не налаштований. Налаштуйте його у Загальних налаштуваннях, щоб використовувати функції AI Чат."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Будь ласка, прийміть угоду про приватність даних у Загальних налаштуваннях, щоб використовувати функції AI Чат."
+            ],
+            "AI Chat Tutorial": [
+                "AI Чат: навчальний посібник"
+            ],
+            "Learn how to configure and use the AI Chat feature to provide instant support to your users.": [
+                "Дізнайтеся, як налаштувати та використовувати функцію AI Чат, щоб надавати миттєву підтримку вашим користувачам."
+            ],
+            "AI Chat Tutorial Screenshot": [
+                "AI Чат: скріншот навчального посібника"
+            ],
+            "<h4>Getting Started with AI Chat</h4><ul><li>Enable AI Chat in the Settings tab</li><li>Configure your chat widget appearance and behavior</li><li>View conversation history to see how users interact with your AI assistant</li><li>Customize the AI instructions to match your support style</li></ul>": [
+                "<h4>Початок роботи з AI Чат</h4><ul><li>Увімкніть AI Чат на вкладці Налаштування</li><li>Налаштуйте вигляд віджета чату та його поведінку</li><li>Перегляньте історію розмов, щоб побачити, як користувачі взаємодіють із вашим AI-асистентом</li><li>Налаштуйте інструкції AI, щоб відповідати стилю вашої підтримки</li></ul>"
+            ]
+        }
+    }
+}

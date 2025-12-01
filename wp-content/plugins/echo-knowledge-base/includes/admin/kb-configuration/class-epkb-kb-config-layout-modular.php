@@ -17,12 +17,6 @@ class EPKB_KB_Config_Layout_Modular {
 
         $config_specification = array(
 
-	        'modular_main_page_toggle'                              => array(
-		        'label'       => esc_html__( 'Modular Main Page', 'echo-knowledge-base' ),
-		        'name'        => 'modular_main_page_toggle',
-		        'type'        => EPKB_Input_Filter::CHECKBOX,
-		        'default'     => 'on'
-	        ),
 	        'modular_main_page_custom_css_toggle'                   => array(
 		        'label'       => esc_html__( 'Custom CSS', 'echo-knowledge-base' ),
 		        'name'        => 'modular_main_page_custom_css_toggle',

@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Cancel": [
+                "Скасувати"
+            ],
+            "articles": [
+                "статті"
+            ],
+            "Analyze Content": [
+                "Аналізувати вміст"
+            ],
+            "No articles found to analyze": [
+                "Статей не знайдено для аналізу"
+            ],
+            "of": [
+                "з"
+            ],
+            "Analysis canceled": [
+                "Аналіз скасовано"
+            ],
+            "Failed to cancel analysis": [
+                "Не вдалося скасувати аналіз"
+            ],
+            "Calculating...": [
+                "Обчислення..."
+            ],
+            "Analysis failed": [
+                "Не вдалося виконати аналіз"
+            ],
+            "Content analysis completed successfully!": [
+                "Аналіз вмісту успішно завершено!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Досягнуто ліміту повторних запитів до OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Не вдалося запустити аналіз"
+            ],
+            "Analysis Job Running": [
+                "Завдання аналізу виконується"
+            ],
+            "Wait": [
+                "Зачекайте"
+            ],
+            "articles selected for analysis": [
+                "Статті, відібрані для аналізу"
+            ],
+            "Analysis in Progress": [
+                "Аналіз у процесі"
+            ],
+            "Stop Analysis": [
+                "Зупинити аналіз"
+            ],
+            "Starting analysis...": [
+                "Початок аналізу..."
+            ],
+            "article": [
+                "Документація"
+            ],
+            "Analyzing": [
+                "Аналіз"
+            ],
+            "Completed! Analyzed": [
+                "Завершено! Проаналізовано"
+            ],
+            "error": [
+                "помилка"
+            ],
+            "errors": [
+                "помилки"
+            ],
+            "with": [
+                "з"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Аналіз зупинено після помилок. Проаналізовано"
+            ],
+            "Remaining Time:": [
+                "Залишилося часу:"
+            ]
+        }
+    }
+}

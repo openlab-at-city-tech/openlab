@@ -40,38 +40,6 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 		</div>   <?php
 	}
 
-    /**
-	 * Generate content of the KB main page
-	 */
-	public function generate_non_modular_kb_main_page() {
-
-		$active_cat_id = $this->get_active_category_id();
-
-		$class2_escaped = $this->get_css_class( '::width' );    ?>
-
-		<div id="epkb-main-page-container" role="main" aria-labelledby="<?php esc_html_e( 'Knowledge Base', 'echo-knowledge-base' ); ?>" class="epkb-css-full-reset epkb-tabs-template <?php echo esc_attr( EPKB_Utilities::get_active_theme_classes() ); ?>">
-			<div <?php echo $class2_escaped; ?>>  <?php
-
-				//  KB Search form
-				$this->get_search_form();
-
-				//  Knowledge Base Layout
-				$style1_escaped = $this->get_inline_style( 'background-color:: background_color' );				?>
-				<div id="epkb-content-container" <?php echo $style1_escaped; ?> >
-
-					<!--  Navigation Tabs -->
-					<?php $this->display_navigation_tabs( $active_cat_id ); ?>
-
-					<!--  Main Page Content -->
-					<div class="epkb-panel-container">
-						<?php $this->display_main_page_content( $active_cat_id ); ?>
-					</div>
-
-				</div>
-			</div>
-		</div>   <?php
-	}
-
 	/**
 	 * Display KB Main page navigation tabs
 	 *
@@ -263,7 +231,10 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 		$style3_escaped = $this->get_inline_style(
 					'color:: section_head_font_color,
 					 text-align::section_head_alignment,
-					 justify-content::section_head_alignment'
+					 justify-content::section_head_alignment' .
+					 ( $this->kb_config['section_head_alignment'] == 'left' ? ', padding-left:: article_list_margin' : '' ) .
+					 ( $this->kb_config['section_head_alignment'] == 'right' ? ', padding-right:: article_list_margin' : '' ) . ',
+					 '
 		);
 		
 		$style31_escaped = $this->get_inline_style(
@@ -273,7 +244,10 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 		$style4_escaped = $this->get_inline_style(
 					'color:: section_head_description_font_color,
 					 text-align::section_head_alignment,
-					 typography:: section_head_description_typography'
+					 typography:: section_head_description_typography' .
+					 ( $this->kb_config['section_head_alignment'] == 'left' ? ', padding-left:: article_list_margin' : '' ) .
+					 ( $this->kb_config['section_head_alignment'] == 'right' ? ', padding-right:: article_list_margin' : '' ) . ',
+					 '
 		);
 		$style5 = 'border-bottom-width:: section_border_width,
 					padding-top::    section_body_padding_top,
@@ -323,8 +297,6 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 
 			<div class="<?php echo esc_attr( $class_list ); ?>"> <?php
 
-				$is_modular = $this->kb_config['modular_main_page_toggle'] == 'on';
-
 				// old users do not see hidden articles that were assigned to top tab categories
 				if ( ( empty( $articles_level_1_list ) || ! EPKB_Utilities::is_new_user( $this->kb_config, '11.30.0' ) ) && empty( $level_1_categories ) && ! empty( $articles_coming_soon_msg ) ) {  ?>
 					<div class="epkb-articles-coming-soon" data-kb-top-category-id="<?php echo esc_attr( $tab_category_id ); ?>" data-kb-type="top-category-no-articles"><?php echo esc_html( $articles_coming_soon_msg ); ?></div> <?php
@@ -368,8 +340,8 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 					$category_desc = isset($this->articles_seq_data[$box_category_id][1]) && $this->kb_config['section_desc_text_on'] == 'on' ? $this->articles_seq_data[$box_category_id][1] : '';
 					$level_2_categories = is_array($level_2_categories) ? $level_2_categories : array();
 
-					// divide categories into rows if modular layout is on
-					if ( $is_modular && $column_index == 1 ) { ?>
+					// divide categories into rows
+					if ( $column_index == 1 ) { ?>
 						<div class="epkb-ml__module-categories-articles__row">  <?php
 					}   ?>
 
@@ -446,7 +418,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 
 					</section><!-- Section End -->  <?php
 
-					if ( $is_modular && ( $column_index == $this->get_nof_columns_int() || $loop_index == count( $level_1_categories ) ) ) {     ?>
+					if ( $column_index == $this->get_nof_columns_int() || $loop_index == count( $level_1_categories ) ) {     ?>
 						</div>  <?php
 						$column_index = 0;
 					}

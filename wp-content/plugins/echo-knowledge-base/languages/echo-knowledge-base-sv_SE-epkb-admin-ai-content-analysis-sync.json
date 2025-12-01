@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Cancel": [
+                "Avbryt"
+            ],
+            "articles": [
+                "dokumentationssidor"
+            ],
+            "Analyze Content": [
+                "Analysera innehåll"
+            ],
+            "No articles found to analyze": [
+                "Inga dokumentationssidor hittades för analys"
+            ],
+            "of": [
+                "av"
+            ],
+            "Analysis canceled": [
+                "Analys avbruten"
+            ],
+            "Failed to cancel analysis": [
+                "Misslyckades med att avbryta analysen"
+            ],
+            "Calculating...": [
+                "Beräknar..."
+            ],
+            "Analysis failed": [
+                "Analysen misslyckades"
+            ],
+            "Content analysis completed successfully!": [
+                "Innehållsanalys genomförd framgångsrikt!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Återförsöksgränsen uppnåddes vid kontakt med OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Misslyckades med att starta analysen"
+            ],
+            "Analysis Job Running": [
+                "Analysjobb pågår"
+            ],
+            "Wait": [
+                "Vänta"
+            ],
+            "articles selected for analysis": [
+                "dokumentationssidor valda för analys"
+            ],
+            "Analysis in Progress": [
+                "Analys pågår"
+            ],
+            "Stop Analysis": [
+                "Avsluta analysen"
+            ],
+            "Starting analysis...": [
+                "Påbörjar analys..."
+            ],
+            "article": [
+                "dokumentationssida"
+            ],
+            "Analyzing": [
+                "Analyserar"
+            ],
+            "Completed! Analyzed": [
+                "Slutfört! Analys genomförd"
+            ],
+            "error": [
+                "fel"
+            ],
+            "errors": [
+                "fel"
+            ],
+            "with": [
+                "med"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analysen stoppades efter fel. Analys genomförd"
+            ],
+            "Remaining Time:": [
+                "Återstående tid:"
+            ]
+        }
+    }
+}

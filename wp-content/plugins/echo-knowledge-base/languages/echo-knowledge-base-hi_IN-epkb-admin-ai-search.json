@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Search Results": [
+                "खोज परिणाम"
+            ],
+            "Page": [
+                "पृष्ठ"
+            ],
+            "Settings saved successfully": [
+                "सेटिंग्स सफलतापूर्वक सहेजी गईं"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Date:": [
+                "तारीख:"
+            ],
+            "Next": [
+                "अगला"
+            ],
+            "Previous": [
+                "पिछला"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
+            ],
+            "Search History": [
+                "खोज इतिहास"
+            ],
+            "Search Settings": [
+                "खोज सेटिंग्स"
+            ],
+            "Single Column": [
+                "एक स्तंभ"
+            ],
+            "Left Column": [
+                "बायाँ स्तंभ"
+            ],
+            "Right Column": [
+                "दायाँ स्तंभ"
+            ],
+            "Middle Column": [
+                "मध्य स्तंभ"
+            ],
+            "Feedback": [
+                "प्रतिक्रिया"
+            ],
+            "AI Assistant": [
+                "एआई सहायक"
+            ],
+            "Save Settings": [
+                "सेटिंग्स सहेजें"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "Delete Selected": [
+                "चयनित को हटाएं"
+            ],
+            "of": [
+                "में से"
+            ],
+            "Reset": [
+                "रीसेट"
+            ],
+            "Refreshing...": [
+                "ताज़ा किया जा रहा है..."
+            ],
+            "Refresh": [
+                "ताज़ा करें"
+            ],
+            "Time": [
+                "समय"
+            ],
+            "User": [
+                "उपयोगकर्ता"
+            ],
+            "Searching server for more results...": [
+                "अधिक परिणामों के लिए सर्वर खोज रहा है..."
+            ],
+            "User:": [
+                "उपयोगकर्ता:"
+            ],
+            "Status:": [
+                "स्थिति:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं?"
+            ],
+            "Reset Instructions": [
+                "निर्देश रीसेट करें"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं? आपके कस्टम निर्देश खो जाएंगे।."
+            ],
+            "Reset to Default": [
+                "डिफ़ॉल्ट पर रीसेट करें"
+            ],
+            "Failed to save settings": [
+                "सेटिंग्स सहेजने में असफल"
+            ],
+            "Go to Settings": [
+                "सेटिंग्स पर जाएँ"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "क्या आप चयनित खोजों को हटाना चाहते हैं?"
+            ],
+            "Delete Search History": [
+                "खोज इतिहास हटाएं"
+            ],
+            "Deleting searches...": [
+                "खोजें हटाई जा रहीं हैं..."
+            ],
+            "Search history refreshed successfully": [
+                "खोज इतिहास सफलतापूर्वक ताज़ा किया गया"
+            ],
+            "Search queries...": [
+                "खोज प्रश्न..."
+            ],
+            "Loading search history...": [
+                "खोज इतिहास लोड हो रहा है..."
+            ],
+            "No searches found": [
+                "कोई खोजें नहीं मिलीं"
+            ],
+            "Search Query": [
+                "खोज क्वेरी"
+            ],
+            "Info": [
+                "सूचना"
+            ],
+            "Contact request submitted": [
+                "संपर्क अनुरोध प्रस्तुत किया गया"
+            ],
+            "User Needs Help": [
+                "उपयोगकर्ता को सहायता चाहिए"
+            ],
+            "Positive feedback": [
+                "सकारात्मक प्रतिक्रिया"
+            ],
+            "Negative feedback": [
+                "नकारात्मक प्रतिक्रिया"
+            ],
+            "Search Details": [
+                "खोज विवरण"
+            ],
+            "Select a search to view details": [
+                "विस्तार देखने के लिए एक खोज चुनें"
+            ],
+            "Search Information": [
+                "खोज जानकारी"
+            ],
+            "Query:": [
+                "प्रश्न:"
+            ],
+            "Results Count:": [
+                "परिणामों की संख्या:"
+            ],
+            "Contact Request": [
+                "संपर्क अनुरोध"
+            ],
+            "Name:": [
+                "नाम:"
+            ],
+            "Email:": [
+                "ईमेल:"
+            ],
+            "Vote:": [
+                "मतदान:"
+            ],
+            "Positive": [
+                "सकारात्मक"
+            ],
+            "Negative": [
+                "नकारात्मक"
+            ],
+            "Search Interaction": [
+                "खोज सहभागिता"
+            ],
+            "AI Response": [
+                "एआई प्रतिक्रिया"
+            ],
+            "✓ Clicked": [
+                "✓ क्लिक किया गया"
+            ],
+            "Relevance:": [
+                "प्रासंगिकता:"
+            ],
+            "No sections added yet": [
+                "अभी तक कोई अनुभाग नहीं जोड़ा गया है"
+            ],
+            "-- Select Section --": [
+                "-- अनुभाग चुनें --"
+            ],
+            "Add Section": [
+                "अनुभाग जोड़ें"
+            ],
+            "Failed to load search history": [
+                "खोज इतिहास लोड करने में विफल"
+            ],
+            "Searches deleted successfully": [
+                "खोजें सफलतापूर्वक हटाई गईं"
+            ],
+            "Failed to delete searches": [
+                "खोजों को हटाने में विफल"
+            ],
+            "AI Search is Disabled": [
+                "AI खोज अक्षम है"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "खोज इतिहास देखने के लिए, कृपया सेटिंग्स टैब में AI खोज सक्षम करें।."
+            ]
+        }
+    }
+}

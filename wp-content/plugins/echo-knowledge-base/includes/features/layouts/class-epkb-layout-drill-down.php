@@ -416,8 +416,4 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 
 		return $output;
 	}
-
-	public function generate_non_modular_kb_main_page() {
-		// for compatibility reasons
-	}
 }

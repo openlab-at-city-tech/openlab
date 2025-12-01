@@ -50,6 +50,27 @@ class EPKB_Blocks_Settings {
 	}
 
 	/**
+	 * Return 'kb_ai_collection_id' setting for blocks that support AI search
+	 * @return array
+	 */
+	public static function get_kb_ai_collection_id_setting() {
+
+		if ( EPKB_Utilities::is_frontend() ) {
+			return array(
+				'setting_type' => '',
+				'default' => 1,
+			);
+		}
+
+		return array(
+			'setting_type' => 'custom_dropdown',
+			'default' => 1,
+			'label' => esc_html__( 'AI Training Data Collection', 'echo-knowledge-base' ),
+			'options' => EPKB_AI_Utilities::get_collection_options( 'block' ),
+		);
+	}
+
+	/**
 	 * Return configuration array for KB Custom Block Template for this page toggle
 	 * @return array
 	 */

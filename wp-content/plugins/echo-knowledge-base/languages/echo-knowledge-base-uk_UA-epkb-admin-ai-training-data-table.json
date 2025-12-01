@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Title": [
+                "Назва"
+            ],
+            "Filter": [
+                "Фільтр"
+            ],
+            "Status": [
+                "Статус"
+            ],
+            "All": [
+                "Всі"
+            ],
+            "Close": [
+                "Закрити"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "selected": [
+                "обрано"
+            ],
+            "Article": [
+                "Стаття"
+            ],
+            "Updated": [
+                "Оновлено"
+            ],
+            "Next": [
+                "Далі"
+            ],
+            "Previous": [
+                "Попередній"
+            ],
+            "Loading...": [
+                "Завантаження..."
+            ],
+            "Error": [
+                "Помилка"
+            ],
+            "Error Details": [
+                "Деталі помилки"
+            ],
+            "Pending": [
+                "Очікує перевірки"
+            ],
+            "Page": [
+                "Сторінка"
+            ],
+            "Delete": [
+                "Видалити"
+            ],
+            "of": [
+                "з"
+            ],
+            "Refreshing...": [
+                "Оновлення..."
+            ],
+            "Refresh": [
+                "Оновити"
+            ],
+            "Searching server for more results...": [
+                "Пошук додаткових результатів на сервері..."
+            ],
+            "Data refreshed successfully": [
+                "Дані успішно оновлено"
+            ],
+            "Delete Selected Items": [
+                "Видалити вибрані елементи"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Ви впевнені, що хочете видалити вибрані елементи?"
+            ],
+            "Items deleted successfully": [
+                "Елементи успішно видалено"
+            ],
+            "Sort": [
+                "Сортувати"
+            ],
+            "Completed": [
+                "Завершено"
+            ],
+            "Outdated": [
+                "Застаріло"
+            ],
+            "Added": [
+                "Додано"
+            ],
+            "Failed to load training data": [
+                "Не вдалося завантажити дані машинного навчання"
+            ],
+            "Failed to delete items": [
+                "Не вдалося видалити елементи"
+            ],
+            "Delete Items": [
+                "Видалити елементи"
+            ],
+            "Syncing": [
+                "Синхронізація"
+            ],
+            "Canceled": [
+                "Скасовано"
+            ],
+            "How to get started": [
+                "Як розпочати"
+            ],
+            "Choose Training Data": [
+                "Виберіть дані машинного навчання"
+            ],
+            "Pick the content types to include.": [
+                "Виберіть типи вмісту, які потрібно включити."
+            ],
+            "Send Data to AI": [
+                "Надіслати дані ШІ"
+            ],
+            "Select items in the table, then sync them.": [
+                "Виберіть елементи у таблиці, а потім синхронізуйте їх."
+            ],
+            "Other Actions": [
+                "Інші дії"
+            ],
+            "Rename the collection or delete items.": [
+                "Перейменуйте збірку даних або видаліть елементи."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Порада: розпочніть з невеликого набору, щоб перевірити процес."
+            ],
+            "Sync": [
+                "Синхронізувати"
+            ],
+            "Sync Complete": [
+                "Синхронізація завершена"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "Пошук за назвою, типом, URL або ID..."
+            ],
+            "Preparing sync...": [
+                "Підготовка синхронізації..."
+            ],
+            "Loading training data...": [
+                "Завантажуються дані для машинного навчання..."
+            ],
+            "Type": [
+                "Тип"
+            ],
+            "No training data found": [
+                "Не знайдено даних для машинного навчання"
+            ],
+            "Edit note": [
+                "Редагувати примітку"
+            ],
+            "View Error": [
+                "Переглянути помилку"
+            ],
+            "View content": [
+                "Переглянути вміст"
+            ],
+            "KB Files": [
+                "Файли KB"
+            ],
+            "Never": [
+                "Ніколи"
+            ],
+            "Failed to load content": [
+                "Не вдалося завантажити вміст"
+            ],
+            "Post ID:": [
+                "ID запису:"
+            ],
+            "Loading content...": [
+                "Завантажується вміст..."
+            ],
+            "Error Processing Content": [
+                "Помилка обробки вмісту"
+            ],
+            "Original Content": [
+                "Оригінальний вміст"
+            ],
+            "Processed Content": [
+                "Оброблений вміст"
+            ],
+            "No content available": [
+                "Немає доступного вмісту"
+            ],
+            "No processed content available": [
+                "Немає доступного обробленого вмісту"
+            ]
+        }
+    }
+}

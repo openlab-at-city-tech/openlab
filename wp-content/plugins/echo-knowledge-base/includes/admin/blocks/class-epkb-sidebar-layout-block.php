@@ -99,6 +99,7 @@ final class EPKB_Sidebar_Layout_Block extends EPKB_Abstract_Block {
 		$block_attributes['article-right-sidebar-match'] = 'off';
 		$block_attributes['article-mobile-break-point-v2'] = '768';
 		$block_attributes['article-tablet-break-point-v2'] = '1025';
+		$block_attributes['article_search_toggle'] = 'on';
 
 		$layout_output = EPKB_Articles_Setup::get_article_content_and_features( $temp_article, $temp_article->post_content, $block_attributes );
 		$handler->set_sidebar_layout_content( $layout_output );
@@ -281,13 +282,13 @@ final class EPKB_Sidebar_Layout_Block extends EPKB_Abstract_Block {
 								'setting_type' => 'section_description',
 								'description' => esc_html__( 'To Edit Introduction Text', 'echo-knowledge-base' ) . ', ',
 								'link_text' => esc_html__( 'click here', 'echo-knowledge-base' ),
-								'link_url' => EPKB_Need_Help_Features::get_settings_link( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'settings', 'labels', '', 'sidebar_main_page_intro_text' ),
+								'link_url' => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Config_DB::DEFAULT_KB_ID ) . '&page=epkb-kb-configuration#tools__other' ),
 							),
 							'sidebar_main_page_link_to_edit' => array(
 								'setting_type' => 'section_description',
 								'description' => esc_html__( 'Sidebar block settings are controlled by the Article Page Sidebar settings. To edit sidebar settings', 'echo-knowledge-base' ) . ', ',
 								'link_text' => esc_html__( 'click here', 'echo-knowledge-base' ),
-								'link_url' => EPKB_Need_Help_Features::get_settings_link( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'settings', 'article-page', 'article-page-sidebar' ),
+								'link_url' => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Config_DB::DEFAULT_KB_ID ) . '&page=epkb-kb-configuration#settings__article-page__article-page-sidebar' ),
 							),
 						),
 					),

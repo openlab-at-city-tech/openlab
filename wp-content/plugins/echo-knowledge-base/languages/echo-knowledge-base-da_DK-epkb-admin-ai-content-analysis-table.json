@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Titel"
+            ],
+            "Status": [
+                "Status"
+            ],
+            "All": [
+                "Alle"
+            ],
+            "Page": [
+                "Side"
+            ],
+            "Close": [
+                "Luk"
+            ],
+            "Recent": [
+                "Seneste"
+            ],
+            "Cancel": [
+                "Annuller"
+            ],
+            "selected": [
+                "valgt"
+            ],
+            "Next": [
+                "Næste"
+            ],
+            "Previous": [
+                "Forrige"
+            ],
+            "Today": [
+                "I dag"
+            ],
+            "Yesterday": [
+                "I går"
+            ],
+            "Loading...": [
+                "Indlæser..."
+            ],
+            "Delete": [
+                "Slet"
+            ],
+            "of": [
+                "af"
+            ],
+            "Searching...": [
+                "Søger..."
+            ],
+            "Refreshing...": [
+                "Opdaterer..."
+            ],
+            "Refresh": [
+                "Opdater"
+            ],
+            "Failed to fetch analysis data": [
+                "Kunne ikke hente analyseoplysninger"
+            ],
+            "Data refreshed successfully": [
+                "Data opdateret med succes"
+            ],
+            "Delete Selected Items": [
+                "Slet valgte elementer"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Er du sikker på, at du vil slette de valgte elementer?"
+            ],
+            "Items deleted successfully": [
+                "De valgte elementer er slettet"
+            ],
+            "Unknown error occurred": [
+                "Der opstod en ukendt fejl"
+            ],
+            "No articles need analysis": [
+                "Ingen artikler behøver analyse"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "Alle artikler er blevet analyseret. Godt arbejde!"
+            ],
+            "No articles need improvement": [
+                "Ingen artikler behøver forbedring"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "Alle analyserede artikler har en score over 80%. Fremragende!"
+            ],
+            "No recent articles": [
+                "Ingen nylige artikler"
+            ],
+            "No articles have been modified recently.": [
+                "Ingen artikler er blevet ændret for nylig."
+            ],
+            "No articles found": [
+                "Ingen artikler fundet"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "Der er ingen artikler tilgængelige i denne Vidensbase. Opret nogle artikler for at begynde analysen."
+            ],
+            "To Analyze": [
+                "Til analyse"
+            ],
+            "To Improve": [
+                "Til forbedring"
+            ],
+            "Search by title...": [
+                "Søg efter titel..."
+            ],
+            "Loading content analysis data...": [
+                "Indlæser indholdsanalysedata..."
+            ],
+            "Score": [
+                "Resultat"
+            ],
+            "Sort": [
+                "Sortér"
+            ],
+            "Importance": [
+                "Vigtighed"
+            ],
+            "Last Modified": [
+                "Sidst ændret"
+            ],
+            "No articles match your search": [
+                "Ingen artikler matcher din søgning"
+            ],
+            "View detailed analysis": [
+                "Se detaljeret analyse"
+            ],
+            "days ago": [
+                "dage siden"
+            ],
+            "week ago": [
+                "en uge siden"
+            ],
+            "weeks ago": [
+                "uger siden"
+            ],
+            "Content Analysis Error": [
+                "Fejl i indholdsanalysen"
+            ],
+            "ERROR": [
+                "FEJL"
+            ],
+            "Article ID:": [
+                "Artikel-ID:"
+            ],
+            "Error Processing Content Analysis": [
+                "Fejl ved behandling af indholdsanalysen"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "Denne artikel kunne ikke analyseres. Prøv igen eller kontroller artiklens indhold for problemer."
+            ]
+        }
+    }
+}

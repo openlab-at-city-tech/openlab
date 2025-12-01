@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Cancel": [
+                "Anuluj"
+            ],
+            "articles": [
+                "artykuły"
+            ],
+            "Analyze Content": [
+                "Analizuj treść"
+            ],
+            "No articles found to analyze": [
+                "Nie znaleziono artykułów do analizy"
+            ],
+            "of": [
+                "z"
+            ],
+            "Analysis canceled": [
+                "Analiza anulowana"
+            ],
+            "Failed to cancel analysis": [
+                "Nie udało się anulować analizy"
+            ],
+            "Calculating...": [
+                "Obliczanie..."
+            ],
+            "Analysis failed": [
+                "Analiza nie powiodła się"
+            ],
+            "Content analysis completed successfully!": [
+                "Analiza treści zakończona pomyślnie!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Osiągnięto limit ponownych prób podczas kontaktowania z OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Nie udało się uruchomić analizy"
+            ],
+            "Analysis Job Running": [
+                "Analiza w toku"
+            ],
+            "Wait": [
+                "Poczekaj"
+            ],
+            "articles selected for analysis": [
+                "Wybrane artykuły do analizy"
+            ],
+            "Analysis in Progress": [
+                "Analiza w toku"
+            ],
+            "Stop Analysis": [
+                "Zatrzymaj analizę"
+            ],
+            "Starting analysis...": [
+                "Rozpoczynanie analizy..."
+            ],
+            "article": [
+                "artykuł"
+            ],
+            "Analyzing": [
+                "Analizowanie"
+            ],
+            "Completed! Analyzed": [
+                "Zakończono! Zanalizowano"
+            ],
+            "error": [
+                "błąd"
+            ],
+            "errors": [
+                "błędy"
+            ],
+            "with": [
+                "z"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analiza zakończona po błędach. Zanalizowano"
+            ],
+            "Remaining Time:": [
+                "Pozostały czas:"
+            ]
+        }
+    }
+}

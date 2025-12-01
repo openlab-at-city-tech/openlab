@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Learn more": [
+                "En savoir plus"
+            ],
+            "Cancel": [
+                "Annuler"
+            ],
+            "Vote for Top 3 Features": [
+                "Votez pour les 3 meilleures fonctionnalités"
+            ],
+            "First Name": [
+                "Prénom"
+            ],
+            "(optional)": [
+                "(facultatif)"
+            ],
+            "Email": [
+                "E-mail"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "Échec de l'envoi du vote. Veuillez réessayer."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "Étape 1 : Configurer la clé API et la confidentialité"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "Ajoutez votre clé API OpenAI et acceptez l’accord de confidentialité des données."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "Étape 2 : Activer IA Chat et/ou Recherche IA"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "Activez les fonctionnalités IA Chat ou Recherche IA pour votre site."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "Étape 3 : Ajouter des données d’apprentissage et synchroniser"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "Sélectionnez le contenu et synchronisez-le avec OpenAI pour le traitement par IA."
+            ],
+            "Go to Settings": [
+                "Aller dans les Paramètres"
+            ],
+            "Completed": [
+                "Complété"
+            ],
+            "Warnings": [
+                "Avertissements"
+            ],
+            "Welcome to AI Features!": [
+                "Bienvenue dans les fonctionnalités IA !"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "Configurez rapidement le chat et la recherche pilotés par l’IA en quelques étapes."
+            ],
+            "Complete Your Setup": [
+                "Complétez votre configuration"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "Encore quelques étapes pour activer les fonctionnalités IA :"
+            ],
+            "Setup Steps": [
+                "Étapes de configuration"
+            ],
+            "Configure API Key & Privacy": [
+                "Configurer la clé API et la confidentialité"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "Ajoutez votre clé API OpenAI et acceptez l'accord sur la confidentialité des données"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "Activer le Chat IA et/ou la Recherche IA"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "Activez les fonctionnalités Chat IA ou Recherche IA pour votre site"
+            ],
+            "Enable AI Features": [
+                "Activer les fonctionnalités d'IA"
+            ],
+            "Add Training Data & Sync": [
+                "Ajouter des données d'entraînement et synchroniser"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "Sélectionnez le contenu et synchronisez-le avec OpenAI pour le traitement par IA"
+            ],
+            "Go to Training Data": [
+                "Aller à Données d'entraînement"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "Aidez-nous à prioriser les fonctionnalités en fournissant vos informations :"
+            ],
+            "Describe Your Feature Request": [
+                "Décrivez votre demande de fonctionnalité"
+            ],
+            "Please describe the feature you would like to see...": [
+                "Veuillez décrire la fonctionnalité que vous aimeriez voir..."
+            ],
+            "Submit Vote": [
+                "Soumettre un vote"
+            ],
+            "Please describe the feature you would like to see.": [
+                "Veuillez décrire la fonctionnalité que vous aimeriez voir."
+            ],
+            "Please enter a valid email address.": [
+                "Veuillez saisir une adresse e-mail valide."
+            ],
+            "Please select at least one feature to vote for.": [
+                "Veuillez sélectionner au moins une fonctionnalité pour voter."
+            ],
+            "Submitting your vote...": [
+                "Soumission de votre vote..."
+            ],
+            "Thank you for voting!": [
+                "Merci pour votre vote !"
+            ],
+            "An error occurred. Please try again.": [
+                "Une erreur s'est produite. Veuillez réessayer."
+            ],
+            "Latest AI Updates": [
+                "Dernières mises à jour de l'IA"
+            ],
+            "Select the features you would like to see implemented:": [
+                "Sélectionnez les fonctionnalités que vous aimeriez voir mises en œuvre :"
+            ],
+            "Released": [
+                "Publié"
+            ],
+            "feature selected": [
+                "fonctionnalité sélectionnée"
+            ],
+            "features selected": [
+                "fonctionnalités sélectionnées"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "Note : Vos retours nous aident à prioriser le développement. Les fonctionnalités peuvent changer."
+            ]
+        }
+    }
+}

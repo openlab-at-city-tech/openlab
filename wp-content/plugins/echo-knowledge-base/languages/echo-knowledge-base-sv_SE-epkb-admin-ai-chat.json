@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings": [
+                "Inställningar"
+            ],
+            "Page": [
+                "Sida"
+            ],
+            "Settings saved successfully": [
+                "Inställningar sparades"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Next": [
+                "Nästa"
+            ],
+            "Previous": [
+                "Föregående"
+            ],
+            "Saving...": [
+                "Sparar …"
+            ],
+            "Go to General Settings": [
+                "Gå till allmänna inställningar"
+            ],
+            "Chat History": [
+                "Chatthistorik"
+            ],
+            "API Configuration": [
+                "API-konfiguration"
+            ],
+            "AI Assistant": [
+                "AI-assistent"
+            ],
+            "Save Settings": [
+                "Spara inställningar"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "Delete Selected": [
+                "Ta bort valda"
+            ],
+            "of": [
+                "av"
+            ],
+            "Reset": [
+                "Återställ"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Är du säker på att du vill ta bort de valda konversationerna?"
+            ],
+            "Delete Conversations": [
+                "Ta bort konversationer"
+            ],
+            "Deleting conversations...": [
+                "Raderar konversationer..."
+            ],
+            "Conversations refreshed successfully": [
+                "Konversationer uppdaterades"
+            ],
+            "Search conversations...": [
+                "Sök konversationer..."
+            ],
+            "Refreshing...": [
+                "Uppdaterar..."
+            ],
+            "Refresh": [
+                "Uppdatera"
+            ],
+            "Loading conversations...": [
+                "Laddar konversationer..."
+            ],
+            "No conversations found": [
+                "Inga konversationer hittades"
+            ],
+            "Time": [
+                "Tid"
+            ],
+            "User": [
+                "Användare"
+            ],
+            "Conversation": [
+                "Samtal"
+            ],
+            "Searching server for more results...": [
+                "Söker efter fler resultat från servern..."
+            ],
+            "Conversation Details": [
+                "Samtalsdetaljer"
+            ],
+            "Select a conversation to view details": [
+                "Välj ett samtal för att visa detaljer"
+            ],
+            "Conversation Info": [
+                "Samtalsinformation"
+            ],
+            "User:": [
+                "Användare:"
+            ],
+            "Started:": [
+                "Startade:"
+            ],
+            "Messages:": [
+                "Meddelanden:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Rating:": [
+                "Betyg:"
+            ],
+            "Full Conversation": [
+                "Hela konversationen"
+            ],
+            "No messages in this conversation.": [
+                "Inga meddelanden i denna konversation."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Är du säker på att du vill återställa till standardinstruktioner؟"
+            ],
+            "Reset Instructions": [
+                "Återställ instruktioner"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Är du säker på att du vill återställa till standardinstruktioner? Dina anpassade instruktioner kommer att gå förlorade."
+            ],
+            "Reset to Default": [
+                "Återställ till standard"
+            ],
+            "Failed to load conversations": [
+                "Misslyckades med att ladda konversationer"
+            ],
+            "Failed to save settings": [
+                "Misslyckades med att spara inställningar"
+            ],
+            "Conversations deleted successfully": [
+                "Konversationer raderades framgångsrikt"
+            ],
+            "Failed to delete conversations": [
+                "Misslyckades med att radera konversationer"
+            ],
+            "AI Chat is Disabled": [
+                "AI Chatt är inaktiverad"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "För att visa chatthistorik, vänligen aktivera AI Chatt i Fliken Inställningar."
+            ],
+            "Go to Settings": [
+                "Gå till Inställningar"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "OpenAI API-nyckel är inte konfigurerad. Konfigurera den i Allmänna inställningar för att använda AI Chatt-funktioner."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Vänligen acceptera dataskyddsavtalet i Allmänna inställningar för att använda AI Chatt-funktioner."
+            ]
+        }
+    }
+}
