@@ -101,12 +101,14 @@ function wpa_update_settings() {
 			$wpa_search_alt         = ( isset( $_POST['wpa_search_alt'] ) ) ? 'on' : '';
 			$wpa_diagnostics        = ( isset( $_POST['wpa_diagnostics'] ) ) ? 'on' : '';
 			$wpa_disable_fullscreen = ( isset( $_POST['wpa_disable_fullscreen'] ) ) ? 'on' : '';
+			$wpa_disable_file_embed = ( isset( $_POST['wpa_disable_file_embed'] ) ) ? 'on' : '';
 			$wpa_allow_h1           = ( isset( $_POST['wpa_allow_h1'] ) ) ? 'on' : '';
 			$wpa_disable_logout     = ( isset( $_POST['wpa_disable_logout'] ) ) ? 'on' : '';
 			$wpa_track_stats        = ( isset( $_POST['wpa_track_stats'] ) ) ? sanitize_text_field( $_POST['wpa_track_stats'] ) : '';
 			update_option( 'wpa_search_alt', $wpa_search_alt );
 			update_option( 'wpa_diagnostics', $wpa_diagnostics );
 			update_option( 'wpa_disable_fullscreen', $wpa_disable_fullscreen );
+			update_option( 'wpa_disable_file_embed', $wpa_disable_file_embed );
 			update_option( 'wpa_allow_h1', $wpa_allow_h1 );
 			update_option( 'wpa_track_stats', $wpa_track_stats );
 			update_option( 'wpa_disable_logout', $wpa_disable_logout );
@@ -120,6 +122,7 @@ function wpa_update_settings() {
 			$wpa_search      = ( isset( $_POST['wpa_search'] ) ) ? 'on' : '';
 			$wpa_tabindex    = ( isset( $_POST['wpa_tabindex'] ) ) ? 'on' : '';
 			$wpa_underline   = ( isset( $_POST['wpa_underline'] ) ) ? 'on' : '';
+			$wpa_videos      = ( isset( $_POST['wpa_videos'] ) ) ? 'on' : '';
 			$wpa_more        = ( isset( $_POST['wpa_more'] ) ) ? 'on' : '';
 			$wpa_focus       = ( isset( $_POST['wpa_focus'] ) ) ? 'on' : '';
 			$wpa_focus_color = ( isset( $_POST['wpa_focus_color'] ) ) ? str_replace( '#', '', $_POST['wpa_focus_color'] ) : '';
@@ -128,6 +131,7 @@ function wpa_update_settings() {
 			update_option( 'wpa_search', $wpa_search );
 			update_option( 'wpa_tabindex', $wpa_tabindex );
 			update_option( 'wpa_underline', $wpa_underline );
+			update_option( 'wpa_videos', $wpa_videos );
 			update_option( 'wpa_more', $wpa_more );
 			update_option( 'wpa_focus', $wpa_focus );
 			update_option( 'wpa_focus_color', $wpa_focus_color );
@@ -200,7 +204,7 @@ function wpa_admin_settings() {
 								</p>
 								<hr>
 								<form method="post" action="<?php echo admin_url( 'admin.php?page=wp-accessibility' ); ?>">
-									<br>	
+									<br>
 									<fieldset>
 										<legend><?php _e( 'Configure Skiplinks', 'wp-accessibility' ); ?></legend>
 										<ul>
@@ -313,11 +317,11 @@ function wpa_admin_settings() {
 									<div class="wpa-toolbar-settings <?php echo $class; ?>">
 										<ul>
 											<li>
-												<input type="checkbox" id="wpa_toolbar_fs" name="wpa_toolbar_fs" <?php checked( get_option( 'wpa_toolbar_fs', '' ), 'on' ); ?> value='on' />
+												<input type="checkbox" id="wpa_toolbar_fs" name="wpa_toolbar_fs" <?php checked( get_option( 'wpa_toolbar_fs', 'on' ), 'on' ); ?> value='on' />
 												<label for="wpa_toolbar_fs"><?php _e( 'Include Font size button', 'wp-accessibility' ); ?></label>
 											</li>
 											<li>
-												<input type="checkbox" id="wpa_toolbar_ct" name="wpa_toolbar_ct" <?php checked( get_option( 'wpa_toolbar_ct', '' ), 'on' ); ?> value='on' />
+												<input type="checkbox" id="wpa_toolbar_ct" name="wpa_toolbar_ct" <?php checked( get_option( 'wpa_toolbar_ct', 'on' ), 'on' ); ?> value='on' />
 												<label for="wpa_toolbar_ct"><?php _e( 'Include Contrast button', 'wp-accessibility' ); ?></label>
 											</li>
 											<li>
@@ -336,7 +340,7 @@ function wpa_admin_settings() {
 												<select name='wpa_toolbar_size' id='wpa_toolbar_size'>
 													<option value=''><?php _e( 'Default size', 'wp-accessibility' ); ?></option>
 													<?php
-													for ( $i = 1.6; $i <= 3.8; ) {
+													for ( $i = 1.4; $i <= 3.8; ) {
 														$val           = ( $i * 10 ) + 2;
 														$current       = absint( $val );
 														$selected_size = ( $current === $size ) ? ' selected="selected"' : '';
@@ -419,6 +423,10 @@ function wpa_admin_settings() {
 										<li>
 											<input type="checkbox" id="wpa_underline" aria-describedby="wpa-underline-note" name="wpa_underline" <?php checked( get_option( 'wpa_underline' ), 'on' ); ?>/>
 											<label for="wpa_underline"><?php _e( 'Force underline on links', 'wp-accessibility' ); ?></label> <em id="wpa-underline-note" class="wpa-note"><?php _e( 'Excludes links inside <code>nav</code> elements.', 'wp-accessibility' ); ?></em>
+										</li>
+										<li>
+											<input type="checkbox" id="wpa_videos" aria-describedby="wpa-videos-note" name="wpa_videos" <?php checked( get_option( 'wpa_videos' ), 'on' ); ?>/>
+											<label for="wpa_videos"><?php _e( 'Insert play/pause button on autoplay videos', 'wp-accessibility' ); ?></label> <em id="wpa-underline-note" class="wpa-note"><?php _e( 'Only effects videos with <code>autoplay</code> enabled and <code>controls</code> disabled.', 'wp-accessibility' ); ?></em>
 										</li>
 										<li>
 											<input type="checkbox" id="wpa_focus" name="wpa_focus" <?php checked( get_option( 'wpa_focus' ), 'on' ); ?>/>
@@ -518,6 +526,10 @@ function wpa_admin_settings() {
 										<li>
 											<input type="checkbox" id="wpa_disable_fullscreen" name="wpa_disable_fullscreen" <?php checked( get_option( 'wpa_disable_fullscreen' ), 'on' ); ?>/>
 											<label for="wpa_disable_fullscreen"><?php _e( 'Disable fullscreen block editor by default', 'wp-accessibility' ); ?></label>
+										</li>
+										<li>
+											<input type="checkbox" id="wpa_disable_file_embed" name="wpa_disable_file_embed" <?php checked( get_option( 'wpa_disable_file_embed' ), 'on' ); ?>/>
+											<label for="wpa_disable_file_embed"><?php _e( 'Disable embed behavior as default on file block', 'wp-accessibility' ); ?></label>
 										</li>
 										<li>
 											<input type="checkbox" id="wpa_allow_h1" name="wpa_allow_h1" <?php checked( get_option( 'wpa_allow_h1' ), 'on' ); ?>/>
@@ -770,8 +782,8 @@ function wpa_linkedin_promotion() {
 function wpa_edac_promotion( $type = 'large' ) {
 	$pro  = false;
 	$edac = false;
-	if ( function_exists( 'edac_check_plugin_active' ) ) {
-		$pro  = edac_check_plugin_active( 'accessibility-checker-pro/accessibility-checker-pro.php' );
+	if ( defined( 'EDAC_VERSION' ) ) {
+		$pro  = is_plugin_active( 'accessibility-checker-pro/accessibility-checker-pro.php' );
 		$edac = true;
 	}
 	if ( ! $pro ) {
