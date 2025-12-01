@@ -14,7 +14,7 @@ do_action( 'kadence_hero_header' );
 ?>
 <div id="primary" class="content-area">
 	<div class="content-container site-container">
-		<main id="main" class="site-main" role="main">
+		<div id="main" class="site-main">
 			<?php
 			/**
 			 * Hook for anything before main content
@@ -38,13 +38,13 @@ do_action( 'kadence_hero_header' );
 				}
 				?>
 			</div>
-			<?php			
+			<?php	      
 			/**
 			 * Hook for anything after main content
 			 */
 			do_action( 'kadence_after_main_content' );
 			?>
-		</main><!-- #main -->
+		</div><!-- #main -->
 		<?php
 		get_sidebar();
 		?>

@@ -401,16 +401,16 @@ class Component implements Component_Interface {
 		$css->add_property( 'min-height', $css->render_range( kadence()->option( 'courses_title_height' ), 'mobile' ) );
 		$css->stop_media_query();
 		// Course Title.
-		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title .tutor-fs-4' );
+		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title.tutor-fs-4' );
 		$css->render_font( kadence()->option( 'courses_title_font' ), $css, 'heading' );
 		$css->start_media_query( $media_query['tablet'] );
-		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title .tutor-fs-4' );
+		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title.tutor-fs-4' );
 		$css->add_property( 'font-size', $css->render_font_size( kadence()->option( 'courses_title_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $css->render_font_height( kadence()->option( 'courses_title_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $css->render_font_spacing( kadence()->option( 'courses_title_font' ), 'tablet' ) );
 		$css->stop_media_query();
 		$css->start_media_query( $media_query['mobile'] );
-		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title .tutor-fs-4' );
+		$css->set_selector( '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title.tutor-fs-4' );
 		$css->add_property( 'font-size', $css->render_font_size( kadence()->option( 'courses_title_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $css->render_font_height( kadence()->option( 'courses_title_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $css->render_font_spacing( kadence()->option( 'courses_title_font' ), 'mobile' ) );

@@ -1,10 +1,10 @@
 === Kadence ===
 Contributors: britner
-Tags: translation-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
+Tags: translation-ready, accessibility-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
 Requires at least: 6.3
-Tested up to: 6.8.1
+Tested up to: 6.8.3
 Requires PHP: 7.4
-Stable tag: 1.2.27
+Stable tag: 1.4.2
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,70 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+= 1.4.2 | 18th November 2025
+* Fix: Optimized group block removed the wide-width and full width layout options
+* Fix: Syntax error reported in theme.json
+* Fix: Button (Adv) outline style text color settings not working when visited
+
+= 1.4.1 | 13th November 2025
+* Fix: issue with visited outline buttons in kadence blocks
+* Fix: Issue with some mega menu dropdown backgrounds
+* Fix: Issue with color palette importer/exporter
+* Update: New named format for color palette importer/exporter in the customizer (still supports old format)
+
+= 1.4.0 | 6th November 2025
+* Add: Customizer Style Guide
+* Add: Extended color palette
+* Add: Font clamp styles
+* Add: Secondary and outline button style controls
+* Add: Ability to set body class per page.
+
+= 1.3.6 | 25th September 2025
+* Fix: Ignore comment replies when scrolling to id.
+* Fix: Some social links did not have fields in the customizer.
+
+= 1.3.5 | 11th September 2025
+* Fix: Store Notice "Disable Dismiss Button" Option Not Working When Placement Set to Above
+* Fix: Header Enable Reveal Sticky on Scroll issue with bottom row.
+
+= 1.3.4 | 3rd September 2025
+* Fix: Issue with splide js in theme.
+* Fix: Issue with scroll to id in some situations.
+
+= 1.3.3 | 29th August 2025
+* Fix: Sticky Offset Issue.
+
+= 1.3.2 | 28th August 2025
+* Update: theme automated build process.
+* Add: Accessibility Ready theme tag.
+* Fix: Issue with Sticky Header and “Scroll to ID” Offset in Kadence Header(Adv) block
+
+= 1.3.1 | 19th August 2025
+* Update: Improve navigation aria labels
+* Update: Improve navigation expand state management.
+* Update: Improve screen reader navigation of header search modal.
+* Update: Main role landmark.
+* Fix: Increase specificity for post grid css.
+* Fix: Increase specificity for nav-button css.
+* Fix: Issue with post grid and testimonial grid styles.
+* Fix: Issue with archive grid item
+
+= 1.3.0 | 14th August 2025
+* Update: Theme JSON Mode defaults.
+* Update: Default link styles to show hover state.
+* Update: Post grid html to use lists for better accessibility.
+* Add: Aria label support for similar posts carousel.
+* Fix: Query Loop(Adv) image not opening in lightbox.
+
+= 1.2.28 | 17th July 2025
+* Fix: Duplicated banner roles removed.
+* Fix: Store notice placement above the content.
+* Fix: Circle shape for radial gradient color selector. 
+* Fix: Scroll to id on WooCommerce single product tabs.
+* Fix: Overlapping text in some Woo Commerce product carts.
+* Fix: Tutor LMS course layout title typography settings.
+
 = 1.2.27 | 3rd July 2025 =
 * Fix: Sale button position in pro gallery for Woo Templates.
 

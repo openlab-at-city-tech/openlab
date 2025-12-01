@@ -1,0 +1,39 @@
+=== Accessibility Statement ===
+This theme was designed and developed with accessibility best practices in mind, following WCAG 2.2 guidelines.
+== Quick Information ==
+WCAG audit completed: YES
+Most recent audit date: 2025-08-05
+Conformance level: WCAG 2.2 AA
+Audited by: @alh0319(Amber Hinds)
+Tested by disabled users: Yes
+
+== Testing Tools and Methodology ==
+
+Accessibility was a core part of the development workflow for this theme from the initial design phase through final release. We followed WCAG 2.2 AA guidelines to ensure the theme is usable by people with a wide range of abilities and assistive technologies.
+During development, we used a combination of automated and manual testing methods:
+Automated Tools:
+Accessibility Checker WordPress plugin
+axe DevTools browser extension
+WAVE browser extension
+ESLint with accessibility-focused rules for JSX and ARIA usage
+Manual Testing Techniques:
+Keyboard-only navigation testing to ensure all interactive elements are focusable and operable
+Screen reader testing with NVDA (Windows) and VoiceOver (macOS) to verify meaningful announcements, focus order, and labeling
+Manual color contrast checks using the WebAIM Contrast Checker
+Testing responsive behaviors to ensure accessibility is preserved on mobile and tablet devices
+All components and templates were tested for accessibility as they were developed. Additionally, we performed a full accessibility audit prior to release. The audit was conducted internally and verified by an external accessibility expert, John Doe.
+We maintain a version-controlled accessibility checklist, and all theme updates go through regression testing to ensure accessibility is preserved. Any reported issues from users are logged and reviewed as part of our regular release process.
+This proactive and ongoing approach helps ensure the theme remains compliant and usable for all site visitors
+
+
+== Screen Reader Text Class ==
+
+.screen-reader-text
+
+== Accessibility Help Contact ==
+
+[Contact Us](https://www.kadencewp.com/contact-us/)
+
+== Where to Report Issues ==
+
+[Contact Us](https://www.kadencewp.com/contact-us/)

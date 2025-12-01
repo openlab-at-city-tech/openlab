@@ -9,7 +9,6 @@ namespace Kadence;
 
 use function Kadence\kadence;
 use function get_template_part;
-use function add_action;
 
 defined( 'ABSPATH' ) || exit;
 /**
@@ -26,7 +25,7 @@ function footer_markup() {
  */
 function top_footer() {
 	if ( kadence()->display_footer_row( 'top' ) ) {
-		kadence()->get_template( 'template-parts/footer/footer', 'row', array( 'row' => 'top' ) );
+		kadence()->get_template( 'template-parts/footer/footer', 'row', [ 'row' => 'top' ] );
 	}
 }
 
@@ -35,7 +34,7 @@ function top_footer() {
  */
 function middle_footer() {
 	if ( kadence()->display_footer_row( 'middle' ) ) {
-		kadence()->get_template( 'template-parts/footer/footer', 'row', array( 'row' => 'middle' ) );
+		kadence()->get_template( 'template-parts/footer/footer', 'row', [ 'row' => 'middle' ] );
 	}
 }
 
@@ -44,7 +43,7 @@ function middle_footer() {
  */
 function bottom_footer() {
 	if ( kadence()->display_footer_row( 'bottom' ) ) {
-		kadence()->get_template( 'template-parts/footer/footer', 'row', array( 'row' => 'bottom' ) );
+		kadence()->get_template( 'template-parts/footer/footer', 'row', [ 'row' => 'bottom' ] );
 	}
 }
 
@@ -63,7 +62,7 @@ function footer_column( $row, $column ) {
  * Footer HTML
  */
 function footer_html() {
-	$content    = kadence()->option( 'footer_html_content' );
+	$content = kadence()->option( 'footer_html_content' );
 	if ( $content || is_customize_preview() ) {
 		$link_style = kadence()->option( 'footer_html_link_style' );
 		echo '<div class="footer-html inner-link-style-' . esc_attr( $link_style ) . '">';
@@ -73,7 +72,7 @@ function footer_html() {
 		$content = str_replace( '{year}', date_i18n( 'Y' ), $content );
 		$content = str_replace( '{site-title}', get_bloginfo( 'name' ), $content );
 		// translators: %s is link to Kadence WP.
-		$content = str_replace( '{theme-credit}', sprintf( __( '- WordPress Theme by %s', 'kadence' ), '<a href="https://www.kadencewp.com/" rel="nofollow noopener" target="_blank">Kadence WP</a>' ), $content );
+		$content = str_replace( '{theme-credit}', sprintf( __( '- WordPress Theme by %s', 'kadence' ), '<a href="https://www.kadencewp.com/" rel="nofollow noopener">Kadence WP</a>' ), $content );
 		echo do_shortcode( wpautop( $content ) );
 		echo '</div>';
 		echo '</div>';
@@ -85,12 +84,12 @@ function footer_html() {
  */
 function footer_navigation() {
 	?>
-	<nav id="footer-navigation" class="footer-navigation" role="navigation" aria-label="<?php esc_attr_e( 'Footer Navigation', 'kadence' ); ?>">
+	<nav id="footer-navigation" class="footer-navigation" role="navigation" aria-label="<?php esc_attr_e( 'Footer', 'kadence' ); ?>">
 		<?php kadence()->customizer_quick_link(); ?>
 		<div class="footer-menu-container">
 			<?php
 			if ( kadence()->is_footer_nav_menu_active() ) {
-				kadence()->display_footer_nav_menu( array( 'menu_id' => 'footer-menu' ) );
+				kadence()->display_footer_nav_menu( [ 'menu_id' => 'footer-menu' ] );
 			} else {
 				kadence()->display_fallback_menu();
 			}
@@ -104,11 +103,12 @@ function footer_navigation() {
  * Desktop Social
  */
 function footer_social() {
-	$items      = kadence()->sub_option( 'footer_social_items', 'items' );
-	$title      = kadence()->option( 'footer_social_title' );
-	$show_label = kadence()->option( 'footer_social_show_label' );
-	$brand_colors = kadence()->option( 'footer_social_brand' );
-	$brand_color_class = '';
+	$items                     = kadence()->sub_option( 'footer_social_items', 'items' );
+	$title                     = kadence()->option( 'footer_social_title' );
+	$show_label                = kadence()->option( 'footer_social_show_label' );
+	$brand_colors              = kadence()->option( 'footer_social_brand' );
+	$social_links_open_new_tab = kadence()->option( 'social_links_open_new_tab' );
+	$brand_color_class         = '';
 	if ( 'onhover' === $brand_colors ) {
 		$brand_color_class = ' social-show-brand-hover';
 	} elseif ( 'untilhover' === $brand_colors ) {
@@ -134,10 +134,18 @@ function footer_social() {
 						$link = 'mailto:' . $link;
 					}
 				}
-				echo '<a href="' . esc_attr( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="_blank" rel="noopener noreferrer"  ' ) . 'class="social-button footer-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
+				echo '<a href="' . esc_url( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="' . esc_attr( $social_links_open_new_tab ? '_blank' : '_self' ) . '" rel="noopener noreferrer"  ' ) . 'class="social-button footer-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
 				if ( 'image' === $item['source'] ) {
 					if ( $item['imageid'] && wp_get_attachment_image( $item['imageid'], 'full', true ) ) {
-						echo wp_get_attachment_image( $item['imageid'], 'full', true, array( 'class' => 'social-icon-image', 'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px' ) );
+						echo wp_get_attachment_image(
+							$item['imageid'],
+							'full',
+							true,
+							[
+								'class' => 'social-icon-image',
+								'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px',
+							] 
+						);
 					} elseif ( ! empty( $item['url'] ) ) {
 						echo '<img src="' . esc_attr( $item['url'] ) . '" alt="' . esc_attr( $item['label'] ) . '" class="social-icon-image" style="max-width:' . esc_attr( $item['width'] ) . 'px"/>';
 					}

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 do_action( 'kadence_after_content' );
 ?>
-	</div><!-- #inner-wrap -->
+	</main><!-- #inner-wrap -->
 	<?php
 	do_action( 'kadence_before_footer' );
 	/**

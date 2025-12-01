@@ -11,11 +11,13 @@ $row = get_query_var( 'row' );
 ?>
 <div class="<?php echo esc_attr( header_row_class( $row ) ); ?>" data-section="kadence_customizer_header_<?php echo esc_attr( $row ); ?>"<?php
 if ( 'main' === $row && 'main' === kadence()->option( 'header_sticky' ) ) {
-	echo ' data-reveal-scroll-up="' . ( kadence()->option( 'header_reveal_scroll_up' ) ? 'true' : 'false' ) . '"';
 	echo ' data-shrink="' . ( kadence()->option( 'header_sticky_shrink' ) ? 'true' : 'false' ) . '"';
 	if ( kadence()->option( 'header_sticky_shrink' ) ) {
 		echo ' data-shrink-height="' . esc_attr( kadence()->sub_option( 'header_sticky_main_shrink', 'size' ) ) . '"';
 	}
+}
+if ( $row && $row === kadence()->option( 'header_sticky' ) ) {
+	echo ' data-reveal-scroll-up="' . ( kadence()->option( 'header_reveal_scroll_up' ) ? 'true' : 'false' ) . '"';
 }
 ?>>
 	<div class="site-header-row-container-inner">

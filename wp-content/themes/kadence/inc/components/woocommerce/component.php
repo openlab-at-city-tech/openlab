@@ -176,7 +176,7 @@ class Component implements Component_Interface {
 		// Add single product Button Classes.
 		add_filter( 'body_class', array( $this, 'single_product_body_classes' ) );
 
-		// Add Store Notice Body Class.
+		// Add Store Notice Body Class and handle some placement shuffling for the store notice.
 		add_filter( 'body_class', array( $this, 'woo_extra_body_classes' ) );
 		// Filter product blocks grid html.
 		add_filter( 'woocommerce_blocks_product_grid_item_html', array( $this, 'custom_block_html' ), 2, 3 );
@@ -789,11 +789,12 @@ class Component implements Component_Interface {
 		if ( is_store_notice_showing() ) {
 			$placement = kadence()->option( 'woo_store_notice_placement' );
 			$classes[] = esc_attr( 'kadence-store-notice-placement-' . $placement );
+
 			if ( 'above' === $placement ) {
 				if ( kadence()->option( 'woo_store_notice_hide_dismiss' ) ) {
 					add_filter( 'woocommerce_demo_store', array( $this, 'woocommerce_demo_store_remove_dismiss' ), 15, 2 );
 				}
-				remove_action( 'wp_footer', 'woocommerce_demo_store' );
+				remove_action( 'wp_body_open', 'woocommerce_demo_store' );
 				add_action( 'kadence_before_header', 'woocommerce_demo_store' );
 			}
 		}

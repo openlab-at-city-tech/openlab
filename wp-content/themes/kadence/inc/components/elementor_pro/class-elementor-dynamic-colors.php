@@ -100,6 +100,12 @@ if ( class_exists( '\ElementorPro\Modules\DynamicTags\Tags\Base\Data_Tag' ) ) {
 				'palette7' => __( '7 - Subtle Background', 'kadence' ),
 				'palette8' => __( '8 - Lighter Background', 'kadence' ),
 				'palette9' => __( '9 - White or offwhite', 'kadence' ),
+				'palette10' => __( '10 - Accent - Complement', 'kadence' ),
+				'palette11' => __( '11 - Notices - Success', 'kadence' ),
+				'palette12' => __( '12 - Notices - Info', 'kadence' ),
+				'palette13' => __( '13 - Notices - Alert', 'kadence' ),
+				'palette14' => __( '14 - Notices - Warning', 'kadence' ),
+				'palette15' => __( '15 - Notices - Rating', 'kadence' ),
 			);
 			$this->add_control(
 				'kadence_palette',

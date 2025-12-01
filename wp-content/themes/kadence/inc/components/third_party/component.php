@@ -12,7 +12,6 @@ use function Kadence\kadence;
 use function add_action;
 use function add_filter;
 use function get_template_part;
-use function locate_template;
 
 /**
  * Class for integrating with the block Third_Party.
@@ -26,7 +25,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'third_party';
 	}
 
@@ -37,17 +36,17 @@ class Component implements Component_Interface {
 		// WeDocs.
 		remove_action( 'wedocs_before_main_content', 'wedocs_template_wrapper_start' );
 		remove_action( 'wedocs_after_main_content', 'wedocs_template_wrapper_end' );
-		add_action( 'wedocs_before_main_content', array( $this, 'output_content_wrapper' ) );
-		add_action( 'wedocs_after_main_content', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'kadence_gallery_post_before', array( $this, 'output_content_wrapper' ) );
-		add_action( 'kadence_gallery_post_after', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'kadence_gallery_post_before_content', array( $this, 'output_content_inner' ) );
-		add_action( 'kadence_gallery_post_after_content', array( $this, 'output_content_inner_end' ) );
+		add_action( 'wedocs_before_main_content', [ $this, 'output_content_wrapper' ] );
+		add_action( 'wedocs_after_main_content', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'kadence_gallery_post_before', [ $this, 'output_content_wrapper' ] );
+		add_action( 'kadence_gallery_post_after', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'kadence_gallery_post_before_content', [ $this, 'output_content_inner' ] );
+		add_action( 'kadence_gallery_post_after_content', [ $this, 'output_content_inner_end' ] );
 		add_filter( 'kadence_gallery_single_show_title', '__return_false' );
-		add_action( 'kadence_gallery_album_before', array( $this, 'output_content_wrapper' ) );
-		add_action( 'kadence_gallery_album_after', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'kadence_gallery_album_before_content', array( $this, 'output_archive_content_inner' ) );
-		add_action( 'kadence_gallery_album_after_content', array( $this, 'output_content_inner_end' ) );
+		add_action( 'kadence_gallery_album_before', [ $this, 'output_content_wrapper' ] );
+		add_action( 'kadence_gallery_album_after', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'kadence_gallery_album_before_content', [ $this, 'output_archive_content_inner' ] );
+		add_action( 'kadence_gallery_album_after_content', [ $this, 'output_content_inner_end' ] );
 	}
 	/**
 	 * Adds theme output Wrapper.
@@ -101,7 +100,7 @@ class Component implements Component_Interface {
 		?>
 		<div id="primary" class="content-area">
 			<div class="content-container site-container">
-				<main id="main" class="site-main" role="main">
+				<div id="main" class="site-main">
 					<?php
 					/**
 					 * Hook for anything before main content
@@ -120,7 +119,7 @@ class Component implements Component_Interface {
 		 */
 		do_action( 'kadence_after_main_content' );
 		?>
-			</main><!-- #main -->
+			</div><!-- #main -->
 			<?php
 			get_sidebar();
 			?>

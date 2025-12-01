@@ -10,9 +10,7 @@ namespace Kadence\Estatik;
 use Kadence\Component_Interface;
 use function Kadence\kadence;
 use function add_action;
-use function add_filter;
 use function get_template_part;
-use function locate_template;
 
 /**
  * Class for integrating with the block Third_Party.
@@ -26,7 +24,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'estatik';
 	}
 
@@ -37,11 +35,10 @@ class Component implements Component_Interface {
 		// remove_action( 'es_before_content', 'ere_output_content_wrapper_start' );
 		// remove_action( 'es_after_content', 'es_after_content' );
 		// remove_action( 'ere_sidebar_property', 'ere_sidebar_property' );
-		add_action( 'es_before_content', array( $this, 'output_content_wrapper' ) );
-		add_action( 'es_after_content', array( $this, 'output_content_wrapper_end' ) );
+		add_action( 'es_before_content', [ $this, 'output_content_wrapper' ] );
+		add_action( 'es_after_content', [ $this, 'output_content_wrapper_end' ] );
 		// add_action( 'es_before_content', array( $this, 'output_content_inner' ), 20 );
 		// add_action( 'es_after_content', array( $this, 'output_content_inner_end' ), 20 );
-
 	}
 	/**
 	 * Adds theme output Wrapper.
@@ -102,13 +99,13 @@ class Component implements Component_Interface {
 	public function output_content_wrapper() {
 		kadence()->print_styles( 'kadence-content' );
 		// /**
-		//  * Hook for Hero Section
-		//  */
+		// * Hook for Hero Section
+		// */
 		// do_action( 'kadence_hero_header' );
 		?>
 		<div id="primary" class="content-area">
 			<div class="content-container site-container">
-				<main id="main" class="site-main" role="main">
+				<div id="main" class="site-main">
 					<?php
 					/**
 					 * Hook for anything before main content
@@ -130,7 +127,7 @@ class Component implements Component_Interface {
 		 */
 		do_action( 'kadence_after_main_content' );
 		?>
-			</main><!-- #main -->
+			</div><!-- #main -->
 			<?php
 			get_sidebar();
 			?>

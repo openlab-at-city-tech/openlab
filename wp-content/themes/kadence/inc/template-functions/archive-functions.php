@@ -25,7 +25,7 @@ function archive_markup() {
  */
 function get_archive_hero_classes() {
 	$slug      = get_archive_post_type_slug();
-	$classes   = array();
+	$classes   = [];
 	$classes[] = 'entry-hero';
 	$classes[] = $slug . '-archive-hero-section';
 	$classes[] = 'entry-hero-layout-' . ( kadence()->option( $slug . '_archive_title_inner_layout' ) ? kadence()->option( $slug . '_archive_title_inner_layout' ) : 'inherit' );
@@ -54,7 +54,7 @@ function get_archive_post_type_slug() {
 			$current_tax = get_taxonomy( $queried_object->taxonomy );
 			if ( property_exists( $current_tax, 'object_type' ) ) {
 				$post_types = $current_tax->object_type;
-				$slug = $post_types[0];
+				$slug       = $post_types[0];
 			}
 		}
 	}
@@ -68,7 +68,7 @@ function get_archive_post_type_slug() {
  */
 function get_archive_title_classes() {
 	$slug      = get_archive_post_type_slug();
-	$classes   = array();
+	$classes   = [];
 	$classes[] = 'entry-header';
 	$classes[] = $slug . '-archive-title';
 	$classes[] = 'title-align-' . ( kadence()->sub_option( $slug . '_archive_title_align', 'desktop' ) ? kadence()->sub_option( $slug . '_archive_title_align', 'desktop' ) : 'inherit' );
@@ -83,13 +83,14 @@ function get_archive_title_classes() {
  * @return array $classes for the archive container.
  */
 function get_archive_container_classes() {
-	$classes   = array();
+	$classes   = [];
 	$classes[] = 'content-wrap';
+	$classes[] = 'kadence-posts-list';
 	$classes[] = 'grid-cols';
 	if ( is_search() ) {
 		$classes[] = 'search-archive';
 		if ( '1' === kadence()->option( 'search_archive_columns' ) ) {
-			$placement    = kadence()->option( 'search_archive_item_image_placement' );
+			$placement = kadence()->option( 'search_archive_item_image_placement' );
 			$classes[] = 'grid-sm-col-1';
 			$classes[] = 'grid-lg-col-1';
 			$classes[] = 'item-image-style-' . $placement;
@@ -109,7 +110,7 @@ function get_archive_container_classes() {
 	} elseif ( 'post' === get_post_type() ) {
 		$classes[] = 'post-archive';
 		if ( '1' === kadence()->option( 'post_archive_columns' ) ) {
-			$placement    = kadence()->option( 'post_archive_item_image_placement' );
+			$placement = kadence()->option( 'post_archive_item_image_placement' );
 			if ( 'beside' === $placement ) {
 				$classes[] = 'item-content-vertical-align-' . kadence()->option( 'post_archive_item_vertical_alignment', 'top' );
 			}

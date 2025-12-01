@@ -314,7 +314,9 @@ Theme_Customizer::add_settings(
 					),
 					'outline' => array(
 						'name'    => __( 'Outline', 'kadence' ),
-						'icon'    => '',
+					),
+					'secondary' => array(
+						'name'    => __( 'Secondary', 'kadence' ),
 					),
 				),
 				'responsive' => false,

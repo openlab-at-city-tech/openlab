@@ -15,9 +15,9 @@ use function the_author_meta;
 use function get_the_author_posts_link;
 
 kadence()->print_styles( 'kadence-author-box' );
-
+$social_links_open_new_tab = kadence()->option( 'social_links_open_new_tab' );
 ?>
-<div class="entry-author entry-author-style-<?php echo esc_attr( kadence()->option( 'post_author_box_style' ) ); ?><?php echo ( kadence()->option( 'post_footer_area_boxed' ) ? ' content-bg entry-content-wrap entry' : '' ); ?>">
+<div class="entry-author entry-author-style-<?php echo esc_attr( kadence()->option( 'post_author_box_style' ) ); ?><?php echo kadence()->option( 'post_footer_area_boxed' ) ? ' content-bg entry-content-wrap entry' : ''; ?>">
 	<div class="entry-author-profile author-profile vcard">
 		<div class="entry-author-avatar">
 			<?php echo get_avatar( get_the_author_meta( 'ID' ), 80 ); ?>
@@ -31,9 +31,9 @@ kadence()->print_styles( 'kadence-author-box' );
 		</div>
 		<div class="entry-author-follow author-follow">
 			<?php
-			foreach ( array( 'facebook', 'twitter', 'instagram', 'threads', 'youtube', 'flickr', 'vimeo', 'linkedin', 'pinterest', 'dribbble', 'amazon', 'medium', 'goodreads', 'bookbub' ) as $social ) {
+			foreach ( [ 'facebook', 'twitter', 'instagram', 'threads', 'youtube', 'flickr', 'vimeo', 'linkedin', 'pinterest', 'dribbble', 'amazon', 'medium', 'goodreads', 'bookbub' ] as $social ) {
 				if ( get_the_author_meta( $social ) ) {
-					$url = get_the_author_meta( $social );
+					$url  = get_the_author_meta( $social );
 					$name = 'twitter' === $social ? 'x formerly Twitter' : $social;
 					$icon = 'twitter' === $social ? 'twitterAlt2' : $social;
 					$icon = 'instagram' === $social ? 'instagramAlt' : $icon;
@@ -45,7 +45,7 @@ kadence()->print_styles( 'kadence-author-box' );
 						}
 					}
 					?>
-					<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $social ); ?>-link social-button" target="_blank" rel="noopener" title="<?php /* translators: 1: Author Name, 2: Social Media Name */ echo sprintf( esc_attr__( 'Follow %1$s on %2$s', 'kadence' ), esc_attr( get_the_author_meta( 'display_name' ) ), esc_attr( ucfirst( $name ) ) ); ?>">
+					<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $social ); ?>-link social-button" target="<?php echo esc_attr( $social_links_open_new_tab ? '_blank' : '_self' ); ?>" rel="noopener" title="<?php /* translators: 1: Author Name, 2: Social Media Name */ printf( esc_attr__( 'Follow %1$s on %2$s', 'kadence' ), esc_attr( get_the_author_meta( 'display_name' ) ), esc_attr( ucfirst( $name ) ) ); ?>">
 						<?php kadence()->print_icon( $icon, '', false ); ?>
 					</a>
 					<?php

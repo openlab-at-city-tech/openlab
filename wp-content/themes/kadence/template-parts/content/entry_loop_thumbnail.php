@@ -10,12 +10,12 @@ namespace Kadence;
 if ( post_password_required() || ! post_type_supports( get_post_type(), 'thumbnail' ) || ! has_post_thumbnail() ) {
 	return;
 }
-$defaults = array(
+$defaults        = [
 	'enabled'   => true,
 	'ratio'     => '2-3',
 	'size'      => 'medium_large',
 	'imageLink' => true,
-);
+];
 $slug            = ( is_search() ? 'search' : get_post_type() );
 $feature_element = kadence()->option( $slug . '_archive_element_feature', $defaults );
 if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feature_element['enabled'] ) {
@@ -31,13 +31,13 @@ if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feat
 				<?php
 				the_post_thumbnail(
 					$size,
-					array(
+					[
 						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
-							array(
+							[
 								'echo' => false,
-							)
+							]
 						),
-					)
+					]
 				);
 				?>
 			</div>
@@ -45,18 +45,18 @@ if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feat
 		<?php
 	} else {
 		?>
-		<a class="post-thumbnail kadence-thumbnail-ratio-<?php echo esc_attr( $ratio ); ?>" href="<?php the_permalink(); ?>">
+		<a aria-hidden="true" tabindex="-1" role="presentation" class="post-thumbnail kadence-thumbnail-ratio-<?php echo esc_attr( $ratio ); ?>" aria-label="<?php the_title_attribute(); ?>" href="<?php the_permalink(); ?>">
 			<div class="post-thumbnail-inner">
 				<?php
 				the_post_thumbnail(
 					$size,
-					array(
+					[
 						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
-							array(
+							[
 								'echo' => false,
-							)
+							]
 						),
-					)
+					]
 				);
 				?>
 			</div>

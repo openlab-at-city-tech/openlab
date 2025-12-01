@@ -13,9 +13,6 @@ use function Kadence\kadence;
 use function Kadence\print_webfont_preload;
 use function Kadence\get_webfont_url;
 use function add_action;
-use function have_posts;
-use function the_post;
-use function is_search;
 use function get_template_part;
 use function get_post_type;
 
@@ -30,13 +27,13 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'give';
 	}
 
@@ -45,17 +42,17 @@ class Component implements Component_Interface {
 	 */
 	public function initialize() {
 		// New Visual Builder Styles.
-		add_action( 'givewp_donation_form_enqueue_scripts', array( $this, 'update_visual_builder_template_styles' ), 10 );
-		add_action( 'givewp_donation_form_enqueue_scripts', array( $this, 'update_visual_builder_template_fonts' ), 15 );
-		add_action( 'wp_print_styles', array( $this, 'override_iframe_template_styles' ), 10 );
-		add_action( 'wp_print_styles', array( $this, 'add_iframe_fonts' ), 20 );
-		add_action( 'give_default_wrapper_start', array( $this, 'output_content_wrapper' ) );
-		add_action( 'give_default_wrapper_end', array( $this, 'output_content_wrapper_end' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'give_styles' ), 60 );
-		add_filter( 'post_class', array( $this, 'set_give_entry_class' ), 10, 3 );
-		add_action( 'give_before_single_form_summary', array( $this, 'output_inner_content_wrapper' ), 2 );
-		add_action( 'give_after_single_form_summary', array( $this, 'output_inner_content_wrapper_end' ) );
-		add_action( 'give_single_form_summary', array( $this, 'maybe_add_title' ), 1 );
+		add_action( 'givewp_donation_form_enqueue_scripts', [ $this, 'update_visual_builder_template_styles' ], 10 );
+		add_action( 'givewp_donation_form_enqueue_scripts', [ $this, 'update_visual_builder_template_fonts' ], 15 );
+		add_action( 'wp_print_styles', [ $this, 'override_iframe_template_styles' ], 10 );
+		add_action( 'wp_print_styles', [ $this, 'add_iframe_fonts' ], 20 );
+		add_action( 'give_default_wrapper_start', [ $this, 'output_content_wrapper' ] );
+		add_action( 'give_default_wrapper_end', [ $this, 'output_content_wrapper_end' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'give_styles' ], 60 );
+		add_filter( 'post_class', [ $this, 'set_give_entry_class' ], 10, 3 );
+		add_action( 'give_before_single_form_summary', [ $this, 'output_inner_content_wrapper' ], 2 );
+		add_action( 'give_after_single_form_summary', [ $this, 'output_inner_content_wrapper_end' ] );
+		add_action( 'give_single_form_summary', [ $this, 'maybe_add_title' ], 1 );
 		remove_action( 'give_single_form_summary', 'give_template_single_title', 5 );
 	}
 	/**
@@ -90,7 +87,7 @@ class Component implements Component_Interface {
 	 * Add some css styles for zoom_recipe_card
 	 */
 	public function give_styles() {
-		wp_enqueue_style( 'kadence-givewp', get_theme_file_uri( '/assets/css/givewp.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-givewp', get_theme_file_uri( '/assets/css/givewp.min.css' ), [], KADENCE_VERSION );
 	}
 	/**
 	 * Adds theme output Wrapper.
@@ -120,7 +117,7 @@ class Component implements Component_Interface {
 		?>
 		<div id="primary" class="content-area">
 			<div class="content-container site-container">
-				<main id="main" class="site-main" role="main">
+				<div id="main" class="site-main">
 					<?php
 					/**
 					 * Hook for anything before main content
@@ -134,7 +131,7 @@ class Component implements Component_Interface {
 	 * Adds theme end output Wrapper.
 	 */
 	public function output_content_wrapper_end() {
-					?>
+		?>
 					</div>
 					<?php
 					/**
@@ -142,7 +139,7 @@ class Component implements Component_Interface {
 					 */
 					do_action( 'kadence_after_main_content' );
 					?>
-				</main><!-- #main -->
+				</div><!-- #main -->
 				<?php
 				get_sidebar();
 				?>
@@ -160,7 +157,7 @@ class Component implements Component_Interface {
 			return '';
 		}
 		$link    = '';
-		$sub_add = array();
+		$sub_add = [];
 		$subsets = kadence()->option( 'google_subsets' );
 		foreach ( $google_fonts as $key => $gfont_values ) {
 			if ( ! empty( $link ) ) {
@@ -179,11 +176,11 @@ class Component implements Component_Interface {
 				}
 			}
 		}
-		$args = array(
+		$args = [
 			'family' => $link,
-		);
+		];
 		if ( ! empty( $subsets ) ) {
-			$available = array( 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' );
+			$available = [ 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' ];
 			foreach ( $subsets as $key => $enabled ) {
 				if ( $enabled && in_array( $key, $available, true ) ) {
 					if ( 'chinese' === $key ) {
@@ -202,7 +199,8 @@ class Component implements Component_Interface {
 			$args['display'] = 'swap';
 		}
 		$google_fonts_url = add_query_arg( apply_filters( 'kadence_theme_givewp_google_fonts_query_args', $args ), 'https://fonts.googleapis.com/css' );
-		if ( ! empty( $google_fonts_url ) ) {
+		// Check if give-sequoia-template-css is enqueued
+		if ( ! empty( $google_fonts_url ) && wp_style_is( 'give-sequoia-template-css', 'enqueued' ) ) {
 			if ( kadence()->option( 'load_fonts_local' ) ) {
 				if ( kadence()->option( 'preload_fonts_local' ) && apply_filters( 'kadence_local_fonts_preload', true ) ) {
 					print_webfont_preload( $google_fonts_url );
@@ -210,11 +208,11 @@ class Component implements Component_Interface {
 				wp_enqueue_style(
 					'kadence-givewp-iframe-fonts',
 					get_webfont_url( $google_fonts_url ),
-					array('give-sequoia-template-css'),
+					[ 'give-sequoia-template-css' ],
 					KADENCE_VERSION
 				);
 			} else {
-				wp_enqueue_style( 'kadence-givewp-iframe-fonts', $google_fonts_url, array('give-sequoia-template-css'), KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_enqueue_style( 'kadence-givewp-iframe-fonts', $google_fonts_url, [ 'give-sequoia-template-css' ], KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			}
 		}
 	}
@@ -228,7 +226,7 @@ class Component implements Component_Interface {
 			return '';
 		}
 		$link    = '';
-		$sub_add = array();
+		$sub_add = [];
 		$subsets = kadence()->option( 'google_subsets' );
 		foreach ( $google_fonts as $key => $gfont_values ) {
 			if ( ! empty( $link ) ) {
@@ -247,11 +245,11 @@ class Component implements Component_Interface {
 				}
 			}
 		}
-		$args = array(
+		$args = [
 			'family' => $link,
-		);
+		];
 		if ( ! empty( $subsets ) ) {
-			$available = array( 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' );
+			$available = [ 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' ];
 			foreach ( $subsets as $key => $enabled ) {
 				if ( $enabled && in_array( $key, $available, true ) ) {
 					if ( 'chinese' === $key ) {
@@ -278,11 +276,11 @@ class Component implements Component_Interface {
 				wp_enqueue_style(
 					'kadence-givewp-visual-iframe-fonts',
 					get_webfont_url( $google_fonts_url ),
-					array(),
+					[],
 					KADENCE_VERSION
 				);
 			} else {
-				wp_enqueue_style( 'kadence-givewp-visual-iframe-fonts', $google_fonts_url, array(), KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_enqueue_style( 'kadence-givewp-visual-iframe-fonts', $google_fonts_url, [], KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			}
 		}
 	}
@@ -291,7 +289,7 @@ class Component implements Component_Interface {
 	 */
 	public function update_visual_builder_template_styles() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -306,13 +304,34 @@ class Component implements Component_Interface {
 		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
 		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
 		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette10', kadence()->palette_option( 'palette10' ) );
+		$css->add_property( '--global-palette11', kadence()->palette_option( 'palette11' ) );
+		$css->add_property( '--global-palette12', kadence()->palette_option( 'palette12' ) );
+		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
+		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
+		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
 		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
 		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
 		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
+
+		// Button.
 		$css->add_property( '--global-palette-btn-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'hover' ) ) );
 		$css->add_property( '--global-palette-btn', $css->render_color( kadence()->sub_option( 'buttons_color', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-hover', $css->render_color( kadence()->sub_option( 'buttons_color', 'hover' ) ) );
+
+		// Button Secondary.
+		$css->add_property( '--global-palette-btn-sec-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-sec', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-hover', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'hover' ) ) );
+
+		// Button Outline.
+		$css->add_property( '--global-palette-btn-out-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-out', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-hover', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+
 		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );
 		$css->add_property( '--global-heading-font-family', $css->render_font_family( kadence()->option( 'heading_font' ) ) );
 		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
@@ -330,7 +349,7 @@ class Component implements Component_Interface {
 	 */
 	public function override_iframe_template_styles() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -345,6 +364,12 @@ class Component implements Component_Interface {
 		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
 		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
 		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette10', kadence()->palette_option( 'palette10' ) );
+		$css->add_property( '--global-palette11', kadence()->palette_option( 'palette11' ) );
+		$css->add_property( '--global-palette12', kadence()->palette_option( 'palette12' ) );
+		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
+		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
+		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
 		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
 		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
 		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
@@ -382,7 +407,7 @@ class Component implements Component_Interface {
 		$css->add_property( 'background', 'var(--global-palette7 )' );
 		$css->set_selector( '.form-footer .navigator-tracker .step-tracker.current' );
 		$css->add_property( 'background', 'var(--global-palette6 )' );
-		$css->set_selector( '.payment #give_purchase_form_wrap');
+		$css->set_selector( '.payment #give_purchase_form_wrap' );
 		$css->add_property( 'background', 'var(--global-palette8 )' );
 		$css->set_selector(
 			'body.give-form-templates,
