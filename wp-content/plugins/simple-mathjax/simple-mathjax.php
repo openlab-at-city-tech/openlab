@@ -2,9 +2,11 @@
 /*
  * Plugin Name: Simple MathJax
  * Description: Load the mathjax scripts across your wordpress blog
- * Version: 2.0.3
+ * Version: 2.1.1
  * Author: Samuel Coskey, Peter Krautzberger, Christian Lawson-Perfect
- * Author URI: https://boolesrings.org
+ * Author URI: https://somethingorotherwhatever.com
+ * License: GPLv3
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
  */
 
 class SimpleMathjax {
@@ -13,7 +15,7 @@ class SimpleMathjax {
    * Default options for the plugin
    */ 
   public static $default_options = array(
-    'major_version' => 3,
+    'major_version' => 4,
     'mathjax_in_admin' => false,
     'custom_mathjax_cdn' => '',
     'custom_mathjax_config' => '',
@@ -25,15 +27,17 @@ class SimpleMathjax {
    */
   public static $default_configs = array(
     2 => "MathJax.Hub.Config({\n  tex2jax: {\n    inlineMath: [['$','$'], ['\\\\(','\\\\)']],\n    processEscapes: true,\n    ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'\n  }\n});\n",
-    3 => "MathJax = {\n  tex: {\n    inlineMath: [['$','$'],['\\\\(','\\\\)']], \n    processEscapes: true\n  },\n  options: {\n    ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'\n  }\n};\n"
+    3 => "MathJax = {\n  tex: {\n    inlineMath: [['$','$'],['\\\\(','\\\\)']], \n    processEscapes: true\n  },\n  options: {\n    ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'\n  }\n};\n",
+    4 => "MathJax = {\n  tex: {\n    inlineMath: [['$','$'],['\\\\(','\\\\)']], \n    processEscapes: true\n  },\n  options: {\n    ignoreHtmlClass: 'tex2jax_ignore|editor-rich-text'\n  }\n};\n"
   );
 
   /*
    * Default CDN URLs, for each major version.
    */
   public static $default_cdns = array(
-    2 => "//cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-MML-AM_CHTML,Safe.js",
-    3 => "//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    4 => "//cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js",
+    3 => "//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js",
+    2 => "//cdn.jsdelivr.net/npm/mathjax@2.7.8/MathJax.js?config=TeX-MML-AM_CHTML,Safe.js"
   );
 
   /*
@@ -80,7 +84,7 @@ class SimpleMathjax {
   public static function configure_mathjax() {
     $options = self::load_options();
     $version = $options['major_version'];
-    $custom_config = wp_kses( $options['custom_mathjax_config'], array() );
+    $custom_config = $options['custom_mathjax_config'];
     $config = $custom_config ? $custom_config : self::$default_configs[$version];
     if($version==2) {
       echo "\n<script type='text/x-mathjax-config'>\n{$config}\n</script>\n";
@@ -126,7 +130,7 @@ class SimpleMathjax {
   </script>
   <?php
 
-      } else if($version==3) {
+      } else if($version==3 || $version==4) {
 
   ?>
   <script>
@@ -175,10 +179,16 @@ class SimpleMathjax {
     $options = self::load_options();
   ?>
     <select id="major_version" name="simple_mathjax_options[major_version]">
-      <option value="2" <?= $options['major_version']==2 ? 'selected' : '' ?>>2</option>
-      <option value="3" <?= $options['major_version']==3 ? 'selected' : '' ?>>3</option>
+    <?php foreach([2,3,4] as $version) { ?>
+        <option 
+            value="<?= $version ?>" 
+            <?= $options['major_version']==$version ? 'selected' : '' ?>
+        >
+            <?= $version ?>
+        </option>
+    <?php } ?>
     </select>
-    <p>MathJax versions 2 and 3 work very differently. See the <a href="http://docs.mathjax.org/en/latest/upgrading/v2.html">MathJax documentation</a>.</p>
+    <p>MathJax versions 2 and 3 work very differently. If you were using version 2, see the <a href="http://docs.mathjax.org/en/latest/upgrading/v2.html">MathJax documentation</a>.</p>
   <?php
   }
 
@@ -199,14 +209,13 @@ class SimpleMathjax {
   public static function cdn_input() {
     $options = self::load_options();
   ?>
-    <input type="text" id="custom_mathjax_cdn" size="50" name="simple_mathjax_options[custom_mathjax_cdn]" value="<?= $options['custom_mathjax_cdn'] ?>">
-    <p>If you leave this blank, the default will be used, depending on the major version of MathJax:</p>
-    <dl>
-      <dt>Version 2</dt>
-      <dd><code><?= self::$default_cdns[2] ?></code></dd>
-      <dt>Version 3</dt>
-      <dd><code><?= self::$default_cdns[3] ?></code></dd>
-    </dl>
+    <input type="text" id="custom_mathjax_cdn" size="50" name="simple_mathjax_options[custom_mathjax_cdn]" value="<?= $options['custom_mathjax_cdn'] ?>" list="default-cdns">
+<datalist id="default-cdns">
+      <?php foreach(self::$default_cdns as $version => $url) { ?>
+      <option value="<?= $url ?>">Version <?= $version ?></option>
+      <?php } ?>
+      </datalist>
+    <p>If you leave this blank, the default will be used, depending on the chosen version of MathJax.</p>
   <?php
   }
 
@@ -216,13 +225,13 @@ class SimpleMathjax {
   public static function config_input() {
     $options = self::load_options();
   ?>
-    <textarea id="custom_mathjax_config" cols="50" rows="10" name="simple_mathjax_options[custom_mathjax_config]"><?= $options['custom_mathjax_config'] ?></textarea>
+    <textarea style="font-family: monospace;" id="custom_mathjax_config" cols="50" rows="10" name="simple_mathjax_options[custom_mathjax_config]"><?= $options['custom_mathjax_config'] ?></textarea>
     <p>This text will be used to configure MathJax. See <a href="https://docs.mathjax.org/en/latest/options/index.html">the documentation on configuring MathJax</a>.</p>
     <p>If you leave this blank, the default will be used, according to the major version of MathJax:</p>
     <dl>
       <dt>Version 2</dt>
       <dd><pre><?= self::$default_configs[2] ?></pre></dd>
-      <dt>Version 3</dt>
+      <dt>Versions 3 and 4</dt>
       <dd><pre><?= self::$default_configs[3] ?></pre></dd>
     </dl>
   <?php
@@ -234,9 +243,9 @@ class SimpleMathjax {
   public static function latex_preamble_input() {
     $options = self::load_options();
   ?>
-    <textarea id="latex_preamble" cols="50" rows="10" name="simple_mathjax_options[latex_preamble]"><?= $options['latex_preamble'] ?></textarea>
+    <textarea style="font-family: monospace;" id="latex_preamble" cols="50" rows="10" name="simple_mathjax_options[latex_preamble]"><?= $options['latex_preamble'] ?></textarea>
     <p>This LaTeX will be run invisibly before any other LaTeX on the page. A good place to put \newcommand's and \renewcommand's</p>
-    <p><strong>Do not us $ signs</strong>, they will be added for you</p>
+    <p><strong>Do not use $ signs</strong>, they will be added for you.</p>
     <p>E.g.</p>
     <pre>\newcommand{\NN}{\mathbb N}
   \newcommand{\abs}[1]{\left|#1\right|}</pre>

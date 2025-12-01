@@ -1,11 +1,10 @@
 === Simple Mathjax ===
 
 Contributors: sgcoskey, pkra, christianperfect
-Donate link: https://boolesrings.org
 Tags: mathjax, latex
 Requires at least: 3.0
-Tested up to: 6.4
-Stable tag: 2.0.3
+Tested up to: 6.8
+Stable tag: 2.1.1
 
 Yet another plugin to add MathJax support to your wordpress blog.
 Just wrap your equations inside $ signs and MathJax will render them visually.
@@ -14,7 +13,7 @@ Just wrap your equations inside $ signs and MathJax will render them visually.
 
 This wordpress plugin is yet another simple plugin to load the [MathJax](http://www.mathjax.org) scripts at the bottom of all of your pages. It uses a very all-inclusive mathjax configuration by default, with $'s and $$'s the default delimeters for in-line and displayed equations.
 
-A preference pane is added to the "Settings" group where you can choose whether to use MathJax version 2 or 3, change the MathJax server location (CDN) and the MathJax configuration settings. (See [this page](https://docs.mathjax.org/en/latest/configuration.html#using-in-line-configuration-options) for details on the options available.) 
+A preference pane is added to the "Settings" group where you can choose whether to use MathJax version 2 or 3, change the MathJax server location (CDN) and the MathJax configuration settings. (See [the mathjax documentation](https://docs.mathjax.org/en/latest/web/start.html#configuring-mathjax) for details on the options available.) 
 You can also specify a LaTeX "preamble" of newcommands which will be loaded in a hidden element near the top of each page.
 
 Fork this plugin on [GitHub](https://github.com/boolesrings/Simple-Mathjax-wordpress-plugin).
@@ -24,6 +23,12 @@ Fork this plugin on [GitHub](https://github.com/boolesrings/Simple-Mathjax-wordp
 Nothing unusual here!
 
 == Changelog ==
+
+= 2.1.1 =
+The custom config no longer has the HTML escaping filter applied.
+
+= 2.1.0 =
+Added support for MathJax 4.
 
 = 2.0.1 =
 Bumped the default CDN URL for MathJax 2 to use 2.7.8.
