@@ -4,8 +4,8 @@ Tags: page builder, editor, landing page, drag-and-drop, elementor,
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.30.1
-Beta tag: 3.30.0-beta3
+Stable tag: 3.33.2
+Beta tag: 3.33.0-beta4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -349,47 +349,28 @@ You can also add a new language via [translate.wordpress.org](https://go.element
 
 == Changelog ==
 
-= 3.30.1 - 2025-07-07 =
+= 3.33.2 - 2025-11-23 =
 
-* Fix: Focus not applied correctly to chosen property in popovers - Editor V4
-* Fix: Font Family popover not loading as expected - Editor V4
-* Fix: Empty list displayed when opening the Class Manager - Editor V4
+* Security Fix: Improved code security enforcement in repeater widgets
+* Security Fix: Improved code security enforcement in Star Rating widget
+* Fix: Editor not loading with errors in the console in certain scenarios – Editor V4
 
-= 3.30.0 - 2025-07-01 =
+= 3.33.1 - 2025-11-17 =
 
-* New: Added support for setting custom units in size controls - Editor V4 ([#31287](https://github.com/elementor/elementor/issues/31287))
-* New: Added reset control visibility via the floating action bar - Editor V4 ([#31356](https://github.com/elementor/elementor/issues/31356))
-* New: Added JS handler infrastructure for the new elements system - Editor V4
-* New: Introduced modular YouTube element built with new structure and JS handlers – Editor V4
-* New: Added support for context-aware editing memory - Editor V4
-* New: Enabled Smart Unit Typing - allows typing values with units directly - Editor V4
-* New: Added ID control to Settings section under General tab - Editor V4
-* New: Added Anchor Offset control to Position section under Style tab - Editor V4
-* New: Added Display None control to Layout section under Style tab - Editor V4
-* New: Added Object Fit control to Size section under Style tab - Editor V4
-* New: Added Columns control to Typography section under Style tab - Editor V4
-* New: Added Aspect Ratio control to Size section under Style tab - Editor V4
-* New: Added group-level style indicators to show where class-based styles are applied – Editor V4
-* New: Added Indications Popover for visualizing class-based style origins – Editor V4
-* New: Introduced class permissions for non-admin users - Editor V4
-* Tweak: Added title hover and focus color options to Icon Box and Image Box widgets ([#29948](https://github.com/elementor/elementor/issues/29948))
-* Tweak: Added support for registering custom mask shapes ([#19396](https://github.com/elementor/elementor/issues/19396))
-* Tweak: User-defined class names now appear as-is in the final code output in Class Management - Editor V4 ([#31055](https://github.com/elementor/elementor/issues/31055))
-* Tweak: Renamed "Kits" to "Website Template" across the interface
-* Tweak: Added Settings section inside the General tab - Editor V4
-* Tweak: Merged "Editor Top Bar" feature into the core version
-* Tweak: Merged "Load Google Fonts locally" feature into the core version
-* Tweak: Activated "Optimized Markup" feature for new sites
-* Tweak: Promoted "Element Caching" feature to Stable status
-* Tweak: Added new mask shapes
-* Tweak: Replaced select control with a visual choice control in Mask shapes
-* Tweak: Add image `height`, `object-fit`, `object-position`, `box-shadow` in Image Box widget
-* Tweak: Standardized naming convention for items in the editor `app-bar`
-* Tweak: Consolidated control visibility and layout into a single Style tab in Progress Bar widget
-* Tweak: Updated minimum required WordPress version to 6.6
-* Fix: Global CSS transition with higher specificity prevents Container transitions from being applied ([#30460](https://github.com/elementor/elementor/issues/30460))
-* Fix: Global CSS classes are lost when publishing from multiple tabs - Editor V4
-* Fix: Redundant spacing appears below the image in the Image Box widget
-* Fix: Scrolling to anchors no longer works inside the Editor
+* Security Fix: Improved code security enforcement in Floating Elements
+
+= 3.33.0 - 2025-11-10 =
+
+* New: Introducing Variables Manager to manage design variables like colors, fonts, and sizes from a centralized panel - Editor V4
+* New: Introducing Blend Mode control to create layered visual effects by defining how elements blend with backgrounds - Editor V4
+* New: Introducing Background Clipping control to define where an element's background is rendered across the element's layout - Editor V4
+* Tweak: Updated Editor Top Bar layout and button placement for improved navigation
+* Tweak: Adjusted default cache behavior to inactive and updated FAQ Schema notice in Accordion widget
+* Tweak: Improved error handling in Import and Export customization flow
+* Tweak: Applied CSS logical properties support in Star Rating widget
+* Tweak: Enhanced accessibility in Star Rating widget
+* Tweak: Updated minimum supported versions for Chrome, Firefox, and Safari
+* Fix: Child pages and menu items not importing correctly in Website Templates
+* Fix: Deprecated `utf8_encode()` and `utf8_decode()` functions replaced for PHP 8.2 compatibility ([#27499](https://github.com/elementor/elementor/issues/27499))
 
 [See changelog for all versions.](https://go.elementor.com/full-changelog/)

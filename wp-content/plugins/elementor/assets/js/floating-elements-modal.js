@@ -1,4 +1,3 @@
-/*! elementor - v3.30.0 - 07-07-2025 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -149,6 +148,29 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
       };
     }
   }, {
+    key: "onRender",
+    value: function onRender() {
+      this.bindEscapeKey();
+    }
+  }, {
+    key: "bindEscapeKey",
+    value: function bindEscapeKey() {
+      var _this = this;
+      this.onDocumentKeyDown = function (event) {
+        if ('Escape' === event.key) {
+          _this.onCloseModalClick();
+        }
+      };
+      document.addEventListener('keydown', this.onDocumentKeyDown);
+    }
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {
+      if (this.onDocumentKeyDown) {
+        document.removeEventListener('keydown', this.onDocumentKeyDown);
+      }
+    }
+  }, {
     key: "templateHelpers",
     value: function templateHelpers() {
       return {
@@ -158,10 +180,9 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
   }, {
     key: "onCloseModalClick",
     value: function onCloseModalClick() {
-      var _elementor$config$doc, _elementor$config;
       this._parent._parent._parent.hideModal();
-      var type = (_elementor$config$doc = (_elementor$config = elementor.config) === null || _elementor$config === void 0 || (_elementor$config = _elementor$config.document) === null || _elementor$config === void 0 ? void 0 : _elementor$config.type) !== null && _elementor$config$doc !== void 0 ? _elementor$config$doc : 'default';
-      var customEvent = new CustomEvent("core/modal/close/".concat(type));
+      var documentType = this.getDocumentType();
+      var customEvent = new CustomEvent("core/modal/close/".concat(documentType));
       window.dispatchEvent(customEvent);
       if (this.isFloatingButtonLibraryClose()) {
         $e.internal('document/save/set-is-modified', {
@@ -171,10 +192,20 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
       }
     }
   }, {
+    key: "getDocumentType",
+    value: function getDocumentType() {
+      var _elementor$config$doc, _elementor;
+      var DEFAULT_TYPE = 'default';
+      if ('undefined' === typeof window.elementor) {
+        return DEFAULT_TYPE;
+      }
+      return (_elementor$config$doc = (_elementor = elementor) === null || _elementor === void 0 || (_elementor = _elementor.config) === null || _elementor === void 0 || (_elementor = _elementor.document) === null || _elementor === void 0 ? void 0 : _elementor.type) !== null && _elementor$config$doc !== void 0 ? _elementor$config$doc : DEFAULT_TYPE;
+    }
+  }, {
     key: "isFloatingButtonLibraryClose",
     value: function isFloatingButtonLibraryClose() {
-      var _elementor$config2, _elementor$config3;
-      return window.elementor && ((_elementor$config2 = elementor.config) === null || _elementor$config2 === void 0 ? void 0 : _elementor$config2.admin_floating_button_admin_url) && 'floating-buttons' === ((_elementor$config3 = elementor.config) === null || _elementor$config3 === void 0 || (_elementor$config3 = _elementor$config3.document) === null || _elementor$config3 === void 0 ? void 0 : _elementor$config3.type) && (this.$el.closest('.dialog-lightbox-widget-content').find('.elementor-template-library-template-floating_button').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-preview').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-templates-empty').length);
+      var _elementor$config, _elementor$config2;
+      return window.elementor && ((_elementor$config = elementor.config) === null || _elementor$config === void 0 ? void 0 : _elementor$config.admin_floating_button_admin_url) && 'floating-buttons' === ((_elementor$config2 = elementor.config) === null || _elementor$config2 === void 0 || (_elementor$config2 = _elementor$config2.document) === null || _elementor$config2 === void 0 ? void 0 : _elementor$config2.type) && (this.$el.closest('.dialog-lightbox-widget-content').find('.elementor-template-library-template-floating_button').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-preview').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-templates-empty').length);
     }
   }]);
 }(Marionette.LayoutView);
@@ -430,17 +461,6 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$ItemView)
 
 /***/ }),
 
-/***/ "@wordpress/i18n":
-/*!**************************!*\
-  !*** external "wp.i18n" ***!
-  \**************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = wp.i18n;
-
-/***/ }),
-
 /***/ "../node_modules/@babel/runtime/helpers/assertThisInitialized.js":
 /*!***********************************************************************!*\
   !*** ../node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
@@ -663,6 +683,17 @@ function _typeof(o) {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _typeof(o);
 }
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!**************************!*\
+  !*** external "wp.i18n" ***!
+  \**************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = wp.i18n;
 
 /***/ })
 

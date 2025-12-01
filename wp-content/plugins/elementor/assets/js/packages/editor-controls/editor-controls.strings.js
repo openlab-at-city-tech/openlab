@@ -1,8 +1,12 @@
+__( "Sorry, you can't upload that file yet.", 'elementor' );
+__( 'To upload them anyway, ask the site administrator to enable unfiltered', 'elementor' );
+__( 'file uploads.', 'elementor' );
 __( 'Preview SVG', 'elementor' );
 __( 'Select SVG', 'elementor' );
 __( 'Upload', 'elementor' );
 __( 'Stroke width', 'elementor' );
 __( 'Stroke color', 'elementor' );
+__( 'Search', 'elementor' );
 __( 'Center center', 'elementor' );
 __( 'Center left', 'elementor' );
 __( 'Center right', 'elementor' );
@@ -24,15 +28,9 @@ __( 'Right', 'elementor' );
 __( 'Bottom', 'elementor' );
 __( 'Right', 'elementor' );
 __( 'Left', 'elementor' );
-__( 'Learn More', 'elementor' );
 __( 'Link', 'elementor' );
 __( 'Toggle link', 'elementor' );
 __( 'Open in a new tab', 'elementor' );
-__( 'Take me there', 'elementor' );
-__( 'To add a link to this container,', 'elementor' );
-__( 'first remove the link from the elements inside of it.', 'elementor' );
-__( 'To add a link to this element,', 'elementor' );
-__( 'first remove the link from its parent container.', 'elementor' );
 __( 'Key', 'elementor' );
 __( 'Value', 'elementor' );
 __( 'Invalid Format', 'elementor' );
@@ -40,18 +38,18 @@ __( 'Select image', 'elementor' );
 __( 'Upload', 'elementor' );
 __( 'Image', 'elementor' );
 __( 'Resolution', 'elementor' );
+__( 'HTML Tag', 'elementor' );
+/* translators: %s is the element name. */
+__(
+			`The tag is locked to 'a' tag because this %s has a link. To pick a different tag, remove the link first.`,
+			'elementor'
+		);
 // translators: %s: Tooltip title.
 __( 'Link %s', 'elementor' );
 // translators: %s: Tooltip title.
 __( 'Unlink %s', 'elementor' );
 __( 'Column', 'elementor' );
 __( 'Row', 'elementor' );
-__( 'Blur', 'elementor' );
-__( 'Radius', 'elementor' );
-__( 'Brightness', 'elementor' );
-__( 'Amount', 'elementor' );
-__( 'Filter', 'elementor' );
-__( 'Filter', 'elementor' );
 __( 'Mixed', 'elementor' );
 __( 'Box shadow', 'elementor' );
 __( 'Color', 'elementor' );
@@ -64,13 +62,22 @@ __( 'Blur', 'elementor' );
 __( 'Spread', 'elementor' );
 __( 'Auto', 'elementor' );
 __( 'Custom', 'elementor' );
+__( 'CSS function', 'elementor' );
+__( 'Drag item', 'elementor' );
+__( 'Learn More', 'elementor' );
+__(
+		'To add a link to this element, first remove the link from the elements inside of it.',
+		'elementor'
+	);
+__( 'To add a link to this element, first remove the link from its parent container.', 'elementor' );
+__( 'Take me there', 'elementor' );
+__( 'Nested links', 'elementor' );
 __( 'Add item', 'elementor' );
 __( 'Duplicate', 'elementor' );
 __( 'Show', 'elementor' );
 __( 'Hide', 'elementor' );
 __( 'Remove', 'elementor' );
 __( 'Open item', 'elementor' );
-__( 'Font Family', 'elementor' );
 __( 'Search', 'elementor' );
 __( 'Sorry, nothing matched', 'elementor' );
 __( 'Try something else.', 'elementor' );
@@ -80,11 +87,6 @@ __(
 	'Before you enable unfiltered files upload, note that such files include a security risk. Elementor does run a process to remove possible malicious code, but there is still risk involved when using such files.',
 	'elementor'
 );
-__( "Sorry, you can't upload that file yet", 'elementor' );
-__(
-	'This is because this file type may pose a security risk. To upload them anyway, ask the site administrator to enable unfiltered file uploads.',
-	'elementor'
-);
 __( 'Failed to enable unfiltered files upload.', 'elementor' );
 __(
 	'You can try again, if the problem persists, please contact support.',
@@ -92,15 +94,77 @@ __(
 );
 __( 'Cancel', 'elementor' );
 __( 'Enable', 'elementor' );
-__( 'Got it', 'elementor' );
+__( 'Recently Used', 'elementor' );
+__( 'Transition Property', 'elementor' );
+__( 'Type', 'elementor' );
+__( 'Duration', 'elementor' );
+__( 'Transitions', 'elementor' );
+__( "Switch to 'Normal' state to add a transition.", 'elementor' );
+__( 'Transitions', 'elementor' );
+__( 'Transitions', 'elementor' );
+__( 'Empty Transition', 'elementor' );
+__( 'All properties', 'elementor' );
+__( 'Default', 'elementor' );
+__( 'All properties', 'elementor' );
+__( 'Transform settings', 'elementor' );
+__( 'You can use each kind of transform only once per element.', 'elementor' );
+__( 'Transform', 'elementor' );
+__( 'Transform settings', 'elementor' );
+__( 'Move', 'elementor' );
+__( 'Scale', 'elementor' );
+__( 'Rotate', 'elementor' );
+__( 'Skew', 'elementor' );
 __( 'Transform', 'elementor' );
 __( 'Move', 'elementor' );
-__( 'Transform', 'elementor' );
-__( 'Move', 'elementor' );
+__( 'Scale', 'elementor' );
+__( 'Rotate', 'elementor' );
+__( 'Skew', 'elementor' );
+__( 'Font family', 'elementor' );
+__( 'Amount', 'elementor' );
+__( 'Filters', 'elementor' );
+__( 'Backdrop filters', 'elementor' );
+__( 'Filter', 'elementor' );
+__( 'Blur', 'elementor' );
+__( 'Radius', 'elementor' );
+__( 'Brightness', 'elementor' );
+__( 'Contrast', 'elementor' );
+__( 'Saturate', 'elementor' );
+__( 'Hue Rotate', 'elementor' );
+__( 'Angle', 'elementor' );
+__( 'Grayscale', 'elementor' );
+__( 'Invert', 'elementor' );
+__( 'Sepia', 'elementor' );
+__( 'Drop shadow', 'elementor' );
+__( 'Drop-shadow', 'elementor' );
+__( 'Full element', 'elementor' );
+__( 'Padding edges', 'elementor' );
+__( 'Content edges', 'elementor' );
+__( 'Text', 'elementor' );
 __( 'Color', 'elementor' );
+__( 'Clipping', 'elementor' );
+__( 'Origin X', 'elementor' );
+__( 'Origin Y', 'elementor' );
+__( 'Origin Z', 'elementor' );
+__( 'Transform', 'elementor' );
+__( 'Perspective', 'elementor' );
+__( 'Origin X', 'elementor' );
+__( 'Origin Y', 'elementor' );
+__( 'Children perspective', 'elementor' );
+__( 'Skew X', 'elementor' );
+__( 'Skew Y', 'elementor' );
+__( 'Scale X', 'elementor' );
+__( 'Scale Y', 'elementor' );
+__( 'Scale Z', 'elementor' );
+__( 'Rotate X', 'elementor' );
+__( 'Rotate Y', 'elementor' );
+__( 'Rotate Z', 'elementor' );
 __( 'Move X', 'elementor' );
 __( 'Move Y', 'elementor' );
 __( 'Move Z', 'elementor' );
+__( 'X-axis', 'elementor' );
+__( 'Y-axis', 'elementor' );
+__( 'Blur', 'elementor' );
+__( 'Color', 'elementor' );
 __( 'Thumbnail - 150 x 150', 'elementor' );
 __( 'Medium - 300 x 300', 'elementor' );
 __( 'Large 1024 x 1024', 'elementor' );
@@ -112,6 +176,12 @@ __( 'Gradient', 'elementor' );
 __( 'Color', 'elementor' );
 __( 'Linear Gradient', 'elementor' );
 __( 'Radial Gradient', 'elementor' );
+__( 'Open item', 'elementor' );
+__( 'Add %s item', 'elementor' );
+__( 'Remove', 'elementor' );
+__( 'Duplicate', 'elementor' );
+__( 'Show', 'elementor' );
+__( 'Hide', 'elementor' );
 __( 'Auto', 'elementor' );
 __( 'Cover', 'elementor' );
 __( 'Contain', 'elementor' );

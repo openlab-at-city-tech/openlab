@@ -1,5 +1,1469 @@
-/*! elementor - v3.30.0 - 07-07-2025 */
 (self["webpackChunkelementorFrontend"] = self["webpackChunkelementorFrontend"] || []).push([["frontend-modules"],{
+
+/***/ "../app/assets/js/event-track/apps-event-tracking.js":
+/*!***********************************************************!*\
+  !*** ../app/assets/js/event-track/apps-event-tracking.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.appsEventTrackingDispatch = exports.AppsEventTracking = void 0;
+var _eventsConfig = _interopRequireDefault(__webpack_require__(/*! ../../../../core/common/modules/events-manager/assets/js/events-config */ "../core/common/modules/events-manager/assets/js/events-config.js"));
+const EVENTS_MAP = {
+  PAGE_VIEWS_WEBSITE_TEMPLATES: 'page_views_website_templates',
+  KITS_CLOUD_UPGRADE_CLICKED: 'kits_cloud_upgrade_clicked',
+  EXPORT_KIT_CUSTOMIZATION: 'export_kit_customization',
+  IMPORT_KIT_CUSTOMIZATION: 'import_kit_customization',
+  KIT_IMPORT_STATUS: 'kit_import_status',
+  KIT_CLOUD_LIBRARY_APPLY: 'kit_cloud_library_apply',
+  KIT_CLOUD_LIBRARY_DELETE: 'kit_cloud_library_delete',
+  IMPORT_EXPORT_ADMIN_ACTION: 'ie_admin_action',
+  KIT_IMPORT_UPLOAD_FILE: 'kit_import_upload_file'
+};
+const appsEventTrackingDispatch = (command, eventParams) => {
+  // Add existing eventParams key value pair to the data/details object.
+  const objectCreator = (array, obj) => {
+    for (const key of array) {
+      if (eventParams.hasOwnProperty(key) && eventParams[key] !== null) {
+        obj[key] = eventParams[key];
+      }
+    }
+    return obj;
+  };
+  const dataKeys = [];
+  const detailsKeys = ['layout', 'site_part', 'error', 'document_name', 'document_type', 'view_type_clicked', 'tag', 'sort_direction', 'sort_type', 'action', 'grid_location', 'kit_name', 'page_source', 'element_position', 'element', 'event_type', 'modal_type', 'method', 'status', 'step', 'item', 'category', 'element_location', 'search_term', 'section', 'site_area'];
+  const data = {};
+  const details = {};
+  const init = () => {
+    objectCreator(detailsKeys, details);
+    objectCreator(dataKeys, data);
+    const commandSplit = command.split('/');
+    data.placement = commandSplit[0];
+    data.event = commandSplit[1];
+
+    // If 'details' is not empty, add the details object to the data object.
+    if (Object.keys(details).length) {
+      data.details = details;
+    }
+  };
+  init();
+  $e.run(command, data);
+};
+exports.appsEventTrackingDispatch = appsEventTrackingDispatch;
+class AppsEventTracking {
+  static dispatchEvent(eventName, payload) {
+    return elementorCommon.eventsManager.dispatchEvent(eventName, payload);
+  }
+  static sendPageViewsWebsiteTemplates(page) {
+    return this.dispatchEvent(EVENTS_MAP.PAGE_VIEWS_WEBSITE_TEMPLATES, {
+      trigger: _eventsConfig.default.triggers.pageLoaded,
+      page_loaded: page,
+      secondary_location: page
+    });
+  }
+  static sendKitsCloudUpgradeClicked(upgradeLocation) {
+    return this.dispatchEvent(EVENTS_MAP.KITS_CLOUD_UPGRADE_CLICKED, {
+      trigger: _eventsConfig.default.triggers.click,
+      secondary_location: upgradeLocation,
+      upgrade_location: upgradeLocation
+    });
+  }
+  static sendExportKitCustomization(payload) {
+    return this.dispatchEvent(EVENTS_MAP.EXPORT_KIT_CUSTOMIZATION, {
+      trigger: _eventsConfig.default.triggers.click,
+      ...payload
+    });
+  }
+  static sendImportKitCustomization(payload) {
+    return this.dispatchEvent(EVENTS_MAP.IMPORT_KIT_CUSTOMIZATION, {
+      trigger: _eventsConfig.default.triggers.click,
+      ...payload
+    });
+  }
+  static sendKitImportStatus(error = null) {
+    const isError = !!error;
+    return this.dispatchEvent(EVENTS_MAP.KIT_IMPORT_STATUS, {
+      kit_import_status: !isError,
+      ...(isError && {
+        kit_import_error: error.message
+      })
+    });
+  }
+  static sendKitCloudLibraryApply(kitId, kitApplyUrl) {
+    return this.dispatchEvent(EVENTS_MAP.KIT_CLOUD_LIBRARY_APPLY, {
+      trigger: _eventsConfig.default.triggers.click,
+      kit_cloud_id: kitId,
+      ...(kitApplyUrl && {
+        kit_apply_url: kitApplyUrl
+      })
+    });
+  }
+  static sendKitCloudLibraryDelete() {
+    return this.dispatchEvent(EVENTS_MAP.KIT_CLOUD_LIBRARY_DELETE, {
+      trigger: _eventsConfig.default.triggers.click
+    });
+  }
+  static sendImportExportAdminAction(actionType) {
+    return this.dispatchEvent(EVENTS_MAP.IMPORT_EXPORT_ADMIN_ACTION, {
+      trigger: _eventsConfig.default.triggers.click,
+      action_type: actionType
+    });
+  }
+  static sendKitImportUploadFile(status) {
+    return this.dispatchEvent(EVENTS_MAP.KIT_IMPORT_UPLOAD_FILE, {
+      kit_import_upload_file_status: status
+    });
+  }
+}
+exports.AppsEventTracking = AppsEventTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/base-tracking.js":
+/*!***************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/base-tracking.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+__webpack_require__(/*! core-js/modules/es.array.push.js */ "../node_modules/core-js/modules/es.array.push.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
+class BaseTracking {
+  static ensureOwnArrays() {
+    if (!Object.prototype.hasOwnProperty.call(this, 'observers')) {
+      this.observers = [];
+    }
+    if (!Object.prototype.hasOwnProperty.call(this, 'eventListeners')) {
+      this.eventListeners = [];
+    }
+  }
+  static destroy() {
+    this.ensureOwnArrays();
+    this.observers.forEach(observer => observer.disconnect());
+    this.observers = [];
+    this.eventListeners.forEach(({
+      target,
+      type,
+      handler,
+      options
+    }) => {
+      target.removeEventListener(type, handler, options);
+    });
+    this.eventListeners = [];
+  }
+  static addObserver(target, options, callback) {
+    this.ensureOwnArrays();
+    const observer = new MutationObserver(callback);
+    observer.observe(target, options);
+    this.observers.push(observer);
+    return observer;
+  }
+  static addEventListenerTracked(target, type, handler, options = {}) {
+    this.ensureOwnArrays();
+    target.addEventListener(type, handler, options);
+    this.eventListeners.push({
+      target,
+      type,
+      handler,
+      options
+    });
+  }
+}
+var _default = exports["default"] = BaseTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/menu-promotion.js":
+/*!****************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/menu-promotion.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _wpDashboardTracking = _interopRequireDefault(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+const PROMO_MENU_ITEMS = {
+  go_elementor_pro: 'Upgrade'
+};
+class MenuPromotionTracking extends _baseTracking.default {
+  static init() {
+    this.attachDelegatedTracking();
+  }
+  static attachDelegatedTracking() {
+    this.addEventListenerTracked(document, 'click', event => {
+      const target = event.target;
+      if (!target) {
+        return;
+      }
+      const link = target.closest('a');
+      if (!link) {
+        return;
+      }
+      const href = link.getAttribute('href');
+      if (!href) {
+        return;
+      }
+      const menuItemKey = this.extractPromoMenuKey(href);
+      if (!menuItemKey) {
+        return;
+      }
+      this.handleMenuPromoClick(link, menuItemKey);
+    }, {
+      capture: true
+    });
+  }
+  static extractPromoMenuKey(href) {
+    for (const menuItemKey of Object.keys(PROMO_MENU_ITEMS)) {
+      if (href.includes(`page=${menuItemKey}`)) {
+        return menuItemKey;
+      }
+    }
+    return null;
+  }
+  static handleMenuPromoClick(menuItem, menuItemKey) {
+    const destination = menuItem.getAttribute('href');
+    const promoName = PROMO_MENU_ITEMS[menuItemKey];
+    const path = menuItemKey.replace('elementor_', '').replace(/_/g, '/');
+    _wpDashboardTracking.default.trackPromoClicked(promoName, destination, path);
+  }
+}
+var _default = exports["default"] = MenuPromotionTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/navigation.js":
+/*!************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/navigation.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _wpDashboardTracking = _interopRequireWildcard(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+const ELEMENTOR_MENU_SELECTORS = {
+  ELEMENTOR_TOP_LEVEL: 'li#toplevel_page_elementor',
+  TEMPLATES_TOP_LEVEL: 'li#menu-posts-elementor_library',
+  ADMIN_MENU: '#adminmenu',
+  TOP_LEVEL_LINK: '.wp-menu-name',
+  SUBMENU_CONTAINER: '.wp-submenu',
+  SUBMENU_ITEM: '.wp-submenu li a',
+  SUBMENU_ITEM_TOP_LEVEL: '.wp-has-submenu'
+};
+class NavigationTracking extends _baseTracking.default {
+  static init() {
+    this.attachElementorMenuTracking();
+    this.attachTemplatesMenuTracking();
+  }
+  static attachElementorMenuTracking() {
+    const elementorMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_TOP_LEVEL);
+    if (!elementorMenu) {
+      return;
+    }
+    this.attachMenuTracking(elementorMenu, 'Elementor');
+  }
+  static attachTemplatesMenuTracking() {
+    const templatesMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.TEMPLATES_TOP_LEVEL);
+    if (!templatesMenu) {
+      return;
+    }
+    this.attachMenuTracking(templatesMenu, 'Templates');
+  }
+  static attachMenuTracking(menuElement, menuName) {
+    this.addEventListenerTracked(menuElement, 'click', event => {
+      this.handleMenuClick(event, menuName);
+    });
+  }
+  static handleMenuClick(event, menuName) {
+    const link = event.target.closest('a');
+    if (!link) {
+      return;
+    }
+    const isTopLevel = link.classList.contains('menu-top');
+    const itemId = this.extractItemId(link);
+    const area = this.determineNavArea(link);
+    _wpDashboardTracking.default.trackNavClicked(itemId, isTopLevel ? null : menuName, area);
+  }
+  static extractItemId(link) {
+    const textContent = link.textContent.trim();
+    if (textContent) {
+      return textContent;
+    }
+    const href = link.getAttribute('href');
+    if (href) {
+      const urlParams = new URLSearchParams(href.split('?')[1] || '');
+      const page = urlParams.get('page');
+      const postType = urlParams.get('post_type');
+      if (page) {
+        return page;
+      }
+      if (postType) {
+        return postType;
+      }
+    }
+    const id = link.getAttribute('id');
+    if (id) {
+      return id;
+    }
+    return 'unknown';
+  }
+  static determineNavArea(link) {
+    const parentMenu = link.closest('li.menu-top');
+    if (parentMenu) {
+      const isSubmenuItem = link.closest(ELEMENTOR_MENU_SELECTORS.SUBMENU_CONTAINER);
+      if (isSubmenuItem) {
+        const submenuElement = link.closest(ELEMENTOR_MENU_SELECTORS.SUBMENU_ITEM_TOP_LEVEL);
+        if (submenuElement.classList.contains('wp-not-current-submenu')) {
+          return _wpDashboardTracking.NAV_AREAS.HOVER_MENU;
+        }
+        return _wpDashboardTracking.NAV_AREAS.SUBMENU;
+      }
+      return _wpDashboardTracking.NAV_AREAS.LEFT_MENU;
+    }
+    return _wpDashboardTracking.NAV_AREAS.LEFT_MENU;
+  }
+}
+var _default = exports["default"] = NavigationTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/plugin-actions.js":
+/*!****************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/plugin-actions.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _wpDashboardTracking = _interopRequireDefault(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+const PLUGIN_TYPE = {
+  ELEMENTOR: 'core',
+  ELEMENTOR_PRO: 'pro'
+};
+class PluginActions extends _baseTracking.default {
+  static selectedReason = null;
+  static init() {
+    this.attachCoreDeactivationTracking();
+    this.attachProDeactivationTracking();
+    this.attachProDeletionTracking();
+  }
+  static attachCoreDeactivationTracking() {
+    const dialogForm = document.querySelector('#elementor-deactivate-feedback-dialog-form');
+    if (!dialogForm) {
+      return;
+    }
+    this.addEventListenerTracked(dialogForm, 'change', event => {
+      const target = event.target;
+      if (target.classList.contains('elementor-deactivate-feedback-dialog-input')) {
+        this.selectedReason = target.value;
+      }
+    });
+    this.observeModalButtons();
+  }
+  static attachProDeactivationTracking() {
+    const pluginsTable = document.querySelector('.plugins');
+    if (!pluginsTable) {
+      return;
+    }
+    this.addEventListenerTracked(pluginsTable, 'click', event => {
+      const link = event.target.closest('a');
+      if (link && 'deactivate-elementor-pro' === link.id) {
+        this.trackProDeactivation();
+      }
+    }, {
+      capture: true
+    });
+  }
+  static observeModalButtons() {
+    const checkAndAttachDelegation = () => {
+      const modal = document.querySelector('#elementor-deactivate-feedback-modal');
+      if (!modal) {
+        return false;
+      }
+      this.addEventListenerTracked(modal, 'click', event => {
+        const submitButton = event.target.closest('.dialog-submit');
+        const skipButton = event.target.closest('.dialog-skip');
+        if (submitButton) {
+          this.trackCoreDeactivation('submit&deactivate');
+        } else if (skipButton) {
+          this.trackCoreDeactivation('skip&deactivate');
+        }
+      }, {
+        capture: true
+      });
+      return true;
+    };
+    if (checkAndAttachDelegation()) {
+      return;
+    }
+    this.addObserver(document.body, {
+      childList: true,
+      subtree: true
+    }, (mutations, observer) => {
+      if (checkAndAttachDelegation()) {
+        observer.disconnect();
+      }
+    });
+  }
+  static getUserInput() {
+    const reasonsWithInput = ['found_a_better_plugin', 'other'];
+    if (!this.selectedReason || !reasonsWithInput.includes(this.selectedReason)) {
+      return null;
+    }
+    const inputField = document.querySelector(`input[name="reason_${this.selectedReason}"]`);
+    if (inputField && inputField.value) {
+      return inputField.value;
+    }
+    return null;
+  }
+  static trackCoreDeactivation(action) {
+    const properties = {
+      deactivate_form_submit: action,
+      deactivate_plugin_type: PLUGIN_TYPE.ELEMENTOR
+    };
+    if (this.selectedReason) {
+      properties.deactivate_feedback_reason = this.selectedReason;
+    }
+    const userInput = this.getUserInput();
+    if (userInput) {
+      properties.deactivate_feedback_reason += `/${userInput}`;
+    }
+    _wpDashboardTracking.default.dispatchEvent('wpdash_deactivate_plugin', properties, {
+      send_immediately: true
+    });
+  }
+  static trackProDeactivation() {
+    this.trackProAction('deactivate');
+  }
+  static attachProDeletionTracking() {
+    if ('undefined' === typeof jQuery) {
+      return;
+    }
+    jQuery(document).on('wp-plugin-deleting', (event, args) => {
+      if ('elementor-pro' === args?.slug) {
+        this.trackProAction('delete');
+      }
+    });
+  }
+  static destroy() {
+    if ('undefined' !== typeof jQuery) {
+      jQuery(document).off('wp-plugin-deleting');
+    }
+    _baseTracking.default.destroy.call(this);
+  }
+  static trackProAction(action) {
+    const eventMap = {
+      deactivate: {
+        eventName: 'wpdash_deactivate_plugin',
+        propertyKey: 'deactivate_plugin_type'
+      },
+      delete: {
+        eventName: 'wpdash_delete_plugin',
+        propertyKey: 'plugin_delete'
+      }
+    };
+    const config = eventMap[action];
+    if (!config) {
+      return;
+    }
+    const properties = {
+      [config.propertyKey]: PLUGIN_TYPE.ELEMENTOR_PRO
+    };
+    _wpDashboardTracking.default.dispatchEvent(config.eventName, properties, {
+      send_immediately: true
+    });
+  }
+}
+var _default = exports["default"] = PluginActions;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/promotion.js":
+/*!***********************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/promotion.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _wpDashboardTracking = _interopRequireDefault(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+const PROMO_SELECTORS = {
+  PROMO_PAGE: '.e-feature-promotion, .elementor-settings-form-page',
+  PROMO_BLANK_STATE: '.elementor-blank_state',
+  CTA_BUTTON: '.go-pro',
+  TITLE: 'h3'
+};
+class PromotionTracking extends _baseTracking.default {
+  static init() {
+    this.attachDelegatedTracking();
+  }
+  static attachDelegatedTracking() {
+    this.addEventListenerTracked(document, 'click', event => {
+      const target = event.target;
+      if (!target) {
+        return;
+      }
+      const button = target.closest(`a${PROMO_SELECTORS.CTA_BUTTON}`);
+      if (!button) {
+        return;
+      }
+      const promoPage = button.closest(`${PROMO_SELECTORS.PROMO_PAGE}, ${PROMO_SELECTORS.PROMO_BLANK_STATE}`);
+      if (!promoPage) {
+        return;
+      }
+      this.handlePromoClick(button, promoPage);
+    }, {
+      capture: true
+    });
+  }
+  static handlePromoClick(button, promoPage) {
+    const promoTitle = this.extractPromoTitle(promoPage, button);
+    const destination = button.getAttribute('href');
+    const path = this.extractPromoPath();
+    _wpDashboardTracking.default.trackPromoClicked(promoTitle, destination, path);
+  }
+  static extractPromoTitle(promoPage, button) {
+    const titleElement = promoPage.querySelector(PROMO_SELECTORS.TITLE);
+    return titleElement ? titleElement.textContent.trim() : button.textContent.trim();
+  }
+  static extractPromoPath() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    if (!page) {
+      return 'elementor';
+    }
+    return page.replace('elementor_', '').replace(/_/g, '/');
+  }
+}
+var _default = exports["default"] = PromotionTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/screen-view.js":
+/*!*************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/screen-view.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "../node_modules/core-js/modules/esnext.iterator.filter.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
+var _wpDashboardTracking = _interopRequireWildcard(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _utils = __webpack_require__(/*! ./utils */ "../app/assets/js/event-track/dashboard/utils.js");
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+const SCREEN_SELECTORS = {
+  NAV_TAB_WRAPPER: '.nav-tab-wrapper',
+  NAV_TAB: '.nav-tab',
+  NAV_TAB_ACTIVE: '.nav-tab-active',
+  SETTINGS_FORM_PAGE: '.elementor-settings-form-page',
+  SETTINGS_FORM_PAGE_ACTIVE: '.elementor-settings-form-page.elementor-active',
+  FLOATING_ELEMENTS_MODAL: '#elementor-new-floating-elements-modal',
+  TEMPLATE_DIALOG_MODAL: '#elementor-new-template-dialog-content'
+};
+const TRACKED_MODALS = [SCREEN_SELECTORS.FLOATING_ELEMENTS_MODAL, SCREEN_SELECTORS.TEMPLATE_DIALOG_MODAL];
+class ScreenViewTracking extends _baseTracking.default {
+  static trackedScreens = new Set();
+  static init() {
+    if (!_utils.DashboardUtils.isElementorPage()) {
+      return;
+    }
+    this.attachTabChangeTracking();
+  }
+  static destroy() {
+    super.destroy();
+    this.trackedScreens.clear();
+  }
+  static getScreenData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    const postType = urlParams.get('post_type');
+    const hash = window.location.hash;
+    let screenId = '';
+    let screenType = '';
+    if (page) {
+      screenId = page;
+    } else if (postType) {
+      screenId = postType;
+    } else {
+      screenId = this.getScreenIdFromBody();
+    }
+    if (this.isElementorAppPage()) {
+      const appScreenData = this.getAppScreenData(hash);
+      if (appScreenData) {
+        return appScreenData;
+      }
+    }
+    const hasNavTabs = document.querySelector(SCREEN_SELECTORS.NAV_TAB_WRAPPER);
+    const hasSettingsTabs = document.querySelectorAll(SCREEN_SELECTORS.SETTINGS_FORM_PAGE).length > 1;
+    if (hasNavTabs || hasSettingsTabs || hash && !this.isElementorAppPage()) {
+      screenType = _wpDashboardTracking.SCREEN_TYPES.TAB;
+      if (hash) {
+        const tabId = hash.replace(/^#(tab-)?/, '');
+        screenId = `${screenId}-${tabId}`;
+      } else if (hasNavTabs) {
+        const activeTab = document.querySelector(SCREEN_SELECTORS.NAV_TAB_ACTIVE);
+        if (activeTab) {
+          const tabText = activeTab.textContent.trim();
+          const tabHref = activeTab.getAttribute('href');
+          if (tabText) {
+            screenId = `${screenId}-${this.sanitizeScreenId(tabText)}`;
+          } else if (tabHref && tabHref.includes('#')) {
+            const tabId = tabHref.split('#')[1];
+            screenId = `${screenId}-${tabId}`;
+          }
+        }
+      } else if (hasSettingsTabs) {
+        const activeSettingsTab = document.querySelector(SCREEN_SELECTORS.SETTINGS_FORM_PAGE_ACTIVE);
+        if (activeSettingsTab) {
+          const tabId = activeSettingsTab.id;
+          if (tabId) {
+            screenId = `${screenId}-${tabId}`;
+          }
+        }
+      }
+    }
+    return {
+      screenId,
+      screenType
+    };
+  }
+  static isElementorAppPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return 'elementor-app' === urlParams.get('page');
+  }
+  static getAppScreenData(hash) {
+    if (!hash) {
+      return null;
+    }
+    const cleanHash = hash.replace(/^#/, '');
+    if (!cleanHash.startsWith('/')) {
+      return null;
+    }
+    const pathParts = cleanHash.split('/').filter(Boolean);
+    if (0 === pathParts.length) {
+      return null;
+    }
+    const screenId = pathParts.join('/');
+    const screenType = _wpDashboardTracking.SCREEN_TYPES.APP_SCREEN;
+    return {
+      screenId,
+      screenType
+    };
+  }
+  static getScreenIdFromBody() {
+    const body = document.body;
+    const bodyClasses = body.className.split(' ');
+    for (const cls of bodyClasses) {
+      if (cls.startsWith('elementor') && (cls.includes('page') || cls.includes('post-type'))) {
+        return cls;
+      }
+    }
+    return 'elementor-unknown';
+  }
+  static sanitizeScreenId(text) {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  static attachTabChangeTracking() {
+    this.attachNavTabTracking();
+    this.attachHashChangeTracking();
+    this.attachSettingsTabTracking();
+    this.attachModalTracking();
+  }
+  static attachNavTabTracking() {
+    const wrapper = document.querySelector(SCREEN_SELECTORS.NAV_TAB_WRAPPER);
+    if (!wrapper) {
+      return;
+    }
+    this.addEventListenerTracked(wrapper, 'click', event => {
+      const navTab = event.target.closest(SCREEN_SELECTORS.NAV_TAB);
+      if (navTab && !navTab.classList.contains('nav-tab-active')) {
+        const screenData = this.getScreenData();
+        if (screenData) {
+          this.trackScreen(screenData.screenId, screenData.screenType);
+        }
+      }
+    });
+  }
+  static attachHashChangeTracking() {
+    this.addEventListenerTracked(window, 'hashchange', () => {
+      const screenData = this.getScreenData();
+      if (screenData) {
+        this.trackScreen(screenData.screenId, screenData.screenType);
+      }
+    });
+  }
+  static attachSettingsTabTracking() {
+    const settingsPages = document.querySelectorAll(SCREEN_SELECTORS.SETTINGS_FORM_PAGE);
+    if (0 === settingsPages.length) {
+      return;
+    }
+    settingsPages.forEach(page => {
+      this.addObserver(page, {
+        attributes: true,
+        attributeFilter: ['class']
+      }, () => {
+        const screenData = this.getScreenData();
+        if (screenData) {
+          this.trackScreen(screenData.screenId, screenData.screenType);
+        }
+      });
+    });
+  }
+  static attachModalTracking() {
+    this.addObserver(document.body, {
+      childList: true,
+      subtree: true
+    }, mutations => {
+      for (const mutation of mutations) {
+        if ('childList' === mutation.type) {
+          TRACKED_MODALS.forEach(modalSelector => {
+            const modal = document.querySelector(modalSelector);
+            if (modal && this.isModalVisible(modal)) {
+              const modalId = modalSelector.replace('#', '');
+              this.trackScreen(modalId, _wpDashboardTracking.SCREEN_TYPES.POPUP);
+            }
+          });
+        }
+      }
+    });
+  }
+  static isModalVisible(element) {
+    if (!element) {
+      return false;
+    }
+    const style = window.getComputedStyle(element);
+    return 'none' !== style.display && 0 !== parseFloat(style.opacity);
+  }
+  static trackScreen(screenId, screenType = _wpDashboardTracking.SCREEN_TYPES.TOP_LEVEL_PAGE) {
+    const trackingKey = `${screenId}-${screenType}`;
+    if (this.trackedScreens.has(trackingKey)) {
+      return;
+    }
+    this.trackedScreens.add(trackingKey);
+    _wpDashboardTracking.default.trackScreenViewed(screenId, screenType);
+  }
+}
+var _default = exports["default"] = ScreenViewTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/top-bar.js":
+/*!*********************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/top-bar.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "../node_modules/core-js/modules/esnext.iterator.filter.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
+var _wpDashboardTracking = _interopRequireWildcard(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+const TOP_BAR_SELECTORS = {
+  TOP_BAR_ROOT: '.e-admin-top-bar',
+  BAR_BUTTON: '.e-admin-top-bar__bar-button',
+  BUTTON_TITLE: '.e-admin-top-bar__bar-button-title',
+  MAIN_AREA: '.e-admin-top-bar__main-area',
+  SECONDARY_AREA: '.e-admin-top-bar__secondary-area'
+};
+class TopBarTracking extends _baseTracking.default {
+  static init() {
+    this.waitForTopBar();
+  }
+  static waitForTopBar() {
+    const topBar = document.querySelector(TOP_BAR_SELECTORS.TOP_BAR_ROOT);
+    if (topBar) {
+      this.attachTopBarTracking(topBar);
+      return;
+    }
+    const observer = this.addObserver(document.body, {
+      childList: true,
+      subtree: true
+    }, () => {
+      const foundTopBar = document.querySelector(TOP_BAR_SELECTORS.TOP_BAR_ROOT);
+      if (foundTopBar) {
+        this.attachTopBarTracking(foundTopBar);
+        observer.disconnect();
+        clearTimeout(timeoutId);
+      }
+    });
+    const timeoutId = setTimeout(() => {
+      observer.disconnect();
+    }, 10000);
+  }
+  static attachTopBarTracking(topBar) {
+    const buttons = topBar.querySelectorAll(TOP_BAR_SELECTORS.BAR_BUTTON);
+    buttons.forEach(button => {
+      this.addEventListenerTracked(button, 'click', event => {
+        this.handleTopBarClick(event);
+      });
+    });
+    this.observeTopBarChanges(topBar);
+  }
+  static observeTopBarChanges(topBar) {
+    this.addObserver(topBar, {
+      childList: true,
+      subtree: true
+    }, mutations => {
+      mutations.forEach(mutation => {
+        if ('childList' === mutation.type) {
+          mutation.addedNodes.forEach(node => {
+            if (1 === node.nodeType) {
+              if (node.matches && node.matches(TOP_BAR_SELECTORS.BAR_BUTTON)) {
+                this.addEventListenerTracked(node, 'click', event => {
+                  this.handleTopBarClick(event);
+                });
+              } else {
+                const buttons = node.querySelectorAll ? node.querySelectorAll(TOP_BAR_SELECTORS.BAR_BUTTON) : [];
+                buttons.forEach(button => {
+                  this.addEventListenerTracked(button, 'click', event => {
+                    this.handleTopBarClick(event);
+                  });
+                });
+              }
+            }
+          });
+        }
+      });
+    });
+  }
+  static handleTopBarClick(event) {
+    const button = event.currentTarget;
+    const itemId = this.extractItemId(button);
+    _wpDashboardTracking.default.trackNavClicked(itemId, null, _wpDashboardTracking.NAV_AREAS.TOP_BAR);
+  }
+  static extractItemId(button) {
+    const titleElement = button.querySelector(TOP_BAR_SELECTORS.BUTTON_TITLE);
+    if (titleElement && titleElement.textContent.trim()) {
+      return titleElement.textContent.trim();
+    }
+    const textContent = button.textContent.trim();
+    if (textContent) {
+      return textContent;
+    }
+    const href = button.getAttribute('href');
+    if (href) {
+      const urlParams = new URLSearchParams(href.split('?')[1] || '');
+      const page = urlParams.get('page');
+      if (page) {
+        return page;
+      }
+      if (href.includes('/wp-admin/')) {
+        const pathParts = href.split('/wp-admin/')[1];
+        if (pathParts) {
+          return pathParts.split('?')[0];
+        }
+      }
+      try {
+        const url = new URL(href, window.location.origin);
+        return url.pathname.split('/').filter(Boolean).pop() || url.hostname;
+      } catch (error) {
+        return href;
+      }
+    }
+    const dataInfo = button.getAttribute('data-info');
+    if (dataInfo) {
+      return dataInfo;
+    }
+    const classes = button.className.split(' ').filter(cls => cls && 'e-admin-top-bar__bar-button' !== cls);
+    if (classes.length > 0) {
+      return classes.join('-');
+    }
+    return 'unknown-top-bar-button';
+  }
+}
+var _default = exports["default"] = TopBarTracking;
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/dashboard/utils.js":
+/*!*******************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/utils.js ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.DashboardUtils = void 0;
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "../node_modules/core-js/modules/esnext.iterator.some.js");
+const DashboardUtils = exports.DashboardUtils = {
+  isElementorPage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get('page');
+    if (page && (page.startsWith('elementor') || page.includes('elementor'))) {
+      return true;
+    }
+    const postType = urlParams.get('post_type');
+    if ('elementor_library' === postType || 'e-floating-buttons' === postType) {
+      return true;
+    }
+    const body = document.body;
+    const bodyClasses = body.className.split(' ');
+    return bodyClasses.some(cls => cls.includes('elementor') && (cls.includes('page') || cls.includes('post-type')));
+  }
+};
+
+/***/ }),
+
+/***/ "../app/assets/js/event-track/wp-dashboard-tracking.js":
+/*!*************************************************************!*\
+  !*** ../app/assets/js/event-track/wp-dashboard-tracking.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.SCREEN_TYPES = exports.NAV_AREAS = exports.CONTROL_TYPES = void 0;
+__webpack_require__(/*! core-js/modules/es.array.push.js */ "../node_modules/core-js/modules/es.array.push.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
+var _navigation = _interopRequireDefault(__webpack_require__(/*! ./dashboard/navigation */ "../app/assets/js/event-track/dashboard/navigation.js"));
+var _pluginActions = _interopRequireDefault(__webpack_require__(/*! ./dashboard/plugin-actions */ "../app/assets/js/event-track/dashboard/plugin-actions.js"));
+var _promotion = _interopRequireDefault(__webpack_require__(/*! ./dashboard/promotion */ "../app/assets/js/event-track/dashboard/promotion.js"));
+var _screenView = _interopRequireDefault(__webpack_require__(/*! ./dashboard/screen-view */ "../app/assets/js/event-track/dashboard/screen-view.js"));
+var _topBar = _interopRequireDefault(__webpack_require__(/*! ./dashboard/top-bar */ "../app/assets/js/event-track/dashboard/top-bar.js"));
+var _menuPromotion = _interopRequireDefault(__webpack_require__(/*! ./dashboard/menu-promotion */ "../app/assets/js/event-track/dashboard/menu-promotion.js"));
+const SESSION_TIMEOUT_MINUTES = 30;
+const MINUTE_MS = 60 * 1000;
+const SESSION_TIMEOUT = SESSION_TIMEOUT_MINUTES * MINUTE_MS;
+const ACTIVITY_CHECK_INTERVAL = 1 * MINUTE_MS;
+const SESSION_STORAGE_KEY = 'elementor_wpdash_session';
+const PENDING_NAV_CLICK_KEY = 'elementor_wpdash_pending_nav';
+const CONTROL_TYPES = exports.CONTROL_TYPES = {
+  BUTTON: 'button',
+  CHECKBOX: 'checkbox',
+  RADIO: 'radio',
+  LINK: 'link',
+  SELECT: 'select',
+  TOGGLE: 'toggle'
+};
+const NAV_AREAS = exports.NAV_AREAS = {
+  LEFT_MENU: 'left_menu',
+  SUBMENU: 'submenu',
+  HOVER_MENU: 'hover_menu',
+  TOP_BAR: 'top_bar'
+};
+const SCREEN_TYPES = exports.SCREEN_TYPES = {
+  TAB: 'tab',
+  POPUP: 'popup',
+  APP_SCREEN: 'app_screen'
+};
+class WpDashboardTracking {
+  static sessionStartTime = Date.now();
+  static lastActivityTime = Date.now();
+  static sessionEnded = false;
+  static navItemsVisited = new Set();
+  static activityCheckInterval = null;
+  static initialized = false;
+  static navigationListeners = [];
+  static isNavigatingToElementor = false;
+  static init() {
+    if (this.initialized) {
+      return;
+    }
+    this.restoreOrCreateSession();
+    if (this.isEventsManagerAvailable()) {
+      this.startSessionMonitoring();
+      this.attachActivityListeners();
+      this.attachNavigationListener();
+      this.initialized = true;
+    }
+  }
+  static restoreOrCreateSession() {
+    const storedSession = this.getStoredSession();
+    if (storedSession) {
+      this.sessionStartTime = storedSession.sessionStartTime;
+      this.navItemsVisited = new Set(storedSession.navItemsVisited);
+      this.lastActivityTime = Date.now();
+      this.sessionEnded = false;
+    } else {
+      this.sessionStartTime = Date.now();
+      this.lastActivityTime = Date.now();
+      this.sessionEnded = false;
+      this.navItemsVisited = new Set();
+    }
+    this.processPendingNavClick();
+    this.saveSessionToStorage();
+  }
+  static processPendingNavClick() {
+    try {
+      const pendingNav = sessionStorage.getItem(PENDING_NAV_CLICK_KEY);
+      if (pendingNav) {
+        const {
+          itemId,
+          rootItem,
+          area
+        } = JSON.parse(pendingNav);
+        this.navItemsVisited.add(itemId);
+        const properties = {
+          wpdash_nav_item_id: itemId,
+          wpdash_nav_area: area
+        };
+        if (rootItem) {
+          properties.wpdash_nav_item_root = rootItem;
+        }
+        this.dispatchEvent('wpdash_nav_clicked', properties, {
+          send_immediately: true
+        });
+        sessionStorage.removeItem(PENDING_NAV_CLICK_KEY);
+      }
+    } catch (error) {
+      sessionStorage.removeItem(PENDING_NAV_CLICK_KEY);
+    }
+  }
+  static getStoredSession() {
+    try {
+      const stored = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch (error) {
+      return null;
+    }
+  }
+  static saveSessionToStorage() {
+    const sessionData = {
+      sessionStartTime: this.sessionStartTime,
+      navItemsVisited: Array.from(this.navItemsVisited)
+    };
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(sessionData));
+  }
+  static clearStoredSession() {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  }
+  static isEventsManagerAvailable() {
+    return elementorCommon?.eventsManager && 'function' === typeof elementorCommon.eventsManager.dispatchEvent;
+  }
+  static canSendEvents() {
+    return elementorCommon?.config?.editor_events?.can_send_events || false;
+  }
+  static dispatchEvent(eventName, properties = {}, options = {}) {
+    if (!this.isEventsManagerAvailable() || !this.canSendEvents()) {
+      return;
+    }
+    elementorCommon.eventsManager.dispatchEvent(eventName, properties, options);
+  }
+  static updateActivity() {
+    this.lastActivityTime = Date.now();
+  }
+  static startSessionMonitoring() {
+    this.activityCheckInterval = setInterval(() => {
+      this.checkSessionTimeout();
+    }, ACTIVITY_CHECK_INTERVAL);
+    window.addEventListener('beforeunload', () => {
+      if (!this.sessionEnded && !this.isNavigatingToElementor) {
+        this.trackSessionEnd('tab_closed');
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (!this.sessionEnded && document.hidden) {
+        const timeSinceLastActivity = Date.now() - this.lastActivityTime;
+        if (timeSinceLastActivity > SESSION_TIMEOUT) {
+          this.trackSessionEnd('tab_inactive');
+        }
+      }
+    });
+  }
+  static isElementorPage(url) {
+    try {
+      const urlObj = new URL(url, window.location.origin);
+      const params = urlObj.searchParams;
+      const page = params.get('page');
+      const postType = params.get('post_type');
+      const action = params.get('action');
+      const elementorPages = ['elementor', 'go_knowledge_base_site', 'e-form-submissions'];
+      const elementorPostTypes = ['elementor_library', 'e-floating-buttons'];
+      return page && elementorPages.some(p => page.includes(p)) || postType && elementorPostTypes.includes(postType) || action && action.includes('elementor');
+    } catch (error) {
+      return false;
+    }
+  }
+  static isPluginsPage(url) {
+    try {
+      const urlObj = new URL(url, window.location.origin);
+      return urlObj.pathname.includes('plugins.php');
+    } catch (error) {
+      return false;
+    }
+  }
+  static isNavigatingAwayFromElementor(targetUrl) {
+    if (!targetUrl) {
+      return false;
+    }
+    if (targetUrl.startsWith('#')) {
+      return false;
+    }
+    return !this.isElementorPage(targetUrl);
+  }
+  static isLinkOpeningInNewTab(link) {
+    const target = link.getAttribute('target');
+    return '_blank' === target || '_new' === target;
+  }
+  static attachNavigationListener() {
+    const handleLinkClick = event => {
+      const link = event.target.closest('a');
+      if (link && link.href) {
+        if (this.isLinkOpeningInNewTab(link)) {
+          return;
+        }
+        if (!this.sessionEnded && this.isNavigatingAwayFromElementor(link.href)) {
+          this.trackSessionEnd('navigate_away');
+        } else if (this.isElementorPage(link.href)) {
+          this.isNavigatingToElementor = true;
+        }
+      }
+    };
+    const handleFormSubmit = event => {
+      const form = event.target;
+      if (form.action) {
+        if (!this.sessionEnded && this.isNavigatingAwayFromElementor(form.action)) {
+          this.trackSessionEnd('navigate_away');
+        } else if (this.isElementorPage(form.action)) {
+          this.isNavigatingToElementor = true;
+        }
+      }
+    };
+    document.addEventListener('click', handleLinkClick, true);
+    document.addEventListener('submit', handleFormSubmit, true);
+    this.navigationListeners.push({
+      type: 'click',
+      handler: handleLinkClick
+    }, {
+      type: 'submit',
+      handler: handleFormSubmit
+    });
+  }
+  static checkSessionTimeout() {
+    const timeSinceLastActivity = Date.now() - this.lastActivityTime;
+    if (timeSinceLastActivity > SESSION_TIMEOUT && !this.sessionEnded) {
+      this.trackSessionEnd('timeout');
+    }
+  }
+  static attachActivityListeners() {
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+    events.forEach(event => {
+      document.addEventListener(event, () => {
+        this.updateActivity();
+      }, {
+        capture: true,
+        passive: true
+      });
+    });
+  }
+  static formatDuration(milliseconds) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    return Number(totalSeconds.toFixed(2));
+  }
+  static trackNavClicked(itemId, rootItem = null, area = NAV_AREAS.LEFT_MENU) {
+    if (!this.initialized) {
+      const pendingNav = {
+        itemId,
+        rootItem,
+        area
+      };
+      sessionStorage.setItem(PENDING_NAV_CLICK_KEY, JSON.stringify(pendingNav));
+      return;
+    }
+    this.updateActivity();
+    this.navItemsVisited.add(itemId);
+    this.saveSessionToStorage();
+    const properties = {
+      wpdash_nav_item_id: itemId,
+      wpdash_nav_area: area
+    };
+    if (rootItem) {
+      properties.wpdash_nav_item_root = rootItem;
+    }
+    this.dispatchEvent('wpdash_nav_clicked', properties);
+  }
+  static trackScreenViewed(screenId, screenType = SCREEN_TYPES.TAB) {
+    this.updateActivity();
+    const properties = {
+      wpdash_screen_id: screenId,
+      wpdash_screen_type: screenType
+    };
+    this.dispatchEvent('wpdash_screen_viewed', properties);
+  }
+  static trackActionControl(controlIdentifier, controlType) {
+    this.updateActivity();
+    const properties = {
+      wpdash_action_control_interacted: controlIdentifier,
+      wpdash_control_type: controlType
+    };
+    this.dispatchEvent('wpdash_action_control', properties);
+  }
+  static trackPromoClicked(promoName, destination, clickPath) {
+    this.updateActivity();
+    const properties = {
+      wpdash_promo_name: promoName,
+      wpdash_promo_destination: destination,
+      wpdash_promo_clicked_path: clickPath
+    };
+    this.dispatchEvent('wpdash_promo_clicked', properties);
+  }
+  static trackSessionEnd(reason = 'timeout') {
+    if (this.sessionEnded) {
+      return;
+    }
+    this.sessionEnded = true;
+    if (this.activityCheckInterval) {
+      clearInterval(this.activityCheckInterval);
+      this.activityCheckInterval = null;
+    }
+    const duration = Date.now() - this.sessionStartTime;
+    const properties = {
+      wpdash_endstate_nav_summary: Array.from(this.navItemsVisited),
+      wpdash_endstate_nav_count: this.navItemsVisited.size,
+      wpdash_endstate_duration: this.formatDuration(duration),
+      reason
+    };
+    this.dispatchEvent('wpdash_session_end_state', properties);
+    this.clearStoredSession();
+  }
+  static destroy() {
+    if (this.activityCheckInterval) {
+      clearInterval(this.activityCheckInterval);
+    }
+    this.navigationListeners.forEach(({
+      type,
+      handler
+    }) => {
+      document.removeEventListener(type, handler, true);
+    });
+    this.navigationListeners = [];
+    _topBar.default.destroy();
+    _screenView.default.destroy();
+    _promotion.default.destroy();
+    _menuPromotion.default.destroy();
+    this.initialized = false;
+  }
+}
+exports["default"] = WpDashboardTracking;
+window.addEventListener('elementor/admin/init', () => {
+  const currentUrl = window.location.href;
+  const isPluginsPage = WpDashboardTracking.isPluginsPage(currentUrl);
+  const isElementorPage = WpDashboardTracking.isElementorPage(currentUrl);
+  if (isPluginsPage) {
+    _pluginActions.default.init();
+  }
+  _navigation.default.init();
+  if (isElementorPage) {
+    WpDashboardTracking.init();
+    _topBar.default.init();
+    _screenView.default.init();
+    _promotion.default.init();
+    _menuPromotion.default.init();
+  }
+});
+window.addEventListener('beforeunload', () => {
+  _navigation.default.destroy();
+  _pluginActions.default.destroy();
+  WpDashboardTracking.destroy();
+});
+
+/***/ }),
+
+/***/ "../app/modules/import-export-customization/assets/js/shared/registry/base.js":
+/*!************************************************************************************!*\
+  !*** ../app/modules/import-export-customization/assets/js/shared/registry/base.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.BaseRegistry = void 0;
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "../node_modules/core-js/modules/esnext.iterator.filter.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.map.js */ "../node_modules/core-js/modules/esnext.iterator.map.js");
+class BaseRegistry {
+  constructor() {
+    this.sections = new Map();
+  }
+  register(section) {
+    if (!section.key || !section.title) {
+      throw new Error('Template type must have key and title');
+    }
+    const existingSection = this.get(section.key);
+    const formattedSection = existingSection || this.formatSection(section);
+    if (section.children) {
+      // If existing section has children, merge them with new children
+      if (formattedSection.children) {
+        const existingChildrenMap = new Map(formattedSection.children.map(child => [child.key, child]));
+
+        // Override existing children with new ones and add new children
+        section.children.forEach(childSection => {
+          const formattedChild = this.formatSection(childSection);
+          existingChildrenMap.set(childSection.key, formattedChild);
+        });
+        formattedSection.children = Array.from(existingChildrenMap.values());
+      } else {
+        formattedSection.children = section.children.map(childSection => this.formatSection(childSection));
+      }
+    }
+    this.sections.set(section.key, formattedSection);
+  }
+  formatSection({
+    children,
+    ...section
+  }) {
+    return {
+      key: section.key,
+      title: section.title,
+      description: section.description || '',
+      useParentDefault: section.useParentDefault !== false,
+      getInitialState: section.getInitialState || null,
+      component: section.component || null,
+      order: section.order || 10,
+      isAvailable: section.isAvailable || (() => true),
+      ...section
+    };
+  }
+  getAll() {
+    return Array.from(this.sections.values()).filter(type => type.isAvailable()).map(type => {
+      if (type.children) {
+        return {
+          ...type,
+          children: [...type.children].sort((a, b) => a.order - b.order)
+        };
+      }
+      return type;
+    }).sort((a, b) => a.order - b.order);
+  }
+  get(key) {
+    return this.sections.get(key);
+  }
+}
+exports.BaseRegistry = BaseRegistry;
+
+/***/ }),
+
+/***/ "../app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js":
+/*!*****************************************************************************************************!*\
+  !*** ../app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.customizationDialogsRegistry = void 0;
+var _base = __webpack_require__(/*! ./base */ "../app/modules/import-export-customization/assets/js/shared/registry/base.js");
+const customizationDialogsRegistry = exports.customizationDialogsRegistry = new _base.BaseRegistry();
+
+/***/ }),
+
+/***/ "../app/modules/import-export-customization/assets/js/shared/utils/template-registry-helpers.js":
+/*!******************************************************************************************************!*\
+  !*** ../app/modules/import-export-customization/assets/js/shared/utils/template-registry-helpers.js ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.createGetInitialState = createGetInitialState;
+function createGetInitialState(exportGroup, additionalProps = {}) {
+  return (data, parentInitialState) => {
+    let isEnabled = parentInitialState;
+    const isImport = data.hasOwnProperty('uploadedData');
+    if (isImport) {
+      isEnabled = false;
+      const templates = data.uploadedData.manifest.templates;
+      const exportGroups = elementorAppConfig?.['import-export-customization']?.exportGroups || {};
+      for (const templateId in templates) {
+        const template = templates[templateId];
+        const templateExportGroup = exportGroups[template.doc_type];
+        if (templateExportGroup === exportGroup) {
+          isEnabled = true;
+          break;
+        }
+      }
+    }
+    return {
+      enabled: isEnabled,
+      ...additionalProps
+    };
+  };
+}
+
+/***/ }),
 
 /***/ "../assets/dev/js/editor/utils/is-instanceof.js":
 /*!******************************************************!*\
@@ -271,8 +1735,8 @@ class CarouselHandlerBase extends _baseSwiper.default {
   addClassToSwiperContainer(className) {
     this.getDefaultElements().$swiperContainer[0].classList.add(className);
   }
-  async onInit() {
-    super.onInit(...arguments);
+  async onInit(...args) {
+    super.onInit(...args);
     if (!this.elements.$swiperContainer.length || 2 > this.elements.$slides.length) {
       return;
     }
@@ -366,8 +1830,7 @@ class CarouselHandlerBase extends _baseSwiper.default {
       this.swiper.slideToLoop(this.getEditSettings('activeItemIndex') - 1);
     }
   }
-  getSpaceBetween() {
-    let device = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  getSpaceBetween(device = null) {
     const responsiveControlValue = elementorFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), 'image_spacing_custom', 'size', device);
     return Number(responsiveControlValue) || 0;
   }
@@ -381,8 +1844,7 @@ class CarouselHandlerBase extends _baseSwiper.default {
     this.swiper.params.spaceBetween = newSpaceBetween;
     this.swiper.update();
   }
-  getPaginationBullets() {
-    let type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'array';
+  getPaginationBullets(type = 'array') {
     const paginationBullets = this.$element.find(this.getSettings('selectors').paginationBullet);
     return 'array' === type ? Array.from(paginationBullets) : paginationBullets;
   }
@@ -406,8 +1868,7 @@ class CarouselHandlerBase extends _baseSwiper.default {
     transformValue = parseInt(transformValue[0].replace('px', ''));
     return !!transformValue ? transformValue : 0;
   }
-  a11ySetSlideAriaHidden() {
-    let status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  a11ySetSlideAriaHidden(status = '') {
     const currentIndex = 'initialisation' === status ? 0 : this.swiper?.activeIndex;
     if ('number' !== typeof currentIndex) {
       return;
@@ -743,8 +2204,7 @@ class StretchedElement extends _base.default {
   isActive(settings) {
     return elementorFrontend.isEditMode() || settings.$element.hasClass(this.getStretchedClass());
   }
-  getStretchElementForConfig() {
-    let childSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  getStretchElementForConfig(childSelector = null) {
     if (childSelector) {
       return this.$element.find(childSelector);
     }
@@ -775,12 +2235,12 @@ class StretchedElement extends _base.default {
     }
     this.stretchElement.stretch();
   }
-  onInit() {
+  onInit(...args) {
     if (!this.isActive(this.getSettings())) {
       return;
     }
     this.initStretch();
-    super.onInit(...arguments);
+    super.onInit(...args);
     this.stretch();
   }
   onElementChange(propertyName) {
@@ -988,8 +2448,7 @@ class ArgsObject extends _instanceType.default {
    *
    * @throws {Error}
    */
-  requireArgument(property) {
-    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.args;
+  requireArgument(property, args = this.args) {
     if (!Object.prototype.hasOwnProperty.call(args, property)) {
       throw Error(`${property} is required.`);
     }
@@ -1006,8 +2465,7 @@ class ArgsObject extends _instanceType.default {
    *
    * @throws {Error}
    */
-  requireArgumentType(property, type) {
-    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
+  requireArgumentType(property, type, args = this.args) {
     this.requireArgument(property, args);
     if (typeof args[property] !== type) {
       throw Error(`${property} invalid type: ${type}.`);
@@ -1025,8 +2483,7 @@ class ArgsObject extends _instanceType.default {
    *
    * @throws {Error}
    */
-  requireArgumentInstance(property, instance) {
-    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
+  requireArgumentInstance(property, instance, args = this.args) {
     this.requireArgument(property, args);
     if (!(args[property] instanceof instance) && !(0, _isInstanceof.default)(args[property], instance)) {
       throw Error(`${property} invalid instance.`);
@@ -1044,8 +2501,7 @@ class ArgsObject extends _instanceType.default {
    *
    * @throws {Error}
    */
-  requireArgumentConstructor(property, type) {
-    let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
+  requireArgumentConstructor(property, type, args = this.args) {
     this.requireArgument(property, args);
 
     // Note: Converting the constructor to string in order to avoid equation issues
@@ -1063,7 +2519,7 @@ exports["default"] = ArgsObject;
 /*!***********************************************************************!*\
   !*** ../assets/dev/js/modules/imports/force-method-implementation.js ***!
   \***********************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
@@ -1072,13 +2528,10 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ForceMethodImplementation = void 0;
-__webpack_require__(/*! core-js/modules/es.array.includes.js */ "../node_modules/core-js/modules/es.array.includes.js");
 // TODO: Wrong location used as `elementorModules.ForceMethodImplementation(); should be` `elementorUtils.forceMethodImplementation()`;
 
 class ForceMethodImplementation extends Error {
-  constructor() {
-    let info = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  constructor(info = {}, args = {}) {
     super(`${info.isStatic ? 'static ' : ''}${info.fullName}() should be implemented, please provide '${info.functionName || info.fullName}' functionality.`, args);
 
     // Allow to pass custom properties to the error.
@@ -1433,8 +2886,7 @@ class Scroll {
 
     // Generating thresholds points along the animation height
     // More thresholds points = more trigger points of the callback
-    const buildThresholds = function () {
-      let sensitivityPercentage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    const buildThresholds = (sensitivityPercentage = 0) => {
       const thresholds = [];
       if (sensitivityPercentage > 0 && sensitivityPercentage <= 100) {
         const increment = 100 / sensitivityPercentage;
@@ -1473,8 +2925,7 @@ class Scroll {
    * @param {number}         offsetObj.start - Offset start value in percentages
    * @param {number}         offsetObj.end   - Offset end value in percentages
    */
-  static getElementViewportPercentage($element) {
-    let offsetObj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  static getElementViewportPercentage($element, offsetObj = {}) {
     const elementOffset = $element[0].getBoundingClientRect(),
       offsetStart = offsetObj.start || 0,
       offsetEnd = offsetObj.end || 0,
@@ -1494,9 +2945,7 @@ class Scroll {
    * @param {number} offsetObj.end   - Offset end value in percentages
    * @param {number} limitPageHeight - Will limit the page height calculation
    */
-  static getPageScrollPercentage() {
-    let offsetObj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    let limitPageHeight = arguments.length > 1 ? arguments[1] : undefined;
+  static getPageScrollPercentage(offsetObj = {}, limitPageHeight) {
     const offsetStart = offsetObj.start || 0,
       offsetEnd = offsetObj.end || 0,
       initialPageHeight = limitPageHeight || document.documentElement.scrollHeight - document.documentElement.clientHeight,
@@ -1562,6 +3011,10 @@ var _argsObject = _interopRequireDefault(__webpack_require__(/*! ./imports/args-
 var _masonry = _interopRequireDefault(__webpack_require__(/*! ./imports/utils/masonry */ "../assets/dev/js/modules/imports/utils/masonry.js"));
 var _scroll = _interopRequireDefault(__webpack_require__(/*! ./imports/utils/scroll */ "../assets/dev/js/modules/imports/utils/scroll.js"));
 var _forceMethodImplementation = _interopRequireDefault(__webpack_require__(/*! ./imports/force-method-implementation */ "../assets/dev/js/modules/imports/force-method-implementation.js"));
+var _templateRegistryHelpers = __webpack_require__(/*! ../../../../app/modules/import-export-customization/assets/js/shared/utils/template-registry-helpers */ "../app/modules/import-export-customization/assets/js/shared/utils/template-registry-helpers.js");
+var _customizationDialogs = __webpack_require__(/*! ../../../../app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs */ "../app/modules/import-export-customization/assets/js/shared/registry/customization-dialogs.js");
+var _appsEventTracking = __webpack_require__(/*! elementor-app/event-track/apps-event-tracking */ "../app/assets/js/event-track/apps-event-tracking.js");
+var _wpDashboardTracking = _interopRequireDefault(__webpack_require__(/*! elementor-app/event-track/wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
 var _default = exports["default"] = window.elementorModules = {
   Module: _module.default,
   ViewModule: _viewModule.default,
@@ -1570,8 +3023,200 @@ var _default = exports["default"] = window.elementorModules = {
   utils: {
     Masonry: _masonry.default,
     Scroll: _scroll.default
+  },
+  importExport: {
+    createGetInitialState: _templateRegistryHelpers.createGetInitialState,
+    customizationDialogsRegistry: _customizationDialogs.customizationDialogsRegistry
+  },
+  appsEventTracking: {
+    AppsEventTracking: _appsEventTracking.AppsEventTracking
+  },
+  wpDashboardTracking: {
+    WpDashboardTracking: _wpDashboardTracking.default
   }
 };
+
+/***/ }),
+
+/***/ "../core/common/modules/events-manager/assets/js/events-config.js":
+/*!************************************************************************!*\
+  !*** ../core/common/modules/events-manager/assets/js/events-config.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+const eventsConfig = {
+  triggers: {
+    click: 'Click',
+    accordionClick: 'Accordion Click',
+    toggleClick: 'Toggle Click',
+    dropdownClick: 'Click Dropdown',
+    editorLoaded: 'Editor Loaded',
+    visible: 'Visible',
+    pageLoaded: 'Page Loaded'
+  },
+  locations: {
+    widgetPanel: 'Widget Panel',
+    topBar: 'Top Bar',
+    elementorEditor: 'Elementor Editor',
+    templatesLibrary: {
+      library: 'Templates Library'
+    },
+    app: {
+      import: 'Import Kit',
+      export: 'Export Kit',
+      kitLibrary: 'Kit Library',
+      cloudKitLibrary: 'Cloud Kit Library'
+    },
+    variables: 'Variables Panel',
+    admin: 'WP admin'
+  },
+  secondaryLocations: {
+    layout: 'Layout Section',
+    basic: 'Basic Section',
+    'pro-elements': 'Pro Section',
+    general: 'General Section',
+    'theme-elements': 'Site Section',
+    'theme-elements-single': 'Single Section',
+    'woocommerce-elements': 'WooCommerce Section',
+    wordpress: 'WordPress Section',
+    categories: 'Widgets Tab',
+    global: 'Globals Tab',
+    'whats-new': 'What\'s New',
+    'document-settings': 'Document Settings icon',
+    'preview-page': 'Preview Page',
+    'publish-button': 'Publish Button',
+    'widget-panel': 'Widget Panel Icon',
+    finder: 'Finder',
+    help: 'Help',
+    elementorLogoDropdown: 'top_bar_elementor_logo_dropdown',
+    elementorLogo: 'Elementor Logo',
+    eLogoMenu: 'E-logo Menu',
+    notes: 'Notes',
+    siteSettings: 'Site Settings',
+    structure: 'Structure',
+    documentNameDropdown: 'Document Name dropdown',
+    responsiveControls: 'Responsive controls',
+    launchpad: 'launchpad',
+    checklistHeader: 'Checklist Header',
+    checklistSteps: 'Checklist Steps',
+    userPreferences: 'User Preferences',
+    contextMenu: 'Context Menu',
+    templateLibrary: {
+      saveModal: 'Save to Modal',
+      moveModal: 'Move to Modal',
+      bulkMoveModal: 'Bulk Move to Modal',
+      copyModal: 'Copy to Modal',
+      bulkCopyModal: 'Bulk Copy to Modal',
+      saveModalSelectFolder: 'Save to Modal - select folder',
+      saveModalSelectConnect: 'Save to Modal - connect',
+      saveModalSelectUpgrade: 'Save to Modal - upgrade',
+      importModal: 'Import Modal',
+      newFolderModal: 'New Folder Modal',
+      deleteDialog: 'Delete Dialog',
+      deleteFolderDialog: 'Delete Folder Dialog',
+      renameDialog: 'Rename Dialog',
+      createFolderDialog: 'Create Folder Dialog',
+      applySettingsDialog: 'Apply Settings Dialog',
+      cloudTab: 'Cloud Tab',
+      siteTab: 'Site Tab',
+      cloudTabFolder: 'Cloud Tab - Folder',
+      cloudTabConnect: 'Cloud Tab - Connect',
+      cloudTabUpgrade: 'Cloud Tab - Upgrade',
+      morePopup: 'Context Menu',
+      quotaBar: 'Quota Bar'
+    },
+    kitLibrary: {
+      cloudKitLibrary: 'kits_cloud_library',
+      cloudKitLibraryConnect: 'kits_cloud_library_connect',
+      cloudKitLibraryUpgrade: 'kits_cloud_library_upgrade',
+      kitExportCustomization: 'kit_export_customization',
+      kitExport: 'kit_export',
+      kitExportCustomizationEdit: 'kit_export_customization_edit',
+      kitExportSummary: 'kit_export_summary',
+      kitImportUploadBox: 'kit_import_upload_box',
+      kitImportCustomization: 'kit_import_customization',
+      kitImportSummary: 'kit_import_summary'
+    },
+    variablesPopover: 'Variables Popover',
+    admin: {
+      pluginToolsTab: 'plugin_tools_tab',
+      pluginWebsiteTemplatesTab: 'plugin_website_templates_tab'
+    }
+  },
+  elements: {
+    accordionSection: 'Accordion section',
+    buttonIcon: 'Button Icon',
+    mainCta: 'Main CTA',
+    button: 'Button',
+    link: 'Link',
+    dropdown: 'Dropdown',
+    toggle: 'Toggle',
+    launchpadChecklist: 'Checklist popup'
+  },
+  names: {
+    v1: {
+      layout: 'v1_widgets_tab_layout_section',
+      basic: 'v1_widgets_tab_basic_section',
+      'pro-elements': 'v1_widgets_tab_pro_section',
+      general: 'v1_widgets_tab_general_section',
+      'theme-elements': 'v1_widgets_tab_site_section',
+      'theme-elements-single': 'v1_widgets_tab_single_section',
+      'woocommerce-elements': 'v1_widgets_tab_woocommerce_section',
+      wordpress: 'v1_widgets_tab_wordpress_section',
+      categories: 'v1_widgets_tab',
+      global: 'v1_globals_tab'
+    },
+    topBar: {
+      whatsNew: 'top_bar_whats_new',
+      documentSettings: 'top_bar_document_settings_icon',
+      previewPage: 'top_bar_preview_page',
+      publishButton: 'top_bar_publish_button',
+      widgetPanel: 'top_bar_widget_panel_icon',
+      finder: 'top_bar_finder',
+      help: 'top_bar_help',
+      history: 'top_bar_elementor_logo_dropdown_history',
+      userPreferences: 'top_bar_elementor_logo_dropdown_user_preferences',
+      keyboardShortcuts: 'top_bar_elementor_logo_dropdown_keyboard_shortcuts',
+      exitToWordpress: 'top_bar_elementor_logo_dropdown_exit_to_wordpress',
+      themeBuilder: 'top_bar_elementor_logo_dropdown_theme_builder',
+      notes: 'top_bar_notes',
+      siteSettings: 'top_bar_site_setting',
+      structure: 'top_bar_structure',
+      documentNameDropdown: 'top_bar_document_name_dropdown',
+      responsiveControls: 'top_bar_responsive_controls',
+      launchpadOn: 'top_bar_checklist_icon_show',
+      launchpadOff: 'top_bar_checklist_icon_hide',
+      elementorLogoDropdown: 'open_e_menu',
+      connectAccount: 'connect_account',
+      accountConnected: 'account_connected'
+    },
+    // ChecklistSteps event names are generated dynamically, based on stepId and action type taken: title, action, done, undone, upgrade
+    elementorEditor: {
+      checklist: {
+        checklistHeaderClose: 'checklist_header_close_icon',
+        checklistFirstPopup: 'checklist popup triggered'
+      },
+      userPreferences: {
+        checklistShow: 'checklist_userpreferences_toggle_show',
+        checklistHide: 'checklist_userpreferences_toggle_hide'
+      }
+    },
+    variables: {
+      open: 'open_variables_popover',
+      add: 'add_new_variable',
+      connect: 'connect_variable',
+      save: 'save_new_variable'
+    }
+  }
+};
+var _default = exports["default"] = eventsConfig;
 
 /***/ }),
 
@@ -1607,38 +3252,6 @@ var $TypeError = TypeError;
 module.exports = function (argument) {
   if (isCallable(argument)) return argument;
   throw new $TypeError(tryToString(argument) + ' is not a function');
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/add-to-unscopables.js":
-/*!***************************************************************!*\
-  !*** ../node_modules/core-js/internals/add-to-unscopables.js ***!
-  \***************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
-var create = __webpack_require__(/*! ../internals/object-create */ "../node_modules/core-js/internals/object-create.js");
-var defineProperty = (__webpack_require__(/*! ../internals/object-define-property */ "../node_modules/core-js/internals/object-define-property.js").f);
-
-var UNSCOPABLES = wellKnownSymbol('unscopables');
-var ArrayPrototype = Array.prototype;
-
-// Array.prototype[@@unscopables]
-// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
-if (ArrayPrototype[UNSCOPABLES] === undefined) {
-  defineProperty(ArrayPrototype, UNSCOPABLES, {
-    configurable: true,
-    value: create(null)
-  });
-}
-
-// add a key to Array.prototype[@@unscopables]
-module.exports = function (key) {
-  ArrayPrototype[UNSCOPABLES][key] = true;
 };
 
 
@@ -2361,7 +3974,7 @@ module.exports = !fails(function () {
 var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
 
 var call = Function.prototype.call;
-
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 module.exports = NATIVE_BIND ? call.bind(call) : function () {
   return call.apply(call, arguments);
 };
@@ -2431,6 +4044,7 @@ var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "
 
 var FunctionPrototype = Function.prototype;
 var call = FunctionPrototype.call;
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
 module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
@@ -3001,7 +4615,7 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal', condition);
+    if (iterator) iteratorClose(iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -3038,6 +4652,33 @@ module.exports = function (iterable, unboundFunction, options) {
     }
     if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/iterator-close-all.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-close-all.js ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+
+module.exports = function (iters, kind, value) {
+  for (var i = iters.length - 1; i >= 0; i--) {
+    if (iters[i] === undefined) continue;
+    try {
+      value = iteratorClose(iters[i].iterator, kind, value);
+    } catch (error) {
+      kind = 'throw';
+      value = error;
+    }
+  }
+  if (kind === 'throw') throw value;
+  return value;
 };
 
 
@@ -3096,10 +4737,13 @@ var getMethod = __webpack_require__(/*! ../internals/get-method */ "../node_modu
 var IteratorPrototype = (__webpack_require__(/*! ../internals/iterators-core */ "../node_modules/core-js/internals/iterators-core.js").IteratorPrototype);
 var createIterResultObject = __webpack_require__(/*! ../internals/create-iter-result-object */ "../node_modules/core-js/internals/create-iter-result-object.js");
 var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorCloseAll = __webpack_require__(/*! ./iterator-close-all */ "../node_modules/core-js/internals/iterator-close-all.js");
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var ITERATOR_HELPER = 'IteratorHelper';
 var WRAP_FOR_VALID_ITERATOR = 'WrapForValidIterator';
+var NORMAL = 'normal';
+var THROW = 'throw';
 var setInternalState = InternalStateModule.set;
 
 var createIteratorProxyPrototype = function (IS_ITERATOR) {
@@ -3109,12 +4753,13 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
     next: function next() {
       var state = getInternalState(this);
       // for simplification:
-      //   for `%WrapForValidIteratorPrototype%.next` our `nextHandler` returns `IterResultObject`
+      //   for `%WrapForValidIteratorPrototype%.next` or with `state.returnHandlerResult` our `nextHandler` returns `IterResultObject`
       //   for `%IteratorHelperPrototype%.next` - just a value
       if (IS_ITERATOR) return state.nextHandler();
+      if (state.done) return createIterResultObject(undefined, true);
       try {
-        var result = state.done ? undefined : state.nextHandler();
-        return createIterResultObject(result, state.done);
+        var result = state.nextHandler();
+        return state.returnHandlerResult ? result : createIterResultObject(result, state.done);
       } catch (error) {
         state.done = true;
         throw error;
@@ -3129,11 +4774,16 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
         return returnMethod ? call(returnMethod, iterator) : createIterResultObject(undefined, true);
       }
       if (state.inner) try {
-        iteratorClose(state.inner.iterator, 'normal');
+        iteratorClose(state.inner.iterator, NORMAL);
       } catch (error) {
-        return iteratorClose(iterator, 'throw', error);
+        return iteratorClose(iterator, THROW, error);
       }
-      if (iterator) iteratorClose(iterator, 'normal');
+      if (state.openIters) try {
+        iteratorCloseAll(state.openIters, NORMAL);
+      } catch (error) {
+        return iteratorClose(iterator, THROW, error);
+      }
+      if (iterator) iteratorClose(iterator, NORMAL);
       return createIterResultObject(undefined, true);
     }
   });
@@ -3144,13 +4794,14 @@ var IteratorHelperPrototype = createIteratorProxyPrototype(false);
 
 createNonEnumerableProperty(IteratorHelperPrototype, TO_STRING_TAG, 'Iterator Helper');
 
-module.exports = function (nextHandler, IS_ITERATOR) {
+module.exports = function (nextHandler, IS_ITERATOR, RETURN_HANDLER_RESULT) {
   var IteratorProxy = function Iterator(record, state) {
     if (state) {
       state.iterator = record.iterator;
       state.next = record.next;
     } else state = record;
     state.type = IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER;
+    state.returnHandlerResult = !!RETURN_HANDLER_RESULT;
     state.nextHandler = nextHandler;
     state.counter = 0;
     state.done = false;
@@ -3160,6 +4811,63 @@ module.exports = function (nextHandler, IS_ITERATOR) {
   IteratorProxy.prototype = IS_ITERATOR ? WrapForValidIteratorPrototype : IteratorHelperPrototype;
 
   return IteratorProxy;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js":
+/*!***************************************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js ***!
+  \***************************************************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+// Should throw an error on invalid iterator
+// https://issues.chromium.org/issues/336839115
+module.exports = function (methodName, argument) {
+  // eslint-disable-next-line es/no-iterator -- required for testing
+  var method = typeof Iterator == 'function' && Iterator.prototype[methodName];
+  if (method) try {
+    method.call({ next: null }, argument).next();
+  } catch (error) {
+    return true;
+  }
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js":
+/*!*******************************************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js ***!
+  \*******************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var globalThis = __webpack_require__(/*! ../internals/global-this */ "../node_modules/core-js/internals/global-this.js");
+
+// https://github.com/tc39/ecma262/pull/3467
+module.exports = function (METHOD_NAME, ExpectedError) {
+  var Iterator = globalThis.Iterator;
+  var IteratorPrototype = Iterator && Iterator.prototype;
+  var method = IteratorPrototype && IteratorPrototype[METHOD_NAME];
+
+  var CLOSED = false;
+
+  if (method) try {
+    method.call({
+      next: function () { return { done: true }; },
+      'return': function () { CLOSED = true; }
+    }, -1);
+  } catch (error) {
+    // https://bugs.webkit.org/show_bug.cgi?id=291195
+    if (!(error instanceof ExpectedError)) CLOSED = false;
+  }
+
+  if (!CLOSED) return method;
 };
 
 
@@ -3836,10 +5544,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.39.0',
+  version: '3.43.0',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
+  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.43.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -4111,7 +5819,7 @@ var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ 
 
 var id = 0;
 var postfix = Math.random();
-var toString = uncurryThis(1.0.toString);
+var toString = uncurryThis(1.1.toString);
 
 module.exports = function (key) {
   return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -4206,39 +5914,6 @@ module.exports = function (name) {
       : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/modules/es.array.includes.js":
-/*!************************************************************!*\
-  !*** ../node_modules/core-js/modules/es.array.includes.js ***!
-  \************************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-
-var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
-var $includes = (__webpack_require__(/*! ../internals/array-includes */ "../node_modules/core-js/internals/array-includes.js").includes);
-var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
-var addToUnscopables = __webpack_require__(/*! ../internals/add-to-unscopables */ "../node_modules/core-js/internals/add-to-unscopables.js");
-
-// FF99+ bug
-var BROKEN_ON_SPARSE = fails(function () {
-  // eslint-disable-next-line es/no-array-prototype-includes -- detection
-  return !Array(1).includes();
-});
-
-// `Array.prototype.includes` method
-// https://tc39.es/ecma262/#sec-array.prototype.includes
-$({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE }, {
-  includes: function includes(el /* , fromIndex = 0 */) {
-    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
-  }
-});
-
-// https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
-addToUnscopables('includes');
 
 
 /***/ }),
@@ -4388,6 +6063,15 @@ var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct
 var createIteratorProxy = __webpack_require__(/*! ../internals/iterator-create-proxy */ "../node_modules/core-js/internals/iterator-create-proxy.js");
 var callWithSafeIterationClosing = __webpack_require__(/*! ../internals/call-with-safe-iteration-closing */ "../node_modules/core-js/internals/call-with-safe-iteration-closing.js");
 var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperThrowsOnInvalidIterator = __webpack_require__(/*! ../internals/iterator-helper-throws-on-invalid-iterator */ "../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js");
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
+
+var FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR = !IS_PURE && !iteratorHelperThrowsOnInvalidIterator('filter', function () { /* empty */ });
+var filterWithoutClosingOnEarlyError = !IS_PURE && !FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR
+  && iteratorHelperWithoutClosingOnEarlyError('filter', TypeError);
+
+var FORCED = IS_PURE || FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR || filterWithoutClosingOnEarlyError;
 
 var IteratorProxy = createIteratorProxy(function () {
   var iterator = this.iterator;
@@ -4405,10 +6089,17 @@ var IteratorProxy = createIteratorProxy(function () {
 
 // `Iterator.prototype.filter` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.filter
-$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
+$({ target: 'Iterator', proto: true, real: true, forced: FORCED }, {
   filter: function filter(predicate) {
     anObject(this);
-    aCallable(predicate);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (filterWithoutClosingOnEarlyError) return call(filterWithoutClosingOnEarlyError, this, predicate);
+
     return new IteratorProxy(getIteratorDirect(this), {
       predicate: predicate
     });
@@ -4427,17 +6118,29 @@ $({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
 "use strict";
 
 var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
+var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
 var iterate = __webpack_require__(/*! ../internals/iterate */ "../node_modules/core-js/internals/iterate.js");
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
 var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
 var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
+
+var findWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('find', TypeError);
 
 // `Iterator.prototype.find` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.find
-$({ target: 'Iterator', proto: true, real: true }, {
+$({ target: 'Iterator', proto: true, real: true, forced: findWithoutClosingOnEarlyError }, {
   find: function find(predicate) {
     anObject(this);
-    aCallable(predicate);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (findWithoutClosingOnEarlyError) return call(findWithoutClosingOnEarlyError, this, predicate);
+
     var record = getIteratorDirect(this);
     var counter = 0;
     return iterate(record, function (value, stop) {
@@ -4458,22 +6161,132 @@ $({ target: 'Iterator', proto: true, real: true }, {
 "use strict";
 
 var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
+var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
 var iterate = __webpack_require__(/*! ../internals/iterate */ "../node_modules/core-js/internals/iterate.js");
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
 var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
 var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
+
+var forEachWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('forEach', TypeError);
 
 // `Iterator.prototype.forEach` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.foreach
-$({ target: 'Iterator', proto: true, real: true }, {
+$({ target: 'Iterator', proto: true, real: true, forced: forEachWithoutClosingOnEarlyError }, {
   forEach: function forEach(fn) {
     anObject(this);
-    aCallable(fn);
+    try {
+      aCallable(fn);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (forEachWithoutClosingOnEarlyError) return call(forEachWithoutClosingOnEarlyError, this, fn);
+
     var record = getIteratorDirect(this);
     var counter = 0;
     iterate(record, function (value) {
       fn(value, counter++);
     }, { IS_RECORD: true });
+  }
+});
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/modules/es.iterator.map.js":
+/*!**********************************************************!*\
+  !*** ../node_modules/core-js/modules/es.iterator.map.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
+var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
+var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
+var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
+var createIteratorProxy = __webpack_require__(/*! ../internals/iterator-create-proxy */ "../node_modules/core-js/internals/iterator-create-proxy.js");
+var callWithSafeIterationClosing = __webpack_require__(/*! ../internals/call-with-safe-iteration-closing */ "../node_modules/core-js/internals/call-with-safe-iteration-closing.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperThrowsOnInvalidIterator = __webpack_require__(/*! ../internals/iterator-helper-throws-on-invalid-iterator */ "../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js");
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
+var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
+
+var MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR = !IS_PURE && !iteratorHelperThrowsOnInvalidIterator('map', function () { /* empty */ });
+var mapWithoutClosingOnEarlyError = !IS_PURE && !MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR
+  && iteratorHelperWithoutClosingOnEarlyError('map', TypeError);
+
+var FORCED = IS_PURE || MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR || mapWithoutClosingOnEarlyError;
+
+var IteratorProxy = createIteratorProxy(function () {
+  var iterator = this.iterator;
+  var result = anObject(call(this.next, iterator));
+  var done = this.done = !!result.done;
+  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
+});
+
+// `Iterator.prototype.map` method
+// https://tc39.es/ecma262/#sec-iterator.prototype.map
+$({ target: 'Iterator', proto: true, real: true, forced: FORCED }, {
+  map: function map(mapper) {
+    anObject(this);
+    try {
+      aCallable(mapper);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (mapWithoutClosingOnEarlyError) return call(mapWithoutClosingOnEarlyError, this, mapper);
+
+    return new IteratorProxy(getIteratorDirect(this), {
+      mapper: mapper
+    });
+  }
+});
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/modules/es.iterator.some.js":
+/*!***********************************************************!*\
+  !*** ../node_modules/core-js/modules/es.iterator.some.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
+var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
+var iterate = __webpack_require__(/*! ../internals/iterate */ "../node_modules/core-js/internals/iterate.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
+var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
+var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
+
+var someWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('some', TypeError);
+
+// `Iterator.prototype.some` method
+// https://tc39.es/ecma262/#sec-iterator.prototype.some
+$({ target: 'Iterator', proto: true, real: true, forced: someWithoutClosingOnEarlyError }, {
+  some: function some(predicate) {
+    anObject(this);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (someWithoutClosingOnEarlyError) return call(someWithoutClosingOnEarlyError, this, predicate);
+
+    var record = getIteratorDirect(this);
+    var counter = 0;
+    return iterate(record, function (value, stop) {
+      if (predicate(value, counter++)) return stop();
+    }, { IS_RECORD: true, INTERRUPTED: true }).stopped;
   }
 });
 
@@ -4532,6 +6345,34 @@ __webpack_require__(/*! ../modules/es.iterator.find */ "../node_modules/core-js/
 
 // TODO: Remove from `core-js@4`
 __webpack_require__(/*! ../modules/es.iterator.for-each */ "../node_modules/core-js/modules/es.iterator.for-each.js");
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/modules/esnext.iterator.map.js":
+/*!**************************************************************!*\
+  !*** ../node_modules/core-js/modules/esnext.iterator.map.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+// TODO: Remove from `core-js@4`
+__webpack_require__(/*! ../modules/es.iterator.map */ "../node_modules/core-js/modules/es.iterator.map.js");
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/modules/esnext.iterator.some.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/core-js/modules/esnext.iterator.some.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+// TODO: Remove from `core-js@4`
+__webpack_require__(/*! ../modules/es.iterator.some */ "../node_modules/core-js/modules/es.iterator.some.js");
 
 
 /***/ })

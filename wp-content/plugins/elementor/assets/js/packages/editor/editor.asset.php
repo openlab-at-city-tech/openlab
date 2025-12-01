@@ -9,6 +9,7 @@ return [
 	'handle' => 'elementor-v2-editor',
 	'deps' => [
 		'elementor-v2-editor-current-user',
+		'elementor-v2-editor-ui',
 		'elementor-v2-editor-v1-adapters',
 		'elementor-v2-locations',
 		'elementor-v2-query',

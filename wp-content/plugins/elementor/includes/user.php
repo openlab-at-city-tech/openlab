@@ -276,6 +276,49 @@ class User {
 	}
 
 	/**
+	 * @param string $plugin_name
+	 *
+	 * @return void
+	 */
+	public static function set_user_notice_first_time( $plugin_name ) {
+		if ( ! $plugin_name ) {
+			return;
+		}
+		if ( ! self::get_user_notice_first_time( $plugin_name ) ) {
+			update_user_meta( get_current_user_id(), 'plugin_' . $plugin_name . '_first_time', current_time( 'mysql' ) );
+		}
+	}
+
+	/**
+	 * Check if a plugin notice has been displayed for a required time.
+	 *
+	 * @param mixed $plugin_name
+	 * @param mixed $required_seconds
+	 * @return bool
+	 */
+	public static function has_plugin_notice_been_displayed_for_required_time( $plugin_name, $required_seconds ) {
+		$first_time = self::get_user_notice_first_time( $plugin_name );
+		if ( ! $first_time ) {
+			return false;
+		}
+
+		return strtotime( $first_time ) <= ( time() - $required_seconds );
+	}
+
+	/**
+	 * @param string $plugin_name
+	 *
+	 * @return string|false
+	 */
+	public static function get_user_notice_first_time( $plugin_name = '' ) {
+		if ( ! $plugin_name ) {
+			return false;
+		}
+
+		return get_user_meta( get_current_user_id(), 'plugin_' . $plugin_name . '_first_time', true );
+	}
+
+	/**
 	 * @param string $notice_id
 	 * @param bool   $is_viewed
 	 * @param array  $meta
@@ -363,18 +406,18 @@ class User {
 	}
 
 	/**
-	 * Get a user option with default value as fallback.
+	 * Get a user option with a fallback value.
 	 *
-	 * @param string $option  - Option key.
-	 * @param int    $user_id - User ID.
-	 * @param mixed  $default - Default fallback value.
+	 * @param string $option   Option key.
+	 * @param int    $user_id  User ID.
+	 * @param mixed  $fallback Default fallback value.
 	 *
 	 * @return mixed
 	 */
-	public static function get_user_option_with_default( $option, $user_id, $default ) {
+	public static function get_user_option_with_default( $option, $user_id, $fallback ) {
 		$value = get_user_option( $option, $user_id );
 
-		return ( false === $value ) ? $default : $value;
+		return ( false === $value ) ? $fallback : $value;
 	}
 
 	/**
