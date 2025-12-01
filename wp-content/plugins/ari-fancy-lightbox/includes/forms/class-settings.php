@@ -806,6 +806,17 @@ class Settings extends Form {
                     'type' => 'checkbox',
                 ),
 
+
+                array(
+                    'id' => 'advanced$$allow_html_in_title',
+
+                    'label' => __( 'Allow HTML in title', 'ari-fancy-lightbox' ),
+
+                    'description' => __( 'If the parameter is enabled, safe HTML can be used in titles.', 'ari-fancy-lightbox' ),
+
+                    'type' => 'checkbox',
+                ),
+
                 array(
                     'id' => 'advanced$$custom_js',
 

@@ -3,8 +3,8 @@ Contributors: arisoft
 Donate link: http://wp-quiz.ari-soft.com/plugins/wordpress-fancy-lightbox.html
 Tags: lightbox, fancybox3, popup, video lightbox, fancybox
 Requires at least: 3.4
-Tested up to: 6.8.1
-Stable tag: 1.3.19
+Tested up to: 6.8.2
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,13 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 
 == Changelog ==
 
+= 1.4.1 =
+
+* Fix security issue
+
+= 1.4.0 =
+
+* Add "Advanced -> Allow HTML in title" option
 
 = 1.3.19 =
 
