@@ -14,37 +14,44 @@ class WP_Document_Revisions_Admin {
 	/**
 	 * The parent WP Document Revisions instance
 	 *
-	 * @var $parent
+	 * @var object
 	 */
 	public static $parent;
 
 	/**
 	 * The singelton instance
 	 *
-	 * @var $instance
+	 * @var object
 	 */
 	public static $instance;
 
 	/**
 	 * The last_but_one revision
 	 *
-	 * @var $last_but_one_revn
+	 * @var int | null
 	 */
 	private static $last_but_one_revn = null;
 
 	/**
 	 * The last_but_one revision excerpt
 	 *
-	 * @var $last_revn_excerpt
+	 * @var string | null
 	 */
 	private static $last_revn_excerpt = null;
 
 	/**
 	 * The last revision
 	 *
-	 * @var $last_revn
+	 * @var int | null
 	 */
 	private static $last_revn = null;
+
+	/**
+	 * List of document attachments (used to ensure all deleted on document deletion.
+	 *
+	 * @var int[] | null
+	 */
+	private static $attachmts = null;
 
 	/**
 	 * Register's admin hooks
@@ -101,9 +108,6 @@ class WP_Document_Revisions_Admin {
 		add_action( 'network_admin_notices', array( &$this, 'network_settings_errors' ) );
 		add_filter( 'wp_redirect', array( &$this, 'network_settings_redirect' ) );
 
-		// revisions management.
-		add_filter( 'wp_revisions_to_keep', array( &$this, 'manage_document_revisions_limit' ), 10, 2 );
-
 		// profile.
 		add_action( 'show_user_profile', array( $this, 'rss_key_display' ) );
 		add_action( 'personal_options_update', array( &$this, 'profile_update_cb' ) );
@@ -117,6 +121,7 @@ class WP_Document_Revisions_Admin {
 		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_from_media_grid' ) );
 
 		// cleanup.
+		add_action( 'before_delete_post', array( &$this, 'list_attachments_with_document' ) );
 		add_action( 'delete_post', array( &$this, 'delete_attachments_with_document' ) );
 
 		// edit flow or publishpress support.
@@ -979,6 +984,7 @@ class WP_Document_Revisions_Admin {
 
 	/**
 	 * Binds our post-upload javascript callback to the plupload event
+	 *
 	 * Note: in footer because it has to be called after handler.js is loaded and initialized.
 	 *
 	 * @since 1.2.1
@@ -987,14 +993,14 @@ class WP_Document_Revisions_Admin {
 		global $pagenow;
 
 		if ( 'media-upload.php' === $pagenow ) {
+			// Change event to load to let all js get loaded/initialised.
 			?>
 			<script type="text/javascript">
-				document.addEventListener('DOMContentLoaded', function() {window.WPDocumentRevisions.bindPostDocumentUploadCB()});
+				window.addEventListener('load', function() {window.WPDocumentRevisions.bindPostDocumentUploadCB()});
 			</script>
 			<?php
 		}
 	}
-
 
 	/**
 	 * Retrieves the most recent file attached to a post.
@@ -1105,37 +1111,6 @@ class WP_Document_Revisions_Admin {
 		}
 	}
 
-	/**
-	 * Ensures that any system limit on revisions does not apply to documents.
-	 *
-	 * @since 3.2.2
-	 *
-	 * @param int     $num  default value for the number of revisions for the post_type.
-	 * @param WP_Post $post current post.
-	 */
-	public function manage_document_revisions_limit( $num, $post ) {
-		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) ) {
-			return $num;
-		}
-
-		// Set default number as unlimited.
-		$num = -1;
-		/**
-		 * Filters the number of revisions to keep for documents.
-		 *
-		 * This should normally be unlimited and setting it can make attachments unaccessible.
-		 *
-		 * Note particularly that Autosaves are revisions, so count towards the total.
-		 *
-		 * @since 3.2.2
-		 *
-		 * @param int -1 (unlimited).
-		 */
-		$num = apply_filters( 'document_revisions_limit', $num );
-
-		return $num;
-	}
-
 
 	/**
 	 * Ensures that an error box appears if the revisions for a post has reached a system limit.
@@ -1174,7 +1149,7 @@ class WP_Document_Revisions_Admin {
 				</p></div>
 				<?php
 
-			} elseif ( $num === $revisions ) {
+			} elseif ( $num <= $revisions ) {
 				?>
 				<div class="notice notice-error"><p>
 				<?php
@@ -1507,7 +1482,12 @@ class WP_Document_Revisions_Admin {
 			null;
 		} else {
 			// Yes. Need to delete the last_but one revision and update the excerpt on the last revision and the post to keep timestamps.
+			// Remove our filter so that we can delete the revision.
+			global $wpdr;
+			remove_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
 			wp_delete_post_revision( self::$last_but_one_revn );
+			add_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
+
 			global $wpdb;
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
 			$post_table = "{$wpdb->prefix}posts";
@@ -1706,7 +1686,10 @@ class WP_Document_Revisions_Admin {
 		$revision = get_post( $revision_id );
 		// delete revision if there is no content.
 		if ( 0 === strlen( $revision->post_content ) ) {
+			global $wpdr;
+			remove_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
 			wp_delete_post_revision( $revision_id );
+			add_filter( 'pre_delete_post', array( $wpdr, 'possibly_delete_revision' ), 9999, 3 );
 			return;
 		}
 
@@ -1769,9 +1752,34 @@ class WP_Document_Revisions_Admin {
 		return $post_has_changed;
 	}
 
+	/**
+	 * Creates a list of all document attachments. Some may not be attached to a document or revision.
+	 *
+	 * @since 3.7
+	 * @param int $post_id the id of the deleted post.
+	 */
+	public function list_attachments_with_document( $post_id ) {
+		$record = get_post( $post_id );
+		if ( 'document' !== $record->post_type ) {
+			return;
+		}
+
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$attachmts       = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->prefix}posts WHERE post_parent = %d AND post_type = 'attachment'",
+				$post_id
+			),
+			ARRAY_A
+		);
+		self::$attachmts = wp_list_pluck( $attachmts, 'ID', 'ID' );
+	}
 
 	/**
 	 * Deletes all attachments associated with a document or revision.
+	 *
+	 * This is called (for documents) after any remaining attachments have had their parent removed.
 	 *
 	 * @since 1.0
 	 * @param int $post_id the id of the deleted post.
@@ -1781,53 +1789,103 @@ class WP_Document_Revisions_Admin {
 			return;
 		}
 
-		$document = get_post( $post_id );
+		// relevant record could be document, revision or attachment.
+		$record = get_post( $post_id );
 
 		// not for an attachment or an autosave revision.
-		if ( 'attachment' === $document->post_type || wp_is_post_autosave( $post_id ) ) {
+		if ( 'attachment' === $record->post_type || wp_is_post_autosave( $post_id ) ) {
 			return;
 		}
 
+		// We will delete the attachment record related to this record.
+		// Since all revisions are deleted with the document, all attachments will get deleted.
 		$attach = $this->get_document( $post_id );
 		if ( ! $attach ) {
 			// no attachment.
 			return;
 		}
 
-		// make sure that the attachment is not refered to by another post (ignore autosave).
+		// make sure that the attachment is not refered to by another document or revision post (ignore autosave).
+		$doc_id = ( 'document' === $record->post_type ? $record->ID : $record->post_parent );
 		global $wpdb;
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery
 		$doc_link = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(1) FROM $wpdb->posts WHERE %d IN (post_parent, id) AND (post_content = %d OR post_content LIKE %s ) AND post_name != %s ",
-				$document->post_parent,
+				$doc_id,
 				$attach->ID,
 				$this->format_doc_id( $attach->ID ) . '%',
-				strval( $document->post_parent ) . '-autosave-v1'
+				strval( $doc_id ) . '-autosave-v1'
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery
 
 		if ( '1' === $doc_link ) {
-			// have to access the document upload directory, so add it.
+			// have to access the document upload directory, so add it. Also on delete file.
 			add_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+			add_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
 
-			// look for attachment meta (before deleting attachment).
-			$meta = get_post_meta( $attach->ID, '_wp_attachment_metadata', true );
+			// delete_attachment does not delete the attachment if document is outside uploads directory.
+			$file = get_attached_file( $attach->ID );
 			wp_delete_attachment( $attach->ID, true );
 
-			// delete any remaining metadata images.
-			global $wpdr;
-			$file_dir = trailingslashit( $wpdr::$wpdr_document_dir );
-			if ( isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
-				foreach ( $meta['sizes'] as $size => $sizeinfo ) {
-					wp_delete_file_from_directory( $file_dir . $sizeinfo['file'], $file_dir );
-				}
-			}
+			// ensure attachment deleted.
+			wp_delete_file( $file );
+
+			// have looked for the upload directory, so remove it.
+			remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+			remove_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
+
+			// remove attachment ID from list.
+			unset( self::$attachmts[ $attach->ID ] );
 		}
 
-		// have looked for the upload directory, so remove it.
-		remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+		// If multiple files have been uploaded between saves then there will be attached files left [Edge case].
+		if ( 'document' === $record->post_type ) {
+			if ( ! empty( self::$attachmts ) ) {
+				add_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+				add_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
+				foreach ( self::$attachmts as $id => $value ) {
+					// delete_attachment does not delete the attachment if document is outside uploads directory.
+					$file = get_attached_file( $id );
+
+					wp_delete_attachment( $id, true );
+
+					// ensure attachment deleted.
+					wp_delete_file( $file );
+				}
+				remove_filter( 'upload_dir', array( self::$parent, 'document_upload_dir_filter' ) );
+				remove_filter( 'wp_delete_file', array( $this, 'wp_delete_file' ) );
+			}
+			// set the attachmts to null, so that being null means we are not deleting a document.
+			self::$attachmts = null;
+		}
+	}
+
+	/**
+	 * Are we in the process of deleting documents or their revisions.
+	 *
+	 * @since 3.7
+	 * @return bool
+	 */
+	public function is_deleting() {
+		return ( ! is_null( self::$attachmts ) );
+	}
+
+	/**
+	 * Ensure file delete uses document directory...
+	 *
+	 * @since 0.5
+	 * @param string $file Path to the file to delete.
+	 */
+	public function wp_delete_file( $file ) {
+		global $wpdr;
+		$std_dir = $wpdr::$wp_default_dir['basedir'];
+		$doc_dir = $wpdr::$wpdr_document_dir;
+		if ( $doc_dir !== $std_dir ) {
+			$file = str_ireplace( $std_dir, $doc_dir, $file );
+		}
+		return $file;
 	}
 
 	/**

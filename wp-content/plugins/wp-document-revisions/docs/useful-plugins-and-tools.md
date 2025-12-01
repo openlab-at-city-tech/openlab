@@ -2,7 +2,7 @@
 
 ### Permissions management
 
-* [Members � Membership & User Role Editor Plugin](https://wordpress.org/plugins/members/)
+* [Members - Membership & User Role Editor Plugin](https://wordpress.org/plugins/members/)
 
 	(Previously called Members)
 
@@ -17,7 +17,5 @@
 ### Document workflow management
 
 * [Edit Flow](https://wordpress.org/plugins/edit-flow/)
-* [PublishPress Planner](https://wordpress.org/plugins/publishpress/)
-
-	(Previously called PublishPress)
 * [PublishPress Statuses](https://wordpress.org/plugins/publishpress-statuses/)
+* [PublishPress Revisions](https://wordpress.org/plugins/publishpress-revisions/)

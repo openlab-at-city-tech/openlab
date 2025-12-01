@@ -4,6 +4,13 @@ This plugin makes use of many filters to tailor the delivered processing accordi
 
 Most of them are named with a leading 'document-' but there are a few additional non-standard ones shown at the bottom.
 
+## Filter document_allow_revision_deletion
+
+In: class-wp-document-revisions.php
+
+Filter to allow revision deletion. Set to true to bypass these tests and allow delete.
+Note that this should be used when deleting revisions by trusted plugins e.g. PublishPress Revisions.
+
 ## Filter document_block_taxonomies
 
 In: class-wp-document-revisions-front-end.php
@@ -122,7 +129,7 @@ Filters the default structure and label values of the workflow_state taxonomy on
 
 ## Filter document_revisions_limit
 
-In: class-wp-document-revisions-admin.php
+In: class-wp-document-revisions.php
 
 Filters the number of revisions to keep for documents.
 
@@ -210,6 +217,12 @@ In: class-wp-document-revisions.php
 
 Filter to select which taxonomies with default term count to be modified to count all non-trashed posts.
 
+## Filter document_thumbnail
+
+In: class-wp-document-revisions-front-end.php
+
+Filters the post thumbnail size on blocks/shortcodes - default thumbnail.
+
 ## Filter document_title
 
 In: class-wp-document-revisions.php
@@ -233,6 +246,12 @@ Filter to switch off use of standard Workflow States taxonomy. For internal use.
 In: class-wp-document-revisions.php
 
 Filter whether WP_FileSystem used to serve document (or PHP readfile). Irrelevant if file compressed on output.
+
+## Filter document_validate
+
+In: class-wp-document-revisions-validate-structure.php
+
+Filter whether to validate the document structure for a documrnt.
 
 ## Filter document_validate_md5
 
