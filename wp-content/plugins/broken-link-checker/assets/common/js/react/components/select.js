@@ -60,6 +60,7 @@ export function Select(props) {
             {props.label && <label className="sui-label">{props.label}</label>}
 
             <select
+                defaultValue={props.selected}
                 id={props.id}
                 className={`sui-select ${props.classes}`}
                 ref={selectElement}

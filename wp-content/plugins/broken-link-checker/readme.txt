@@ -3,7 +3,7 @@ Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images
 Requires at least: 5.2
 Tested up to: 6.8
-Stable tag: 2.4.6
+Stable tag: 2.4.7
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -207,6 +207,18 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 6. Local Broken Link Checker engine settings
 
 == Changelog ==
+
+= 2.4.7 =
+* Fix: Removed Edit and Unlink Banner actions from the Local Scanner page.
+* Fix: Updated webhook parse_request handler to use add_action instead of add_filter.
+* Fix: Prevented broken links from being highlighted for non-logged-in users.
+* Fix: Updated email reports to use public post links.
+* Enhance: Added the blc_allow_subsites_email_notification filter to control sending email notifications from subsites in multisite installations.
+* Fix: Updated React JS files to properly support translations.
+* Fix: Removed type attributes from inline styles.
+* Fix: Updated user-count logic in the Schedule Scan modal to correctly handle changes in user numbers.
+* Enhance: Improved keyboard accessibility for the Search Users field in the Schedule Scan modal.
+* Fix: Miscellaneousness improvements
 
 = 2.4.6 =
 * Fix: Patched a vulnerability issue.

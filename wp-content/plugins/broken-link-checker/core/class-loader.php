@@ -154,11 +154,6 @@ final class Loader extends Base {
 		$loaded = true;
 
 		/**
-		 * Start Hub Connector
-		 */
-		$this->register_hub_connector();
-
-		/**
 		 * Start app functions.
 		 */
 		add_action( 'init', array( $this, 'init_app' ), 9 );
@@ -184,6 +179,11 @@ final class Loader extends Base {
 	 * @return void
 	 */
 	public function init_app() {
+		/**
+		 * Start Hub Connector
+		 */
+		$this->register_hub_connector();
+
 		// Load text domain.
 		load_plugin_textdomain(
 			'broken-link-checker',
@@ -303,8 +303,7 @@ final class Loader extends Base {
 				if ( $has_translation ) {
 					wp_set_script_translations(
 						$handle,
-						'broken-link-checker',
-						plugin_dir_path( __FILE__ ) . 'languages'
+						'broken-link-checker'
 					);
 				}
 			}
