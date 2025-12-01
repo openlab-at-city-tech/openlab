@@ -356,6 +356,7 @@ class TablePress_Render {
 
 		// Check if there are rows and columns in the table (might not be the case after removing hidden rows/columns!).
 		if ( 0 === $num_rows || 0 === $num_columns ) {
+			/* translators: %s: Table ID */
 			$this->output = sprintf( __( '<!-- The table with the ID %s is empty! -->', 'tablepress' ), $this->table['id'] );
 			return;
 		}
@@ -478,7 +479,7 @@ class TablePress_Render {
 		$row_idx = $this->last_row_idx;
 
 		// Render the table footer rows, if there is at least one extra row.
-		if ( $this->render_options['table_foot'] > 0 && $num_rows >= $this->render_options['table_head'] + $this->render_options['table_foot'] ) { // @phpstan-ignore greaterOrEqual.invalid (`table_head` and `table_foot` are integers.)
+		if ( $this->render_options['table_foot'] > 0 && $num_rows >= $this->render_options['table_head'] + $this->render_options['table_foot'] ) {
 			$last_tbody_idx = $this->last_row_idx - $this->render_options['table_foot'];
 			while ( $row_idx > $last_tbody_idx ) {
 				$tfoot[] = $this->_render_row( $row_idx, 'th' );

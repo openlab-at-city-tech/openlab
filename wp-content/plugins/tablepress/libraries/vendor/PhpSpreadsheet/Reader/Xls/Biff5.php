@@ -46,6 +46,8 @@ class Biff5 extends Xls
 	/**
 	 * Read BIFF5 cell range address list
 	 * section 2.5.15.
+	 *
+	 * @return array{size: int, cellRangeAddresses: string[]}
 	 */
 	public static function readBIFF5CellRangeAddressList(string $subData): array
 	{
@@ -57,7 +59,7 @@ class Biff5 extends Xls
 		$offset = 2;
 		// offset: 2; size: 6 * $nm; list of $nm (fixed) cell range addresses
 		for ($i = 0; $i < $nm; ++$i) {
-			$cellRangeAddresses[] = self::readBIFF5CellRangeAddressFixed(substr($subData, $offset, 6));
+			$cellRangeAddresses[] = self::readBIFF5CellRangeAddressFixed((string) substr($subData, $offset, 6));
 			$offset += 6;
 		}
 

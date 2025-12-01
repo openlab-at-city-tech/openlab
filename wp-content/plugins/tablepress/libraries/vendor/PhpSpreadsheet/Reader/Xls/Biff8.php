@@ -12,6 +12,8 @@ class Biff8 extends Xls
 	 * read BIFF8 constant value array from array data
 	 * returns e.g. ['value' => '{1,2;3,4}', 'size' => 40]
 	 * section 2.5.8.
+	 *
+	 * @return array{value: string, size: int}
 	 */
 	protected static function readBIFF8ConstantArray(string $arrayData): array
 	{
@@ -21,7 +23,7 @@ class Biff8 extends Xls
 		// offset: 1; size: 2; number of rows decreased by 1
 		$nr = self::getUInt2d($arrayData, 1);
 		$size = 3; // initialize
-		$arrayData = substr($arrayData, 3);
+		$arrayData = (string) substr($arrayData, 3);
 
 		// offset: 3; size: var; list of ($nc + 1) * ($nr + 1) constant values
 		$matrixChunks = [];
@@ -30,7 +32,7 @@ class Biff8 extends Xls
 			for ($c = 1; $c <= $nc + 1; ++$c) {
 				$constant = self::readBIFF8Constant($arrayData);
 				$items[] = $constant['value'];
-				$arrayData = substr($arrayData, $constant['size']);
+				$arrayData = (string) substr($arrayData, $constant['size']);
 				$size += $constant['size'];
 			}
 			$matrixChunks[] = implode(',', $items); // looks like e.g. '1,"hello"'
@@ -47,6 +49,8 @@ class Biff8 extends Xls
 	 * read BIFF8 constant value which may be 'Empty Value', 'Number', 'String Value', 'Boolean Value', 'Error Value'
 	 * section 2.5.7
 	 * returns e.g. ['value' => '5', 'size' => 9].
+	 *
+	 * @return array{value: bool|float|int|string, size: int}
 	 */
 	private static function readBIFF8Constant(string $valueData): array
 	{
@@ -61,13 +65,13 @@ class Biff8 extends Xls
 				break;
 			case 0x01: // number
 				// offset: 1; size: 8; IEEE 754 floating-point value
-				$value = self::extractNumber(substr($valueData, 1, 8));
+				$value = self::extractNumber((string) substr($valueData, 1, 8));
 				$size = 9;
 
 				break;
 			case 0x02: // string value
 				// offset: 1; size: var; Unicode string, 16-bit string length
-				$string = self::readUnicodeStringLong(substr($valueData, 1));
+				$string = self::readUnicodeStringLong((string) substr($valueData, 1));
 				$value = '"' . $string['value'] . '"';
 				$size = 1 + $string['size'];
 
@@ -101,6 +105,8 @@ class Biff8 extends Xls
 	/**
 	 * Read BIFF8 cell range address list
 	 * section 2.5.15.
+	 *
+	 * @return array{size: int, cellRangeAddresses: mixed[]}
 	 */
 	public static function readBIFF8CellRangeAddressList(string $subData): array
 	{
@@ -112,7 +118,7 @@ class Biff8 extends Xls
 		$offset = 2;
 		// offset: 2; size: 8 * $nm; list of $nm (fixed) cell range addresses
 		for ($i = 0; $i < $nm; ++$i) {
-			$cellRangeAddresses[] = self::readBIFF8CellRangeAddressFixed(substr($subData, $offset, 8));
+			$cellRangeAddresses[] = self::readBIFF8CellRangeAddressFixed((string) substr($subData, $offset, 8));
 			$offset += 8;
 		}
 

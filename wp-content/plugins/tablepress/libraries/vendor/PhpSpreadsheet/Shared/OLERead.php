@@ -58,6 +58,7 @@ class OLERead
 
 	private int $rootentry;
 
+	/** @var mixed[][] */
 	private array $props = [];
 
 	/**
@@ -164,8 +165,11 @@ class OLERead
 		$streamData = '';
 
 		if ($this->props[$stream]['size'] < self::SMALL_BLOCK_THRESHOLD) {
-			$rootdata = $this->readData($this->props[$this->rootentry]['startBlock']);
+			/** @var int */
+			$temp = $this->props[$this->rootentry]['startBlock'];
+			$rootdata = $this->readData($temp);
 
+			/** @var int */
 			$block = $this->props[$stream]['startBlock'];
 
 			while ($block != -2) {
@@ -177,8 +181,10 @@ class OLERead
 
 			return $streamData;
 		}
-		$numBlocks = $this->props[$stream]['size'] / self::BIG_BLOCK_SIZE;
-		if ($this->props[$stream]['size'] % self::BIG_BLOCK_SIZE != 0) {
+		/** @var int */
+		$temp = $this->props[$stream]['size'];
+		$numBlocks = $temp / self::BIG_BLOCK_SIZE;
+		if ($temp % self::BIG_BLOCK_SIZE != 0) {
 			++$numBlocks;
 		}
 
@@ -186,6 +192,7 @@ class OLERead
 			return '';
 		}
 
+		/** @var int */
 		$block = $this->props[$stream]['startBlock'];
 
 		while ($block != -2) {
@@ -228,7 +235,7 @@ class OLERead
 		$entryLen = strlen($this->entry);
 		while ($offset < $entryLen) {
 			// entry data (128 bytes)
-			$d = substr($this->entry, $offset, self::PROPERTY_STORAGE_BLOCK_SIZE);
+			$d = (string) substr($this->entry, $offset, self::PROPERTY_STORAGE_BLOCK_SIZE);
 
 			// size in bytes of name
 			$nameSize = ord($d[self::SIZE_OF_NAME_POS]) | (ord($d[self::SIZE_OF_NAME_POS + 1]) << 8);
@@ -242,7 +249,7 @@ class OLERead
 
 			$size = self::getInt4d($d, self::SIZE_POS);
 
-			$name = str_replace("\x00", '', substr($d, 0, $nameSize));
+			$name = str_replace("\x00", '', (string) substr($d, 0, $nameSize));
 
 			$this->props[] = [
 				'name' => $name,

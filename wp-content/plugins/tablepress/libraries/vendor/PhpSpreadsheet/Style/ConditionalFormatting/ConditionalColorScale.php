@@ -21,6 +21,7 @@ class ConditionalColorScale
 
 	private ?string $sqref = null;
 
+	/** @var mixed[] */
 	private array $valueArray = [];
 
 	private float $minValue = 0;
@@ -122,6 +123,7 @@ class ConditionalColorScale
 			$values = $this->worksheet->rangesToArray($this->sqref, null, true, true, true);
 			$this->valueArray = [];
 			foreach ($values as $key => $value) {
+				/** @var array<float|int|string> $value */
 				foreach ($value as $k => $v) {
 					$this->valueArray[] = (float) $v;
 				}
@@ -158,24 +160,24 @@ class ConditionalColorScale
 			$blend = ($value - $this->minValue) / ($this->midValue - $this->minValue);
 			$alpha1 = hexdec(substr($minColor, 0, 2));
 			$alpha2 = hexdec(substr($midColor, 0, 2));
-			$red1 = hexdec(substr($minColor, 2, 2));
-			$red2 = hexdec(substr($midColor, 2, 2));
-			$green1 = hexdec(substr($minColor, 4, 2));
-			$green2 = hexdec(substr($midColor, 4, 2));
-			$blue1 = hexdec(substr($minColor, 6, 2));
-			$blue2 = hexdec(substr($midColor, 6, 2));
+			$red1 = hexdec((string) substr($minColor, 2, 2));
+			$red2 = hexdec((string) substr($midColor, 2, 2));
+			$green1 = hexdec((string) substr($minColor, 4, 2));
+			$green2 = hexdec((string) substr($midColor, 4, 2));
+			$blue1 = hexdec((string) substr($minColor, 6, 2));
+			$blue2 = hexdec((string) substr($midColor, 6, 2));
 
 			return strtoupper(dechex((int) ($alpha2 * $blend + $alpha1 * (1 - $blend))) . '' . dechex((int) ($red2 * $blend + $red1 * (1 - $blend))) . '' . dechex((int) ($green2 * $blend + $green1 * (1 - $blend))) . '' . dechex((int) ($blue2 * $blend + $blue1 * (1 - $blend))));
 		}
 		$blend = ($value - $this->midValue) / ($this->maxValue - $this->midValue);
 		$alpha1 = hexdec(substr($midColor, 0, 2));
 		$alpha2 = hexdec(substr($maxColor, 0, 2));
-		$red1 = hexdec(substr($midColor, 2, 2));
-		$red2 = hexdec(substr($maxColor, 2, 2));
-		$green1 = hexdec(substr($midColor, 4, 2));
-		$green2 = hexdec(substr($maxColor, 4, 2));
-		$blue1 = hexdec(substr($midColor, 6, 2));
-		$blue2 = hexdec(substr($maxColor, 6, 2));
+		$red1 = hexdec((string) substr($midColor, 2, 2));
+		$red2 = hexdec((string) substr($maxColor, 2, 2));
+		$green1 = hexdec((string) substr($midColor, 4, 2));
+		$green2 = hexdec((string) substr($maxColor, 4, 2));
+		$blue1 = hexdec((string) substr($midColor, 6, 2));
+		$blue2 = hexdec((string) substr($maxColor, 6, 2));
 
 		return strtoupper(dechex((int) ($alpha2 * $blend + $alpha1 * (1 - $blend))) . '' . dechex((int) ($red2 * $blend + $red1 * (1 - $blend))) . '' . dechex((int) ($green2 * $blend + $green1 * (1 - $blend))) . '' . dechex((int) ($blue2 * $blend + $blue1 * (1 - $blend))));
 	}
@@ -187,16 +189,26 @@ class ConditionalColorScale
 		}
 		switch ($type) {
 			case 'min':
-				return (float) min($this->valueArray);
+				/** @var float|int */
+				$temp = min($this->valueArray);
+
+				return (float) $temp;
 			case 'max':
-				return (float) max($this->valueArray);
+				/** @var float|int */
+				$temp = max($this->valueArray);
+
+				return (float) $temp;
 			case 'percentile':
 				return (float) Percentiles::PERCENTILE($this->valueArray, (float) ($value / 100));
 			case 'formula':
 				return $formula;
 			case 'percent':
-				$min = (float) min($this->valueArray);
-				$max = (float) max($this->valueArray);
+				/** @var float|int */
+				$min = min($this->valueArray);
+				$min = (float) $min;
+				/** @var float|int */
+				$max = max($this->valueArray);
+				$max = (float) $max;
 
 				return $min + (float) ($value / 100) * ($max - $min);
 			default:
@@ -226,12 +238,12 @@ class ConditionalColorScale
 				if ($minColor !== null && $maxColor !== null) {
 					$alpha1 = hexdec(substr($minColor, 0, 2));
 					$alpha2 = hexdec(substr($maxColor, 0, 2));
-					$red1 = hexdec(substr($minColor, 2, 2));
-					$red2 = hexdec(substr($maxColor, 2, 2));
-					$green1 = hexdec(substr($minColor, 4, 2));
-					$green2 = hexdec(substr($maxColor, 4, 2));
-					$blue1 = hexdec(substr($minColor, 6, 2));
-					$blue2 = hexdec(substr($maxColor, 6, 2));
+					$red1 = hexdec((string) substr($minColor, 2, 2));
+					$red2 = hexdec((string) substr($maxColor, 2, 2));
+					$green1 = hexdec((string) substr($minColor, 4, 2));
+					$green2 = hexdec((string) substr($maxColor, 4, 2));
+					$blue1 = hexdec((string) substr($minColor, 6, 2));
+					$blue2 = hexdec((string) substr($maxColor, 6, 2));
 					$this->midpointColor = new Color(strtoupper(dechex((int) ($alpha2 * $blend + $alpha1 * (1 - $blend))) . '' . dechex((int) ($red2 * $blend + $red1 * (1 - $blend))) . '' . dechex((int) ($green2 * $blend + $green1 * (1 - $blend))) . '' . dechex((int) ($blue2 * $blend + $blue1 * (1 - $blend)))));
 				} else {
 					$this->midpointColor = null;

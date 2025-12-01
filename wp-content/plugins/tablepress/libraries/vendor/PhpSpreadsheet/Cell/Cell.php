@@ -265,7 +265,14 @@ class Cell
 			case DataType::TYPE_INLINE:
 				// Rich text
 				$value2 = StringHelper::convertToString($value, true);
-				$this->value = DataType::checkString(($value instanceof RichText) ? $value : $value2);
+				// Cells?->Worksheet?->Spreadsheet
+				$binder = ($nullsafeVariable6 = ($nullsafeVariable7 = ($nullsafeVariable8 = $this->parent) ? $nullsafeVariable8->getParent() : null) ? $nullsafeVariable7->getParent() : null) ? $nullsafeVariable6->getValueBinder() : null;
+				$preserveCr = false;
+				if ($binder !== null && method_exists($binder, 'getPreserveCr')) {
+					/** @var bool */
+					$preserveCr = $binder->getPreserveCr();
+				}
+				$this->value = DataType::checkString(($value instanceof RichText) ? $value : $value2, $preserveCr);
 
 				break;
 			case DataType::TYPE_NUMERIC:
@@ -301,7 +308,7 @@ class Cell
 
 		$this->updateInCollection();
 		$cellCoordinate = $this->getCoordinate();
-		self::updateIfCellIsTableHeader(($nullsafeVariable6 = $this->getParent()) ? $nullsafeVariable6->getParent() : null, $this, $oldValue, $value);
+		self::updateIfCellIsTableHeader(($nullsafeVariable9 = $this->getParent()) ? $nullsafeVariable9->getParent() : null, $this, $oldValue, $value);
 		$worksheet = $this->getWorksheet();
 		$spreadsheet = $worksheet->getParent();
 		if (isset($spreadsheet) && $spreadsheet->getIndex($worksheet, true) >= 0) {
@@ -318,7 +325,7 @@ class Cell
 			}
 		}
 
-		return (($nullsafeVariable7 = $this->getParent()) ? $nullsafeVariable7->get($cellCoordinate) : null) ?? $this;
+		return (($nullsafeVariable10 = $this->getParent()) ? $nullsafeVariable10->get($cellCoordinate) : null) ?? $this;
 	}
 	public const CALCULATE_DATE_TIME_ASIS = 0;
 	public const CALCULATE_DATE_TIME_FLOAT = 1;
@@ -397,7 +404,7 @@ class Cell
 		if ($this->dataType === DataType::TYPE_FORMULA) {
 			try {
 				$currentCalendar = SharedDate::getExcelCalendar();
-				SharedDate::setExcelCalendar(($nullsafeVariable8 = $this->getWorksheet()->getParent()) ? $nullsafeVariable8->getExcelCalendar() : null);
+				SharedDate::setExcelCalendar(($nullsafeVariable11 = $this->getWorksheet()->getParent()) ? $nullsafeVariable11->getExcelCalendar() : null);
 				$thisworksheet = $this->getWorksheet();
 				$index = $thisworksheet->getParentOrThrow()->getActiveSheetIndex();
 				$selected = $thisworksheet->getSelectedCells();
@@ -434,6 +441,7 @@ class Cell
 				}
 				$newColumn = $this->getColumn();
 				if (is_array($result)) {
+					$result = self::convertSpecialArray($result);
 					$this->formulaAttributes['t'] = 'array';
 					$this->formulaAttributes['ref'] = $maxCoordinate = $coordinate;
 					$newRow = $row = $this->getRow();
@@ -452,7 +460,8 @@ class Cell
 										}
 									}
 								}
-								++$newColumn;
+								/** @var string $newColumn */
+								StringHelper::stringIncrement($newColumn);
 							}
 							++$newRow;
 						} else {
@@ -464,7 +473,7 @@ class Cell
 									}
 								}
 							}
-							++$newColumn;
+							StringHelper::stringIncrement($newColumn);
 						}
 						if ($spill) {
 							break;
@@ -485,12 +494,12 @@ class Cell
 								if (isset($matches[3])) {
 									$minCol = $matches[1];
 									$minRow = (int) $matches[2];
-									// https://github.com/phpstan/phpstan/issues/11602
-									$maxCol = $matches[4]; // @phpstan-ignore-line
-									++$maxCol;
-									$maxRow = (int) $matches[5]; // @phpstan-ignore-line
+									$maxCol = $matches[4];
+									StringHelper::stringIncrement($maxCol);
+									$maxRow = (int) $matches[5];
 									for ($row = $minRow; $row <= $maxRow; ++$row) {
-										for ($col = $minCol; $col !== $maxCol; ++$col) {
+										for ($col = $minCol; $col !== $maxCol; StringHelper::stringIncrement($col)) {
+											/** @var string $col */
 											if ("$col$row" !== $coordinate) {
 												$thisworksheet->getCell("$col$row")->setValue(null);
 											}
@@ -513,16 +522,18 @@ class Cell
 							$newColumn = $column;
 							foreach ($resultRow as $resultValue) {
 								if ($row !== $newRow || $column !== $newColumn) {
-									$thisworksheet->getCell($newColumn . $newRow)->setValue($resultValue);
+									$thisworksheet
+										->getCell($newColumn . $newRow)
+										->setValue($resultValue);
 								}
-								++$newColumn;
+								StringHelper::stringIncrement($newColumn);
 							}
 							++$newRow;
 						} else {
 							if ($row !== $newRow || $column !== $newColumn) {
 								$thisworksheet->getCell($newColumn . $newRow)->setValue($resultRow);
 							}
-							++$newColumn;
+							StringHelper::stringIncrement($newColumn);
 						}
 					}
 					$thisworksheet->getCell($column . $row);
@@ -557,6 +568,35 @@ class Cell
 		}
 
 		return $this->convertDateTimeInt($this->value);
+	}
+	/**
+	 * Convert array like the following (preserve values, lose indexes):
+	 * [
+	 *   rowNumber1 => [colLetter1 => value, colLetter2 => value ...],
+	 *   rowNumber2 => [colLetter1 => value, colLetter2 => value ...],
+	 *   ...
+	 * ].
+	 *
+	 * @param mixed[] $array
+	 *
+	 * @return mixed[]
+	 */
+	private static function convertSpecialArray(array $array): array
+	{
+		$newArray = [];
+		foreach ($array as $rowIndex => $row) {
+			if (!is_int($rowIndex) || $rowIndex <= 0 || !is_array($row)) {
+				return $array;
+			}
+			$keys = array_keys($row);
+			$key0 = $keys[0] ?? '';
+			if (!is_string($key0)) {
+				return $array;
+			}
+			$newArray[] = array_values($row);
+		}
+
+		return $newArray;
 	}
 	/**
 	 * Set old calculated value (cached).
@@ -895,9 +935,7 @@ class Cell
 	/**
 	 * Set the formula attributes.
 	 *
-	 * @param $attributes null|array<string, string>
-	 *
-	 * @return $this
+	 * @param null|array<string, string> $attributes
 	 */
 	public function setFormulaAttributes(?array $attributes): self
 	{
@@ -910,7 +948,7 @@ class Cell
 	 *
 	 * @return null|array<string, string>
 	 */
-	public function getFormulaAttributes(): ?array
+	public function getFormulaAttributes()
 	{
 		return $this->formulaAttributes;
 	}
@@ -929,7 +967,7 @@ class Cell
 	}
 	public function isLocked(): bool
 	{
-		$protected = ($nullsafeVariable9 = ($nullsafeVariable10 = ($nullsafeVariable11 = $this->parent) ? $nullsafeVariable11->getParent() : null) ? $nullsafeVariable10->getProtection() : null) ? $nullsafeVariable9->getSheet() : null;
+		$protected = ($nullsafeVariable12 = ($nullsafeVariable13 = ($nullsafeVariable14 = $this->parent) ? $nullsafeVariable14->getParent() : null) ? $nullsafeVariable13->getProtection() : null) ? $nullsafeVariable12->getSheet() : null;
 		if ($protected !== true) {
 			return false;
 		}
@@ -942,7 +980,7 @@ class Cell
 		if ($this->getDataType() !== DataType::TYPE_FORMULA) {
 			return false;
 		}
-		$protected = ($nullsafeVariable12 = ($nullsafeVariable13 = ($nullsafeVariable14 = $this->parent) ? $nullsafeVariable14->getParent() : null) ? $nullsafeVariable13->getProtection() : null) ? $nullsafeVariable12->getSheet() : null;
+		$protected = ($nullsafeVariable15 = ($nullsafeVariable16 = ($nullsafeVariable17 = $this->parent) ? $nullsafeVariable17->getParent() : null) ? $nullsafeVariable16->getProtection() : null) ? $nullsafeVariable15->getSheet() : null;
 		if ($protected !== true) {
 			return false;
 		}

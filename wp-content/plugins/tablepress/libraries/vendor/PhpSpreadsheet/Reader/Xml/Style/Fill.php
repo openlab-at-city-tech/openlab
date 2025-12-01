@@ -7,9 +7,6 @@ use SimpleXMLElement;
 
 class Fill extends StyleBase
 {
-	/**
-	 * @var array
-	 */
 	public const FILL_MAPPINGS = [
 		'fillType' => [
 			'solid' => FillStyles::FILL_SOLID,
@@ -33,6 +30,7 @@ class Fill extends StyleBase
 		],
 	];
 
+	/** @return mixed[] */
 	public function parseStyle(SimpleXMLElement $styleAttributes): array
 	{
 		$style = [];
@@ -41,12 +39,12 @@ class Fill extends StyleBase
 			$styleAttributeValue = (string) $styleAttributeValuex;
 			switch ($styleAttributeKey) {
 				case 'Color':
-					$style['fill']['endColor']['rgb'] = substr($styleAttributeValue, 1);
-					$style['fill']['startColor']['rgb'] = substr($styleAttributeValue, 1);
+					$style['fill']['endColor']['rgb'] = (string) substr($styleAttributeValue, 1);
+					$style['fill']['startColor']['rgb'] = (string) substr($styleAttributeValue, 1);
 
 					break;
 				case 'PatternColor':
-					$style['fill']['startColor']['rgb'] = substr($styleAttributeValue, 1);
+					$style['fill']['startColor']['rgb'] = (string) substr($styleAttributeValue, 1);
 
 					break;
 				case 'Pattern':

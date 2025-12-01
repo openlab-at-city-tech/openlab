@@ -22,7 +22,7 @@ class ChartColor
 	private ?int $brightness = null;
 
 	/**
-	 * @param string|string[] $value
+	 * @param array{value: ?string, alpha: null|int|string, brightness?: null|int|string, type: ?string}|string  $value
 	 */
 	public function __construct($value = '', ?int $alpha = null, ?string $type = null, ?int $brightness = null)
 	{
@@ -90,10 +90,10 @@ class ChartColor
 		if (empty($type) && !empty($color)) {
 			if (str_starts_with($color, '*')) {
 				$type = 'schemeClr';
-				$color = substr($color, 1);
+				$color = (string) substr($color, 1);
 			} elseif (str_starts_with($color, '/')) {
 				$type = 'prstClr';
-				$color = substr($color, 1);
+				$color = (string) substr($color, 1);
 			} elseif (preg_match('/^[0-9A-Fa-f]{6}$/', $color) === 1) {
 				$type = 'srgbClr';
 			}
@@ -118,6 +118,7 @@ class ChartColor
 		return $this;
 	}
 
+	/** @param array{value: ?string, alpha: null|int|string, brightness?: null|int|string, type: ?string}  $color */
 	public function setColorPropertiesArray(array $color): self
 	{
 		return $this->setColorProperties(

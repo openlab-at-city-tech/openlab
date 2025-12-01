@@ -95,8 +95,12 @@ abstract class TablePress_View {
 		// Enable two column layout.
 		add_filter( "get_user_option_screen_layout_{$screen->id}", array( $this, 'set_current_screen_layout_columns' ) ); // @phpstan-ignore property.nonObject
 
+		/* translators: %1$s: URL to TablePress website, %2$s: URL to WordPress Plugin Directory */
 		$common_content = '<p>' . sprintf( __( 'More information about TablePress can be found on the <a href="%1$s">plugin website</a> or on its page in the <a href="%2$s">WordPress Plugin Directory</a>.', 'tablepress' ), 'https://tablepress.org/', 'https://wordpress.org/plugins/tablepress/' ) . '</p>';
-		$common_content .= '<p>' . sprintf( __( 'For technical information, please see the <a href="%s">Documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' ' . sprintf( __( 'Common questions are answered in the <a href="%s">FAQ</a>.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '</p>';
+		/* translators: %s: URL to Documentation page */
+		$common_content .= '<p>' . sprintf( __( 'For technical information, please see the <a href="%s">Documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' ';
+		/* translators: %s: URL to FAQ page */
+		$common_content .= sprintf( __( 'Common questions are answered in the <a href="%s">FAQ</a>.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '</p>';
 
 		if ( tb_tp_fs()->is_free_plan() ) {
 			$common_content .= '<p>'
@@ -414,10 +418,20 @@ abstract class TablePress_View {
 			</h1>
 			<?php if ( ! TABLEPRESS_IS_PLAYGROUND_PREVIEW && tb_tp_fs()->is_free_plan() ) : ?>
 				<div class="buttons">
+					<?php
+					$timestamp_today = strtotime( 'today' );
+					if ( strtotime( '2025-11-24' ) < $timestamp_today && $timestamp_today < strtotime( '2025-12-03' ) ) :
+						?>
+						<a href="https://tablepress.org/premium/?utm_campaign=black-week-2025&utm_source=plugin&utm_medium=button&utm_content=upgrade-button" class="tablepress-button" style="background:linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);border-color:#ffffff;font-weight:bold;font-size:20px;border-radius:5px;padding:8px 2px 8px 10px">
+							<span>Premium: 20% off for Black Friday!</span>
+							<span class="dashicons dashicons-arrow-right-alt" />
+						</a>
+					<?php else : ?>
 					<a href="<?php echo esc_url( tb_tp_fs()->pricing_url( WP_FS__PERIOD_ANNUALLY, false ) ); ?>" class="tablepress-button">
 						<span><?php _e( 'Upgrade to Premium', 'tablepress' ); ?></span>
 						<span class="dashicons dashicons-arrow-right-alt"></span>
 					</a>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>
