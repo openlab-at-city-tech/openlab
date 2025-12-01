@@ -9,7 +9,7 @@
 
 <!-- wp:cover {"url":"<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>","id":12,"dimRatio":0,"minHeight":600,"minHeightUnit":"px","isDark":false,"align":"full","style":{"border":{"radius":"0px"}},"className":"slide2"} -->
 <div class="wp-block-cover alignfull is-light slide2" style="border-radius:0px;min-height:600px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-0 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-12" alt="" src="<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:group {"layout":{"type":"constrained","contentSize":"90%"}} -->
-<div class="wp-block-group"><!-- wp:columns {"verticalAlignment":"center"} -->
+<div class="wp-block-group wow fadeInLeft"><!-- wp:columns {"verticalAlignment":"center"} -->
 <div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"50%"} -->
 <div class="wp-block-column is-vertically-aligned-center" style="flex-basis:50%"><!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"500"},"spacing":{"margin":{"top":"0","bottom":"0"}},"elements":{"link":{"color":{"text":"#181719"}}},"color":{"text":"#181719"}},"fontSize":"extra-large"} -->
 <h4 class="wp-block-heading has-text-color has-link-color has-extra-large-font-size" style="color:#181719;margin-top:0;margin-bottom:0;font-style:normal;font-weight:500"><?php esc_html_e('Hello, I am','fse-freelancer-portfolio'); ?></h4>

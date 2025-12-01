@@ -13,7 +13,7 @@
 <!-- wp:columns {"verticalAlignment":"center"} -->
 <div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","style":{"spacing":{"padding":{"top":"0","right":"0","bottom":"0","left":"0"}}}} -->
 <div class="wp-block-column is-vertically-aligned-center" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:heading {"className":"section-main-heading","style":{"typography":{"fontStyle":"normal","fontWeight":"700","fontSize":"50px"}},"textColor":"heading"} -->
-<h2 class="wp-block-heading section-main-heading has-heading-color has-text-color" style="font-size:50px;font-style:normal;font-weight:700"><?php esc_html_e('Work','fse-freelancer-portfolio'); ?><br><?php esc_html_e('History','fse-freelancer-portfolio'); ?></h2>
+<h2 class="wp-block-heading section-main-heading has-heading-color has-text-color wow fadeInDown" style="font-size:50px;font-style:normal;font-weight:700"><?php esc_html_e('Work','fse-freelancer-portfolio'); ?><br><?php esc_html_e('History','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"fontSize":"medium"} -->

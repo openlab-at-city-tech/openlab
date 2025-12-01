@@ -10,8 +10,8 @@
 <div style="height:24px" aria-hidden="true" class="wp-block-spacer is-style-has-mb-20"></div>
 <!-- /wp:spacer -->
 
-<!-- wp:columns {"align":"wide","className":"footer-box","style":{"spacing":{"padding":{"top":"0px","bottom":"0px","right":"15px","left":"15px"},"blockGap":{"top":"30px","left":"50px"}}}} -->
-<div class="wp-block-columns alignwide footer-box" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:15px"><!-- wp:column {"verticalAlignment":"top"} -->
+<!-- wp:columns {"align":"wide","className":"footer-box wow bounceInUp","style":{"spacing":{"padding":{"top":"0px","bottom":"0px","right":"15px","left":"15px"},"blockGap":{"top":"30px","left":"50px"}}}} -->
+<div class="wp-block-columns alignwide footer-box wow bounceInUp" style="padding-top:0px;padding-right:15px;padding-bottom:0px;padding-left:15px"><!-- wp:column {"verticalAlignment":"top"} -->
 <div class="wp-block-column is-vertically-aligned-top"><!-- wp:group {"style":{"spacing":{"blockGap":"24px"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 <div class="wp-block-group"><!-- wp:site-title {"textColor":"white"} /-->
 
@@ -111,8 +111,8 @@
 <div style="height:24px" aria-hidden="true" class="wp-block-spacer is-style-has-mb-20"></div>
 <!-- /wp:spacer -->
 
-<!-- wp:group {"className":"rights-box","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-<div class="wp-block-group rights-box"><!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"0px","left":"0px"},"padding":{"top":"0","right":"0","bottom":"0","left":"0"}},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"textColor":"white","fontSize":"medium"} -->
+<!-- wp:group {"className":"rights-box wow bounceInUp","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
+<div class="wp-block-group rights-box wow bounceInUp"><!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"0px","left":"0px"},"padding":{"top":"0","right":"0","bottom":"0","left":"0"}},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"textColor":"white","fontSize":"medium"} -->
 <p class="has-white-color has-text-color has-link-color has-medium-font-size" style="margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><a rel="noreferrer noopener" href="https://www.cretathemes.com/products/free-freelancer-wordpress-theme"><?php esc_html_e('FSE Freelancer Portfolio','fse-freelancer-portfolio'); ?></a>.<?php esc_html_e('All Rights Reserved.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
