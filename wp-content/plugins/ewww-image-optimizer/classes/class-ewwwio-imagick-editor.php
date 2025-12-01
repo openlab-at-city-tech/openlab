@@ -66,36 +66,48 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 	protected $indexed_max_colors = false;
 
 	/**
+	 * Whether an indexed grayscale image needs further processing to reduce the palette.
+	 *
+	 * @access protected
+	 * @var int
+	 */
+	protected $indexed_grayscale_alpha_problem = false;
+
+	/**
 	 * Gets the bit depth for PNG images and checks for indexed-color mode.
 	 *
-	 * Access the file directly, as we cannot currently rely on Imagick to identify
-	 * palette images with alpha support.
+	 * Access the file directly, in case Imagick fails to identify the number of colors in an indexed image.
 	 *
-	 * @since 6.6.0
+	 * @since 7.7.0
+	 * @since 8.1.5 Only used to get the bit depth when IM returns 8 and getImageColors() isn't working.
+	 *
+	 * @return int The bit depth for PNG images, 8 by default.
 	 */
 	protected function get_png_color_depth() {
+		ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
+		$bit_depth = 8;
 		if ( 'image/png' !== $this->mime_type ) {
-			return;
+			return $bit_depth;
 		}
 		if ( wp_is_stream( $this->file ) ) {
-			return;
+			return $bit_depth;
 		}
 		if ( ! is_file( $this->file ) ) {
-			return;
+			return $bit_depth;
 		}
 		if ( filesize( $this->file ) < 24 ) {
-			return;
+			return $bit_depth;
 		}
 
 		$file_handle = fopen( $this->file, 'rb' );
 
 		if ( ! $file_handle ) {
-			return;
+			return $bit_depth;
 		}
 
 		$png_header = fread( $file_handle, 4 );
 		if ( chr( 0x89 ) . 'PNG' !== $png_header ) {
-			return;
+			return $bit_depth;
 		}
 
 		// Move forward 8 bytes.
@@ -104,7 +116,7 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 
 		// Make sure we have an IHDR.
 		if ( 'IHDR' !== $png_ihdr ) {
-			return;
+			return $bit_depth;
 		}
 
 		// Skip past the dimensions.
@@ -115,7 +127,7 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 		// per palette index (not per pixel).
 		//
 		// Valid values are 1, 2, 4, 8, and 16, although not all values are allowed for all color types.
-		$this->indexed_pixel_depth = ord( (string) fread( $file_handle, 1 ) );
+		$bit_depth = ord( (string) fread( $file_handle, 1 ) );
 
 		// Color type is a single-byte integer that describes the interpretation of the image data.
 		// Color type codes represent sums of the following values:
@@ -130,11 +142,10 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 		// Valid values are 0, 2, 3, 4, and 6.
 		$color_type = ord( (string) fread( $file_handle, 1 ) );
 
-		if ( 3 === (int) $color_type ) {
-			$this->indexed_color_encoded = true;
-		}
-
 		fclose( $file_handle );
+
+		ewwwio_debug_message( "detected bit depth $bit_depth, color type $color_type" );
+		return $bit_depth;
 	}
 
 	/**
@@ -216,7 +227,10 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 		}
 		$return_parent = false; // An indicator for whether we should short-circuit and use the parent thumbnail_image method.
 		$ewww_status   = get_transient( 'ewww_image_optimizer_cloud_status' );
-		if ( 'image/gif' === $this->mime_type && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
+		if (
+			'image/gif' === $this->mime_type &&
+			! ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' )
+		) {
 			$gifsicle_path = ewwwio()->local->get_path( 'gifsicle' );
 			if ( empty( $gifsicle_path ) ) {
 				ewwwio_debug_message( 'no gifsicle to resize an animated GIF' );
@@ -228,7 +242,8 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 			'image/gif' === $this->mime_type &&
 			empty( $gifsicle_path ) &&
 			false === strpos( $ewww_status, 'great' ) &&
-			ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' )
+			ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) &&
+			! ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) )
 		) {
 			ewwwio_debug_message( 'no API key to resize an animated GIF' );
 			$return_parent = true;
@@ -345,14 +360,30 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 		}
 
 		if ( 'image/png' === $this->mime_type ) {
+			$png_color_type      = '6';
+			$png_has_alpha       = false;
+			$alpha_channel_depth = 1;
+			if ( method_exists( $this->image, 'getImageProperty' ) ) {
+				$png_color_type = $this->image->getImageProperty( 'png:IHDR.color-type-orig' );
+			}
 			ewwwio_debug_message( 'this image is type: ' . $this->image->getImageType() );
-			$this->get_png_color_depth();
-			if ( $this->indexed_color_encoded ) {
+			ewwwio_debug_message( 'this image has color type: ' . $png_color_type );
+			if ( '3' === $png_color_type ) {
 				$current_colors = 500; // Fail-safe for more than any indexed PNG could have.
 				if ( is_callable( array( $this->image, 'getImageColors' ) ) ) {
 					$current_colors = $this->image->getImageColors();
+					ewwwio_debug_message( "image has $current_colors colors" );
 				}
-				switch ( $this->indexed_pixel_depth ) {
+				$bit_depth = 8;
+				if ( is_callable( array( $this->image, 'getImageDepth' ) ) ) {
+					$bit_depth = (int) $this->image->getImageDepth();
+					// Only use the direct file method if the current colors is higher than normal.
+					// We'll need an accurate bit depth in that case, to make sure we properly set the maximum.
+					if ( $bit_depth >= 8 && $current_colors > 256 ) {
+						$bit_depth = $this->get_png_color_depth();
+					}
+				}
+				switch ( $bit_depth ) {
 					case 8:
 						$max_colors = 255;
 						break;
@@ -369,7 +400,15 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 						$max_colors = 255;
 				}
 				$this->indexed_max_colors = min( $max_colors, $current_colors );
-				ewwwio_debug_message( "indexed image with pixel depth {$this->indexed_pixel_depth} limiting to {$this->indexed_max_colors} colors" );
+				if ( is_callable( array( $this->image, 'getImageAlphaChannel' ) ) && $this->image->getImageAlphaChannel() ) {
+					ewwwio_debug_message( 'image has alpha channel' );
+					$png_has_alpha = true;
+					if ( is_callable( array( $this->image, 'getImageChannelDepth' ) ) && defined( 'Imagick::CHANNEL_ALPHA' ) ) {
+						$alpha_channel_depth = $this->image->getImageChannelDepth( Imagick::CHANNEL_ALPHA );
+						ewwwio_debug_message( "alpha channel depth is $alpha_channel_depth" );
+					}
+				}
+				ewwwio_debug_message( "indexed image with pixel depth {$bit_depth} limiting to {$this->indexed_max_colors} colors" );
 			}
 		}
 
@@ -440,28 +479,28 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 				$this->image->setOption( 'png:compression-filter', '5' );
 				$this->image->setOption( 'png:compression-level', '9' );
 				$this->image->setOption( 'png:compression-strategy', '1' );
-				if ( $this->indexed_color_encoded
-					&& is_callable( array( $this->image, 'getImageAlphaChannel' ) )
-					&& $this->image->getImageAlphaChannel()
-				) {
-					$this->image->setOption( 'png:include-chunk', 'tRNS' );
-				} else {
-					$this->image->setOption( 'png:exclude-chunk', 'all' );
-				}
-			}
-
-			if ( $this->indexed_color_encoded ) {
-				if ( ! empty( $this->indexed_max_colors ) && ! ewww_image_optimizer_pngquant_reduce_available() ) {
-					ewwwio_debug_message( "doing quantizeImage on $this->file ($dst_w,$dst_h) to reduce palette to $this->indexed_max_colors" );
-					$this->image->quantizeImage( $this->indexed_max_colors, $this->image->getColorspace(), 0, false, false );
-					ewwwio_debug_message( "originally we had $current_colors colors, and now we have " . $this->image->getImageColors() );
-					/**
-					 * ImageMagick likes to convert gray indexed images to grayscale.
-					 * So, if the colorspace has changed to 'gray', use the png8 format
-					 * to ensure it stays indexed.
-					 */
-					if ( Imagick::COLORSPACE_GRAY === $this->image->getImageColorspace() ) {
-						$this->image->setOption( 'png:format', 'png8' );
+				if ( '3' === $png_color_type ) {
+					if ( $png_has_alpha ) {
+						$this->image->setOption( 'png:include-chunk', 'tRNS' );
+					} else {
+						$this->image->setOption( 'png:exclude-chunk', 'all' );
+					}
+					if ( ! empty( $this->indexed_max_colors ) && ! ewww_image_optimizer_pngquant_reduce_available() ) {
+						ewwwio_debug_message( "doing quantizeImage on $this->file ($dst_w,$dst_h) to reduce colors from " . $this->image->getImageColors() . " to $this->indexed_max_colors" );
+						$this->image->quantizeImage( $this->indexed_max_colors, $this->image->getColorspace(), 0, false, false );
+						ewwwio_debug_message( "originally we had $current_colors colors, and now we have " . $this->image->getImageColors() );
+						/**
+						 * ImageMagick likes to convert gray indexed images to grayscale.
+						 * So, if the colorspace has changed to 'gray', use the png8 format
+						 * to ensure it stays indexed.
+						 */
+						if ( $alpha_channel_depth > 1 && Imagick::COLORSPACE_GRAY === $this->image->getImageColorspace() ) {
+							ewwwio_debug_message( 'COLORSPACE_GRAY found, but alpha channel is too complicated for png8 mode' );
+							$this->indexed_grayscale_alpha_problem = true;
+						} elseif ( Imagick::COLORSPACE_GRAY === $this->image->getImageColorspace() ) {
+							ewwwio_debug_message( 'COLORSPACE_GRAY found, setting png:format = png8' );
+							$this->image->setOption( 'png:format', 'png8' );
+						}
 					}
 				}
 			}
@@ -813,9 +852,9 @@ class EWWWIO_Imagick_Editor extends WP_Image_Editor_Imagick {
 		chmod( $filename, $perms );
 
 		if ( ewwwio_is_file( $filename ) ) {
-			if ( $this->indexed_color_encoded ) {
+			if ( $this->indexed_max_colors ) {
 				ewwwio_debug_message( "reducing to $this->indexed_max_colors colors" );
-				ewww_image_optimizer_reduce_palette( $filename, $this->indexed_max_colors );
+				ewww_image_optimizer_reduce_palette( $filename, $this->indexed_max_colors, $this->indexed_grayscale_alpha_problem );
 			}
 
 			global $ewww_preempt_editor;
