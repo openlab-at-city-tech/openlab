@@ -15,7 +15,15 @@ The Simple Pull Quote WordPress Plugin provides an easy way for you to insert pu
 
 Simple Pull Quote Wordpress Plugin provides an easy way for you to insert pull quotes into your posts and pages.  It adds an easy-to-use "Pullquote" button to both the HTML and TinyMCE editors. 
 
+IMPORTANT: To use in the new WordPress (Gutenberg) editor, you can either:
+1. [use the "Classic" block](https://ps.w.org/simple-pull-quote/trunk/screenshot-4.gif).![How to use Simple Pull Quote in Gutenberg editor](https://ps.w.org/simple-pull-quote/trunk/screenshot-4.gif "How to use Simple Pull Quote in Gutenberg editor")
+2. Use shortcodes such as `[pullquote class="left”]TEXT HERE[/pullquote]`
 
+
+See the plugin in action as well as how to use it:
+http://youtu.be/JGudI9gr9iE
+
+[youtube http://www.youtube.com/watch?v= JGudI9gr9iE]
 
 == Installation ==
 
@@ -46,21 +54,9 @@ Look me up on [Twitter](http://twitter.com/themightymo "Twitter") or contact me 
 
 == Usage ==
 
-** Gutenberg Editor
-To use in the new WordPress (Gutenberg) editor, you can either:
-1. [Use the "Classic" block.](https://ps.w.org/simple-pull-quote/trunk/screenshot-4.gif).
-2. Use shortcodes such as `[pullquote class="left”]TEXT HERE[/pullquote]`
-
-
-![How to use Simple Pull Quote in Gutenberg editor](https://ps.w.org/simple-pull-quote/trunk/screenshot-4.gif "How to use Simple Pull Quote in Gutenberg editor")
-
-** Classic Editor
 1. Select the text that you want to use as your pull quote.
 2. Click on the "Pullquote" button in either the Visual or HTML editor.
 <br /><br />For more help on usage, visit the [Simple Pull Quote Homepage](http://themightymo.com/simple-pull-quote "Simple Pull Quote Wordpress Plugin") for a visual guide.
-
-
-[See the plugin in action in the Classic Editor as well as how to use it on Youtube.](https://www.youtube.com/watch?v=JGudI9gr9iE)
 
 = How do I update the look of the pull quotes? =
 

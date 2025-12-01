@@ -1,6 +1,6 @@
 (function(){
     // Load plugin specific language pack
-    //tinymce.PluginManager.requireLangPack('spq');
+    tinymce.PluginManager.requireLangPack('spq');
     
     tinymce.create('tinymce.plugins.SPQPlugin', {
         /**
