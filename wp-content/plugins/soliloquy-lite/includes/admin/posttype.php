@@ -668,9 +668,8 @@ class Soliloquy_Lite_Posttype_Admin {
 					return;
 				}
 
-				// Check if the current user can edit others' posts or if they own this post.
-				if ( ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_others_posts', $post_id ) ) {
-					wp_die( 'You do not have permission to edit this slider.' );
+				if ( ! current_user_can( 'edit_post', $post_id ) ) {
+					wp_die( esc_html__( 'You do not have permission to edit this slider.', 'soliloquy' ) );
 				}
 			}
 		}
