@@ -67,8 +67,8 @@
                 {
                     ?>
                         <div id="cpt_info_box">
-                            <p><?php esc_html_e('Did you find this plugin useful? Please support our work by purchasing the advanced version or write an article about this plugin in your blog with a link to our site', 'post-types-order') ?> <a href="https://www.nsp-code.com/" target="_blank"><strong>https://www.nsp-code.com/</strong></a>.</p>
-                            <h4><a href="https://www.nsp-code.com/premium-plugins/advanced-post-types-order/" target="_blank"><img width="151" src="<?php echo CPTURL ?>/images/logo.png" class="attachment-large size-large wp-image-36927" alt=""></a> <?php esc_html_e('Did you know there is available an Advanced version of this plug-in?', 'post-types-order') ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/advanced-post-types-order/"><?php _e('Read more', 'post-types-order') ?></a></h4>
+                            <p><?php esc_html_e('Did you find this plugin useful? Please support our work by purchasing the advanced version or write an article about this plugin in your blog with a link to our site', 'post-types-order') ?> <a href="https://www.nsp-code.com/" target="_blank"><strong>nsp-code.com</strong></a></p>
+                            <h4><a href="https://www.nsp-code.com/premium-plugins/advanced-post-types-order/" target="_blank"><img width="151" src="<?php echo esc_url ( CPTURL . "/images/logo.png" ) ?>" class="attachment-large size-large wp-image-36927" alt=""></a> <?php esc_html_e('Did you know there is available an Advanced version of this plug-in?', 'post-types-order') ?> <a target="_blank" href="https://www.nsp-code.com/premium-plugins/advanced-post-types-order/"><?php esc_html_e('Read more', 'post-types-order') ?></a></h4>
                             <p><?php esc_html_e('Check our', 'post-types-order') ?> <a target="_blank" href="https://wordpress.org/plugins/taxonomy-terms-order/">Category Order - Taxonomy Terms Order</a> <?php esc_html_e('plugin which allow to custom sort categories and custom taxonomies terms', 'post-types-order') ?> </p>
                             <p><span style="color:#CC0000" class="dashicons dashicons-megaphone" alt="f488">&nbsp;</span> <?php esc_html_e('Check our', 'post-types-order') ?> <a href="https://wordpress.org/plugins/wp-hide-security-enhancer/" target="_blank"><b>WP Hide & Security Enhancer</b></a> <?php esc_html_e('an extra layer of security for your site. The easy way to completely hide your WordPress core files, themes and plugins', 'post-types-order') ?>.</p>
                             
@@ -111,7 +111,7 @@
                                     // back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
                                     if ( false !== strpos( $excluded_terms, ' and ' ) ) 
                                         {
-                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( esc_html__( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
+                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( esc_html__( 'Use commas instead of %s to separate excluded terms.', 'post-types-order' ), "'and'" ) );
                                             $excluded_terms = explode( ' and ', $excluded_terms );
                                         } 
                                     else 
@@ -140,10 +140,9 @@
                         
                     $current_menu_order = $post->menu_order;
                     
-                    $query = $wpdb->prepare( "SELECT p.* FROM $wpdb->posts AS p
+                    $results = $wpdb->get_results( $wpdb->prepare( "SELECT p.* FROM $wpdb->posts AS p
                                 $_join
-                                WHERE p.post_date < %s  AND p.menu_order = %d AND p.post_type = %s AND p.post_status = 'publish' $_where" ,  $post->post_date, $current_menu_order, $post->post_type);
-                    $results = $wpdb->get_results($query);
+                                WHERE p.post_date < %s  AND p.menu_order = %d AND p.post_type = %s AND p.post_status = 'publish' $_where" ,  $post->post_date, $current_menu_order, $post->post_type) );
                             
                     if (count($results) > 0)
                             {
@@ -204,7 +203,7 @@
                                     // back-compat, $excluded_terms used to be $excluded_terms with IDs separated by " and "
                                     if ( false !== strpos( $excluded_terms, ' and ' ) ) 
                                         {
-                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( esc_html__( 'Use commas instead of %s to separate excluded terms.' ), "'and'" ) );
+                                            _deprecated_argument( __FUNCTION__, '3.3', sprintf( esc_html__( 'Use commas instead of %s to separate excluded terms.', 'post-types-order' ), "'and'" ) );
                                             $excluded_terms = explode( ' and ', $excluded_terms );
                                         } 
                                     else 
@@ -234,10 +233,9 @@
                     $current_menu_order = $post->menu_order;
                     
                     //check if there are more posts with lower menu_order
-                    $query = $wpdb->prepare( "SELECT p.* FROM $wpdb->posts AS p
+                    $results = $wpdb->get_results( $wpdb->prepare( "SELECT p.* FROM $wpdb->posts AS p
                                 $_join
-                                WHERE p.post_date > %s AND p.menu_order = %d AND p.post_type = %s AND p.post_status = 'publish' $_where", $post->post_date, $current_menu_order, $post->post_type );
-                    $results = $wpdb->get_results($query);
+                                WHERE p.post_date > %s AND p.menu_order = %d AND p.post_type = %s AND p.post_status = 'publish' $_where", $post->post_date, $current_menu_order, $post->post_type ) );
                             
                     if (count($results) > 0)
                             {

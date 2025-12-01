@@ -29,19 +29,20 @@
                     
                     $options    =   $this->CPTO->functions->get_options();
                     
-                    if (isset($_POST['form_submit'])    &&  wp_verify_nonce($_POST['cpto_form_nonce'],'cpto_form_submit'))
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized 
+                    if ( isset($_POST['form_submit'])    &&  isset ( $_POST['cpto_form_nonce'] ) &&  wp_verify_nonce(  wp_unslash( $_POST['cpto_form_nonce'] ),'cpto_form_submit' ) )
                         {
                             
-                            $options['show_reorder_interfaces']             =   array_map( 'sanitize_key', (array) $_POST['show_reorder_interfaces'] );
-                            $options['allow_reorder_default_interfaces']    =   array_map( 'sanitize_key', (array) $_POST['allow_reorder_default_interfaces'] );
+                            $options['show_reorder_interfaces']             =   isset ( $_POST['show_reorder_interfaces'] )             ?   array_map( 'sanitize_key', (array) $_POST['show_reorder_interfaces'] )  :   array();
+                            $options['allow_reorder_default_interfaces']    =   isset ( $_POST['allow_reorder_default_interfaces'] )    ?   array_map( 'sanitize_key', (array) $_POST['allow_reorder_default_interfaces'] ) :   '';
                                 
-                            $options['capability']              = sanitize_key($_POST['capability']);
+                            $options['capability']              = isset ( $_POST['capability'] )            ?  sanitize_key($_POST['capability'])  :   '';
                             
-                            $options['autosort']                = isset($_POST['autosort'])     ? intval($_POST['autosort'])    : '';
-                            $options['adminsort']               = isset($_POST['adminsort'])    ? intval($_POST['adminsort'])   : '';
-                            $options['use_query_ASC_DESC']      = isset($_POST['use_query_ASC_DESC'])    ? intval($_POST['use_query_ASC_DESC'])   : '';
+                            $options['autosort']                = isset($_POST['autosort'])                 ? intval($_POST['autosort'])    : '';
+                            $options['adminsort']               = isset($_POST['adminsort'])                ? intval($_POST['adminsort'])   : '';
+                            $options['use_query_ASC_DESC']      = isset($_POST['use_query_ASC_DESC'])       ? intval($_POST['use_query_ASC_DESC'])   : '';
                             
-                            $options['edit_view_links']         = isset($_POST['edit_view_links'])    ? intval($_POST['edit_view_links'])   : '';
+                            $options['edit_view_links']         = isset($_POST['edit_view_links'])          ? intval($_POST['edit_view_links'])   : '';
                             $options['navigation_sort_apply']   = isset($_POST['navigation_sort_apply'])    ? intval($_POST['navigation_sort_apply'])   : '';
                                                 
                             update_option('cpto_options', $options);
@@ -145,7 +146,7 @@
                                                 <p><input type="checkbox" <?php checked( '1', $options['autosort'] ); ?> id="autosort" value="1" name="autosort"> <?php esc_html_e("If checked, the plug-in automatically update the WordPress queries to use the new order", 'post-types-order'); ?> ( <b><?php esc_html_e("No code update is necessarily", 'post-types-order'); ?></b> )</p>
                                                 <p class="description"><?php esc_html_e("If only certain queries need to use the custom sort, keep this unchecked and include 'orderby' => 'menu_order' into query parameters", 'post-types-order') ?>.
                                                 <br />
-                                                <a href="http://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/" target="_blank"><?php esc_html_e('Additional Description and Examples', 'post-types-order') ?></a></p>
+                                                <a href="https://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin" target="_blank"><?php esc_html_e('Additional Description and Examples', 'post-types-order') ?></a></p>
                                                 
                                             </td>
                                         </tr>
@@ -173,7 +174,7 @@
                                             <th scope="row" style="text-align: right;"><label for="archive_drag_drop"><?php esc_html_e('Archive Drag&Drop ', 'post-types-order') ?></label></th>
                                             <td>
                                                 <p>
-                                                <?php esc_html_e("Enable sortable drag-and-drop functionality within the default WordPress post type archive. An " ); ?><span style="transform: rotate(-90deg);" class='dashicons dashicons-editor-code'></span><?php  esc_html_e(" icon will be displayed on the items, allowing for customization of the order.", 'post-types-order') ?>
+                                                <?php esc_html_e("Enable sortable drag-and-drop functionality within the default WordPress post type archive. An ", 'post-types-order' ); ?><span style="transform: rotate(-90deg);" class='dashicons dashicons-editor-code'></span><?php  esc_html_e(" icon will be displayed on the items, allowing for customization of the order.", 'post-types-order') ?>
                                                 <br />
                                                 <?php  esc_html_e("Admin Sort feature must be activated for this functionality.", 'post-types-order') ?>
                                                 </p>
@@ -228,7 +229,7 @@
                                             <td>
                                                 <p>
                                                 <input type="checkbox" <?php checked( '1', $options['navigation_sort_apply'] ); ?> id="navigation_sort_apply" value="1" name="navigation_sort_apply">
-                                                <?php esc_html_e("Apply the sort on Next / Previous site-wide navigation.", 'post-types-order') ?> <?php esc_html_e('This can also be controlled through', 'post-types-order') ?> <a href="http://www.nsp-code.com/apply-custom-sorting-for-next-previous-site-wide-navigation/" target="_blank"><?php esc_html_e('code', 'post-types-order') ?></a></p>
+                                                <?php esc_html_e("Apply the sort on Next / Previous site-wide navigation.", 'post-types-order') ?> <?php esc_html_e('This can also be controlled through', 'post-types-order') ?> <a href="https://www.nsp-code.com/apply-custom-sorting-for-next-previous-site-wide-navigation/" target="_blank"><?php esc_html_e('code', 'post-types-order') ?></a></p>
                                             </td>
                                         </tr>
                                         
