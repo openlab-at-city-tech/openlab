@@ -3,7 +3,7 @@
 Plugin Name: WP LaTeX
 Plugin URI: http://automattic.com/code/
 Description: Converts inline latex code into PNG images that are displayed in your blog posts and comments.  Use either [latex]e^{\i \pi} + 1 = 0[/latex] or $latex e^{\i \pi} + 1 = 0$ syntax.
-Version: 1.9.2
+Version: 1.9.3
 Author: Automattic, Inc.
 Author URI: http://automattic.com/
 
@@ -32,13 +32,15 @@ class WP_LaTeX {
 	
 		add_action( 'wp_head', array( &$this, 'wp_head' ) );
 
-		add_filter( 'the_content', array( &$this, 'inline_to_shortcode' ), 8 );
-		add_shortcode( 'latex', array( &$this, 'shortcode' ) );
+		add_filter( 'the_content', array( &$this, 'inline_to_shortcode' ), 7 ); // Before wptexturize()
+		add_filter( 'the_content', array( &$this, 'do_this_shortcode' ), 8 );   // Before wpautop()
 
-		// This isn't really correct.  This adds all shortcodes to comments, not just LaTeX
+		add_shortcode( 'latex', array( &$this, 'shortcode' ) );
+		add_filter( 'no_texturize_shortcodes', array( $this, 'add_shortcode_to_list' ) );
+
 		if ( !has_filter( 'comment_text', 'do_shortcode' ) && $this->options['comments'] ) {
-			add_filter( 'comment_text', array( &$this, 'inline_to_shortcode' ) );
-			add_filter( 'comment_text', 'do_shortcode', 31 );
+			add_filter( 'comment_text', array( &$this, 'inline_to_shortcode' ), 7 ); // Before wptexturize()
+			add_filter( 'comment_text', array( &$this, 'do_this_shortcode' ), 8 );   // Before wpautop()
 		}
 	}
 
@@ -53,6 +55,12 @@ class WP_LaTeX {
 /* ]]> */
 </style>
 <?php
+	}
+
+	function add_shortcode_to_list( $shortcodes ) {
+		$shortcodes[] = 'latex';
+
+		return $shortcodes;
 	}
 
 	// [latex size=0 color=000000 background=ffffff]\LaTeX[/latex]
@@ -109,28 +117,67 @@ class WP_LaTeX {
 		if ( false === strpos( $content, '$latex' ) )
 			return $content;
 
-		return preg_replace_callback( '#(\s*)\$latex[= ](.*?[^\\\\])\$(\s*)#', array( &$this, 'inline_to_shortcode_callback' ), $content );
+		$textarr = wp_html_split( $content );
+
+		$regex = '%
+			(\s*) # 1: Leading whitespace
+			\$latex(?:=\s*|\s+)
+			((?:
+				[^$]+ # Not a dollar
+			|
+				(?<=(?<!\\\\)\\\\)\$ # Dollar preceded by exactly one slash
+			)+)   # 2: Content
+			(?<!\\\\)\$ # Dollar preceded by zero slashes
+			(\s*) # 3: Trailing whitespace
+		%ix';
+
+		foreach ( $textarr as &$element ) {
+			if ( '' == $element || '<' === $element[0] ) {
+				continue;
+			}
+
+			if ( false === stripos( $element, '$latex' ) ) {
+				continue;
+			}
+
+			$element = preg_replace_callback( $regex, array( &$this, 'inline_to_shortcode_callback' ), $element );
+		}
+
+		return implode( '', $textarr );
 	}
 
 	function inline_to_shortcode_callback( $matches ) {
 		$r = "{$matches[1]}[latex";
 
-		if ( preg_match( '/.+((?:&#038;|&amp;)s=(-?[0-4])).*/i', $matches[2], $s_matches ) ) {
+		if ( preg_match( '/.+((?:&#038;|&amp;|&)s=(-?[0-4])).*/i', $matches[2], $s_matches ) ) {
 			$r .= ' size="' . (int) $s_matches[2] . '"';
 			$matches[2] = str_replace( $s_matches[1], '', $matches[2] );
 		}
 
-		if ( preg_match( '/.+((?:&#038;|&amp;)fg=([0-9a-f]{6})).*/i', $matches[2], $fg_matches ) ) {
+		if ( preg_match( '/.+((?:&#038;|&amp;|&)fg=([0-9a-f]{6})).*/i', $matches[2], $fg_matches ) ) {
 			$r .= ' color="' . $fg_matches[2] . '"';
 			$matches[2] = str_replace( $fg_matches[1], '', $matches[2] );
 		}
 	
-		if ( preg_match( '/.+((?:&#038;|&amp;)bg=([0-9a-f]{6})).*/i', $matches[2], $bg_matches ) ) {
+		if ( preg_match( '/.+((?:&#038;|&amp;|&)bg=([0-9a-f]{6})).*/i', $matches[2], $bg_matches ) ) {
 			$r .= ' background="' . $bg_matches[2] . '"';
 			$matches[2] = str_replace( $bg_matches[1], '', $matches[2] );
 		}
 
 		return "$r]{$matches[2]}[/latex]{$matches[3]}";
+	}
+
+	function do_this_shortcode( $text ) {
+		$current_shortcodes = $GLOBALS['shortcode_tags'];
+		remove_all_shortcodes();
+
+		add_shortcode( 'latex', array( $this, 'shortcode' ) );
+
+		$text = do_shortcode( $text, true );
+
+		$GLOBALS['shortcode_tags'] = $current_shortcodes;
+
+		return $text;
 	}
 }
 
