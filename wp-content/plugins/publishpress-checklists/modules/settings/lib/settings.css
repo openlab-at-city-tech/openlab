@@ -1,0 +1,448 @@
+/* @override http://localhost:8888/wpplugindev/wp-content/plugins/publishpress/css/settings.css?ver=0.6.4 */
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.clear-left {
+    clear: left;
+}
+
+.clear-right {
+    clear: right;
+}
+
+.clear-both {
+    clear: both;
+}
+
+#modules-wrapper {
+    overflow: hidden;
+}
+
+#modules-wrapper:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+.publishpress-modules {
+    min-width: 340px;
+    max-width: 770px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.publishpress-modules .publishpress-module {
+    width: 210px;
+    min-height: 150px;
+    position: relative;
+    float: left;
+    border: 1px solid #e1e1e1;
+    padding: 14px;
+    background-color: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+
+.publishpress-modules .publishpress-module p {
+    font-size: 12px;
+    color: #3d3d3d;
+    line-height: 150%;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Verdana, "Bitstream Vera Sans", sans-serif;
+}
+
+.publishpress-modules .publishpress-module h4 {
+    color: #000000;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Verdana, "Bitstream Vera Sans", sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1.1;
+    margin: 0;
+    padding: 0;
+}
+
+.publishpress-modules .publishpress-module .publishpress-module-actions {
+    position: absolute;
+    bottom: 0px;
+    left: 10px;
+    width: 210px;
+}
+
+.publishpress-modules .publishpress-module .button-primary {
+    color: #f1f1f1;
+    border: solid 1px #538312;
+    background: #64991e;
+    background: -webkit-gradient(linear, left top, left bottom, from(#86C67C), to(#3D8B37));
+    background: -moz-linear-gradient(top, #86C67C, #3D8B37);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#86C67C', endColorstr='#3D8B37');
+}
+
+.publishpress-modules .publishpress-module .button-primary:hover {
+    color: #FFFFFF;
+    border-color: #3B5D0C;
+}
+
+.publishpress-modules .publishpress-module .button-primary.configure-publishpress-module {
+    color: #f1f1f1;
+    border: solid 1px #666;
+    background: #655997;
+    box-shadow: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#BBB', endColorstr='#888');
+    text-shadow: none;
+}
+
+.publishpress-modules .publishpress-module .button-primary.configure-publishpress-module:hover {
+    color: #FFF;
+    border-color: #7569A7;
+    background: #7569A7;
+}
+
+.publishpress-checklists-admin a.cancel-settings-link {
+    margin-left: 10px;
+}
+
+.publishpress-checklists-admin .inline-edit-row fieldset label span.title {
+    width: 6em;
+}
+
+.publishpress-checklists-admin .inline-edit-row fieldset label span.input-text-wrap {
+    margin-left: 6em;
+}
+
+.publishpress-checklists-admin .explanation,
+.publishpress-checklists-admin .explanation p {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.publishpress-checklists-admin .explanation {
+    margin-bottom: 1em;
+}
+
+.publishpress-checklists-admin .explanation p {
+    margin: 0.5em 0;
+}
+
+.publishpress-checklists-admin .tablenav {
+    display: none;
+}
+
+/* Display drag handles for the cursor on sortable list tables for our custom taxonomies */
+.publishpress-checklists-admin table.wp-list-table tbody.ui-sortable tr.term-static {
+    cursor: move;
+}
+
+.publishpress-checklists-admin table.wp-list-table tbody.ui-sortable tr.ui-sortable-helper td,
+.publishpress-checklists-admin table.wp-list-table tbody.ui-sortable tr.ui-sortable-helper .row-actions {
+    visibility: hidden;
+}
+
+.publishpress-checklists-admin table.wp-list-table tbody.ui-sortable tr.ui-sortable-helper {
+    border: 1px solid #DFDFDF;
+}
+
+.publishpress-checklists-admin table.wp-list-table tbody.ui-sortable tr.ui-sortable-helper td.column-name {
+    visibility: visible;
+    border-bottom: none;
+}
+
+/* Display disabled inputs with a very light gray background */
+.publishpress-checklists-admin input[disabled] {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+/* Styles for disabled pro options */
+.publishpress-checklists-admin .disabled-pro-option {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Pro badge styles */
+.publishpress-checklists-admin .pro-badge {
+    display: inline-block;
+    background-color: #FDB324;
+    color: black;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-left: 5px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.publishpress-modules .publishpress-module input.button,
+.publishpress-modules .publishpress-module a.button {
+    font-weight: normal;
+    margin: 0;
+}
+
+.publishpress-modules .publishpress-module a.button-primary {
+    float: right;
+}
+
+.publishpress-modules .module-icon {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.credits {
+    color: #666666;
+    font-size: 11px;
+}
+
+.credits a {
+    color: #666666;
+}
+
+/* Module specific image styles */
+
+.button-inline-block {
+    display: inline-block;
+}
+
+h3.nav-tab-wrapper {
+    margin-top: 0;
+}
+
+.form-wrap .form-field {
+    margin: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.form-error p {
+    font-weight: bold;
+    color: #CC0000;
+}
+
+.form-wrap p.submit a {
+    font-style: normal;
+}
+
+.enable-disable-publishpress-module {
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    padding-left: 5px !important;
+    color: gray !important;
+    text-shadow: none !important;
+}
+
+.enable-disable-publishpress-module.button-remove {
+    color: black !important;
+}
+
+#modules-wrapper {
+    padding-top: 20px;
+}
+
+#modules-wrapper .module-box {
+    padding: 10px;
+    line-height: 26px;
+    background: #fff;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    max-width: 265px;
+    border: 1px solid #e1e1e1;
+    position: relative;
+    float: left;
+    height: 100px;
+    min-width: 265px;
+}
+
+#modules-wrapper .module-box h4 {
+    max-width: 150px;
+    margin: 0;
+    position: absolute;
+    left: 35px;
+    top: 7px;
+}
+
+#modules-wrapper .module-box .enable-disable-publishpress-module {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    box-shadow: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#BBB', endColorstr='#888');
+    text-shadow: none;
+    color: #f1f1f1;
+    border: solid 1px #bbb;
+    background: #b5b9bD;
+}
+
+#modules-wrapper .module-box.module-enabled .enable-disable-publishpress-module {
+    color: #f1f1f1;
+    border: solid 1px #666;
+    background: #655997;
+}
+
+#modules-wrapper .module-box .enable-disable-publishpress-module:hover {
+    color: #f1f1f1;
+    border: solid 1px #bbb;
+    background: #c5c9cD;
+}
+
+#modules-wrapper .module-box.module-enabled .enable-disable-publishpress-module:hover {
+    color: #fff;
+    border-color: #7569a7;
+    background: #7569a7;
+}
+
+#modules-wrapper .dashicons {
+    color: #b0b0b0;
+}
+
+
+/* Admin Menu Icon */
+#adminmenu .toplevel_page_ppch-settings .wp-menu-image img {
+    width: 16px;
+    height: 16px;
+}
+
+#publishpress-checklists-settings-tabs .nav-tab {
+    margin-bottom: -1px;
+}
+
+
+.ppch-advertisement-right-sidebar .upgrade-btn a {
+    background: #FCB223;
+    color: #000 !important;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 9px 12px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #fca871;
+    break-inside: avoid;
+    white-space: nowrap;
+}
+
+.ppch-advertisement-right-sidebar .upgrade-btn a:hover {
+    background: #fcca46;
+    color: #000 !important;
+}
+
+.ppch-advertisement-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ppseries-token-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ppch-advertisement-right-sidebar h3.hndle {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ppch-advertisement-right-sidebar .inside ul {
+    margin-bottom: 20px;
+}
+
+.ppch-advertisement-right-sidebar .inside ul li {
+    position: relative;
+    padding-left: 22px;
+    font-weight: 600;
+    font-size: .9em;
+}
+
+.ppch-advertisement-right-sidebar .inside ul li:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    background-color: #3C50FF;
+    mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+    -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z'/></svg>");
+    mask-size: 16px;
+    -webkit-mask-size: 16px;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: left;
+    -webkit-mask-position: left;
+}
+
+.ppch-advertisement-right-sidebar a.advert-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.ppch-advertisement-right-sidebar .advertisement-box-header {
+    background: #655897;
+    color: #ffffff;
+}
+
+.ppch-advertisement-right-sidebar .advertisement-box-content {
+    border: 1px solid #655897;
+}
+
+.pp-columns-wrapper.pp-enable-sidebar .pp-column-left {
+	width: 75%;
+}
+
+.pp-columns-wrapper.pp-enable-sidebar .pp-column-right {
+	width: calc( 25% - 20px );
+	margin-left: 20px;
+}
+
+.pp-columns-wrapper.pp-enable-sidebar .pp-column-left,
+.pp-columns-wrapper.pp-enable-sidebar .pp-column-right {
+	float: left;
+}
+
+
+@media only screen and (min-width: 1075px) {
+    .ppch-advertisement-right-sidebar-message,
+    .upgrade-btn {
+        display: inline-block;
+    }
+
+    .ppch-advertisement-right-sidebar-message {
+        margin-right: 25px;
+    }
+}
+
+@media only screen and (max-width: 1074px) {
+    .ppch-advertisement-right-sidebar-message,
+    .upgrade-btn {
+        display: block;
+    }
+
+    .upgrade-btn {
+        margin-top: 20px;
+    }
+
+    .upgrade-btn a {
+        max-width: 170px;
+    }
+}
+
