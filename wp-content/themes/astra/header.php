@@ -38,8 +38,7 @@ if ( apply_filters( 'astra_header_profile_gmpg_link', true ) ) {
 
 <a
 	class="skip-link screen-reader-text"
-	href="#content"
-	title="<?php echo esc_attr( astra_default_strings( 'string-header-skip-link', false ) ); ?>">
+	href="#content">
 		<?php echo esc_html( astra_default_strings( 'string-header-skip-link', false ) ); ?>
 </a>
 

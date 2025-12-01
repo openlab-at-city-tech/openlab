@@ -115,6 +115,7 @@ class Astra_Gutenberg {
 		if (
 			isset( $block['blockName'] ) && isset( $block['attrs']['layout']['inherit'] ) && $block['attrs']['layout']['inherit']
 		) {
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, simple string replacement with quoted pattern
 			$block_content = preg_replace(
 				'/' . preg_quote( 'class="', '/' ) . '/',
 				'class="inherit-container-width ',

@@ -1,5 +1,16 @@
 *** Astra Changelog ***
 
+2025-11-11 - version 4.11.15
+* Fix: Astra theme was throwing a ReactDOM console warning in the Customizer.
+
+2025-11-04 - version 4.11.14
+* Improvement: Enhanced accessibility for the “Skip to Content” link.
+* Fix: Resolved an issue where the forum title was not displayed on the frontend when using the BuddyBoss plugin with the Forum module enabled.
+* Fix: Resolved an issue in WooCommerce integration to ensure quantity buttons are disabled for “sold individually” products on single product pages.
+* Fix: Resolved an issue where Google Fonts in the Customizer showed limited font weights in Astra.
+* Fix: Resolved a minor issue where the Columns block might not display at full width in some cases.
+* Fix: Resolved a broken color picker UI issue in the Blog Archive metabox.
+
 2025-10-07 - version 4.11.13
 * Improvement: Added lazy-loading for Google Fonts in Customizer to improve performance and reduce extra PHP memory consume by loading fonts via AJAX only when needed.
 * Improvement: Added LifterLMS compatibility on course catalog page.

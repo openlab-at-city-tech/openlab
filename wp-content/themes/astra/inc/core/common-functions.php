@@ -40,6 +40,7 @@ if ( ! function_exists( 'astra_get_foreground_color' ) ) {
 
 		if ( strpos( $hex, 'rgba' ) !== false ) {
 
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier.
 			$rgba = preg_replace( '/[^0-9,]/', '', $hex );
 			$rgba = explode( ',', $rgba );
 
@@ -1944,6 +1945,7 @@ function astra_get_filter_svg( $filter_id, $color ) {
 	$svg = ob_get_clean();
 
 	// Clean up the whitespace.
+	// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, normalizes whitespace in SVG output
 	$svg = preg_replace( "/[\r\n\t ]+/", ' ', $svg );
 	$svg = str_replace( '> <', '><', $svg );
 	return trim( $svg );

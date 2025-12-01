@@ -174,6 +174,7 @@ if ( ! class_exists( 'Astra_Woocommerce' ) ) {
 		public function add_active_filter_widget_class( $block_content, $block ) {
 
 			if ( isset( $block['blockName'] ) && isset( $block['attrs']['displayStyle'] ) && 'chips' === $block['attrs']['displayStyle'] ) {
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, simple string replacement with quoted pattern
 				$block_content = preg_replace(
 					'/' . preg_quote( 'class="', '/' ) . '/',
 					'class="ast-woo-active-filter-widget ',

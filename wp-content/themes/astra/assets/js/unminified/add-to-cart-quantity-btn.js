@@ -72,6 +72,12 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
 
         if ( $quantityBoxes && 'date' !== $quantityBoxes.getAttribute( 'type' ) && 'hidden' !== $quantityBoxes.getAttribute( 'type' ) ) {
 
+            // Skip adding buttons if max quantity is 1 (sold individually)
+            var $maxQuantity = $quantityBoxes.getAttribute( 'max' );
+            if ( $maxQuantity && parseFloat( $maxQuantity ) === 1 ) {
+                continue;
+            }
+
             // Add plus and minus icons.
             $qty_parent = $quantityBoxes.parentElement;
 

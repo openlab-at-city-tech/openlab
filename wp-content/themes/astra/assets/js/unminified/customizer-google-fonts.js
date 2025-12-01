@@ -5,108 +5,85 @@
  * @since 4.11.13
  */
 
-(function($) {
+(function ($) {
 	'use strict';
 
 	/**
-	 * Initialize Google Fonts AJAX loading
+	 * Re-initialize font weights for all typography controls
 	 */
-	function initGoogleFontsLoader() {
-		if (typeof AstFontFamilies !== 'undefined' && AstFontFamilies.googleLoaded === false) {
-			loadGoogleFonts();
+	function reinitializeFontWeights() {
+		if (typeof wp === 'undefined' || typeof wp.customize === 'undefined' || typeof AstTypography === 'undefined') {
+			return;
 		}
+
+		$('.customize-control-ast-font-family select').each(function () {
+			var link = $(this).data('customize-setting-link');
+			var weight = $(this).data('connected-control');
+
+			if (weight && link && wp.customize(link)) {
+				AstTypography._setFontWeightOptions.apply(wp.customize(link), [true]);
+			}
+		});
 	}
 
 	/**
 	 * Load Google Fonts via AJAX
 	 */
 	function loadGoogleFonts() {
-		let data = {
-			action: 'astra_load_google_fonts',
-			nonce: astraCustomizer.customizer_nonce
-		};
-
 		$.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: data,
-			dataType: 'json',
-			success: function(response) {
-				if (response.success && response.data) {
-					if (typeof AstFontFamilies !== 'undefined') {
-						AstFontFamilies.google = response.data.google || {};
-						AstFontFamilies.custom = response.data.custom || AstFontFamilies.custom || {};
-						AstFontFamilies.googleLoaded = true;
-
-						$(document).trigger('astraGoogleFontsLoaded', [AstFontFamilies]);
-					}
-				}
+			data: {
+				action: 'astra_load_google_fonts',
+				nonce: astraCustomizer.customizer_nonce
 			},
-			error: function(xhr, status, error) {
-				console.warn('Astra: Failed to load Google Fonts via AJAX:', error);
-				
-				loadGoogleFontsFallback();
-			}
-		});
-	}
+			success: function (response) {
+				if (response.success && response.data) {
+					var fontData = response.data.data || response.data;
 
-	/**
-	 * Fallback method to load Google Fonts synchronously
-	 */
-	function loadGoogleFontsFallback() {
-		let data = {
-			action: 'astra_load_google_fonts',
-			nonce: astraCustomizer.customizer_nonce
-		};
-
-		$.post(ajaxurl, data, function(response) {
-			if (response.success && response.data) {
-				if (typeof AstFontFamilies !== 'undefined') {
-					AstFontFamilies.google = response.data.google || {};
-					AstFontFamilies.custom = response.data.custom || AstFontFamilies.custom || {};
+					AstFontFamilies.google = fontData.google || {};
+					AstFontFamilies.custom = fontData.custom || AstFontFamilies.custom || {};
 					AstFontFamilies.googleLoaded = true;
 
+					// Update React component's font data
+					if (typeof window.AstraBuilderCustomizerData !== 'undefined') {
+						window.AstraBuilderCustomizerData.googleFonts = fontData.google || {};
+					}
+
 					$(document).trigger('astraGoogleFontsLoaded', [AstFontFamilies]);
+					reinitializeFontWeights();
 				}
+			},
+			error: function () {
+				// Fallback: try once more with $.post
+				$.post(ajaxurl, {
+					action: 'astra_load_google_fonts',
+					nonce: astraCustomizer.customizer_nonce
+				}, function (response) {
+					if (response.success && response.data) {
+						var fontData = response.data.data || response.data;
+
+						AstFontFamilies.google = fontData.google || {};
+						AstFontFamilies.custom = fontData.custom || AstFontFamilies.custom || {};
+						AstFontFamilies.googleLoaded = true;
+
+						// Update React component's font data
+						if (typeof window.AstraBuilderCustomizerData !== 'undefined') {
+							window.AstraBuilderCustomizerData.googleFonts = fontData.google || {};
+						}
+
+						$(document).trigger('astraGoogleFontsLoaded', [AstFontFamilies]);
+						reinitializeFontWeights();
+					}
+				});
 			}
-		}).fail(function() {
-			console.error('Astra: Google Fonts fallback loading also failed');
 		});
 	}
 
-	/**
-	 * Get Google Font data with loading support
-	 * This replaces direct access to AstFontFamilies.google
-	 */
-	window.astraGetGoogleFonts = function(callback) {
-		if (typeof AstFontFamilies !== 'undefined') {
-			if (AstFontFamilies.googleLoaded) {
-				// Fonts already loaded, return immediately
-				if (callback && typeof callback === 'function') {
-					callback(AstFontFamilies.google);
-				}
-				return AstFontFamilies.google;
-			} else {
-				// Fonts not loaded, wait for them
-				$(document).on('astraGoogleFontsLoaded', function(event, fontFamilies) {
-					if (callback && typeof callback === 'function') {
-						callback(fontFamilies.google);
-					}
-				});
-				return {};
-			}
-		}
-		return {};
-	};
-
 	// Initialize when customizer is ready
-	wp.customize.bind('ready', function() {
-		setTimeout(initGoogleFontsLoader, 100);
-	});
-
-	$(document).ready(function() {
-		if (typeof wp === 'undefined' || typeof wp.customize === 'undefined') {
-			setTimeout(initGoogleFontsLoader, 500);
+	wp.customize.bind('ready', function () {
+		if (typeof AstFontFamilies !== 'undefined' && AstFontFamilies.googleLoaded === false) {
+			setTimeout(loadGoogleFonts, 100);
 		}
 	});
 

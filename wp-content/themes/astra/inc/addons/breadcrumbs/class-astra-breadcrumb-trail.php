@@ -331,6 +331,7 @@ class Astra_Breadcrumb_Trail {
 
 				// Wrap the item with its itemprop.
 				$item = ! empty( $matches ) && $this->args['schema']
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, adds schema.org markup to breadcrumb links
 					? preg_replace( '/(<a.*?)([\'"])>/i', '$1$2 itemprop=$2item$2>', $item )
 					: sprintf( '<span>%s</span>', $item );
 

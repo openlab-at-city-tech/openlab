@@ -420,7 +420,7 @@
 	padding: 8px 18px;
 	border-radius: 30px;
 	border: 1px solid #5c2ede;
-	background-color: #5c2ede;
+	background: linear-gradient(-90deg, #EB1B99 -23.83%, #321978 28.86%, #321978 49.67%, #321978 74.52%, #5810FF 109.73%);
 	color: var( --ast-customizer-color-9 );
 	font-size: 13px !important;
 	font-weight: 400;
@@ -428,6 +428,12 @@
 	text-align: center;
 	cursor: pointer;
 	gap: 12px;
+}
+
+.ast-upgrade-pro-heading{
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
 }
 
 .customize-control-ast-button-link .ast-button-link:hover,
@@ -1390,8 +1396,8 @@ section.ast-palette-presets-inner-wrap {
 }
 
 .ast-field-settings-modal .astra-color-picker-wrap {
-	position: relative;
-	top: 10px;
+	position: absolute;
+	top: 25px;
 }
 
 .ast-color-palette .components-circular-option-picker__option-wrapper {
@@ -4925,7 +4931,6 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 .customize-control-ast-slider .ast-slider-wrap,
 .customize-control-ast-responsive-slider .ast-slider-wrap {
 	position: relative;
-	z-index: 1;
 }
 
 .components-range-control__wrapper .components-range-control__track {
@@ -5510,7 +5515,7 @@ li#customize-control-astra-settings-header-preset-style .customizer-text {
 }
 
 .ast-group-tabs .ui-widget-content {
-	overflow: hidden;
+	overflow: visible;
 	/*padding-top: 15px;*/
 }
 
@@ -6787,8 +6792,12 @@ a.ast-upgrade-trigger:active {
 	font-size: 14px;
 	line-height: 18px;
 	font-weight: 500;
-	color: #4E26BF;
+	color: #8843E1;
 	margin: 0;
+}
+
+.ast-brand-logo img{
+	width:100% !important;
 }
 
 .ast-pro-upgrade-item {
