@@ -1,6 +1,6 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 5.0.2
+Stable tag: 5.1.3
 Tags: FontAwesome, icon, svg icon, iconfont, webfont
 Requires at least: 5.8
 Tested up to: 6.8
@@ -117,6 +117,9 @@ You can get more information about using the plugin, details for available setti
 
 
 == Upgrade Notice ==
+= 5.1.1 =
+* When upgrading to this version, you'll need to reload the WP admin dashboard, or simply visit the Font Awesome plugin's settings page, in order to cause the plugin to re-fetch a required SVG stylesheet.
+
 = 5.0.1 =
 * When upgrading to this version, you'll need to reload the WP admin dashboard, or simply visit the Font Awesome
 plugin's settings page, in order to cause the plugin to fetch a required SVG stylesheet. The correct stylesheet
@@ -187,6 +190,41 @@ If you're using the Icon Chooser, you'll need to use a Pro Kit. (The CDN can onl
 
 
 == Changelog ==
+= 5.1.3 =
+
+* Resolve a compatibility conflict with Toolset Types in the classic editor.
+
+= 5.1.2 =
+
+* Fix a bug where clicking "Style" on a rich text icon (inside a paragraph block, for example), would
+  result in an error in the block editor. This bug was introduced in 5.1.1 and does not affect
+  icons created as blocks--only those added as inline rich text.
+
+= 5.1.1 =
+
+* Enable changing the icon within the block editor styling UI.
+* Fix a bug in block editor icon styling UI where the theme color palette options were incorrect when
+  any custom colors were defined in the theme.
+* Fix animations on SVGs in some use cases when added in the block editor. This loads a different SVG
+  support stylesheet that includes the animations CSS rules.
+* Fix a bug where when there are multiple empty icon blocks, changing an icon in one might affect others.
+  The now function independently of one another as expected.
+
+= 5.1.0 =
+
+* Minor updates to support Font Awesome 7.
+* Allow kits to use a version "7.x".
+* Update icon chooser to support Font Awesome 7.
+* Use the new svg.css for SVG support styling. (Reverted in 5.1.1)
+
+= 5.0.2 =
+
+* Fix a bug in the Classic Editor involving interaction with some other plugins, where the Font Awesome
+  media button would not be visible.
+* Make it an admin warning instead of an error when the plugin can't fetch SVG support stylesheet.
+* Add a `font_awesome_disable_block_editor_support` filter to allow disabling the block editor support entirely.
+* Changes to enable usage of the self-hosted SVG support stylesheet on systems where file system access is not available.
+
 = 5.0.1 =
 * Automatically fetch the SVG stylesheet any time the WP admin dashboard or Font Awesome plugin settings
 page is loaded. This stylesheet is required for the new embedded SVG icons to display correctly when they

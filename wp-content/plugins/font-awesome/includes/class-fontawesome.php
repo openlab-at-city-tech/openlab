@@ -136,7 +136,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	public const PLUGIN_VERSION = '5.0.2';
+	public const PLUGIN_VERSION = '5.1.3';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -866,6 +866,19 @@ class FontAwesome {
 	}
 
 	/**
+	 * Returns the latest available version of Font Awesome 7 as a string,
+	 * or null if the releases metadata has not yet been successfully retrieved from the
+	 * API server.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @return null|string
+	 */
+	public function latest_version_7() {
+		return $this->release_provider()->latest_version_7();
+	}
+
+	/**
 	 * Queries the Font Awesome API to load releases metadata. Results are stored
 	 * in the wp database.
 	 *
@@ -1415,7 +1428,8 @@ class FontAwesome {
 					$options_for_comparison,
 					$client_preferences,
 					$this->latest_version_5(),
-					$this->latest_version_6()
+					$this->latest_version_6(),
+					$this->latest_version_7()
 				);
 				if ( count( $current_conflicts ) > 0 ) {
 					$conflicts[ $client_name ] = $current_conflicts;
@@ -1669,13 +1683,17 @@ class FontAwesome {
 					true
 				);
 
+				/** While this plugin's Classic Editor support does depend on tinymce
+				 * being loaded, the wp-tinymce dependency has intentionally been omitted
+				 * here due to compatibility problems with Toolset.
+				 * See: https://wordpress.org/support/topic/cant-edit-post_content-in-classic-editor-if-plugin-v5-0-1-or-v5-0-2-is-active/
+				 */
 				wp_register_script(
 					self::RESOURCE_HANDLE_CLASSIC_EDITOR,
 					trailingslashit( FONTAWESOME_DIR_URL ) . 'classic-editor/build/index.js',
 					array(
 						self::ADMIN_RESOURCE_HANDLE,
 						self::RESOURCE_HANDLE_ICON_CHOOSER,
-						'wp-tinymce',
 						'jquery',
 					),
 					self::PLUGIN_VERSION,
@@ -1701,6 +1719,7 @@ class FontAwesome {
 										'available'        => $this->release_provider()->versions(),
 										'latest_version_5' => $this->latest_version_5(),
 										'latest_version_6' => $this->latest_version_6(),
+										'latest_version_7' => $this->latest_version_7(),
 									),
 									'pluginVersion'       => FontAwesome::PLUGIN_VERSION,
 									'preferenceConflicts' => $this->conflicts_by_option(),
@@ -1895,6 +1914,7 @@ class FontAwesome {
 			'options'                       => $this->options(),
 			'webpackPublicPath'             => trailingslashit( FONTAWESOME_DIR_URL ) . 'admin/build/',
 			'disableRichTextIcons'          => $this->disable_rich_text_icons(),
+			'assetsBaseUrlOverride'         => FONTAWESOME_ASSETS_BASE_URL_OVERRIDE,
 		);
 	}
 
@@ -3109,6 +3129,8 @@ EOT;
 			$concrete_version = $this->latest_version_5();
 		} elseif ( '6.x' === $version ) {
 			$concrete_version = $this->latest_version_6();
+		} elseif ( '7.x' === $version ) {
+			$concrete_version = $this->latest_version_7();
 		} else {
 			$concrete_version = $version;
 		}
