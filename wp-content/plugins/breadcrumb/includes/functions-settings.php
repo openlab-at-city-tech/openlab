@@ -30,8 +30,8 @@ function breadcrumb_settings_tabs_content_options()
 
 
     <div class="section">
-        <div class="section-title"><?php echo __('General option', 'breadcrumb'); ?></div>
-        <p class="description section-description"><?php echo __('Set some basic option to get start.', 'breadcrumb'); ?></p>
+        <div class="section-title"><?php esc_html_e('General option', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php esc_html_e('Set some basic option to get start.', 'breadcrumb'); ?></p>
 
         <?php
 
@@ -286,8 +286,8 @@ function breadcrumb_settings_tabs_content_builder()
 
 ?>
     <div class="section">
-        <div class="section-title"><?php echo __('Breadcrumb builder', 'breadcrumb'); ?></div>
-        <p class="description section-description"><?php echo __('Build your own breadcrumb.', 'breadcrumb'); ?></p>
+        <div class="section-title"><?php esc_html_e('Breadcrumb builder', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php esc_html_e('Build your own breadcrumb.', 'breadcrumb'); ?></p>
 
         <?php
 
@@ -296,10 +296,7 @@ function breadcrumb_settings_tabs_content_builder()
         ?>
         <script>
             jQuery(document).ready(function($) {
-                breadcrumb_tag_options = <?php echo $breadcrumb_tag_options; ?>;
-
-                console.log(breadcrumb_tag_options);
-
+                breadcrumb_tag_options = <?php echo wp_json_encode($breadcrumb_tag_options); ?>;
 
                 $(document).on('click', '.breadcrumb-tags span', function() {
                     tag_id = $(this).attr('tag_id');
@@ -345,9 +342,6 @@ function breadcrumb_settings_tabs_content_builder()
                 <h2 style="margin: 50px 0 10px 0;font-size:25px"><?php echo ucfirst(str_replace('_', ' ', esc_html($view_type))); ?></h2>
                 <hr>
                 <?php
-
-
-
 
                 foreach ($view as $postType => $postTypeData) :
 
@@ -399,7 +393,10 @@ function breadcrumb_settings_tabs_content_builder()
                             else :
                             ?>
                                 <div class="empty-element">
-                                    <?php echo sprintf(__('%s Click to add tags.', 'breadcrumb'), '<i class="far fa-hand-point-up"></i>') ?>
+                                    <?php
+                                    /* translators: %s: Icon HTML */
+
+                                    echo sprintf(__('%s Click to add tags.', 'breadcrumb'), '<i class="far fa-hand-point-up"></i>') ?>
                                 </div>
                             <?php
                             endif;
@@ -505,8 +502,8 @@ function breadcrumb_settings_tabs_content_style()
 
 ?>
     <div class="section">
-        <div class="section-title"><?php echo __('Choose style', 'breadcrumb'); ?></div>
-        <p class="description section-description"><?php echo __('Customize the breadcrumb.', 'breadcrumb'); ?></p>
+        <div class="section-title"><?php esc_html_e('Choose style', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php esc_html_e('Customize the breadcrumb.', 'breadcrumb'); ?></p>
 
         <?php
 
@@ -633,8 +630,8 @@ function breadcrumb_settings_tabs_content_style()
     </div>
 
     <div class="section">
-        <div class="section-title"><?php echo __('Display Dynamically', 'breadcrumb'); ?></div>
-        <p class="description section-description"><?php echo __('Display dynamically by action hooks.', 'breadcrumb'); ?></p>
+        <div class="section-title"><?php esc_html_e('Display Dynamically', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php esc_html_e('Display dynamically by action hooks.', 'breadcrumb'); ?></p>
 
 
         <?php
@@ -700,8 +697,8 @@ function breadcrumb_settings_tabs_content_custom_scripts()
 
 ?>
     <div class="section">
-        <div class="section-title"><?php echo __('Custom scripts', 'breadcrumb'); ?></div>
-        <p class="description section-description"><?php echo __('Add your own scripts and style css.', 'breadcrumb'); ?></p>
+        <div class="section-title"><?php esc_html_e('Custom scripts', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php esc_html_e('Add your own scripts and style css.', 'breadcrumb'); ?></p>
 
         <?php
 
@@ -756,8 +753,8 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
 
     ?>
         <div class="section">
-            <div class="section-title"><?php echo __('Get support', 'breadcrumb'); ?></div>
-            <p class="description section-description"><?php echo __('Use following to get help and support from our expert team.', 'breadcrumb'); ?></p>
+            <div class="section-title"><?php esc_html_e('Get support', 'breadcrumb'); ?></div>
+            <p class="description section-description"><?php esc_html_e('Use following to get help and support from our expert team.', 'breadcrumb'); ?></p>
 
             <?php
 
@@ -766,16 +763,16 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
             ?>
 
             <div class="copy-to-clipboard">
-                <input type="text" value="[breadcrumb]"> <span class="copied"><?php echo __('Copied', 'breadcrumb'); ?></span>
-                <p class="description"><?php echo __('You can use this shortcode under post content', 'breadcrumb'); ?></p>
+                <input type="text" value="[breadcrumb]"> <span class="copied"><?php esc_html_e('Copied', 'breadcrumb'); ?></span>
+                <p class="description"><?php esc_html_e('You can use this shortcode under post content', 'breadcrumb'); ?></p>
             </div>
 
 
             <div class="copy-to-clipboard">
                 <textarea cols="50" rows="2" style="background:#bfefff" onClick="this.select();"><?php echo '<?php echo do_shortcode("[breadcrumb';
                                                                                                     echo "]";
-                                                                                                    echo '"); ?>'; ?></textarea> <span class="copied"><span class="copied"><?php echo __('Copied', 'breadcrumb'); ?></span>
-                    <p class="description"><?php echo __('PHP Code, you can use under theme .php files.', 'breadcrumb'); ?></p>
+                                                                                                    echo '"); ?>'; ?></textarea> <span class="copied"><span class="copied"><?php esc_html_e('Copied', 'breadcrumb'); ?></span>
+                    <p class="description"><?php esc_html_e('PHP Code, you can use under theme .php files.', 'breadcrumb'); ?></p>
             </div>
 
 
@@ -817,26 +814,26 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
             ob_start();
             ?>
 
-            <p><?php echo __('Ask question for free on our forum and get quick reply from our expert team members.', 'breadcrumb'); ?></p>
-            <a class="button" href="https://www.pickplugins.com/create-support-ticket/"><?php echo __('Create support ticket', 'breadcrumb'); ?></a>
+            <p><?php esc_html_e('Ask question for free on our forum and get quick reply from our expert team members.', 'breadcrumb'); ?></p>
+            <a class="button" href="https://www.pickplugins.com/create-support-ticket/"><?php esc_html_e('Create support ticket', 'breadcrumb'); ?></a>
 
-            <p><?php echo __('Read our documentation before asking your question.', 'breadcrumb'); ?></p>
-            <a class="button" href="https://www.pickplugins.com/documentation/breadcrumb/"><?php echo __('Documentation', 'breadcrumb'); ?></a>
+            <p><?php esc_html_e('Read our documentation before asking your question.', 'breadcrumb'); ?></p>
+            <a class="button" href="https://www.pickplugins.com/documentation/breadcrumb/"><?php esc_html_e('Documentation', 'breadcrumb'); ?></a>
 
-            <p><?php echo __('Watch video tutorials.', 'breadcrumb'); ?></p>
-            <a class="button" href="https://www.youtube.com/playlist?list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><i class="fab fa-youtube"></i> <?php echo __('All tutorials', 'breadcrumb'); ?></a>
+            <p><?php esc_html_e('Watch video tutorials.', 'breadcrumb'); ?></p>
+            <a class="button" href="https://www.youtube.com/playlist?list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><i class="fab fa-youtube"></i> <?php esc_html_e('All tutorials', 'breadcrumb'); ?></a>
 
             <ul>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HTbEIOEcc0c&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><?php echo __('Install & setup', 'breadcrumb'); ?></a></li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=jc1EzF_5kxs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=2"><?php echo __('Limit link text', 'breadcrumb'); ?></a></li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=91fC7hOl6W0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=3"><?php echo __('Customize home text', 'breadcrumb'); ?></a></li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=B3xpe9BZWWI&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=4"><?php echo __('Install pro and setup', 'breadcrumb'); ?></a> [Premium]</li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=xdPiM7UlNTs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=5"><?php echo __('Hide on archives', 'breadcrumb'); ?></a> [Premium]</li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=l1LA5m6HaRQ&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=6"><?php echo __('Hide by post types', 'breadcrumb'); ?></a> [Premium]</li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=LJg_d7UUTEA&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=7"><?php echo __('Hide by post ids', 'breadcrumb'); ?></a> [Premium]</li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=7mYp27fzXY0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=8"><?php echo __('Change style', 'breadcrumb'); ?></a></li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HgFRmOqi-yk&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=9"><?php echo __('Build your own breadcrumb', 'breadcrumb'); ?></a></li>
-                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=KjyBEhzH-N8&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=10"><?php echo __('Customize breadcrumb items', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HTbEIOEcc0c&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><?php esc_html_e('Install & setup', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=jc1EzF_5kxs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=2"><?php esc_html_e('Limit link text', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=91fC7hOl6W0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=3"><?php esc_html_e('Customize home text', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=B3xpe9BZWWI&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=4"><?php esc_html_e('Install pro and setup', 'breadcrumb'); ?></a> [Premium]</li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=xdPiM7UlNTs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=5"><?php esc_html_e('Hide on archives', 'breadcrumb'); ?></a> [Premium]</li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=l1LA5m6HaRQ&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=6"><?php esc_html_e('Hide by post types', 'breadcrumb'); ?></a> [Premium]</li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=LJg_d7UUTEA&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=7"><?php esc_html_e('Hide by post ids', 'breadcrumb'); ?></a> [Premium]</li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=7mYp27fzXY0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=8"><?php esc_html_e('Change style', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HgFRmOqi-yk&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=9"><?php esc_html_e('Build your own breadcrumb', 'breadcrumb'); ?></a></li>
+                <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=KjyBEhzH-N8&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=10"><?php esc_html_e('Customize breadcrumb items', 'breadcrumb'); ?></a></li>
 
             </ul>
 
@@ -862,9 +859,9 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
             ob_start();
             ?>
 
-            <p class=""><?php echo __('We wish your 2 minutes to write your feedback about plugin. give us 5 star.', 'breadcrumb'); ?> <span style="color: #ffae19"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></p>
+            <p class=""><?php esc_html_e('We wish your 2 minutes to write your feedback about plugin. give us 5 star.', 'breadcrumb'); ?> <span style="color: #ffae19"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></p>
 
-            <a target="_blank" href="https://wordpress.org/support/plugin/breadcrumb/reviews/#new-post" class="button"><i class="fab fa-wordpress"></i> <?php echo __('Write a review', 'breadcrumb'); ?></a>
+            <a target="_blank" href="https://wordpress.org/support/plugin/breadcrumb/reviews/#new-post" class="button"><i class="fab fa-wordpress"></i> <?php esc_html_e('Write a review', 'breadcrumb'); ?></a>
 
 
             <?php
@@ -907,8 +904,8 @@ if (!function_exists('breadcrumb_settings_tabs_content_buy_pro')) {
 
     ?>
         <div class="section">
-            <div class="section-title"><?php echo __('Get Premium', 'breadcrumb'); ?></div>
-            <p class="description section-description"><?php echo __('Thanks for using our plugin, if you looking for some advance feature please buy premium version.', 'breadcrumb'); ?></p>
+            <div class="section-title"><?php esc_html_e('Get Premium', 'breadcrumb'); ?></div>
+            <p class="description section-description"><?php esc_html_e('Thanks for using our plugin, if you looking for some advance feature please buy premium version.', 'breadcrumb'); ?></p>
 
             <?php
 
@@ -916,92 +913,92 @@ if (!function_exists('breadcrumb_settings_tabs_content_buy_pro')) {
             ob_start();
             ?>
 
-            <p><?php echo __('If you love our plugin and want more feature please consider to buy pro version.', 'breadcrumb'); ?></p>
-            <a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a>
+            <p><?php esc_html_e('If you love our plugin and want more feature please consider to buy pro version.', 'breadcrumb'); ?></p>
+            <a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php esc_html_e('Buy premium', 'breadcrumb'); ?></a>
 
-            <h2><?php echo __('See the differences', 'breadcrumb'); ?></h2>
+            <h2><?php esc_html_e('See the differences', 'breadcrumb'); ?></h2>
 
             <table class="pro-features">
                 <thead>
                     <tr>
-                        <th class="col-features"><?php echo __('Features', 'breadcrumb'); ?></th>
-                        <th class="col-free"><?php echo __('Free', 'breadcrumb'); ?></th>
-                        <th class="col-pro"><?php echo __('Premium', 'breadcrumb'); ?></th>
+                        <th class="col-features"><?php esc_html_e('Features', 'breadcrumb'); ?></th>
+                        <th class="col-free"><?php esc_html_e('Free', 'breadcrumb'); ?></th>
+                        <th class="col-pro"><?php esc_html_e('Premium', 'breadcrumb'); ?></th>
                     </tr>
                 </thead>
                 <tr>
-                    <td class="col-features"><?php echo __('Hide on archives', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Hide on archives', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-times"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
                 <tr>
-                    <td class="col-features"><?php echo __('Hide by post types', 'breadcrumb'); ?></td>
-                    <td><i class="fas fa-times"></i></td>
-                    <td><i class="fas fa-check"></i></td>
-                </tr>
-
-
-                <tr>
-                    <td class="col-features"><?php echo __('Hide by post ids', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Hide by post types', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-times"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
+
                 <tr>
-                    <td class="col-features"><?php echo __('Extra ready 10 themes', 'breadcrumb'); ?></td>
-                    <td><i class="fas fa-times"></i></td>
-                    <td><i class="fas fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb builder for archives', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Hide by post ids', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-times"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb builder for posttypes', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Extra ready 10 themes', 'breadcrumb'); ?></td>
+                    <td><i class="fas fa-times"></i></td>
+                    <td><i class="fas fa-check"></i></td>
+                </tr>
+                <tr>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb builder for archives', 'breadcrumb'); ?></td>
+                    <td><i class="fas fa-times"></i></td>
+                    <td><i class="fas fa-check"></i></td>
+                </tr>
+
+                <tr>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb builder for posttypes', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb front text', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb front text', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb separator text', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb separator text', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Display or hide last separator', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Display or hide last separator', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb link text limit', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb link text limit', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Ending character', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Ending character', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Display "Home" on breadcrumb', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Display "Home" on breadcrumb', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <td class="col-features"><?php echo __('Custom home text', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Custom home text', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
@@ -1009,36 +1006,36 @@ if (!function_exists('breadcrumb_settings_tabs_content_buy_pro')) {
 
 
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb text font size', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb text font size', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
                 <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb link background color', 'breadcrumb'); ?></td>
-                    <td><i class="fas fa-check"></i></td>
-                    <td><i class="fas fa-check"></i></td>
-                </tr>
-
-                <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb link color', 'breadcrumb'); ?></td>
-                    <td><i class="fas fa-check"></i></td>
-                    <td><i class="fas fa-check"></i></td>
-                </tr>
-                <tr>
-                    <td class="col-features"><?php echo __('Breadcrumb separator color', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb link background color', 'breadcrumb'); ?></td>
                     <td><i class="fas fa-check"></i></td>
                     <td><i class="fas fa-check"></i></td>
                 </tr>
 
                 <tr>
-                    <th class="col-features"><?php echo __('Features', 'breadcrumb'); ?></th>
-                    <th class="col-free"><?php echo __('Free', 'breadcrumb'); ?></th>
-                    <th class="col-pro"><?php echo __('Premium', 'breadcrumb'); ?></th>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb link color', 'breadcrumb'); ?></td>
+                    <td><i class="fas fa-check"></i></td>
+                    <td><i class="fas fa-check"></i></td>
                 </tr>
                 <tr>
-                    <td class="col-features"><?php echo __('Buy now', 'breadcrumb'); ?></td>
+                    <td class="col-features"><?php esc_html_e('Breadcrumb separator color', 'breadcrumb'); ?></td>
+                    <td><i class="fas fa-check"></i></td>
+                    <td><i class="fas fa-check"></i></td>
+                </tr>
+
+                <tr>
+                    <th class="col-features"><?php esc_html_e('Features', 'breadcrumb'); ?></th>
+                    <th class="col-free"><?php esc_html_e('Free', 'breadcrumb'); ?></th>
+                    <th class="col-pro"><?php esc_html_e('Premium', 'breadcrumb'); ?></th>
+                </tr>
+                <tr>
+                    <td class="col-features"><?php esc_html_e('Buy now', 'breadcrumb'); ?></td>
                     <td> </td>
-                    <td><a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a></td>
+                    <td><a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php esc_html_e('Buy premium', 'breadcrumb'); ?></a></td>
                 </tr>
 
             </table>
@@ -1131,33 +1128,33 @@ if (!function_exists('breadcrumb_settings_tabs_right_panel_options')) {
     {
 
     ?>
-        <h3><?php echo __('Help & Support', 'breadcrumb'); ?></h3>
-        <p><?php echo __('Ask question for free on our forum and get quick reply from our expert team members.', 'breadcrumb'); ?></p>
-        <a class="button" href="https://www.pickplugins.com/create-support-ticket/"><?php echo __('Create support ticket', 'breadcrumb'); ?></a>
+        <h3><?php esc_html_e('Help & Support', 'breadcrumb'); ?></h3>
+        <p><?php esc_html_e('Ask question for free on our forum and get quick reply from our expert team members.', 'breadcrumb'); ?></p>
+        <a class="button" href="https://www.pickplugins.com/create-support-ticket/"><?php esc_html_e('Create support ticket', 'breadcrumb'); ?></a>
 
-        <p><?php echo __('Read our documentation before asking your question.', 'breadcrumb'); ?></p>
-        <a class="button" href="https://www.pickplugins.com/documentation/breadcrumb/"><?php echo __('Documentation', 'breadcrumb'); ?></a>
+        <p><?php esc_html_e('Read our documentation before asking your question.', 'breadcrumb'); ?></p>
+        <a class="button" href="https://www.pickplugins.com/documentation/breadcrumb/"><?php esc_html_e('Documentation', 'breadcrumb'); ?></a>
 
-        <p><?php echo __('Watch video tutorials.', 'breadcrumb'); ?></p>
-        <a class="button" href="https://www.youtube.com/playlist?list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><i class="fab fa-youtube"></i> <?php echo __('All tutorials', 'breadcrumb'); ?></a>
+        <p><?php esc_html_e('Watch video tutorials.', 'breadcrumb'); ?></p>
+        <a class="button" href="https://www.youtube.com/playlist?list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><i class="fab fa-youtube"></i> <?php esc_html_e('All tutorials', 'breadcrumb'); ?></a>
 
         <ul>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HTbEIOEcc0c&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><?php echo __('Install & setup', 'breadcrumb'); ?></a></li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=jc1EzF_5kxs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=2"><?php echo __('Limit link text', 'breadcrumb'); ?></a></li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=91fC7hOl6W0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=3"><?php echo __('Customize home text', 'breadcrumb'); ?></a></li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=B3xpe9BZWWI&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=4"><?php echo __('Install pro and setup', 'breadcrumb'); ?></a> [Premium]</li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=xdPiM7UlNTs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=5"><?php echo __('Hide on archives', 'breadcrumb'); ?></a> [Premium]</li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=l1LA5m6HaRQ&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=6"><?php echo __('Hide by post types', 'breadcrumb'); ?></a> [Premium]</li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=LJg_d7UUTEA&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=7"><?php echo __('Hide by post ids', 'breadcrumb'); ?></a> [Premium]</li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=7mYp27fzXY0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=8"><?php echo __('Change style', 'breadcrumb'); ?></a></li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HgFRmOqi-yk&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=9"><?php echo __('Build your own breadcrumb', 'breadcrumb'); ?></a></li>
-            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=KjyBEhzH-N8&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=10"><?php echo __('Customize breadcrumb items', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HTbEIOEcc0c&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb"><?php esc_html_e('Install & setup', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=jc1EzF_5kxs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=2"><?php esc_html_e('Limit link text', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=91fC7hOl6W0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=3"><?php esc_html_e('Customize home text', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=B3xpe9BZWWI&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=4"><?php esc_html_e('Install pro and setup', 'breadcrumb'); ?></a> [Premium]</li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=xdPiM7UlNTs&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=5"><?php esc_html_e('Hide on archives', 'breadcrumb'); ?></a> [Premium]</li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=l1LA5m6HaRQ&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=6"><?php esc_html_e('Hide by post types', 'breadcrumb'); ?></a> [Premium]</li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=LJg_d7UUTEA&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=7"><?php esc_html_e('Hide by post ids', 'breadcrumb'); ?></a> [Premium]</li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=7mYp27fzXY0&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=8"><?php esc_html_e('Change style', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=HgFRmOqi-yk&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=9"><?php esc_html_e('Build your own breadcrumb', 'breadcrumb'); ?></a></li>
+            <li><i class="far fa-dot-circle"></i> <a href="https://www.youtube.com/watch?v=KjyBEhzH-N8&list=PL0QP7T2SN94bnUjguNbBXAjW1yJjjeLtb&index=10"><?php esc_html_e('Customize breadcrumb items', 'breadcrumb'); ?></a></li>
 
         </ul>
 
-        <h3><?php echo __('Submit reviews', 'breadcrumb'); ?></h3>
+        <h3><?php esc_html_e('Submit reviews', 'breadcrumb'); ?></h3>
 
-        <p class=""><?php echo __('We wish your 2 minutes to write your feedback about plugin. give us', 'breadcrumb'); ?> <br /><span style="color: #ffae19"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></p>
+        <p class=""><?php esc_html_e('We wish your 2 minutes to write your feedback about plugin. give us', 'breadcrumb'); ?> <br /><span style="color: #ffae19"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></p>
 
         <a target="_blank" href="https://wordpress.org/support/plugin/breadcrumb/reviews/#new-post" class="button"><i class="fab fa-wordpress"></i> Write a review</a>
 

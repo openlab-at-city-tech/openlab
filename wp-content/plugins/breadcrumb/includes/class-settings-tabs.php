@@ -686,7 +686,7 @@ if (!class_exists('settings_tabs_field')) {
 
             <div id="input-wrapper-<?php echo esc_attr($css_id); ?>" class=" input-wrapper field-repeatable-wrapper
             field-repeatable-wrapper-<?php echo esc_attr($css_id); ?>">
-                <div add_html="<?php echo esc_attr($fieldHtml); ?>" class="add-repeat-field"><i class="far fa-plus-square"></i> <?php _e('Add', $this->textdomain); ?></div>
+                <div add_html="<?php echo esc_attr($fieldHtml); ?>" class="add-repeat-field"><i class="far fa-plus-square"></i> <?php esc_html_e('Add', $this->textdomain); ?></div>
                 <div class="repeatable-field-list sortable" id="<?php echo esc_attr($css_id); ?>">
                     <?php
                     if (!empty($values)) :
