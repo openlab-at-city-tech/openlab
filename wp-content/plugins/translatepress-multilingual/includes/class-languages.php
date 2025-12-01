@@ -243,6 +243,24 @@ class TRP_Languages{
 	 */
 	public function reorder_languages( $languages_array, $english_or_native_name ){
 		$english_array = array();
+
+        // Remove English (United States) language before sorting
+        $keyToMoveFirst = 'en_US';
+        if ( isset( $languages_array[ $keyToMoveFirst ] ) ) {
+            $english_united_states = $languages_array[ $keyToMoveFirst ];
+            unset( $languages_array[ $keyToMoveFirst ] );
+        }
+
+        // Remove English (United Kingdom) language before sorting
+        $keyToMoveSecond = 'en_GB';
+        if ( isset( $languages_array[ $keyToMoveSecond ] ) ) {
+            $english_united_kingdom = $languages_array[ $keyToMoveSecond ];
+            unset( $languages_array[ $keyToMoveSecond ] );
+        }
+
+        // Sort languages by name
+        asort($languages_array);
+
 		foreach( $languages_array as $key => $value ){
 			if ( $this->string_trim_after_character( $key, '_' ) == 'en' ){
 				$english_array[$key] = $value;
@@ -250,7 +268,19 @@ class TRP_Languages{
 			}
 		}
 
-		return $english_array + $languages_array;
+        // Add English languages back
+        $languages_array = $english_array + $languages_array;
+
+        // Move English (United Kingdom) language to the second position of the array
+        if ( isset( $english_united_kingdom ) ) {
+            $languages_array = array( $keyToMoveSecond => $english_united_kingdom ) + $languages_array;
+        }
+
+        // Move English (United States) language to the first position of the array
+        if ( isset( $english_united_states ) ) {
+            $languages_array = array( $keyToMoveFirst => $english_united_states ) + $languages_array;
+        }
+		return $languages_array;
 	}
 
     /**
@@ -265,4 +295,70 @@ class TRP_Languages{
 		$decoded = json_decode( $string, true );
 		return $decoded['translations'];
 	}
+
+    /**
+     * Merge extra languages with existing WP languages but don't overwrite WP languages
+     *
+     * @param $languages
+     * @return mixed
+     */
+    public function add_extra_languages( $languages ) {
+        $extra_languages = $this->get_extra_languages();
+        foreach ( $extra_languages as $key => $extra_language ) {
+
+            // check just in case WP adds a language from the extra languages array
+            if ( isset( $languages[ $key ] ) ) {
+                continue;
+            } else {
+                $languages[ $key ] = $extra_language;
+            }
+        }
+
+        return $languages;
+    }
+
+    /**
+     * Languages supported by DeepL but not found in WP
+     *
+     * @return array
+     */
+    public function get_extra_languages() {
+        return array(
+            'ace' => array( 'language' => 'ace', 'english_name' => 'Acehnese', 'native_name' => 'Acehnese', 'iso' => array( 'ace' ) ),
+            'ay'  => array( 'language' => 'ay', 'english_name' => 'Aymara', 'native_name' => 'Aymara', 'iso' => array( 'ay' ) ),
+            'ba'  => array( 'language' => 'ba', 'english_name' => 'Bashkir', 'native_name' => 'Bashkir', 'iso' => array( 'ba' ) ),
+            'bho' => array( 'language' => 'bho', 'english_name' => 'Bhojpuri', 'native_name' => 'Bhojpuri', 'iso' => array( 'bho' ) ),
+            'br'  => array( 'language' => 'br', 'english_name' => 'Breton', 'native_name' => 'Breton', 'iso' => array( 'br' ) ),
+            'ga'  => array( 'language' => 'ga', 'english_name' => 'Irish', 'native_name' => 'Irish', 'iso' => array( 'ga' ) ),
+            'gn'  => array( 'language' => 'gn', 'english_name' => 'Guarani', 'native_name' => 'Guarani', 'iso' => array( 'gn' ) ),
+            'gom' => array( 'language' => 'gom', 'english_name' => 'Konkani', 'native_name' => 'Konkani', 'iso' => array( 'gom' ) ),
+            'ha'  => array( 'language' => 'ha', 'english_name' => 'Hausa', 'native_name' => 'Hausa', 'iso' => array( 'ha' ) ),
+            'ht'  => array( 'language' => 'ht', 'english_name' => 'Haitian Creole', 'native_name' => 'Haitian Creole', 'iso' => array( 'ht' ) ),
+            'ig'  => array( 'language' => 'ig', 'english_name' => 'Igbo', 'native_name' => 'Igbo', 'iso' => array( 'ig' ) ),
+            'kmr' => array( 'language' => 'kmr', 'english_name' => 'Kurdish (Kurmanji)', 'native_name' => 'Kurdish (Kurmanji)', 'iso' => array( 'kmr' ) ),
+            'la'  => array( 'language' => 'la', 'english_name' => 'Latin', 'native_name' => 'Latin', 'iso' => array( 'la' ) ),
+            'lb'  => array( 'language' => 'lb', 'english_name' => 'Luxembourgish', 'native_name' => 'Luxembourgish', 'iso' => array( 'lb' ) ),
+            'lmo' => array( 'language' => 'lmo', 'english_name' => 'Lombard', 'native_name' => 'Lombard', 'iso' => array( 'lmo' ) ),
+            'ln'  => array( 'language' => 'ln', 'english_name' => 'Lingala', 'native_name' => 'Lingala', 'iso' => array( 'ln' ) ),
+            'mai' => array( 'language' => 'mai', 'english_name' => 'Maithili', 'native_name' => 'Maithili', 'iso' => array( 'mai' ) ),
+            'mg'  => array( 'language' => 'mg', 'english_name' => 'Malagasy', 'native_name' => 'Malagasy', 'iso' => array( 'mg' ) ),
+            'mi'  => array( 'language' => 'mi', 'english_name' => 'Maori', 'native_name' => 'Maori', 'iso' => array( 'mi' ) ),
+            'mt'  => array( 'language' => 'mt', 'english_name' => 'Maltese', 'native_name' => 'Maltese', 'iso' => array( 'mt' ) ),
+            'pag' => array( 'language' => 'pag', 'english_name' => 'Pangasinan', 'native_name' => 'Pangasinan', 'iso' => array( 'pag' ) ),
+            'pam' => array( 'language' => 'pam', 'english_name' => 'Kapampangan', 'native_name' => 'Kapampangan', 'iso' => array( 'pam' ) ),
+            'prs' => array( 'language' => 'prs', 'english_name' => 'Dari', 'native_name' => 'Dari', 'iso' => array( 'prs' ) ),
+            'qu'  => array( 'language' => 'qu', 'english_name' => 'Quechua', 'native_name' => 'Quechua', 'iso' => array( 'qu' ) ),
+            'sa'  => array( 'language' => 'sa', 'english_name' => 'Sanskrit', 'native_name' => 'Sanskrit', 'iso' => array( 'sa' ) ),
+            'scn' => array( 'language' => 'scn', 'english_name' => 'Sicilian', 'native_name' => 'Sicilian', 'iso' => array( 'scn' ) ),
+            'su'  => array( 'language' => 'su', 'english_name' => 'Sundanese', 'native_name' => 'Sundanese', 'iso' => array( 'su' ) ),
+            'tg'  => array( 'language' => 'tg', 'english_name' => 'Tajik', 'native_name' => 'Tajik', 'iso' => array( 'tg' ) ),
+            'tk'  => array( 'language' => 'tk', 'english_name' => 'Turkmen', 'native_name' => 'Turkmen', 'iso' => array( 'tk' ) ),
+            'tn'  => array( 'language' => 'tn', 'english_name' => 'Tswana', 'native_name' => 'Tswana', 'iso' => array( 'tn' ) ),
+            'ts'  => array( 'language' => 'ts', 'english_name' => 'Tsonga', 'native_name' => 'Tsonga', 'iso' => array( 'ts' ) ),
+            'wo'  => array( 'language' => 'wo', 'english_name' => 'Wolof', 'native_name' => 'Wolof', 'iso' => array( 'wo' ) ),
+            'xh'  => array( 'language' => 'xh', 'english_name' => 'Xhosa', 'native_name' => 'Xhosa', 'iso' => array( 'xh' ) ),
+            'yue' => array( 'language' => 'yue', 'english_name' => 'Cantonese', 'native_name' => 'Cantonese', 'iso' => array( 'yue' ) )
+        );
+
+    }
 }

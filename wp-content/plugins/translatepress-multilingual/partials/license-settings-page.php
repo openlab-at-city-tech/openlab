@@ -84,7 +84,8 @@ if ( $license_status == 'valid' ) {
                                         <?php
                                         printf(
                                             esc_html__( 'Manage your license in your %1$s.', 'translatepress-multilingual' ),
-                                            '<a href="' . esc_url( 'https://translatepress.com/account/' ) . '" target="_blank">' . esc_html__( 'Account Page', 'translatepress-multilingual' ) . '</a>'
+                                            //[utm56]
+                                            '<a href="' . esc_url( 'https://translatepress.com/account/?utm_source=tp-license&utm_medium=client-site&utm_campaign=license-account' ) . '" target="_blank">' . esc_html__( 'Account Page', 'translatepress-multilingual' ) . '</a>'
                                         );
                                         ?>
                                     </p>
@@ -131,7 +132,7 @@ if ( $license_status == 'valid' ) {
                                 </div>
 
                                 <div>
-                                    <a href="https://translatepress.com/ai-free/?utm_source=wpbackend&utm_medium=clientsite&utm_content=license-page&utm_campaign=tpaifree" class="trp-submit-btn" target="_blank"><?php esc_html_e("Get a free License Today", 'translatepress-multilingual') ?></a>
+                                    <a href="https://translatepress.com/ai-free/?utm_source=tp-license&utm_medium=client-site&utm_campaign=tp-ai-free" class="trp-submit-btn" target="_blank"><?php esc_html_e("Get a free License Today", 'translatepress-multilingual') /* [utm57] */ ?></a>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +220,7 @@ Response Body:
                         <div class="trp-settings-container trp-license-page-upsell-container-content">
                             <div class="trp-upgrade-notice">
                                 <?php esc_html_e( 'Get more AI words and unlock all features with TranslatePress Pro.', 'translatepress-multilingual' ); ?>
-                                <a class="trp-upgrade-notice-button" href="https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=license-page&utm_campaign=upsell"><span><?php esc_html_e( 'Upgrade now ↗', 'translatepress-multilingual' ); ?></span></a>
+                                <a class="trp-upgrade-notice-button" href="https://translatepress.com/pricing/?utm_source=tp-license&utm_medium=client-site&utm_campaign=license-upsell"><span><?php esc_html_e( 'Upgrade now ↗', 'translatepress-multilingual' ); /* [utm58] */ ?></span></a>
 
                             </div>
                             <h3 class="trp-settings-secondary-heading">
@@ -233,7 +234,8 @@ Response Body:
                                     <?php
                                     printf(
                                         esc_html__( 'Go to your %1$s', 'translatepress-multilingual' ),
-                                        '<a href="' . esc_url( 'https://translatepress.com/account/' ) . '" target="_blank">' . esc_html__( 'TranslatePress.com Account', 'translatepress-multilingual' ) . '</a>'
+                                        // [utm59]
+                                        '<a href="' . esc_url( 'https://translatepress.com/account/?utm_source=tp-license&utm_medium=client-site&utm_campaign=license-account' ) . '" target="_blank">' . esc_html__( 'TranslatePress.com Account', 'translatepress-multilingual' ) . '</a>'
                                     );
                                     ?>
                                 </span>
@@ -246,7 +248,7 @@ Response Body:
                             </div>
 
                             <div>
-                                <a href="https://translatepress.com/docs/installation/" class="trp-button-secondary" target="_blank"><?php esc_html_e("Learn More", 'translatepress-multilingual') ?></a>
+                                <a href="https://translatepress.com/docs/installation/?utm_source=tp-license&utm_medium=client-site&utm_campaign=installation-guide" class="trp-button-secondary" target="_blank"><?php esc_html_e("Learn More", 'translatepress-multilingual') /* [utm60] */ ?></a>
                             </div>
                         </div>
                 </div>

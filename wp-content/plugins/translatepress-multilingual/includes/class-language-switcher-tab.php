@@ -30,21 +30,47 @@ class TRP_Language_Switcher_Tab {
 
     /**
      * Retrieve the nested language_switcher config.
-     * Fallback to defaults
+     * - If option is missing/empty: seed with defaults.
+     * - If option exists but misses keys: complete only the missing keys (deep), then update option.
      *
      * @return array
      */
     public function get_initial_config(): array {
-        $saved = get_option('trp_language_switcher_settings', null);
-
-        if ( is_array( $saved ) && !empty( $saved ) )
-            return $saved;
-
+        $saved    = get_option( 'trp_language_switcher_settings', null );
         $defaults = self::default_switcher_config();
+        $changed  = false;
 
-        update_option( 'trp_language_switcher_settings', $defaults );
+        // Option is not set or is invalid - use defaults
+        if ( !is_array( $saved ) || empty( $saved ) ) {
+            update_option( 'trp_language_switcher_settings', $defaults );
 
-        return $defaults;
+            return $defaults;
+        }
+
+        // Recursive merge that only fills missing keys
+        $merge_missing = static function ( array $have, array $defaults ) use ( &$changed, &$merge_missing ): array {
+            foreach ( $defaults as $key => $def_val ) {
+                if ( !array_key_exists( $key, $have ) ) {
+                    $have[ $key ] = $def_val;
+                    $changed = true;
+
+                    continue;
+                }
+
+                if ( is_array( $def_val ) && is_array( $have[ $key ] ) ) {
+                    $have[ $key ] = $merge_missing( $have[ $key ], $def_val );
+                }
+            }
+
+            return $have;
+        };
+
+        $completed = $merge_missing( $saved, $defaults );
+
+        if ( $changed )
+            update_option( 'trp_language_switcher_settings', $completed );
+
+        return $completed;
     }
 
     /**
@@ -126,7 +152,7 @@ class TRP_Language_Switcher_Tab {
                 'clickLanguage'     => false,
                 'layoutCustomizer'  => $layoutCustomizerDefault['shortcode'],
                 'enableTransitions' => true,
-
+                'oppositeLanguage'  => false
             ],
             'menu' => [
                 'layoutCustomizer' => $layoutCustomizerDefault['menu'],
@@ -255,7 +281,8 @@ class TRP_Language_Switcher_Tab {
                 'customCss'         => 'css',
                 'layoutCustomizer'  => 'layoutCustomizer',
                 'clickLanguage'     => 'bool',
-                'enableTransitions' => 'bool'
+                'enableTransitions' => 'bool',
+                'oppositeLanguage'  => 'bool'
             ],
             'menu' => [
                 'flagShape'        => 'text',
@@ -458,11 +485,16 @@ class TRP_Language_Switcher_Tab {
 
     /**
      * Enqueue the Vue app script & CSS.
+     * @param ?string $hook
      */
-    public function enqueue_assets( string $hook ): void {
-        if ( 'admin_page_trp_language_switcher' !== $hook ) {
-            return;
+    public function enqueue_assets( $hook = null ): void {
+        if ( !is_string( $hook ) && function_exists( 'get_current_screen' ) ) {
+            $screen = get_current_screen();
+            $hook   = $screen ? $screen->id : '';
         }
+
+        if ( 'admin_page_trp_language_switcher' !== $hook )
+            return;
 
         $script_url = TRP_PLUGIN_URL . 'assets/js/trp-lang-switcher-configurator.js';
         $style_url  = TRP_PLUGIN_URL . 'assets/css/trp-lang-switcher-configurator.css';

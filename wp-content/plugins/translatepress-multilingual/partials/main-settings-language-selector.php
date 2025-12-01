@@ -135,9 +135,9 @@
             <span class="trp-upgrade-notice-text">
                 <?php esc_html_e( 'Adding more than two languages is a paid feature. Upgrade TranslatePress and unlock more premium features.', 'translatepress-multilingual'); ?>
             </span>
-            <a href="https://translatepress.com/pricing/">
+            <a href="https://translatepress.com/pricing/?utm_source=tp-website-languages&utm_medium=client-site&utm_campaign=add-languages">
                 <span class="trp-upgrade-notice-button">
-                    <span> Upgrade now </span>
+                    <span><?php esc_html_e('Upgrade now', 'translatepress-multilingual'); /* [utm65]*/ ?> </span>
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17 7.3252L7 17.3252M17 7.3252H8M17 7.3252V16.3252" stroke="#354052" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -155,7 +155,8 @@
                 printf( esc_html__('Please %1$senter your license%2$s key first to add more languages.', 'translatepress-multilingual'), '<a href="' . esc_url( admin_url('admin.php?page=trp_license_key') ) . '">', '</a>');
             }
             elseif( $license_status !== 'valid' ){
-                printf( esc_html__('You need an active license to add more languages. Verify in your %1$saccount%2$s that your license is valid', 'translatepress-multilingual'), '<a target="_blank" href="https://translatepress.com/account/?utm_source=tp-website-languages&utm_medium=client-site&utm_campaign=expired-license">', '</a>');
+                // [utm66]
+                printf( esc_html__('You need an active license to add more languages. Verify in your %1$saccount%2$s that your license is valid', 'translatepress-multilingual'), '<a target="_blank" href="https://translatepress.com/account/?utm_source=tp-website-languages&utm_medium=client-site&utm_campaign=pro-no-active-license">', '</a>');
             }
             elseif( $license_status === 'valid' ){
                 printf( esc_html__('To Add more languages activate the Multiple Languages Addon', 'translatepress-multilingual') );

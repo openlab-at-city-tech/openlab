@@ -140,7 +140,11 @@ class TRP_Url_Converter {
             !in_array( 'rank_math/sitemap/url', $wp_current_filter ) &&
             !in_array( 'aiosp_sitemap_data',    $wp_current_filter ) &&
             !in_array( 'aioseo_sitemap_terms',  $wp_current_filter ) &&
-            !in_array( 'aioseo_sitemap_posts',  $wp_current_filter )
+            !in_array( 'aioseo_sitemap_posts',  $wp_current_filter ) &&
+            !in_array( 'slim_seo_sitemap_post',  $wp_current_filter ) &&
+            !in_array( 'slim_seo_sitemap_term',  $wp_current_filter ) &&
+            !in_array( 'slim_seo_sitemap_homepage',  $wp_current_filter ) &&
+            !in_array( 'slim_seo_sitemap_post_type_archive',  $wp_current_filter )
         ){
             return true;
         }

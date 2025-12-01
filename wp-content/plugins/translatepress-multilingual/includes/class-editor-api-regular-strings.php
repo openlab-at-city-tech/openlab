@@ -172,7 +172,7 @@ class TRP_Editor_Api_Regular_Strings {
 	protected function extract_original_strings( $strings, $original_array, $id_array ){
 		if ( count( $strings ) > 0 ) {
 			foreach ($id_array as $id) {
-				if ( is_object( $strings[$id] ) ){
+				if ( isset($strings[$id]) && is_object( $strings[$id] ) ){
 					$original_array[] = $strings[ $id ]->original;
 				}
 			}

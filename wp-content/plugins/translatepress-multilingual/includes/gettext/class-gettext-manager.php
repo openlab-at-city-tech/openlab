@@ -42,9 +42,9 @@ class TRP_Gettext_Manager {
 	 * Create a global with the gettext strings that exist in the database
 	 */
 	public function create_gettext_translated_global() {
-
 		global $trp_translated_gettext_texts, $trp_translated_gettext_texts_language;
-		if ( $this->processing_gettext_is_needed() ) {
+        // Create gettext translated global only if processing is needed
+        if ( $this->processing_gettext_is_needed() ) {
 			$language = get_locale();
 
 			if ( in_array( $language, $this->settings['translation-languages'] ) ) {
@@ -115,39 +115,47 @@ class TRP_Gettext_Manager {
 		$this->call_gettext_filters( 'woocommerce_' );
 	}
 
-	public function processing_gettext_is_needed() {
-		global $pagenow;
+    public function processing_gettext_is_needed() {
+        global $pagenow;
 
-		if ( ! $this->url_converter ) {
-			$trp                 = TRP_Translate_Press::get_trp_instance();
-			$this->url_converter = $trp->get_component( 'url_converter' );
-		}
-		if ( $this->is_admin_request === null ) {
-			$this->is_admin_request = $this->url_converter->is_admin_request();
-		}
+        if ( ! $this->url_converter ) {
+            $trp                 = TRP_Translate_Press::get_trp_instance();
+            $this->url_converter = $trp->get_component( 'url_converter' );
+        }
+        if ( $this->is_admin_request === null ) {
+            $this->is_admin_request = $this->url_converter->is_admin_request();
+        }
 
-		// Do not process gettext strings on wp-login pages. Do not process strings in admin area except for when when is_ajax_on_frontend. Do not process gettext strings when is rest api from admin url referer. Do not process gettext on xmlrpc.pho
-		return ( ( $pagenow != 'wp-login.php' ) && ( ! is_admin() || $this::is_ajax_on_frontend() ) && ! $this->is_admin_request && $pagenow != 'xmlrpc.php' );
-	}
+        $should_process = (
+            ( $pagenow != 'wp-login.php' )
+            && ( ! is_admin() || $this::is_ajax_on_frontend() )
+            && ! $this->is_admin_request
+            && $pagenow != 'xmlrpc.php'
+        );
+
+        return apply_filters( 'trp_processing_gettext_is_needed', $should_process );
+    }
 
 	public function call_gettext_filters( $prefix = '' ) {
-		if ( $this->processing_gettext_is_needed() ) {
-			add_filter( 'gettext', array(
-				$this->process_gettext,
-				$prefix . 'process_gettext_strings_no_context'
-			), 100, 3 );
-			add_filter( 'gettext_with_context', array(
-				$this->process_gettext,
-				$prefix . 'process_gettext_strings_with_context'
-			), 100, 4 );
-			add_filter( 'ngettext', array( $this->process_gettext, $prefix . 'process_ngettext_strings' ), 100, 5 );
-			add_filter( 'ngettext_with_context', array(
-				$this->process_gettext,
-				$prefix . 'process_ngettext_strings_with_context'
-			), 100, 6 );
+        // Add gettext filters only if processing is needed
+        if ( !$this->processing_gettext_is_needed() )
+            return;
 
-			do_action( 'trp_call_gettext_filters' );
-		}
+        add_filter( 'gettext', array(
+            $this->process_gettext,
+            $prefix . 'process_gettext_strings_no_context'
+        ), 100, 3 );
+        add_filter( 'gettext_with_context', array(
+            $this->process_gettext,
+            $prefix . 'process_gettext_strings_with_context'
+        ), 100, 4 );
+        add_filter( 'ngettext', array( $this->process_gettext, $prefix . 'process_ngettext_strings' ), 100, 5 );
+        add_filter( 'ngettext_with_context', array(
+            $this->process_gettext,
+            $prefix . 'process_ngettext_strings_with_context'
+        ), 100, 6 );
+
+        do_action( 'trp_call_gettext_filters' );
 	}
 
 	public function is_domain_loaded_in_locale( $domain, $locale ) {

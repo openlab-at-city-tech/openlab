@@ -11,6 +11,11 @@
     border-radius:0;
 }
 
+#wp-admin-bar-wp-rocket .trp-flag-image {
+    width: 18px !important;
+    height: 12px !important;
+}
+
 /*
  *  Shortcode Language Switcher
  */

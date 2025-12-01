@@ -137,7 +137,6 @@ class TRP_String_Translation {
         wp_localize_script( 'trp-string-translation-editor', 'trp_editor_data', $this->translation_manager->get_trp_editor_data() );
         wp_localize_script( 'trp-string-translation-editor', 'trp_string_translation_data', $this->get_string_translation_data() );
 
-
         // Show upload media dialog in default language
         switch_to_locale( $this->settings['default-language'] );
         // Necessary for add media button
@@ -260,7 +259,7 @@ class TRP_String_Translation {
 	        'last_page'                  => esc_html__( 'Navigate to last page', 'translatepress-multilingual' ),
 	        'navigate_to_page'           => esc_html__( 'Type a page number to navigate to', 'translatepress-multilingual' ),
 	        'wrong_page'                 => esc_html__( 'Incorrect page number. Type a page number between 1 and total number of pages', 'translatepress-multilingual' ),
-	        'search_tooltip'             => esc_html__( 'Search original strings containing typed keywords while also matching selected filters', 'translatepress-multilingual' ),
+	        'search_tooltip'             => html_entity_decode(esc_html__( 'Search original and translated strings containing typed keywords while also matching selected filters. Place string in quotes for exact match: "string"', 'translatepress-multilingual' )),
 	        'filter_tooltip'             => esc_html__( 'Filter strings according to selected translation status, filters and keywords and selected filters', 'translatepress-multilingual' ),
 	        'clear_filter_tooltip'       => esc_html__( 'Removes selected filters', 'translatepress-multilingual' ),
 	        'select_all_tooltip'         => esc_html__( 'See options for selecting all strings', 'translatepress-multilingual' ),

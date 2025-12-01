@@ -168,11 +168,13 @@ class TRP_Translation_Manager {
                 'extra_upsell_row5'                 => esc_html__( 'Translate by Browsing as User Role', 'translatepress-multilingual' ),
                 'extra_upsell_row6'                 => esc_html__( 'Different Menu Items for each Language', 'translatepress-multilingual' ),
                 'extra_upsell_row7'                 => esc_html__( 'Automatic User Language Detection', 'translatepress-multilingual' ),
-                'extra_upsell_button'               => wp_kses( sprintf( '<a class="button-primary" target="_blank" href="%s">%s</a>', esc_url( trp_add_affiliate_id_to_link( 'https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpeditor&utm_campaign=tpfree' ) ), __( 'Upgrade to PRO', 'translatepress-multilingual' ) ), array( 'a' => [ 'class' => [], 'target' => [], 'href' => [] ] ) ),
+                //[utm30]
+                'extra_upsell_button'               => wp_kses( sprintf( '<a class="button-primary" target="_blank" href="%s">%s</a>', esc_url( trp_add_affiliate_id_to_link( 'https://translatepress.com/pricing/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=tp-editor-upsell' ) ), __( 'Upgrade to PRO', 'translatepress-multilingual' ) ), array( 'a' => [ 'class' => [], 'target' => [], 'href' => [] ] ) ),
                 // Black Friday
                 'extra_upsell_bf_row1'              => esc_html__( 'Upgrade to PRO with our biggest discount of the year!', 'translatepress-multilingual' ),
                 'extra_upsell_bf_row2'              => esc_html__( 'This Black Friday, get access to these features and more at a fraction of the costs:', 'translatepress-multilingual' ),
-                'extra_upsell_bf_button'            => wp_kses( sprintf( '<a class="button-primary" target="_blank" href="%s">%s</a>', esc_url( trp_add_affiliate_id_to_link( 'https://translatepress.com/black-friday/?utm_source=tpeditor&utm_medium=clientsite&utm_campaign=BF-2024' ) ), __( 'Upgrade to PRO', 'translatepress-multilingual' ) ), array( 'a' => [ 'class' => [], 'target' => [], 'href' => [] ] ) ),
+                //[utm31]
+                'extra_upsell_bf_button'            => wp_kses( sprintf( '<a class="button-primary" target="_blank" href="%s">%s</a>', esc_url( trp_add_affiliate_id_to_link( 'https://translatepress.com/black-friday/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=bf-2025' ) ), __( 'Upgrade to PRO', 'translatepress-multilingual' ) ), array( 'a' => [ 'class' => [], 'target' => [], 'href' => [] ] ) ),
                 // Translation Memory
                 'translation_memory_no_suggestions' => esc_html__( 'No available suggestions', 'translatepress-multilingual' ),
                 'translation_memory_suggestions'    => esc_html__( 'Suggestions from translation memory', 'translatepress-multilingual' ),
@@ -235,11 +237,13 @@ class TRP_Translation_Manager {
                             if( trp_bf_show_promotion() ){
                                 $instructions = esc_html__( '<strong>This Black Friday, renew your license at a special price</strong> to continue receiving access to product downloads, automatic updates, and support.', 'translatepress-multilingual' );
                                 $button       = esc_html__( 'Get Deal', 'translatepress-multilingual' );
-                                $link         = 'https://translatepress.com/account/?utm_source=tpeditor&utm_medium=clientsite&utm_campaign=BF-2024';
+                                //[utm32]
+                                $link         = 'https://translatepress.com/account/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=bf-2025-renewal';
                             } else {
                                 $instructions = esc_html__( 'Please renew your license to continue receiving access to TranslatePress AI, premium addons, automatic updates and support.', 'translatepress-multilingual' );
                                 $button       = esc_html__( 'Renew Now', 'translatepress-multilingual' );
-                                $link         = 'https://translatepress.com/account/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpeditor&utm_campaign=TP-Renewal';
+                                //[utm33]
+                                $link         = 'https://translatepress.com/account/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=expired-license';
                             }
                             
                             break;
@@ -249,7 +253,8 @@ class TRP_Translation_Manager {
                             $status_text  = wp_kses( sprintf( __( 'Your %s license was <span class="trp-license-status-emphasized">refunded</span>.', 'translatepress-multilingual' ), '<strong>' . $translatepress_product . '</strong>' ), array( 'strong' => array(),'span' => array( 'class' => array() ) ) );
                             $instructions = esc_html__( 'Please purchase a new license to continue receiving access to TranslatePress AI, premium addons, automatic updates and support.', 'translatepress-multilingual' );
                             $button       = esc_html__( 'Purchase a new license', 'translatepress-multilingual' );
-                            $link = 'https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpeditor&utm_campaign=TP-Refund';
+                            //[utm34]
+                            $link = 'https://translatepress.com/pricing/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=refunded-license';
                             break;
                         }
                     //  case 'missing' :
@@ -260,6 +265,7 @@ class TRP_Translation_Manager {
                     default:
                         {
                             $status_text  = wp_kses( sprintf( __( 'Your %s license is <span class="trp-license-status-emphasized">missing or invalid</span>.', 'translatepress-multilingual' ), '<strong>' . $translatepress_product . '</strong>' ), array( 'strong' => array(),'span' => array( 'class' => array() ) ) );
+                            //[utm35]
                             $instructions = sprintf( esc_html__( 'Please enter a valid license to get access to TranslatePress AI, premium addons, automatic updates and support. Need a license key? %1$sPurchase one now%2$s', 'translatepress-multilingual' ), '<a href="https://translatepress.com/pricing/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=pro-no-active-license" target="_blank">', '</a>' );
                             $button       = esc_html__( 'Enter a valid license', 'translatepress-multilingual' );
                             $link         = admin_url( 'admin.php?page=trp_license_key' );
@@ -903,7 +909,8 @@ class TRP_Translation_Manager {
 		}
 	
 		// Default upsale text for free version
-		$upsale_url = 'https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpstringeditor&utm_campaign=tpfree';
+        //[utm36]
+		$upsale_url = 'https://translatepress.com/pricing/?utm_source=tp-editor&utm_medium=client-site&utm_campaign=tp-editor-upsell';
 
 		$html = '<div class="trp-text-and-image-upsale-slugs">';
 		$html .= '<div class="trp-text-upsale-slugs">';

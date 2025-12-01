@@ -38,6 +38,7 @@ class TRP_Woocommerce_Emails{
             add_action( 'woocommerce_order_status_pending_to_completed_notification', array( $this, 'store_email_order_id' ), 5, 1 );
             add_action( 'woocommerce_order_status_failed_to_completed_notification', array( $this, 'store_email_order_id' ), 5, 1 );
             add_action( 'woocommerce_order_status_cancelled_to_completed_notification', array( $this, 'store_email_order_id' ), 5, 1 );
+            add_action( 'woocommerce_order_status_failed_notification', array( $this, 'store_email_order_id' ), 5, 1 );
 
             // WooCommerce emails when resent by admin
             add_action( 'woocommerce_before_resend_order_emails', array( $this, 'prepare_order_id_for_resend_emails' ), 5, 2 );
@@ -176,33 +177,37 @@ class TRP_Woocommerce_Emails{
      * @return false
      */
     public function trp_woo_setup_locale( $bool, $wc_email ) {
-        // We need to set up the $recipients ourselves in case we're dealing with an order.
-        // Otherwise, $wc_email->get_recipient() returns null and throws a PHP warning inside WooCommerce /woocommerce/includes/emails/class-wc-email.php
-        global $TRP_EMAIL_ORDER;
+        global $TRP_EMAIL_ORDER, $TRP_LANGUAGE;
         $order = false;
+
+        $is_customer_email = $wc_email->is_customer_email();
 
         if ( $TRP_EMAIL_ORDER  ) {
             $order = wc_get_order( $TRP_EMAIL_ORDER );
         }
 
-        if ( is_a( $order, 'WC_Order' ) ) {
+        /**
+         * At this point in the execution, $wc_email->get_recipient() returns null and throws a PHP warning inside WooCommerce /woocommerce/includes/emails/class-wc-email.php
+         * This is why we use $wc_email->get_option( 'recipient' ). It properly returns the recipient in the case of admin emails.
+         *
+         * We treat customer emails differently.
+         */
+        $recipients = $wc_email->get_option( 'recipient' );
+
+        /**
+         * When dealing with customer emails, recipient will not be set. We need to retrieve it via get_billing_email().
+         */
+        if ( $is_customer_email && is_a( $order, 'WC_Order' ) && empty( $recipients ) )
             $recipients = $order->get_billing_email();
-        } else {
-            $recipients = $wc_email->get_recipient();
-        }
 
-        global $TRP_LANGUAGE;
-        $is_customer_email  = $wc_email->is_customer_email();
-
-
-        if ( $recipients === null || $recipients === '' ) {
+        if ( empty( $recipients ) ) {
             $recipients = [];
         } elseif ( !is_array($recipients) ) {
             $recipients = explode( ',', $recipients );
         }
 
-        $language           = $TRP_LANGUAGE;
-        $user_id            = 0;
+        $language = $TRP_LANGUAGE;
+        $user_id  = 0;
 
         if( $is_customer_email ){
             if ( $order ) {
@@ -218,7 +223,12 @@ class TRP_Woocommerce_Emails{
             if( ! empty( $recipients ) && count( $recipients ) == 1 ){
                 $registered_user = get_user_by( 'email', $recipients[0] );
                 if( $registered_user ){
-                    $language = $registered_user->locale;
+                    // If language is set to site default, user object won't have a locale set. Fallback to WPLANG. In case WPLANG is not set either, fallback to trp_language
+                    if ( !empty( $registered_user->locale ) ){
+                        $language = $registered_user->locale;
+                    } else {
+                        $language = get_option( 'WPLANG' ) ?? get_user_meta( $registered_user->ID, 'trp_language', true );
+                    }
                 } else {
                     $language = trp_woo_hpos_get_post_meta( $TRP_EMAIL_ORDER, 'trp_language', true );
                 }
@@ -234,13 +244,14 @@ class TRP_Woocommerce_Emails{
 
         WC()->load_plugin_textdomain();
 
+        $this->bootstrap_trp_gettext_for_email_language( $language );
+
         // calls necessary because the default additional_content field of an email is localized before this point and stored in a variable in the previous locale
         $wc_email->init_form_fields();
         $wc_email->init_settings();
 
         return false;
     }
-
 
     /**
      * Restore locale after email is sent
@@ -256,6 +267,44 @@ class TRP_Woocommerce_Emails{
 
         return false;
 
+    }
+
+    /**
+     * Ensure TranslatePress gettext is active for the current email language.
+     *
+     * WooCommerce's emails are not always triggered in a normal frontend request.
+     * They can be sent asynchronously (e.g. admin changing an order status, a
+     * payment processor callback marking the order as paid, or cron/CLI jobs).
+     *
+     * In those cases, TranslatePress’s gettext global ($trp_translated_gettext_texts)
+     * and filters are never initialized in time because the email is rendered much
+     * later in the request lifecycle.
+     *
+     * To guarantee that TP’s database-backed translations are available for
+     * the strings in WooCommerce emails, we:
+     *   - check if at least one of TP’s WooCommerce gettext filters is already attached,
+     *   - if not, force creation of the gettext global and force-attach the filters.
+     *
+     * This way, even when emails are sent outside a normal page render, the
+     * gettext translations stored in TranslatePress are applied correctly.
+     */
+    private function bootstrap_trp_gettext_for_email_language( $language ) {
+        $trp             = TRP_Translate_Press::get_trp_instance();
+        $gettext_manager = $trp->get_component( 'gettext_manager' );
+        $pg              = $gettext_manager->get_gettext_component( 'process_gettext' );
+
+        // If at least one core handler is already attached, return
+        if ( has_filter( 'gettext', [ $pg, 'woocommerce_process_gettext_strings_no_context' ] ) )
+            return;
+
+        if ( !$trp->get_component( 'machine_translator') || get_class( $trp->get_component( 'machine_translator' ) ) === TRP_Machine_Translator::class )
+            $trp->init_machine_translation(); // Machine translator should be initialized by the get_trp_instance() call. In the case of cron jobs, it is not - so we initialize it here manually.
+
+        // Bypass processing_gettext_is_needed usual checks. Otherwise, the below method calls wouldn't go through
+        add_filter( 'trp_processing_gettext_is_needed', '__return_true' );
+
+        $gettext_manager->create_gettext_translated_global();
+        $gettext_manager->call_gettext_filters( 'woocommerce_' );
     }
 
 }

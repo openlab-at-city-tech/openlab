@@ -512,6 +512,12 @@ class TRP_Translation_Render{
 
         $output = apply_filters('trp_before_translate_content', $output);
 
+        /* remove unwanted tags. For example,we're removing script and style because they should not be translated and if they are large cause big performance issues */
+        $excluded_tags = apply_filters('trp_excluded_tags_from_translation', array('script', 'style'));
+        $output_with_excluded_tags_removed = $this->remove_tags_from_output($output, $excluded_tags); // $removed_tags = array('output' => '$output string', 'excluded_tags' => array());
+
+        $output = apply_filters('trp_after_excluded_tags_from_translation', $output_with_excluded_tags_removed['output']);
+
         if ( $output == false || !is_string( $output ) || strlen( $output ) < 1 ) {
             return $output;
         }
@@ -534,9 +540,13 @@ class TRP_Translation_Render{
         if( is_object($wp_rewrite) ) {
             if( strpos( $this->url_converter->cur_page_url( false ), get_rest_url() ) !== false
                 && current_filter() !== 'oembed_response_data'
-                && current_filter() !== 'rest_pre_echo_response' )
+                && current_filter() !== 'rest_pre_echo_response'
+                && current_filter() !== 'wp_mail'
+            )
             {
                 $trpremoved = $this->remove_trp_html_tags( $output );
+                /* add back the excluded tags like script and style to the html */
+                $trpremoved = $this->add_excluded_tags_after_translation( $trpremoved, $output_with_excluded_tags_removed['excluded_tags'] );
                 return $trpremoved;
             }
         }
@@ -544,12 +554,16 @@ class TRP_Translation_Render{
         /* don't do anything on xmlrpc.php  */
         if( strpos( $this->url_converter->cur_page_url( false ), 'xmlrpc.php' ) !== false ){
             $trpremoved = $this->remove_trp_html_tags( $output );
+            /* add back the excluded tags like script and style to the html */
+            $trpremoved = $this->add_excluded_tags_after_translation( $trpremoved, $output_with_excluded_tags_removed['excluded_tags'] );
             return $trpremoved;
         }
 
         global $TRP_LANGUAGE;
         $language_code = $this->force_language_in_preview();
         if ($language_code === false) {
+            /* add back the excluded tags like script and style to the html */
+            $output = $this->add_excluded_tags_after_translation( $output, $output_with_excluded_tags_removed['excluded_tags'] );
             return $output;
         }
         if ( $language_code == $this->settings['default-language'] ){
@@ -572,8 +586,11 @@ class TRP_Translation_Render{
 	     */
 	    if( $json_array && $json_array != $output ) {
 		    /* if it's one of our own ajax calls don't do nothing */
-            if ( ! empty( $_REQUEST['action'] ) && strpos( sanitize_text_field( $_REQUEST['action'] ), 'trp_' ) === 0 && $_REQUEST['action'] != 'trp_split_translation_block' )
-		        return $output;
+            if ( ! empty( $_REQUEST['action'] ) && strpos( sanitize_text_field( $_REQUEST['action'] ), 'trp_' ) === 0 && $_REQUEST['action'] != 'trp_split_translation_block' ){
+                /* add back the excluded tags like script and style to the html */
+                $output = $this->add_excluded_tags_after_translation( $output, $output_with_excluded_tags_removed['excluded_tags'] );
+                return $output;
+            }
 
 	        //check if we have a json response
 	        if ( ! empty( $json_array ) ) {
@@ -615,6 +632,8 @@ class TRP_Translation_Render{
 	    $html = TranslatePress\str_get_html($output, true, true, TRP_DEFAULT_TARGET_CHARSET, false, TRP_DEFAULT_BR_TEXT, TRP_DEFAULT_SPAN_TEXT);
 	    if ( $html === false ){
             $trpremoved = $this->remove_trp_html_tags( $output );
+            /* add back the excluded tags like script and style to the html */
+            $trpremoved = $this->add_excluded_tags_after_translation( $trpremoved, $output_with_excluded_tags_removed['excluded_tags'] );
 		    return $trpremoved;
 	    }
 
@@ -771,7 +790,9 @@ class TRP_Translation_Render{
             $trpremoved = $html->save();
             /* perform preg replace on the remaining trp-gettext tags */
             $trpremoved = $this->remove_trp_html_tags($trpremoved );
-		    return $trpremoved;
+            /* add back the excluded tags like script and style to the html */
+            $trpremoved = $this->add_excluded_tags_after_translation( $trpremoved, $output_with_excluded_tags_removed['excluded_tags'] );
+            return $trpremoved;
 	    }
 
         $no_translate_selectors = apply_filters( 'trp_no_translate_selectors', array( '#wpadminbar' ), $TRP_LANGUAGE );
@@ -1131,6 +1152,8 @@ class TRP_Translation_Render{
             $html_string = $html->save();
             $html = TranslatePress\str_get_html($html_string, true, true, TRP_DEFAULT_TARGET_CHARSET, false, TRP_DEFAULT_BR_TEXT, TRP_DEFAULT_SPAN_TEXT);
             if ( $html === false ){
+                /* add back the excluded tags like script and style to the html */
+                $html_string = $this->add_excluded_tags_after_translation( $html_string, $output_with_excluded_tags_removed['excluded_tags'] );
                 return $html_string;
             }
         }
@@ -1146,6 +1169,9 @@ class TRP_Translation_Render{
             }
 	    }
 	    $final_html = $html->save();
+
+        /* add back the excluded tags like script and style to the html */
+        $final_html = $this->add_excluded_tags_after_translation( $final_html, $output_with_excluded_tags_removed['excluded_tags'] );
 
        /* perform preg replace on the remaining trp-gettext tags */
         $final_html = $this->remove_trp_html_tags( $final_html );
@@ -1770,8 +1796,11 @@ class TRP_Translation_Render{
         }
 
 
-        $this->trp_query->insert_strings( $new_strings, $language_code, $block_type );
-        $this->trp_query->update_strings( $update_strings, $language_code, array( 'id','original', 'translated', 'status', 'original_id' ) );
+        // Allow filtering whether to save strings to database (for manual translation only mode)
+        if ( apply_filters( 'trp_allow_string_saving', true, $new_strings, $update_strings ) ) {
+            $this->trp_query->insert_strings( $new_strings, $language_code, $block_type );
+            $this->trp_query->update_strings( $update_strings, $language_code, array( 'id','original', 'translated', 'status', 'original_id' ) );
+        }
 
         return $translated_strings;
     }
@@ -2051,16 +2080,18 @@ class TRP_Translation_Render{
      * @return array
      */
     public function wp_mail_filter( $args ){
-        if (!is_array($args)){
+        if ( !is_array( $args ) ){
             return $args;
         }
 
-        if(array_key_exists('subject', $args)){
-            $args['subject'] = $this->translate_page( do_shortcode( $args['subject'] ) );
+        $whitelisted_shortcodes = apply_filters( 'trp_whitelisted_shortcodes_for_wp_mail', [ 'trp_language', 'language-include', 'language-exclude' ] );
+
+        if ( array_key_exists( 'subject', $args ) ){
+            $args['subject'] = $this->translate_page( trp_do_these_shortcodes( $args['subject'], $whitelisted_shortcodes ) );
         }
 
-        if(array_key_exists('message', $args)){
-            $args['message'] = $this->translate_page( do_shortcode( $args['message'] ) );
+        if ( array_key_exists( 'message', $args ) ){
+            $args['message'] = $this->translate_page( trp_do_these_shortcodes( $args['message'], $whitelisted_shortcodes ) );
         }
 
         return $args;
@@ -2338,5 +2369,124 @@ class TRP_Translation_Render{
             $translateable_information['translateable_strings'][$key] = is_email(html_entity_decode($string)) ? html_entity_decode($string) : $string;
         }
         return $translateable_information;
+    }
+
+    /**
+     * Remove excluded tags before translation
+     * and replaces them with <trp-replace-$index></trp-replace-$index>
+     *
+     * @param $output
+     * @param $excluded_tags
+     * @return array
+     */
+    private function remove_tags_from_output($output, $excluded_tags)
+    {
+        if (!is_string($output) || !is_array($excluded_tags)) {
+            return array('output' => $output, 'excluded_tags' => array());
+        }
+        
+        $trp_excluded_replacements = [];
+
+        $index = 0;
+        $result = '';
+        $offset = 0;
+
+        while (true) {
+            $found = false;
+
+            foreach ($excluded_tags as $tag) {
+                $start = stripos($output, "<$tag", $offset);
+                // We keep the first found tag - min($start_for_tag_script, $start_for_tag_style) where $start < $found['pos']
+                if ($start !== false && ($found === false || $start < $found['pos'])) {
+                    $found = [
+                        'pos' => $start,
+                        'tag' => $tag
+                    ];
+                }
+            }
+
+            if ($found === false) {
+                // No more excluded tags found
+                $result .= substr($output, $offset);
+                break;
+            }
+
+            $start = $found['pos'];
+            $tag   = $found['tag'];
+
+            // Add everything before the tag
+            $result .= substr($output, $offset, $start - $offset);
+
+            // Find closing tag </tag>
+            $end = stripos($output, "</$tag", $start);
+            if ($end === false) {
+                // malformed: no closing tag
+                $result .= substr($output, $start);
+                break;
+            }
+
+            // Move to closing ">"
+            $close_pos = strpos($output, '>', $end);
+            if ($close_pos === false) {
+                // malformed: no ">"
+                $result .= substr($output, $start);
+                break;
+            }
+
+            /**
+             * Preserve <script type="application/ld+json"> blocks,
+             * so they remain in the DOM and can be processed by
+             * translate_schema_data() via trp_process_other_text_nodes.
+             */
+            if ( $tag === 'script' ) {
+                $open_tag_end = strpos( $output, '>', $start );
+                if ( $open_tag_end === false ) {
+                    // malformed: no ">" on opening tag
+                    $result .= substr( $output, $start );
+                    break;
+                }
+
+                // Opening <script ...> tag only
+                $opening_tag_html = substr( $output, $start, $open_tag_end - $start + 1 );
+
+                // If this is JSON-LD, keep the whole block untouched
+                if ( stripos( $opening_tag_html, 'application/ld+json' ) !== false ) {
+                    // Append the full <script>...</script> block
+                    $result .= substr( $output, $start, $close_pos - $start + 1 );
+                    $offset = $close_pos + 1;
+                    // Do NOT record a replacement / placeholder for this one
+                    continue;
+                }
+            }
+
+            // Full <tag>...</tag>
+            $tag_html = substr($output, $start, $close_pos - $start + 1);
+
+            // Save replacement
+            $trp_excluded_replacements[$index] = $tag_html;
+
+            // Insert placeholder
+            $result .= "<trp-replace-$index></trp-replace-$index>";
+
+            // Advance offset
+            $offset = $close_pos + 1;
+            $index++;
+        }
+
+        return array('output' => $result, 'excluded_tags' => $trp_excluded_replacements);
+    }
+
+    private function add_excluded_tags_after_translation($final_html, $trp_excluded_replacements)
+    {
+        if (!is_string($final_html) || !is_array($trp_excluded_replacements) || empty($trp_excluded_replacements)) {
+            return $final_html;
+        }
+
+        foreach ($trp_excluded_replacements as $index => $tag_html) {
+            $placeholder = "<trp-replace-$index></trp-replace-$index>";
+            $final_html = str_replace($placeholder, $tag_html, $final_html);
+        }
+
+        return $final_html;
     }
 }

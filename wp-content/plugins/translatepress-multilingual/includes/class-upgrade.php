@@ -1031,9 +1031,10 @@ class TRP_Upgrade {
                 $notifications = TRP_Plugin_Notifications::get_instance();
 
                 $notification_id = 'trp_add_ons_removal';
-
-                $url_info = 'https://translatepress.com/docs/installation/upgrade-to-version-2-0-5-or-newer/';
-                $url_account = 'https://translatepress.com/account/';
+                //[utm37]
+                $url_info = 'https://translatepress.com/docs/installation/upgrade-to-version-2-0-5-or-newer/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=tp-bundle-update';
+                //[utm38]
+                $url_account = 'https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=tp-bundle-update';
                 $message = '<p style="padding-right:30px;">' . sprintf(__( 'All individual TranslatePress add-on plugins <a href="%1$s" target="_blank">have been discontinued</a> and are now included in the premium Personal, Business and Developer versions of TranslatePress. Please log into your <a href="%2$s" target="_blank">account page</a>, download the new premium version and install it. Your individual addons settings will be ported over.' , 'translatepress-multilingual' ), esc_url($url_info), esc_url($url_account)) . '</p>';
                 //make sure to use the trp_dismiss_admin_notification arg
                 $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss" style="text-decoration: none;z-index:100;"><span class="screen-reader-text">' . esc_html__('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
@@ -1747,8 +1748,10 @@ class TRP_Upgrade {
         }
 
         if ( !isset($cfg['floater']['oppositeLanguage']) ) {
-            $cfg['floater']['oppositeLanguage'] =
-                ( isset($adv_settings['show_opposite_flag_language_switcher_shortcode']) && $adv_settings['show_opposite_flag_language_switcher_shortcode'] === 'yes' );
+            $is_opposite_language_enabled = ( isset($adv_settings['show_opposite_flag_language_switcher_shortcode']) && $adv_settings['show_opposite_flag_language_switcher_shortcode'] === 'yes' );
+
+            $cfg['floater']['oppositeLanguage']   = $is_opposite_language_enabled;
+            $cfg['shortcode']['oppositeLanguage'] = $is_opposite_language_enabled;
         }
 
         $adv_settings['load_legacy_language_switcher'] = 'yes';
@@ -1788,7 +1791,8 @@ class TRP_Upgrade {
             esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) .
             '</span></a>';
 
-        $docs_url = 'https://translatepress.com/docs/settings/language-switcher/';
+        //[utm39]
+        $docs_url = 'https://translatepress.com/docs/settings/language-switcher/?utm_source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-legacy#legacy-mode';
 
         $css = '
             .trp-ls-v2-card{display:grid;gap:8px;padding:10px;}

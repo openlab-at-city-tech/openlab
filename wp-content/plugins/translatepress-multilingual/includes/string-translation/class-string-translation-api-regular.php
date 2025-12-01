@@ -63,11 +63,23 @@ class TRP_String_Translation_API_Regular {
             $query_args = $this->helper->get_sanitized_query_args( $this->type );
 
             // Used to display (found in translation) label next to the original string in case we found the search result in translations
-            if ( !empty( $query_args['s'] ) ) {
+            if ( ! empty( $query_args['s'] ) ) {
+                // Use helper method to parse search input for exact match detection
+                $search_data = $this->helper->parse_search_input( $query_args['s'] );
+                $is_exact_match = $search_data['is_exact_match'];
+                $search_term = $search_data['search_term'];
+
                 foreach ( $dictionary_by_original as &$dictionary ) {
                     foreach ( $dictionary['translationsArray'] as $translationArray ) {
-                        if ( strpos( $translationArray->translated, $query_args['s'] ) !== false )
-                            $dictionary['foundInTranslation'] = true;
+                        if ( $is_exact_match ) {
+                            if ( $translationArray->translated === $search_term ) {
+                                $dictionary['foundInTranslation'] = true;
+                            }
+                        } else {
+                            if ( strpos( $translationArray->translated, $search_term ) !== false ) {
+                                $dictionary['foundInTranslation'] = true;
+                            }
+                        }
                     }
                 }
             }

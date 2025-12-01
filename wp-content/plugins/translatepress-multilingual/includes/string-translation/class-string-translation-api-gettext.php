@@ -136,11 +136,23 @@ class TRP_String_Translation_API_Gettext {
 
                 $search_query = get_transient('trp_gettext_search' );
 
-                if ( !empty( $search_query ) ) {
+                if ( ! empty( $search_query ) ) {
+                    // Use helper method to parse search input for exact match detection
+                    $search_data = $this->helper->parse_search_input( $search_query );
+                    $is_exact_match = $search_data['is_exact_match'];
+                    $search_term = $search_data['search_term'];
+
                     foreach ( $dictionary_by_original as &$dictionary ) {
                         foreach ( $dictionary['translationsArray'] as $translationArray ) {
-                            if ( strpos( $translationArray->translated, $search_query  ) !== false )
-                                $dictionary['foundInTranslation'] = true;
+                            if ( $is_exact_match ) {
+                                if ( $translationArray->translated === $search_term ) {
+                                    $dictionary['foundInTranslation'] = true;
+                                }
+                            } else {
+                                if ( strpos( $translationArray->translated, $search_term ) !== false ) {
+                                    $dictionary['foundInTranslation'] = true;
+                                }
+                            }
                         }
                     }
                 }
