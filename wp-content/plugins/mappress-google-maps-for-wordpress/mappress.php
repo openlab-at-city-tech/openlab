@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.94.15
+Version: 2.95.3
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.94.15';
+	const VERSION = '2.95.3';
 
 	static
 		$api,
@@ -525,9 +525,9 @@ class Mappress {
 			$response = wp_remote_post('https://mappresspro.com', array('timeout' => 15, 'sslverify' => false, 'body' => (array) $args));
 		}
 
-		// Algolia geocoder discontinued since 2.69.3
-		if (empty(self::$options->geocoder || self::$options->geocoder == 'algolia')) {
-			self::$options->geocoder = 'nominatim';
+		// Default geocoder if it's missing or using discontinued Algolia geocoder 
+		if (empty(self::$options->geocoder) || self::$options->geocoder == 'algolia') {
+			self::$options->geocoder = (self::$options->engine == 'leaflet') ? 'nominatim' : 'google';
 			self::$options->save();
 		}
 
@@ -696,7 +696,6 @@ class Mappress {
 			'debug' => self::$debug,
 			'dev' => self::is_dev(),
 			'editurl' => admin_url('post.php'),
-			'filterParams' => (class_exists('Mappress_Filter')) ? Mappress_Filter::get_url_params() : array(),
 			'iconsUrl' => (self::$pro) ? Mappress_Icons::$icons_url : null,    
 			'isEditor' => ($post && $post->ID) || ($screen && $screen->base == 'site-editor'),
 			'isIE' => $is_IE,
@@ -762,7 +761,6 @@ class Mappress {
 			foreach(self::$options->filters as $type => $filters) {
 				foreach($filters as $atts) {
 					$filter = new Mappress_Filter($atts);
-					$filter->values = null;
 					$l10n['options']['filters'][$type][] = $filter;
 				}
 			}
@@ -878,8 +876,9 @@ class Mappress {
 
 		// Dependencies
 		$deps = array('react', 'react-dom', 'wp-i18n');
-		if (self::$options->engine == 'leaflet')
-			$deps = array_merge(array('mappress-leaflet', 'mappress-leaflet-omnivore'), $deps);
+		if (self::$options->engine == 'leaflet') {
+			$deps = array_merge(array('mappress-leaflet', 'mappress-leaflet-togeojson'), $deps);
+		}
 
 		// Clustering ( https://github.com/googlemaps/js-markerclusterer | https://github.com/Leaflet/Leaflet.markercluster )
 		if (self::$options->clustering)
@@ -888,8 +887,8 @@ class Mappress {
 
 		$register = array(
 			array("mappress-leaflet", $lib . '/leaflet/leaflet.js', null, null, $footer),
-			array("mappress-leaflet-omnivore", $lib . '/leaflet/leaflet-omnivore.min.js', null, null, $footer),
-			array('mappress-markerclusterer', 'https://unpkg.com/@googlemaps/markerclusterer@2.5.3/dist/index.min.js', null, null, $footer),
+			array("mappress-leaflet-togeojson", $lib . '/leaflet/togeojson.min.js', null, null, $footer),
+			array('mappress-markerclusterer', 'https://unpkg.com/@googlemaps/markerclusterer@2.6.2/dist/index.min.js', null, null, $footer),
 			array('mappress-leaflet-markercluster', $lib . '/leaflet/leaflet.markercluster.js', null, null, $footer),
 			array('mappress', $js . "/index_mappress.js", $deps, self::$version, $footer),
 			array('mappress_admin', $js . "/index_mappress_admin.js", $admin_deps, self::$version, $footer)
