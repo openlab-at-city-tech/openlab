@@ -10,6 +10,10 @@ namespace Automattic\Jetpack\Sync\Modules;
 use WC_Order;
 use WP_Error;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Class to handle sync for WooCommerce.
  */
@@ -170,6 +174,7 @@ class WooCommerce extends Module {
 		add_action( 'woocommerce_delete_order_item', $callable, 10, 1 );
 		add_action( 'woocommerce_remove_order_item_ids', $callable, 10, 1 );
 		$this->init_listeners_for_meta_type( 'order_item', $callable );
+		$this->init_meta_whitelist_handler( 'order_item', array( $this, 'filter_meta' ) );
 
 		// Payment tokens.
 		add_action( 'woocommerce_new_payment_token', $callable, 10, 1 );
@@ -236,6 +241,38 @@ class WooCommerce extends Module {
 		// Make sure we always have all the data - prior to WooCommerce 3.0 we only have the user supplied data in the second argument and not the full details.
 		$args[1] = $this->build_order_item( $args[0] );
 		return $args;
+	}
+
+	/**
+	 * Handler for filtering out non-whitelisted order item meta.
+	 *
+	 * @since 4.22.3
+	 *
+	 * @param array $args Hook arguments.
+	 * @return array|false False if not whitelisted, the original hook args otherwise.
+	 */
+	public function filter_meta( $args ) {
+		if (
+			! empty( $args[2] ) && $this->is_whitelisted_order_item_meta( $args[2] )
+		) {
+			return $args;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether an order item meta key is whitelisted for sync.
+	 *
+	 * @access public
+	 *
+	 * @since 4.22.3
+	 *
+	 * @param string $meta_key Order item meta key.
+	 * @return bool True if whitelisted.
+	 */
+	public function is_whitelisted_order_item_meta( $meta_key ) {
+		return is_string( $meta_key ) && in_array( $meta_key, self::$order_item_meta_whitelist, true );
 	}
 
 	/**
@@ -325,7 +362,7 @@ class WooCommerce extends Module {
 	 * @todo Refactor the SQL query to use $wpdb->prepare().
 	 *
 	 * @param array $config Full sync configuration for this sync module.
-	 * @return array Number of items yet to be enqueued.
+	 * @return int Number of items yet to be enqueued.
 	 */
 	public function estimate_full_sync_actions( $config ) {
 		global $wpdb;

@@ -23,6 +23,10 @@
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Constants;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 // Keep compatibility with the PollDaddy plugin.
 if (
 	! class_exists( 'CrowdsignalShortcode' )
@@ -30,6 +34,8 @@ if (
 ) {
 	/**
 	 * Class wrapper for Crowdsignal shortcodes
+	 *
+	 * @phan-constructor-used-for-side-effects
 	 */
 	class CrowdsignalShortcode {
 
@@ -56,7 +62,10 @@ if (
 			add_shortcode( 'crowdsignal', array( $this, 'crowdsignal_shortcode' ) );
 			add_shortcode( 'polldaddy', array( $this, 'polldaddy_shortcode' ) );
 
-			add_filter( 'pre_kses', array( $this, 'crowdsignal_embed_to_shortcode' ) );
+			if ( jetpack_shortcodes_should_hook_pre_kses() ) {
+				add_filter( 'pre_kses', array( $this, 'crowdsignal_embed_to_shortcode' ) );
+			}
+
 			add_action( 'infinite_scroll_render', array( $this, 'crowdsignal_shortcode_infinite' ), 11 );
 		}
 
@@ -219,7 +228,6 @@ if (
 			$inline = ! in_the_loop()
 				&& ! Constants::is_defined( 'TESTING_IN_JETPACK' );
 
-			$no_script       = false;
 			$infinite_scroll = false;
 
 			if ( is_home() && current_theme_supports( 'infinite-scroll' ) ) {
@@ -230,16 +238,12 @@ if (
 				$inline = true;
 			}
 
-			if ( is_feed() || ( defined( 'DOING_AJAX' ) && ! $infinite_scroll ) ) {
-				$no_script = false;
-			}
-
 			self::$add_script = $infinite_scroll;
 
 			/*
 			 * Rating embed.
 			 */
-			if ( (int) $attributes['rating'] > 0 && ! $no_script ) {
+			if ( (int) $attributes['rating'] > 0 ) {
 				$post_id = $post instanceof WP_Post ? $post->ID : get_the_ID();
 				$post_id = $post_id ?? '';
 
@@ -362,10 +366,7 @@ if (
 					esc_html( $attributes['title'] )
 				);
 
-				if (
-					$no_script
-					|| ( class_exists( 'Jetpack_AMP_Support' ) && Jetpack_AMP_Support::is_amp_request() )
-				) {
+				if ( class_exists( 'Jetpack_AMP_Support' ) && Jetpack_AMP_Support::is_amp_request() ) {
 					return $poll_link;
 				} elseif ( 'slider' === $attributes['type'] && ! $inline ) { // Slider poll.
 					if ( ! in_array(
@@ -381,7 +382,7 @@ if (
 						'embed' => 'poll',
 						'delay' => (int) $attributes['delay'],
 						'visit' => $attributes['visit'],
-						'id'    => (int) $poll,
+						'id'    => $poll,
 						'site'  => $attributes['site'],
 					);
 
@@ -425,7 +426,7 @@ if (
 
 						$data = array( 'url' => $poll_js );
 
-						self::$scripts['poll'][ (int) $poll ] = $data;
+						self::$scripts['poll'][ $poll ] = $data;
 
 						add_action( 'wp_footer', array( $this, 'generate_scripts' ) );
 
@@ -450,7 +451,7 @@ if (
 						 *
 						 * @param int $poll Poll ID.
 						 */
-						do_action( 'crowdsignal_shortcode_before', (int) $poll );
+						do_action( 'crowdsignal_shortcode_before', $poll );
 
 						return sprintf(
 							'<a name="pd_a_%1$d"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$d" data-settings="%2$s" style="%3$s%4$s"></div><div id="PD_superContainer"></div><noscript>%5$s</noscript>',
@@ -474,7 +475,7 @@ if (
 						);
 
 						/** This action is already documented in modules/shortcodes/crowdsignal.php */
-						do_action( 'crowdsignal_shortcode_before', (int) $poll );
+						do_action( 'crowdsignal_shortcode_before', $poll );
 
 						return sprintf(
 							'<a id="pd_a_%1$s"></a><div class="CSS_Poll PDS_Poll" id="PDI_container%1$s" style="%2$s%3$s"></div><div id="PD_superContainer"></div><noscript>%4$s</noscript>',
@@ -549,7 +550,7 @@ if (
 								$attributes['width'] = $content_width;
 							}
 
-							if ( ! $attributes['width'] ) {
+							if ( empty( $attributes['width'] ) ) {
 								$attributes['width'] = '100%';
 							} else {
 								$attributes['width'] = (int) $attributes['width'];
@@ -751,8 +752,8 @@ if (
 			);
 
 			// Replace survey.fm links.
-			$content = preg_replace(
-				'!(?:\n|\A)https?://(.*).survey.fm/(.*)(/.*)?(?:\n|\Z)!i',
+			$content = jetpack_preg_replace_outside_tags(
+				'!(?:\n|\A)https?:\/\/([^"\'.]+)\.survey\.fm\/([^"\'\/\s]+)(?:\/.*)?(?:\n|\Z)!i',
 				'[crowdsignal type="iframe" survey="true" height="auto" domain="$1" id="$2"]',
 				$content
 			);

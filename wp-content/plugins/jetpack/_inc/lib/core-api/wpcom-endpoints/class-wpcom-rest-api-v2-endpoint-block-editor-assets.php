@@ -7,6 +7,10 @@
 
 declare( strict_types = 1 );
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Core class used to retrieve the block editor assets via the REST API.
  */
@@ -14,17 +18,16 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 	const CACHE_BUSTER = '2025-02-28';
 
 	/**
-	 * List of allowed plugins whose assets should be preserved.
-	 * Each entry should be a unique identifier that appears in the asset URL.
+	 * List of allowed plugin handle prefixes whose assets should be preserved.
+	 * Each entry should be a handle prefix that identifies assets from allowed plugins.
 	 *
 	 * @var array
 	 */
-	const ALLOWED_PLUGINS = array(
-		'/plugins/gutenberg/',
-		'/plugins/gutenberg-core/', // WPCOM Simple site
-		'/plugins/jetpack/',
-		'/mu-plugins/jetpack-mu-wpcom-plugin/', // WPCOM Simple site
-		'/mu-plugins/wpcomsh/', // WoW helpers
+	const ALLOWED_PLUGIN_HANDLE_PREFIXES = array(
+		'jetpack-', // E.g., jetpack-blocks-editor, jetpack-connection
+		'jp-', // E.g., jp-forms-blocks
+		'videopress-', // E.g., videopress-add-resumable-upload-support
+		'wp-', // E.g., wp-block-styles, wp-jp-i18n-loader
 	);
 
 	/**
@@ -47,35 +50,17 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'a8c/posts-carousel',
 		'jetpack/address',
 		'jetpack/ai-assistant',
-		'jetpack/ai-chat',
+		'jetpack/blog-stats',
 		'jetpack/blogging-prompt',
 		'jetpack/blogroll',
 		'jetpack/blogroll-item',
 		'jetpack/business-hours',
 		'jetpack/button',
 		'jetpack/calendly',
-		'jetpack/contact-form',
 		'jetpack/contact-info',
-		'jetpack/cookie-consent',
-		'jetpack/donations',
 		'jetpack/email',
 		'jetpack/event-countdown',
 		'jetpack/eventbrite',
-		'jetpack/field-checkbox',
-		'jetpack/field-checkbox-multiple',
-		'jetpack/field-consent',
-		'jetpack/field-date',
-		'jetpack/field-email',
-		'jetpack/field-name',
-		'jetpack/field-number',
-		'jetpack/field-option-checkbox',
-		'jetpack/field-option-radio',
-		'jetpack/field-radio',
-		'jetpack/field-select',
-		'jetpack/field-telephone',
-		'jetpack/field-text',
-		'jetpack/field-textarea',
-		'jetpack/field-url',
 		'jetpack/gif',
 		'jetpack/goodreads',
 		'jetpack/google-calendar',
@@ -89,7 +74,7 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'jetpack/opentable',
 		'jetpack/payment-buttons',
 		'jetpack/payments-intro',
-		'jetpack/paywall',
+		'jetpack/paypal-payment-buttons',
 		'jetpack/phone',
 		'jetpack/pinterest',
 		'jetpack/podcast-player',
@@ -101,21 +86,27 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		'jetpack/sharing-button',
 		'jetpack/sharing-buttons',
 		'jetpack/simple-payments',
-		'jetpack/slideshow',
-		'jetpack/story',
 		'jetpack/subscriber-login',
 		'jetpack/subscriptions',
 		'jetpack/tiled-gallery',
 		'jetpack/timeline',
 		'jetpack/timeline-item',
-		'jetpack/tock',
+		'jetpack/top-posts',
 		'jetpack/whatsapp-button',
 		'premium-content/buttons',
 		'premium-content/container',
 		'premium-content/logged-out-view',
 		'premium-content/login-button',
 		'premium-content/subscriber-view',
-		'syntaxhighlighter/code',
+	);
+
+	/**
+	 * List of disallowed core block types.
+	 *
+	 * @var array
+	 */
+	const DISALLOWED_CORE_BLOCKS = array(
+		'core/freeform', // Classic editor - TinyMCE is unavailable in the mobile editor
 	);
 
 	/**
@@ -124,12 +115,15 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 	 * @return array List of core block types.
 	 */
 	private function get_core_block_types() {
-		return array_filter(
+		$core_blocks = array_filter(
 			array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() ),
 			function ( $block_name ) {
 				return strpos( $block_name, 'core/' ) === 0;
 			}
 		);
+
+		// Remove disallowed core blocks
+		return array_diff( $core_blocks, self::DISALLOWED_CORE_BLOCKS );
 	}
 
 	/**
@@ -175,14 +169,41 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		$current_wp_styles  = $wp_styles;
 		$current_wp_scripts = $wp_scripts;
 
+		// Preserve allowed plugin scripts registered during the `init` action
+		$preserved_scripts = array();
+		$preserved_styles  = array();
+
+		foreach ( $current_wp_scripts->registered as $handle => $script ) {
+			if ( $this->is_allowed_plugin_handle( $handle ) && ! $this->is_core_or_gutenberg_asset( $script->src ) ) {
+				$preserved_scripts[ $handle ] = clone $script;
+			}
+		}
+
+		foreach ( $current_wp_styles->registered as $handle => $style ) {
+			if ( $this->is_allowed_plugin_handle( $handle ) && ! $this->is_core_or_gutenberg_asset( $style->src ) ) {
+				$preserved_styles[ $handle ] = clone $style;
+			}
+		}
+
+		// Initialize new instances to control which assets are loaded
 		$wp_styles  = new WP_Styles();
 		$wp_scripts = new WP_Scripts();
 
+		// Restore preserved plugin scripts
+		foreach ( $preserved_scripts as $handle => $script ) {
+			$wp_scripts->registered[ $handle ] = $script;
+		}
+
+		foreach ( $preserved_styles as $handle => $style ) {
+			$wp_styles->registered[ $handle ] = $style;
+		}
+
+		// Set up a block editor screen context to prevent errors when
+		// plugins/themes call get_current_screen() during asset enqueueing
+		$this->setup_block_editor_screen();
+
 		// Trigger an action frequently used by plugins to enqueue assets.
 		do_action( 'wp_loaded' );
-
-		// Unregister disallowed plugin assets before proceeding with asset collection
-		$this->unregister_disallowed_plugin_assets();
 
 		// We generally do not need reset styles for the block editor. However, if
 		// it's a classic theme, margins will be added to every block, which is
@@ -239,6 +260,12 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 			remove_action( 'wp_print_styles', 'print_emoji_styles' );
 		}
 
+		// Unregister disallowed plugin assets before proceeding with asset collection
+		$this->unregister_disallowed_plugin_assets();
+
+		add_filter( 'script_loader_src', array( $this, 'make_url_absolute' ), 10, 2 );
+		add_filter( 'style_loader_src', array( $this, 'make_url_absolute' ), 10, 2 );
+
 		ob_start();
 		wp_print_styles();
 		$styles = ob_get_clean();
@@ -251,6 +278,9 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		wp_print_head_scripts();
 		wp_print_footer_scripts();
 		$scripts = ob_get_clean();
+
+		remove_filter( 'script_loader_src', array( $this, 'make_url_absolute' ), 10 );
+		remove_filter( 'style_loader_src', array( $this, 'make_url_absolute' ), 10 );
 
 		$wp_styles  = $current_wp_styles;
 		$wp_scripts = $current_wp_scripts;
@@ -268,6 +298,44 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 	}
 
 	/**
+	 * Sets up a mock block editor screen context for the REST API request.
+	 *
+	 * This ensures get_current_screen() is available and returns a proper
+	 * block editor screen object, preventing fatal errors when plugins/themes
+	 * call get_current_screen() during the enqueue_block_editor_assets action.
+	 */
+	private function setup_block_editor_screen() {
+		// Ensure screen class and functions are available
+		if ( ! class_exists( 'WP_Screen' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/class-wp-screen.php';
+		}
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/screen.php';
+		}
+
+		// Determine the post type for the screen context
+		$post_type = get_query_var( 'post_type', 'post' );
+		if ( is_array( $post_type ) ) {
+			$post_type = $post_type[0];
+		}
+
+		// Validate that the post type is registered
+		if ( ! post_type_exists( $post_type ) ) {
+			$post_type = 'post';
+		}
+
+		// Create a post editor screen context
+		set_current_screen( 'post' );
+
+		// Update the screen to indicate it's using the block editor
+		$current_screen = get_current_screen();
+		if ( $current_screen ) {
+			$current_screen->is_block_editor( true );
+			$current_screen->post_type = $post_type;
+		}
+	}
+
+	/**
 	 * Unregisters all assets except those from core or allowed plugins.
 	 */
 	private function unregister_disallowed_plugin_assets() {
@@ -276,11 +344,11 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		// Unregister disallowed plugin scripts
 		foreach ( $wp_scripts->registered as $handle => $script ) {
 			// Skip core scripts and protected handles
-			if ( $this->is_core_asset( $script->src ) || $this->is_protected_handle( $handle ) ) {
+			if ( $this->is_core_or_gutenberg_asset( $script->src ) || $this->is_protected_handle( $handle ) ) {
 				continue;
 			}
 
-			if ( ! $this->is_allowed_plugin_asset( $script->src ) ) {
+			if ( ! $this->is_allowed_plugin_handle( $handle ) ) {
 				unset( $wp_scripts->registered[ $handle ] );
 			}
 		}
@@ -288,23 +356,23 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		// Unregister disallowed plugin styles
 		foreach ( $wp_styles->registered as $handle => $style ) {
 			// Skip core styles and protected handles
-			if ( $this->is_core_asset( $style->src ) || $this->is_protected_handle( $handle ) ) {
+			if ( $this->is_core_or_gutenberg_asset( $style->src ) || $this->is_protected_handle( $handle ) ) {
 				continue;
 			}
 
-			if ( ! $this->is_allowed_plugin_asset( $style->src ) ) {
+			if ( ! $this->is_allowed_plugin_handle( $handle ) ) {
 				unset( $wp_styles->registered[ $handle ] );
 			}
 		}
 	}
 
 	/**
-	 * Check if an asset is a core asset.
+	 * Check if an asset is a core or Gutenberg asset.
 	 *
 	 * @param string $src The asset source URL.
-	 * @return bool True if the asset is a core asset, false otherwise.
+	 * @return bool True if the asset is a core or Gutenberg asset, false otherwise.
 	 */
-	private function is_core_asset( $src ) {
+	private function is_core_or_gutenberg_asset( $src ) {
 		if ( ! is_string( $src ) ) {
 			return false;
 		}
@@ -312,7 +380,9 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 		return empty( $src ) ||
 			$src[0] === '/' ||
 			strpos( $src, 'wp-includes/' ) !== false ||
-			strpos( $src, 'wp-admin/' ) !== false;
+			strpos( $src, 'wp-admin/' ) !== false ||
+			strpos( $src, 'plugins/gutenberg/' ) !== false ||
+			strpos( $src, 'plugins/gutenberg-core/' ) !== false; // WPCOM-specific path
 	}
 
 	/**
@@ -326,23 +396,36 @@ class WPCOM_REST_API_V2_Endpoint_Block_Editor_Assets extends WP_REST_Controller 
 	}
 
 	/**
-	 * Check if an asset is from an allowed plugin.
+	 * Check if a handle is from an allowed plugin.
 	 *
-	 * @param string $src The asset source URL.
-	 * @return bool True if the asset is from an allowed plugin, false otherwise.
+	 * @param string $handle The asset handle.
+	 * @return bool True if the handle is from an allowed plugin, false otherwise.
 	 */
-	private function is_allowed_plugin_asset( $src ) {
-		if ( ! is_string( $src ) || empty( $src ) ) {
+	private function is_allowed_plugin_handle( $handle ) {
+		if ( ! is_string( $handle ) || empty( $handle ) ) {
 			return false;
 		}
 
-		foreach ( self::ALLOWED_PLUGINS as $allowed_plugin ) {
-			if ( strpos( $src, $allowed_plugin ) !== false ) {
+		foreach ( self::ALLOWED_PLUGIN_HANDLE_PREFIXES as $allowed_prefix ) {
+			if ( strpos( $handle, $allowed_prefix ) === 0 ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Convert relative URLs to absolute URLs.
+	 *
+	 * @param string $src The source URL.
+	 * @return string The absolute URL.
+	 */
+	public function make_url_absolute( $src ) {
+		if ( ! empty( $src ) && str_starts_with( $src, '/' ) && ! str_starts_with( $src, '//' ) ) {
+			return site_url( $src );
+		}
+		return $src;
 	}
 
 	/**

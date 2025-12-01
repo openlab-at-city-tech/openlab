@@ -5,6 +5,82 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.4.5 - 2025-11-03
+### Changed
+- Update package dependencies. [#45652]
+
+## 0.4.4 - 2025-10-27
+### Changed
+- Update package dependencies. [#45551]
+
+## 0.4.3 - 2025-10-10
+### Changed
+- Update package dependencies. [#45428]
+
+## 0.4.2 - 2025-10-06
+### Changed
+- Update package dependencies. [#45334]
+
+## 0.4.1 - 2025-09-22
+### Changed
+- Update dependencies. [#44940]
+
+## 0.4.0 - 2025-09-19
+### Changed
+- Update @wordpress/dataviews package from v7 to v9. [#45213]
+- Update package dependencies. [#45173] [#45229]
+
+## 0.3.0 - 2025-09-08
+### Changed
+- Update @wordpress/dataviews package v5.0.0 → v7.0.0 [#45012]
+- Update package dependencies. [#45027] [#45097]
+
+## 0.2.5 - 2025-09-01
+### Changed
+- Remove unused JavaScript dependencies. [#44813]
+
+### Fixed
+- Restore dependency removed in #44813. [#44968]
+
+## 0.2.4 - 2025-08-25
+### Changed
+- Update dependencies. [#44934]
+
+## 0.2.3 - 2025-08-18
+### Added
+- Add `typecheck` script to ensure that TypeScript files are type-checked. [#44795]
+
+## 0.2.2 - 2025-08-14
+### Changed
+- Update package dependencies. [#44701]
+
+## 0.2.1 - 2025-08-11
+### Changed
+- Update dependencies. [#44673]
+- Update package dependencies. [#44677]
+
+## 0.2.0 - 2025-08-04
+### Changed
+- Update @wordpress/dataviews to 5.0.0. [#44376]
+- Update dependencies. [#44551]
+
+## 0.1.24 - 2025-07-28
+### Changed
+- Update dependencies. [#44432]
+
+## 0.1.23 - 2025-07-21
+### Changed
+- Update package dependencies. [#44356]
+
+## 0.1.22 - 2025-07-14
+### Changed
+- Update package dependencies. [#44217] [#44219]
+
+## 0.1.21 - 2025-07-07
+### Changed
+- Update dependencies. [#44161]
+- Update package dependencies. [#44148] [#44151]
+
 ## 0.1.20 - 2025-06-30
 ### Changed
 - Update dependencies. [#43971]

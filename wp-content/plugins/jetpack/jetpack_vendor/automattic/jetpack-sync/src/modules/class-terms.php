@@ -9,6 +9,10 @@ namespace Automattic\Jetpack\Sync\Modules;
 
 use Automattic\Jetpack\Sync\Settings;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Class to handle sync for terms.
  */
@@ -339,6 +343,7 @@ class Terms extends Module {
 		list( $term_taxonomy_ids, $previous_end ) = $args;
 
 		return array(
+			// @phan-suppress-next-line PhanAccessMethodInternal -- the @internal annotation is for an internal comment, not to mark the function as internal
 			'terms'        => get_terms(
 				array(
 					'hide_empty'       => false,
