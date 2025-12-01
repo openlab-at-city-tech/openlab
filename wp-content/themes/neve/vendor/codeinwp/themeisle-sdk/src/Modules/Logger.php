@@ -55,8 +55,8 @@ class Logger extends Abstract_Module {
 	 */
 	public function load( $product ) {
 		$this->product = $product;
-		$this->setup_notification();
-		$this->setup_actions();
+		add_action( 'wp_loaded', array( $this, 'setup_actions' ) );
+		add_action( 'admin_init', array( $this, 'setup_notification' ) );
 		return $this;
 	}
 
@@ -64,12 +64,10 @@ class Logger extends Abstract_Module {
 	 * Setup notification on admin.
 	 */
 	public function setup_notification() {
-		if ( ! $this->product->is_wordpress_available() ) {
+		if ( $this->is_logger_active() ) {
 			return;
 		}
-
 		add_filter( 'themeisle_sdk_registered_notifications', [ $this, 'add_notification' ] );
-
 	}
 
 	/**
@@ -79,7 +77,6 @@ class Logger extends Abstract_Module {
 		if ( ! $this->is_logger_active() ) {
 			return;
 		}
-		
 		add_action(
 			'admin_enqueue_scripts',
 			function() {
@@ -89,7 +86,7 @@ class Logger extends Abstract_Module {
 
 				$this->load_telemetry();
 			},
-			PHP_INT_MAX 
+			PHP_INT_MAX
 		);
 
 		$action_key = $this->product->get_key() . '_log_activity';
@@ -105,24 +102,26 @@ class Logger extends Abstract_Module {
 	 * @return bool Is logger active?
 	 */
 	private function is_logger_active() {
+		if ( apply_filters( 'themeisle_sdk_disable_telemetry', false ) ) {
+			return false;
+		}
 		$default = 'no';
 
 		if ( ! $this->product->is_wordpress_available() ) {
 			$default = 'yes';
 		} else {
-			$pro_slug = $this->product->get_pro_slug();
-
-			if ( ! empty( $pro_slug ) ) {
-				$all_products = Loader::get_products();
-				if ( isset( $all_products[ $pro_slug ] ) ) {
+			$all_products = Loader::get_products();
+			foreach ( $all_products as $product ) {
+				if ( $product->requires_license() ) {
 					$default = 'yes';
+					break;
 				}
 			}
 		}
 
+
 		return ( get_option( $this->product->get_key() . '_logger_flag', $default ) === 'yes' );
 	}
-
 	/**
 	 * Add notification to queue.
 	 *
@@ -179,14 +178,15 @@ class Logger extends Abstract_Module {
 				'timeout'     => 3,
 				'redirection' => 5,
 				'body'        => array(
-					'site'        => get_site_url(),
-					'slug'        => $this->product->get_slug(),
-					'version'     => $this->product->get_version(),
-					'wp_version'  => $wp_version,
-					'locale'      => get_locale(),
-					'data'        => apply_filters( $this->product->get_key() . '_logger_data', array() ),
-					'environment' => $environment,
-					'license'     => apply_filters( $this->product->get_key() . '_license_status', '' ),
+					'site'         => get_site_url(),
+					'slug'         => $this->product->get_slug(),
+					'version'      => $this->product->get_version(),
+					'wp_version'   => $wp_version,
+					'install_time' => $this->product->get_install_time(),
+					'locale'       => get_locale(),
+					'data'         => apply_filters( $this->product->get_key() . '_logger_data', array() ),
+					'environment'  => $environment,
+					'license'      => apply_filters( $this->product->get_key() . '_license_status', '' ),
 				),
 			)
 		);
