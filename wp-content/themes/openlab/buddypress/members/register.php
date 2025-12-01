@@ -151,6 +151,7 @@ $account_type_options = array_map(
 									/>
 
 								<label class="control-label" for="signup_email_confirm"><span class="label-text">Confirm Email Address</span> <span class="label-gloss">(required)</span></label>
+								<div id="signup_email_confirm_error" class="error-container"></div>
 								<input
 									class="form-control email-autocomplete"
 									type="text"
