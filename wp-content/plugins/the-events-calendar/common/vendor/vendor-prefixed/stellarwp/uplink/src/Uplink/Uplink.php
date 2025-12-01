@@ -20,7 +20,7 @@ class Uplink {
 	public static function init(): void {
 		if ( ! Config::has_container() ) {
 			throw new RuntimeException(
-				__( 'You must call StellarWP\Uplink\Config::set_container() before calling StellarWP\Uplink::init().', 'tribe-common' )
+				__( 'You must call StellarWP\Uplink\Config::set_container() before calling StellarWP\Uplink::init().', '%TEXTDOMAIN%' )
 			);
 		}
 

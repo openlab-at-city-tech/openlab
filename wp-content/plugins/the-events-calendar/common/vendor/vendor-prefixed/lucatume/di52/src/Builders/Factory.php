@@ -1,20 +1,19 @@
 <?php
+
 /**
  * Builds and sets up the correct builder for a binding.
  *
  * @package lucatume\DI52
  */
-
 namespace TEC\Common\lucatume\DI52\Builders;
 
 use Closure;
 use TEC\Common\lucatume\DI52\Container;
 use TEC\Common\lucatume\DI52\NotFoundException;
-
 /**
  * Class Factory
  *
- * @package TEC\Common\lucatume\DI52\Builders
+ * @package \TEC\Common\lucatume\DI52\Builders
  */
 class Factory
 {
@@ -30,7 +29,6 @@ class Factory
      * @var Container
      */
     protected $container;
-
     /**
      * BuilderFactory constructor.
      * @param Container $container A reference to the DI container the builder is working for.
@@ -41,7 +39,6 @@ class Factory
         $this->container = $container;
         $this->resolver = $resolver;
     }
-
     /**
      * Returns the correct builder for a value.
      *
@@ -67,22 +64,17 @@ class Factory
             }
             return new ValueBuilder($implementation);
         }
-
         if ($implementation instanceof BuilderInterface) {
             return $implementation;
         }
-
         if ($implementation instanceof Closure) {
             return new ClosureBuilder($this->container, $implementation);
         }
-
         if (is_callable($implementation)) {
             return new CallableBuilder($this->container, $implementation);
         }
-
         return new ValueBuilder($implementation);
     }
-
     /**
      * Sets the container the builder should use.
      *
@@ -96,7 +88,6 @@ class Factory
     {
         $this->container = $container;
     }
-
     /**
      * Sets the resolver the container should use.
      *

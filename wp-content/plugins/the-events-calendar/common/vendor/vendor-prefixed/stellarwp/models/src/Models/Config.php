@@ -3,6 +3,8 @@
 namespace TEC\Common\StellarWP\Models;
 
 use InvalidArgumentException;
+use TEC\Common\StellarWP\Models\Exceptions\ReadOnlyPropertyException;
+use Throwable;
 
 class Config {
 	/**
@@ -11,9 +13,14 @@ class Config {
 	protected static $hookPrefix;
 
 	/**
-	 * @var string
+	 * @var class-string<Throwable>
 	 */
 	protected static $invalidArgumentException = InvalidArgumentException::class;
+
+	/**
+	 * @var class-string<ReadOnlyPropertyException>
+	 */
+	protected static $readOnlyPropertyException = ReadOnlyPropertyException::class;
 
 	/**
 	 * Gets the hook prefix.
@@ -40,10 +47,21 @@ class Config {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string
+	 * @return class-string<Throwable>
 	 */
 	public static function getInvalidArgumentException(): string {
 		return static::$invalidArgumentException;
+	}
+
+	/**
+	 * Gets the ReadOnlyPropertyException class.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return class-string<ReadOnlyPropertyException>
+	 */
+	public static function getReadOnlyPropertyException(): string {
+		return static::$readOnlyPropertyException;
 	}
 
 	/**
@@ -56,6 +74,7 @@ class Config {
 	public static function reset() {
 		static::$hookPrefix = null;
 		static::$invalidArgumentException = InvalidArgumentException::class;
+		static::$readOnlyPropertyException = ReadOnlyPropertyException::class;
 	}
 
 	/**
@@ -102,5 +121,53 @@ class Config {
 		}
 
 		static::$invalidArgumentException = $class;
+	}
+
+	/**
+	 * Allow for overriding the ReadOnlyPropertyException class.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $class
+	 *
+	 * @return void
+	 */
+	public static function setReadOnlyPropertyException( string $class ) {
+		if ( ! is_a( $class, ReadOnlyPropertyException::class, true ) ) {
+			throw new \InvalidArgumentException( 'The provided ReadOnlyPropertyException class must be or must extend ' . ReadOnlyPropertyException::class . '.' );
+		}
+
+		static::$readOnlyPropertyException = $class;
+	}
+
+	/**
+	 * Convenience method for throwing the InvalidArgumentException.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $message
+	 *
+	 * @return never
+	 * @throws Throwable
+	 */
+	public static function throwInvalidArgumentException( string $message ): void {
+		$exceptionClass = static::$invalidArgumentException;
+		throw new $exceptionClass( $message );
+	}
+
+	/**
+	 * Convenience method for throwing the ReadOnlyPropertyException.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param ModelProperty $property
+	 * @param string        $message
+	 *
+	 * @return never
+	 * @throws ReadOnlyPropertyException
+	 */
+	public static function throwReadOnlyPropertyException( ModelProperty $property, string $message ): void {
+		$exceptionClass = static::$readOnlyPropertyException;
+		throw new $exceptionClass( $property, $message );
 	}
 }

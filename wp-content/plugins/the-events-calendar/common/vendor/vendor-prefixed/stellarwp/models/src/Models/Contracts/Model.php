@@ -3,6 +3,7 @@
 namespace TEC\Common\StellarWP\Models\Contracts;
 
 use RuntimeException;
+use TEC\Common\StellarWP\Models\ModelPropertyDefinition;
 
 interface Model {
 	/**
@@ -13,6 +14,17 @@ interface Model {
 	 * @param array<string,mixed> $attributes Attributes.
 	 */
 	public function __construct( array $attributes = [] );
+
+	/**
+	 * Constructs a model instance from a data array.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array<string,mixed>|object $data
+	 *
+	 * @return static
+	 */
+	public static function fromData( $data );
 
 	/**
 	 * Fills the model with an array of attributes.
@@ -43,7 +55,7 @@ interface Model {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function getDirty() : array;
 
@@ -56,18 +68,38 @@ interface Model {
 	 *
 	 * @return mixed|array
 	 */
-	public function getOriginal( string $key = null );
+	public function getOriginal( ?string $key = null );
+
+	/**
+	 * Returns the property definition for the given key.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $key Property name.
+	 *
+	 * @return ModelPropertyDefinition
+	 */
+	public static function getPropertyDefinition( string $key ) : ModelPropertyDefinition;
+
+	/**
+	 * Returns the property definitions for the model.
+	 *
+	 * @since 2.0.0
+	 * @return array<string,ModelPropertyDefinition>
+	 */
+	public static function getPropertyDefinitions() : array;
 
 	/**
 	 * Determines if the model has the given property.
 	 *
+	 * @since 2.0.0 changed to static
 	 * @since 1.0.0
 	 *
 	 * @param string $key Property name.
 	 *
 	 * @return bool
 	 */
-	public function hasProperty( string $key ) : bool;
+	public static function hasProperty( string $key ) : bool;
 
 	/**
 	 * Determines if a given attribute is clean.
@@ -78,7 +110,7 @@ interface Model {
 	 *
 	 * @return bool
 	 */
-	public function isClean( string $attribute = null ) : bool;
+	public function isClean( ?string $attribute = null ) : bool;
 
 	/**
 	 * Determines if a given attribute is dirty.
@@ -89,11 +121,12 @@ interface Model {
 	 *
 	 * @return bool
 	 */
-	public function isDirty( string $attribute = null ) : bool;
+	public function isDirty( ?string $attribute = null ) : bool;
 
 	/**
 	 * Validates an attribute to a PHP type.
 	 *
+	 * @since 2.0.0 changed to static
 	 * @since 1.0.0
 	 *
 	 * @param string $key   Attribute name.
@@ -101,14 +134,15 @@ interface Model {
 	 *
 	 * @return bool
 	 */
-	public function isPropertyTypeValid( string $key, $value ) : bool;
+	public static function isPropertyTypeValid( string $key, $value ) : bool;
 
 	/**
 	 * Returns the property keys.
 	 *
+	 * @since 2.0.0 changed to static
 	 * @since 1.0.0
 	 *
-	 * @return int[]|string[]
+	 * @return list<string>
 	 */
 	public static function propertyKeys() : array;
 

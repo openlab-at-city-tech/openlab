@@ -8,7 +8,7 @@ abstract class DataTransferObject {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param $object
+	 * @param object $object
 	 *
 	 * @return self
 	 */

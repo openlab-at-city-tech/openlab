@@ -1,21 +1,20 @@
 <?php
+
 /**
  * Builds and returns object instances.
  *
  * @package lucatume\DI52
  */
-
 namespace TEC\Common\lucatume\DI52\Builders;
 
 use TEC\Common\lucatume\DI52\ContainerException;
 use TEC\Common\lucatume\DI52\NotFoundException;
 use ReflectionException;
 use ReflectionMethod;
-
 /**
  * Class ClassBuilder
  *
- * @package TEC\Common\lucatume\DI52\Builders
+ * @package \TEC\Common\lucatume\DI52\Builders
  */
 class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
 {
@@ -47,14 +46,12 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
      * @var array<string>|null
      */
     protected $afterBuildMethods;
-
     /**
      * A reference to the resolver currently using the builder.
      *
      * @var Resolver
      */
     protected $resolver;
-
     /**
      * Whether the $className is an implementation of $id
      * and $id is an interface.
@@ -62,7 +59,6 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
      * @var bool
      */
     protected $isInterface = false;
-
     /**
      * ClassBuilder constructor.
      *
@@ -78,24 +74,18 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
     public function __construct($id, Resolver $resolver, $className, array $afterBuildMethods = null, ...$buildArgs)
     {
         if (!class_exists($className)) {
-            throw new NotFoundException(
-                "nothing is bound to the '$className' id and it's not an existing or instantiable class."
-            );
+            throw new NotFoundException("nothing is bound to the '{$className}' id and it's not an existing or instantiable class.");
         }
-
         $interfaces = class_implements($className);
-
         if ($interfaces && isset($interfaces[$id])) {
             $this->isInterface = true;
         }
-
         $this->id = $id;
         $this->className = $className;
         $this->afterBuildMethods = $afterBuildMethods;
         $this->resolver = $resolver;
         $this->buildArgs = $buildArgs;
     }
-
     /**
      * Builds and returns an instance of the class.
      *
@@ -107,12 +97,11 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
     {
         $constructorArgs = $this->resolveConstructorParameters();
         $built = new $this->className(...$constructorArgs);
-        foreach ((array)$this->afterBuildMethods as $afterBuildMethod) {
+        foreach ((array) $this->afterBuildMethods as $afterBuildMethod) {
             $built->{$afterBuildMethod}();
         }
         return $built;
     }
-
     /**
      * Resolves the constructor arguments to concrete implementations or values.
      *
@@ -123,28 +112,23 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
     protected function resolveConstructorParameters()
     {
         $constructorArgs = [];
-
         /** @var Parameter $parameter */
         foreach ($this->getResolvedConstructorParameters($this->className) as $i => $parameter) {
-            $this->resolver->addToBuildLine((string)$parameter->getType(), $parameter->getName());
+            $this->resolver->addToBuildLine((string) $parameter->getType(), $parameter->getName());
             if (isset($this->buildArgs[$i])) {
                 $arg = $this->buildArgs[$i];
                 if ($arg instanceof BuilderInterface) {
                     $constructorArgs[] = $arg->build();
                     continue;
                 }
-
                 $constructorArgs[] = $this->resolveBuildArg($this->buildArgs[$i]);
                 continue;
             }
-
-            $constructorArgs [] = $this->resolveParameter($parameter);
+            $constructorArgs[] = $this->resolveParameter($parameter);
             $this->resolver->buildLinePop();
         }
-
         return $constructorArgs;
     }
-
     /**
      * Returns a set of resolved constructor parameters.
      *
@@ -159,7 +143,6 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
         if (isset(self::$constructorParametersCache[$className])) {
             return self::$constructorParametersCache[$className];
         }
-
         try {
             $constructorReflection = new ReflectionMethod($className, '__construct');
         } catch (ReflectionException $e) {
@@ -167,22 +150,16 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
             // No constructor method, no args.
             return [];
         }
-
         if (!$constructorReflection->isPublic()) {
             throw new ContainerException("constructor method is not public.");
         }
-
         $parameters = [];
-
         foreach ($constructorReflection->getParameters() as $i => $reflectionParameter) {
             $parameters[] = new Parameter($i, $reflectionParameter);
         }
-
         self::$constructorParametersCache[$className] = $parameters;
-
         return $parameters;
     }
-
     /**
      * Resolves a build argument to a concrete implementation.
      *
@@ -199,7 +176,6 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
         }
         return $arg;
     }
-
     /**
      * Resolves a parameter to a concrete implementation or value.
      *
@@ -212,27 +188,22 @@ class ClassBuilder implements BuilderInterface, ReinitializableBuilderInterface
     protected function resolveParameter(Parameter $parameter)
     {
         $paramClass = $parameter->getClass();
-
         if ($paramClass) {
             $parameterImplementation = $this->resolver->whenNeedsGive($this->id, $paramClass);
         } elseif ($this->isInterface) {
             $name = $parameter->getName();
             // If an interface was requested, resolve the underlying concrete class instead.
-            $parameterImplementation = $this->resolver->whenNeedsGive($this->className, "\$$name");
+            $parameterImplementation = $this->resolver->whenNeedsGive($this->className, "\${$name}");
         } else {
             $name = $parameter->getName();
-            $parameterImplementation = $this->resolver->whenNeedsGive($this->id, "\$$name");
+            $parameterImplementation = $this->resolver->whenNeedsGive($this->id, "\${$name}");
         }
-
         try {
-            return $parameterImplementation instanceof BuilderInterface ?
-                $parameterImplementation->build()
-                : $this->resolver->resolve($parameterImplementation);
+            return $parameterImplementation instanceof BuilderInterface ? $parameterImplementation->build() : $this->resolver->resolve($parameterImplementation);
         } catch (NotFoundException $e) {
             return $parameter->getDefaultValueOrFail();
         }
     }
-
     /**
      * {@inheritdoc}
      */

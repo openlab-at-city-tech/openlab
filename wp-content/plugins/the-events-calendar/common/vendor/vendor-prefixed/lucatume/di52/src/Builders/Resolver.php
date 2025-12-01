@@ -1,18 +1,17 @@
 <?php
+
 /**
  * Resolves ids (string, class names or mixed values) to values with auto-wiring.
  *
  * @package TEC\Common\lucatume\DI52\Builders
  */
-
 namespace TEC\Common\lucatume\DI52\Builders;
 
 use TEC\Common\lucatume\DI52\NotFoundException;
-
 /**
  * Class Resolver
  *
- * @package TEC\Common\lucatume\DI52\Builders
+ * @package \TEC\Common\lucatume\DI52\Builders
  */
 class Resolver
 {
@@ -22,7 +21,6 @@ class Resolver
      * @var array<string,BuilderInterface|mixed>
      */
     protected $bindings = [];
-
     /**
      * A flag property to indicate whether implicit bindings, those discovered during auto-wiring resolution, should
      * be bound as prototype or singleton bindings.
@@ -30,14 +28,12 @@ class Resolver
      * @var bool
      */
     protected $resolveUnboundAsSingletons = false;
-
     /**
      * A map from ids bound in the container to their singleton nature.
      *
      * @var array<string,bool>
      */
     protected $singletons = [];
-
     /**
      * A map of when-needs-give specifications.
      * @var array<string,array<string,BuilderInterface>>
@@ -49,7 +45,6 @@ class Resolver
      * @var array<string>
      */
     protected $buildLine = [];
-
     /**
      * Resolver constructor.
      *
@@ -60,7 +55,6 @@ class Resolver
     {
         $this->resolveUnboundAsSingletons = $resolveUnboundAsSingletons;
     }
-
     /**
      * Binds an implementation for an id, or class name, as prototype (build new each time).
      *
@@ -74,7 +68,6 @@ class Resolver
         unset($this->singletons[$id]);
         $this->bindings[$id] = $implementation;
     }
-
     /**
      * Registers an implementation for an id, or class name, as singleton (build at most once).
      *
@@ -89,7 +82,6 @@ class Resolver
         $this->singletons[$id] = true;
         $this->bindings[$id] = $implementation;
     }
-
     /**
      * Returns whether an implementation was registered for the id in the resolver or not.
      *
@@ -101,7 +93,6 @@ class Resolver
     {
         return isset($this->bindings[$id]);
     }
-
     /**
      * Removes the relation between an id and a bound implementation from the resolver.
      *
@@ -113,7 +104,6 @@ class Resolver
     {
         unset($this->bindings[$id]);
     }
-
     /**
      * Returns whether a specific id is bound as singleton (build at most once), or not.
      *
@@ -125,7 +115,6 @@ class Resolver
     {
         return isset($this->singletons[$id]);
     }
-
     /**
      * Transform the canonical class to the class part of a when-needs-give specification, if required.
      *
@@ -137,11 +126,8 @@ class Resolver
      */
     public function whenNeedsGive($id, $paramClass)
     {
-        return isset($this->whenNeedsGive[$id][$paramClass]) ?
-            $this->whenNeedsGive[$id][$paramClass]
-            : $paramClass;
+        return isset($this->whenNeedsGive[$id][$paramClass]) ? $this->whenNeedsGive[$id][$paramClass] : $paramClass;
     }
-
     /**
      * Sets an entry in the when->needs->give chain.
      *
@@ -156,7 +142,6 @@ class Resolver
     {
         $this->whenNeedsGive[$whenClass][$needsClass] = $builder;
     }
-
     /**
      * Resolves an ide to an implementation with the input arguments.
      *
@@ -172,16 +157,14 @@ class Resolver
      */
     public function resolveWithArgs($id, array $afterBuildMethods = null, ...$buildArgs)
     {
-        if (! is_string($id)) {
+        if (!is_string($id)) {
             return $id;
         }
-
         if (empty($afterBuildMethods) && empty($buildArgs)) {
             return $this->resolve($id);
         }
         return $this->cloneBuilder($id, $afterBuildMethods, ...$buildArgs)->build();
     }
-
     /**
      * Resolves an id or input value to a value or object instance.
      *
@@ -202,24 +185,19 @@ class Resolver
         if ($buildLine !== null) {
             $this->buildLine = $buildLine;
         }
-
-        if (! is_string($id)) {
+        if (!is_string($id)) {
             return $id;
         }
-
         if (!isset($this->bindings[$id])) {
             return $this->resolveUnbound($id);
         }
-
         if ($this->bindings[$id] instanceof BuilderInterface) {
             $built = $this->resolveBound($id);
         } else {
             $built = $this->bindings[$id];
         }
-
         return $built;
     }
-
     /**
      * Builds, with auto-wiring, an instance of a not bound class.
      *
@@ -232,15 +210,12 @@ class Resolver
     private function resolveUnbound($id)
     {
         $built = (new ClassBuilder($id, $this, $id))->build();
-
         if ($this->resolveUnboundAsSingletons) {
             $this->singletons[$id] = true;
             $this->bindings[$id] = $built;
         }
-
         return $built;
     }
-
     /**
      * Resolves a bound implementation to a value or object.
      *
@@ -257,7 +232,6 @@ class Resolver
         }
         return $built;
     }
-
     /**
      * Clones the builder assigned to an id and re-initializes it.
      * The clone operation leverages the already resolved dependencies of a builder to create an up-to-date instance.
@@ -281,10 +255,8 @@ class Resolver
         } else {
             $builder = new ClassBuilder($id, $this, $id, $afterBuildMethods, ...$buildArgs);
         }
-
         return $builder;
     }
-
     /**
      * Adds an entry to the build line.
      *
@@ -295,9 +267,8 @@ class Resolver
      */
     public function addToBuildLine($type, $parameterName)
     {
-        $this->buildLine[] = trim("$type \$$parameterName");
+        $this->buildLine[] = trim("{$type} \${$parameterName}");
     }
-
     /**
      * Returns the current build line.
      *
@@ -310,7 +281,6 @@ class Resolver
     {
         return $this->buildLine;
     }
-
     /**
      * Removes the last element from the build line, if any.
      *

@@ -74,13 +74,13 @@ final class Notice {
 	) {
 		if ( ! in_array( $type, self::ALLOWED_TYPES, true ) ) {
 			throw new InvalidArgumentException( sprintf(
-					__( 'Notice $type must be one of: %s', 'tribe-common' ),
+					__( 'Notice $type must be one of: %s', '%TEXTDOMAIN%' ),
 					implode( ', ', self::ALLOWED_TYPES ) )
 			);
 		}
 
 		if ( empty( $message ) ) {
-			throw new InvalidArgumentException( __( 'The $message cannot be empty', 'tribe-common' ) );
+			throw new InvalidArgumentException( __( 'The $message cannot be empty', '%TEXTDOMAIN%' ) );
 		}
 
 		$this->type        = $type;

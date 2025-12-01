@@ -67,7 +67,7 @@ class License_Field extends Field {
 
 			add_settings_field(
 				$resource->get_license_object()->get_key_option_name(),
-				__( 'License Key', 'tribe-common' ),
+				__( 'License Key', '%TEXTDOMAIN%' ),
 				[ $this, 'field_html' ],
 				$this->group->get_name( sanitize_title( $resource->get_slug() ) ),
 				self::get_section_name( $resource ),
@@ -77,7 +77,7 @@ class License_Field extends Field {
 					'type'         => 'text',
 					'path'         => $resource->get_path(),
 					'value'        => $resource->get_license_key(),
-					'placeholder'  => __( 'License Number', 'tribe-common' ),
+					'placeholder'  => __( 'License Number', '%TEXTDOMAIN%' ),
 					'html'         => $this->get_field_html( $resource ),
 					'html_classes' => 'stellarwp-uplink-license-key-field',
 					'plugin'       => $resource->get_path(),
@@ -95,7 +95,7 @@ class License_Field extends Field {
 	 * @return string
 	 */
 	public function get_field_html( $plugin ) : string {
-		$html = sprintf( '<p class="tooltip description">%s</p>', __( 'A valid license key is required for support and updates', 'tribe-common' ) );
+		$html = sprintf( '<p class="tooltip description">%s</p>', __( 'A valid license key is required for support and updates', '%TEXTDOMAIN%' ) );
 		$html .= '<div class="license-test-results"><img src="' . esc_url( admin_url( 'images/wpspin_light.gif' ) ) . '" class="ajax-loading-license" alt="Loading" style="display: none"/>';
 		$html .= '<div class="key-validity"></div></div>';
 

@@ -4,94 +4,26 @@ namespace TEC\Common\StellarWP\Schema;
 
 use TEC\Common\StellarWP\Schema\Builder;
 use TEC\Common\StellarWP\Schema\Config;
-use TEC\Common\StellarWP\Schema\Fields;
 use TEC\Common\StellarWP\Schema\Tables;
+use TEC\Common\StellarWP\Schema\Tables\Contracts\Table_Interface;
+use TEC\Common\StellarWP\Schema\Tables\Collection;
 
 /**
  * A helper class for registering StellarWP Schema resources.
  */
 class Register {
 	/**
-	 * Register a field schema.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string|Fields\Contracts\Field $field Field class.
-	 *
-	 * @return Fields\Contracts\Schema_Interface
-	 */
-	public static function field( $field ) {
-		Schema::init();
-
-		if ( is_string( $field ) ) {
-			$field = new $field();
-		}
-
-		$container = Config::get_container();
-
-		Schema::fields()->add( $field );
-
-		// If we've already executed plugins_loaded, automatically add the field.
-		if ( did_action( 'plugins_loaded' ) ) {
-			$container->get( Builder::class )->up();
-		}
-
-		return $field;
-	}
-
-	/**
-	 * Register multiple field schemas.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array<mixed> $fields Fields to register.
-	 *
-	 * @return Fields\Collection
-	 */
-	public static function fields( array $fields ) {
-		foreach ( $fields as $field ) {
-			static::field( $field );
-		}
-
-		return Schema::fields();
-	}
-
-	/**
-	 * Removes a field from the register.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string|Fields\Contracts\Schema_Interface $field Field Schema class.
-	 *
-	 * @return Fields\Contracts\Schema_Interface
-	 */
-	public static function remove_field( $field ) {
-		Schema::init();
-
-		if ( is_string( $field ) ) {
-			$field = new $field();
-		}
-
-		// If we've already executed plugins_loaded, automatically remove the field.
-		if ( did_action( 'plugins_loaded' ) ) {
-			$field->drop();
-		}
-
-		Schema::fields()->remove( $field::get_schema_slug() );
-
-		return $field;
-	}
-
-	/**
 	 * Removes a table from the register.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string|Tables\Contracts\Schema_Interface $table Table Schema class.
+	 * @param string|Table_Interface $table Table Schema class.
 	 *
-	 * @return Tables\Contracts\Schema_Interface
+	 * @throws \TEC\Common\StellarWP\DB\Database\Exceptions\DatabaseQueryException If the query fails.
+	 *
+	 * @return Table_Interface
 	 */
-	public static function remove_table( $table ) {
+	public static function remove_table( $table ): Table_Interface {
 		Schema::init();
 
 		if ( is_string( $table ) ) {
@@ -115,9 +47,11 @@ class Register {
 	 *
 	 * @param string|Tables\Contracts\Table $table Table class.
 	 *
-	 * @return Tables\Contracts\Schema_Interface
+	 * @throws \TEC\Common\StellarWP\DB\Database\Exceptions\DatabaseQueryException If the query fails.
+	 *
+	 * @return Table_Interface
 	 */
-	public static function table( $table ) {
+	public static function table( $table ): Table_Interface {
 		Schema::init();
 
 		if ( is_string( $table ) ) {
@@ -143,9 +77,11 @@ class Register {
 	 *
 	 * @param array<mixed> $tables Tables to register.
 	 *
-	 * @return Tables\Collection
+	 * @throws \TEC\Common\StellarWP\DB\Database\Exceptions\DatabaseQueryException If the query fails.
+	 *
+	 * @return Collection
 	 */
-	public static function tables( array $tables ) {
+	public static function tables( array $tables ): Collection {
 		foreach ( $tables as $table ) {
 			static::table( $table );
 		}

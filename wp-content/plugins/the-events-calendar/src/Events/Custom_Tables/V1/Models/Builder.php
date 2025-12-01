@@ -290,8 +290,9 @@ class Builder {
 	/**
 	 * Insert a new row or update one if already exists.
 	 *
-	 * @since 6.1.3 Integration with memoization.
 	 * @since 6.0.0
+	 * @since 6.1.3 Integration with memoization.
+	 * @since 6.15.1 Create working copies to preserve original parameter values for debug_backtrace().
 	 *
 	 * @param array<string>            $unique_by A list of columns that are marked as UNIQUE on the database.
 	 * @param array<string,mixed>|null $data      The data to be inserted or updated into the table.
@@ -299,29 +300,32 @@ class Builder {
 	 * @return false|int The rows affected flag or false on failure.
 	 */
 	public function upsert( array $unique_by, array $data = null ) {
-		if ( empty( $unique_by ) ) {
+		$working_unique_by = $unique_by;
+		$working_data      = $data;
+
+		if ( empty( $working_unique_by ) ) {
 			throw new InvalidArgumentException( 'A series of unique column needs to be specified.' );
 		}
 
 		// If no input was provided use the model as input.
-		if ( $data === null ) {
+		if ( $working_data === null ) {
 			$model = $this->model;
 			$model->validate();
 		} else {
-			if ( empty( $data ) ) {
+			if ( empty( $working_data ) ) {
 				return false;
 			}
 
-			$columns = array_keys( $data );
+			$columns = array_keys( $working_data );
 			// Make sure the required key is part of the data to be inserted in.
-			foreach ( $unique_by as $column ) {
+			foreach ( $working_unique_by as $column ) {
 				if ( ! in_array( $column, $columns, true ) ) {
 					throw new InvalidArgumentException( "The column '{$column}' must be part of the data array" );
 				}
 			}
 
-			$model = $this->set_data_to_model( $data );
-			$model->validate( array_keys( $data ) );
+			$model = $this->set_data_to_model( $working_data );
+			$model->validate( array_keys( $working_data ) );
 		}
 
 		if ( $model->is_invalid() ) {
@@ -357,7 +361,7 @@ class Builder {
 		$update_sql   = [];
 		$update_value = [];
 		foreach ( $formatted_data as $column => $value ) {
-			if ( in_array( $column, $unique_by, true ) ) {
+			if ( in_array( $column, $working_unique_by, true ) ) {
 				continue;
 			}
 			$value_placeholder = $format[ $column ] ?? '%s';
@@ -385,19 +389,21 @@ class Builder {
 					'debug',
 					'Builder: query failure.',
 					[
-						'source' => __CLASS__ . ' ' . __METHOD__ . ' ' . __LINE__,
-						'trace'  => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-						'error'  => $wpdb->last_error,
+						'source'            => __CLASS__ . ' ' . __METHOD__ . ' ' . __LINE__,
+						'trace'             => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+						'error'             => $wpdb->last_error,
+						'working_unique_by' => $working_unique_by,
+						'working_data'      => $working_data,
 					]
 				);
 			}
 
 			// If we have a cache, let's clear it.
 			// It may be either a static call or on an instance, handle both.
-			if ( $data !== null ) {
+			if ( $working_data !== null ) {
 				// Attempt to generate a cache key by the upsert key.
-				foreach ( $unique_by as $field ) {
-					$value = $data[ $field ] ?? null;
+				foreach ( $working_unique_by as $field ) {
+					$value = $working_data[ $field ] ?? null;
 					$key   = self::generate_cache_key( $model, $field, $value );
 
 					// Invalidate the caches.
@@ -476,16 +482,17 @@ class Builder {
 	/**
 	 * Perform updates against a model that already exists on the database.
 	 *
-	 * @since 6.1.3 Integration with memoization.
 	 * @since 6.0.0
+	 * @since 6.1.3 Integration with memoization.
+	 * @since 6.15.12 Mark $data as nullable.
 	 *
-	 * @param array|null $data    If the data is null the data of the model would be used to set an update, otherwise
+	 * @param array|null $data If the data is null the data of the model would be used to set an update, otherwise
 	 *                            an array of `column => value` are used to construct the series of updates to perform
 	 *                            against this model.
 	 *
 	 * @return bool|int False if the operation was unsuccessfully
 	 */
-	public function update( array $data = null ) {
+	public function update( ?array $data = null ) {
 		// Invalid on a where clause or previous value.
 		if ( $this->invalid ) {
 			return false;
@@ -830,6 +837,7 @@ class Builder {
 	 * that will be hidden from the client code.
 	 *
 	 * @since 6.0.0
+	 * @since 6.15.1 Create working copies to preserve original parameter values for debug_backtrace().
 	 *
 	 * @param mixed|array<mixed> $value     The value, or values, to find the matches for.
 	 * @param string|null        $column    The column to search the Models by, or `null` to use the Model
@@ -839,22 +847,26 @@ class Builder {
 	 *                               hiding the batched query logic.
 	 */
 	public function find_all( $value, $column = null ) {
-		if ( false === $column_data_format = $this->check_find_value_column( $value, $column ) ) {
+		$working_value  = $value;
+		$working_column = $column;
+
+		// phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.FoundInControlStructure
+		if ( false === $column_data_format = $this->check_find_value_column( $working_value, $working_column ) ) {
 			// Nothing to return.
 			return;
 		}
 
-		list( $column, $data, $format ) = $column_data_format;
+		list( $working_column, $data, $format ) = $column_data_format;
 
-		$operator = is_array( $value ) ? 'IN' : '=';
-		$compare  = is_array( $value ) ? implode( ',', array_column( $format, $column ) ) : $format[ $column ];
-		$data     = is_array( $value ) ? array_column( $data, $column ) : $data;
+		$operator = is_array( $working_value ) ? 'IN' : '=';
+		$compare  = is_array( $working_value ) ? implode( ',', array_column( $format, $working_column ) ) : $format[ $working_column ];
+		$data     = is_array( $working_value ) ? array_column( $data, $working_column ) : $data;
 
 		// Build our order by string.
 		$order_by = $this->get_order_by_clause();
 
 		global $wpdb;
-		$sql = "SELECT * FROM {$wpdb->prefix}{$this->model->table_name()} WHERE `{$column}` {$operator} ({$compare}) {$order_by} LIMIT %d";
+		$sql = "SELECT * FROM {$wpdb->prefix}{$this->model->table_name()} WHERE `{$working_column}` {$operator} ({$compare}) {$order_by} LIMIT %d";
 
 		$batch_size    = min( absint( $this->batch_size ), 5000 );
 		$semi_prepared = $wpdb->prepare( $sql, array_merge( (array) $data, [ $batch_size ] ) );
@@ -873,9 +885,11 @@ class Builder {
 						'debug',
 						'Builder: query failure.',
 						[
-							'source' => __METHOD__ . ':' . __LINE__,
-							'trace'  => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-						'error'      => $wpdb->last_error,
+							'source'         => __METHOD__ . ':' . __LINE__,
+							'trace'          => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+							'error'          => $wpdb->last_error,
+							'working_value'  => $working_value,
+							'working_column' => $working_column,
 						]
 					);
 				}
@@ -932,22 +946,25 @@ class Builder {
 	 * Execute a COUNT() call against the DB using the provided query elements.
 	 *
 	 * @since 6.0.0
+	 * @since 6.15.1 Create working copy to preserve original parameter value for debug_backtrace().
 	 *
 	 * @param string|null $column_name The name of the column used for the count, '*` otherwise.
 	 *
 	 * @return int
 	 */
 	public function count( $column_name = null ) {
+		$working_column_name = $column_name;
+
 		if ( $this->invalid ) {
 			return 0;
 		}
 
 		global $wpdb;
 
-		if ( $column_name === null ) {
+		if ( $working_column_name === null ) {
 			$this->operation = 'SELECT COUNT(*)';
 		} else {
-			$this->operation = $wpdb->prepare( 'SELECT COUNT(%s)', $column_name );
+			$this->operation = $wpdb->prepare( 'SELECT COUNT(%s)', $working_column_name );
 		}
 
 		// If the query is invalid, don't return a single result.
@@ -965,9 +982,10 @@ class Builder {
 				'debug',
 				'Builder: query failure.',
 				[
-					'source' => __METHOD__ . ':' . __LINE__,
-					'trace'  => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-					'error'  => $wpdb->last_error,
+					'source'              => __METHOD__ . ':' . __LINE__,
+					'trace'               => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+					'error'               => $wpdb->last_error,
+					'working_column_name' => $working_column_name,
 				]
 			);
 		}
@@ -979,25 +997,32 @@ class Builder {
 	 * Run a query and return the results directly from $wpdb->query().
 	 *
 	 * @since 6.3.1
+	 * @since 6.15.1 Create working copy to preserve original parameter value for debug_backtrace().
 	 *
 	 * @param string $query The SQL query to run on the database.
 	 *
 	 * @return bool|int|mixed|\mysqli_result|resource|null The query result or null.
 	 */
 	protected function query( string $query ) {
+		$working_query = $query;
+
 		global $wpdb;
+
 		$result = null;
+
 		if ( $this->execute_queries ) {
-			$result = $wpdb->query( $query );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$result = $wpdb->query( $working_query );
 			if ( $result === false || $wpdb->last_error ) {
 				do_action(
 					'tribe_log',
 					'debug',
 					'Builder: query failure.',
 					[
-						'source' => __METHOD__ . ':' . __LINE__,
-						'trace'  => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
-						'error'  => $wpdb->last_error,
+						'source'        => __METHOD__ . ':' . __LINE__,
+						'trace'         => debug_backtrace( 2, 5 ), // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_debug_backtrace
+						'error'         => $wpdb->last_error,
+						'working_query' => $working_query,
 					]
 				);
 			}
@@ -1540,12 +1565,13 @@ class Builder {
 	 * Create an array of model instances to get the benefits of a model.
 	 *
 	 * @since 6.0.0
+	 * @since 6.15.12 Mark $raw as nullable.
 	 *
 	 * @param array|null $raw The result from a `$wpdb->get_results` call.
 	 *
 	 * @return array<Model> An array with the models with the raw results.
 	 */
-	private function create_collection( array $raw = null ) {
+	private function create_collection( ?array $raw = null ) {
 		if ( $raw === null ) {
 			return [];
 		}

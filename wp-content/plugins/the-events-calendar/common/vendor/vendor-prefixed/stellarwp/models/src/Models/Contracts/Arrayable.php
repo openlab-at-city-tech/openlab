@@ -11,7 +11,7 @@ interface Arrayable {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array
+	 * @return array<string,mixed>
 	 */
 	public function toArray() : array;
 }

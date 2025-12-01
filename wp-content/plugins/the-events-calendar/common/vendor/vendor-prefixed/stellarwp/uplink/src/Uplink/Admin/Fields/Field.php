@@ -179,7 +179,7 @@ class Field {
 	 * @return string
 	 */
 	public function get_placeholder(): string {
-		return __( 'License key', 'tribe-common' );
+		return __( 'License key', '%TEXTDOMAIN%' );
 	}
 
 	/**

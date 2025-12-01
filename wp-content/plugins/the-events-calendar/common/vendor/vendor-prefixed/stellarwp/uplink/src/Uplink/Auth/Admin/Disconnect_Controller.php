@@ -108,7 +108,7 @@ final class Disconnect_Controller {
 			if ( $this->authorizer->can_auth() && $this->disconnect->disconnect( $_GET[ self::SLUG ], $_GET[ self::CACHE_KEY ] ) ) {
 				$this->notice->add(
 					new Notice( Notice::SUCCESS,
-						__( 'Token disconnected.', 'tribe-common' ),
+						__( 'Token disconnected.', '%TEXTDOMAIN%' ),
 						true
 					)
 				);
@@ -133,7 +133,7 @@ final class Disconnect_Controller {
 			} else {
 				$this->notice->add(
 					new Notice( Notice::ERROR,
-						__( 'Unable to disconnect token, ensure you have admin permissions.', 'tribe-common' ),
+						__( 'Unable to disconnect token, ensure you have admin permissions.', '%TEXTDOMAIN%' ),
 						true
 					)
 				);
@@ -141,7 +141,7 @@ final class Disconnect_Controller {
 		} else {
 			$this->notice->add(
 				new Notice( Notice::ERROR,
-					__( 'Unable to disconnect token: nonce verification failed.', 'tribe-common' ),
+					__( 'Unable to disconnect token: nonce verification failed.', '%TEXTDOMAIN%' ),
 					true
 				)
 			);

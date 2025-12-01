@@ -34,7 +34,7 @@ final class Token_Manager implements Contracts\Token_Manager {
 	public function __construct( string $option_name ) {
 		if ( ! $option_name ) {
 			throw new InvalidArgumentException(
-				__( 'You must set a token prefix with StellarWP\Uplink\Config::set_token_auth_prefix() before using the token manager.', 'tribe-common' )
+				__( 'You must set a token prefix with StellarWP\Uplink\Config::set_token_auth_prefix() before using the token manager.', '%TEXTDOMAIN%' )
 			);
 		}
 

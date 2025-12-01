@@ -52,7 +52,7 @@ class Form extends Controller{
 	 */
 	public function get_button_text(): string {
 		if ( empty( $this->button_text ) ) {
-			return esc_html__( 'Save Changes', 'tribe-common' );
+			return esc_html__( 'Save Changes', '%TEXTDOMAIN%' );
 		}
 
 		return $this->button_text;
