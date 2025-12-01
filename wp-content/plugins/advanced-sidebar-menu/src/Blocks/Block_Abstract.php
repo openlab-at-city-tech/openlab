@@ -2,7 +2,6 @@
 
 namespace Advanced_Sidebar_Menu\Blocks;
 
-use Advanced_Sidebar_Menu\__Temp_Id_Proxy;
 use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
 use Advanced_Sidebar_Menu\Blocks\Register\Register_Utils;
 use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
@@ -11,7 +10,6 @@ use Advanced_Sidebar_Menu\Utils;
 use Advanced_Sidebar_Menu\Widget\Category;
 use Advanced_Sidebar_Menu\Widget\Page;
 use Advanced_Sidebar_Menu\Widget\Widget;
-use Advanced_Sidebar_Menu\Widget\WidgetWithId;
 use Advanced_Sidebar_Menu\Widget_Options\Shared\Style_Targeting;
 
 /**
@@ -75,7 +73,7 @@ abstract class Block_Abstract {
 
 
 	/**
-	 * @todo  Remove once minimum required PRO Blocks\Navigation implements `Block` interface.
+	 * @todo  Remove once minimum required PRO is 9.10.0
 	 *
 	 * @return array<string, ATTR_SHAPE|Attribute>
 	 */
@@ -83,15 +81,15 @@ abstract class Block_Abstract {
 
 
 	/**
-	 * @todo  Remove once minimum required PRO Blocks\Navigation implements `Block` interface.
+	 * @todo  Remove once minimum required PRO is 9.10.0
 	 *
-	 * @return WidgetWithId<WIDGET_SETTINGS, DEFAULTS>
+	 * @return Widget<WIDGET_SETTINGS, DEFAULTS>
 	 */
 	abstract protected function get_widget_class();
 
 
 	/**
-	 * @todo  Remove once \Advanced_Sidebar_Menu\Blocks\Navigation implements `Block` interface.
+	 * @todo  Remove once minimum required PRO is 9.10.0
 	 *
 	 * @return string
 	 */
@@ -138,7 +136,7 @@ abstract class Block_Abstract {
 		}
 
 		$widget = $this->get_widget_class();
-		$blocks[] = __Temp_Id_Proxy::factory( $widget )->get_id_base();
+		$blocks[] = $widget->get_id_base();
 		return $blocks;
 	}
 

@@ -3,7 +3,7 @@
 namespace Advanced_Sidebar_Menu\Blocks;
 
 use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
-use Advanced_Sidebar_Menu\Widget\WidgetWithId;
+use Advanced_Sidebar_Menu\Widget\Widget;
 
 /**
  * Rules a block must follow.
@@ -47,9 +47,9 @@ interface Block {
 	/**
 	 * Get the widget class, which matches this block.
 	 *
-	 * @return WidgetWithId<SETTINGS, DEFAULTS>
+	 * @return Widget<SETTINGS, DEFAULTS>
 	 */
-	public function get_widget_class(): WidgetWithId;
+	public function get_widget_class(): Widget;
 
 
 	/**

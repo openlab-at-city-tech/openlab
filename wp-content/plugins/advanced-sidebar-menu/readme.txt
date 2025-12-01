@@ -3,9 +3,9 @@ Contributors: onpointplugins, Mat Lipe
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: menus, page menus, category menus, sidebars, hierarchy
 Requires at least: 6.2.0
-Tested up to: 6.8.2
+Tested up to: 6.8.3
 Requires PHP: 7.4.0
-Stable tag: 9.7.1
+Stable tag: 9.8.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Fully automatic sidebar menus.
@@ -218,6 +218,21 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+
+= 9.8.2 = 
+* Fixed the display of the "Show on single posts" option in category blocks.
+
+= 9.8.1 = 
+* Introduced 'advanced-sidebar-menu/pages/general-after' slot fill.
+* Updated expired @todos in PHP docs.
+
+= 9.8.0 = 
+* Updated Node.js to version 22.21.1.
+* Killed the JS block attribute handler.
+* Updated ESLint rules to version 5 and fixed all suggestions.
+* Combined WidgetWithId into the Widget interface.
+* Required PRO version 9.9.0+.
+* Tested to WordPress Core 6.8.3.
 
 = 9.7.1 =
 * Established a migration plan for removing the `WidgetWithId` interface.
@@ -452,6 +467,9 @@ Yes. Based on whatever page post or category you are on, the menu will change au
 * Numerous bug fixes.
 
 == Upgrade Notice ==
+= 9.8.1 =
+Update to support PRO version 9.10.0
+
 = 9.3.4 =
 Update to support WordPress 6.4.
 

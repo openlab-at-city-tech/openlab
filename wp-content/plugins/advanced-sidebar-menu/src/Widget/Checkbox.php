@@ -63,7 +63,7 @@ trait Checkbox {
 			name="<?php echo esc_attr( $this->get_field_name( $name ) ); ?>"
 			type="checkbox"
 			value="checked"
-			data-js="advanced-sidebar-menu/widget/<?php echo esc_attr( __Temp_Id_Proxy::factory( $this )->get_id_base() ); ?>/<?php echo esc_attr( $name ); ?>"
+			data-js="advanced-sidebar-menu/widget/<?php echo esc_attr( $this->get_id_base() ); ?>/<?php echo esc_attr( $name ); ?>"
 			<?php
 			if ( null !== $element_to_reveal ) {
 				echo ' onclick="window.advancedSidebarMenuAdmin.clickReveal( \'' . esc_attr( $this->get_field_id( $element_to_reveal ) ) . '\')" ';

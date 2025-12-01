@@ -2,7 +2,6 @@
 
 namespace Advanced_Sidebar_Menu\Blocks;
 
-use Advanced_Sidebar_Menu\Blocks\Attributes\CategoryAttr;
 use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
 use Advanced_Sidebar_Menu\Menus\Category as Menu;
 use Advanced_Sidebar_Menu\Traits\Singleton;
