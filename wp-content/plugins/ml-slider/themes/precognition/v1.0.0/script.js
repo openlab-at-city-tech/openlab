@@ -2,7 +2,8 @@
    // metaslider has been initilalised
 	$(document).on('metaslider/initialized', function (e, identifier) {
 		// if .ms-theme-precognition
-		if ($(identifier).closest('.metaslider.ms-theme-precognition').length) {
+		var $wrapper = $(identifier).closest('.metaslider.ms-theme-precognition');
+		if ($wrapper.length) {
 			var $slider = $(identifier);
 			var $container = $(identifier).closest('.metaslider.ms-theme-precognition');
 			var captions = $slider.find('.caption');
@@ -11,10 +12,26 @@
 			}
 
 			// Revert nav and slides order
-			var slides = $slider.find('.flex-viewport ul.slides');
+			var slides = $slider.find('ul.slides');
 			if (slides.length) {
 				var nav = $slider.find('.flex-control-nav').detach();
 				nav.insertAfter(slides);
+
+				// Update nav dots with image titles
+				if (!$wrapper.hasClass('has-carousel-mode') && ($wrapper.hasClass('has-dots-nav') || $wrapper.hasClass('has-dots-onhover-navigation'))) {
+					var id = $slider.attr('id').split('_')[1] || '';
+					var slideItems = slides.find('> li:not(.clone)');
+					var navItems = nav.find('li > a');
+
+					nav.addClass('titleNav-' + id).removeClass('flex-control-paging');
+
+					slideItems.each(function(index) {
+						var title = $(this).find('img').attr('title') || '';
+						if (title) {
+							navItems.eq(index).text(title);
+						}
+					});
+				}
 			}
 			
 			$container.addClass('ms-loaded');

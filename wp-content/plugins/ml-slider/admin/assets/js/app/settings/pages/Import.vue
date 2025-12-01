@@ -9,7 +9,7 @@
 			<file-button name="import" accept=".json" @loaded="loadSlideshowsFromFile" :disabled="processing">
 				<template slot="header">{{ __('Load slideshows', 'ml-slider') }}</template>
 				<template slot="description">{{ sprintf(__('If you have an export file, you may upload it here to be processed. Information about each slideshow will be presented below. You will be able to confirm before importing.', 'ml-slider'), slideshowsToImport) }}</template>
-				<template v-if="importing" slot="button">{{ __('Importing...', 'ml-slider') }}</template>
+				<template v-if="importing" slot="button">{{ __('Importing... Please wait', 'ml-slider') }}</template>
 				<template v-else-if="processing" slot="button">{{ __('Processing...', 'ml-slider') }}</template>
 				<template v-else slot="button">
 					<svg class="w-5 -ml-1 pr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,30 +27,18 @@
 		>
 		<template slot="header">{{ __('Slideshows', 'ml-slider') }}</template>
 		<template slot="description">
-				<div v-if="!procesingImages && !missingImages.length">
-					{{ __('All images required to import are accounted for.', 'ml-slider') }}
-				</div>
 			<transition name="settings-fade" mode="in-out">
-				<div v-if="!procesingImages && missingImages.length">
-					<h4 class="import-subheader">{{ __('The following images were not found:', 'ml-slider') }}</h4>
-					<div class="import-note" v-if="!procesingImages && missingImages.length">
-						{{ __('Note: You can still import slideshows that contain missing images. You will just need to manually update or delete these slides from their individual slideshow edit pages.', 'ml-slider') }}
-					</div>
-					<div>
-						<div v-for="slideshow in missingImages" :key="slideshow">
-							<p class="font-bold mb-1" style="color: #DD6923;">
-								{{ __('Slideshow Title: ', 'ml-slider') }} {{ slideshowsList[slideshow].title }}
-							</p>
-							<ul class="mb-4 missing-images">
-								<li
-									v-for="slide in slidesMissingImages(slideshow)"
-									:key="slide.original_id"
-									class="mb-0">
-									{{ slide.image ? slide.image : __('No image name provided' , 'ml-slider') }}
-								</li>
-							</ul>
-						</div>
-					</div>
+				<div v-if="environment === 'local'">
+					{{ __("The import file appears to have been generated on a local development site. Some images or videos may not be imported due to limitations in the WordPress upload system.", 'ml-slider') }}
+				</div>
+				<div v-else-if="environment === 'unknown'">
+					{{ __('The import file was created with a previous version of MetaSlider. Please make sure you are using the latest version of MetaSlider in the source website, generate the import file again and upload it here.', 'ml-slider') }}
+				</div>
+				<div v-else-if="missingImages.length">
+					{{ __("Some images are missing. Please ensure all images are accessible from the source website before importing.", 'ml-slider') }}
+				</div>
+				<div v-else>
+					{{ __('Click the Import button to begin the import process.', 'ml-slider') }}
 				</div>
 			</transition>
 		</template>
@@ -89,8 +77,12 @@
 								v-for="slide in slideshow.slides"
 								:key="slide.original_id"
 								class="relative -ml-3 z-30 inline-block h-12 w-12 text-white border border-gray-light shadow-solid rounded-full">
+								<img
+									v-if="slide.image_url && slide.imageExists && environment !== 'local'" :src="slide.image_url"
+									class="gradient border border-white rounded-full h-full inline-block"
+									alt="">
 								<div
-									v-if="'post_feed' === slide.meta['ml-slider_type']"
+									v-else-if="'post_feed' === slide.meta['ml-slider_type']"
 									class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
 									:original-title="__('Post Feed slide', 'ml-slider')"
 									:title="__('Post Feed slide', 'ml-slider')">
@@ -104,21 +96,51 @@
 									E
 								</div>
 								<div
-									v-else-if="!slide.id && !procesingImages"
+									v-else-if="'woocommerce' === slide.meta['ml-slider_type']"
+									class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									style="background:#873eff;border-color:#873eff;"
+									:original-title="__('WooCommerce slide', 'ml-slider')"
+									:title="__('WooCommerce slide', 'ml-slider')">
+									WC
+								</div>
+								<div
+									v-else-if="'folder' === slide.meta['ml-slider_type']"
+									class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									style="background:#0f95da;border-color: #0f95da;"
+									:original-title="__('Image Folder slide', 'ml-slider')"
+									:title="__('Image Folder slide', 'ml-slider')">
+									F
+								</div>
+								<div
+									v-else-if="'local_video' === slide.meta['ml-slider_type']"
+									class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									:original-title="__('Local Video slide', 'ml-slider')"
+									:title="__('Local Video slide', 'ml-slider')">
+									LV
+								</div>
+								<div
+									v-else-if="'external_video' === slide.meta['ml-slider_type']"
+									class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									:original-title="__('External Video slide', 'ml-slider')"
+									:title="__('External Video slide', 'ml-slider')">
+									EV
+								</div>
+								<div
+									v-else-if="'custom_html' === slide.meta['ml-slider_type']"
+									class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									style="background:#e44d26;border-color:#e44d26;"
+									:original-title="__('Custom HTML slide', 'ml-slider')"
+									:title="__('Custom HTML slide', 'ml-slider')">
+									&lt;/&gt;
+								</div>
+								<div
+									v-else 
 									:style="{ 'animation-delay': [(500 * index * Math.random()) + 'ms'] }"
 									class="gradient border border-white rounded-full h-full flex justify-center items-center text-red tipsy-tooltip-top"
 									:original-title="sprintf(__('Image not found<br>%s', 'ml-slider'), slide.image)"
 									:title="sprintf(__('Image not found<br>%s', 'ml-slider'), slide.image)">
 									x
 								</div>
-								<div
-									v-else-if="!slide.id"
-									:style="{ 'animation-delay': [(500 * index * Math.random()) + 'ms'] }"
-									class="gradient border border-white text-white rounded-full h-full"/>
-								<img
-									v-else :src="imageThumbnails[slide.id]"
-									class="gradient border border-white rounded-full h-full inline-block"
-									alt="">
 
 							</div>
 							<div class="relative -ml-3 z-50 inline-block bg-gray-lighter flex items-center justify-center text-lg text-gray-dark h-12 w-12 rounded-full shadow-solid border border-gray-light">
@@ -137,7 +159,7 @@
 </template>
 
 <script>
-import { Image, Slideshow } from '../../api'
+import { Slideshow } from '../../api'
 import Swal from 'sweetalert2'
 import { default as SplitLayout } from '../layouts/_split'
 import { default as SwitchSingle } from '../inputs/_switchSingle'
@@ -160,38 +182,12 @@ export default {
 				this.slideshowsListSelection[slideshowId] && ids.push(slideshowId)
 			})
 			return ids
-		},
-		missingImages() {
-			// Only check slideshows they want to import
-			return this.slideshowsToImport.filter(index => {
-				if (!this.slideshowsList[index] || !this.slideshowsList[index].slides) return false
-				let slides = this.slideshowsList[index].slides.filter(slide => {
-					if (['external', 'post_feed'].indexOf(slide.meta['ml-slider_type']) > -1) return false
-					return !slide.id
-				})
-				return slides.length
-			})
 		}
 	},
 	watch: {
-		slideshowsList: {
-			immediate: false,
-			handler: function(slideshowsFromFile) {
-				// TODO: check if any images are even missing IDs (only needed if they upload a new file)
-				let images = []
-				Object.keys(slideshowsFromFile).forEach(index => {
-					if (this.slideshowsList[index].slides) {
-						let imagesNames = this.slideshowsList[index].slides.map(slide => [slide.image, slide.image_alt])
-						images.push(...imagesNames)
-					}
-				})
-				if (images.length) {
-					images = images.flat().filter(image => image.length)
-					images = [...new Set(images)]
-					images && this.findImages(images)
-				}
-			}
-		},
+		missingImages(newVal) {
+			console.log('Missing images:', newVal);
+		}
 	},
 	props: {},
 	data() {
@@ -199,11 +195,11 @@ export default {
 			metadata: '',
 			slideshowsList: {},
 			slideshowsListSelection: {},
-			imageThumbnails: {},
 			processing: false,
-			procesingImages: false,
 			importing: false,
-			userSawProcessingImagesMessage: false
+			userSawProcessingImagesMessage: false,
+			environment: '',
+			missingImages: []
 		}
 	},
 	created() {},
@@ -228,6 +224,28 @@ export default {
 				delete data.metadata
 				this.slideshowsList = data
 
+				this.environment = this.metadata.environment ?? 'unknown';
+
+				// Check for missing images
+				this.missingImages = [];
+
+				Object.values(this.slideshowsList).forEach(async (slideshow) => {
+					if (slideshow.slides) {
+						for (const slide of slideshow.slides) {
+							if (slide.image_url) {
+								const exists = await this.imageExists(slide.image_url);
+								// Mark each slide as valid/invalid
+								this.$set(slide, 'imageExists', exists);
+								if (!exists) {
+									this.missingImages.push(slide.image_url);
+								}
+							} else {
+								this.$set(slide, 'imageExists', false);
+							}
+						}
+					}
+				});
+
 				const slideshowsListSelection = {}
 				for (const [key, slideshow] of Object.entries(this.slideshowsList)) {
 					slideshowsListSelection[key] = true
@@ -246,51 +264,7 @@ export default {
 			}
 			this.processing = false
 		},
-		findImages(filenames) {
-			this.procesingImages = true
-			Image.findIdFromFilename(JSON.stringify(filenames)).then(response => {
-				const images = response.data.data
-
-				// Create lookup table for thumbnails
-				Object.keys(images).forEach(filename => {
-					images[filename] && this.$set(this.imageThumbnails, images[filename].id, images[filename].thumbnail)
-				})
-
-				// Set the ID on the slides so they will be properly imported
-				Object.keys(this.slideshowsList).forEach(slideshow => {
-					if (this.slideshowsList[slideshow].slides) {
-						Object.keys(this.slideshowsList[slideshow].slides).forEach(slide => {
-							let filename = this.slideshowsList[slideshow].slides[slide].image
-							let filenameAlt = this.slideshowsList[slideshow].slides[slide].image_alt
-							if (images[filename]) {
-								this.$set(this.slideshowsList[slideshow].slides[slide], 'id', images[filename].id)
-							} else if (images[filenameAlt]) {
-								this.$set(this.slideshowsList[slideshow].slides[slide], 'id', images[filenameAlt].id)
-							}
-						})
-					}
-				})
-				this.procesingImages = false
-
-				// Only show this if the user attempted to import while still processing
-				if (this.userSawProcessingImagesMessage) {
-					this.notifyInfo(
-						'metaslider-finding-images-success',
-						this.__('Image search complete', 'ml-slider'), true)
-				}
-			}).catch(error => {
-				this.notifyError('metaslider/import-from-file-error', error, true)
-			})
-		},
 		async importSlideshows() {
-			if (this.procesingImages) {
-				this.userSawProcessingImagesMessage = true
-				this.notifyWarning(
-					'metaslider-importing-slideshows-still-processing-images',
-					this.__('We are still searching for your images. Please wait.', 'ml-slider'), true)
-				return
-			}
-
 			if (!this.slideshowsToImport.length) {
 				this.notifyWarning(
 					'metaslider-importing-slideshows-no-slideshows',
@@ -305,10 +279,18 @@ export default {
 				slideshowData.push(this.slideshowsList[key])
 			})
 
-			// If images are missing, give the user information and the choice to proceed
-			const readyToImport = this.missingImages.length ? await Swal.fire({
-				title: this.__('Some images are missing', 'ml-slider'),
-				html: '<p class="text-base">' + this.__('When images are missing you will have to manually update or delete the slide after the import completes.', 'ml-slider') + '</p>',
+			// If export file comes from a local environment, give the user information and the choice to proceed
+			let popupText = '';
+			if (this.environment === 'local') {
+				popupText = this.__('Export file is from a local site. Exporting from a local site may cause issues during import. This is because the images and videos need to be accessible from a live server.', 'ml-slider');
+			}
+			if (this.missingImages.length) {
+				popupText = '<br><br>' + this.__('Some images are missing. Please ensure all images are accessible from the source website before importing.', 'ml-slider');
+			}
+
+			const readyToImport = this.environment === 'local' || this.missingImages.length ? await Swal.fire({
+				title: this.__('Important!', 'ml-slider'),
+				html: '<p class="text-base">' + popupText + '</p>',
 				confirmButtonText: this.__('Continue', 'ml-slider'),
 				showCancelButton: true,
 				icon: 'warning',
@@ -326,7 +308,7 @@ export default {
 			this.notifyInfo(
 				'metaslider-importing-slideshows',
 				this.sprintf(
-					this.__('Importing %s slideshows...', 'ml-slider'),
+					this.__('Importing %s slideshows... This may take a minute', 'ml-slider'),
 					this.slideshowsToImport.length
 				), true)
 
@@ -357,6 +339,14 @@ export default {
 		toggleSlideshowsToImport(state) {
 			Object.keys(this.slideshowsListSelection).forEach(slideshow => this.slideshowsListSelection[slideshow] = state)
 		},
+		async imageExists(url) {
+			return new Promise(resolve => {
+				const img = new window.Image();
+				img.onload = () => resolve(true);
+				img.onerror = () => resolve(false);
+				img.src = url;
+			});
+		}
 	}
 }
 </script>

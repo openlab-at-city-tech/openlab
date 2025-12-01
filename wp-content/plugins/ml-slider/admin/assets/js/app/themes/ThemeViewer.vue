@@ -29,6 +29,8 @@
 				class="slider-not-supported-warning">
 				{{ __('This theme was designed for FlexSlider. Please choose the FlexSlider option for the best display.', 'ml-slider') }}
 			</p>
+			<!-- Notice when "Recommended Theme Options" is disabled -->
+			<p v-if="!Number(autoThemeConfig)" class="slider-not-supported-warning" v-html="recommendedThemeOptionsNotice"></p>
 
 			<!-- If there's a theme already set -->
 			<div
@@ -41,7 +43,10 @@
 					@click="openModal">
 					<div
 						v-if="'custom' == current.theme.type"
-						class="custom-theme-single p-0">
+						:class="[
+							'custom-theme-single p-0',
+							{ 'custom-theme-single--legacy': current.theme?.version !== 'v2' }
+						]">
 						<template v-if="current.theme.version === 'v2'">
 							<div class="theme-label-info-v2">
 								<div class="custom-subtitle">
@@ -130,6 +135,8 @@
 					<template v-if="(themes && Object.keys(themes).length) || (Object.keys(customThemes).length && proUser)">
 						<div class="columns">
 							<div class="theme-list-column">
+								<!-- Notice when "Recommended Theme Options" is disabled -->
+								<div v-if="!Number(autoThemeConfig)" class="slider-not-supported-warning" style="margin: 0 !important" v-html="recommendedThemeOptionsNotice"></div>
 								<ul class="ms-image-selector regular-themes">
 									<li
 										v-if="themes && Object.keys(themes).length"
@@ -474,6 +481,15 @@ export default {
 			if (!this.current.id || !this.current.hasOwnProperty('theme')) return false
 			return this.current.theme.hasOwnProperty('folder') && this.current.theme.folder.length
 		},
+		recommendedThemeOptionsNotice() {
+			const linkStart = `<a href="${this.metaslider_settings_page}" target="_blank" style="color:#135e96">`;
+			const linkEnd = `</a>`;
+			return sprintf(
+				this.__('We recommend to enable %1$s"Recommended Theme Options"%2$s to automatically adjust slideshow settings when selecting a new theme.', 'ml-slider'),
+				linkStart,
+				linkEnd
+			);
+		},
 		...mapGetters({
 			current: 'slideshows/getCurrent'
 		})
@@ -582,7 +598,7 @@ export default {
 
 					this.notifySuccess('metaslider/theme-updated', this.__('Theme saved', 'ml-slider'), true)
 
-					if (typeof metaslider.autoThemeConfig !== 'undefined' && parseInt(metaslider.autoThemeConfig, 10)) {
+					if (Number(this.autoThemeConfig)) {
 						this.theme_edit_settings = this.selectedTheme.edit_settings ?? {};
 						this.updateEditSettings();
 					}
@@ -1018,7 +1034,11 @@ export default {
 		@include custom-theme-box();
 
 		.custom-theme-single {
-			min-height: 177px;
+			height: 100%;
+			
+			&--legacy {
+				min-height: 200px;
+			}
 		}
 	}
 	#metaslider-ui .ms-current-theme .custom-theme-single .custom-subtitle {
@@ -1030,7 +1050,6 @@ export default {
 	}
 	#metaslider-ui .custom-theme-single {
 		width: 100%;
-		min-height: 216px;
 		height: 100%;
 		line-height: normal;
 		display: flex;

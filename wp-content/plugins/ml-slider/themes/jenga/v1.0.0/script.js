@@ -47,15 +47,31 @@
 
 	$(window).on('resize', function(e) {
 		$(function() {
-			// Removed these to give it a height that works for any number of slides.
-			// var controlTotalHeight = controlNavHeight();
-         	// var arrowsTotalHeight = arrowsNavHeight();
-			$('.metaslider.ms-theme-jenga .slide-control').css({
-				  'position' : 'absolute',
-				  'top' : '39%',
-				  'height' : "140px",
-				  'margin-top' : "-50px"
-			 });
+			var slideshow = $('.metaslider.ms-theme-jenga');
+			var slide_control = slideshow.find('.slide-control');
+			if (slideshow.find('.flexslider').length == 0) {
+				// Legacy slider libraries
+				slide_control.css({
+					'position' : 'absolute',
+					'top' : '39%',
+					'min-height' : "140px",
+					'margin-top' : "-50px"
+				});
+			} else {
+				// Only flexslider
+				var small = (slideshow.outerHeight() - 50) < slide_control.outerHeight() ? true : false;
+				var small_xtra = small && $(window).width() < 439 ? true : false;
+				var scale = small ? 'scale(0.7)' : '';
+				scale = small_xtra ? 'scale(0.5)' : scale;
+				var top = small ? '30%' : '39%';
+				slide_control.css({
+					'position' : 'absolute',
+					'top' : top,
+					'min-height' : "140px",
+					'margin-top' : "-50px",
+					'transform': scale
+				});
+			}
 		});
 	});
 

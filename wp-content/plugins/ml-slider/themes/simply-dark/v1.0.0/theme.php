@@ -40,7 +40,7 @@ class MetaSlider_Theme_Simply_Dark extends MetaSlider_Theme_Base
             "metaslider_{$this->id}_theme_styles", 
             METASLIDER_THEMES_URL. "{$this->id}/v{$this->version}/style.css", 
             array('metaslider-public'), 
-            $this->version 
+            METASLIDER_VERSION
         );
     }
 

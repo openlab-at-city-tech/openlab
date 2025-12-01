@@ -484,7 +484,13 @@ return $theme;
             $settings['theme'] = 'none';
             $settings['theme_customize'] = array();
             update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
-            return update_post_meta($slideshow_id, 'metaslider_slideshow_theme', 'none');
+
+            $res = update_post_meta( $slideshow_id, 'metaslider_slideshow_theme', 'none' );
+
+            // @since 3.103
+            do_action( 'metaslider_set_theme', $slideshow_id, $settings );
+
+            return $res;
         }
 
         // For custom themes, it's easier to use the legacy setting because the pro plugin
@@ -532,8 +538,13 @@ return $theme;
             unset($theme['edit_settings']);
         }
 
+        $res = (bool) update_post_meta( $slideshow_id, 'metaslider_slideshow_theme', $theme );
+        
+        // @since 3.103
+        do_action( 'metaslider_set_theme', $slideshow_id, $settings );
+
         // This will return false if the data is the same, unfortunately
-        return (bool) update_post_meta($slideshow_id, 'metaslider_slideshow_theme', $theme);
+        return $res;
     }
 
     /**
@@ -669,9 +680,18 @@ return $theme;
             // Loop each section 'settings' key
             foreach ($section['settings'] as $row_item) {
                 
-                // If type is 'fields', let's look for the list of fields. 
-                // Usually for multiple color fields grouped together
-                if ($row_item['type'] === 'fields') {
+                if ($row_item['type'] === 'message') {
+                    // If type is 'message', we don't need to do anything
+                } elseif ($row_item['type'] === 'section') {
+                    // If type is 'section', let's look for the list of fields.
+                    // Usually for multiple color fields grouped together
+
+                    if (!$filter || in_array($row_item['type'], $filter)) {
+                        $res[$row_item['name']] = $row_item['default'];
+                    }
+                } elseif ($row_item['type'] === 'fields') {
+                    // If type is 'fields', let's look for the list of fields. 
+                    // Usually for multiple color fields grouped together
 
                     foreach ($row_item['fields'] as $field_item) {
                         if (!$filter || in_array($field_item['type'], $filter)) {
@@ -837,8 +857,8 @@ return $theme;
             // Loop each section 'settings' key
             foreach ( $section['settings'] as $row_item ) {
 
-                // Skip fields and its childs. Perhaps in future support it?
-                if ( $row_item['type'] !== 'fields' ) {
+                // Skip fields, its childs and message types
+                if ( $row_item['type'] !== 'fields' && $row_item['type'] !== 'message' ) {
 
                     if ( isset( $row_item['css_field'] )
                         && $row_item['css_field'] === $name 
@@ -892,9 +912,11 @@ return $theme;
             // Loop each section 'settings' key
             foreach ($section['settings'] as $row_item) {
 
-                // If type is 'fields', let's look for the list of fields. 
-                // Usually for multiple color fields grouped together
-                if ($row_item['type'] === 'fields') {
+                if ($row_item['type'] === 'message') {
+                    // If type is 'message', we don't need to do anything
+                } elseif ($row_item['type'] === 'fields') {
+                    // If type is 'fields', let's look for the list of fields. 
+                    // Usually for multiple color fields grouped together
 
                     foreach ($row_item['fields'] as $field_item) {
                         
@@ -1245,9 +1267,12 @@ return $theme;
         foreach ( $manifest as $section ) {
             // Loop each section 'settings' key
             foreach ( $section['settings'] as $row_item ) {
-                // If type is 'fields', let's look for the list of fields. 
-                // Usually for multiple color fields grouped together
-                if ( $row_item['type'] === 'fields' ) {
+                if ( $row_item['type'] === 'message' ) {
+                    // If type is 'message', we don't need to do anything
+                } elseif ( $row_item['type'] === 'fields' ) {
+                    // If type is 'fields', let's look for the list of fields. 
+                    // Usually for multiple color fields grouped together
+
                     foreach ( $row_item['fields'] as $field_item ) {
                         // Check if setting from manifest exists in $stored and sanitized value is not false
                         if ( isset( $stored[$field_item['name']] ) 

@@ -163,19 +163,26 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
                 && $global_settings['newSlideOrder'] === 'first' 
                 ? esc_html( $global_settings['newSlideOrder'] ) : 'last',
             'tinymce' => array(), // Just initialize to add values later through JS files
-            'autoThemeConfig' => ! isset( $global_settings['autoThemeConfig'] ) 
-                || (bool) $global_settings['autoThemeConfig'] ? 1 : 0,
             'quickstart_slugs' => $this->quickstart_slugs(),
             'breakpoints' => $breakpoints,
             'tone' => esc_html__( 'Tone', 'ml-slider' ),
             'opacity' => esc_html__( 'Opacity', 'ml-slider' ),
-            'device_options_dropdown'  => esc_html__('Device Options', 'ml-slider'),
+            'device_options_dropdown'  => esc_html__('Shortcodes', 'ml-slider'),
             'hide_on_mobile'  => esc_html__('Hide on Smartphone', 'ml-slider'),
             'hide_on_tablet'  => esc_html__('Hide on Tablet', 'ml-slider'),
             'hide_on_laptop'  => esc_html__('Hide on Laptop', 'ml-slider'),
             'hide_on_desktop' => esc_html__('Hide on Desktop', 'ml-slider'),
+            'add_button' => esc_html__('Add Button', 'ml-slider'),
+            'close' => esc_html__('Close', 'ml-slider'),
+            'insert' => esc_html__('Insert', 'ml-slider'),
+            'url' => esc_html__('URL', 'ml-slider'),
+            'enter_url' => esc_html__('Please enter a valid URL.', 'ml-slider'),
+            'enter_text' => esc_html__('Please enter link text for the button.', 'ml-slider'),
+            'open_new_window' => esc_html__('Open in new window', 'ml-slider'),
+            'button_color' => esc_html__('Button Color', 'ml-slider'),
+            'text_color' => esc_html__('Text Color', 'ml-slider'),
+            'link_text' => esc_html__('Link Text', 'ml-slider'),
             'mobile_settings' => !isset($global_settings['mobileSettings']) || (isset($global_settings['mobileSettings']) && $global_settings['mobileSettings'] === true)
-
         ));
         wp_enqueue_script('metaslider-admin-script');
         do_action('metaslider_register_admin_scripts');
@@ -206,12 +213,15 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'privacy_link' => metaslider_get_privacy_link(),
             'metaslider_admin_assets' => METASLIDER_ADMIN_ASSETS_URL,
             'metaslider_page' => admin_url('admin.php?page=metaslider'),
+            'metaslider_settings_page' => admin_url('admin.php?page=metaslider-settings'),
             'theme_editor_link' => admin_url('admin.php?page=metaslider-theme-editor'),
             'site_id' => get_current_blog_id(),
             'supports_rest' => $is_rest_enabled,
             'locale' => $this->gutenberg_get_jed_locale_data('ml-slider'),
             'default_locale' => $this->gutenberg_get_jed_locale_data('default'),
             'current_server_time' => current_time('mysql'),
+            'autoThemeConfig' => ! isset( $global_settings['autoThemeConfig'] ) 
+                || (bool) $global_settings['autoThemeConfig'] ? 1 : 0,
         ));
         wp_enqueue_script('metaslider-admin-components');
     }
@@ -346,6 +356,19 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
         include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
         include METASLIDER_PATH . "admin/views/pages/upgrade.php";
+    }
+
+    /**
+     * Sets up any logic needed for the theme editor promo page
+     * 
+     * @since 3.101
+     */
+    public function render_upgrade_metaslider_theme_editor_page()
+    {
+        do_action('metaslider_admin_notices');
+
+        include METASLIDER_PATH . "admin/views/pages/parts/toolbar.php";
+        include METASLIDER_PATH . "admin/views/pages/theme-editor.php";
     }
 
     /**

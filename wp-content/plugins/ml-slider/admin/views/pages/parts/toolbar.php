@@ -91,8 +91,6 @@
 								</button>
 								<?php echo apply_filters('metaslider_add_css_module', ob_get_clean()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
-								<span class="border-l h-8 mx-2"></span>
-
 								<!-- TODO: Create a vue component -->
 								<!-- TODO: check what triggers id="ms-save" -->
 								<button
@@ -108,10 +106,10 @@
                                         class="opacity-0 w-6 p-0.5 ms-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                                     </svg>
-                                    <svg v-else class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg v-else class="w-6 p-0.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
                                     </svg>
-									<span :class="{'text-gray-darkest': !locked}" class="text-sm"><?php esc_html_e('Save', 'ml-slider'); ?></span>
+									<span :class="{'text-white': !locked}" class="text-sm"><?php esc_html_e('Save', 'ml-slider'); ?></span>
 								</button>
                             <?php else : ?>
                                 <a href="<?php 

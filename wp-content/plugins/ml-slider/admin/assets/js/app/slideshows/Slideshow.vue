@@ -142,21 +142,36 @@ export default {
 
 				let data = window.jQuery('#ms-form-settings').serializeArray()
 				await this.saveSettings(data).then(() => {
+					// Disable interactions with the form while saving slides
+					const formSettings = document.querySelector('#ms-form-settings');
+					if (formSettings) {
+						formSettings.style.pointerEvents = 'none';
+						formSettings.style.opacity = '0.5';
+					}
 
 					// Todo: refactor out slides logic
 					let slides = this.prepareSlideData(data)
-					slides.length > 20 && this.notifyInfo(
+					var saving_message = slides.length > 20 
+						? this.sprintf(this.__('Saving %s slides. This may take a few moments.', 'ml-slider'), slides.length)
+						: this.sprintf(this.__('Saving %s slides.', 'ml-slider'), slides.length);
+					this.notifyInfo(
 						'metaslider/saving-more-notice',
-						this.sprintf(this.__('Saving %s slides. This may take a few moments.', 'ml-slider'), slides.length),
+						saving_message,
 						true
 					)
 					this.showSlideSaveNotification = false
 					setTimeout(() => { this.showSlideSaveNotification = true }, 4000)
 					return this.saveSlides(slides).then(() => {
-
+						// Re-enable interactions with the form
+						if (formSettings) {
+							formSettings.style.pointerEvents = '';
+							formSettings.style.opacity = '';
+						}
 						// TODO: refactor out with psuedocode below
 						this.cropSlidesTheOldWay()
-						this.notifySuccess('metaslider/save-success', this.__('Slideshow saved', 'ml-slider'), true)
+						setTimeout(() => {
+							this.notifySuccess('metaslider/save-success', this.__('Slideshow saved', 'ml-slider'), true)
+						}, 1000);
 					}).catch(error => {
 
 						// If the input vars are too low, reload the page with the error message

@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Plugins - Slider, Gallery, and Carousel by MetaSlider "
 "&#8211; Responsive WordPress Slideshows - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
-"POT-Creation-Date: 2025-03-20T17:04:32+00:00\n"
-"PO-Revision-Date: 2025-03-21 11:17+0100\n"
+"POT-Creation-Date: 2025-10-16T14:58:38+00:00\n"
+"PO-Revision-Date: 2025-10-18 11:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.7\n"
 
 #. Plugin Name of the plugin
 #. Author of the plugin
@@ -36,6 +36,10 @@ msgid ""
 msgstr ""
 "MetaSlider te da la capacidad de crear un hermoso pase de diapositivas, "
 "carrusel o galería en tu sitio de WordPress."
+
+#: admin/lib/helpers.php:402
+msgid "Some of these features are available in MetaSlider Pro"
+msgstr "Algunas de estas características están disponibles en MetaSlider Pro"
 
 #: admin/Notices.php:98
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
@@ -99,33 +103,33 @@ msgstr "Ir ahí &rarr;"
 msgid "Read more"
 msgstr "Leer más"
 
-#: admin/Notices.php:361 admin/support/Analytics.php:66
-#: inc/slide/metaslide.class.php:144 inc/slide/metaslide.image.class.php:126
-#: inc/slide/metaslide.image.class.php:230
-#: inc/slide/metaslide.image.class.php:284
-#: inc/slide/metaslide.image.class.php:402 ml-slider.php:849 ml-slider.php:931
-#: ml-slider.php:1043 ml-slider.php:2564 ml-slider.php:2605
+#: admin/Notices.php:361 inc/slide/metaslide.class.php:144
+#: inc/slide/metaslide.image.class.php:127
+#: inc/slide/metaslide.image.class.php:231
+#: inc/slide/metaslide.image.class.php:285
+#: inc/slide/metaslide.image.class.php:403 ml-slider.php:884 ml-slider.php:966
+#: ml-slider.php:1078 ml-slider.php:2824 ml-slider.php:2865
 msgid "The security check failed. Please refresh the page and try again."
 msgstr ""
 "La comprobación de seguridad ha fallado. Por favor, actualiza la página e "
 "inténtalo de nuevo."
 
 #: admin/Notices.php:369 admin/routes/api.php:140
-#: inc/slide/metaslide.class.php:152 inc/slide/metaslide.image.class.php:134
-#: inc/slide/metaslide.image.class.php:153
-#: inc/slide/metaslide.image.class.php:238
-#: inc/slide/metaslide.image.class.php:292 ml-slider.php:857 ml-slider.php:939
-#: ml-slider.php:1051 ml-slider.php:2572 ml-slider.php:2613
+#: inc/slide/metaslide.class.php:152 inc/slide/metaslide.image.class.php:135
+#: inc/slide/metaslide.image.class.php:154
+#: inc/slide/metaslide.image.class.php:239
+#: inc/slide/metaslide.image.class.php:293 ml-slider.php:892 ml-slider.php:974
+#: ml-slider.php:1086 ml-slider.php:2832 ml-slider.php:2873
 msgid "Access denied. Sorry, you do not have permission to complete this task."
 msgstr ""
 "Acceso denegado. Lo siento, no tienes el permiso para completar esta tarea."
 
 #: admin/Notices.php:377 inc/slide/metaslide.class.php:161
-#: inc/slide/metaslide.image.class.php:143
-#: inc/slide/metaslide.image.class.php:247
-#: inc/slide/metaslide.image.class.php:301
-#: inc/slide/metaslide.image.class.php:420 ml-slider.php:866 ml-slider.php:948
-#: ml-slider.php:1060 ml-slider.php:2581 ml-slider.php:2622
+#: inc/slide/metaslide.image.class.php:144
+#: inc/slide/metaslide.image.class.php:248
+#: inc/slide/metaslide.image.class.php:302
+#: inc/slide/metaslide.image.class.php:421 ml-slider.php:901 ml-slider.php:983
+#: ml-slider.php:1095 ml-slider.php:2841 ml-slider.php:2882
 msgid "Bad request"
 msgstr "Solicitud incorrecta"
 
@@ -146,19 +150,19 @@ msgstr "Los datos solicitados no existen."
 msgid "The attempt to update the option failed."
 msgstr "El intento de actualización ha fallado."
 
-#: admin/Pages.php:138
+#: admin/Pages.php:138 admin/Pages.php:178
 msgid "URL"
 msgstr "URL"
 
-#: admin/Pages.php:139 themes/architekt/customize.php:146
-#: themes/bitono/customize.php:272 themes/blend/customize.php:258
-#: themes/bubble/customize.php:303 themes/clarity/customize.php:316
-#: themes/cubic/customize.php:281 themes/databold/customize.php:269
-#: themes/default-base/customize.php:301 themes/disjoint/customize.php:163
-#: themes/draxler/customize.php:225 themes/highway/customize.php:296
-#: themes/jenga/customize.php:103 themes/nexus/customize.php:262
-#: themes/outline/customize.php:277 themes/precognition/customize.php:150
-#: themes/radix/customize.php:128 themes/simply-dark/customize.php:222
+#: admin/Pages.php:139 themes/architekt/customize.php:444
+#: themes/bitono/customize.php:554 themes/blend/customize.php:583
+#: themes/bubble/customize.php:570 themes/clarity/customize.php:553
+#: themes/cubic/customize.php:538 themes/databold/customize.php:553
+#: themes/default-base/customize.php:575 themes/disjoint/customize.php:529
+#: themes/draxler/customize.php:530 themes/highway/customize.php:542
+#: themes/jenga/customize.php:353 themes/nexus/customize.php:538
+#: themes/outline/customize.php:552 themes/precognition/customize.php:455
+#: themes/radix/customize.php:433 themes/simply-dark/customize.php:542
 #: admin/assets/dist/js/app.js:2
 msgid "Caption"
 msgstr "Subtítulo"
@@ -185,7 +189,7 @@ msgid "Slide deleted"
 msgstr "Diapositiva eliminada"
 
 #: admin/Pages.php:145 admin/assets/dist/js/app.js:2
-#: admin/assets/js/app/globals.js:105
+#: admin/assets/js/app/globals.js:107
 msgid "Success"
 msgstr "Correcto"
 
@@ -194,14 +198,18 @@ msgid "Item was copied to your clipboard"
 msgstr "El elemento ha sido copiado a tu portapapeles"
 
 #: admin/Pages.php:147
+msgid "Creating slideshow..."
+msgstr "Creando presentación de diapositivas..."
+
+#: admin/Pages.php:148
 msgid "Press to undo"
 msgstr "Haz clic para deshacer"
 
-#: admin/Pages.php:149
+#: admin/Pages.php:150
 msgid "Select replacement image"
 msgstr "Selecciona la imagen de sustitución"
 
-#: admin/Pages.php:159
+#: admin/Pages.php:160
 msgid ""
 "Caution: This setting is for advanced developers only. If you're unsure, "
 "leave it checked."
@@ -209,82 +217,131 @@ msgstr ""
 "Cuidado: Estos ajustes son solo para desarrolladores avanzados. Si tienes "
 "dudas, déjalo marcado."
 
-#: admin/Pages.php:167
+#: admin/Pages.php:168
 msgid "Tone"
 msgstr "Tono"
 
-#: admin/Pages.php:168 admin/views/pages/parts/slider-settings-legacy.php:1021
-#: themes/architekt/customize.php:49
+#: admin/Pages.php:169 admin/views/pages/parts/slider-settings.php:1146
+#: themes/architekt/customize.php:530 themes/bitono/customize.php:707
+#: themes/blend/customize.php:736 themes/bubble/customize.php:723
+#: themes/clarity/customize.php:661 themes/cubic/customize.php:691
+#: themes/databold/customize.php:706 themes/default-base/customize.php:741
+#: themes/disjoint/customize.php:682 themes/draxler/customize.php:683
+#: themes/highway/customize.php:694 themes/jenga/customize.php:506
+#: themes/nexus/customize.php:691 themes/outline/customize.php:705
+#: themes/precognition/customize.php:608 themes/radix/customize.php:585
+#: themes/simply-dark/customize.php:700
 msgid "Opacity"
 msgstr "Opacidad"
 
-#: admin/Pages.php:169 admin/views/pages/parts/slider-settings-legacy.php:460
-#: admin/views/pages/parts/slider-settings.php:346
-msgid "Device Options"
-msgstr "Opciones dispositivo"
-
 #: admin/Pages.php:170
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: admin/Pages.php:171
 msgid "Hide on Smartphone"
 msgstr "Oculta en smartphone"
 
-#: admin/Pages.php:171
+#: admin/Pages.php:172
 msgid "Hide on Tablet"
 msgstr "Oculta en tabletas"
 
-#: admin/Pages.php:172
+#: admin/Pages.php:173
 msgid "Hide on Laptop"
 msgstr "Oculta en portátil"
 
-#: admin/Pages.php:173
+#: admin/Pages.php:174
 msgid "Hide on Desktop"
 msgstr "Oculta en escritorio"
 
-#: admin/routes/api.php:484
+#: admin/Pages.php:175
+#| msgid "Button"
+msgid "Add Button"
+msgstr "Añadir botón"
+
+#: admin/Pages.php:176
+msgid "Close"
+msgstr "Cerrar"
+
+#: admin/Pages.php:177
+msgid "Insert"
+msgstr "Insertar"
+
+#: admin/Pages.php:179
+msgid "Please enter a valid URL."
+msgstr "Por favor, introduce una URL válida."
+
+#: admin/Pages.php:180
+msgid "Please enter link text for the button."
+msgstr "Por favor, introduce el texto del enlace para el botón."
+
+#: admin/Pages.php:181
+#| msgid "Open link in a new window"
+msgid "Open in new window"
+msgstr "Abrir en una ventana nueva"
+
+#: admin/Pages.php:182
+#| msgid "Button Hover"
+msgid "Button Color"
+msgstr "Color del botón"
+
+#: admin/Pages.php:183 themes/radix/customize.php:42
+#: themes/radix/customize.php:55
+msgid "Text Color"
+msgstr "Color del Texto"
+
+#: admin/Pages.php:184
+#| msgid "Image Link Alt Text"
+msgid "Link Text"
+msgstr "Texto de enlace"
+
+#: admin/routes/api.php:461
 msgid "The request format was not valid."
 msgstr "El formato de la petición no era válido."
 
-#: admin/routes/api.php:492 admin/routes/api.php:624
+#: admin/routes/api.php:469 admin/routes/api.php:601
 msgid "This slideshow is no longer available."
 msgstr "Este carrusel ya no está disponible."
 
-#: admin/routes/api.php:579
+#: admin/routes/api.php:556
 msgid "Nothing to import."
 msgstr "Nada que importar."
 
-#: admin/routes/api.php:631
+#: admin/routes/api.php:608
 msgid "This was not a slideshow, so we cannot delete it."
 msgstr ""
 "Esto no era una presentación de diapositivas, así que no podemos eliminarla."
 
-#: admin/routes/api.php:844
+#: admin/routes/api.php:821
 msgid "This was not a slideshow, so we cannot update the setting."
 msgstr ""
 "Esto no es un pase de diapositivas, por lo que no se puede actualizar el "
 "ajuste."
 
-#: admin/routes/api.php:953
+#: admin/routes/api.php:930
 msgid "The title cannot be empty."
 msgstr "El título no puede estar vacío."
 
-#: admin/routes/api.php:957 admin/routes/api.php:1144
+#: admin/routes/api.php:934 admin/routes/api.php:1101
+#, php-format
 msgid "The field (%s) cannot be empty"
 msgstr "El campo (%s) no puede estar vacío"
 
-#: admin/routes/api.php:1134 admin/assets/dist/js/app.js:2
+#: admin/routes/api.php:1091
 msgid "Maximum Number of Custom Field in Post Feed Sliders"
 msgstr ""
 "Número máximo de campos personalizados en los controles deslizantes de feed "
 "de entradas"
 
-#: admin/routes/api.php:1240
+#: admin/routes/api.php:1205
 msgid "Import slug not found"
 msgstr "No se ha encontrado el slug de importación"
 
-#: admin/routes/api.php:1256
+#: admin/routes/api.php:1221
 msgid "Import data could not be processed"
 msgstr "No se han podido procesar los datos de importación"
 
-#: admin/slideshows/Image.php:145
+#: admin/slideshows/Image.php:153
 msgid "We could not find any images to import."
 msgstr "No hemos podido encontrar ninguna imagen que importar."
 
@@ -292,11 +349,13 @@ msgstr "No hemos podido encontrar ninguna imagen que importar."
 msgid "New Slideshow"
 msgstr "Nueva presentación de diapositivas"
 
-#: admin/slideshows/Settings.php:85 inc/slider/metaslider.class.php:127
+#: admin/slideshows/Settings.php:86 inc/slider/metaslider.class.php:131
+#: inc/slider/metaslider.flex.class.php:760
 msgid "Previous"
 msgstr "Anterior"
 
-#: admin/slideshows/Settings.php:86 inc/slider/metaslider.class.php:128
+#: admin/slideshows/Settings.php:87 inc/slider/metaslider.class.php:132
+#: inc/slider/metaslider.flex.class.php:761
 msgid "Next"
 msgstr "Siguiente"
 
@@ -308,7 +367,7 @@ msgstr "El archivo de importación no es válido."
 msgid "No themes found."
 msgstr "No se han encontrado temas."
 
-#: admin/slideshows/Themes.php:390
+#: admin/slideshows/Themes.php:449
 msgid ""
 "We removed your selected theme as it could not be found. Was the folder "
 "deleted?"
@@ -321,21 +380,22 @@ msgid "You don't have any trashed slideshows."
 msgstr "No hay ningún pase de diapositivas en la papelera."
 
 #: admin/Table.php:104
+#, php-format
 msgid ""
 "You don't have any slideshows yet. Click %shere%s to create a new slideshow."
 msgstr ""
 "Todavía no tienes ningún pase de diapositivas. Haz clic %saquí%s para crear "
 "un nuevo pase de diapositivas."
 
-#: admin/Table.php:155 admin/Table.php:313 inc/slide/metaslide.class.php:409
+#: admin/Table.php:155 admin/Table.php:314 inc/slide/metaslide.class.php:409
 msgid "Restore"
 msgstr "Restaurar"
 
-#: admin/Table.php:156 admin/Table.php:314 inc/slide/metaslide.class.php:419
+#: admin/Table.php:156 admin/Table.php:315 inc/slide/metaslide.class.php:419
 msgid "Delete Permanently"
 msgstr "Borrar permanentemente"
 
-#: admin/Table.php:160 admin/Table.php:328
+#: admin/Table.php:160 admin/Table.php:329
 msgid "Trash"
 msgstr "Papelera"
 
@@ -356,8 +416,7 @@ msgstr "Tipo de diapositivas"
 msgid "Number of Slides"
 msgstr "Número de diapositivas"
 
-#: admin/Table.php:175 admin/views/pages/parts/slider-settings-legacy.php:164
-#: admin/views/pages/parts/slider-settings.php:162
+#: admin/Table.php:175 admin/views/pages/parts/slider-settings.php:182
 msgid "Theme"
 msgstr "Tema"
 
@@ -365,8 +424,7 @@ msgstr "Tema"
 msgid "Created"
 msgstr "Creado"
 
-#: admin/Table.php:177 admin/views/pages/parts/slider-settings-legacy.php:1181
-#: admin/views/pages/parts/slider-settings.php:982
+#: admin/Table.php:177 admin/views/pages/parts/slider-settings.php:1383
 msgid "Shortcode"
 msgstr "Shortcode"
 
@@ -374,31 +432,31 @@ msgstr "Shortcode"
 msgid "Usage"
 msgstr "Utilización"
 
-#: admin/Table.php:327
+#: admin/Table.php:328
 msgid "Edit"
 msgstr "Editar"
 
-#: admin/Table.php:364 admin/views/pages/parts/shortcode.php:11
+#: admin/Table.php:365 admin/views/pages/parts/shortcode.php:11
 msgid "Click to copy shortcode."
 msgstr "Haz clic para copiar el shortcode."
 
-#: admin/Table.php:372 admin/Table.php:385 admin/Table.php:445
-msgid "Not in use."
-msgstr "No está en uso."
+#: admin/Table.php:373 admin/Table.php:386 admin/Table.php:446
+msgid "Not found."
+msgstr "No encontrado."
 
-#: admin/Table.php:374
+#: admin/Table.php:375
 msgid "View Usage"
 msgstr "Ver utilización"
 
-#: admin/Table.php:380
-msgid "Pages Using This Slideshow"
-msgstr "Páginas que usan este pase de diapositivas"
+#: admin/Table.php:381
+msgid "Content Using This Slideshow"
+msgstr "Contenido que utiliza esta presentación de diapositivas"
 
-#: admin/Table.php:422
+#: admin/Table.php:423
 msgid "Theme Setting"
 msgstr "Ajustes del tema"
 
-#: admin/Table.php:436
+#: admin/Table.php:437
 msgid "Option"
 msgstr "Opción"
 
@@ -416,6 +474,7 @@ msgstr "Añadir nueva"
 
 #. Translators: %d is the number of slideshows moved to the Trash.
 #: admin/views/pages/dashboard.php:20
+#, php-format
 msgid "%d slideshow moved to the Trash."
 msgid_plural "%d slideshows moved to the Trash."
 msgstr[0] "%d pase de diapositivas movido a la papelera."
@@ -423,6 +482,7 @@ msgstr[1] "%d pases de diapositivas movidos a la papelera."
 
 #. Translators: %d is the number of slideshows restored from the Trash.
 #: admin/views/pages/dashboard.php:24
+#, php-format
 msgid "%d slideshow restored from the Trash."
 msgid_plural "%d slideshows restored from the Trash."
 msgstr[0] "%d pase de diapositivas ha sido restaurado de la papelera."
@@ -430,6 +490,7 @@ msgstr[1] "%d pases de diapositivas han sido restaurados de la Papelera."
 
 #. Translators: %d is the number of slideshows permanently deleted.
 #: admin/views/pages/dashboard.php:28
+#, php-format
 msgid "%d slideshow permanently deleted."
 msgid_plural "%d slideshows permanently deleted."
 msgstr[0] "%d pase de diapositivas borrado permanentemente."
@@ -448,6 +509,7 @@ msgid "Browser upgrade required"
 msgstr "Actualización obligatoria del navegador"
 
 #: admin/views/pages/parts/ie-warning.php:8
+#, php-format
 msgid ""
 "It looks like you are using %s. While MetaSlider does support %s on the "
 "frontend of the website where users see your slideshows, some of the tools "
@@ -470,56 +532,68 @@ msgstr "IE11"
 msgid "Update Internet Explorer"
 msgstr "Actualiza Internet Explorer"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:20
-#: admin/views/pages/parts/slider-settings.php:24
+#: admin/views/pages/parts/slider-settings.php:29
+#: inc/slider/metaslider.flex.class.php:416 admin/assets/dist/js/app.js:2
+msgid "Loading..."
+msgstr "Cargando…"
+
+#: admin/views/pages/parts/slider-settings.php:35
 msgid "Main Options"
 msgstr "Opciones principales"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:30
-#: admin/views/pages/parts/slider-settings-legacy.php:355
-#: admin/views/pages/parts/slider-settings.php:34
-#: themes/bitono/customize.php:102 themes/databold/customize.php:112
-#: themes/default-base/customize.php:116 themes/highway/customize.php:109
-#: themes/nexus/customize.php:102
+#: admin/views/pages/parts/slider-settings.php:51
+#: admin/views/pages/parts/slider-settings.php:393
+#: themes/architekt/customize.php:207 themes/architekt/customize.php:477
+#: themes/bitono/customize.php:218 themes/bitono/customize.php:654
+#: themes/blend/customize.php:683 themes/bubble/customize.php:202
+#: themes/bubble/customize.php:670 themes/clarity/customize.php:217
+#: themes/clarity/customize.php:608 themes/cubic/customize.php:638
+#: themes/databold/customize.php:234 themes/databold/customize.php:653
+#: themes/default-base/customize.php:234 themes/default-base/customize.php:688
+#: themes/disjoint/customize.php:629 themes/draxler/customize.php:630
+#: themes/highway/customize.php:217 themes/highway/customize.php:641
+#: themes/jenga/customize.php:453 themes/nexus/customize.php:202
+#: themes/nexus/customize.php:638 themes/outline/customize.php:217
+#: themes/outline/customize.php:652 themes/precognition/customize.php:218
+#: themes/precognition/customize.php:555 themes/radix/customize.php:532
+#: themes/simply-dark/customize.php:647
 msgid "Width"
 msgstr "Ancho"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:32
-#: admin/views/pages/parts/slider-settings.php:36
+#: admin/views/pages/parts/slider-settings.php:53
 #: admin/assets/js/gutenberg/components/block-edit.js:57
 #: admin/assets/js/gutenberg/components/block-edit.js:82
 msgid "Slideshow width"
 msgstr "Anchura de la presentación de diapositivas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:33
-#: admin/views/pages/parts/slider-settings-legacy.php:46
-#: admin/views/pages/parts/slider-settings-legacy.php:876
-#: admin/views/pages/parts/slider-settings.php:37
-#: admin/views/pages/parts/slider-settings.php:50
-#: admin/views/pages/parts/slider-settings.php:761
+#: admin/views/pages/parts/slider-settings.php:54
+#: admin/views/pages/parts/slider-settings.php:67
+#: admin/views/pages/parts/slider-settings.php:584
 msgid "px"
 msgstr "px"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:43
-#: admin/views/pages/parts/slider-settings-legacy.php:371
-#: admin/views/pages/parts/slider-settings.php:47
-#: themes/bitono/customize.php:112 themes/cubic/customize.php:102
-#: themes/databold/customize.php:102 themes/default-base/customize.php:126
-#: themes/highway/customize.php:119 themes/nexus/customize.php:112
+#: admin/views/pages/parts/slider-settings.php:64
+#: admin/views/pages/parts/slider-settings.php:410
+#: themes/architekt/customize.php:223 themes/bitono/customize.php:234
+#: themes/blend/customize.php:199 themes/bubble/customize.php:218
+#: themes/clarity/customize.php:233 themes/cubic/customize.php:218
+#: themes/databold/customize.php:218 themes/default-base/customize.php:250
+#: themes/disjoint/customize.php:210 themes/draxler/customize.php:199
+#: themes/highway/customize.php:233 themes/nexus/customize.php:218
+#: themes/outline/customize.php:233 themes/precognition/customize.php:234
+#: themes/radix/customize.php:229
 msgid "Height"
 msgstr "Alto"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:45
-#: admin/views/pages/parts/slider-settings.php:49
+#: admin/views/pages/parts/slider-settings.php:66
 msgid "Slideshow height"
 msgstr "Altura de la presentación de diapositivas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:51
-#: admin/views/pages/parts/slider-settings.php:55
+#: admin/views/pages/parts/slider-settings.php:72
 #: themes/architekt/customize.php:10 themes/bitono/customize.php:10
 #: themes/blend/customize.php:10 themes/bubble/customize.php:10
 #: themes/clarity/customize.php:10 themes/cubic/customize.php:10
-#: themes/databold/customize.php:10 themes/default-base/customize.php:10
+#: themes/databold/customize.php:10 themes/default-base/customize.php:21
 #: themes/disjoint/customize.php:10 themes/draxler/customize.php:10
 #: themes/highway/customize.php:10 themes/jenga/customize.php:10
 #: themes/nexus/customize.php:10 themes/outline/customize.php:10
@@ -528,252 +602,231 @@ msgstr "Altura de la presentación de diapositivas"
 msgid "Arrows"
 msgstr "Flechas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:54
-#: admin/views/pages/parts/slider-settings.php:58
+#: admin/views/pages/parts/slider-settings.php:75
 msgid "Show the Previous / Next arrows."
 msgstr "Mostrar las flechas anterior/siguiente."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:60
-#: admin/views/pages/parts/slider-settings-legacy.php:91
-#: admin/views/pages/parts/slider-settings.php:64
-#: admin/views/pages/parts/slider-settings.php:95 admin/assets/dist/js/app.js:2
+#: admin/views/pages/parts/slider-settings.php:81
+#: admin/views/pages/parts/slider-settings.php:112
+#: admin/assets/dist/js/app.js:2
 msgid "Hidden"
 msgstr "Oculto"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:63
-#: admin/views/pages/parts/slider-settings.php:67
+#: admin/views/pages/parts/slider-settings.php:84
 msgid "Visible"
 msgstr "Visible"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:66
-#: admin/views/pages/parts/slider-settings.php:70
+#: admin/views/pages/parts/slider-settings.php:87
 msgid "Visible On Hover"
 msgstr "Visible al pasar el cursor"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:82
-#: admin/views/pages/parts/slider-settings.php:86
-#: themes/architekt/customize.php:61 themes/bitono/customize.php:164
-#: themes/blend/customize.php:101 themes/bubble/customize.php:131
-#: themes/clarity/customize.php:187 themes/cubic/customize.php:134
-#: themes/databold/customize.php:144 themes/default-base/customize.php:178
-#: themes/disjoint/customize.php:38 themes/draxler/customize.php:114
-#: themes/highway/customize.php:151 themes/jenga/customize.php:38
-#: themes/nexus/customize.php:154 themes/outline/customize.php:111
-#: themes/precognition/customize.php:71 themes/radix/customize.php:65
-#: themes/simply-dark/customize.php:114 admin/assets/dist/js/app.js:2
+#: admin/views/pages/parts/slider-settings.php:103
+#: themes/architekt/customize.php:289 themes/bitono/customize.php:300
+#: themes/blend/customize.php:265 themes/bubble/customize.php:284
+#: themes/clarity/customize.php:299 themes/cubic/customize.php:284
+#: themes/databold/customize.php:300 themes/default-base/customize.php:316
+#: themes/disjoint/customize.php:276 themes/draxler/customize.php:268
+#: themes/highway/customize.php:299 themes/jenga/customize.php:188
+#: themes/nexus/customize.php:284 themes/outline/customize.php:299
+#: themes/precognition/customize.php:300 themes/radix/customize.php:295
+#: themes/simply-dark/customize.php:288
 msgid "Navigation"
 msgstr "Navegación"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:85
-#: admin/views/pages/parts/slider-settings.php:89
+#: admin/views/pages/parts/slider-settings.php:106
 msgid "Show navigation options so that users can browse the slides."
 msgstr ""
 "Muestra opciones de navegación para que los usuarios puedan navegar por las "
 "diapositivas."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:94
-#: admin/views/pages/parts/slider-settings.php:98 admin/assets/dist/js/app.js:2
+#: admin/views/pages/parts/slider-settings.php:115
+#: admin/assets/dist/js/app.js:2
 msgid "Dots"
 msgstr "Puntos"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:97
-#: admin/views/pages/parts/slider-settings.php:101
+#: admin/views/pages/parts/slider-settings.php:118
+#: admin/assets/dist/js/app.js:2
 msgid "Dots - Visible On Hover"
 msgstr "Puntos - visible al pasar el cursor"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:100
-#: admin/views/pages/parts/slider-settings.php:104
+#: admin/views/pages/parts/slider-settings.php:121
 msgid "Thumbnails (Pro)"
 msgstr "Miniaturas (Pro)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:104
-#: admin/views/pages/parts/slider-settings.php:108
+#: admin/views/pages/parts/slider-settings.php:125
+#: admin/assets/dist/js/app.js:2
 msgid "Thumbnails - Visible On Hover (Pro)"
-msgstr "Miniatura - visible al pasar el cursor (Pro)"
+msgstr "Miniaturas - visible al pasar el cursor (Pro)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:108
-#: admin/views/pages/parts/slider-settings.php:112
+#: admin/views/pages/parts/slider-settings.php:129
 #: admin/assets/dist/js/app.js:2
 msgid "Filmstrip (Pro)"
 msgstr "Película (Pro)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:112
-#: admin/views/pages/parts/slider-settings.php:116
+#: admin/views/pages/parts/slider-settings.php:133
+#: admin/assets/dist/js/app.js:2
 msgid "Filmstrip - Visible On Hover (Pro)"
 msgstr "Película - visible al pasar el cursor (Pro)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:138
-#: admin/views/pages/parts/slider-settings.php:142
+#: admin/views/pages/parts/slider-settings.php:161
 #: admin/assets/dist/js/app.js:2
 msgid "100% Width"
 msgstr "Ancho 100%"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:143
-#: admin/views/pages/parts/slider-settings.php:147
-msgid "Stretch the slideshow output to fill its parent container."
-msgstr "Ensancha el pase de diapositivas hasta rellenar el contenedor padre."
+#: admin/views/pages/parts/slider-settings.php:166
+msgid ""
+"If the space for the slideshow is larger than the \"Width\" setting, the "
+"slideshow output will expand to fill all of that space."
+msgstr ""
+"Si el espacio para la presentación de diapositivas es más grande que la "
+"configuración «Anchura», la salida de la presentación de diapositivas se "
+"expandirá para llenar todo ese espacio."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:186
-#: admin/views/pages/parts/slider-settings.php:184
+#: admin/views/pages/parts/slider-settings.php:200
 msgid "Transition Options"
 msgstr "Opciones de transición"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:192
-#: admin/views/pages/parts/slider-settings.php:190
+#: admin/views/pages/parts/slider-settings.php:212
 msgid "Transition Effect"
 msgstr "Efecto de la transición"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:194
-#: admin/views/pages/parts/slider-settings.php:192
+#: admin/views/pages/parts/slider-settings.php:214
 msgid "This animation is used when changing slides."
 msgstr "Esta animación se utiliza al cambiar de diapositiva."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:208
-#: admin/views/pages/parts/slider-settings-legacy.php:924
-#: admin/views/pages/parts/slider-settings.php:809
-msgid "Random"
-msgstr "Aleatorio"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:212
-msgid "Swirl"
-msgstr "Remolino"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:216
-msgid "Rain"
-msgstr "Lluvia"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:220
-msgid "Straight"
-msgstr "Recto"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:224
-msgid "Slice Down"
-msgstr "Cortar abajo"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:228
-msgid "Slice Up"
-msgstr "Cortar"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:232
-msgid "Slice Up Left"
-msgstr "Cortar arriba izquierda"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:236
-msgid "Slide Up Down"
-msgstr "Deslizar arriba abajo"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:240
-msgid "Slice Up Down Left"
-msgstr "Cortar arriba abajo izquierda"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:244
-#: admin/views/pages/parts/slider-settings.php:206
+#: admin/views/pages/parts/slider-settings.php:228
 msgid "Fade"
 msgstr "Fundido"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:248
-msgid "Fold"
-msgstr "Doblar"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:252
-msgid "Slide in Right"
-msgstr "Deslizar desde la derecha"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:256
-msgid "Slide in Left"
-msgstr "Deslizar desde la izquierda"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:260
-msgid "Box Random"
-msgstr "Caja al azar"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:264
-msgid "Box Rain"
-msgstr "Box Rain"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:268
-msgid "Box Rain Reverse"
-msgstr "Box Rain Reverse"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:272
-msgid "Box Rain Grow"
-msgstr "Crecer lluvia de cajas"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:276
-msgid "Box Rain Grow Reverse"
-msgstr "Box Rain Grow Reverse"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:280
-#: admin/views/pages/parts/slider-settings.php:210
+#: admin/views/pages/parts/slider-settings.php:232
 msgid "Slide"
 msgstr "Diapositiva"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:284
-#: admin/views/pages/parts/slider-settings.php:214
+#: admin/views/pages/parts/slider-settings.php:236
 msgid "Zooming"
 msgstr "Ampliación"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:288
-#: admin/views/pages/parts/slider-settings.php:218
+#: admin/views/pages/parts/slider-settings.php:240
 msgid "Flip"
 msgstr "Voltear"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:300
-#: admin/views/pages/parts/slider-settings.php:230
+#: admin/views/pages/parts/slider-settings.php:244
+#: admin/views/pages/parts/slider-settings.php:1046
+msgid "Random"
+msgstr "Aleatorio"
+
+#: admin/views/pages/parts/slider-settings.php:249
+msgid "Swirl"
+msgstr "Remolino"
+
+#: admin/views/pages/parts/slider-settings.php:254
+msgid "Rain"
+msgstr "Lluvia"
+
+#: admin/views/pages/parts/slider-settings.php:259
+msgid "Straight"
+msgstr "Recto"
+
+#: admin/views/pages/parts/slider-settings.php:264
+msgid "Slice Down"
+msgstr "Cortar abajo"
+
+#: admin/views/pages/parts/slider-settings.php:269
+msgid "Slice Up"
+msgstr "Cortar"
+
+#: admin/views/pages/parts/slider-settings.php:274
+msgid "Slice Up Left"
+msgstr "Cortar arriba izquierda"
+
+#: admin/views/pages/parts/slider-settings.php:279
+msgid "Slide Up Down"
+msgstr "Deslizar arriba abajo"
+
+#: admin/views/pages/parts/slider-settings.php:284
+msgid "Slice Up Down Left"
+msgstr "Cortar arriba abajo izquierda"
+
+#: admin/views/pages/parts/slider-settings.php:289
+msgid "Fold"
+msgstr "Doblar"
+
+#: admin/views/pages/parts/slider-settings.php:294
+msgid "Slide in Right"
+msgstr "Deslizar desde la derecha"
+
+#: admin/views/pages/parts/slider-settings.php:299
+msgid "Slide in Left"
+msgstr "Deslizar desde la izquierda"
+
+#: admin/views/pages/parts/slider-settings.php:304
+msgid "Box Random"
+msgstr "Caja al azar"
+
+#: admin/views/pages/parts/slider-settings.php:309
+msgid "Box Rain"
+msgstr "Box Rain"
+
+#: admin/views/pages/parts/slider-settings.php:314
+msgid "Box Rain Reverse"
+msgstr "Box Rain Reverse"
+
+#: admin/views/pages/parts/slider-settings.php:319
+msgid "Box Rain Grow"
+msgstr "Crecer lluvia de cajas"
+
+#: admin/views/pages/parts/slider-settings.php:324
+msgid "Box Rain Grow Reverse"
+msgstr "Box Rain Grow Reverse"
+
+#: admin/views/pages/parts/slider-settings.php:337
 msgid "Slide Delay"
 msgstr "Retraso entre diapositivas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:302
-#: admin/views/pages/parts/slider-settings.php:232
+#: admin/views/pages/parts/slider-settings.php:339
 msgid "How long to display each slide, in milliseconds."
 msgstr "Cuanto tiempo se muestra cada diapositiva en milisegundos."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:306
-#: admin/views/pages/parts/slider-settings-legacy.php:326
-#: admin/views/pages/parts/slider-settings-legacy.php:1011
-#: admin/views/pages/parts/slider-settings-legacy.php:1043
-#: admin/views/pages/parts/slider-settings.php:236
-#: admin/views/pages/parts/slider-settings.php:256
+#: admin/views/pages/parts/slider-settings.php:343
+#: admin/views/pages/parts/slider-settings.php:363
+#: admin/views/pages/parts/slider-settings.php:1135
+#: admin/views/pages/parts/slider-settings.php:1169
 msgctxt "Short for milliseconds"
 msgid "ms"
 msgstr "ms"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:320
-#: admin/views/pages/parts/slider-settings.php:250
+#: admin/views/pages/parts/slider-settings.php:357
 msgid "Transition Speed"
 msgstr "Velocidad de la transición"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:322
-#: admin/views/pages/parts/slider-settings.php:252
+#: admin/views/pages/parts/slider-settings.php:359
 msgid ""
 "Choose the speed of the animation in milliseconds. You can select the "
-"animation in the \"Effect\" field."
+"animation in the \"Transition Effect\" field."
 msgstr ""
 "Elige la velocidad de la animación en milisegundos. Puedes seleccionar la "
-"animación en el campo «Efecto»."
+"animación en el campo «Efecto de transición»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:340
-#: admin/views/pages/parts/slider-settings-legacy.php:342
+#: admin/views/pages/parts/slider-settings.php:377
+#: admin/views/pages/parts/slider-settings.php:379
 msgid "Number of Slices"
 msgstr "Número de cortes"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:352
-#: admin/views/pages/parts/slider-settings-legacy.php:368
+#: admin/views/pages/parts/slider-settings.php:390
+#: admin/views/pages/parts/slider-settings.php:407
 msgid "Number of Squares"
 msgstr "Número de cuadros"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:357
-#: admin/views/pages/parts/slider-settings-legacy.php:373
+#: admin/views/pages/parts/slider-settings.php:395
+#: admin/views/pages/parts/slider-settings.php:412
 msgid "Number of squares"
 msgstr "Número de cuadros"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:379
-#: admin/views/pages/parts/slider-settings.php:265
+#: admin/views/pages/parts/slider-settings.php:419
 msgid "Slide Direction"
 msgstr "Dirección de la diapositiva"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:381
-#: admin/views/pages/parts/slider-settings.php:267
+#: admin/views/pages/parts/slider-settings.php:421
 msgid ""
 "Select the direction that slides will move. Vertical will not work if "
 "\"Carousel mode\" is enabled or \"Transition Effect\" is set to \"Fade\"."
@@ -782,23 +835,27 @@ msgstr ""
 "funcionará si «Modo carrusel» está activado o el efecto de transición está "
 "establecido como «Fundido»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:388
-#: admin/views/pages/parts/slider-settings.php:274
+#: admin/views/pages/parts/slider-settings.php:428
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:395
-#: admin/views/pages/parts/slider-settings.php:281
+#: admin/views/pages/parts/slider-settings.php:435
 msgid "Vertical"
 msgstr "Vertical"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:406
-#: admin/views/pages/parts/slider-settings.php:292
+#: admin/views/pages/parts/slider-settings.php:446
+msgid "Reverse"
+msgstr "Invertir"
+
+#: admin/views/pages/parts/slider-settings.php:451
+msgid "Reverse the slide direction."
+msgstr "Invertir la dirección de la diapositiva."
+
+#: admin/views/pages/parts/slider-settings.php:459
 msgid "Image Animation"
 msgstr "Animación de la imagen"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:408
-#: admin/views/pages/parts/slider-settings.php:294
+#: admin/views/pages/parts/slider-settings.php:461
 msgid ""
 "This feature adds gradual acceleration and deceleration to slide "
 "transitions, rather than abrupt starts and stops. This feature only works "
@@ -808,13 +865,27 @@ msgstr ""
 "transiciones de diapositivas, en lugar de arranques y paradas bruscos. Esta "
 "característica funciona solo con el efecto de transición «Deslizar»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:418
-#: admin/views/pages/parts/slider-settings.php:304
+#: admin/views/pages/parts/slider-settings.php:471
+msgid "Extra Effect"
+msgstr "Efecto extra"
+
+#: admin/views/pages/parts/slider-settings.php:473
+msgid "Extra effect for slides."
+msgstr "Efecto extra para las diapositivas."
+
+#: admin/views/pages/parts/slider-settings.php:477
+msgid "None"
+msgstr "Ninguno"
+
+#: admin/views/pages/parts/slider-settings.php:480
+msgid "Ken Burns (Pro)"
+msgstr "Ken Burns (Pro)"
+
+#: admin/views/pages/parts/slider-settings.php:489
 msgid "Fade In"
 msgstr "Fundido de entrada"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:423
-#: admin/views/pages/parts/slider-settings.php:309
+#: admin/views/pages/parts/slider-settings.php:494
 msgid ""
 "This adds an animation when the slideshow loads. It only uses the \"Fade\" "
 "transition effect."
@@ -822,13 +893,76 @@ msgstr ""
 "Esto añade una animación cuando se carga el pase de diapositivas. Solo "
 "utiliza el efecto de transición «Fundido»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:465
-#: admin/views/pages/parts/slider-settings.php:351
+#: admin/views/pages/parts/slider-settings.php:515
+msgid "Carousel Options"
+msgstr "Opciones del carrusel"
+
+#: admin/views/pages/parts/slider-settings.php:526
+msgid "Carousel Mode"
+msgstr "Modo carrusel"
+
+#: admin/views/pages/parts/slider-settings.php:531
+msgid ""
+"Display multiple slides at once. The slideshow output will default to using "
+"100% width and the 'Slide' Transition Effect."
+msgstr ""
+"Mostrar varias diapositivas a la vez. La presentación usará el ancho del 100 "
+"% y el efecto de transición «Deslizar» por defecto."
+
+#: admin/views/pages/parts/slider-settings.php:561
+msgid "Loop Carousel Continuously"
+msgstr "Carrusel en bucle continuo"
+
+#: admin/views/pages/parts/slider-settings.php:566
+msgid ""
+"Infinite loop of slides when Carousel Mode is enabled. This option disables "
+"arrows and navigation. The slideshow width must be less than or equal to the "
+"width of the container where it is inserted."
+msgstr ""
+"Bucle infinito de diapositivas cuando el modo carrusel está activado. Esta "
+"opción desactiva las flechas y la navegación. El ancho de la presentación "
+"debe ser menor o igual al ancho del contenedor donde se inserta."
+
+#: admin/views/pages/parts/slider-settings.php:577
+msgid "Carousel Margin"
+msgstr "Margen de carrusel"
+
+#: admin/views/pages/parts/slider-settings.php:580
+msgid "Pixel margin between slides in carousel."
+msgstr "Margen en píxeles entre diapositivas en el carrusel."
+
+#: admin/views/pages/parts/slider-settings.php:594
+msgid "Carousel Items"
+msgstr "Elementos de carrusel"
+
+#: admin/views/pages/parts/slider-settings.php:596
+msgid "Minimum number of slides to be displayed at once in the carousel."
+msgstr ""
+"Número mínimo de diapositivas que se mostrarán a la vez en el carrusel."
+
+#: admin/views/pages/parts/slider-settings.php:605
+msgid "Force Height"
+msgstr "Forzar altura"
+
+#: admin/views/pages/parts/slider-settings.php:610
+msgid ""
+"If the slideshow looks small, force slideshow height when using Carousel "
+"mode. Please note when is enabled slides may look cropped."
+msgstr ""
+"Si el pase de diapositivas parece pequeño, fuerza la altura del pase de "
+"diapositivas cuando uses el modo «Carrusel». Por favor, ten en cuenta que "
+"las diapositivas pueden parecer recortadas."
+
+#: admin/views/pages/parts/slider-settings.php:643
+msgid "Device Options"
+msgstr "Opciones dispositivo"
+
+#: admin/views/pages/parts/slider-settings.php:654
 msgid "Hide Arrows On"
 msgstr "Ocultar flechas en"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:470
-#: admin/views/pages/parts/slider-settings.php:356
+#: admin/views/pages/parts/slider-settings.php:659
+#, php-format
 msgid ""
 "When enabled this setting will hide the arrows on screen widths less than "
 "%spx."
@@ -836,10 +970,9 @@ msgstr ""
 "Cuando está activado, este ajuste oculta las flechas en las pantallas con "
 "anchuras inferiores a %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:480
-#: admin/views/pages/parts/slider-settings-legacy.php:491
-#: admin/views/pages/parts/slider-settings.php:366
-#: admin/views/pages/parts/slider-settings.php:377
+#: admin/views/pages/parts/slider-settings.php:669
+#: admin/views/pages/parts/slider-settings.php:680
+#, php-format
 msgid ""
 "When enabled this setting will hide the arrows on screen widths of %1$spx to "
 "%2$spx."
@@ -847,8 +980,8 @@ msgstr ""
 "Cuando está activado, este ajuste oculta las flechas en las pantallas con "
 "anchuras comprendidas entre %1$spx y %2$spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:502
-#: admin/views/pages/parts/slider-settings.php:388
+#: admin/views/pages/parts/slider-settings.php:691
+#, php-format
 msgid ""
 "When enabled this setting will hide the arrows on screen widths equal to or "
 "greater than %spx."
@@ -856,13 +989,12 @@ msgstr ""
 "Cuando está activado, este ajuste oculta las flechas en pantallas con "
 "anchuras iguales o superiores a %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:514
-#: admin/views/pages/parts/slider-settings.php:400
+#: admin/views/pages/parts/slider-settings.php:703
 msgid "Hide Navigation On"
 msgstr "Ocultar navegación en"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:519
-#: admin/views/pages/parts/slider-settings.php:405
+#: admin/views/pages/parts/slider-settings.php:708
+#, php-format
 msgid ""
 "When enabled this setting will hide the navigation on screen widths less "
 "than %spx."
@@ -870,10 +1002,9 @@ msgstr ""
 "Cuando está activado, este ajuste oculta la navegación en pantallas con "
 "anchuras inferiores a %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:529
-#: admin/views/pages/parts/slider-settings-legacy.php:540
-#: admin/views/pages/parts/slider-settings.php:415
-#: admin/views/pages/parts/slider-settings.php:426
+#: admin/views/pages/parts/slider-settings.php:718
+#: admin/views/pages/parts/slider-settings.php:729
+#, php-format
 msgid ""
 "When enabled this setting will hide the navigation on screen widths of "
 "%1$spx to %2$spx."
@@ -881,8 +1012,8 @@ msgstr ""
 "Cuando está activado, este ajuste oculta la navegación en pantallas con "
 "anchuras comprendidas entre %1$spx a %2$spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:551
-#: admin/views/pages/parts/slider-settings.php:437
+#: admin/views/pages/parts/slider-settings.php:740
+#, php-format
 msgid ""
 "When enabled this setting will hide the navigation on screen widths equal to "
 "or greater than %spx."
@@ -890,13 +1021,12 @@ msgstr ""
 "Cuando está activado, este ajuste oculta la navegación en pantallas con "
 "anchuras iguales o superiores a %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:563
-#: admin/views/pages/parts/slider-settings.php:449
+#: admin/views/pages/parts/slider-settings.php:752
 msgid "Hide Slideshow On"
 msgstr "Ocultar el pase de diapositivas en"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:568
-#: admin/views/pages/parts/slider-settings.php:454
+#: admin/views/pages/parts/slider-settings.php:757
+#, php-format
 msgid ""
 "When enabled this setting will hide the slideshow on screen widths less than "
 "%spx."
@@ -904,10 +1034,9 @@ msgstr ""
 "Cuando está activado, este ajuste oculta el pase de diapositivas en las "
 "pantallas con anchuras inferiores a %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:578
-#: admin/views/pages/parts/slider-settings-legacy.php:589
-#: admin/views/pages/parts/slider-settings.php:464
-#: admin/views/pages/parts/slider-settings.php:475
+#: admin/views/pages/parts/slider-settings.php:767
+#: admin/views/pages/parts/slider-settings.php:778
+#, php-format
 msgid ""
 "When enabled this setting will hide the slideshow on screen widths of %1$spx "
 "to %2$spx."
@@ -915,8 +1044,8 @@ msgstr ""
 "Cuando está activado, este ajuste oculta el pase de diapositivas en "
 "pantallas de anchura %1$spx a %2$spx"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:600
-#: admin/views/pages/parts/slider-settings.php:486
+#: admin/views/pages/parts/slider-settings.php:789
+#, php-format
 msgid ""
 "When enabled this setting will hide the slideshow on screen widths equal to "
 "or greater than %spx."
@@ -924,64 +1053,52 @@ msgstr ""
 "Cuando está activado, este ajuste oculta el pase de diapositivas en "
 "pantallas de anchura igual o superior a %spx"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:625
-#: admin/views/pages/parts/slider-settings.php:511
+#: admin/views/pages/parts/slider-settings.php:812
 msgid "Advanced Options"
 msgstr "Ajustes avanzados"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:630
-#: admin/views/pages/parts/slider-settings.php:516
+#: admin/views/pages/parts/slider-settings.php:824
 msgid "Center Align"
 msgstr "Alinear al centro"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:635
-#: admin/views/pages/parts/slider-settings.php:521
+#: admin/views/pages/parts/slider-settings.php:829
 msgid "Center align the slideshow in the available space on your website."
 msgstr ""
 "Centra el pase de diapositivas en el espacio disponible en tu sitio web."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:643
-#: admin/views/pages/parts/slider-settings.php:529
+#: admin/views/pages/parts/slider-settings.php:837
 #: admin/assets/dist/js/app.js:2
 msgid "Auto Play"
 msgstr "Reproducción automática"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:648
-#: admin/views/pages/parts/slider-settings.php:534
+#: admin/views/pages/parts/slider-settings.php:842
 msgid "Transition between slides automatically."
 msgstr "Transición entre diapositivas automáticamente."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:656
-#: admin/views/pages/parts/slider-settings.php:542 themes/customize.php:18
+#: admin/views/pages/parts/slider-settings.php:850 themes/customize.php:20
 msgid "Play / Pause Button"
 msgstr "Botón de reproducción/pausa"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:661
-#: admin/views/pages/parts/slider-settings.php:547
+#: admin/views/pages/parts/slider-settings.php:855
 msgid "This allows user to pause or resume Auto Play on the slideshow."
 msgstr ""
 "Esto permite al usuario pausar o reanudar la reproducción automática del "
 "pase de diapositivas."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:669
-#: admin/views/pages/parts/slider-settings.php:555
+#: admin/views/pages/parts/slider-settings.php:863
 msgid "Show Play / Pause Button Text"
 msgstr "Muestra el texto del botón de reproducción/pausa"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:674
-#: admin/views/pages/parts/slider-settings.php:560
+#: admin/views/pages/parts/slider-settings.php:868
 msgid "Show text options for Play / Pause Button"
 msgstr "Muestra las opciones para el texto del botón de reproducción/pausa"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:682
-#: admin/views/pages/parts/slider-settings.php:568
+#: admin/views/pages/parts/slider-settings.php:876
 msgid "Play Text"
 msgstr "Texto para «Reproducir»"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:684
-#: admin/views/pages/parts/slider-settings-legacy.php:697
-#: admin/views/pages/parts/slider-settings.php:570
-#: admin/views/pages/parts/slider-settings.php:583
+#: admin/views/pages/parts/slider-settings.php:878
+#: admin/views/pages/parts/slider-settings.php:891
 msgid ""
 "Enter text for the Play/Pause Button. Leave the field empty to use the icon "
 "only."
@@ -989,18 +1106,15 @@ msgstr ""
 "Introduce el texto para el botón Reproducir/Pausa. Deja el campo vacío para "
 "utilizar solo el icono."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:695
-#: admin/views/pages/parts/slider-settings.php:581
+#: admin/views/pages/parts/slider-settings.php:889
 msgid "Pause Text"
 msgstr "Texto para «Pausar»"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:708
-#: admin/views/pages/parts/slider-settings.php:594
+#: admin/views/pages/parts/slider-settings.php:902
 msgid "Hover Pause"
 msgstr "Pausa al pasar el cursor"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:713
-#: admin/views/pages/parts/slider-settings.php:599
+#: admin/views/pages/parts/slider-settings.php:907
 msgid ""
 "Pause the slideshow when hovering over slider, then resume when no longer "
 "hovering."
@@ -1008,13 +1122,11 @@ msgstr ""
 "Pausa la presentación de diapositivas al pasar el cursor sobre la misma, "
 "luego vuelve a ponerse en marcha cuando quites el cursor."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:721
-#: admin/views/pages/parts/slider-settings.php:607
+#: admin/views/pages/parts/slider-settings.php:915
 msgid "Loop"
 msgstr "Bucle"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:723
-#: admin/views/pages/parts/slider-settings.php:609
+#: admin/views/pages/parts/slider-settings.php:917
 msgid ""
 "If you choose \"Loop endlessly\", the slides will loop infinitely. If you "
 "choose \"Stop on first slide after looping\", the slideshow will stop on the "
@@ -1027,48 +1139,39 @@ msgstr ""
 "los elementos. Si eliges «Detener en la última diapositiva», las "
 "diapositivas se detendrán en la última diapositiva."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:726
-#: admin/views/pages/parts/slider-settings.php:612
+#: admin/views/pages/parts/slider-settings.php:920
 msgid "Loop Endlessly"
 msgstr "Bucle sin fin"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:727
-#: admin/views/pages/parts/slider-settings.php:613
+#: admin/views/pages/parts/slider-settings.php:921
 msgid "Stop On Last Slide"
 msgstr "Detener en la última diapositiva"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:728
-#: admin/views/pages/parts/slider-settings.php:614
+#: admin/views/pages/parts/slider-settings.php:922
 msgid "Stop On First Slide After Looping"
 msgstr "Detener en la primera diapositiva después del bucle"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:734
-#: admin/views/pages/parts/slider-settings.php:620
+#: admin/views/pages/parts/slider-settings.php:928
 msgid "Image Crop"
 msgstr "Recorte de la imagen"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:739
-#: admin/views/pages/parts/slider-settings.php:625
+#: admin/views/pages/parts/slider-settings.php:933
 msgid "Smart Crop"
 msgstr "Recorte inteligente"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:746
-#: admin/views/pages/parts/slider-settings.php:632
+#: admin/views/pages/parts/slider-settings.php:940
 msgid "Standard"
 msgstr "Estándar"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:753
-#: admin/views/pages/parts/slider-settings.php:639
+#: admin/views/pages/parts/slider-settings.php:947
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:760
-#: admin/views/pages/parts/slider-settings.php:646
+#: admin/views/pages/parts/slider-settings.php:954
 msgid "Disabled (Smart Pad)"
 msgstr "Disabled (Smart Pad)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:767
-#: admin/views/pages/parts/slider-settings.php:653
+#: admin/views/pages/parts/slider-settings.php:961
 msgid ""
 "Smart Crop ensures your responsive slides are cropped to a ratio that "
 "results in a consistent slideshow size."
@@ -1077,13 +1180,34 @@ msgstr ""
 "recortadas en una proporción correcta respecto a la presentación de "
 "diapositivas."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:784
-#: admin/views/pages/parts/slider-settings.php:670
+#: admin/views/pages/parts/slider-settings.php:978
+msgid "Image Crop Source"
+msgstr "Fuente del recorte de la imagen"
+
+#: admin/views/pages/parts/slider-settings.php:983
+msgid "Slideshow width/height"
+msgstr "Ancho/alto del pase de diapositivas"
+
+#: admin/views/pages/parts/slider-settings.php:986
+msgid "Custom width/height (Pro)"
+msgstr "Ancho/alto personalizados (Pro)"
+
+#: admin/views/pages/parts/slider-settings.php:990
+msgid ""
+"By default, MetaSlider will crop images using the main width and height of "
+"the slideshow. If you want smaller images, select Custom width/height and "
+"make sure the values are less than the main width and height."
+msgstr ""
+"Por defecto, MetaSlider recortará las imágenes utilizando el ancho y alto "
+"principales de la presentación de diapositivas. Si deseas imágenes más "
+"pequeñas, selecciona «Ancho/alto personalizados» y asegúrate de que los "
+"valores sean inferiores al ancho y alto principales."
+
+#: admin/views/pages/parts/slider-settings.php:999
 msgid "Image Crop Size"
 msgstr "Tamaño de recorte de imagen"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:793
-#: admin/views/pages/parts/slider-settings.php:679
+#: admin/views/pages/parts/slider-settings.php:1008
 msgid ""
 "This will increase the size of the images in your slideshow. Larger images "
 "are higher quality. Smaller images load more quickly."
@@ -1092,103 +1216,32 @@ msgstr ""
 "imágenes más grandes son de mayor calidad. Las imágenes más pequeñas se "
 "cargan más rápidamente."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:804
-#: admin/views/pages/parts/slider-settings.php:690
+#: admin/views/pages/parts/slider-settings.php:1019
 msgid "Smooth Height"
 msgstr "Altura suave"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:809
-#: admin/views/pages/parts/slider-settings.php:695
+#: admin/views/pages/parts/slider-settings.php:1024
 msgid "Allow navigation to follow the slide's height smoothly."
 msgstr ""
 "Permitir que la navegación siga suavemente la altura de la diapositiva."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:817
-#: admin/views/pages/parts/slider-settings.php:703
-msgid "Carousel Mode"
-msgstr "Modo carrusel"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:822
-msgid ""
-"Display multiple slides at once. Slideshow output will be 100% wide. "
-"Carousel Mode only uses the Transition Effect."
-msgstr ""
-"Muestra varias diapositivas a la vez. El pase de diapositivas tendrá un "
-"ancho del 100%. El modo «Carrusel» solo utiliza el efecto de transición."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:852
-#: admin/views/pages/parts/slider-settings.php:738
-msgid "Loop Carousel Continuously"
-msgstr "Carrusel en bucle continuo"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:857
-#: admin/views/pages/parts/slider-settings.php:743
-msgid ""
-"Infinite loop of slides when Carousel Mode is enabled. This option disables "
-"arrows and navigation."
-msgstr ""
-"Bucle infinito de diapositivas cuando el modo carrusel está activado. Esta "
-"opción desactiva las flechas y la navegación."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:869
-#: admin/views/pages/parts/slider-settings.php:754
-msgid "Carousel Margin"
-msgstr "Margen de carrusel"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:872
-#: admin/views/pages/parts/slider-settings.php:757
-msgid "Pixel margin between slides in carousel."
-msgstr "Margen en píxeles entre diapositivas en el carrusel."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:886
-#: admin/views/pages/parts/slider-settings.php:771
-msgid "Carousel Items"
-msgstr "Elementos de carrusel"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:888
-#: admin/views/pages/parts/slider-settings.php:773
-msgid "Minimum number of slides to be displayed at once in carousel."
-msgstr ""
-"Número mínimo de diapositivas que se mostrarán a la vez en el carrusel."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:897
-#: admin/views/pages/parts/slider-settings.php:782
-#| msgid "Line Height"
-msgid "Force Height"
-msgstr "Forzar altura"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:902
-#: admin/views/pages/parts/slider-settings.php:787
-msgid ""
-"If the slideshow looks small, force slideshow height when using Carousel "
-"mode. Please note when is enabled slides may look cropped."
-msgstr ""
-"Si el pase de diapositivas parece pequeño, fuerza la altura del pase de "
-"diapositivas cuando uses el modo «Carrusel». Por favor, ten en cuenta que "
-"las diapositivas pueden parecer recortadas."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:910
-#: admin/views/pages/parts/slider-settings.php:795
+#: admin/views/pages/parts/slider-settings.php:1032
 msgid "Slide Order"
 msgstr "Orden de diapositivas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:915
-#: admin/views/pages/parts/slider-settings.php:800
+#: admin/views/pages/parts/slider-settings.php:1037
 msgid "Newest First"
 msgstr "Los más recientes primero"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:918
-#: admin/views/pages/parts/slider-settings.php:803
+#: admin/views/pages/parts/slider-settings.php:1040
 msgid "Oldest First"
 msgstr "Los más antiguos primero"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:921
-#: admin/views/pages/parts/slider-settings.php:806
+#: admin/views/pages/parts/slider-settings.php:1043
 msgid "Drag-and-drop"
 msgstr "Arrastrar y soltar"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:927
-#: admin/views/pages/parts/slider-settings.php:812
+#: admin/views/pages/parts/slider-settings.php:1049
 msgid ""
 "Select the order in which slides appear in the slideshow. This impacts the "
 "frontend view."
@@ -1196,108 +1249,124 @@ msgstr ""
 "Selecciona el orden en que aparecerán las diapositivas en el pase de "
 "diapositivas. Esto afecta a la vista pública."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:935
-#: admin/views/pages/parts/slider-settings.php:820
-msgid "Reverse"
-msgstr "Invertir"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:940
-#: admin/views/pages/parts/slider-settings.php:825
-msgid "Reverse the animation direction."
-msgstr "Invertir orden de la animación."
-
-#: admin/views/pages/parts/slider-settings-legacy.php:948
-#: admin/views/pages/parts/slider-settings.php:833
+#: admin/views/pages/parts/slider-settings.php:1057
 msgid "Touch Swipe"
 msgstr "Deslizar tocando"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:953
-#: admin/views/pages/parts/slider-settings.php:838
+#: admin/views/pages/parts/slider-settings.php:1062
 msgid "Allow touch swipe navigation of the slider on touch-enabled devices."
 msgstr "Permitir la navegación táctil del carrusel en dispositivos táctiles."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:961
-#: admin/views/pages/parts/slider-settings.php:846 themes/customize.php:140
+#: admin/views/pages/parts/slider-settings.php:1070 themes/customize.php:143
 msgid "Progress Bar"
 msgstr "Barra de progreso"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:966
-#: admin/views/pages/parts/slider-settings.php:851
+#: admin/views/pages/parts/slider-settings.php:1075
 msgid ""
 "Displays a visual indicator showing the time left before the next slide."
 msgstr ""
 "Muestra un indicador visual del tiempo que falta para la diapositiva "
 "siguiente."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:974
+#: admin/views/pages/parts/slider-settings.php:1083
+msgid "Loading Indicator"
+msgstr "Indicador de carga"
+
+#: admin/views/pages/parts/slider-settings.php:1088
+msgid "Displays a visual indicator while the slideshow is loading."
+msgstr ""
+"Muestra un indicador visual cuando el pase de diapositivas está cargando."
+
+#: admin/views/pages/parts/slider-settings.php:1096
 msgid "Previous Text"
 msgstr "Texto para «Anterior»"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:976
+#: admin/views/pages/parts/slider-settings.php:1098
 msgid "Set the text for the \"previous\" direction item."
 msgstr "Establece el texto para el elemento de dirección «anterior»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:987
+#: admin/views/pages/parts/slider-settings.php:1110
 msgid "Next Text"
 msgstr "Texto para «Siguiente»"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:989
+#: admin/views/pages/parts/slider-settings.php:1112
 msgid "Set the text for the \"next\" direction item."
 msgstr "Establece el texto para el elemento de dirección «siguiente»."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1005
+#: admin/views/pages/parts/slider-settings.php:1129
 msgid "Square Delay"
 msgstr "Retardo entre cuadros"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1007
+#: admin/views/pages/parts/slider-settings.php:1131
 msgid "Delay between squares in ms."
 msgstr "Retardo entre cuadros en ms."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1023
+#: admin/views/pages/parts/slider-settings.php:1148
 msgid "Opacity of title and navigation, between 0 and 1."
 msgstr "Opacidad del título y navegación, entre 0 y 1."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1037
+#: admin/views/pages/parts/slider-settings.php:1163
 msgid "Caption Speed"
 msgstr "Velocidad de la leyenda"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1039
+#: admin/views/pages/parts/slider-settings.php:1165
 msgid "Set the fade in speed of the caption."
 msgstr "Establece la velocidad del fundido de la leyenda."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1052
-#: admin/views/pages/parts/slider-settings.php:859
+#: admin/views/pages/parts/slider-settings.php:1179
+msgid "Lazy Load Images"
+msgstr "Carga diferida de imágenes"
+
+#: admin/views/pages/parts/slider-settings.php:1184
+msgid ""
+"This feature can speed up your site. MetaSlider will only load slides when "
+"they are required by your slideshow."
+msgstr ""
+"Esta característica puede acelerar tu sitio. MetaSlider solo cargará las "
+"diapositivas cuando sean necesarias para tu pase de diapositivas."
+
+#: admin/views/pages/parts/slider-settings.php:1201
+msgid "Container Options"
+msgstr "Opciones del contenedor"
+
+#: admin/views/pages/parts/slider-settings.php:1213
+msgid "Container Box"
+msgstr "Caja del contenedor"
+
+#: admin/views/pages/parts/slider-settings.php:1218
+msgid "Customize the slideshow's container box."
+msgstr "Personaliza la caja del contenedor del pase de diapositivas."
+
+#: admin/views/pages/parts/slider-settings.php:1224
+msgid "This feature is available in MetaSlider Pro"
+msgstr "Esta característica está disponible en MetaSlider Pro"
+
+#: admin/views/pages/parts/slider-settings.php:1239
 msgid "Accessibility Options"
 msgstr "Opciones de accesibilidad"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1058
-#: admin/views/pages/parts/slider-settings.php:865
+#: admin/views/pages/parts/slider-settings.php:1251
 msgid "Keyboard Controls"
 msgstr "Controles del teclado"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1063
-#: admin/views/pages/parts/slider-settings.php:870
+#: admin/views/pages/parts/slider-settings.php:1256
 msgid "Use arrow keys to get to the next slide."
 msgstr "Utiliza las teclas de flecha para pasar a la siguiente diapositiva."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1071
-#: admin/views/pages/parts/slider-settings.php:878
+#: admin/views/pages/parts/slider-settings.php:1264
 msgid "Tabindex For Navigation"
 msgstr "Tabindex para la navegación"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1076
-#: admin/views/pages/parts/slider-settings.php:883
+#: admin/views/pages/parts/slider-settings.php:1269
 msgid "This helps make the slideshow navigation more accessible."
 msgstr ""
 "Esto hace que la navegación por el pase de diapositivas sea más accesible."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1084
-#: admin/views/pages/parts/slider-settings.php:891
+#: admin/views/pages/parts/slider-settings.php:1277
 msgid "ARIA Live"
 msgstr "ARIA Live"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1089
-#: admin/views/pages/parts/slider-settings.php:896
+#: admin/views/pages/parts/slider-settings.php:1282
 msgid ""
 "If Autoplay is enabled, this causes screen readers to announce that the "
 "slides are changing."
@@ -1305,13 +1374,11 @@ msgstr ""
 "Si la reproducción automática está activada, esto hace que los lectores de "
 "pantalla anuncien que las diapositivas están cambiando."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1097
-#: admin/views/pages/parts/slider-settings.php:904
+#: admin/views/pages/parts/slider-settings.php:1290
 msgid "ARIA Current"
 msgstr "ARIA actual"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1102
-#: admin/views/pages/parts/slider-settings.php:909
+#: admin/views/pages/parts/slider-settings.php:1295
 msgid ""
 "This is used on the navigation button for the active slide. It helps screen "
 "readers understand which slide is active."
@@ -1319,18 +1386,15 @@ msgstr ""
 "Esto se utiliza en el botón de navegación para la diapositiva activa. Ayuda "
 "a los lectores de pantalla a entender qué diapositiva está activa."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1110
-#: admin/views/pages/parts/slider-settings.php:917
+#: admin/views/pages/parts/slider-settings.php:1311
 msgid "Developer Options"
 msgstr "Opciones de desarrollador"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1116
-#: admin/views/pages/parts/slider-settings.php:923
+#: admin/views/pages/parts/slider-settings.php:1323
 msgid "CSS Classes"
 msgstr "Clases CSS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1118
-#: admin/views/pages/parts/slider-settings.php:925
+#: admin/views/pages/parts/slider-settings.php:1325
 msgid ""
 "Enter custom CSS classes to apply to the slider wrapper. Separate multiple "
 "classes with a space."
@@ -1338,59 +1402,43 @@ msgstr ""
 "Introduce clases CSS personalizadas para aplicarlas a la envoltura del "
 "carrusel. Separa varias clases con un espacio."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1129
-#: admin/views/pages/parts/slider-settings.php:936
+#: admin/views/pages/parts/slider-settings.php:1336
 msgid "Print CSS"
 msgstr "Imprimir CSS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1134
-#: admin/views/pages/parts/slider-settings.php:941
+#: admin/views/pages/parts/slider-settings.php:1341
 msgid "Uncheck this if you would like to include your own CSS."
 msgstr "Desmarca esta si quieres incluir tu propio CSS."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1142
-#: admin/views/pages/parts/slider-settings.php:949
+#: admin/views/pages/parts/slider-settings.php:1349
 msgid "Print JS"
 msgstr "Imprimir JS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1147
-#: admin/views/pages/parts/slider-settings.php:954
+#: admin/views/pages/parts/slider-settings.php:1354
 msgid "Uncheck this if you would like to include your own Javascript."
 msgstr "Desmarca esta si quieres incluir tu propio JavaScript."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1155
-#: admin/views/pages/parts/slider-settings.php:962
+#: admin/views/pages/parts/slider-settings.php:1362
 msgid "No Conflict Mode"
 msgstr "Sin modo de conflicto"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1160
-#: admin/views/pages/parts/slider-settings.php:967
+#: admin/views/pages/parts/slider-settings.php:1367
 msgid "Delay adding the flexslider class to the slideshow."
 msgstr "Retardo añadiendo la clase «flexslider» al pase de diapositivas."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1204
-#: admin/views/pages/parts/slider-settings.php:1004 ml-slider.php:1804
+#: admin/views/pages/parts/slider-settings.php:1405 ml-slider.php:1936
 msgid "Trashed Slides"
 msgstr "Diapositivas eliminadas"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:1226
-#: admin/views/pages/parts/slider-settings.php:1014
+#: admin/views/pages/parts/slider-settings.php:1415
 msgid "View trashed slides"
 msgstr "Ver diapositivas borradas"
-
-#: admin/views/pages/parts/slider-settings.php:708
-msgid ""
-"Display multiple slides at once. Slideshow output will be 100% wide. "
-"Carousel Mode only uses the 'Slide' Transition Effect."
-msgstr ""
-"Muestra varias diapositivas a la vez. El pase de diapositivas tendrá un "
-"ancho del 100%. El modo «Carrusel» solo utiliza el efecto «Deslizar»."
 
 #: admin/views/pages/parts/toolbar.php:25
 msgid "Add a new slide"
 msgstr "Añadir nueva diapositiva"
 
-#: admin/views/pages/parts/toolbar.php:29
+#: admin/views/pages/parts/toolbar.php:29 inc/slider/metaslider.class.php:911
 msgid "Add Slide"
 msgstr "Añadir diapositiva"
 
@@ -1429,15 +1477,15 @@ msgstr ""
 msgid "Add CSS"
 msgstr "Añadir CSS"
 
-#: admin/views/pages/parts/toolbar.php:100
+#: admin/views/pages/parts/toolbar.php:98
 msgid "Save slideshow"
 msgstr "Guardar presentación de diapositivas"
 
-#: admin/views/pages/parts/toolbar.php:114 admin/assets/dist/js/app.js:2
+#: admin/views/pages/parts/toolbar.php:112 admin/assets/dist/js/app.js:2
 msgid "Save"
 msgstr "Guardar"
 
-#: admin/views/pages/parts/toolbar.php:125 ml-slider.php:1875
+#: admin/views/pages/parts/toolbar.php:123 ml-slider.php:2007
 msgid "Return to Published Slides"
 msgstr "Volver a las diapositivas publicadas"
 
@@ -1480,35 +1528,83 @@ msgid "Choose your own images to start a new slideshow."
 msgstr "Elige tus propias imágenes para iniciar un nuevo pase de diapositivas."
 
 #: admin/views/pages/start.php:34
+msgid "Uploading images..."
+msgstr "Subiendo imágenes..."
+
+#: admin/views/pages/start.php:41
 msgctxt "Uploader: Drop files to upload - or - Select Files"
 msgid "or"
 msgstr "o"
 
-#: admin/views/pages/start.php:37
+#: admin/views/pages/start.php:44
 msgid "Open Media Library"
 msgstr "Abrir biblioteca de medios"
 
-#: admin/views/pages/start.php:52
+#: admin/views/pages/start.php:59
 msgid "Import a demo slideshow"
 msgstr "Importar un pase de diapositivas de demostración"
 
-#: admin/views/pages/start.php:55
+#: admin/views/pages/start.php:62
 msgid "Use sample slides to quickly create a new slideshow."
 msgstr ""
 "Utiliza las diapositivas de muestra para crear rápidamente un nuevo pase de "
 "diapositivas."
 
-#: admin/views/pages/start.php:62
+#: admin/views/pages/start.php:69
 msgid "Blank Slideshow"
 msgstr "Presentación en blanco"
 
-#: admin/views/pages/start.php:63
+#: admin/views/pages/start.php:70
 msgid "Image Slideshow"
 msgstr "Presentación de imágenes"
 
-#: admin/views/pages/start.php:77
+#: admin/views/pages/start.php:84
 msgid "Create a Slideshow"
 msgstr "Crear una presentación de diapositivas"
+
+#: admin/views/pages/theme-editor.php:11
+msgid "Introducing the Theme Editor in MetaSlider Pro"
+msgstr "Introducción del editor de temas en MetaSlider Pro"
+
+#: admin/views/pages/theme-editor.php:18 ml-slider.php:531
+msgid "Theme Editor"
+msgstr "Editor de temas"
+
+#: admin/views/pages/theme-editor.php:23
+msgid "Create your own MetaSlider Themes"
+msgstr "Crea tus propios temas de MetaSlider"
+
+#: admin/views/pages/theme-editor.php:26
+msgid ""
+"The Theme Editor is an easy and powerful way to design themes that exactly "
+"match your site."
+msgstr ""
+"El editor de temas es una herramienta sencilla y potente que te permite "
+"diseñar temas que se adaptan perfectamente a tu sitio."
+
+#: admin/views/pages/theme-editor.php:29
+msgid ""
+"The Theme Editor allows you to customize almost every aspect of your "
+"slideshow themes. You can change the arrows, navigation, captions, Play / "
+"Pause button, and other slideshow details."
+msgstr ""
+"El editor de temas te permite personalizar casi todos los aspectos de los "
+"temas de tus pases de diapositivas. Puedes cambiar las flechas, la "
+"navegación, las leyendas, el botón «Reproducir/Pausar» y otros detalles del "
+"pase de diapositivas."
+
+#: admin/views/pages/theme-editor.php:32
+msgid ""
+"Upgrade to MetaSlider Pro and you can create a beautiful WordPress slideshow "
+"in minutes."
+msgstr ""
+"Actualiza a MetaSlider Pro y podrás crear un magnífico pase de diapositivas "
+"de WordPress en unos minutos."
+
+#: admin/views/pages/theme-editor.php:36 admin/views/pages/upgrade.php:26
+#: admin/views/pages/upgrade.php:193 admin/assets/dist/js/app.js:2
+msgid "Upgrade now"
+msgstr "Actualizar ahora"
 
 #: admin/views/pages/upgrade.php:13
 msgid "Comparison Chart"
@@ -1522,14 +1618,9 @@ msgstr "Gratuito"
 msgid "Pro"
 msgstr "Pro"
 
-#: admin/views/pages/upgrade.php:25 admin/views/pages/upgrade.php:152
+#: admin/views/pages/upgrade.php:25 admin/views/pages/upgrade.php:192
 msgid "Installed"
 msgstr "Instalado"
-
-#: admin/views/pages/upgrade.php:26 admin/views/pages/upgrade.php:153
-#: admin/views/slides/tabs/schedule.php:10 admin/assets/dist/js/app.js:2
-msgid "Upgrade now"
-msgstr "Actualizar ahora"
 
 #: admin/views/pages/upgrade.php:30
 msgid "Create unlimited slideshows"
@@ -1560,111 +1651,194 @@ msgstr ""
 "se redimensionen a la perfección."
 
 #: admin/views/pages/upgrade.php:54
+msgid "Toggle your slide's visibility"
+msgstr "Cambia la visibilidad de tu diapositiva"
+
+#: admin/views/pages/upgrade.php:55
+msgid "Hide any slide, without having to delete them."
+msgstr "Oculta cualquier diapositiva, sin tener que borrarla."
+
+#: admin/views/pages/upgrade.php:62
 msgid "Thumbnail navigation"
 msgstr "Navegación por miniaturas"
 
-#: admin/views/pages/upgrade.php:55
+#: admin/views/pages/upgrade.php:63
 msgid "Allow users to browse your slideshows using thumbnail navigation."
 msgstr ""
 "Permite navegar a tu usuarios de manera sencilla por tus pases de "
 "diapositivas usando las miniaturas."
 
-#: admin/views/pages/upgrade.php:62
+#: admin/views/pages/upgrade.php:70
 msgid "Add YouTube, Vimeo and Tiktok slides"
 msgstr "Añadir diapositivas de YouTube, Vimeo y Tiktok"
 
-#: admin/views/pages/upgrade.php:63
+#: admin/views/pages/upgrade.php:71
 msgid "Easily include videos hosted by YouTube, Vimeo or TikTok."
 msgstr "Incluye fácilmente vídeos alojados en YouTube, Vimeo o TikTok."
 
-#: admin/views/pages/upgrade.php:70
+#: admin/views/pages/upgrade.php:78
 msgid "Add local video slides"
 msgstr "Añadir diapositivas de vídeo local"
 
-#: admin/views/pages/upgrade.php:71
+#: admin/views/pages/upgrade.php:79
 msgid "Create slideshows with videos from your WordPress media library."
 msgstr ""
 "Crea pases de diapositivas con los vídeos de tu bliblioteca de medios de "
 "WordPress."
 
-#: admin/views/pages/upgrade.php:78
+#: admin/views/pages/upgrade.php:86
 msgid "Add external video slides"
 msgstr "Añadir diapositivas de vídeo externo"
 
-#: admin/views/pages/upgrade.php:79
+#: admin/views/pages/upgrade.php:87
 msgid "Create slideshows with external videos."
 msgstr "Crea pases de diapositivas con tus vídeos externos"
 
-#: admin/views/pages/upgrade.php:86
+#: admin/views/pages/upgrade.php:94
 msgid "Extra premium themes"
 msgstr "Temas premium adicionales"
 
-#: admin/views/pages/upgrade.php:87
+#: admin/views/pages/upgrade.php:95
 msgid ""
 "MetaSlider Pro provides stylish and exclusive themes for your slideshows."
 msgstr ""
 "MetaSlider Pro proporciona temas elegantes y exclusivos para tus pases de "
 "diapositivas."
 
-#: admin/views/pages/upgrade.php:94
+#: admin/views/pages/upgrade.php:102
 msgid "Add slide layers"
 msgstr "Añadir capas a la diapositiva"
 
-#: admin/views/pages/upgrade.php:95
+#: admin/views/pages/upgrade.php:103
 msgid "Add layers to your slides with over 50 available transition effects."
 msgstr ""
 "Agrega capas a tus diapositivas con más de 50 efectos de transición "
 "disponibles."
 
-#: admin/views/pages/upgrade.php:102
+#: admin/views/pages/upgrade.php:110
 msgid "Add Post Feed slides"
 msgstr "Añadir feed de diapositivas"
 
-#: admin/views/pages/upgrade.php:103
+#: admin/views/pages/upgrade.php:111
 msgid "Easily build slides based on your WordPress posts."
 msgstr "Construye fácilmente diapositivas en base a tus entradas de WordPress."
 
-#: admin/views/pages/upgrade.php:110
+#: admin/views/pages/upgrade.php:118
 msgid "Add Custom HTML slides"
 msgstr "Añadir diapositivas de CSS personalizado"
 
-#: admin/views/pages/upgrade.php:111
+#: admin/views/pages/upgrade.php:119
 msgid "Design slides using images, HTML and CSS"
 msgstr "Diseñar diapositivas utilizando imágenes, HTML y CSS"
 
-#: admin/views/pages/upgrade.php:118
+#: admin/views/pages/upgrade.php:126
+msgid "Add Post Images slides"
+msgstr "Añadir diapositivas de imágenes de la entrada"
+
+#: admin/views/pages/upgrade.php:127
+msgid "Extract images from the current post and displays them as slides."
+msgstr ""
+"Extraer imágenes de la publicación actual y mostrarlas como diapositivas."
+
+#: admin/views/pages/upgrade.php:134
 msgid "Add custom CSS"
 msgstr "Añadir CSS personalizado"
 
-#: admin/views/pages/upgrade.php:119
+#: admin/views/pages/upgrade.php:135
 msgid "Customize your slideshows to fit with your website."
 msgstr "Personaliza tus pases de diapositivas para adaptarlos a tu web."
 
-#: admin/views/pages/upgrade.php:126
+#: admin/views/pages/upgrade.php:142
 msgid "Schedule your slides"
 msgstr "Programa tus diapositivas"
 
-#: admin/views/pages/upgrade.php:127
+#: admin/views/pages/upgrade.php:143
 msgid "Add a start/end date to individual slides."
 msgstr "Añade una fecha de inicio/fin a diapositivas individuales."
 
-#: admin/views/pages/upgrade.php:134
-msgid "Toggle your slide's visibility"
-msgstr "Cambia la visibilidad de tu diapositiva"
+#: admin/views/pages/upgrade.php:150
+msgid "WooCommerce integrations"
+msgstr "Integraciones de WooCommerce"
 
-#: admin/views/pages/upgrade.php:135
-msgid "Hide any slide, without having to delete them."
-msgstr "Oculta cualquier diapositiva, sin tener que borrarla."
+#: admin/views/pages/upgrade.php:151
+msgid "Display your products as slides with support for product galleries."
+msgstr ""
+"Muestra tus productos como diapositivas con la compatibilidad para galerías "
+"de productos."
 
-#: admin/views/pages/upgrade.php:142
+#: admin/views/pages/upgrade.php:158
+msgid "Advanced Custom Fields integrations"
+msgstr "Integraciones de Advanced Custom Fields"
+
+#: admin/views/pages/upgrade.php:159
+msgid "Display ACF image and gallery fields."
+msgstr "Mostrar los campos galería e imagen de ACF."
+
+#: admin/views/pages/upgrade.php:166
+msgid "The Events Calendar integrations"
+msgstr "Integraciones de The Events Calendar"
+
+#: admin/views/pages/upgrade.php:167
+msgid "Display your events as slides."
+msgstr "Muestra tus eventos como diapositivas."
+
+#: admin/views/pages/upgrade.php:174
+msgid "Repeating Slides support"
+msgstr "Es compatible con la repetición de diapositivas"
+
+#: admin/views/pages/upgrade.php:175
+msgid "Repeat a slide multiple times."
+msgstr "Repetir una diapositiva varias veces."
+
+#: admin/views/pages/upgrade.php:182
 msgid "Premium support"
 msgstr "Soporte Premium"
 
-#: admin/views/pages/upgrade.php:143
+#: admin/views/pages/upgrade.php:183
 msgid "Have your specific queries addressed directly by our experts."
 msgstr ""
 "Haz que tus consultas específicas sean tratadas directamente por nuestros "
 "expertos."
+
+#: admin/views/slides/tabs/advanced.php:11
+msgid "Custom delay for this slide"
+msgstr "Retraso personalizado para esta diapositiva"
+
+#: admin/views/slides/tabs/advanced.php:11
+msgid ""
+"Requires the Auto play setting to be enabled for this slideshow. When active "
+"on video slides, playback (by user or video autoplay) controls when the "
+"slideshow advances."
+msgstr ""
+"Es obligatorio que el ajuste «Reproducción automática» esté activado para "
+"este pase de diapositivas. Cuando está activo en las diapositivas de vídeo, "
+"la reproducción (por parte del usuario o la reproducción automática del "
+"vídeo) controla el avance del pase de diapositivas."
+
+#: admin/views/slides/tabs/advanced.php:18
+msgid "Custom delay is available in MetaSlider Pro"
+msgstr "El retraso personalizado está dispnible en MetaSlider Pro"
+
+#: admin/views/slides/tabs/advanced.php:30
+msgid "Repeat this slide"
+msgstr "Repetir esta diapositiva"
+
+#: admin/views/slides/tabs/advanced.php:30
+msgid ""
+"The slide is repeated after the specified number of original slides until "
+"the end of the slider. If multiple slides have this feature enabled, only "
+"the original (non-repeated) slides are considered when determining the "
+"positions of the repeated slides."
+msgstr ""
+"La diapositiva se repite después del número especificado de diapositivas "
+"originales hasta el final del carrusel. Si varias diapositivas tienen esta "
+"característica habilitada, solo se tienen en cuenta las diapositivas "
+"originales (no repetidas) al determinar las posiciones de las diapositivas "
+"repetidas."
+
+#: admin/views/slides/tabs/advanced.php:37
+msgid "Repeat slide is available in MetaSlider Pro"
+msgstr "La repetición de diapositiva está disponible en MetaSlider Pro"
 
 #: admin/views/slides/tabs/crop.php:14
 msgid "Crop Position"
@@ -1672,13 +1846,12 @@ msgstr "Posición del recorte"
 
 #: admin/views/slides/tabs/crop.php:15
 msgid ""
-"Choose how images are cropped if their size doesn't exactly match the size "
-"of your slideshow. This works if \"Smart Crop\" is selected in the \"Image "
-"Crop\" settings."
+"Choose how images are cropped if they are too large for the slideshow. This "
+"works if \"Smart Crop\" is selected in the \"Image Crop\" settings."
 msgstr ""
-"Elige cómo se recortan las imágenes si su tamaño no coincide exactamente con "
-"el del pase de diapositivas. Esto funciona si está seleccionado «Recorte "
-"inteligente» en los ajustes de «Recorte de imagen»."
+"Selecciona cómo se recortan las imágenes si son demasiado grandes para la "
+"presentación. Esto funciona si se selecciona «Recorte inteligente» en la "
+"configuración de «Recorte de imagen»."
 
 #: admin/views/slides/tabs/crop.php:19
 msgid "Top Left"
@@ -1757,6 +1930,7 @@ msgid "Hide slide on:"
 msgstr "Ocultar la diapositiva en:"
 
 #: admin/views/slides/tabs/mobile.php:46
+#, php-format
 msgid ""
 "When enabled this setting will hide the slide on screen widths equal to or "
 "greater than %spx"
@@ -1765,6 +1939,7 @@ msgstr ""
 "anchura igual o superior a %spx"
 
 #: admin/views/slides/tabs/mobile.php:56
+#, php-format
 msgid ""
 "When enabled this setting will hide the slide on screen widths of %1$spx to "
 "%2$spx"
@@ -1777,6 +1952,7 @@ msgid "Hide caption on:"
 msgstr "Oculta la leyenda en:"
 
 #: admin/views/slides/tabs/mobile.php:85
+#, php-format
 msgid ""
 "When enabled this setting will hide the caption on screen widths equal to or "
 "greater than %spx"
@@ -1785,6 +1961,7 @@ msgstr ""
 "anchuras iguales o superiores a %spx"
 
 #: admin/views/slides/tabs/mobile.php:95
+#, php-format
 msgid ""
 "When enabled this setting will hide the caption on screen widths of %1$spx "
 "to %2$spx"
@@ -1792,25 +1969,32 @@ msgstr ""
 "Cuando está activado, este ajuste oculta la leyenda en pantallas de anchura "
 "%1$spx a %2$spx"
 
-#: admin/views/slides/tabs/schedule.php:6
-msgid ""
-"Update or activate your MetaSlider Pro now to add a start/end date option to "
-"your slides"
-msgstr ""
-"Actualiza o activa MetaSlider Pro ahora para añadir una opción de fecha de "
-"inicio/fin a tus diapositivas"
+#: admin/views/slides/tabs/schedule.php:15
+msgid "Schedule this slide"
+msgstr "Programa esta diapositiva"
 
-#: admin/views/slides/tabs/schedule.php:8
-msgid "Get MetaSlider Pro"
-msgstr "Obtén MetaSlider Pro"
+#: admin/views/slides/tabs/schedule.php:18
+msgid "Schedule is available in MetaSlider Pro"
+msgstr "La programación está disponible en MetaSlider Pro"
 
-#: admin/views/slides/tabs/schedule.php:9
-msgid ""
-"With MetaSlider Pro, you can schedule your slides. You can choose to show "
-"your slides on specific dates, days of the week, or times of day."
-msgstr ""
-"Con MetaSlider Pro, puedes programar tus diapositivas. Puedes elegir mostrar "
-"tus diapositivas en fechas específicas, días de la semana u horas del día."
+#: admin/views/slides/tabs/schedule.php:35
+#, php-format
+msgid "%s time"
+msgstr "%s vuelta"
+
+#: admin/views/slides/tabs/schedule.php:45
+#, php-format
+msgid "UTC%s timezone"
+msgstr "Zona horaria UTC%s"
+
+#: admin/views/slides/tabs/schedule.php:48
+#, php-format
+msgid "%sUses your settings timezone%s"
+msgstr "%sUtiliza la zona horaria de tus ajustes%s"
+
+#: admin/views/slides/tabs/schedule.php:57
+msgid "Current server time"
+msgstr "Hora actual del servidor"
 
 #: admin/views/slides/tabs/seo.php:7
 msgid "Image Title Text"
@@ -1853,6 +2037,7 @@ msgid "Use the image alt text"
 msgstr "Utilizar el texto alternativo de la imagen"
 
 #: inc/metaslider.systemcheck.class.php:91
+#, php-format
 msgid ""
 "Your settings might not be saving properly due to a configuration on your "
 "server. %s is currently set to %s, but we recommend a setting of 4000. "
@@ -1868,7 +2053,7 @@ msgstr ""
 msgid "this article"
 msgstr "este artículo"
 
-#: inc/metaslider.systemcheck.class.php:212
+#: inc/metaslider.systemcheck.class.php:216
 msgid "Warning:"
 msgstr "Advertencia:"
 
@@ -1880,7 +2065,7 @@ msgstr "Titulo:"
 msgid "Select Slider:"
 msgstr "Seleccionar pase"
 
-#: inc/metaslider.widget.class.php:125 ml-slider.php:1984
+#: inc/metaslider.widget.class.php:125 ml-slider.php:2136
 #: admin/assets/dist/js/app.js:2
 msgid "No slideshows found"
 msgstr "No se han encontrado presentaciones de diapositivas"
@@ -1908,8 +2093,8 @@ msgstr ""
 msgid "Trash slide"
 msgstr "Mover la diapositiva a la basura"
 
-#: inc/slide/metaslide.class.php:431 inc/slide/metaslide.class.php:687
-#: inc/slide/metaslide.class.php:688
+#: inc/slide/metaslide.class.php:431 inc/slide/metaslide.class.php:650
+#: inc/slide/metaslide.class.php:651
 msgid "Update slide image"
 msgstr "Actualizar imagen de la diapositiva"
 
@@ -1917,57 +2102,65 @@ msgstr "Actualizar imagen de la diapositiva"
 msgid "Duplicate slide"
 msgstr "Duplicar diapositiva"
 
-#: inc/slide/metaslide.image.class.php:90
+#: inc/slide/metaslide.class.php:855
+msgid "Hide slide"
+msgstr "Ocultar la diapositiva"
+
+#: inc/slide/metaslide.image.class.php:91
 msgid "This isn't a valid image format. Please try again."
 msgstr "Este formato de imagen no es válido. Por favor, inténtalo de nuevo."
 
-#: inc/slide/metaslide.image.class.php:410
+#: inc/slide/metaslide.image.class.php:411
 msgid "Access denied"
 msgstr "Acceso denegado"
 
-#: inc/slide/metaslide.image.class.php:443
+#: inc/slide/metaslide.image.class.php:450
 msgid "Image Slide"
 msgstr "Imagen de la diapositiva"
 
-#: inc/slide/metaslide.image.class.php:528
+#: inc/slide/metaslide.image.class.php:536
 msgid "Warning: The image data does not exist. Please re-upload the image."
 msgstr ""
 "Advertencia: No existen datos de la imagen. Vuelve a subirla, por favor."
 
-#: inc/slide/metaslide.image.class.php:543
+#: inc/slide/metaslide.image.class.php:551
 msgid "General"
 msgstr "General"
 
-#: inc/slide/metaslide.image.class.php:547
+#: inc/slide/metaslide.image.class.php:555
 msgid "Link"
 msgstr "Enlace"
 
-#: inc/slide/metaslide.image.class.php:551
+#: inc/slide/metaslide.image.class.php:559
 msgid "SEO"
 msgstr "SEO"
 
-#: inc/slide/metaslide.image.class.php:567
+#: inc/slide/metaslide.image.class.php:575
 msgid "Device"
 msgstr "Dispositivo"
 
-#: inc/slide/metaslide.image.class.php:584
+#: inc/slide/metaslide.image.class.php:592
 msgid "Crop"
 msgstr "Recortar"
 
-#: inc/slide/metaslide.image.class.php:596
+#: inc/slide/metaslide.image.class.php:604
 msgid "Schedule"
 msgstr "Programar"
 
-#: inc/slider/metaslider.class.php:282
-msgid "Click the \"Add Slide\" button to create your slideshow"
-msgstr ""
-"Haz clic en el botón «Añadir diapositiva» para crear tu pase de diapositivas"
+#: inc/slide/metaslide.image.class.php:615
+msgid "Advanced"
+msgstr "Avanzado"
 
-#: inc/slider/metaslider.class.php:325
+#: inc/slide/metaslide.image.class.php:843
+msgid "View Slide Details"
+msgstr "Ver detalles de la diapositiva"
+
+#: inc/slider/metaslider.class.php:347
 msgid "Edit Slideshow"
 msgstr "Editar el pase de diapositivas"
 
-#: ml-slider.php:262
+#: ml-slider.php:264
+#, php-format
 msgid ""
 "MetaSlider Pro is installed but is out of date. You may update it %shere%s. "
 "Learn more about this notice %shere%s"
@@ -1975,103 +2168,123 @@ msgstr ""
 "MetaSlider Pro está instalado pero no está actualizado. Puedes actualizarlo "
 "%saquí%s. Leer más sobre este aviso %saquí%s"
 
-#: ml-slider.php:494
+#: ml-slider.php:526
 msgid "Home"
 msgstr "Inicio"
 
-#: ml-slider.php:495
+#: ml-slider.php:527
 msgid "Quick Start"
 msgstr "Inicio rápido"
 
-#: ml-slider.php:496
+#: ml-slider.php:528
 msgid "Settings & Help"
 msgstr "Ajustes y ayuda"
 
-#: ml-slider.php:499
+#: ml-slider.php:532
 msgid "Upgrade to Pro"
 msgstr "Actualizar a Pro"
 
-#: ml-slider.php:536 ml-slider.php:539
+#: ml-slider.php:569 ml-slider.php:572
 msgid "All Slideshows"
 msgstr "Todos pases de diapositivas"
 
-#: ml-slider.php:547 ml-slider.php:550
+#: ml-slider.php:580 ml-slider.php:583
 msgid "Create Slideshow"
 msgstr "Crear una presentación de diapositivas"
 
-#: ml-slider.php:707
+#: ml-slider.php:740
 msgid "Image"
 msgstr "Imagen"
 
-#: ml-slider.php:708
+#: ml-slider.php:741 admin/assets/dist/js/admin.js:1
+#: admin/assets/js/admin.js:199
 msgid "Add to slideshow"
 msgstr "Añadir a la presentación de diapositivas"
 
-#: ml-slider.php:748
+#: ml-slider.php:781
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: ml-slider.php:749
+#: ml-slider.php:782
 msgid "YouTube"
 msgstr "YouTube"
 
-#: ml-slider.php:750
+#: ml-slider.php:783
 msgid "TikTok"
 msgstr "TikTok"
 
-#: ml-slider.php:751
+#: ml-slider.php:784
 msgid "External Image"
 msgstr "Imagen externa"
 
-#: ml-slider.php:752
+#: ml-slider.php:785
 msgid "External Video"
 msgstr "Vídeo externo"
 
-#: ml-slider.php:753
+#: ml-slider.php:786
 msgid "Custom HTML"
 msgstr "HTML personalizado"
 
-#: ml-slider.php:754
+#: ml-slider.php:787
+msgid "Post Images"
+msgstr "Imágenes de la entrada"
+
+#: ml-slider.php:788
+#| msgid "WooCommerce integrations"
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: ml-slider.php:789
 msgid "Post Feed"
 msgstr "Feed de la entrada"
 
-#: ml-slider.php:755
+#: ml-slider.php:790
 msgid "Layer Slide"
 msgstr "Capa de corte"
 
-#: ml-slider.php:756
+#: ml-slider.php:791
 msgid "Local Video"
 msgstr "Vídeo local"
 
-#: ml-slider.php:881
+#: ml-slider.php:916
 msgid "The slide was successfully restored"
 msgstr "La diapositiva se ha restaurado correctamente"
 
-#: ml-slider.php:904
+#: ml-slider.php:939
 msgid "The attempt to restore the slide failed."
 msgstr "El intento de recuperar la diapositiva ha fallado."
 
-#: ml-slider.php:963
+#: ml-slider.php:998
 msgid "The slide was successfully trashed"
 msgstr "La diapositiva se ha eliminado correctamente"
 
-#: ml-slider.php:1075
+#: ml-slider.php:1110
 msgid "The slide was permanently deleted"
 msgstr "La diapositiva ha sido borrado permanentemente"
 
-#: ml-slider.php:1787
+#: ml-slider.php:1548
+#, php-format
+msgid ""
+"Please consider moving your slides to <b>FlexSlider</b>. We're adding all "
+"new MetaSlider features to this option. <a href=\"%s\">Find out more</a>."
+msgstr ""
+"Considera migrar tus diapositivas a <b>FlexSlider</b>. Estamos añadiendo "
+"todas las nuevas funciones de MetaSlider a esta opción. <a href=\"%s\">Más "
+"información</a>."
+
+#: ml-slider.php:1919
 msgid "Slide permanently deleted."
 msgstr "Diapositiva borrada permanentemente."
 
-#: ml-slider.php:1790
+#: ml-slider.php:1922
 msgid "Slide restored."
 msgstr "Diapositiva restaurada."
 
-#: ml-slider.php:1832
+#: ml-slider.php:1964
 msgid "Loading... Please wait!"
 msgstr "Cargando… ¡Por favor, espera!"
 
-#: ml-slider.php:1835
+#: ml-slider.php:1967
 msgid ""
 "Loading... Please wait! This may take some minutes due we're downloading "
 "sample Local videos."
@@ -2079,7 +2292,8 @@ msgstr ""
 "Cargando… ¡Por favor, espera! Esto puede tardar unos minutos debido a que "
 "estamos descargando vídeos locales de muestra."
 
-#: ml-slider.php:1865
+#: ml-slider.php:1997
+#, php-format
 msgid ""
 "You are viewing slides that have been trashed, which will be automatically "
 "deleted in %s days."
@@ -2087,28 +2301,32 @@ msgstr ""
 "Estás viendo diapositivas que se han movido a la papelera, que se borrarán "
 "automáticamente en %s días."
 
-#: ml-slider.php:1911
+#: ml-slider.php:2030
 msgid "Move slideshow to trash"
 msgstr "Mover el pase de diapositivas a la papelera"
 
-#: ml-slider.php:1963
+#: ml-slider.php:2085
+msgid "Add slideshow"
+msgstr "Añadir presentación de diapositivas"
+
+#: ml-slider.php:2115
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
 msgid "Select slideshow to insert into post"
 msgstr "Selecciona el pase de diapositivas que quieres insertar en la entrada"
 
-#: ml-slider.php:1969
+#: ml-slider.php:2121
 msgid "Choose slideshow"
 msgstr "Elige presentación de diapositivas"
 
-#: ml-slider.php:1979
+#: ml-slider.php:2131
 msgid "Insert slideshow"
 msgstr "Insertar presentación de diapositivas"
 
-#: ml-slider.php:2014
+#: ml-slider.php:2166
 msgid "Create slides by adding text, videos and more to your images"
 msgstr "Crea diapositivas añadiendo texto, vídeos y mucho más a tus imágenes"
 
-#: ml-slider.php:2018
+#: ml-slider.php:2170
 msgid ""
 "With Layer slides, you can create beautiful, stylish layers of different "
 "elements."
@@ -2116,7 +2334,7 @@ msgstr ""
 "Con las diapositivas de capas, puede crear capas hermosas y elegantes de "
 "diferentes elementos."
 
-#: ml-slider.php:2022
+#: ml-slider.php:2174
 msgid ""
 "You start with an image and then can add text, video, colors, animations, "
 "more images, and even shortcodes."
@@ -2124,24 +2342,25 @@ msgstr ""
 "Empiezas con una imagen y luego puedes añadir texto, vídeo, colores, "
 "animaciones, más imágenes e incluso shortcodes."
 
-#: ml-slider.php:2028 ml-slider.php:2069 ml-slider.php:2110 ml-slider.php:2153
-#: ml-slider.php:2196 ml-slider.php:2239 ml-slider.php:2282 ml-slider.php:2321
-#: ml-slider.php:2360 admin/assets/dist/js/app.js:2
+#: ml-slider.php:2180 ml-slider.php:2221 ml-slider.php:2262 ml-slider.php:2305
+#: ml-slider.php:2348 ml-slider.php:2391 ml-slider.php:2434 ml-slider.php:2473
+#: ml-slider.php:2512 ml-slider.php:2571 ml-slider.php:2606
+#: admin/assets/dist/js/app.js:2
 msgid "Find out more about MetaSlider Pro"
 msgstr "Más información acerca de MetaSlider Pro"
 
-#: ml-slider.php:2057
+#: ml-slider.php:2209
 msgid "Create slideshows with your Vimeo videos"
 msgstr "Crea pases de diapositivas con tus vídeos de Vimeo"
 
-#: ml-slider.php:2061
+#: ml-slider.php:2213
 msgid ""
 "With Vimeo slides, you can build beautiful slideshows with your Vimeo videos."
 msgstr ""
 "Con las diapositivas de Vimeo, puedes crear hermosas presentaciones con tus "
 "vídeos de Vimeo."
 
-#: ml-slider.php:2065
+#: ml-slider.php:2217
 msgid ""
 "Vimeo slides will display your videos with auto play, mute, the ability to "
 "hide controls, and much more."
@@ -2149,11 +2368,11 @@ msgstr ""
 "Las diapositivas de Vimeo mostrarán tus vídeos con reproducción automática, "
 "silencio, posibilidad de ocultar controles y mucho más."
 
-#: ml-slider.php:2098
+#: ml-slider.php:2250
 msgid "Create slideshows with your YouTube videos"
 msgstr "Crea pases de diapositivas con tus vídeos de YouTube"
 
-#: ml-slider.php:2102
+#: ml-slider.php:2254
 msgid ""
 "With YouTube slides, you can build beautiful slideshows with your YouTube "
 "videos."
@@ -2161,7 +2380,7 @@ msgstr ""
 "Con las diapositivas de YouTube, puedes crear hermosas presentaciones con "
 "tus vídeos de YouTube."
 
-#: ml-slider.php:2106
+#: ml-slider.php:2258
 msgid ""
 "YouTube slides will display your videos with auto play, mute, lazy load, the "
 "ability to hide controls, and much more."
@@ -2169,11 +2388,11 @@ msgstr ""
 "Las diapositivas de YouTube mostrarán tus vídeos con reproducción "
 "automática, silencio, posibilidad de ocultar controles y mucho más."
 
-#: ml-slider.php:2139
+#: ml-slider.php:2291
 msgid "Create slideshows with your posts"
 msgstr "Crea pases de diapositivas con tus entradas"
 
-#: ml-slider.php:2143
+#: ml-slider.php:2295
 msgid ""
 "With Post Feed slides, you can build slideshows with your latest posts, "
 "events, or WooCommerce products."
@@ -2181,7 +2400,7 @@ msgstr ""
 "Con las diapositivas de feed de entradas, puedes crear presentaciones con "
 "tus últimas entradas, eventos o productos de WooCommerce."
 
-#: ml-slider.php:2147
+#: ml-slider.php:2299
 msgid ""
 "Post Feed slides will automatically display your posts with images, text, "
 "custom fields, and much more."
@@ -2189,11 +2408,11 @@ msgstr ""
 "Las diapositivas de feed de entradas mostrarán automáticamente tus entradas "
 "con imágenes, texto, campos personalizados y mucho más."
 
-#: ml-slider.php:2182
+#: ml-slider.php:2334
 msgid "Create slideshows with images stored outside of WordPress"
 msgstr "Crea pases de diapositivas con imágenes almacenadas fuera de WordPress"
 
-#: ml-slider.php:2186
+#: ml-slider.php:2338
 msgid ""
 "With External URL slides, you can load images directly from non-WordPress "
 "sources such as CDNs or image hosts."
@@ -2201,7 +2420,7 @@ msgstr ""
 "Con las diapositivas URL externas, puedes cargar imágenes directamente desde "
 "fuentes ajenas a WordPress, como CDN o hosts de imágenes."
 
-#: ml-slider.php:2190
+#: ml-slider.php:2342
 msgid ""
 "External URL slides give you all the power of MetaSlider, using images "
 "stored anywhere you want."
@@ -2209,11 +2428,11 @@ msgstr ""
 "Las diapositivas URL externas te ofrecen toda la potencia de MetaSlider, "
 "utilizando imágenes almacenadas en cualquier lugar que desees."
 
-#: ml-slider.php:2225
+#: ml-slider.php:2377
 msgid "Create slideshows with videos in your media library"
 msgstr "Crea pases de diapositivas con los videos de tu bliblioteca de medios"
 
-#: ml-slider.php:2229
+#: ml-slider.php:2381
 msgid ""
 "With Local Video slides, you can build beautiful slideshows with videos in "
 "your WordPress media library."
@@ -2221,7 +2440,7 @@ msgstr ""
 "Con las diapositivas de vídeo locales, puedes crear hermosos pases de "
 "diapositivas con los vídeos de tu biblioteca de medios de WordPress."
 
-#: ml-slider.php:2233
+#: ml-slider.php:2385
 msgid ""
 "Local Video slides will display your MP4, WebM, and MOV videos with cover "
 "images, auto play, mute, lazy load, the ability to hide controls, and much "
@@ -2231,11 +2450,11 @@ msgstr ""
 "imágenes de portada, reproducción automática, silencio, carga lenta, "
 "posibilidad de ocultar controles y mucho más."
 
-#: ml-slider.php:2268
+#: ml-slider.php:2420
 msgid "Create slideshows with videos stored outside of WordPress"
 msgstr "Crea pases de diapositivas con vídeos almacenados fuera de WordPress"
 
-#: ml-slider.php:2272
+#: ml-slider.php:2424
 msgid ""
 "With External Video slides, you can add videos directly from non-WordPress "
 "sources."
@@ -2243,7 +2462,7 @@ msgstr ""
 "Con las diapositivas de vídeo externas, puedes añadir vídeos directamente "
 "desde fuentes ajenas a WordPress."
 
-#: ml-slider.php:2276
+#: ml-slider.php:2428
 msgid ""
 "External Video Slides will display your MP4, WebM, and MOV videos. Features "
 "include text captions, cover images, auto play, mute, lazy load, the ability "
@@ -2253,11 +2472,11 @@ msgstr ""
 "leyendas de texto, imágenes de portada, reproducción automática, silencio, "
 "carga lenta, posibilidad de ocultar controles y mucho más."
 
-#: ml-slider.php:2311
+#: ml-slider.php:2463
 msgid "Create slideshows with custom HTML"
 msgstr "Crea pases de diapositivas con HTML personalizado"
 
-#: ml-slider.php:2315
+#: ml-slider.php:2467
 msgid ""
 "With Custom HTML slides, you can design slides using images, HTML and CSS. "
 "This gives you complete control over the layout and styling."
@@ -2266,530 +2485,850 @@ msgstr ""
 "utilizando imágenes, HTML y CSS. Esto te da un control total sobre el diseño "
 "y el estilo."
 
-#: ml-slider.php:2350
+#: ml-slider.php:2502
 msgid "Create slideshows with Tiktok Videos"
 msgstr "Crea pases de diapositivas con vídeos de Tiktok"
 
-#: ml-slider.php:2354
+#: ml-slider.php:2506
 msgid ""
-"A TikTok Slide will display a video in your slideshow directly from TikTok."
-"com."
+"A TikTok Slide will display a video in your slideshow directly from "
+"TikTok.com."
 msgstr ""
 "Una diapositiva TikTok mostrará un vídeo en tu pase de diapositivas "
 "directamente desde TikTok.com."
 
-#: ml-slider.php:2398
+#: ml-slider.php:2557
+msgid "Create slideshows with Post Images"
+msgstr "Crea pases de diapositivas con imágenes de la entrada"
+
+#: ml-slider.php:2561
+msgid ""
+"The Post Images slide type extracts images from the current post and "
+"displays them as slides."
+msgstr ""
+"El tipo de diapositiva «Imágenes de la publicación» extrae imágenes de la "
+"publicación actual y las muestra como diapositivas."
+
+#: ml-slider.php:2565
+msgid ""
+"This slide type supports featured images, post content images, WooCommerce "
+"galleries, Advanced Custom Fields images and galleries."
+msgstr ""
+"Este tipo de diapositiva es compatible con las imágenes destacadas, las "
+"imágenes del contenido de la entrada, las galerías WooCommerce, las imágenes "
+"y las galerías Advanced Custom Fields."
+
+#: ml-slider.php:2592
+#| msgid "Create slideshows with your posts"
+msgid "Create slideshows with your WooCommerce products"
+msgstr "Crea pases de diapositivas con tus productos WooCommerce"
+
+#: ml-slider.php:2596
+#| msgid ""
+#| "With Post Feed slides, you can build slideshows with your latest posts, "
+#| "events, or WooCommerce products."
+msgid ""
+"With WooCommerce slides, you can build slideshows with your WooCommerce "
+"products."
+msgstr ""
+"Con las diapositivas de WooCommerce, puedes crear presentaciones con tus "
+"productos de WooCommerce."
+
+#: ml-slider.php:2600
+#| msgid ""
+#| "Post Feed slides will automatically display your posts with images, text, "
+#| "custom fields, and much more."
+msgid ""
+"WooCommerce slides will automatically display your products with images, "
+"text, custom fields, and much more."
+msgstr ""
+"La diapositivas de WooCommerce mostrarán automáticamente tus productos con "
+"imágenes, texto, campos personalizados y mucho más."
+
+#: ml-slider.php:2644
 msgid "Premium Support"
 msgstr "Soporte premium"
 
-#: ml-slider.php:2404
+#: ml-slider.php:2650
 msgid "MetaSlider Pro"
 msgstr "MetaSlider Pro"
 
-#: ml-slider.php:2408
+#: ml-slider.php:2654
 msgid "Support"
 msgstr "Soporte"
 
-#: ml-slider.php:2413
+#: ml-slider.php:2659
 msgid "Documentation"
 msgstr "Documentación"
 
-#: ml-slider.php:2417
+#: ml-slider.php:2663
 msgid "Leave a review"
 msgstr "Deja una valoración"
 
-#: themes/architekt/customize.php:16 themes/bitono/customize.php:36
-#: themes/blend/customize.php:16 themes/bubble/customize.php:36
-#: themes/clarity/customize.php:36 themes/cubic/customize.php:36
-#: themes/databold/customize.php:36 themes/default-base/customize.php:36
-#: themes/disjoint/customize.php:16 themes/draxler/customize.php:36
-#: themes/highway/customize.php:36 themes/highway/customize.php:56
-#: themes/jenga/customize.php:16 themes/nexus/customize.php:36
-#: themes/outline/customize.php:36 themes/precognition/customize.php:16
-#: themes/radix/customize.php:43 themes/simply-dark/customize.php:36
-msgid "Icon Colors"
-msgstr "Colores del icono"
+#: ml-slider.php:2782
+msgid "Uploading..."
+msgstr "Subiendo..."
 
-#: themes/architekt/customize.php:20 themes/architekt/customize.php:91
-#: themes/bitono/customize.php:20 themes/bitono/customize.php:40
-#: themes/bitono/customize.php:174 themes/blend/customize.php:20
-#: themes/blend/customize.php:111 themes/blend/customize.php:138
-#: themes/bubble/customize.php:20 themes/bubble/customize.php:40
-#: themes/bubble/customize.php:141 themes/bubble/customize.php:168
-#: themes/bubble/customize.php:195 themes/clarity/customize.php:20
-#: themes/clarity/customize.php:40 themes/clarity/customize.php:60
-#: themes/clarity/customize.php:197 themes/cubic/customize.php:20
-#: themes/cubic/customize.php:40 themes/cubic/customize.php:144
-#: themes/cubic/customize.php:171 themes/customize.php:28
-#: themes/customize.php:48 themes/databold/customize.php:20
-#: themes/databold/customize.php:40 themes/databold/customize.php:154
-#: themes/databold/customize.php:181 themes/default-base/customize.php:20
-#: themes/default-base/customize.php:40 themes/default-base/customize.php:188
-#: themes/disjoint/customize.php:20 themes/disjoint/customize.php:48
-#: themes/draxler/customize.php:20 themes/draxler/customize.php:40
-#: themes/draxler/customize.php:124 themes/highway/customize.php:20
-#: themes/highway/customize.php:40 themes/highway/customize.php:60
-#: themes/highway/customize.php:161 themes/highway/customize.php:188
-#: themes/jenga/customize.php:20 themes/jenga/customize.php:48
-#: themes/nexus/customize.php:20 themes/nexus/customize.php:40
-#: themes/nexus/customize.php:164 themes/nexus/customize.php:384
-#: themes/outline/customize.php:20 themes/outline/customize.php:40
-#: themes/outline/customize.php:121 themes/outline/customize.php:148
-#: themes/precognition/customize.php:20 themes/precognition/customize.php:81
-#: themes/precognition/customize.php:115 themes/radix/customize.php:20
-#: themes/radix/customize.php:47 themes/simply-dark/customize.php:20
-#: themes/simply-dark/customize.php:40 themes/simply-dark/customize.php:124
-msgid "Default"
-msgstr "Por defecto"
+#: ml-slider.php:2789
+msgid "Upload Complete"
+msgstr "Subida completa"
 
-#: themes/architekt/customize.php:27 themes/architekt/customize.php:71
-#: themes/architekt/customize.php:98 themes/bitono/customize.php:27
-#: themes/bitono/customize.php:47 themes/bitono/customize.php:181
-#: themes/blend/customize.php:27 themes/blend/customize.php:118
-#: themes/blend/customize.php:145 themes/bubble/customize.php:27
-#: themes/bubble/customize.php:47 themes/bubble/customize.php:148
-#: themes/bubble/customize.php:175 themes/bubble/customize.php:202
-#: themes/clarity/customize.php:27 themes/clarity/customize.php:47
-#: themes/clarity/customize.php:204 themes/cubic/customize.php:27
-#: themes/cubic/customize.php:47 themes/cubic/customize.php:151
-#: themes/cubic/customize.php:178 themes/customize.php:35
-#: themes/customize.php:55 themes/databold/customize.php:27
-#: themes/databold/customize.php:47 themes/databold/customize.php:161
-#: themes/databold/customize.php:188 themes/default-base/customize.php:27
-#: themes/default-base/customize.php:47 themes/default-base/customize.php:195
-#: themes/disjoint/customize.php:27 themes/disjoint/customize.php:55
-#: themes/disjoint/customize.php:82 themes/draxler/customize.php:27
-#: themes/draxler/customize.php:47 themes/draxler/customize.php:131
-#: themes/highway/customize.php:27 themes/highway/customize.php:47
-#: themes/highway/customize.php:67 themes/highway/customize.php:168
-#: themes/highway/customize.php:195 themes/jenga/customize.php:27
-#: themes/jenga/customize.php:55 themes/nexus/customize.php:27
-#: themes/nexus/customize.php:47 themes/nexus/customize.php:171
-#: themes/nexus/customize.php:391 themes/outline/customize.php:27
-#: themes/outline/customize.php:47 themes/outline/customize.php:128
-#: themes/outline/customize.php:155 themes/precognition/customize.php:27
-#: themes/precognition/customize.php:88 themes/precognition/customize.php:122
-#: themes/radix/customize.php:27 themes/radix/customize.php:54
-#: themes/simply-dark/customize.php:27 themes/simply-dark/customize.php:47
-#: themes/simply-dark/customize.php:131
-msgid "Hover"
-msgstr "Al pasar el cursor"
-
-#: themes/architekt/customize.php:67 themes/blend/customize.php:107
-msgid "Numbers Underline"
-msgstr "Subrayar números"
-
-#: themes/architekt/customize.php:78 themes/architekt/customize.php:105
-#: themes/bitono/customize.php:188 themes/blend/customize.php:125
-#: themes/blend/customize.php:152 themes/bubble/customize.php:155
-#: themes/bubble/customize.php:182 themes/bubble/customize.php:209
-#: themes/clarity/customize.php:211 themes/cubic/customize.php:158
-#: themes/cubic/customize.php:185 themes/databold/customize.php:168
-#: themes/databold/customize.php:195 themes/default-base/customize.php:202
-#: themes/disjoint/customize.php:62 themes/disjoint/customize.php:89
-#: themes/draxler/customize.php:138 themes/highway/customize.php:175
-#: themes/highway/customize.php:202 themes/jenga/customize.php:62
-#: themes/nexus/customize.php:178 themes/outline/customize.php:135
-#: themes/outline/customize.php:162 themes/precognition/customize.php:95
-#: themes/precognition/customize.php:129 themes/simply-dark/customize.php:138
-msgid "Active"
-msgstr "Activar"
-
-#: themes/architekt/customize.php:87 themes/blend/customize.php:134
-#: themes/bubble/customize.php:191 themes/radix/customize.php:71
-msgid "Numbers"
-msgstr "Números"
-
-#: themes/architekt/customize.php:114 themes/precognition/customize.php:138
-msgid "Numbers Size"
-msgstr "Tamaño de los números"
-
-#: themes/architekt/customize.php:124
-msgid "Numbers Line Height"
-msgstr "Alto de línea de los números"
-
-#: themes/architekt/customize.php:134
-msgid "Distance Between Numbers"
-msgstr "Distancia entre los números"
-
-#: themes/architekt/customize.php:152 themes/bitono/customize.php:170
-#: themes/bitono/customize.php:278 themes/blend/customize.php:264
-#: themes/bubble/customize.php:309 themes/clarity/customize.php:193
-#: themes/clarity/customize.php:322 themes/cubic/customize.php:287
-#: themes/databold/customize.php:275 themes/default-base/customize.php:184
-#: themes/default-base/customize.php:307 themes/disjoint/customize.php:169
-#: themes/draxler/customize.php:120 themes/draxler/customize.php:231
-#: themes/highway/customize.php:302 themes/jenga/customize.php:44
-#: themes/jenga/customize.php:109 themes/nexus/customize.php:160
-#: themes/nexus/customize.php:268 themes/outline/customize.php:117
-#: themes/outline/customize.php:283 themes/precognition/customize.php:77
-#: themes/precognition/customize.php:156 themes/radix/customize.php:134
-#: themes/simply-dark/customize.php:120 themes/simply-dark/customize.php:228
-msgid "Colors"
-msgstr "Colores"
-
-#: themes/architekt/customize.php:156 themes/bitono/customize.php:289
-#: themes/blend/customize.php:275 themes/bubble/customize.php:320
-#: themes/clarity/customize.php:333 themes/cubic/customize.php:298
-#: themes/databold/customize.php:286 themes/default-base/customize.php:318
-#: themes/disjoint/customize.php:180 themes/draxler/customize.php:242
-#: themes/highway/customize.php:313 themes/jenga/customize.php:120
-#: themes/nexus/customize.php:279 themes/outline/customize.php:294
-#: themes/precognition/customize.php:167 themes/radix/customize.php:34
-#: themes/radix/customize.php:145 themes/simply-dark/customize.php:239
-msgid "Text"
-msgstr "Texto"
-
-#: themes/architekt/customize.php:165 themes/bitono/customize.php:339
-#: themes/blend/customize.php:318 themes/bubble/customize.php:363
-#: themes/clarity/customize.php:371 themes/cubic/customize.php:348
-#: themes/databold/customize.php:336 themes/default-base/customize.php:382
-#: themes/disjoint/customize.php:223 themes/draxler/customize.php:292
-#: themes/highway/customize.php:355 themes/jenga/customize.php:163
-#: themes/nexus/customize.php:329 themes/outline/customize.php:344
-#: themes/radix/customize.php:154 themes/simply-dark/customize.php:255
-msgid "Font Size"
-msgstr "Tamaño de la fuente"
-
-#: themes/architekt/customize.php:176 themes/bitono/customize.php:350
-#: themes/blend/customize.php:329 themes/bubble/customize.php:374
-#: themes/clarity/customize.php:382 themes/cubic/customize.php:359
-#: themes/databold/customize.php:347 themes/default-base/customize.php:393
-#: themes/disjoint/customize.php:234 themes/draxler/customize.php:303
-#: themes/highway/customize.php:366 themes/jenga/customize.php:174
-#: themes/nexus/customize.php:340 themes/outline/customize.php:355
-#: themes/radix/customize.php:165 themes/simply-dark/customize.php:266
-msgid "Line Height"
-msgstr "Alto de línea"
-
-#: themes/architekt/customize.php:187 themes/bitono/customize.php:361
-#: themes/blend/customize.php:340 themes/bubble/customize.php:385
-#: themes/clarity/customize.php:393 themes/cubic/customize.php:370
-#: themes/databold/customize.php:358 themes/default-base/customize.php:404
-#: themes/disjoint/customize.php:245 themes/draxler/customize.php:314
-#: themes/highway/customize.php:377 themes/jenga/customize.php:185
-#: themes/nexus/customize.php:351 themes/outline/customize.php:366
-#: themes/precognition/customize.php:228 themes/radix/customize.php:176
-#: themes/simply-dark/customize.php:277
-msgid "Text Align"
-msgstr "Alineación del texto"
-
-#: themes/architekt/customize.php:193 themes/bitono/customize.php:367
-#: themes/blend/customize.php:346 themes/bubble/customize.php:391
-#: themes/clarity/customize.php:399 themes/cubic/customize.php:376
-#: themes/databold/customize.php:364 themes/default-base/customize.php:264
-#: themes/default-base/customize.php:410 themes/disjoint/customize.php:251
-#: themes/draxler/customize.php:320 themes/highway/customize.php:383
-#: themes/jenga/customize.php:191 themes/nexus/customize.php:357
-#: themes/outline/customize.php:372 themes/precognition/customize.php:234
-#: themes/radix/customize.php:182 themes/simply-dark/customize.php:283
-msgid "Left"
-msgstr "Izquierda"
-
-#: themes/architekt/customize.php:197 themes/bitono/customize.php:371
-#: themes/blend/customize.php:350 themes/bubble/customize.php:395
-#: themes/clarity/customize.php:403 themes/cubic/customize.php:380
-#: themes/databold/customize.php:368 themes/default-base/customize.php:268
-#: themes/default-base/customize.php:414 themes/disjoint/customize.php:255
-#: themes/draxler/customize.php:324 themes/highway/customize.php:387
-#: themes/jenga/customize.php:195 themes/nexus/customize.php:361
-#: themes/outline/customize.php:376 themes/precognition/customize.php:238
-#: themes/radix/customize.php:186 themes/simply-dark/customize.php:287
-msgid "Right"
-msgstr "Derecha"
-
-#: themes/architekt/customize.php:201 themes/bitono/customize.php:375
-#: themes/blend/customize.php:354 themes/bubble/customize.php:399
-#: themes/clarity/customize.php:407 themes/cubic/customize.php:384
-#: themes/databold/customize.php:372 themes/default-base/customize.php:272
-#: themes/default-base/customize.php:418 themes/disjoint/customize.php:259
-#: themes/draxler/customize.php:328 themes/highway/customize.php:391
-#: themes/jenga/customize.php:199 themes/nexus/customize.php:365
-#: themes/outline/customize.php:380 themes/precognition/customize.php:242
-#: themes/radix/customize.php:190 themes/simply-dark/customize.php:291
-msgid "Center"
-msgstr "Centro"
-
-#: themes/bitono/customize.php:16 themes/bitono/customize.php:282
-#: themes/blend/customize.php:268 themes/bubble/customize.php:16
-#: themes/bubble/customize.php:137 themes/bubble/customize.php:313
-#: themes/clarity/customize.php:16 themes/clarity/customize.php:326
-#: themes/cubic/customize.php:16 themes/cubic/customize.php:140
-#: themes/cubic/customize.php:291 themes/customize.php:24
-#: themes/customize.php:133 themes/databold/customize.php:16
-#: themes/databold/customize.php:150 themes/databold/customize.php:279
-#: themes/default-base/customize.php:16 themes/default-base/customize.php:311
-#: themes/disjoint/customize.php:44 themes/disjoint/customize.php:173
-#: themes/draxler/customize.php:16 themes/draxler/customize.php:235
-#: themes/highway/customize.php:16 themes/highway/customize.php:157
-#: themes/highway/customize.php:306 themes/jenga/customize.php:113
-#: themes/nexus/customize.php:16 themes/nexus/customize.php:272
-#: themes/nexus/customize.php:380 themes/outline/customize.php:287
-#: themes/precognition/customize.php:160 themes/radix/customize.php:16
-#: themes/radix/customize.php:138 themes/simply-dark/customize.php:16
-#: themes/simply-dark/customize.php:232
+#: themes/architekt/customize.php:16 themes/architekt/customize.php:295
+#: themes/architekt/customize.php:454 themes/bitono/customize.php:16
+#: themes/bitono/customize.php:306 themes/bitono/customize.php:564
+#: themes/blend/customize.php:16 themes/blend/customize.php:271
+#: themes/blend/customize.php:593 themes/bubble/customize.php:16
+#: themes/bubble/customize.php:290 themes/bubble/customize.php:580
+#: themes/clarity/customize.php:16 themes/clarity/customize.php:305
+#: themes/clarity/customize.php:563 themes/cubic/customize.php:16
+#: themes/cubic/customize.php:290 themes/cubic/customize.php:548
+#: themes/customize.php:26 themes/customize.php:135
+#: themes/databold/customize.php:16 themes/databold/customize.php:306
+#: themes/databold/customize.php:563 themes/default-base/customize.php:27
+#: themes/default-base/customize.php:322 themes/default-base/customize.php:585
+#: themes/disjoint/customize.php:16 themes/disjoint/customize.php:282
+#: themes/disjoint/customize.php:539 themes/draxler/customize.php:16
+#: themes/draxler/customize.php:274 themes/draxler/customize.php:540
+#: themes/highway/customize.php:16 themes/highway/customize.php:305
+#: themes/highway/customize.php:552 themes/jenga/customize.php:16
+#: themes/jenga/customize.php:194 themes/jenga/customize.php:363
+#: themes/nexus/customize.php:16 themes/nexus/customize.php:290
+#: themes/nexus/customize.php:548 themes/nexus/customize.php:709
+#: themes/outline/customize.php:16 themes/outline/customize.php:305
+#: themes/outline/customize.php:562 themes/precognition/customize.php:16
+#: themes/precognition/customize.php:306 themes/precognition/customize.php:465
+#: themes/radix/customize.php:16 themes/radix/customize.php:443
+#: themes/simply-dark/customize.php:16 themes/simply-dark/customize.php:294
+#: themes/simply-dark/customize.php:552
 msgid "Background"
 msgstr "Fondo"
 
-#: themes/bitono/customize.php:56 themes/clarity/customize.php:69
-#: themes/cubic/customize.php:56 themes/databold/customize.php:56
-#: themes/default-base/customize.php:56 themes/nexus/customize.php:56
-#: themes/simply-dark/customize.php:56
-msgid "Distance from Edge"
-msgstr "Distancia del borde"
+#: themes/architekt/customize.php:20 themes/architekt/customize.php:46
+#: themes/architekt/customize.php:88 themes/architekt/customize.php:299
+#: themes/architekt/customize.php:365 themes/bitono/customize.php:20
+#: themes/bitono/customize.php:46 themes/bitono/customize.php:88
+#: themes/bitono/customize.php:310 themes/bitono/customize.php:343
+#: themes/blend/customize.php:20 themes/blend/customize.php:46
+#: themes/blend/customize.php:88 themes/blend/customize.php:275
+#: themes/blend/customize.php:308 themes/blend/customize.php:384
+#: themes/bubble/customize.php:20 themes/bubble/customize.php:46
+#: themes/bubble/customize.php:72 themes/bubble/customize.php:294
+#: themes/bubble/customize.php:327 themes/bubble/customize.php:403
+#: themes/clarity/customize.php:20 themes/clarity/customize.php:46
+#: themes/clarity/customize.php:88 themes/clarity/customize.php:309
+#: themes/clarity/customize.php:342 themes/cubic/customize.php:20
+#: themes/cubic/customize.php:46 themes/cubic/customize.php:88
+#: themes/cubic/customize.php:294 themes/cubic/customize.php:327
+#: themes/customize.php:30 themes/customize.php:50
+#: themes/databold/customize.php:20 themes/databold/customize.php:46
+#: themes/databold/customize.php:88 themes/databold/customize.php:310
+#: themes/databold/customize.php:343 themes/default-base/customize.php:31
+#: themes/default-base/customize.php:57 themes/default-base/customize.php:99
+#: themes/default-base/customize.php:326 themes/default-base/customize.php:359
+#: themes/disjoint/customize.php:20 themes/disjoint/customize.php:46
+#: themes/disjoint/customize.php:88 themes/disjoint/customize.php:286
+#: themes/disjoint/customize.php:319 themes/draxler/customize.php:20
+#: themes/draxler/customize.php:46 themes/draxler/customize.php:88
+#: themes/draxler/customize.php:278 themes/draxler/customize.php:311
+#: themes/highway/customize.php:20 themes/highway/customize.php:46
+#: themes/highway/customize.php:88 themes/highway/customize.php:309
+#: themes/highway/customize.php:342 themes/jenga/customize.php:20
+#: themes/jenga/customize.php:46 themes/jenga/customize.php:72
+#: themes/jenga/customize.php:198 themes/jenga/customize.php:231
+#: themes/nexus/customize.php:20 themes/nexus/customize.php:46
+#: themes/nexus/customize.php:72 themes/nexus/customize.php:294
+#: themes/nexus/customize.php:327 themes/nexus/customize.php:713
+#: themes/outline/customize.php:20 themes/outline/customize.php:46
+#: themes/outline/customize.php:88 themes/outline/customize.php:309
+#: themes/outline/customize.php:342 themes/precognition/customize.php:20
+#: themes/precognition/customize.php:46 themes/precognition/customize.php:88
+#: themes/precognition/customize.php:310 themes/precognition/customize.php:408
+#: themes/radix/customize.php:20 themes/radix/customize.php:72
+#: themes/radix/customize.php:114 themes/simply-dark/customize.php:20
+#: themes/simply-dark/customize.php:46 themes/simply-dark/customize.php:88
+#: themes/simply-dark/customize.php:298 themes/simply-dark/customize.php:331
+msgid "Default"
+msgstr "Por defecto"
 
-#: themes/bitono/customize.php:69 themes/bitono/customize.php:197
-#: themes/bitono/customize.php:305 themes/blend/customize.php:36
-#: themes/blend/customize.php:161 themes/blend/customize.php:284
-#: themes/bubble/customize.php:56 themes/bubble/customize.php:218
-#: themes/bubble/customize.php:329 themes/clarity/customize.php:82
-#: themes/clarity/customize.php:220 themes/cubic/customize.php:69
-#: themes/cubic/customize.php:194 themes/cubic/customize.php:314
-#: themes/databold/customize.php:69 themes/databold/customize.php:204
-#: themes/databold/customize.php:302 themes/default-base/customize.php:69
-#: themes/default-base/customize.php:211 themes/default-base/customize.php:334
-#: themes/disjoint/customize.php:98 themes/disjoint/customize.php:189
-#: themes/draxler/customize.php:56 themes/draxler/customize.php:147
-#: themes/draxler/customize.php:258 themes/highway/customize.php:211
-#: themes/jenga/customize.php:129 themes/nexus/customize.php:69
-#: themes/nexus/customize.php:187 themes/nexus/customize.php:295
-#: themes/outline/customize.php:56 themes/outline/customize.php:171
-#: themes/outline/customize.php:310 themes/precognition/customize.php:36
-#: themes/precognition/customize.php:183 themes/simply-dark/customize.php:69
-#: themes/simply-dark/customize.php:147
-msgid "Position"
-msgstr "Posición"
+#: themes/architekt/customize.php:27 themes/architekt/customize.php:53
+#: themes/architekt/customize.php:95 themes/architekt/customize.php:306
+#: themes/architekt/customize.php:332 themes/architekt/customize.php:339
+#: themes/architekt/customize.php:372 themes/bitono/customize.php:27
+#: themes/bitono/customize.php:53 themes/bitono/customize.php:95
+#: themes/bitono/customize.php:317 themes/bitono/customize.php:350
+#: themes/blend/customize.php:27 themes/blend/customize.php:53
+#: themes/blend/customize.php:95 themes/blend/customize.php:282
+#: themes/blend/customize.php:315 themes/blend/customize.php:391
+#: themes/bubble/customize.php:27 themes/bubble/customize.php:53
+#: themes/bubble/customize.php:79 themes/bubble/customize.php:301
+#: themes/bubble/customize.php:334 themes/bubble/customize.php:410
+#: themes/clarity/customize.php:27 themes/clarity/customize.php:53
+#: themes/clarity/customize.php:95 themes/clarity/customize.php:316
+#: themes/clarity/customize.php:349 themes/cubic/customize.php:27
+#: themes/cubic/customize.php:53 themes/cubic/customize.php:95
+#: themes/cubic/customize.php:301 themes/cubic/customize.php:334
+#: themes/customize.php:37 themes/customize.php:57
+#: themes/databold/customize.php:27 themes/databold/customize.php:53
+#: themes/databold/customize.php:95 themes/databold/customize.php:317
+#: themes/databold/customize.php:350 themes/default-base/customize.php:38
+#: themes/default-base/customize.php:64 themes/default-base/customize.php:106
+#: themes/default-base/customize.php:333 themes/default-base/customize.php:366
+#: themes/disjoint/customize.php:27 themes/disjoint/customize.php:53
+#: themes/disjoint/customize.php:95 themes/disjoint/customize.php:293
+#: themes/disjoint/customize.php:326 themes/draxler/customize.php:27
+#: themes/draxler/customize.php:53 themes/draxler/customize.php:95
+#: themes/draxler/customize.php:285 themes/draxler/customize.php:318
+#: themes/highway/customize.php:27 themes/highway/customize.php:53
+#: themes/highway/customize.php:95 themes/highway/customize.php:316
+#: themes/highway/customize.php:349 themes/jenga/customize.php:27
+#: themes/jenga/customize.php:53 themes/jenga/customize.php:79
+#: themes/jenga/customize.php:205 themes/jenga/customize.php:238
+#: themes/nexus/customize.php:27 themes/nexus/customize.php:53
+#: themes/nexus/customize.php:79 themes/nexus/customize.php:301
+#: themes/nexus/customize.php:334 themes/nexus/customize.php:720
+#: themes/outline/customize.php:27 themes/outline/customize.php:53
+#: themes/outline/customize.php:95 themes/outline/customize.php:316
+#: themes/outline/customize.php:349 themes/precognition/customize.php:27
+#: themes/precognition/customize.php:53 themes/precognition/customize.php:95
+#: themes/precognition/customize.php:317 themes/precognition/customize.php:415
+#: themes/radix/customize.php:27 themes/radix/customize.php:79
+#: themes/radix/customize.php:121 themes/simply-dark/customize.php:27
+#: themes/simply-dark/customize.php:53 themes/simply-dark/customize.php:95
+#: themes/simply-dark/customize.php:305 themes/simply-dark/customize.php:338
+msgid "Hover"
+msgstr "Al pasar el cursor"
 
-#: themes/bitono/customize.php:75 themes/bitono/customize.php:203
-#: themes/bitono/customize.php:311 themes/blend/customize.php:42
-#: themes/blend/customize.php:167 themes/blend/customize.php:290
-#: themes/bubble/customize.php:62 themes/bubble/customize.php:224
-#: themes/bubble/customize.php:335 themes/clarity/customize.php:88
-#: themes/clarity/customize.php:226 themes/cubic/customize.php:75
-#: themes/cubic/customize.php:200 themes/cubic/customize.php:320
-#: themes/databold/customize.php:75 themes/databold/customize.php:210
-#: themes/databold/customize.php:308 themes/default-base/customize.php:79
-#: themes/default-base/customize.php:221 themes/default-base/customize.php:344
-#: themes/disjoint/customize.php:104 themes/disjoint/customize.php:195
-#: themes/draxler/customize.php:62 themes/draxler/customize.php:153
-#: themes/draxler/customize.php:264 themes/highway/customize.php:217
-#: themes/jenga/customize.php:135 themes/nexus/customize.php:75
-#: themes/nexus/customize.php:193 themes/nexus/customize.php:301
-#: themes/outline/customize.php:62 themes/outline/customize.php:177
-#: themes/outline/customize.php:316 themes/precognition/customize.php:42
-#: themes/precognition/customize.php:189 themes/simply-dark/customize.php:75
-#: themes/simply-dark/customize.php:153
-msgid "Top"
-msgstr "Arriba"
+#: themes/architekt/customize.php:42 themes/bitono/customize.php:42
+#: themes/blend/customize.php:42 themes/bubble/customize.php:42
+#: themes/clarity/customize.php:42 themes/cubic/customize.php:42
+#: themes/customize.php:46 themes/databold/customize.php:42
+#: themes/default-base/customize.php:53 themes/disjoint/customize.php:42
+#: themes/draxler/customize.php:42 themes/highway/customize.php:42
+#: themes/jenga/customize.php:42 themes/nexus/customize.php:42
+#: themes/outline/customize.php:42 themes/precognition/customize.php:42
+#: themes/radix/customize.php:68 themes/simply-dark/customize.php:42
+msgid "Icon Colors"
+msgstr "Colores del icono"
 
-#: themes/bitono/customize.php:79 themes/bitono/customize.php:207
-#: themes/bitono/customize.php:315 themes/blend/customize.php:46
-#: themes/blend/customize.php:171 themes/blend/customize.php:294
-#: themes/bubble/customize.php:66 themes/bubble/customize.php:228
-#: themes/bubble/customize.php:339 themes/clarity/customize.php:92
-#: themes/clarity/customize.php:230 themes/cubic/customize.php:79
-#: themes/cubic/customize.php:204 themes/cubic/customize.php:324
-#: themes/databold/customize.php:79 themes/databold/customize.php:214
-#: themes/databold/customize.php:312 themes/default-base/customize.php:83
-#: themes/default-base/customize.php:225 themes/default-base/customize.php:348
-#: themes/disjoint/customize.php:108 themes/disjoint/customize.php:199
-#: themes/draxler/customize.php:66 themes/draxler/customize.php:157
-#: themes/draxler/customize.php:268 themes/highway/customize.php:221
-#: themes/jenga/customize.php:139 themes/nexus/customize.php:79
-#: themes/nexus/customize.php:197 themes/nexus/customize.php:305
-#: themes/outline/customize.php:66 themes/outline/customize.php:181
-#: themes/outline/customize.php:320 themes/precognition/customize.php:46
-#: themes/precognition/customize.php:193 themes/simply-dark/customize.php:79
-#: themes/simply-dark/customize.php:157
-msgid "Bottom"
-msgstr "Abajo"
-
-#: themes/bitono/customize.php:90 themes/bitono/customize.php:218
-#: themes/bitono/customize.php:327 themes/blend/customize.php:57
-#: themes/blend/customize.php:182 themes/blend/customize.php:306
-#: themes/bubble/customize.php:77 themes/bubble/customize.php:239
-#: themes/bubble/customize.php:351 themes/clarity/customize.php:103
-#: themes/clarity/customize.php:241 themes/cubic/customize.php:90
-#: themes/cubic/customize.php:215 themes/cubic/customize.php:336
-#: themes/databold/customize.php:90 themes/databold/customize.php:225
-#: themes/databold/customize.php:324 themes/default-base/customize.php:104
-#: themes/default-base/customize.php:246 themes/default-base/customize.php:370
-#: themes/disjoint/customize.php:119 themes/disjoint/customize.php:211
-#: themes/draxler/customize.php:77 themes/draxler/customize.php:168
-#: themes/draxler/customize.php:280 themes/highway/customize.php:232
-#: themes/jenga/customize.php:151 themes/nexus/customize.php:90
-#: themes/nexus/customize.php:208 themes/nexus/customize.php:317
-#: themes/outline/customize.php:77 themes/outline/customize.php:192
-#: themes/outline/customize.php:332 themes/precognition/customize.php:57
-#: themes/precognition/customize.php:205 themes/simply-dark/customize.php:90
-#: themes/simply-dark/customize.php:168
-msgid "Position Offset"
-msgstr "Desfase de la posición"
-
-#: themes/bitono/customize.php:91 themes/bitono/customize.php:219
-#: themes/bitono/customize.php:328 themes/blend/customize.php:58
-#: themes/blend/customize.php:183 themes/blend/customize.php:307
-#: themes/bubble/customize.php:78 themes/bubble/customize.php:240
-#: themes/bubble/customize.php:352 themes/clarity/customize.php:104
-#: themes/clarity/customize.php:242 themes/cubic/customize.php:91
-#: themes/cubic/customize.php:216 themes/cubic/customize.php:337
-#: themes/databold/customize.php:91 themes/databold/customize.php:226
-#: themes/databold/customize.php:325 themes/default-base/customize.php:105
-#: themes/default-base/customize.php:247 themes/default-base/customize.php:371
-#: themes/disjoint/customize.php:120 themes/disjoint/customize.php:212
-#: themes/draxler/customize.php:78 themes/draxler/customize.php:169
-#: themes/draxler/customize.php:281 themes/highway/customize.php:233
-#: themes/jenga/customize.php:152 themes/nexus/customize.php:91
-#: themes/nexus/customize.php:209 themes/nexus/customize.php:318
-#: themes/outline/customize.php:78 themes/outline/customize.php:193
-#: themes/outline/customize.php:333 themes/precognition/customize.php:58
-#: themes/precognition/customize.php:206 themes/simply-dark/customize.php:91
-#: themes/simply-dark/customize.php:169
-msgid "Based on \"Position\"."
-msgstr "Basado en la «Posición»."
-
-#: themes/bitono/customize.php:122 themes/blend/customize.php:69
-#: themes/cubic/customize.php:112 themes/databold/customize.php:122
-#: themes/default-base/customize.php:136 themes/draxler/customize.php:89
-#: themes/highway/customize.php:129
+#: themes/architekt/customize.php:68 themes/bitono/customize.php:68
+#: themes/blend/customize.php:68 themes/clarity/customize.php:68
+#: themes/cubic/customize.php:68 themes/databold/customize.php:68
+#: themes/default-base/customize.php:79 themes/disjoint/customize.php:68
+#: themes/draxler/customize.php:68 themes/highway/customize.php:68
+#: themes/outline/customize.php:68 themes/precognition/customize.php:68
+#: themes/radix/customize.php:94 themes/simply-dark/customize.php:68
 msgid "Icon Size"
 msgstr "Tamaño del icono"
 
-#: themes/bitono/customize.php:132 themes/bubble/customize.php:99
-#: themes/clarity/customize.php:145 themes/cubic/customize.php:122
-#: themes/customize.php:64 themes/databold/customize.php:132
-#: themes/default-base/customize.php:146 themes/draxler/customize.php:99
-#: themes/draxler/customize.php:180 themes/highway/customize.php:139
-#: themes/nexus/customize.php:122 themes/outline/customize.php:89
-#: themes/simply-dark/customize.php:102
-msgid "Border Radius"
-msgstr "Radio del borde"
-
-#: themes/bitono/customize.php:142 themes/blend/customize.php:79
-#: themes/bubble/customize.php:109 themes/clarity/customize.php:165
-#: themes/customize.php:74 themes/default-base/customize.php:156
-#: themes/nexus/customize.php:132
-msgid "Opacity (default)"
-msgstr "Opacidad (por defecto)"
-
-#: themes/bitono/customize.php:152 themes/blend/customize.php:89
-#: themes/bubble/customize.php:119 themes/clarity/customize.php:175
-#: themes/customize.php:84 themes/default-base/customize.php:166
-#: themes/nexus/customize.php:142
-msgid "Opacity (hover)"
-msgstr "Opacidad (al pasar el cursor)"
-
-#: themes/bitono/customize.php:230 themes/bubble/customize.php:251
-#: themes/clarity/customize.php:274 themes/cubic/customize.php:227
-#: themes/databold/customize.php:237 themes/default-base/customize.php:279
-#: themes/highway/customize.php:244 themes/jenga/customize.php:71
-#: themes/nexus/customize.php:220 themes/outline/customize.php:204
-#: themes/simply-dark/customize.php:180
-msgid "Dots Border Radius"
-msgstr "Radio del borde de puntos"
-
-#: themes/bitono/customize.php:240 themes/bubble/customize.php:261
-#: themes/clarity/customize.php:284 themes/disjoint/customize.php:131
-#: themes/draxler/customize.php:193 themes/highway/customize.php:254
-#: themes/jenga/customize.php:81 themes/nexus/customize.php:230
-#: themes/outline/customize.php:214 themes/simply-dark/customize.php:190
-msgid "Dots Width"
-msgstr "Ancho de los puntos"
-
-#: themes/bitono/customize.php:250 themes/bubble/customize.php:271
-#: themes/clarity/customize.php:294 themes/disjoint/customize.php:141
-#: themes/draxler/customize.php:203 themes/highway/customize.php:264
-#: themes/jenga/customize.php:91 themes/nexus/customize.php:240
-#: themes/outline/customize.php:224 themes/simply-dark/customize.php:200
-msgid "Dots Height"
-msgstr "Altura de los puntos"
-
-#: themes/bitono/customize.php:260 themes/bubble/customize.php:281
-#: themes/clarity/customize.php:304 themes/draxler/customize.php:213
-#: themes/highway/customize.php:274 themes/nexus/customize.php:250
-#: themes/outline/customize.php:234 themes/simply-dark/customize.php:210
-msgid "Distance Between Dots"
-msgstr "Distancia entre los puntos"
-
-#: themes/bitono/customize.php:296 themes/clarity/customize.php:340
-#: themes/cubic/customize.php:305 themes/databold/customize.php:293
-#: themes/default-base/customize.php:325 themes/draxler/customize.php:249
-#: themes/nexus/customize.php:286 themes/outline/customize.php:301
-#: themes/precognition/customize.php:174 themes/simply-dark/customize.php:246
-msgid "Links"
-msgstr "Enlaces"
-
-#: themes/blend/customize.php:194
-msgid "Number Size"
-msgstr "Tamaño de número"
-
-#: themes/blend/customize.php:204
-msgid "Number Line Height"
-msgstr "Alto de línea de número"
-
-#: themes/blend/customize.php:215
-msgid "Number Underline Width"
-msgstr "Ancho del subrayado de los números"
-
-#: themes/bubble/customize.php:164 themes/cubic/customize.php:167
-#: themes/databold/customize.php:177 themes/disjoint/customize.php:71
-#: themes/highway/customize.php:184 themes/outline/customize.php:16
-#: themes/outline/customize.php:144 themes/precognition/customize.php:102
-msgid "Border"
-msgstr "Borde"
-
-#: themes/bubble/customize.php:291 themes/cubic/customize.php:247
-#: themes/databold/customize.php:257 themes/disjoint/customize.php:151
-#: themes/highway/customize.php:284 themes/outline/customize.php:244
-msgid "Dots Border Width"
-msgstr "Ancho del borde de puntos"
-
-#: themes/clarity/customize.php:56
+#: themes/architekt/customize.php:84 themes/bitono/customize.php:84
+#: themes/bitono/customize.php:339 themes/blend/customize.php:84
+#: themes/bubble/customize.php:68 themes/bubble/customize.php:323
+#: themes/clarity/customize.php:84 themes/clarity/customize.php:338
+#: themes/cubic/customize.php:84 themes/cubic/customize.php:323
+#: themes/databold/customize.php:84 themes/databold/customize.php:339
+#: themes/default-base/customize.php:95 themes/default-base/customize.php:355
+#: themes/disjoint/customize.php:84 themes/disjoint/customize.php:315
+#: themes/draxler/customize.php:84 themes/draxler/customize.php:307
+#: themes/highway/customize.php:84 themes/highway/customize.php:338
+#: themes/jenga/customize.php:68 themes/jenga/customize.php:227
+#: themes/nexus/customize.php:68 themes/nexus/customize.php:323
+#: themes/outline/customize.php:84 themes/outline/customize.php:338
+#: themes/precognition/customize.php:84 themes/precognition/customize.php:339
+#: themes/radix/customize.php:110 themes/simply-dark/customize.php:84
+#: themes/simply-dark/customize.php:327
 msgid "Border Color"
 msgstr "Color del borde"
 
-#: themes/clarity/customize.php:155 themes/outline/customize.php:99
+#: themes/architekt/customize.php:111 themes/bitono/customize.php:111
+#: themes/bitono/customize.php:373 themes/blend/customize.php:111
+#: themes/bubble/customize.php:95 themes/clarity/customize.php:110
+#: themes/clarity/customize.php:372 themes/cubic/customize.php:111
+#: themes/databold/customize.php:111 themes/default-base/customize.php:122
+#: themes/default-base/customize.php:389 themes/disjoint/customize.php:111
+#: themes/draxler/customize.php:111 themes/draxler/customize.php:341
+#: themes/highway/customize.php:110 themes/highway/customize.php:372
+#: themes/jenga/customize.php:95 themes/jenga/customize.php:260
+#: themes/nexus/customize.php:95 themes/nexus/customize.php:357
+#: themes/outline/customize.php:110 themes/precognition/customize.php:111
+#: themes/precognition/customize.php:358 themes/radix/customize.php:137
+#: themes/simply-dark/customize.php:111 themes/simply-dark/customize.php:361
 msgid "Border Width"
 msgstr "Ancho del borde"
 
-#: themes/cubic/customize.php:237 themes/databold/customize.php:247
-#: themes/default-base/customize.php:289
-msgid "Dots Size"
-msgstr "Tamaño de los puntos"
+#: themes/architekt/customize.php:127 themes/bitono/customize.php:127
+#: themes/bitono/customize.php:389 themes/blend/customize.php:127
+#: themes/bubble/customize.php:111 themes/bubble/customize.php:372
+#: themes/clarity/customize.php:126 themes/clarity/customize.php:388
+#: themes/cubic/customize.php:127 themes/databold/customize.php:127
+#: themes/databold/customize.php:388 themes/default-base/customize.php:138
+#: themes/default-base/customize.php:405 themes/disjoint/customize.php:127
+#: themes/disjoint/customize.php:364 themes/draxler/customize.php:127
+#: themes/draxler/customize.php:357 themes/highway/customize.php:126
+#: themes/highway/customize.php:388 themes/jenga/customize.php:111
+#: themes/jenga/customize.php:276 themes/nexus/customize.php:111
+#: themes/nexus/customize.php:373 themes/outline/customize.php:126
+#: themes/precognition/customize.php:127 themes/precognition/customize.php:377
+#: themes/radix/customize.php:153 themes/simply-dark/customize.php:127
+#: themes/simply-dark/customize.php:377
+msgid "Border Style"
+msgstr "Estilo del borde"
 
-#: themes/cubic/customize.php:248
-msgid "Visible in active and hover navigation dot"
-msgstr "Visible en el punto de navegación activo y al pasar el cursor"
-
-#: themes/cubic/customize.php:258 themes/outline/customize.php:254
-msgid "Dots Border Style"
-msgstr "Estilo del borde de puntos"
-
-#: themes/cubic/customize.php:264 themes/outline/customize.php:260
+#: themes/architekt/customize.php:133 themes/bitono/customize.php:133
+#: themes/bitono/customize.php:395 themes/blend/customize.php:133
+#: themes/blend/customize.php:359 themes/bubble/customize.php:117
+#: themes/bubble/customize.php:378 themes/clarity/customize.php:132
+#: themes/clarity/customize.php:394 themes/cubic/customize.php:133
+#: themes/cubic/customize.php:379 themes/databold/customize.php:133
+#: themes/databold/customize.php:394 themes/default-base/customize.php:144
+#: themes/default-base/customize.php:411 themes/disjoint/customize.php:133
+#: themes/disjoint/customize.php:370 themes/draxler/customize.php:133
+#: themes/draxler/customize.php:363 themes/highway/customize.php:132
+#: themes/highway/customize.php:394 themes/jenga/customize.php:117
+#: themes/jenga/customize.php:282 themes/nexus/customize.php:117
+#: themes/nexus/customize.php:379 themes/outline/customize.php:132
+#: themes/outline/customize.php:393 themes/precognition/customize.php:133
+#: themes/precognition/customize.php:383 themes/radix/customize.php:159
+#: themes/simply-dark/customize.php:133 themes/simply-dark/customize.php:383
 msgid "Solid"
 msgstr "Continuo"
 
-#: themes/cubic/customize.php:268 themes/outline/customize.php:264
+#: themes/architekt/customize.php:137 themes/bitono/customize.php:137
+#: themes/bitono/customize.php:399 themes/blend/customize.php:137
+#: themes/blend/customize.php:363 themes/bubble/customize.php:121
+#: themes/bubble/customize.php:382 themes/clarity/customize.php:136
+#: themes/clarity/customize.php:398 themes/cubic/customize.php:137
+#: themes/cubic/customize.php:383 themes/databold/customize.php:137
+#: themes/databold/customize.php:398 themes/default-base/customize.php:148
+#: themes/default-base/customize.php:415 themes/disjoint/customize.php:137
+#: themes/disjoint/customize.php:374 themes/draxler/customize.php:137
+#: themes/draxler/customize.php:367 themes/highway/customize.php:136
+#: themes/highway/customize.php:398 themes/jenga/customize.php:121
+#: themes/jenga/customize.php:286 themes/nexus/customize.php:121
+#: themes/nexus/customize.php:383 themes/outline/customize.php:136
+#: themes/outline/customize.php:397 themes/precognition/customize.php:137
+#: themes/precognition/customize.php:387 themes/radix/customize.php:163
+#: themes/simply-dark/customize.php:137 themes/simply-dark/customize.php:387
 msgid "Dotted"
 msgstr "Punteado"
 
-#: themes/cubic/customize.php:272 themes/outline/customize.php:268
+#: themes/architekt/customize.php:141 themes/bitono/customize.php:141
+#: themes/bitono/customize.php:403 themes/blend/customize.php:141
+#: themes/blend/customize.php:367 themes/bubble/customize.php:125
+#: themes/bubble/customize.php:386 themes/clarity/customize.php:140
+#: themes/clarity/customize.php:402 themes/cubic/customize.php:141
+#: themes/cubic/customize.php:387 themes/databold/customize.php:141
+#: themes/databold/customize.php:402 themes/default-base/customize.php:152
+#: themes/default-base/customize.php:419 themes/disjoint/customize.php:141
+#: themes/disjoint/customize.php:378 themes/draxler/customize.php:141
+#: themes/draxler/customize.php:371 themes/highway/customize.php:140
+#: themes/highway/customize.php:402 themes/jenga/customize.php:125
+#: themes/jenga/customize.php:290 themes/nexus/customize.php:125
+#: themes/nexus/customize.php:387 themes/outline/customize.php:140
+#: themes/outline/customize.php:401 themes/precognition/customize.php:141
+#: themes/precognition/customize.php:391 themes/radix/customize.php:167
+#: themes/simply-dark/customize.php:141 themes/simply-dark/customize.php:391
 msgid "Dashed"
 msgstr "Discontinuo"
 
-#: themes/customize.php:44
-msgid "Icon colors"
-msgstr "Colores del icono"
+#: themes/architekt/customize.php:154
+msgid "Distance from Navigation"
+msgstr "Distancia desde la navegación"
 
-#: themes/customize.php:127
-msgid "Slideshow"
-msgstr "Pase de diapositivas"
+#: themes/architekt/customize.php:239 themes/bitono/customize.php:250
+#: themes/blend/customize.php:215 themes/bubble/customize.php:234
+#: themes/clarity/customize.php:249 themes/cubic/customize.php:234
+#: themes/customize.php:66 themes/databold/customize.php:250
+#: themes/default-base/customize.php:266 themes/disjoint/customize.php:226
+#: themes/draxler/customize.php:215 themes/draxler/customize.php:461
+#: themes/highway/customize.php:249 themes/jenga/customize.php:138
+#: themes/nexus/customize.php:234 themes/outline/customize.php:249
+#: themes/precognition/customize.php:250 themes/radix/customize.php:245
+#: themes/simply-dark/customize.php:238
+msgid "Border Radius"
+msgstr "Radio del borde"
 
-#: themes/default-base/customize.php:258
+#: themes/architekt/customize.php:255 themes/bitono/customize.php:266
+#: themes/blend/customize.php:231 themes/bubble/customize.php:250
+#: themes/clarity/customize.php:265 themes/cubic/customize.php:250
+#: themes/customize.php:76 themes/databold/customize.php:266
+#: themes/default-base/customize.php:282 themes/disjoint/customize.php:242
+#: themes/draxler/customize.php:234 themes/highway/customize.php:265
+#: themes/jenga/customize.php:154 themes/nexus/customize.php:250
+#: themes/outline/customize.php:265 themes/precognition/customize.php:266
+#: themes/radix/customize.php:261 themes/simply-dark/customize.php:254
+msgid "Opacity (default)"
+msgstr "Opacidad (por defecto)"
+
+#: themes/architekt/customize.php:271 themes/bitono/customize.php:282
+#: themes/blend/customize.php:247 themes/bubble/customize.php:266
+#: themes/clarity/customize.php:281 themes/cubic/customize.php:266
+#: themes/customize.php:86 themes/databold/customize.php:282
+#: themes/default-base/customize.php:298 themes/disjoint/customize.php:258
+#: themes/draxler/customize.php:250 themes/highway/customize.php:281
+#: themes/jenga/customize.php:170 themes/nexus/customize.php:266
+#: themes/outline/customize.php:281 themes/precognition/customize.php:282
+#: themes/radix/customize.php:277 themes/simply-dark/customize.php:270
+msgid "Opacity (hover)"
+msgstr "Opacidad (al pasar el cursor)"
+
+#: themes/architekt/customize.php:313 themes/architekt/customize.php:346
+#: themes/architekt/customize.php:379 themes/bitono/customize.php:324
+#: themes/bitono/customize.php:357 themes/blend/customize.php:289
+#: themes/blend/customize.php:322 themes/blend/customize.php:398
+#: themes/bubble/customize.php:308 themes/bubble/customize.php:341
+#: themes/bubble/customize.php:417 themes/clarity/customize.php:323
+#: themes/clarity/customize.php:356 themes/cubic/customize.php:308
+#: themes/cubic/customize.php:341 themes/databold/customize.php:324
+#: themes/databold/customize.php:357 themes/default-base/customize.php:340
+#: themes/default-base/customize.php:373 themes/disjoint/customize.php:300
+#: themes/disjoint/customize.php:333 themes/draxler/customize.php:292
+#: themes/draxler/customize.php:325 themes/highway/customize.php:323
+#: themes/highway/customize.php:356 themes/jenga/customize.php:212
+#: themes/jenga/customize.php:245 themes/nexus/customize.php:308
+#: themes/nexus/customize.php:341 themes/outline/customize.php:323
+#: themes/outline/customize.php:356 themes/precognition/customize.php:324
+#: themes/precognition/customize.php:422 themes/simply-dark/customize.php:312
+#: themes/simply-dark/customize.php:345
+msgid "Active"
+msgstr "Activar"
+
+#: themes/architekt/customize.php:328 themes/blend/customize.php:304
+msgid "Numbers Underline Color"
+msgstr "Color de subrayado de números"
+
+#: themes/architekt/customize.php:361
+msgid "Numbers Color"
+msgstr "Color de los números"
+
+#: themes/architekt/customize.php:394 themes/precognition/customize.php:437
+msgid "Numbers Size"
+msgstr "Tamaño de los números"
+
+#: themes/architekt/customize.php:410
+msgid "Numbers Line Height"
+msgstr "Alto de línea de los números"
+
+#: themes/architekt/customize.php:426
+msgid "Distance Between Numbers"
+msgstr "Distancia entre los números"
+
+#: themes/architekt/customize.php:450 themes/bitono/customize.php:560
+#: themes/blend/customize.php:589 themes/bubble/customize.php:576
+#: themes/clarity/customize.php:559 themes/cubic/customize.php:544
+#: themes/databold/customize.php:559 themes/default-base/customize.php:581
+#: themes/disjoint/customize.php:535 themes/draxler/customize.php:536
+#: themes/highway/customize.php:548 themes/jenga/customize.php:359
+#: themes/nexus/customize.php:544 themes/outline/customize.php:558
+#: themes/precognition/customize.php:461 themes/radix/customize.php:439
+#: themes/simply-dark/customize.php:548
+msgid "Colors"
+msgstr "Colores"
+
+#: themes/architekt/customize.php:461 themes/bitono/customize.php:571
+#: themes/blend/customize.php:600 themes/bubble/customize.php:587
+#: themes/clarity/customize.php:570 themes/cubic/customize.php:555
+#: themes/databold/customize.php:570 themes/default-base/customize.php:592
+#: themes/disjoint/customize.php:546 themes/draxler/customize.php:547
+#: themes/highway/customize.php:559 themes/jenga/customize.php:370
+#: themes/nexus/customize.php:555 themes/outline/customize.php:569
+#: themes/precognition/customize.php:472 themes/radix/customize.php:450
+#: themes/simply-dark/customize.php:559
+msgid "Text"
+msgstr "Texto"
+
+#: themes/architekt/customize.php:468 themes/bitono/customize.php:578
+#: themes/blend/customize.php:607 themes/bubble/customize.php:594
+#: themes/clarity/customize.php:577 themes/cubic/customize.php:562
+#: themes/databold/customize.php:577 themes/default-base/customize.php:599
+#: themes/disjoint/customize.php:553 themes/draxler/customize.php:554
+#: themes/highway/customize.php:566 themes/jenga/customize.php:377
+#: themes/nexus/customize.php:562 themes/outline/customize.php:576
+#: themes/precognition/customize.php:479 themes/radix/customize.php:457
+#: themes/simply-dark/customize.php:566
+msgid "Links"
+msgstr "Enlaces"
+
+#: themes/architekt/customize.php:487 themes/bitono/customize.php:664
+#: themes/blend/customize.php:693 themes/bubble/customize.php:680
+#: themes/clarity/customize.php:618 themes/cubic/customize.php:648
+#: themes/databold/customize.php:663 themes/default-base/customize.php:698
+#: themes/disjoint/customize.php:639 themes/draxler/customize.php:640
+#: themes/highway/customize.php:651 themes/jenga/customize.php:463
+#: themes/nexus/customize.php:648 themes/outline/customize.php:662
+#: themes/precognition/customize.php:565 themes/radix/customize.php:542
+#: themes/simply-dark/customize.php:657
+msgid "Font Size"
+msgstr "Tamaño de la fuente"
+
+#: themes/architekt/customize.php:498 themes/bitono/customize.php:675
+#: themes/blend/customize.php:704 themes/bubble/customize.php:691
+#: themes/clarity/customize.php:629 themes/cubic/customize.php:659
+#: themes/databold/customize.php:674 themes/default-base/customize.php:709
+#: themes/disjoint/customize.php:650 themes/draxler/customize.php:651
+#: themes/highway/customize.php:662 themes/jenga/customize.php:474
+#: themes/nexus/customize.php:659 themes/outline/customize.php:673
+#: themes/precognition/customize.php:576 themes/radix/customize.php:553
+#: themes/simply-dark/customize.php:668
+msgid "Line Height"
+msgstr "Alto de línea"
+
+#: themes/architekt/customize.php:509 themes/bitono/customize.php:686
+#: themes/blend/customize.php:715 themes/bubble/customize.php:702
+#: themes/clarity/customize.php:640 themes/cubic/customize.php:670
+#: themes/databold/customize.php:685 themes/default-base/customize.php:720
+#: themes/disjoint/customize.php:661 themes/draxler/customize.php:662
+#: themes/highway/customize.php:673 themes/jenga/customize.php:485
+#: themes/nexus/customize.php:670 themes/outline/customize.php:684
+#: themes/precognition/customize.php:587 themes/radix/customize.php:564
+#: themes/simply-dark/customize.php:679
+msgid "Text Align"
+msgstr "Alineación del texto"
+
+#: themes/architekt/customize.php:515 themes/bitono/customize.php:467
+#: themes/bitono/customize.php:631 themes/bitono/customize.php:692
+#: themes/blend/customize.php:464 themes/blend/customize.php:660
+#: themes/blend/customize.php:721 themes/bubble/customize.php:483
+#: themes/bubble/customize.php:647 themes/bubble/customize.php:708
+#: themes/clarity/customize.php:466 themes/clarity/customize.php:646
+#: themes/cubic/customize.php:451 themes/cubic/customize.php:615
+#: themes/cubic/customize.php:676 themes/databold/customize.php:466
+#: themes/databold/customize.php:630 themes/databold/customize.php:691
+#: themes/default-base/customize.php:488 themes/default-base/customize.php:665
+#: themes/default-base/customize.php:726 themes/disjoint/customize.php:442
+#: themes/disjoint/customize.php:606 themes/disjoint/customize.php:667
+#: themes/draxler/customize.php:435 themes/draxler/customize.php:607
+#: themes/draxler/customize.php:668 themes/highway/customize.php:618
+#: themes/highway/customize.php:679 themes/jenga/customize.php:430
+#: themes/jenga/customize.php:491 themes/nexus/customize.php:451
+#: themes/nexus/customize.php:615 themes/nexus/customize.php:676
+#: themes/outline/customize.php:465 themes/outline/customize.php:629
+#: themes/outline/customize.php:690 themes/precognition/customize.php:532
+#: themes/precognition/customize.php:593 themes/radix/customize.php:509
+#: themes/radix/customize.php:570 themes/simply-dark/customize.php:455
+#: themes/simply-dark/customize.php:624 themes/simply-dark/customize.php:685
+msgid "Left"
+msgstr "Izquierda"
+
+#: themes/architekt/customize.php:519 themes/bitono/customize.php:471
+#: themes/bitono/customize.php:627 themes/bitono/customize.php:696
+#: themes/blend/customize.php:468 themes/blend/customize.php:656
+#: themes/blend/customize.php:725 themes/bubble/customize.php:487
+#: themes/bubble/customize.php:643 themes/bubble/customize.php:712
+#: themes/clarity/customize.php:470 themes/clarity/customize.php:650
+#: themes/cubic/customize.php:455 themes/cubic/customize.php:611
+#: themes/cubic/customize.php:680 themes/databold/customize.php:470
+#: themes/databold/customize.php:626 themes/databold/customize.php:695
+#: themes/default-base/customize.php:492 themes/default-base/customize.php:661
+#: themes/default-base/customize.php:730 themes/disjoint/customize.php:446
+#: themes/disjoint/customize.php:602 themes/disjoint/customize.php:671
+#: themes/draxler/customize.php:439 themes/draxler/customize.php:603
+#: themes/draxler/customize.php:672 themes/highway/customize.php:614
+#: themes/highway/customize.php:683 themes/jenga/customize.php:426
+#: themes/jenga/customize.php:495 themes/nexus/customize.php:455
+#: themes/nexus/customize.php:611 themes/nexus/customize.php:680
+#: themes/outline/customize.php:469 themes/outline/customize.php:625
+#: themes/outline/customize.php:694 themes/precognition/customize.php:528
+#: themes/precognition/customize.php:597 themes/radix/customize.php:505
+#: themes/radix/customize.php:574 themes/simply-dark/customize.php:459
+#: themes/simply-dark/customize.php:620 themes/simply-dark/customize.php:689
+msgid "Right"
+msgstr "Derecha"
+
+#: themes/architekt/customize.php:523 themes/bitono/customize.php:475
+#: themes/bitono/customize.php:700 themes/blend/customize.php:472
+#: themes/blend/customize.php:729 themes/bubble/customize.php:491
+#: themes/bubble/customize.php:716 themes/clarity/customize.php:474
+#: themes/clarity/customize.php:654 themes/cubic/customize.php:459
+#: themes/cubic/customize.php:684 themes/databold/customize.php:474
+#: themes/databold/customize.php:699 themes/default-base/customize.php:496
+#: themes/default-base/customize.php:734 themes/disjoint/customize.php:450
+#: themes/disjoint/customize.php:675 themes/draxler/customize.php:443
+#: themes/draxler/customize.php:676 themes/highway/customize.php:687
+#: themes/jenga/customize.php:499 themes/nexus/customize.php:459
+#: themes/nexus/customize.php:684 themes/outline/customize.php:473
+#: themes/outline/customize.php:698 themes/precognition/customize.php:601
+#: themes/radix/customize.php:578 themes/simply-dark/customize.php:463
+#: themes/simply-dark/customize.php:693
+msgid "Center"
+msgstr "Centro"
+
+#: themes/bitono/customize.php:154 themes/bubble/customize.php:138
+#: themes/clarity/customize.php:153 themes/cubic/customize.php:154
+#: themes/databold/customize.php:154 themes/default-base/customize.php:165
+#: themes/nexus/customize.php:138 themes/outline/customize.php:153
+#: themes/precognition/customize.php:154 themes/simply-dark/customize.php:154
+msgid "Distance from Edge"
+msgstr "Distancia del borde"
+
+#: themes/bitono/customize.php:173 themes/bitono/customize.php:416
+#: themes/bitono/customize.php:587 themes/blend/customize.php:154
+#: themes/blend/customize.php:413 themes/blend/customize.php:616
+#: themes/bubble/customize.php:157 themes/bubble/customize.php:432
+#: themes/bubble/customize.php:603 themes/clarity/customize.php:172
+#: themes/clarity/customize.php:415 themes/cubic/customize.php:173
+#: themes/cubic/customize.php:400 themes/cubic/customize.php:571
+#: themes/databold/customize.php:173 themes/databold/customize.php:415
+#: themes/databold/customize.php:586 themes/default-base/customize.php:184
+#: themes/default-base/customize.php:432 themes/default-base/customize.php:608
+#: themes/disjoint/customize.php:154 themes/disjoint/customize.php:391
+#: themes/disjoint/customize.php:562 themes/draxler/customize.php:154
+#: themes/draxler/customize.php:384 themes/draxler/customize.php:563
+#: themes/highway/customize.php:172 themes/highway/customize.php:415
+#: themes/highway/customize.php:575 themes/jenga/customize.php:386
+#: themes/nexus/customize.php:157 themes/nexus/customize.php:400
+#: themes/nexus/customize.php:571 themes/outline/customize.php:172
+#: themes/outline/customize.php:414 themes/outline/customize.php:585
+#: themes/precognition/customize.php:173 themes/precognition/customize.php:488
+#: themes/radix/customize.php:180 themes/radix/customize.php:320
+#: themes/radix/customize.php:466 themes/simply-dark/customize.php:173
+#: themes/simply-dark/customize.php:404 themes/simply-dark/customize.php:575
+msgid "Vertical Position"
+msgstr "Posición vertical"
+
+#: themes/bitono/customize.php:179 themes/bitono/customize.php:422
+#: themes/bitono/customize.php:593 themes/blend/customize.php:160
+#: themes/blend/customize.php:419 themes/blend/customize.php:622
+#: themes/bubble/customize.php:163 themes/bubble/customize.php:438
+#: themes/bubble/customize.php:609 themes/clarity/customize.php:178
+#: themes/clarity/customize.php:421 themes/clarity/customize.php:597
+#: themes/cubic/customize.php:179 themes/cubic/customize.php:406
+#: themes/cubic/customize.php:577 themes/databold/customize.php:179
+#: themes/databold/customize.php:421 themes/databold/customize.php:592
+#: themes/default-base/customize.php:194 themes/default-base/customize.php:442
+#: themes/default-base/customize.php:618 themes/disjoint/customize.php:160
+#: themes/disjoint/customize.php:397 themes/disjoint/customize.php:568
+#: themes/draxler/customize.php:160 themes/draxler/customize.php:390
+#: themes/draxler/customize.php:569 themes/highway/customize.php:178
+#: themes/highway/customize.php:421 themes/highway/customize.php:581
+#: themes/jenga/customize.php:392 themes/nexus/customize.php:163
+#: themes/nexus/customize.php:406 themes/nexus/customize.php:577
+#: themes/outline/customize.php:178 themes/outline/customize.php:420
+#: themes/outline/customize.php:591 themes/precognition/customize.php:179
+#: themes/precognition/customize.php:494 themes/radix/customize.php:190
+#: themes/radix/customize.php:326 themes/radix/customize.php:472
+#: themes/simply-dark/customize.php:179 themes/simply-dark/customize.php:410
+#: themes/simply-dark/customize.php:585
+msgid "Top"
+msgstr "Arriba"
+
+#: themes/bitono/customize.php:183 themes/bitono/customize.php:426
+#: themes/bitono/customize.php:597 themes/blend/customize.php:164
+#: themes/blend/customize.php:423 themes/blend/customize.php:626
+#: themes/bubble/customize.php:167 themes/bubble/customize.php:442
+#: themes/bubble/customize.php:613 themes/clarity/customize.php:182
+#: themes/clarity/customize.php:425 themes/clarity/customize.php:593
+#: themes/cubic/customize.php:183 themes/cubic/customize.php:410
+#: themes/cubic/customize.php:581 themes/databold/customize.php:183
+#: themes/databold/customize.php:425 themes/databold/customize.php:596
+#: themes/default-base/customize.php:198 themes/default-base/customize.php:446
+#: themes/default-base/customize.php:622 themes/disjoint/customize.php:164
+#: themes/disjoint/customize.php:401 themes/disjoint/customize.php:572
+#: themes/draxler/customize.php:164 themes/draxler/customize.php:394
+#: themes/draxler/customize.php:573 themes/highway/customize.php:182
+#: themes/highway/customize.php:425 themes/highway/customize.php:585
+#: themes/jenga/customize.php:396 themes/nexus/customize.php:167
+#: themes/nexus/customize.php:410 themes/nexus/customize.php:581
+#: themes/outline/customize.php:182 themes/outline/customize.php:424
+#: themes/outline/customize.php:595 themes/precognition/customize.php:183
+#: themes/precognition/customize.php:498 themes/radix/customize.php:194
+#: themes/radix/customize.php:330 themes/radix/customize.php:476
+#: themes/simply-dark/customize.php:183 themes/simply-dark/customize.php:414
+#: themes/simply-dark/customize.php:589
+msgid "Bottom"
+msgstr "Abajo"
+
+#: themes/bitono/customize.php:200 themes/bitono/customize.php:443
+#: themes/bitono/customize.php:609 themes/blend/customize.php:181
+#: themes/blend/customize.php:440 themes/blend/customize.php:638
+#: themes/bubble/customize.php:184 themes/bubble/customize.php:459
+#: themes/bubble/customize.php:625 themes/clarity/customize.php:199
+#: themes/clarity/customize.php:442 themes/cubic/customize.php:200
+#: themes/cubic/customize.php:427 themes/cubic/customize.php:593
+#: themes/databold/customize.php:200 themes/databold/customize.php:442
+#: themes/databold/customize.php:608 themes/default-base/customize.php:216
+#: themes/default-base/customize.php:464 themes/default-base/customize.php:643
+#: themes/disjoint/customize.php:182 themes/disjoint/customize.php:418
+#: themes/disjoint/customize.php:584 themes/draxler/customize.php:181
+#: themes/draxler/customize.php:411 themes/draxler/customize.php:585
+#: themes/highway/customize.php:199 themes/highway/customize.php:442
+#: themes/highway/customize.php:596 themes/jenga/customize.php:408
+#: themes/nexus/customize.php:184 themes/nexus/customize.php:427
+#: themes/nexus/customize.php:593 themes/outline/customize.php:199
+#: themes/outline/customize.php:441 themes/outline/customize.php:607
+#: themes/precognition/customize.php:200 themes/precognition/customize.php:510
+#: themes/radix/customize.php:211 themes/radix/customize.php:347
+#: themes/radix/customize.php:487 themes/simply-dark/customize.php:200
+#: themes/simply-dark/customize.php:431 themes/simply-dark/customize.php:602
+msgid "Vertical Position Offset"
+msgstr "Desfase de la posición vertical"
+
+#: themes/bitono/customize.php:201 themes/bitono/customize.php:444
+#: themes/bitono/customize.php:610 themes/blend/customize.php:182
+#: themes/blend/customize.php:441 themes/blend/customize.php:639
+#: themes/bubble/customize.php:185 themes/bubble/customize.php:460
+#: themes/bubble/customize.php:626 themes/clarity/customize.php:200
+#: themes/clarity/customize.php:443 themes/cubic/customize.php:201
+#: themes/cubic/customize.php:428 themes/cubic/customize.php:594
+#: themes/databold/customize.php:201 themes/databold/customize.php:443
+#: themes/databold/customize.php:609 themes/default-base/customize.php:217
+#: themes/default-base/customize.php:465 themes/disjoint/customize.php:183
+#: themes/disjoint/customize.php:419 themes/disjoint/customize.php:585
+#: themes/draxler/customize.php:182 themes/draxler/customize.php:412
+#: themes/draxler/customize.php:586 themes/highway/customize.php:200
+#: themes/highway/customize.php:443 themes/highway/customize.php:597
+#: themes/jenga/customize.php:409 themes/nexus/customize.php:185
+#: themes/nexus/customize.php:428 themes/nexus/customize.php:594
+#: themes/outline/customize.php:200 themes/outline/customize.php:442
+#: themes/outline/customize.php:608 themes/precognition/customize.php:201
+#: themes/precognition/customize.php:511 themes/radix/customize.php:212
+#: themes/radix/customize.php:348 themes/radix/customize.php:488
+#: themes/simply-dark/customize.php:201 themes/simply-dark/customize.php:432
+#: themes/simply-dark/customize.php:603
+msgid "Based on \"Position\"."
+msgstr "Basado en la «Posición»."
+
+#: themes/bitono/customize.php:461 themes/blend/customize.php:458
+#: themes/bubble/customize.php:477 themes/clarity/customize.php:460
+#: themes/cubic/customize.php:445 themes/databold/customize.php:460
+#: themes/default-base/customize.php:482 themes/disjoint/customize.php:436
+#: themes/draxler/customize.php:429 themes/nexus/customize.php:445
+#: themes/outline/customize.php:459 themes/simply-dark/customize.php:449
 msgid "Alignment"
 msgstr "Alineación"
 
-#: themes/manifest-legacy.php:15 themes/manifest.php:15
+#: themes/bitono/customize.php:488 themes/blend/customize.php:490
+#: themes/bubble/customize.php:504 themes/clarity/customize.php:487
+#: themes/cubic/customize.php:472 themes/databold/customize.php:487
+#: themes/default-base/customize.php:509 themes/disjoint/customize.php:463
+#: themes/highway/customize.php:460 themes/jenga/customize.php:303
+#: themes/nexus/customize.php:472 themes/outline/customize.php:486
+#: themes/simply-dark/customize.php:476
+msgid "Dots Border Radius"
+msgstr "Radio del borde de puntos"
+
+#: themes/bitono/customize.php:504 themes/blend/customize.php:506
+#: themes/bubble/customize.php:520 themes/clarity/customize.php:503
+#: themes/cubic/customize.php:488 themes/databold/customize.php:503
+#: themes/default-base/customize.php:525 themes/disjoint/customize.php:479
+#: themes/draxler/customize.php:480 themes/highway/customize.php:476
+#: themes/jenga/customize.php:319 themes/nexus/customize.php:488
+#: themes/outline/customize.php:502 themes/simply-dark/customize.php:492
+msgid "Dots Width"
+msgstr "Ancho de los puntos"
+
+#: themes/bitono/customize.php:520 themes/bubble/customize.php:536
+#: themes/clarity/customize.php:519 themes/cubic/customize.php:504
+#: themes/databold/customize.php:519 themes/default-base/customize.php:541
+#: themes/disjoint/customize.php:495 themes/draxler/customize.php:496
+#: themes/highway/customize.php:492 themes/jenga/customize.php:335
+#: themes/nexus/customize.php:504 themes/outline/customize.php:518
+#: themes/simply-dark/customize.php:508
+msgid "Dots Height"
+msgstr "Altura de los puntos"
+
+#: themes/bitono/customize.php:536 themes/blend/customize.php:565
+#: themes/bubble/customize.php:552 themes/clarity/customize.php:535
+#: themes/cubic/customize.php:520 themes/databold/customize.php:535
+#: themes/default-base/customize.php:557 themes/disjoint/customize.php:511
+#: themes/draxler/customize.php:512 themes/highway/customize.php:508
+#: themes/nexus/customize.php:520 themes/outline/customize.php:534
+#: themes/simply-dark/customize.php:524
+msgid "Distance Between Dots"
+msgstr "Distancia entre los puntos"
+
+#: themes/bitono/customize.php:621 themes/blend/customize.php:650
+#: themes/bubble/customize.php:637 themes/cubic/customize.php:605
+#: themes/databold/customize.php:620 themes/default-base/customize.php:655
+#: themes/disjoint/customize.php:596 themes/draxler/customize.php:597
+#: themes/highway/customize.php:608 themes/jenga/customize.php:420
+#: themes/nexus/customize.php:605 themes/outline/customize.php:619
+#: themes/precognition/customize.php:522 themes/radix/customize.php:499
+#: themes/simply-dark/customize.php:614
+msgid "Horizontal Position"
+msgstr "Posición horizontal"
+
+#: themes/bitono/customize.php:642 themes/blend/customize.php:671
+#: themes/bubble/customize.php:658 themes/cubic/customize.php:626
+#: themes/databold/customize.php:641 themes/default-base/customize.php:676
+#: themes/disjoint/customize.php:617 themes/draxler/customize.php:618
+#: themes/highway/customize.php:629 themes/jenga/customize.php:441
+#: themes/nexus/customize.php:626 themes/outline/customize.php:640
+#: themes/precognition/customize.php:543 themes/radix/customize.php:520
+#: themes/simply-dark/customize.php:635
+msgid "Horizontal Position Offset"
+msgstr "Desfase de la posición horizontal"
+
+#: themes/bitono/customize.php:643 themes/blend/customize.php:672
+#: themes/bubble/customize.php:659 themes/cubic/customize.php:627
+#: themes/databold/customize.php:642 themes/default-base/customize.php:677
+#: themes/disjoint/customize.php:618 themes/draxler/customize.php:619
+#: themes/highway/customize.php:630 themes/jenga/customize.php:442
+#: themes/nexus/customize.php:627 themes/outline/customize.php:641
+#: themes/precognition/customize.php:544 themes/radix/customize.php:521
+#: themes/simply-dark/customize.php:636
+msgid "Based on \"Horizontal Position\"."
+msgstr "Basado en la «Posición horizontal»."
+
+#: themes/blend/customize.php:337
+msgid "Number Underline Width"
+msgstr "Ancho del subrayado de los números"
+
+#: themes/blend/customize.php:353
+msgid "Numbers Underline Style"
+msgstr "Estilo de subrayado de números"
+
+#: themes/blend/customize.php:380 themes/bubble/customize.php:399
+#: themes/radix/customize.php:301
+msgid "Numbers"
+msgstr "Números"
+
+#: themes/blend/customize.php:532
+msgid "Number Size"
+msgstr "Tamaño de número"
+
+#: themes/blend/customize.php:548
+msgid "Number Line Height"
+msgstr "Alto de línea de número"
+
+#: themes/bubble/customize.php:356 themes/cubic/customize.php:356
+#: themes/databold/customize.php:372 themes/disjoint/customize.php:348
+#: themes/highway/customize.php:524 themes/outline/customize.php:371
+msgid "Dots Border Width"
+msgstr "Ancho del borde de puntos"
+
+#: themes/clarity/customize.php:586
+msgid "Position"
+msgstr "Posición"
+
+#: themes/cubic/customize.php:357
+msgid "Visible in active and hover navigation dot"
+msgstr "Visible en el punto de navegación activo y al pasar el cursor"
+
+#: themes/cubic/customize.php:373 themes/outline/customize.php:387
+msgid "Dots Border Style"
+msgstr "Estilo del borde de puntos"
+
+#: themes/customize.php:129
+msgid "Slideshow"
+msgstr "Pase de diapositivas"
+
+#: themes/customize.php:136
+msgid ""
+"This background color is used when a slide does not fill the whole width and "
+"height of the slide area."
+msgstr ""
+"Este color de fondo se utiliza cuando una diapositiva no rellena todo el "
+"ancho y alto del área de la diapositiva."
+
+#: themes/default-base/customize.php:644
+msgid "Based on \"Vertical Position\"."
+msgstr "Basado en la «Posición vertical»."
+
+#: themes/highway/customize.php:153
+msgid "Distance from Center"
+msgstr "Distancia desde el centro"
+
+#: themes/manifest-legacy.php:15
 msgid "This is the default MetaSlider theme."
 msgstr "Este es el tema por defecto de MetaSlider."
 
@@ -2949,7 +3488,8 @@ msgstr "minimalista"
 msgid "2 columns"
 msgstr "2 columnas"
 
-#: themes/manifest-premium.php:17
+#: themes/manifest-premium.php:17 themes/manifest-premium.php:78
+#: themes/manifest-premium.php:86
 msgid "A 2 columns minimalistic theme to split your images and captions."
 msgstr ""
 "Un tema minimalista de 2 columnas para dividir tus imágenes y leyendas."
@@ -2991,16 +3531,16 @@ msgstr ""
 "haciéndola más grande que las diapositivas circundantes, creando un punto "
 "focal tipo héroe que atrae la atención del espectador."
 
-#: themes/manifest-premium.php:39
+#: themes/manifest-premium.php:39 themes/manifest-premium.php:63
 msgid ""
-"This is the Beta version of the Hero Theme. It should also be used with 100% "
-"Width and Carousel Mode disabled and Transition Effect set to Slide. "
-"Currently works on all slide types except External Image and Tiktok Videos."
+"It should be used with 100% Width and Carousel Mode disabled, Transition "
+"Effect set to Slide and Center Align enabled. Currently works on all slide "
+"types except External Image and Tiktok Videos."
 msgstr ""
-"Esta es la versión beta del tema Hero. También debe utilizarse con la "
-"anchura al 100% y el modo carrusel desactivados y el efecto de transición "
-"ajustado a deslizar. Actualmente funciona en todos los tipos de diapositivas "
-"excepto en imagen externa y vídeos Tiktok."
+"También debe usarse con el modo «Ancho 100%» y «Carrusel» desactivado, el "
+"efecto de transición establecido en «Deslizar» y la alineación central "
+"habilitada. Actualmente funciona en todos los tipos de diapositivas excepto "
+"imagen externa y Tiktok videos."
 
 #: themes/manifest-premium.php:46
 msgid ""
@@ -3040,16 +3580,58 @@ msgstr ""
 "utilizando escala de grises y opacidad para las diapositivas circundantes, "
 "creando un punto focal que atrae la atención del espectador."
 
-#: themes/manifest-premium.php:63
+#: themes/manifest-premium.php:70
 msgid ""
-"This is the Beta version of the Focus Theme. It should also be used with "
-"100% Width and Carousel Mode disabled and Transition Effect set to Slide. "
-"Currently works on all slide types except External Image and Tiktok Videos."
+"A dynamic slideshow theme to display testimonials that emphasizes the active "
+"slide by using grayscale for the surrounding slides, creating a focal point "
+"that draws the viewer's attention."
 msgstr ""
-"Esta es la versión beta del tema Focus. También debe utilizarse con la "
-"anchura al 100% y el modo carrusel desactivados y el efecto de transición "
-"ajustado a deslizar. Actualmente funciona en todos los tipos de diapositivas "
-"excepto en imagen externa y vídeos Tiktok."
+"Un tema de pase de diapositivas dinámico que enfatiza la diapositiva activa "
+"utilizando escala de grises para las diapositivas circundantes, creando un "
+"punto focal que atrae la atención del espectador."
+
+#: themes/manifest-premium.php:71
+msgid ""
+"Best used with Image slides. It should also be used with Hidden Arrows, "
+"Carousel Mode disabled, Transition Effect set to Slide, Smart Crop enabled "
+"and Crop Source set to \"Custom width/height\"."
+msgstr ""
+"Es mejor utilizarlo en pases de diapositivas con diapositivas de imágenes. "
+"También debe usarse con las flechas ocultadas, el modo «Carrusel» "
+"desactivado, el efecto de transición establecido en «Deslizar, el recorte "
+"inteligente activado y la fuente del recorte establecida en «Ancho/alto "
+"personalizados»."
+
+#: themes/manifest-premium.php:79 themes/manifest-premium.php:87
+msgid ""
+"Image, External Image, Post Feed, Local Video and External Video slides are "
+"displayed in 2 columns, while the other slide types are displayed in 1 "
+"column."
+msgstr ""
+"Las diapositivas de imagen, imagen externa, feed de entradas, vídeo local y "
+"vídeo externo se muestran en 2 columnas, mientras que el resto de tipos de "
+"diapositivas se muestran en 1 columna."
+
+#: themes/manifest-premium.php:94
+#| msgid "A 2 columns minimalistic theme to split your images and captions."
+msgid ""
+"A 2 rows modern theme to split your images and captions ideal for "
+"WooCommerce products."
+msgstr ""
+"Un tema moderno de 2 filas para dividir tus imágenes y leyendas, ideal para "
+"productos WooCommerce."
+
+#: themes/manifest-premium.php:101
+msgid "A stylish theme ideal for WooCommerce products."
+msgstr "Un tema elegante ideal para productos WooCommerce."
+
+#: themes/manifest.php:15
+msgid ""
+"This is the default MetaSlider theme. Use this theme to adjust colors to "
+"your preference."
+msgstr ""
+"Este es el tema por defecto de MetaSlider. Utiliza este tema para ajustar "
+"los colores según tus preferencias."
 
 #: themes/manifest.php:56
 msgid ""
@@ -3059,35 +3641,39 @@ msgstr ""
 "Para añadir un botón al tema Nexus, introduce la URL y el texto del botón en "
 "la pestaña «Enlace»."
 
-#: themes/nexus/customize.php:374
+#: themes/nexus/customize.php:703
 msgid "Button"
 msgstr "Botón"
 
-#: themes/nexus/v1.0.0/theme.php:46
+#: themes/nexus/v1.0.0/theme.php:53
 msgid "Click Here"
 msgstr "Haz clic aquí"
 
-#: themes/precognition/customize.php:111
+#: themes/precognition/customize.php:343
+msgid "Border"
+msgstr "Borde"
+
+#: themes/precognition/customize.php:404
 msgid "Text and Numbers"
 msgstr "Texto y números"
 
-#: themes/radix/customize.php:75
+#: themes/radix/customize.php:305
 msgid "Color"
 msgstr "Color"
 
-#: themes/radix/customize.php:84
+#: themes/radix/customize.php:365
 msgid "Font Size for Active Number "
 msgstr "Tamaño de fuente para el número activo "
 
-#: themes/radix/customize.php:94
+#: themes/radix/customize.php:381
 msgid "Line Height for Active Number "
 msgstr "Alto de línea para el número activo "
 
-#: themes/radix/customize.php:105
+#: themes/radix/customize.php:398
 msgid "Font Size for Count Number "
 msgstr "Tamaño de fuente para el número de recuento "
 
-#: themes/radix/customize.php:115
+#: themes/radix/customize.php:414
 msgid "Line Height for Count Number "
 msgstr "Alto de línea para el número de recuento "
 
@@ -3103,45 +3689,51 @@ msgstr "Siguiente diapositiva"
 msgid "Preparing 1 slide..."
 msgstr "Preparando 1 diapositiva..."
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:149
-#: admin/assets/js/admin.js:1293
+#: admin/assets/dist/js/admin.js:1 admin/assets/dist/js/app.js:2
+#: admin/assets/js/admin.js:149 admin/assets/js/admin.js:1330
+#: admin/assets/js/admin.js:1373
+#: admin/assets/js/app/store/modules/slideshows.js:216
 msgid "1 slide added successfully"
 msgstr "1 diapositiva añadida correctamente"
 
 #: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:198
+msgid "Slide Types"
+msgstr "Tipos de diapositiva"
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:203
 msgid "Opening add slide UI..."
 msgstr "Abriendo la interfaz de usuario de añadir diapositiva…"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:201
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:206
 msgid "Closing add slide UI..."
 msgstr "Cerrando la interfaz de usuario de añadir diapositiva…"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:290
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:295
 msgid "Updating slide..."
 msgstr "Actualizando la diapositiva..."
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:342
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:347
 msgid "Slide updated successfully"
 msgstr "Diapositiva actualizada correctamente"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:630
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:639
 msgid "Stop on first slide after looping"
 msgstr "Detener en la primera diapositiva después del bucle"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1121
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1158
 msgid "Crop position saved and image cropped"
 msgstr "Posición de recorte guardada e imagen recortada"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1138
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1175
 msgid "There was an error when saving crop position or cropping the image"
 msgstr ""
 "Ha habido un error al guardar la posición de recorte o al recortar la imagen"
 
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1305
-msgid "Device options are enabled for this slide. Adjust using the Mobile tab."
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1388
+msgid "Device options are enabled for this slide. Adjust using the Device tab."
 msgstr ""
-"Las opciones dispositivo están activadas para esta diapositiva. Ajústelas "
-"utilizando la pestaña «Móvil»."
+"Las opciones de dispositivo están activadas para esta diapositiva. Ajusta "
+"utilizando la pestaña «Dispositivo»."
 
 #: admin/assets/dist/js/app.js:2
 msgid "CSS Manager notice opened"
@@ -3295,21 +3887,30 @@ msgstr "Se ha producido un error"
 msgid "Preparing slideshow for duplication..."
 msgstr "Preparando el pase de diapositivas para duplicado..."
 
-#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:88
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:90
 msgid "Doing something..."
 msgstr "Haciendo algo…"
 
-#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:96
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:98
 msgid "No error message provided."
 msgstr "No se han proporcionado un mensaje sobre el error."
 
-#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:113
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:115
 msgid "Undefined error occurred"
 msgstr "Ha ocurrido un error no definido"
 
-#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:169
+#: admin/assets/dist/js/app.js:2 admin/assets/js/app/globals.js:171
 msgid "No error message reported."
 msgstr "No se ha informado de ningún mensaje de error."
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"We recommend to enable %1$s\"Recommended Theme Options\"%2$s to "
+"automatically adjust slideshow settings when selecting a new theme."
+msgstr ""
+"Te recomendamos activar las %1$s«Opciones de tema recomendadas»%2$s para "
+"ajustar automáticamente los ajustes del pase de diapositivas al seleccionar "
+"un nuevo tema."
 
 #: admin/assets/dist/js/app.js:2
 msgid "Saving theme..."
@@ -3325,11 +3926,11 @@ msgstr "Tema del pase de diapositivas"
 
 #: admin/assets/dist/js/app.js:2
 msgid ""
-"This theme is not officially supported by the slider you chose. Your results "
-"might vary."
+"This theme was designed for FlexSlider. Please choose the FlexSlider option "
+"for the best display."
 msgstr ""
-"Este tema no es oficialmente compatible con la diapositiva que has elegido. "
-"Tus resultados podrían variar."
+"Este tema fue diseñado para FlexSlider. Elige la opción FlexSlider para una "
+"mejor visualización."
 
 #: admin/assets/dist/js/app.js:2
 msgid "theme"
@@ -3352,7 +3953,7 @@ msgid "Change"
 msgstr "Cambiar"
 
 #: admin/assets/dist/js/app.js:2
-msgid "Change the design your slideshow with a stylish MetaSlider theme!"
+msgid "Change the design of your slideshow with a stylish MetaSlider theme!"
 msgstr ""
 "¡Cambia el diseño de tu pase de diapositivas con un elegante tema MetaSlider!"
 
@@ -3363,10 +3964,6 @@ msgstr "Selecciona un tema personalizado"
 #: admin/assets/dist/js/app.js:2
 msgid "All themes"
 msgstr "Todos los temas"
-
-#: admin/assets/dist/js/app.js:2
-msgid "Loading..."
-msgstr "Cargando…"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Get MetaSlider Pro!"
@@ -3476,6 +4073,14 @@ msgstr "Descripción de medios"
 #: admin/assets/dist/js/app.js:2
 msgid "Manual entry"
 msgstr "Introducción manual"
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"This will override the Caption Link Color option in the \"Theme\" area of "
+"the right sidebar."
+msgstr ""
+"Esto anulará la opción de color del enlace de la leyenda en el área «Tema» "
+"de la barra lateral derecha."
 
 #: admin/assets/dist/js/app.js:2
 msgid "Enter text that will appear with your image slide."
@@ -3900,8 +4505,16 @@ msgid "Thumbnail (Pro)"
 msgstr "Miniatura (Pro)"
 
 #: admin/assets/dist/js/app.js:2
+msgid "Thumbnails - Visible On Hover"
+msgstr "Miniaturas - visible al pasar el cursor"
+
+#: admin/assets/dist/js/app.js:2
 msgid "Filmstrip"
 msgstr "Película"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Filmstrip - Visible On Hover"
+msgstr "Película - visible al pasar el cursor"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Slideshow settings saved"
@@ -3934,8 +4547,8 @@ msgid "Change the default title"
 msgstr "Cambiar el título por defecto"
 
 #: admin/assets/dist/js/app.js:2
-msgid "Base Image Width"
-msgstr "Ancho base de la imagen"
+msgid "Default Base Image Width"
+msgstr "Anchura por defecto de la imagen base"
 
 #: admin/assets/dist/js/app.js:2
 msgid ""
@@ -3950,8 +4563,8 @@ msgid "Change the default width"
 msgstr "Cambiar el ancho por defecto"
 
 #: admin/assets/dist/js/app.js:2
-msgid "Base Image Height"
-msgstr "Altura base de la imagen"
+msgid "Default Base Image Height"
+msgstr "Altura por defecto de la imagen base"
 
 #: admin/assets/dist/js/app.js:2
 msgid ""
@@ -3975,20 +4588,18 @@ msgstr ""
 "configurar que el pase de diapositivas se ajuste a su contenedor."
 
 #: admin/assets/dist/js/app.js:2
-msgid ""
-"Change the default navigation when creating a new slideshow. Show options so "
-"that users can browse the slides."
-msgstr ""
-"Cambiar la navegación por defecto al crear un nuevo pase de diapositivas. "
-"Mostrar opciones para que los usuarios puedan navegar por las diapositivas."
+msgid "Default Navigation"
+msgstr "Navegación por defecto"
 
 #: admin/assets/dist/js/app.js:2
-msgid ""
-"Change the default transition between slides automatically when creating a "
-"new slideshow."
+msgid "Change the default navigation when creating a new slideshow."
 msgstr ""
-"Cambiar automáticamente la transición por defecto entre diapositivas al "
-"crear un nuevo pase de diapositivas."
+"Cambiar la navegación por defecto al crear una nueva presentación de "
+"diapositivas."
+
+#: admin/assets/dist/js/app.js:2
+msgid "Change the default transition between slides."
+msgstr "Cambiar la transición por defecto entre diapositivas."
 
 #: admin/assets/dist/js/app.js:2
 msgid "Global Settings"
@@ -4028,6 +4639,22 @@ msgstr "Ajustes para dispositivo"
 #: admin/assets/dist/js/app.js:2
 msgid "Set breakpoints for different screen sizes"
 msgstr "Establece puntos de ruptura para diferentes tamaños de pantalla"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Smartphone"
+msgstr "Smartphone"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Tablet"
+msgstr "Tableta"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Laptop"
+msgstr "Portátil"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Desktop"
+msgstr "Escritorio"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Disable Legacy Libraries"
@@ -4116,6 +4743,18 @@ msgstr ""
 "diapositivas."
 
 #: admin/assets/dist/js/app.js:2
+msgid "Recommended Theme Options"
+msgstr "Opciones de tema recomendadas"
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Automatically apply recommended slideshow options when selecting a theme. "
+"This will replace some of the previous options."
+msgstr ""
+"Aplicar automáticamente las opciones de pase de diapositivas recomendadas al "
+"seleccionar un tema. Esto reemplazará algunas de las opciones anteriores."
+
+#: admin/assets/dist/js/app.js:2
 msgid "Dashboard Settings"
 msgstr "Ajustes del escritorio"
 
@@ -4162,6 +4801,13 @@ msgid "Update the MetaSlider Pro settings."
 msgstr "Actualiza los ajustes de MetaSlider Pro."
 
 #: admin/assets/dist/js/app.js:2
+#| msgid "Maximum Number of Custom Fields in Post Feed Slides"
+msgid "Maximum Number of Custom Fields in Post Feed and WooCommerce Slides"
+msgstr ""
+"Número máximo de campos personalizados en las diapositivas de feed de la "
+"entrada y WooCommerce"
+
+#: admin/assets/dist/js/app.js:2
 msgid ""
 "Select how many custom fields will display in the dropdown menu when you are "
 "inserting tags."
@@ -4170,8 +4816,11 @@ msgstr ""
 "al insertar etiquetas."
 
 #: admin/assets/dist/js/app.js:2
-msgid "Change the maximum custom fields for Post Feed"
-msgstr "Cambia el máximo de campos personalizados para el feed de entradas"
+#| msgid "Change the maximum custom fields for Post Feed"
+msgid "Change the maximum custom fields for Post Feed and WooCommerce"
+msgstr ""
+"Cambia el número máximo de campos personalizados por los feeds de las "
+"entradas y WooCommerce"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Enable Legacy Theme Editor"
@@ -4554,6 +5203,102 @@ msgstr "pase de diapositivas"
 msgid "gallery"
 msgstr "galería"
 
+#~ msgid ""
+#~ "Update or activate your MetaSlider Pro now to add a custom delay and "
+#~ "repeat options to your slides"
+#~ msgstr ""
+#~ "Actualiza o activa tu MetaSlider Pro ahora para añadir un retardo "
+#~ "personalizado y opciones de repetición a tus diapositivas"
+
+#~ msgid "Get MetaSlider Pro"
+#~ msgstr "Obtén MetaSlider Pro"
+
+#~ msgid ""
+#~ "With MetaSlider Pro, you can add a custom delay and repeat options to "
+#~ "your slides. You can choose to display your slides more time, and repeat "
+#~ "your slides multiple times."
+#~ msgstr ""
+#~ "Con MetaSlider Pro, puedes añadir un retardo personalizado y opciones de "
+#~ "repetición a tus diapositivas. Puedes elegir mostrar tus diapositivas más "
+#~ "tiempo, y repetir las diapositivas varias veces."
+
+#~ msgid ""
+#~ "Update or activate your MetaSlider Pro now to add a start/end date option "
+#~ "to your slides"
+#~ msgstr ""
+#~ "Actualiza o activa MetaSlider Pro ahora para añadir una opción de fecha "
+#~ "de inicio/fin a tus diapositivas"
+
+#~ msgid ""
+#~ "With MetaSlider Pro, you can schedule your slides. You can choose to show "
+#~ "your slides on specific dates, days of the week, or times of day."
+#~ msgstr ""
+#~ "Con MetaSlider Pro, puedes programar tus diapositivas. Puedes elegir "
+#~ "mostrar tus diapositivas en fechas específicas, días de la semana u horas "
+#~ "del día."
+
+#~ msgid "Click the \"Add Slide\" button to create your slideshow"
+#~ msgstr ""
+#~ "Haz clic en el botón «Añadir diapositiva» para crear tu pase de "
+#~ "diapositivas"
+
+#~ msgid "Fallback background for slideshow."
+#~ msgstr "Fondo alternativo por el pase de diapositivas."
+
+#~ msgid ""
+#~ "Image, External Image and Post Feed slides are displayed in 2 rows, while "
+#~ "the others slide types are displayed in 1 row. It should also be used "
+#~ "with 100% Width and Carousel Mode disabled, Transition Effect set to "
+#~ "Slide and Center Align enabled."
+#~ msgstr ""
+#~ "Las diapositivas de imagen, imagen externa y feed de entradas se muestran "
+#~ "en 2 columnas, mientras que el resto de tipos de diapositivas se muestran "
+#~ "en en 1 columna. También debe usarse con el modo «Ancho 100%» y "
+#~ "«Carrusel» desactivado, el efecto de transición establecido en «Deslizar» "
+#~ "y la alineación central habilitada."
+
+#~ msgid "Not in use."
+#~ msgstr "No está en uso."
+
+#~ msgid "Stretch the slideshow output to fill its parent container."
+#~ msgstr ""
+#~ "Ensancha el pase de diapositivas hasta rellenar el contenedor padre."
+
+#~ msgid ""
+#~ "Display multiple slides at once. Slideshow output will be 100% wide. "
+#~ "Carousel Mode only uses the Transition Effect."
+#~ msgstr ""
+#~ "Muestra varias diapositivas a la vez. El pase de diapositivas tendrá un "
+#~ "ancho del 100%. El modo «Carrusel» solo utiliza el efecto de transición."
+
+#~ msgid "Dots Size"
+#~ msgstr "Tamaño de los puntos"
+
+#~ msgid "Icon colors"
+#~ msgstr "Colores del icono"
+
+#~ msgid ""
+#~ "This theme is not officially supported by the slider you chose. Your "
+#~ "results might vary."
+#~ msgstr ""
+#~ "Este tema no es oficialmente compatible con la diapositiva que has "
+#~ "elegido. Tus resultados podrían variar."
+
+#~ msgid ""
+#~ "Change the default navigation when creating a new slideshow. Show options "
+#~ "so that users can browse the slides."
+#~ msgstr ""
+#~ "Cambiar la navegación por defecto al crear un nuevo pase de diapositivas. "
+#~ "Mostrar opciones para que los usuarios puedan navegar por las "
+#~ "diapositivas."
+
+#~ msgid ""
+#~ "Change the default transition between slides automatically when creating "
+#~ "a new slideshow."
+#~ msgstr ""
+#~ "Cambiar automáticamente la transición por defecto entre diapositivas al "
+#~ "crear un nuevo pase de diapositivas."
+
 #~ msgid "Published"
 #~ msgstr "Publicado"
 
@@ -4581,12 +5326,6 @@ msgstr "galería"
 
 #~ msgid "Tiktok"
 #~ msgstr "Tiktok"
-
-#~ msgid "Add slideshow"
-#~ msgstr "Añadir presentación de diapositivas"
-
-#~ msgid "Vertical Position"
-#~ msgstr "Posición vertical"
 
 #~ msgid "Taking bottom as reference point."
 #~ msgstr "Tomando el fondo como punto de referencia."
@@ -4648,12 +5387,6 @@ msgstr "galería"
 
 #~ msgid "Play Button Icon Hover"
 #~ msgstr "Icono del botón de reproducción al pasar el cursor"
-
-#~ msgid "Button Hover"
-#~ msgstr "Botón al pasar el cursor"
-
-#~ msgid "Create a slideshow with sample images"
-#~ msgstr "Crear una presentación de diapositivas con imágenes de muestra"
 
 #~ msgid "Draxler is a minimalist theme."
 #~ msgstr "Draxler es un tema minimalista."
@@ -4723,9 +5456,6 @@ msgstr "galería"
 #~ "Elige si las diapositivas se reproducen en bucle o se detienen en una "
 #~ "diapositiva específica. Las diapositivas se reproducirán en bucle "
 #~ "infinito si eliges «Continuamente» y el efecto «Diapositiva»."
-
-#~ msgid "Effect"
-#~ msgstr "Efecto"
 
 #~ msgid "Configure loop"
 #~ msgstr "Configurar bucle"
@@ -4979,9 +5709,6 @@ msgstr "galería"
 #~ msgid "Gallery"
 #~ msgstr "Galería"
 
-#~ msgid "Select Images"
-#~ msgstr "Selecciona imágenes"
-
 #~ msgid "edit"
 #~ msgstr "editar"
 
@@ -5158,9 +5885,6 @@ msgstr "galería"
 
 #~ msgid "CSS manager module"
 #~ msgstr "Módulo gestor de CSS"
-
-#~ msgid "Close"
-#~ msgstr "Cerrar"
 
 #~ msgid "Coming soon"
 #~ msgstr "Próximamente"

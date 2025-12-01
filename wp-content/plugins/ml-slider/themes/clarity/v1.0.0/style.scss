@@ -216,3 +216,12 @@
 		opacity: 0;
 	}
 }
+
+@media (max-width:576px) {
+	.metaslider.ms-theme-clarity .flexslider {
+
+		.caption-wrap .caption {
+			padding: 20px;
+		}
+	}
+}
