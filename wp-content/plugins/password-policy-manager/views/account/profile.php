@@ -65,6 +65,7 @@ if ( isset( $back_button ) ) {
 				{
 					'action'                  : 'moppm_ajax',
 					'option'                  : 'moppm_log_out_form',  
+					'nonce'                   : '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>',
 				};
 				jQuery.post(ajaxurl, data, function(response) {
 					window.location.reload(true);

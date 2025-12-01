@@ -94,7 +94,7 @@ jQuery("#moppm_clear_all_inactive").click(function(e){
 Moppm_error_msg("This feature is available in premium plugins.");
 });
 function removefromlist(id){
-	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_remove_Nonce' ) ); ?>';
+	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>';
 	user_value = id;
 	if(user_value != '')
 	{
@@ -105,16 +105,16 @@ function removefromlist(id){
 		'nonce'						:  nonce
 		};
 		jQuery.post(ajaxurl, data, function(response) {
-				var response = response.replace(/\s+/g,' ').trim();
-				if(response == 'UNKNOWN_ERROR')
-				{
-			Moppm_error_msg(" Unknown Error occured while removing the user.");
-				}
-				else
-				{
-			Moppm_success_msg("User detail is removed from list successfully.");
-			jQuery('#'+id).hide();      
-				}
+			var response = response.replace(/\s+/g,' ').trim();
+			if(response == 'SUCCESS')
+			{   
+				Moppm_success_msg("User detail is removed from list successfully.");
+				jQuery('#'+id).hide();    
+			}
+			else
+			{
+				Moppm_error_msg("Unknown Error occured while removing the user.");
+			}
 		});
 	}
 }
@@ -122,24 +122,24 @@ function removefromlist(id){
 jQuery("#moppm_clear_all").click(function()
 		{
 			jQuery("#moppm_clear_all").attr('disabled','disabled');
-			var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_clear_nonce' ) ); ?>'; 
+			var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>'; 
 					var data = {
 								'action'                            :  'moppm_ajax',
 								'option'                            :  'moppm_clear_button',
 								'nonce'                             :   nonce
-							};
-						jQuery.post(ajaxurl, data, function(response) 
-						{
-							jQuery("#moppm_clear_all").removeAttr('disabled');
-							var response = response.replace(/\s+/g,' ').trim(); 
-							if(response == 'ERROR')
-								Moppm_error_msg('Please click again.');
-							else{
-								Moppm_success_msg('Your report list is clear.');
-								window.location.reload(); 
-							}
+						};
+					jQuery.post(ajaxurl, data, function(response) 
+					{
+						jQuery("#moppm_clear_all").removeAttr('disabled');
+						var response = response.replace(/\s+/g,' ').trim(); 
+						if(response == 'SUCCESS') {
+							Moppm_success_msg('Your report list is clear.');
+							window.location.reload();
+						} else{
+							Moppm_error_msg('Please click again.');
+						}
 
-						});
+					});
 });
 function moppmrefreshListTable(html)
 {
@@ -160,22 +160,20 @@ jQuery("#moppm_enable_disable_report").click(function()
 {
 	var moppm_enable_disable_report = jQuery("input[name='moppm_enable_disable_report']:checked").val();
 
-	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_enable_disable_report' ) ); ?>'; 
+	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>'; 
 					var data = {
 								'action'                            :  'moppm_ajax',
 								'option'                            :  'moppm_enable_disable_report',
 								'moppm_enable_disable_report'       :  moppm_enable_disable_report,
 								'nonce'                             :   nonce
 							};
-							jQuery.post(ajaxurl, data, function(response) 
-						{
-							var response = response.replace(/\s+/g,' ').trim();
-							if (response == "true"){
-								Moppm_success_msg("Your login report is now enabled.");
-							}
-							else{
-									Moppm_error_msg("Your login report is now disabled.");
-								}
-						});
+					jQuery.post(ajaxurl, data, function(response) {
+						var response = response.replace(/\s+/g,' ').trim();
+						if (response == "SUCCESS"){
+							Moppm_success_msg("Your login report is now enabled.");
+						} else {
+							Moppm_error_msg("Your login report is now disabled.");
+						}
+					});
 });
 </script>

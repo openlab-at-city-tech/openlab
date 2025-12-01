@@ -45,8 +45,11 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 */
 		public function moppm_ajax() {
 			global $moppm_db_queries;
-			if ( isset( $_POST['option'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce is used in each functions separately
-				$option = sanitize_text_field( wp_unslash( $_POST['option'] ) ); //phpcs:ignore WordPress.Security.NonceVerification.Missing -- nonce is used in each functions separately
+			if ( ! check_ajax_referer( 'moppm-admin-action-nonce', 'nonce', false ) || ! current_user_can( 'manage_options' ) ) {
+				wp_send_json( 'ERROR' );
+			}
+			if ( isset( $_POST['option'] ) ) { 
+				$option = sanitize_text_field( wp_unslash( $_POST['option'] ) ); 
 				switch ( $option ) {
 					case 'moppm_setting_enable_disable':
 						$this->moppm_setting_enable_disable();
@@ -86,15 +89,8 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_black_friday_remove() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm-remove-offer-banner' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			} else {
-				update_site_option( 'moppm_remove_offer_banner', true );
-				wp_send_json( 'SUCCESS' );
-			}
-
+			update_site_option( 'moppm_remove_offer_banner', true );
+			wp_send_json( 'SUCCESS' );
 		}
 
 		/**
@@ -128,11 +124,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_update_plan() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm_update_plan' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			$moppm_all_plannames = isset( $_POST['planname'] ) ? sanitize_text_field( wp_unslash( $_POST['planname'] ) ) : '';
 			$moppm_plan_type     = isset( $_POST['plantype'] ) ? sanitize_text_field( wp_unslash( $_POST['plantype'] ) ) : '';
 			update_site_option( 'moppm_planname', $moppm_all_plannames );
@@ -146,17 +137,12 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_enable_disable_report() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm_enable_disable_report' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			$moppm_enable_disable_ppm = isset( $_POST['moppm_enable_disable_report'] ) ? sanitize_text_field( wp_unslash( $_POST['moppm_enable_disable_report'] ) ) : '';
 			update_site_option( 'moppm_enable_disable_report', $moppm_enable_disable_ppm );
 			if ( 'on' === $moppm_enable_disable_ppm ) {
-				wp_send_json( 'true' );
+				wp_send_json( 'SUCCESS' );
 			} elseif ( '' === $moppm_enable_disable_ppm ) {
-				wp_send_json( 'false' );
+				wp_send_json( 'ERROR' );
 			}
 
 		}
@@ -165,16 +151,10 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * Function to clear report table
 		 */
 		public function moppm_clear_button() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm_clear_nonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			} else {
-				global $wpdb;
-				global $moppm_db_queries;
-				$moppm_db_queries->clear_report_list();
-				return;
-			}
+			global $wpdb;
+			global $moppm_db_queries;
+			$moppm_db_queries->clear_report_list();
+			wp_send_json( 'SUCCESS' );
 		}
 
 		/**
@@ -184,14 +164,10 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 */
 		public function moppm_report_remove() {
 			global $moppm_db_queries;
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm_remove_Nonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			if ( isset( $_POST['user_value'] ) ) {
 				$user_id = sanitize_text_field( wp_unslash( $_POST['user_value'] ) );
 				$moppm_db_queries->delete_report_list( $user_id );
+				wp_send_json( 'SUCCESS' );
 			}
 		}
 
@@ -201,11 +177,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_reset_button_submit() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'moppm_reset_nonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			$users         = get_users();
 			$no_of_attempt = get_site_option( 'no_of_of_attempt' );
 			if ( ! $no_of_attempt ) {
@@ -220,7 +191,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 			$result  = wp_mail( $email, 'Reset All Password - WordPress', $message, $headers );
 			if ( ! $result ) {
 				wp_send_json( 'SMTP_NOT_SET' );
-				return;
 			}
 			if ( ! empty( $users ) ) {
 				foreach ( $users as $user ) {
@@ -229,6 +199,7 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 					$sessions->destroy_all();
 				}
 			}
+			wp_send_json( 'SUCCESS' );
 
 		}
 
@@ -238,11 +209,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_setting_enable_disable() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'PPMsettingNonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			if ( isset( $_POST['moppm_enable_ppm'] ) ) {
 				$moppm_enable_disable_ppm = sanitize_text_field( wp_unslash( $_POST['moppm_enable_ppm'] ) );
 				update_site_option( 'Moppm_enable_disable_ppm', $moppm_enable_disable_ppm );
@@ -251,9 +217,9 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 				update_site_option( 'Moppm_enable_disable_ppm', $moppm_enable_disable_ppm );
 			}
 			if ( 'on' === $moppm_enable_disable_ppm ) {
-				wp_send_json( 'true' );
+				wp_send_json( 'SUCCESS' );
 			} elseif ( '' === $moppm_enable_disable_ppm ) {
-				wp_send_json( 'false' );
+				wp_send_json( 'ERROR' );
 			}
 		}
 
@@ -263,11 +229,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 		 * @return void
 		 */
 		public function moppm_setting_enable_disable_form() {
-			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-			if ( ! wp_verify_nonce( $nonce, 'PPMsettingNonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
-			}
 			$moppm_numeric_digit         = isset( $_POST['moppm_numeric_digit'] ) ? sanitize_text_field( wp_unslash( $_POST['moppm_numeric_digit'] ) ) : '';
 			$moppm_enable_disable_expiry = isset( $_POST['moppm_enable_disable_expiry'] ) ? sanitize_text_field( wp_unslash( $_POST['moppm_enable_disable_expiry'] ) ) : '';
 			$moppm_letter                = isset( $_POST['moppm_letter'] ) ? sanitize_text_field( wp_unslash( $_POST['moppm_letter'] ) ) : '';
@@ -284,7 +245,7 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 			} else {
 				wp_send_json( 'Digit_Invalid' );
 			}
-			wp_send_json( 'true' );
+			wp_send_json( 'SUCCESS' );
 		}
 
 		/**

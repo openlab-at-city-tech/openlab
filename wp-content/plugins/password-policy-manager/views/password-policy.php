@@ -205,7 +205,7 @@ require_once $setup_dir_name;
 				jQuery("#Moppm_enable_ppm").click(function() {
 
 					var Moppm_enable_ppm = jQuery("input[name='Moppm_enable_ppm']:checked").val();
-					var nonce = '<?php echo esc_js( wp_create_nonce( 'PPMsettingNonce' ) ); ?>';
+					var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>';
 					if (Moppm_enable_ppm != '') {
 						var data = {
 							'action': 'moppm_ajax',
@@ -215,7 +215,7 @@ require_once $setup_dir_name;
 						};
 						jQuery.post(ajaxurl, data, function(response) {
 							var response = response.replace(/\s+/g, ' ').trim();
-							if (response == "true") {
+							if (response == "SUCCESS") {
 								Moppm_success_msg("The password policy settings are enabled.");
 							} else {
 								Moppm_error_msg("The password policy settings are disabled.");
@@ -243,7 +243,7 @@ require_once $setup_dir_name;
 
 				jQuery("#moppm_save_form").click(function() {
 					jQuery("#moppm_save_form").attr('disabled', 'disabled');
-					var nonce = '<?php echo esc_js( wp_create_nonce( 'PPMsettingNonce' ) ); ?>';
+					var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>';
 					var data = {
 						'action': 'moppm_ajax',
 						'option': 'moppm_setting_enable_disable_form',
@@ -260,18 +260,19 @@ require_once $setup_dir_name;
 					jQuery.post(ajaxurl, data, function(response) {
 						var response = response.replace(/\s+/g, ' ').trim();
 						jQuery("#moppm_save_form").removeAttr('disabled');
-						if (response == 'Exp_Time_Invalid')
-							Moppm_error_msg('Please enter expiration time in given range');
-						else if (response == 'Digit_Invalid')
+						if (response == 'SUCCESS') {
+						    Moppm_success_msg('Your password policy settings have been saved.');
+						} else if (response == 'Digit_Invalid') {
 							Moppm_error_msg('Please enter the characters of password between given range');
-						else
-							Moppm_success_msg('Your password policy settings have been saved.');
+						} else {
+							Moppm_error_msg('Something went wrong. Please try again.');
+						}
 					});
 				});
 
 				jQuery("#moppm_reset_pass").click(function() {
 					jQuery("#moppm_reset_pass").attr('disabled', 'disabled');
-					var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_reset_nonce' ) ); ?>';
+					var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>';
 					var data = {
 						'action': 'moppm_ajax',
 						'option': 'moppm_reset_button',
@@ -281,14 +282,13 @@ require_once $setup_dir_name;
 					jQuery.post(ajaxurl, data, function(response) {
 						var response = response.replace(/\s+/g, ' ').trim();
 						jQuery("#moppm_reset_pass").removeAttr('disabled');
-						if (response == 'reset_not_submit')
-							Moppm_error_msg('Please click again.');
-						else if (response == 'SMTP_NOT_SET') {
-							Moppm_error_msg("Please configure SMTP to reset all user passwords.");
-						} else if (response == 'attempts_over')
-							Moppm_error_msg('Your reset password limit has expired. Please upgrade to premium.');
-						else
+						if (response == 'SUCCESS') {
 							Moppm_success_msg('All user passwords have been reset.');
+						} else if (response == 'SMTP_NOT_SET') {
+							Moppm_error_msg('Please configure SMTP to reset all user passwords.');
+						} else {
+							Moppm_error_msg('Something went wrong. PLease try again.');
+						}
 					});
 				});
 			</script>
