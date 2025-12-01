@@ -47,11 +47,40 @@
 
             // Required for theme
             // echo $before_widget;
-			echo esc_html( $before_widget );
+			echo wp_kses($before_widget,
+				array(
+					'p' => array(),
+					'i' => array(),
+					'b' => array(),
+					'em' => array(),
+					'strong' => array(),
+					'div' => array(
+						'id' => array(),
+						'class' => array(),
+						'style' => array()
+					),
+					'span' => array(
+						'id' => array(),
+						'class' => array(),
+						'style' => array()
+					),
+				)
+			);
 
             if ( $widget_title )
-				echo esc_html( $before_title . $widget_title . $after_title );
-				// echo $before_title . $widget_title . $after_title;
+				echo wp_kses($before_title . $widget_title . $after_title,
+					array(
+						'i' => array(),
+						'b' => array(),
+						'em' => array(),
+						'strong' => array(),
+						'span' => array(
+							'id' => array(),
+							'class' => array(),
+							'style' => array()
+						),
+					)
+				);
 
 			echo "<div class=\"zp-ZotpressSidebarWidget\">\n\n";
 
@@ -83,7 +112,25 @@
 
             // Required for theme
             // echo $after_widget;
-			echo esc_html( $after_widget );
+			echo wp_kses($after_widget,
+				array(
+					'p' => array(),
+					'i' => array(),
+					'b' => array(),
+					'em' => array(),
+					'strong' => array(),
+					'div' => array(
+						'id' => array(),
+						'class' => array(),
+						'style' => array()
+					),
+					'span' => array(
+						'id' => array(),
+						'class' => array(),
+						'style' => array()
+					),
+				)
+			);
         }
 
 

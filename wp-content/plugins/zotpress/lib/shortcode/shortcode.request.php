@@ -1139,6 +1139,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					'em' => array(),
 					'strong' => array(),
 					'div' => array(
+						'id' => array(),
 						'class' => array(),
 						'style' => array()
 					),
