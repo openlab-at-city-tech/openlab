@@ -28,7 +28,7 @@ class B2S_Ship_Image {
         $content = '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-danger b2s-upload-image-invalid-extension" style="display:none;"><span id="b2s-upload-image-invalid-extension-file-name"></span>' . esc_html__('The images file types .jpg and .png are allowed. Please try another.', 'blog2social') . '</div></div>';
         $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-info b2s-upload-image-no-permission" style="display:none;">' . esc_html__('You need a higher user role to upload an image on this blog. Please contact your administrator.', 'blog2social') . '</div></div>';
         $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-danger b2s-upload-image-free-version-info" style="display:none;">' . esc_html__('To select an individual image from your media library,', 'blog2social');
-        $content .= ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '">' . esc_html__('please upgrade', 'blog2social') . '</a>';
+        $content .= ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('please upgrade', 'blog2social') . '</a>';
         $content .= '</div></div>';
         $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-info b2s-gif-support-info" style="display:none;">' . esc_html__('The networks Diigo, Bloglovin’ and Google Business Profile do not support the GIF image format and will display your standard image instead.', 'blog2social') . '</div></div>';
         $content .= '<div class="col-xs-12 del-padding-left del-padding-right"><div class="alert alert-primary b2s-change-meta-image-info" style="display:none;">' . esc_html__('By changing your image in the link post format it will be changed for all networks listed below. This also applies for all scheduled posts in this post format. ', 'blog2social') . '<a href="'.esc_url(B2S_Tools::getSupportLink('open_graph_tags')).'" target="_blank">' . esc_html__('More Information', 'blog2social') . '</a><br><br><div class="b2s-change-meta-image-networks"></div></div></div>';
@@ -51,7 +51,7 @@ class B2S_Ship_Image {
                 $content .= '<div class="b2s-image-item">';
                 $content .= '<div class="b2s-image-item-thumb">';
                 $content .= '<label for="b2s-image-count-' . esc_attr($tempCountImage) . '">';
-                $content .= '<img class="img-thumbnail networkImage img-responsive" alt="blogImage" src="' . esc_url($image[0]) . '">';
+                $content .= '<img class="img-thumbnail networkImage img-responsive" alt="" src="' . esc_url($image[0]) . '">';
                 $content .= '</label>';
                 $content .= '</div>';
                 $content .= '<div class="b2s-image-item-caption text-center">';

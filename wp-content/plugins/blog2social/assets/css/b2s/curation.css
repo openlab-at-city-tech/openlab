@@ -294,3 +294,10 @@
 #b2s-curation-input-title{
     width:100%;
 }
+.b2s-curation-post-form-apply-post-templates-checkbox{
+    margin-bottom: 7px!important;
+    margin-right: 4px!important;
+}
+.b2s-curation-post-form-apply-post-templates{
+    float: right;
+}

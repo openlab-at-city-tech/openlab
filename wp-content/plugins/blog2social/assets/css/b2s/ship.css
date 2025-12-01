@@ -851,7 +851,7 @@ input[type="checkbox"], input[type="radio"] {
     /*flex-direction: column;*/
     /*
     gap:8px;*/
-    height: 340px;
+    height: 320px;
     width:100%;
 }
 
@@ -1202,3 +1202,98 @@ input[type="number"]{
     border-color: transparent !important;
     color: #3c434a !important;
 }
+
+.b2s-tiktok-form-container{
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+
+.tiktok-video-preview{
+    flex-shrink: 0;
+    width: 30%;
+}
+.tiktok-preview-right-container{
+    width: 100%;
+}
+
+.tiktok-preview-margin-bottom{
+    margin-bottom: 10px;
+}
+
+input[type="checkbox"].error,
+select.error,
+.b2s-tiktok-status_privacy.error {
+    border: 1px solid #FF0000 !important
+}
+
+.form-check {
+  display: block;
+  min-height: 1.5rem;
+  /*padding-left: 1.5em;*/
+  margin-bottom: 0.125rem;
+}
+
+.form-check-input {
+  width: 1em;
+  height: 1em;
+  margin-top: 0.25em;
+  vertical-align: top;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.25);
+  appearance: none;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  width: 35px!important;
+}
+
+.form-check-input[type="checkbox"] {
+  border-radius: 0.25em;
+  width: 35px!important;
+}
+
+.form-check-input:focus {
+  border-color: #86b7fe;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.form-switch .form-check-input {
+  width: 2em;
+  /*margin-left: -2.5em;*/
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(0,0,0,.25)'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  border-radius: 2em;
+  transition: background-position .15s ease-in-out;
+
+/* fully reset native checkbox */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-switch .form-check-input:checked {
+  background-position: right center;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255,255,255,.9)'/%3e%3c/svg%3e");
+}
+
+.form-check-input:checked::before {
+  content: ""!important
+}
+
+#b2s-ass-settings-checkbox-4:focus {
+    outline: none;       /* removes default outline */
+    box-shadow: none;    /* removes any shadow some browsers add */
+}
+

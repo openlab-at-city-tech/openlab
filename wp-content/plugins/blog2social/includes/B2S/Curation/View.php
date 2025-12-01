@@ -27,7 +27,7 @@ class B2S_Curation_View {
         $html .='</div>';
         $html .='</br>';
         $html .='<div class="row">';
-        $html .='<div class="panel panel-default">';
+        $html .='<div class="panel panel-default" style="display: none;">'; //Since new preview, url preview is hidden
         $html .='<div class="panel-body">';
         $html .='<div class="col-xs-12 col-sm-5 col-lg-3">';
         $html .='<img src="' . esc_url($image) . '" class="center-block img-responsive" style="display: block;">';
@@ -39,7 +39,7 @@ class B2S_Curation_View {
         $html .='<input type="hidden" id="b2s-post-curation-preview-title" class="form-control" name="title" value="' . esc_attr(addslashes($title)) . '" placeholder="'.esc_attr__('Title', 'blog2social').'">';
         $html .='<span class="b2s-post-item-details-preview-desc">' . esc_html($desc) . '</span>';
         $html .='<br>';
-        $html .='<span class="b2s-post-item-details-preview-url"><a href="' . esc_url($url) . '" target="_blank" class="btn btn-link del-padding-left b2s-break-word">' . esc_url($url) . '</a></span>';
+        $html .='<span class="b2s-post-item-details-preview-url"><a href="' . esc_url($url) . '" target="_blank" class="b2s-post-item-details-preview-url-link btn btn-link del-padding-left b2s-break-word">' . esc_url($url) . '</a></span>';
         $html .='<input type="hidden" id="b2s-post-curation-url" name="url" value="' . esc_url($url) . '">';
         $html .='<span class="glyphicon glyphicon-pencil b2s-btn-change-url-preview"></span>';
         $html .='</div>';
@@ -99,16 +99,16 @@ class B2S_Curation_View {
             $content .='</div>';
         }
         $content .='</div>';
-        
-        $content .= '<br>';
+        $content .='<div class="b2s-curation-post-form-apply-post-templates">';
+        $content .='<input class="b2s-curation-post-form-apply-post-templates-checkbox" name="apply_post_templates" type="checkbox"><label>' . esc_html__('Apply Post Templates', 'blog2social') . '</label>';
+        $content .='</div>';
+        $content .='<br>';
         $content .='<div class="row">';
         $content .='<div class="col-xs-12 col-sm-6 col-lg-4 b2s-post-curation-ship-date-area">';
         $content .='<label for="b2s-post-curation-ship-date">' . esc_html__('Date', 'blog2social') . '</label>';
         $content .='<input type = "text" placeholder = "' . esc_html__('Date', 'blog2social') . '" name = "ship_date"  id="b2s-post-curation-ship-date" class = "b2s-post-curation-ship-date form-control b2s-input" disabled = "disabled" readonly  data-timepicker="true" data-language="' . esc_attr(substr(B2S_LANGUAGE, 0, 2)) . '" data-time-format="' . esc_attr($timeFormat) . '" data-date-format="' . esc_attr($dateFormat) . '">';
         $content .='</div>';
         $content .='</div>';
-        
-        
         
         $content .= '<br>';
         $content .='<hr>';

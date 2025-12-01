@@ -78,9 +78,10 @@ jQuery(document).on('click', '.b2s-video-upload-feedback-btn', function () {
 });
 
 jQuery(document).on('change', '#b2s-post-curation-ship-type', function () {
+  
     if (jQuery(this).val() == 1) {
         if (jQuery(this).attr('data-user-version') == 0) {
-            jQuery('#b2s-sched-post-modal').modal('show');
+            jQuery('#b2sPreFeatureScheduleModal').modal('show');
             jQuery(this).val('0');
             return false;
         }

@@ -141,7 +141,7 @@ class B2S_Video_Item {
 
 
                 if ((int) $var->hook_action == 0) {
-                    $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-video-upload-area-drop-btn" data-attachment-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                    $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-video-upload-area-drop-btn" data-attachment-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
                     $content .= esc_html__('delete from reporting', 'blog2social') . '</a> ';
                 }
 
@@ -155,7 +155,7 @@ class B2S_Video_Item {
                                 </li>';
             }
             $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-            $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-video-upload-all-btn" data-attachment-id="' . esc_attr($attachment_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+            $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-video-upload-all-btn" data-attachment-id="' . esc_attr($attachment_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
             $content .= esc_html__('delete from reporting', 'blog2social') . '</a></label></li>';
             $content .= '</ul></div></div>';
             return $content;

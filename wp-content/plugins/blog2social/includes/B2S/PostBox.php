@@ -178,7 +178,7 @@ class B2S_PostBox {
         }
 
         $content = '<div class="b2s-post-meta-box">
-                    <div id="b2s-licence-condition" class="b2s-info-error b2s-info-display-none"><span class="b2s-text-bold">' . esc_html__("You've reached your posting volume!", "blog2social") . '</span><br>' . esc_html__('To increase your volume and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>
+                    <div id="b2s-licence-condition" class="b2s-info-error b2s-info-display-none"><span class="b2s-text-bold">' . esc_html__("You've reached your posting volume!", "blog2social") . '</span><br>' . esc_html__('To increase your volume and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>
                     <div id="b2s-server-connection-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-server-connection-fail" title="close notice"></button>' . esc_html__('The connection to the server failed. Please try again! You can find more information and solutions in the', 'blog2social') . '<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('connection_guide')) . '"> ' . esc_html__('guide for server connection', 'blog2social') . '</a>.</div>
                     <div id="b2s-heartbeat-fail" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-heartbeat-fail" title="close notice"></button>' . esc_html__('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social!', 'blog2social') . $b2sHeartbeatFaqLink . ' </div>
                     <div id="b2s-post-meta-box-state-no-publish-future-customize" class="b2s-info-error b2s-info-display-none"><button class="b2s-btn-close-meta-box b2s-close-icon" data-area-id="b2s-post-meta-box-state-no-publish-future-customize" title="close notice"></button>' . esc_html__('Your post is still on draft or pending status. Please make sure that your post is published or scheduled to be published on this blog. You can then auto-post or schedule and customize your social media posts with Blog2Social.', 'blog2social') . '</div>
@@ -269,7 +269,7 @@ class B2S_PostBox {
                                 - ' . esc_html__('Select individual images per post', 'blog2social') . '<br>
                                 - ' . esc_html__('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') . '<br>
                                 <br>
-                                <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" class="b2s-btn b2s-btn-success b2s-center-block b2s-btn-none-underline">' . esc_html__('Upgrade to SMART and above', 'blog2social') . '</a><br>
+                                <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '" class="b2s-btn b2s-btn-success b2s-center-block b2s-btn-none-underline">' . esc_html__('Upgrade to SMART and above', 'blog2social') . '</a><br>
 
                                 ' . ((!get_option('B2S_PLUGIN_DISABLE_TRAIL')) ? '<center>' . sprintf(
                                     // translators: %s is a link

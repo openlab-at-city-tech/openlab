@@ -84,7 +84,7 @@ class B2S_AutoPost_Item {
         } else {
             $content .= '<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your new or updated posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
             $content .= '<form id = "b2s-user-network-settings-auto-post-own" method = "post">';
-            $content .= '<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+            $content .= '<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled b2sPreFeatureAutoPosterModal' : '') . '">';
             $content .= '<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" ' . (($autoPostActive) ? 'checked' : '') . '  name="b2s-manuell-auto-post" class="b2s-auto-post-area-toggle" data-area-type="manuell" value="1" type="checkbox">';
             $content .= '</div>';
             $content .= '<div class="b2s-auto-post-area" data-area-type="manuell"' . (($autoPostActive) ? '' : ' style="display:none;"') . '>';
@@ -205,20 +205,20 @@ class B2S_AutoPost_Item {
         $content .= '<br>';
         $content .= '<hr>';
         $content .= '</div>';
-        $content .= '<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter for Imported Posts', 'blog2social') . '</h4><a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('auto_post_import')) . '">Info</a>';
+        $content .= '<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter for Imported Posts e.g. RSS-Feed from other plugins', 'blog2social') . '</h4><a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('auto_post_import')) . '">Info</a>';
         $content .= '<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your imported posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
-        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
+        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
         $content .= '<p>' . esc_html__('Your current license:', 'blog2social') . '<span class="b2s-key-name"> ' . esc_html($versionType[B2S_PLUGIN_USER_VERSION]) . '</span> ';
         if (B2S_PLUGIN_USER_VERSION == 0) {
             $content .= '<br>' . esc_html__('Immediate Cross-Posting across all networks: Share an unlimited number of posts', 'blog2social') . '<br>';
-            $content .= esc_html__('Scheduled Auto-Posting', 'blog2social') . ': <a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a>';
+            $content .= esc_html__('Scheduled Auto-Posting', 'blog2social') . ': <a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a>';
         } else {
             $content .= '(' . esc_html__('share up to', 'blog2social') . ' ' . esc_html($limit[B2S_PLUGIN_USER_VERSION]) . ((B2S_PLUGIN_USER_VERSION >= 2) ? ' ' . esc_html__('posts per day', 'blog2social') : '') . ') ';
-            $content .= '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a>';
+            $content .= '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a>';
         }
         $content .= '</p>';
         $content .= '<br>';
-        $content .= '<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
+        $content .= '<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled b2sPreFeatureAutoPosterModal' : '') . '">';
         $content .= '<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" ' . (($autoPostImportActive) ? 'checked' : '') . '  name="b2s-import-auto-post" class="b2s-auto-post-area-toggle" data-area-type="import" value="1" type="checkbox">';
         $content .= '<div class="b2s-auto-post-area" data-area-type="import"' . (($autoPostImportActive) ? '' : ' style="display:none;"') . '>';
         $content .= '<br><br>';
@@ -253,7 +253,7 @@ class B2S_AutoPost_Item {
 
         $content .= '</form>';
         if (B2S_PLUGIN_USER_VERSION > 0) {
-            $content .= '<button class="pull-right btn btn-primary btn-sm" id="b2s-auto-post-settings-btn" type="submit">';
+            $content .= '<button class="pull-right btn btn-primary btn-sm" id="b2s-auto-post-settings-btn" type="button">';
         } else {
             $content .= '<button class="pull-right btn btn-primary btn-sm b2s-btn-disabled b2s-save-settings-pro-info b2sInfoAutoPosterMModalBtn">';
         }

@@ -332,7 +332,7 @@ if ($optionUserTimeFormat == false) {
                 <br><br>
                 <?php esc_html_e('Upgrade to Blog2Social Pro or Business today and give your social media posts the URL they deserve!', 'blog2social');?>
                 <br><br>
-                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
+                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
                 <br>
                 <center> <?php echo wp_kses(sprintf(
                     // translators: %s is a link

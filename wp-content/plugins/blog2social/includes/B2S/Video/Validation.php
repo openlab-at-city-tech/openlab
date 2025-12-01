@@ -11,6 +11,7 @@ class B2S_Video_Validation {
     public function loadNetworkProperties() {
         $checkUpdateOption = get_option('B2S_PLUGIN_UPDATE_TIME_NETWORK_PROPERTIES');
         $this->networkProperties = get_option('B2S_PLUGIN_DATA_NETWORK_PROPERTIES');
+        $checkUpdateOption=false;
         if ($checkUpdateOption == false || $this->networkProperties == false || $checkUpdateOption < time()) {
             $properties = $this->getNetworkProperties();
             if ($properties !== false) {

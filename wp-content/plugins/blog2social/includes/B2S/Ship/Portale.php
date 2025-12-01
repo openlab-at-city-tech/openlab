@@ -26,7 +26,7 @@ class B2S_Ship_Portale {
     public function getItemHtml($portale, $isVideoView = false) {
         $html = '<ul>';
         foreach ($portale as $k => $portal) {
-
+            
             if ($isVideoView) {
                 if (!in_array($portal->id, $this->isVideoNetwork)) {
                     continue;
@@ -42,10 +42,10 @@ class B2S_Ship_Portale {
                     continue;
                 }
             }
-
+          
             $isDeprecated = ($portal->id == 8) ? true : false;
             if (!$isDeprecated) {
-                $html .= '<li>';
+                $html .= '<li data-network-id="' . $portal->id . '">';
                 $html .= '<img class="b2s-network-list-add-thumb" alt="' . esc_attr($portal->name) . '" src="' . esc_url(plugins_url('/assets/images/portale/' . $portal->id . '_flat.png', B2S_PLUGIN_FILE)) . '">';
                 $html .= '<span class="b2s-network-list-add-details">' . esc_html($portal->name) . '</span>';
 
@@ -57,7 +57,7 @@ class B2S_Ship_Portale {
                     }
                     $html .= (B2S_PLUGIN_USER_VERSION > 1) ? ('<button onclick="wop(\'' . esc_url($b2sAuthUrl) . '&choose=group\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn">' . sprintf(
                         // translators: %s is network name
-                        esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-type="auth-network" data-title="' . esc_html__('You want to connect a social media group?', 'blog2social') . '">' . sprintf(
+                        esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureNetworksModal" data-type="auth-network" data-title="' . esc_html__('You want to connect a social media group?', 'blog2social') . '">' . sprintf(
                         // translators: %s is network name
                         esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '<span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
                 }
@@ -67,24 +67,24 @@ class B2S_Ship_Portale {
                         $name = $this->networkTypeNameIndividual[$portal->id][1];
                     }
                     if ($portal->id == 42 && B2S_PLUGIN_USER_VERSION < 2) {
-                        $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') . '" data-type="network-humhub">' . sprintf(
+                        $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureNetworksModal" data-title="' . esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') . '" data-type="network-humhub">' . sprintf(
                             // translators: %s is network name
                             esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
                     } else if ($portal->id == 12) {
                         $b2sSpecialAuthUrl = $this->authurl . '&portal_id=' . $portal->id . '&transfer=oauth&version=3&affiliate_id=' . B2S_Tools::getAffiliateId();
                         $html .= (B2S_PLUGIN_USER_VERSION >= 1) ? '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-add-instagram-business-info-btn" data-b2s-auth-url="' . $b2sSpecialAuthUrl . '">' . sprintf(
                             // translators: %s is network name
-                            esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network" >' . sprintf(
+                            esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureNetworksModal" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network" >' . sprintf(
                             // translators: %s is network name
                             esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</a></button>';
                     } else if ($portal->id == 6 && B2S_PLUGIN_USER_VERSION == 0) {
-                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureNetworksModal" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
                                 // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</a></button>';
                     }else {
                         $html .= (B2S_PLUGIN_USER_VERSION > 1 || (B2S_PLUGIN_USER_VERSION == 0 && ($portal->id == 1 || $portal->id == 6)) || (B2S_PLUGIN_USER_VERSION == 1 && ($portal->id == 1 || $portal->id == 6))) ? ('<button onclick="wop(\'' . esc_url($b2sAuthUrl) . '&choose=page\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn">' . sprintf(
                             // translators: %s is network name
-                            esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled ' . ((B2S_PLUGIN_USER_VERSION == 0) ? 'b2sPreFeatureModalBtn' : 'b2sProFeatureModalBtn') . '" data-title="' . esc_html__('You want to connect a network page?', 'blog2social') . '" data-type="auth-network" >' . sprintf(
+                            esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled ' . ((B2S_PLUGIN_USER_VERSION == 0) ? 'b2sPreFeatureNetworksModal' : 'b2sProFeatureNetworksModal') . '" data-title="' . esc_html__('You want to connect a network page?', 'blog2social') . '" data-type="auth-network" >' . sprintf(
                             // translators: %s is network name
                             esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
                     }
@@ -102,25 +102,25 @@ class B2S_Ship_Portale {
                                 // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</a>';
                         } else if ($portal->id == 24 && B2S_PLUGIN_USER_VERSION < 1) {
-                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sBusinessFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sBusinessFeatureNetworksModal" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
                                 // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("BUSINESS", "blog2social") . '</a></button>';
-                        } else if (($portal->id == 38 || $portal->id == 42) && B2S_PLUGIN_USER_VERSION < 2) {
-                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-title="' .(($portal->id == 42) ? esc_html__('Expand Your Social Media Universe with HumHub!', 'blog2social') : esc_html__('You want to connect a network profile?', 'blog2social')). '" data-type="'.(($portal->id == 42)? 'network-humhub' : 'auth-network').'">' . sprintf(
+                        } else if (($portal->id == 38 || $portal->id == 42 || $portal->id == 36 ) && B2S_PLUGIN_USER_VERSION < 2) {
+                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureNetworksModal" data-title="' .(($portal->id == 42) ? esc_html__('Expand Your Social Media Universe with HumHub!', 'blog2social') : esc_html__('You want to connect a network profile?', 'blog2social')). '" data-type="'.(($portal->id == 42)? 'network-humhub' : 'auth-network').'">' . sprintf(
                                 // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
                         } else if ($portal->id == 12) {
                             $html .= '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-add-instagram-info-btn" data-b2s-auth-url="' . $b2sAuthUrl . '">' . sprintf(
                                 // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>';
-                        } else if (($portal->id == 25 || $portal->id == 26 || $portal->id == 27 || $portal->id == 36 || $portal->id == 39 || $portal->id == 45 || $portal->id == 46) && B2S_PLUGIN_USER_VERSION < 1) {
-                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                        } else if (($portal->id == 25 || $portal->id == 26 || $portal->id == 27 || $portal->id == 39 || $portal->id == 45 || $portal->id == 46) && B2S_PLUGIN_USER_VERSION < 1) {
+                            $html .= '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sPreFeatureNetworksModal" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
                                  // translators: %s is network name
                                 esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</a></button>';
                         } else {
                             $html .= ($portal->id != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $portal->id == 18)) ? ('<button onclick="wop(\'' . esc_url($b2sAuthUrl) . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn">' . sprintf(
                                 // translators: %s is network name
-                                esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
+                                esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button type="button" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($portal->name))) . ' btn-sm b2s-network-list-add-btn b2s-network-list-add-btn-profeature b2s-btn-disabled b2sProFeatureNetworksModal" data-title="' . esc_html__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</a></button>';
                         }
                     }
                 }

@@ -129,7 +129,7 @@ class B2S_Video_Upload {
             $filesize = filesize($file);
             $contents = file_get_contents($file);
 
-            if ($contents !== false) {
+           if ($contents !== false) {
             
                 $chunks = str_split($contents, $this->maxClientPostSize);
                 $maxCountChunk = ceil($filesize / $this->maxClientPostSize);
@@ -138,30 +138,42 @@ class B2S_Video_Upload {
                 $counter = 0;
                 $currentChunk = 1;
 
+                $wpVersion = get_bloginfo('version');
+                $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
+                $ua = sprintf(
+                        'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
+                        $wpVersion,
+                        $pluginVersion
+                );
+
                 foreach($chunks as $chunk) {
 
-                    $wpVersion = get_bloginfo('version');
-                    $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
-                    $ua = sprintf(
-                            'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
-                            $wpVersion,
-                            $pluginVersion
+                    $data = array(
+                        'video_token' => trim($videoToken),
+                        'max_count_chunks' => (int) $maxCountChunk,
+                        'current_chunk' => $currentChunk,
+                        'chunk' => $chunk
                     );
 
-                    //upload chunks
+                    $boundary = wp_generate_password(24);
+                    $headers = [
+                        'Content-Type' => 'multipart/form-data; boundary=' . $boundary,
+                    ];
+                    $body = '';
+                    foreach ($data as $name => $value) {
+                        $body .= "--{$boundary}\r\n";
+                        $body .= "Content-Disposition: form-data; name=\"{$name}\"\r\n\r\n";
+                        $body .= "{$value}\r\n";
+                    }
+                    $body .= "--{$boundary}--";
                     $args = array(
                         'method' => 'POST',
-                        'body' => array(
-                            'video_token' => trim($videoToken),
-                            'max_count_chunks' => (int) $maxCountChunk,
-                            'current_chunk' => $currentChunk,
-                            'chunk' => $chunk,
-                        ),
+                        'body' => $body,
                         'timeout' => 45,
                         'redirection' => '5',
                         'user-agent' => $ua,
+                        'headers' => $headers
                     );
-
                     $resultChunk = wp_remote_retrieve_body(wp_remote_post(B2S_PLUGIN_API_VIDEO_UPLOAD_ENDPOINT . 'video/upload', $args));
 
                     if (!empty($resultChunk)) {
@@ -179,6 +191,7 @@ class B2S_Video_Upload {
                                 $lastCall = false;
                             }
                         }
+
                         if (isset($resultChunk['networks']) && !empty($resultChunk['networks']) && is_array($resultChunk['networks'])) {
                             foreach ($resultChunk['networks'] as $k => $value) {
                                 if (isset($value['error']) && (int) $value['error'] == 1 && isset($value['post_id']) && (int) $value['post_id'] > 0 && isset($value['b2s_error_code']) && !empty($value['b2s_error_code'])) {

@@ -2,7 +2,7 @@
 
 class B2S_Api_Get {
 
-    public static function get($url = '', $timeout = 15) {
+    public static function get($url = '', $timeout = 30) {
         if (empty($url)) {
             return false;
         }

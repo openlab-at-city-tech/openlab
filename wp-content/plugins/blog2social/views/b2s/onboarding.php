@@ -115,7 +115,7 @@ $onboarding->startOnboarding();
 
                             </div>
                             <div class="col-sm-6 b2s-onboarding-premium-right">
-                                <a href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')) ?>" target="blank_" class="btn text-center b2s-onboarding-button"><?php esc_html_e("Buy Premium", "blog2social") ?></a>
+                                <a href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')) ?>" target="blank_" class="btn text-center b2s-onboarding-button"><?php esc_html_e("Buy Premium", "blog2social") ?></a>
 
                             </div>
                         </div>

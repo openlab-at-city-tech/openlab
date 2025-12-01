@@ -238,6 +238,7 @@ class B2S_Settings_Item {
         return $content;
     }
 
+    /*
     public function getNetworkSettingsHtml() {
         $optionPostFormat = $this->options->_getOption('post_template');
         $defaultPostFormat = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT);
@@ -247,7 +248,7 @@ class B2S_Settings_Item {
         if (B2S_PLUGIN_USER_VERSION < 2) {
             $content .= '<div class="alert alert-default">';
             $content .= '<b>' . esc_html__('Did you know?', 'blog2social') . '</b><br>';
-            $content .= esc_html__('With Premium Pro, you can change the custom post format photo post or link post for each individual social media post and channel (profile, page, group).', 'blog2social') . ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '">' . esc_html__('Upgrade to Premium Pro now.', 'blog2social') . '</a>';
+            $content .= esc_html__('With Premium Pro, you can change the custom post format photo post or link post for each individual social media post and channel (profile, page, group).', 'blog2social') . ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade to Premium Pro now.', 'blog2social') . '</a>';
             $content .= '<hr></div>';
         }
 
@@ -298,11 +299,10 @@ class B2S_Settings_Item {
             }
         }
         return $content;
-    }
+    }*/
 
     //New Version of Settings new View -not yet adapted for different images only for show purposes yet
-    /*
-    public function getNetworkSettingsHtml2() {
+    public function getNetworkSettingsHtml() {
         $optionPostFormat = $this->options->_getOption('post_template');
         $defaultPostFormat = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT);
         $content = '';
@@ -311,7 +311,7 @@ class B2S_Settings_Item {
         if (B2S_PLUGIN_USER_VERSION < 2) {
             $content .= '<div class="alert alert-default">';
             $content .= '<b>' . esc_html__('Did you know?', 'blog2social') . '</b><br>';
-            $content .= esc_html__('With Premium Pro, you can change the custom post format photo post or link post for each individual social media post and channel (profile, page, group).', 'blog2social') . ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '">' . esc_html__('Upgrade to Premium Pro now.', 'blog2social') . '</a>';
+            $content .= esc_html__('With Premium Pro, you can change the custom post format photo post or link post for each individual social media post and channel (profile, page, group).', 'blog2social') . ' <a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade to Premium Pro now.', 'blog2social') . '</a>';
             $content .= '<hr></div>';
         }
 
@@ -335,17 +335,17 @@ class B2S_Settings_Item {
                 $content .= '<div class= "b2s-user-network-settings-post-format-area col-md-12" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '"  data-network-id="' . esc_attr($networkId) . '" data-network-title="' . esc_attr($networkName[$networkId]) . '" style="display:none;" >';
                     $content .= '<div class= "b2s-user-network-settings-post-format-container b2s-user-network-settings-post-format-container-top">';
                         $content .= '<label class="radio-style"><input type="checkbox" name="b2s-user-network-settings-post-format-' . esc_attr($networkId) . '" class="b2s-user-network-settings-post-format-new ' . esc_attr($post_format_0) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="0" /><span class="custom-radio"></span></label>';
-                        $content .= '<img class="b2s-user-network-settings-post-format-area-new" src="' . esc_url(plugins_url('/assets/images/settings/newpostformat/'.esc_attr($networkId).'-0.png', B2S_PLUGIN_FILE)) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="0">';
-                        $content .= '<img class="b2s-user-network-settings-post-format-area-new-description" src="' . esc_url(plugins_url('/assets/images/settings/newpostformat/'.esc_attr($networkId).'-0-description.png', B2S_PLUGIN_FILE)) . '">';
+                        $content .= '<img class="b2s-user-network-settings-post-format-area-new" src="' . esc_url(plugins_url('/assets/images/settings/postformat/'.esc_attr($networkId).'-0.png', B2S_PLUGIN_FILE)) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="0">';
+                        $content .= '<img class="b2s-user-network-settings-post-format-area-new-description" src="' . esc_url(plugins_url('/assets/images/settings/postformat/'.esc_attr($networkId).'-0-description.png', B2S_PLUGIN_FILE)) . '">';
                     $content .= '</div>';
                     $content .= '<div class= "b2s-user-network-settings-post-format-container">';
                         $content .= '<label class="radio-style"><input type="checkbox" name="b2s-user-network-settings-post-format-' . esc_attr($networkId) . '" class="b2s-user-network-settings-post-format-new ' . esc_attr($post_format_1) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="1"/><span class="custom-radio"></span></label>';
-                        $content .= '<img class="b2s-user-network-settings-post-format-area-new" src="' . esc_url(plugins_url('/assets/images/settings/newpostformat/'.esc_attr($networkId).'-1.png', B2S_PLUGIN_FILE)) . '"   data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="1" >';
-                        $content .= '<img class="b2s-user-network-settings-post-format-area-new-description" src="' . esc_url(plugins_url('/assets/images/settings/newpostformat/'.esc_attr($networkId).'-1-description.png', B2S_PLUGIN_FILE)) . '">';
+                        $content .= '<img class="b2s-user-network-settings-post-format-area-new" src="' . esc_url(plugins_url('/assets/images/settings/postformat/'.esc_attr($networkId).'-1.png', B2S_PLUGIN_FILE)) . '"   data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '" data-post-format="1" >';
+                        $content .= '<img class="b2s-user-network-settings-post-format-area-new-description" src="' . esc_url(plugins_url('/assets/images/settings/postformat/'.esc_attr($networkId).'-1-description.png', B2S_PLUGIN_FILE)) . '">';
                     $content .= '</div>';
                     $content .= '<div>';
                     $faqLink =  esc_url(B2S_Tools::getSupportLink('faq_postformats'));
-                    $content .= '<div class="b2s-user-network-settings-post-format-faq">'.esc_html('Image Post vs. Link Post:', 'blog2social').' <a class="b2s-faq-link" target="_blank" href="'.$faqLink.'">What`s the difference</a></div>';
+                    $content .= '<div class="b2s-user-network-settings-post-format-faq">'.esc_html__('Image Post vs. Link Post:', 'blog2social').' <a class="b2s-faq-link" target="_blank" href="'.$faqLink.'">'.esc_html__("What`s the difference?", "blog2social").'</a></div>';
                     $content .= '<div class= "b2s-user-network-settings-post-format-button-container">';
                     $content .= '<button type="button" class="b2s-user-network-settings-post-format-apply" name="b2s-user-network-settings-post-format-' . esc_attr($networkId) . '" class="b2s-user-network-settings-post-format-new ' . esc_attr($post_format_0) . '" data-post-wp-type="" data-post-format-type="' . esc_attr($postFormatType) . '" data-network-type="' . esc_attr($typeId) . '" data-network-id="' . esc_attr($networkId) . '">Änderung übernehmen</button>';
                     $content .= '</div>';
@@ -356,7 +356,6 @@ class B2S_Settings_Item {
         }
         return $content;
     }
-    */
 
     //view=ship
     public function setNetworkSettingsHtml() {
@@ -365,20 +364,45 @@ class B2S_Settings_Item {
             $defaultTemplate = unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT);
         }
         $optionPostFormat = $this->options->_getOption('post_template');
+     
         $content = "<input type='hidden' class='b2sNetworkSettingsPostFormatText' value='" . json_encode(array('post' => array(__('Link Post', 'blog2social'), __('Image Post', 'blog2social')), 'image' => array(__('Image with frame', 'blog2social'), __('Image cut out', 'blog2social')))) . "'/>";
-        foreach (array(1, 2, 3, 12, 19, 15, 17, 24, 43, 44, 45) as $n => $networkId) { //FB,TW,LI,IN
+        foreach (array(1, 2, 3, 4, 12, 19, 15, 17, 24, 43, 44, 45) as $n => $networkId) { //FB,TW,LI,IN
             $postFormatType = ($networkId == 12) ? 'image' : 'post';
             $type = ($networkId == 1 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3 || $networkId == 19) ? array(0, 1) : (($networkId == 12) ? array(1) : array(0)));
-            foreach ($type as $t => $typeId) { //Profile,Page,Group                
-                if (!isset($optionPostFormat[$networkId][$typeId]['format']) || (int) $optionPostFormat[$networkId][$typeId]['format'] < 0 || (int) $optionPostFormat[$networkId][$typeId]['format'] > 1) { //DEFAULT
-                    if (is_array($defaultTemplate) && isset($defaultTemplate[$networkId][$typeId]['format']) && $defaultTemplate[$networkId][$typeId]['format'] >= 0 && $defaultTemplate[$networkId][$typeId]['format'] <= 1) {
-                        $value = $defaultTemplate[$networkId][$typeId]['format'];
+            foreach ($type as $t => $typeId) { //Profile,Page,Group    
+
+                //Tumblr Special Post Format
+                if($networkId == 4 ){
+                    
+                    if (!isset($optionPostFormat[$networkId][$typeId]['format']) || !in_array((int) $optionPostFormat[$networkId][$typeId]['format'], array(1,2,3)) ) { //DEFAULT
+                        
+                
+                        if(!isset($defaultTemplate[$networkId][$typeId]['format']) || !in_array((int) $defaultTemplate[$networkId][$typeId]['format'], array(1,2,3)) ){
+                            $value = 0; //default tumblr to html
+                        }else
+                        {
+                            $value = $defaultTemplate[$networkId][$typeId]['format'];
+                        }
+
                     } else {
-                        $value = ($networkId == 2 || $networkId == 43 || $networkId == 45) ? 1 : 0;  //default see B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT
+
+                        $value = $optionPostFormat[$networkId][$typeId]['format'];
                     }
-                } else {
-                    $value = $optionPostFormat[$networkId][$typeId]['format'];
+                   
+                }else{
+
+                    if (!isset($optionPostFormat[$networkId][$typeId]['format']) || (int) $optionPostFormat[$networkId][$typeId]['format'] < 0 || ((int) $optionPostFormat[$networkId][$typeId]['format'] > 1)) { //DEFAULT
+                    
+                        if (is_array($defaultTemplate) && isset($defaultTemplate[$networkId][$typeId]['format']) && $defaultTemplate[$networkId][$typeId]['format'] >= 0 && $defaultTemplate[$networkId][$typeId]['format'] <= 1) {
+                            $value = $defaultTemplate[$networkId][$typeId]['format'];
+                        } else {
+                            $value = ($networkId == 2 || $networkId == 43 || $networkId == 45) ? 1 : 0;  //default see B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT
+                        }
+                    } else {
+                        $value = $optionPostFormat[$networkId][$typeId]['format'];
+                    }
                 }
+                
                 $content .= "<input type='hidden' class='b2sNetworkSettingsPostFormatCurrent' data-post-format-type='" . esc_attr($postFormatType) . "' data-network-id='" . esc_attr($networkId) . "' data-network-type='" . esc_attr($typeId) . "' value='" . (int) esc_attr($value) . "' />";
             }
         }

@@ -444,3 +444,126 @@ body .fc-day-grid-event .fc-content{
     right: 0px;
     font-weight: 700 !important;
 }
+
+/*new Post Format*/
+
+.b2s-user-network-settings-post-format-area-new{
+   /* width: 37%;*/
+   /* box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.3);
+    align-self: flex-start;
+    height: 100%;
+    */
+    box-shadow: 0px 18px 30px -11px rgba(50,65,84,.27);
+    /*box-shadow: 0px 18px 30px -10px #3241545C;*/
+    border-radius: 12px;
+   
+    height: auto;
+    display: block;
+    object-fit: contain;
+    width: 50%;
+}
+.b2s-user-network-settings-post-format-area-new-description{
+    
+    padding-left: 5px;
+   /* width: 37%;
+    align-self: flex-start;
+    height: 100%;
+    */
+    /*
+    height: 100%;       
+    width: auto;        
+    object-fit: contain;  /* Prevent distortion or cropping */
+
+   
+    display: block;
+ }
+
+.b2s-user-network-settings-post-format-area-new:hover {
+    border: 2px solid #b5b5b5 
+}
+    
+
+.b2s-user-network-settings-post-format-apply{
+
+    background-color: #79B331;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: regular;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-top: 10px;
+    float: right;
+    border: none;
+    cursor: pointer;
+}
+/*Custom radio buttons*/
+.radio-style {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .radio-style input[type="checkbox"] {
+    display: none;
+  }
+  
+  .radio-style .custom-radio {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #79B331;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+  }
+  
+  .radio-style input[type="checkbox"]:checked + .custom-radio::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: #79B331;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.b2s-user-network-settings-post-format-faq{
+    padding-top:13px;
+}
+
+.b2s-user-network-settings-post-format-area-new-container{
+    display: flex;
+    width: 100%;
+}
+.b2s-user-network-settings-post-format-button-container{
+    width: 100%;
+}
+.b2s-user-network-settings-post-format-container{
+    display: -webkit-inline-box; 
+    
+    align-items: stretch; 
+    /*flex-direction: column;*/
+    /*
+    gap:8px;*/
+    height: 320px;
+    width:100%;
+}
+
+.b2s-user-network-settings-post-format-hidden{
+    visibility: hidden;
+}
+.b2s-user-network-settings-post-format-container-top{
+    margin-bottom: 20px;
+}
+
+input[type="radio"] {
+    accent-color:#79b232
+}
+
+.b2s-settings-checked-new{
+    border: 2px solid #79B331 !important
+}
+

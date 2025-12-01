@@ -40,6 +40,11 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                     <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No posts found. Please try again with different filter options.', 'blog2social'); ?>
                 </div>
             </div>
+            <div class="panel panel-group b2s-left-border-danger no_network_in_group" style="display: none;">
+                <div class="panel-body">
+                    <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No connected networks. Please make sure to connect at least one social media account in your network collection.', 'blog2social'); ?>
+                </div>
+            </div>
             <div class="panel panel-group b2s-left-border-danger b2s-re-post-content-in-queue" style="display: none;">
                 <div class="panel-body">
                     <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The posts you tried to add are already in your sharing queue. If you want to re-schedule them, please delete the posts before adding them again.', 'blog2social'); ?>
@@ -273,42 +278,65 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 'data-network-type' => array()
                             )
                         ));
-                        echo wp_kses($settingsItem->getNetworkSettingsHtml(), array(
-                            'div' => array(
-                                'class' => array(),
-                                'data-post-format-type' => array(),
-                                'data-network-type' => array(),
-                                'data-network-id' => array(),
-                                'data-network-title' => array(),
-                                'style' => array()
-                            ),
-                            'b' => array(),
-                            'br' => array(),
-                            'a' => array(
-                                'target' => array(),
-                                'href' => array()
-                            ),
-                            'hr' => array(),
-                            'span' => array(
-                                'class' => array()
-                            ),
-                            'label' => array(),
-                            'input' => array(
-                                'type' => array(),
-                                'name' => array(),
-                                'value' => array(),
-                                'class' => array(),
-                                'data-post-wp-type' => array(),
-                                'data-post-format-type' => array(),
-                                'data-network-type' => array(),
-                                'data-network-id' => array(),
-                                'data-post-format' => array()
-                            ),
-                            'img' => array(
-                                'class' => array(),
-                                'src' => array()
-                            )
-                        ));
+                         echo wp_kses($settingsItem->getNetworkSettingsHtml(), array(
+                                                        'div' => array(
+                                                            'class' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-network-title' => array(),
+                                                            'style' => array()
+                                                        ),
+                                                        'b' => array(),
+                                                        'br' => array(),
+                                                        'a' => array(
+                                                            'target' => array(),
+                                                            'href' => array(),
+                                                            'class' => array()
+                                                        ),
+                                                        'hr' => array(),
+                                                        'span' => array(
+                                                            'class' => array()
+                                                        ),
+                                                        'label' => array(
+                                                            'class' => array()
+                                                        ),
+                                                        'input' => array(
+                                                            'type' => array(),
+                                                            'name' => array(),
+                                                            'value' => array(),
+                                                            'class' => array(),
+                                                            'data-post-wp-type' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-post-format' => array(),
+                                                            'data-network-count' => array(),
+                                                            'identifier'=>array()
+                                                        ),
+                                                        'img' => array(
+                                                            'class' => array(),
+                                                            'src' => array(),
+                                                            'identifier'=>array(),
+                                                            'data-post-format' => array(),
+                                                            'data-post-wp-type' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-post-format' => array(),
+                                                        ),
+                                                        'button' => array(
+                                                            'type' => array(),
+                                                            'class' => array(),
+                                                            'data-post-wp-type' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-post-format' => array(),
+                                                            'data-network-count' => array(),
+                                                            'identifier'=>array()
+                                                        )
+                                                    ));
                         ?>
                     </div>
                 </div>
