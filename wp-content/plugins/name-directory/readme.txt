@@ -7,7 +7,7 @@ Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
 Tested up to: 6.9
-Stable tag: 1.30.2
+Stable tag: 1.30.3
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -265,6 +265,10 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.30.3 | November 22, 2025 =
+ * Enhancement: Tested again with new WordPress 6.9
+ * Bugfix: Fixed a small bug when an extra div-element was rendered
 
 = 1.30.2 | October 11, 2025 =
  * Enhancement: Tested with WordPress 6.9
