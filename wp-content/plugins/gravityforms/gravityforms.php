@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.9.20
+Version: 2.9.23
 Requires at least: 6.5
 Requires PHP: 7.4
 Author: Gravity Forms
@@ -257,7 +257,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.9.20';
+	public static $version = '2.9.23';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -2698,7 +2698,7 @@ class GFForms {
 							/* translators: %1$s Plugin name %2$s and %3$s are link tag markup */
 							__( 'The %1$s is not available with the configured license; please visit the %2$sGravity Forms website%3$s to verify your license. ', 'gravityforms' ),
 								esc_html( rgar( $plugin_data, 'Name' ) ),
-								'<a href="https://www.gravityforms.com/my-account/licenses/?utm_source=gf-admin&utm_medium=purchase-link&utm_campaign=license-enforcement" target="_blank">',
+								'<a href="https://account.gravity.com/?utm_source=gf-admin&utm_medium=purchase-link&utm_campaign=license-enforcement" target="_blank">',
 								'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link" aria-hidden="true"></span></a>'
 							);
 			}
@@ -7053,6 +7053,43 @@ class GFForms {
 		$parser = new Dom_Parser( $content );
 
 		return $parser->get_injected_html();
+	}
+
+	/**
+	* Get information about all installed plugins.
+	*
+	* The returned array is keyed by the plugin slug (directory name)
+	* and contains plugin name, version, path, and whether it is active.
+	*
+	* @since 2.9.23
+	*
+	* @return array Array of plugin information.
+	*/
+	public static function get_installed_plugins() {
+		static $plugins_info = null;
+
+		if ( $plugins_info !== null ) {
+			return $plugins_info;
+		}
+
+		// List all installed plugins with their active status.
+		$all_plugins    = get_plugins();
+		$active_plugins = get_option( 'active_plugins' );
+
+		$plugins_info = array();
+
+		foreach ( $all_plugins as $plugin_path => $plugin ) {
+			$is_active = in_array( $plugin_path, $active_plugins, true );
+
+			$plugins_info[ dirname( $plugin_path ) ] = array(
+				'name'      => $plugin['Name'],
+				'version'   => $plugin['Version'],
+				'path'      => $plugin_path,
+				'is_active' => $is_active,
+			);
+		}
+
+		return $plugins_info;
 	}
 
 }

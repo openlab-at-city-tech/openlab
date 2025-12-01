@@ -1230,6 +1230,8 @@ abstract class GFFeedAddOn extends GFAddOn {
 
 		$wpdb->update( "{$wpdb->prefix}gf_addon_feed", array( 'is_active' => $is_active ), array( 'id' => $id ), array( '%d' ), array( '%d' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
+		$success = $wpdb->rows_affected > 0;
+
 		/*
 		 * Do an action after a feed status has been updated.
 		 *
@@ -1241,7 +1243,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 		 */
 		do_action( 'gform_update_feed_active', $id, $is_active, $this );
 
-		return $wpdb->rows_affected > 0;
+		return $success;
 	}
 
 	/**
@@ -2400,7 +2402,6 @@ abstract class GFFeedAddOn extends GFAddOn {
 			add_filter( 'gform_addon_feed_settings_fields', array( $this, 'add_post_payment_actions' ), 10, 2 );
 		}
 
-		add_action( 'gform_paypal_fulfillment', array( $this, 'paypal_fulfillment' ), 10, 4 );
 		add_action( 'gform_trigger_payment_delayed_feeds', array( $this, 'action_trigger_payment_delayed_feeds' ), 10, 4 );
 	}
 
@@ -2492,21 +2493,6 @@ abstract class GFFeedAddOn extends GFAddOn {
 		}
 
 		return $feed_settings_fields;
-	}
-
-	/**
-	 * Triggers processing of feeds delayed by the PayPal add-on.
-	 *
-	 * @since 2.4.13 Updated to use action_trigger_payment_delayed_feeds().
-	 * @since unknown
-	 *
-	 * @param array  $entry          The entry currently being processed.
-	 * @param array  $paypal_config  The payment feed which originated the transaction.
-	 * @param string $transaction_id The transaction or subscription ID.
-	 * @param string $amount         The transaction amount.
-	 */
-	public function paypal_fulfillment( $entry, $paypal_config, $transaction_id, $amount ) {
-		$this->action_trigger_payment_delayed_feeds( $transaction_id, $paypal_config, $entry );
 	}
 
 	/**
