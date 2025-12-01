@@ -37,3 +37,9 @@
 [submodule "wp-content/themes/red-dragon-portfolio"]
 	path = wp-content/themes/red-dragon-portfolio
 	url = https://github.com/beckej13820/red-dragon-portfolio
+[submodule "wp-content/plugins/publication-checklist"]
+	path = wp-content/plugins/publication-checklist
+	url = https://github.com/humanmade/publication-checklist/
+[submodule "wp-content/plugins/demo-publication-checklist"]
+	path = wp-content/plugins/demo-publication-checklist
+	url = https://github.com/humanmade/demo-publication-checklist/
