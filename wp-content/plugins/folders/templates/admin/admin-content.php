@@ -229,7 +229,7 @@ $horClass = (!isset($customize_folders['enable_horizontal_scroll']) || $customiz
                         <div class="folder-separator-2"></div>
                         <div class="folders-action-menu">
                             <ul>
-                                <li style="flex: 0 0 22px;"><a href="#" class="no-bg"><input type="checkbox" id="menu-checkbox" ></a></li>
+                                <li style="align-items: center; justify-content: center; vertical-align: middle; display: flex;"> <span class="no-bg full-width"><input type="checkbox" id="menu-checkbox" ></span></li>
                                 <li class="folder-inline-tooltip">
                                     <a class="full-width upload-media-action disabled" target="_blank" href="<?php echo esc_url($this->getFoldersUpgradeURL()) ?>">
                                         <span class="inline-tooltip"><?php esc_html_e("Uploading folder is pro feature", "folders"); ?> <span><?php esc_html_e("Upgrade Now 🎉", "folders") ?></span></span>
