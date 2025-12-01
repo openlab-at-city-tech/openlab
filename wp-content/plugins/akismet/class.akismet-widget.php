@@ -137,7 +137,7 @@ class Akismet_Widget extends WP_Widget {
 		</style>
 
 		<div class="a-stats">
-			<a href="https://akismet.com" class="a-stats__link" target="_blank" rel="noopener" style="background-color: var(--akismet-color-mid-green); color: var(--akismet-color-white);">
+			<a href="https://akismet.com?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=widget_stats" class="a-stats__link" target="_blank" rel="noopener" style="background-color: var(--akismet-color-mid-green); color: var(--akismet-color-white);">
 				<?php
 
 				echo wp_kses(

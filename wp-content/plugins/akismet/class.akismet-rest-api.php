@@ -28,7 +28,7 @@ class Akismet_REST_API {
 							'required'          => true,
 							'type'              => 'string',
 							'sanitize_callback' => array( 'Akismet_REST_API', 'sanitize_key' ),
-							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/get/', 'akismet' ),
+							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/account', 'akismet' ),
 						),
 					),
 				),
@@ -119,7 +119,7 @@ class Akismet_REST_API {
 							'required'          => false,
 							'type'              => 'string',
 							'sanitize_callback' => array( 'Akismet_REST_API', 'sanitize_key' ),
-							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/get/', 'akismet' ),
+							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/account', 'akismet' ),
 						),
 					),
 				),
@@ -132,7 +132,7 @@ class Akismet_REST_API {
 							'required'          => false,
 							'type'              => 'string',
 							'sanitize_callback' => array( 'Akismet_REST_API', 'sanitize_key' ),
-							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/get/', 'akismet' ),
+							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/account', 'akismet' ),
 						),
 					),
 				),
@@ -145,7 +145,7 @@ class Akismet_REST_API {
 							'required'          => false,
 							'type'              => 'string',
 							'sanitize_callback' => array( 'Akismet_REST_API', 'sanitize_key' ),
-							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/get/', 'akismet' ),
+							'description'       => __( 'A 12-character Akismet API key. Available at akismet.com/account', 'akismet' ),
 						),
 					),
 				),
@@ -388,7 +388,7 @@ class Akismet_REST_API {
 	public static function remote_call_permission_callback( $request ) {
 		$local_key = Akismet::get_api_key();
 
-		return $local_key && ( strtolower( $request->get_param( 'key' ) ) === strtolower( $local_key ) );
+		return $local_key && ( strtolower( $request->get_param( 'key' ) ?? '' ) === strtolower( $local_key ) );
 	}
 
 	public static function sanitize_interval( $interval, $request, $param ) {

@@ -1,4 +1,4 @@
-/* This file was automatically generated on Jun 19 2025 22:00:12 */
+/* This file was automatically generated on Oct 30 2025 21:26:42 */
 
 .wp-admin.jetpack_page_akismet-key-config, .wp-admin.settings_page_akismet-key-config {
 	background-color:#f3f6f8;
@@ -93,13 +93,6 @@ table.comments td.comment p a:after {
 	margin: 1em 0;
 }
 
-.akismet-alert-text {
-	color: #dd3d36;
-	font-weight: bold;
-	font-size: 120%;
-	margin-top: .5rem;
-}
-
 .akismet-new-snapshot {
 	margin-top: 1em;
 	text-align: center;
@@ -120,12 +113,6 @@ table.comments td.comment p a:after {
 	box-sizing: border-box;
 }
 
-.akismet-new-snapshot__number {
-	display: block;
-	font-size: 32px;
-	font-weight: lighter;
-	line-height: 1.5em;
-}
 
 .akismet-settings th:first-child {
 	vertical-align: top;
@@ -297,18 +284,6 @@ table.comments td.comment p a:after {
 	margin: 0;
 }
 
-.akismet-jetpack-email {
-	font-style: oblique;
-}
-
-.akismet-jetpack-gravatar {
-	padding: 0 1.5rem 0 0;
-	float: right;
-	margin-left: 1rem;
-	width: 54px;
-	height: 54px;
-}
-
 .akismet-box p:after {
 	content: ".";
 	display: block;
@@ -335,29 +310,8 @@ table.comments td.comment p a:after {
 	margin-top: 1.5rem;
 }
 
-.akismet-box-header {
-	max-width: 700px;
-	margin: 0 auto 40px auto;
-	line-height: 1.5;
-}
-
-.akismet-box-header h2 {
-	margin: 1.5rem 10% 0;
-	font-size: 1.375rem;
-	font-weight: 700;
-	color: #000;
-}
-
 .akismet-box .centered {
 	text-align: center;
-}
-
-.akismet-box .akismet-toggles {
-	margin: 3rem 0;
-}
-
-.akismet-box .akismet-ak-connect, .akismet-box .toggle-jp-connect {
-	display: none;
 }
 
 .akismet-button, .akismet-button:hover, .akismet-button:visited {
@@ -434,12 +388,13 @@ table.comments td.comment p a:after {
 	line-height: 1.75rem;
 }
 
-.akismet-setup-instructions {
-	text-align: center;
-}
-
 .akismet-setup-instructions form {
 	padding-bottom: 1.5rem;
+}
+
+.akismet-setup-instructions > a.akismet-button {
+	display: inline-block;
+	margin-bottom: 1.5rem;
 }
 
 div.error.akismet-usage-limit-alert {
@@ -479,6 +434,7 @@ div.error.akismet-usage-limit-alert {
 }
 
 .akismet-usage-limit-alert h3 {
+	line-height: 1.3;
 	margin: 0;
 }
 
