@@ -5,7 +5,7 @@ Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 6.9.7
+Stable tag: 6.9.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,18 @@ This plugin is compatible with all media types, including retina and WebP versio
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.9.8 (2025/11/13) =
+* Update: Enhanced UI and UX.
+* Fix: Fixed the Smart Slider 3 parser to load correctly and function as expected.
+* Add: Parsed "href" and "src" attributes in Enfold HTML to accurately extract URLs.
+* Refactor: Enhanced caching to store IDs and URLs in the DB.
+* Add: Support for the "value" attribute in Divi 5 blocks to facilitate ID extraction.
+* Update: Refined Divi parser to support both Divi 4 and Divi 5 simultaneously.
+* Fix: Hotfix for handling null values with substr, avoiding deprecated functions.
+* Fix: Fixed the Scan confirmation prompt to show only once.
+* Fix: Restricted scope of the "substr" function to prevent deprecation issues.
+* Update: Optimized database checks and CLI commands for faster performance.
 
 = 6.9.7 (2025/09/30) =
 * Add: Timeout mechanism to avoid a stalled scan.

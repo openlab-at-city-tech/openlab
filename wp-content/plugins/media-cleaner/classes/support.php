@@ -121,7 +121,7 @@ class Meow_WPMC_Support {
 			array_push( $unsupported, 'Advanced Ads' );
     }
 
-    if ( function_exists( 'smart_slider_3_plugins_loaded' ) ) {
+    if ( defined( 'SMARTSLIDER3_LIBRARY_PATH' ) ) {
 			array_push( $unsupported, 'Smart Slider' );
     }
 

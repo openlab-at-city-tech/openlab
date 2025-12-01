@@ -1,6 +1,6 @@
 <?php
 
-class Meow_WPMC_Admin extends MeowCommon_Admin {
+class Meow_WPMC_Admin extends MeowKit_WPMC_Admin {
 
   private $core = null;
 
