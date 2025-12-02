@@ -150,12 +150,16 @@ function gquizSetFieldChoice(index) {
 
     //set field selections
     jQuery('#field_choices :radio, #field_choices :checkbox').each(function (index) {
+        // if field.choices[index] is undefined, it means the choice was deleted
+        if (typeof field.choices[index] === 'undefined') {
+            return;
+        }
         field.choices[index].isSelected = this.checked;
     });
 
     LoadBulkChoices(field);
 
-    UpdateFieldChoices(GetInputType(field));
+    RefreshSelectedFieldPreview();
 }
 
 function gquizInsertChoice(index) {
@@ -165,23 +169,33 @@ function gquizInsertChoice(index) {
 
     field.choices.splice(index, 0, new_choice);
     gquizLoadChoices();
-    UpdateFieldChoices(GetInputType(field));
+    RefreshSelectedFieldPreview();
 }
 
-function gquizDeleteChoice(index) {
+async function gquizDeleteChoice(index) {
 
     var field = GetSelectedField();
     var value = jQuery('#gquiz-choice-value-' + index).val();
 
-    if (HasConditionalLogicDependency(field.id, value)) {
-        if (!confirm(gf_vars.conditionalLogicDependencyChoice)) {
-            return;
+    const hasDependency = await HasConditionalLogicDependency(field.id, value);
+    if (hasDependency) {
+        var message = gf_vars.conditionalLogicDependencyChoiceEdit.replace('{type}', hasDependency);
+
+        if( typeof gform.instances.dialogAlert == 'function' ) {
+          const confirmed = await gform.instances.dialogConfirmAsync(gf_vars.conditionalLogicWarningTitle, message);
+           if ( !confirmed ) {
+                return;
+            }
+        } else {
+            if ( !confirm( message ) ) {
+              return;
+            }
         }
     }
 
     field.choices.splice(index, 1);
     gquizLoadChoices();
-    UpdateFieldChoices(GetInputType(field));
+    RefreshSelectedFieldPreview();
 }
 
 function gquizLoadChoices() {
@@ -301,7 +315,7 @@ function gquizMoveFieldChoice(fromIndex, toIndex) {
     //inserting into new position
     field.choices.splice(toIndex, 0, choice);
     gquizLoadChoices();
-    UpdateFieldChoices(GetInputType(field));
+    RefreshSelectedFieldPreview();;
 }
 
 function SetDefaultValues_quiz(field) {

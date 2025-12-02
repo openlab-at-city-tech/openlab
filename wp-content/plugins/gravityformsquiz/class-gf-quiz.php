@@ -53,6 +53,7 @@ class GFQuiz extends GFAddOn {
 
 	protected $_version = GF_QUIZ_VERSION;
 	protected $_min_gravityforms_version = '1.9.10';
+	protected $_min_compatible_gravityforms_version = '2.9.2';
 	protected $_slug = 'gravityformsquiz';
 	protected $_path = 'gravityformsquiz/quiz.php';
 	protected $_full_path = __FILE__;
@@ -2419,7 +2420,8 @@ class GFQuiz extends GFAddOn {
 		/**
 		 * A filter to either allow or disallow choice values using true or false (Default is false)
 		 */
-		$show_values_style = apply_filters( 'gform_quiz_show_choice_values', false ) ? '' : ' style="display:none;"';
+		$show_values_style       = apply_filters( 'gform_quiz_show_choice_values', false ) ? '' : ' style="display:none;"';
+		$choice_options_position = version_compare( GFForms::$version, '2.9.1.4', '<=' ) ? 1363 : 1368;
 
 		if ( $position == 10 ) {
 			?>
@@ -2497,23 +2499,23 @@ class GFQuiz extends GFAddOn {
 			</li>
 
 			<?php
-		} elseif ( $position == 1368 ) {
+		} elseif ( $position == $choice_options_position ) {
 			//right after the other_choice_setting
 			?>
-			<li class="gquiz-setting-randomize-quiz-choices field_setting" data-js="choices-ui-setting" data-type="option">
+			<li class="gquiz-setting-randomize-quiz-choices field_setting">
 
 				<input type="checkbox" id="gquiz-randomize-quiz-choices" onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizEnableRandomizeQuizChoices', value);">
 				<label for="gquiz-randomize-quiz-choices" class="inline"><?php esc_html_e( 'Randomize order of choices', 'gravityformsquiz' ); ?><?php gform_tooltip( 'gquiz_randomize_quiz_choices' ); ?></label>
 
 			</li>
-			<li class="gquiz-setting-show-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
+			<li class="gquiz-setting-show-answer-explanation field_setting">
 
 				<input type="checkbox" id="gquiz-show-answer-explanation"
 				       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizShowAnswerExplanation', value); gquiz_toggle_answer_explanation(value);"/>
 				<label for="gquiz-show-answer-explanation" class="inline"><?php esc_html_e( 'Enable answer explanation', 'gravityformsquiz' ); ?><?php gform_tooltip( 'gquiz_enable_answer_explanation' ) ?></label>
 
 			</li>
-			<li class="gquiz-setting-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
+			<li class="gquiz-setting-answer-explanation field_setting">
 				<label for="gquiz-answer-explanation">
 					<?php esc_html_e( 'Quiz answer explanation', 'gravityformsquiz' ); ?>
 					<?php gform_tooltip( 'gquiz_answer_explanation' ); ?>

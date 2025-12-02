@@ -1,7 +1,8 @@
-### 4.2.1
-- Updated Quiz to be released with minified and non-minified assets.
+### 4.3.0 | 2025-06-12
 - Added support for displaying instant feedback on more than one form on the same page.
-
+- Fixed an issue where the 'Randomize order of choices' and 'Enable answer explanation' settings are not displaying in the sidebar.
+- Updated the add-on to be released with minified and non-minified assets.
+- Updated the choices flyout to be compatible with recent changes in Gravity Forms.
 
 ### 4.2.0 | 2024-07-29
 - Updated the feedback icons to be visible on all background colors.
