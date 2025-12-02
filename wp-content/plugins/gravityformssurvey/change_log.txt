@@ -1,7 +1,17 @@
-### 4.1.1
-- Updated Survey to be released with minified and non-minified assets.
+### 4.2.2
+- Fixed an issue where Survey icon is not displayed on Uninstall screen.
+- Fixed a fatal error that occurs when the site is using plain permalinks.
+
+### 4.2.1
+- Fixed fatal error due to class name duplication.
+
+### 4.2.0 | 2025-06-10
+- Updated the add-on to be released with minified and non-minified assets.
 - Fixed a bug that causes the Rating choices to not be saved when navigating between pages or failing validation.
 - Fixed a bug that can cause PHP errors in the dashboard.
+- API: Fixed an issue where the Survey field does not use the correct styles in a conversational form.
+- API: Fixed an issue where Theme Framework CSS API properties for Survey fields are output when not using the Orbital theme and no Survey field is present.
+- API: Removed the deprecated form Theme Framework global CSS API properties used in `theme_layer_form_css_properties`.
 
 
 ### 4.1.0 | 2024-10-02
