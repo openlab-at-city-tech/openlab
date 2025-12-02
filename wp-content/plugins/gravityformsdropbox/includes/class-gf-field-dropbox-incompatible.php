@@ -39,10 +39,26 @@ class GF_Field_Dropbox extends GF_Field {
 
 		// If we are in the form editor, display an error message.
 		if ( $this->is_form_editor() ) {
-			return sprintf(
-				'<div class="ginput_container"><p>%s</p></div>',
-				$this->get_field_sidebar_messages()
-			);
+			return '<div class="ginput_container ginput_container_addon_message ginput_container_addon_message_dropbox">
+                <div class="gform-alert gform-alert--info gform-alert--theme-cosmos gform-spacing gform-spacing--bottom-0 gform-theme__disable">
+                    <span
+                        class="gform-icon gform-icon--information-simple gform-icon--preset-active gform-icon-preset--status-info gform-alert__icon"
+                        aria-hidden="true"
+                    ></span>
+                    <div class="gform-alert__message-wrap">
+                        <div class="gform-alert__message">
+                            '. __( 'Configuration Required', 'gravityformsdropbox' ) .'
+	                        <div class="gform-spacing gform-spacing--top-1">'. sprintf(
+							'%s %s%s%s.',
+							__( 'To use the Dropbox Upload field, please configure your', 'gravityformsdropbox' ),
+							'<a href="?page=gf_settings&subview=gravityformsdropbox" target="_blank">',
+							__( 'Dropbox settings', 'gravityformsdropbox' ),
+							'</a>'
+						) .'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>';
 		}
 
 		return '';
@@ -57,7 +73,16 @@ class GF_Field_Dropbox extends GF_Field {
 	 * @return array|array[]|string
 	 */
 	public function get_field_sidebar_messages() {
-		return esc_html__( 'Dropbox Upload field is unavailable because the Dropbox Add-On is not configured using a custom Dropbox App.', 'gravityformsdropbox' );
+		return array(
+			'type'             => 'notice',
+			'content'          => sprintf(
+				'%s<div class="gform-spacing gform-spacing--top-1">%s</div>',
+				__( 'Configuration Required', 'gravityformsgravityformsdropbox' ),
+				// Translators: 1. Opening <a> tag with link to the Forms > Settings > Dropbox page. 2. closing <a> tag.
+				sprintf( __( 'To use the Dropbox Upload field, please configure your %1$sDropbox settings%2$s.', 'gravityformsdropbox' ), '<a href="?page=gf_settings&subview=gravityformsdropbox" target="_blank">', '</a>' )
+			),
+			'icon_helper_text' => __( 'This field requires additional configuration', 'gravityformsdropbox' ),
+		);
 	}
 
 	/**
