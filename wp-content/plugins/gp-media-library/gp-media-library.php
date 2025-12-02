@@ -3,7 +3,7 @@
  * Plugin Name: GP Media Library
  * Description: Upload files from a Gravity Forms File Upload field to the WordPress media library.
  * Plugin URI: https://gravitywiz.com/documentation/gravity-forms-media-library/
- * Version: 1.2.29
+ * Version: 1.2.35
  * Author: Gravity Wiz
  * Author URI: http://gravitywiz.com/
  * License: GPL2
@@ -13,7 +13,7 @@
  * Domain Path: /languages
  */
 
-define( 'GP_MEDIA_LIBRARY_VERSION', '1.2.29' );
+define( 'GP_MEDIA_LIBRARY_VERSION', '1.2.35' );
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-gp-bootstrap.php';
 
