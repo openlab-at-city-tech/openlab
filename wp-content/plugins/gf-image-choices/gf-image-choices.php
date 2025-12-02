@@ -1,36 +1,49 @@
 <?php
+if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
+    add_action( 'admin_notices', function() {
+        echo '<div class="notice notice-error"><p>';
+        echo esc_html__( 'Gravity Forms Image Choices requires PHP 7.4 or higher. Please upgrade your PHP version.', 'gf_image_choices' );
+        echo '</p></div>';
+    } );
+    return;
+}
 /*
 Plugin Name: Gravity Forms Image Choices
 Plugin URI: https://jetsloth.com/gravity-forms-image-choices/
 Description: Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
 Author: JetSloth
-Version: 1.5.4
+Version: 1.6.16
 Requires at least: 3.5
-Tested up to: 6.6.2
+Tested up to: 6.8.1
 Author URI: https://jetsloth.com
-License: GPL2
+License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+SPDX-License-Identifier: GPL-2.0-or-later
 Text Domain: gf_image_choices
+Requires PHP: 7.4
 */
 
 /*
-	Copyright 2017 JetSloth
+SPDX-License-Identifier: GPL-2.0-or-later
+Copyright (c) 2025 JetSloth
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+You should have received a copy of the GNU General Public License
+along with this program; see license.txt. If not, see https://www.gnu.org/licenses/.
+
+Assets & trademarks: See readme.txt (“Assets & trademarks”) for details on non-GPL assets and trademarks.
 */
 
-define('GFIC_VERSION', '1.5.4');
+define('GFIC_VERSION', '1.6.16');
 define('GFIC_HOME', 'https://jetsloth.com');
 define('GFIC_NAME', 'Gravity Forms Image Choices');
 define('GFIC_SLUG', 'gf-image-choices');
@@ -75,7 +88,7 @@ function gf_image_choices_plugin_updater() {
 
 	if ( ! class_exists( 'Image_Choices_Plugin_Updater' ) ) {
 		// load our custom updater if it doesn't already exist
-		include_once( dirname( __FILE__ ) . '/inc/Image_Choices_Plugin_Updater.php' );
+		include_once( dirname( __FILE__ ) . '/edd/Image_Choices_Plugin_Updater.php' );
 	}
 
 	// retrieve the license key

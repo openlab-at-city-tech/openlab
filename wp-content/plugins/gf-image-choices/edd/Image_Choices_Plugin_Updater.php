@@ -564,6 +564,9 @@ class Image_Choices_Plugin_Updater {
 			array(
 				'timeout'   => 15,
 				'sslverify' => $this->verify_ssl(),
+				'headers'   => array(
+					'x-jetsloth-license' => '1',
+				),
 				'body'      => $api_params,
 			)
 		);

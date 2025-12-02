@@ -1,2 +1,1867 @@
-var imageChoicesAdmin=imageChoicesAdmin||{};!function(e){var i=2;imageChoicesAdmin.markupDetect=function(){return void 0!==window.form&&window.form.hasOwnProperty("markupVersion")&&(i=""!==window.form.markupVersion?parseInt(window.form.markupVersion.toString(),10):1),i},imageChoicesAdmin.isLegacyMode=function(){return!(imageChoicesVars.hasOwnProperty("useNewFeatures")&&"true"===imageChoicesVars.useNewFeatures.toString())},imageChoicesAdmin.formHasImageChoicesFields=function(){var i=!1;return e.each(window.form.fields,(function(e,t){if(t.hasOwnProperty("imageChoices_enableImages")&&t.imageChoices_enableImages)return i=!0,!1})),i},imageChoicesAdmin.markup={removeChoicesButton:function(){return'<button class="button image-choices-remove-choices-btn" type="button" onclick="imageChoicesAdmin.removeAllChoices();">'+imageChoicesFieldStrings.removeAllChoices+"</button>"},choicesAdminRow:function(e,i,t){var o=void 0!==e?e:0,a=void 0!==i?i:"";t=void 0!==t?t:"";return['<button type="button" id="image-choices-option-upload-button-'+o+'" class="button image-choices-option-upload-button" onclick="imageChoicesAdmin.OpenMediaLibrary(this);" title="'+imageChoicesFieldStrings.uploadImage+'"><i class="ic-select-icon"></i></button>','<span id="image-choices-option-preview-'+o+'" class="image-choices-option-preview-wrap">','<span class="image-choices-option-preview" style="background-image:url('+a+');"></span>','<a href="javascript:void(0);" class="image-choices-option-image-remove" onclick="imageChoicesAdmin.RemovePreview(this);" title="'+imageChoicesFieldStrings.removeImage+'"><i class="dashicons dashicons-no"></i></a>',"</span>",'<input type="hidden" id="image-choices-option-image-'+o+'" class="image-choices-option-image" value="'+a+'" />','<input type="hidden" id="image-choices-option-image-id-'+o+'" class="image-choices-option-image-id" value="'+t+'" />'].join("")},choicesPreviewRow:function(e,i,t){var o=void 0!==t?t:"";return['<span class="image-choices-choice-image-wrap" style="background-image:url('+o+')">','<img src="'+o+'" alt="" class="image-choices-choice-image" />',"</span>",'<span class="image-choices-choice-text">'+(void 0!==i?i:"")+"</span>"].join("")}},imageChoicesAdmin.getChoices=function(i){void 0===i&&(i=GetSelectedField());imageChoicesAdmin.getSettingsElement().find('[class*="-choice-row"]').each((function(){var t=e(this),o=t.data("index"),a=i.choices.length&&void 0!==i.choices[o].imageChoices_image?i.choices[o].imageChoices_image:"",s=i.choices.length&&void 0!==i.choices[o].imageChoices_imageID?i.choices[o].imageChoices_imageID:"";if(!t.find(".image-choices-option-image").length){var c=t.find('input[id*="_choice_text"]:first');c.length||(c=t.find('input[id*="-choice-text"]:first')),c.length&&c.before(imageChoicesAdmin.markup.choicesAdminRow(o,a,s))}""!==t.find(".image-choices-option-image").val()&&t.addClass("image-choices-has-image")})),imageChoicesAdmin.updateFieldPreview(i)},imageChoicesAdmin.RemovePreview=function(i){if(void 0!==i){var t=e(i).closest('[class*="-choice-row"]');t.find(".image-choices-option-image").val(""),t.find(".image-choices-option-image-id").val(""),t.find(".image-choices-option-preview").css("background-image",""),t.removeClass("image-choices-has-image"),imageChoicesAdmin.UpdateFieldChoicesObject();var o=GetSelectedField();imageChoicesAdmin.updateFieldPreview(o)}},imageChoicesAdmin.UpdateFieldChoicesObject=function(){var i=GetSelectedField();imageChoicesAdmin.getSettingsElement().find('[class*="-choice-row"]').each((function(t){var o=e(this),a=o.find(".image-choices-option-image").val(),s=o.find(".image-choices-option-image-id").val(),c=o.data("index");""!==a?(o.addClass("image-choices-has-image"),o.find(".gf-image-choices-option-preview").css("background-image","url("+a+")")):o.removeClass("image-choices-has-image"),i.choices[c].imageChoices_image=a,i.choices[c].imageChoices_imageID=s}))},imageChoicesAdmin.onProductPriceChange=function(){setTimeout((function(){imageChoicesAdmin.updateFieldPreview(GetSelectedField())}),10)},imageChoicesAdmin.updateFieldPreview=function(i){var t=e("#field_"+i.id),o="product"===i.type&&"singleproduct"===i.inputType,a=t.find(".gfield_label.gform-field-label"),s=t.find(".ic-product-image-wrap"),c=o?"productImage_enabled":"imageChoices_enableImages",n=i.hasOwnProperty(c)&&!0===i[c],m=imageChoicesAdmin.hasProductImage(i);console.log("imageChoicesAdmin.updateFieldPreview",{field_id:i.id,prop:c,imagesEnabled:n}),n?o?(!s.length&&m?(a.detach(),(s=e('<div class="ic-product-image-wrap"></div>')).append(`<div class="ic-product-image" style="background-image:url(${i.productImage_image});"><img src="${i.productImage_image}" alt="" class="ic-product-image-element" /></div>`),s.append(a),s.append(`<div class="ic-product-image-price">${i.basePrice}</div>`),t.prepend(s)):!m&&s.length&&(a.detach(),t.prepend(a),s.remove()),m&&t.find(".ic-product-image-price").html(i.basePrice)):(s.length&&(a.detach(),t.prepend(a),s.remove()),n&&void 0===i.imageChoices_showLabels&&imageChoicesAdmin.toggleShowLabels(!0),imageChoicesAdmin.$fieldChoices(t).each((function(t){var o=e(this);if(!o.hasClass("gchoice_total")){o.addClass("image-choices-choice");var a=o.find("label"),s=a.find(".image-choices-choice-text").length?a.find(".image-choices-choice-text").html():a.html();if(i.imageChoices_enableImages){if(i.choices.length>t){var c=void 0!==i.choices[t].imageChoices_image?i.choices[t].imageChoices_image:"";a.html(imageChoicesAdmin.markup.choicesPreviewRow(t,s,c))}}else a.html(s)}}))):s.length&&(a.detach(),t.prepend(a),s.remove())},imageChoicesAdmin.getField=function(){var i=GetSelectedField();return e("#field_"+i.id)},imageChoicesAdmin.removeAllChoices=function(){imageChoicesAdmin.getSettingsElement().find(".image-choices-option-image-remove").each((function(){e(this).trigger("click")})),$settingsWrap.find(".gf_delete_field_choice").each((function(){e(this).trigger("click")})),$settingsWrap.find('.field-choice-row input[type="text"], .gquiz-choice-row input[type="text"]').val("")},imageChoicesAdmin.isColorPickerPluginActive=function(){return window.hasOwnProperty("colorPickerFieldVars")&&void 0!==window.colorPickerFieldVars},imageChoicesAdmin.isImageChoicesEnabled=function(e){return e=e||GetSelectedField(),imageChoicesAdmin.fieldCanHaveImages(e)&&!0===e.imageChoices_enableImages},imageChoicesAdmin.hasImageChoicesImage=function(e){return e=e||GetSelectedField(),imageChoicesAdmin.isImageChoicesEnabled(e)&&e.hasOwnProperty("imageChoices_image")&&""!==e.imageChoices_image},imageChoicesAdmin.isProductImageField=function(e){return"product"===(e=e||GetSelectedField()).type&&"singleproduct"===e.inputType},imageChoicesAdmin.isProductImageEnabled=function(e){return e=e||GetSelectedField(),imageChoicesAdmin.isProductImageField(e)&&!0===e.productImage_enabled},imageChoicesAdmin.hasProductImage=function(e){return e=e||GetSelectedField(),imageChoicesAdmin.isProductImageField(e)&&e.hasOwnProperty("productImage_image")&&""!==e.productImage_image},imageChoicesAdmin.hasProductImageId=function(e){return e=e||GetSelectedField(),imageChoicesAdmin.isProductImageField(e)&&e.hasOwnProperty("productImage_imageId")&&e.productImage_imageId},imageChoicesAdmin.onProductImageToggleClick=function(i){imageChoicesAdmin.toggleEnableImages(i.checked,!0),i.checked&&(imageChoicesAdmin.hasProductImage()||(e("#product_image_tab_toggle").click(),setTimeout((function(){e("#product-image-button").click()}),500)))},imageChoicesAdmin.toggleEnableImages=function(e,i){var t=!0===i,o=t?"input.field_product_image_enabled":"input.field_choice_images_enabled",a=imageChoicesAdmin.getSettingsElement(),s=a.find(o);if(void 0===e&&(e=s.is(":checked")),t)imageChoicesAdmin.onToggleEnableImages(e,t);else{var c=a.find("input.field_color_picker_enabled");e&&imageChoicesAdmin.isColorPickerPluginActive()&&c.length&&c.is(":checked")?window.confirm(imageChoicesFieldStrings.confirmImagesToggle)?(window.hasOwnProperty("colorPicker_toggleEnableColors")&&"function"==typeof window.colorPicker_toggleEnableColors&&window.colorPicker_toggleEnableColors(!1),imageChoicesAdmin.onToggleEnableImages(e,t)):s.prop("checked",!1):imageChoicesAdmin.onToggleEnableImages(e,t)}},window.imageChoices_toggleEnableImages=imageChoicesAdmin.toggleEnableImages,imageChoicesAdmin.onToggleEnableImages=function(i,t){var o=GetSelectedField();if(o){var a=!0===t,s=a?"input.field_product_image_enabled":"input.field_choice_images_enabled",c=imageChoicesAdmin.getField(),n=imageChoicesAdmin.getSettingsElement(),m=n.find(s);if(void 0===i&&(i=m.is(":checked")),c.toggleClass("image-choices-admin-field",i),a){SetFieldProperty("productImage_enabled",i),m.prop("checked",i),e("#product_image_tab_toggle").toggle(i);var g=c.find(".ic-product-image-wrap");if(!i&&g.length){var d=c.find(".gfield_label.gform-field-label");d.detach(),c.prepend(d),g.remove()}c.toggleClass("product-image-admin-field",i),c.toggleClass("product-image-enabled",i),n.toggleClass("product-image-enabled",i)}else{SetFieldProperty("imageChoices_enableImages",i),m.prop("checked",i),e("#image_choices_tab_toggle").toggle(i);var r="quiz"===o.type.toLowerCase()?"#gquiz_gfield_settings_choices_container":"#gfield_settings_choices_container";e(r).toggleClass("image-choices-enabled",i),c.toggleClass("image-choices-use-images",i),n.toggleClass("image-choices-use-images",i);var l=n.find(".image-choices-remove-choices-btn");i||l.length&&l.remove();var h=e(".field_setting.other_choice_setting");("radio"===o.type||"poll"===o.type&&"radio"===o.inputType)&&h.show()}imageChoicesAdmin.updateFieldPreview(o)}},imageChoicesAdmin.toggleShowLabels=function(e){var i=imageChoicesAdmin.getField(),t=imageChoicesAdmin.getSettingsElement().find("input.image_choices_show_labels");void 0===e&&(e=t.is(":checked")),SetFieldProperty("imageChoices_showLabels",e),t.prop("checked",e),i.toggleClass("image-choices-show-labels",e)},imageChoicesAdmin.toggleShowPrices=function(e){var i=imageChoicesAdmin.getField(),t=imageChoicesAdmin.getSettingsElement().find("input.image_choices_show_prices");void 0===e&&(e=t.is(":checked")),SetFieldProperty("imageChoices_showPrices",e),t.prop("checked",e),i.toggleClass("image-choices-show-prices",e)},imageChoicesAdmin.toggleUseLightboxCaption=function(e,i){imageChoicesAdmin.getField();var t=!0===i,o=t?"input.product_image_use_lightbox_caption":"input.image_choices_use_lightbox_caption",a=imageChoicesAdmin.getSettingsElement().find(o);void 0===e&&(e=a.is(":checked")),a.prop("checked",e),t?SetFieldProperty("productImage_useLightboxCaption",e):SetFieldProperty("imageChoices_useLightboxCaption",e)},imageChoicesAdmin.toggleUseLightbox=function(i,t){var o=GetSelectedField(),a=imageChoicesAdmin.getField(),s=!0===t,c=s?"input.product_image_use_lightbox":"input.image_choices_use_lightbox",n=imageChoicesAdmin.getSettingsElement().find(c),m=s?".product-image-setting-use-lightbox-caption":".image-choices-setting-use-lightbox-caption";if(void 0===i&&(i=n.is(":checked")),n.prop("checked",i),s){if(SetFieldProperty("productImage_useLightbox",i),a.toggleClass("product-image-use-lightbox",i),imageChoicesAdmin.hasProductImage(o)&&!imageChoicesAdmin.hasProductImageId(o))return window.alert(imageChoicesFieldStrings.useLightboxWarning),!1}else SetFieldProperty("imageChoices_useLightbox",i),a.toggleClass("image-choices-use-lightbox",i),i&&e.each(o.choices,(function(e,i){var t=i.hasOwnProperty("imageChoices_image")&&""!==i.imageChoices_image,o=i.hasOwnProperty("imageChoices_imageID")&&""!==i.imageChoices_imageID;if(t&&!o)return window.alert(imageChoicesFieldStrings.useLightboxWarning),!1}));document.querySelector(m).style.setProperty("display",i?"block":"none","important")},imageChoicesAdmin.updateEntrySetting=function(e,i){var t=!0===i,o=t?"product-image":"image-choices";SetFieldProperty(`${t?"productImage":"imageChoices"}_entrySetting`,e),imageChoicesAdmin.getSettingsElement().find(`#${o}-entry-value`).val(e)},imageChoicesAdmin.OpenMediaLibrary=function(i){if(void 0!==i){var t,o=GetSelectedField(),a=imageChoicesAdmin.isProductImageField(o);if(a){var s=imageChoicesAdmin.getField();t=s.data("file-frame")}else{var c=e(i).closest('[class*="-choice-row"]');t=c.data("file-frame")}t?t.open():(t=wp.media({title:"Select an image to upload",button:{text:"Use this image"},frame:"post",state:"insert",multiple:!1}),setTimeout((function(){e('input[value="Insert into Post"]').val("Use this Image"),e("button.media-button-insert").text("Use this Image")}),100),jQuery("body").on("click","li.attachment",(function(){e('input[value="Insert into Post"]').val("Use this Image"),e("button.media-button-insert").text("Use this Image")})),t.on("insert",(function(i){var s=t.state();if(i=i||s.get("selection")){var n=i.first(),m=s.display(n).toJSON();n=n.toJSON();var g,d=["medium","thumbnail","full"];if(m&&m.hasOwnProperty("size")&&m.size&&d.unshift(m.size),n.hasOwnProperty("sizes")){for(var r=0,l=d[r].toString();!n.sizes.hasOwnProperty(l)||!n.sizes[l].hasOwnProperty("url")||""===n.sizes[l].url;)l=d[++r].toString();g=n.sizes[l].url,l}else g=n.url,"full";if(a)imageChoicesAdmin.updateProductImage(g,n.id);else{c.find(".image-choices-option-image").val(g),c.find(".image-choices-option-image-id").val(n.id),c.find(".image-choices-option-preview").css("background-image","url("+g+")"),c.addClass("image-choices-has-image"),imageChoicesAdmin.UpdateFieldChoicesObject(),imageChoicesAdmin.updateFieldPreview(o);var h=e("#choices-ui-flyout");h.length&&h.addClass("gform-flyout--anim-in-ready gform-flyout--anim-in-active")}}})),t.open(),a?s.data("file-frame",t):c.data("file-frame",t))}},imageChoicesAdmin.fieldCanHaveImages=function(e){if(void 0===e||!e.hasOwnProperty("type"))return!1;var i="radio"===e.type||"checkbox"===e.type||"quiz"===e.type&&"radio"==e.inputType||"quiz"===e.type&&"checkbox"==e.inputType||"poll"===e.type&&"radio"==e.inputType||"poll"===e.type&&"checkbox"==e.inputType||"post_custom_field"===e.type&&"radio"==e.inputType||"post_custom_field"===e.type&&"checkbox"==e.inputType||"survey"===e.type&&"radio"==e.inputType||"survey"===e.type&&"checkbox"==e.inputType||"product"===e.type&&"radio"==e.inputType||"option"===e.type&&"radio"==e.inputType||"option"===e.type&&"checkbox"==e.inputType;return gform.applyFilters("gfic_field_can_have_images",i,e)},imageChoicesAdmin.$fieldChoices=function(e){if(void 0===e||e instanceof jQuery==!1)return[];return e.find('.ginput_container .gfield_radio div[class*="gchoice"], .ginput_container .gfield_checkbox .gchoice:not(.gchoice_select_all)')},imageChoicesAdmin.getSettingsElement=function(){var i="#field_settings_container";return i+="quiz"===GetSelectedField().type?", #gquiz_gfield_settings_choices_container":", #gfield_settings_choices_container",e(i)},imageChoicesAdmin.previewHeight=function(e){if("object"!=typeof e){var i=imageChoicesAdmin.getField();e=i.find(".ginput_container")}e.length&&e.closest(".gfield").hasClass("image-choices-admin-field")&&setTimeout((function(){e.height(e.find("> ul:first").outerHeight())}),20)},imageChoicesAdmin.updateProductImage=function(e,i){var t=imageChoicesAdmin.getSettingsElement(),o=imageChoicesAdmin.getField();void 0===e&&(e=""),void 0===i&&(i=""),SetFieldProperty("productImage_image",e),SetFieldProperty("productImage_imageId",i),t.find(".product-image-url").val(e),t.find(".product-image-id").val(i),t.find("#product-image-preview").css("background-image","url("+e+")"),t.toggleClass("has-product-image",""!==e),o.toggleClass("has-product-image",""!==e),imageChoicesAdmin.updateFieldPreview(GetSelectedField())},imageChoicesAdmin.updateThemeSetting=function(i,t){var o=!0===t,a=o?"product-image":"image-choices";SetFieldProperty(`${o?"productImage":"imageChoices"}_theme`,i),imageChoicesAdmin.getSettingsElement().find(`#${a}-theme`).val(i);var s,c=e(`#${a}-theme-preview`);c.toggle("none"!==i),"none"===i?c.hide().find("img").hide():"form_setting"===i?((i=window.form.hasOwnProperty("gf-image-choices")&&window.form["gf-image-choices"].hasOwnProperty("gf_image_choices_theme")?window.form["gf-image-choices"].gf_image_choices_theme:"")&&"global_setting"!==i||(i=imageChoicesVars.hasOwnProperty("globals")&&imageChoicesVars.globals.hasOwnProperty("theme")?imageChoicesVars.globals.theme:imageChoicesVars.hasOwnProperty("defaults")&&imageChoicesVars.defaults.hasOwnProperty("theme")?imageChoicesVars.defaults.theme:"simple"),c.find("img").hide(),(s=c.find(`img.${a}-theme-preview-${i}`)).length&&s.show()):(c.find("img").hide(),(s=c.find(`img.${a}-theme-preview-${i}`)).length&&s.show())},imageChoicesAdmin.updateFeatureColorSetting=function(e){SetFieldProperty("imageChoices_featureColor",e);var i=imageChoicesAdmin.getSettingsElement().find('[for="image-choices-feature-color-custom"]'),t=imageChoicesAdmin.getSettingsElement().find("#image-choices-feature-color-custom"),o=imageChoicesAdmin.getSettingsElement().find(".image-choices-setting-feature-color .wp-picker-container"),a=t.val();imageChoicesAdmin.getSettingsElement().find("#image-choices-feature-color").val(e),"custom"===e?(i.show(),t.show(),o.length?(o.show(),setTimeout((function(){""!==a?t.wpColorPicker("color",a):o.find(".wp-picker-clear").trigger("click")}),100)):(t.wpColorPicker({change:function(e,i){imageChoicesAdmin.updateCustomFeatureColor(i.color.toString())}}),setTimeout((function(){""!==a?t.wpColorPicker("color",a):o.find(".wp-picker-clear").trigger("click")}),100))):(i.hide(),t.hide(),o.length&&(o.find(".wp-picker-clear").trigger("click"),o.hide()))},imageChoicesAdmin.updateCustomFeatureColor=function(e,i){var t=!0===i,o=t?"productImage":"imageChoices",a=t?"product-image":"image-choices";imageChoicesAdmin.getSettingsElement().find(`#${a}-feature-color-custom`).val(e),SetFieldProperty(`${o}_featureColorCustom`,e)},imageChoicesAdmin.updateAlignSetting=function(e){SetFieldProperty("imageChoices_align",e),imageChoicesAdmin.getSettingsElement().find("#image-choices-align").val(e)},imageChoicesAdmin.updateImageStyleSetting=function(e,i){var t=!0===i,o=t?"product-image":"image-choices";SetFieldProperty(`${t?"productImage":"imageChoices"}_imageStyle`,e),imageChoicesAdmin.getSettingsElement().find(`#${o}-image-style`).val(e)},imageChoicesAdmin.validateNumericValue=function(e){var i="";if(""!==(e=e.toString()).trim()){var t=parseInt(e,10);i=isNaN(t)||t<=0?"":t.toString()}return i!==e?i:e},imageChoicesAdmin.updateColumnsSetting=function(e){SetFieldProperty("imageChoices_columns",e);var i=imageChoicesAdmin.getSettingsElement();i.find("#image-choices-columns").val(e),i.find(".image-choices-setting-columns-width").toggle("fixed"===e)},imageChoicesAdmin.updateColumnsWidthSetting=function(e){var i=imageChoicesAdmin.validateNumericValue(e);SetFieldProperty("imageChoices_columnsWidth",i),imageChoicesAdmin.getSettingsElement().find("#image-choices-columns-width").val(i)},imageChoicesAdmin.updateColumnsMediumSetting=function(e){SetFieldProperty("imageChoices_columnsMedium",e);var i=imageChoicesAdmin.getSettingsElement();i.find("#image-choices-columns-medium").val(e),i.find(".image-choices-setting-columns-width-medium").toggle("fixed"===e)},imageChoicesAdmin.updateColumnsMediumWidthSetting=function(e){var i=imageChoicesAdmin.validateNumericValue(e);SetFieldProperty("imageChoices_columnsWidthMedium",i),imageChoicesAdmin.getSettingsElement().find("#image-choices-columns-width-medium").val(i)},imageChoicesAdmin.updateColumnsSmallSetting=function(e){SetFieldProperty("imageChoices_columnsSmall",e);var i=imageChoicesAdmin.getSettingsElement();i.find("#image-choices-columns-small").val(e),i.find(".image-choices-setting-columns-width-small").toggle("fixed"===e)},imageChoicesAdmin.updateColumnsSmallWidthSetting=function(e){var i=imageChoicesAdmin.validateNumericValue(e);SetFieldProperty("imageChoices_columnsWidthSmall",i),imageChoicesAdmin.getSettingsElement().find("#image-choices-columns-width-small").val(i)},imageChoicesAdmin.updateHeightSetting=function(e,i){var t=imageChoicesAdmin.validateNumericValue(e),o=!0===i,a=o?"product-image":"image-choices";SetFieldProperty(`${o?"productImage":"imageChoices"}_height`,t),imageChoicesAdmin.getSettingsElement().find(`#${a}-height`).val(t)},imageChoicesAdmin.updateMediumHeightSetting=function(e,i){var t=imageChoicesAdmin.validateNumericValue(e),o=!0===i,a=o?"product-image":"image-choices";SetFieldProperty(`${o?"productImage":"imageChoices"}_heightMedium`,t),imageChoicesAdmin.getSettingsElement().find(`#${a}-height-medium`).val(t)},imageChoicesAdmin.updateSmallHeightSetting=function(e,i){var t=imageChoicesAdmin.validateNumericValue(e),o=!0===i,a=o?"product-image":"image-choices";SetFieldProperty(`${o?"productImage":"imageChoices"}_heightSmall`,t),imageChoicesAdmin.getSettingsElement().find(`#${a}-height-small`).val(t)},imageChoicesAdmin.initProductImageField=function(i){var t=e("#field_"+i.id);t.addClass("product-image-admin-field"),t.addClass("product-image-enabled"),imageChoicesAdmin.hasProductImage(i)&&t.addClass("has-product-image"),imageChoicesAdmin.updateFieldPreview(i)},imageChoicesAdmin.initImageChoicesField=function(i){var t=e("#field_"+i.id);t.addClass("image-choices-admin-field"),t.addClass("image-choices-enabled"),imageChoicesAdmin.hasImageChoicesImage(i)&&t.addClass("image-choices-has-image"),imageChoicesAdmin.updateFieldPreview(i)},imageChoicesAdmin.formEditorInit=function(){gform.addAction("gform_after_refresh_field_preview",(function(e){var i=GetSelectedField();imageChoicesAdmin.isImageChoicesEnabled(i)&&imageChoicesAdmin.updateFieldPreview(i)})),form.fields.forEach((function(e){imageChoicesAdmin.isProductImageEnabled(e)?imageChoicesAdmin.initProductImageField(e):imageChoicesAdmin.isImageChoicesEnabled(e)&&imageChoicesAdmin.initImageChoicesField(e)})),e(".gfield.image-choices-admin-field").each((function(){imageChoicesAdmin.$fieldChoices(e(this)).each((function(){let i=e(this);i.hasClass("gchoice_total")||i.addClass("image-choices-choice")}))})),e("#gform_fields .gfield .ginput_container").each((function(){imageChoicesAdmin.previewHeight(e(this))})),e(window).on("gf_update_field_choices",(function(){setTimeout((function(){imageChoicesAdmin.getChoices()}),10),imageChoicesAdmin.previewHeight()})),e(document).on("click",".gf_insert_field_choice, .gf_delete_field_choice",(function(e){imageChoicesAdmin.previewHeight()})),gform.addAction("gform_load_field_choices",(function(i){setTimeout((function(){var t=void 0!==i&&i.length?i[0]:GetSelectedField(),o=e("#field_"+t.id),a=imageChoicesAdmin.getSettingsElement();if(imageChoicesAdmin.isProductImageField(t)){e("#field_base_price").on("change",imageChoicesAdmin.onProductPriceChange);var s=imageChoicesAdmin.isProductImageEnabled(t),c=void 0!==t.productImage_image?t.productImage_image:"",n=void 0!==t.productImage_imageId?t.productImage_imageId:"",m=void 0!==t.productImage_useLightbox&&t.productImage_useLightbox,g=void 0!==t.productImage_theme?t.productImage_theme:"form_setting",d=void 0!==t.productImage_imageStyle?t.productImage_imageStyle:"form_setting",r=void 0===t.productImage_useLightboxCaption||t.productImage_useLightboxCaption;"form_setting"!==r&&""!==r||(r=!0);var l=void 0!==t.productImage_height?t.productImage_height:"",h=void 0!==t.productImage_heightMedium?t.productImage_heightMedium:"",u=void 0!==t.productImage_heightSmall?t.productImage_heightSmall:"",p=void 0!==t.productImage_entrySetting?t.productImage_entrySetting:"form_setting";a.addClass("product-image-field-settings"),imageChoicesAdmin.toggleEnableImages(s,!0),imageChoicesAdmin.updateProductImage(c,n),imageChoicesAdmin.toggleUseLightbox(m,!0),imageChoicesAdmin.toggleUseLightboxCaption(r,!0),imageChoicesAdmin.updateThemeSetting(g,!0),imageChoicesAdmin.updateImageStyleSetting(d,!0),imageChoicesAdmin.updateHeightSetting(l,!0),imageChoicesAdmin.updateMediumHeightSetting(h,!0),imageChoicesAdmin.updateSmallHeightSetting(u,!0),imageChoicesAdmin.updateEntrySetting(p,!0)}else imageChoicesAdmin.toggleEnableImages(!1,!0),imageChoicesAdmin.updateProductImage(""),imageChoicesAdmin.toggleUseLightboxCaption(!0,!0),imageChoicesAdmin.updateThemeSetting("form_setting",!0),imageChoicesAdmin.updateImageStyleSetting("form_setting",!0),imageChoicesAdmin.updateHeightSetting("",!0),imageChoicesAdmin.updateMediumHeightSetting("",!0),imageChoicesAdmin.updateSmallHeightSetting("",!0),imageChoicesAdmin.updateEntrySetting("",!0),o.removeClass("product-image-admin-field"),a.removeClass("product-image-field-settings");if(imageChoicesAdmin.fieldCanHaveImages(t)){var f=!0===t.imageChoices_enableImages,C=void 0!==t.imageChoices_useLightbox&&t.imageChoices_useLightbox,_=void 0===t.imageChoices_showLabels||t.imageChoices_showLabels,v="product"===t.type&&void 0!==t.imageChoices_showPrices&&t.imageChoices_showPrices,A=void 0!==t.imageChoices_entrySetting?t.imageChoices_entrySetting:"form_setting",w=void 0!==t.imageChoices_theme?t.imageChoices_theme:"form_setting",S=void 0!==t.imageChoices_featureColor?t.imageChoices_featureColor:"form_setting",b=void 0!==t.imageChoices_featureColorCustom?t.imageChoices_featureColorCustom:"",y=void 0!==t.imageChoices_align?t.imageChoices_align:"form_setting",I=void 0!==t.imageChoices_imageStyle?t.imageChoices_imageStyle:"form_setting",P=void 0!==t.imageChoices_columns?t.imageChoices_columns:"form_setting",F=void 0!==t.imageChoices_columnsWidth?t.imageChoices_columnsWidth:"",k=void 0!==t.imageChoices_columnsMedium?t.imageChoices_columnsMedium:"form_setting",x=void 0!==t.imageChoices_columnsWidthMedium?t.imageChoices_columnsWidthMedium:"",E=void 0!==t.imageChoices_columnsSmall?t.imageChoices_columnsSmall:"form_setting",T=void 0!==t.imageChoices_columnsWidthSmall?t.imageChoices_columnsWidthSmall:"",L=void 0===t.imageChoices_useLightboxCaption||t.imageChoices_useLightboxCaption;"form_setting"!==L&&""!==L||(L=!0);var O=void 0!==t.imageChoices_height?t.imageChoices_height:"",$=void 0!==t.imageChoices_heightMedium?t.imageChoices_heightMedium:"",M=void 0!==t.imageChoices_heightSmall?t.imageChoices_heightSmall:"";a.addClass("image-choices-field-settings"),imageChoicesAdmin.toggleEnableImages(f),imageChoicesAdmin.toggleUseLightbox(C),imageChoicesAdmin.toggleShowLabels(_),imageChoicesAdmin.toggleShowPrices(v),imageChoicesAdmin.updateEntrySetting(A),imageChoicesAdmin.toggleUseLightboxCaption(L),imageChoicesAdmin.isLegacyMode()||(imageChoicesAdmin.updateThemeSetting(w),imageChoicesAdmin.updateCustomFeatureColor(b),imageChoicesAdmin.updateFeatureColorSetting(S),imageChoicesAdmin.updateAlignSetting(y),imageChoicesAdmin.updateImageStyleSetting(I),imageChoicesAdmin.updateHeightSetting(O),imageChoicesAdmin.updateMediumHeightSetting($),imageChoicesAdmin.updateSmallHeightSetting(M),imageChoicesAdmin.updateColumnsWidthSetting(F),imageChoicesAdmin.updateColumnsMediumWidthSetting(x),imageChoicesAdmin.updateColumnsSmallWidthSetting(T),imageChoicesAdmin.updateColumnsSetting(P),imageChoicesAdmin.updateColumnsMediumSetting(k),imageChoicesAdmin.updateColumnsSmallSetting(E)),imageChoicesAdmin.getChoices(t)}else imageChoicesAdmin.toggleEnableImages(!1),imageChoicesAdmin.toggleUseLightboxCaption(!0),imageChoicesAdmin.isLegacyMode()||(imageChoicesAdmin.updateThemeSetting("form_setting"),imageChoicesAdmin.updateCustomFeatureColor(""),imageChoicesAdmin.updateFeatureColorSetting("form_setting"),imageChoicesAdmin.updateAlignSetting("form_setting"),imageChoicesAdmin.updateImageStyleSetting("form_setting"),imageChoicesAdmin.updateHeightSetting(""),imageChoicesAdmin.updateMediumHeightSetting(""),imageChoicesAdmin.updateSmallHeightSetting(""),imageChoicesAdmin.updateColumnsWidthSetting(""),imageChoicesAdmin.updateColumnsMediumWidthSetting(""),imageChoicesAdmin.updateColumnsSmallWidthSetting(""),imageChoicesAdmin.updateColumnsSetting("form_setting"),imageChoicesAdmin.updateColumnsMediumSetting("form_setting"),imageChoicesAdmin.updateColumnsSmallSetting("form_setting")),o.removeClass("image-choices-show-labels"),a.removeClass("image-choices-field-settings"),a.remove("image-choices-product-field")}),100)})),e(document).bind("gform_load_field_settings",(function(i,t,o){"function"!=typeof window.imageChoices_GF_UpdateFieldChoices&&"function"==typeof UpdateFieldChoices&&(window.imageChoices_GF_UpdateFieldChoices=UpdateFieldChoices,window.UpdateFieldChoices=function(){window.imageChoices_GF_UpdateFieldChoices.apply(this,arguments),e(window).trigger("gf_update_field_choices")}),imageChoicesAdmin.previewHeight()}))},imageChoicesAdmin.formEditorLegacyWarning=function(){},e(document).bind("gform_main_scripts_loaded",(function(){void 0!==window.form&&(1===imageChoicesAdmin.markupDetect()&&imageChoicesAdmin.formHasImageChoicesFields()&&imageChoicesAdmin.formEditorLegacyWarning(),imageChoicesAdmin.formEditorInit());var i=e("#gf_image_choices_custom_css_global, #gf_image_choices_custom_css, #gf_image_choices_user_css_global, #gf_image_choices_user_css_form");if(i.length){var t=wp.codeEditor.defaultSettings?_.clone(wp.codeEditor.defaultSettings):{};t.codemirror=_.extend({},t.codemirror,{indentUnit:4,tabSize:4,mode:"css",lineNumbers:!0,autoCloseBrackets:!0,continueComments:!0,indentWithTabs:!0,inputStyle:"contenteditable",lineWrapping:!0,lint:!1,matchBrackets:!0,styleActiveLine:!0,gutters:[],extraKeys:{"Alt-F":"findPersistent","Cmd-F":"findPersistent","Ctrl-F":"findPersistent","Cmd-/":"toggleComment","Ctrl-/":"toggleComment","Ctrl-Space":"autocomplete"}}),i.each((function(){window[this.id+"_editor"]=wp.codeEditor.initialize(e(this),t)}))}var o=e("#gform_settings_section_collapsed_gf_image_choices_legacy_custom_css_section, #gform_settings_section_collapsed_gf_image_choices_legacy_custom_form_css_section");o.length&&o.on("click",(function(){e(this).closest(".gform-settings-panel").find("textarea").each((function(){var i=e(this).attr("id")+"_editor";try{window[i].codemirror.refresh()}catch(e){}}))}));var a=e("#_gform_setting_gf_image_choices_use_legacy_styles"),s=e("#gform-settings-section-theme, #gform-settings-section-feature-color, #gform-settings-section-choices-layout, #gform-settings-section-image-options, #gform-settings-section-custom-css, #gform-settings-section-gf_image_choices_legacy_custom_css_section .gform-settings-label");a.length&&(a.on("change",(function(e){var i=a.is(":checked");s.length&&s.toggle(!i),o.length&&(i&&o.is(":checked")||!i&&!o.is(":checked"))&&o.click()})),a.trigger("change"));var c=e("#tab_gf-image-choices .gform-settings-tabs__navigation a");c.length&&c.each((function(){e(this).on("click",(function(i){e("#tab_gf-image-choices #gform-settings-save").toggle("gf_image_choices_settings_tab"===e(this).data("tab"))}))}));var n=e('input[id^="gf_image_choices"][id*="columns_width"], input[id^="image-choices"][id*="columns-width"], input[id^="gf_image_choices"][id*="height"], input[id^="image-choices"][id*="height"], input[id^="product-image"][id*="height"]');n.length&&n.each((function(){e(this).on("keyup",(function(e){var i=e.currentTarget.value.toString(),t=imageChoicesAdmin.validateNumericValue(i);t!==i&&(e.currentTarget.value=t)}))}));var m=e("#gf_image_choices_theme, #gf_image_choices_global_theme").first(),g=e("#gform_setting_gf_image_choices_theme_preview .image-choices-theme-preview, #gform_setting_gf_image_choices_global_theme_preview .image-choices-theme-preview").first();m.length&&g.length&&(m.on("change",(function(i){var t=e(this).val();""!==t&&"global_setting"!=t||(t=imageChoicesVars.hasOwnProperty("globals")&&imageChoicesVars.globals.hasOwnProperty("theme")?imageChoicesVars.globals.theme:imageChoicesVars.hasOwnProperty("defaults")&&imageChoicesVars.defaults.hasOwnProperty("theme")?imageChoicesVars.defaults.theme:"simple"),g.toggle("none"!==t),"none"===t?g.hide().find("img").hide():(g.find("img").hide(),g.find("img.image-choices-theme-preview-"+t).show())})),m.trigger("change"));var d,r,l=e("#gf_image_choices_feature_color, #gf_image_choices_global_feature_color").first(),h=e("#gform_setting_gf_image_choices_feature_color_custom, #gform_setting_gf_image_choices_global_feature_color_custom").first(),u=e("#gf_image_choices_feature_color_custom, #gf_image_choices_global_feature_color_custom").first();l.length&&h.length&&(r=h.find(".wp-picker-container"),d=u.val(),l.on("change",(function(i){"custom"===e(this).val()?(h.show(),r.length?setTimeout((function(){""!==customColor?u.wpColorPicker("color",d):r.find(".wp-picker-clear").trigger("click")}),100):(u.wpColorPicker(),setTimeout((function(){""!==d?u.wpColorPicker("color",d):r.find(".wp-picker-clear").trigger("click")}),100))):(h.hide(),r.length&&r.find(".wp-picker-clear").trigger("click"))})),l.trigger("change"));var p=e("#image_choices_url_replacement"),f=p.length?e("#image_choices_url_replacement_submit"):null,C=p.length?p.find(".jetbase-tool__progress"):null,v=p.length?p.find(".jetbase-tool__progress-percent"):null,A=p.length?p.find(".jetbase-tool__progress-status"):null,w={old:"",new:"",forms:[],index:0,replacements:[]};imageChoicesAdmin.processUrlReplacement=function(){if(!w.forms.length||w.replacements.length===w.forms.length||w.index>=w.forms.length)return v.css("width","100%"),A.html(`Done! ${w.forms.length} form(s) processed`),p.removeClass("busy"),void(S.length&&S.removeClass("disabled"));e.ajax({url:window.ajaxurl,method:"POST",data:{action:"gf_image_choices_url_replacement",id:w.forms[w.index],old:w.old,new:w.new},beforeSend:function(e,i){A.html(`Processing form ${w.index+1}/${w.forms.length}`)},success:function(e){e&&e.success?w.replacements[w.index]=e.total:e&&e.error?(w.replacements[w.index]=!1,A.html("Error: "+e.error)):(w.replacements[w.index]=!1,A.html("Error")),w.index++,v.css("width",`${Math.ceil(w.index/w.forms.length*100)}%`),imageChoicesAdmin.processUrlReplacement()}})},f&&f.length&&f.on("click",(function(i){i.preventDefault();var t=p.find("#image_choices_url_replacement_form_select").val().trim(),o=p.find("#image_choices_url_replacement_from_input").val().trim(),a=p.find("#image_choices_url_replacement_to_input").val().trim();o&&a&&o!==a&&(w.old=o,w.new=a,w.forms=[],w.index=0,w.replacements=[],"all"===t?(A.html("Scanning for forms with old URL in image choices..."),v.css("width","0%"),p.addClass("busy"),C.addClass("active"),S.length&&S.addClass("disabled"),e.ajax({url:window.ajaxurl,method:"POST",data:{action:"gf_image_choices_get_url_replacement_form_ids",form_id:w.formId,old:w.old,new:w.new},success:function(e){e&&e.success?e.forms&&e.forms.length?(w.forms=e.forms,imageChoicesAdmin.processUrlReplacement()):(v.css("width","100%"),A.html("Done! No image choices found containing that old URL"),p.removeClass("busy"),S.length&&S.removeClass("disabled")):e&&e.error?A.html("Error: "+e.error):A.html("Error")}})):(A.html("..."),v.css("width","0%"),p.addClass("busy"),C.addClass("active"),S.length&&S.addClass("disabled"),w.forms=[t],imageChoicesAdmin.processUrlReplacement()))}));var S=e("#image_choices_image_replacement"),b=S.length?e("#image_choices_image_replacement_submit"):null,y=S.length?S.find(".jetbase-tool__progress"):null,I=S.length?S.find(".jetbase-tool__progress-percent"):null,P=S.length?S.find(".jetbase-tool__progress-status"):null,F={new:"",forms:[],index:0,replacements:[]};imageChoicesAdmin.processSizeReplacement=function(){if(!F.forms.length||F.replacements.length===F.forms.length||F.index>=F.forms.length)return I.css("width","100%"),P.html(`Done! ${F.forms.length} form(s) processed`),S.removeClass("busy"),void(p.length&&p.removeClass("disabled"));e.ajax({url:window.ajaxurl,method:"POST",data:{action:"gf_image_choices_image_size_replacement",id:F.forms[F.index],new:F.new},beforeSend:function(e,i){P.html(`Processing form ${F.index+1}/${F.forms.length}`)},success:function(e){e&&e.success?F.replacements[F.index]=e.total:e&&e.error?(F.replacements[F.index]=!1,P.html("Error: "+e.error)):(F.replacements[F.index]=!1,P.html("Error")),F.index++,I.css("width",`${Math.ceil(F.index/F.forms.length*100)}%`),imageChoicesAdmin.processSizeReplacement()}})},b&&b.length&&b.on("click",(function(i){i.preventDefault();var t=S.find("#image_choices_image_replacement_size_select").val().trim(),o=S.find("#image_choices_image_replacement_form_select").val().trim();t&&(F.new=t,F.forms=[],F.index=0,F.replacements=[],"all"===o?(P.html("Scanning for forms with image choices enabled..."),I.css("width","0%"),S.addClass("busy"),y.addClass("active"),p.length&&p.addClass("disabled"),e.ajax({url:window.ajaxurl,method:"POST",data:{action:"gf_image_choices_get_image_size_replacement_form_ids"},success:function(e){e&&e.success?e.forms&&e.forms.length?(F.forms=e.forms,imageChoicesAdmin.processSizeReplacement()):(I.css("width","100%"),P.html("Done! No forms found with image choices enabled"),S.removeClass("busy"),p.length&&p.removeClass("disabled")):e&&e.error?P.html("Error: "+e.error):P.html("Error")}})):(P.html("..."),I.css("width","0%"),S.addClass("busy"),y.addClass("active"),p.length&&p.addClass("disabled"),F.forms=[o],imageChoicesAdmin.processSizeReplacement()))}))}))}(jQuery);
-//# sourceMappingURL=gf_image_choices_admin.js.map
+/*! © JetSloth — SPDX-License-Identifier: GPL-2.0-or-later */
+
+var imageChoicesAdmin = imageChoicesAdmin || {};
+
+(function($){
+
+	var GF_MARKUP_VERSION = 2;
+
+	imageChoicesAdmin.extend = (...arguments) => {
+
+		// Variables
+		let extended = {};
+		let deep = false;
+		let i = 0;
+
+		// Check if a deep merge
+		if (typeof (arguments[0]) === 'boolean') {
+			deep = arguments[0];
+			i++;
+		}
+
+		// Merge the object into the extended object
+		let merge = function (obj) {
+			for (let prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+					if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+						// If we're doing a deep merge and the property is an object
+						extended[prop] = imageChoicesAdmin.extend(true, extended[prop], obj[prop]);
+					} else {
+						// Otherwise, do a regular merge
+						extended[prop] = obj[prop];
+					}
+				}
+			}
+		};
+
+		// Loop through each object and conduct a merge
+		for (; i < arguments.length; i++) {
+			merge(arguments[i]);
+		}
+
+		return extended;
+
+	};
+
+	imageChoicesAdmin.__dialogDefaults = {
+		dialogType: 'alert',
+		cancelText: 'Cancel',
+		confirmText: 'Ok',
+		allowCancel: true,
+		promptLabel: '',
+		promptPlaceholder: '',
+		promptValue: '',
+		title: '',
+		content: '',
+		image: false,
+		onConfirm: null,
+		onCancel: null,
+	};
+
+	imageChoicesAdmin.closeDialog = (dialogId) => {
+		let dialog = document.getElementById(dialogId);
+		if ( dialog ) {
+			dialog.classList.remove('ic-active');
+			setTimeout(() => {
+				dialog.remove();
+			}, 300);
+		}
+		let dialogBg = document.querySelector(`.ic-dialog-bg[data-for="${dialogId}"]`);
+		if ( dialogBg ) {
+			dialogBg.classList.remove('ic-active');
+			setTimeout(() => {
+				dialogBg.remove();
+			}, 300);
+		}
+	};
+
+	imageChoicesAdmin.dialog = (options) => {
+		let _options = imageChoicesAdmin.__dialogDefaults;
+		let allOptions = (typeof options === "object") ? imageChoicesAdmin.extend(true, _options, options) : _options;
+		if ( allOptions.dialogType !== 'alert' && allOptions.dialogType !== 'confirm' && allOptions.dialogType !== 'prompt' ) {
+			allOptions.dialogType = imageChoicesAdmin.__dialogDefaults.dialogType;
+		}
+		if ( allOptions.dialogType === 'alert' ) {
+			allOptions.allowCancel = false;
+		}
+
+		let dialogCount = document.querySelectorAll('.ic-dialog').length;
+		let dialogId = `ic_dialog_${dialogCount}`;
+
+		let baseZindex = 999900;
+
+		let dialogBg = document.createElement('div');
+		dialogBg.classList.add('ic-dialog-bg');
+		dialogBg.dataset.for = dialogId;
+		dialogBg.style.zIndex = `${baseZindex + dialogCount}`;
+
+		let cancelButton = ( allOptions.allowCancel ) ? `<button type="button" class="ic-btn ic-btn-secondary ic-dialog-cancel">${allOptions.cancelText}</button>` : ``;
+
+		let promptLabel = ( allOptions.promptLabel ) ? `<label for="${dialogId}_input" class="ic-prompt-input-label">${allOptions.promptLabel}</label>` : ``;
+		let promptInput = ( allOptions.dialogType === 'prompt' ) ? `<div class="ic-prompt-input-wrap">${promptLabel}<input type="text" id="${dialogId}_input" class=ic-prompt-input" value="${allOptions.promptValue}" placeholder="${allOptions.promptPlaceholder}"></div>` : ``;
+
+		let dialog = document.createElement('div');
+		dialog.id = dialogId;
+		dialog.classList.add('ic-dialog', `ic-dialog-${allOptions.dialogType}`);
+		dialog.innerHTML = `<div class="ic-dialog-header">${allOptions.title}</div><div class="ic-dialog-body">${allOptions.content}${promptInput}</div><div class="ic-dialog-footer">${cancelButton}<button type="button" class="ic-btn ic-dialog-confirm">${allOptions.confirmText}</button></div>`;
+		dialog.style.zIndex = `${baseZindex + dialogCount + 1}`;
+
+		document.body.append(dialogBg);
+		document.body.append(dialog);
+		setTimeout(() => {
+			dialogBg.classList.add('ic-active');
+			dialog.classList.add('ic-active');
+		}, 10);
+
+		dialog.querySelector('.ic-dialog-confirm').addEventListener('click', (e) => {
+			e.preventDefault();
+			let thisId =  e.currentTarget.closest('.ic-dialog').id;
+			if ( typeof allOptions.onConfirm === 'function' ) {
+				let val = ( allOptions.dialogType === 'prompt' ) ? document.getElementById(`${thisId}_input`).value : undefined;
+				allOptions.onConfirm(val);
+			}
+			imageChoicesAdmin.closeDialog( thisId );
+		});
+
+		if ( allOptions.allowCancel ) {
+			dialog.querySelector('.ic-dialog-cancel').addEventListener('click', (e) => {
+				e.preventDefault();
+				if ( typeof allOptions.onCancel === 'function' ) {
+					allOptions.onCancel();
+				}
+				imageChoicesAdmin.closeDialog( e.currentTarget.closest('.ic-dialog').id );
+			});
+		}
+	};
+
+	imageChoicesAdmin.prompt = (options) => {
+		let _options = imageChoicesAdmin.__dialogDefaults;
+		if (typeof options !== "object") {
+			options = {};
+		}
+		options.dialogType = 'prompt';
+		let allOptions = (typeof options === "object") ? imageChoicesAdmin.extend(true, _options, options) : _options;
+		imageChoicesAdmin.dialog(allOptions);
+	};
+
+	imageChoicesAdmin.confirm = (options) => {
+		let _options = imageChoicesAdmin.__dialogDefaults;
+		if (typeof options !== "object") {
+			options = {};
+		}
+		options.dialogType = 'confirm';
+		let allOptions = (typeof options === "object") ? imageChoicesAdmin.extend(true, _options, options) : _options;
+		imageChoicesAdmin.dialog(allOptions);
+	};
+
+	imageChoicesAdmin.alert = (options) => {
+		let _options = imageChoicesAdmin.__dialogDefaults;
+		if (typeof options !== "object") {
+			options = {};
+		}
+		options.dialogType = 'alert';
+		let allOptions = (typeof options === "object") ? imageChoicesAdmin.extend(true, _options, options) : _options;
+		imageChoicesAdmin.dialog(allOptions);
+	};
+
+
+	imageChoicesAdmin.markupDetect = function() {
+		if ( typeof window.form !== 'undefined' && window.form.hasOwnProperty('markupVersion') ) {
+			GF_MARKUP_VERSION = ( window.form.markupVersion !== '' ) ? parseInt( window.form.markupVersion.toString(), 10 ) : 1;
+		}
+		return GF_MARKUP_VERSION;
+	};
+
+	imageChoicesAdmin.isLegacyMode = function() {
+		var useNewFeatures = ( imageChoicesVars.hasOwnProperty('useNewFeatures') && imageChoicesVars.useNewFeatures.toString() === 'true');
+		return !useNewFeatures;
+	};
+
+	imageChoicesAdmin.formHasImageChoicesFields = function() {
+		var hasImageChoicesFields = false;
+		$.each(window.form.fields, function(i, field){
+			if ( field.hasOwnProperty('imageChoices_enableImages') && field.imageChoices_enableImages ) {
+				hasImageChoicesFields = true;
+				return false;
+			}
+		});
+		return hasImageChoicesFields;
+	};
+
+	imageChoicesAdmin.markup = {
+		removeChoicesButton: function(){
+			return '<button class="button image-choices-remove-choices-btn" type="button" onclick="imageChoicesAdmin.removeAllChoices();">'+imageChoicesFieldStrings.removeAllChoices+'</button>';
+		},
+		choicesAdminRow: function(index, image, id){
+			var i = (index !== undefined) ? index : 0;
+			var img = (image !== undefined) ? image : '';
+			var id = (id !== undefined) ? id : '';
+			var buttonLabel = '<i class="ic-select-icon"></i>';// GF 2.5+
+			return [
+				'<button type="button" id="image-choices-option-upload-button-'+i+'" class="button image-choices-option-upload-button" onclick="imageChoicesAdmin.OpenMediaLibrary(this);" title="'+imageChoicesFieldStrings.uploadImage+'">'+buttonLabel+'</button>',
+				'<span id="image-choices-option-preview-'+i+'" class="image-choices-option-preview-wrap">',
+					'<span class="image-choices-option-preview" style="background-image:url('+img+');"></span>',
+					'<a href="javascript:void(0);" class="image-choices-option-image-remove" onclick="imageChoicesAdmin.RemovePreview(this);" title="'+imageChoicesFieldStrings.removeImage+'"><i class="dashicons dashicons-no"></i></a>',
+				'</span>',
+				'<input type="hidden" id="image-choices-option-image-'+i+'" class="image-choices-option-image" value="'+img+'" />',
+				'<input type="hidden" id="image-choices-option-image-id-'+i+'" class="image-choices-option-image-id" value="'+id+'" />'
+			].join('');
+		},
+		choicesPreviewRow: function(index, labelText, image) {
+			var i = (index !== undefined) ? index : 0;
+			var label = (labelText !== undefined) ? labelText : '';
+			var img = (image !== undefined) ? image : '';
+			return [
+				'<span class="image-choices-choice-image-wrap" style="background-image:url('+img+')">',
+					'<img src="'+img+'" alt="" class="image-choices-choice-image" />',
+				'</span>',
+				'<span class="image-choices-choice-text">'+label+'</span>'
+			].join('');
+		}
+	};
+
+	imageChoicesAdmin.getChoices = function( field ) {
+		if ( typeof field === 'undefined' ) {
+			field = GetSelectedField();
+		}
+
+		var choicesSelector = '[class*="-choice-row"]';
+
+		imageChoicesAdmin.getSettingsElement().find(choicesSelector).each(function(){
+			var $row = $(this);
+			var i = $row.data('index');
+			var img = (field.choices.length && field.choices[i].imageChoices_image !== undefined) ? field.choices[i].imageChoices_image : '';
+			var imgID = (field.choices.length && field.choices[i].imageChoices_imageID !== undefined) ? field.choices[i].imageChoices_imageID : '';
+
+			if ( !$row.find('.image-choices-option-image').length ) {
+				var $firstInput = $row.find('input[id*="_choice_text"]:first');
+				if ( !$firstInput.length ) {
+					$firstInput = $row.find('input[id*="-choice-text"]:first');
+				}
+				if ( $firstInput.length ) {
+					$firstInput.before(imageChoicesAdmin.markup.choicesAdminRow(i, img, imgID));
+				}
+			}
+
+			var $imageInput = $row.find('.image-choices-option-image');
+			if ($imageInput.val() !== '') {
+				$row.addClass('image-choices-has-image');
+			}
+		});
+
+		imageChoicesAdmin.updateFieldPreview(field);
+	};
+
+	imageChoicesAdmin.RemovePreview = function( btnEl ) {
+		if (typeof btnEl === 'undefined') {
+			return;
+		}
+
+		var $choice = $(btnEl).closest('[class*="-choice-row"]');
+		$choice.find('.image-choices-option-image').val('');
+		$choice.find('.image-choices-option-image-id').val('');
+		$choice.find('.image-choices-option-preview').css('background-image', '');
+		$choice.removeClass('image-choices-has-image');
+
+		imageChoicesAdmin.UpdateFieldChoicesObject();
+
+		var field = GetSelectedField();
+		imageChoicesAdmin.updateFieldPreview(field);
+	};
+
+	imageChoicesAdmin.UpdateFieldChoicesObject = function() {
+		var field = GetSelectedField();
+
+		var $fieldSettings = imageChoicesAdmin.getSettingsElement();
+
+		var selector = '[class*="-choice-row"]';
+
+		$fieldSettings.find(selector).each(function(index) {
+			var $choice = $(this);
+			var image = $choice.find('.image-choices-option-image').val();
+			var imageID = $choice.find('.image-choices-option-image-id').val();
+			var i = $choice.data("index");
+			if (image !== '') {
+				$choice.addClass('image-choices-has-image');
+				$choice.find('.gf-image-choices-option-preview').css('background-image', 'url('+image+')');
+			}
+			else {
+				$choice.removeClass('image-choices-has-image');
+			}
+			field.choices[i].imageChoices_image = image;
+			field.choices[i].imageChoices_imageID = imageID;
+		});
+	};
+
+	imageChoicesAdmin.onProductPriceChange = function() {
+		setTimeout(function(){
+			imageChoicesAdmin.updateFieldPreview( GetSelectedField() );
+		}, 10);
+	};
+
+	var ttUpdateDelay;
+
+	imageChoicesAdmin.updateFieldPreview = function( field ) {
+
+		var $field = $('#field_'+field.id);
+		var productImageField = ( field.type === 'product' && field.inputType === 'singleproduct' );
+
+		var $fieldLabel = $field.find('.gfield_label.gform-field-label');
+		var $productImageWrap = $field.find('.ic-product-image-wrap');
+
+		var prop = productImageField ? 'productImage_enabled' : 'imageChoices_enableImages';
+		var imagesEnabled = (field.hasOwnProperty(prop) && field[prop] === true);
+		var hasProductImage = imageChoicesAdmin.hasProductImage( field );
+
+
+		if ( !imagesEnabled || !productImageField ) {
+			if ( $productImageWrap.length ) {
+				$fieldLabel.detach();
+				$field.prepend($fieldLabel);
+				$productImageWrap.remove();
+			}
+		}
+
+		if ( productImageField ) {
+
+			if ( !$productImageWrap.length && hasProductImage ) {
+				$fieldLabel.detach();
+				$productImageWrap = $(`<div class="ic-product-image-wrap"></div>`);
+				$productImageWrap.append(`<div class="ic-product-image" style="background-image:url(${field.productImage_image});"><img src="${field.productImage_image}" alt="" class="ic-product-image-element" /></div>`);
+				$productImageWrap.append($fieldLabel);
+				$productImageWrap.append(`<div class="ic-product-image-price">${field.basePrice}</div>`);
+				$field.prepend($productImageWrap);
+			}
+			else if ( !hasProductImage && $productImageWrap.length ) {
+				$fieldLabel.detach();
+				$field.prepend($fieldLabel);
+				$productImageWrap.remove();
+			}
+
+			if ( hasProductImage ) {
+				$field.find('.ic-product-image-price').html(field.basePrice);
+			}
+
+		}
+		else {
+
+			if ( imagesEnabled && field.imageChoices_showLabels === undefined ) {
+				imageChoicesAdmin.toggleShowLabels(true);
+			}
+
+			imageChoicesAdmin.$fieldChoices( $field ).each(function(i){
+				var $choice = $(this);
+
+				if ( !$choice.hasClass('gchoice_total') ) {
+
+					$choice.toggleClass('image-choices-choice', imagesEnabled);
+
+					var $choiceLabel = $choice.find('label');
+					var labelText = ($choiceLabel.find('.image-choices-choice-text').length) ? $choiceLabel.find('.image-choices-choice-text').html() : $choiceLabel.html();
+
+					if ( imagesEnabled && field.choices.length > i) {
+						var img = (field.choices[i].imageChoices_image !== undefined) ? field.choices[i].imageChoices_image : '';
+						$choiceLabel.html(imageChoicesAdmin.markup.choicesPreviewRow(i, labelText, img));
+					}
+					else if ( !imagesEnabled ) {
+						$choiceLabel.html(labelText);
+					}
+
+				}
+			});
+
+			if ( typeof gfttAdmin !== 'undefined' ) {
+				clearTimeout(ttUpdateDelay);
+				ttUpdateDelay = setTimeout(function(){
+					gfttAdmin.updateChoicesPreview();
+				}, 100);
+			}
+
+		}
+
+
+	};
+
+	imageChoicesAdmin.getField = function() {
+		var field = GetSelectedField();
+		return $('#field_'+field.id);
+	};
+
+	imageChoicesAdmin.removeAllChoices = function() {
+		imageChoicesAdmin.getSettingsElement().find('.image-choices-option-image-remove').each(function(){
+			$(this).trigger('click');
+		});
+
+		$settingsWrap.find('.gf_delete_field_choice').each(function(){
+			$(this).trigger('click');
+		});
+
+		$settingsWrap.find('.field-choice-row input[type="text"], .gquiz-choice-row input[type="text"]').val('');
+	};
+
+	imageChoicesAdmin.isColorPickerPluginActive = function() {
+		return (window.hasOwnProperty('colorPickerFieldVars') && typeof window.colorPickerFieldVars !== 'undefined');
+	};
+
+	imageChoicesAdmin.isImageChoicesEnabled = function( field ) {
+		field = field || GetSelectedField();
+		return ( imageChoicesAdmin.fieldCanHaveImages(field) && field.imageChoices_enableImages === true );
+	};
+
+	imageChoicesAdmin.hasImageChoicesImage = function( field ) {
+		field = field || GetSelectedField();
+		return ( imageChoicesAdmin.isImageChoicesEnabled(field) && field.hasOwnProperty('imageChoices_image') && field.imageChoices_image !== '' );
+	};
+
+	imageChoicesAdmin.isProductImageField = function( field ) {
+		field = field || GetSelectedField();
+		return ( field.type === "product" && field.inputType === "singleproduct" );
+	};
+
+	imageChoicesAdmin.isProductImageEnabled = function( field ) {
+		field = field || GetSelectedField();
+		return ( imageChoicesAdmin.isProductImageField(field) && field.productImage_enabled === true );
+	};
+
+	imageChoicesAdmin.hasProductImage = function( field ) {
+		field = field || GetSelectedField();
+		return ( imageChoicesAdmin.isProductImageField(field) && field.hasOwnProperty('productImage_image') && field.productImage_image !== '' );
+	};
+
+	imageChoicesAdmin.hasProductImageId = function( field ) {
+		field = field || GetSelectedField();
+		return ( imageChoicesAdmin.isProductImageField(field) && field.hasOwnProperty('productImage_imageId') && field.productImage_imageId );
+	};
+
+	imageChoicesAdmin.onProductImageToggleClick = function(toggle) {
+		imageChoicesAdmin.toggleEnableImages(toggle.checked, true);
+		if ( toggle.checked ) {
+			if ( !imageChoicesAdmin.hasProductImage() ) {
+				$('#product_image_tab_toggle').click();
+				setTimeout(function(){
+					$('#product-image-button').click();
+				}, 500);
+			}
+		}
+	}
+
+	imageChoicesAdmin.toggleEnableImages = function( enable, forProductImage ) {
+
+		var isForProductImage = ( forProductImage === true );
+		var toggleSelector = isForProductImage ? 'input.field_product_image_enabled' : 'input.field_choice_images_enabled';
+
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		var $toggle = $settings.find(toggleSelector);
+
+		if ( enable === undefined ) {
+			enable = $toggle.is(':checked');
+		}
+
+		if ( isForProductImage ) {
+			imageChoicesAdmin.onToggleEnableImages(enable, isForProductImage);
+			return;
+		}
+
+		var $coloPickerToggle = $settings.find('input.field_color_picker_enabled');
+
+		// if user is enabling image choices, and color picker is currently in use on this field, confirm the switch
+		if (enable && imageChoicesAdmin.isColorPickerPluginActive() && $coloPickerToggle.length && $coloPickerToggle.is(':checked')) {
+			if (window.confirm(imageChoicesFieldStrings.confirmImagesToggle)) {
+				if (window.hasOwnProperty('colorPicker_toggleEnableColors') && typeof window.colorPicker_toggleEnableColors === 'function') {
+					window.colorPicker_toggleEnableColors(false);
+				}
+				imageChoicesAdmin.onToggleEnableImages(enable, isForProductImage);
+			}
+			else {
+				$toggle.prop('checked', false);
+			}
+		}
+		else {
+			imageChoicesAdmin.onToggleEnableImages(enable, isForProductImage);
+		}
+	};
+	window.imageChoices_toggleEnableImages = imageChoicesAdmin.toggleEnableImages;// legacy support
+
+	imageChoicesAdmin.onToggleEnableImages = function( enable, forProductImage ) {
+
+		var field = GetSelectedField();
+		if ( !field ) {
+			return;
+		}
+
+		var isForProductImage = ( forProductImage === true );
+		var toggleSelector = isForProductImage ? 'input.field_product_image_enabled' : 'input.field_choice_images_enabled';
+
+		var $field = imageChoicesAdmin.getField();
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		var $toggle = $settings.find(toggleSelector);
+
+		if (enable === undefined) {
+			enable = $toggle.is(':checked');
+		}
+
+		$field.toggleClass('image-choices-admin-field', enable);
+		//$fieldSettings.toggleClass('image-choices-product-field', field.type === "product");
+
+		if ( isForProductImage ) {
+
+			SetFieldProperty('productImage_enabled', enable);
+			$toggle.prop('checked', enable);
+			$('#product_image_tab_toggle').toggle( enable );
+
+			var $imageWrap = $field.find('.ic-product-image-wrap');
+
+			if ( !enable && $imageWrap.length ) {
+				var $label = $field.find('.gfield_label.gform-field-label');
+				$label.detach();
+				$field.prepend($label);
+				$imageWrap.remove();
+			}
+
+			$field.toggleClass('product-image-admin-field', enable);
+			$field.toggleClass('product-image-enabled', enable);
+			$settings.toggleClass('product-image-enabled', enable);
+
+		}
+		else {
+
+			SetFieldProperty('imageChoices_enableImages', enable);
+			$toggle.prop('checked', enable);
+			$('#image_choices_tab_toggle').toggle( enable );
+
+			var choicesContainerSelector = ( field.type.toLowerCase() === "quiz" ) ? '#gquiz_gfield_settings_choices_container' : '#gfield_settings_choices_container';
+			var $choicesContainer = $(choicesContainerSelector);
+			$choicesContainer.toggleClass('image-choices-enabled', enable);
+
+			$field.toggleClass('image-choices-use-images', enable);
+			$settings.toggleClass('image-choices-use-images', enable);
+
+			var $removeChoicesBtn = $settings.find('.image-choices-remove-choices-btn');
+
+			if (!enable) {
+				if ($removeChoicesBtn.length) {
+					$removeChoicesBtn.remove();
+				}
+			}
+
+			var $enableOtherChoicesSetting = $('.field_setting.other_choice_setting');
+			var isFieldWithOtherChoiceOption = (field.type === 'radio' || (field.type === 'poll' && field.inputType === 'radio'));
+
+			if (isFieldWithOtherChoiceOption) {
+				$enableOtherChoicesSetting.show();
+			}
+
+		}
+
+		imageChoicesAdmin.updateFieldPreview(field);
+	};
+
+	imageChoicesAdmin.toggleShowLabels = function( enable ) {
+		var $field = imageChoicesAdmin.getField();
+		var $toggle = imageChoicesAdmin.getSettingsElement().find('input.image_choices_show_labels');
+
+		if (enable === undefined) {
+			enable = $toggle.is(':checked');
+		}
+
+		SetFieldProperty('imageChoices_showLabels', enable);
+
+		$toggle.prop('checked', enable);
+
+		$field.toggleClass('image-choices-show-labels', enable);
+	};
+
+	imageChoicesAdmin.toggleShowPrices = function( enable ) {
+		var $field = imageChoicesAdmin.getField();
+		var $toggle = imageChoicesAdmin.getSettingsElement().find('input.image_choices_show_prices');
+
+		if (enable === undefined) {
+			enable = $toggle.is(':checked');
+		}
+
+		SetFieldProperty('imageChoices_showPrices', enable);
+
+		$toggle.prop('checked', enable);
+
+		$field.toggleClass('image-choices-show-prices', enable);
+	};
+
+	imageChoicesAdmin.toggleUseLightboxCaption = function( enable, forProductImage ) {
+
+		var $field = imageChoicesAdmin.getField();
+		var isForProductImage = ( forProductImage === true );
+		var toggleSelector = isForProductImage ? 'input.product_image_use_lightbox_caption' : 'input.image_choices_use_lightbox_caption';
+		var $toggle = imageChoicesAdmin.getSettingsElement().find(toggleSelector);
+
+		if (enable === undefined) {
+			enable = $toggle.is(':checked');
+		}
+
+		$toggle.prop('checked', enable);
+
+		if ( isForProductImage ) {
+			SetFieldProperty('productImage_useLightboxCaption', enable);
+		}
+		else {
+			SetFieldProperty('imageChoices_useLightboxCaption', enable);
+		}
+
+	};
+
+	imageChoicesAdmin.toggleUseLightbox = function( enable, forProductImage ) {
+
+		var field = GetSelectedField();
+		var $field = imageChoicesAdmin.getField();
+		var isForProductImage = ( forProductImage === true );
+		var toggleSelector = isForProductImage ? 'input.product_image_use_lightbox' : 'input.image_choices_use_lightbox';
+		var $toggle = imageChoicesAdmin.getSettingsElement().find(toggleSelector);
+		var lightboxCaptionSelector = isForProductImage ? '.product-image-setting-use-lightbox-caption' : '.image-choices-setting-use-lightbox-caption';
+
+		if (enable === undefined) {
+			enable = $toggle.is(':checked');
+		}
+
+		$toggle.prop('checked', enable);
+
+		if ( isForProductImage ) {
+
+			SetFieldProperty('productImage_useLightbox', enable);
+			$field.toggleClass('product-image-use-lightbox', enable);
+
+			if ( imageChoicesAdmin.hasProductImage(field) && !imageChoicesAdmin.hasProductImageId(field) ) {
+				window.alert(imageChoicesFieldStrings.useLightboxWarning);
+				return false;
+			}
+
+		}
+		else {
+
+			SetFieldProperty('imageChoices_useLightbox', enable);
+			$field.toggleClass('image-choices-use-lightbox', enable);
+
+			if (enable) {
+				$.each(field.choices, function(i, fieldChoice){
+					var hasImage = ( fieldChoice.hasOwnProperty('imageChoices_image') && fieldChoice.imageChoices_image !== '' );
+					var hasImageID = ( fieldChoice.hasOwnProperty('imageChoices_imageID') && fieldChoice.imageChoices_imageID !== '' );
+
+					if ( hasImage && !hasImageID ) {
+						window.alert(imageChoicesFieldStrings.useLightboxWarning);
+						return false;
+					}
+				});
+			}
+
+		}
+
+		document.querySelector(lightboxCaptionSelector).style.setProperty('display', enable ? 'block' : 'none', 'important');
+
+	};
+
+	imageChoicesAdmin.updateEntrySetting = function( value, forProductImage ) {
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+
+		SetFieldProperty(`${propPrefix}_entrySetting`, value);
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-entry-value`).val( value );
+	};
+
+	imageChoicesAdmin.OpenMediaLibrary = function( btnEl ) {
+		if (typeof btnEl === 'undefined') {
+			return;
+		}
+
+		var field = GetSelectedField();
+		var isForProductImage = imageChoicesAdmin.isProductImageField(field);
+
+		var image_fileFrame;
+
+		if ( isForProductImage ) {
+			var $field = imageChoicesAdmin.getField();
+			image_fileFrame = $field.data('file-frame');
+		}
+		else {
+			var $choice = $(btnEl).closest('[class*="-choice-row"]');
+			image_fileFrame = $choice.data('file-frame');
+		}
+
+		// If the media frame already exists, reopen it.
+		if ( image_fileFrame ) {
+			// Open frame
+			image_fileFrame.open();
+			return;
+		}
+
+		// Create the media frame.
+		image_fileFrame = wp.media({
+			title: 'Select an image to upload',
+			button: {
+				text: 'Use this image'
+			},
+			frame: 'post',
+			state: 'insert',
+			multiple: false	// Set to true to allow multiple files to be selected
+		});
+
+		setTimeout(function(){
+			$('input[value="Insert into Post"]').val('Use this Image');
+			$('button.media-button-insert').text('Use this Image');
+		}, 100);
+
+		jQuery('body').on('click', 'li.attachment', function(){
+			$('input[value="Insert into Post"]').val('Use this Image');
+			$('button.media-button-insert').text('Use this Image');
+		});
+
+		// When an image is selected, run a callback.
+		image_fileFrame.on( 'insert', function(selection) {
+			var state = image_fileFrame.state();
+			selection = selection || state.get('selection');
+			if (! selection) {
+				return;
+			}
+
+			var attachment = selection.first();
+			var selectedSize = "";
+
+			var display = state.display(attachment).toJSON();
+			attachment = attachment.toJSON();
+
+			// start with the selected size, but fallback to one of the defaults if there's no image
+			// this can happen eg when there are existing images in the media library when a new size is created, and thumbnails haven't been generated for existing
+			// the size will appear as an option in the media library when selecting the image, but then fails as there's no image in that size
+			var sizes = ["medium", "thumbnail", "full"];
+			if ( display && display.hasOwnProperty('size') && display.size ) {
+				sizes.unshift( display.size );
+			}
+
+			var img;
+			if ( !attachment.hasOwnProperty('sizes') ) {
+				img = attachment.url;
+				selectedSize = "full";
+			}
+			else {
+				var i = 0;
+				var imageSize = sizes[i].toString();
+				while ( !attachment.sizes.hasOwnProperty(imageSize) || !attachment.sizes[imageSize].hasOwnProperty('url') || attachment.sizes[imageSize].url === "" ) {
+					i++;
+					imageSize = sizes[i].toString();
+				}
+				img = attachment.sizes[imageSize].url;
+				selectedSize = imageSize;
+				// TODO: size override? But can use the IC image size update tool
+				/*
+				if ( imageChoicesVars.hasOwnProperty('defaults') && imageChoicesVars.defaults.hasOwnProperty('imageSize') && sizes.indexOf(imageChoicesVars.defaults.imageSize) !== -1 ) {
+					img = attachment.sizes[imageChoicesVars.defaults.imageSize].url;
+				}
+				*/
+			}
+
+			if ( isForProductImage ) {
+				imageChoicesAdmin.updateProductImage(img, attachment.id);
+			}
+			else {
+				$choice.find('.image-choices-option-image').val(img);
+				$choice.find('.image-choices-option-image-id').val(attachment.id);
+				$choice.find('.image-choices-option-preview').css('background-image', 'url('+img+')');
+				$choice.addClass('image-choices-has-image');
+
+				imageChoicesAdmin.UpdateFieldChoicesObject();
+				imageChoicesAdmin.updateFieldPreview(field);
+
+				// GF 2.6+
+				var $choicesFlyout = $('#choices-ui-flyout');
+				if ( $choicesFlyout.length ) {
+					$choicesFlyout.addClass('gform-flyout--anim-in-ready gform-flyout--anim-in-active');
+				}
+			}
+
+		});
+
+		// Finally, open the modal
+		image_fileFrame.open();
+
+		if ( isForProductImage ) {
+			$field.data('file-frame', image_fileFrame);
+		}
+		else {
+			$choice.data('file-frame', image_fileFrame);
+		}
+	};
+
+	imageChoicesAdmin.fieldCanHaveImages = function( field ) {
+
+		if ( typeof field === 'undefined' || !field.hasOwnProperty('type') ) {
+			return false;
+		}
+
+		var canHave = (
+			field.type === 'radio'
+			|| field.type === 'checkbox'
+			|| ( field.type === 'quiz' && field.inputType == 'radio' )
+			|| ( field.type === 'quiz' && field.inputType == 'checkbox' )
+			|| ( field.type === 'poll' && field.inputType == 'radio' )
+			|| ( field.type === 'poll' && field.inputType == 'checkbox' )
+			|| ( field.type === 'post_custom_field' && field.inputType == 'radio' )
+			|| ( field.type === 'post_custom_field' && field.inputType == 'checkbox' )
+			|| ( field.type === 'survey' && field.inputType == 'radio' )
+			|| ( field.type === 'survey' && field.inputType == 'checkbox' )
+			|| ( field.type === 'product' && field.inputType == 'radio' )
+			|| ( field.type === 'shipping' && field.inputType == 'radio' )
+			|| ( field.type === 'option' && field.inputType == 'radio' )
+			|| ( field.type === 'option' && field.inputType == 'checkbox' )
+			|| ( field.type === 'multi_choice' && field.inputType == 'radio' )
+			|| ( field.type === 'multi_choice' && field.inputType == 'checkbox' )
+		);
+
+		return gform.applyFilters('gfic_field_can_have_images', canHave, field);
+
+	};
+
+	imageChoicesAdmin.$fieldChoices = function( $field ) {
+		if ( typeof $field === 'undefined' || $field instanceof jQuery === false) {
+			return [];
+		}
+		var choicesSelector = '.ginput_container .gfield_radio div[class*="gchoice"], .ginput_container .gfield_checkbox .gchoice:not(.gchoice_select_all)';// GF 2.5+
+
+		return $field.find(choicesSelector);
+	};
+
+	imageChoicesAdmin.getSettingsElement = function() {
+		var fieldSettingsSelector = '#field_settings_container';// GF 2.5+
+
+		var field = GetSelectedField();
+		fieldSettingsSelector += ( field.type === "quiz" ) ? ', #gquiz_gfield_settings_choices_container' : ', #gfield_settings_choices_container'
+
+		return $(fieldSettingsSelector);
+	};
+
+	imageChoicesAdmin.previewHeight = function( $el ) {
+
+		if ( typeof $el !== 'object' ) {
+			var $field = imageChoicesAdmin.getField();
+			$el = $field.find('.ginput_container');
+		}
+
+		if ( !$el.length || !$el.closest('.gfield').hasClass('image-choices-admin-field') ) {
+			return;
+		}
+
+		setTimeout(function(){
+			$el.height( $el.find('> ul:first').outerHeight() );
+		}, 20);
+
+	};
+
+	imageChoicesAdmin.updateProductImage = function( url, id ) {
+
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		var $field = imageChoicesAdmin.getField();
+
+		if ( typeof url === 'undefined' ) {
+			url = '';
+		}
+		if ( typeof id === 'undefined' ) {
+			id = '';
+		}
+
+		SetFieldProperty('productImage_image', url);
+		SetFieldProperty('productImage_imageId', id);
+
+		$settings.find('.product-image-url').val(url);
+		$settings.find('.product-image-id').val(id);
+		$settings.find('#product-image-preview').css('background-image', 'url('+url+')');
+
+		$settings.toggleClass('has-product-image', url !== '');// todo: class on settings?
+		$field.toggleClass('has-product-image', url !== '');// todo: or class on field?
+		imageChoicesAdmin.updateFieldPreview( GetSelectedField() );
+
+	};
+
+	imageChoicesAdmin.updateThemeSetting = function( value, forProductImage ) {
+
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+
+		SetFieldProperty( `${propPrefix}_theme`, value );
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-theme`).val( value );
+
+		var $previewWrap = $(`#${selectorPrefix}-theme-preview`);
+		var $previewImg;
+		$previewWrap.toggle(value !== 'none');
+		if (value === 'none') {
+			$previewWrap.hide().find('img').hide();
+		}
+		else if (value === 'form_setting') {
+			value = (window.form.hasOwnProperty('gf-image-choices') && window.form['gf-image-choices'].hasOwnProperty('gf_image_choices_theme')) ? window.form['gf-image-choices'].gf_image_choices_theme : '';
+			if ( !value || value === "global_setting" ) {
+				value = ( imageChoicesVars.hasOwnProperty('globals') && imageChoicesVars.globals.hasOwnProperty('theme') ) ? imageChoicesVars.globals.theme : ( imageChoicesVars.hasOwnProperty('defaults') && imageChoicesVars.defaults.hasOwnProperty('theme') ) ? imageChoicesVars.defaults.theme : 'simple';
+			}
+			$previewWrap.find('img').hide();
+			$previewImg = $previewWrap.find(`img.${selectorPrefix}-theme-preview-${value}`);
+			if ( $previewImg.length ) {
+				$previewImg.show();
+			}
+		}
+		else {
+			$previewWrap.find('img').hide();
+			$previewImg = $previewWrap.find(`img.${selectorPrefix}-theme-preview-${value}`);
+			if ( $previewImg.length ) {
+				$previewImg.show();
+			}
+		}
+
+	};
+
+	imageChoicesAdmin.updateFeatureColorSetting = function( value ) {
+
+		SetFieldProperty( `imageChoices_featureColor`, value );
+
+		var $customColorLabel = imageChoicesAdmin.getSettingsElement().find(`[for="image-choices-feature-color-custom"]`);
+		var $customColorInput = imageChoicesAdmin.getSettingsElement().find(`#image-choices-feature-color-custom`);
+		var $customColorPicker = imageChoicesAdmin.getSettingsElement().find(`.image-choices-setting-feature-color .wp-picker-container`);
+		var customColor = $customColorInput.val();
+
+		imageChoicesAdmin.getSettingsElement().find(`#image-choices-feature-color`).val( value );
+
+		if ( value === "custom" ) {
+			$customColorLabel.show();
+			$customColorInput.show();
+			if ( $customColorPicker.length ) {
+				$customColorPicker.show();
+				setTimeout(function(){
+					if ( customColor !== "" ) {
+						$customColorInput.wpColorPicker('color', customColor);
+					}
+					else {
+						$customColorPicker.find('.wp-picker-clear').trigger('click');
+					}
+				}, 100);
+			}
+			else {
+				$customColorInput.wpColorPicker({
+					change: function( e, ui ) {
+						imageChoicesAdmin.updateCustomFeatureColor( ui.color.toString() );
+					}
+				});
+				setTimeout(function(){
+					if ( customColor !== "" ) {
+						$customColorInput.wpColorPicker('color', customColor);
+					}
+					else {
+						$customColorPicker.find('.wp-picker-clear').trigger('click');
+					}
+				}, 100);
+			}
+		}
+		else {
+			$customColorLabel.hide();
+			$customColorInput.hide();
+			if ( $customColorPicker.length ) {
+				$customColorPicker.find('.wp-picker-clear').trigger('click');
+				$customColorPicker.hide();
+			}
+		}
+
+	};
+
+	imageChoicesAdmin.updateCustomFeatureColor = function( value, forProductImage ) {
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-feature-color-custom`).val( value );
+		SetFieldProperty( `${propPrefix}_featureColorCustom`, value );
+	};
+
+	imageChoicesAdmin.updateAlignSetting = function( value ) {
+		SetFieldProperty( 'imageChoices_align', value );
+		imageChoicesAdmin.getSettingsElement().find('#image-choices-align').val( value );
+	};
+
+	imageChoicesAdmin.updateImageStyleSetting = function( value, forProductImage ) {
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+		SetFieldProperty( `${propPrefix}_imageStyle`, value );
+
+		var $select = imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-image-style`);
+		if ( !$select.length ) {
+			return;
+		}
+
+		$select.val( value );
+		if ( value === 'form_setting' ) {
+			var optionText = $select.find('option[value="form_setting"]').html();
+			value = optionText.substring( optionText.indexOf('(') + 1, optionText.indexOf(')') ).toLowerCase();
+			if ( value.indexOf('global:') !== -1 ) {
+				value = value.substring( value.indexOf('global:') + 8 );
+			}
+		}
+
+		imageChoicesAdmin.getSettingsElement().find('.image-choices-setting-height, .image-choices-setting-height-medium, .image-choices-setting-height-small').toggleClass('hide-setting', value === 'square' || value === 'natural' );
+	};
+
+	imageChoicesAdmin.validateNumericValue = function( val ) {
+		var numVal = '';
+		val = val.toString();
+		if ( val.trim() !== '' ) {
+			var num = parseInt(val, 10);
+			if ( isNaN(num) || num <= 0 ) {
+				numVal = '';
+			}
+			else {
+				numVal = num.toString();
+			}
+		}
+		return ( numVal !== val ) ? numVal : val;
+	};
+
+	imageChoicesAdmin.updateColumnsSetting = function( value ) {
+		SetFieldProperty( 'imageChoices_columns', value );
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		$settings.find('#image-choices-columns').val( value );
+		$settings.find('.image-choices-setting-columns-width').toggle( value === 'fixed' );
+	};
+
+	imageChoicesAdmin.updateColumnsWidthSetting = function( value ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		SetFieldProperty( 'imageChoices_columnsWidth', numVal );
+		imageChoicesAdmin.getSettingsElement().find('#image-choices-columns-width').val( numVal );
+	};
+
+	imageChoicesAdmin.updateColumnsMediumSetting = function( value ) {
+		SetFieldProperty( 'imageChoices_columnsMedium', value );
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		$settings.find('#image-choices-columns-medium').val( value );
+		$settings.find('.image-choices-setting-columns-width-medium').toggle( value === 'fixed' );
+	};
+
+	imageChoicesAdmin.updateColumnsMediumWidthSetting = function( value ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		SetFieldProperty( 'imageChoices_columnsWidthMedium', numVal );
+		imageChoicesAdmin.getSettingsElement().find('#image-choices-columns-width-medium').val( numVal );
+	};
+
+	imageChoicesAdmin.updateColumnsSmallSetting = function( value ) {
+		SetFieldProperty( 'imageChoices_columnsSmall', value );
+		var $settings = imageChoicesAdmin.getSettingsElement();
+		$settings.find('#image-choices-columns-small').val( value );
+		$settings.find('.image-choices-setting-columns-width-small').toggle( value === 'fixed' );
+	};
+
+	imageChoicesAdmin.updateColumnsSmallWidthSetting = function( value ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		SetFieldProperty( 'imageChoices_columnsWidthSmall', numVal );
+		imageChoicesAdmin.getSettingsElement().find('#image-choices-columns-width-small').val( numVal );
+	};
+
+	imageChoicesAdmin.updateHeightSetting = function( value, forProductImage ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+
+		SetFieldProperty( `${propPrefix}_height`, numVal );
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-height`).val( numVal );
+	};
+
+	imageChoicesAdmin.updateMediumHeightSetting = function( value, forProductImage ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+
+		SetFieldProperty( `${propPrefix}_heightMedium`, numVal );
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-height-medium`).val( numVal );
+	};
+
+	imageChoicesAdmin.updateSmallHeightSetting = function( value, forProductImage ) {
+		var numVal = imageChoicesAdmin.validateNumericValue( value );
+		var isForProductImage = ( forProductImage === true );
+		var propPrefix = isForProductImage ? 'productImage' : 'imageChoices';
+		var selectorPrefix = isForProductImage ? 'product-image' : 'image-choices';
+
+		SetFieldProperty( `${propPrefix}_heightSmall`, numVal );
+		imageChoicesAdmin.getSettingsElement().find(`#${selectorPrefix}-height-small`).val( numVal );
+	};
+
+	imageChoicesAdmin.initProductImageField = function(field) {
+		var $field = $('#field_'+field.id);
+		$field.addClass('product-image-admin-field');
+		$field.addClass('product-image-enabled');
+		if ( imageChoicesAdmin.hasProductImage(field) ) {
+			$field.addClass('has-product-image');
+		}
+		imageChoicesAdmin.updateFieldPreview(field);
+	};
+
+	imageChoicesAdmin.initImageChoicesField = function(field) {
+		var $field = $('#field_'+field.id);
+		$field.addClass('image-choices-admin-field');
+		$field.addClass('image-choices-enabled');
+		if ( imageChoicesAdmin.hasImageChoicesImage(field) ) {
+			$field.addClass('image-choices-has-image');
+		}
+		imageChoicesAdmin.updateFieldPreview(field);
+	};
+
+	imageChoicesAdmin.formEditorInit = function() {
+
+		gform.addAction( 'gform_after_refresh_field_preview', function(fieldId){
+			var field = GetSelectedField();
+			if ( imageChoicesAdmin.isImageChoicesEnabled(field) ) {
+				imageChoicesAdmin.updateFieldPreview(field);
+			}
+		});
+
+		// setup previews on load
+		form.fields.forEach(function(f){
+			if ( imageChoicesAdmin.isProductImageEnabled(f) ) {
+				imageChoicesAdmin.initProductImageField(f);
+			}
+			else if ( imageChoicesAdmin.isImageChoicesEnabled(f) ) {
+				imageChoicesAdmin.initImageChoicesField(f);
+			}
+		});
+
+		$('.gfield.image-choices-admin-field').each(function(){
+			imageChoicesAdmin.$fieldChoices( $(this) ).each(function(){
+				let $choice = $(this);
+				if ( !$choice.hasClass('gchoice_total') ) {
+					$choice.addClass('image-choices-choice');
+				}
+			});
+		});
+
+		$('#gform_fields .gfield .ginput_container').each(function(){
+			imageChoicesAdmin.previewHeight( $(this) );
+		});
+
+
+		$(window).on('gf_update_field_choices', function() {
+			setTimeout(function() {
+				imageChoicesAdmin.getChoices();
+			}, 10);
+
+			imageChoicesAdmin.previewHeight();
+		});
+
+		$(document).on('click', '.gf_insert_field_choice, .gf_delete_field_choice', function(e){
+			imageChoicesAdmin.previewHeight();
+		});
+
+		gform.addAction('gform_load_field_choices', function( fields ){
+
+			setTimeout(function(){
+
+				var field = ( typeof fields !== 'undefined' && fields.length ) ? fields[0] : GetSelectedField();
+				var $field = $('#field_'+field.id);
+				var $fieldSettings = imageChoicesAdmin.getSettingsElement();
+
+				if ( imageChoicesAdmin.isProductImageField(field) ) {
+
+					$('#field_base_price').on('change', imageChoicesAdmin.onProductPriceChange);
+
+					var productImageEnabled = imageChoicesAdmin.isProductImageEnabled(field);
+
+					var productImageUrl = (field.productImage_image !== undefined) ? field.productImage_image : '';
+					var productImageId = (field.productImage_imageId !== undefined) ? field.productImage_imageId : '';
+					var useProductImageLightbox = (field.productImage_useLightbox !== undefined) ? field.productImage_useLightbox : false;
+					var selectedProductImageTheme = (field.productImage_theme !== undefined) ? field.productImage_theme : 'form_setting';
+					var productImageStyle = (field.productImage_imageStyle !== undefined) ? field.productImage_imageStyle : 'form_setting';
+					var productImageUseLightboxCaption = (field.productImage_useLightboxCaption !== undefined) ? field.productImage_useLightboxCaption : true;
+					if ( productImageUseLightboxCaption === "form_setting" || productImageUseLightboxCaption === "" ) {
+						productImageUseLightboxCaption = true;
+					}
+					var productImageHeightSetting = (field.productImage_height !== undefined) ? field.productImage_height : '';
+					var productImageMediumHeightSetting = (field.productImage_heightMedium !== undefined) ? field.productImage_heightMedium : '';
+					var productImageSmallHeightSetting = (field.productImage_heightSmall !== undefined) ? field.productImage_heightSmall : '';
+
+					var productImageEntryValue = (field.productImage_entrySetting !== undefined) ? field.productImage_entrySetting : 'form_setting';
+
+					$fieldSettings.addClass('product-image-field-settings');
+
+					imageChoicesAdmin.toggleEnableImages(productImageEnabled, true);
+
+					imageChoicesAdmin.updateProductImage(productImageUrl, productImageId);
+
+					imageChoicesAdmin.toggleUseLightbox(useProductImageLightbox, true);
+					imageChoicesAdmin.toggleUseLightboxCaption(productImageUseLightboxCaption, true);
+
+					imageChoicesAdmin.updateThemeSetting(selectedProductImageTheme, true);
+					imageChoicesAdmin.updateImageStyleSetting(productImageStyle, true);
+
+					imageChoicesAdmin.updateHeightSetting(productImageHeightSetting, true);
+					imageChoicesAdmin.updateMediumHeightSetting(productImageMediumHeightSetting, true);
+					imageChoicesAdmin.updateSmallHeightSetting(productImageSmallHeightSetting, true);
+
+					imageChoicesAdmin.updateEntrySetting(productImageEntryValue, true);
+
+				}
+				else {
+					imageChoicesAdmin.toggleEnableImages(false, true);
+					imageChoicesAdmin.updateProductImage('');
+					imageChoicesAdmin.toggleUseLightboxCaption(true, true);
+					imageChoicesAdmin.updateThemeSetting('form_setting', true);
+					imageChoicesAdmin.updateImageStyleSetting('form_setting', true);
+
+					imageChoicesAdmin.updateHeightSetting('', true);
+					imageChoicesAdmin.updateMediumHeightSetting('', true);
+					imageChoicesAdmin.updateSmallHeightSetting('', true);
+
+					imageChoicesAdmin.updateEntrySetting('', true);
+
+					$field.removeClass('product-image-admin-field');
+					$fieldSettings.removeClass('product-image-field-settings');
+				}
+
+				if ( imageChoicesAdmin.fieldCanHaveImages(field) ) {
+
+					var imagesEnabled = (field.imageChoices_enableImages === true);
+					var useLightbox = (field.imageChoices_useLightbox !== undefined) ? field.imageChoices_useLightbox : false;
+					var displayLabels = (field.imageChoices_showLabels !== undefined) ? field.imageChoices_showLabels : true;
+					var showPrices = (field.type === 'product' && field.imageChoices_showPrices !== undefined) ? field.imageChoices_showPrices : false;
+					var entryValue = (field.imageChoices_entrySetting !== undefined) ? field.imageChoices_entrySetting : 'form_setting';
+					var selectedTheme = (field.imageChoices_theme !== undefined) ? field.imageChoices_theme : 'form_setting';
+					var featureColor = (field.imageChoices_featureColor !== undefined) ? field.imageChoices_featureColor : 'form_setting';
+					var featureColorCustom = (field.imageChoices_featureColorCustom !== undefined) ? field.imageChoices_featureColorCustom : '';
+					var alignSetting = (field.imageChoices_align !== undefined) ? field.imageChoices_align : 'form_setting';
+					var imageStyle = (field.imageChoices_imageStyle !== undefined) ? field.imageChoices_imageStyle : 'form_setting';
+					var columnsSetting = (field.imageChoices_columns !== undefined) ? field.imageChoices_columns : 'form_setting';
+					var columnsWidthSetting = (field.imageChoices_columnsWidth !== undefined) ? field.imageChoices_columnsWidth : '';
+					var columnsMediumSetting = (field.imageChoices_columnsMedium !== undefined) ? field.imageChoices_columnsMedium : 'form_setting';
+					var columnsMediumWidthSetting = (field.imageChoices_columnsWidthMedium !== undefined) ? field.imageChoices_columnsWidthMedium : '';
+					var columnsSmallSetting = (field.imageChoices_columnsSmall !== undefined) ? field.imageChoices_columnsSmall : 'form_setting';
+					var columnsSmallWidthSetting = (field.imageChoices_columnsWidthSmall !== undefined) ? field.imageChoices_columnsWidthSmall : '';
+					var useLightboxCaption = (field.imageChoices_useLightboxCaption !== undefined) ? field.imageChoices_useLightboxCaption : true;
+					if ( useLightboxCaption === "form_setting" || useLightboxCaption === "" ) {
+						useLightboxCaption = true;
+					}
+					var heightSetting = (field.imageChoices_height !== undefined) ? field.imageChoices_height : '';
+					var mediumHeightSetting = (field.imageChoices_heightMedium !== undefined) ? field.imageChoices_heightMedium : '';
+					var smallHeightSetting = (field.imageChoices_heightSmall !== undefined) ? field.imageChoices_heightSmall : '';
+
+					$fieldSettings.addClass('image-choices-field-settings');
+
+					if ( field.type === 'product' ) {
+						$fieldSettings.addClass('image-choices-product-field');
+					}
+
+					imageChoicesAdmin.toggleEnableImages(imagesEnabled);
+					imageChoicesAdmin.toggleUseLightbox(useLightbox);
+					imageChoicesAdmin.toggleShowLabels(displayLabels);
+					imageChoicesAdmin.toggleShowPrices(showPrices);
+					imageChoicesAdmin.updateEntrySetting(entryValue);
+					imageChoicesAdmin.toggleUseLightboxCaption(useLightboxCaption);
+
+					if ( !imageChoicesAdmin.isLegacyMode() ) {
+						imageChoicesAdmin.updateThemeSetting(selectedTheme);
+						imageChoicesAdmin.updateCustomFeatureColor(featureColorCustom);
+						imageChoicesAdmin.updateFeatureColorSetting(featureColor);
+						imageChoicesAdmin.updateAlignSetting(alignSetting);
+						imageChoicesAdmin.updateImageStyleSetting(imageStyle);
+
+						imageChoicesAdmin.updateHeightSetting(heightSetting);
+						imageChoicesAdmin.updateMediumHeightSetting(mediumHeightSetting);
+						imageChoicesAdmin.updateSmallHeightSetting(smallHeightSetting);
+
+						imageChoicesAdmin.updateColumnsWidthSetting(columnsWidthSetting);
+						imageChoicesAdmin.updateColumnsMediumWidthSetting(columnsMediumWidthSetting);
+						imageChoicesAdmin.updateColumnsSmallWidthSetting(columnsSmallWidthSetting);
+
+						imageChoicesAdmin.updateColumnsSetting(columnsSetting);
+						imageChoicesAdmin.updateColumnsMediumSetting(columnsMediumSetting);
+						imageChoicesAdmin.updateColumnsSmallSetting(columnsSmallSetting);
+					}
+
+					imageChoicesAdmin.getChoices( field );
+
+				}
+				else {
+
+					imageChoicesAdmin.toggleEnableImages(false);
+					imageChoicesAdmin.toggleUseLightboxCaption(true);
+					//imageChoicesAdmin.toggleShowLabels(false);
+
+					if ( !imageChoicesAdmin.isLegacyMode() ) {
+						imageChoicesAdmin.updateThemeSetting('form_setting');
+						imageChoicesAdmin.updateCustomFeatureColor('');
+						imageChoicesAdmin.updateFeatureColorSetting('form_setting');
+						imageChoicesAdmin.updateAlignSetting('form_setting');
+						imageChoicesAdmin.updateImageStyleSetting('form_setting');
+
+						imageChoicesAdmin.updateHeightSetting('');
+						imageChoicesAdmin.updateMediumHeightSetting('');
+						imageChoicesAdmin.updateSmallHeightSetting('');
+
+						imageChoicesAdmin.updateColumnsWidthSetting('');
+						imageChoicesAdmin.updateColumnsMediumWidthSetting('');
+						imageChoicesAdmin.updateColumnsSmallWidthSetting('');
+
+						imageChoicesAdmin.updateColumnsSetting('form_setting');
+						imageChoicesAdmin.updateColumnsMediumSetting('form_setting');
+						imageChoicesAdmin.updateColumnsSmallSetting('form_setting');
+					}
+
+					$field.removeClass('image-choices-show-labels');
+					$fieldSettings.removeClass('image-choices-field-settings');
+					$fieldSettings.remove('image-choices-product-field');
+				}
+
+			}, 100);
+
+		});
+
+		$(document).bind('gform_load_field_settings', function (event, field, form) {
+
+			// There's currently no action or event fired by GF when the 'show values' or 'show prices' option is toggled, but the preview updates
+			// So we override the global UpdateFieldChoices that is called at this point (GF form_editor.js) in order to fire our own gf_update_field_choices event so we can update preview
+			if (typeof window.imageChoices_GF_UpdateFieldChoices !== 'function' && typeof UpdateFieldChoices === 'function') {
+				window.imageChoices_GF_UpdateFieldChoices = UpdateFieldChoices;
+				window.UpdateFieldChoices = function() {
+					window.imageChoices_GF_UpdateFieldChoices.apply(this, arguments);
+					$(window).trigger('gf_update_field_choices');
+				};
+			}
+
+			imageChoicesAdmin.previewHeight();
+		});
+
+	};
+
+	imageChoicesAdmin.formEditorLegacyWarning = function() {
+
+		return;
+
+		var alertMessage = [
+			'<div class="gform-alert" data-js="gform-alert" role="status" data-gform-alert-instance="gfic-legacy-alert-' + window.form.id.toString() + '">',
+				'<span class="gform-alert__icon gform-icon gform-icon--warning" aria-hidden="true"></span>',
+				'<div class="gform-alert__message-wrap">',
+					'<p class="gform-alert__message">JetSloth will stop supporting legacy markup at the end of 2023. We encourage you to test out your form with legacy markup turned off, to ensure continued compatibility with Image Choices.</p>',
+					'<a class="gform-alert__cta gform-button gform-button--white gform-button--size-xs" href="' + window.imageChoicesVars.form_settings + window.form.id.toString() + '#gform_setting_markupVersion" aria-label="">Form settings</a>',
+				'</div>',
+			'</div>',
+		].join('');
+
+		var $gfLegacyAlert = $('.simplebar-content > .gform-alert[data-gform-alert-instance^="gform-alert-"]:first');
+		if ( $gfLegacyAlert.length ) {
+			$gfLegacyAlert.after(alertMessage);
+		}
+		else {
+			$('.simplebar-content').prepend(alertMessage);
+		}
+		gform.tools.trigger( 'gform_init_alerts' );
+
+	};
+
+	imageChoicesAdmin.adminInit = () => {
+
+		// Custom CSS editors
+		var $customCssBoxes = $('#gf_image_choices_custom_css_global, #gf_image_choices_custom_css, #gf_image_choices_user_css_global, #gf_image_choices_user_css_form');
+		if ( $customCssBoxes.length ) {
+			var editorSettings = wp.codeEditor.defaultSettings ? _.clone( wp.codeEditor.defaultSettings ) : {};
+			editorSettings.codemirror = _.extend(
+				{},
+				editorSettings.codemirror,
+				{
+					indentUnit: 4,
+					tabSize: 4,
+					mode: 'css',
+					lineNumbers: true,
+					autoCloseBrackets: true,
+					continueComments: true,
+					indentWithTabs: true,
+					inputStyle: "contenteditable",
+					lineWrapping: true,
+					lint: false,
+					matchBrackets: true,
+					styleActiveLine: true,
+					gutters: [],
+					extraKeys: {
+						"Alt-F": "findPersistent",
+						"Cmd-F": "findPersistent",
+						"Ctrl-F": "findPersistent",
+						"Cmd-/": "toggleComment",
+						"Ctrl-/": "toggleComment",
+						"Ctrl-Space": "autocomplete",
+					}
+				}
+			);
+			$customCssBoxes.each(function(){
+				window[this.id + '_editor'] = wp.codeEditor.initialize( $(this), editorSettings );
+			});
+		}
+
+		var $legacyCssSectionToggle = $('#gform_settings_section_collapsed_gf_image_choices_legacy_custom_css_section, #gform_settings_section_collapsed_gf_image_choices_legacy_custom_form_css_section');
+		if ( $legacyCssSectionToggle.length ) {
+			$legacyCssSectionToggle.on('click', function(){
+				$(this).closest('.gform-settings-panel').find('textarea').each(function(){
+					var ref = $(this).attr('id') + '_editor';
+					try {
+						window[ref].codemirror.refresh();
+					}
+					catch(e) {
+						// do nothing
+					}
+				});
+			});
+		}
+
+		var $globalStyleSelect = $('#gf_image_choices_global_image_style');
+		if ( $globalStyleSelect.length ) {
+			$globalStyleSelect.on('change', function(e){
+				var style = e.currentTarget.value;
+				$('#gform_setting_gf_image_choices_global_height, #gform_setting_gf_image_choices_global_height_medium, #gform_setting_gf_image_choices_global_height_small').toggle( style !== 'natural' && style !== 'square' );
+			});
+			$globalStyleSelect.trigger('change');
+		}
+
+		var $formStyleSelect = $('#gf_image_choices_image_style');
+		if ( $formStyleSelect.length ) {
+			$formStyleSelect.on('change', function(e){
+				var style = e.currentTarget.value;
+				if ( style === 'global_setting' ) {
+					var optionText = $(e.currentTarget).find(`option[value="${style}"]`).html();
+					style = optionText.substring( optionText.indexOf('(') + 1, optionText.indexOf(')') ).toLowerCase();
+				}
+				$('#gform_setting_gf_image_choices_height, #gform_setting_gf_image_choices_height_medium, #gform_setting_gf_image_choices_height_small').toggle( style !== 'natural' && style !== 'square' );
+			});
+			$formStyleSelect.trigger('change');
+		}
+
+		// show/hide new settings based on toggle
+		var $legacyModeToggle = $('#_gform_setting_gf_image_choices_use_legacy_styles');
+		var $newFeaturesElements = $('#gform-settings-section-theme, #gform-settings-section-feature-color, #gform-settings-section-choices-layout, #gform-settings-section-image-options, #gform-settings-section-custom-css, #gform-settings-section-gf_image_choices_legacy_custom_css_section .gform-settings-label');
+
+		if ( $legacyModeToggle.length ) {
+			$legacyModeToggle.on('change', function(e){
+				var useLegacyMode = $legacyModeToggle.is(':checked');
+				if ( $newFeaturesElements.length ) {
+					$newFeaturesElements.toggle( !useLegacyMode );
+				}
+				if ( $legacyCssSectionToggle.length ) {
+					if ( ( useLegacyMode && $legacyCssSectionToggle.is(":checked") ) || ( !useLegacyMode && !$legacyCssSectionToggle.is(":checked") ) ) {
+						$legacyCssSectionToggle.click();
+					}
+				}
+			});
+			$legacyModeToggle.trigger('change');
+		}
+
+
+
+		// settings page tab switch (hide submit if not settings tab)
+		var $settingsTabNavLinks = $('#tab_gf-image-choices .gform-settings-tabs__navigation a');
+		if ( $settingsTabNavLinks.length ) {
+			$settingsTabNavLinks.each(function(){
+				$(this).on('click', function(e){
+					window.location.hash = e.currentTarget.id.replace('gform-settings-tab-gf_image_choices_', '');
+					$('#tab_gf-image-choices #gform-settings-save').toggle( $(this).data('tab') === "gf_image_choices_settings_tab" );
+				});
+			});
+
+			setTimeout(() => {
+				const hash = window.location.hash.substring(1);
+				const hashTab = ( hash !== "" ) ? document.querySelector(`#tab_gf-image-choices #gform-settings-tab-gf_image_choices_${hash}`) : null;
+				const tabLink = hashTab ? hashTab : $settingsTabNavLinks[0];
+				tabLink.dispatchEvent( new Event('click') );
+			}, 100);
+		}
+
+
+		// numeric settings live validation to number (plugin and form settings)
+		var $numericSettingsInputs = $('input[id^="gf_image_choices"][id*="columns_width"], input[id^="image-choices"][id*="columns-width"], input[id^="gf_image_choices"][id*="height"], input[id^="image-choices"][id*="height"], input[id^="product-image"][id*="height"]');
+		if ( $numericSettingsInputs.length ) {
+			$numericSettingsInputs.each(function(){
+				var $input = $(this);
+				$input.on('keyup', function(e){
+					var val = e.currentTarget.value.toString();
+					var numVal = imageChoicesAdmin.validateNumericValue( val );
+					if ( numVal !== val ) {
+						e.currentTarget.value = numVal;
+					}
+				});
+			});
+		}
+
+
+		// form settings theme preview
+		var $settingsThemeSelect = $('#gf_image_choices_theme, #gf_image_choices_global_theme').first();
+		var $settingsThemePreview = $('#gform_setting_gf_image_choices_theme_preview .image-choices-theme-preview, #gform_setting_gf_image_choices_global_theme_preview .image-choices-theme-preview').first();
+		if ( $settingsThemeSelect.length && $settingsThemePreview.length ) {
+			$settingsThemeSelect.on('change', function(e){
+				var value = $(this).val();
+				if ( value === "" || value == "global_setting" ) {
+					value = ( imageChoicesVars.hasOwnProperty('globals') && imageChoicesVars.globals.hasOwnProperty('theme') ) ? imageChoicesVars.globals.theme : ( imageChoicesVars.hasOwnProperty('defaults') && imageChoicesVars.defaults.hasOwnProperty('theme') ) ? imageChoicesVars.defaults.theme : 'simple';
+				}
+
+				$settingsThemePreview.toggle(value !== 'none');
+				if (value === 'none') {
+					$settingsThemePreview.hide().find('img').hide();
+				}
+				else {
+					$settingsThemePreview.find('img').hide();
+					$settingsThemePreview.find('img.image-choices-theme-preview-'+value).show();
+				}
+			});
+			$settingsThemeSelect.trigger('change');
+		}
+
+		// form settings feature color
+		var $settingsFeatureColorSelect = $('#gf_image_choices_feature_color, #gf_image_choices_global_feature_color').first();
+		var $settingsFeatureColorCustom = $('#gform_setting_gf_image_choices_feature_color_custom, #gform_setting_gf_image_choices_global_feature_color_custom').first();
+		var $settingsFeatureColorInput = $('#gf_image_choices_feature_color_custom, #gf_image_choices_global_feature_color_custom').first();
+		var settingsCustomFeatureColor;
+		var $settingsFeatureColorPicker;
+
+		if ( $settingsFeatureColorSelect.length && $settingsFeatureColorCustom.length ) {
+
+			$settingsFeatureColorPicker = $settingsFeatureColorCustom.find('.wp-picker-container');
+			settingsCustomFeatureColor = $settingsFeatureColorInput.val();
+
+			$settingsFeatureColorSelect.on('change', function(e){
+				var value = $(this).val();
+
+				if ( value === "custom" ) {
+					$settingsFeatureColorCustom.show();
+					if ( $settingsFeatureColorPicker.length ) {
+						setTimeout(function(){
+							if ( customColor !== "" ) {
+								$settingsFeatureColorInput.wpColorPicker('color', settingsCustomFeatureColor);
+							}
+							else {
+								$settingsFeatureColorPicker.find('.wp-picker-clear').trigger('click');
+							}
+						}, 100);
+					}
+					else {
+						$settingsFeatureColorInput.wpColorPicker();
+						setTimeout(function(){
+							if ( settingsCustomFeatureColor !== "" ) {
+								$settingsFeatureColorInput.wpColorPicker('color', settingsCustomFeatureColor);
+							}
+							else {
+								$settingsFeatureColorPicker.find('.wp-picker-clear').trigger('click');
+							}
+						}, 100);
+					}
+				}
+				else {
+					$settingsFeatureColorCustom.hide();
+					if ( $settingsFeatureColorPicker.length ) {
+						$settingsFeatureColorPicker.find('.wp-picker-clear').trigger('click');
+					}
+				}
+
+			});
+			$settingsFeatureColorSelect.trigger('change');
+		}
+
+
+
+		var $urlReplacementTool = $('#image_choices_url_replacement');
+		var $urlReplacementSubmit = ($urlReplacementTool.length) ? $('#image_choices_url_replacement_submit') : null;
+		var $urlReplacementProgress = ($urlReplacementTool.length) ? $urlReplacementTool.find('.jetbase-tool__progress') : null;
+		var $urlReplacementProgressBar = ($urlReplacementTool.length) ? $urlReplacementTool.find('.jetbase-tool__progress-percent') : null;
+		var $urlReplacementStatus = ($urlReplacementTool.length) ? $urlReplacementTool.find('.jetbase-tool__progress-status') : null;
+
+		var urlReplacements = {
+			old: "",
+			new: "",
+			forms: [],
+			index: 0,
+			replacements: []
+		}
+
+		imageChoicesAdmin.processUrlReplacement = function() {
+			if ( !urlReplacements.forms.length || urlReplacements.replacements.length === urlReplacements.forms.length || urlReplacements.index >= urlReplacements.forms.length ) {
+				// done
+				$urlReplacementProgressBar.css('width', `100%`);
+				$urlReplacementStatus.html(`Done! ${urlReplacements.forms.length} form(s) processed`);
+				$urlReplacementTool.removeClass('busy');
+				if ( $sizeReplacementTool.length ) {
+					$sizeReplacementTool.removeClass('disabled');
+				}
+				return
+			}
+
+			$.ajax({
+				url: window.ajaxurl,
+				method: 'POST',
+				data: {
+					action: 'gf_image_choices_url_replacement',
+					id: urlReplacements.forms[urlReplacements.index],
+					old: urlReplacements.old,
+					new: urlReplacements.new
+				},
+				beforeSend: function(jqXHR, settings){
+					$urlReplacementStatus.html(`Processing form ${urlReplacements.index + 1}/${urlReplacements.forms.length}`);
+				},
+				success: function(response) {
+					if ( response && response.success ) {
+						urlReplacements.replacements[urlReplacements.index] = response.total;
+					}
+					else if ( response && response.error ) {
+						urlReplacements.replacements[urlReplacements.index] = false;
+						$urlReplacementStatus.html('Error: ' + response.error );
+					}
+					else {
+						urlReplacements.replacements[urlReplacements.index] = false;
+						$urlReplacementStatus.html('Error');
+					}
+					urlReplacements.index++;
+					$urlReplacementProgressBar.css('width', `${ Math.ceil( (urlReplacements.index / urlReplacements.forms.length) * 100 ) }%`);
+					imageChoicesAdmin.processUrlReplacement();
+				}
+			});
+
+		}
+
+		if ( $urlReplacementSubmit && $urlReplacementSubmit.length ) {
+
+			$urlReplacementSubmit.on('click', function(e){
+				e.preventDefault();
+
+				var formId = $urlReplacementTool.find('#image_choices_url_replacement_form_select').val().trim();
+				var oldUrl = $urlReplacementTool.find('#image_choices_url_replacement_from_input').val().trim();
+				var newUrl = $urlReplacementTool.find('#image_choices_url_replacement_to_input').val().trim();
+				if ( !oldUrl || !newUrl || oldUrl === newUrl ) {
+					return;
+				}
+
+				urlReplacements.old = oldUrl;
+				urlReplacements.new = newUrl;
+				urlReplacements.forms = [];
+				urlReplacements.index = 0;
+				urlReplacements.replacements = [];
+
+				if ( formId === "all" ) {
+
+					$urlReplacementStatus.html('Scanning for forms with old URL in image choices...');
+					$urlReplacementProgressBar.css('width', '0%');
+					$urlReplacementTool.addClass('busy');
+					$urlReplacementProgress.addClass('active');
+					if ( $sizeReplacementTool.length ) {
+						$sizeReplacementTool.addClass('disabled');
+					}
+
+					$.ajax({
+						url: window.ajaxurl,
+						method: 'POST',
+						data: {
+							action: 'gf_image_choices_get_url_replacement_form_ids',
+							form_id: urlReplacements.formId,
+							old: urlReplacements.old,
+							new: urlReplacements.new
+						},
+						success: function(response) {
+							if ( response && response.success ) {
+								if ( response.forms && response.forms.length ) {
+									urlReplacements.forms = response.forms
+									imageChoicesAdmin.processUrlReplacement();
+								}
+								else {
+									$urlReplacementProgressBar.css('width', `100%`);
+									$urlReplacementStatus.html(`Done! No image choices found containing that old URL`);
+									$urlReplacementTool.removeClass('busy');
+									if ( $sizeReplacementTool.length ) {
+										$sizeReplacementTool.removeClass('disabled');
+									}
+								}
+							}
+							else if ( response && response.error ) {
+								$urlReplacementStatus.html('Error: ' + response.error );
+							}
+							else {
+								$urlReplacementStatus.html('Error');
+							}
+						}
+					});
+
+				}
+				else {
+
+					$urlReplacementStatus.html('...');
+					$urlReplacementProgressBar.css('width', '0%');
+					$urlReplacementTool.addClass('busy');
+					$urlReplacementProgress.addClass('active');
+					if ( $sizeReplacementTool.length ) {
+						$sizeReplacementTool.addClass('disabled');
+					}
+
+					urlReplacements.forms = [ formId ]
+					imageChoicesAdmin.processUrlReplacement();
+
+				}
+
+			});
+
+		}
+
+
+		var $sizeReplacementTool = $('#image_choices_image_replacement');
+		var $sizeReplacementSubmit = ($sizeReplacementTool.length) ? $('#image_choices_image_replacement_submit') : null;
+		var $sizeReplacementProgress = ($sizeReplacementTool.length) ? $sizeReplacementTool.find('.jetbase-tool__progress') : null;
+		var $sizeReplacementProgressBar = ($sizeReplacementTool.length) ? $sizeReplacementTool.find('.jetbase-tool__progress-percent') : null;
+		var $sizeReplacementStatus = ($sizeReplacementTool.length) ? $sizeReplacementTool.find('.jetbase-tool__progress-status') : null;
+
+		var sizeReplacements = {
+			new: "",
+			forms: [],
+			index: 0,
+			replacements: []
+		}
+
+		imageChoicesAdmin.processSizeReplacement = function() {
+			if ( !sizeReplacements.forms.length || sizeReplacements.replacements.length === sizeReplacements.forms.length || sizeReplacements.index >= sizeReplacements.forms.length ) {
+				// done
+				$sizeReplacementProgressBar.css('width', `100%`);
+				$sizeReplacementStatus.html(`Done! ${sizeReplacements.forms.length} form(s) processed`);
+				$sizeReplacementTool.removeClass('busy');
+				if ( $urlReplacementTool.length ) {
+					$urlReplacementTool.removeClass('disabled');
+				}
+				return
+			}
+
+			$.ajax({
+				url: window.ajaxurl,
+				method: 'POST',
+				data: {
+					action: 'gf_image_choices_image_size_replacement',
+					id: sizeReplacements.forms[sizeReplacements.index],
+					new: sizeReplacements.new
+				},
+				beforeSend: function(jqXHR, settings) {
+					$sizeReplacementStatus.html(`Processing form ${sizeReplacements.index + 1}/${sizeReplacements.forms.length}`);
+				},
+				success: function(response) {
+					if ( response && response.success ) {
+						sizeReplacements.replacements[sizeReplacements.index] = response.total;
+					}
+					else if ( response && response.error ) {
+						sizeReplacements.replacements[sizeReplacements.index] = false;
+						$sizeReplacementStatus.html('Error: ' + response.error );
+					}
+					else {
+						sizeReplacements.replacements[sizeReplacements.index] = false;
+						$sizeReplacementStatus.html('Error');
+					}
+					sizeReplacements.index++;
+					$sizeReplacementProgressBar.css('width', `${ Math.ceil( (sizeReplacements.index / sizeReplacements.forms.length) * 100 ) }%`);
+					imageChoicesAdmin.processSizeReplacement();
+				}
+			});
+
+		}
+
+		if ( $sizeReplacementSubmit && $sizeReplacementSubmit.length ) {
+
+			$sizeReplacementSubmit.on('click', function(e){
+				e.preventDefault();
+
+				var newSize = $sizeReplacementTool.find('#image_choices_image_replacement_size_select').val().trim();
+				var formId = $sizeReplacementTool.find('#image_choices_image_replacement_form_select').val().trim();
+				if ( !newSize ) {
+					return;
+				}
+
+				sizeReplacements.new = newSize;
+				sizeReplacements.forms = [];
+				sizeReplacements.index = 0;
+				sizeReplacements.replacements = [];
+
+
+				if ( formId === "all" ) {
+
+					$sizeReplacementStatus.html('Scanning for forms with image choices enabled...');
+					$sizeReplacementProgressBar.css('width', '0%');
+					$sizeReplacementTool.addClass('busy');
+					$sizeReplacementProgress.addClass('active');
+
+					if ( $urlReplacementTool.length ) {
+						$urlReplacementTool.addClass('disabled');
+					}
+
+					$.ajax({
+						url: window.ajaxurl,
+						method: 'POST',
+						data: {
+							action: 'gf_image_choices_get_image_size_replacement_form_ids',
+						},
+						success: function(response) {
+							if ( response && response.success ) {
+								if ( response.forms && response.forms.length ) {
+									sizeReplacements.forms = response.forms
+									imageChoicesAdmin.processSizeReplacement();
+								}
+								else {
+									$sizeReplacementProgressBar.css('width', `100%`);
+									$sizeReplacementStatus.html(`Done! No forms found with image choices enabled`);
+									$sizeReplacementTool.removeClass('busy');
+									if ( $urlReplacementTool.length ) {
+										$urlReplacementTool.removeClass('disabled');
+									}
+								}
+							}
+							else if ( response && response.error ) {
+								$sizeReplacementStatus.html('Error: ' + response.error );
+							}
+							else {
+								$sizeReplacementStatus.html('Error');
+							}
+						}
+					});
+
+				}
+				else {
+
+					$sizeReplacementStatus.html('...');
+					$sizeReplacementProgressBar.css('width', '0%');
+					$sizeReplacementTool.addClass('busy');
+					$sizeReplacementProgress.addClass('active');
+
+					if ( $urlReplacementTool.length ) {
+						$urlReplacementTool.addClass('disabled');
+					}
+
+					sizeReplacements.forms = [ formId ];
+					imageChoicesAdmin.processSizeReplacement();
+
+				}
+
+			});
+
+		}
+
+	};
+
+	var gformAdminReady = false;
+	var gformAdminReadyCheck;
+
+	$(document).ready(function() {
+		if ( !gformAdminReady ) {
+			gformAdminReadyCheck = setInterval(function(){
+				if ( typeof gform !== 'undefined' ) {
+					gformAdminReady = true;
+					clearInterval(gformAdminReadyCheck);
+					imageChoicesAdmin.adminInit();
+				}
+			}, 100);
+		}
+	});
+
+	$(document).bind( 'gform_main_scripts_loaded', function() {
+
+		if ( typeof window.form !== 'undefined' ) {
+			var markupVersion = imageChoicesAdmin.markupDetect();
+			if ( markupVersion === 1 && imageChoicesAdmin.formHasImageChoicesFields() ) {
+				imageChoicesAdmin.formEditorLegacyWarning();
+			}
+			imageChoicesAdmin.formEditorInit();
+		}
+
+	});
+
+})(jQuery);
