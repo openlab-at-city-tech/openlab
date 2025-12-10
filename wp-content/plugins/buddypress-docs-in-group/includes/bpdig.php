@@ -1,6 +1,6 @@
 <?php
 
-function bpdig_filter_group_extension_class( $class ) {
+function bpdig_filter_group_extension_class() {
 	require BPDIG_PLUGIN_DIR . 'includes/bpdig-group-extension.php';
 	return 'BPDIG_Group_Extension';
 }
@@ -58,7 +58,7 @@ function bpdig_catch_delete_request() {
 			bp_core_add_message( __( 'You do not have permission to delete that doc.', 'bp-docs' ), 'error' );
 		}
 
-		bp_core_redirect( bp_get_group_permalink( groups_get_current_group() ) . bp_docs_get_slug() );
+		bp_core_redirect( bp_docs_get_group_docs_url( bp_get_current_group_id() ) );
 		die();
 	}
 }
@@ -132,13 +132,17 @@ add_filter( 'bp_docs_get_the_content', 'bpdig_filter_the_content' );
 function bpdig_filter_doc_link( $link, $doc_id ) {
 	$group_id = bp_docs_get_associated_group_id( $doc_id );
 	if ( ! empty( $group_id ) ) {
-		$group = groups_get_group( array(
-			'group_id' => $group_id,
-		) );
-
 		$doc = get_post( $doc_id );
+		if ( ! $doc || $doc->post_type !== bp_docs_get_post_type_name() ) {
+			return $link;
+		}
 
-		$link = bp_get_group_permalink( $group ) . bp_docs_get_docs_slug() . '/' . $doc->post_name . '/';
+		$group = groups_get_group( array( 'group_id' => $group_id ) );
+		if ( ! $group || is_wp_error( $group ) ) {
+			return $link;
+		}
+
+		$link = bp_docs_get_group_docs_url( $group ) . $doc->post_name . '/';
 	}
 
 	return $link;
@@ -153,8 +157,7 @@ function bpdig_get_create_link( $link ) {
 		return $link;
 	}
 
-	$link = bp_get_group_permalink( groups_get_current_group() ) . bp_docs_get_docs_slug() . '/' . BP_DOCS_CREATE_SLUG . '/';
-	return $link;
+	return bp_docs_get_group_docs_url( bp_get_current_group_id() ) . BP_DOCS_CREATE_SLUG . '/';
 }
 add_filter( 'bp_docs_get_create_link', 'bpdig_get_create_link', 1000 );
 
@@ -163,7 +166,7 @@ add_filter( 'bp_docs_get_create_link', 'bpdig_get_create_link', 1000 );
  */
 function bpdig_get_tag_link_url( $url, $args ) {
 	if ( bp_is_group() ) {
-		$base = bp_get_group_permalink( groups_get_current_group() ) . bp_docs_get_docs_slug() . '/';
+		$base = bp_docs_get_group_docs_url( bp_get_current_group_id() );
 
 		// I HAVE NO IDEA WHAT IS HAPPENING HERE
 		if ( is_array( $args ) ) {
@@ -243,7 +246,7 @@ function bpdig_filter_post_save_redirect_base( $redirect_base ) {
 	}
 
 	if ( bp_is_group() ) {
-		$redirect_base = bp_get_group_permalink( groups_get_current_group() ) . bp_docs_get_docs_slug() . '/';
+		$redirect_base = bp_docs_get_group_docs_url( bp_get_current_group_id() );
 	}
 
 	return $redirect_base;
@@ -354,9 +357,7 @@ function bpdig_protect_create_page() {
 	if ( bp_is_group() && bp_is_current_action( bp_docs_get_docs_slug() ) && bp_is_action_variable( BP_DOCS_CREATE_SLUG, 0 ) ) {
 		if ( ! current_user_can( 'bp_docs_associate_with_group', bp_get_current_group_id() ) ) {
 			bp_core_add_message( 'You do not have permission to do that.', 'error' );
-
-			$redirect = bp_get_group_permalink( groups_get_current_group() ) . bp_docs_get_docs_slug() . '/';
-			bp_core_redirect( $redirect );
+			bp_core_redirect( bp_docs_get_group_docs_url( bp_get_current_group_id() ) );
 			die();
 		}
 	}
@@ -416,19 +417,3 @@ function bpdig_comments_open( $open, $post_id ) {
 	return true;
 }
 add_filter( 'comments_open', 'bpdig_comments_open', 10, 2 );
-
-/**
- * Don't show an 'Unlink from group' link in Docs directories.
- */
-add_action(
-	'bp_screens',
-	function() {
-		$bp = buddypress();
-		if ( empty( $bp->bp_docs ) || empty( $bp->bp_docs->groups_integration ) ) {
-			return;
-		}
-
-		remove_filter( 'bp_docs_doc_action_links', [ buddypress()->bp_docs->groups_integration, 'add_doc_action_unlink_from_group_link' ], 10, 2 );
-	},
-	5
-);
