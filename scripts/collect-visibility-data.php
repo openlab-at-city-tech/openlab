@@ -63,7 +63,7 @@ function openlab_collect_visibility_data() {
 	// Get all sites in the network
 	$sites = get_sites(
 		[
-			'number'  => 99999,
+			'number'  => 999999, // Increased limit for very large networks
 			'fields'  => 'ids',
 			'public'  => null,
 			'deleted' => 0,
@@ -97,13 +97,16 @@ function openlab_collect_visibility_data() {
 
 		// Query for posts with openlab_post_visibility meta
 		$posts_with_visibility = $wpdb->get_results(
-			"SELECT pm.post_id, pm.meta_value as visibility_option, p.post_author
-			FROM {$wpdb->postmeta} pm
-			INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
-			WHERE pm.meta_key = 'openlab_post_visibility'
-			AND pm.meta_value IN ('group-members-only', 'members-only', 'default')
-			AND p.post_status = 'publish'
-			AND p.post_type IN ('post', 'page')"
+			$wpdb->prepare(
+				"SELECT pm.post_id, pm.meta_value as visibility_option, p.post_author
+				FROM {$wpdb->postmeta} pm
+				INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+				WHERE pm.meta_key = %s
+				AND pm.meta_value IN ('group-members-only', 'members-only', 'default')
+				AND p.post_status = 'publish'
+				AND p.post_type IN ('post', 'page')",
+				'openlab_post_visibility'
+			)
 		);
 
 		// Check if this site has at least one post with visibility options
