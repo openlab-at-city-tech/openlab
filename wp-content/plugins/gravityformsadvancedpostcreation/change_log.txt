@@ -1,0 +1,92 @@
+### 1.5.0 | 2025-03-18
+- Added a setting to disable auto-formatting for the post content field.
+- Added support for WebP images as featured images.
+- Fixed an issue where the {apc_media} merge tag outputs only commas when the field is not adding files to the media library.
+- AF: Updated process_feed() return value for compatibility with Gravity Forms 2.9.4, so the framework can save the feed status to the entry meta.
+- AF: Updated update_post() return value so Gravity Flow 2.9.13+ can save the feed status to the entry meta when used with Gravity Forms 2.9.4+.
+
+### 1.4.0 | 2023-09-14
+- Added support for async (background) feed processing to improve form submission performance.
+- Added the [gform_advancedpostcreation_post_update_post](https://docs.gravityforms.com/gform_advancedpostcreation_post_update_post/) action.
+- Fixed an issue to allow File Upload fields that have been extended by a developer to be processed when creating posts. Credit: Gravity PDF
+
+### 1.3 | 2022-11-16
+- Added the [gform_advancedpostcreation_taxonomy_mapping_field](https://docs.gravityforms.com/gform_advancedpostcreation_taxonomy_mapping_field/) filter.
+- Added the [gform_advancedpostcreation_file_url_pre_set_post_thumbnail](https://docs.gravityforms.com/gform_advancedpostcreation_file_url_pre_set_post_thumbnail/) filter.
+
+### 1.2 | 2022-02-02
+- Fixed an issue that causes feeds to break if a taxonomy term has an apostrophe in the label.
+
+### 1.1 | 2021-08-21
+- Fixed a fatal error that occurs when a form is submitted with the date mapped to "Date & Time Fields" or "Custom Date & Time".
+
+### 1.0 | 2021-07-21
+- Official release.
+
+### 1.0-beta-7.5
+- Fixed UI issues in the feed settings page where the post date setting don't show options for the value selected.
+- API: Added `gf_advancedpostcreation()->update_post( $post_id, $feed, $entry, $form )` to enable programmatic updating of posts.
+
+
+### 1.0-beta-7.4
+- Fixed a compatibility issue with Gravity Forms 2.5 by updating the postExcerpt field to explicitly allow HTML.
+- Fixed an issue that causes custom dates and times entered into the feed settings to use UTC instead of the local time.
+
+
+### 1.0-beta-7.3
+- Updated the post content field in the feed settings to use the text editor to enable easier markup entry.
+
+
+### 1.0-beta-7.2
+- Added a custom icon for Gravity Forms 2.5.
+
+
+### 1.0-beta-7.1
+- Updated the Swedish translations.
+
+
+### 1.0-beta-7 | 2020-09-28
+- Fixed an issue with the feed settings.
+
+
+### 1.0-beta-6 | 2020-09-24
+- Added support for Gravity Forms 2.5
+
+
+### 1.0-beta-5 | 2020-08-05
+- Added support for WordPress 5.5.
+- Updated Post Format labels to be translatable.
+- Fixed a JavaScript error with WordPress 5.5 which prevents the taxonomy settings rendering correctly.
+- Fixed an issue where pending and draft posts created via the add-on do not have the correct post creation date when the date mappings are used in the post creation feed.
+- Fixed an issue where merge tags used in the custom value inputs of the categories and tags feed settings are not processed.
+
+
+### 1.0-beta-4 | 2020-05-07
+- Added translations for Hebrew, Hindi, Japanese, and Turkish.
+- Added the {apc_media} merge tag to insert IDs or URLs of files uploaded to media library.
+- Updated Javascript files, stylesheets to use minified versions.
+- Fixed an issue where a taxonomy mapping which is removed on the feed configuration page can still be processed.
+- Fixed an issue where the wrong user could be assigned as the media author.
+- Fixed an issue attaching uploaded images as a featured image for a post when the image file has uppercase characters in the file extension.
+
+
+### 1.0-beta-3 | 2019-08-07
+- Added security enhancements.
+- Added support for delaying feed processing until after payment has been successfully completed using the PayPal Standard Add-On.
+- Added the *[gform_advancedpostcreation_args_pre_get_custom_post_types](https://docs.gravityforms.com/gform_advancedpostcreation_args_pre_get_custom_post_types/)* filter enabling the arguments used to get the custom post types for inclusion in the types setting to be overridden.
+- Added the *[gform_advancedpostcreation_file_fields_choices](https://docs.gravityforms.com/gform_advancedpostcreation_file_fields_choices/)* filter enabling the available choices for the media settings to be overridden on the feed configuration page.
+- Added the *[gform_advancedpostcreation_term_separator](https://docs.gravityforms.com/gform_advancedpostcreation_term_separator/)* filter enabling the ability to override the default comma separator with another string when terms are being assigned from the value of a field on a form with a post creation feed set up.
+- Added additional logging statements.
+- Updated + and - icons so that they are consistent across all settings.
+
+
+### 1.0-beta-2 | 2019-03-20
+- Added support for {post_id} and {post_edit_url} merge tags.
+- Added support for setting post author when user is registered with User Registration Add-On.
+- Fixed an issue getting the default merge tags for the title, content, and excerpt settings when creating a new feed.
+- Fixed an issue where files could fail to be added to the media library on servers where allow_url_fopen is disabled.
+- Updated feed processing to store the uploaded media IDs in the entry meta along with the post and feed IDs.
+
+
+### 1.0-beta-1 | 2019-01-10
+- It's all new!
