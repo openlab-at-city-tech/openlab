@@ -903,7 +903,7 @@ OpenLab.utility = (function ($) {
 							if ( defaultPanel ) {
 								// Wait for transitions to complete before moving focus
 								setTimeout(() => {
-									const firstFocusable = defaultPanel.querySelector('.drawer-list .nav-item');
+									const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
 									if (firstFocusable) {
 										firstFocusable.focus();
 									}
