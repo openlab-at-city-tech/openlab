@@ -889,13 +889,6 @@ OpenLab.utility = (function ($) {
 								defaultPanel.classList.add('active');
 								defaultPanel.setAttribute('aria-hidden', 'false');
 								OpenLab.utility.setInertState(defaultPanel, false);
-
-								// Move focus to first item in panel
-								const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
-								if (firstFocusable) {
-									// Use setTimeout to ensure panel is visible first
-									setTimeout(() => firstFocusable.focus(), 50);
-								}
 							}
 
 							document.body.classList.add( 'drawer-open' );
@@ -905,6 +898,17 @@ OpenLab.utility = (function ($) {
 
 							toggle.setAttribute('aria-expanded', 'true');
 							toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+							// Move focus to first item in panel after drawer is open
+							if ( defaultPanel ) {
+								// Wait for transitions to complete before moving focus
+								setTimeout(() => {
+									const firstFocusable = defaultPanel.querySelector('.drawer-list .nav-item');
+									if (firstFocusable) {
+										firstFocusable.focus();
+									}
+								}, 100);
+							}
 						}
 					}
 				});
@@ -977,10 +981,12 @@ OpenLab.utility = (function ($) {
 				if (e.key === 'Escape' || e.key === 'Esc') {
 					const isDrawerOpen = document.body.classList.contains('drawer-open');
 					if (isDrawerOpen) {
+						// Find the open toggle BEFORE closing
+						const openToggle = document.querySelector('.navbar-flyout-toggle[aria-expanded="true"]');
+						
 						closeAllDrawers();
 						
-						// Return focus to the toggle button that opened the drawer
-						const openToggle = document.querySelector('.navbar-flyout-toggle[aria-expanded="true"]');
+						// Return focus to the toggle button that was open
 						if (openToggle) {
 							openToggle.focus();
 						}
