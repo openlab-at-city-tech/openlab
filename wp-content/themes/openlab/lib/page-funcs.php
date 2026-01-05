@@ -441,8 +441,12 @@ function openlab_primary_skip_link() {
 
 	$skip_link_out = <<<HTML
             <a id="skipToContent" tabindex="0" class="sr-only sr-only-focusable skip-link" href="{$content_target}">Skip to {$content_text}</a>
-            <a id="skipToAdminbar" tabindex="0" class="sr-only sr-only-focusable skip-link" href="{$adminbar_target}">Skip to {$adminbar_text}</a>
 HTML;
+
+	// The primary site doesn't show the admin bar on the front-end.
+	if ( is_admin_bar_showing() ) {
+        $skip_link_out .= "<a id=\"skipToAdminbar\" tabindex=\"0\" class=\"sr-only sr-only-focusable skip-link\" href=\"{$adminbar_target}\">Skip to {$adminbar_text}</a>";
+	}
 
 	return $skip_link_out;
 }
