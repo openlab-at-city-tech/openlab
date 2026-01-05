@@ -7838,6 +7838,10 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   display: block;
   border-radius: 50%;
 }
+.openlab-navbar-drawer .nav-item:focus,
+.openlab-navbar-drawer .nav-item:hover {
+  background-color: #f0f0f0;
+}
 .openlab-navbar-drawer button.flyout-action-button {
   background: none;
   padding: 0;
@@ -7858,6 +7862,9 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-navbar-drawer button.flyout-submenu-toggle:focus,
 .openlab-navbar-drawer button.flyout-submenu-toggle:hover {
   background-color: #f0f0f0;
+  outline: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle .right-chevron svg {
   height: 14px;
