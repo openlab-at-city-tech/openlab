@@ -779,9 +779,9 @@ OpenLab.utility = (function ($) {
 			
 			focusableElements.forEach(el => {
 				if (isInert) {
-					// Store original tabindex if it exists
+					// Store original tabindex if it exists and is not already -1
 					const originalTabindex = el.getAttribute('tabindex');
-					if (originalTabindex !== null) {
+					if (originalTabindex !== null && originalTabindex !== '-1') {
 						el.setAttribute('data-original-tabindex', originalTabindex);
 					}
 					el.setAttribute('tabindex', '-1');
