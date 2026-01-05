@@ -19,8 +19,8 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 
 ?>
 
-<div class="flyout-menu" id="favorites-flyout" role="menu">
-	<div class="drawer-panel-submenu">
+<div class="flyout-menu" id="favorites-flyout" data-default-panel="favorites-root">
+	<div class="drawer-panel drawer-panel-root" id="favorites-root" aria-hidden="true">
 		<div class="flyout-heading">
 			<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 			<span>My Favorites</span>

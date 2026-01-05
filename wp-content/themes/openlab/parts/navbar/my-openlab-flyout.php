@@ -137,7 +137,7 @@ $panels = [
 
 ?>
 
-<div class="flyout-menu" id="my-openlab-flyout" role="menu" data-default-panel="panel-root">
+<div class="flyout-menu" id="my-openlab-flyout" data-default-panel="panel-root">
 
 	<?php foreach ( $panels as $panel_id => $items ) : ?>
 		<?php
@@ -181,7 +181,7 @@ $panels = [
 						// Drawer target (not a link)
 						?>
 						<li class="<?php echo esc_attr( $class_attr ); ?>">
-							<button class="nav-item has-submenu flyout-action-button flyout-submenu-toggle" data-target="panel-<?php echo esc_attr( $item['target'] ); ?>">
+							<button class="nav-item has-submenu flyout-action-button flyout-submenu-toggle" data-target="panel-<?php echo esc_attr( $item['target'] ); ?>" aria-expanded="false">
 								<span><?php echo esc_html( $item['text'] ); ?></span>
 								<span class="right-chevron"><?php echo $right_chevron_svg; ?></span>
 							</button>

@@ -768,6 +768,27 @@ OpenLab.utility = (function ($) {
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 
+			// Function to set inert state on hidden panels
+			const setInertState = function(element, isInert) {
+				if (!element) return;
+				
+				const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+				focusableElements.forEach(el => {
+					if (isInert) {
+						el.setAttribute('tabindex', '-1');
+						el.setAttribute('data-was-inert', 'true');
+					} else if (el.hasAttribute('data-was-inert')) {
+						el.removeAttribute('tabindex');
+						el.removeAttribute('data-was-inert');
+					}
+				});
+			};
+
+			// Initialize all flyout panels as inert
+			document.querySelectorAll('.drawer-panel').forEach(panel => {
+				setInertState(panel, true);
+			});
+
 			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
 				toggle.addEventListener('click', (e) => {
@@ -785,6 +806,11 @@ OpenLab.utility = (function ($) {
 					document.querySelectorAll('.navbar-flyout-toggle').forEach(button => {
 						button.setAttribute('aria-expanded', 'false');
 					} )
+
+					// Set all panels as inert when closing
+					document.querySelectorAll('.drawer-panel').forEach(panel => {
+						setInertState(panel, true);
+					});
 
 					if ( isOpen ) {
 						document.body.classList.remove( 'drawer-open' );
@@ -804,6 +830,7 @@ OpenLab.utility = (function ($) {
 						if ( defaultPanel ) {
 							defaultPanel.classList.add('active');
 							defaultPanel.setAttribute('aria-hidden', 'false');
+							setInertState(defaultPanel, false);
 						}
 
 						document.body.classList.add( 'drawer-open' );
@@ -833,6 +860,10 @@ OpenLab.utility = (function ($) {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
 					const isKeyboardEvent = e.detail === 0;
+					
+					// Update aria-expanded when opening submenu
+					this.setAttribute('aria-expanded', 'true');
+					
 					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
 				});
 			});
@@ -844,12 +875,30 @@ OpenLab.utility = (function ($) {
 					e.preventDefault();
 					const currentPanel = this.closest('.drawer-panel');
 					const targetId = this.getAttribute('data-back');
+					
+					// Reset aria-expanded on submenu toggles when going back
+					const targetPanel = document.getElementById(targetId);
+					if (targetPanel) {
+						targetPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
+							submenuToggle.setAttribute('aria-expanded', 'false');
+						});
+					}
+					
 					OpenLab.utility.switchToNavPanel(targetId, false, 'backward', currentPanel);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
+						
+						// Reset aria-expanded when going back
+						const rootPanel = document.getElementById('panel-root');
+						if (rootPanel) {
+							rootPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
+								submenuToggle.setAttribute('aria-expanded', 'false');
+							});
+						}
+						
 						OpenLab.utility.switchToNavPanel( 'panel-root', true, 'backward' );
 					}
 				});
@@ -884,6 +933,15 @@ OpenLab.utility = (function ($) {
 					const drawer = document.querySelector('.openlab-navbar-drawer');
 					drawer.setAttribute('aria-hidden', 'true')
 					drawer.classList.remove('is-open');
+
+					// Set all panels as inert
+					document.querySelectorAll('.drawer-panel').forEach(panel => {
+						const focusableElements = panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+						focusableElements.forEach(el => {
+							el.setAttribute('tabindex', '-1');
+							el.setAttribute('data-was-inert', 'true');
+						});
+					});
 
 					// Close all submenus too
 					document.querySelectorAll('.flyout-submenu').forEach(el => {
@@ -936,6 +994,27 @@ OpenLab.utility = (function ($) {
 			const targetPanel = document.getElementById(panelId);
 			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
 
+			// Function to set inert state on a panel
+			const setInertState = function(element, isInert) {
+				if (!element) return;
+				
+				const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+				focusableElements.forEach(el => {
+					if (isInert) {
+						el.setAttribute('tabindex', '-1');
+						el.setAttribute('data-was-inert', 'true');
+					} else if (el.hasAttribute('data-was-inert')) {
+						el.removeAttribute('tabindex');
+						el.removeAttribute('data-was-inert');
+					}
+				});
+			};
+
+			// Set previous panel as inert
+			if (previousPanel) {
+				setInertState(previousPanel, true);
+			}
+
 			// Animate out
 			if (previousPanel) {
 				if (direction === 'forward') {
@@ -948,6 +1027,7 @@ OpenLab.utility = (function ($) {
 			// Animate in
 			targetPanel.classList.add('active');
 			targetPanel.setAttribute('aria-hidden', 'false');
+			setInertState(targetPanel, false);
 
 			// Cleanup
 			if (previousPanel) {
