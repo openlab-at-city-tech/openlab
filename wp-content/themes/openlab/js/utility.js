@@ -765,36 +765,93 @@ OpenLab.utility = (function ($) {
 			checkButton();
 			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
+		setInertState: function(element, isInert) {
+			if (!element) return;
+			
+			// When making inert, select currently focusable elements
+			// When making NOT inert, select elements that were made inert (have data-was-inert)
+			let focusableElements;
+			if (isInert) {
+				focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			} else {
+				focusableElements = element.querySelectorAll('[data-was-inert]');
+			}
+			
+			focusableElements.forEach(el => {
+				if (isInert) {
+					// Store original tabindex if it exists and is not already -1
+					const originalTabindex = el.getAttribute('tabindex');
+					if (originalTabindex !== null && originalTabindex !== '-1') {
+						el.setAttribute('data-original-tabindex', originalTabindex);
+					}
+					el.setAttribute('tabindex', '-1');
+					el.setAttribute('data-was-inert', 'true');
+				} else {
+					// Restore original tabindex or remove it
+					const originalTabindex = el.getAttribute('data-original-tabindex');
+					if (originalTabindex !== null) {
+						el.setAttribute('tabindex', originalTabindex);
+						el.removeAttribute('data-original-tabindex');
+					} else {
+						el.removeAttribute('tabindex');
+					}
+					el.removeAttribute('data-was-inert');
+				}
+			});
+		},
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 
+			// Initialize all flyout panels as inert
+			document.querySelectorAll('.drawer-panel').forEach(panel => {
+				OpenLab.utility.setInertState(panel, true);
+			});
+
+			// Function to close all drawers
+			const closeAllDrawers = function() {
+				document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
+					el.classList.remove('is-open')
+				);
+				
+				document.querySelectorAll('.flyout-menu').forEach(el =>
+					el.classList.remove('is-open')
+				);
+				
+				document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
+					el.setAttribute('aria-expanded', 'false')
+				);
+				
+				document.body.classList.remove('drawer-open');
+				drawer.setAttribute('aria-hidden', 'true');
+				drawer.classList.remove('is-open');
+				
+				// Set all panels as inert
+				document.querySelectorAll('.drawer-panel').forEach(panel => {
+					OpenLab.utility.setInertState(panel, true);
+				});
+				
+				// Close all submenus
+				document.querySelectorAll('.flyout-submenu').forEach(el => {
+					el.hidden = true;
+				});
+				document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
+					el.setAttribute('aria-expanded', 'false')
+				);
+			};
+
 			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+				// Handle click events
 				toggle.addEventListener('click', (e) => {
 					e.preventDefault();
 
-					const isKeyboardEvent = e.detail === 0;
-
 					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
-					// Close all open menus.
-					document.querySelectorAll('.navbar-action-link-toggleable').forEach(b => {
-						b.classList.remove('is-open');
-					});
+					// Close all open menus first
+					closeAllDrawers();
 
-					document.querySelectorAll('.navbar-flyout-toggle').forEach(button => {
-						button.setAttribute('aria-expanded', 'false');
-					} )
-
-					if ( isOpen ) {
-						document.body.classList.remove( 'drawer-open' );
-						drawer.setAttribute('aria-hidden', 'true');
-						drawer.classList.remove('is-open');
-					} else {
-						document.querySelectorAll('.flyout-menu').forEach(menu => {
-							menu.classList.remove('is-open');
-						})
-
+					// If was closed, open it
+					if ( ! isOpen ) {
 						const menuId = toggle.getAttribute('aria-controls');
 						const menu = document.getElementById(menuId);
 						menu.classList.add('is-open');
@@ -804,6 +861,7 @@ OpenLab.utility = (function ($) {
 						if ( defaultPanel ) {
 							defaultPanel.classList.add('active');
 							defaultPanel.setAttribute('aria-hidden', 'false');
+							OpenLab.utility.setInertState(defaultPanel, false);
 						}
 
 						document.body.classList.add( 'drawer-open' );
@@ -813,12 +871,50 @@ OpenLab.utility = (function ($) {
 
 						toggle.setAttribute('aria-expanded', 'true');
 						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+					}
+				});
 
-						// If this is a keyboard event, focus the first focusable element in the default panel.
-						if ( isKeyboardEvent ) {
-							const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
-							if (firstFocusable) {
-								firstFocusable.focus();
+				// Handle keyboard events for Enter/Space to ensure focus moves
+				toggle.addEventListener('keydown', (e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+
+						const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+						// Close all open menus first
+						closeAllDrawers();
+
+						// If was closed, open it and move focus
+						if ( ! isOpen ) {
+							const menuId = toggle.getAttribute('aria-controls');
+							const menu = document.getElementById(menuId);
+							menu.classList.add('is-open');
+
+							const defaultPanelId = menu.getAttribute('data-default-panel');
+							const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
+							if ( defaultPanel ) {
+								defaultPanel.classList.add('active');
+								defaultPanel.setAttribute('aria-hidden', 'false');
+								OpenLab.utility.setInertState(defaultPanel, false);
+							}
+
+							document.body.classList.add( 'drawer-open' );
+							drawer.setAttribute('aria-hidden', 'false');
+							drawer.classList.add('is-open');
+							drawer.scrollTop = 0;
+
+							toggle.setAttribute('aria-expanded', 'true');
+							toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+							// Move focus to first item in panel after drawer is open
+							if ( defaultPanel ) {
+								// Wait for transitions to complete before moving focus
+								setTimeout(() => {
+									const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
+									if (firstFocusable) {
+										firstFocusable.focus();
+									}
+								}, 100);
 							}
 						}
 					}
@@ -833,6 +929,10 @@ OpenLab.utility = (function ($) {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
 					const isKeyboardEvent = e.detail === 0;
+					
+					// Update aria-expanded when opening submenu
+					this.setAttribute('aria-expanded', 'true');
+					
 					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
 				});
 			});
@@ -840,17 +940,30 @@ OpenLab.utility = (function ($) {
 			// Handling back toggles in flyout submenus.
 			const backToggles = document.querySelectorAll('.flyout-subnav-back');
 			backToggles.forEach( toggle => {
-				toggle.addEventListener('click', function (e) {
-					e.preventDefault();
+				const handleBack = function(switchFocus) {
 					const currentPanel = this.closest('.drawer-panel');
 					const targetId = this.getAttribute('data-back');
-					OpenLab.utility.switchToNavPanel(targetId, false, 'backward', currentPanel);
+					
+					// Reset aria-expanded on submenu toggles when going back
+					const targetPanel = document.getElementById(targetId);
+					if (targetPanel) {
+						targetPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
+							submenuToggle.setAttribute('aria-expanded', 'false');
+						});
+					}
+					
+					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
+				};
+
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+					handleBack.call(this, false);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						OpenLab.utility.switchToNavPanel( 'panel-root', true, 'backward' );
+						handleBack.call(this, true);
 					}
 				});
 			});
@@ -866,32 +979,25 @@ OpenLab.utility = (function ($) {
 				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
 
 				if (!isClickInsideNav) {
-					// Close all open flyout menus
-					document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
-						el.classList.remove('is-open')
-					);
+					closeAllDrawers();
+				}
+			});
 
-					document.querySelectorAll('.flyout-menu').forEach(el =>
-						el.classList.remove('is-open')
-					);
-
-					document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
-						el.setAttribute('aria-expanded', 'false')
-					);
-
-					document.body.classList.remove('drawer-open');
-
-					const drawer = document.querySelector('.openlab-navbar-drawer');
-					drawer.setAttribute('aria-hidden', 'true')
-					drawer.classList.remove('is-open');
-
-					// Close all submenus too
-					document.querySelectorAll('.flyout-submenu').forEach(el => {
-						el.hidden = true;
-					});
-					document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
-						el.setAttribute('aria-expanded', 'false')
-					);
+			// Close flyout menus when pressing Escape key.
+			document.addEventListener('keydown', function (e) {
+				if (e.key === 'Escape' || e.key === 'Esc') {
+					const isDrawerOpen = document.body.classList.contains('drawer-open');
+					if (isDrawerOpen) {
+						// Find the open toggle BEFORE closing
+						const openToggle = document.querySelector('.navbar-flyout-toggle[aria-expanded="true"]');
+						
+						closeAllDrawers();
+						
+						// Return focus to the toggle button that was open
+						if (openToggle) {
+							openToggle.focus();
+						}
+					}
 				}
 			});
 
@@ -936,6 +1042,11 @@ OpenLab.utility = (function ($) {
 			const targetPanel = document.getElementById(panelId);
 			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
 
+			// Set previous panel as inert
+			if (previousPanel) {
+				OpenLab.utility.setInertState(previousPanel, true);
+			}
+
 			// Animate out
 			if (previousPanel) {
 				if (direction === 'forward') {
@@ -948,6 +1059,7 @@ OpenLab.utility = (function ($) {
 			// Animate in
 			targetPanel.classList.add('active');
 			targetPanel.setAttribute('aria-hidden', 'false');
+			OpenLab.utility.setInertState(targetPanel, false);
 
 			// Cleanup
 			if (previousPanel) {

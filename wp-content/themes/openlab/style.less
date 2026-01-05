@@ -736,6 +736,13 @@ button.navbar-flyout-toggle:hover,
 		}
 	}
 
+	.nav-item {
+		&:focus,
+		&:hover {
+			background-color: #f0f0f0;
+		}
+	}
+
 	button.flyout-action-button {
 		background: none;
 		padding: 0;
@@ -756,6 +763,9 @@ button.navbar-flyout-toggle:hover,
 		&:focus,
 		&:hover {
 			background-color: #f0f0f0;
+			outline: solid;
+			outline-offset: -2px;
+			outline-width: 2px;
 		}
 
 		.right-chevron svg {
