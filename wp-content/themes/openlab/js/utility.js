@@ -768,13 +768,26 @@ OpenLab.utility = (function ($) {
 		setInertState: function(element, isInert) {
 			if (!element) return;
 			
-			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex="0"], [tabindex]:not([tabindex="-1"]):not([tabindex="0"])');
+			// Select naturally focusable elements and any with non-negative tabindex
+			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
 			focusableElements.forEach(el => {
 				if (isInert) {
+					// Store original tabindex if it exists
+					const originalTabindex = el.getAttribute('tabindex');
+					if (originalTabindex !== null) {
+						el.setAttribute('data-original-tabindex', originalTabindex);
+					}
 					el.setAttribute('tabindex', '-1');
 					el.setAttribute('data-was-inert', 'true');
 				} else if (el.hasAttribute('data-was-inert')) {
-					el.removeAttribute('tabindex');
+					// Restore original tabindex or remove it
+					const originalTabindex = el.getAttribute('data-original-tabindex');
+					if (originalTabindex !== null) {
+						el.setAttribute('tabindex', originalTabindex);
+						el.removeAttribute('data-original-tabindex');
+					} else {
+						el.removeAttribute('tabindex');
+					}
 					el.removeAttribute('data-was-inert');
 				}
 			});
