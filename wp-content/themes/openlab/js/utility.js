@@ -768,8 +768,15 @@ OpenLab.utility = (function ($) {
 		setInertState: function(element, isInert) {
 			if (!element) return;
 			
-			// Select naturally focusable elements and any with non-negative tabindex
-			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			// When making inert, select currently focusable elements
+			// When making NOT inert, select elements that were made inert (have data-was-inert)
+			let focusableElements;
+			if (isInert) {
+				focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			} else {
+				focusableElements = element.querySelectorAll('[data-was-inert]');
+			}
+			
 			focusableElements.forEach(el => {
 				if (isInert) {
 					// Store original tabindex if it exists
@@ -779,7 +786,7 @@ OpenLab.utility = (function ($) {
 					}
 					el.setAttribute('tabindex', '-1');
 					el.setAttribute('data-was-inert', 'true');
-				} else if (el.hasAttribute('data-was-inert')) {
+				} else {
 					// Restore original tabindex or remove it
 					const originalTabindex = el.getAttribute('data-original-tabindex');
 					if (originalTabindex !== null) {
