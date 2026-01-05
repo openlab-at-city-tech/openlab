@@ -768,7 +768,10 @@ OpenLab.utility = (function ($) {
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 
-			// Initialize all flyout panels as inert
+			// Initialize all flyout panels as inert.
+			// Using the native 'inert' attribute instead of aria-hidden for better accessibility.
+			// The inert attribute prevents interaction and removes elements from the accessibility tree.
+			// Supported in all modern browsers: Chrome 102+, Firefox 112+, Safari 15.5+
 			document.querySelectorAll('.drawer-panel').forEach(panel => {
 				panel.inert = true;
 			});
