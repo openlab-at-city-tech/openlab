@@ -85,7 +85,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 	<div class="shadow-mask-right"></div>
 </nav>
 
-<div class="openlab-navbar-drawer" aria-hidden="true">
+<div class="openlab-navbar-drawer" inert>
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>

@@ -765,46 +765,12 @@ OpenLab.utility = (function ($) {
 			checkButton();
 			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
-		setInertState: function(element, isInert) {
-			if (!element) return;
-			
-			// When making inert, select currently focusable elements
-			// When making NOT inert, select elements that were made inert (have data-was-inert)
-			let focusableElements;
-			if (isInert) {
-				focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-			} else {
-				focusableElements = element.querySelectorAll('[data-was-inert]');
-			}
-			
-			focusableElements.forEach(el => {
-				if (isInert) {
-					// Store original tabindex if it exists and is not already -1
-					const originalTabindex = el.getAttribute('tabindex');
-					if (originalTabindex !== null && originalTabindex !== '-1') {
-						el.setAttribute('data-original-tabindex', originalTabindex);
-					}
-					el.setAttribute('tabindex', '-1');
-					el.setAttribute('data-was-inert', 'true');
-				} else {
-					// Restore original tabindex or remove it
-					const originalTabindex = el.getAttribute('data-original-tabindex');
-					if (originalTabindex !== null) {
-						el.setAttribute('tabindex', originalTabindex);
-						el.removeAttribute('data-original-tabindex');
-					} else {
-						el.removeAttribute('tabindex');
-					}
-					el.removeAttribute('data-was-inert');
-				}
-			});
-		},
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 
 			// Initialize all flyout panels as inert
 			document.querySelectorAll('.drawer-panel').forEach(panel => {
-				OpenLab.utility.setInertState(panel, true);
+				panel.inert = true;
 			});
 
 			// Function to close all drawers
@@ -822,12 +788,12 @@ OpenLab.utility = (function ($) {
 				);
 				
 				document.body.classList.remove('drawer-open');
-				drawer.setAttribute('aria-hidden', 'true');
+				drawer.inert = true;
 				drawer.classList.remove('is-open');
 				
 				// Set all panels as inert
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
-					OpenLab.utility.setInertState(panel, true);
+					panel.inert = true;
 				});
 				
 				// Close all submenus
@@ -860,12 +826,11 @@ OpenLab.utility = (function ($) {
 						const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
 						if ( defaultPanel ) {
 							defaultPanel.classList.add('active');
-							defaultPanel.setAttribute('aria-hidden', 'false');
-							OpenLab.utility.setInertState(defaultPanel, false);
+							defaultPanel.inert = false;
 						}
 
 						document.body.classList.add( 'drawer-open' );
-						drawer.setAttribute('aria-hidden', 'false');
+						drawer.inert = false;
 						drawer.classList.add('is-open');
 						drawer.scrollTop = 0;
 
@@ -894,12 +859,11 @@ OpenLab.utility = (function ($) {
 							const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
 							if ( defaultPanel ) {
 								defaultPanel.classList.add('active');
-								defaultPanel.setAttribute('aria-hidden', 'false');
-								OpenLab.utility.setInertState(defaultPanel, false);
+								defaultPanel.inert = false;
 							}
 
 							document.body.classList.add( 'drawer-open' );
-							drawer.setAttribute('aria-hidden', 'false');
+							drawer.inert = false;
 							drawer.classList.add('is-open');
 							drawer.scrollTop = 0;
 
@@ -1044,7 +1008,7 @@ OpenLab.utility = (function ($) {
 
 			// Set previous panel as inert
 			if (previousPanel) {
-				OpenLab.utility.setInertState(previousPanel, true);
+				previousPanel.inert = true;
 			}
 
 			// Animate out
@@ -1058,14 +1022,12 @@ OpenLab.utility = (function ($) {
 
 			// Animate in
 			targetPanel.classList.add('active');
-			targetPanel.setAttribute('aria-hidden', 'false');
-			OpenLab.utility.setInertState(targetPanel, false);
+			targetPanel.inert = false;
 
 			// Cleanup
 			if (previousPanel) {
 				OpenLab.utility.runAfterTransition(previousPanel, () => {
 					previousPanel.classList.remove('active', 'is-leaving', 'covered');
-					previousPanel.setAttribute('aria-hidden', 'true');
 				}, 600);
 			}
 

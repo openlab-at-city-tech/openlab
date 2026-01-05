@@ -30,7 +30,7 @@ if ( is_user_logged_in() ) {
 ?>
 
 <div class="flyout-menu" id="main-menu-flyout" data-default-panel="main-menu-root">
-	<div class="drawer-panel drawer-panel-root" id="main-menu-root" aria-hidden="true">
+	<div class="drawer-panel drawer-panel-root" id="main-menu-root" inert>
 		<div class="flyout-heading">
 			<a href="<?php echo esc_url( home_url() ); ?>">
 				<span>OpenLab</span>
