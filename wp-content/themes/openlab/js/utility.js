@@ -882,8 +882,7 @@ OpenLab.utility = (function ($) {
 			// Handling back toggles in flyout submenus.
 			const backToggles = document.querySelectorAll('.flyout-subnav-back');
 			backToggles.forEach( toggle => {
-				toggle.addEventListener('click', function (e) {
-					e.preventDefault();
+				const handleBack = function(switchFocus) {
 					const currentPanel = this.closest('.drawer-panel');
 					const targetId = this.getAttribute('data-back');
 					
@@ -895,25 +894,18 @@ OpenLab.utility = (function ($) {
 						});
 					}
 					
-					OpenLab.utility.switchToNavPanel(targetId, false, 'backward', currentPanel);
+					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
+				};
+
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+					handleBack.call(this, false);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						
-						const currentPanel = this.closest('.drawer-panel');
-						const targetId = this.getAttribute('data-back');
-						
-						// Reset aria-expanded when going back
-						const targetPanel = document.getElementById(targetId);
-						if (targetPanel) {
-							targetPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
-								submenuToggle.setAttribute('aria-expanded', 'false');
-							});
-						}
-						
-						OpenLab.utility.switchToNavPanel( targetId, true, 'backward', currentPanel );
+						handleBack.call(this, true);
 					}
 				});
 			});
