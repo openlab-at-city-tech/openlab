@@ -768,7 +768,7 @@ OpenLab.utility = (function ($) {
 		setInertState: function(element, isInert) {
 			if (!element) return;
 			
-			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex="0"], [tabindex]:not([tabindex="-1"]):not([tabindex="0"])');
 			focusableElements.forEach(el => {
 				if (isInert) {
 					el.setAttribute('tabindex', '-1');
@@ -889,15 +889,18 @@ OpenLab.utility = (function ($) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
 						
+						const currentPanel = this.closest('.drawer-panel');
+						const targetId = this.getAttribute('data-back');
+						
 						// Reset aria-expanded when going back
-						const rootPanel = document.getElementById('panel-root');
-						if (rootPanel) {
-							rootPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
+						const targetPanel = document.getElementById(targetId);
+						if (targetPanel) {
+							targetPanel.querySelectorAll('.flyout-submenu-toggle').forEach(submenuToggle => {
 								submenuToggle.setAttribute('aria-expanded', 'false');
 							});
 						}
 						
-						OpenLab.utility.switchToNavPanel( 'panel-root', true, 'backward' );
+						OpenLab.utility.switchToNavPanel( targetId, true, 'backward', currentPanel );
 					}
 				});
 			});
