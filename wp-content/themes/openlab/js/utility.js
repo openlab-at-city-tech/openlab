@@ -765,28 +765,26 @@ OpenLab.utility = (function ($) {
 			checkButton();
 			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
+		setInertState: function(element, isInert) {
+			if (!element) return;
+			
+			const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+			focusableElements.forEach(el => {
+				if (isInert) {
+					el.setAttribute('tabindex', '-1');
+					el.setAttribute('data-was-inert', 'true');
+				} else if (el.hasAttribute('data-was-inert')) {
+					el.removeAttribute('tabindex');
+					el.removeAttribute('data-was-inert');
+				}
+			});
+		},
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 
-			// Function to set inert state on hidden panels
-			const setInertState = function(element, isInert) {
-				if (!element) return;
-				
-				const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-				focusableElements.forEach(el => {
-					if (isInert) {
-						el.setAttribute('tabindex', '-1');
-						el.setAttribute('data-was-inert', 'true');
-					} else if (el.hasAttribute('data-was-inert')) {
-						el.removeAttribute('tabindex');
-						el.removeAttribute('data-was-inert');
-					}
-				});
-			};
-
 			// Initialize all flyout panels as inert
 			document.querySelectorAll('.drawer-panel').forEach(panel => {
-				setInertState(panel, true);
+				OpenLab.utility.setInertState(panel, true);
 			});
 
 			// Handling the drawer toggle button.
@@ -809,7 +807,7 @@ OpenLab.utility = (function ($) {
 
 					// Set all panels as inert when closing
 					document.querySelectorAll('.drawer-panel').forEach(panel => {
-						setInertState(panel, true);
+						OpenLab.utility.setInertState(panel, true);
 					});
 
 					if ( isOpen ) {
@@ -830,7 +828,7 @@ OpenLab.utility = (function ($) {
 						if ( defaultPanel ) {
 							defaultPanel.classList.add('active');
 							defaultPanel.setAttribute('aria-hidden', 'false');
-							setInertState(defaultPanel, false);
+							OpenLab.utility.setInertState(defaultPanel, false);
 						}
 
 						document.body.classList.add( 'drawer-open' );
@@ -936,11 +934,7 @@ OpenLab.utility = (function ($) {
 
 					// Set all panels as inert
 					document.querySelectorAll('.drawer-panel').forEach(panel => {
-						const focusableElements = panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-						focusableElements.forEach(el => {
-							el.setAttribute('tabindex', '-1');
-							el.setAttribute('data-was-inert', 'true');
-						});
+						OpenLab.utility.setInertState(panel, true);
 					});
 
 					// Close all submenus too
@@ -994,25 +988,9 @@ OpenLab.utility = (function ($) {
 			const targetPanel = document.getElementById(panelId);
 			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
 
-			// Function to set inert state on a panel
-			const setInertState = function(element, isInert) {
-				if (!element) return;
-				
-				const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-				focusableElements.forEach(el => {
-					if (isInert) {
-						el.setAttribute('tabindex', '-1');
-						el.setAttribute('data-was-inert', 'true');
-					} else if (el.hasAttribute('data-was-inert')) {
-						el.removeAttribute('tabindex');
-						el.removeAttribute('data-was-inert');
-					}
-				});
-			};
-
 			// Set previous panel as inert
 			if (previousPanel) {
-				setInertState(previousPanel, true);
+				OpenLab.utility.setInertState(previousPanel, true);
 			}
 
 			// Animate out
@@ -1027,7 +1005,7 @@ OpenLab.utility = (function ($) {
 			// Animate in
 			targetPanel.classList.add('active');
 			targetPanel.setAttribute('aria-hidden', 'false');
-			setInertState(targetPanel, false);
+			OpenLab.utility.setInertState(targetPanel, false);
 
 			// Cleanup
 			if (previousPanel) {
