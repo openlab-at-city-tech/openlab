@@ -150,7 +150,7 @@ $panels = [
 
 		$panel_classes_string = implode( ' ', array_map( 'sanitize_html_class', $panel_classes ) );
 		?>
-		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" aria-hidden="true">
+		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" inert>
 			<div class="flyout-heading">
 				<?php if ( 'root' === $panel_id ) : ?>
 					<a href="<?php echo esc_url( bp_loggedin_user_url() ); ?>">
