@@ -16,6 +16,7 @@ function openlab_get_hidden_plugins() {
 		'accordion-shortcodes/accordion-shortcodes.php',
 		'achievements/achievements.php',
 		'admin-commenters-comments-count/admin-commenters-comments-count.php', // #3483
+		'advanced-excerpt/advanced-excerpt.php', // #3623
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
 		'ambrosite-nextprevious-post-link-plus/ambrosite-post-link-plus.php',
 		'an-gradebook/GradeBook.php',
@@ -24,6 +25,7 @@ function openlab_get_hidden_plugins() {
 		'badgeos/badgeos.php',
 		'badgeos-badgestack-add-on/badgeos-badgestack.php',
 		'bbpress/bbpress.php',
+		'block-navigation/block-navigation.php', // #3623
 		'blog2social/blog2social.php',
 		'bookly-responsive-appointment-booking-tool/main.php',
 		'bp-avatar-on-register/bp-avatar-on-register.php', // #3483
@@ -31,20 +33,25 @@ function openlab_get_hidden_plugins() {
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
 		'bp-reply-by-email/loader.php',
+		'breadcrumb/breadcrumb.php', // #3623
 		'bu-learning-blocks/bu-learning-blocks.php', // #3149
 		'bu-navigation/bu-navigation.php', // #3149
 		'cac-featured-content/cac-featured-content.php',
 		'cac-non-cuny-signup/loader.php',
 		'cardboard/cardboard.php',
+		'category-tag-pages/category-tag-pages.php', // #3623
 		'category-sticky-post/category-sticky-post.php', // #3440
+		'cite/cite.php', // #3623
 		'content-aware-sidebars/content-aware-sidebars.php', // #3498
 		'cubepoints/cubepoints.php',
+		'dco-comment-attachment/dco-comment-attachment.php', // #3623
 		'distributor/distributor.php', // #3279
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
 		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-custom-sidebars/easy-custom-sidebars.php', // #3502
+		'easy-google-fonts/easy-google-fonts.php', // #3623
 		'easy-table/easy-table.php',
 		'echo-knowledge-base/echo-knowledge-base.php', // #3455
 		'edge-suite/edge-suite.php',
@@ -80,6 +87,7 @@ function openlab_get_hidden_plugins() {
 		'page-links-to/page-links-to.php',
 		'pagemash/pagemash.php',
 		'page-tagger/page-tagger.php',
+		'pager-widget/pager-widget.php', // #3623
 		'papercite/papercite-wp-plugin.php',
 		'password-policy-manager/miniorange-password-policy-setting.php', // #3483
 		'pdf-embedder/pdf_embedder.php',
@@ -102,6 +110,9 @@ function openlab_get_hidden_plugins() {
 		'table-of-contents-plus/toc.php',
 		'tako-movable-comments/tako.php',
 		'taxonomy-terms-order/taxonomy-terms-order.php',
+		'templates-patterns-collection/templates-patterns-collection.php', // #3623
+		'text-hover/text-hover.php', // #3623
+		'text-replace/text-replace.php', // #3623
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
 		'tablepress-responsive-tables/tablepress-responsive-tables.php', // #3483
