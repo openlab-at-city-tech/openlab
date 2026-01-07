@@ -45,6 +45,7 @@ function openlab_get_hidden_plugins() {
 		'content-aware-sidebars/content-aware-sidebars.php', // #3498
 		'cubepoints/cubepoints.php',
 		'dco-comment-attachment/dco-comment-attachment.php', // #3623
+		'demo-publication-checklist/plugin.php', // #3594
 		'distributor/distributor.php', // #3279
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
@@ -93,6 +94,8 @@ function openlab_get_hidden_plugins() {
 		'pdf-embedder/pdf_embedder.php',
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
+		'publication-checklist/plugin.php', // #3594
+		'publishpress-checklists/publishpress-checklists.php', // #3594
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
 		'rederly.php',
