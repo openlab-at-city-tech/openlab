@@ -55,7 +55,6 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 			</div>
 
 			<div class="navbar-action-link navbar-action-link-my-openlab navbar-action-link-toggleable <?php echo esc_attr( $my_openlab_is_current_class ); ?>">
-				<span class="screen-reader-text">My OpenLab</span>
 				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-expanded="false" aria-controls="my-openlab-flyout">
 					<span class="screen-reader-text">My OpenLab</span>
 					<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
