@@ -354,7 +354,7 @@ OpenLab.nav = (function ($) {
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
-					if ( activeElement && $( thisToggleTarget ).find( activeElement ).length > 0 ) {
+					if ( activeElement && thisToggleTarget[0] && $.contains( thisToggleTarget[0], activeElement ) ) {
 						thisElem.trigger( 'focus' );
 					}
 
@@ -423,7 +423,7 @@ OpenLab.nav = (function ($) {
 
 					// Focus management: only move focus if triggered by keyboard
 					if ( triggeredByKeyboard ) {
-						var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])' );
+						var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
 						if ( focusableElements.length > 0 ) {
 							focusableElements.first().trigger( 'focus' );
 						}
