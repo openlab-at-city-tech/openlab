@@ -6,7 +6,7 @@
     Plugin URI: http://katieseaborn.com/plugins
     Description: Bringing Zotero and scholarly blogging to your WordPress website.
     Author: Katie Seaborn
-    Version: 7.4.1
+    Version: 7.4.2
     Author URI: http://katieseaborn.com
     Text Domain: zotpress
     Domain Path: /languages/
@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     define('ZOTPRESS_PLUGIN_FILE',  __FILE__ );
     define('ZOTPRESS_PLUGIN_URL', plugin_dir_url( ZOTPRESS_PLUGIN_FILE ));
     define('ZOTPRESS_PLUGIN_DIR', dirname( __FILE__ ));
-    define('ZOTPRESS_VERSION', '7.4.1' );
+    define('ZOTPRESS_VERSION', '7.4.2' );
 
     // NOTE: Remember to set to TRUE after dev and before version release
     define('ZOTPRESS_LIVEMODE', true );
@@ -150,7 +150,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         wp_register_script(
             'zotpress.gutenberg'.$minify.'.js',
             ZOTPRESS_PLUGIN_URL . 'js/zotpress.gutenberg'.$minify.'.js',
-            array( 'wp-rich-text', 'wp-element', 'wp-editor', 'jquery' ),
+            array( 'wp-rich-text', 'wp-element', 'jquery' ), // 7.4.2: removed 'wp-editor'
             '7.4',
             true
         );

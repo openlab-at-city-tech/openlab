@@ -34,7 +34,7 @@ class Update_Available extends Message_Abstract {
 		$link = sprintf( '<a href="%s">', $this->resource->get_home_url() ?: '' );
 
 		return sprintf(
-			esc_html__( 'There is an update for %s. You\'ll need to %scheck your license%s to have access to updates, downloads, and support.', 'tribe-common' ),
+			esc_html__( 'There is an update for %s. You\'ll need to %scheck your license%s to have access to updates, downloads, and support.', '%TEXTDOMAIN%' ),
 			$this->resource->get_name(),
 			$link,
 			'</a>'

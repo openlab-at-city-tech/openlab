@@ -334,7 +334,7 @@ if ( defined( 'BLC_ACTIVE' ) ) {
 				if ( $blc_config_manager->options['mark_removed_links'] && ! empty( $blc_config_manager->options['removed_link_css'] ) ) {
 					function blc_print_removed_link_css() {
 						global $blc_config_manager;
-						echo '<style type="text/css">',$blc_config_manager->options['removed_link_css'],'</style>';
+						echo '<style>',$blc_config_manager->options['removed_link_css'],'</style>';
 					}
 					add_action( 'wp_head', 'blc_print_removed_link_css' );
 				}

@@ -37,7 +37,7 @@ use Bookly\Lib;
             <li class="nav-item">
                 <a id="bookly-holidays-tab" href="#days_off" data-toggle="bookly-tab" class="nav-link">
                     <i class="far fa-calendar fa-fw mr-lg-1"></i>
-                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Days Off', 'bookly' ) ?></span>
+                    <span class="d-none d-lg-inline"><?php esc_html_e( 'Days off', 'bookly' ) ?></span>
                 </a>
             </li>
         </ul>

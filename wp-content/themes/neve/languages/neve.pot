@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-25T14:07:17+00:00\n"
+"POT-Creation-Date: 2025-11-26T16:23:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: neve\n"
@@ -17,8 +17,8 @@ msgstr ""
 #. Theme Name of the theme
 #. translators: Theme Name
 #: neve
-#: neve/inc/admin/dashboard/main.php:1068
-#: neve/inc/admin/dashboard/main.php:1140
+#: neve/inc/admin/dashboard/main.php:1235
+#: neve/inc/admin/dashboard/main.php:1307
 #: neve/inc/admin/troubleshoot/main.php:38
 #: neve/inc/admin/troubleshoot/main.php:79
 #: neve/inc/admin/troubleshoot/main.php:93
@@ -61,9 +61,70 @@ msgid "upgrading PHP to the latest version"
 msgstr ""
 
 #. translators: %s: commands to run the theme
-#: neve/functions.php:65
+#: neve/functions.php:64
 #, php-format
 msgid "You appear to be running the Neve theme from source code. Please finish installation by running %s."
+msgstr ""
+
+#: neve/functions.php:174
+msgid "About Us"
+msgstr ""
+
+#: neve/functions.php:175
+msgid "Our Story"
+msgstr ""
+
+#: neve/functions.php:183
+msgid "WordPress Guides/Tutorials"
+msgstr ""
+
+#. translators: %s: product name
+#: neve/functions.php:185
+#, php-format
+msgid "Popular %s"
+msgstr ""
+
+#: neve/functions.php:186
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Install"
+msgstr ""
+
+#. translators: %s: product name
+#: neve/functions.php:188
+#, php-format
+msgid "Powered by %s"
+msgstr ""
+
+#. translators: %s: product name, %s: requirement name %s: update link start, %s: update link end, %s: requirement name %s: requirement type(theme/plugin)
+#: neve/functions.php:197
+#, php-format
+msgid "%1$s requires a newer version of %2$s. Please %3$supdate%4$s %5$s %6$s to the latest version."
+msgstr ""
+
+#. translators: %s: product name, %s: requirement name %s: update link start, %s: update link end, %s: requirement name %s: requirement type(theme/plugin)
+#: neve/functions.php:199
+#, php-format
+msgid "%1$s update requires a newer version of %2$s. Please %3$supdate%4$s %5$s %6$s."
+msgstr ""
+
+#. translators: $1: Bold start, $2: Bold end, $3: theme name, $4: plugin name
+#: neve/functions.php:201
+#, php-format
+msgid "%1$sWarning:%2$s This theme has not been tested with your current version of %1$s%3$s%2$s. Please update %3$s plugin."
+msgstr ""
+
+#. translators: $1: Bold start, $2: Bold end, $3: Product name, $4: product type(theme/plugin)
+#: neve/functions.php:203
+#, php-format
+msgid "%1$sWarning:%2$s This plugin has not been tested with your current version of %1$s%3$s%2$s. Please update %3$s %4$s."
+msgstr ""
+
+#: neve/functions.php:204
+msgid "theme"
+msgstr ""
+
+#: neve/functions.php:205
+msgid "plugin"
 msgstr ""
 
 #: neve/globals/utilities.php:233
@@ -79,7 +140,7 @@ msgid "Search"
 msgstr ""
 
 #: neve/globals/utilities.php:441
-#: neve/inc/customizer/options/upsells.php:437
+#: neve/inc/customizer/options/upsells.php:415
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Learn More"
 msgstr ""
@@ -89,7 +150,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Builder/Header.php:70
 #: neve/header-footer-grid/Core/Components/Button.php:165
 #: neve/inc/admin/dashboard/main.php:350
-#: neve/inc/core/front_end.php:570
+#: neve/inc/core/front_end.php:580
 #: neve/inc/customizer/controls/simple_upsell.php:92
 #: neve/inc/customizer/controls/simple_upsell_section.php:66
 #: neve/assets/apps/customizer-controls/build/controls.js:5
@@ -122,7 +183,7 @@ msgstr ""
 #: neve/inc/customizer/options/layout_blog.php:666
 #: neve/inc/customizer/options/layout_single_post.php:585
 #: neve/inc/customizer/options/layout_single_product.php:107
-#: neve/inc/customizer/options/upsells.php:228
+#: neve/inc/customizer/options/upsells.php:220
 #: neve/inc/views/partials/post_meta.php:235
 msgid "Category"
 msgstr ""
@@ -150,22 +211,22 @@ msgstr ""
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:245
 #: neve/header-footer-grid/Core/Builder/Footer.php:105
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:5
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
 msgid "Desktop"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:246
 #: neve/header-footer-grid/Core/Builder/Footer.php:106
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:5
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
 msgid "Mobile"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:345
 #: neve/header-footer-grid/Core/Settings/Manager.php:206
-#: neve/inc/customizer/options/upsells.php:144
-#: neve/inc/customizer/options/upsells.php:167
-#: neve/inc/customizer/options/upsells.php:250
+#: neve/inc/customizer/options/upsells.php:136
+#: neve/inc/customizer/options/upsells.php:159
+#: neve/inc/customizer/options/upsells.php:242
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Layout"
 msgstr ""
@@ -212,10 +273,11 @@ msgstr ""
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:517
 #: neve/header-footer-grid/Core/Components/CustomHtml.php:171
 #: neve/header-footer-grid/Core/Components/Logo.php:526
-#: neve/inc/compatibility/elementor.php:198
-#: neve/inc/core/front_end.php:122
+#: neve/inc/compatibility/elementor.php:199
+#: neve/inc/core/front_end.php:125
 #: neve/inc/customizer/options/layout_blog.php:841
 #: neve/inc/customizer/options/layout_blog.php:985
+#: neve/inc/views/style_book.php:54
 #: neve/assets/apps/components/build/components.js:1
 msgid "Text Color"
 msgstr ""
@@ -241,8 +303,9 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:929
 #: neve/inc/customizer/defaults/utils.php:32
 #: neve/inc/customizer/options/base_layout_single.php:619
-#: neve/inc/customizer/options/upsells.php:359
-#: neve/inc/customizer/options/upsells.php:373
+#: neve/inc/customizer/options/scroll_to_top.php:177
+#: neve/inc/customizer/options/upsells.php:351
+#: neve/inc/customizer/options/upsells.php:365
 #: neve/assets/apps/components/build/components.js:1
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 #: neve/assets/apps/metabox/build/index.js:1
@@ -252,7 +315,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:1842
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:933
 #: neve/inc/customizer/options/base_layout_single.php:623
-#: neve/inc/customizer/options/upsells.php:363
+#: neve/inc/customizer/options/upsells.php:355
 msgid "Center"
 msgstr ""
 
@@ -260,8 +323,9 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:937
 #: neve/inc/customizer/defaults/utils.php:36
 #: neve/inc/customizer/options/base_layout_single.php:627
-#: neve/inc/customizer/options/upsells.php:368
-#: neve/inc/customizer/options/upsells.php:373
+#: neve/inc/customizer/options/scroll_to_top.php:178
+#: neve/inc/customizer/options/upsells.php:360
+#: neve/inc/customizer/options/upsells.php:365
 #: neve/assets/apps/components/build/components.js:1
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 #: neve/assets/apps/metabox/build/index.js:1
@@ -270,7 +334,7 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:1857
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:960
-#: neve/inc/customizer/options/upsells.php:354
+#: neve/inc/customizer/options/upsells.php:346
 msgid "Alignment"
 msgstr ""
 
@@ -329,7 +393,7 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Abstract_Builder.php:2042
 #: neve/inc/customizer/options/base_layout_single.php:322
-#: neve/inc/customizer/options/upsells.php:205
+#: neve/inc/customizer/options/upsells.php:197
 #: neve/assets/apps/components/build/components.js:1
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Bottom"
@@ -341,6 +405,7 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:39
 #: neve/inc/compatibility/fse.php:436
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Footer"
 msgstr ""
 
@@ -362,11 +427,10 @@ msgid "Change Copyright"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:70
-#: neve/inc/admin/dashboard/main.php:526
-#: neve/inc/admin/dashboard/main.php:1069
+#: neve/inc/admin/dashboard/main.php:572
+#: neve/inc/admin/dashboard/main.php:1236
 #: neve/inc/customizer/controls/upsell_control.php:95
-#: neve/inc/customizer/options/upsells.php:418
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "PRO"
 msgstr ""
@@ -416,6 +480,8 @@ msgid "Footer Bottom"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:315
+#: neve/header-footer-grid/Core/Builder/Header.php:557
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Contact"
 msgstr ""
 
@@ -424,12 +490,33 @@ msgid "Payment icons"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Footer.php:323
-#: neve/header-footer-grid/Core/Builder/Header.php:561
+msgid "Copyright"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Footer.php:327
+#: neve/header-footer-grid/Core/Builder/Header.php:565
+#: neve/inc/admin/dashboard/main.php:387
+#: neve/inc/admin/dashboard/main.php:674
+#: neve/inc/admin/dashboard/main.php:807
+#: neve/inc/admin/dashboard/main.php:1078
+#: neve/inc/admin/hooks_upsells.php:221
+#: neve/inc/admin/hooks_upsells.php:222
+#: neve/inc/core/front_end.php:572
+msgid "Custom Layouts"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Footer.php:331
+#: neve/header-footer-grid/Core/Builder/Header.php:585
+msgid "Widget Area"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Footer.php:335
+#: neve/header-footer-grid/Core/Builder/Header.php:573
 msgid "Social Icons"
 msgstr ""
 
 #. translators: %1$s is Theme Name ( Neve ), %2$s is WordPress
-#: neve/header-footer-grid/Core/Builder/Footer.php:336
+#: neve/header-footer-grid/Core/Builder/Footer.php:348
 #, php-format
 msgid "%1$s | Powered by %2$s"
 msgstr ""
@@ -466,6 +553,7 @@ msgstr ""
 #: neve/inc/customizer/options/checkout.php:105
 #: neve/inc/customizer/options/layout_blog.php:168
 #: neve/inc/customizer/options/layout_single_post.php:140
+#: neve/inc/customizer/options/scroll_to_top.php:147
 #: neve/inc/customizer/options/typography.php:101
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "General"
@@ -529,24 +617,42 @@ msgid "Button Item"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Builder/Header.php:553
+#: neve/header-footer-grid/Core/Components/Search.php:42
+msgid "Search Form"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Header.php:561
 #: neve/header-footer-grid/Core/Components/CustomHtml.php:35
 #: neve/header-footer-grid/Core/Components/CustomHtml.php:147
 msgid "HTML"
 msgstr ""
 
-#: neve/header-footer-grid/Core/Builder/Header.php:557
-#: neve/inc/admin/dashboard/main.php:379
-#: neve/inc/admin/dashboard/main.php:568
-#: neve/inc/admin/dashboard/main.php:687
-#: neve/inc/admin/dashboard/main.php:911
-#: neve/inc/admin/hooks_upsells.php:221
-#: neve/inc/admin/hooks_upsells.php:222
-#: neve/inc/core/front_end.php:562
-msgid "Custom Layouts"
+#: neve/header-footer-grid/Core/Builder/Header.php:569
+#: neve/inc/customizer/options/upsells.php:513
+msgid "Divider element"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Header.php:577
+#: neve/header-footer-grid/Core/Components/Nav.php:45
+#: neve/header-footer-grid/Core/Components/Nav.php:348
+#: neve/header-footer-grid/templates/components/component-nav.php:31
+#: neve/inc/core/front_end.php:78
+msgid "Primary Menu"
+msgstr ""
+
+#: neve/header-footer-grid/Core/Builder/Header.php:581
+#: neve/header-footer-grid/Core/Components/Button.php:81
+#: neve/header-footer-grid/Core/Components/Button.php:150
+#: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:143
+#: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:147
+#: neve/inc/customizer/options/form_fields.php:567
+#: neve/assets/apps/components/build/components.js:1
+msgid "Button"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:515
 #: neve/inc/customizer/options/buttons.php:77
+#: neve/inc/customizer/options/scroll_to_top.php:384
 msgid "Padding"
 msgstr ""
 
@@ -559,20 +665,12 @@ msgstr ""
 #: neve/inc/customizer/options/main.php:64
 #: neve/inc/customizer/options/typography.php:439
 #: neve/inc/customizer/options/typography.php:461
+#: neve/inc/views/style_book.php:97
 msgid "Typography"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Abstract_Component.php:943
 msgid "Justify"
-msgstr ""
-
-#: neve/header-footer-grid/Core/Components/Button.php:81
-#: neve/header-footer-grid/Core/Components/Button.php:150
-#: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:143
-#: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:147
-#: neve/inc/customizer/options/form_fields.php:567
-#: neve/assets/apps/components/build/components.js:1
-msgid "Button"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Button.php:135
@@ -593,6 +691,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/MenuIcon.php:564
 #: neve/header-footer-grid/Core/Components/PaletteSwitch.php:423
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:148
+#: neve/inc/customizer/options/scroll_to_top.php:427
 msgid "Icon Size"
 msgstr ""
 
@@ -603,6 +702,8 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/SecondNav.php:199
 #: neve/inc/customizer/options/base_layout_single.php:646
 #: neve/inc/customizer/options/form_fields.php:357
+#: neve/inc/customizer/options/scroll_to_top.php:540
+#: neve/inc/customizer/options/scroll_to_top.php:557
 #: neve/assets/apps/components/build/components.js:1
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Color"
@@ -611,6 +712,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/CartIcon.php:208
 #: neve/header-footer-grid/Core/Components/EddCartIcon.php:114
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:208
+#: neve/inc/customizer/options/scroll_to_top.php:572
 msgid "Hover Color"
 msgstr ""
 
@@ -623,26 +725,27 @@ msgid "Easy Digital Downloads Cart"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetFour.php:32
-#: neve/inc/core/front_end.php:527
+#: neve/inc/core/front_end.php:537
 msgid "Footer Four"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetOne.php:31
-#: neve/inc/core/front_end.php:524
+#: neve/inc/core/front_end.php:534
 msgid "Footer One"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetThree.php:31
-#: neve/inc/core/front_end.php:526
+#: neve/inc/core/front_end.php:536
 msgid "Footer Three"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetTwo.php:32
-#: neve/inc/core/front_end.php:525
+#: neve/inc/core/front_end.php:535
 msgid "Footer Two"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Logo.php:80
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Logo & Site Identity"
 msgstr ""
 
@@ -676,6 +779,7 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Logo.php:483
 #: neve/header-footer-grid/Core/Magic_Tags.php:691
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Site Title"
 msgstr ""
 
@@ -704,6 +808,7 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Components/MenuIcon.php:512
 #: neve/header-footer-grid/Core/Components/PaletteSwitch.php:458
+#: neve/inc/customizer/options/scroll_to_top.php:266
 msgid "Label"
 msgstr ""
 
@@ -712,6 +817,8 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:129
 #: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:143
 #: neve/header-footer-grid/Core/Components/Utility/SearchIconButton.php:170
+#: neve/inc/customizer/options/scroll_to_top.php:201
+#: neve/inc/customizer/options/scroll_to_top.php:220
 msgid "Icon"
 msgstr ""
 
@@ -737,13 +844,6 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Components/MenuIcon.php:604
 msgid "Open Behavior"
-msgstr ""
-
-#: neve/header-footer-grid/Core/Components/Nav.php:45
-#: neve/header-footer-grid/Core/Components/Nav.php:348
-#: neve/header-footer-grid/templates/components/component-nav.php:31
-#: neve/inc/core/front_end.php:77
-msgid "Primary Menu"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Nav.php:184
@@ -802,7 +902,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/NavFooter.php:41
 #: neve/header-footer-grid/Core/Components/NavFooter.php:146
 #: neve/header-footer-grid/templates/components/component-nav-footer.php:25
-#: neve/inc/core/front_end.php:78
+#: neve/inc/core/front_end.php:79
 msgid "Footer Menu"
 msgstr ""
 
@@ -847,10 +947,6 @@ msgstr ""
 msgid "Adjust default color scheme based on the user device preferences. %1$sLearn More%2$s."
 msgstr ""
 
-#: neve/header-footer-grid/Core/Components/Search.php:42
-msgid "Search Form"
-msgstr ""
-
 #: neve/header-footer-grid/Core/Components/Search.php:65
 #: neve/header-footer-grid/Core/Components/Search.php:452
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:91
@@ -862,6 +958,8 @@ msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Search.php:66
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:92
+#: neve/inc/views/style_book.php:156
+#: neve/inc/views/style_book.php:160
 msgid "Placeholder"
 msgstr ""
 
@@ -874,12 +972,14 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:440
 #: neve/inc/customizer/options/form_fields.php:240
 #: neve/inc/customizer/options/layout_blog.php:869
+#: neve/inc/customizer/options/scroll_to_top.php:497
 #: neve/assets/apps/components/build/components.js:1
 msgid "Border Radius"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/Search.php:310
 #: neve/header-footer-grid/Core/Components/SearchResponsive.php:479
+#: neve/inc/customizer/options/scroll_to_top.php:587
 msgid "Background Color"
 msgstr ""
 
@@ -908,7 +1008,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Components/SecondNav.php:42
 #: neve/header-footer-grid/Core/Components/SecondNav.php:225
 #: neve/header-footer-grid/templates/components/component-nav-secondary.php:27
-#: neve/inc/core/front_end.php:79
+#: neve/inc/core/front_end.php:80
 msgid "Secondary Menu"
 msgstr ""
 
@@ -942,7 +1042,7 @@ msgstr ""
 
 #. translators: %s is the header name
 #: neve/header-footer-grid/Core/Customizer.php:288
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:5
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
 msgid "Click on any empty space to add components, or existing components to adjust settings."
 msgstr ""
 
@@ -952,6 +1052,7 @@ msgstr ""
 #: neve/inc/admin/hooks_upsells.php:410
 #: neve/inc/views/header.php:141
 #: neve/inc/views/layouts/layout_sidebar.php:189
+#: neve/inc/views/style_book.php:74
 msgid "Close"
 msgstr ""
 
@@ -1045,6 +1146,7 @@ msgid "User Email"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Magic_Tags.php:695
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Site Tagline"
 msgstr ""
 
@@ -1106,7 +1208,8 @@ msgid "Checkout URL"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Settings/Manager.php:210
-#: neve/inc/customizer/options/upsells.php:304
+#: neve/inc/customizer/options/scroll_to_top.php:340
+#: neve/inc/customizer/options/upsells.php:296
 #: neve/assets/apps/components/build/components.js:1
 msgid "Style"
 msgstr ""
@@ -1129,6 +1232,7 @@ msgstr ""
 #: neve/header-footer-grid/templates/row-wrapper-mobile.php:45
 #: neve/header-footer-grid/templates/row-wrapper-mobile.php:46
 #: neve/header-footer-grid/templates/row-wrapper-mobile.php:75
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Navigation Menu"
 msgstr ""
 
@@ -1150,7 +1254,7 @@ msgid "Skip to content"
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:99
-#: neve/inc/admin/dashboard/main.php:458
+#: neve/inc/admin/dashboard/main.php:504
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Upgrade"
 msgstr ""
@@ -1158,7 +1262,7 @@ msgstr ""
 #. translators: %s - Theme name
 #: neve/inc/admin/dashboard/main.php:174
 #: neve/inc/admin/dashboard/main.php:176
-#: neve/inc/core/front_end.php:573
+#: neve/inc/core/front_end.php:583
 #: neve/assets/apps/metabox/build/index.js:2
 #, php-format,js-format
 msgid "%s Options"
@@ -1228,427 +1332,460 @@ msgid "Enter your license from %1$s purchase history in order to get plugin upda
 msgstr ""
 
 #. translators: s - theme name (Neve).
-#: neve/inc/admin/dashboard/main.php:417
+#: neve/inc/admin/dashboard/main.php:463
 #, php-format
 msgid "New theme update for %1$s! Please update to %2$s."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:422
-#: neve/inc/admin/dashboard/main.php:443
+#: neve/inc/admin/dashboard/main.php:468
+#: neve/inc/admin/dashboard/main.php:489
 msgid "Update Now"
 msgstr ""
 
 #. translators: s - Pro plugin name (Neve Pro)
-#: neve/inc/admin/dashboard/main.php:434
+#: neve/inc/admin/dashboard/main.php:480
 #, php-format
 msgid "New plugin update for %1$s! Please update to %2$s."
 msgstr ""
 
 #. translators: s - Discount Code
-#: neve/inc/admin/dashboard/main.php:453
+#: neve/inc/admin/dashboard/main.php:499
 #, php-format
 msgid "From 3.3.0 we decided to remove the copyright component from the free version. You can continue using it if you rollback to 3.2.x or you can upgrade to pro, using a one time 50%% discount: %s"
 msgstr ""
 
 #. translators: 1 - Theme Name (Neve), 2 - Plugin Name (Neve Pro)
-#: neve/inc/admin/dashboard/main.php:465
+#: neve/inc/admin/dashboard/main.php:511
 #, php-format
 msgid "We recommend that both %1$s and %2$s are updated to the latest version to ensure optimal intercompatibility."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:495
+#: neve/inc/admin/dashboard/main.php:541
 #: neve/assets/apps/customizer-controls/build/controls.js:5
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Upload Logo"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:496
+#: neve/inc/admin/dashboard/main.php:542
 msgid "Recommended size: 200x50px"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:500
+#: neve/inc/admin/dashboard/main.php:546
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Set Colors"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:501
+#: neve/inc/admin/dashboard/main.php:547
 msgid "Brand colors & site palette"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:505
+#: neve/inc/admin/dashboard/main.php:551
 msgid "Customize Fonts"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:506
+#: neve/inc/admin/dashboard/main.php:552
 msgid "Typography & text styles"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:510
+#: neve/inc/admin/dashboard/main.php:556
 msgid "Layout Options"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:511
+#: neve/inc/admin/dashboard/main.php:557
 msgid "Content structure & spacing"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:515
+#: neve/inc/admin/dashboard/main.php:561
 msgid "Header Options"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:516
+#: neve/inc/admin/dashboard/main.php:562
 msgid "Navigation & branding setup"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:520
+#: neve/inc/admin/dashboard/main.php:566
 msgid "Blog Layouts"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:521
+#: neve/inc/admin/dashboard/main.php:567
 msgid "Post display & formatting"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:525
+#: neve/inc/admin/dashboard/main.php:571
 msgid "Footer Options"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:526
+#: neve/inc/admin/dashboard/main.php:572
 msgid "Custom footer layouts"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:530
+#: neve/inc/admin/dashboard/main.php:576
 #: neve/inc/customizer/options/layout_sidebar.php:74
 msgid "Content / Sidebar"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:531
+#: neve/inc/admin/dashboard/main.php:577
 msgid "Widget areas & layout"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:557
+#: neve/inc/admin/dashboard/main.php:663
 msgid "Website Essentials"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:560
+#: neve/inc/admin/dashboard/main.php:666
 msgid "Advanced Header Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:561
+#: neve/inc/admin/dashboard/main.php:667
 msgid "Full header settings control with sticky/transparent header, page-specific settings & mobile layouts."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:564
+#: neve/inc/admin/dashboard/main.php:670
 msgid "Design Components"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:565
+#: neve/inc/admin/dashboard/main.php:671
 msgid "Social icons, payment icons, divider, footer copyright editor and 15+ header components."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:569
+#: neve/inc/admin/dashboard/main.php:675
 msgid "Add custom blocks or content using hooks for headers, footers, 404 pages, and more."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:574
+#: neve/inc/admin/dashboard/main.php:680
 msgid "Page Builder Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:577
+#: neve/inc/admin/dashboard/main.php:683
 msgid "Elementor Add-ons"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:578
+#: neve/inc/admin/dashboard/main.php:684
 msgid "Add engaging elements, protect content, and create dynamic layouts with our advanced toolkit."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:582
+#: neve/inc/admin/dashboard/main.php:688
 msgid "Advanced Gutenberg blocks with animations & visibility controls."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:587
+#: neve/inc/admin/dashboard/main.php:693
 msgid "Content & Blog Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:590
+#: neve/inc/admin/dashboard/main.php:696
 msgid "Advanced Blog Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:591
+#: neve/inc/admin/dashboard/main.php:697
 msgid "Multiple layouts, reading time estimates, social sharing & related posts."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:594
-#: neve/inc/admin/dashboard/main.php:734
-#: neve/inc/core/admin.php:543
+#: neve/inc/admin/dashboard/main.php:700
+#: neve/inc/admin/dashboard/main.php:873
+#: neve/inc/core/admin.php:773
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Starter Sites"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:595
+#: neve/inc/admin/dashboard/main.php:701
 msgid "Access a growing library of beautiful, ready-to-use templates for every niche and industry."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:598
+#: neve/inc/admin/dashboard/main.php:704
 msgid "Content Restriction"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:599
+#: neve/inc/admin/dashboard/main.php:705
 msgid "Restrict content access by user, role, or password—ideal for membership sites."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:602
+#: neve/inc/admin/dashboard/main.php:708
 msgid "Multilingual Support"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:603
+#: neve/inc/admin/dashboard/main.php:709
 msgid "Seamlessly integrate with WPML, Weglot, and Polylang for enhanced multilingual capabilities."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:608
+#: neve/inc/admin/dashboard/main.php:714
 msgid "Store Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:611
+#: neve/inc/admin/dashboard/main.php:717
 msgid "Product Experience"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:612
+#: neve/inc/admin/dashboard/main.php:718
 msgid "Quick view popup, features video & wishlist functionality."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:615
+#: neve/inc/admin/dashboard/main.php:721
 msgid "Shopping Enhancement"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:616
+#: neve/inc/admin/dashboard/main.php:722
 msgid "Product comparison, advance product review & variation swatches."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:619
+#: neve/inc/admin/dashboard/main.php:725
 msgid "Sales Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:620
+#: neve/inc/admin/dashboard/main.php:726
 msgid "Custom thank you pages & announcement bars."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:625
+#: neve/inc/admin/dashboard/main.php:731
 msgid "Professional Features"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:628
+#: neve/inc/admin/dashboard/main.php:734
 msgid "Priority Support"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:629
+#: neve/inc/admin/dashboard/main.php:735
 msgid "Get fast and reliable assistance directly from our expert team."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:632
-#: neve/inc/admin/dashboard/main.php:683
+#: neve/inc/admin/dashboard/main.php:738
+#: neve/inc/admin/dashboard/main.php:800
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "White Label"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:633
+#: neve/inc/admin/dashboard/main.php:739
 msgid "Remove Neve branding and rebrand it as your own for client websites."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:648
-#: neve/inc/core/front_end.php:559
+#: neve/inc/admin/dashboard/main.php:754
+#: neve/inc/core/front_end.php:569
 msgid "Header Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:649
+#: neve/inc/admin/dashboard/main.php:755
 msgid "Create unique sticky & transparent headers that adapt to scroll. Perfect for modern, immersive websites."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:652
-#: neve/inc/core/front_end.php:561
+#: neve/inc/admin/dashboard/main.php:761
+#: neve/inc/core/front_end.php:571
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:653
+#: neve/inc/admin/dashboard/main.php:762
 msgid "Transform your store with quick-view popups, wishlist features, and optimized checkout flow. Boost sales instantly."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:654
+#: neve/inc/admin/dashboard/main.php:763
 msgid "Boost conversion rates up to 15%"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:658
+#: neve/inc/admin/dashboard/main.php:767
 msgid "Easy Digital Downloads Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:659
+#: neve/inc/admin/dashboard/main.php:768
 msgid "Enhance your Easy Digital Downloads store with additional customization settings."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:663
-#: neve/inc/core/front_end.php:560
+#: neve/inc/admin/dashboard/main.php:772
+#: neve/inc/core/front_end.php:570
 msgid "Blog Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:664
+#: neve/inc/admin/dashboard/main.php:773
 msgid "Advanced layouts, reading time estimates, and social sharing to keep readers engaged longer."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:667
+#: neve/inc/admin/dashboard/main.php:779
 msgid "Post types enhancements"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:668
+#: neve/inc/admin/dashboard/main.php:780
 msgid "Extend Neve's powerful features to custom post types. Create unique layouts for portfolios, testimonials, and more."
 msgstr ""
 
-#. translators: Module name for the upsell.
-#: neve/inc/admin/dashboard/main.php:671
-#: neve/inc/customizer/options/upsells.php:417
-#: neve/inc/customizer/options/upsells.php:458
-msgid "Scroll To Top"
-msgstr ""
-
-#: neve/inc/admin/dashboard/main.php:672
-msgid "Add a customizable scroll-to-top button that appears exactly when needed. Style it to match your brand."
-msgstr ""
-
-#: neve/inc/admin/dashboard/main.php:675
+#: neve/inc/admin/dashboard/main.php:786
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Performance"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:676
+#: neve/inc/admin/dashboard/main.php:787
 msgid "Optimize core vitals, enable lazy loading, and minify resources for lightning-fast load times."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:679
+#: neve/inc/admin/dashboard/main.php:793
 msgid "Block Editor Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:680
+#: neve/inc/admin/dashboard/main.php:794
 msgid "Advanced Gutenberg blocks designed specifically for Neve. Build faster with pre-styled patterns."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:684
+#: neve/inc/admin/dashboard/main.php:801
 msgid "Rebrand Neve as your own. Change theme name, author, and links to match your agency identity."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:688
+#: neve/inc/admin/dashboard/main.php:808
 msgid "Create conditional headers, footers, and content blocks. Perfect for custom landing pages and marketing campaigns."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:691
-#: neve/inc/core/front_end.php:565
+#: neve/inc/admin/dashboard/main.php:814
+#: neve/inc/core/front_end.php:575
 msgid "Elementor Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:692
-#: neve/inc/core/front_end.php:568
+#: neve/inc/admin/dashboard/main.php:815
+#: neve/inc/core/front_end.php:578
 msgid "Leverage the true flexibility of Elementor with powerful addons and templates that you can import with just one click."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:696
+#: neve/inc/admin/dashboard/main.php:819
 msgid "LifterLMS Booster"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:697
+#: neve/inc/admin/dashboard/main.php:820
 msgid "Enhanced course layouts, student dashboards, and learning features for your online education platform."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:701
+#: neve/inc/admin/dashboard/main.php:824
 msgid "Typekit Fonts"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:702
+#: neve/inc/admin/dashboard/main.php:825
 msgid "Access premium Adobe fonts directly in your theme. Add professional typography to any element."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:705
+#: neve/inc/admin/dashboard/main.php:831
 msgid "Custom Sidebars"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:706
+#: neve/inc/admin/dashboard/main.php:832
 msgid "Create unique sidebar layouts for different sections. Show relevant content based on user context."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:709
+#: neve/inc/admin/dashboard/main.php:838
 msgid "Content restriction"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:710
+#: neve/inc/admin/dashboard/main.php:839
 msgid "Create members-only content areas. Control access by user roles, logged-in status, or custom rules."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:731
+#: neve/inc/admin/dashboard/main.php:845
+msgid "WP Dashboard Customizer"
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:846
+msgid "Create or modify the WordPress dashboard. Customize the admin pages, admin menu, and admin bar."
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:870
 msgid "Advanced blocks for modern WordPress editing"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:735
+#: neve/inc/admin/dashboard/main.php:874
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Import ready-made websites with a single click"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:739
+#: neve/inc/admin/dashboard/main.php:878
 msgid "Simple ecommerce solution with Stripe integration"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:743
+#: neve/inc/admin/dashboard/main.php:882
 msgid "Smart image optimization and CDN"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:747
+#: neve/inc/admin/dashboard/main.php:886
 msgid "Lightning-fast caching made simple"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:752
+#: neve/inc/admin/dashboard/main.php:891
 msgid "RSS feeds aggregator and content curator"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:759
+#: neve/inc/admin/dashboard/main.php:898
 msgid "AI chatbot for your website"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:916
+#: neve/inc/admin/dashboard/main.php:974
+msgid "Login Customizer"
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:975
+msgid "Customize your WordPress login page with branding and styling options."
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:978
+msgid "Custom Fonts/Scripts"
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:979
+msgid "Add custom fonts and scripts to your website easily."
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:982
+msgid "Cookie Notice"
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:983
+msgid "Display a customizable cookie consent notice for GDPR compliance."
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:986
+msgid "Duplicate Page"
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:987
+msgid "Quickly duplicate posts, pages, and custom post types."
+msgstr ""
+
+#: neve/inc/admin/dashboard/main.php:1083
 msgid "Add New Layout"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:923
+#: neve/inc/admin/dashboard/main.php:1090
 msgid "View Tutorial"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:930
+#: neve/inc/admin/dashboard/main.php:1097
+#: neve/inc/views/style_book.php:130
 msgid "Design unique website sections without touching code. Create custom headers, footers, and content areas that match your vision."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:1065
+#: neve/inc/admin/dashboard/main.php:1232
 msgid "Neve Logo"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:1069
+#: neve/inc/admin/dashboard/main.php:1236
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Free"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:1077
+#: neve/inc/admin/dashboard/main.php:1244
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Documentation"
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:1082
+#: neve/inc/admin/dashboard/main.php:1249
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Changelog"
 msgstr ""
 
 #. translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-#: neve/inc/admin/dashboard/main.php:1139
+#: neve/inc/admin/dashboard/main.php:1306
 #, php-format
 msgid "Our biggest sale of the year: %1$sup to %2$s OFF%3$s on %4$s. Don't miss this limited-time offer."
 msgstr ""
 
 #. translators: %1$s - HTML tag, %2$s - discount, %3$s - HTML tag, %4$s - product name.
-#: neve/inc/admin/dashboard/main.php:1148
+#: neve/inc/admin/dashboard/main.php:1315
 #, php-format
 msgid "Get %1$sup to %2$s off%3$s when you upgrade your %4$s plan or renew early."
 msgstr ""
 
-#: neve/inc/admin/dashboard/main.php:1149
+#: neve/inc/admin/dashboard/main.php:1316
 msgid "Neve Pro"
 msgstr ""
 
@@ -1661,13 +1798,13 @@ msgid "Hide Hooks"
 msgstr ""
 
 #: neve/inc/admin/hooks_upsells.php:174
-#: neve/inc/customizer/options/upsells.php:404
-#: neve/inc/customizer/options/upsells.php:436
+#: neve/inc/customizer/options/upsells.php:396
+#: neve/inc/customizer/options/upsells.php:414
 msgid "Neve PRO Features"
 msgstr ""
 
 #: neve/inc/admin/hooks_upsells.php:174
-#: neve/inc/customizer/loader.php:144
+#: neve/inc/customizer/loader.php:145
 #: neve/inc/customizer/options/typography.php:74
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Learn more"
@@ -1732,6 +1869,7 @@ msgstr ""
 
 #: neve/inc/admin/hooks_upsells.php:508
 #: neve/inc/admin/hooks_upsells.php:529
+#: neve/inc/customizer/options/scroll_to_top.php:196
 msgid "Type"
 msgstr ""
 
@@ -1773,13 +1911,13 @@ msgid "No Sidebar"
 msgstr ""
 
 #: neve/inc/admin/metabox/main.php:61
-#: neve/inc/core/front_end.php:517
+#: neve/inc/core/front_end.php:527
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Sidebar"
 msgstr ""
 
 #: neve/inc/admin/metabox/main.php:75
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
 msgid "Components"
 msgstr ""
 
@@ -1934,56 +2072,64 @@ msgstr ""
 msgid "Neve Theme controls base style settings of Easy Digital Downloads. Additional settings from other extensions might appear below."
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:193
-#: neve/inc/core/front_end.php:102
+#: neve/inc/compatibility/elementor.php:194
+#: neve/inc/core/front_end.php:105
+#: neve/inc/views/style_book.php:34
 #: neve/assets/apps/components/build/components.js:1
 msgid "Primary Accent"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:194
-#: neve/inc/core/front_end.php:106
+#: neve/inc/compatibility/elementor.php:195
+#: neve/inc/core/front_end.php:109
+#: neve/inc/views/style_book.php:38
 #: neve/assets/apps/components/build/components.js:1
 msgid "Secondary Accent"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:195
-#: neve/inc/core/front_end.php:110
+#: neve/inc/compatibility/elementor.php:196
+#: neve/inc/core/front_end.php:113
+#: neve/inc/views/style_book.php:42
 #: neve/assets/apps/components/build/components.js:1
 msgid "Site Background"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:196
-#: neve/inc/core/front_end.php:114
+#: neve/inc/compatibility/elementor.php:197
+#: neve/inc/core/front_end.php:117
+#: neve/inc/views/style_book.php:46
 #: neve/assets/apps/components/build/components.js:1
 msgid "Light Background"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:197
-#: neve/inc/core/front_end.php:118
+#: neve/inc/compatibility/elementor.php:198
+#: neve/inc/core/front_end.php:121
+#: neve/inc/views/style_book.php:50
 #: neve/assets/apps/components/build/components.js:1
 msgid "Dark Background"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:199
-#: neve/inc/core/front_end.php:126
+#: neve/inc/compatibility/elementor.php:200
+#: neve/inc/core/front_end.php:129
+#: neve/inc/views/style_book.php:58
 #: neve/assets/apps/components/build/components.js:1
 msgid "Text Dark Background"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:200
-#: neve/inc/core/front_end.php:130
+#: neve/inc/compatibility/elementor.php:201
+#: neve/inc/core/front_end.php:133
+#: neve/inc/views/style_book.php:62
 #: neve/assets/apps/components/build/components.js:1
 msgid "Extra Color 1"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:201
-#: neve/inc/core/front_end.php:134
+#: neve/inc/compatibility/elementor.php:202
+#: neve/inc/core/front_end.php:137
+#: neve/inc/views/style_book.php:66
 #: neve/assets/apps/components/build/components.js:1
 msgid "Extra Color 2"
 msgstr ""
 
-#: neve/inc/compatibility/elementor.php:385
-#: neve/inc/core/front_end.php:97
+#: neve/inc/compatibility/elementor.php:386
+#: neve/inc/core/front_end.php:100
 msgid "Theme"
 msgstr ""
 
@@ -2058,144 +2204,174 @@ msgctxt "Theme starter content"
 msgid "Blog"
 msgstr ""
 
-#: neve/inc/core/admin.php:498
+#: neve/inc/core/admin.php:432
+#: neve/inc/core/admin.php:453
+#: neve/inc/core/admin.php:484
+#: neve/inc/core/admin.php:491
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Invalid action"
+msgstr ""
+
+#: neve/inc/core/admin.php:470
+#: neve/inc/core/admin.php:496
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Module Activated"
+msgstr ""
+
+#: neve/inc/core/admin.php:496
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Module Deactivated."
+msgstr ""
+
+#: neve/inc/core/admin.php:728
 #: neve/assets/apps/starter-sites/build/notice.js:1
 msgid "Let's Get Started with Starter Templates"
 msgstr ""
 
-#: neve/inc/core/admin.php:506
+#: neve/inc/core/admin.php:736
 msgid "I want to build this website from scratch"
 msgstr ""
 
 #. translators: %s: the name of the theme (Neve Theme).
-#: neve/inc/core/admin.php:511
+#: neve/inc/core/admin.php:741
 #, php-format
 msgid "Thanks for downloading %s"
 msgstr ""
 
-#: neve/inc/core/admin.php:512
+#: neve/inc/core/admin.php:742
 msgid "Neve Theme"
 msgstr ""
 
-#: neve/inc/core/admin.php:514
+#: neve/inc/core/admin.php:744
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Explore a vast library of pre-designed sites within Neve. Visit our constantly growing collection of demos to find the perfect starting point for your project."
 msgstr ""
 
-#: neve/inc/core/front_end.php:518
+#: neve/inc/core/front_end.php:528
 msgid "Shop Sidebar"
 msgstr ""
 
-#: neve/inc/core/front_end.php:553
+#: neve/inc/core/front_end.php:563
 msgid "Add item"
 msgstr ""
 
-#: neve/inc/core/front_end.php:554
+#: neve/inc/core/front_end.php:564
 msgid "Add items by clicking the ones below."
 msgstr ""
 
-#: neve/inc/core/front_end.php:555
+#: neve/inc/core/front_end.php:565
 msgid "All items are already selected."
 msgstr ""
 
-#: neve/inc/core/front_end.php:556
+#: neve/inc/core/front_end.php:566
 msgid "Page Layout"
 msgstr ""
 
-#: neve/inc/core/front_end.php:557
+#: neve/inc/core/front_end.php:567
 msgid "Page Title"
 msgstr ""
 
-#: neve/inc/core/front_end.php:558
+#: neve/inc/core/front_end.php:568
 msgid "Upgrade to Neve Pro and unlock all components, including Wish List, Breadcrumbs, Custom Layouts and many more."
 msgstr ""
 
-#: neve/inc/core/front_end.php:563
+#: neve/inc/core/front_end.php:573
 msgid "White Label module"
 msgstr ""
 
-#: neve/inc/core/front_end.php:564
+#: neve/inc/core/front_end.php:574
 msgid "Scroll to Top module"
 msgstr ""
 
-#: neve/inc/core/front_end.php:566
+#: neve/inc/core/front_end.php:576
 msgid "Extend your header with more components and settings, build sticky/transparent headers or display them conditionally."
 msgstr ""
 
-#: neve/inc/core/front_end.php:567
+#: neve/inc/core/front_end.php:577
 msgid "Easily create custom headers and footers as well as adding your own custom code or content in any of the hooks locations."
 msgstr ""
 
-#: neve/inc/core/front_end.php:569
-#: neve/inc/customizer/options/upsells.php:459
+#: neve/inc/core/front_end.php:579
 msgid "Get the PRO version!"
 msgstr ""
 
-#: neve/inc/core/front_end.php:571
+#: neve/inc/core/front_end.php:581
 msgid "Filter"
 msgstr ""
 
-#: neve/inc/core/front_end.php:574
+#: neve/inc/core/front_end.php:584
 msgid "Migrating builder data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:575
+#: neve/inc/core/front_end.php:585
 msgid "Rolling back builder"
 msgstr ""
 
-#: neve/inc/core/front_end.php:576
+#: neve/inc/core/front_end.php:586
 msgid "Removing old data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:577
+#: neve/inc/core/front_end.php:587
 msgid "You must save the current customizer values before running the migration."
 msgstr ""
 
-#: neve/inc/core/front_end.php:578
+#: neve/inc/core/front_end.php:588
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Something went wrong. Please reload the page and try again."
 msgstr ""
 
-#: neve/inc/core/front_end.php:579
+#: neve/inc/core/front_end.php:589
 msgid "Want to roll back to the old builder?"
 msgstr ""
 
-#: neve/inc/core/front_end.php:580
+#: neve/inc/core/front_end.php:590
 msgid "We've created a new Header/Footer Builder experience! You can always roll back to the old builder from right here."
 msgstr ""
 
-#: neve/inc/core/front_end.php:581
+#: neve/inc/core/front_end.php:591
 msgid "Some manual adjustments may be required."
 msgstr ""
 
-#: neve/inc/core/front_end.php:582
+#: neve/inc/core/front_end.php:592
 msgid "Reload"
 msgstr ""
 
-#: neve/inc/core/front_end.php:583
+#: neve/inc/core/front_end.php:593
 msgid "Migrate Builders Data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:584
+#: neve/inc/core/front_end.php:594
 msgid "Legacy Skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:585
+#: neve/inc/core/front_end.php:595
 msgid "Neve 3.0"
 msgstr ""
 
-#: neve/inc/core/front_end.php:586
+#: neve/inc/core/front_end.php:596
 msgid "Switching skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:587
+#: neve/inc/core/front_end.php:597
 msgid "Switch Skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:588
+#: neve/inc/core/front_end.php:598
 msgid "Dismiss"
 msgstr ""
 
-#: neve/inc/core/front_end.php:589
+#: neve/inc/core/front_end.php:599
 msgid "Roll Back"
+msgstr ""
+
+#: neve/inc/core/front_end.php:600
+msgid "Add a customizable scroll-to-top button that appears exactly when needed. Style it to match your brand."
+msgstr ""
+
+#. translators: %s - Module name for the upsell
+#: neve/inc/core/front_end.php:602
+#, php-format
+msgid "Unlock %s with the Pro version."
 msgstr ""
 
 #: neve/inc/customizer/base_customizer.php:357
@@ -2224,41 +2400,41 @@ msgstr ""
 msgid "edit"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:141
+#: neve/inc/customizer/loader.php:142
 msgid "update"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:160
+#: neve/inc/customizer/loader.php:164
 msgid "Welcome to your new site!"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:161
+#: neve/inc/customizer/loader.php:165
 msgid "We've added some starter pages to help you get going quickly."
 msgstr ""
 
-#: neve/inc/customizer/loader.php:162
+#: neve/inc/customizer/loader.php:166
 msgid "Keep these helpful pages"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:163
+#: neve/inc/customizer/loader.php:167
 msgid "Start with a clean slate"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:164
+#: neve/inc/customizer/loader.php:168
 msgid "Don't worry - you can always add or remove pages later"
 msgstr ""
 
-#: neve/inc/customizer/loader.php:165
-#: neve/inc/customizer/loader.php:325
+#: neve/inc/customizer/loader.php:169
+#: neve/inc/customizer/loader.php:337
 #: neve/assets/apps/dashboard/build/dashboard.js:4
 msgid "An error occurred. Please reload the page and try again."
 msgstr ""
 
-#: neve/inc/customizer/loader.php:305
+#: neve/inc/customizer/loader.php:317
 msgid "Invalid security token."
 msgstr ""
 
-#: neve/inc/customizer/loader.php:313
+#: neve/inc/customizer/loader.php:325
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -2364,7 +2540,7 @@ msgid "Screen"
 msgstr ""
 
 #: neve/inc/customizer/options/base_layout_single.php:641
-#: neve/inc/customizer/options/upsells.php:210
+#: neve/inc/customizer/options/upsells.php:202
 msgid "Overlay"
 msgstr ""
 
@@ -2405,6 +2581,7 @@ msgid "Full width"
 msgstr ""
 
 #: neve/inc/customizer/options/buttons.php:44
+#: neve/inc/views/style_book.php:138
 msgid "Buttons"
 msgstr ""
 
@@ -2413,10 +2590,12 @@ msgid "Button Text"
 msgstr ""
 
 #: neve/inc/customizer/options/buttons.php:160
+#: neve/inc/views/style_book.php:142
 msgid "Primary Button"
 msgstr ""
 
 #: neve/inc/customizer/options/buttons.php:161
+#: neve/inc/views/style_book.php:145
 msgid "Secondary Button"
 msgstr ""
 
@@ -2449,6 +2628,7 @@ msgstr ""
 
 #: neve/inc/customizer/options/form_fields.php:56
 #: neve/inc/customizer/options/form_fields.php:74
+#: neve/inc/views/style_book.php:152
 msgid "Form Fields"
 msgstr ""
 
@@ -2461,6 +2641,7 @@ msgid "Field Background Color"
 msgstr ""
 
 #: neve/inc/customizer/options/form_fields.php:335
+#: neve/inc/views/style_book.php:155
 msgid "Input Text"
 msgstr ""
 
@@ -2469,7 +2650,7 @@ msgid "Form Labels"
 msgstr ""
 
 #: neve/inc/customizer/options/form_fields.php:587
-#: neve/inc/customizer/options/upsells.php:196
+#: neve/inc/customizer/options/upsells.php:188
 msgid "Button Style"
 msgstr ""
 
@@ -2513,7 +2694,7 @@ msgid "Post Cards Layout"
 msgstr ""
 
 #: neve/inc/customizer/options/layout_blog.php:247
-#: neve/inc/customizer/options/upsells.php:176
+#: neve/inc/customizer/options/upsells.php:168
 msgid "List"
 msgstr ""
 
@@ -2522,7 +2703,7 @@ msgid "Covers"
 msgstr ""
 
 #: neve/inc/customizer/options/layout_blog.php:255
-#: neve/inc/customizer/options/upsells.php:172
+#: neve/inc/customizer/options/upsells.php:164
 msgid "Grid"
 msgstr ""
 
@@ -2625,6 +2806,7 @@ msgstr ""
 
 #: neve/inc/customizer/options/layout_blog.php:659
 #: neve/inc/customizer/options/layout_single_post.php:606
+#: neve/inc/customizer/options/scroll_to_top.php:316
 msgid "Hide on mobile"
 msgstr ""
 
@@ -2714,13 +2896,14 @@ msgid "Image Size"
 msgstr ""
 
 #: neve/inc/customizer/options/layout_single_post.php:380
-#: neve/inc/customizer/options/upsells.php:332
+#: neve/inc/customizer/options/upsells.php:324
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Content"
 msgstr ""
 
 #: neve/inc/customizer/options/layout_single_post.php:384
-#: neve/inc/customizer/options/upsells.php:282
+#: neve/inc/customizer/options/upsells.php:274
 #: neve/inc/views/partials/post_meta.php:416
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Tags"
@@ -2768,7 +2951,7 @@ msgid "Exclusive Products"
 msgstr ""
 
 #: neve/inc/customizer/options/layout_single_product.php:124
-#: neve/inc/customizer/options/upsells.php:201
+#: neve/inc/customizer/options/upsells.php:193
 #: neve/assets/apps/customizer-controls/build/controls.js:1
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "None"
@@ -2792,6 +2975,34 @@ msgstr ""
 
 #: neve/inc/customizer/options/main.php:102
 msgid "Change archive font size"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:110
+#: neve/inc/views/scroll_to_top.php:150
+msgid "Scroll To Top"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:132
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
+msgid "Enable"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:172
+msgid "Choose Side"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:202
+#: neve/inc/customizer/options/scroll_to_top.php:242
+#: neve/assets/apps/components/build/components.js:1
+msgid "Image"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:284
+msgid "Offset (px)"
+msgstr ""
+
+#: neve/inc/customizer/options/scroll_to_top.php:605
+msgid "Background Hover Color"
 msgstr ""
 
 #: neve/inc/customizer/options/typography.php:73
@@ -2837,140 +3048,130 @@ msgstr ""
 msgid "Comments reply title"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:110
+#: neve/inc/customizer/options/upsells.php:102
 msgid "Standard"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:114
+#: neve/inc/customizer/options/upsells.php:106
 msgid "Vertical"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:119
+#: neve/inc/customizer/options/upsells.php:111
 msgid "Stepped"
 msgstr ""
 
-#. translators: Module name for the upsell.
-#: neve/inc/customizer/options/upsells.php:458
-#, php-format
-msgid "Unlock %s with the Pro version."
-msgstr ""
-
-#: neve/inc/customizer/options/upsells.php:478
+#: neve/inc/customizer/options/upsells.php:432
 msgid "Extend your blog/archive capabilities with more powerful customization options."
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:479
-#: neve/inc/customizer/options/upsells.php:502
+#: neve/inc/customizer/options/upsells.php:433
+#: neve/inc/customizer/options/upsells.php:456
+#: neve/inc/customizer/options/upsells.php:483
+#: neve/inc/customizer/options/upsells.php:507
 #: neve/inc/customizer/options/upsells.php:529
-#: neve/inc/customizer/options/upsells.php:553
-#: neve/inc/customizer/options/upsells.php:575
 msgid "Upgrade to unlock"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:484
+#: neve/inc/customizer/options/upsells.php:438
 msgid "Image style"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:485
+#: neve/inc/customizer/options/upsells.php:439
 msgid "Content padding"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:486
+#: neve/inc/customizer/options/upsells.php:440
 msgid "Overlay color"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:487
+#: neve/inc/customizer/options/upsells.php:441
 msgid "Grid spacing"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:489
-#: neve/inc/customizer/options/upsells.php:512
-#: neve/inc/customizer/options/upsells.php:563
-#: neve/inc/customizer/options/upsells.php:585
+#: neve/inc/customizer/options/upsells.php:443
+#: neve/inc/customizer/options/upsells.php:466
+#: neve/inc/customizer/options/upsells.php:517
+#: neve/inc/customizer/options/upsells.php:539
 msgid "Unlock Full Potential"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:501
+#: neve/inc/customizer/options/upsells.php:455
 msgid "Extend your single post capabilities with more powerful customization options."
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:507
+#: neve/inc/customizer/options/upsells.php:461
 msgid "Related post"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:508
+#: neve/inc/customizer/options/upsells.php:462
 msgid "Sharing icons"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:509
+#: neve/inc/customizer/options/upsells.php:463
 msgid "Author biography"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:510
+#: neve/inc/customizer/options/upsells.php:464
 msgid "Estimated reading time"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:528
+#: neve/inc/customizer/options/upsells.php:482
 msgid "Extend your WooCommerce with powerful features available in Neve Pro Business and Agency plans."
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:534
+#: neve/inc/customizer/options/upsells.php:488
 msgid "Quick view"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:535
+#: neve/inc/customizer/options/upsells.php:489
 msgid "Wishlist"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:536
+#: neve/inc/customizer/options/upsells.php:490
 msgid "Variations swatches"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:537
+#: neve/inc/customizer/options/upsells.php:491
 msgid "Comparison table"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:539
+#: neve/inc/customizer/options/upsells.php:493
 msgid "Neve Pro Features"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:552
+#: neve/inc/customizer/options/upsells.php:506
 msgid "Extend your footer capabilities with more powerful customization options."
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:558
+#: neve/inc/customizer/options/upsells.php:512
 msgid "Dynamic copyright"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:559
-msgid "Divider element"
-msgstr ""
-
-#: neve/inc/customizer/options/upsells.php:560
+#: neve/inc/customizer/options/upsells.php:514
 msgid "Payments & social icons"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:561
+#: neve/inc/customizer/options/upsells.php:515
 msgid "Custom layouts"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:574
+#: neve/inc/customizer/options/upsells.php:528
 msgid "Extend your header capabilities with more powerful customization options."
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:580
+#: neve/inc/customizer/options/upsells.php:534
 msgid "Sticky header"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:581
+#: neve/inc/customizer/options/upsells.php:535
 msgid "Transparent header"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:582
+#: neve/inc/customizer/options/upsells.php:536
 msgid "Display rules"
 msgstr ""
 
-#: neve/inc/customizer/options/upsells.php:583
+#: neve/inc/customizer/options/upsells.php:537
 msgid "More components"
 msgstr ""
 
@@ -2998,12 +3199,12 @@ msgid "Sorry, but nothing matched your search terms. Please try again with some 
 msgstr ""
 
 #: neve/inc/views/nav_walker.php:122
+#: neve/inc/views/style_book.php:163
 msgid "Dropdown"
 msgstr ""
 
 #: neve/inc/views/nav_walker.php:154
 #: neve/assets/apps/customizer-controls/build/controls.js:1
-#: neve/assets/apps/customizer-controls/build/controls.js:5
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Toggle"
 msgstr ""
@@ -3102,6 +3303,24 @@ msgstr ""
 msgid "Out of stock"
 msgstr ""
 
+#: neve/inc/views/style_book.php:81
+#: neve/assets/apps/customizer-controls/build/controls.js:2
+msgid "Palette Colors"
+msgstr ""
+
+#. translators: %d: heading level number
+#: neve/inc/views/style_book.php:117
+#: neve/inc/views/style_book.php:168
+#: neve/inc/views/style_book.php:174
+#: neve/inc/views/style_book.php:180
+#, php-format
+msgid "Heading %d"
+msgstr ""
+
+#: neve/inc/views/style_book.php:159
+msgid "Textarea"
+msgstr ""
+
 #: neve/inc/views/template_parts.php:470
 msgid "Read More"
 msgstr ""
@@ -3121,10 +3340,6 @@ msgstr ""
 #: neve/assets/apps/components/build/components.js:1
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Clear"
-msgstr ""
-
-#: neve/assets/apps/components/build/components.js:1
-msgid "Image"
 msgstr ""
 
 #: neve/assets/apps/components/build/components.js:1
@@ -3225,8 +3440,53 @@ msgid "No unit"
 msgstr ""
 
 #: neve/assets/apps/components/build/components.js:1
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
 msgid "Remove Item"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Item Settings"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Widget Settings"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Search for a component…"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+#: neve/assets/apps/customizer-controls/build/bd47bef6f3c92f884605.js:1
+msgid "All available components are used inside the builder"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Explore Neve PRO"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Row Setting"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:1
+msgid "Toggle Sidebar"
+msgstr ""
+
+#. translators: %1$s conditional header name (ie: Posts Header, Page Header, 404 Header)
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:3
+#, js-format
+msgid "You are customizing the <Button>%1$s</Button> Header"
+msgstr ""
+
+#. translators: %1$s builder name (ie: Header)
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
+#, js-format
+msgid "%1$s Builder"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/3c60893f0987518903b8.js:5
+msgid "By default, the mobile footer inherits the desktop components. Click the button below to enable a custom mobile footer."
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/7e5613fb2e01e74b5136.js:1
@@ -3241,13 +3501,28 @@ msgstr ""
 msgid "In Progress"
 msgstr ""
 
-#: neve/assets/apps/customizer-controls/build/bd47bef6f3c92f884605.js:1
-msgid "Available Components"
+#: neve/assets/apps/customizer-controls/build/934ab551ff22ec775b44.js:1
+#: neve/assets/apps/customizer-controls/build/controls.js:5
+#: neve/assets/apps/metabox/build/index.js:1
+msgid "Drag to Reorder"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/934ab551ff22ec775b44.js:1
+msgid "Ordering locked for current layout"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/934ab551ff22ec775b44.js:1
+#: neve/assets/apps/customizer-controls/build/controls.js:5
+msgid "Toggle Controls"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/934ab551ff22ec775b44.js:1
+#: neve/assets/apps/customizer-controls/build/controls.js:5
+msgid "Toggle Visibility"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/bd47bef6f3c92f884605.js:1
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "All available components are used inside the builder"
+msgid "Available Components"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:1
@@ -3411,10 +3686,6 @@ msgid "Cancel"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:2
-msgid "Palette Colors"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/controls.js:2
 #: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Reset all to default"
 msgstr ""
@@ -3474,22 +3745,7 @@ msgid "Remove"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:5
-#: neve/assets/apps/customizer-controls/build/fe894d5b402cd5535eb1.js:1
-msgid "Drag to Reorder"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Item"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/controls.js:5
-#: neve/assets/apps/customizer-controls/build/fe894d5b402cd5535eb1.js:1
-msgid "Toggle Controls"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/controls.js:5
-#: neve/assets/apps/customizer-controls/build/fe894d5b402cd5535eb1.js:1
-msgid "Toggle Visibility"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:5
@@ -3521,51 +3777,15 @@ msgid "Local fonts hosting"
 msgstr ""
 
 #: neve/assets/apps/customizer-controls/build/controls.js:5
+msgid "Preload fonts"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/controls.js:5
+msgid "Style Book"
+msgstr ""
+
+#: neve/assets/apps/customizer-controls/build/controls.js:5
 msgid "Insert Dynamic Tag"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Item Settings"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Widget Settings"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Search for a component…"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Explore Neve PRO"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Row Setting"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:1
-msgid "Toggle Sidebar"
-msgstr ""
-
-#. translators: %1$s conditional header name (ie: Posts Header, Page Header, 404 Header)
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:3
-#, js-format
-msgid "You are customizing the <Button>%1$s</Button> Header"
-msgstr ""
-
-#. translators: %1$s builder name (ie: Header)
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:5
-#, js-format
-msgid "%1$s Builder"
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe21e704398fee9da3e4.js:5
-msgid "By default, the mobile footer inherits the desktop components. Click the button below to enable a custom mobile footer."
-msgstr ""
-
-#: neve/assets/apps/customizer-controls/build/fe894d5b402cd5535eb1.js:1
-msgid "Ordering locked for current layout"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
@@ -3573,10 +3793,23 @@ msgid "Typekit Project ID is invalid"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Personal"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Business"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Agency"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
 msgid "Enter License Key"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 #: neve/assets/apps/starter-sites/build/notice.js:1
 msgid "Activating"
 msgstr ""
@@ -3610,10 +3843,7 @@ msgid "Install & Activate"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
-msgid "Install"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:1
+#: neve/assets/apps/dashboard/build/dashboard.js:2
 #: neve/assets/apps/starter-sites/build/notice.js:1
 msgid "Installing"
 msgstr ""
@@ -3629,10 +3859,6 @@ msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
 msgid "Could not deactivate plugin."
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:1
-msgid "Invalid action"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
@@ -3681,6 +3907,27 @@ msgid "Allow Anonymous Tracking"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Need help deciding?"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Our support team is happy to answer your questions about specific Pro features and help you determine if they match your needs."
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Average response time: ~8 hours during business days"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "View Pro Plans"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
+msgid "Contact Support"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:1
 msgid "Join the Community"
 msgstr ""
 
@@ -3712,14 +3959,6 @@ msgid "These features are available in Neve Pro."
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Module Activated"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Module Deactivated."
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Could not activate module. Please try again."
 msgstr ""
 
@@ -3741,26 +3980,6 @@ msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Feature"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Need help deciding?"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Our support team is happy to answer your questions about specific Pro features and help you determine if they match your needs."
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Average response time: ~8 hours during business days"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "View Pro Plans"
-msgstr ""
-
-#: neve/assets/apps/dashboard/build/dashboard.js:2
-msgid "Contact Support"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
@@ -3853,6 +4072,14 @@ msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "General Settings"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "This feature is part of OrbitFox plugin, built by the Neve team. Enabling the toggle will automatically install and activate the plugin."
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Available Modules"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
@@ -3993,6 +4220,110 @@ msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Load More"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Steps"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Set Up"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Replace \"Just Another WordPress Site\" with your brand name and description"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Add your custom logo to the header for a professional look"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Customize your site's color scheme to match your brand identity"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Add Site Icon (Favicon)"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Display your brand in browser tabs, bookmarks, and mobile home screens"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Create Your Homepage"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Add compelling content that tells visitors what you do and why it matters"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "About"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Create essential pages so visitors can learn about you and get in touch"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Make it easy for visitors to find their way around your website"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Add copyright info, social links, and contact details to your footer"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Set Permalink Structure"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Configure SEO-friendly URLs (recommended: Post name)"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Install SEO Plugin"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Optimize your site for search engines with Yoast SEO or RankMath"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Test Site Speed"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Check your website speed and performance using free testing tools"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Create Privacy Policy Page"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Meet legal requirements with essential privacy and terms pages"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Congratulations! Your Website is Ready for Launch!"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "You've completed all essential setup steps. Take your site to the next level with Pro features!"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Launch Progress"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Complete these essential steps to launch your website"
+msgstr ""
+
+#: neve/assets/apps/dashboard/build/dashboard.js:2
+msgid "Steps Completed"
 msgstr ""
 
 #: neve/assets/apps/dashboard/build/dashboard.js:2

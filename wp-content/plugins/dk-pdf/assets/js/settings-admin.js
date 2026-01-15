@@ -100,4 +100,53 @@ jQuery(document).ready(function($) {
 
         return false;
     });
+
+    /***** Select2 for Custom Fields with AJAX *****/
+
+    // Initialize Select2 for custom fields dropdowns
+    jQuery('.dkpdf-select2-ajax').each(function() {
+        var $select = $(this);
+        var postType = $select.data('post-type');
+        var ajaxAction = $select.data('ajax-action');
+
+        if (!postType || !ajaxAction) {
+            // Fallback to regular Select2 if no AJAX data
+            $select.select2({
+                placeholder: 'Select custom fields...',
+                width: '100%'
+            });
+            return;
+        }
+
+        $select.select2({
+            placeholder: '',
+            width: '100%',
+            minimumInputLength: 0,
+            dropdownAutoWidth: true,
+            ajax: {
+                url: dkpdf_ajax.ajax_url,
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term || '',
+                        post_type: postType,
+                        action: ajaxAction,
+                        nonce: dkpdf_ajax.nonce
+                    };
+                },
+                processResults: function(data) {
+                    if (data.success && data.data) {
+                        return {
+                            results: data.data
+                        };
+                    }
+                    return {
+                        results: []
+                    };
+                },
+                cache: true
+            }
+        });
+    });
 });

@@ -1,5 +1,9 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 new WPCOM_JSON_API_GET_Post_Counts_V1_1_Endpoint(
 	array(
 		'description'      => 'Get number of posts in the post type groups by post status',
@@ -33,6 +37,8 @@ new WPCOM_JSON_API_GET_Post_Counts_V1_1_Endpoint(
 
 /**
  * GET Post Counts v1_1 endpoint class.
+ *
+ * @phan-constructor-used-for-side-effects
  */
 class WPCOM_JSON_API_GET_Post_Counts_V1_1_Endpoint extends WPCOM_JSON_API_Endpoint {
 
@@ -154,7 +160,7 @@ class WPCOM_JSON_API_GET_Post_Counts_V1_1_Endpoint extends WPCOM_JSON_API_Endpoi
 		}
 
 		$return = array(
-			'counts' => (array) array(
+			'counts' => array(
 				'all'  => (object) $this->retrieveCounts( $post_type ),
 				'mine' => (object) $this->retrieveCounts( $post_type, $mine_ID ), // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 			),

@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Go to General Settings": [
+                "Перейдіть до Загальних налаштувань"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Щоб використати функції AI, будь ласка, налаштуйте свій ключ API та прийміть угоду про захист даних у Загальних налаштуваннях, після чого увімкніть AI пошук або AI чат."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Щоб використати навчальні дані, увімкніть або AI чат, або AI пошук у відповідних вкладках."
+            ],
+            "Data Collection": [
+                "Збір даних"
+            ],
+            "OpenAI API Key Required": [
+                "Потрібен ключ API OpenAI"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Щоб використати функції ШІ, потрібно налаштувати ваш ключ API OpenAI."
+            ],
+            "Configure API Key": [
+                "Налаштувати ключ API"
+            ],
+            "Failed to load tab data": [
+                "Не вдалося завантажити дані вкладки"
+            ],
+            "Unknown tab": [
+                "Невідома вкладка"
+            ],
+            "AI Configuration": [
+                "Налаштування ШІ"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Помилка: не налаштовано жодних вкладок. Будь ласка, перевірте конфігурацію."
+            ],
+            "New training data collection created": [
+                "Створено новий збір навчальних даних"
+            ],
+            "Failed to create collection": [
+                "Не вдалося створити колекцію"
+            ],
+            "AI features must be enabled to access this tab": [
+                "Щоб отримати доступ до цієї вкладки, увімкніть функції ШІ"
+            ],
+            "Reloading page...": [
+                "Перезавантаження сторінки..."
+            ]
+        }
+    }
+}

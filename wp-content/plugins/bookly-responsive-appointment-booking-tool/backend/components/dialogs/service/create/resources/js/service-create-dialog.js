@@ -1,11 +1,11 @@
-jQuery(function ($) {
+jQuery(function($) {
     'use strict';
 
-    var $modal        = $('#bookly-create-service-modal'),
+    var $modal = $('#bookly-create-service-modal'),
         $serviceTitle = $('#bookly-new-service-title', $modal),
-        $serviceType  = $('#bookly-new-service-type', $modal),
-        $saveBtn      = $('.bookly-js-save', $modal),
-        $servicesList = $('#services-list')
+        $serviceType = $('#bookly-new-service-type', $modal),
+        $saveBtn = $('.bookly-js-save', $modal),
+        $servicesList = $('#bookly-services-list')
     ;
 
     function format(option) {
@@ -20,18 +20,18 @@ jQuery(function ($) {
         allowClear: false,
         templateResult: format,
         templateSelection: format,
-        escapeMarkup: function (m) {
+        escapeMarkup: function(m) {
             return m;
         }
     });
-    $modal.on('shown.bs.modal', function () {
+    $modal.on('shown.bs.modal', function() {
         $serviceTitle.focus();
     });
-    $saveBtn.on('click', function (e) {
+    $saveBtn.on('click', function(e) {
         e.preventDefault();
         let ladda = Ladda.create(this);
         ladda.start();
-        $.post(ajaxurl, booklySerialize.buildRequestDataFromForm('bookly_create_service', $modal), function (response) {
+        $.post(ajaxurl, booklySerialize.buildRequestDataFromForm('bookly_create_service', $modal), function(response) {
             if (response.success) {
                 $servicesList.DataTable().ajax.reload();
                 $serviceTitle.val('');

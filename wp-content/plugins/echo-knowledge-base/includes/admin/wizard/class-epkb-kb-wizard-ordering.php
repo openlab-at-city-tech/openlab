@@ -66,7 +66,7 @@ class EPKB_KB_Wizard_Ordering {
 				</div>
 
 				<div id='epkb-ajax-in-progress' style="display:none;">
-					<?php esc_html__( 'Saving configuration', 'echo-knowledge-base' ); ?> <img class="epkb-ajax waiting" style="height: 30px;" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/loading_spinner.gif' ); ?>">
+					<?php echo esc_html__( 'Saving configuration', 'echo-knowledge-base' ); ?> <img class="epkb-ajax waiting" style="height: 30px;" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/loading_spinner.gif' ); ?>">
 				</div>
 				<input type="hidden" id="epkb_wizard_kb_id" name="epkb_wizard_kb_id" value="<?php echo esc_attr( $this->kb_id ); ?>"/>
 				<input type="hidden" id="use_top_sequence" value="<?php echo ( $this->kb_config['kb_main_page_layout'] == 'Tabs' ) ? 'yes' : 'no'; ?>">

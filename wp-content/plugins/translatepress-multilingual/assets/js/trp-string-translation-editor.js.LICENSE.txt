@@ -5,19 +5,17 @@
 */
 
 /*!
-  * vue-router v4.5.1
-  * (c) 2025 Eduardo San Martin Morote
-  * @license MIT
-  */
-
-/*!
  * The buffer module from node.js, for the browser.
  *
  * @author   Feross Aboukhadijeh <http://feross.org>
  * @license  MIT
  */
 
-/*! #__NO_SIDE_EFFECTS__ */
+/*!
+ * vue-router v4.6.3
+ * (c) 2025 Eduardo San Martin Morote
+ * @license MIT
+ */
 
 /*! Select2 4.0.13 | https://github.com/select2/select2/blob/master/LICENSE.md */
 
@@ -26,19 +24,19 @@
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
 /**
-* @vue/runtime-core v3.5.20
+* @vue/runtime-core v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/runtime-dom v3.5.20
+* @vue/runtime-dom v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/shared v3.5.20
+* @vue/shared v3.5.24
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/

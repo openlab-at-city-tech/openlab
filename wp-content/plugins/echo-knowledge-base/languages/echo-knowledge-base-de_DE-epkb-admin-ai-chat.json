@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings": [
+                "Einstellungen"
+            ],
+            "Page": [
+                "Seite"
+            ],
+            "Settings saved successfully": [
+                "Einstellungen erfolgreich gespeichert"
+            ],
+            "Cancel": [
+                "Abbrechen"
+            ],
+            "Next": [
+                "Weiter"
+            ],
+            "Previous": [
+                "Zurück"
+            ],
+            "Saving...": [
+                "Speichern..."
+            ],
+            "Go to General Settings": [
+                "Gehen Sie zu den allgemeinen Einstellungen"
+            ],
+            "Chat History": [
+                "Chatverlauf"
+            ],
+            "API Configuration": [
+                "API-Konfiguration"
+            ],
+            "AI Assistant": [
+                "KI-Assistent"
+            ],
+            "Save Settings": [
+                "Einstellungen speichern"
+            ],
+            "Delete": [
+                "Löschen"
+            ],
+            "Delete Selected": [
+                "Auswahl löschen"
+            ],
+            "of": [
+                "von"
+            ],
+            "Reset": [
+                "Zurücksetzen"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Möchten Sie die ausgewählten Konversationen wirklich löschen?"
+            ],
+            "Delete Conversations": [
+                "Konversationen löschen"
+            ],
+            "Deleting conversations...": [
+                "Konversationen werden gelöscht..."
+            ],
+            "Conversations refreshed successfully": [
+                "Konversationen wurden erfolgreich aktualisiert"
+            ],
+            "Search conversations...": [
+                "Gespräche suchen..."
+            ],
+            "Refreshing...": [
+                "Aktualisiere..."
+            ],
+            "Refresh": [
+                "Aktualisieren"
+            ],
+            "Loading conversations...": [
+                "Gespräche werden geladen..."
+            ],
+            "No conversations found": [
+                "Keine Gespräche gefunden"
+            ],
+            "Time": [
+                "Zeit"
+            ],
+            "User": [
+                "Benutzer"
+            ],
+            "Conversation": [
+                "Konversation"
+            ],
+            "Searching server for more results...": [
+                "Server sucht nach weiteren Ergebnissen..."
+            ],
+            "Conversation Details": [
+                "Details zur Konversation"
+            ],
+            "Select a conversation to view details": [
+                "Wählen Sie eine Konversation aus, um Details anzuzeigen"
+            ],
+            "Conversation Info": [
+                "Informationen zur Konversation"
+            ],
+            "User:": [
+                "Benutzer:"
+            ],
+            "Started:": [
+                "Gestartet:"
+            ],
+            "Messages:": [
+                "Nachrichten:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Rating:": [
+                "Bewertung:"
+            ],
+            "Full Conversation": [
+                "Vollständige Konversation"
+            ],
+            "No messages in this conversation.": [
+                "Keine Nachrichten in dieser Konversation."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Möchten Sie wirklich die Standardanweisungen zurücksetzen?"
+            ],
+            "Reset Instructions": [
+                "Anweisungen zurücksetzen"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Möchten Sie wirklich die Standardanweisungen zurücksetzen? Ihre benutzerdefinierten Anweisungen gehen verloren."
+            ],
+            "Reset to Default": [
+                "Auf Standard zurücksetzen"
+            ],
+            "Failed to load conversations": [
+                "Fehler beim Laden von Gesprächen"
+            ],
+            "Failed to save settings": [
+                "Fehler beim Speichern der Einstellungen"
+            ],
+            "Conversations deleted successfully": [
+                "Gespräche erfolgreich gelöscht"
+            ],
+            "Failed to delete conversations": [
+                "Fehler beim Löschen der Gespräche"
+            ],
+            "AI Chat is Disabled": [
+                "AI Chat ist deaktiviert"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "Um die Chat-Historie anzuzeigen, aktiviere AI Chat in der Registerkarte Einstellungen."
+            ],
+            "Go to Settings": [
+                "Zu den Einstellungen"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "OpenAI-API-Schlüssel ist nicht konfiguriert. Bitte konfigurieren Sie ihn in den Allgemeinen Einstellungen, um AI-Chat-Funktionen zu verwenden."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Bitte akzeptieren Sie die Datenschutzvereinbarung in den Allgemeinen Einstellungen, um AI-Chat-Funktionen zu verwenden."
+            ]
+        }
+    }
+}

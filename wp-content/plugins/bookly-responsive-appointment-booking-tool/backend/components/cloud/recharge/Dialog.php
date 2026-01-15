@@ -41,6 +41,7 @@ class Dialog extends Lib\Base\Component
                     'bonus' => $cloud->account->getAutoRechargeBonus(),
                 ),
                 'dont_have_auto_recharge' => __( 'You don\'t have active auto-recharge', 'bookly' ),
+                'promo_percentage_info' => __( 'You\'ll receive a %s bonus on your top-up', 'bookly' ),
             ) );
 
             self::renderTemplate( 'dialog', compact( 'cloud' ) );

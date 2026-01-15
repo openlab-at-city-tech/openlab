@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Titolo"
+            ],
+            "Filter": [
+                "Filtro"
+            ],
+            "Status": [
+                "Stato"
+            ],
+            "All": [
+                "Tutti"
+            ],
+            "Page": [
+                "Pagina"
+            ],
+            "Close": [
+                "Chiudi"
+            ],
+            "Cancel": [
+                "Annulla"
+            ],
+            "selected": [
+                "selezionato"
+            ],
+            "Article": [
+                "Articolo"
+            ],
+            "Updated": [
+                "Aggiornato"
+            ],
+            "Next": [
+                "Avanti"
+            ],
+            "Previous": [
+                "Precedente"
+            ],
+            "Loading...": [
+                "Caricamento..."
+            ],
+            "Error": [
+                "Errore"
+            ],
+            "Pending": [
+                "In attesa"
+            ],
+            "Delete": [
+                "Elimina"
+            ],
+            "of": [
+                "di"
+            ],
+            "Refreshing...": [
+                "Aggiornamento in corso..."
+            ],
+            "Refresh": [
+                "Aggiorna"
+            ],
+            "Searching server for more results...": [
+                "Ricerca sul server di ulteriori risultati..."
+            ],
+            "Data refreshed successfully": [
+                "Dati aggiornati con successo"
+            ],
+            "Delete Selected Items": [
+                "Elimina elementi selezionati"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Sei sicuro di voler eliminare gli elementi selezionati?"
+            ],
+            "Items deleted successfully": [
+                "Elementi eliminati con successo"
+            ],
+            "Sort": [
+                "Ordina"
+            ],
+            "Completed": [
+                "Completato"
+            ],
+            "Outdated": [
+                "Obsoleto"
+            ],
+            "Added": [
+                "Aggiunto"
+            ],
+            "Failed to load training data": [
+                "Impossibile caricare dati di addestramento"
+            ],
+            "Failed to delete items": [
+                "Impossibile eliminare gli elementi"
+            ],
+            "Delete Items": [
+                "Elimina elementi"
+            ],
+            "Syncing": [
+                "Sincronizzazione in corso"
+            ],
+            "Canceled": [
+                "Annullato"
+            ],
+            "How to get started": [
+                "Come iniziare"
+            ],
+            "Choose Training Data": [
+                "Scegli dati di addestramento"
+            ],
+            "Pick the content types to include.": [
+                "Seleziona i tipi di contenuto da includere."
+            ],
+            "Send Data to AI": [
+                "Invia dati all'IA"
+            ],
+            "Select items in the table, then sync them.": [
+                "Seleziona gli elementi nella tabella, poi sincronizzali."
+            ],
+            "Other Actions": [
+                "Altre azioni"
+            ],
+            "Rename the collection or delete items.": [
+                "Rinomina la raccolta o elimina gli elementi."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Suggerimento: inizia con un piccolo set per testare il flusso."
+            ],
+            "Sync": [
+                "Sincronizza"
+            ],
+            "Sync Complete": [
+                "Sincronizzazione completata"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "Cerca per titolo, tipo, URL o ID..."
+            ],
+            "Preparing sync...": [
+                "Preparazione della sincronizzazione..."
+            ],
+            "Loading training data...": [
+                "Caricamento dati di addestramento..."
+            ],
+            "Type": [
+                "Tipo"
+            ],
+            "No training data found": [
+                "Nessun dato di addestramento trovato"
+            ],
+            "Edit note": [
+                "Modifica nota"
+            ],
+            "View Error": [
+                "Visualizza errore"
+            ],
+            "View content": [
+                "Visualizza contenuto"
+            ],
+            "KB Files": [
+                "File KB"
+            ],
+            "Never": [
+                "Mai"
+            ],
+            "Error Details": [
+                "Dettagli dell'errore"
+            ],
+            "Failed to load content": [
+                "Impossibile caricare il contenuto"
+            ],
+            "Post ID:": [
+                "ID post:"
+            ],
+            "Loading content...": [
+                "Caricamento contenuto..."
+            ],
+            "Error Processing Content": [
+                "Errore nell'elaborazione del contenuto"
+            ],
+            "Original Content": [
+                "Contenuto originale"
+            ],
+            "Processed Content": [
+                "Contenuto elaborato"
+            ],
+            "No content available": [
+                "Nessun contenuto disponibile"
+            ],
+            "No processed content available": [
+                "Nessun contenuto elaborato disponibile"
+            ]
+        }
+    }
+}

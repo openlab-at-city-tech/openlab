@@ -12,6 +12,7 @@ abstract class Item
     const TYPE_SERIES        = 4;
     const TYPE_PACKAGE       = 5;
     const TYPE_GIFT_CARD     = 6;
+    const TYPE_EVENT_ATTENDEE = 7;
 
     /** @var int */
     protected $type;
@@ -88,6 +89,16 @@ abstract class Item
     public function isGiftCard()
     {
         return $this->type === self::TYPE_GIFT_CARD;
+    }
+
+    /**
+     * Check if item is attendee.
+     *
+     * @return bool
+     */
+    public function isEventAttendee()
+    {
+        return $this->type === self::TYPE_EVENT_ATTENDEE;
     }
 
     public function isAppointment()

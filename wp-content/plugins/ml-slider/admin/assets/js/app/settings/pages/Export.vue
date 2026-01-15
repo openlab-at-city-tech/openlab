@@ -15,11 +15,9 @@
           <li>{{ __('Click the "Export" button.', 'ml-slider') }}</li>
           <li>{{ __('A .json file will automatically be downloaded with all your slideshow data.', 'ml-slider') }}</li>
         </ul>
-        <b>{{ __('A few notes on exporting slideshow images:', 'ml-slider') }}</b>
+        <b>{{ __('A few notes on exporting slideshow images and videos:', 'ml-slider') }}</b>
         <ul class="export-instruction">
-          <li>{{ __('Your images need to be exported manually. Please upload them to the new website before importing these slideshows.', 'ml-slider') }}</li>
-          <li>{{ __('Images will need to keep the same file names on the new site.', 'ml-slider') }} <a href="https://www.metaslider.com/docs/export-and-import-slideshows/"
-           target="_blank">{{ this.__('Read our guide on exporting images.', 'ml-slider') }} <span class="dashicons dashicons-external"></span></a> </li>
+          <li>{{ __('Exporting from a localhost site may cause issues during import. This is because the images and videos need to be accessible from a live server.', 'ml-slider') }}</li>
         </ul>
       </template>
       <template slot="fields">
@@ -52,7 +50,7 @@
               }}
             </template>
             <template slot="description">
-              {{ __('Select the slideshows you wish to export below, then press here to export them.', 'ml-slider') }}
+              {{ __('Select the slideshows you wish to export below, then click here to export them.', 'ml-slider') }}
             </template>
             <template slot="button">{{ __('Export', 'ml-slider') }}</template>
           </action-button>
@@ -78,24 +76,71 @@
                       v-for="slide in slideshow.slides"
                       :key="slide.id"
                       class="relative -ml-3 z-30 inline-block h-12 w-12 text-white border border-gray-light shadow-solid rounded-full">
+                    
+                    <img
+                      v-if="slide.thumbnail" :src="slide.thumbnail"
+                      class="gradient border border-white rounded-full h-full inline-block"
+                      alt="">
                     <div
-                        v-if="'post_feed' === slide.meta['ml-slider_type']"
-                        class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
-                        :original-title="__('Post Feed slide', 'ml-slider')"
-                        :title="__('Post Feed slide', 'ml-slider')">
+                      v-else-if="'post_feed' === slide.meta['ml-slider_type']"
+                      class="bg-blue border border-blue flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      :original-title="__('Post Feed slide', 'ml-slider')"
+                      :title="__('Post Feed slide', 'ml-slider')">
                       P
                     </div>
                     <div
-                        v-else-if="'external' === slide.meta['ml-slider_type']"
-                        class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
-                        :original-title="__('External slide', 'ml-slider')"
-                        :title="__('External slide', 'ml-slider')">
+                      v-else-if="'external' === slide.meta['ml-slider_type']"
+                      class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      :original-title="__('External slide', 'ml-slider')"
+                      :title="__('External slide', 'ml-slider')">
                       E
                     </div>
-                    <img
-                        v-else :src="slide.thumbnail"
-                        class="gradient border border-white rounded-full h-full inline-block"
-                        alt="">
+                    <div
+                      v-else-if="'woocommerce' === slide.meta['ml-slider_type']"
+                      class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      style="background:#873eff;border-color:#873eff;"
+                      :original-title="__('WooCommerce slide', 'ml-slider')"
+                      :title="__('WooCommerce slide', 'ml-slider')">
+                      WC
+                    </div>
+                    <div
+                      v-else-if="'folder' === slide.meta['ml-slider_type']"
+                      class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      style="background:#0f95da;border-color: #0f95da;"
+                      :original-title="__('Image Folder slide', 'ml-slider')"
+                      :title="__('Image Folder slide', 'ml-slider')">
+                      F
+                    </div>
+                    <div
+                      v-else-if="'local_video' === slide.meta['ml-slider_type']"
+                      class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      :original-title="__('Local Video slide', 'ml-slider')"
+                      :title="__('Local Video slide', 'ml-slider')">
+                      LV
+                    </div>
+                    <div
+                      v-else-if="'external_video' === slide.meta['ml-slider_type']"
+                      class="bg-blue-light border border-blue-light flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      :original-title="__('External Video slide', 'ml-slider')"
+                      :title="__('External Video slide', 'ml-slider')">
+                      EV
+                    </div>
+                    <div
+                      v-else-if="'custom_html' === slide.meta['ml-slider_type']"
+                      class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+                      style="background:#e44d26;border-color:#e44d26;"
+                      :original-title="__('Custom HTML slide', 'ml-slider')"
+                      :title="__('Custom HTML slide', 'ml-slider')">
+                      &lt;/&gt;
+                    </div>
+                    <div
+                      v-else 
+                      :style="{ 'animation-delay': [(500 * index * Math.random()) + 'ms'] }"
+                      class="gradient border border-white rounded-full h-full flex justify-center items-center text-red tipsy-tooltip-top"
+                      :original-title="sprintf(__('Image not found<br>%s', 'ml-slider'), slide.image)"
+                      :title="sprintf(__('Image not found<br>%s', 'ml-slider'), slide.image)">
+                      x
+                    </div>
                   </div>
                   <div
                       class="relative -ml-3 z-50 inline-block bg-gray-lighter flex items-center justify-center text-lg text-gray-dark h-12 w-12 rounded-full shadow-solid border border-gray-light">

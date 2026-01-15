@@ -4,6 +4,16 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator {
+    public function __construct( $settings ) {
+        parent::__construct( $settings );
+
+        add_filter(
+            'trp_add_google_v2_supported_languages_to_the_array',
+            array( $this, 'add_google_v2_supported_languages_that_are_not_returned_by_the_post_response' ),
+            10,
+            1
+        );
+    }
     /**
      * Send request to Google Translation API
      *

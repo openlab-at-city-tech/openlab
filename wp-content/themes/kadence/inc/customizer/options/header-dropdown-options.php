@@ -157,6 +157,39 @@ Theme_Customizer::add_settings(
 				'responsive' => false,
 			),
 		),
+		'dropdown_navigation_border_radius' => array(
+			'control_type' => 'kadence_measure_control',
+			'section'      => 'dropdown_navigation_design',
+			'priority'     => 20,
+			'default'      => kadence()->default( 'dropdown_navigation_border_radius' ),
+			'label'        => esc_html__( 'Border Radius', 'kadence' ),
+			'live_method'     => array(
+				array(
+					'type'     => 'css',
+					'selector' => '.header-navigation .header-menu-container ul ul li.menu-item, .header-menu-container ul.menu > li.kadence-menu-mega-enabled > ul > li.menu-item > a',
+					'property' => 'border-radius',
+					'pattern'  => '$',
+					'key'      => 'measure',
+				),
+				array(
+					'type'     => 'css',
+					'selector' => '.header-navigation .header-menu-container ul ul li.menu-item > a:hover',
+					'property' => 'border-radius',
+					'pattern'  => '$',
+					'key'      => 'measure',
+				),
+				array(
+					'type'     => 'css',
+					'selector' => '.header-navigation .header-menu-container ul ul li.menu-item.current-menu-item > a',
+					'property' => 'border-radius',
+					'pattern'  => '$',
+					'key'      => 'measure',
+				),
+			),
+			'input_attrs'  => array(
+				'responsive' => false,
+			),
+		),
 		'dropdown_navigation_typography' => array(
 			'control_type' => 'kadence_typography_control',
 			'section'      => 'dropdown_navigation_design',

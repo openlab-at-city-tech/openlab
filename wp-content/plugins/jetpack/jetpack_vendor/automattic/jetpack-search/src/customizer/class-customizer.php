@@ -13,6 +13,8 @@ use WP_Customize_Manager;
 
 /**
  * Class to customize search on the site.
+ *
+ * @phan-constructor-used-for-side-effects
  */
 class Customizer {
 	/**
@@ -43,7 +45,8 @@ class Customizer {
 		$wp_customize->add_section(
 			$section_id,
 			array(
-				'title'      => esc_html__( 'Jetpack Search', 'jetpack-search-pkg' ),
+				/** "Search" is a product name, do not translate. */
+				'title'      => 'Jetpack Search',
 				'capability' => 'edit_theme_options',
 				'priority'   => 200,
 			)

@@ -1,12 +1,14 @@
 <?php
 
 use TEC\Common\Libraries;
+use TEC\Common\StellarWP\Assets\Asset as StellarWP_Asset;
+use TEC\Common\StellarWP\Assets\Config as Assets_Config;
 use TEC\Common\Translations_Loader;
 use Tribe\Admin\Settings;
 use Tribe\DB_Lock;
 use TEC\Common\Asset;
-use TEC\Common\StellarWP\Assets\Config as Assets_Config;
 use TEC\Common\Controller as Common_Controller;
+use TEC\Common\StellarWP\ContainerContract\ContainerInterface;
 
 // Don't load directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,7 +24,7 @@ class Tribe__Main {
 	const OPTIONNAME        = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK = 'tribe_events_calendar_network_options';
 	const FEED_URL          = 'https://theeventscalendar.com/feed/';
-	const VERSION           = '6.8.2';
+	const VERSION           = '6.10.0';
 
 	protected $plugin_context;
 	protected $plugin_context_class;
@@ -97,14 +99,14 @@ class Tribe__Main {
 
 		$this->promoter_connector();
 
-		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ], 1 );
+		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ], -1 );
 		add_action( 'tribe_common_loaded', [ $this, 'tribe_common_app_store' ], 10 );
 		add_action( 'customize_controls_print_styles', [ $this, 'load_tec_variables' ], 10 );
 
 		if ( did_action( 'plugins_loaded' ) && ! doing_action( 'plugins_loaded' ) ) {
 			/*
 			 * This might happen in the context of a plugin activation.
-			 * Complete the loading now and set the singleton instance to avoid infinite loops.
+			 * Complete the loading now and set the singleton instanceo avoid infinite loops.
 			 */
 			self::$instance = $this;
 			$this->plugins_loaded();
@@ -208,6 +210,7 @@ class Tribe__Main {
 		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/html.php';
 		require_once $this->plugin_path . 'src/functions/template-tags/post.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/svg.php';
 
 		Tribe__Debug::instance();
 		tec_timed_option();
@@ -286,6 +289,17 @@ class Tribe__Main {
 				[ 'tec-ky-module', 'vendor/ky/ky.js', [], null, [ 'module' => true ] ],
 				[ 'tec-ky', 'vendor/ky/tec-ky.js', [ 'tec-ky-module' ], null, [ 'module' => true ] ],
 				[ 'tec-common-php-date-formatter', 'node_modules/php-date-formatter/js/php-date-formatter.js' ],
+			]
+		);
+
+		tec_asset(
+			$this,
+			'tec-user-agent',
+			'user-agent.js',
+			[],
+			'wp_enqueue_scripts',
+			[
+				'groups' => [ self::class ],
 			]
 		);
 
@@ -396,6 +410,12 @@ class Tribe__Main {
 				'conditionals' => [ tribe( Settings::class ), 'should_load_color_field_assets' ]
 			]
 		);
+
+		// Register the TEC API functions that will be accessible at `window.tec.common.tecApi`.
+		StellarWP_Asset::add( 'tec-api', 'tecApi.js' )
+			->add_to_group_path( self::class . '-packages' )
+			->add_to_group( 'tec-api' )
+			->register();
 
 		tribe( Tribe__Admin__Help_Page::class )->register_assets();
 	}
@@ -513,18 +533,6 @@ class Tribe__Main {
 
 		add_filter( 'body_class', [ $this, 'add_js_class' ] );
 		add_action( 'wp_footer', [ $this, 'toggle_js_class' ] );
-
-		add_action( 'init', [ $this, 'load_action_scheduler' ], - 99999 );
-	}
-
-	/**
-	 * Load the Action Scheduler library.
-	 *
-	 * @since TDB
-	 */
-	public function load_action_scheduler(): void {
-		// Load the Action Scheduler library.
-		require_once $this->plugin_path . 'vendor/woocommerce/action-scheduler/action-scheduler.php';
 	}
 
 	/**
@@ -816,7 +824,9 @@ class Tribe__Main {
 		tribe_register_provider( Tribe\Service_Providers\Onboarding::class );
 		tribe_register_provider( \TEC\Common\Notifications\Controller::class );
 		tribe_register_provider( \TEC\Common\QR\Controller::class );
+		tribe_singleton( ContainerInterface::class, tribe() );
 		tribe_register_provider( Libraries\Provider::class );
+		tribe_register_provider( TEC\Common\TrustedLogin\Controller::class );
 
 		// Load the new third-party integration system.
 		tribe_register_provider( TEC\Common\Integrations\Provider::class );

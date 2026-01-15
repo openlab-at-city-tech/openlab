@@ -1,8 +1,8 @@
 <?php
 
-if ( !class_exists( 'MeowCommon_News' ) ) {
+if ( !class_exists( 'MeowKit_WPMC_News' ) ) {
 
-  class MeowCommon_News {
+  class MeowKit_WPMC_News {
     private $domain = null;
     private $topic = null;
     private $fromDate = null;

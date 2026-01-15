@@ -2,6 +2,16 @@ jQuery( document ).ready( function( $ ) {
 
 	let frontendEditor = $( '#epkb-fe__editor' );
 
+	/* 
+	* Move #epkb-fe__editor directly under <body> as the last element.
+	* This ensures the editor always displays on top of the page.
+	* If it stays inside other containers, those containers can block it
+	* and cause parts of the editor to be hidden behind other elements.
+	*/
+	if ( frontendEditor.length && document.body.contains( frontendEditor[0] ) ) {
+		document.body.appendChild( frontendEditor[0]); // now last child of <body>
+	}
+
 	// show the frontend editor if one of KB pages is found in the page
 	if ( frontendEditor.length > 0 ) {
 		if ( frontendEditor.data( 'display-frontend-editor-closed' ) ) {
@@ -9,15 +19,78 @@ jQuery( document ).ready( function( $ ) {
 		} else {
 			open_frontend_editor(null );
 		}
-	} else {
-		$('#wp-admin-bar-epkb-edit-mode-button').hide();
 	}
 
-	let admin_report_error_form = $( '#epkb-fe__error-form-wrap .epkb-admin__error-form__container' );
-
 	// Handle FE Open Button and Admin bar FE edit link
-	$( '.epkb-fe__toggle, #wp-admin-bar-epkb-edit-mode-button' ).on( 'click', function( e ) {
+	$( document ).on( 'click', '.epkb-fe__toggle, #wp-admin-bar-epkb-edit-mode-button', function ( e ) {
+		
+		// Don't open editor if close button was clicked
+		if ( $(e.target).closest('.epkb-fe__toggle-close').length > 0 ) {
+			return;
+		}
+
+		const params      = new URLSearchParams( window.location.search );
+		const bodyClasses = document.body.classList;
+
+		const builders = {
+			visualComposer : (
+				params.get( 'vcv-editable' ) === '1' ||
+				bodyClasses.contains( 'vcwb-editor-body' )
+			),
+			divi       : bodyClasses.contains( 'et-fb-root-ancestor' ),
+			siteOrigin : bodyClasses.contains( 'siteorigin-panels-live-editor' ),
+			pageLayer  : bodyClasses.contains( 'pagelayer-body' ),
+			beaver     : bodyClasses.contains( 'fl-builder-edit' ),
+			elementor  : bodyClasses.contains( 'elementor-editor-active' ),
+			brizy      : bodyClasses.contains( 'brz' ),
+			kubio      : bodyClasses.contains( 'kubio-iframe-holder--show' ),
+			colibri    : (
+				bodyClasses.contains( 'colibri-in-customizer' ) ||
+				bodyClasses.contains( 'customize-partial-edit-shortcuts-shown' ) ||
+				bodyClasses.contains( 'colibri-in-customizer--loaded' )
+			)
+		};
+
+		const activeKey = Object.keys( builders ).find( key => builders[ key ] );
+
+		if ( activeKey ) {
+			e.preventDefault();
+
+			const builderNames = {
+				visualComposer : 'Visual Composer',
+				divi           : 'Divi Builder',
+				siteOrigin     : 'SiteOrigin Builder',
+				pageLayer      : 'Pagelayer Builder',
+				beaver         : 'Beaver Builder',
+				elementor      : 'Elementor Builder',
+				brizy          : 'Brizy Builder',
+				kubio          : 'Kubio Builder',
+				colibri        : 'Colibri Page Builder'
+			};
+
+			const builderName = builderNames[ activeKey ] || 'Page Builder';
+
+			const message = wp.i18n.__( 'The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?', 'echo-knowledge-base' );
+
+			// Show confirmation dialog
+			const goToSettings = window.confirm( message );
+
+			if ( goToSettings ) {
+				// Get admin URL from localized script variables
+				const adminBase = epkb_fe_vars?.admin_url;
+				
+				if ( adminBase ) {
+					const adminUrl = adminBase + 'edit.php?post_type=epkb_post_type_1&page=epkb-kb-configuration#settings';
+					window.open( adminUrl, '_blank' );
+				}
+			}
+
+			return;
+		}
+
+		// If no builders active, continue to open frontend editor
 		open_frontend_editor( e );
+
 	} );
 
 	function open_frontend_editor( e ) {
@@ -30,7 +103,8 @@ jQuery( document ).ready( function( $ ) {
 		$( '#epkb-fe__editor .epkb-fe__feature-settings' ).each(function () {
 			const $featureSettings = $( this );
 			const rowNumber = $featureSettings.attr( 'data-row-number' );
-			if ( rowNumber === 'none' ) {
+			const isNonRowFeature = $featureSettings.data( 'non-row-feature' );
+			if ( rowNumber === 'none' && ! isNonRowFeature ) {
 				$featureSettings.find( '.epkb-fe__settings-section:not(.epkb-fe__settings-section--module-position)' ).addClass( 'epkb-fe__settings-section--hide' );
 			} else {
 				$featureSettings.find( '.epkb-fe__settings-section:not(.epkb-fe__settings-section--module-position)' ).removeClass( 'epkb-fe__settings-section--hide' );
@@ -57,6 +131,29 @@ jQuery( document ).ready( function( $ ) {
 				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
 			}
 		} );
+	} );
+
+	// Close FE Toggle Button - Hide permanently
+	$( document ).on( 'click', '.epkb-fe__toggle-close', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		e.stopImmediatePropagation();
+		
+		// Hide the toggle button
+		$( '.epkb-fe__toggle' ).hide();
+		
+		// Save the setting to hide the button permanently
+		$.ajax( {
+			url: epkb_vars.ajaxurl,
+			method: 'POST',
+			data: {
+				action: 'eckb_hide_fe_toggle_button',
+				kb_id: frontendEditor.data( 'kbid' ),
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			}
+		} );
+		
+		return false;
 	} );
 
 	// Open Help tab
@@ -87,6 +184,15 @@ jQuery( document ).ready( function( $ ) {
 		$( '.epkb-fe__feature-select-button' ).hide();
 		$( '.epkb-fe__feature-settings' ).removeClass( 'epkb-fe__feature-settings--active' );
 		$tab.addClass( 'epkb-fe__feature-settings--active' );
+
+		// Restore all sections to their default open state
+		$tab.find( '.epkb-fe__settings-section' ).each( function() {
+			let $section = $( this );
+			if ( ! $section.hasClass( 'epkb-fe__is_opened' ) ) {
+				$section.addClass( 'epkb-fe__is_opened' );
+				$section.find( '.epkb-fe__settings-section-body' ).show();
+			}
+		} );
 
 		// Refresh conditional settings
 		$tab.find( '.eckb-conditional-setting-input' ).trigger( 'click' );
@@ -252,14 +358,16 @@ jQuery( document ).ready( function( $ ) {
 		// Show loading dialog based on page type
 		if ( kb_page_type === 'main-page' ) {
 			epkb_loading_Dialog( 'show', '', $( '#epkb-modular-main-page-container, #eckb-kb-template' ) );
-			if ( $feature_settings_container.find( '[name="advanced_search_mp_presets"]:checked' ).val() !== 'current' ) {
-				selected_search_preset = $feature_settings_container.find( '[name="advanced_search_mp_presets"]:checked' ).val();
+			let $search_preset_input = $feature_settings_container.find( '[name="advanced_search_mp_presets"]:checked' );
+			if ( $search_preset_input.length > 0 && $search_preset_input.val() !== 'current' ) {
+				selected_search_preset = $search_preset_input.val();
 			}
 		} else if ( kb_page_type === 'article-page' ) {
 			// For article page, always show loading on the main article container
 			epkb_loading_Dialog( 'show', '', $( '#eckb-article-page-container-v2' ) );
-			if ( $feature_settings_container.find( '[name="advanced_search_ap_presets"]:checked' ).val() !== 'current' ) {
-				selected_search_preset = $feature_settings_container.find( '[name="advanced_search_ap_presets"]:checked' ).val();
+			let $search_preset_input = $feature_settings_container.find( '[name="advanced_search_ap_presets"]:checked' );
+			if ( $search_preset_input.length > 0 && $search_preset_input.val() !== 'current' ) {
+				selected_search_preset = $search_preset_input.val();
 			}
 		} else if ( kb_page_type === 'archive-page' ) {
 			epkb_loading_Dialog( 'show', '', $( '#eckb-archive-page-container' ) );
@@ -275,6 +383,7 @@ jQuery( document ).ready( function( $ ) {
 				kb_id: frontendEditor.data( 'kbid' ),
 				new_kb_config: kb_config,
 				kb_page_type: kb_page_type,
+				is_article_page: kb_page_type === 'article-page' ? 1 : 0,
 				feature_name: feature_name,
 				setting_name: $(event.target).attr('name'),
 				prev_link_css_id: $( '[id^="epkb-mp-frontend-modular-"][id$="-layout-css"]' ).attr( 'id' ),
@@ -364,7 +473,7 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Update FAQs module settings (after applying design preset)
-					if ( response.data.faqs_design_settings ) {
+					if ( response.data.faqs_design_settings && response.data.faqs_design_settings.length > 0 ) {
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
 						$feature_settings_container.find( '[name="faq_preset_name"]' ).prop( 'checked', false );
@@ -380,15 +489,15 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Update Categories & Articles module settings (after applying design preset)
-					if ( response.data.categories_articles_design_settings ) {
+					if ( response.data.categories_articles_design_settings && Object.keys(response.data.categories_articles_design_settings).length > 0 ) {
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
 						$feature_settings_container.find( '[name="categories_articles_preset"]' ).val( 'current' ).trigger( 'change' );
 
 						// Apply preset settings for UI controls
 						for ( const [ key, value ] of Object.entries( response.data.categories_articles_design_settings ) ) {
-							const $target_field = frontendEditor.find( '[name="' + key + '"]' );
-							apply_preset_setting( frontendEditor, $target_field, key, value );
+							const $target_field = $feature_settings_container.find( '[name="' + key + '"]' );
+							apply_preset_setting( $feature_settings_container, $target_field, key, value );
 						}
 
 						// Re-apply current settings for the buttons, radio buttons, and other controls of the module
@@ -396,12 +505,12 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Update search settings (after applying design preset)
-					if ( response.data.search_design_settings ) {
+					if ( response.data.search_design_settings && $feature_settings_container.find( '[name="advanced_search_mp_presets"]' ).length > 0 ) {
 
 						// Apply preset settings for UI controls
 						for ( const [ key, value ] of Object.entries( response.data.search_design_settings ) ) {
-							const $target_field = frontendEditor.find( '[name="' + key + '"]' );
-							apply_preset_setting( frontendEditor, $target_field, key, value );
+							const $target_field = $feature_settings_container.find( '[name="' + key + '"]' );
+							apply_preset_setting( $feature_settings_container, $target_field, key, value );
 						}
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
@@ -412,12 +521,12 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Inline styles - changed every time a module setting was changed
-					if ( response.data.inline_styles ) {
+					if ( response.data.inline_styles && response.data.inline_styles.length > 0 ) {
 						$( '[id^="epkb-mp-frontend-modular-"][id$="-layout-inline-css"]' ).html( response.data.inline_styles );
 					}
 
 					// Update HTML of the target module - changed every time a module setting was changed
-					if ( response.data.preview_html ) {
+					if ( response.data.preview_html && response.data.preview_html.length > 0 ) {
 						// Find the row by feature name, not by row number
 						let $destination_row = $( '.epkb-ml__row[data-feature="' + feature_name + '"]' );
 						
@@ -427,6 +536,18 @@ jQuery( document ).ready( function( $ ) {
 						}
 						// Note: If the row doesn't exist, we don't create it here because 
 						// the module is disabled and shouldn't have content displayed
+					}
+
+					// Custom inline styles - always rendered separately to avoid possible impact of internal KB inline styles on user's mistake
+					if ( response.data.custom_inline_styles && response.data.custom_inline_styles.length > 0 ) {
+						// epkb-mp-frontend-modular-category-layout-custom-inline-css
+						let $custom_inline_styles_tag = $( '[id^="epkb-"][id$="-custom-inline-css"]' );
+						const $new_custom_inline_styles_tag = $( '<style id="epkb--custom-inline-css">' + response.data.custom_inline_styles + '</style>');
+						if ( $custom_inline_styles_tag.length > 0 ) {
+							$custom_inline_styles_tag.replaceWith( $new_custom_inline_styles_tag );
+						} else {
+							$new_custom_inline_styles_tag.insertAfter( '[id^="epkb-"][id$="-inline-css"]' );
+						}
 					}
 
 					// Ensure public JS which is dependent on HTML initialization is re-initialized
@@ -439,12 +560,12 @@ jQuery( document ).ready( function( $ ) {
 				if ( kb_page_type === 'article-page' ) {
 
 					// Update search settings (after applying design preset or sync with Main Page search)
-					if ( response.data.search_design_settings ) {
+					if ( response.data.search_design_settings && $feature_settings_container.find( '[name="advanced_search_ap_presets"]' ).length > 0 ) {
 
 						// Apply preset settings for UI controls
 						for ( const [ key, value ] of Object.entries( response.data.search_design_settings ) ) {
-							const $target_field = frontendEditor.find( '[name="' + key + '"]' );
-							apply_preset_setting( frontendEditor, $target_field, key, value );
+							const $target_field = $feature_settings_container.find( '[name="' + key + '"]' );
+							apply_preset_setting( $feature_settings_container, $target_field, key, value );
 						}
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
@@ -455,7 +576,7 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Update HTML of the entire Article content or specific sections
-					if ( response.data.preview_html ) {
+					if ( response.data.preview_html && response.data.preview_html.length > 0 ) {
 
 						const $newContent = $( response.data.preview_html );
 						const $templateData = $newContent.filter('#eckb-template-update-data');
@@ -480,7 +601,7 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Inline styles - changed every time a module setting was changed
-					if ( response.data.inline_styles ) {
+					if ( response.data.inline_styles && response.data.inline_styles.length > 0 ) {
 						let $inlineStyles = $( '#epkb-ap-frontend-layout-inline-css' );
 						if ( $inlineStyles.length ) {
 							$inlineStyles.html( response.data.inline_styles );
@@ -508,7 +629,7 @@ jQuery( document ).ready( function( $ ) {
 				if ( kb_page_type === 'archive-page' ) {
 
 					// Update design settings (after applying design preset)
-					if ( response.data.archive_design_settings ) {
+					if ( response.data.archive_design_settings && response.data.archive_design_settings.length > 0 ) {
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
 						$feature_settings_container.find( '[name="archive_content_sub_categories_display_mode"]' ).prop( 'checked', false );
@@ -524,12 +645,12 @@ jQuery( document ).ready( function( $ ) {
 					}
 
 					// Update HTML of the entire Archive content
-					if ( response.data.preview_html ) {
+					if ( response.data.preview_html && response.data.preview_html.length > 0 ) {
 						$( '#eckb-archive-page-container' ).replaceWith( response.data.preview_html );
 					}
 
 					// Inline styles - changed every time a module setting was changed
-					if ( response.data.inline_styles ) {
+					if ( response.data.inline_styles && response.data.inline_styles.length > 0 ) {
 						let $inlineStyles = $( '#epkb-cp-frontend-layout-inline-css' );
 						if ( $inlineStyles.length ) {
 							$inlineStyles.html( response.data.inline_styles );
@@ -561,10 +682,14 @@ jQuery( document ).ready( function( $ ) {
 				}
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
-				// Handle AJAX request errors with detailed information
-				let errorMessage = buildDetailedErrorMessage( jqXHR, textStatus, errorThrown, epkb_vars.fe_update_preview_error );
-
-				show_report_error_form( errorMessage );
+				// Log error to console
+				console.error( 'Frontend Editor Preview Error:', {
+					status: jqXHR.status,
+					statusText: jqXHR.statusText,
+					textStatus: textStatus,
+					errorThrown: errorThrown,
+					response: jqXHR.responseJSON || jqXHR.responseText
+				} );
 
 				// Remove loading dialog based on page type
 				if ( kb_page_type === 'main-page' ) {
@@ -638,6 +763,7 @@ jQuery( document ).ready( function( $ ) {
 		let $preview_form = $( '<form method="post" action="' + action_url + '" style="display: none !important;">' +
 			'<input type="hidden" name="epkb_fe_reload_mode" value="on">' +
 			'<input type="hidden" name="kb_id" value="' + frontendEditor.data( 'kbid' ) + '">' +
+			'<input type="hidden" name="is_article_page" value="' + (kb_page_type === 'article-page' ? 1 : 0) + '">' +
 			'<input type="text" name="new_kb_config" value="">' +
 			'</form>' );
 
@@ -734,12 +860,13 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		let $field = $( this );
+		const field_name = $field.attr( 'name' );
 
 		// some settings do not need to trigger AJAX update for preview
 		const noPreviewUpdateSettings = [ 'search_result_mode', 'search_box_results_style', 'article_search_box_results_style', 'article_search_result_mode', 'advanced_search_mp_show_top_category',
 			'advanced_search_ap_show_top_category', 'advanced_search_mp_results_list_size', 'advanced_search_ap_results_list_size', 'advanced_search_text_highlight_enabled',
 			'advanced_search_mp_results_page_size', 'advanced_search_ap_results_page_size', 'advanced_search_mp_box_results_style', 'advanced_search_ap_box_results_style', 'article_views_counter_method', 'back_navigation_mode'];
-		if ( noPreviewUpdateSettings.includes( $field[0].name ) ) {
+		if ( noPreviewUpdateSettings.includes( field_name ) ) {
 			return;
 		}
 
@@ -768,9 +895,9 @@ jQuery( document ).ready( function( $ ) {
 		};
 
 		// Special handling for instant toggle settings
-		if ( instantToggleSettings[$field[0].name] ) {
+		if ( instantToggleSettings[field_name] ) {
 			const isToggleOn = $field.attr('type') === 'checkbox' ? $field.prop('checked') : $field.val() === 'on';
-			const selectors = instantToggleSettings[$field[0].name];
+			const selectors = instantToggleSettings[field_name];
 			let foundExisting = false;
 
 			// If toggling OFF, hide all matching elements and skip backend call
@@ -811,14 +938,14 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// Special handling for TOC fields synchronization
-		if ( $field.attr( 'name' ) === 'toc_toggler' || 
-			 $field.attr( 'name' ) === 'toc_left' || 
-			 $field.attr( 'name' ) === 'toc_right' ) {
+		if ( field_name === 'toc_toggler' ||
+			field_name === 'toc_left' ||
+			field_name === 'toc_right' ) {
 			
 			ignore_setting_update_flag = true;
 			
 			// Handle TOC toggler change
-			if ( $field.attr( 'name' ) === 'toc_toggler' ) {
+			if ( field_name === 'toc_toggler' ) {
 				const isChecked = $field.prop( 'checked' );
 				
 				if ( isChecked ) {
@@ -849,7 +976,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 			
 			// Handle TOC location change (radio buttons)
-			else if ( $field.attr( 'name' ) === 'toc_locations' && $field.prop( 'checked' ) ) {
+			else if ( field_name === 'toc_locations' && $field.prop( 'checked' ) ) {
 				const location = $field.val();
 				let is_toc_set = false;
 				
@@ -896,8 +1023,8 @@ jQuery( document ).ready( function( $ ) {
 			}
 			
 			// Handle Article Sidebar Position dropdowns
-			else if ( $field.attr( 'name' ) === 'toc_left' || $field.attr( 'name' ) === 'toc_right' ) {
-				const sidebarSuffix = $field.attr( 'name' ) === 'toc_left' ? 'left' : 'right';
+			else if ( field_name === 'toc_left' || field_name === 'toc_right' ) {
+				const sidebarSuffix = field_name === 'toc_left' ? 'left' : 'right';
 				const currentValue = parseInt( $field.val() );
 				
 				if ( currentValue > 0 ) {
@@ -933,11 +1060,9 @@ jQuery( document ).ready( function( $ ) {
 			ignore_setting_update_flag = true;
 
 			// Handle change of value
-			const current_input_name = $field.attr( 'name' );
-
 			// Unset current value in other dropdowns of the current unselection group
 			$( '[data-custom-unselection-group="' + current_unselection_group + '"] select' ).each( function() {
-				if ( current_input_name !== $( this ).attr( 'name' ) && $( this ).val() === $field.val() ) {
+				if ( field_name !== $( this ).attr( 'name' ) && $( this ).val() === $field.val() ) {
 					$( this ).val( 'none' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
 					$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
 				}
@@ -945,7 +1070,7 @@ jQuery( document ).ready( function( $ ) {
 
 			// Unset other dropdowns of the current unselection group if any of them has non-zero value
 			$( '[data-custom-nonzero-unselection-group="' + current_nonzero_unselection_group + '"] select' ).each( function() {
-				if ( parseInt( $field.val() ) > 0 && current_input_name !== $( this ).attr( 'name' ) && parseInt( $( this ).val() ) > 0 ) {
+				if ( parseInt( $field.val() ) > 0 && field_name !== $( this ).attr( 'name' ) && parseInt( $( this ).val() ) > 0 ) {
 					$( this ).val( '0' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
 					$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
 				}
@@ -955,7 +1080,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// Article Right Sidebar (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
-		if ( $field.attr( 'name' ) === 'nav_sidebar_right' ) {
+		if ( field_name === 'nav_sidebar_right' ) {
 
 			// When unselected, then set current sidebar navigation type to none
 			const current_value = $( this ).val();
@@ -973,7 +1098,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// Article Left Sidebar (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
-		if ( $field.attr( 'name' ) === 'nav_sidebar_left' ) {
+		if ( field_name === 'nav_sidebar_left' ) {
 
 			// When unselected, then set current sidebar navigation type to none
 			const current_value = $( this ).val();
@@ -995,8 +1120,92 @@ jQuery( document ).ready( function( $ ) {
 			return;
 		}
 
-		// Color-picker handles its update through 'iris' library
-		if ( $field.hasClass( 'wp-color-picker' ) ) {
+		// Handle template_for_archive_page with current_theme_templates value
+		if ( field_name === 'template_for_archive_page' && $field.val() === 'current_theme_templates' ) {
+			// Create dialog HTML
+			const dialogHtml = `
+				<div id="epkb-theme-template-dialog" class="epkb-dialog-box-form epkb-dialog-box-form--active">
+					<div class="epkb-dbf__header">
+						<h4>${epkb_vars.theme_template_switch_title || 'Switch to Theme Template'}</h4>
+					</div>
+					<div class="epkb-dbf__body">
+						${epkb_vars.theme_template_switch_msg || 'The page will reload with your theme template. You can switch back in KB Settings.'}
+					</div>
+					<div class="epkb-dbf__footer">
+						<div class="epkb-dbf__footer__accept">
+							<span class="epkb-dbf__footer__accept__btn">OK</span>
+						</div>
+						<div class="epkb-dbf__footer__cancel">
+							<span class="epkb-dbf__footer__cancel__btn">Cancel</span>
+						</div>
+					</div>
+					<div class="epkb-dbf__close epkbfa epkbfa-times"></div>
+				</div>
+				<div class="epkb-dialog-box-form-black-background"></div>
+			`;
+			
+			// Remove any existing dialog
+			$( '#epkb-theme-template-dialog, .epkb-dialog-box-form-black-background' ).remove();
+			
+			// Add dialog to body
+			$( 'body' ).append( dialogHtml );
+			
+			// Handle OK button click
+			$( '#epkb-theme-template-dialog .epkb-dbf__footer__accept__btn' ).on( 'click', function() {
+				// Remove dialog
+				$( '#epkb-theme-template-dialog, .epkb-dialog-box-form-black-background' ).remove();
+				
+				// Show loading dialog on the archive page container
+				const loadingContainer = $( '#eckb-archive-page-container' );
+				epkb_loading_Dialog( 'show', epkb_vars.switching_template_msg || 'Switching to theme template...', loadingContainer );
+				
+				// Call the switch_kb_template AJAX function to switch to current theme template
+				$.ajax({
+					url: epkb_vars.ajaxurl,
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						action: 'epkb_switch_kb_template',
+						_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+						epkb_kb_id: $('#epkb-fe__editor').data('kbid'),
+						template_type: 'current_theme_templates'
+					},
+					success: function( response ) {
+						if ( response.reload === true ) {
+							// Update the loading message to indicate page reload
+							loadingContainer.find( '.epkb-admin-text' ).text( epkb_vars.reloading_page_msg || 'Reloading page...' );
+							
+							// Reload the page after a short delay
+							setTimeout( function() {
+								window.location.reload();
+							}, 500 );
+						} else {
+							// Remove loading dialog if no reload needed
+							epkb_loading_Dialog( 'remove', '', loadingContainer );
+						}
+					},
+					error: function( jqXHR, textStatus, errorThrown ) {
+						// Remove loading dialog on error
+						epkb_loading_Dialog( 'remove', '', loadingContainer );
+						
+						// Show error notification
+						$('.eckb-bottom-notice-message').remove();
+						$('body').append( epkb_admin_notification( '', epkb_vars.switch_template_error || 'Failed to switch template. Please try again.', 'error' ) );
+						
+						console.error( 'Failed to switch template:', errorThrown );
+					}
+				});
+			});
+			
+			// Handle Cancel button and close X click
+			$( '#epkb-theme-template-dialog .epkb-dbf__footer__cancel__btn, #epkb-theme-template-dialog .epkb-dbf__close' ).on( 'click', function() {
+				// Remove dialog
+				$( '#epkb-theme-template-dialog, .epkb-dialog-box-form-black-background' ).remove();
+				// Revert radio button selection back to previous value (kb_templates)
+				$( 'input[name="template_for_archive_page"][value="kb_templates"]' ).prop( 'checked', true );
+			});
+			
+			// Prevent default processing
 			return;
 		}
 
@@ -1011,13 +1220,30 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// Unselected module does not need to trigger AJAX update for preview
-		if ( $field.closest( '.epkb-fe__feature-settings' ).attr( 'data-row-number' ) === 'none' ) {
+		if ( $field.closest( '.epkb-fe__feature-settings' ).attr( 'data-row-number' ) === 'none' && ! $field.closest( '.epkb-fe__feature-settings' ).attr( 'data-non-row-feature' ) ) {
+			return;
+		}
+
+		// AI Collection ID should never trigger page reload - update via AJAX only
+		if ( field_name === 'kb_ai_collection_id' ) {
+			updatePreview( event );
 			return;
 		}
 
 		// For some settings need to reload the entire page
-		if ( $field.attr( 'name' ) === 'templates_for_kb' ) {
+		// Also reload if page builder is enabled on article page
+		const $feature_settings = $( event.target ).closest( '.epkb-fe__feature-settings' );
+		const kb_page_type = $feature_settings.data( 'kb-page-type' );
+		const has_page_builder = frontendEditor.data( 'has-page-builder' ) === true;
+
+		if ( field_name === 'templates_for_kb' || field_name === 'template_main_page_display_title' || field_name === 'general_typography_font_family' ||
+			 ( kb_page_type === 'article-page' && has_page_builder ) ) {
 			update_preview_via_page_reload( event );
+			return;
+		}
+
+		// Color-picker handles its update through 'iris' library
+		if ( $field.hasClass( 'wp-color-picker' ) ) {
 			return;
 		}
 
@@ -1071,7 +1297,16 @@ jQuery( document ).ready( function( $ ) {
 
 		// Set current timeout handler
 		colorpicker_update_timeout = setTimeout( function () {
-			updatePreview( event, ui );
+			// Check if we need to reload for page builder on article page
+			const $feature_settings = $( event.target ).closest( '.epkb-fe__feature-settings' );
+			const kb_page_type = $feature_settings.data( 'kb-page-type' );
+			const has_page_builder = frontendEditor.data( 'has-page-builder' ) === true;
+			
+			if ( kb_page_type === 'article-page' && has_page_builder ) {
+				update_preview_via_page_reload( event, ui );
+			} else {
+				updatePreview( event, ui );
+			}
 			colorpicker_update_timeout
 		}, 200 );
 	}
@@ -1111,6 +1346,7 @@ jQuery( document ).ready( function( $ ) {
 				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
 				kb_id: frontendEditor.data( 'kbid' ),
 				new_kb_config: kb_config,
+				is_article_page: kb_page_type === 'article-page' ? 1 : 0,
 				selected_search_preset: selected_search_preset
 			},
 			success: function( response ) {
@@ -1138,10 +1374,15 @@ jQuery( document ).ready( function( $ ) {
 				selected_search_preset = 'current';
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
-				// Handle AJAX request errors with detailed information
-				let errorMessage = buildDetailedErrorMessage( jqXHR, textStatus, errorThrown, epkb_vars.fe_save_settings_error );
-				
-				show_report_error_form( errorMessage );
+				// Log error to console
+				console.error( 'Frontend Editor Save Settings Error:', {
+					status: jqXHR.status,
+					statusText: jqXHR.statusText,
+					textStatus: textStatus,
+					errorThrown: errorThrown,
+					response: jqXHR.responseJSON || jqXHR.responseText
+				} );
+
 				epkb_loading_Dialog( 'remove', '', loadingContainer );
 			}
 		} );
@@ -1217,6 +1458,15 @@ jQuery( document ).ready( function( $ ) {
 				kb_config[feature + '_module_position'] = 'none';
 			}
 		});
+
+		// General typography
+		const $general_typography_input = frontendEditor.find( '[name="general_typography_font_family"]' );
+		const $general_typography_loader = frontendEditor.find( '.epkb-general_typography-loader' );
+		if ( $general_typography_input.length > 0 ) {
+			kb_config.general_typography_font_family = $general_typography_input.val();
+		} else if ( $general_typography_loader.length > 0 ) {
+			kb_config.general_typography_font_family = $general_typography_loader.data( 'selected' );
+		}
 
 		return kb_config;
 	}
@@ -1734,6 +1984,8 @@ jQuery( document ).ready( function( $ ) {
 		const feature_name = current_url.searchParams.get( 'epkb_fe_reopen_feature' )
 		if ( feature_name && feature_name.length > 0 ) {
 
+			open_frontend_editor( null );
+
 			// Re-open editor feature
 			$( '.epkb-fe__toggle' ).trigger( 'click' );
 			$( '#epkb-fe__editor .epkb-fe__feature-select-button[data-feature="' + feature_name + '"]' ).trigger( 'click' );
@@ -1754,8 +2006,9 @@ jQuery( document ).ready( function( $ ) {
 
 			open_frontend_editor( null );
 
-			// Prevent re-opening FE on page reload
+			// Prevent re-opening FE on page reload - remove both action and KB ID parameters
 			current_url.searchParams.delete( 'action' );
+			current_url.searchParams.delete( 'epkb_kb_id' );
 
 			// Clear history to avoid resending reopening the FE on manual page reloading
 			history.replaceState( null, '', current_url.pathname + current_url.search + current_url.hash );
@@ -1835,99 +2088,106 @@ jQuery( document ).ready( function( $ ) {
 		return checks.some(check => check === true);
 	}
 
-	/**
-	 * Report the Report Error Form
-	 */
-	// Close Error Submit Form if Close Icon or Close Button clicked
-	$( admin_report_error_form ).on( 'click', '.epkb-close-notice, .epkb-admin__error-form__btn-cancel', function(){
-		$( admin_report_error_form ).css( 'display', 'none' ).parent().css( 'display', 'none' );
+	// Update typography font family hidden input when font is selected
+	$( document ).on( 'epkb-font-selected', function( e, fontFamily ) {
+		$( '#general_typography_font_family' ).val( fontFamily );
+		$( '.epkb-general_typography-current' ).text( fontFamily );
 	});
 
-	// Submit the Report Error Form
-	$( admin_report_error_form ).find( '#epkb-admin__error-form' ).on( 'submit', function ( event ) {
-		event.preventDefault();
+	// Load General Typography on demand
+	$( document ).on( 'click', '.epkb-general_typography-loader', function() {
 
-		let $form = $(this);
+		let loader = $( this );
+
+		let postData = {
+			action: 'epkb_load_general_typography',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			active_font_family: loader.data( 'selected' )
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			loader.closest( '.epkb-general_typography-loader-wrap' ).replaceWith( response.data );
+			ignore_setting_update_flag = true;
+			$( '#general_typography_font_family' ).trigger( 'change' );
+			ignore_setting_update_flag = false;
+		} );
+	} );
+
+	/*************************************************************************************************
+	 *
+	 *          AJAX calls
+	 *
+	 ************************************************************************************************/
+
+	// generic AJAX call handler
+	function epkb_send_ajax( postData, refreshCallback, callbackParam, reload, alwaysCallback, $loader ) {
+
+		let errorMsg;
+		let theResponse;
+		refreshCallback = (typeof refreshCallback === 'undefined') ? 'epkb_callback_noop' : refreshCallback;
+		let loadingContainer = $( '#epkb-modular-main-page-container, #eckb-kb-template' );
 
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
+			data: postData,
 			url: epkb_vars.ajaxurl,
-			data: $form.serialize(),
-			beforeSend: function (xhr) {
-				// block the form and add loader
-				$form.find( '.epkb-admin__error-form__btn-wrap, input, label, textarea' ).slideUp( 'fast' );
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).addClass( 'epkb-admin__error-form__response--active' );
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( epkb_vars.fe_sending_error_report );
+			beforeSend: function (xhr)
+			{
+				if ( typeof $loader == 'undefined' || $loader === false ) {
+					epkb_loading_Dialog('show', '', loadingContainer);
+				}
+
+				if ( typeof $loader == 'object' ) {
+					epkb_loading_Dialog('show', '', $loader);
+				}
 			}
-		}).done(function (response) {
-			// success message
-			if ( typeof response.success !== 'undefined' && response.success === false ) {
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( response.data );
-			} else if ( typeof response.success !== 'undefined' && response.success === true ) {
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( response.data );
+		}).done(function (response)        {
+			theResponse = ( response ? response : '' );
+			if ( theResponse.error || typeof theResponse.message === 'undefined' ) {
+				//noinspection JSUnresolvedVariable,JSUnusedAssignment
+				errorMsg = theResponse.message ? theResponse.message : epkb_admin_notification('', epkb_vars.reload_try_again, 'error');
+			}
+
+		}).fail( function ( response, textStatus, error )        {
+			//noinspection JSUnresolvedVariable
+			errorMsg = ( error ? ' [' + error + ']' : epkb_vars.unknown_error );
+			//noinspection JSUnresolvedVariable
+			errorMsg = epkb_admin_notification(epkb_vars.error_occurred + '. ' + epkb_vars.msg_try_again, errorMsg, 'error');
+		}).always(function() {
+
+			theResponse = (typeof theResponse === 'undefined') ? '' : theResponse;
+
+			if ( typeof alwaysCallback == 'function' ) {
+				alwaysCallback( theResponse );
+			}
+
+			if ( ! reload ) {
+				epkb_loading_Dialog('remove', '', loadingContainer);
+			}
+
+			if ( errorMsg ) {
+				$('.eckb-bottom-notice-message').remove();
+				$('body').append(errorMsg).removeClass('fadeOutDown');
+
+				setTimeout( function() {
+					$('.eckb-bottom-notice-message').addClass( 'fadeOutDown' );
+				}, 10000 );
+				return;
+			}
+
+			if ( typeof refreshCallback === "function" ) {
+
+				if ( typeof callbackParam === 'undefined' ) {
+					refreshCallback(theResponse);
+				} else {
+					refreshCallback(theResponse, callbackParam);
+				}
 			} else {
-				// something went wrong
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( epkb_vars.fe_send_report_error );
+				if ( reload ) {
+					location.reload();
+				}
 			}
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			// Build detailed error message
-			let errorMessage = buildDetailedErrorMessage( jqXHR, textStatus, errorThrown, epkb_vars.fe_send_report_error );
-			
-			$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( errorMessage );
-		}).always(function () {
-			// remove form loader
-			$( admin_report_error_form ).find( 'input, textarea' ).prop( 'disabled', false );
 		});
-	});
-
-	/**
-	 * Build detailed error message from AJAX error response
-	 *
-	 * @param {Object} jqXHR - jQuery XMLHttpRequest object
-	 * @param {string} textStatus - Text status of the error
-	 * @param {string} errorThrown - Exception object if available
-	 * @param {string} baseMessage - Base error message to display
-	 * @returns {string} Formatted error message with details
-	 */
-	function buildDetailedErrorMessage( jqXHR, textStatus, errorThrown, baseMessage ) {
-		let errorMessage = baseMessage || 'An error occurred';
-
-		// Add specific error details
-		if ( textStatus ) {
-			errorMessage += '\n\n' + ( epkb_vars.error_details || 'Error Details' ) + ': ' + textStatus;
-		}
-
-		if ( errorThrown ) {
-			errorMessage += '\n' + errorThrown;
-		}
-
-		// If server returned an error message, try to extract it
-		if ( jqXHR.responseJSON && jqXHR.responseJSON.message ) {
-			errorMessage += '\n\n' + ( epkb_vars.server_response || 'Server Response' ) + ': ' + jqXHR.responseJSON.message;
-		} else if ( jqXHR.responseText ) {
-			// Try to parse response text for error details
-			try {
-				const response = JSON.parse( jqXHR.responseText );
-				if ( response.message ) {
-					errorMessage += '\n\n' + ( epkb_vars.server_response || 'Server Response' ) + ': ' + response.message;
-				}
-			} catch ( e ) {
-				// If not JSON, show first 200 characters of response
-				if ( jqXHR.responseText.length > 0 ) {
-					errorMessage += '\n\n' + ( epkb_vars.server_response || 'Server Response' ) + ': ' + jqXHR.responseText.substring( 0, 200 );
-				}
-			}
-		}
-
-		return errorMessage;
-	}
-
-	function show_report_error_form( error_message ) {
-		let error_message_text = error_message ? error_message : '';
-		$( admin_report_error_form ).find( '.epkb-admin__error-form__title' ).text( epkb_vars.fe_report_error_title );
-		$( admin_report_error_form ).find( '.epkb-admin__error-form__desc' ).text( epkb_vars.fe_report_error_desc );
-		$( admin_report_error_form ).find( '#epkb-admin__error-form__message' ).val( error_message_text );
-		$( admin_report_error_form ).css( 'display', 'block' ).parent().css( 'display', 'block' );
 	}
 });

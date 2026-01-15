@@ -21,7 +21,49 @@
                     global $CPTO;
                     $this->CPTO         =   $CPTO;
                     
+                    add_action( 'admin_init',                               array ( $this, 'admin_init'), 10 );
+                    
                 }
+            
+            
+            /**
+            * 
+            * Check for section actions
+            */
+            function admin_init()
+                {
+                    //check for order reset
+                    if ( isset ( $_POST['pto_order_reset'] ) && $_POST['pto_order_reset'] == 'true' )
+                        {
+                            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized 
+                            if ( isset ( $_POST['nonce'] )  &&  wp_verify_nonce ( wp_unslash( $_POST['nonce'] ),  'pto-interface-reset' ))
+                                { 
+                                    $post_type  =   $this->CPTO->current_post_type->name;
+                                    
+                                    if ( empty ( $post_type ) )  
+                                        {
+                                            echo '<div id="message" class="updated"><p>' . esc_html__('Invalid post type', 'post-types-order') . '</p></div>';
+                                            return;
+                                        }    
+                                    
+                                    global $wpdb;
+                                                        
+                                    $results = $wpdb->query (  $wpdb->prepare ("UPDATE `". $wpdb->posts ."`
+                                                                SET menu_order = 0
+                                                                WHERE `post_type`    =  %s ", $post_type ) );
+                                                                            
+                                    apply_filters('pto/order_reset', $post_type );
+                                    
+                                    echo '<div id="message" class="updated"><p>' . esc_html__('Sort order reset successfully', 'post-types-order') . '</p></div>';
+                                }
+                                else
+                                {
+                                    echo '<div id="message" class="error"><p>' . esc_html__( 'Invalid Nonce', 'post-types-order' )  . '</p></div>';
+                                } 
+                        }
+                    
+                }
+            
                 
                 
             /**
@@ -60,9 +102,9 @@
                                             <p class="actions">
               
                                                 <span class="img_spacer">&nbsp;
-                                                    <img alt="" src="<?php echo CPTURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
+                                                    <img alt="" src="<?php echo esc_url ( CPTURL . "/images/wpspin_light.gif" ) ?>" class="waiting pto_ajax_loading" style="display: none;">
                                                 </span>
-                                                <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                                <a href="javascript:;" class="save-order button-primary"><?php esc_html_e('Update', 'post-types-order') ?></a>
                                             </p>
                                         </div>
                                         
@@ -82,9 +124,12 @@
                             
                             <div id="nav-menu-footer">
                                 <div class="major-publishing-actions">
+                                        
+                                        <a class="button-primary" href="javascript: void(0)" onclick="confirmSubmit()"><?php esc_html_e( "Reset Order", 'post-types-order' ) ?></a>
+                                
                                         <div class="alignright actions">
-                                            <img alt="" src="<?php echo CPTURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
-                                            <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                            <img alt="" src="<?php echo esc_url ( CPTURL . "/images/wpspin_light.gif" ) ?>" class="waiting pto_ajax_loading" style="display: none;">
+                                            <a href="javascript:;" class="save-order button-primary"><?php esc_html_e('Update', 'post-types-order') ?></a>
                                         </div>
                                         
                                         <div class="clear"></div>
@@ -97,6 +142,18 @@
                         <?php wp_nonce_field( 'interface_sort_nonce', 'interface_sort_nonce' ); ?>
                         
                         <script type="text/javascript">
+                        
+                            function confirmSubmit()
+                                {
+                                    var agree=confirm("<?php esc_html_e( "Are you sure you want to reset the order??", 'post-types-order' ) ?>");
+                                    if (agree)
+                                        {
+                                            jQuery('#pto_form_order_reset').submit();   
+                                        }
+                                        else
+                                        return false ;
+                                }
+                        
                             jQuery(document).ready(function() {
                                 jQuery("#sortable").sortable({
                                     'tolerance':'intersect',
@@ -120,7 +177,10 @@
                             });
                         </script>
                         
-                        
+                        <form action="" method="post" id="pto_form_order_reset">
+                            <input type="hidden" name="pto_order_reset" value="true" />
+                            <input type="hidden" name="nonce" value="<?php echo esc_attr( wp_create_nonce( 'pto-interface-reset' ) ) ?>" />
+                        </form>
                         
                         
                     </div>
@@ -147,8 +207,6 @@
                     extract( $r, EXTR_SKIP );
 
                     $output = '';
-
-                    $r['exclude'] = implode( ',', apply_filters('wp_list_pages_excludes', array()) );
                     
                     // Query pages.
                     $r['hierarchical'] = 0;

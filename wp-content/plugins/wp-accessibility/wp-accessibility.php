@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 2.1.19
+ * Version: 2.2.6
  */
 
 /*
@@ -49,6 +49,8 @@ require_once __DIR__ . '/wp-accessibility-help.php';
 if ( 'off' !== get_option( 'wpa_track_stats' ) ) {
 	require_once __DIR__ . '/wp-accessibility-stats.php';
 }
+
+define( 'WP_ACCESSIBILITY_VERSION', '2.2.6' );
 
 register_activation_hook( __FILE__, 'wpa_install' );
 
@@ -86,7 +88,6 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '2.1.19';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -98,12 +99,10 @@ function wpa_install() {
 		add_option( 'wpa_continue', 'Continue Reading' );
 		add_option( 'wpa_focus', '' );
 		add_option( 'wpa_installed', 'true' );
-		add_option( 'wpa_version', $wpa_version );
-		add_option( 'wpa_longdesc', 'jquery' );
+		add_option( 'wpa_longdesc', 'button' );
 		add_option( 'wpa_post_types', array( 'post' ) );
 	} else {
 		wpa_check_version();
-		update_option( 'wpa_version', $wpa_version );
 	}
 }
 
@@ -114,9 +113,9 @@ function wpa_install() {
  */
 function wpa_check_version() {
 	// upgrade for version 1.3.0.
-	$version = get_option( 'wpa_version' );
+	$version = WP_ACCESSIBILITY_VERSION;
 	if ( version_compare( $version, '1.3.0', '<' ) ) {
-		add_option( 'wpa_longdesc', 'jquery' );
+		add_option( 'wpa_longdesc', 'button' );
 	}
 	// upgrade for version 1.9.0.
 	if ( version_compare( $version, '1.9.0', '<' ) ) {
@@ -128,6 +127,12 @@ function wpa_check_version() {
 		}
 		if ( '' === $wpa_toolbar_ct ) {
 			update_option( 'wpa_toolbar_ct', 'on' );
+		}
+	}
+	if ( version_compare( $version, '2.2.0', '<' ) ) {
+		$ld_option = get_option( 'wpa_longdesc' );
+		if ( 'jquery' === $ld_option ) {
+			update_option( 'wpa_longdesc', 'button' );
 		}
 	}
 
@@ -157,7 +162,8 @@ add_action( 'wp_enqueue_scripts', 'wpa_stylesheet' );
 function wpa_stylesheet() {
 	$version = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
 	wp_register_style( 'wpa-style', plugins_url( 'css/wpa-style.css', __FILE__ ), array(), $version );
-	if ( 'link' === get_option( 'wpa_longdesc' ) || 'jquery' === get_option( 'wpa_longdesc' ) || 'on' === get_option( 'asl_enable' ) || ! empty( get_option( 'wpa_post_types', array() ) ) ) {
+	$ld = get_option( 'wpa_longdesc' );
+	if ( 'link' === $ld || 'jquery' === $ld || 'button' === $ld || 'on' === get_option( 'asl_enable' ) || ! empty( get_option( 'wpa_post_types', array() ) ) ) {
 		wp_enqueue_style( 'wpa-style' );
 		// these styles are derived from the WordPress skip link defaults.
 		$top = '7px';
@@ -225,7 +231,6 @@ function wpa_skiplink_css( $defaults = false ) {
 		// these styles are derived from the WordPress skip link defaults.
 		$default_focus = 'background-color: #f1f1f1;
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
-	clip: auto;
 	color: #0073aa;
 	display: block;
 	font-weight: 600;
@@ -243,7 +248,6 @@ function wpa_skiplink_css( $defaults = false ) {
 		// Passive default styles derived from WordPress default focus styles.
 		$default_passive = 'background-color: #fff;
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
-	clip: auto;
 	color: #333;
 	display: block;
 	font-weight: 600;
@@ -330,73 +334,12 @@ function wpa_is_url( $url ) {
 	return preg_match( '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url );
 }
 
-add_action( 'wp_enqueue_scripts', 'wpa_jquery_asl', 100 );
+add_action( 'wp_enqueue_scripts', 'wpa_enqueue_js', 100 );
 /**
  * Enqueue JS needed for WP Accessibility options.
  */
-function wpa_jquery_asl() {
-	$version       = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
-	$longdesc_type = false;
-	if ( 'link' === get_option( 'wpa_longdesc' ) ) {
-		$longdesc_type = 'link';
-	} elseif ( 'jquery' === get_option( 'wpa_longdesc' ) ) {
-		$longdesc_type = 'jquery';
-	}
-	if ( $longdesc_type ) {
-		$wpald = ( SCRIPT_DEBUG ) ? plugins_url( 'js/longdesc.js', __FILE__ ) : plugins_url( 'js/longdesc.min.js', __FILE__ );
-		wp_enqueue_script(
-			'wpa.longdesc',
-			$wpald,
-			array( 'jquery' ),
-			$version,
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
-		wp_localize_script(
-			'wpa.longdesc',
-			'wpald',
-			array(
-				'url'  => get_rest_url( null, 'wp/v2/media' ),
-				'type' => $longdesc_type,
-				'home' => home_url(),
-				'text' => '<span class="dashicons dashicons-media-text" aria-hidden="true"></span><span class="screen-reader">' . __( 'Long Description', 'wp-accessibility' ) . '</span>',
-			)
-		);
-	}
-	if ( 'on' === get_option( 'wpa_show_alt' ) ) {
-		/**
-		 * Modify the selector used to attach the alt attribute toggle button on images. Default `.hentry img[alt!=""], .comment-content img[alt!=""]`.
-		 *
-		 * @hook wpa_show_alt_selector
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param {string} $selector Valid jQuery selector string.
-		 *
-		 * @return {string}
-		 */
-		$selector = apply_filters( 'wpa_show_alt_selector', '.hentry img[alt!=""], .comment-content img[alt!=""]' );
-		$wpaab    = ( SCRIPT_DEBUG ) ? plugins_url( 'js/alt.button.js', __FILE__ ) : plugins_url( 'js/alt.button.min.js', __FILE__ );
-		wp_enqueue_script(
-			'wpa.alt',
-			$wpaab,
-			array( 'jquery' ),
-			$version,
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
-		wp_localize_script(
-			'wpa.alt',
-			'wpalt',
-			array(
-				'selector' => $selector,
-			)
-		);
-	}
+function wpa_enqueue_js() {
+	$version    = ( SCRIPT_DEBUG ) ? wp_rand( 10000, 100000 ) : wpa_check_version();
 	$visibility = ( 'on' === get_option( 'asl_visible' ) ) ? 'wpa-visible' : 'wpa-hide';
 	$output     = '';
 	if ( 'on' === get_option( 'asl_enable' ) && ! wpa_accessible_theme() ) {
@@ -438,11 +381,11 @@ function wpa_jquery_asl() {
 	}
 
 	$labels = array(
-		's'       => __( 'Search', 'wp-accessibility' ),
-		'author'  => __( 'Name', 'wp-accessibility' ),
-		'email'   => __( 'Email', 'wp-accessibility' ),
-		'url'     => __( 'Website', 'wp-accessibility' ),
-		'comment' => __( 'Comment', 'wp-accessibility' ),
+		's'       => _x( 'Search', 'Search field label', 'wp-accessibility' ),
+		'author'  => _x( 'Name', 'Commenter name label', 'wp-accessibility' ),
+		'email'   => _x( 'Email', 'Commenter email label', 'wp-accessibility' ),
+		'url'     => _x( 'Website', 'Commenter website label', 'wp-accessibility' ),
+		'comment' => _x( 'Comment', 'Commenter message label', 'wp-accessibility' ),
 	);
 	/**
 	 * Customize labels passed to automatically label core WordPress fields.
@@ -456,32 +399,42 @@ function wpa_jquery_asl() {
 	$dir    = ( is_rtl() ) ? 'rtl' : 'ltr';
 	$lang   = get_bloginfo( 'language' );
 
-	$wpafp = plugins_url( 'js/fingerprint.min.js', __FILE__ );
-	wp_register_script( 'wpa-fingerprintjs', $wpafp, array(), $version );
 	if ( SCRIPT_DEBUG ) {
 		$wpajs = plugins_url( 'js/wp-accessibility.js', __FILE__ );
 	} else {
 		$wpajs = plugins_url( 'js/wp-accessibility.min.js', __FILE__ );
 	}
-	$deps     = array( 'jquery', 'wpa-fingerprintjs' );
-	$longdesc = ( 'jquery' === get_option( 'wpa_longdesc' ) ) ? true : false;
-	if ( 'jquery' === $longdesc ) {
-		$deps[] = 'wpa.longdesc';
-	}
-	$alttext = ( 'on' === get_option( 'wpa_show_alt' ) ) ? true : false;
-	if ( $alttext ) {
-		$deps[] = 'wpa.alt';
-	}
 	wp_enqueue_script(
 		'wp-accessibility',
 		$wpajs,
-		$deps,
+		array(),
 		$version,
 		array(
 			'in_footer' => true,
 			'strategy'  => 'defer',
 		)
 	);
+
+	$longdesc_type = false;
+	if ( 'link' === get_option( 'wpa_longdesc' ) ) {
+		$longdesc_type = 'link';
+	} elseif ( 'jquery' === get_option( 'wpa_longdesc' ) || 'button' === get_option( 'wpa_longdesc' ) ) {
+		$longdesc_type = 'button';
+	}
+	/**
+	 * Modify the selector used to attach the alt attribute toggle button on images. Default `.hentry img[alt!=""], .comment-content img[alt!=""]`.
+	 *
+	 * @hook wpa_show_alt_selector
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param {string} $selector Valid CSS selector string.
+	 *
+	 * @return {string}
+	 */
+	$selector = apply_filters( 'wpa_show_alt_selector', '.hentry img[alt]:not([alt=""]), .comment-content img[alt]:not([alt=""]), #content img[alt]:not([alt=""]),.entry-content img[alt]:not([alt=""])' );
+	$alttext  = ( 'on' === get_option( 'wpa_show_alt' ) ) ? true : false;
+
 	/**
 	 * Filter target element selector for underlines. Default `a`.
 	 *
@@ -538,30 +491,40 @@ function wpa_jquery_asl() {
 		'wp-accessibility',
 		'wpa',
 		array(
-			'skiplinks' => array(
+			'skiplinks'   => array(
 				'enabled' => ( 'on' === get_option( 'asl_enable' ) ) ? true : false,
 				'output'  => $output,
 			),
-			'target'    => ( 'on' === get_option( 'wpa_target' ) ) ? true : false,
-			'tabindex'  => ( 'on' === get_option( 'wpa_tabindex' ) ) ? true : false,
-			'underline' => array(
+			'target'      => ( 'on' === get_option( 'wpa_target' ) ) ? true : false,
+			'tabindex'    => ( 'on' === get_option( 'wpa_tabindex' ) ) ? true : false,
+			'underline'   => array(
 				'enabled' => ( 'on' === get_option( 'wpa_underline' ) ) ? true : false,
 				'target'  => $target,
 			),
-			'dir'       => $dir,
-			'lang'      => $lang,
-			'titles'    => $remove_titles,
-			'labels'    => $apply_labels,
-			'wpalabels' => $labels,
-			'current'   => ( version_compare( $GLOBALS['wp_version'], '5.3', '<' ) ) ? true : false,
-			'errors'    => ( $errors_enabled ) ? true : false,
-			'tracking'  => ( $tracking_enabled ) ? true : false,
-			'ajaxurl'   => admin_url( 'admin-ajax.php' ),
-			'security'  => wp_create_nonce( 'wpa-stats-action' ),
-			'action'    => 'wpa_stats_action',
-			'url'       => ( function_exists( 'wpa_get_current_url' ) ) ? wpa_get_current_url() : 'disabled',
-			'post_id'   => ( is_singular() ) ? get_the_ID() : '',
-			'continue'  => ( wp_is_block_theme() ) ? true : false,
+			'videos'      => ( 'on' === get_option( 'wpa_videos' ) ) ? true : false,
+			'dir'         => $dir,
+			'lang'        => $lang,
+			'titles'      => $remove_titles,
+			'labels'      => $apply_labels,
+			'wpalabels'   => $labels,
+			'alt'         => $alttext,
+			'altSelector' => $selector,
+			'current'     => ( version_compare( $GLOBALS['wp_version'], '5.3', '<' ) ) ? true : false,
+			'errors'      => ( $errors_enabled ) ? true : false,
+			'tracking'    => ( $tracking_enabled ) ? true : false,
+			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+			'security'    => wp_create_nonce( 'wpa-stats-action' ),
+			'action'      => 'wpa_stats_action',
+			'url'         => ( function_exists( 'wpa_get_current_url' ) ) ? wpa_get_current_url() : 'disabled',
+			'post_id'     => ( is_singular() ) ? get_the_ID() : '',
+			'continue'    => ( wp_is_block_theme() ) ? true : false,
+			'pause'       => __( 'Pause video', 'wp-accessibility' ),
+			'play'        => __( 'Play video', 'wp-accessibility' ),
+			'restUrl'     => get_rest_url( null, 'wp/v2/media' ),
+			'ldType'      => $longdesc_type,
+			'ldHome'      => home_url(),
+			'ldText'      => '<span class="dashicons dashicons-media-text" aria-hidden="true"></span><span class="screen-reader">' . __( 'Long Description', 'wp-accessibility' ) . '</span>',
+
 		)
 	);
 }
@@ -889,6 +852,24 @@ function wpa_disable_editor_fullscreen_by_default() {
 	}
 }
 add_action( 'enqueue_block_editor_assets', 'wpa_disable_editor_fullscreen_by_default' );
+
+/**
+ * Disable file embeds by default.
+ *
+ * @param array $blockdata Array of block configuration meta data.
+ *
+ * @return array
+ */
+function wpa_disable_file_embed_by_default( $blockdata ) {
+	if ( 'core/file' === $blockdata['name'] && 'on' === get_option( 'wpa_disable_file_embed' ) ) {
+		if ( isset( $blockdata['attributes']['displayPreview'] ) ) {
+			$blockdata['attributes']['displayPreview']['default'] = false;
+		}
+	}
+
+	return $blockdata;
+}
+add_filter( 'block_type_metadata', 'wpa_disable_file_embed_by_default' );
 
 /**
  * Remove the H1 heading from the headings block.

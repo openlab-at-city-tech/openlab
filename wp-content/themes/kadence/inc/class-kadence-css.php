@@ -553,9 +553,14 @@ class Kadence_CSS {
 		if ( isset( $font['weight'] ) && ! empty( $font['weight'] ) ) {
 			$css->add_property( 'font-weight', $font['weight'] );
 		}
-		$size_type = ( isset( $font['sizeType'] ) && ! empty( $font['sizeType'] ) ? $font['sizeType'] : 'px' );
-		if ( isset( $font['size'] ) && isset( $font['size']['desktop'] ) && ! empty( $font['size']['desktop'] ) ) {
-			$css->add_property( 'font-size', $font['size']['desktop'] . $size_type );
+		$clamped_value = $this->generate_clamp_value( $font );
+		if ( $clamped_value ) {
+			$css->add_property( 'font-size', $clamped_value );
+		} else {
+			$size_type = ( isset( $font['sizeType'] ) && ! empty( $font['sizeType'] ) ? $font['sizeType'] : 'px' );
+			if ( isset( $font['size'] ) && isset( $font['size']['desktop'] ) && ! empty( $font['size']['desktop'] ) ) {
+				$css->add_property( 'font-size', $font['size']['desktop'] . $size_type );
+			}
 		}
 		$line_type = ( isset( $font['lineType'] ) && ! empty( $font['lineType'] ) ? $font['lineType'] : '' );
 		$line_type = ( '-' !== $line_type ? $line_type : '' );
@@ -799,6 +804,9 @@ class Kadence_CSS {
 			return false;
 		}
 		if ( ! isset( $shadow['inset'] ) ) {
+			return false;
+		}
+		if ( isset( $shadow['disabled'] ) && true === $shadow['disabled'] ) {
 			return false;
 		}
 		if ( $shadow['inset'] ) {
@@ -1306,6 +1314,90 @@ class Kadence_CSS {
 	}
 
 	/**
+	 * Calculate preferred value with custom viewport widths using precise calc formula
+	 *
+	 * @param array   $font Font settings array
+	 * @return string Calculated preferred value as calc expression
+	 */
+	public function calculate_preferred_value_with_viewports( $font ) {
+
+		$min_value = $font['minFontSize'];
+		$max_value = $font['maxFontSize'];
+		$min_viewport = $font['minScreenSize'];
+		$max_viewport = $font['maxScreenSize'];
+		$unit = $font['fontSizeUnit'] ?? 'px';
+		$viewport_unit = $font['screenSizeUnit'] ?? 'px';
+
+		if ( empty( $min_value ) || empty( $max_value ) || empty( $min_viewport ) || empty( $max_viewport ) ) {
+			return '';
+		}
+
+		// Convert to rem if needed for consistent calculation
+		$min_in_rem = $min_value;
+		$max_in_rem = $max_value;
+
+		// Convert px to rem for calculation (but keep original unit in output)
+		$output_unit = $unit;
+		if ( 'px' === $unit ) {
+			$min_in_rem = $min_value / 16;
+			$max_in_rem = $max_value / 16;
+			$unit = 'rem';
+		}
+
+		// For rem-based calculations, use the precise formula
+		// The formula: preferred = a + b*vw where:
+		// b = 1600 * (F2 - F1) / (W2 - W1)
+		// a = F1 - (b/1600) * W1
+		// This ensures at W1: a + b*(W1/100) = F1 and at W2: a + b*(W2/100) = F2
+
+		if ( 'rem' === $unit || 'em' === $unit ) {
+			$slope = ( 1600 * ( $max_in_rem - $min_in_rem ) ) / ( $max_viewport - $min_viewport );
+			$intercept = $min_in_rem - ( $slope / 1600 ) * $min_viewport;
+
+			// Round to 4 decimal places for precision
+			$rounded_intercept = round( $intercept * 10000 ) / 10000;
+			$rounded_slope = round( $slope * 10000 ) / 10000;
+
+			// Return clean expression without calc()
+			return $rounded_intercept . $unit . ' + ' . $rounded_slope . 'vw';
+		}
+
+		// For other units (%, vw), use a simpler approach
+		$min_value = $min_value;
+		$max_value = $max_value;
+		$slope = ( ( $max_value - $min_value ) / ( $max_viewport - $min_viewport ) ) * 100;
+		$intercept = $min_value - ( $slope * $min_viewport ) / 100;
+
+		$rounded_intercept = round( $intercept * 10000 ) / 10000;
+		$rounded_slope = round( $slope * 10000 ) / 10000;
+
+		return $rounded_intercept . $unit . ' + ' . $rounded_slope . 'vw';
+	}
+
+	/**
+	 * Generate a clamp value from mobile and desktop sizes
+	 *
+	 * @param array $font Font settings array
+	 * @return string Generated clamp value
+	 */
+	public function generate_clamp_value( $font ) {
+		$clamped = ( isset( $font['clamped'] ) && true === $font['clamped'] ? true : false );
+		if ( $clamped ) {
+			$min_value = $font['minFontSize'];
+			$max_value = $font['maxFontSize'];
+			$unit = $font['fontSizeUnit'] ?? 'px';
+
+			$preferred = $this->calculate_preferred_value_with_viewports( $font );
+
+			if ( ! empty( $preferred ) && ! empty( $min_value ) && ! empty( $max_value ) ) {
+				return 'clamp(' . $min_value . $unit . ', ' . $preferred . ', ' . $max_value . $unit . ')';
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Resets the css variable
 	 *
 	 * @access private
@@ -1345,5 +1437,4 @@ class Kadence_CSS {
 		// Output minified css
 		return $this->_output;
 	}
-
 }

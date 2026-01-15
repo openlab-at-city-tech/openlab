@@ -1,2 +1,689 @@
-var imageChoices=imageChoices||{};!function(e){imageChoices.cssClasses={selected:"image-choices-choice-selected",hover:"image-choices-choice-hover",focus:"image-choices-choice-focus"},imageChoices.getFormMarkupVersion=function(i){var o,t,a="";return void 0===i||"string"==typeof i&&""===i||"number"==typeof i&&i<=0?(o=e('form[id^="gform_"]:first').attr("id"),a=window.hasOwnProperty("gf_get_form_id_by_html_id")?window.gf_get_form_id_by_html_id(o):o.replace("gform_",""),t=e("#"+o)):i instanceof jQuery?(o=i.attr("id"),a=window.hasOwnProperty("gf_get_form_id_by_html_id")?window.gf_get_form_id_by_html_id(o):o.replace("gform_",""),t=i):"string"==typeof i&&-1!==i.indexOf("gform_")?(a=window.hasOwnProperty("gf_get_form_id_by_html_id")?window.gf_get_form_id_by_html_id(i):i.replace("gform_",""),t=e("#"+(o="gform_"+a))):(a=window.hasOwnProperty("gf_get_form_id_by_html_id")?window.gf_get_form_id_by_html_id("gform_"+i.toString()):i.toString(),t=e("#"+(o="gform_"+a))),t.length?t.find(".gform_body .gfield:first").is("li")?1:2:e(".gform_body .gfield:first").is("li")?1:2},imageChoices.isLegacyMarkup=function(e){return 1===imageChoices.getFormMarkupVersion(e)},imageChoices.isLegacyMode=function(){return!(imageChoicesVars.hasOwnProperty("useNewFeatures")&&"true"===imageChoicesVars.useNewFeatures.toString())},imageChoices.$fieldChoices=function(e){if(void 0===e||e instanceof jQuery==!1)return[];var i='.ginput_container .gfield_radio div[class*="gchoice"], .ginput_container .gfield_checkbox div[class*="gchoice"]:not(.gchoice_select_all)';return imageChoices.isLegacyMarkup(e.closest('[id^="gform_wrapper_"]'))&&(i=".ginput_container .gfield_radio li, .ginput_container .gfield_checkbox li:not(.gchoice_select_all)"),e.find(i)},imageChoices.SelectedFields=function(i){var o=e(void 0!==i&&""!==i?"#gform_"+i:".gform_wrapper form");imageChoices.$fieldChoices(o.find(".image-choices-field")).find("input:checked").each((function(){e(this).closest('[class*="gchoice"]').addClass(imageChoices.cssClasses.selected)}))},imageChoices.InitLightbox=function(i){var o=e(void 0!==i&&""!==i?"#gform_"+i:".gform_wrapper form"),t=parseInt(i,10);o.find(".image-choices-field.image-choices-use-lightbox").each((function(){var i=e(this),o=i.attr("id"),a=parseInt(o.substring(o.lastIndexOf("_")+1),10);if(!imageChoicesVars.hasOwnProperty("elementorCompat")||"elementor"!==imageChoicesVars.elementorCompat){var c=gform.applyFilters("gfic_lightbox_options",{captions:imageChoices.isLegacyMode()||i.hasClass("ic-lightbox-captions"),captionType:"data",captionsData:"caption"},t,a);c.captions=gform.applyFilters("gfic_lightbox_captions",c.captions,t,a),c=gform.applyFilters(`gfic_lightbox_options_${t}`,c,t,a),c=gform.applyFilters(`gfic_lightbox_options_${t}_${a}`,c,t,a),i.find(".image-choices-lightbox-btn").jetslothLightbox(c)}})),o.find(".product-image-field.product-image-use-lightbox").each((function(){var i=e(this),o=i.attr("id"),a=parseInt(o.substring(o.lastIndexOf("_")+1),10),c=i.find(".ic-product-image-lightbox-btn");if(!imageChoicesVars.hasOwnProperty("elementorCompat")||"elementor"!==imageChoicesVars.elementorCompat){var s=((i.find(".gfield_label_product").length?i.find(".gfield_label_product").text():i.find(".gftt-label").length?i.find(".gftt-label").text():i.find(".gfield_label").text())+"").replace(/[\\"']/g,"\\$&").replace(/\u0000/g,"\\0");c.data("caption",s),c.attr("data-elementor-open-lightbox","no");var l=gform.applyFilters("gfic_lightbox_options",{captions:i.hasClass("product-image-lightbox-captions"),captionType:"data",captionsData:"caption"},t,a);l.captions=gform.applyFilters("gfic_lightbox_captions",l.captions,t,a),l=gform.applyFilters(`gfic_lightbox_options_${t}`,l,t,a),l=gform.applyFilters(`gfic_lightbox_options_${t}_${a}`,l,t,a),c.jetslothLightbox(l)}}))},imageChoices.onChoiceKeyPress=function(i){var o=e(i.target),t=o.closest(".gfield");if(32===i.keyCode&&(o.is(":checkbox")||o.is(":radio")))o.is(":radio")&&!o.is(":checked")?i.preventDefault():o.is(":checkbox")&&(i.preventDefault(),i.stopImmediatePropagation());else if(9===i.keyCode&&t.hasClass("image-choices-field")){var a=i.shiftKey?"previous":"next",c=o.closest(".image-choices-choice");"next"===a?c.is(":last-child")||(i.preventDefault(),c.next(".image-choices-choice").find("> input").focus()):"previous"===a&&(c.is(":first-child")||(i.preventDefault(),c.prev(".image-choices-choice").find("> input").focus()))}},imageChoices.onChoicesSelectAllClick=function(i){var o=e(this),t=o.closest(".gfield"),a=(o.is("input")?o.is(":checked"):o.data("checked"))?t.find(".image-choices-choice input:checked"):t.find(".image-choices-choice input:not(:checked)");a.length&&a.each((function(i,o){var t=e(o);imageChoices.onChoiceLabelClick(t.next("label"))}))},imageChoices.onChoiceLabelClick=function(e){var i=e.closest('[class*="gchoice"]'),o=i.closest(".gfield_checkbox, .gfield_radio").first(),t=i.find("input");i.hasClass("image-choices-choice-other")&&setTimeout((function(){i.find(".gf_other_wrap").addClass("active"),i.find("input:text").focus()}),250),o.hasClass("gfield_radio")?(o.find("."+imageChoices.cssClasses.selected).not(i).removeClass(imageChoices.cssClasses.selected).find("input").prop("checked",!1),i.addClass(imageChoices.cssClasses.selected)):o.hasClass("gfield_checkbox")&&(t.is(":checked")?i.addClass(imageChoices.cssClasses.selected):i.removeClass(imageChoices.cssClasses.selected))},imageChoices.clearProductImageChoice=function(e){let i=e.querySelector(".ginput_container_singleproduct .ginput_quantity");e.classList.remove("ic-product-selected"),i.value="",jQuery(i).trigger("input")},imageChoices.selectProductImageChoice=function(e){e.classList.add("ic-product-selected");let i=Array.from(e.classList).filter((e=>-1!==e.indexOf("ic-product-group-"))),o=i.length?"."+i[0]:"";document.querySelectorAll(`.product-image-field.ic-product-single-choice${o}:not([id="${e.id}"])`).forEach((e=>{imageChoices.clearProductImageChoice(e)}))},imageChoices.onProductImageChoiceClick=function(e){e.querySelector(".ginput_container_singleproduct .ginput_quantity");e.classList.contains("ic-product-single-choice")?e.classList.contains("ic-product-selected")||imageChoices.selectProductImageChoice(e):(e.classList.toggle("ic-product-selected"),e.classList.contains("ic-product-selected")||imageChoices.clearProductImageChoice(e))},imageChoices.setupProductImageChoices=function(e){e.querySelectorAll(".product-image-field.ic-product-image-choice .ic-product-image-wrap").forEach((e=>{e.addEventListener("click",(e=>{e.preventDefault(),imageChoices.onProductImageChoiceClick(e.currentTarget.closest(".gfield"))}))}))},imageChoices.SetUpFields=function(i,o){e(".entry-details .detail-view .image-choices-choice-image-wrap").each((function(i){e(this).closest(".detail-view").addClass("image-choices-field image-choices-show-labels")}));var t=e(void 0!==i&&""!==i?"#gform_"+i:".gform_wrapper form");!t.length&&e(".gform_variation_wrapper").length&&(t=e(".gform_variation_wrapper"));var a=t.find(".image-choices-field");a.length&&a.find(".gfield_radio, .gfield_checkbox").addClass("gform-theme__no-reset--children");var c=imageChoices.$fieldChoices(a),s=t.find(".product-image-field");t.find('.gchoice_select_all input, button[id$="select_all"]').each((function(i,o){e(o).on("click",imageChoices.onChoicesSelectAllClick)})),(c.length>0||s.length>0)&&(c.each((function(){var i=e(this);if(!0!==i.data("init")){i.data("init",!0),i.find("label").addClass("gform-field-label"),i.find("label").hover((function(i){var o=e(this);if(o.find("input").is(":disabled"))return!1;o.closest('[class*="gchoice"]').addClass(imageChoices.cssClasses.hover)}),(function(i){var o=e(this);if(o.find("input").is(":disabled"))return!1;o.closest('[class*="gchoice"]').removeClass(imageChoices.cssClasses.hover)})),i.find("input").focus((function(){e(this).closest('[class*="gchoice"]').addClass(imageChoices.cssClasses.focus)})).blur((function(){e(this).closest('[class*="gchoice"]').removeClass(imageChoices.cssClasses.focus)})),i.find('input[value="gf_other_choice"]').length?(i.addClass("image-choices-choice-other"),i.find('input[type="text"]').wrap('<div class="gf_other_wrap"></div>'),e(".gf_other_wrap").append('<a href="#" class="gf_other_close"></a>'),e(document).on("click",".gf_other_close",(function(i){i.preventDefault(),e(this).parent().removeClass("active")})),i.find('input:not([type="text"])').on("click",(function(){var i=e(this).closest(".image-choices-choice").find("label");imageChoices.onChoiceLabelClick(i)}))):i.find("input").on("click",(function(){var i=e(this).closest(".image-choices-choice").find("label");imageChoices.onChoiceLabelClick(i)}));var o=i.closest(".image-choices-field");if(o.hasClass("image-choices-use-lightbox")&&!i.find(".image-choices-lightbox-btn").length){var t=o.attr("id"),a=(i.find(".image-choices-choice-text").html()+"").replace(/[\\"']/g,"\\$&").replace(/\u0000/g,"\\0"),c=i.find(".image-choices-choice-image").attr("src"),s=i.find(".image-choices-choice-image").data("lightbox-src");if(void 0!==s&&""!==s||(s=c),""!==s){var l=imageChoicesVars.hasOwnProperty("elementorCompat")&&"elementor"!==imageChoicesVars.elementorCompat?'data-elementor-open-lightbox="no"':"",r=e('<a href="'+s+'" class="image-choices-lightbox-btn" '+l+' rel="'+t+'"><i></i></a>');r.data("caption",a),i.prepend(r)}}}})),imageChoices.setupProductImageChoices(t.get(0)),setTimeout((function(){c.length&&imageChoices.SelectedFields(i),imageChoices.InitLightbox(i),imageChoices.InitLazyLoad(i,o),"undefined"!=typeof jetslothMatchHeights&&jetslothMatchHeights(),gform.doAction("gfic_setup",i)}),100))},window.imageChoices_SetUpFields=imageChoices.SetUpFields,imageChoices.ConditionalLogic=function(i){var o=e(void 0!==i&&""!==i?"#gform_"+i:".gform_wrapper form");!o.length&&e(".gform_variation_wrapper").length&&(o=e(".gform_variation_wrapper"));var t=o.find(".image-choices-field");t.length&&(t.each((function(){var i=e(this);i.is(":hidden")&&i.find(".image-choices-choice").removeClass(imageChoices.cssClasses.selected+" "+imageChoices.cssClasses.hover+" "+imageChoices.cssClasses.focus)})),setTimeout((function(){"undefined"!=typeof jetslothMatchHeights&&jetslothMatchHeights()}),10))},e(document).bind("gform_post_render",(function(e,i,o){window.gformGetOptionLabel=imageChoices.gformGetOptionLabel,imageChoices.SetUpFields(i,o)})),e(document).bind("gform_post_conditional_logic",(function(e,i,o,t){imageChoices.ConditionalLogic(i),imageChoices.SelectedFields(i)})),e(document).on("gfcf/conversational/navigate/start gfcf/conversational/navigate/next gfcf/conversational/navigate/prev gfcf/conversational/navigate/error",(function(){jetslothMatchHeights&&jetslothMatchHeights()})),imageChoices.gformGetOptionLabel=function(i,o,t,a,c){if((i=e(i)).closest(".gfield").hasClass("color-picker-field")&&"function"==typeof window.colorPicker_gformGetOptionLabel)return window.colorPicker_gformGetOptionLabel(i,o,t,a,c);var s=i.closest('[class*="gchoice"]').index(),l=gformGetPrice(o),r=i.attr("price"),n=i.html().replace(/<span(.*)<\/span>/i,"").replace(r,""),g=gformGetPriceDifference(t,l);g=0==gformToNumber(g)?"":" "+g,i.attr("price",g);var h="option"==i[0].tagName.toLowerCase()?" "+g:"<span class='ginput_price'>"+g+"</span>",d=n+h;return window.gform_format_option_label&&(d=gform_format_option_label(d,n,h,t,l,a,c,s)),d},window.imageChoices_gformGetOptionLabel=imageChoices.gformGetOptionLabel,window.gformGetOptionLabel=imageChoices.gformGetOptionLabel,imageChoices.gform_format_option_label=function(i,o,t,a,c,s,l,r){var n=[i],g=`${o}`,h=`${t}`,d=e("#gform_"+s+" .gfield#field_"+s+"_"+l);if(d.length&&d.hasClass("image-choices-field")){var f=d.find('[class*="gchoice"]'),m=void 0!==r&&r>=0?f.eq(r):f,p=void 0!==d.data("jetsloth-lazy-loaded")?d.data("jetsloth-lazy-loaded"):[];m.each((function(){var i=e(this),f=i.find("label"),m=(i.find("input"),f.data("img")),_=f.data("lightbox-src");o=f.attr("data-text"),t===o&&(t=""),"<span class='ginput_price'></span>"===t&&(t="<span class='ginput_price'>&nbsp;</span>");var u=s.toString()+"_"+l.toString(),C=imageChoices.isLegacyMode()||!d.hasClass("ic-theme--cover-tile")&&!d.hasClass("ic-image--natural")?"":' data-jmh="'+u+"_"+r+'"',v=d.hasClass("has-jetsloth-lazy")&&-1===e.inArray(r,p),b=['<span class="image-choices-choice-image-wrap"'+C+' style="background-image:url('+m+');">','<img src="'+m+'" class="image-choices-choice-image" alt="" data-lightbox-src="'+_+'" />',"</span>"].join("");v&&(b=['<span class="image-choices-choice-image-wrap jetsloth-lazy"'+C+' data-lazy-bg="'+m+'">','<img src="" data-lazy-src="'+m+'" class="image-choices-choice-image jetsloth-lazy" alt="" data-lightbox-src="'+_+'" />',"</span>"].join(""));if(g=gform.applyFilters("gfic_choice_text",o,a,c,s,l,r),g=gform.applyFilters(`gfic_choice_text_${s}`,g,a,c,s,l,r),g=gform.applyFilters(`gfic_choice_text_${s}_${l}`,g,a,c,s,l,r),g=gform.applyFilters(`gfic_choice_text_${s}_${l}_${r}`,g,a,c,s,l,r),h=gform.applyFilters("gfic_choice_price",t,a,c,s,l,r),h=gform.applyFilters(`gfic_choice_price_${s}`,h,a,c,s,l,r),h=gform.applyFilters(`gfic_choice_price_${s}_${l}`,h,a,c,s,l,r),h=gform.applyFilters(`gfic_choice_price_${s}_${l}_${r}`,h,a,c,s,l,r),n=[b,'<span class="image-choices-choice-text">'+g+"</span>",'<span class="image-choices-choice-price">'+h+"</span>"],d.hasClass("image-choices-use-lightbox")&&i.find(".image-choices-lightbox-btn").length){var y=(o+"").replace(/[\\"']/g,"\\$&").replace(/\u0000/g,"\\0"),w=_;void 0!==w&&""!==w||(w=m),""!==w&&i.find(".image-choices-lightbox-btn").attr("href",w).data("caption",y).attr("rel",l)}"undefined"!=typeof jetslothMatchHeights&&setTimeout((()=>jetslothMatchHeights),100),v&&setTimeout((function(){i.find(".jetsloth-lazy").each((function(){imageChoices.observer.observe(this)}))}),100)}))}var _=gform.applyFilters("gfic_choice_html",n.join(""),g,h,a,c,s,l,r);return _=gform.applyFilters(`gfic_choice_html_${s}`,_,g,h,a,c,s,l,r),_=gform.applyFilters(`gfic_choice_html_${s}_${l}`,_,g,h,a,c,s,l,r),_=gform.applyFilters(`gfic_choice_html_${s}_${l}_${r}`,_,g,h,a,c,s,l,r)},window.imageChoices_gform_format_option_label=imageChoices.gform_format_option_label,window.gform_format_option_label=function(i,o,t,a,c,s,l,r){"undefined"!=typeof gftt&&void 0!==gftt.option_label_reinit&&gftt.option_label_reinit(s,l);var n=e("#field_"+s+"_"+l);return n.length&&n.hasClass("color-picker-field")&&"function"==typeof window.colorPicker_gform_format_option_label?window.colorPicker_gform_format_option_label(i,o,t,a,c,s,l,r):imageChoices.gform_format_option_label(i,o,t,a,c,s,l,r)},imageChoices.onImageLoaded=function(i){var o=e(i);o.addClass("jetsloth-lazy-loaded");var t=o.closest(".gfield");if(t.length){var a=o.closest("li").index(),c=void 0!==t.data("jetsloth-lazy-loaded")?t.data("jetsloth-lazy-loaded"):[];c.push(a),t.data("jetsloth-lazy-loaded",c),"undefined"!=typeof jetslothMatchHeights&&setTimeout((()=>jetslothMatchHeights),100)}},imageChoices.loadImage=function(i){var o=e(i);if(void 0!==o.data("lazy-bg")&&""!==o.data("lazy-bg")){var t=new Image;t.onload=function(){o.css("background-image","url("+o.data("lazy-bg")+")"),imageChoices.onImageLoaded(o)},t.src=o.data("lazy-bg")}else void 0!==o.data("lazy-src")&&""!==o.data("lazy-src")&&(o.on("load",(function(){imageChoices.onImageLoaded(o)})),o.attr("src",o.data("lazy-src")))},imageChoices.lazyLoad=function(i){e.each(i,(function(e,i){i.intersectionRatio>0&&(imageChoices.observer.unobserve(i.target),imageChoices.loadImage(i.target))}))};var i=!1;imageChoices.InitLazyLoad=function(o,t){if(!i){var a=gform.applyFilters("gfic_lazy_root_margin","100px",o,t);a=gform.applyFilters(`gfic_lazy_root_margin_${o}`,a,o,t),a=gform.applyFilters(`gfic_lazy_root_margin_${o}_${t}`,a,o,t);var c=gform.applyFilters("gfic_lazy_threshold",1,o,t);c=gform.applyFilters(`gfic_lazy_threshold_${o}`,c,o,t);var s={rootMargin:a,threshold:c=gform.applyFilters(`gfic_lazy_threshold_${o}_${t}`,c,o,t)};imageChoices.observer=new IntersectionObserver(imageChoices.lazyLoad,s),i=!0}var l=e("#gform_"+o),r=void 0!==t?l.find("#gform_page_"+o+"_"+t):[];(r.length?r.find(".image-choices-field .jetsloth-lazy, .product-image-field .jetsloth-lazy"):l.find(".image-choices-field .jetsloth-lazy, .product-image-field .jetsloth-lazy")).each((function(){imageChoices.observer.observe(this)}))}}(jQuery);
-//# sourceMappingURL=gf_image_choices.js.map
+/*! © JetSloth — SPDX-License-Identifier: GPL-2.0-or-later */
+
+var imageChoices = imageChoices || {};
+(function($){
+
+	imageChoices.cssClasses = {
+		"selected": "image-choices-choice-selected",
+		"hover": "image-choices-choice-hover",
+		"focus": "image-choices-choice-focus"
+	}
+
+	imageChoices.getFormMarkupVersion = function( form_or_id ){
+		var formElementID;
+		var formID = '';
+		var $form;
+
+		if ( typeof form_or_id === 'undefined' || ( typeof form_or_id === 'string' && form_or_id === '' ) || ( typeof form_or_id === 'number' && form_or_id <= 0 ) ) {
+			formElementID = $('form[id^="gform_"]:first').attr('id');
+			formID = ( window.hasOwnProperty('gf_get_form_id_by_html_id') ) ? window.gf_get_form_id_by_html_id( formElementID ) : formElementID.replace('gform_', '');
+			$form = $('#' + formElementID);
+		}
+		else if ( form_or_id instanceof jQuery ) {
+			formElementID = form_or_id.attr('id');
+			formID = ( window.hasOwnProperty('gf_get_form_id_by_html_id') ) ? window.gf_get_form_id_by_html_id( formElementID ) : formElementID.replace('gform_', '');
+			$form = form_or_id;
+		}
+		else if ( typeof form_or_id === 'string' && form_or_id.indexOf("gform_") !== -1 ) {
+			formID = (window.hasOwnProperty('gf_get_form_id_by_html_id')) ? window.gf_get_form_id_by_html_id( form_or_id ) : form_or_id.replace('gform_', '');
+			formElementID = "gform_" + formID;
+			$form = $('#' + formElementID);
+		}
+		else {
+			formID = (window.hasOwnProperty('gf_get_form_id_by_html_id')) ? window.gf_get_form_id_by_html_id( "gform_" + form_or_id.toString() ) : form_or_id.toString();
+			formElementID = "gform_" + formID;
+			$form = $('#' + formElementID);
+		}
+
+		if ( !$form.length ) {
+			return $('.gform_body .gfield:first').is('li') ? 1 : 2;
+		}
+
+		return $form.find('.gform_body .gfield:first').is('li') ? 1 : 2;
+	};
+
+	imageChoices.isLegacyMarkup = function( form_or_id ) {
+		return ( imageChoices.getFormMarkupVersion( form_or_id ) === 1 );
+	}
+
+	imageChoices.isLegacyMode = function() {
+		var useNewFeatures = ( imageChoicesVars.hasOwnProperty('useNewFeatures') && imageChoicesVars.useNewFeatures.toString() === 'true');
+		return !useNewFeatures;
+	};
+
+	imageChoices.$fieldChoices = function( $field ) {
+		if ( typeof $field === 'undefined' || $field instanceof jQuery === false) {
+			return [];
+		}
+
+		var choicesSelector = '.ginput_container .gfield_radio div[class*="gchoice"], .ginput_container .gfield_checkbox div[class*="gchoice"]:not(.gchoice_select_all)';// GF 2.5+
+		if ( imageChoices.isLegacyMarkup( $field.closest('[id^="gform_wrapper_"]') ) ) {
+			choicesSelector = '.ginput_container .gfield_radio li, .ginput_container .gfield_checkbox li:not(.gchoice_select_all)';
+		}
+
+		return $field.find(choicesSelector);
+	};
+
+	imageChoices.SelectedFields = function( form_id ) {
+		var $form = ( typeof form_id !== 'undefined' && form_id !== '' ) ? $('#gform_'+form_id) : $('.gform_wrapper form');
+		imageChoices.$fieldChoices( $form.find('.image-choices-field') ).find('input:checked').each(function() {
+			var $input = $(this);
+			var $choice = $input.closest('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+			$choice.addClass(imageChoices.cssClasses.selected);
+			/*
+			if ( $input.val() === "gf_other_choice" ) {
+				$input.trigger('click')
+			}
+			*/
+		});
+	};
+
+	imageChoices.InitLightbox = function( form_id ){
+		var $form = ( typeof form_id !== 'undefined' && form_id !== '' ) ? $('#gform_'+form_id) : $('.gform_wrapper form');
+		var form_id_num = parseInt(form_id, 10);
+		$form.find('.image-choices-field.image-choices-use-lightbox').each(function(){
+			var $field = $(this);
+			var field_id = $field.attr('id');
+			var field_id_num = parseInt( field_id.substring( field_id.lastIndexOf('_') + 1 ), 10);
+			if ( !imageChoicesVars.hasOwnProperty('elementorCompat') || imageChoicesVars.elementorCompat !== 'elementor' ) {
+				var opts = gform.applyFilters('gfic_lightbox_options', {
+					captions: imageChoices.isLegacyMode() || $field.hasClass('ic-lightbox-captions'),
+					captionType: 'data',
+					captionsData: 'caption'
+				}, form_id_num, field_id_num);
+				opts.captions = gform.applyFilters('gfic_lightbox_captions', opts.captions, form_id_num, field_id_num);// for backward compat
+				opts = gform.applyFilters(`gfic_lightbox_options_${form_id_num}`, opts, form_id_num, field_id_num);
+				opts = gform.applyFilters(`gfic_lightbox_options_${form_id_num}_${field_id_num}`, opts, form_id_num, field_id_num);
+				$field.find('.image-choices-lightbox-btn').jetslothLightbox(opts);
+			}
+		});
+		$form.find('.product-image-field.product-image-use-lightbox').each(function(){
+			var $field = $(this);
+			var field_id = $field.attr('id');
+			var field_id_num = parseInt( field_id.substring( field_id.lastIndexOf('_') + 1 ), 10);
+
+			var $lightboxBtn = $field.find('.ic-product-image-lightbox-btn');
+
+			if ( !imageChoicesVars.hasOwnProperty('elementorCompat') || imageChoicesVars.elementorCompat !== 'elementor' ) {
+				var title = '';
+				if ( $field.find('.gfield_label_product').length ) {
+					title = $field.find('.gfield_label_product').text();
+				}
+				else {
+					title = ( $field.find('.gftt-label').length ) ? $field.find('.gftt-label').text() : $field.find('.gfield_label').text();
+				}
+				var escapedTitle = (title + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+				$lightboxBtn.data('caption', escapedTitle);
+				$lightboxBtn.attr('data-elementor-open-lightbox', 'no');
+				var opts = gform.applyFilters('gfic_lightbox_options', {
+					captions: $field.hasClass('product-image-lightbox-captions'),
+					captionType: 'data',
+					captionsData: 'caption'
+				}, form_id_num, field_id_num);
+				opts.captions = gform.applyFilters('gfic_lightbox_captions', opts.captions, form_id_num, field_id_num);// for backward compat
+				opts = gform.applyFilters(`gfic_lightbox_options_${form_id_num}`, opts, form_id_num, field_id_num);
+				opts = gform.applyFilters(`gfic_lightbox_options_${form_id_num}_${field_id_num}`, opts, form_id_num, field_id_num);
+				$lightboxBtn.jetslothLightbox(opts);
+			}
+		});
+	};
+
+	imageChoices.onChoiceKeyPress = function(e) {
+		var TABKEY = 9;
+		var SPACEKEY = 32;
+		var $input = $(e.target);
+		var $field = $input.closest('.gfield');
+
+		if (e.keyCode === SPACEKEY && ( $input.is(':checkbox') || $input.is(':radio') ) ) {
+			if ($input.is(':radio') && !$input.is(':checked')) {
+				e.preventDefault();
+				//e.stopImmediatePropagation();
+				//$input.next('label').click();
+			}
+			else if ($input.is(':checkbox')) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				//$input.next('label').click();
+			}
+		}
+		else if (e.keyCode === TABKEY && $field.hasClass('image-choices-field')) {
+			var direction = (e.shiftKey) ? 'previous' : 'next';
+			var $inputWrap = $input.closest('.image-choices-choice');
+
+			if (direction === 'next') {
+				if (!$inputWrap.is(':last-child')) {
+					e.preventDefault();
+					//e.stopImmediatePropagation();
+					$inputWrap.next('.image-choices-choice').find('> input').focus();
+				}
+			}
+			else if (direction === 'previous') {
+				if (!$inputWrap.is(':first-child')) {
+					e.preventDefault();
+					//e.stopImmediatePropagation();
+					$inputWrap.prev('.image-choices-choice').find('> input').focus();
+				}
+			}
+
+		}
+	};
+
+	imageChoices.onChoicesSelectAllClick = function(e) {
+		var $toggle = $(this);
+		var $field = $toggle.closest('.gfield');
+		var toggledOn = $toggle.is('input') ? $toggle.is(':checked') : $toggle.data('checked');
+		var $choices = toggledOn ? $field.find('.image-choices-choice input:checked') : $field.find('.image-choices-choice input:not(:checked)');
+
+		if ($choices.length) {
+			$choices.each(function(n, choiceEl){
+				var $choice = $(choiceEl);
+				imageChoices.onChoiceLabelClick( $choice.next('label') );
+			});
+		}
+	};
+
+	imageChoices.onChoiceLabelClick = function( $label ) {
+		var $choice = $label.closest('[class*="gchoice"]');
+		var $wrap = $choice.closest('.gfield_checkbox, .gfield_radio').first();
+
+		var $input = $choice.find('input');
+
+		if ($choice.hasClass('image-choices-choice-other')) {
+			setTimeout(function(){
+				$choice.find('.gf_other_wrap').addClass('active');
+				$choice.find('input:text').focus();
+			}, 250)
+		}
+
+		if ($wrap.hasClass('gfield_radio')) {
+			// radio
+			$wrap.find('.'+imageChoices.cssClasses.selected).not($choice).removeClass(imageChoices.cssClasses.selected).find('input').prop('checked', false);
+			$choice.addClass(imageChoices.cssClasses.selected);
+		}
+		else if ($wrap.hasClass('gfield_checkbox')) {
+			// checkbox
+			if ( $input.is( ':checked' ) ) {
+				$choice.addClass(imageChoices.cssClasses.selected);
+			}
+			else {
+				$choice.removeClass(imageChoices.cssClasses.selected);
+			}
+		}
+	};
+
+
+	imageChoices.clearProductImageChoice = function($field) {
+		let $input = $field.querySelector('.ginput_container_singleproduct .ginput_quantity');
+		$field.classList.remove('ic-product-selected');
+		$input.value = '';
+		jQuery($input).trigger('input');
+	};
+
+	imageChoices.selectProductImageChoice = function($field) {
+		$field.classList.add('ic-product-selected');
+		let group = Array.from($field.classList).filter(cls => ( cls.indexOf('ic-product-group-') !== -1 ));
+		let groupSelector = ( group.length ) ? '.' + group[0] : '';
+		document.querySelectorAll(`.product-image-field.ic-product-single-choice${groupSelector}:not([id="${$field.id}"])`).forEach($choice => {
+			imageChoices.clearProductImageChoice($choice);
+		});
+	};
+
+	imageChoices.onProductImageChoiceClick = function($field){
+		let $input = $field.querySelector('.ginput_container_singleproduct .ginput_quantity');
+		if ( !$field.classList.contains('ic-product-single-choice') ) {
+			$field.classList.toggle('ic-product-selected');
+			if ( !$field.classList.contains('ic-product-selected') ) {
+				imageChoices.clearProductImageChoice($field);
+			}
+		}
+		else if ( !$field.classList.contains('ic-product-selected') ) {
+			imageChoices.selectProductImageChoice($field);
+		}
+	};
+
+	imageChoices.setupProductImageChoices = function($form){
+		$form.querySelectorAll('.product-image-field.ic-product-image-choice .ic-product-image-wrap').forEach($wrap => {
+			$wrap.addEventListener('click', e => {
+				e.preventDefault();
+				imageChoices.onProductImageChoiceClick( e.currentTarget.closest('.gfield') );
+			});
+		});
+	};
+
+
+
+	imageChoices.SetUpFields = function( form_id, current_page ) {
+
+		// Entry detail view, doesn't get the custom class on the "field" wrap (it's .detail-view not .gfield)
+		// If we add the classes here, the rest of the script (and styles) will work
+		$('.entry-details .detail-view .image-choices-choice-image-wrap').each(function(i){
+			var $imgWrap = $(this);
+			var $field = $imgWrap.closest('.detail-view');
+			$field.addClass('image-choices-field image-choices-show-labels');
+		});
+
+
+		var $form = ( typeof form_id !== 'undefined' && form_id !== '' ) ? $('#gform_'+form_id) : $('.gform_wrapper form');
+
+		// WooCommerce Gravity Forms Product Add-Ons compatibility
+		if ( !$form.length && $('.gform_variation_wrapper').length ) {
+			$form = $('.gform_variation_wrapper');
+		}
+
+		var $fields = $form.find('.image-choices-field');
+		if ( $fields.length ) {
+			$fields.find('.gfield_radio, .gfield_checkbox').addClass('gform-theme__no-reset--children');
+		}
+
+		var $choices = imageChoices.$fieldChoices( $fields );
+		var $productImages = $form.find('.product-image-field');
+
+		$form.find('.gchoice_select_all input, button[id$="select_all"]').each(function(t, toggle){
+			$(toggle).on('click', imageChoices.onChoicesSelectAllClick);
+		});
+
+		if ( $choices.length > 0 || $productImages.length > 0 ) {
+
+			$choices.each(function(){
+				var $choice = $(this);
+
+				var choiceInit = $choice.data('init');
+				if (choiceInit !== true) {
+
+					$choice.data('init', true);
+
+					$choice.find('label').addClass('gform-field-label');// for non gf theme installs
+
+					// add a hover state
+					$choice.find('label').hover(function(e){
+						var $this = $(this);
+						if ( $this.find('input').is(':disabled') ) {
+							return false;
+						}
+						else {
+							var $choice = $this.closest('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+							$choice.addClass(imageChoices.cssClasses.hover);
+						}
+
+					}, function(e){
+						var $this = $(this);
+						if ( $this.find('input').is(':disabled') ){
+							return false;
+						}
+						else {
+							var $choice = $this.closest('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+							$choice.removeClass(imageChoices.cssClasses.hover);
+						}
+
+					});
+
+					$choice.find('input').focus(function() {
+						var $this = $(this);
+						var $choice = $this.closest('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+						$choice.addClass(imageChoices.cssClasses.focus);
+					}).blur( function() {
+						var $this = $(this);
+						var $choice = $this.closest('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+						$choice.removeClass(imageChoices.cssClasses.focus);
+					});
+
+
+					if ($choice.find('input[value="gf_other_choice"]').length) {
+
+						$choice.addClass('image-choices-choice-other');
+
+						$choice.find('input[type="text"]').wrap('<div class="gf_other_wrap"></div>');
+						$('.gf_other_wrap').append('<a href="#" class="gf_other_close"></a>');
+						$(document).on('click', '.gf_other_close', function(e){
+							e.preventDefault();
+							$(this).parent().removeClass('active')
+						});
+
+						$choice.find( 'input:not([type="text"])' ).on('click', function() {
+							var $this = $( this );
+							var $label = $this.closest('.image-choices-choice').find('label')
+							imageChoices.onChoiceLabelClick( $label );
+						} );
+
+					}
+					else {
+
+						$choice.find( 'input' ).on('click', function() {
+							var $this = $( this );
+							var $label = $this.closest('.image-choices-choice').find('label')
+							imageChoices.onChoiceLabelClick( $label );
+						} );
+
+					}
+
+					var $choicesField = $choice.closest('.image-choices-field');
+					if ($choicesField.hasClass('image-choices-use-lightbox') && !$choice.find('.image-choices-lightbox-btn').length) {
+						var id = $choicesField.attr('id');
+						var title = $choice.find('.image-choices-choice-text').html();
+						var escapedTitle = (title + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+						var thumbUrl = $choice.find('.image-choices-choice-image').attr('src');
+						var imgUrl = $choice.find('.image-choices-choice-image').data('lightbox-src');
+						if (typeof imgUrl === 'undefined' || imgUrl === '') {
+							imgUrl = thumbUrl;
+						}
+
+						if (imgUrl !== '') {
+
+							var elementorAtts = ( imageChoicesVars.hasOwnProperty('elementorCompat') && imageChoicesVars.elementorCompat !== 'elementor' ) ? 'data-elementor-open-lightbox="no"' : '';
+
+							var $lightboxBtn = $('<a href="'+imgUrl+'" class="image-choices-lightbox-btn gform-theme__disable-reset" ' + elementorAtts + ' rel="'+id+'"><i></i></a>');
+							$lightboxBtn.data('caption', escapedTitle);
+							$choice.prepend($lightboxBtn);
+						}
+					}
+
+				}
+			});
+
+			imageChoices.setupProductImageChoices( $form.get(0) );
+
+			setTimeout(function(){
+				if ( $choices.length ) {
+					imageChoices.SelectedFields( form_id );
+				}
+				imageChoices.InitLightbox( form_id );
+				imageChoices.InitLazyLoad( form_id, current_page );
+				if ( typeof jetslothMatchHeights !== 'undefined' ) {
+					jetslothMatchHeights();
+				}
+				gform.doAction('gfic_setup', form_id);
+			}, 100);
+
+		}
+
+	};
+	window.imageChoices_SetUpFields = imageChoices.SetUpFields;// legacy support added in 1.3.0
+
+	imageChoices.ConditionalLogic = function( form_id ) {
+		// TODO: specific form by id
+		var $form = ( typeof form_id !== 'undefined' && form_id !== '' ) ? $('#gform_'+form_id) : $('.gform_wrapper form');
+		// WooCommerce Gravity Forms Product Add-Ons compatibility
+		if ( !$form.length && $('.gform_variation_wrapper').length ) {
+			$form = $('.gform_variation_wrapper');
+		}
+
+		var $choicesField = $form.find('.image-choices-field');
+		if ($choicesField.length) {
+			$choicesField.each(function(){
+				var $field = $(this);
+				if ($field.is(':hidden')) {
+					$field.find('.image-choices-choice').removeClass(imageChoices.cssClasses.selected + ' ' + imageChoices.cssClasses.hover + ' ' + imageChoices.cssClasses.focus);
+				}
+			});
+			setTimeout(function(){
+				if ( typeof jetslothMatchHeights !== 'undefined' ) {
+					jetslothMatchHeights();
+				}
+			}, 10);
+		}
+	};
+
+	$(document).bind('gform_post_render', function(event, form_id, current_page){
+		window.gformGetOptionLabel = imageChoices.gformGetOptionLabel;
+		imageChoices.SetUpFields( form_id, current_page );
+	});
+
+
+	$(document).bind('gform_post_conditional_logic', function(event, form_id, fields, isInit){
+		imageChoices.ConditionalLogic( form_id );
+		imageChoices.SelectedFields( form_id );
+	});
+
+	$(document).on('gfcf/conversational/navigate/start gfcf/conversational/navigate/next gfcf/conversational/navigate/prev gfcf/conversational/navigate/error', function(){
+		if ( jetslothMatchHeights ) {
+			jetslothMatchHeights();
+		}
+	});
+
+	imageChoices.gformGetOptionLabel = function(element, selected_value, current_price, form_id, field_id) {
+		element = $(element);
+
+		// Added for cross compat with Color Picker
+		if (element.closest('.gfield').hasClass('color-picker-field') && typeof window.colorPicker_gformGetOptionLabel === 'function') {
+			return window.colorPicker_gformGetOptionLabel(element, selected_value, current_price, form_id, field_id);
+		}
+
+		var wrap = element.closest('[class*="gchoice"]');// TODO: Update to just .gchoice
+		var index = wrap.index();
+
+		var price = gformGetPrice(selected_value);
+		var current_diff = element.attr('price');
+		var original_label = element.html().replace(/<span(.*)<\/span>/i, "").replace(current_diff, "");
+
+		var diff = gformGetPriceDifference(current_price, price);
+		diff = gformToNumber(diff) == 0 ? "" : " " + diff;
+		element.attr('price', diff);
+
+		//don't add <span> for drop down items (not supported)
+		var price_label = element[0].tagName.toLowerCase() == "option" ? " " + diff : "<span class='ginput_price'>" + diff + "</span>";
+		var label = original_label + price_label;
+
+		//calling hook to allow for custom option formatting
+		if(window["gform_format_option_label"])
+			label = gform_format_option_label(label, original_label, price_label, current_price, price, form_id, field_id, index);
+
+		return label;
+	};
+	window.imageChoices_gformGetOptionLabel = imageChoices.gformGetOptionLabel;// legacy support added in 1.3.0
+	window.gformGetOptionLabel = imageChoices.gformGetOptionLabel;
+
+
+
+	imageChoices.gform_format_option_label = function(fullLabel, fieldLabel, priceLabel, selectedPrice, price, formId, fieldId, index) {
+		var markup = [fullLabel];
+		var choiceText = `${fieldLabel}`;
+		var choicePrice = `${priceLabel}`;
+
+		var $field = $('#gform_'+formId+' .gfield#field_'+formId+'_'+fieldId);
+
+		if ($field.length && $field.hasClass('image-choices-field')) {
+
+			var $allOptions = $field.find('[class*="gchoice"]');// TODO: Update to just .gchoice ?
+			var $thisOption = (typeof index !== 'undefined' && index >= 0) ? $allOptions.eq(index) : $allOptions;// when index is not passed in or not valid, get all options
+			var loadedChoices = ( typeof $field.data('jetsloth-lazy-loaded') !== 'undefined' ) ? $field.data('jetsloth-lazy-loaded') : [];
+
+			$thisOption.each(function(){
+
+				var $option = $(this);
+
+				var $thisOptionLabel = $option.find('label');
+				var $thisOptionInput = $option.find('input');
+
+				var thisOptionImage = $thisOptionLabel.data('img');
+				var thisOptionLightboxSrc = $thisOptionLabel.data('lightbox-src');
+
+				// Get the label content from the data attribute
+				/*
+				var fallbackFieldLabel = $thisOptionLabel.attr('data-text');
+				if ( (typeof fieldLabel === 'undefined' || fieldLabel === '') && fallbackFieldLabel !== '') {
+					fieldLabel = fallbackFieldLabel;
+				}
+				*/
+				fieldLabel = $thisOptionLabel.attr('data-text');
+
+				if ( priceLabel === fieldLabel ) {
+					priceLabel = "";
+				}
+
+				if ( priceLabel === "<span class='ginput_price'></span>" ) {
+					priceLabel = "<span class='ginput_price'>&nbsp;</span>";
+				}
+
+				var jmhId = formId.toString() + '_' + fieldId.toString();
+				//var jmhAttr = ( !imageChoices.isLegacyMode() && ( $field.hasClass('ic-theme--cover-tile') || $field.hasClass('ic-image--natural') ) ) ? ' data-jmh="' + jmhId + '_' + index + '"' : '';
+				var jmhAttr = ( !imageChoices.isLegacyMode() && ( $field.hasClass('ic-theme--cover-tile') || $field.hasClass('ic-image--natural') ) ) ? ' data-jmh="' + jmhId + '_image' + '"' : '';
+
+				var hasLazyLoad = $field.hasClass('has-jetsloth-lazy');
+				var shouldLazyLoad = ( hasLazyLoad && $.inArray( index, loadedChoices ) === -1 );
+				var imageMarkup = [
+					'<span class="image-choices-choice-image-wrap"' + jmhAttr + ' style="background-image:url('+thisOptionImage+');">',
+						'<img src="'+thisOptionImage+'" class="image-choices-choice-image" alt="" data-lightbox-src="'+thisOptionLightboxSrc+'" />',
+					'</span>',
+				].join('');
+				if ( shouldLazyLoad ) {
+					imageMarkup = [
+						'<span class="image-choices-choice-image-wrap jetsloth-lazy"' + jmhAttr + ' data-lazy-bg="'+thisOptionImage+'">',
+							'<img src="" data-lazy-src="'+thisOptionImage+'" class="image-choices-choice-image jetsloth-lazy" alt="" data-lightbox-src="'+thisOptionLightboxSrc+'" />',
+						'</span>',
+					].join('');
+				}
+
+				//var jmhID = formId + '_' + fieldId;
+				choiceText = gform.applyFilters( 'gfic_choice_text', fieldLabel, selectedPrice, price, formId, fieldId, index );
+				choiceText = gform.applyFilters( `gfic_choice_text_${formId}`, choiceText, selectedPrice, price, formId, fieldId, index );
+				choiceText = gform.applyFilters( `gfic_choice_text_${formId}_${fieldId}`, choiceText, selectedPrice, price, formId, fieldId, index );
+				choiceText = gform.applyFilters( `gfic_choice_text_${formId}_${fieldId}_${index}`, choiceText, selectedPrice, price, formId, fieldId, index );
+
+				choicePrice = gform.applyFilters( 'gfic_choice_price', priceLabel, selectedPrice, price, formId, fieldId, index );
+				choicePrice = gform.applyFilters( `gfic_choice_price_${formId}`, choicePrice, selectedPrice, price, formId, fieldId, index );
+				choicePrice = gform.applyFilters( `gfic_choice_price_${formId}_${fieldId}`, choicePrice, selectedPrice, price, formId, fieldId, index );
+				choicePrice = gform.applyFilters( `gfic_choice_price_${formId}_${fieldId}_${index}`, choicePrice, selectedPrice, price, formId, fieldId, index );
+				markup = [
+					imageMarkup,
+					'<span class="image-choices-choice-text">' + choiceText + '</span>',
+					'<span class="image-choices-choice-price">' + choicePrice + '</span>'
+				];
+
+				if ($field.hasClass('image-choices-use-lightbox') && $option.find('.image-choices-lightbox-btn').length) {
+					var escapedTitle = (fieldLabel + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+					var thumbUrl = thisOptionImage;
+					var imgUrl = thisOptionLightboxSrc;
+					if (typeof imgUrl === 'undefined' || imgUrl === '') {
+						imgUrl = thumbUrl;
+					}
+
+					if (imgUrl !== '') {
+						$option.find('.image-choices-lightbox-btn').attr('href', imgUrl).data('caption', escapedTitle).attr('rel', fieldId);
+					}
+				}
+
+				if ( typeof jetslothMatchHeights !== 'undefined' ) {
+					setTimeout(() => jetslothMatchHeights, 100);
+				}
+
+				if ( shouldLazyLoad ) {
+					setTimeout(function(){
+						$option.find('.jetsloth-lazy').each(function(){
+							imageChoices.observer.observe( this );
+						});
+					}, 100);
+				}
+			});
+
+		}
+
+		var choiceHtml = gform.applyFilters( 'gfic_choice_html', markup.join(''), choiceText, choicePrice, selectedPrice, price, formId, fieldId, index );
+		choiceHtml = gform.applyFilters( `gfic_choice_html_${formId}`, choiceHtml, choiceText, choicePrice, selectedPrice, price, formId, fieldId, index );
+		choiceHtml = gform.applyFilters( `gfic_choice_html_${formId}_${fieldId}`, choiceHtml, choiceText, choicePrice, selectedPrice, price, formId, fieldId, index );
+		choiceHtml = gform.applyFilters( `gfic_choice_html_${formId}_${fieldId}_${index}`, choiceHtml, choiceText, choicePrice, selectedPrice, price, formId, fieldId, index );
+		return choiceHtml;
+	};
+	window.imageChoices_gform_format_option_label = imageChoices.gform_format_option_label;// legacy support added in 1.3.0
+
+
+	window.gform_format_option_label = function(fullLabel, fieldLabel, priceLabel, selectedPrice, price, formId, fieldId, index) {
+
+		if ( typeof gftt !== 'undefined' && typeof gftt.option_label_reinit !== 'undefined' ) {
+			gftt.option_label_reinit( formId, fieldId );
+		}
+
+		// Added for cross compat with Color Picker
+		var $field = $('#field_'+formId+'_'+fieldId);
+		if ($field.length && $field.hasClass('color-picker-field') && typeof window.colorPicker_gform_format_option_label === 'function') {
+			return window.colorPicker_gform_format_option_label(fullLabel, fieldLabel, priceLabel, selectedPrice, price, formId, fieldId, index);
+		}
+
+		return imageChoices.gform_format_option_label(fullLabel, fieldLabel, priceLabel, selectedPrice, price, formId, fieldId, index);
+	}
+
+
+	imageChoices.onImageLoaded = function( element ) {
+
+		var $el = $(element);
+		$el.addClass('jetsloth-lazy-loaded');
+
+		var $field = $el.closest('.gfield');
+		if ( !$field.length ) {
+			return;
+		}
+
+		var index = $el.closest('li').index();
+		var loadedChoices = ( typeof $field.data('jetsloth-lazy-loaded') !== 'undefined' ) ? $field.data('jetsloth-lazy-loaded') : [];
+
+		loadedChoices.push( index );
+		$field.data('jetsloth-lazy-loaded', loadedChoices);
+
+		if ( typeof jetslothMatchHeights !== 'undefined' ) {
+			setTimeout(() => jetslothMatchHeights, 100);
+		}
+	};
+
+	imageChoices.loadImage = function( element ) {
+
+		var $el = $(element);
+
+		if ( typeof $el.data('lazy-bg') !== 'undefined' && $el.data('lazy-bg') !== '' ) {
+			var img = new Image();
+			img.onload = function() {
+				$el.css('background-image', 'url(' + $el.data('lazy-bg') + ')');
+				imageChoices.onImageLoaded( $el );
+			};
+			img.src = $el.data('lazy-bg');
+		}
+		else if ( typeof $el.data('lazy-src') !== 'undefined' && $el.data('lazy-src') !== '' ) {
+			$el.on('load', function(){
+				imageChoices.onImageLoaded( $el );
+			});
+			$el.attr('src', $el.data('lazy-src'));
+		}
+
+	};
+
+
+	imageChoices.lazyLoad = function( elements ) {
+
+		$.each(elements, function(i, item){
+			if (item.intersectionRatio > 0) {
+				imageChoices.observer.unobserve(item.target);
+				imageChoices.loadImage(item.target);
+			};
+		});
+
+	};
+
+	var lazyLoadInit = false;
+	imageChoices.InitLazyLoad = function( form_id, current_page ) {
+
+		if ( !lazyLoadInit ) {
+			// Set up the intersection observer to detect when to define
+			// and load the real image source
+			var lazyRootMargin = gform.applyFilters( 'gfic_lazy_root_margin', "100px", form_id, current_page );
+			lazyRootMargin = gform.applyFilters( `gfic_lazy_root_margin_${form_id}`, lazyRootMargin, form_id, current_page );
+			lazyRootMargin = gform.applyFilters( `gfic_lazy_root_margin_${form_id}_${current_page}`, lazyRootMargin, form_id, current_page );
+
+			var lazyThreshold = gform.applyFilters( 'gfic_lazy_threshold', 1.0, form_id, current_page );
+			lazyThreshold = gform.applyFilters( `gfic_lazy_threshold_${form_id}`, lazyThreshold, form_id, current_page );
+			lazyThreshold = gform.applyFilters( `gfic_lazy_threshold_${form_id}_${current_page}`, lazyThreshold, form_id, current_page );
+			var lazyLoadOptions = {
+				rootMargin: lazyRootMargin,
+				threshold: lazyThreshold
+			};
+			imageChoices.observer = new IntersectionObserver(imageChoices.lazyLoad, lazyLoadOptions);
+			lazyLoadInit = true;
+		}
+
+		var $form = $('#gform_' + form_id);
+		var $page = ( typeof current_page !== 'undefined' ) ? $form.find('#gform_page_' + form_id + '_' + current_page) : [];
+		var $elements = ( $page.length ) ? $page.find('.image-choices-field .jetsloth-lazy, .product-image-field .jetsloth-lazy') : $form.find('.image-choices-field .jetsloth-lazy, .product-image-field .jetsloth-lazy');
+		$elements.each(function(){
+			imageChoices.observer.observe( this );
+		});
+
+	}
+
+})(jQuery);

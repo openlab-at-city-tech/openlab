@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Error": [
+                "Помилка"
+            ],
+            "Analyze Content": [
+                "Аналізувати вміст"
+            ],
+            "Improve Content": [
+                "Покращити вміст"
+            ],
+            "Improve": [
+                "Покращити"
+            ],
+            "Demo Analytics": [
+                "Демоаналітика"
+            ],
+            "Actions": [
+                "Дії"
+            ],
+            "Analyzing": [
+                "Аналіз"
+            ],
+            "No articles found": [
+                "Статті не знайдено"
+            ],
+            "To Analyze": [
+                "До аналізу"
+            ],
+            "To Improve": [
+                "Покращити"
+            ],
+            "Please select exactly one article to improve": [
+                "Будь ласка, оберіть рівно одну документацію для покращення"
+            ],
+            "Demo Data Displayed": [
+                "Показано демонстраційні дані"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "Ці демонстраційні дані аналітики показані для демонстраційних цілей. Після створення нових документацій ви зможете їх проаналізувати, щоб побачити реальні результати аналізу вмісту."
+            ],
+            "Select All That Need Analysis": [
+                "Виберіть усе, що потребує аналізу"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Аналізувати (Синхронізацію не завантажено)"
+            ],
+            "Score Legend": [
+                "Легенда оцінок"
+            ],
+            "Excellent": [
+                "Відмінно"
+            ],
+            "Good": [
+                "Добре"
+            ],
+            "Below 60%": [
+                "Нижче 60%"
+            ],
+            "Needs Improvement": [
+                "Потребує покращення"
+            ],
+            "Importance Legend": [
+                "Легенда важливості"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "На основі переглядів документації — чим більше переглядів, тим вищий пріоритет."
+            ],
+            "Status Legend": [
+                "Легенда статусів"
+            ],
+            "Not analyzed or updated": [
+                "Не аналізовано або не оновлено"
+            ],
+            "Score below 80%": [
+                "Оцінка нижче 80%"
+            ],
+            "Done": [
+                "Готово"
+            ],
+            "Completed": [
+                "Завершено"
+            ],
+            "Ignored": [
+                "Ігноровано"
+            ],
+            "Not important now": [
+                "Зараз неважливо"
+            ],
+            "In progress": [
+                "У процесі"
+            ],
+            "Failed - retry needed": [
+                "Не вдалося — потрібно повторити спробу"
+            ],
+            "Invalid status": [
+                "Неприпустимий статус"
+            ],
+            "Failed to update article status": [
+                "Не вдалося оновити статус документації"
+            ],
+            "Error updating article status": [
+                "Помилка оновлення статусу документації"
+            ],
+            "Ignore": [
+                "Ігнорувати"
+            ],
+            "Remove": [
+                "Видалити"
+            ],
+            "Loading articles...": [
+                "Завантаження документів..."
+            ],
+            "Important and Low Score": [
+                "Важливе та низький рейтинг"
+            ],
+            "Top Important": [
+                "Найважливіше"
+            ],
+            "Lowest Score": [
+                "Найнижчий бал"
+            ],
+            "Recently Analyzed": [
+                "Нещодавно проаналізовано"
+            ],
+            "Unknown sub-tab": [
+                "Невідома підвкладка"
+            ]
+        }
+    }
+}

@@ -221,7 +221,7 @@ class WPCOM_JSON_API {
 			return false;
 		}
 
-		switch ( strtolower( (string) $value ) ) {
+		switch ( strtolower( $value ) ) {
 			case '1':
 			case 't':
 			case 'true':
@@ -250,7 +250,7 @@ class WPCOM_JSON_API {
 			return false;
 		}
 
-		switch ( strtolower( (string) $value ) ) {
+		switch ( strtolower( $value ) ) {
 			case '0':
 			case 'f':
 			case 'false':
@@ -678,7 +678,7 @@ class WPCOM_JSON_API {
 
 		if ( 'text/plain' === $content_type ||
 			'text/html' === $content_type ) {
-			status_header( (int) $status_code );
+			status_header( $status_code );
 			header( 'Content-Type: ' . $content_type );
 			foreach ( $extra as $key => $value ) {
 				header( "$key: $value" );
@@ -700,7 +700,7 @@ class WPCOM_JSON_API {
 			$content_type = 'application/json';
 		}
 
-		status_header( (int) $status_code );
+		status_header( $status_code );
 		header( "Content-Type: $content_type" );
 		if ( isset( $this->query['callback'] ) && is_string( $this->query['callback'] ) ) {
 			$callback = preg_replace( '/[^a-z0-9_.]/i', '', $this->query['callback'] );
@@ -1108,7 +1108,7 @@ class WPCOM_JSON_API {
 	 * Counts the number of comments on a site, including certain comment types.
 	 *
 	 * @param int $post_id Post ID.
-	 * @return array Array of counts, matching the output of https://developer.wordpress.org/reference/functions/get_comment_count/.
+	 * @return object The number of counts keyed by status, matching the output of https://developer.wordpress.org/reference/functions/get_comment_count/.
 	 */
 	public function wp_count_comments( $post_id ) {
 		global $wpdb;

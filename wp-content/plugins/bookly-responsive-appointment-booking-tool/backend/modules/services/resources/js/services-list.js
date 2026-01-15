@@ -1,11 +1,10 @@
 jQuery(function ($) {
-    let $servicesList = $('#services-list'),
-        $checkAllButton = $('#bookly-check-all'),
+    let $servicesList = $('#bookly-services-list'),
         filters = {
             category: $('#bookly-filter-category'),
             search: $('#bookly-filter-search')
         },
-        $deleteButton = $('#bookly-delete'),
+        $deleteButton = $('#bookly-services-list-delete-button'),
         $deleteModal = $('.bookly-js-delete-cascade-confirm'),
         urlParts = document.URL.split('#'),
         columns = []
@@ -130,18 +129,6 @@ jQuery(function ($) {
             return data.disabled ? '' : '<div class="d-inline-flex"><button type="button" class="btn btn-default mr-1" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button><button type="button" class="btn btn-default ladda-button" data-action="duplicate" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666"><span class="ladda-label"><i class="far fa-fw fa-clone mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.duplicate + '…</span></span></button></div>';
         }
     });
-    columns.push({
-        data: null,
-        responsivePriority: 1,
-        orderable: false,
-        searchable: false,
-        render: function (data, type, row, meta) {
-            return '<div class="custom-control custom-checkbox">' +
-                '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
-                '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
-                '</div>';
-        }
-    });
 
     /**
      * Init DataTables.
@@ -167,6 +154,7 @@ jQuery(function ($) {
                 $(row).addClass('text-muted');
             }
         },
+        add_checkbox_column: true
     });
 
     /**
@@ -187,22 +175,6 @@ jQuery(function ($) {
     ;
     filters.category
         .on('change', onChangeFilter);
-
-    /**
-     * Select all appointments.
-     */
-    $checkAllButton.on('change', function () {
-        $servicesList.find('tbody input:checkbox').prop('checked', this.checked);
-        $deleteButton.prop('disabled', $servicesList.find('tbody input:checked').length === 0);
-    });
-
-    /**
-     * On appointment select.
-     */
-    $servicesList.on('change', 'tbody input:checkbox', function () {
-        $checkAllButton.prop('checked', $servicesList.find('tbody input:not(:checked)').length === 0);
-        $deleteButton.prop('disabled', $servicesList.find('tbody input:checked').length === 0);
-    });
 
     $('.bookly-js-delete', $deleteModal).on('click', function (e) {
         e.preventDefault();

@@ -210,8 +210,6 @@
     position: absolute;
     font-size: 32px;
     font-weight: 600;
-    top: 50px;
-    right: 35px;
 }
 /*media*/
 @media screen and (max-width:1699px){
@@ -367,4 +365,16 @@
     background: #135e96;
     border-color: #135e96;
     color: #fff;
+}
+/* upgrade to probutton code */
+#wp-admin-bar-yourplugin_upgrade .ab-item {
+    background-color: #0073aa !important;   
+    color: #fff !important;     
+    font-weight: bold;          
+    border-radius: 4px;          
+    padding: 0 10px !important;  
+}
+#wp-admin-bar-yourplugin_upgrade .ab-item:hover {
+    background-color: #0073aa !important;   
+    color: #fff !important;
 }

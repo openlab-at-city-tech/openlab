@@ -500,11 +500,14 @@ class Cart
                             ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
                             ->leftJoin( 'StaffService', 'ss', 'ss.staff_id = a.staff_id AND ss.service_id = a.service_id' )
                             ->leftJoin( 'Service', 's', 's.id = a.service_id' )
-                            ->where( 'a.staff_id', $staff_id )
-                            ->whereRaw( sprintf( 'a.service_id IS NULL OR ca.status IN ("%s")', implode( '","', Proxy\CustomStatuses::prepareBusyStatuses( array(
-                                Entities\CustomerAppointment::STATUS_PENDING,
-                                Entities\CustomerAppointment::STATUS_APPROVED,
-                            ) ) ) ), array() )
+                            ->where( 'a.staff_id', $staff_id );
+
+                        $busy_statuses = Proxy\CustomStatuses::prepareBusyStatuses( array(
+                            Entities\CustomerAppointment::STATUS_PENDING,
+                            Entities\CustomerAppointment::STATUS_APPROVED,
+                        ) );
+
+                        $query->whereRaw( sprintf( 'a.service_id IS NULL OR ca.status IN (%s)', implode( ', ', array_fill( 0, count( $busy_statuses ), '%s' ) ) ), $busy_statuses )
                             ->groupBy( 'a.service_id, a.start_date' )
                             ->havingRaw( '%s > bound_left AND bound_right > %s AND IF ( one_booking_per_slot = 0, ( total_number_of_persons + %d ) > ss.capacity_max, total_number_of_persons > 0 )',
                                 array( $bound_end->format( 'Y-m-d H:i:s' ), $bound_start->format( 'Y-m-d H:i:s' ), $cart_item->getNumberOfPersons() ) )

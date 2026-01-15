@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "अधिक जानकारी"
+            ],
+            "Copied!": [
+                "कॉपी कर लिया गया!"
+            ],
+            "Copy": [
+                "कॉपी"
+            ],
+            "All features unlocked": [
+                "सभी सुविधाएं अनलॉक हो गईं"
+            ],
+            "Get Started": [
+                "शुरुआत करें"
+            ],
+            "Use Code:": [
+                "कोड का उपयोग करें:"
+            ],
+            "Unlock Premium AI Features": [
+                "प्रीमियम एआई सुविधाओं को अनलॉक करें"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "अपने ज्ञान-आधार को उन्नत एआई क्षमताओं के साथ अगले स्तर तक ले जाएँ"
+            ],
+            "Premium Features": [
+                "प्रीमियम सुविधाएं"
+            ],
+            "Choose Your Plan": [
+                "अपना प्लान चुनें"
+            ],
+            "Flexible pricing to match your needs": [
+                "आपकी जरूरतों के अनुसार लचीला मूल्य निर्धारण"
+            ],
+            "What Our Customers Say": [
+                "हमारे ग्राहक क्या कहते हैं"
+            ],
+            "Get AI Features": [
+                "एआई सुविधाएँ प्राप्त करें"
+            ]
+        }
+    }
+}

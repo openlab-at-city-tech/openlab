@@ -30,7 +30,6 @@ class EPKB_Config_Settings_Page {
 	private $is_archive_kb_templates;
 	private $kb_main_pages;
 	private $kb_main_page_has_kb_blocks;
-	private $is_modular_main_page_off;
 
 	public function __construct( $kb_config, $is_frontend_editor = false ) {
 		
@@ -40,9 +39,6 @@ class EPKB_Config_Settings_Page {
 		$this->kb_config = apply_filters( 'eckb_kb_config', $kb_config );
 
 		$this->kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs( $this->kb_config['id'] );
-
-		// TODO FUTURE remove
-		$this->is_modular_main_page_off = $this->kb_config['modular_main_page_toggle'] != 'on';
 
 		$this->kb_main_pages = EPKB_KB_Handler::get_kb_main_pages( $this->kb_config );
 		$this->kb_main_page_has_kb_blocks = EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $this->kb_config );
@@ -87,30 +83,8 @@ class EPKB_Config_Settings_Page {
 		$contents_configs = $this->get_contents_configs();
 		$sub_contents_configs = $this->get_sub_contents_configs();
 		$helpful_info_box_configs = $this->get_helpful_info_box_config();
-		$access_to_get_started = ! $this->is_modular_main_page_off &&
-			( EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_need_help_read' ) || EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) );
 
 		$tabs_config = [];
-
-		// Get Started
-		if ( $access_to_get_started ) {
-			$tabs_config['get-started'] = array(
-				'title'     => esc_html__( 'Get Started', 'echo-knowledge-base' ),
-				'icon'      => 'epkbfa epkbfa-rocket',
-				'key'       => 'about-kb',
-				'active'    => true,
-				'contents'  => array(
-					array(
-						'title'             => esc_html__( 'Quick Links', 'echo-knowledge-base' ),
-						'body_html'         => $this->get_quick_links_box(),
-					),
-					array(
-						'title'             => esc_html__( 'Helpful Information', 'echo-knowledge-base' ),
-						'body_html'         => $this->get_helpful_info_box( $helpful_info_box_configs ),
-					),
-				),
-			);
-		}
 
 		// Main Page
 		$no_module_label = esc_html__( 'Unused', 'echo-knowledge-base' );
@@ -120,17 +94,7 @@ class EPKB_Config_Settings_Page {
 		$row_4_module = $this->kb_config['ml_row_4_module'];
 		$row_5_module = $this->kb_config['ml_row_5_module'];
 
-		// Non-Modular KB Main Page TODO FUTURE: remove
-		if ( $this->is_modular_main_page_off ) {
-			$main_page_contents = array(
-				array(
-					'title_before_icon' => false,
-					'title' => esc_html__( 'Switch to Modular KB Main Page', 'echo-knowledge-base' ),
-					'body_html' => EPKB_HTML_Admin::display_modular_main_page_toggle( $this->kb_config, $this->kb_config_specs ),
-				),
-			);
-
-		} else if ( $this->is_frontend_editor ) {
+		if ( $this->is_frontend_editor ) {
 			$main_page_contents = array();
 
 		} else if ( empty( $this->kb_main_pages ) ) {	// CASE: Missing Main Page
@@ -168,73 +132,81 @@ class EPKB_Config_Settings_Page {
 			$main_page_contents = array();
 		}
 
+		$shortcode_main_page_sub_tabs = array();
+		if ( $this->is_frontend_editor ) {
+			$shortcode_main_page_sub_tabs = array(
+				array(
+					'title'     =>  esc_html__( 'Page Settings', 'echo-knowledge-base' ),
+					'key'       => 'main-page-settings',
+					'data'		=> ['selected-module' => 'main-page-settings', 'non-row-feature' => 'on'],
+				)
+			);
+		}
+		$shortcode_main_page_sub_tabs = array_merge( $shortcode_main_page_sub_tabs, array(
+			array(
+				'icon'      => 'epkb-admin__form-sub-tab-icon-text',
+				'icon_text' => esc_html__( 'Row 1', 'echo-knowledge-base' ),
+				'title'     =>  $row_1_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_1_module']['options'][$row_1_module],
+				'key'       => 'main-page-ml-row-1',
+				'data'      => [ 'module-selector' => 'ml_row_1_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_1_module ],
+				'class'     => $row_1_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
+			),
+			array(
+				'icon'      => 'epkb-admin__form-sub-tab-icon-text',
+				'icon_text' => esc_html__( 'Row 2', 'echo-knowledge-base' ),
+				'title'     => $row_2_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_2_module']['options'][$row_2_module],
+				'key'       => 'main-page-ml-row-2',
+				'data'      => [ 'module-selector' => 'ml_row_2_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_2_module ],
+				'class'     => $row_2_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
+			),
+			array(
+				'icon'      => 'epkb-admin__form-sub-tab-icon-text',
+				'icon_text' => esc_html__( 'Row 3', 'echo-knowledge-base' ),
+				'title'     => $row_3_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_3_module']['options'][$row_3_module],
+				'key'       => 'main-page-ml-row-3',
+				'data'      => [ 'module-selector' => 'ml_row_3_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_3_module ],
+				'class'     => $row_3_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
+			),
+			array(
+				'icon'      => 'epkb-admin__form-sub-tab-icon-text',
+				'icon_text' => esc_html__( 'Row 4', 'echo-knowledge-base' ),
+				'title'     => $row_4_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_4_module']['options'][$row_4_module],
+				'key'       => 'main-page-ml-row-4',
+				'data'      => [ 'module-selector' => 'ml_row_4_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_4_module ],
+				'class'     => $row_4_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
+			),
+			array(
+				'icon'      => 'epkb-admin__form-sub-tab-icon-text',
+				'icon_text' => esc_html__( 'Row 5', 'echo-knowledge-base' ),
+				'title'     => $row_5_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_5_module']['options'][$row_5_module],
+				'key'       => 'main-page-ml-row-5',
+				'data'      => [ 'module-selector' => 'ml_row_5_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_5_module ],
+				'class'     => $row_5_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
+			),
+		) );
+
 		$tabs_config['main-page'] = array(
 			'title'     => esc_html__( 'KB Main Page', 'echo-knowledge-base' ),
 			'icon'      => 'epkb-main-page-icon',
 			'key'       => 'main-page',
-			'active'    => ! $access_to_get_started,
+			'active'    => true,
 			'contents'  => $main_page_contents,
-			'top_html'	=> $this->is_frontend_editor || $this->kb_main_page_has_kb_blocks || $this->is_modular_main_page_off || empty( $this->kb_main_pages ) ? '' : EPKB_HTML_Admin::display_fe_button_above_main_page_settings( $this->kb_config ),
-			'sub_tabs'  => ! $this->is_frontend_editor && ( empty( $this->kb_main_pages ) || $this->kb_main_page_has_kb_blocks || $this->is_modular_main_page_off )
+			'top_html'	=> $this->is_frontend_editor || $this->kb_main_page_has_kb_blocks || empty( $this->kb_main_pages ) ? '' : EPKB_HTML_Admin::display_fe_button_above_main_page_settings( $this->kb_config ),
+			'sub_tabs'  => ! $this->is_frontend_editor && ( empty( $this->kb_main_pages ) || $this->kb_main_page_has_kb_blocks )
 				// CASE: not already inside FE and Missing Main Page, or Block Main Page or Legacy KB Main Page
 				? array()
 				// CASE: Shortcode Main Page
-				: array(
-					array(
-						'icon'      => 'epkb-admin__form-sub-tab-icon-text',
-						'icon_text' => esc_html__( 'Row 1', 'echo-knowledge-base' ),
-						'title'     =>  $row_1_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_1_module']['options'][$row_1_module],
-						'key'       => 'main-page-ml-row-1',
-						'data'      => [ 'module-selector' => 'ml_row_1_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_1_module ],
-						'class'     => $row_1_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
-					),
-					array(
-						'icon'      => 'epkb-admin__form-sub-tab-icon-text',
-						'icon_text' => esc_html__( 'Row 2', 'echo-knowledge-base' ),
-						'title'     => $row_2_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_2_module']['options'][$row_2_module],
-						'key'       => 'main-page-ml-row-2',
-						'data'      => [ 'module-selector' => 'ml_row_2_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_2_module ],
-						'class'     => $row_2_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
-					),
-					array(
-						'icon'      => 'epkb-admin__form-sub-tab-icon-text',
-						'icon_text' => esc_html__( 'Row 3', 'echo-knowledge-base' ),
-						'title'     => $row_3_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_3_module']['options'][$row_3_module],
-						'key'       => 'main-page-ml-row-3',
-						'data'      => [ 'module-selector' => 'ml_row_3_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_3_module ],
-						'class'     => $row_3_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
-					),
-					array(
-						'icon'      => 'epkb-admin__form-sub-tab-icon-text',
-						'icon_text' => esc_html__( 'Row 4', 'echo-knowledge-base' ),
-						'title'     => $row_4_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_4_module']['options'][$row_4_module],
-						'key'       => 'main-page-ml-row-4',
-						'data'      => [ 'module-selector' => 'ml_row_4_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_4_module ],
-						'class'     => $row_4_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
-					),
-					array(
-						'icon'      => 'epkb-admin__form-sub-tab-icon-text',
-						'icon_text' => esc_html__( 'Row 5', 'echo-knowledge-base' ),
-						'title'     => $row_5_module == 'none' ? $no_module_label : $this->kb_config_specs['ml_row_5_module']['options'][$row_5_module],
-						'key'       => 'main-page-ml-row-5',
-						'data'      => [ 'module-selector' => 'ml_row_5_module', 'no-module-label' => $no_module_label, 'selected-module' => $row_5_module ],
-						'class'     => $row_5_module == 'none' ? 'epkb-admin__form-sub-tab--unused' : '',
-					),
-				),
+				: $shortcode_main_page_sub_tabs,
 		);
 
-		if ( $this->is_modular_main_page_off ) {
-			return $tabs_config;
-		}
 
 		// Articles Page
-		$article_page_contents = array();
 		$tabs_config['article-page'] = array(
 			'title'     => esc_html__( 'KB Article Page', 'echo-knowledge-base' ),
 			'icon'      => 'epkb-article-page-icon',
 			'key'       => 'article-page',
 			'active'    => false,
-			'contents'  => $article_page_contents,
+			'contents'  => array(),
 			'top_html'	=> $this->is_frontend_editor || empty( $this->kb_main_pages ) ? '' : EPKB_HTML_Admin::display_fe_button_above_article_page_settings( $this->kb_config ),
 			'sub_tabs'  => array(
 					array(
@@ -261,13 +233,12 @@ class EPKB_Config_Settings_Page {
 		);
 
 		// Archive Page
-		$archive_page_contents = array();
 		$tabs_config['archive-page'] = array(
 			'title'  => esc_html__( 'Category Archive Page', 'echo-knowledge-base' ),
 			'icon'   => 'epkb-archive-page-icon',
 			'key'    => 'archive-page',
 			'active' => false,
-			'contents' => $archive_page_contents,
+			'contents' => array(),
 			'top_html' => $this->is_frontend_editor || empty( $this->kb_main_pages ) ? '' : EPKB_HTML_Admin::display_fe_button_above_archive_page_settings( $this->kb_config ),
 		);
 
@@ -381,7 +352,7 @@ class EPKB_Config_Settings_Page {
 			'ml_resource_links_1_settings_tab_content', 'ml_resource_links_2_settings_tab_content', 'ml_resource_links_3_settings_tab_content', 'ml_resource_links_4_settings_tab_content',
 			'ml_resource_links_5_settings_tab_content', 'ml_resource_links_6_settings_tab_content', 'ml_resource_links_7_settings_tab_content', 'ml_resource_links_8_settings_tab_content',
 			'general_typography', 'sidebar_main_page_intro_text_link', 'article_search_sidebar_layout_msg', 'article_list_spacing', 'ml_categories_articles_sidebar_desktop_width',
-			'archive_header_desktop_width', 'archive_content_desktop_width', 'article-container-desktop-width-v2', 'article-body-desktop-width-v2', 'article_sidebar_settings_link', 'categories_articles_preset'] ) ) {
+			'archive_header_desktop_width', 'archive_content_desktop_width', 'article-container-desktop-width-v2', 'article-body-desktop-width-v2', 'article_sidebar_settings_link', 'categories_articles_preset', 'kb_ai_collection_id'] ) ) {
 			$this->show_custom_display_fields( $setting_name, $show_included );
 			return;
 		}
@@ -656,6 +627,18 @@ class EPKB_Config_Settings_Page {
 					'0' => esc_html__( 'Disabled', 'echo-knowledge-base' ),
 					'1' => esc_html__( 'Displayed', 'echo-knowledge-base' ),
 				)
+			) );
+		}
+
+		if ( $setting_name == 'kb_ai_collection_id' ) {
+			EPKB_HTML_Elements::custom_dropdown( array(
+				'input_group_class' => 'epkb-admin__input-field' . ' ' . $input_group_class . ' ',
+				'group_data'        => $group_data,
+				'label'             => esc_html__( 'AI Training Data Collection', 'echo-knowledge-base' ),
+				'label_class'       => 'epkb-main_label',
+				'name'              => $setting_name,
+				'value'             => $this->kb_config[$setting_name],
+				'options'           => EPKB_AI_Utilities::get_collection_options()
 			) );
 		}
 
@@ -1231,7 +1214,7 @@ class EPKB_Config_Settings_Page {
 
 		if ( $setting_name == 'general_typography' ) {
 			$input_args = $this->set_input_tooltip( [ 'specs' => $setting_name, ] );
-			$font_family = empty( $this->kb_config[$setting_name]['font-family'] ) ? 'Inherit' : $this->kb_config[$setting_name]['font-family']; ?>
+			$font_family = empty( $this->kb_config[$setting_name]['font-family'] ) ? 'Inherit' : $this->kb_config[$setting_name]['font-family'];	?>
 			<div class="epkb-input-group epkb-general_typography-loader-wrap">
 				<label class="" for="general_typography_font_family"><?php esc_html_e( 'Font Family', 'echo-knowledge-base' ); ?></label>
 				<div class="input_container">
@@ -1240,7 +1223,7 @@ class EPKB_Config_Settings_Page {
 				</div>
 			</div>	<?php
 			if ( ! empty( $input_args['setting_help_text'] ) ) {
-				EPKB_HTML_Elements::display_input_bottom_external_links( $input_args['setting_help_text'] );
+				EPKB_HTML_Elements::display_input_bottom_external_links( $input_args['setting_help_text'], ['css_class' => 'epkb-general-typography-description'] );
 			}
 		}
 
@@ -1331,7 +1314,7 @@ class EPKB_Config_Settings_Page {
 			}
 		}
 
-		if ( $setting_name == 'categories_articles_preset' ) {
+		if ( $setting_name == 'categories_articles_preset' && ( ! in_array( $this->kb_config['kb_main_page_layout'], [ 'Sidebar', 'Grid' ] ) || $this->elay_enabled ) ) {
 			$all_module_presets = EPKB_KB_Wizard_Setup::get_modules_presets_config( $this->kb_config['kb_main_page_layout'] );
 			$current_layout_themes['current'] = '-----';
 			foreach ( $all_module_presets['categories_articles'][ $this->kb_config['kb_main_page_layout'] ]['presets'] as $preset_key => $preset_config ) {
@@ -1436,6 +1419,7 @@ class EPKB_Config_Settings_Page {
 		 * 		'field_name1' => [ Condition_#1, [ Condition_#2, Condition_#3, etc ] ]
 		 */
 
+
 		// Archive Page V2 and V3
 		$contents_configs['archive-page'] = [];
 		if ( ! $this->is_archive_page_v3 ) {
@@ -1470,8 +1454,10 @@ class EPKB_Config_Settings_Page {
 				'archive_content_desktop_width'                 => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
 				'archive_category_desc_toggle'                  => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
 				'archive_content_background_color'              => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
-				'archive_content_articles_arrow_toggle'          => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
-				'archive_category_name_prefix' => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
+				'section_head_category_icon_color'              => [ 'only_archive_kb_templates', 'only_archive_page_v3', 'only_block_main_page' ],
+				'section_head_font_color'                       => [ 'only_archive_kb_templates', 'only_archive_page_v3', 'only_block_main_page' ],
+				'archive_content_articles_arrow_toggle'         => [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
+				'archive_category_name_prefix' 					=> [ 'only_archive_kb_templates', 'only_archive_page_v3' ],
 			],
 			'data'    	=> [ 'target' => 'content-archive' ],
 			/* FUTURE TODO as info icon 'learn_more_links' => [ // title => url
@@ -1554,7 +1540,7 @@ class EPKB_Config_Settings_Page {
 		// Labels - All label settings have been moved to their respective sections
 		$contents_configs['labels'] = array();
 
-		// General TODO: move to Tools -> Settings (keep the fields rendering logic)
+		// General
 		$contents_configs['other'] = [
 			array(
 				'title'     => esc_html__( 'KB Main Page Page Title', 'echo-knowledge-base' ),
@@ -1563,25 +1549,18 @@ class EPKB_Config_Settings_Page {
 				],
 			),
 			array(
+				'title'     => esc_html__( 'Frontend Editor Toggle Visibility', 'echo-knowledge-base' ),
+				'desc'      => '',
+				'fields'    => [
+					'frontend_editor_switch_visibility_toggle' => '',
+				],
+			),
+			array(
 				'title'     => $this->kb_main_page_has_kb_blocks ? esc_html__( 'Typography for Article Page and Category Archive Page', 'echo-knowledge-base' ) : esc_html__( 'Typography', 'echo-knowledge-base' ),
 				'desc'      => '',
 				'fields'    => [
 					'general_typography' => '',
 					'typography_message' => '',   // is internally using by Settings UI
-				],
-			),
-			array(
-				'title'     => esc_html__( 'KB Nickname', 'echo-knowledge-base' ),
-				'desc'      => esc_html__( 'Give your Knowledge Base a name. The name will show when we refer to it or when you see a list of post types.', 'echo-knowledge-base' ),
-				'fields'    => [
-					'kb_name' => '',
-				],
-			),
-			array(
-				'title'     => esc_html__( 'Frontend Editor Toggle Visibility', 'echo-knowledge-base' ),
-				'desc'      => '',
-				'fields'    => [
-					'frontend_editor_switch_visibility_toggle' => '',
 				],
 			),
 			array(
@@ -1602,7 +1581,15 @@ class EPKB_Config_Settings_Page {
 	 */
 	private function get_sub_contents_configs() {
 
-		$sub_contents_configs = array(
+		$sub_contents_configs = array();
+
+		if ( $this->is_frontend_editor ) {
+			$sub_contents_configs = array(
+				'main-page-settings' => [],
+			);
+		}
+
+		$sub_contents_configs = array_merge_recursive( $sub_contents_configs, array(
 
 			// KB Main Page
 			'main-page-ml-row-1' => [],
@@ -1614,7 +1601,7 @@ class EPKB_Config_Settings_Page {
 			// KB Article Page
 			'article-page-settings' => [
 				array(
-					'title'     => esc_html__( 'Article Content Settings', 'echo-knowledge-base' ),
+					'title'     => esc_html__( 'Article Content', 'echo-knowledge-base' ),
 					'fields'    => [
 						'article-body-desktop-width-v2' => '',
 					],
@@ -1930,7 +1917,7 @@ class EPKB_Config_Settings_Page {
 					],
 				),
 			],
-		);
+		) );
 
 		return $this->add_sub_contents_configs( $sub_contents_configs );
 	}
@@ -1948,15 +1935,15 @@ class EPKB_Config_Settings_Page {
 			'title'    => esc_html__( 'Getting Started', 'echo-knowledge-base' ),
 			'desc'     => esc_html__( 'Set up your Knowledge Base name, url, and design', 'echo-knowledge-base' ),
 			'icon'     => 'img/need-help/rocket-2.jpg',
-			'btn_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
-			'btn_url'  => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $this->kb_config['id'] ) . '&page=epkb-kb-need-help' ),
+			'btn_text' => esc_html__( 'Go to Dashboard', 'echo-knowledge-base' ),
+			'btn_url'  => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $this->kb_config['id'] ) . '&page=epkb-dashboard' ),
 		);
 		$list_configs[] = array(
 			'title'    => esc_html__( 'Explore Features', 'echo-knowledge-base' ),
 			'desc'     => esc_html__( 'Get familiar with features and how they function', 'echo-knowledge-base' ),
 			'icon'     => 'img/need-help/mountain-flag.jpg',
 			'btn_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
-			'btn_url'  => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $this->kb_config['id'] ) . '&page=epkb-kb-need-help#features__design' ),
+			'btn_url'  => 'https://www.echoknowledgebase.com/features/',
 		);
 		$list_configs[] = array(
 			'title'    => esc_html__( 'Online Documentation', 'echo-knowledge-base' ),
@@ -1970,7 +1957,7 @@ class EPKB_Config_Settings_Page {
 			'desc'     => esc_html__( 'Support question for something that is not working correctly', 'echo-knowledge-base' ),
 			'icon'     => 'img/need-help/mail.jpg',
 			'btn_text' => esc_html__( 'Ask a Question', 'echo-knowledge-base' ),
-			'btn_url'  => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $this->kb_config['id'] ) . '&page=epkb-kb-need-help#contact-us' ),
+			'btn_url'  => 'https://www.echoknowledgebase.com/contact-us/',
 		);
 
 		return $list_configs;
@@ -2023,6 +2010,13 @@ class EPKB_Config_Settings_Page {
 
 			case 'rating_stats_footer_toggle':
 				$field_specs['label'] = esc_html__( 'Bottom Rating Statistics', 'echo-knowledge-base' );
+				break;
+
+			case 'advanced_search_ap_input_box_radius':
+			case 'advanced_search_mp_input_box_radius':
+				if ( $this->is_frontend_editor ) {
+					$field_specs['label'] = esc_html__( 'Search Input Radius', 'echo-advanced-search' );
+				}
 				break;
 
 			default:
@@ -2149,11 +2143,11 @@ class EPKB_Config_Settings_Page {
 				break;
 
 			case 'ml_faqs_title_location':
-				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change FAQ Title %s' . 'click here' . '%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
+				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change FAQ Title %sclick here%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
 				break;
 
 			case 'ml_articles_list_title_location':
-				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change Featured Articles Title %s' . 'click here' . '%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
+				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change Featured Articles Title %sclick here%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
 				break;
 
 			case 'ml_row_1_desktop_width':
@@ -2196,9 +2190,9 @@ class EPKB_Config_Settings_Page {
 						'is_bottom_text'=> true ];
 				}
 				$input_args['setting_help_text'][] = [
-					'help_desc' => esc_html__( 'The difference between KB Template and Current Theme Template is explained in detail', 'echo-knowledge-base' ) . ':',
+					'help_desc' => esc_html__( 'The difference between KB Template and the Current Theme Template is explained in detail', 'echo-knowledge-base' ) . ':',
 					'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
-					'link_url' => 'https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/',
+					'link_url' => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
 					'is_bottom_text'=> true ];
 				if ( ! $this->is_archive_kb_templates ) {
 					$input_args['setting_help_text'][] = [
@@ -2230,11 +2224,18 @@ class EPKB_Config_Settings_Page {
 							'link_url' => esc_url( $kb_main_page_url ),
 							'is_bottom_text' => true];
 					}
-					/* $input_args['setting_help_text'][] = [
-						'help_desc' => esc_html__( 'The difference between KB Template and Current Theme Template is explained in detail', 'echo-knowledge-base' ),
+					$input_args['setting_help_text'][] = [
+						'help_desc' => esc_html__( 'The difference between the KB Template and the Current Theme Template is explained in detail. This setting also applies to the Article Page.', 'echo-knowledge-base' ) . ':',
 						'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
-						'link_url' => 'https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/',
-						'is_bottom_text' => true]; */
+						'link_url' => 'https://www.echoknowledgebase.com/documentation/kb-block-template/',
+						'is_bottom_text' => true];
+					if ( $this->is_frontend_editor ) {
+						$input_args['setting_help_text'][] = [
+							'help_desc' => esc_html__('The Category Archive Page has a separate setting', 'echo-knowledge-base') . ':',
+							'link_text' => esc_html__('Learn More', 'echo-knowledge-base'),
+							'link_url' => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
+							'is_bottom_text' => true];
+					}
 
 				// scenario: WP < 6.7 or Classic non-block theme
 				} else {
@@ -2249,10 +2250,17 @@ class EPKB_Config_Settings_Page {
 							'is_bottom_text' => true];
 					}
 					$input_args['setting_help_text'][] = [
-						'help_desc' => esc_html__( 'The difference between KB Template and Current Theme Template is explained in detail', 'echo-knowledge-base' ),
+						'help_desc' => esc_html__( 'The difference between the KB Template and the Current Theme Template is explained in detail. This setting also applies to the Article Page.', 'echo-knowledge-base' ) . ':',
 						'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
 						'link_url' => 'https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/',
 						'is_bottom_text' => true];
+					if ( $this->is_frontend_editor ) {
+						$input_args['setting_help_text'][] = [
+							'help_desc' => esc_html__( 'The Category Archive Page has a separate setting', 'echo-knowledge-base' ) . ':',
+							'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ),
+							'link_url' => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
+							'is_bottom_text'=> true ];
+					}
 				}
 				break;
 
@@ -2363,6 +2371,7 @@ class EPKB_Config_Settings_Page {
 			'search' => [
 				'module-settings' => [
 					'ml_search_layout' => 'not_asea',
+					'kb_ai_collection_id' => ''
 				],
 				'main-page-search-box-presets' => [
 					'advanced_search_mp_presets' => 'asea',
@@ -2375,6 +2384,7 @@ class EPKB_Config_Settings_Page {
 					'advanced_search_mp_box_margin_top' => 'asea',
 					'advanced_search_mp_box_margin_bottom' => 'asea',
 					'advanced_search_mp_box_input_width' => 'asea',
+					'advanced_search_mp_input_box_radius' => 'asea',
 					'advanced_search_mp_input_box_search_icon_placement' => 'asea',
 					'advanced_search_mp_filter_toggle' => 'asea',
 
@@ -2411,6 +2421,7 @@ class EPKB_Config_Settings_Page {
 					// Search Input Box - Main Page
 					'advanced_search_mp_title_toggle' => 'asea',
 					'advanced_search_mp_title' => 'asea',
+					'advanced_search_mp_title_font_size' => 'asea',
 					'advanced_search_mp_title_font_color' => 'asea',
 					'search_box_hint' => 'not_block_main_page',
 					'search_results_msg' => [ 'not_block_main_page' ],
@@ -2451,6 +2462,7 @@ class EPKB_Config_Settings_Page {
 
 			'categories_articles' => [
 				'module-settings' => [
+					'categories_articles_preset'                            => '',
 					'grid_nof_columns'                                      => [ 'elay', 'only_grid' ],
 					'nof_columns'                                           => [ 'not_grid', 'not_sidebar' ],
 					'background_color'                                      => 'not_sidebar',
@@ -2639,18 +2651,59 @@ class EPKB_Config_Settings_Page {
 			],
 		];
 
+		if ( $this->is_frontend_editor ) {
+			$sub_contents_configs['main-page-settings'] = array(
+				'main-page-page-title' => array(
+					'title'     => __( 'Pate Title', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'css_class'	=> 'epkb-admin__form-tab-content--main-page-page-title epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
+					'fields'    => [
+						'template_main_page_display_title' => '',
+					],
+					'data'		=> [ 'target' => 'main-page-page-title' ],
+				),
+				'theme-compatibility-mode' => array(
+					'title'     => __( 'Choose Template', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'css_class'	=> 'epkb-admin__form-tab-content--theme-compatibility-mode epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
+					'fields'    => [
+						'templates_for_kb' => 'Choose Template',
+					],
+					'data'		=> [ 'target' => 'theme-compatibility-mode' ],
+				),
+				'main-page-general-typography' => array(
+					'title'     => __( 'Font Family', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'css_class'	=> 'epkb-admin__form-tab-content--main-page-general-typography epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
+					'fields'    => [
+						'general_typography' => '',
+					],
+					'data'		=> [ 'target' => 'main-page-general-typography' ],
+				),
+				'main-page-custom-css' => array(
+					'title'     => __( 'Custom CSS for Main Page', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'css_class'	=> 'epkb-admin__form-tab-content--main-page-custom-css epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
+					'fields'    => [
+						'epkb_ml_custom_css' => '',
+					],
+					'data'		=> [ 'target' => 'main-page-custom-css' ],
+				)
+			);
+		}
+
 		// 1st Row
-		$sub_contents_configs['main-page-ml-row-1'] = array(
-			'module-selection' => array(
-				'title'     => esc_html__( 'Feature Selection', 'echo-knowledge-base' ),
-				'icon'      => 'epkb-admin__form-tab-content-icon-text',
-				'icon_text' => esc_html__( 'Row 1', 'echo-knowledge-base' ),
-				'css_class' => 'epkb-admin__form-tab-content--module-selection',
-				'fields'    => [
-					'ml_row_1_module'   => '',
-				],
-			),
-			'theme-compatibility-mode' => array(
+		$sub_contents_configs['main-page-ml-row-1']['module-selection'] = array(
+			'title'     => esc_html__( 'Feature Selection', 'echo-knowledge-base' ),
+			'icon'      => 'epkb-admin__form-tab-content-icon-text',
+			'icon_text' => esc_html__( 'Row 1', 'echo-knowledge-base' ),
+			'css_class' => 'epkb-admin__form-tab-content--module-selection',
+			'fields'    => [
+				'ml_row_1_module'   => '',
+			]
+		);
+		if ( ! $this->is_frontend_editor ) {
+			$sub_contents_configs['main-page-ml-row-1']['theme-compatibility-mode'] = array(
 				'title'     => esc_html__( 'Template Setup', 'echo-knowledge-base' ),
 				'desc'      => '',
 				'css_class'	=> 'epkb-admin__form-tab-content--theme-compatibility-mode epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--categories_articles-box epkb-admin__form-tab-content--hide',
@@ -2658,23 +2711,23 @@ class EPKB_Config_Settings_Page {
 					'templates_for_kb' => '',
 				],
 				'data'		=> [ 'insert-box-after' => '.epkb-admin__form-tab-content--module-selection', 'target' => 'theme-compatibility-mode' ],
-			),
-			'layout' => array(
-				'title'   	=> esc_html__( 'Layout', 'echo-knowledge-base' ),
-				'css_class'	=> 'epkb-admin__form-tab-content--layout epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--categories_articles-box epkb-admin__form-tab-content--hide',
-				'fields'   	=> [
-					'kb_main_page_layout' => '',
-				],
-				'data'    	=> [ 'insert-box-after' => '.epkb-admin__form-tab-content--module-selection', 'target' => 'main_page_layout' ],
-			),
-			'module-settings' => array(
-				'title'     => esc_html__( 'Settings', 'echo-knowledge-base' ),
-				'css_class' => 'epkb-admin__form-tab-content--module-settings' . ( $this->kb_config['ml_row_1_module'] == 'none' ? ' ' . 'epkb-admin__form-tab-content--hide' : '' ),
-				'fields'    => [
-					'ml_row_1_desktop_width'            => '',
-				],
-				'data' => [ 'target' => 'module-settings' ],
-			),
+			);
+		}
+		$sub_contents_configs['main-page-ml-row-1']['layout'] = array(
+			'title'   	=> esc_html__( 'Layout', 'echo-knowledge-base' ),
+			'css_class'	=> 'epkb-admin__form-tab-content--layout epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--categories_articles-box epkb-admin__form-tab-content--hide',
+			'fields'   	=> [
+				'kb_main_page_layout' => '',
+			],
+			'data'    	=> [ 'insert-box-after' => '.epkb-admin__form-tab-content--module-selection', 'target' => 'main_page_layout' ],
+		);
+		$sub_contents_configs['main-page-ml-row-1']['module-settings'] = array(
+			'title'     => esc_html__( 'Settings', 'echo-knowledge-base' ),
+			'css_class' => 'epkb-admin__form-tab-content--module-settings' . ( $this->kb_config['ml_row_1_module'] == 'none' ? ' ' . 'epkb-admin__form-tab-content--hide' : '' ),
+			'fields'    => [
+				'ml_row_1_desktop_width'            => '',
+			],
+			'data' => [ 'target' => 'module-settings' ],
 		);
 
 		// 2nd Row
@@ -2697,10 +2750,6 @@ class EPKB_Config_Settings_Page {
 				'data' => [ 'target' => 'module-settings' ],
 			),
 		);
-		if ( $this->is_frontend_editor && EPKB_Core_Utilities::is_module_present( $this->kb_config, 'categories_articles' ) ) {
-			$temp_row_id = EPKB_Core_Utilities::get_module_row_number( $this->kb_config, 'categories_articles' );
-			$sub_contents_configs['main-page-ml-row-' . $temp_row_id]['module-settings']['fields']['categories_articles_preset'] = '';
-		}
 
 		// 3rd Row
 		$sub_contents_configs['main-page-ml-row-3'] = array(
@@ -3090,6 +3139,7 @@ class EPKB_Config_Settings_Page {
 							'advanced_search_ap_box_margin_top' => 'asea',
 							'advanced_search_ap_box_margin_bottom' => 'asea',
 							'advanced_search_ap_box_input_width' => 'asea',
+							'advanced_search_ap_input_box_radius' => 'asea',
 							'advanced_search_ap_input_box_search_icon_placement' => 'asea',
 							'advanced_search_ap_filter_toggle' => 'asea',
 
@@ -3118,11 +3168,12 @@ class EPKB_Config_Settings_Page {
 							// Search Title - Article Page
 							'article_search_title' => ['not_asea', 'not_sidebar'],
 							'article_search_button_name' => ['not_asea', 'not_sidebar'],
-							// Search Input Box - Article Page
-							'advanced_search_ap_title_toggle' => 'asea',
-							'advanced_search_ap_title' => 'asea',
-							'advanced_search_ap_title_font_color' => 'asea',
-							'advanced_search_ap_button_name' => ['asea', 'not_sidebar'],
+						// Search Input Box - Article Page
+						'advanced_search_ap_title_toggle' => 'asea',
+						'advanced_search_ap_title' => 'asea',
+						'advanced_search_ap_title_font_size' => 'asea',
+						'advanced_search_ap_title_font_color' => 'asea',
+						'advanced_search_ap_button_name' => ['asea', 'not_sidebar'],
 							'article_search_box_hint' => ['not_sidebar'],
 							'article_search_results_msg' => ['not_sidebar'],
 							'advanced_search_ap_description_below_title_toggle' => 'asea',
@@ -3850,6 +3901,15 @@ class EPKB_Config_Settings_Page {
 			case 'advanced_search_ap_box_hint':
 				$field_specs['dependency'] = ['article_search_sync_toggle'];
 				$field_specs['enable_on'] = ['off'];
+				break;
+
+			case 'templates_for_kb':
+				$field_specs['input_group_class'] = 'eckb-conditional-setting-input' . ' ';
+				break;
+
+			case 'template_main_page_display_title':
+				$field_specs['dependency'] = ['templates_for_kb'];
+				$field_specs['enable_on'] = ['kb_templates'];
 				break;
 
 			default:

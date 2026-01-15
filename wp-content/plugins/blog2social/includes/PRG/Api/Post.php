@@ -2,7 +2,7 @@
 
 class PRG_Api_Post {
 
-    public static function post($url = '', $post = array(), $timeout = 30) {
+    public static function post($url = '', $post = array(), $timeout = 60) {
         if (empty($url) || empty($post)) {
             return false;
         }

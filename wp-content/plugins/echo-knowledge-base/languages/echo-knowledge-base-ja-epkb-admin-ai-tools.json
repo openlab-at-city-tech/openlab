@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "AI Search": [
+                "AI 検索"
+            ],
+            "All": [
+                "すべて"
+            ],
+            "Disabled": [
+                "無効"
+            ],
+            "AI Chat": [
+                "AI チャット"
+            ],
+            "OpenAI API Key": [
+                "OpenAI API キー"
+            ],
+            "Debug mode updated successfully": [
+                "デバッグモードを正常に更新しました。"
+            ],
+            "Refresh": [
+                "更新"
+            ],
+            "Status:": [
+                "ステータス:"
+            ],
+            "Warnings": [
+                "警告"
+            ],
+            "Info": [
+                "情報"
+            ],
+            "Failed to update debug mode": [
+                "デバッグモードの更新に失敗しました"
+            ],
+            "Error updating debug mode": [
+                "デバッグモードの更新時にエラーが発生しました"
+            ],
+            "Failed to load PHP logs": [
+                "PHPログの読み込みに失敗しました"
+            ],
+            "Error loading PHP logs": [
+                "PHPログの読み込み時にエラーが発生しました"
+            ],
+            "Failed to load WP logs": [
+                "WPログの読み込みに失敗しました"
+            ],
+            "Error loading WP logs": [
+                "WPログの読み込み時にエラーが発生しました"
+            ],
+            "Failed to load AI logs": [
+                "AIログの読み込みに失敗しました"
+            ],
+            "Error loading AI logs": [
+                "AI ログの読み込みエラー"
+            ],
+            "All AI logs cleared successfully": [
+                "AIログをすべて正常にクリアしました。"
+            ],
+            "Failed to clear AI logs": [
+                "AI ログのクリアに失敗しました"
+            ],
+            "Error clearing AI logs": [
+                "AI ログのクリア中にエラーが発生しました"
+            ],
+            "Debug Mode": [
+                "デバッグモード"
+            ],
+            "Enable Debug Mode": [
+                "デバッグモードを有効にする"
+            ],
+            " (Localhost detected)": [
+                "(ローカルホストが検出されました)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "システムログを表示し、AI機能のトラブルシューティングを行うには、デバッグモードを有効にしてください。これにより、追加のデバッグツールが読み込まれます。."
+            ],
+            "AI Information": [
+                "AI 情報"
+            ],
+            "Missing API Key": [
+                "APIキーが見つかりません"
+            ],
+            "Data Collections": [
+                "データコレクション"
+            ],
+            "Unnamed Collection": [
+                "未命名のコレクション"
+            ],
+            "Vector Store:": [
+                "ベクトルストア:"
+            ],
+            "Created": [
+                "作成済み"
+            ],
+            "Not created": [
+                "未作成"
+            ],
+            "Total Records:": [
+                "総レコード数:"
+            ],
+            "Added:": [
+                "追加済み:"
+            ],
+            "Updated:": [
+                "更新済み:"
+            ],
+            "Outdated:": [
+                "期限切れ:"
+            ],
+            "Error:": [
+                "エラー:"
+            ],
+            "Pending:": [
+                "保留中:"
+            ],
+            "No data collections found.": [
+                "データコレクションが見つかりません。."
+            ],
+            "System Information": [
+                "システム情報"
+            ],
+            "Download Debug Info": [
+                "デバッグ情報をダウンロード"
+            ],
+            "Logs": [
+                "ログ"
+            ],
+            "PHP Error Log": [
+                "PHP エラーログ"
+            ],
+            "Fatal Errors": [
+                "致命的エラー"
+            ],
+            "Notices": [
+                "通知"
+            ],
+            "AI Related Only": [
+                "AI関連のみ"
+            ],
+            "Latest at top": [
+                "最新を上部に表示"
+            ],
+            "No logs found.": [
+                "ログが見つかりません。."
+            ],
+            "WordPress Error Log": [
+                "WordPress エラーログ"
+            ],
+            "AI Activity Log": [
+                "AI アクティビティ ログ"
+            ],
+            "Clear Log": [
+                "ログをクリア"
+            ],
+            "All Levels": [
+                "すべてのレベル"
+            ],
+            "Errors Only": [
+                "エラーのみ"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "デバッグモードは無効です。上部で有効にしてデバッグ情報を表示してください。."
+            ]
+        }
+    }
+}

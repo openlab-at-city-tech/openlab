@@ -704,10 +704,29 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+			'ekit_submenu_item_indicator_font_size',
+			[
+				'label' => esc_html__( 'Child Indicator Font Size', 'elementskit-lite' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range' => [
+					'px' => [
+						'min' => 10,
+						'max' => 100,
+						'step' => 1,
+					]
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-navbar-nav > li ul li .elementskit-submenu-indicator' => 'font-size: {{SIZE}}{{UNIT}};',
+				]
+			]
+		);
+
 		$this->add_control(
 			'elementskit_style_tab_submenu_indicator_color',
 			[
-				'label' => esc_html__( 'color', 'elementskit-lite' ),
+				'label' => esc_html__( 'Color', 'elementskit-lite' ),
 				'type'  => Controls_Manager::COLOR,
 				'default'   =>  '#101010',
 				'alpha'     => false,
@@ -790,25 +809,6 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             ]
         );
 
-		$this->add_responsive_control(
-			'ekit_submenu_item_indicator_font_size',
-			[
-				'label' => esc_html__( 'Indicator Font Size', 'elementskit-lite' ),
-				'type' => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range' => [
-					'px' => [
-						'min' => 10,
-						'max' => 100,
-						'step' => 1,
-					]
-				],
-				'selectors' => [
-					'{{WRAPPER}} .elementskit-navbar-nav > li ul li .elementskit-submenu-indicator' => 'font-size: {{SIZE}}{{UNIT}};',
-				]
-			]
-		);
-
         $this->add_group_control(
             Group_Control_Typography::get_type(),
             [
@@ -848,6 +848,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
         $this->start_controls_tabs(
             'elementskit_submenu_active_hover_tabs'
         );
+
         $this->start_controls_tab(
             'elementskit_submenu_normal_tab',
             [

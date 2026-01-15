@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings": [
+                "Innstillinger"
+            ],
+            "Page": [
+                "Side"
+            ],
+            "Settings saved successfully": [
+                "Innstillinger lagret"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Next": [
+                "Neste"
+            ],
+            "Previous": [
+                "Forrige"
+            ],
+            "Saving...": [
+                "Lagrer..."
+            ],
+            "Go to General Settings": [
+                "Gå til Generelle innstillinger"
+            ],
+            "Chat History": [
+                "Chathistorikk"
+            ],
+            "API Configuration": [
+                "API-konfigurasjon"
+            ],
+            "AI Assistant": [
+                "AI-assistent"
+            ],
+            "Save Settings": [
+                "Lagre innstillinger"
+            ],
+            "Delete": [
+                "Slett"
+            ],
+            "Delete Selected": [
+                "Slett valgte"
+            ],
+            "of": [
+                "av"
+            ],
+            "Reset": [
+                "Tilbakestill"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "Er du sikker på at du vil slette de valgte samtalene?"
+            ],
+            "Delete Conversations": [
+                "Slett samtaler"
+            ],
+            "Deleting conversations...": [
+                "Sletter samtaler..."
+            ],
+            "Conversations refreshed successfully": [
+                "Samtalene ble oppdatert"
+            ],
+            "Search conversations...": [
+                "Søk i samtaler..."
+            ],
+            "Refreshing...": [
+                "Oppdaterer..."
+            ],
+            "Refresh": [
+                "Oppdater"
+            ],
+            "Loading conversations...": [
+                "Laster inn samtaler..."
+            ],
+            "No conversations found": [
+                "Ingen samtaler funnet"
+            ],
+            "Time": [
+                "Tid"
+            ],
+            "User": [
+                "Bruker"
+            ],
+            "Conversation": [
+                "Samtale"
+            ],
+            "Searching server for more results...": [
+                "Søker på serveren etter flere resultater..."
+            ],
+            "Conversation Details": [
+                "Samtaledetaljer"
+            ],
+            "Select a conversation to view details": [
+                "Velg en samtale for å vise detaljer"
+            ],
+            "Conversation Info": [
+                "Samtaleinformasjon"
+            ],
+            "User:": [
+                "Bruker:"
+            ],
+            "Started:": [
+                "Startet:"
+            ],
+            "Messages:": [
+                "Meldinger:"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Rating:": [
+                "Vurdering:"
+            ],
+            "Full Conversation": [
+                "Hele samtalen"
+            ],
+            "No messages in this conversation.": [
+                "Ingen meldinger i denne samtalen."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Er du sikker på at du vil tilbakestille til standardinstruksjoner?"
+            ],
+            "Reset Instructions": [
+                "Tilbakestill instruksjoner"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Er du sikker på at du vil tilbakestille til standardinstruksjoner? Dine tilpassede instruksjoner vil gå tapt."
+            ],
+            "Reset to Default": [
+                "Tilbakestill til standard"
+            ],
+            "Failed to load conversations": [
+                "Kunne ikke laste samtaler"
+            ],
+            "Failed to save settings": [
+                "Kunne ikke lagre innstillinger"
+            ],
+            "Conversations deleted successfully": [
+                "Samtalene ble slettet"
+            ],
+            "Failed to delete conversations": [
+                "Klarte ikke å slette samtaler"
+            ],
+            "AI Chat is Disabled": [
+                "AI chat er deaktivert"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "For å se chat-historikken, vennligst aktiver AI chat i Innstillinger-fanen."
+            ],
+            "Go to Settings": [
+                "Gå til Innstillinger"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "OpenAI API-nøkkel er ikke konfigurert. Vennligst konfigurer den i Generelle innstillinger for å bruke AI chat-funksjonene."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "Vennligst aksepter personvernavtalen i Generelle innstillinger for å bruke AI chat-funksjonene."
+            ]
+        }
+    }
+}

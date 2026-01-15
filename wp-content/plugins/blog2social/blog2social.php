@@ -1,13 +1,13 @@
 <?php
 
 /*
- * Plugin Name:Blog2Social: Social Media Auto Post & Scheduler
+ * Plugin Name: Blog2Social: Social Media Auto Post & Scheduler
  * Plugin URI: https://www.blog2social.com
- * Description:Auto publish, schedule & share posts on social media: Facebook, X, XING, LinkedIn, Instagram, ... crosspost to pages & groups
+ * Description: Automatically share and schedule your WordPress content on top social platforms like Facebook, Instagram, LinkedIn, TikTok, and more.
  * Author: Blog2Social, miaadenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 8.4.7
+ * Version: 8.7.1
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Tested up to: 6.8    
@@ -15,7 +15,7 @@
  * License: GPLv3
  */
 
-define('B2S_PLUGIN_VERSION', '847');
+define('B2S_PLUGIN_VERSION', '871');
 define('B2S_PLUGIN_LANGUAGE', serialize(array('de_DE', 'en_US')));
 define('B2S_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('B2S_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -27,6 +27,7 @@ define('B2S_LANGUAGE', $language);
 define('B2S_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 define('B2S_PLUGIN_API_ASS_ENDPOINT', 'https://api.assistini.com/');
+define('B2S_PLUGIN_API_ASS_ENDPOINT_AUTH', 'https://developer.blog2social.com/');
 define('B2S_PLUGIN_API_ENDPOINT_AUTH', 'https://developer.blog2social.com/wp/v3/network/auth.php');
 define('B2S_PLUGIN_API_ENDPOINT_AUTH_SHORTENER', 'https://developer.blog2social.com/wp/v3/network/shortener.php');
 define('B2S_PLUGIN_API_ENDPOINT_INSTANT_SHARE', 'https://developer.blog2social.com/wp/v3/instant/share.php');

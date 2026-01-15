@@ -77,8 +77,10 @@
 		public $support_phone;
 		/**
 		 * @var string Support skype username.
+		 *
+		 * @deprecated 2.12.1
 		 */
-		public $support_skype;
+		public $support_skype = '';
 		/**
 		 * @var bool Is personal success manager supported with the plan.
 		 */
@@ -137,7 +139,6 @@
 		 */
 		function has_technical_support() {
 			return ( ! empty( $this->support_email ) ||
-			     ! empty( $this->support_skype ) ||
 			     ! empty( $this->support_phone ) ||
 			     ! empty( $this->is_success_manager )
 			);

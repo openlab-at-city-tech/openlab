@@ -2,6 +2,7 @@
 namespace Bookly\Lib\DataHolders\Notification;
 
 use Bookly\Lib\Entities\Notification;
+use Bookly\Lib\Entities\Payment;
 use Bookly\Lib\Entities\Service;
 use Bookly\Lib\Utils\Codes;
 
@@ -47,6 +48,9 @@ class Settings
             case Notification::TYPE_VERIFY_PHONE:
             case Notification::TYPE_VERIFY_EMAIL:
             case Notification::TYPE_NEW_GIFT_CARD:
+            case Notification::TYPE_NEW_EVENT:
+            case Notification::TYPE_NEW_ATTENDEES:
+            case Notification::TYPE_ATTENDEE_DELETED:
                 $this->instant = 1;
                 break;
             case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED:
@@ -182,15 +186,16 @@ class Settings
     public static function getDefault()
     {
         return array(
-            'status'   => 'any',
-            'option'   => 2,
+            'status' => 'any',
+            'payment_statuses' => array( 'completed' ),
+            'option' => 2,
             'services' => array(
                 'any' => 'any',
                 'ids' => array(),
             ),
-            'offset_hours'   => 2,
-            'perform'        => 'before',
-            'at_hour'        => 9,
+            'offset_hours' => 2,
+            'perform' => 'before',
+            'at_hour' => 9,
             'before_at_hour' => 18,
             'offset_before_hours' => -24,
             'offset_bidirectional_hours' => 0,
@@ -216,6 +221,30 @@ class Settings
         }
 
         return false;
+    }
+
+    /**
+     * @param string $payment_status
+     * @return bool
+     */
+    public function allowedPaymentWithStatus( $payment_status )
+    {
+        $allowed_statuses = isset( $this->settings['payment_statuses'] ) ? $this->settings['payment_statuses'] : array();
+
+        $statuses = array(
+            'no_payment',
+            Payment::STATUS_PENDING,
+            Payment::STATUS_COMPLETED,
+            Payment::STATUS_REFUNDED,
+            Payment::STATUS_REJECTED,
+        );
+
+        if ( in_array( $payment_status, $statuses, true ) ) {
+            return in_array( $payment_status, $allowed_statuses, true );
+        }
+
+        // Unknown status, assume it's allowed.
+        return true;
     }
 
     /**

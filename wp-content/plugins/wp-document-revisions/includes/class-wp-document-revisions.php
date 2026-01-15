@@ -14,35 +14,35 @@ class WP_Document_Revisions {
 	/**
 	 * Singleton instance.
 	 *
-	 * @var Object $instance
+	 * @var object
 	 */
 	public static $instance;
 
 	/**
 	 * Length of feed key.
 	 *
-	 * @var Int $key_length
+	 * @var int
 	 */
 	public static $key_length = 32;
 
 	/**
 	 * User meta key used auth feeds.
 	 *
-	 * @var String $meta_key
+	 * @var string
 	 */
 	public static $meta_key = 'document_revisions_feed_key';
 
 	/**
 	 * The plugin version.
 	 *
-	 * @var String $version
+	 * @var string
 	 */
-	public $version = '3.6.0';
+	public $version = '3.7.2';
 
 	/**
 	 * The WP default upload directory cache.
 	 *
-	 * @var Array $wp_default_dir
+	 * @var array
 	 *
 	 * @since 3.2
 	 */
@@ -51,7 +51,7 @@ class WP_Document_Revisions {
 	/**
 	 * The document upload directory cache.
 	 *
-	 * @var String $wpdr_document_dir
+	 * @var string | null
 	 *
 	 * @since 3.2
 	 */
@@ -60,7 +60,7 @@ class WP_Document_Revisions {
 	/**
 	 * The document admin class.
 	 *
-	 * @var object $admin
+	 * @var object | null
 	 *
 	 * @since 3.5
 	 */
@@ -69,7 +69,7 @@ class WP_Document_Revisions {
 	/**
 	 * Whether processing document or image directory.
 	 *
-	 * @var Boolean $doc_image
+	 * @var bool
 	 *
 	 * @since 3.2
 	 */
@@ -78,7 +78,7 @@ class WP_Document_Revisions {
 	/**
 	 * Identify if processing document or image directory.
 	 *
-	 * @return Boolean $doc_image
+	 * @return bool
 	 *
 	 * @since 3.2
 	 */
@@ -89,7 +89,7 @@ class WP_Document_Revisions {
 	/**
 	 * Taxonomy key - Workflow state or EditFlow or PublishPress statuses to use.
 	 *
-	 * @var String $taxonomy_key_val
+	 * @var string
 	 *
 	 * @since 3.3.0
 	 */
@@ -98,13 +98,22 @@ class WP_Document_Revisions {
 	/**
 	 * Function to return Taxonomy key.
 	 *
-	 * @return String $taxonomy_key
+	 * @return string
 	 *
 	 * @since 3.3.0
 	 */
 	public static function taxonomy_key() {
 		return self::$taxonomy_key_val;
 	}
+
+	/**
+	 * List of document revisions to keep (used to keep them if other processes would delete them).
+	 *
+	 * @var int[][]
+	 *
+	 * @since 3.7.0
+	 */
+	private static $revns = array();
 
 	/**
 	 * Initiates an instance of the class and adds hooks.
@@ -117,9 +126,9 @@ class WP_Document_Revisions {
 		// set the standard default directory - creating the cache (before applying filter).
 		self::$wp_default_dir = wp_upload_dir( null, true, true );
 
-		// admin.
+		// admin. translations need to be called on init, not plugins_loaded.
 		add_action( 'plugins_loaded', array( &$this, 'admin_init' ) );
-		add_action( 'plugins_loaded', array( &$this, 'i18n' ), 5 );
+		add_action( 'init', array( &$this, 'i18n' ), 5 );
 		add_action( 'admin_notices', array( &$this, 'activation_error_notice' ) );
 
 		// CPT/CT.
@@ -202,11 +211,10 @@ class WP_Document_Revisions {
 		add_action( 'wp_ajax_override_lock', array( &$this, 'override_lock' ) );
 
 		// cache clean.
-		add_action( 'save_post_document', array( &$this, 'clear_cache' ), 20 );
+		add_action( 'save_post_document', array( &$this, 'clear_cache' ), 20, 3 );
 
-		// Edit Flow or PublishPress.
+		// Edit Flow or PublishPress Statuses.
 		add_action( 'ef_module_options_loaded', array( &$this, 'edit_flow_support' ) );
-		add_action( 'pp_module_options_loaded', array( &$this, 'publishpress_support' ) );
 		add_action( 'pp_statuses_init', array( &$this, 'publishpress_statuses_support' ), 20 );
 		// always called to determine whether user has turned off workflow_state support.
 		add_action( 'init', array( &$this, 'disable_workflow_states' ), 1900 );
@@ -217,6 +225,12 @@ class WP_Document_Revisions {
 		// no next/previous navigation links (would appear on password entry page).
 		add_filter( 'get_next_post_where', array( &$this, 'suppress_adjacent_doc' ), 10, 5 );
 		add_filter( 'get_previous_post_where', array( &$this, 'suppress_adjacent_doc' ), 10, 5 );
+
+		// block external processes from deleting revisions.
+		add_filter( 'pre_delete_post', array( $this, 'possibly_delete_revision' ), 9999, 3 );
+
+		// revisions management.
+		add_filter( 'wp_revisions_to_keep', array( $this, 'manage_document_revisions_limit' ), 999, 2 );
 
 		// load front-end features (shortcode, widgets, etc.).
 		// For shortcode blocks, json endpoint need to link back to front end and widget so make global.
@@ -279,14 +293,22 @@ class WP_Document_Revisions {
 	 */
 	public function mod_rewrite_rules( $rules ) {
 		// forbid access to documents directly.
+		// Find the path.
+		$home_root = wp_parse_url( home_url() );
+		if ( isset( $home_root['path'] ) ) {
+			$home_root = trailingslashit( $home_root['path'] );
+		} else {
+			$home_root = '/';
+		}
+
 		/**
 		 * Filter to stop direct file access to documents (specify the URL element (or trailing part) to traverse to the document directory).
 		 *
 		 * See above for definition.
 		 */
-		$path_to = trailingslashit( apply_filters( 'document_stop_file_access_pattern', '' ) );
+		$path_to = trailingslashit( $home_root . apply_filters( 'document_stop_file_access_pattern', '' ) );
 		// check that the URL points to a file with an MD5 format name. If so, return Forbidden.
-		$rules = preg_replace( '|RewriteRule \^WPDR /- \[QSA,L\]|', "RewriteCond %{REQUEST_FILENAME} -f\nRewriteRule $path_to(\d{4}/\d{2}/)?[a-f0-9]{32}(\.\w{1,7})?/?$ /- [R=403,L]", $rules );
+		$rules = preg_replace( '|RewriteRule \^WPDR ' . $home_root . '- \[QSA,L\]|', "RewriteCond %{REQUEST_FILENAME} -f\nRewriteRule $path_to(\d{4}/\d{2}/)?[a-f0-9]{32}(\.\w{1,7})?/?$ /- [F]", $rules );
 		return $rules;
 	}
 
@@ -300,7 +322,7 @@ class WP_Document_Revisions {
 	 */
 	public function activation_error_notice() {
 		$transient = get_transient( 'wpdr_activation_issue' );
-		if ( $transient && get_current_user_id() === (int) $transient ) {
+		if ( false !== $transient && get_current_user_id() === (int) $transient ) {
 			delete_transient( 'wpdr_activation_issue' );
 			// timing of initial permissions being set as can give message before initial activation.
 			?>
@@ -330,18 +352,132 @@ class WP_Document_Revisions {
 	 * Extends class with admin functions when in admin backend.
 	 *
 	 * @since 0.5
+	 * @param bool $test whether to force the test scenario.
 	 */
-	public function admin_init() {
+	public function admin_init( $test = false ) {
 
-		// Unless under test, only fire on admin + escape hatch to prevent fatal errors.
-		if ( ! class_exists( 'WP_UnitTestCase' ) ) {
-			if ( ! is_admin() || class_exists( 'WP_Document_Revisions_Admin' ) ) {
-				return;
-			}
+		// check not already defined.
+		if ( ! is_null( $this->admin ) ) {
+			return;
 		}
 
-		require_once __DIR__ . '/class-wp-document-revisions-admin.php';
-		$this->admin = new WP_Document_Revisions_Admin( self::$instance );
+		// Unless under test, only fire on admin + escape hatch to prevent fatal errors.
+		if ( is_admin() || class_exists( 'WP_UnitTestCase' ) || $test ) {
+			if ( ! class_exists( 'WP_Document_Revisions_Admin' ) ) {
+				include_once __DIR__ . '/class-wp-document-revisions-admin.php';
+			}
+			$this->admin = new WP_Document_Revisions_Admin( self::$instance );
+		}
+	}
+
+	/**
+	 * Check whether we can delete a document revision (to block external functionality).
+	 *
+	 * @since 3.7
+	 * @param WP_Post|false|null $delete       Whether to go forward with deletion.
+	 * @param WP_Post            $post         Post object.
+	 * @param bool               $force_delete Whether to bypass the Trash.
+	 */
+	public function possibly_delete_revision( $delete, $post, $force_delete ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		// bail if not a revision, an autosave or already decided not to delete.
+		if ( 'revision' !== $post->post_type || str_contains( $post->post_name, '-autosave-v1' ) || ! is_null( $delete ) ) {
+			// only process revisions.
+			return $delete;
+		}
+
+		// is it for a document.
+		$doc = $post->post_parent;
+		if ( 0 === $doc || ! $this->verify_post_type( $doc ) ) {
+			// not a document.
+			return $delete;
+		}
+
+		// do we want to allow deletion by known processes (eg PublishPress Revisions).
+		/**
+		 * Filter to allow revision deletion. Set to true to bypass these tests and allow delete.
+		 *
+		 * @since 3.7
+		 *
+		 * @param boolean false  default to not allow deletion.
+		 * @param WP_Post $post  Post object.
+		 */
+		if ( apply_filters( 'document_allow_revision_deletion', false, $post ) ) {
+			return $delete;
+		}
+
+		// Have we loaded our admin.
+		// If not, we need to continue as it is external functionality trying to delete our revision.
+		if ( is_null( $this->admin ) ) {
+			$this->admin_init( true );
+		}
+		// are we in the scope of deleting a document so OK to delete.
+		// we can delete a revision if we started with a document or is beyond limit.
+		if ( $this->admin->is_deleting() ) {
+			return $delete;
+		}
+
+		// have we processed the document (so have the keep list).
+		if ( array_key_exists( $doc, self::$revns ) ) {
+			return ( in_array( $post->ID, self::$revns[ $doc ], true ) ? false : $delete );
+		}
+
+		// do we keep all document revisions.
+		$keep = wp_revisions_to_keep( get_post( $doc ) );
+		if ( -1 === $keep ) {
+			// keep all.
+			return false;
+		}
+
+		// or none. (But we won't respect that for documents).
+		if ( 0 === $keep ) {
+			return false;
+		}
+
+		// have we created the keep list of revisions.
+		if ( ! array_key_exists( $doc, self::$revns ) ) {
+			global $wpdr;
+			$all_revns           = $wpdr->get_revisions( $doc );
+			self::$revns[ $doc ] = array_slice( $all_revns, 0, $keep );
+		}
+
+		if ( in_array( $post->ID, self::$revns[ $doc ], true ) ) {
+			// in the keep list, do not delete.
+			return false;
+		}
+
+		return $delete;
+	}
+
+
+	/**
+	 * Ensures that any system limit on revisions does not apply to documents.
+	 *
+	 * @since 3.2.2
+	 *
+	 * @param int     $num  default value for the number of revisions for the post_type.
+	 * @param WP_Post $post current post.
+	 */
+	public function manage_document_revisions_limit( $num, $post ) {
+		if ( ! $this->verify_post_type( ( isset( $post->ID ) ? $post : false ) ) ) {
+			return $num;
+		}
+
+		// Set default number as unlimited.
+		$num = -1;
+		/**
+		 * Filters the number of revisions to keep for documents.
+		 *
+		 * This should normally be unlimited and setting it can make attachments unaccessible.
+		 *
+		 * Note particularly that Autosaves are revisions, so count towards the total.
+		 *
+		 * @since 3.2.2
+		 *
+		 * @param int -1 (unlimited).
+		 */
+		$num = apply_filters( 'document_revisions_limit', $num );
+
+		return $num;
 	}
 
 
@@ -432,22 +568,14 @@ class WP_Document_Revisions {
 		 */
 		register_post_type( 'document', apply_filters( 'document_revisions_cpt', $args ) );
 
-		// Ensure that there is a post-thumbnail size set - could/should be set by theme - default copy from thumbnail.
-		if ( ! array_key_exists( 'post-thumbnail', wp_get_additional_image_sizes() ) ) {
-			$sizing = array(
-				get_option( 'thumbnail_size_w' ),
-				get_option( 'thumbnail_size_h' ),
-				false,
-			);
-			/**
-			 * Filters the post-thumbnail size parameters (used only if this image size has not been set).
-			 *
-			 * @since 3.6
-			 *
-			 * @param mixed[] $sizes default values for the image size.
-			 */
-			$sizing = apply_filters( 'document_post_thumbnail', $sizing );
-			add_image_size( 'post-thumbnail', ...$sizing );
+		// Although default is to support thumbnails on document, this could be filtered away.
+		if ( post_type_supports( 'document', 'thumbnail' ) && current_theme_supports( 'post-thumbnails', 'document' ) ) {
+			// Thumbnails are supported.
+			// Ensure that there is a post-thumbnail size set - could/should be set by theme - default copy from thumbnail.
+			if ( ! array_key_exists( 'post-thumbnail', wp_get_additional_image_sizes() ) ) {
+				// get sizing dynamically.
+				add_filter( 'post_thumbnail_size', array( &$this, 'document_featured_image_size' ), 10, 2 );
+			}
 		}
 
 		// Set Global for Document Image from Cookie doc_image (may be updated later).
@@ -554,6 +682,35 @@ class WP_Document_Revisions {
 				)
 			);
 		}
+	}
+
+
+	/**
+	 * Dynamically sets the Featured Image Size for Documents when not set by theme.
+	 *
+	 * @since 3.7
+	 * @param string|int[] $size    Requested image size. Can be any registered image size name, or
+	 *                              an array of width and height values in pixels (in that order).
+	 * @param int          $post_id The post ID.
+	 */
+	public function document_featured_image_size( $size, $post_id ) {
+		if ( 'post-thumbnail' !== $size || ! $this->verify_post_type( $post_id ) ) {
+			return $size;
+		}
+
+		$size = array(
+			get_option( 'thumbnail_size_w' ),
+			get_option( 'thumbnail_size_h' ),
+		);
+
+		/**
+		 * Filters the post-thumbnail size parameters (used only if this image size has not been set).
+		 *
+		 * @since 3.6
+		 *
+		 * @param mixed[] $size default values for the image size.
+		 */
+		return apply_filters( 'document_post_thumbnail', $size );
 	}
 
 
@@ -995,6 +1152,10 @@ class WP_Document_Revisions {
 		$rev_query->is_404      = (bool) ( 0 === $rev_query->post_count );
 		$rev_query->post        = ( $rev_query->is_404 ? null : $posts[0] );
 		$rev_query->is_feed     = $feed;
+		$rev_query->query_vars  = array(
+			'cache_results' => false,
+			'fields'        => 'all',
+		);
 		$rev_query->rewind_posts();
 
 		return $rev_query;
@@ -1813,7 +1974,7 @@ class WP_Document_Revisions {
 		$new_dir         = array(
 			'path'    => $doc_dir . '/' . $dir['subdir'],
 			'url'     => home_url( '/' . $this->document_slug() ) . $dir['subdir'],
-			'subdtr'  => $dir['subdir'],
+			'subdir'  => $dir['subdir'],
 			'basedir' => $doc_dir,
 			'baseurl' => home_url( '/' . $this->document_slug() ),
 			'error'   => false,
@@ -2220,9 +2381,11 @@ class WP_Document_Revisions {
 	/**
 	 * Clears cache on post_save_document.
 	 *
-	 * @param int $post_id the post ID.
+	 * @param int     $post_id the post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated.
 	 */
-	public function clear_cache( $post_id ) {
+	public function clear_cache( $post_id, $post, $update ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		wp_cache_delete( $post_id, 'document_revision_indices' );
 		wp_cache_delete( $post_id, 'document_revisions' );
 		clean_post_cache( $post_id );
@@ -2789,50 +2952,8 @@ class WP_Document_Revisions {
 		return $vars;
 	}
 
-
 	/**
-	 * Provides support for publish_press_support and disables the default workflow state taxonomy.
-	 *
-	 * @since 3.2.3
-	 */
-	public function publishpress_support() {
-		// verify publishpress is enabled.
-		/**
-		 * Filter to switch off integration with PublishPress statuses.
-		 *
-		 * @param boolean true default value to use PublishPress processes if installed and active.
-		 */
-		if ( ! class_exists( 'PP_Custom_Status' ) || ! apply_filters( 'document_revisions_use_edit_flow', true ) ) {
-			return;
-		}
-
-		global $publishpress;
-
-		// prevent errors if options aren't init'd yet.
-		if ( ! isset( $publishpress->modules->custom_status->options->post_types['document'] ) ) {
-			return;
-		}
-
-		// check if enabled for documents.
-		if ( 'off' === $publishpress->modules->custom_status->options->post_types['document'] ) {
-			return;
-		}
-
-		// update the taxonomy key.
-		self::$taxonomy_key_val = PP_Custom_Status::taxonomy_key;
-
-		// PP adds the Post Status column so nothing to do.
-
-		// workflow_state will be used as a query_var, but is not one.
-		add_filter( 'query_vars', array( &$this, 'add_qv_workflow_state' ), 10 );
-
-		// we are going to use PP processes if installed and active.
-		// make sure use_workflow_states returns false.
-		add_filter( 'document_use_workflow_states', '__return_false' );
-	}
-
-	/**
-	 * Provides support for PublishPress Status and disables the default workflow state taxonomy.
+	 * Provides support for PublishPress Statuses and disables the default workflow state taxonomy.
 	 *
 	 * @since 3.2.3
 	 */
@@ -3214,7 +3335,7 @@ class WP_Document_Revisions {
 		check_ajax_referer( 'samplepermalink', 'samplepermalinknonce' );
 		$post_id = isset( $_POST['post_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : 0;
 		$title   = isset( $_POST['new_title'] ) ? sanitize_text_field( wp_unslash( $_POST['new_title'] ) ) : '';
-		$slug    = isset( $_POST['new_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['new_slug'] ) ) : null;
+		$slug    = isset( $_POST['new_slug'] ) ? sanitize_title( wp_unslash( $_POST['new_slug'] ) ) : null;
 
 		if ( ! $this->verify_post_type( $post_id ) ) {
 			// not a document so do nothing. If another function linked, then exit otherwise do as sample.
@@ -3238,7 +3359,7 @@ class WP_Document_Revisions {
 		);
 		$res        = $wpdb->query( $sql );
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery
-		$this->clear_cache( $post_id );
+		$this->clear_cache( $post_id, $doc, true );
 
 		// phpcs:ignore  WordPress.Security.EscapeOutput
 		wp_die( get_sample_permalink_html( $post_id, $title, $slug ) );
@@ -3424,8 +3545,10 @@ class WP_Document_Revisions {
 		}
 
 		global $wpdr_mr;
-		include_once __DIR__ . '/class-wp-document-revisions-manage-rest.php';
 		if ( ! $wpdr_mr ) {
+			if ( ! class_exists( 'WP_Document_Revisions_Manage_Rest' ) ) {
+				include_once __DIR__ . '/class-wp-document-revisions-manage-rest.php';
+			}
 			$wpdr_mr = new WP_Document_Revisions_Manage_Rest( $this );
 		}
 	}

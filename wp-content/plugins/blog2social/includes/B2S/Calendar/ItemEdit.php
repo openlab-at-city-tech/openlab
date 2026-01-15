@@ -26,10 +26,11 @@ class B2S_Calendar_ItemEdit extends B2S_Ship_Item {
                 $this->calenderItem = B2S_Calendar_Filter::getById($this->b2s_id);
                 return $this->calenderItem;
             }
-
+          
             $filter = B2S_Calendar_Filter::getByPostId($this->getPostId());
+         
             $items = $filter->getItems();
-
+        
             if(count($filter->getItems()) > 0) {
                 $this->calenderItem = $items[0];
             }

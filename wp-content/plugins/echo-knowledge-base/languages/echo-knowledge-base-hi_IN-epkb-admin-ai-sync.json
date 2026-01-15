@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Updated": [
+                "अपडेट किया गया"
+            ],
+            "Error": [
+                "त्रुटि"
+            ],
+            "No posts found to sync": [
+                "सिंक के लिए पोस्ट नहीं मिली"
+            ],
+            "Pending": [
+                "स्थगित"
+            ],
+            "of": [
+                "में से"
+            ],
+            "errors": [
+                "त्रुटियाँ"
+            ],
+            "with": [
+                "के साथ"
+            ],
+            "Sync canceled": [
+                "सिंक रद्द किया गया"
+            ],
+            "Failed to cancel sync": [
+                "सिंक रद्द करने में विफल"
+            ],
+            "A sync job is already running.": [
+                "एक सिंक जॉब पहले से चल रहा है।."
+            ],
+            "Failed to start sync": [
+                "सिंक शुरू करने में विफल रहा"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "OpenAI API कुंजी कंटेंट सिंक करने के लिए आवश्यक है। कृपया इसे सामान्य सेटिंग्स में कॉन्फ़िगर करें।."
+            ],
+            "Sync Method": [
+                "सिंक विधि"
+            ],
+            "Basic Timer": [
+                "बेसिक टाइमर"
+            ],
+            "Select All Filtered Records": [
+                "छांटे गए सभी रिकॉर्ड चुनें"
+            ],
+            "Select All Records": [
+                "सभी रिकॉर्ड चुनें"
+            ],
+            "Outdated": [
+                "पुराना"
+            ],
+            "Added": [
+                "जोड़ा गया"
+            ],
+            "Selected": [
+                "चयनित"
+            ],
+            "Records": [
+                "रिकॉर्ड्स"
+            ],
+            "selected records": [
+                "चुने गए रिकॉर्ड"
+            ],
+            "Sync in Progress": [
+                "सिंक प्रगति पर है"
+            ],
+            "Cancel Sync": [
+                "सिंक रद्द करें"
+            ],
+            "API key required": [
+                "एपीआई कुंजी आवश्यक है"
+            ],
+            "Select at least one item to sync": [
+                "कम से कम एक आइटम चुनें ताकि सिंक किया जा सके"
+            ],
+            "Start Sync": [
+                "सिंक शुरू करें"
+            ],
+            "Sync started successfully! ": [
+                "सिंक सफलतापूर्वक शुरू हुआ!"
+            ],
+            "Starting sync...": [
+                "सिंक शुरू हो रहा है..."
+            ],
+            "Retrying failed posts:": [
+                "असफल पोस्टों को पुनः प्रयास किया जा रहा है:"
+            ],
+            "Processing": [
+                "प्रक्रासन"
+            ],
+            "posts": [
+                "पोस्ट"
+            ],
+            "Completed! Processed": [
+                "समाप्त! संसाधित"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "5 लगातार त्रुटियों के बाद सिंक बंद हो गया। संसाधित"
+            ],
+            "posts with": [
+                "पोस्ट के साथ"
+            ],
+            "total errors": [
+                "कुल त्रुटियाँ"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "सिंक निर्धारित है, शुरू होने के लिए प्रतीक्षा कर रहा है..."
+            ]
+        }
+    }
+}

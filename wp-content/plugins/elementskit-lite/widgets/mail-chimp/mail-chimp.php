@@ -664,6 +664,17 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 			]
 		);
 
+		$this->start_controls_tabs(
+			'mailchimp_input_tabs'
+		);
+
+		$this->start_controls_tab(
+			'mailchimp_input_normal_tab',
+			[
+				'label' => esc_html__( 'Normal', 'elementskit-lite' ),
+			]
+		);
+
 		$this->add_group_control(
 			Group_Control_Background::get_type(),
 			[
@@ -672,18 +683,6 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'types' => [ 'classic', 'gradient' ],
 				'selector' => '{{WRAPPER}} .ekit_form_control',
 				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
-			]
-		);
-
-		$this->add_responsive_control(
-			'ekit_mail_chimp_input_style_radius',
-			[
-				'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
-				'type' => Controls_Manager::DIMENSIONS,
-				'size_units' => [ 'px', '%' ],
-				'selectors' => [
-					'{{WRAPPER}} .ekit_form_control' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
 			]
 		);
 
@@ -702,6 +701,60 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
 				'name' => 'ekit_mail_chimp_input_style_box_shadow',
 				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
 				'selector' => '{{WRAPPER}} .ekit_form_control, {{WRAPPER}} .ekit_form_control:focus',
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'mailchimp_input_focus_tab',
+			[
+				'label' => esc_html__( 'Focus', 'elementskit-lite' ),
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Background::get_type(),
+			[
+				'name' => 'ekit_mail_chimp_input_focus_style_background',
+				'label' => esc_html__( 'Background', 'elementskit-lite' ),
+				'types' => [ 'classic', 'gradient' ],
+				'selector' => '{{WRAPPER}} .ekit_form_control:focus',
+				'exclude' => ['image'] // PHPCS:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'ekit_mail_chimp_input_focus_style_border',
+				'label' => esc_html__( 'Border', 'elementskit-lite' ),
+				'selector' => '{{WRAPPER}} .ekit_form_control:focus',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'ekit_mail_chimp_input_focus_style_box_shadow',
+				'label' => esc_html__( 'Box Shadow', 'elementskit-lite' ),
+				'selector' => '{{WRAPPER}} .ekit_form_control:focus',
+			]
+		);
+
+		$this->end_controls_tab();
+		$this->end_controls_tabs();
+
+		$this->add_responsive_control(
+			'ekit_mail_chimp_input_style_radius',
+			[
+				'label' => esc_html__( 'Border Radius', 'elementskit-lite' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} .ekit_form_control' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+				'separator' => 'before',
 			]
 		);
 

@@ -736,6 +736,13 @@ button.navbar-flyout-toggle:hover,
 		}
 	}
 
+	.nav-item {
+		&:focus,
+		&:hover {
+			background-color: #f0f0f0;
+		}
+	}
+
 	button.flyout-action-button {
 		background: none;
 		padding: 0;
@@ -756,6 +763,9 @@ button.navbar-flyout-toggle:hover,
 		&:focus,
 		&:hover {
 			background-color: #f0f0f0;
+			outline: solid;
+			outline-offset: -2px;
+			outline-width: 2px;
 		}
 
 		.right-chevron svg {
@@ -2707,13 +2717,12 @@ body form{
                     input{
                         &[type="text"],
                         &[type="password"]{
-                            color: @40gray;
                             font-size: 13px;
                             height: 29px;
                             margin-bottom: 7px;
                             padding: 4px 10px;
                             width: 94%;
-                            color: @40gray;
+							color: #757575;
                         }
                     }
                 }

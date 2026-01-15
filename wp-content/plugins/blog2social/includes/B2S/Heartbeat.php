@@ -507,7 +507,7 @@ class B2S_Heartbeat {
 
     private function uploadVideo() {
         global $wpdb;
-     
+        $b2sExPostFormat="video";
         $sendData = $wpdb->get_results($wpdb->prepare("SELECT post_id,upload_video_token FROM {$wpdb->prefix}b2s_posts WHERE hook_action = %d ORDER BY id ASC LIMIT 1", 6), ARRAY_A);
         if (is_array($sendData) && !empty($sendData) && isset($sendData[0])) {
             if (isset($sendData[0]['post_id']) && (int) $sendData[0]['post_id'] > 0 && isset($sendData[0]['upload_video_token']) && $sendData[0]['upload_video_token'] != '') {
@@ -517,13 +517,13 @@ class B2S_Heartbeat {
                 $result= $upload->uploadVideo($sendData[0]['post_id'], $sendData[0]['upload_video_token']);
                 if (is_array($result) && !empty($result) && isset($result['upload'])) {
                     if ($result['upload'] !== false) {
-                        $data = array('hook_action' => 7);
-                        $where = array('publish_error_code' => '', 'upload_video_token' => $sendData[0]['upload_video_token']);
-                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d'), array('%s', '%s'));
-                    } else {
-                        $data = array('hook_action' => 0, 'publish_error_code' => ((isset($result['error_code']) && !empty($result['error_code'])) ? $result['error_code'] : 'VIDEO_UPLOAD'));
+                        $data = array('hook_action' => 7, 'display_post_format' => $b2sExPostFormat);
                         $where = array('publish_error_code' => '', 'upload_video_token' => $sendData[0]['upload_video_token']);
                         $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s'), array('%s', '%s'));
+                    } else {
+                        $data = array('hook_action' => 0, 'publish_error_code' => ((isset($result['error_code']) && !empty($result['error_code'])) ? $result['error_code'] : 'VIDEO_UPLOAD'), 'display_post_format' => $b2sExPostFormat);
+                        $where = array('publish_error_code' => '', 'upload_video_token' => $sendData[0]['upload_video_token']);
+                        $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d', '%s', '%s'), array('%s', '%s'));
                     }
                 }
             }

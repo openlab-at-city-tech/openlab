@@ -26,7 +26,7 @@
                                 </option>
                             <?php }?>
                         </select>
-                        <span class="trp-description-text"><?php esc_html_e( 'Select the original language of your content.', 'translatepress-multilingual' ); ?></span>
+                        <span class="trp-description-text"><?php esc_html_e( 'Select the language your content is written in.', 'translatepress-multilingual' ); ?></span>
                     </div>
                 </div>
 
@@ -34,11 +34,32 @@
                     <?php esc_html_e( 'WARNING. Changing the default language will invalidate existing translations.', 'translatepress-multilingual' ); ?><br/>
                     <?php esc_html_e( 'Even changing from en_US to en_GB, because they are treated as two different languages.', 'translatepress-multilingual' ); ?><br/>
                     <?php esc_html_e( 'In most cases changing the default flag is all it is needed: ', 'translatepress-multilingual' ); ?>
-                    <a href="https://translatepress.com/docs/developers/replace-default-flags/"><?php esc_html_e( 'replace the default flag', 'translatepress-multilingual' ); ?></a>
+                    <a href="https://translatepress.com/docs/developers/replace-default-flags/?utm_source=tp-website-languages&utm_medium=client-site&utm_campaign=change-default-language"><?php /* [utm67] */ esc_html_e( 'replace the default flag', 'translatepress-multilingual' ); ?></a>
                 </p>
 
                 <?php do_action( 'trp_language_selector', $languages ); ?>
 
+            </div>
+
+
+            <div class="trp-settings-container">
+                <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Re-run Setup Wizard', 'translatepress-multilingual' ); ?></h3>
+                <div class="trp-settings-separator"></div>
+
+                <div class="trp-settings-options__wrapper">
+
+                    <label for="trp-re-run-setup-wizard">
+
+                        <span class="trp-description-text"><?php esc_html_e('The Setup wizard allows you to quickly setup TranslatePress. You can initiate it at any time.', 'translatepress-multilingual'); ?>
+                        </span>
+
+                    </label>
+
+                    <a href="<?php echo esc_url( admin_url('admin.php?page=trp-onboarding&step=welcome') ) ?>" class="button-primary trp-submit-btn" id="trp-re-run-setup">
+                        <?php esc_html_e( 'Re-run Setup Wizard', 'translatepress-multilingual' ); ?>
+                    </a>
+
+                </div>
             </div>
 
             <div class="trp-settings-container">
@@ -103,7 +124,7 @@
 
                                 <span class="trp-description-text">
                                     <?php esc_html_e( 'Use shortcode on any page or widget.', 'translatepress-multilingual' ); ?>
-                                    <?php echo wp_kses_post( sprintf( __('You can also add the <a href="%s" title="Language Switcher Block Documentation">Language Switcher Block</a> in the WP Gutenberg Editor.', 'translatepress-multilingual'), esc_url('https://translatepress.com/docs/settings/#language-switcher-block' ) ) ); ?>
+                                    <?php /* [utm68] */ echo wp_kses_post( sprintf( __('You can also add the <a href="%s" title="Language Switcher Block Documentation">Language Switcher Block</a> in the WP Gutenberg Editor.', 'translatepress-multilingual'), esc_url('https://translatepress.com/docs/settings/?utm_source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-block#language-switcher-block' ) ) ); ?>
                                 </span>
                             </div>
                         </label>
@@ -121,7 +142,7 @@
                                     $link_start = '<a href="' . esc_url( admin_url( 'nav-menus.php' ) ) .'">';
                                     $link_end = '</a>';
                                     printf( wp_kses( __( 'Go to  %1$s Appearance -> Menus%2$s to add languages to the Language Switcher in any menu.', 'translatepress-multilingual' ), [ 'a' => [ 'href' => [] ] ] ), $link_start, $link_end ); //phpcs:ignore ?>
-                                    <a href="https://translatepress.com/docs/settings/#language-switcher" target="_blank"><?php esc_html_e( 'Learn more in our documentation.', 'translatepress-multilingual' ); ?></a>
+                                    <a href="https://translatepress.com/docs/settings/language-switcher/?utm_source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-item#menu-switcher" target="_blank"><?php /* [utm69] */esc_html_e( 'Learn more in our documentation.', 'translatepress-multilingual' ); ?></a>
                                 </span>
                             </div>
                         </label>

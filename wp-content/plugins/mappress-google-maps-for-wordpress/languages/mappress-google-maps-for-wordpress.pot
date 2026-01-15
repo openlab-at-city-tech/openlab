@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MapPress Google Maps and Leaflet Maps plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.94.15\n"
+"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.95.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-15T06:33:17+00:00\n"
+"POT-Creation-Date: 2025-10-19T21:24:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 
@@ -31,7 +31,7 @@ msgid "Chris Richardson"
 msgstr ""
 
 #: mappress.php:195
-#: mappress.php:811
+#: mappress.php:809
 #: build/index_mappress_admin.js:1
 msgid "Settings"
 msgstr ""
@@ -122,54 +122,54 @@ msgstr ""
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: mappress.php:737
-#: mappress.php:746
+#: mappress.php:736
+#: mappress.php:745
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:738
+#: mappress.php:737
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:739
+#: mappress.php:738
 msgid "Light"
 msgstr ""
 
-#: mappress.php:740
+#: mappress.php:739
 msgid "Dark"
 msgstr ""
 
-#: mappress.php:741
-#: mappress.php:754
+#: mappress.php:740
+#: mappress.php:753
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:742
+#: mappress.php:741
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress.php:752
+#: mappress.php:751
 msgid "Roadmap"
 msgstr ""
 
-#: mappress.php:753
+#: mappress.php:752
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Terrain"
 msgstr ""
 
-#: mappress.php:755
+#: mappress.php:754
 msgid "Hybrid"
 msgstr ""
 
-#: mappress.php:812
+#: mappress.php:810
 #: build/index_mappress_admin.js:1
 msgid "What's new"
 msgstr ""
 
-#: mappress.php:1202
+#: mappress.php:1201
 #: build/index_mappress_admin.js:1
 msgid "Version"
 msgstr ""
@@ -407,11 +407,6 @@ msgstr ""
 
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
-msgid "Unable to get your location"
-msgstr ""
-
-#: build/index_mappress.js:1
-#: build/index_mappress_admin.js:1
 msgid "Toggle fullscreen view"
 msgstr ""
 
@@ -463,6 +458,16 @@ msgstr ""
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Map error: please see the developer console (F12 in most browsers) for details."
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Browser does not support geolocation"
+msgstr ""
+
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Unable to get your location"
 msgstr ""
 
 #: build/index_mappress.js:1

@@ -1,0 +1,174 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "AI Search": [
+                "KI-Suche"
+            ],
+            "All": [
+                "Alle"
+            ],
+            "Disabled": [
+                "Deaktiviert"
+            ],
+            "AI Chat": [
+                "KI-Chat"
+            ],
+            "OpenAI API Key": [
+                "OpenAI-API-Schlüssel"
+            ],
+            "Debug mode updated successfully": [
+                "Debug-Modus erfolgreich aktualisiert"
+            ],
+            "Refresh": [
+                "Aktualisieren"
+            ],
+            "Status:": [
+                "Status:"
+            ],
+            "Warnings": [
+                "Warnungen"
+            ],
+            "Info": [
+                "Info"
+            ],
+            "Failed to update debug mode": [
+                "Aktualisierung des Debug-Modus fehlgeschlagen"
+            ],
+            "Error updating debug mode": [
+                "Fehler beim Aktualisieren des Debug-Modus"
+            ],
+            "Failed to load PHP logs": [
+                "Fehler beim Laden der PHP-Protokolle"
+            ],
+            "Error loading PHP logs": [
+                "Fehler beim Laden der PHP-Protokolle"
+            ],
+            "Failed to load WP logs": [
+                "Fehler beim Laden der WordPress-Protokolle"
+            ],
+            "Error loading WP logs": [
+                "Fehler beim Laden der WordPress-Protokolle"
+            ],
+            "Failed to load AI logs": [
+                "Fehler beim Laden der KI-Protokolle"
+            ],
+            "Error loading AI logs": [
+                "Fehler beim Laden der KI-Protokolle"
+            ],
+            "All AI logs cleared successfully": [
+                "Alle KI-Protokolle wurden erfolgreich gelöscht"
+            ],
+            "Failed to clear AI logs": [
+                "Fehler beim Löschen der KI-Protokolle"
+            ],
+            "Error clearing AI logs": [
+                "Fehler beim Löschen der KI-Protokolle"
+            ],
+            "Debug Mode": [
+                "Debug-Modus"
+            ],
+            "Enable Debug Mode": [
+                "Debug-Modus aktivieren"
+            ],
+            " (Localhost detected)": [
+                "(Lokaler Host erkannt)"
+            ],
+            "Enable debug mode to view system logs and troubleshoot AI features. This will load additional debugging tools.": [
+                "Aktivieren Sie den Debug-Modus, um Systemprotokolle anzuzeigen und KI-Funktionen zu beheben. Dadurch werden zusätzliche Debugging-Tools geladen."
+            ],
+            "AI Information": [
+                "KI-Informationen"
+            ],
+            "Missing API Key": [
+                "API-Schlüssel fehlt"
+            ],
+            "Data Collections": [
+                "Datensammlungen"
+            ],
+            "Unnamed Collection": [
+                "Unbenannte Sammlung"
+            ],
+            "Vector Store:": [
+                "Vektorspeicher:"
+            ],
+            "Created": [
+                "Erstellt"
+            ],
+            "Not created": [
+                "Nicht erstellt"
+            ],
+            "Total Records:": [
+                "Gesamt-Datensätze:"
+            ],
+            "Added:": [
+                "Hinzugefügt:"
+            ],
+            "Updated:": [
+                "Aktualisiert:"
+            ],
+            "Outdated:": [
+                "Veraltet:"
+            ],
+            "Error:": [
+                "Fehler:"
+            ],
+            "Pending:": [
+                "Ausstehend:"
+            ],
+            "No data collections found.": [
+                "Keine Datensammlungen gefunden."
+            ],
+            "System Information": [
+                "Systeminformationen"
+            ],
+            "Download Debug Info": [
+                "Debug-Informationen herunterladen"
+            ],
+            "Logs": [
+                "Protokolle"
+            ],
+            "PHP Error Log": [
+                "PHP-Fehlerprotokoll"
+            ],
+            "Fatal Errors": [
+                "Schwerwiegende Fehler"
+            ],
+            "Notices": [
+                "Hinweise"
+            ],
+            "AI Related Only": [
+                "Nur KI-bezogen"
+            ],
+            "Latest at top": [
+                "Neueste zuerst"
+            ],
+            "No logs found.": [
+                "Keine Protokolle gefunden."
+            ],
+            "WordPress Error Log": [
+                "WordPress-Fehlerprotokoll"
+            ],
+            "AI Activity Log": [
+                "KI-Aktivitätsprotokoll"
+            ],
+            "Clear Log": [
+                "Protokoll löschen"
+            ],
+            "All Levels": [
+                "Alle Ebenen"
+            ],
+            "Errors Only": [
+                "Nur Fehlermeldungen"
+            ],
+            "Debug mode is disabled. Enable it above to view debug information.": [
+                "Der Debug-Modus ist deaktiviert. Aktivieren Sie ihn oben, um Debug-Informationen anzuzeigen."
+            ]
+        }
+    }
+}

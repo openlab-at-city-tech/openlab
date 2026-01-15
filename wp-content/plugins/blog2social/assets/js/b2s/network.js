@@ -53,13 +53,8 @@ jQuery('.b2s-network-tab').on('shown.bs.tab', function (event) {
 function showContentByCurrentTab() {
 
     if (activeTab == 'isVideo') {
-        jQuery('.b2s-sched-manager-title').hide();
-        jQuery('.b2s-get-settings-sched-time-default').hide();
-        jQuery('.b2s-sched-manager-premium-area').hide();
+        
         jQuery('.b2s-edit-template-btn').hide();
-        jQuery('.b2s-sched-manager-time-area').hide();
-        jQuery('.b2s-sched-manager-day-area').hide();
-
         //FB Profiles+Groups are not supported
         jQuery('.btn-facebook[data-network-type="0"]').hide();
         jQuery('.btn-facebook[data-network-type="2"]').hide();
@@ -783,7 +778,7 @@ function loginSuccess(networkId, networkType, displayName, networkAuthId, mandan
         html += '<a class="b2s-network-item-auth-list-btn-delete b2s-add-padding-network-delete pull-right" data-network-type="' + networkType + '" data-network-id="' + networkId + '" data-network-auth-id="' + networkAuthId + '" href="#"><span class="glyphicon  glyphicon-trash glyphicon-grey"></span></a>';
 
         if (jQuery('#b2sUserVersion').val() == '0') {
-            html += '<span class="b2s-sched-manager-premium-area pull-right hidden-xs"  style="width: 240px;"><span class="label label-success"><a href="#" class="btn-label-premium b2sInfoSchedTimesModalBtn">SMART</a></span></span>';
+            html += '<span class="b2s-sched-manager-premium-area pull-right hidden-xs"  style="width: 240px;"><span class="label label-success"><a href="#" class="btn-label-premium b2sBestTimesInfoModal">SMART</a></span></span>';
         } else {
             html += '<span class="b2s-sched-manager-time-area pull-right b2s-sched-manager-add-padding hidden-xs" style="margin-right:30px !important;">';
             html += '<input class="form-control b2s-box-sched-time-input b2s-settings-sched-item-input-time" type="text" value="' + time + '" readonly data-network-auth-id="' + networkAuthId + '" data-network-mandant-id="' + mandandId + '" data-network-id="' + networkId + '" data-network-type="' + networkType + '" name="b2s-user-sched-data[time][' + networkAuthId + ']">';
@@ -928,6 +923,14 @@ function padDate(n) {
 }
 
 jQuery(document).on('click', '.b2s-edit-template-btn', function () {
+
+    //new Ad Modal if Version Free
+    if(jQuery('#b2sUserVersion').val() < 1){
+        jQuery('#b2sProFeatureEditTemplateModal').modal('show');
+        return;
+    }
+    
+    jQuery('b2s-edit-template-user-upgrade-required').hide();
     jQuery('.b2s-edit-template-content').hide();
     jQuery('.b2s-edit-template-save-btn').hide();
     jQuery('.b2s-loading-area').show();
@@ -953,6 +956,14 @@ jQuery(document).on('click', '.b2s-edit-template-btn', function () {
         },
         success: function (data) {
             if (data.result == true) {
+
+                if(data.content == 'b2s_upgrade_required') {
+                    jQuery('.b2s-loading-area').hide();
+                    jQuery('.b2s-edit-template-user-upgrade-required').show();
+                    return;
+                }
+
+                jQuery('#b2s-edit-template').modal('show');
                 jQuery('.b2s-edit-template-content').html(data.content);
                 jQuery('.b2s-loading-area').hide();
                 jQuery('.b2s-edit-template-content').show();
@@ -994,22 +1005,255 @@ jQuery(document).on('click', '.b2s-edit-template-btn', function () {
 jQuery(window).on("load", function () {
     if (jQuery('#b2sUserVersion').val() >= 1) {
         jQuery(document).on('click', '.b2s-edit-template-link-post', function () {
+            var networkId = jQuery(this).data('network-id');
             jQuery('.b2s-edit-template-image-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
+            jQuery('.b2s-edit-template-text-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
             jQuery('.b2s-edit-template-link-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-light').addClass('btn-primary');
-            jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
+            if(networkId == 4){
+                jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('3');
+
+            }else
+            {
+                jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
+            }
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+            jQuery('.b2s-edit-template-text-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
+            jQuery('.tumblr-link-post-notice').show();
+
+            //Tumblr special Preview Post again
+            if(networkId == 4)
+            {
+                var post = generateExamplePost(jQuery('.b2s-edit-template-post-content').val().replace(/\n/g, "<br>"), jQuery('.b2s-edit-template-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val(), jQuery('.b2s-edit-template-excerpt-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val());
+                jQuery('.b2s-edit-template-preview-content[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').html(post);
+            }
+           
         });
 
         jQuery(document).on('click', '.b2s-edit-template-image-post', function () {
+            var networkId = jQuery(this).data('network-id');
+            jQuery('.tumblr-link-post-notice').hide();
             jQuery('.b2s-edit-template-link-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
+            jQuery('.b2s-edit-template-text-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
             jQuery('.b2s-edit-template-image-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-light').addClass('btn-primary');
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('1');
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
+            jQuery('.b2s-edit-template-text-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
             jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+
+            //Tumblr special Preview Post again
+            if(networkId == 4)
+            {
+                var post = generateExamplePost(jQuery('.b2s-edit-template-post-content').val().replace(/\n/g, "<br>"), jQuery('.b2s-edit-template-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val(), jQuery('.b2s-edit-template-excerpt-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val());
+                jQuery('.b2s-edit-template-preview-content[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').html(post);
+            }
+
+            
         });
+
+        //Tumblr Text
+        jQuery(document).on('click', '.b2s-edit-template-text-post', function () {
+            var networkId = jQuery(this).data('network-id');
+            jQuery('.tumblr-link-post-notice').hide();
+            jQuery('.b2s-edit-template-link-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
+            jQuery('.b2s-edit-template-image-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-primary').addClass('btn-light');
+            jQuery('.b2s-edit-template-text-post[data-network-type=' + jQuery(this).attr('data-network-type') + ']').removeClass('btn-light').addClass('btn-primary');
+            jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
+            jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
+            jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
+            jQuery('.b2s-edit-template-text-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+            jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
+
+            //Tumblr special Preview Post again
+            if(networkId == 4)
+            {
+                var post = generateExamplePost(jQuery('.b2s-edit-template-post-content').val().replace(/\n/g, "<br>"), jQuery('.b2s-edit-template-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val(), jQuery('.b2s-edit-template-excerpt-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val());
+                jQuery('.b2s-edit-template-preview-content[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').html(post);
+            }
+
+        });
+
+   
+        jQuery(document).on('click', '.b2s-tiktok-promotion-radio', function () {
+            
+            var options = jQuery('.b2s-tiktok-promotion-options[data-network-auth-id="' + jQuery(this).attr('data-network-auth-id') + '"]');
+            if (jQuery(this).attr("value") == 1) {
+                options.show()
+            } else {
+                options.hide()
+            }
+        });
+
+
+    jQuery(document).on('change', '.b2s-tiktok-status_privacy', function () {
+     
+        var networkAuthId = jQuery(this).attr("data-network-auth-id");
+        var mode = jQuery(this).val();
+
+        if(mode == "SELF_ONLY"){
+    
+            jQuery('.b2s-tiktok-promotion-radio[data-network-id="'+networkAuthId+'"]').attr("disabled", true);
+            jQuery('.b2s-tiktok-promotion-radio[data-network-id="'+networkAuthId+'"]').first().prop("checked", false);
+            jQuery('.b2s-tiktok-promotion-radio[data-network-id="'+networkAuthId+'"]').last().prop("checked", true);
+            jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sTiktokPromotionThirdParty\\]').attr("disabled", true);
+
+        } else {
+
+            jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sTiktokPromotionThirdParty\\]').attr("disabled", false);
+        }
+    });
+
+   jQuery(document).on('change', '.b2s-tiktok-form-select', function () {
+
+        var networkAuthId = jQuery(this).attr("data-network-auth-id");
+        var value= jQuery(this).val();
+
+        if (value === "0") {
+        
+            jQuery('.tiktok-share-settings[data-network-auth-id="'+networkAuthId+'"]').hide();
+
+        } else {
+        
+             jQuery('.tiktok-share-settings[data-network-auth-id="'+networkAuthId+'"]').show();
+        }
+    });
+
+
+        jQuery(document).on('click', '.tiktok-promotional-toggle', function () {
+        
+            jQuery(this).toggleClass('off'); 
+    
+            var networkAuthId = jQuery(this).attr("data-network-auth-id");
+        
+            var options = jQuery('.b2s-tiktok-promotion-options[data-network-auth-id="'+jQuery(this).attr('data-network-auth-id')+'"]');
+            var self_only_option = jQuery('.b2s-tiktok-status_privacy[data-network-auth-id="'+networkAuthId +'"] > option[value="SELF_ONLY"]');
+
+            var submitButton = jQuery('.b2s-submit-btn');
+            var submitButtonScroll = jQuery('.b2s-submit-btn-scroll');
+            
+            //Toggle on
+            if(!jQuery(this).hasClass('off')){
+                options.show();
+
+                var promotionChecked= jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sTiktokPromotionOwnBrand\\]').is(':checked');
+                var brandedChecked= jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sTiktokPromotionThirdParty\\]').is(':checked');
+
+                if(brandedChecked){
+                    self_only_option.attr("disabled", true);
+                    self_only_option.text(jQuery(".b2s-tiktok-self-only-disabled-text").val());
+                    jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId +'"]').hide();
+                    jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId +'"]').show();
+                    jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPaidPartnership\\]').show();
+                }
+
+                if(promotionChecked && !brandedChecked){
+                    jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPromotional\\]').show();
+                    jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPaidPartnership\\]').hide();
+                    jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId +'"]').show();
+                    jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId +'"]').hide();
+                    
+                }
+
+                if(!promotionChecked && !brandedChecked){
+                    jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPromotional\\]').hide();
+                    jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPaidPartnership\\]').hide();
+                    jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId +'"]').show();
+                    jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId +'"]').hide();
+                
+                    submitButton.prop('disabled', true)
+                    submitButtonScroll.prop('disabled', true)
+
+                    submitButtonScroll.hover(
+                        function () {
+                            var text = jQuery('.b2s-tiktok-no-promotion-selected').val();
+                            jQuery(this).attr('title', text);
+                        });
+
+                    submitButton.hover(
+                        function () {
+                            var text = jQuery('.b2s-tiktok-no-promotion-selected').val();
+                            jQuery(this).attr('title', text);
+                        });
+                
+                
+                } else {
+                    
+                    submitButton.prop('disabled', false)
+                    submitButtonScroll.prop('disabled', false)
+                    submitButton.removeAttr('title');
+                    submitButtonScroll.removeAttr('title');
+                }
+
+            } else {
+
+                jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPromotional\\]').hide();
+                jQuery('#b2s\\['+networkAuthId +'\\]\\[b2sPaidPartnership\\]').hide();
+
+                jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId +'"]').show();
+                jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId +'"]').hide();
+            
+                options.hide()
+                self_only_option.attr("disabled", false);
+                self_only_option.text(jQuery(".b2s-tiktok-self-only-text").val());
+
+                submitButton.prop('disabled', false)
+                submitButtonScroll.prop('disabled', false)
+                submitButton.removeAttr('title');
+                submitButtonScroll.removeAttr('title');  
+                submitButton.unbind('mouseenter mouseleave');
+                submitButtonScroll.unbind('mouseenter mouseleave');
+            }
+        });
+
+        jQuery(document).on('change', '.b2s-tiktok-promotion-option', function () {
+        
+            if (jQuery(this).is(':checked')) {
+                jQuery(this).val("on");   // change value when checked
+            } else {
+                jQuery(this).val("off");  // change value when unchecked
+            }
+
+            var networkAuthId = jQuery(this).attr("data-network-auth-id");
+            var promotionChecked= jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sTiktokPromotionOwnBrand\\]').is(':checked');
+            var brandedChecked= jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sTiktokPromotionThirdParty\\]').is(':checked');
+            var self_only_option = jQuery('.b2s-tiktok-status_privacy[data-network-auth-id="'+networkAuthId+'"] > option[value="SELF_ONLY"]');
+
+            if(brandedChecked){
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPaidPartnership\\]').show();
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPromotional\\]').hide();
+
+                self_only_option.attr("disabled", true);
+                self_only_option.text(jQuery(".b2s-tiktok-self-only-disabled-text").val());
+
+                jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId+'"]').hide();
+                jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId+'"]').show();
+        
+            }else
+            {
+                self_only_option.attr("disabled", false);
+                self_only_option.text(jQuery(".b2s-tiktok-self-only-text").val());
+            }
+            
+            if(promotionChecked && !brandedChecked){
+                
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPromotional\\]').show();
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPaidPartnership\\]').hide();
+                jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId+'"]').show();
+                jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId+'"]').hide();
+                return;
+            }
+            if(!promotionChecked && !brandedChecked){
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPromotional\\]').hide();
+                jQuery('#b2s\\['+networkAuthId+'\\]\\[b2sPaidPartnership\\]').hide();
+                jQuery('.tiktok-music-confirmation[data-network-auth-id="'+networkAuthId+'"]').show();
+                jQuery('.tiktok-music-brand-confirmation[data-network-auth-id="'+networkAuthId+'"]').hide();
+                return;
+            }
+
+        });
+
 
 
         document.addEventListener('dragstart', function (event) {
@@ -1029,6 +1273,7 @@ jQuery(window).on("load", function () {
         });
 
         jQuery(document).on('keyup', '.b2s-edit-template-post-content', function () {
+           
             var post = generateExamplePost(jQuery(this).val().replace(/\n/g, "<br>"), jQuery('.b2s-edit-template-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val(), jQuery('.b2s-edit-template-excerpt-range[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').val());
             jQuery('.b2s-edit-template-preview-content[data-network-type="' + jQuery(this).attr('data-network-type') + '"]').html(post);
             if (typeof jQuery('#b2s_post_title').val() != 'undefined' && jQuery('#b2s_post_title').val() != '') {
@@ -1245,6 +1490,33 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
         }
     });
 
+    //TikTok Share Settings
+    if(jQuery('#b2s-edit-template-network-id').val() == 36) {
+       
+        if(jQuery(".b2s-edit-template-share-settings[data-network-id='"+jQuery('#b2s-edit-template-network-id').val()+"']").hasClass("btn-primary")){
+        
+            var discloseToggleOff = jQuery('[name="b2s[36][b2s-tiktok-disclose-toggle]"]').hasClass("off");
+            var allowComment= jQuery("#b2s\\[36\\]\\[b2sTiktokAllowComment\\]").prop('checked');
+            var isOwndBrand= jQuery("#b2s\\[36\\]\\[b2sTiktokPromotionOwnBrand\\]").prop('checked');
+            var isPromotion= jQuery("#b2s\\[36\\]\\[b2sTiktokPromotionThirdParty\\]").prop('checked');
+            var privacyStatus= jQuery('#b2s\\[36\\]\\[status_privacy\\]').val();
+
+            if(discloseToggleOff){
+               isOwndBrand = false;
+               isPromotion = false;
+            }
+    
+            var shareSettings= {
+                "allow_comment": allowComment,
+                "promotion_option_organic": isOwndBrand,
+                "promotion_option_branded": isPromotion,
+                "status_privacy": privacyStatus
+            }
+    
+            template_data[0]['share_settings'] = shareSettings;
+        }   
+    }   
+
     jQuery.ajax({
         url: ajaxurl,
         type: "POST",
@@ -1309,8 +1581,8 @@ jQuery('#b2sInfoCharacterLimit').on('hidden.bs.modal', function () {
 jQuery(document).on('click', '.b2s-network-add-mandant-btn', function () {
     jQuery('#b2s-network-add-mandant').modal('show');
 });
-jQuery(document).on('click', '.b2sInfoSchedTimesModalBtn', function () {
-    jQuery('#b2sInfoSchedTimesModal').modal('show');
+jQuery(document).on('click', '.b2sBestTimesInfoModal', function () {
+    jQuery('#b2sBestTimesInfoModal').modal('show');
 });
 jQuery(document).on('click', '.b2sInfoNetwork18Btn', function () {
     jQuery('#b2sInfoNetwork18').modal('show');
@@ -1323,9 +1595,6 @@ jQuery(document).on('click', '.b2sInfoContentBtn', function () {
 });
 jQuery(document).on('click', '.b2sInfoCharacterLimitBtn', function () {
     jQuery('#b2sInfoCharacterLimit').modal('show');
-});
-jQuery(document).on('click', '.b2s-network-addon-info-btn', function () {
-    jQuery('#b2sNetworkAddonInfo').modal('show');
 });
 
 //START Network Auth Settings
@@ -1374,6 +1643,9 @@ jQuery(document).on('click', '.b2s-network-auth-settings-btn', function () {
             }
         }
 
+        var networkAuthId = jQuery(this).attr('data-network-auth-id');
+
+
         jQuery.ajax({
             url: ajaxurl,
             type: "GET",
@@ -1406,6 +1678,21 @@ jQuery(document).on('click', '.b2s-network-auth-settings-btn', function () {
                     } else {
                         jQuery('.b2s-url-parameter-error[data-error-reason="default"]').show();
                         jQuery('.b2s-url-parameter-content').hide();
+                    }
+
+                    if( result.shareSettings != false) {
+
+                        jQuery('.b2-share-settings-content').html(result.shareSettings);
+                        jQuery('.b2-share-settings').show();
+                      
+                        if(jQuery('#b2s\\['+networkAuthId+'\\]\\[b2s-tiktok-toggle-on\\]').html() == '1'){
+
+                            jQuery('.toggle[name="b2s['+networkAuthId+'][b2s-tiktok-disclose-toggle]"]').click();
+                        }
+
+                    }else
+                    {
+                        jQuery('.b2-share-settings').hide();
                     }
 
                     //User Assign
@@ -1486,6 +1773,85 @@ jQuery(document).on('click', '.b2s-url-parameter-remove-btn', function () {
     }
     jQuery('.b2s-url-parameter-add-btn').show();
 });
+
+jQuery(document).on('click', '.b2s-share-settings-save-btn', function () {
+
+    jQuery('.b2s-network-auth-settings-content').hide();
+    jQuery('.b2s-loading-area').show();
+    //jQuery('.b2s-url-parameter-error').hide();
+
+    var originNetworkAuthId = jQuery(this).attr('data-network-auth-id');
+    var networkId = jQuery(this).attr('data-network-id');
+
+    //TikTok Share Settings
+    if(networkId  == 36 ) {
+       
+      var discloseToggleOff = jQuery('div.toggle[data-network-auth-id="'+originNetworkAuthId+'"]').hasClass("off");
+
+        var allowComment = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[b2sTiktokAllowComment\\]').prop('checked');
+        var allowStitch  = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[b2sTiktokAllowStitch\\]').prop('checked');
+        var allowDuet    = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[b2sTiktokAllowDuet\\]').prop('checked');
+
+        var isOwndBrand  = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[b2sTiktokPromotionOwnBrand\\]').prop('checked');
+        var isPromotion  = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[b2sTiktokPromotionThirdParty\\]').prop('checked');
+
+        var privacyStatus = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[status_privacy\\]').val();
+        var shareAsDraft  = jQuery('#b2s\\['+originNetworkAuthId+'\\]\\[tiktok_share_mode\\]').val() === "0";
+
+        if (discloseToggleOff) {
+            isOwndBrand = false;
+            isPromotion = false;
+        }
+   
+        if(discloseToggleOff){
+            isOwndBrand = false;
+            isPromotion = false;
+        }
+
+        var shareSettings= {
+            "allow_comment": allowComment,
+            "promotion_option_organic": isOwndBrand,
+            "promotion_option_branded": isPromotion,
+            "status_privacy": privacyStatus,
+            "share_as_draft": shareAsDraft,
+            "allow_stitch": allowStitch,
+            "allow_duet": allowDuet
+        }
+
+    }   
+
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_save_share_settings',
+            'shareSettings': JSON.stringify(shareSettings), 
+            'originNetworkAuthId': originNetworkAuthId,
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-loading-area').hide();
+            jQuery('.b2s-network-auth-settings-content').show();
+       
+            if (data.result == true) {
+                
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                } else {
+                    //jQuery('.b2s-url-parameter-error[data-error-reason="save"]').show();
+                }
+            }
+        }
+    });
+});
+
 
 jQuery(document).on('click', '.b2s-url-parameter-save-btn', function () {
     jQuery('.b2s-network-auth-settings-content').hide();
@@ -1648,11 +2014,13 @@ function generateExamplePost(template, content_range, exerpt_range) {
         if (typeof jQuery('#b2s_post_keywords').val() != 'undefined' && jQuery('#b2s_post_keywords').val() != '') {
             keywords = jQuery('#b2s_post_keywords').val();
         }
+  
         template = template.replace(/{CONTENT}/g, content);
         template = template.replace(/{EXCERPT}/g, exerpt);
         template = template.replace(/{TITLE}/g, title);
         template = template.replace(/{AUTHOR}/g, author);
         template = template.replace(/{KEYWORDS}/g, keywords);
+
     }
     if (typeof jQuery('.b2s-edit-template-limit').val() != 'undefined' && jQuery('.b2s-edit-template-limit').val() > 0) {
         if (template.length > jQuery('.b2s-edit-template-limit').val() || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 45) {
@@ -1661,10 +2029,40 @@ function generateExamplePost(template, content_range, exerpt_range) {
             } else {
                 template = template.substring(0, jQuery('.b2s-edit-template-limit').val());
             }
+
+            
             template = template.substring(0, template.lastIndexOf(' '));
         }
     }
+
+    //tumblr special preview case
+    if(jQuery('#b2s-edit-template-network-id').val() == 4){
+        var postFormat= jQuery('.b2s-edit-template-post-format').val();
+
+        if(postFormat == 3){
+            template= stripTags(template);
+            template= template.replace(/(\r\n|\n|\r)/gm, '');
+            template = template.substring(0, 125);
+            template = template + "...";
+        }
+
+        if(postFormat ==1){
+            template = title;
+        }else
+        {
+            jQuery('.b2s-edit-template-text-preview-tumblr-title').html(title);
+        }
+        
+        jQuery('.b2s-edit-template-text-preview-tumblr-hashtags').html(keywords);
+
+    }
     return template;
+}
+
+function stripTags(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
 }
 
 jQuery(document).on('click', '.b2s-stop-onboarding', function() {

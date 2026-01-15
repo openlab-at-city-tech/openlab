@@ -8,7 +8,7 @@ abstract class ShortCode extends Component
     /** @var string */
     public static $code;
     /** @var array */
-    protected static $print_only = array( 'bookly-search-form', 'bookly-staff-form', 'bookly-services-form', 'bookly-tags-form' );
+    protected static $print_only = array( 'bookly-search-form', 'bookly-staff-form', 'bookly-services-form', 'bookly-tags-form', 'bookly-customer-gift-cards', 'bookly-checkout-form', 'bookly-events-form' );
 
     /**
      * @return void

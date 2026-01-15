@@ -710,7 +710,7 @@ export default function EpkbInspectorControls({ block_ui_config, attributes, set
 				block={blockName}
 				attributes={attributes}
 				epkbBlockStorage={epkbBlockStorage}	// ensure the preview is re-rendered when the local storage is updated
-				urlQueryArgs={{is_editor_preview: 1}}
+				urlQueryArgs={{is_editor_preview: 1}}  // Flag to indicate editor preview mode - retrieved in PHP via class-epkb-abstract-block.php:108
 				httpMethod="POST"
 			/>
 		</div>

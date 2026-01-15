@@ -13,7 +13,6 @@ use Bookly\Frontend\Modules\Payment;
  * @method static void complete( Lib\DataHolders\Booking\Item $item )
  * @method static string getTranslatedTitle( $default, Lib\CartItem $cart_item )
  * @method static \Bookly\Lib\DataHolders\Details\Base paymentCreateDetailsFromItem( $details, Lib\DataHolders\Booking\Item $item )
- * @method static \Bookly\Lib\DataHolders\Details\Base paymentCreateDetailsByType( $details, string $type )
  * @method static bool paymentSpecificPriceExists( string $gateway ) Check whether specific price exists for given gateway.
  * @method static bool showPaymentSpecificPrices( bool $show ) Whether to show specific price for each payment system.
  * @method static Lib\Entities\Payment rollbackPayment( Lib\Entities\Payment $payment ) Rollback payment.

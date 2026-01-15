@@ -114,7 +114,7 @@ class Base
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getPrice()
     {

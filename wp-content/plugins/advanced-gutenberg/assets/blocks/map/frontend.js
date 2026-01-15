@@ -3,6 +3,20 @@ window.addEventListener('load', function () {
         return null;
     }
 
+    const sanitizeMapText = (text, preserveLineBreaks = false) => {
+        if (!text) return '';
+
+        const div = document.createElement('div');
+        div.textContent = text;
+        let sanitized = div.innerHTML;
+
+        if (preserveLineBreaks) {
+            sanitized = sanitized.replace(/\n/g, '<br>');
+        }
+
+        return sanitized;
+    };
+
     var mapElm = document.querySelectorAll('.advgb-map-block .advgb-map-content');
     for (var i = 0; i < mapElm.length; i++) {
         elm = mapElm[i];
@@ -11,8 +25,8 @@ window.addEventListener('load', function () {
             zoom = parseFloat(elm.dataset.zoom),
             defaultMarker = elm.dataset.default,
             icon = elm.dataset.icon,
-            title = elm.dataset.title.replace(/\\/g, ''),
-            desc = elm.dataset.desc.replace(/\\/g, ''),
+            title = sanitizeMapText(elm.dataset.title.replace(/\\/g, '')),
+            desc = sanitizeMapText(elm.dataset.desc.replace(/\\/g, ''), true),
             infoShown = elm.dataset.shown === 'true',
             info = '',
             mapStyle = decodeURIComponent(elm.dataset.style);

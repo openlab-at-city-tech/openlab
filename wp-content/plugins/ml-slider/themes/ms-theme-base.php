@@ -64,6 +64,10 @@ class MetaSlider_Theme_Base
 
         // Customize theme design
         add_filter('metaslider_theme_css', array($this, 'theme_customize'), 10, 3);
+
+        // @since 3.101 - Container
+        add_filter( 'metaslider_slideshow_output', array( $this, 'output_container' ), 10, 3 );
+        add_filter( 'metaslider_css', array( $this, 'css_container' ), 11, 3 );
     }
 
     /**
@@ -83,31 +87,6 @@ class MetaSlider_Theme_Base
 
         // Pro - override the arrows markup for the filmstrip
         add_filter('metaslider_flex_slider_filmstrip_parameters', array($this, 'update_parameters'), 99, 3);
-
-        // Adds classes for thumbnails and filmstrip navigation
-        add_filter('metaslider_css_classes', array($this, 'slider_classes'), 20, 3);
-    }
-
-    /**
-     * Slider Classes - Filter
-     *
-     * @param string $classes         Slider Classes
-     * @param int    $slider_id       Slider ID
-     * @param array  $slider_settings Slider Settings
-     * @return string
-     */
-    public function slider_classes($classes, $slider_id, $slider_settings)
-    {
-        if (isset($slider_settings['carouselMode']) && 'true' === $slider_settings['carouselMode']) {
-            $classes .= ' has-carousel-mode';
-        }
-        if ('true' == $slider_settings['navigation']) {
-            $classes .= ' has-dots-nav';
-        }
-        if ('filmstrip' == $slider_settings['navigation']) {
-            $classes .= ' has-filmstrip-nav';
-        }
-        return $classes;
     }
 
     /**
@@ -117,11 +96,11 @@ class MetaSlider_Theme_Base
     {
         foreach ($this->assets as $asset) {
             if ('css' == $asset['type']) {
-                wp_enqueue_style('metaslider_' . $this->id . '_theme_styles', METASLIDER_THEMES_URL . $this->id . $asset['file'], isset($asset['dependencies']) ? $asset['dependencies'] : array(), $this->version);
+                wp_enqueue_style('metaslider_' . $this->id . '_theme_styles', METASLIDER_THEMES_URL . $this->id . $asset['file'], isset($asset['dependencies']) ? $asset['dependencies'] : array(), METASLIDER_VERSION);
             }
 
             if ('js' == $asset['type']) {
-                wp_enqueue_script('metaslider_' . $this->id . '_theme_script', METASLIDER_THEMES_URL . $this->id . $asset['file'], isset($asset['dependencies']) ? $asset['dependencies'] : array(), $this->version, isset($asset['in_footer']) ? $asset['in_footer'] : true);
+                wp_enqueue_script('metaslider_' . $this->id . '_theme_script', METASLIDER_THEMES_URL . $this->id . $asset['file'], isset($asset['dependencies']) ? $asset['dependencies'] : array(), METASLIDER_VERSION, isset($asset['in_footer']) ? $asset['in_footer'] : true);
             }
         }
     }
@@ -139,6 +118,10 @@ class MetaSlider_Theme_Base
         $enable     = apply_filters( 'metaslider_flex_slider_responsive_arrows_enable', false );
         $prev_class = apply_filters( 'metaslider_flex_slider_responsive_arrows_prev_class', '.flex-prev' );
         $next_class = apply_filters( 'metaslider_flex_slider_responsive_arrows_next_class', '.flex-next' );
+
+        // @since 3.100 - Use these filters to add custom JS
+        $mobile_on_js   = apply_filters( 'metaslider_flex_slider_responsive_arrows_mobile_on_js', '' );
+        $mobile_off_js  = apply_filters( 'metaslider_flex_slider_responsive_arrows_mobile_off_js', '' );
         
         if ( ! is_admin() && $enable ) {
             $options['start'] = isset( $options['start'] ) ? $options['start'] : array();
@@ -165,9 +148,11 @@ class MetaSlider_Theme_Base
                     if ((screenWidth - 200) < liWidth && (parseInt(prevStartVal, 10) < 0 || parseInt(nextStartVal, 10) < 0)) {
                         prev.css('left', '10px');
                         next.css('right', '10px');
+                        {$mobile_on_js}
                     } else {
                         prev.css('left', prevStartVal);
                         next.css('right', nextStartVal);
+                        {$mobile_off_js}
                     }
                 }
                     
@@ -224,7 +209,9 @@ return $options;
 
     /**
      * Add manual controls to this theme
-     *
+     * Important: be careful when using as it will override 
+     * the default dots navigation of other slideshows in same page.
+     * 
      * @param array  $html         - The flexslider options
      * @param string $slideshow_id - the id of the slideshow
      * @param array  $settings     - the id of the slideshow
@@ -380,6 +367,70 @@ return $options;
             $settings,
             $slideshow_id
         );
+
+        return $css;
+    }
+
+    /**
+     * Add a wrapper to the slideshow output based on container settings
+     * 
+     * @since 3.101
+     * 
+     * @return html
+     */
+    public function output_container( $html, $slider_id, $settings )
+    {
+        $container = metaslider_pro_is_active() && isset( $settings['container'] ) && $settings['container'] === 'true' 
+            ? true : false;
+
+        if ( ! $container ) {
+            return $html;
+        }
+
+        $new_html = array();
+        $new_html[] = '<div id="metaslider_container_box_' . $slider_id . '" class="metaslider-container-box">';
+        $new_html[] = $html;
+        $new_html[] = '</div>';
+
+        return implode( "\n", $new_html );
+    }
+
+    /**
+     * Add CSS to style container
+     * 
+     * @since 3.101
+     */
+    public function css_container( $css, $settings, $id )
+    {
+        $container = metaslider_pro_is_active() && isset( $settings['container'] ) && $settings['container'] === 'true' 
+            ? true : false;
+
+        // @since 2.49 - Add CSS to container box
+        if ( $container) {
+            
+            $css .= '#metaslider_container_box_' . $id . ' {';
+
+            // Background
+            if ( ! empty( $settings['container_background'] ) ) {
+                $css .= 'background:' . esc_html( $settings['container_background'] ) . ';';
+            }
+
+            // Padding
+            foreach ( array( 'top', 'right', 'bottom', 'left' ) as $prop ) {
+                if ( isset( $settings['containerPadding_' . $prop] ) ) {
+                    $css .= 'padding-' . $prop . ':' . esc_html( (int) $settings['containerPadding_' . $prop] ) . 'px;';
+                }
+            }
+
+            // Margin
+            foreach ( array( 'top', 'bottom' ) as $prop ) {
+                if ( isset( $settings['containerMargin_' . $prop] ) ) {
+                    $css .= 'margin-' . $prop . ':' . esc_html( (int) $settings['containerMargin_' . $prop] ) . 'px;';
+                }
+            }
+
+            $css .= '}';
+        }
 
         return $css;
     }

@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Go to General Settings": [
+                "सामान्य सेटिंग्स पर जाएँ"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "AI सुविधाओं के उपयोग के लिए, कृपया अपनी API कुंजी कॉन्फ़िगर करें और सामान्य सेटिंग्स में डेटा गोपनीयता समझौते को स्वीकार करें, फिर AI खोज या AI चैट सक्षम करें।."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "मशीन लर्निंग डेटा के उपयोग के लिए, कृपया उनके संबंधित टैब में से AI चैट या AI खोज को सक्षम करें।."
+            ],
+            "Data Collection": [
+                "डेटा संग्रह"
+            ],
+            "OpenAI API Key Required": [
+                "OpenAI API कुंजी आवश्यक है"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "AI सुविधाओं के उपयोग के लिए, आपको अपनी OpenAI API कुंजी कॉन्फ़िगर करनी होगी।."
+            ],
+            "Configure API Key": [
+                "API कुंजी कॉन्फ़िगर करें"
+            ],
+            "Failed to load tab data": [
+                "टैब डेटा लोड करने में असफल"
+            ],
+            "Unknown tab": [
+                "अज्ञात टैब"
+            ],
+            "AI Configuration": [
+                "एआई कॉन्फ़िगरेशन"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "त्रुटि: कोई टैब कॉन्फ़िगर नहीं है। कृपया कॉन्फ़िगरेशन की जाँच करें।."
+            ],
+            "New training data collection created": [
+                "नई प्रशिक्षण डेटा संग्रह बनाई गई।"
+            ],
+            "Failed to create collection": [
+                "संग्रह बनाने में असफल रहा।"
+            ],
+            "AI features must be enabled to access this tab": [
+                "इस टैब तक पहुँचने के लिए AI सुविधाओं को सक्षम किया जाना चाहिए।"
+            ],
+            "Reloading page...": [
+                "पृष्ठ पुनः लोड हो रहा है..."
+            ]
+        }
+    }
+}

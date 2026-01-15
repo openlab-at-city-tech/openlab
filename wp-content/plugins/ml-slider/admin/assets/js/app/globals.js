@@ -28,6 +28,8 @@ Vue.mixin({
 		this.privacyLink = window.metaslider_api.privacy_link
 		this.themeEditorLink = window.metaslider_api.theme_editor_link
 		this.metasliderPage = window.metaslider_api.metaslider_page
+		this.metaslider_settings_page = window.metaslider_api.metaslider_settings_page
+		this.autoThemeConfig = window.metaslider_api.autoThemeConfig
 		this.production = process.env.NODE_ENV === 'production'
 
 		this.isIE11 = !!window.MSInputMethodContext && !!document.documentMode

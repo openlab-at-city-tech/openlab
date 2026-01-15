@@ -2,10 +2,8 @@
 Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
 Tags: compress, convert, webp, resize, lazy load
-Requires at least: 6.5
-Tested up to: 6.8
-Requires PHP: 7.4
-Stable tag: 8.1.4
+Tested up to: 6.9
+Stable tag: 8.3.0
 License: GPLv3
 
 Smaller Images, Faster Sites, Happier Visitors. Comprehensive image optimization that doesn't require a degree in rocket science.
@@ -143,6 +141,40 @@ That's not a question, but since I made it up, I'll answer it. See this resource
 
 * Feature requests can be viewed and submitted on our [feedback portal](https://feedback.ewww.io/b/features)
 * If you would like to help translate this plugin in your language, [join the team](https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/)
+
+= 8.3.0 =
+*Release Date - November 19, 2025*
+
+* added: Lazy Load support for background images in external CSS files
+* added: View CDN bandwidth usage on settings page
+* changed: Lazy Load checks parent element for skip-lazy class
+* changed: Lazy Load auto-sizing honors High DPI setting
+* changed: Easy IO fills in 450px wide image when responsive (srcset) images have a gap
+* changed: Easy IO premium setting moved to zone configuration at https://ewww.io/manage-sites/
+* improved: Lazy Load performance when searching for img elements
+* improved: Lazy Load placeholder generation is faster and works better with Safari
+* fixed: Lazy Load for iframes breaks WP Remote Users Sync plugin
+* fixed: PHP warning when attempting conversion of custom thumbnails from certain themes
+
+= 8.2.1 =
+*Release Date - August 27, 2025*
+
+* added: filters for cloud storage plugin integration
+* fixed: Easy IO misses some preload links
+* fixed: PHP error when API quota is exhausted during single image optimization
+
+= 8.2.0 =
+*Release Date - July 15, 2025*
+
+* added: JS WebP support for HTML elements/tags added via eio_allowed_background_image_elements filter
+* added: Easy IO support for dynamic cropping (crop=1) on WordPress.com sites
+* changed: use native ImageMagick methods to detect, and correct, paletted PNG thumbnails
+* changed: use authoritative classmap via composer to speed up autoloader, props @nlemoine
+* changed: streamlined admin notices
+* fixed: indexed PNG thumbnails with 8-bit alpha are distorted by quantization
+* fixed: PHP warnings related to HTML parsing
+* fixed: missing ImageMagick information on Site Health screen
+* fixed: PHP warnings when link URLs contain special regex characters
 
 = 8.1.4 =
 *Release Date - May 15, 2025*

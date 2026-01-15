@@ -13,7 +13,7 @@ if ( !defined('ABSPATH' ) )
 add_shortcode( 'trp_language', 'trp_language_content');
 
 /* ---------------------------------------------------------------------------
- * Shortcode [trp_language language="en_EN"] [/trp_language]
+ * Shortcode [trp_language language="en_US"] [/trp_language]
  * --------------------------------------------------------------------------- */
 
 
@@ -26,13 +26,13 @@ function trp_language_content( $attr, $content = null ){
 
     $TRP_LANGUAGE_SHORTCODE[] = $content;
 
-    extract(shortcode_atts(array(
+    $attr = shortcode_atts(array(
         'language' => '',
-    ), $attr));
+    ), $attr);
 
     $current_language = get_locale();
 
-    if( $current_language == $language ){
+    if( $current_language == $attr['language'] ){
         $output = do_shortcode($content);
     }else{
         $output = "";

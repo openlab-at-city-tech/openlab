@@ -13,6 +13,10 @@ use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * Jetpack just in time messaging through out the admin
  *
@@ -21,7 +25,7 @@ use Automattic\Jetpack\Status\Host;
  */
 class JITM {
 
-	const PACKAGE_VERSION = '4.2.26';
+	const PACKAGE_VERSION = '4.3.8';
 
 	/**
 	 * List of screen IDs where JITMs are allowed to display.
@@ -191,7 +195,7 @@ class JITM {
 			__FILE__,
 			array(
 				'in_footer'    => true,
-				'dependencies' => array( 'jquery' ),
+				'dependencies' => array(),
 				'enqueue'      => true,
 			)
 		);

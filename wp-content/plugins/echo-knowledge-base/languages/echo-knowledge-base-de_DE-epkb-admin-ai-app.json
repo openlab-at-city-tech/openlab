@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Go to General Settings": [
+                "Gehen Sie zu den allgemeinen Einstellungen"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Um AI-Funktionen nutzen zu können, konfigurieren Sie bitte Ihren API-Schlüssel und akzeptieren Sie in den Allgemeinen Einstellungen die Datenschutzvereinbarung. Aktivieren Sie anschließend AI Search oder AI Chat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Um Trainingsdaten verwenden zu können, aktivieren Sie bitte entweder AI Chat oder AI Search in den jeweiligen Registerkarten."
+            ],
+            "Data Collection": [
+                "Datensammlung"
+            ],
+            "OpenAI API Key Required": [
+                "OpenAI-API-Schlüssel erforderlich"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Um KI-Funktionen zu verwenden, müssen Sie Ihren OpenAI-API-Schlüssel konfigurieren."
+            ],
+            "Configure API Key": [
+                "API-Schlüssel konfigurieren"
+            ],
+            "Failed to load tab data": [
+                "Fehler beim Laden der Registerkarten-Daten"
+            ],
+            "Unknown tab": [
+                "Unbekannte Registerkarte"
+            ],
+            "AI Configuration": [
+                "KI-Konfiguration"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Fehler: Keine Registerkarten konfiguriert. Bitte überprüfen Sie die Konfiguration."
+            ],
+            "New training data collection created": [
+                "Neue Trainingsdaten-Sammlung erstellt"
+            ],
+            "Failed to create collection": [
+                "Sammlung konnte nicht erstellt werden"
+            ],
+            "AI features must be enabled to access this tab": [
+                "KI-Funktionen müssen aktiviert sein, um auf diese Registerkarte zuzugreifen"
+            ],
+            "Reloading page...": [
+                "Seite wird neu geladen..."
+            ]
+        }
+    }
+}

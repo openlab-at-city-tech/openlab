@@ -1,4 +1,3 @@
-/*! elementor - v3.30.0 - 07-07-2025 */
 .elementor-control-unit-1 {
   width: 27px;
 }
@@ -62,8 +61,8 @@ body {
 body:after {
   content: "";
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
   height: 100%;
   width: 0;
   background-color: var(--e-a-bg-default);
@@ -75,14 +74,14 @@ body a {
 body a:hover {
   color: var(--e-a-color-primary-bold);
 }
-body.elementor-editor-active #elementor-mode-switcher-preview .eicon:before {
-  content: "\e89f";
+body.elementor-editor-active #elementor-mode-switcher-preview i {
+  scale: calc(1 * var(--direction-multiplier)) 1;
 }
 body.elementor-editor-preview {
   --e-preview-width: 100%;
 }
-body.elementor-editor-preview #elementor-mode-switcher-preview .eicon:before {
-  content: "\e89e";
+body.elementor-editor-preview #elementor-mode-switcher-preview i {
+  scale: calc(-1 * var(--direction-multiplier)) 1;
 }
 body.elementor-navigator--dock-hint:after {
   width: 30px;
@@ -196,9 +195,10 @@ body.elementor-navigator--dock-hint:after {
 }
 .e-control-tool i {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
   color: var(--e-a-color-txt-default);
   font-size: 13px;
 }
@@ -209,9 +209,9 @@ i.eicon-tilted {
 
 .elementor-loader-wrapper {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -901,8 +901,7 @@ select {
   position: absolute;
   box-shadow: var(--e-a-popover-shadow);
   border-radius: var(--e-a-border-radius);
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   margin: -4px auto 5px;
   padding-block-start: 15px;
   width: 90%;
@@ -912,8 +911,8 @@ select {
 .elementor-panel .elementor-controls-popover:before {
   content: "";
   position: absolute;
-  top: -16px;
-  right: 22px;
+  inset-block-start: -16px;
+  inset-inline-end: 22px;
   border: 8px solid transparent;
   border-block-end-color: var(--e-a-bg-default);
 }
@@ -929,6 +928,7 @@ select {
 .elementor-panel {
   position: relative;
   height: 100%;
+  inset-inline-start: 0;
   margin-inline-start: calc(-1 * var(--e-editor-panel-width) * var(--e-is-preview-mode));
   width: var(--e-editor-panel-width);
   overflow: visible;
@@ -936,7 +936,6 @@ select {
   z-index: 1;
   font-family: var(--e-a-font-family);
   font-size: 13px;
-  left: 0;
 }
 .elementor-editor-preview .elementor-panel {
   --e-is-preview-mode: 1;
@@ -1195,10 +1194,10 @@ select {
   position: absolute;
   height: 13px;
   width: 13px;
-  top: 3px;
-  bottom: 0;
-  left: 8px;
-  right: 0;
+  inset-block-start: 3px;
+  inset-block-end: 0;
+  inset-inline-start: 8px;
+  inset-inline-end: 0;
   border-radius: 50%;
   z-index: -1;
 }
@@ -1291,8 +1290,8 @@ select {
 }
 .elementor-panel .elementor-panel-footer-sub-menu-wrapper {
   position: absolute;
-  bottom: 100%;
-  left: 0;
+  inset-block-end: 100%;
+  inset-inline-start: 0;
   width: 100%;
   background-color: #1f2124;
   padding: 10px;
@@ -1361,9 +1360,13 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 #elementor-panel-elements-search-area {
   background-color: var(--e-a-bg-default);
   position: sticky;
-  top: 0;
+  inset-block-start: 0;
   padding: 15px;
   z-index: 1;
+}
+
+#elementor-panel-elements-search-area:empty {
+  display: none;
 }
 
 #elementor-panel-elements-search-wrapper {
@@ -1384,14 +1387,26 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 }
 #elementor-panel-elements-search-input + i {
   position: absolute;
-  left: 10px;
-  top: 50%;
-  color: var(--e-a-color-txt-disabled);
+  inset-block-start: 50%;
+  inset-inline-start: 10px;
   transform: translateY(-50%);
+  color: var(--e-a-color-txt-disabled);
 }
 #elementor-panel-elements-search-input:focus {
   border-color: var(--e-a-border-color-focus);
   padding-inline-end: 15px;
+}
+
+.e-free-badge-container {
+  flex-grow: 1;
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+}
+.e-free-badge-container .e-free-badge {
+  border-radius: var(--e-a-border-radius);
+  background-color: var(--e-a-btn-bg);
+  color: var(--e-a-btn-color-invert);
+  padding: 3px 5px;
 }
 
 .elementor-panel .elementor-element {
@@ -1415,8 +1430,8 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 }
 .elementor-panel .elementor-element .eicon-atomic {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
   color: var(--e-a-color-txt);
 }
 .elementor-panel .elementor-element:hover, .elementor-panel .elementor-element:focus {
@@ -1425,6 +1440,9 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 }
 .elementor-panel .elementor-element:hover > .eicon-lock, .elementor-panel .elementor-element:focus > .eicon-lock {
   color: var(--e-a-color-accent);
+}
+.elementor-panel .elementor-element:hover > .eicon-plug, .elementor-panel .elementor-element:focus > .eicon-plug {
+  color: var(--e-a-color-info);
 }
 .elementor-panel .elementor-element .icon {
   font-size: 28px;
@@ -1439,10 +1457,10 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 .elementor-panel .elementor-element .title {
   font-size: 12px;
 }
-.elementor-panel .elementor-element > .eicon-lock {
+.elementor-panel .elementor-element > .eicon-lock, .elementor-panel .elementor-element .eicon-plug {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
   color: var(--e-a-color-txt-disabled);
 }
 .elementor-panel .elementor-element:active {
@@ -1462,8 +1480,8 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 #elementor-element--promotion__dialog:after {
   content: "";
   position: absolute;
-  top: 15px;
-  right: 100%;
+  inset-block-start: 15px;
+  inset-inline-end: 100%;
   transform: scaleY(0.7);
   border: 10px solid transparent;
   border-inline-end-color: var(--e-a-bg-default);
@@ -1512,8 +1530,8 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 .dialog-tooltip-widget:after {
   content: "";
   position: absolute;
-  top: 15px;
-  right: 100%;
+  inset-block-start: 15px;
+  inset-inline-end: 100%;
   transform: scaleY(0.7);
   border: 10px solid transparent;
   border-inline-end-color: var(--e-a-bg-default);
@@ -1583,14 +1601,14 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 
 #elementor-panel-get-pro-elements-sticky {
   position: sticky;
-  bottom: 0;
+  inset-block-end: 0;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.6;
   margin-block-end: -10px;
 }
 #elementor-panel-get-pro-elements-sticky .elementor-get-pro-sticky-message {
-  margin-top: -14px;
+  margin-block-start: -14px;
   min-height: 40px;
   display: block;
   padding: 9px min(35px, 5%);
@@ -1607,7 +1625,7 @@ body.elementor-panel-loading #elementor-panel-state-loading {
   color: var(--e-a-btn-bg-accent);
 }
 #elementor-panel-get-pro-elements-sticky img {
-  margin-left: 17px;
+  margin-inline-start: 17px;
 }
 
 #elementor-panel-notice-wrapper .elementor-panel-notice {
@@ -1636,8 +1654,8 @@ body.e-has-notification .elementor-panel-menu-item.elementor-panel-menu-item-not
   border-radius: 50%;
   width: 8px;
   height: 8px;
-  top: 5px;
-  right: 5px;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
 }
 
 .media-modal.wp-core-ui {
@@ -1753,21 +1771,34 @@ body:not(.elementor-device-mobile_extra) .elementor-control.elementor-control-re
 body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsive-mobile {
   display: none;
 }
+.elementor-control-shape_divider_top .elementor-visual-choice-element-image label, .elementor-control-shape_divider_bottom .elementor-visual-choice-element-image label {
+  padding: 4px;
+}
+.elementor-control-shape_divider_top img, .elementor-control-shape_divider_bottom img {
+  aspect-ratio: 4/1;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+}
+.elementor-control-shape_divider_bottom img {
+  rotate: X 180deg;
+}
 .elementor-control-custom_css_pro .elementor-nerd-box-message, .elementor-control-custom_attributes_pro .elementor-nerd-box-message {
   margin-block-start: 5px;
 }
 
-.elementor-control.e-open .elementor-panel-heading-toggle .eicon:before, .elementor-control.elementor-active .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-category.e-open .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-category.elementor-active .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-scheme-item.e-open .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-scheme-item.elementor-active .elementor-panel-heading-toggle .eicon:before {
-  content: "\e92a";
+.elementor-control.e-open .elementor-panel-heading-toggle i, .elementor-control.elementor-active .elementor-panel-heading-toggle i,
+.elementor-panel-category.e-open .elementor-panel-heading-toggle i,
+.elementor-panel-category.elementor-active .elementor-panel-heading-toggle i,
+.elementor-panel-scheme-item.e-open .elementor-panel-heading-toggle i,
+.elementor-panel-scheme-item.elementor-active .elementor-panel-heading-toggle i {
+  transform: rotate(90deg);
 }
-.elementor-control:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-category:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle .eicon:before,
-.elementor-panel-scheme-item:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle .eicon:before {
-  content: "\e90a";
+.elementor-control:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle i,
+.elementor-panel-category:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle i,
+.elementor-panel-scheme-item:not(.e-open):not(.elementor-active) .elementor-panel-heading-toggle i {
+  scale: calc(1 * var(--direction-multiplier)) 1;
 }
 
 .elementor-panel-heading {
@@ -1871,6 +1902,11 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   margin-block-start: 0;
 }
 
+.elementor-control-start-end .eicon-h-align-left,
+.elementor-control-start-end .eicon-h-align-right {
+  scale: calc(1 * var(--direction-multiplier)) 1;
+}
+
 .elementor-update-preview {
   margin: 15px 15px 0;
   display: flex;
@@ -1907,7 +1943,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-responsive-switchers__holder {
   position: absolute;
   width: 100%;
-  top: 0;
+  inset-block-start: 0;
   background-color: var(--e-a-bg-default);
   border-radius: var(--e-a-border-radius);
   transition: 0.15s;
@@ -2052,8 +2088,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   overflow: hidden;
   max-height: 0;
   position: absolute;
-  top: -0.8em;
-  left: -0.5em;
+  inset-block-start: -0.8em;
+  inset-inline-start: -0.5em;
   width: 2.5em;
   text-align: center;
   background-color: var(--e-a-bg-default);
@@ -2230,7 +2266,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-responsive-switchers__holder {
   position: absolute;
   width: 100%;
-  top: 0;
+  inset-block-start: 0;
   background-color: var(--e-a-bg-default);
   border-radius: var(--e-a-border-radius);
   transition: 0.15s;
@@ -2375,8 +2411,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   overflow: hidden;
   max-height: 0;
   position: absolute;
-  top: -0.8em;
-  left: -0.5em;
+  inset-block-start: -0.8em;
+  inset-inline-start: -0.5em;
   width: 2.5em;
   text-align: center;
   background-color: var(--e-a-bg-default);
@@ -2508,7 +2544,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-responsive-switchers__holder {
   position: absolute;
   width: 100%;
-  top: 0;
+  inset-block-start: 0;
   background-color: var(--e-a-bg-default);
   border-radius: var(--e-a-border-radius);
   transition: 0.15s;
@@ -2653,8 +2689,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   overflow: hidden;
   max-height: 0;
   position: absolute;
-  top: -0.8em;
-  left: -0.5em;
+  inset-block-start: -0.8em;
+  inset-inline-start: -0.5em;
   width: 2.5em;
   text-align: center;
   background-color: var(--e-a-bg-default);
@@ -2776,9 +2812,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 
 .elementor-control-type-icons .elementor-control-media__preview > * {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
 }
 .elementor-control-type-icons .elementor-control-media__preview i {
   font-size: 70px;
@@ -2846,8 +2882,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-type-gallery .elementor-control-gallery-edit span {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  inset-block-start: 10px;
+  inset-inline-end: 10px;
   width: 21px;
   height: 21px;
   color: var(--e-a-color-white);
@@ -2959,8 +2995,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .e-global__popover-info-tooltip:after {
   content: "";
   position: absolute;
-  bottom: -17px;
-  left: 16px;
+  inset-block-end: -17px;
+  inset-inline-start: 16px;
   border: 10px solid transparent;
   border-block-start-color: rgba(0, 0, 0, 0.9);
 }
@@ -2996,7 +3032,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   content: "\e90e";
   position: absolute;
   transform: translateY(-50%);
-  top: 50%;
+  inset-block-start: 50%;
   inset-inline-start: 13px;
 }
 .e-global__color {
@@ -3139,9 +3175,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-media .eicon-plus-circle {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
   color: var(--e-a-color-white);
   font-size: 20px;
 }
@@ -3166,9 +3202,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-media-area .eicon-video-camera {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
   color: rgba(255, 255, 255, 0.7);
   font-size: 21px;
 }
@@ -3186,16 +3222,15 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   pointer-events: none;
 }
 .elementor-control-media .elementor-control-media__content:not(:hover) .elementor-control-media__tools {
-  bottom: -30px;
+  inset-block-end: -30px;
 }
 .elementor-control-media__content {
   transition: all 0.2s ease-in-out;
 }
 .elementor-control-media__tools {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  inset-block-end: 0;
+  inset-inline: 0;
   height: 27px;
   transition: all 0.2s ease-in-out;
 }
@@ -3224,8 +3259,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-media__content__remove {
   position: absolute;
   z-index: 1;
-  top: 10px;
-  right: 10px;
+  inset-block-start: 10px;
+  inset-inline-end: 10px;
   width: 20px;
   height: 20px;
   font-size: 11px;
@@ -3568,9 +3603,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   content: "\e8ad";
   font-size: 12px;
   position: absolute;
-  top: 50%;
+  inset-block-start: 50%;
+  inset-inline-end: 5px;
   transform: translateY(-50%);
-  right: 5px;
   pointer-events: none;
 }
 .elementor-control-type-select .elementor-control-field.elementor-control-field-select-small .elementor-control-input-wrapper {
@@ -3606,12 +3641,12 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-type-slider--handles-range .elementor-slider .noUi-handle {
   border-radius: 0;
   width: 10px;
-  transform: translateY(calc(50% - 14px)) translateX(4px);
+  transform: translateY(calc(50% - 14px)) translateX(calc(4px * var(--direction-multiplier)));
 }
 .elementor-control-type-slider--handles-range .elementor-slider .noUi-handle:after {
   content: "";
   position: absolute;
-  top: 2px;
+  inset-block-start: 2px;
   height: 12px;
   width: 11px;
   transform: rotate(45deg);
@@ -3690,9 +3725,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   height: 16px;
   width: 16px;
   background-color: var(--e-a-color-white);
-  right: 0;
-  transform: translateY(calc(50% - 14px)) translateX(8px);
   position: absolute;
+  inset-inline-end: 0;
+  transform: translateY(calc(50% - 14px)) translateX(calc(8px * var(--direction-multiplier)));
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   border-radius: 50%;
 }
@@ -3711,7 +3746,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-slider .noUi-tooltip {
   position: absolute;
-  top: calc(100% + 5px);
+  inset-block-start: calc(100% + 5px);
   left: calc(50% - 4px);
   transform: translateX(-50%);
   font-size: 10px;
@@ -3800,7 +3835,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-type-switcher .elementor-switch-label:before, .elementor-control-type-switcher .elementor-switch-label:after {
   position: absolute;
-  top: 0;
+  inset-block-start: 0;
   width: 50%;
   text-align: center;
   line-height: 20px;
@@ -3808,12 +3843,12 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-type-switcher .elementor-switch-label:before {
   content: attr(data-off);
-  right: 5px;
+  inset-inline-end: 5px;
   color: var(--e-a-color-txt-muted);
 }
 .elementor-control-type-switcher .elementor-switch-label:after {
   content: attr(data-on);
-  left: 5px;
+  inset-inline-start: 5px;
   color: var(--e-a-btn-color);
   opacity: 0;
 }
@@ -3828,17 +3863,17 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 }
 .elementor-control-type-switcher .elementor-switch-handle {
   position: absolute;
-  top: 1px;
-  left: 1px;
+  inset-block-start: 1px;
+  inset-inline-start: 1px;
   width: 18px;
   height: 18px;
   background: white;
   border-radius: 10px;
-  transition: left 0.15s ease-out;
+  transition: inset-inline-start 0.15s ease-out;
 }
 .elementor-control-type-switcher .elementor-switch-input:checked ~ .elementor-switch-handle {
-  left: initial;
-  right: 1px;
+  inset-inline-start: initial;
+  inset-inline-end: 1px;
 }
 
 .elementor-control-type-tabs {
@@ -3892,8 +3927,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-type-textarea:not(.elementor-control-dynamic-value) .elementor-control-dynamic-switcher,
 .elementor-control-type-code:not(.elementor-control-dynamic-value) .elementor-control-dynamic-switcher {
   position: absolute;
-  top: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline-end: 0;
   z-index: 1;
 }
 .elementor-control-type-textarea .elementor-control-input-wrapper,
@@ -3973,8 +4008,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .elementor-control-type-url .elementor-control-url-autocomplete-spinner {
   display: none;
   position: absolute;
-  top: 5px;
-  right: 0;
+  inset-block-start: 5px;
+  inset-inline-end: 0;
   width: 10px;
   height: 10px;
   font-size: 10px;
@@ -4055,6 +4090,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   transition: var(--e-a-transition-hover);
   cursor: pointer;
   overflow: hidden;
+  width: 100%;
   padding: 8px;
 }
 .elementor-visual-choice-element-image input.e-visual-choice-placeholder + label, .elementor-visual-choice-element-image input:checked + label, .elementor-visual-choice-element-image input:hover + label {
@@ -4239,11 +4275,11 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   --e-a-mode-switcher-height: 50px;
   --e-a-mode-switcher-icon-size: 15px;
   position: absolute;
-  left: 100%;
-  top: 50%;
+  inset-block-start: 50%;
+  inset-inline-start: 100%;
   transform: translateY(-50%);
   background-color: var(--e-a-bg-default);
-  box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: calc(3px * var(--direction-multiplier, 1)) 1px 3px rgba(0, 0, 0, 0.05);
   transition: 0.3s opacity;
 }
 #elementor-mode-switcher:hover {
@@ -4315,9 +4351,9 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 
 #elementor-panel-revisions-loading {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
 }
 #elementor-panel-revisions-loading .eicon-loading {
   font-size: 50px;
@@ -4547,11 +4583,11 @@ body:not(.e-routes-has-history) #elementor-panel-header-kit-back {
 .elementor-control-type-global-style-repeater .elementor-controls-popover {
   align-self: end;
   margin-block-start: 35px;
-  top: 0;
+  inset-block-start: 0;
   width: 100%;
 }
 .elementor-control-type-global-style-repeater .elementor-controls-popover:before {
-  right: 5px;
+  inset-inline-end: 5px;
 }
 .elementor-control-type-global-style-repeater .elementor-controls-popover .elementor-control {
   padding: 0 20px 15px;
@@ -5038,6 +5074,7 @@ body.e-is-device-mode:not(.elementor-device-desktop) #elementor-preview-responsi
 }
 
 #elementor-template-library-header-preview-back {
+  gap: 10px;
   padding-block: 16.5px 15px;
   padding-inline: 0 16.5px;
   border-inline-end: var(--e-a-border);
@@ -5048,11 +5085,8 @@ body.e-is-device-mode:not(.elementor-device-desktop) #elementor-preview-responsi
   color: var(--e-a-color-txt-hover);
 }
 #elementor-template-library-header-preview-back i {
-  padding-inline-end: 10px;
   font-size: 18px;
-}
-#elementor-template-library-header-preview-back i:before {
-  content: "\e87e";
+  scale: calc(1 * var(--direction-multiplier)) 1;
 }
 
 #elementor-template-library-templates {
@@ -5087,7 +5121,7 @@ body.e-is-device-mode:not(.elementor-device-desktop) #elementor-preview-responsi
 }
 #elementor-template-library-templates[data-template-source=cloud] .toolbar-container .quota-progress-info i, #elementor-template-library-templates[data-template-source=empty] .toolbar-container .quota-progress-info i {
   font-size: 14px;
-  margin-left: 5px;
+  margin-inline-start: 5px;
 }
 #elementor-template-library-templates[data-template-source=cloud] .toolbar-container .progress-bar-container, #elementor-template-library-templates[data-template-source=empty] .toolbar-container .progress-bar-container {
   width: 200px;
@@ -5243,12 +5277,12 @@ body.e-is-device-mode:not(.elementor-device-desktop) #elementor-preview-responsi
   height: 100px;
   position: relative;
   border-radius: 3px;
-  margin-bottom: 4px;
+  margin-block-end: 4px;
   overflow: hidden;
 }
 #elementor-template-library-templates[data-template-view=grid] #elementor-template-library-templates-container .elementor-template-library-template-view-grid .elementor-template-library-template-thumbnail img {
-  -o-object-fit: cover;
-     object-fit: cover;
+  -o-object-fit: contain;
+     object-fit: contain;
   width: 100%;
   height: 100%;
 }
@@ -5377,10 +5411,10 @@ body.e-is-device-mode:not(.elementor-device-desktop) #elementor-preview-responsi
 }
 #elementor-template-library-templates .elementor-template-library-local-column-1 input[type=checkbox] {
   position: relative;
-  top: 3px;
+  inset-block-start: 3px;
 }
 #elementor-template-library-templates .elementor-template-library-local-column-1 input[type=checkbox]:checked {
-  top: 0px;
+  inset-block-start: 0px;
 }
 #elementor-template-library-templates .bulk-selection-item-checkbox:checked,
 #elementor-template-library-templates #bulk-select-all:checked {
@@ -5510,7 +5544,7 @@ label.elementor-template-library-order-label:hover {
 }
 
 #elementor-template-library-create-new-folder-dialog .elementor-create-folder-template-dialog__p {
-  margin-bottom: 10px;
+  margin-block-end: 10px;
 }
 
 #elementor-template-library-filter-text-wrapper {
@@ -5519,12 +5553,12 @@ label.elementor-template-library-order-label:hover {
 }
 #elementor-template-library-filter-text-wrapper i {
   position: absolute;
-  top: 50%;
-  right: 0;
+  inset-block-start: 50%;
+  inset-inline-end: 0;
   transform: translateY(-50%);
 }
 #elementor-template-library-filter-text-wrapper i.eicon-loading.eicon-animation-spin {
-  top: 25%;
+  inset-block-start: 25%;
 }
 
 #elementor-template-library-filter-text {
@@ -5573,8 +5607,8 @@ label.elementor-template-library-order-label:hover {
   position: absolute;
   text-transform: uppercase;
   line-height: 1;
-  top: 5px;
-  right: 5px;
+  inset-block-start: 5px;
+  inset-inline-end: 5px;
   padding: 3px 5px;
   font-size: 8px;
   border-radius: 2px;
@@ -5591,8 +5625,8 @@ label.elementor-template-library-order-label:hover {
 .elementor-template-library-template-remote:not(.elementor-template-library-template-page):not(.elementor-template-library-template-lp) .elementor-template-library-template-footer {
   position: absolute;
   width: 100%;
-  bottom: 0;
-  left: 0;
+  inset-block-end: 0;
+  inset-inline-start: 0;
   padding: 10px;
   background-color: var(--e-a-bg-default);
   transition: transform 0.5s;
@@ -5627,9 +5661,9 @@ label.elementor-template-library-order-label:hover {
 .elementor-template-library-template-remote .elementor-template-library-template-preview i {
   font-size: 20px;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
 }
 .elementor-template-library-template-remote .elementor-template-library-template-footer {
   display: flex;
@@ -5770,8 +5804,8 @@ label.elementor-template-library-order-label:hover {
   background-color: var(--e-a-bg-default);
   border-radius: var(--e-a-border-radius);
   box-shadow: 1px 3px 11px rgba(0, 0, 0, 0.3);
-  top: 100%;
-  right: 0;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
   z-index: 1;
 }
 .elementor-template-library-template-local .elementor-template-library-template-more > div,
@@ -5904,7 +5938,7 @@ label.elementor-template-library-order-label:hover {
 }
 #elementor-template-library-preview iframe {
   height: 150%;
-  transform: scale(0.666) translateX(-25%) translateY(-25%);
+  transform: scale(0.666) translateX(calc(-25% * var(--direction-multiplier))) translateY(-25%);
 }
 @media (max-width: 1439px) {
   #elementor-template-library-preview iframe {
@@ -6065,7 +6099,7 @@ label.elementor-template-library-order-label:hover {
 }
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections input[type=checkbox]:checked {
   background: #69727D;
-  top: -3px;
+  inset-block-start: -3px;
   position: relative;
 }
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input {
@@ -6081,11 +6115,11 @@ label.elementor-template-library-order-label:hover {
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input #cloud,
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input #local {
   position: relative;
-  top: 2px;
+  inset-block-start: 2px;
 }
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input #cloud:checked,
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input #local:checked {
-  top: -2px;
+  inset-block-start: -2px;
 }
 #elementor-template-library-save-template-form .cloud-library-form-inputs .source-selections-input .eicon-ellipsis-h {
   vertical-align: bottom;
@@ -6116,7 +6150,7 @@ label.elementor-template-library-order-label:hover {
 #elementor-template-library-save-template-form .cloud-library-form-inputs .cloud-folder-selection-dropdown {
   display: none;
   position: absolute;
-  top: 40px;
+  inset-block-start: 40px;
   background-color: var(--e-a-bg-default);
   min-width: 187px;
   overflow: auto;
@@ -6274,9 +6308,9 @@ label.elementor-template-library-order-label:hover {
 
 .elementor-template-library-blank-footer {
   position: absolute;
-  bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%);
+  inset-block-end: 70px;
+  inset-inline-start: 50%;
+  transform: translateX(calc(-50% * var(--direction-multiplier)));
   font-style: italic;
   color: var(--e-a-color-txt-muted);
 }
@@ -6341,7 +6375,7 @@ label.elementor-template-library-order-label:hover {
 #elementor-library--connect_infotip__dialog:after {
   content: "";
   position: absolute;
-  right: 46%;
+  inset-inline-end: 46%;
   transform: scaleX(0.7);
   border: 10px solid transparent;
 }
@@ -6353,8 +6387,8 @@ label.elementor-template-library-order-label:hover {
   padding: 20px 20px 0px 20px;
 }
 #elementor-library--infotip__dialog:after {
-  top: 100%;
-  border-top-color: var(--e-a-bg-default);
+  inset-block-start: 100%;
+  border-block-start-color: var(--e-a-bg-default);
 }
 
 #elementor-library--connect_infotip__dialog {
@@ -6364,8 +6398,8 @@ label.elementor-template-library-order-label:hover {
   padding: 20px;
 }
 #elementor-library--connect_infotip__dialog:after {
-  bottom: 100%;
-  border-bottom-color: var(--e-a-bg-default);
+  inset-block-end: 100%;
+  border-block-end-color: var(--e-a-bg-default);
 }
 
 .elementor-tags-list {
@@ -6459,8 +6493,8 @@ label.elementor-template-library-order-label:hover {
 .elementor-tag-settings-popup:before {
   content: "";
   position: absolute;
-  top: -20px;
-  left: 5px;
+  inset-block-start: -20px;
+  inset-inline-start: 5px;
   border: 10px solid transparent;
   border-block-end-color: var(--e-a-border-color);
 }
@@ -6669,7 +6703,7 @@ label.elementor-template-library-order-label:hover {
 .elementor-hotkeys__item--shortcut kbd:not(:last-of-type)::after {
   content: "+";
   position: absolute;
-  right: 0;
+  inset-inline-end: 0;
   width: 9px;
   text-align: center;
   margin-inline-end: -18px;
@@ -6750,10 +6784,10 @@ body {
 
 #elementor-navigator {
   position: fixed;
-  top: 100px;
+  inset-block-start: 100px;
+  inset-inline-end: 30px;
   width: var(--e-editor-navigator-width);
   height: 50vh;
-  right: 30px;
   background-color: var(--e-a-bg-default);
   border: var(--e-a-border);
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.1);
@@ -6884,7 +6918,7 @@ iframe + #elementor-navigator__header__title, #elementor-navigator__ai-titles + 
   cursor: not-allowed;
 }
 .elementor-navigator__item:not(.elementor-active) .elementor-navigator__element__list-toggle i {
-  transform: rotate(-90deg);
+  transform: rotate(calc(-90deg * var(--direction-multiplier)));
 }
 .elementor-navigator__item > * {
   display: flex;
@@ -6971,7 +7005,7 @@ iframe + #elementor-navigator__header__title, #elementor-navigator__ai-titles + 
 }
 .elementor-navigator__element__toggle {
   position: absolute;
-  right: 15px;
+  inset-inline-end: 15px;
   height: 100%;
   z-index: 0;
   font-size: 13px;
@@ -6982,7 +7016,7 @@ iframe + #elementor-navigator__header__title, #elementor-navigator__ai-titles + 
   z-index: 91;
 }
 .elementor-navigator__element__indicators:not(:hover) {
-  transform: translateX(calc(100% - var(--e-editor-navigator-indicator-width)));
+  transform: translateX(calc(100% * var(--direction-multiplier) - var(--e-editor-navigator-indicator-width) * var(--direction-multiplier)));
 }
 .elementor-navigator__element__indicator {
   height: 100%;
@@ -7011,7 +7045,7 @@ iframe + #elementor-navigator__header__title, #elementor-navigator__ai-titles + 
 .e-notice-bar {
   position: absolute;
   width: 100%;
-  bottom: 0;
+  inset-block-end: 0;
   display: flex;
   align-items: center;
   height: 40px;
@@ -7139,9 +7173,9 @@ body:not(.elementor-device-desktop) #e-notice-bar {
 }
 #elementor-icons-manager__search i {
   position: absolute;
-  top: 50%;
+  inset-block-start: 50%;
+  inset-inline-end: 15px;
   transform: translateY(-50%);
-  right: 15px;
 }
 #elementor-icons-manager__tab__wrapper {
   overflow: auto;
@@ -7232,8 +7266,8 @@ body:not(.elementor-device-desktop) #e-notice-bar {
   position: absolute;
   height: 100%;
   width: 3px;
-  top: 0;
-  left: 0;
+  inset-block-start: 0;
+  inset-inline-start: 0;
   background-color: var(--e-a-border-color-accent);
 }
 .elementor-icons-manager__tab__item {
@@ -7260,9 +7294,9 @@ body:not(.elementor-device-desktop) #e-notice-bar {
   align-items: center;
   width: 100%;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
   padding: 1px;
 }
 .elementor-icons-manager__tab__item__icon {
@@ -7308,9 +7342,10 @@ body:not(.elementor-device-desktop) #e-notice-bar {
 .pickr .pcr-button:before, .pickr .pcr-button:after {
   height: 12px;
   width: 12px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(calc(-50% * var(--direction-multiplier)), -50%);
 }
 
 .pcr-app {
@@ -7452,7 +7487,7 @@ body:not(.elementor-device-desktop) #e-notice-bar {
 
 .select2-selection__arrow {
   height: 27px;
-  top: 0;
+  inset-block-start: 0;
 }
 
 .select2-results__option[aria-selected=true] {
@@ -7513,9 +7548,8 @@ label.e-scrubbing-over {
   margin: 0;
   height: 100px;
   position: absolute;
-  top: -60px;
-  left: 0;
-  right: 0;
+  inset-block-start: -60px;
+  inset-inline: 0;
 }
 #elementor-paste-area-dialog #elementor-paste-area-dialog__input:focus {
   border-color: transparent;

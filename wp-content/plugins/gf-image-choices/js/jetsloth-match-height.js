@@ -1,3 +1,5 @@
+/*! © JetSloth — SPDX-License-Identifier: GPL-2.0-or-later */
+
 (function(){
 
 	const jetsloth_matchHeights_setHeight = (el, val) => {

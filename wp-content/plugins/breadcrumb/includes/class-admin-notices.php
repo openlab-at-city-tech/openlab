@@ -6,7 +6,7 @@ class class_breadcrumb_notices
 
     public function __construct()
     {
-        add_action('admin_notices', array($this, 'data_update'));
+        //add_action('admin_notices', array($this, 'data_update'));
     }
 
 
@@ -30,7 +30,8 @@ class class_breadcrumb_notices
             <div class="notice">
                 <p>
                     <?php
-                    echo sprintf(__('Data update required for breadcrumb plugin <strong><a href="%s">click here</a></strong> to update data', 'post-grid-pro'), esc_url(admin_url() . 'admin.php?page=breadcrumb-data-update'))
+                    /* translators: %s: URL to breadcrumb data update page */
+                    echo sprintf(wp_kses_post(__('Data update required for breadcrumb plugin <strong><a href="%s">click here</a></strong> to update data', 'breadcrumb'), esc_url(admin_url() . 'admin.php?page=breadcrumb-data-update')))
                     ?>
                 </p>
             </div>
@@ -38,7 +39,7 @@ class class_breadcrumb_notices
         }
 
 
-        echo (ob_get_clean());
+        echo wp_kses_post(ob_get_clean());
     }
 }
 

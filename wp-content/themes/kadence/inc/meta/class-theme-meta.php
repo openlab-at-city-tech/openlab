@@ -554,6 +554,16 @@ class Theme_Meta {
 				'auth_callback' => '__return_true',
 			)
 		);
+		register_post_meta(
+			'', // Pass an empty string to register the meta key across all existing post types.
+			'_kad_post_classname',
+			array(
+				'show_in_rest'  => true,
+				'single'        => true,
+				'type'          => 'string',
+				'auth_callback' => '__return_true',
+			)
+		);
 	}
 	/**
 	 * Enqueue Script for Meta options

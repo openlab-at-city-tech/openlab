@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Title": [
+                "Назва"
+            ],
+            "Status": [
+                "Статус"
+            ],
+            "All": [
+                "Всі"
+            ],
+            "Close": [
+                "Закрити"
+            ],
+            "Recent": [
+                "Останні"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "selected": [
+                "обрано"
+            ],
+            "Next": [
+                "Далі"
+            ],
+            "Previous": [
+                "Попередній"
+            ],
+            "Today": [
+                "Сьогодні"
+            ],
+            "Yesterday": [
+                "Учора"
+            ],
+            "Loading...": [
+                "Завантаження..."
+            ],
+            "Page": [
+                "Сторінка"
+            ],
+            "Delete": [
+                "Видалити"
+            ],
+            "of": [
+                "з"
+            ],
+            "Searching...": [
+                "Пошук..."
+            ],
+            "Refreshing...": [
+                "Оновлення..."
+            ],
+            "Refresh": [
+                "Оновити"
+            ],
+            "Failed to fetch analysis data": [
+                "Не вдалося отримати дані аналізу"
+            ],
+            "Data refreshed successfully": [
+                "Дані успішно оновлено"
+            ],
+            "Delete Selected Items": [
+                "Видалити вибрані елементи"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Ви впевнені, що хочете видалити вибрані елементи?"
+            ],
+            "Items deleted successfully": [
+                "Елементи успішно видалено"
+            ],
+            "Unknown error occurred": [
+                "Сталася невідома помилка"
+            ],
+            "No articles need analysis": [
+                "Статті не потребують аналізу"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "Усі статті проаналізовано. Відмінна робота!"
+            ],
+            "No articles need improvement": [
+                "Статті не потребують вдосконалення"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "Усі проаналізовані статті мають оцінку понад 80%. Чудово!"
+            ],
+            "No recent articles": [
+                "Немає недавніх статей"
+            ],
+            "No articles have been modified recently.": [
+                "Останнім часом статті не були змінені."
+            ],
+            "No articles found": [
+                "Статті не знайдено"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "У цій базі знань немає статей. Створіть кілька статей, щоб розпочати аналіз."
+            ],
+            "To Analyze": [
+                "До аналізу"
+            ],
+            "To Improve": [
+                "Покращити"
+            ],
+            "Search by title...": [
+                "Пошук за назвою..."
+            ],
+            "Loading content analysis data...": [
+                "Завантаження даних аналізу вмісту..."
+            ],
+            "Score": [
+                "Оцінка"
+            ],
+            "Sort": [
+                "Сортувати"
+            ],
+            "Importance": [
+                "Важливість"
+            ],
+            "Last Modified": [
+                "Останнє редагування"
+            ],
+            "No articles match your search": [
+                "Статті, які відповідають вашому запиту, не знайдені"
+            ],
+            "View detailed analysis": [
+                "Переглянути детальний аналіз"
+            ],
+            "days ago": [
+                "дні тому"
+            ],
+            "week ago": [
+                "тиждень тому"
+            ],
+            "weeks ago": [
+                "тижнів тому"
+            ],
+            "Content Analysis Error": [
+                "Помилка аналізу вмісту"
+            ],
+            "ERROR": [
+                "ПОМИЛКА"
+            ],
+            "Article ID:": [
+                "ID документації:"
+            ],
+            "Error Processing Content Analysis": [
+                "Помилка обробки аналізу вмісту"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "Цю документацію не вдалося проаналізувати. Спробуйте ще раз або перевірте вміст документації на наявність проблем."
+            ]
+        }
+    }
+}

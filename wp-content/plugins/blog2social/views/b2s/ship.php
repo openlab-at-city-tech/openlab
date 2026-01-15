@@ -163,22 +163,21 @@ $mandantData = $navbar->getData();
                 </div>
             </div>
             <div class="clearfix"></div>            
-            <?php if (defined("B2S_PLUGIN_NOTICE_SITE_URL") && B2S_PLUGIN_NOTICE_SITE_URL != false && !$isVideo) { ?>
+            <?php if (defined("B2S_PLUGIN_NOTICE_SITE_URL") && B2S_PLUGIN_NOTICE_SITE_URL != false) { ?>
                 <div class="b2s-settings-user-sched-time-area col-xs-12 del-padding-left hidden-xs">
                     <button type="button" class="btn btn-link pull-left btn-xs  scroll-to-bottom"><span class="glyphicon glyphicon-chevron-down"></span> <?php esc_html_e('scroll to bottom', 'blog2social') ?> </button>
                     <div class="pull-right">
                         <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                             <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-user">
                             <?php } else { ?>
-                                <a href="#" class="btn btn-primary btn-xs b2s-btn-disabled b2sPreFeatureModalBtn" data-title="<?php esc_html_e('You want to load your time settings?', 'blog2social') ?>">
+                                <a href="#" class="btn btn-primary btn-xs b2s-btn-disabled b2s-get-settings-custom-sched-time-open-modal b2sPreFeatureBestTimesModal" data-title="<?php esc_html_e('You want to load your time settings?', 'blog2social') ?>">
                                 <?php } esc_html_e('Load My Times Settings', 'blog2social'); ?> <?php echo wp_kses($isPremium, array('span' => array('class' => array()))); ?></a>
 
                             <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                                 <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-default">
                                 <?php } else { ?>
-                                    <a href="#" class="btn btn-primary btn-xs b2s-btn-disabled b2s-get-settings-sched-time-open-modal b2sPreFeatureModalBtn" data-title="<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>">
+                                    <a href="#" class="btn btn-primary btn-xs b2s-btn-disabled b2s-get-settings-sched-time-open-modal b2sPreFeatureBestTimesModal" data-title="<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>">
                                     <?php } esc_html_e('Load Best Times', 'blog2social'); ?> <?php echo wp_kses($isPremium, array('span' => array('class' => array()))); ?></a>
-                                <a href="#" class="btn btn-link btn-xs hidden-sm b2s-load-settings-sched-time-default-info b2sInfoSchedTimesModalBtn"><?php esc_html_e('Info', 'blog2social'); ?></a>
                                 </div>
                                 </div>
                             <?php } ?>
@@ -444,7 +443,7 @@ $mandantData = $navbar->getData();
                                                             <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                                                                 <button class="btn btn-primary b2s-re-share-btn"><?php esc_html_e('Re-share this post', 'blog2social') ?></button>
                                                             <?php } else { ?>
-                                                                <a href="#" class="btn btn-primary b2s-btn-disabled b2sPreFeatureModalBtn" data-title="You want to re-share your blog post?"><?php esc_html_e('Re-share this post', 'blog2social') ?> <?php echo wp_kses($isPremium, array('span' => array('class' => array()))); ?></a>
+                                                                <a href="#" class="btn btn-primary b2s-btn-disabled b2sPreFeatureReshareModal" data-title="You want to re-share your blog post?"><?php esc_html_e('Re-share this post', 'blog2social') ?> <?php echo wp_kses($isPremium, array('span' => array('class' => array()))); ?></a>
                                                                 <?php
                                                             }
                                                             if (!$isVideo) {
@@ -483,6 +482,7 @@ $mandantData = $navbar->getData();
                                                 'ul' => array(),
                                                 'li' => array(
                                                     'data-mandant-default-id' => array(),
+                                                    'data-network-id' => array(),
                                                 ),
                                                 'img' => array(
                                                     'class' => array(),
@@ -540,7 +540,7 @@ $mandantData = $navbar->getData();
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
                                                 <br>
-                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
+                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                                                 <br>
                                                 <center> <?php echo wp_kses(sprintf(
                                                     // translators: %s is a link
@@ -624,7 +624,7 @@ $mandantData = $navbar->getData();
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
                                                 <br>
-                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
+                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                                                 <br>
                                                 <center> <?php echo wp_kses(sprintf(
                                                     // translators: %s is a link
@@ -636,57 +636,6 @@ $mandantData = $navbar->getData();
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-sched-post-modal">&times;</button>
-                                            <h4 class="modal-title"><?php esc_html_e('Need to schedule your posts?', 'blog2social') ?></h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p><?php esc_html_e('Blog2Social Premium covers everything you need.', 'blog2social') ?></p>
-                                            <br>
-                                            <div class="clearfix"></div>
-                                            <b><?php esc_html_e('Schedule for specific dates', 'blog2social') ?></b>
-                                            <p><?php esc_html_e('You want to publish a post on a specific date? No problem! Just enter your desired date and you are ready to go!', 'blog2social') ?></p>
-                                            <br>
-                                            <b><?php esc_html_e('Schedule post recurrently', 'blog2social') ?></b>
-                                            <p><?php esc_html_e('You have evergreen content you want to re-share from time to time in your timeline? Schedule your evergreen content to be shared once, multiple times or recurringly at specific times.', 'blog2social') ?></p>
-                                            <br>
-                                            <b><?php esc_html_e('Best Time Scheduler', 'blog2social') ?></b>
-                                            <p><?php esc_html_e('Whenever you publish a post, only a fraction of your followers will actually see your post. Use the Blog2Social Best Times Scheduler to share your post at the best times for each social network. Get more outreach and extend the lifespan of your posts.', 'blog2social') ?></p>
-                                            <br>
-                                            <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
-                                                <hr>
-                                                <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
-                                                <br>
-                                                <br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Share on multiple profiles, pages and groups', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-post and auto-schedule new and updated blog posts', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your posts at the best times on each network', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Manager: use predefined best time scheduler to auto-schedule your social media posts', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your post for one time, multiple times or recurrently', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule and re-share old posts', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select link format or image format for your posts', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
-                                                <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
-                                                <br>
-                                                <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
-                                                <br>
-                                                <center> <?php echo wp_kses(sprintf(
-                                                    // translators: %s is a link
-                                                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
-                                                        array('a' => array('href' => array(), 'target' => array())));
-                                                    ?> </center>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
 
                             <div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
@@ -1216,7 +1165,7 @@ $mandantData = $navbar->getData();
                                         <div class="modal-body">
                                             <p><?php esc_html_e('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') ?></p>
                                             <br>
-                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade', 'blog2social') ?></a>
+                                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade', 'blog2social') ?></a>
                                         </div>
                                     </div>
                                 </div>
@@ -1236,3 +1185,11 @@ $mandantData = $navbar->getData();
                                     </div>
                                 </div>
                             </div>
+                            <?php
+                     
+                                include (B2S_PLUGIN_DIR . 'views/b2s/partials/network-modal.php');     
+                                
+                                $modalNames= array("b2sPreFeatureNetworksModal", "b2sProFeatureNetworksModal", "b2sProFeatureMultiImageModal", "b2sPreFeaturePostFormatModal", "b2sBusinessFeatureNetworksModal", "b2sPreFeatureScheduleModal");
+                                include (B2S_PLUGIN_DIR . 'views/b2s/partials/general-modal.php');    
+                                                 
+                            ?>

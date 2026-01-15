@@ -225,8 +225,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#222222',
 				'selectors' => [
-					'{{WRAPPER}} {{CURRENT_ITEM}} > a' => 'color: {{VALUE}};',
-					'{{WRAPPER}} {{CURRENT_ITEM}} > a svg path'	=> 'stroke: {{VALUE}}; fill: {{VALUE}};',
+					'{{WRAPPER}} {{CURRENT_ITEM}} > a :is(i, svg)' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
@@ -504,7 +503,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
                 ],
             ]
 		);
-		
+
 		$this->add_responsive_control(
             'ekit_socialmedai_list_icon_size',
             [
@@ -667,7 +666,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
 							$this->add_link_attributes( 'button-' . $key, $icon['ekit_socialmedia_link'] );
 							$this->add_render_attribute( 'button-' . $key, 'aria-label', $icon['ekit_socialmedia_label'] );
 						}
-						
+
 					?>
 					<li class="elementor-repeater-item-<?php echo esc_attr( $icon[ '_id' ] ); ?>">
 					    <a
@@ -683,7 +682,7 @@ class ElementsKit_Widget_Social extends Widget_Base {
 						$getClass = explode('-', ($is_new || $migrated) ? $icon['ekit_socialmedia_icons']['library'] != 'svg' ? $icon['ekit_socialmedia_icons']['value'] : '' : $icon['ekit_socialmedia_icon'] );
 						 $iconClass = !empty($getClass) ? end($getClass) : ''; ?> class="<?php echo esc_attr( $iconClass ); ?>" >
 							<?php if($settings['ekit_socialmedia_style'] != 'text' && $settings['ekit_socialmedia_style_icon_position'] == 'before'): ?>
-							
+
 							<?php
 								if ( $is_new || $migrated ) {
 									// new icon
@@ -694,25 +693,25 @@ class ElementsKit_Widget_Social extends Widget_Base {
 									<?php
 								}
 							?>
-									
+
                             <?php endif; ?>
                             <?php if($settings['ekit_socialmedia_style'] != 'icon' ): ?>
                             <?php echo esc_html($icon['ekit_socialmedia_label'])?>
                             <?php endif; ?>
                             <?php if($settings['ekit_socialmedia_style'] != 'text' && $settings['ekit_socialmedia_style_icon_position'] == 'after'): ?>
-							
+
 							<?php
-								
+
 								if ( $is_new || $migrated ) {
 									// new icon
 									Icons_Manager::render_icon( $icon['ekit_socialmedia_icons'], [ 'aria-hidden' => 'true' ] );
 								} else {
 									?>
 									<i class="<?php echo esc_attr($icon['ekit_socialmedia_icon']); ?>" aria-hidden="true"></i>
-									<?php 
+									<?php
 								}
 							?>
-							
+
                             <?php endif; ?>
                         </a>
                     </li>

@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Zapier Add-On
 Plugin URI: https://gravityforms.com
 Description: Integrates Gravity Forms with Zapier, allowing form submissions to be automatically sent to your configured Zaps.
-Version: 4.3.0
+Version: 4.5.1
 Author: Gravity Forms
 Author URI: https://gravityforms.com
 License: GPL-2.0+
@@ -11,7 +11,7 @@ Text Domain: gravityformszapier
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2009-2024 Rocketgenius, Inc.
+Copyright 2009-2025 Rocketgenius, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ along with this program.  If not, see http://www.gnu.org/licenses.
 defined( 'ABSPATH' ) || die();
 
 // Defines the current version of the Gravity Forms Zapier Add-On.
-define( 'GF_ZAPIER_VERSION', '4.3.0' );
+define( 'GF_ZAPIER_VERSION', '4.5.1' );
 
 // Defines the minimum version of Gravity Forms required to run this version of the add-on.
 define( 'GF_ZAPIER_MIN_GF_VERSION', '2.4' );
@@ -62,7 +62,7 @@ class GF_Zapier_Bootstrap {
 	public static function load_addon() {
 
 		// Requires the class file.
-		require_once( plugin_dir_path( __FILE__ ) . '/class-gf-zapier.php' );
+		require_once plugin_dir_path( __FILE__ ) . '/class-gf-zapier.php';
 
 		// Registers the class name with GFAddOn.
 		GFAddOn::register( 'GF_Zapier' );
@@ -78,4 +78,3 @@ class GF_Zapier_Bootstrap {
 function gf_zapier() {
 	return GF_Zapier::get_instance();
 }
-

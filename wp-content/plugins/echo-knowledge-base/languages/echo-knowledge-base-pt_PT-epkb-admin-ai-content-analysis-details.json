@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Demo Article": [
+                "Artigo de Demonstração"
+            ],
+            "Categories": [
+                "Categorias"
+            ],
+            "Analyzing...": [
+                "A analisar..."
+            ],
+            "Content Gaps Analysis": [
+                "Análise de lacunas de conteúdo"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "Sugestões de Etiquetas com IA"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "A análise de lacunas está disponível apenas com a extensão de Funcionalidades de IA."
+            ],
+            "Readability": [
+                "Legibilidade"
+            ],
+            "Tag added successfully": [
+                "Etiqueta adicionada com sucesso"
+            ],
+            "Tag removed successfully": [
+                "Etiqueta removida com sucesso"
+            ],
+            "Tag updated successfully": [
+                "Etiqueta atualizada com sucesso"
+            ],
+            "Add New Tag": [
+                "Adicionar Nova Etiqueta"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "Etiquetas"
+            ],
+            "Edit Article": [
+                "Editar Artigo"
+            ],
+            "View Article": [
+                "Ver Artigo"
+            ],
+            "Failed to save tag changes": [
+                "Falha ao guardar alterações de tag"
+            ],
+            "Failed to add tag": [
+                "Falha ao adicionar tag"
+            ],
+            "Failed to remove tag": [
+                "Falha ao remover tag"
+            ],
+            "Failed to remove tags": [
+                "Falha ao remover etiquetas"
+            ],
+            "Failed to update tag": [
+                "Falha ao atualizar a tag"
+            ],
+            "Not Analyzed": [
+                "Não analisado"
+            ],
+            "Demo Analysis Data": [
+                "Dados de análise de demonstração"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "Este é um artigo de demonstração com dados analíticos de amostra para fins de demonstração. Crie os seus próprios artigos para ver resultados reais da análise de conteúdo."
+            ],
+            "Loading analysis details...": [
+                "A carregar detalhes da análise..."
+            ],
+            "No analysis details available for this article.": [
+                "Não há detalhes de análise disponíveis para este artigo."
+            ],
+            "Content Gaps": [
+                "Lacunas de Conteúdo"
+            ],
+            "Overall Score": [
+                "Pontuação Global"
+            ],
+            "Article Importance": [
+                "Importância do artigo"
+            ],
+            "Readability analysis completed": [
+                "Análise de legibilidade concluída"
+            ],
+            "Failed to run readability analysis": [
+                "Falhou a execução da análise de legibilidade"
+            ],
+            "Re-analyze": [
+                "Reanalisar"
+            ],
+            "Readability Analysis": [
+                "Análise de legibilidade"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "Não foram encontradas questões de legibilidade. O artigo está claro e bem escrito."
+            ],
+            "Analysis Error": [
+                "Erro de análise"
+            ],
+            "An error occurred during readability analysis.": [
+                "Ocorreu um erro durante a análise de legibilidade."
+            ],
+            "Retrying analysis...": [
+                "A tentar novamente a análise..."
+            ],
+            "Retry Analysis": [
+                "Repetir a análise"
+            ],
+            "Analyzing article readability...": [
+                "A analisar a legibilidade do artigo..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "Clique no botão abaixo para analisar a legibilidade deste artigo usando IA."
+            ],
+            "Run Readability Analysis": [
+                "Executar análise de legibilidade"
+            ],
+            "Article Content": [
+                "Conteúdo do artigo"
+            ],
+            "No article content available": [
+                "Não há conteúdo do artigo disponível"
+            ],
+            "Content Gaps analysis completed": [
+                "Análise de lacunas de conteúdo concluída"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "Falhou a execução da análise de lacunas de conteúdo"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "Não foram encontradas lacunas de conteúdo. O artigo parece ser abrangente."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "Ocorreu um erro durante a análise de lacunas de conteúdo."
+            ],
+            "Learn More About AI Features": [
+                "Saber mais sobre os recursos de IA"
+            ],
+            "Analyzing article for content gaps...": [
+                "Analisando o artigo em busca de lacunas de conteúdo..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "Clique no botão abaixo para analisar este artigo em busca de conteúdo em falta usando IA."
+            ],
+            "Run Content Gaps Analysis": [
+                "Executar análise de lacunas de conteúdo"
+            ],
+            "Tags analysis completed": [
+                "Análise de etiquetas concluída"
+            ],
+            "Failed to run tags analysis": [
+                "Falha ao executar a análise de etiquetas"
+            ],
+            "Re-analyze Tags": [
+                "Reanalisar as etiquetas"
+            ],
+            "Tag Count": [
+                "Contagem de etiquetas"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "O número de etiquetas está dentro do intervalo recomendado (3-10)."
+            ],
+            "Tag Relevance": [
+                "Relevância das etiquetas"
+            ],
+            "Not Applicable due to missing tags": [
+                "Não aplicável devido à ausência de etiquetas"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "Todas as etiquetas são relevantes e aparecem no conteúdo do Artigo."
+            ],
+            "Tag Format": [
+                "Formato de etiqueta"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "Todas as etiquetas estão formatadas corretamente e seguem as melhores práticas."
+            ],
+            "Duplicate Tags": [
+                "Etiquetas duplicadas"
+            ],
+            "No duplicate or similar tags found.": [
+                "Não foram encontradas etiquetas duplicadas ou semelhantes."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "O Artigo tem o número certo de categorias (1-3)."
+            ],
+            "Add": [
+                "Adicionar"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "Com base na análise de conteúdo por IA, considere adicionar estas etiquetas:"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "Obtenha o complemento AI Features para desbloquear sugestões de etiquetas alimentadas por IA."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "Neste momento não há sugestões de etiquetas disponíveis para este Artigo."
+            ],
+            "Broad Tags": [
+                "Etiquetas gerais"
+            ],
+            "(General categories)": [
+                "(Categorias gerais)"
+            ],
+            "Specific Tags": [
+                "Etiquetas específicas"
+            ],
+            "(Detailed topics)": [
+                "(Tópicos detalhados)"
+            ],
+            "Article Tags": [
+                "Etiquetas do Artigo"
+            ],
+            "Restore tag": [
+                "Restaurar etiqueta"
+            ],
+            "Mark for deletion": [
+                "Marcar para eliminação"
+            ],
+            "No tags": [
+                "Sem etiquetas"
+            ],
+            "Remove tag": [
+                "Remover etiqueta"
+            ],
+            "Tag name": [
+                "Nome da etiqueta"
+            ],
+            "Tag Best Practices": [
+                "Melhores práticas de etiquetas"
+            ],
+            "Guidelines:": [
+                "Diretrizes:"
+            ],
+            "Relevant & Keyword-Rich:": [
+                "Relevante e rico em palavras-chave:"
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "Use etiquetas descritivas que correspondam ao conteúdo e aos termos de pesquisa."
+            ],
+            "Avoid Duplicates:": [
+                "Evitar duplicatas:"
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "Não reutilize nomes de categorias como etiquetas (ou vice-versa)."
+            ],
+            "Reuse Consistently:": [
+                "Reutilize de forma consistente:"
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "Siga uma estratégia; evite etiquetas únicas por publicação para evitar o 'tag bloat' (páginas rasas prejudicam o SEO). As etiquetas devem agrupar várias publicações; não indexar arquivos rasos (≤2 publicações)."
+            ],
+            "Keep Short:": [
+                "Mantenha-o curto:"
+            ],
+            "1–3 words, reusable.": [
+                "1–3 palavras, reutilizáveis."
+            ],
+            "Editor Checklist:": [
+                "Checklist do Editor:"
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "Grupos com ≥3 publicações (agora ou em breve)?"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "1–3 palavras, distintas das etiquetas/categorias existentes?"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "Fundir sinónimos em vez de novas etiquetas?"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "Noindex se for ralo; indexar se for substancial com descrição?"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "Nota: ao guardar, os redirecionamentos da página de arquivo de etiquetas (opcional) serão atualizados"
+            ],
+            "Save Changes": [
+                "Guardar Alterações"
+            ]
+        }
+    }
+}

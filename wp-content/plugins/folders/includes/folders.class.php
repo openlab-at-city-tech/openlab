@@ -128,9 +128,7 @@ class WCP_Folders
         // Update Parent Data
         add_action('wp_ajax_wcp_mark_un_mark_folder', [$this, 'wcp_mark_un_mark_folder']);
         // Update Parent Data
-        add_action('wp_ajax_wcp_make_sticky_folder', [$this, 'wcp_make_sticky_folder']);
-        // Update Parent Data
-        add_action('wp_ajax_wcp_change_post_folder', [$this, 'wcp_change_post_folder']);
+        add_action('wp_ajax_wcp_make_sticky_folder', [$this, 'wcp_make_sticky_folder']); 
         // Update Parent Data
         add_action('wp_ajax_wcp_change_multiple_post_folder', [$this, 'wcp_change_multiple_post_folder']);
         // Update width Data
@@ -716,6 +714,9 @@ class WCP_Folders
         if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $response['message'] = esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
+        } else if (!current_user_can('manage_options')) {
+            $response['message'] = esc_html__("You have not permission to remove all folders data", 'folders');
+            $errorCounter++;
         } else {
             $type  = self::sanitize_options($postData['type']);
             $nonce = self::sanitize_options($postData['nonce']);
@@ -726,6 +727,7 @@ class WCP_Folders
         }
 
         if ($errorCounter == 0) {
+          
             self::$folders = 0;
             self::remove_folder_by_taxonomy("media_folder");
             self::remove_folder_by_taxonomy("folder");
@@ -736,13 +738,16 @@ class WCP_Folders
                 "post",
                 "attachment",
             ];
+
             foreach ($post_types as $post_type) {
                 if (!in_array($post_type->name, $post_array)) {
                     self::remove_folder_by_taxonomy($post_type->name.'_folder');
                 }
             }
 
+            delete_option('folders_settings');
             delete_option('default_folders');
+            delete_option('customize_folders'); 
             $response['status'] = 1;
             $response['data']   = [
                 'items' => self::$folders,
@@ -768,7 +773,7 @@ class WCP_Folders
         $query   = "SELECT * FROM ".$wpdb->term_taxonomy."
 					LEFT JOIN  ".$wpdb->terms."
 					ON  ".$wpdb->term_taxonomy.".term_id =  ".$wpdb->terms.".term_id
-					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%d'
+					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%s'
 					ORDER BY parent ASC";
         $query   = $wpdb->prepare($query, $taxonomy);
         $folders = $wpdb->get_results($query);
@@ -1045,8 +1050,9 @@ class WCP_Folders
                         if ($trash_count == null && isset($trash_folders[$term->term_taxonomy_id]) && !$polylang_is_active) {
                             $trash_count = $trash_folders[$term->term_taxonomy_id];
                         } else if ($trash_count == null) {
-
-                            if ($trash_count === null) {
+                            if (isset($trash_folders[$term->term_taxonomy_id])) {
+                                $trash_count = $trash_folders[$term->term_taxonomy_id];
+                            } else {
                                 $query = "SELECT COUNT(DISTINCT(p.ID)) 
                                     FROM {$post_table} p 
                                         JOIN {$term_table} rl ON p.ID = rl.object_id 
@@ -3123,7 +3129,8 @@ class WCP_Folders
         $response['data']    = [];
         $response['message'] = "";
         $postData            = filter_input_array(INPUT_POST);
-        $errorCounter        = 0;
+        $errorCounter        = 0; 
+        
         if (!isset($postData['post_ids']) || empty($postData['post_ids'])) {
             $response['message'] = esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
@@ -3228,7 +3235,10 @@ class WCP_Folders
         } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
             $response['message'] = esc_html__("Your request is not valid", 'folders');
             $errorCounter++;
-        } else {
+        } else if ( !current_user_can( 'edit_posts' ) ) {
+            $response['message'] = esc_html__("You have not permission to undo folder changes", 'folders');
+            $errorCounter++;
+        }else {
             if (!wp_verify_nonce($postData['nonce'], 'wcp_folder_nonce_'.$postData['post_type'])) {
                 $response['message'] = esc_html__("Your request is not valid", 'folders');
                 $errorCounter++;
@@ -3280,83 +3290,7 @@ class WCP_Folders
 
     }//end wcp_undo_folder_changes()
 
-
-    /**
-     * Change post, page, attachment folder
-     *
-     * @since  1.0.0
-     * @access public
-     * @return $response
-     */
-    public function wcp_change_post_folder()
-    {
-        $response            = [];
-        $response['status']  = 0;
-        $response['error']   = 0;
-        $response['data']    = [];
-        $response['message'] = "";
-        $postData            = filter_input_array(INPUT_POST);
-        $errorCounter        = 0;
-        if (!isset($postData['post_id']) || empty($postData['post_id'])) {
-            $errorCounter++;
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
-        } else if (!isset($postData['folder_id']) || empty($postData['folder_id'])) {
-            $errorCounter++;
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
-        } else if (!isset($postData['type']) || empty($postData['type'])) {
-            $errorCounter++;
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
-        } else if (!isset($postData['nonce']) || empty($postData['nonce'])) {
-            $response['message'] = esc_html__("Your request is not valid", 'folders');
-            $errorCounter++;
-        } else if ($postData['type'] == "page" && !current_user_can("edit_pages")) {
-            $response['message'] = esc_html__("You have not permission to update folder", 'folders');
-            $errorCounter++;
-        } else if ($postData['type'] != "page" && !current_user_can("edit_posts")) {
-            $response['message'] = esc_html__("You have not permission to update folder", 'folders');
-            $errorCounter++;
-        } else {
-            $term_id = self::sanitize_options($postData['folder_id']);
-            if (!wp_verify_nonce($postData['nonce'], 'wcp_folder_term_'.$term_id)) {
-                $response['message'] = esc_html__("Your request is not valid", 'folders');
-                $errorCounter++;
-            }
-        }//end if
-
-        if ($errorCounter == 0) {
-            $postID   = self::sanitize_options($postData['post_id']);
-            $folderID = self::sanitize_options($postData['folder_id']);
-            $type     = self::sanitize_options($postData['type']);
-            $folder_post_type = self::get_custom_post_type($type);
-            $status           = 0;
-            if (isset($postData['status'])) {
-                $status = self::sanitize_options($postData['status']);
-            }
-
-            $status   = ($status == 1) ? true : false;
-            $taxonomy = "";
-            if (isset($postData['taxonomy'])) {
-                $taxonomy = self::sanitize_options($postData['taxonomy']);
-            }
-
-            $terms = get_the_terms($postID, $folder_post_type);
-            if (!empty($terms)) {
-                foreach ($terms as $term) {
-                    if (!empty($taxonomy) && ($term->term_id == $taxonomy || $term->slug == $taxonomy)) {
-                        wp_remove_object_terms($postID, $term->term_id, $folder_post_type);
-                    }
-                }
-            }
-
-            wp_set_post_terms($postID, $folderID, $folder_post_type, true);
-            $response['status'] = 1;
-        }//end if
-
-        echo wp_json_encode($response);
-        wp_die();
-
-    }//end wcp_change_post_folder()
-
+ 
 
     /**
      * Mark/Unmark folder

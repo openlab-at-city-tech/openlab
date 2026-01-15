@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Error": [
+                "エラー"
+            ],
+            "Analyze Content": [
+                "コンテンツを分析"
+            ],
+            "Improve Content": [
+                "コンテンツを改善"
+            ],
+            "Improve": [
+                "改善"
+            ],
+            "Demo Analytics": [
+                "デモ分析"
+            ],
+            "Actions": [
+                "操作"
+            ],
+            "Analyzing": [
+                "分析中"
+            ],
+            "No articles found": [
+                "記事が見つかりません"
+            ],
+            "To Analyze": [
+                "分析する"
+            ],
+            "To Improve": [
+                "改善する"
+            ],
+            "Please select exactly one article to improve": [
+                "改善するには、正確に1つの記事を選択してください。"
+            ],
+            "Demo Data Displayed": [
+                "デモデータが表示されました"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "これはデモ目的の分析データです。新しい記事を作成すると、それを分析して実際のコンテンツ分析結果を確認できます。."
+            ],
+            "Select All That Need Analysis": [
+                "分析が必要なものをすべて選択"
+            ],
+            "Analyze (Sync not loaded)": [
+                "分析（同期が読み込まれていません）"
+            ],
+            "Score Legend": [
+                "スコアの凡例"
+            ],
+            "Excellent": [
+                "優秀"
+            ],
+            "Good": [
+                "良い"
+            ],
+            "Below 60%": [
+                "60％未満"
+            ],
+            "Needs Improvement": [
+                "改善が必要"
+            ],
+            "Importance Legend": [
+                "重要度の凡例"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "記事の閲覧数に基づく - 閲覧数が多いほど優先度が高くなります。."
+            ],
+            "Status Legend": [
+                "ステータスの凡例"
+            ],
+            "Not analyzed or updated": [
+                "分析されていないか、更新されていません"
+            ],
+            "Score below 80%": [
+                "80％未満"
+            ],
+            "Done": [
+                "完了"
+            ],
+            "Completed": [
+                "完了済み"
+            ],
+            "Ignored": [
+                "無視済み"
+            ],
+            "Not important now": [
+                "現在は重要ではありません"
+            ],
+            "In progress": [
+                "進行中"
+            ],
+            "Failed - retry needed": [
+                "失敗しました。再試行が必要です。"
+            ],
+            "Invalid status": [
+                "無効な状態"
+            ],
+            "Failed to update article status": [
+                "記事のステータスの更新に失敗しました。"
+            ],
+            "Error updating article status": [
+                "記事のステータスの更新中にエラーが発生しました。"
+            ],
+            "Ignore": [
+                "無視"
+            ],
+            "Remove": [
+                "削除"
+            ],
+            "Loading articles...": [
+                "記事を読み込み中..."
+            ],
+            "Important and Low Score": [
+                "重要度と低スコア"
+            ],
+            "Top Important": [
+                "最重要"
+            ],
+            "Lowest Score": [
+                "最低スコア"
+            ],
+            "Recently Analyzed": [
+                "最近分析済み"
+            ],
+            "Unknown sub-tab": [
+                "不明なサブタブ"
+            ]
+        }
+    }
+}

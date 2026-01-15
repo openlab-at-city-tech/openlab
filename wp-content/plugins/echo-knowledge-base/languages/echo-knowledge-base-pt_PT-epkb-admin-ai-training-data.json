@@ -1,0 +1,267 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pt_PT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Back": [
+                "Voltar"
+            ],
+            "Save": [
+                "Guardar"
+            ],
+            "Cancel": [
+                "Cancelar"
+            ],
+            "Saving...": [
+                "A guardar..."
+            ],
+            "Collection name cannot be empty": [
+                "O nome da coleção não pode ficar vazio"
+            ],
+            "Data Collection": [
+                "Coleta de dados"
+            ],
+            "Note updated successfully": [
+                "Nota atualizada com sucesso"
+            ],
+            "Note deleted successfully": [
+                "Nota eliminada com sucesso"
+            ],
+            "Delete": [
+                "Apagar"
+            ],
+            "Delete Selected": [
+                "Apagar Selecionados"
+            ],
+            "Failed to create collection": [
+                "Falha ao criar coleção"
+            ],
+            "How to get started": [
+                "Como começar"
+            ],
+            "Choose Training Data": [
+                "Selecionar dados de aprendizagem automática"
+            ],
+            "Pick the content types to include.": [
+                "Selecione os tipos de conteúdo a incluir."
+            ],
+            "Send Data to AI": [
+                "Enviar dados para IA"
+            ],
+            "Select items in the table, then sync them.": [
+                "Selecione itens na tabela e sincronize-os."
+            ],
+            "Other Actions": [
+                "Outras Ações"
+            ],
+            "Rename the collection or delete items.": [
+                "Renomeie a coleção ou elimine itens."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Dica: Comece com um conjunto pequeno para testar o fluxo."
+            ],
+            "Failed to load note content": [
+                "Falhou ao carregar o conteúdo da nota"
+            ],
+            "Please enter both title and content for the note": [
+                "Por favor, introduza o título e o conteúdo da nota"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "Não foi possível eliminar a nota. Atualize a página e tente novamente."
+            ],
+            "Delete Note": [
+                "Eliminar nota"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "Tem a certeza de que pretende eliminar esta nota? Esta ação não pode ser desfeita."
+            ],
+            "Failed to delete note": [
+                "Não foi possível eliminar a nota"
+            ],
+            "Edit Note": [
+                "Editar nota"
+            ],
+            "Add Note": [
+                "Adicionar nota"
+            ],
+            "Loading note content...": [
+                "A carregar conteúdo da nota..."
+            ],
+            "Note Title": [
+                "Título da nota"
+            ],
+            "Enter note title...": [
+                "Introduza o título da nota..."
+            ],
+            "Note Content": [
+                "Conteúdo da nota"
+            ],
+            "Enter note content...": [
+                "Introduza o conteúdo da nota..."
+            ],
+            "Deleting...": [
+                "A eliminar..."
+            ],
+            "Save Note": [
+                "Salvar Nota"
+            ],
+            "Collection name updated successfully": [
+                "O nome da coleção foi atualizado com sucesso"
+            ],
+            "Failed to update collection name": [
+                "Falhou ao atualizar o nome da coleção"
+            ],
+            "Delete Collection": [
+                "Eliminar coleção"
+            ],
+            "Are you sure you want to delete this collection?": [
+                "Tem a certeza de que pretende eliminar esta coleção?"
+            ],
+            "Type the collection name to confirm:": [
+                "Introduza o nome da coleção para confirmar:"
+            ],
+            "Enter collection name": [
+                "Introduza o nome da coleção"
+            ],
+            "Collection deleted successfully": [
+                "A coleção foi eliminada com sucesso"
+            ],
+            "Failed to delete collection": [
+                "Falhou ao eliminar a coleção"
+            ],
+            "Please select at least one data type": [
+                "Por favor, selecione pelo menos um tipo de conteúdo"
+            ],
+            "Data added successfully": [
+                "Dados adicionados com sucesso"
+            ],
+            "Failed to add data": [
+                "Falhou ao adicionar dados"
+            ],
+            "Choose an Action": [
+                "Escolha uma ação"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Não é possível alterar ações enquanto a sincronização está em curso"
+            ],
+            "Add Training Data": [
+                "Adicionar Dados de treino"
+            ],
+            "Cannot navigate while sync is in progress": [
+                "Não é possível navegar enquanto a sincronização está em curso"
+            ],
+            "Choose which content types you want to include in your AI training data.": [
+                "Escolha quais tipos de conteúdo pretende incluir nos seus dados de treino de IA."
+            ],
+            "Access Manager Notice": [
+                "Aviso do Gestor de Acesso"
+            ],
+            "Currently only publicly accessible articles can be uploaded to AI. Articles with access restrictions will not be included in the training data.": [
+                "Atualmente apenas artigos publicamente acessíveis podem ser carregados para IA. Artigos com restrições de acesso não serão incluídos nos dados de treino."
+            ],
+            "Loading content types...": [
+                "Carregando tipos de conteúdo..."
+            ],
+            "available": [
+                "disponível"
+            ],
+            "added": [
+                "adicionado"
+            ],
+            "excluded": [
+                "excluído"
+            ],
+            "No eligible content": [
+                "Não há conteúdo elegível"
+            ],
+            "No published content available": [
+                "Não há conteúdo publicado disponível"
+            ],
+            "All eligible items already added to collection": [
+                "Todos os itens elegíveis já adicionados à coleção"
+            ],
+            "No content types available.": [
+                "Não há tipos de conteúdo disponíveis."
+            ],
+            "Adding Data...": [
+                "A adicionar dados..."
+            ],
+            "Add Data": [
+                "Adicionar Dados"
+            ],
+            "Notes": [
+                "Notas"
+            ],
+            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
+                "Adicione notas personalizadas para ajudar a treinar a IA com informações específicas, diretrizes ou contexto que possam não constar no seu conteúdo habitual."
+            ],
+            "Select items from the table and choose a sync method to update your AI training data.": [
+                "Selecione itens da tabela e escolha um método de sincronização para atualizar os seus dados de treino da IA."
+            ],
+            "Manage your collection settings and data.": [
+                "Gerencie as configurações e os dados da sua coleção."
+            ],
+            "Collection Name": [
+                "Nome da coleção"
+            ],
+            "Change the display name for this collection.": [
+                "Alterar o nome de exibição desta coleção."
+            ],
+            "Unable to delete items. Please refresh the page and try again.": [
+                "Não foi possível eliminar itens. Atualize a página e tente novamente."
+            ],
+            "Selected Records": [
+                "Registos selecionados"
+            ],
+            "Delete the selected training data items from this collection.": [
+                "Eliminar os itens de dados de treino selecionados desta coleção."
+            ],
+            "This will permanently delete all training data in this collection.": [
+                "Isto eliminará permanentemente todos os dados de treino desta coleção."
+            ],
+            "Note added successfully": [
+                "Nota adicionada com sucesso"
+            ],
+            "AI Features Pro is not properly configured. Please ensure the plugin is activated.": [
+                "AI Features Pro não está configurado corretamente. Por favor, certifique-se de que o plugin está ativado."
+            ],
+            "Failed to save note": [
+                "Falha ao guardar a nota"
+            ],
+            "Unable to determine next collection ID": [
+                "Não foi possível determinar o próximo ID da coleção"
+            ],
+            "Creating new collection...": [
+                "Criando nova coleção..."
+            ],
+            "Collection created successfully": [
+                "Coleção criada com sucesso"
+            ],
+            "Sync in progress. Please wait...": [
+                "Sincronização em andamento. Por favor, aguarde..."
+            ],
+            "Training Data Tutorial": [
+                "Tutorial de Dados de Treino"
+            ],
+            "Learn how to manage and sync your knowledge base content for AI features.": [
+                "Aprenda a gerir e sincronizar o conteúdo da sua base de conhecimento para funcionalidades de IA."
+            ],
+            "Training Data Tutorial Screenshot": [
+                "Captura de tela do Tutorial de Dados de Treino"
+            ],
+            "<h4>Getting Started with Training Data</h4><ul><li>Create collections to organize your content for AI processing</li><li>Sync your articles and pages to train the AI on your knowledge base</li><li>Monitor sync status and manage training data items</li><li>Select which post types to include in each collection</li></ul>": [
+                "<h4>Começar com Dados de Treino</h4><ul><li>Crie coleções para organizar o seu conteúdo para processamento de IA</li><li>Sincronize os seus artigos e páginas para treinar a IA na sua base de conhecimento</li><li>Monitore o estado de sincronização e gerencie os itens de dados de treino</li><li>Selecione quais tipos de post incluir em cada coleção</li></ul>"
+            ],
+            "No collections available. Click \"Add New\" to create one.": [
+                "Não há coleções disponíveis. Clique em \"Adicionar Novo\" para criar uma."
+            ],
+            "No training data configuration available.": [
+                "Nenhuma configuração de dados de treino disponível."
+            ]
+        }
+    }
+}

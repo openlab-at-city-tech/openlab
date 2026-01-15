@@ -1,4 +1,3 @@
-/*! elementor - v3.30.0 - 07-07-2025 */
 "use strict";
 (self["webpackChunkelementorFrontend"] = self["webpackChunkelementorFrontend"] || []).push([["frontend"],{
 
@@ -17,8 +16,8 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _document = _interopRequireDefault(__webpack_require__(/*! ./document */ "../assets/dev/js/frontend/document.js"));
 class _default extends elementorModules.ViewModule {
-  constructor() {
-    super(...arguments);
+  constructor(...args) {
+    super(...args);
     this.documents = {};
     this.initDocumentClasses();
     this.attachDocumentsClasses();
@@ -81,7 +80,6 @@ var _column = _interopRequireDefault(__webpack_require__(/*! ./handlers/column *
 /* global elementorFrontendConfig */
 
 module.exports = function ($) {
-  var _this = this;
   const handlersInstances = {};
   this.elementsHandlers = {
     'accordion.default': () => __webpack_require__.e(/*! import() | accordion */ "accordion").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/accordion */ "../assets/dev/js/frontend/handlers/accordion.js")),
@@ -118,13 +116,12 @@ module.exports = function ($) {
     });
   };
   const isClassHandler = Handler => Handler.prototype?.getUniqueHandlerID;
-  const addHandlerWithHook = function (elementBaseName, Handler) {
-    let skin = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'default';
+  const addHandlerWithHook = (elementBaseName, Handler, skin = 'default') => {
     skin = skin ? '.' + skin : '';
     const elementName = elementBaseName + skin;
     elementorFrontend.hooks.addAction(`frontend/element_ready/${elementName}`, $element => {
       if (isClassHandler(Handler)) {
-        _this.addHandler(Handler, {
+        this.addHandler(Handler, {
           $element,
           elementName
         }, true);
@@ -134,17 +131,16 @@ module.exports = function ($) {
           return;
         }
         if (handlerValue instanceof Promise) {
-          handlerValue.then(_ref => {
-            let {
-              default: dynamicHandler
-            } = _ref;
-            _this.addHandler(dynamicHandler, {
+          handlerValue.then(({
+            default: dynamicHandler
+          }) => {
+            this.addHandler(dynamicHandler, {
               $element,
               elementName
             }, true);
           });
         } else {
-          _this.addHandler(handlerValue, {
+          this.addHandler(handlerValue, {
             $element,
             elementName
           }, true);
@@ -185,10 +181,9 @@ module.exports = function ($) {
       return elementHandler;
     }
     return new Promise(res => {
-      elementHandler().then(_ref2 => {
-        let {
-          default: dynamicHandler
-        } = _ref2;
+      elementHandler().then(({
+        default: dynamicHandler
+      }) => {
         res(dynamicHandler);
       });
     });
@@ -270,8 +265,8 @@ var _utils = __webpack_require__(/*! elementor-frontend/utils/utils */ "../asset
 const EventManager = __webpack_require__(/*! elementor-utils/hooks */ "../assets/dev/js/utils/hooks.js"),
   ElementsHandler = __webpack_require__(/*! elementor-frontend/elements-handlers-manager */ "../assets/dev/js/frontend/elements-handlers-manager.js");
 class Frontend extends elementorModules.ViewModule {
-  constructor() {
-    super(...arguments);
+  constructor(...args) {
+    super(...args);
     this.config = elementorFrontendConfig;
     this.config.legacyMode = {
       /**
@@ -519,15 +514,13 @@ class Frontend extends elementorModules.ViewModule {
 
     // TODO: Use this instead.
     elementorFrontend.trigger('elementor/modules/init/before');
-    Object.entries(handlers).forEach(_ref => {
-      let [moduleName, ModuleClass] = _ref;
+    Object.entries(handlers).forEach(([moduleName, ModuleClass]) => {
       this.modulesHandlers[moduleName] = new ModuleClass();
     });
   }
   populateActiveBreakpointsConfig() {
     this.config.responsive.activeBreakpoints = {};
-    Object.entries(this.config.responsive.breakpoints).forEach(_ref2 => {
-      let [breakpointKey, breakpointData] = _ref2;
+    Object.entries(this.config.responsive.breakpoints).forEach(([breakpointKey, breakpointData]) => {
       if (breakpointData.is_enabled) {
         this.config.responsive.activeBreakpoints[breakpointKey] = breakpointData;
       }
@@ -660,8 +653,8 @@ class GlobalHandler extends elementorModules.frontend.handlers.Base {
   getAnimation() {
     return this.getCurrentDeviceSetting('animation') || this.getCurrentDeviceSetting('_animation');
   }
-  onInit() {
-    super.onInit(...arguments);
+  onInit(...args) {
+    super.onInit(...args);
     if (this.getAnimation()) {
       const observer = elementorModules.utils.Scroll.scrollObserver({
         callback: event => {
@@ -986,9 +979,7 @@ class Controls {
    * @param {string} device          If we want to get a value for a specific device mode.
    * @return {*} Control Value
    */
-  getResponsiveControlValue(controlSettings, controlKey) {
-    let controlSubKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-    let device = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  getResponsiveControlValue(controlSettings, controlKey, controlSubKey = '', device = null) {
     const currentDeviceMode = device || elementorFrontend.getCurrentDeviceMode(),
       controlValueDesktop = this.getControlValue(controlSettings, controlKey, controlSubKey);
 
@@ -1046,12 +1037,9 @@ __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "../node_modu
 class LightboxManager extends elementorModules.ViewModule {
   static getLightbox() {
     const lightboxPromise = new Promise(resolveLightbox => {
-        __webpack_require__.e(/*! import() | lightbox */ "lightbox").then(__webpack_require__.t.bind(__webpack_require__, /*! elementor-frontend/utils/lightbox/lightbox */ "../assets/dev/js/frontend/utils/lightbox/lightbox.js", 23)).then(_ref => {
-          let {
-            default: LightboxModule
-          } = _ref;
-          return resolveLightbox(new LightboxModule());
-        });
+        __webpack_require__.e(/*! import() | lightbox */ "lightbox").then(__webpack_require__.t.bind(__webpack_require__, /*! elementor-frontend/utils/lightbox/lightbox */ "../assets/dev/js/frontend/utils/lightbox/lightbox.js", 23)).then(({
+          default: LightboxModule
+        }) => resolveLightbox(new LightboxModule()));
       }),
       dialogScriptPromise = elementorFrontend.utils.assetsLoader.load('script', 'dialog'),
       dialogStylePromise = elementorFrontend.utils.assetsLoader.load('style', 'dialog'),
@@ -1113,8 +1101,8 @@ class LightboxManager extends elementorModules.ViewModule {
   bindEvents() {
     elementorFrontend.elements.$document.on('click', this.getSettings('selectors.links'), event => this.onLinkClick(event));
   }
-  onInit() {
-    super.onInit(...arguments);
+  onInit(...args) {
+    super.onInit(...args);
     if (elementorFrontend.isEditMode()) {
       return;
     }
@@ -1274,7 +1262,7 @@ class _default extends elementorModules.ViewModule {
   addAction(name, callback) {
     this.actions[name] = callback;
   }
-  runAction(url) {
+  runAction(url, ...restArgs) {
     url = decodeURI(url);
     url = decodeURIComponent(url);
     const actionMatch = url.match(/action=(.+?)&/);
@@ -1291,9 +1279,6 @@ class _default extends elementorModules.ViewModule {
       settings = JSON.parse(atob(settingsMatch[1]));
     }
     settings.previousEvent = event;
-    for (var _len = arguments.length, restArgs = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      restArgs[_key - 1] = arguments[_key];
-    }
     action(settings, ...restArgs);
   }
   runLinkAction(event) {
@@ -1539,8 +1524,7 @@ class Breakpoints extends elementorModules.Module {
    *
    * @param {Object} args
    */
-  getActiveBreakpointsList() {
-    let args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  getActiveBreakpointsList(args = {}) {
     const defaultArgs = {
       largeToSmall: false,
       withDesktop: false
@@ -1709,9 +1693,7 @@ class Events {
    *
    * @return {void}
    */
-  static dispatch(context, event) {
-    let data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-    let bcEvent = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  static dispatch(context, event, data = null, bcEvent = null) {
     // Make sure to use the native context if it's a jQuery instance.
     context = context instanceof jQuery ? context[0] : context;
 
@@ -2297,40 +2279,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/iterator-map.js":
-/*!*********************************************************!*\
-  !*** ../node_modules/core-js/internals/iterator-map.js ***!
-  \*********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
-var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
-var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
-var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
-var createIteratorProxy = __webpack_require__(/*! ../internals/iterator-create-proxy */ "../node_modules/core-js/internals/iterator-create-proxy.js");
-var callWithSafeIterationClosing = __webpack_require__(/*! ../internals/call-with-safe-iteration-closing */ "../node_modules/core-js/internals/call-with-safe-iteration-closing.js");
-
-var IteratorProxy = createIteratorProxy(function () {
-  var iterator = this.iterator;
-  var result = anObject(call(this.next, iterator));
-  var done = this.done = !!result.done;
-  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
-});
-
-// `Iterator.prototype.map` method
-// https://github.com/tc39/proposal-iterator-helpers
-module.exports = function map(mapper) {
-  anObject(this);
-  aCallable(mapper);
-  return new IteratorProxy(getIteratorDirect(this), {
-    mapper: mapper
-  });
-};
-
-
-/***/ }),
-
 /***/ "../node_modules/core-js/internals/normalize-string-argument.js":
 /*!**********************************************************************!*\
   !*** ../node_modules/core-js/internals/normalize-string-argument.js ***!
@@ -2401,39 +2349,6 @@ module.exports = function (argument) {
   if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
   return $String(argument);
 };
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/modules/es.iterator.map.js":
-/*!**********************************************************!*\
-  !*** ../node_modules/core-js/modules/es.iterator.map.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
-var map = __webpack_require__(/*! ../internals/iterator-map */ "../node_modules/core-js/internals/iterator-map.js");
-var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
-
-// `Iterator.prototype.map` method
-// https://tc39.es/ecma262/#sec-iterator.prototype.map
-$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
-  map: map
-});
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/modules/esnext.iterator.map.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/core-js/modules/esnext.iterator.map.js ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-
-// TODO: Remove from `core-js@4`
-__webpack_require__(/*! ../modules/es.iterator.map */ "../node_modules/core-js/modules/es.iterator.map.js");
 
 
 /***/ }),

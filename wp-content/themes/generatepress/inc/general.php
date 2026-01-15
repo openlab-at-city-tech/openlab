@@ -67,11 +67,6 @@ if ( ! function_exists( 'generate_scripts' ) ) {
 			wp_enqueue_style( 'generate-child', get_stylesheet_uri(), array( 'generate-style' ), filemtime( get_stylesheet_directory() . '/style.css' ), 'all' );
 		}
 
-		if ( function_exists( 'wp_script_add_data' ) ) {
-			wp_enqueue_script( 'generate-classlist', $dir_uri . "/assets/js/classList{$suffix}.js", array(), GENERATE_VERSION, true );
-			wp_script_add_data( 'generate-classlist', 'conditional', 'lte IE 11' );
-		}
-
 		if ( generate_has_active_menu() ) {
 			wp_enqueue_script( 'generate-menu', $dir_uri . "/assets/js/menu{$suffix}.js", array(), GENERATE_VERSION, true );
 

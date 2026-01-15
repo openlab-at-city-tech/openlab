@@ -341,7 +341,24 @@ function astra_cart_color_default_icon_old_header() {
  * @since 3.9.2
  */
 function astra_add_to_cart_quantity_btn_enabled() {
-	return apply_filters( 'astra_add_to_cart_quantity_btn_enabled', astra_get_option( 'single-product-plus-minus-button' ) );
+	$is_enabled = astra_get_option( 'single-product-plus-minus-button' );
+
+	// If on single product page, check if product is sold individually
+	if ( $is_enabled && is_product() ) {
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		/** @psalm-suppress InvalidGlobal */
+		global $product;
+
+		if ( ! $product instanceof WC_Product ) {
+			$product = wc_get_product( get_the_ID() );
+		}
+
+		if ( $product instanceof WC_Product && $product->is_sold_individually() ) {
+			$is_enabled = false;
+		}
+	}
+
+	return apply_filters( 'astra_add_to_cart_quantity_btn_enabled', $is_enabled );
 }
 
 /**

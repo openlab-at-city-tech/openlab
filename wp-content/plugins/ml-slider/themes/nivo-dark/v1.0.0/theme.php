@@ -13,7 +13,7 @@ if (!isset(MetaSlider_Theme_Base::$themes['nivo-dark'])) {
     // instanciate the theme
     new MetaSlider_Theme_Base(
         'nivo-dark',        // ID
-        '1.0.0',        // version
+        METASLIDER_VERSION,        // version
         array(          // assets
             array(
                 'type' => 'css',

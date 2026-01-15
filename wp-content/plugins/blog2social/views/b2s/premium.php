@@ -24,12 +24,12 @@
                                     ?>
                                 </span>
                                 <?php if (B2S_PLUGIN_USER_VERSION == 0 && !defined("B2S_PLUGIN_TRAIL_END") && !get_option('B2S_PLUGIN_DISABLE_TRAIL')) { ?>
-                                    <a class="btn btn-sm btn-primary pull-right" href="<?php echo esc_url(B2S_Tools::getSupportLink('feature')); ?>" target="_blank">   <?php esc_html_e('Start your 30-day free Premium trial', 'blog2social') ?></a>
+                                    <a class="btn btn-sm btn-primary pull-right" href="<?php echo esc_url(B2S_Tools::getSupportLink('trial')); ?>" target="_blank">   <?php esc_html_e('Start your 30-day free Premium trial', 'blog2social') ?></a>
                                 <?php } ?>  
                             </h3>
                             <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time()) { ?>
                                 <p> <span class="b2s-text-bold"><?php esc_html_e("End of Trial", "blog2social") ?></span>: <?php echo esc_html(B2S_Util::getCustomDateFormat(B2S_PLUGIN_TRAIL_END, trim(strtolower(substr(B2S_LANGUAGE, 0, 2))), false)); ?> 
-                                    <a class="b2s-text-bold" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank">   <?php esc_html_e('Upgrade', 'blog2social') ?></a>
+                                    <a class="b2s-text-bold" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" target="_blank">   <?php esc_html_e('Upgrade', 'blog2social') ?></a>
                                 </p>
                                 <br>
                             <?php } ?>
@@ -155,7 +155,7 @@
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row b2s-premium-btn-group">
-                                    <a class="btn b2s-btn-lg b2s-btn-premium-filled b2s-font-bold" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank">   <?php esc_html_e('Upgrade license', 'blog2social') ?></a>                                  
+                                    <a class="btn b2s-btn-lg b2s-btn-premium-filled b2s-font-bold" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" target="_blank">   <?php esc_html_e('Upgrade license', 'blog2social') ?></a>                                  
                                 </div>
                             </div>
                         <?php } ?>
@@ -183,7 +183,7 @@
                         <br>
                         <p class="b2s-text-bold"><?php esc_html_e('Upgrade to Business to enhance your team\'s productivity and expand your social media reach.', 'blog2social') ?></p>
                         <br>
-                        <a href="<?php echo esc_url(B2S_Tools::getSupportLink('pricing')); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-premium-filled"><?php esc_html_e("Discover plans", "blog2social"); ?></a>
+                        <a href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-premium-filled"><?php esc_html_e("Discover plans", "blog2social"); ?></a>
                     </div>
                 </div>
             </div>

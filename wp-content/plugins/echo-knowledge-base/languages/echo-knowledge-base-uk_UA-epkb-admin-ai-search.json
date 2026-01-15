@@ -1,0 +1,222 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Search Results": [
+                "Результат пошуку"
+            ],
+            "Settings saved successfully": [
+                "Налаштування успішно збережено"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "Date:": [
+                "Дата:"
+            ],
+            "Saving...": [
+                "Збереження..."
+            ],
+            "Search History": [
+                "Історія пошуку"
+            ],
+            "Search Settings": [
+                "Налаштування пошуку"
+            ],
+            "Single Column": [
+                "Одна колонка"
+            ],
+            "Left Column": [
+                "Ліва колонка"
+            ],
+            "Right Column": [
+                "Права колонка"
+            ],
+            "Middle Column": [
+                "Середня колонка"
+            ],
+            "Feedback": [
+                "Зворотній зв'язок"
+            ],
+            "AI Assistant": [
+                "ШІ-помічник"
+            ],
+            "Save Settings": [
+                "Зберегти налаштування"
+            ],
+            "Delete": [
+                "Видалити"
+            ],
+            "Delete Selected": [
+                "Видалити обрані"
+            ],
+            "Reset": [
+                "Скинути"
+            ],
+            "Refreshing...": [
+                "Оновлення..."
+            ],
+            "Refresh": [
+                "Оновити"
+            ],
+            "Time": [
+                "Час"
+            ],
+            "User": [
+                "Користувач"
+            ],
+            "Searching server for more results...": [
+                "Пошук додаткових результатів на сервері..."
+            ],
+            "User:": [
+                "Користувач:"
+            ],
+            "Status:": [
+                "Статус:"
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "Ви впевнені, що хочете скинути до інструкцій за замовчуванням?"
+            ],
+            "Reset Instructions": [
+                "Скинути інструкції"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "Ви впевнені, що хочете скинути до інструкцій за замовчуванням? Ваші персоналізовані інструкції будуть втрачені."
+            ],
+            "Reset to Default": [
+                "Скинути за замовчуванням"
+            ],
+            "Failed to save settings": [
+                "Не вдалося зберегти налаштування"
+            ],
+            "Go to Settings": [
+                "Перейти до Налаштувань"
+            ],
+            "Are you sure you want to delete the selected searches?": [
+                "Ви впевнені, що хочете видалити обрані пошукові запити?"
+            ],
+            "Delete Search History": [
+                "Видалити історію пошуку"
+            ],
+            "Deleting searches...": [
+                "Видаляємо пошукові запити..."
+            ],
+            "Search history refreshed successfully": [
+                "Історію пошуку успішно оновлено"
+            ],
+            "Search queries...": [
+                "Пошукові запити..."
+            ],
+            "Loading search history...": [
+                "Завантажуємо історію пошуку..."
+            ],
+            "No searches found": [
+                "Пошукові запити не знайдено"
+            ],
+            "Search Query": [
+                "Запит пошуку"
+            ],
+            "Info": [
+                "Інформація"
+            ],
+            "Contact request submitted": [
+                "Запит на контакт надіслано"
+            ],
+            "User Needs Help": [
+                "Користувач потребує допомоги"
+            ],
+            "Positive feedback": [
+                "Позитивний відгук"
+            ],
+            "Negative feedback": [
+                "Негативний відгук"
+            ],
+            "Search Details": [
+                "Деталі пошуку"
+            ],
+            "Select a search to view details": [
+                "Виберіть пошук, щоб переглянути деталі"
+            ],
+            "Search Information": [
+                "Інформація про пошук"
+            ],
+            "Query:": [
+                "Запит:"
+            ],
+            "Results Count:": [
+                "Кількість результатів:"
+            ],
+            "Contact Request": [
+                "Запит на контакт"
+            ],
+            "Name:": [
+                "Ім'я:"
+            ],
+            "Email:": [
+                "Електронна адреса:"
+            ],
+            "Vote:": [
+                "Голос:"
+            ],
+            "Positive": [
+                "Позитивний"
+            ],
+            "Negative": [
+                "Негативний"
+            ],
+            "Search Interaction": [
+                "Взаємодія з пошуком"
+            ],
+            "AI Response": [
+                "AI Відповідь"
+            ],
+            "✓ Clicked": [
+                "✓ Натиснуто"
+            ],
+            "Relevance:": [
+                "Актуальність:"
+            ],
+            "No sections added yet": [
+                "Ще не додано розділів"
+            ],
+            "-- Select Section --": [
+                "-- Виберіть розділ --"
+            ],
+            "Add Section": [
+                "Додати розділ"
+            ],
+            "Failed to load search history": [
+                "Не вдалося завантажити історію пошуку"
+            ],
+            "Searches deleted successfully": [
+                "Пошуки успішно видалено"
+            ],
+            "Failed to delete searches": [
+                "Не вдалося видалити пошуки"
+            ],
+            "AI Search is Disabled": [
+                "AI Пошук вимкнено"
+            ],
+            "To view search history, please enable AI Search in the Settings tab.": [
+                "Щоб переглянути історію пошуку, увімкніть AI Пошук на вкладці Налаштування."
+            ],
+            "AI Search Tutorial": [
+                "AI Пошук: навчальний посібник"
+            ],
+            "Learn how to configure and optimize the AI Search feature to help users find answers quickly.": [
+                "Дізнайтеся, як налаштувати та оптимізувати AI Пошук, щоб користувачі швидше знаходили відповіді."
+            ],
+            "AI Search Tutorial Screenshot": [
+                "Скріншот навчального посібника AI Пошук"
+            ],
+            "<h4>Getting Started with AI Search</h4><ul><li>Enable AI Search in the Settings tab</li><li>Configure search result display modes (Simple or Advanced)</li><li>View search history to analyze user queries</li><li>Customize AI instructions for better search accuracy</li></ul>": [
+                "<h4>Початок роботи з AI Пошук</h4><ul><li>Увімкніть AI Пошук на вкладці Налаштування</li><li>Налаштуйте режими відображення результатів пошуку (Простий або Розширений)</li><li>Перегляньте історію пошуку, щоб аналізувати запити користувачів</li><li>Налаштуйте інструкції AI для підвищення точності пошуку</li></ul>"
+            ]
+        }
+    }
+}

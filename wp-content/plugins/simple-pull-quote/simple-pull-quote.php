@@ -2,12 +2,12 @@
 /**
  * @package Simple Pull Quote
  * @author Toby Cryns
- * @version 1.6.3
+ * @version 1.6.4
  */
 /*
 	* @wordpress-plugin
 	* Plugin Name: Simple Pull Quote
-	* Version: 1.6.3
+	* Version: 1.6.4
 	* Plugin URI: http://www.themightymo.com/simple-pull-quote
 	* Description: Easily add pull quotes to blog posts using shortcode.
 	* Author: Toby Cryns
@@ -39,7 +39,7 @@
 require_once (dirname(__FILE__) . '/simple-pull-quote_tinymce.php');
 
 function my_css() {
-        echo '<link type="text/css" rel="stylesheet" href="' . plugins_url( 'css/simple-pull-quote.css', __FILE__ ) . '" />' . "\n";
+	echo '<link type="text/css" rel="stylesheet" href="' . esc_url( plugins_url( 'css/simple-pull-quote.css', __FILE__ ) ) . '" />' . "\n";
 }
 
 // Add the CSS file to the header when the page loads
@@ -50,14 +50,14 @@ add_action('wp_head', 'my_css');
 function simplePullQuotes() {
 	wp_enqueue_script(
 		'simple-pull-quotes',
-		plugin_dir_url(__FILE__) . 'simple-pull-quote.js',
+		esc_url( plugin_dir_url(__FILE__) . 'simple-pull-quote.js' ),
 		array('quicktags')
 	);
 }
 
 // Load the custom TinyMCE plugin
 function simple_pull_quotes_plugin( $plugins ) {
-	$plugins['simplepullquotes'] = plugins_url('/simple-pull-quote/tinymce3/editor_plugin.js');
+	$plugins['simplepullquotes'] = esc_url( plugins_url('/simple-pull-quote/tinymce3/editor_plugin.js') );
 	return $plugins;
 }
 
@@ -75,15 +75,25 @@ function getSimplePullQuote( $atts, $content = null ) {
         'class' => 'right',
     ), $atts );
 
-    // Clean up and process content
-    $content = wpautop(trim($content));
+	// Normalize content - run shortcodes, autop paragraphs, then sanitize allowed HTML
+	if ( is_null( $content ) ) {
+		$content = '';
+	} else {
+		$content = trim( $content );
+		// Allow nested shortcodes to run first
+		$content = do_shortcode( $content );
+		// Add paragraph tags where appropriate
+		$content = wpautop( $content );
+		// Strip disallowed HTML (removes scripts, event handlers, etc.)
+		$content = wp_kses_post( $content );
+	}
 
-    // Create the output with the appropriate class and content
-    $output = '<div class="simplePullQuote ' . sanitize_html_class($pull_quote_atts['class']) . '">';
-    $output .= do_shortcode($content);
-    $output .= '</div>';
+	// Create the output with the appropriate class and safely-escaped attributes/content
+	$output = '<div class="simplePullQuote ' . esc_attr( sanitize_html_class( $pull_quote_atts['class'] ) ) . '">';
+	$output .= $content;
+	$output .= '</div>';
 
-    return $output;
+	return $output;
 }
 add_shortcode('pullquote', 'getSimplePullQuote');
 
@@ -95,7 +105,8 @@ function getQuote(){
 	global $post;
 	$my_custom_field = get_post_meta($post->ID, "quote", true);
 	/* Add CSS classes to the pull quote (a.k.a. Style the thing!) */
-	return '<div class="simplePullQuote">'.$my_custom_field.'</div>'; 
+	$my_custom_field = wp_kses_post( $my_custom_field );
+	return '<div class="simplePullQuote">' . $my_custom_field . '</div>'; 
 }
 
 /* Allow us to add the pull quote using Wordpress shortcode, "[quote]" */
@@ -104,7 +115,8 @@ function getQuote1(){
 	global $post;
 	$my_custom_field = get_post_meta($post->ID, "quote1", true);
 	/* Add CSS classes to the pull quote (a.k.a. Style the thing!) */
-	return '<div class="simplePullQuote">'.$my_custom_field.'</div>'; 
+	$my_custom_field = wp_kses_post( $my_custom_field );
+	return '<div class="simplePullQuote">' . $my_custom_field . '</div>'; 
 }
 
 /* Allow us to add the pull quote using Wordpress shortcode, "[quote]" */
@@ -115,7 +127,8 @@ function getQuote2(){
 	$my_custom_field = get_post_meta($post->ID, "quote2", true);
 
 	/* Add CSS classes to the pull quote (a.k.a. Style the thing!) */
-	return '<div class="simplePullQuote">'.$my_custom_field.'</div>'; 
+	$my_custom_field = wp_kses_post( $my_custom_field );
+	return '<div class="simplePullQuote">' . $my_custom_field . '</div>'; 
 }
 
 // Allow us to add the pull quote using Wordpress shortcode, "[quote]" */

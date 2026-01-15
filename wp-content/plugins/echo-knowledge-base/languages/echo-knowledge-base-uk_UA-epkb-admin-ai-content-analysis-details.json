@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Demo Article": [
+                "Демонстраційна документація"
+            ],
+            "Categories": [
+                "Категорії"
+            ],
+            "Analyzing...": [
+                "Аналізуємо..."
+            ],
+            "Content Gaps Analysis": [
+                "Аналіз прогалин у контенті"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "Підказки тегів за допомогою ШІ"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "Аналіз прогалин доступний лише з додатком Функції ШІ."
+            ],
+            "Readability": [
+                "Читабельність"
+            ],
+            "Tag added successfully": [
+                "Тег успішно додано"
+            ],
+            "Tag removed successfully": [
+                "Тег успішно видалено"
+            ],
+            "Tag updated successfully": [
+                "Тег успішно оновлено"
+            ],
+            "Add New Tag": [
+                "Додати нову позначку"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "Позначки"
+            ],
+            "Edit Article": [
+                "Редагувати статтю"
+            ],
+            "View Article": [
+                "Переглянути статтю"
+            ],
+            "Failed to save tag changes": [
+                "Не вдалося зберегти зміни тегів"
+            ],
+            "Failed to add tag": [
+                "Не вдалося додати тег"
+            ],
+            "Failed to remove tag": [
+                "Не вдалося видалити тег"
+            ],
+            "Failed to remove tags": [
+                "Не вдалося видалити теги"
+            ],
+            "Failed to update tag": [
+                "Не вдалося оновити тег"
+            ],
+            "Not Analyzed": [
+                "Не проаналізовано"
+            ],
+            "Demo Analysis Data": [
+                "Дані демоаналізу"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "Це демо-сторінка документації з прикладами даних аналітики для демонстраційних цілей. Створіть свої власні демо-сторінки документації, щоб побачити реальні результати аналізу контенту."
+            ],
+            "Loading analysis details...": [
+                "Завантажуються деталі аналізу..."
+            ],
+            "No analysis details available for this article.": [
+                "Деталі аналізу відсутні для цієї документації."
+            ],
+            "Content Gaps": [
+                "Прогалини контенту"
+            ],
+            "Overall Score": [
+                "Загальна оцінка"
+            ],
+            "Article Importance": [
+                "Важливість документації"
+            ],
+            "Readability analysis completed": [
+                "Аналіз читабельності завершено"
+            ],
+            "Failed to run readability analysis": [
+                "Не вдалося запустити аналіз читабельності"
+            ],
+            "Re-analyze": [
+                "Перепроаналізувати"
+            ],
+            "Readability Analysis": [
+                "Аналіз читабельності"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "Помилки читабельності не знайдено. Документаційна сторінка чітка та добре написана."
+            ],
+            "Analysis Error": [
+                "Помилка аналізу"
+            ],
+            "An error occurred during readability analysis.": [
+                "Під час аналізу читабельності сталася помилка."
+            ],
+            "Retrying analysis...": [
+                "Повторна спроба аналізу..."
+            ],
+            "Retry Analysis": [
+                "Повторити аналіз"
+            ],
+            "Analyzing article readability...": [
+                "Аналізую читабельність документації..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "Натисніть кнопку нижче, щоб за допомогою ШІ проаналізувати читабельність цієї документації."
+            ],
+            "Run Readability Analysis": [
+                "Провести аналіз читабельності"
+            ],
+            "Article Content": [
+                "Зміст документації"
+            ],
+            "No article content available": [
+                "Зміст документації відсутній"
+            ],
+            "Content Gaps analysis completed": [
+                "Завершено аналіз прогалин контенту"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "Не вдалося запустити аналіз прогалин контенту"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "Прогалин контенту відсутні. Документаційна сторінка здається повною."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "Під час аналізу прогалин контенту сталася помилка."
+            ],
+            "Learn More About AI Features": [
+                "Дізнайтеся більше про можливості штучного інтелекту"
+            ],
+            "Analyzing article for content gaps...": [
+                "Аналізую документацію на наявність прогалин у контенті..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "Натисніть кнопку нижче, щоб за допомогою ШІ проаналізувати цю документацію на відсутність контенту."
+            ],
+            "Run Content Gaps Analysis": [
+                "Запустити аналіз прогалин контенту"
+            ],
+            "Tags analysis completed": [
+                "Аналіз тегів завершено"
+            ],
+            "Failed to run tags analysis": [
+                "Не вдалося запустити аналіз тегів"
+            ],
+            "Re-analyze Tags": [
+                "Перепроаналізувати теги"
+            ],
+            "Tag Count": [
+                "Кількість тегів"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "Кількість тегів відповідає рекомендованому діапазону (3-10)."
+            ],
+            "Tag Relevance": [
+                "Актуальність тегів"
+            ],
+            "Not Applicable due to missing tags": [
+                "Не застосовується через відсутність тегів"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "Усі теги релевантні та з'являються у вмісті документації."
+            ],
+            "Tag Format": [
+                "Формат тегів"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "Усі теги правильно відформатовані та відповідають найкращим практикам."
+            ],
+            "Duplicate Tags": [
+                "Дублікати тегів"
+            ],
+            "No duplicate or similar tags found.": [
+                "Не знайдено дублікатів або схожих тегів."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "Документація має потрібну кількість категорій (1-3)."
+            ],
+            "Add": [
+                "Додати"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "Згідно з аналізом контенту за допомогою ШІ, розгляньте можливість додавання цих тегів:"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "Отримайте плагін AI Features, щоб розблокувати підказки тегів на основі ШІ."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "Наразі підказки тегів для цієї документації відсутні."
+            ],
+            "Broad Tags": [
+                "Широкі теги"
+            ],
+            "(General categories)": [
+                "(Загальні категорії)"
+            ],
+            "Specific Tags": [
+                "Специфічні теги"
+            ],
+            "(Detailed topics)": [
+                "(Детальні теми)"
+            ],
+            "Article Tags": [
+                "Теги документації"
+            ],
+            "Restore tag": [
+                "Відновити тег"
+            ],
+            "Mark for deletion": [
+                "Позначити для видалення"
+            ],
+            "No tags": [
+                "Немає тегів"
+            ],
+            "Remove tag": [
+                "Видалити тег"
+            ],
+            "Tag name": [
+                "Назва тегу"
+            ],
+            "Tag Best Practices": [
+                "Кращі практики тегів"
+            ],
+            "Guidelines:": [
+                "Рекомендації:"
+            ],
+            "Relevant & Keyword-Rich:": [
+                "Актуальні та багаті на ключові слова:"
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "Використовуйте описові теги, що відповідають змісту та пошуковим запитам."
+            ],
+            "Avoid Duplicates:": [
+                "Уникайте дублікатів:"
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "Не використовуйте назви категорій як теги (або навпаки)."
+            ],
+            "Reuse Consistently:": [
+                "Повторюйте послідовно:"
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "Дотримуйтесь стратегії; не використовуйте унікальні теги для кожного запису, щоб уникнути «роздування тегів» (тонкі сторінки погано впливають на SEO). Теги повинні об'єднувати кілька записів; noindex тонкі архіви (≤2 записів)."
+            ],
+            "Keep Short:": [
+                "Коротко:"
+            ],
+            "1–3 words, reusable.": [
+                "1–3 слова, повторювані."
+            ],
+            "Editor Checklist:": [
+                "Перелік перевірок редактора:"
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "Групи ≥3 публікацій (зараз або скоро)?"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "1–3 слова, відрізняються від існуючих тегів/категорій?"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "Об'єднуйте синоніми замість нових тегів?"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "Noindex, якщо тонкі; індексувати, якщо суттєві з описом?"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "Примітка: Збереження оновить перенаправлення архіву тегів (необов'язково)"
+            ],
+            "Save Changes": [
+                "Зберегти зміни"
+            ]
+        }
+    }
+}

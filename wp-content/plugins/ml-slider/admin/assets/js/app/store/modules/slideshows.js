@@ -166,7 +166,8 @@ const mutations = {
                             slideshow_id: slideshows[key].id,
                             slug: slug
                         })).then(response => {
-                            window.metaslider.after_importing_slides_success( response.data );
+                            // This will trigger sampleSlidesWereAdded()
+                            window.location.href = window.location.href.replace('metaslider_add_sample_slides', 'metaslider_add_sample_slides_after');
                         }).catch(error => {
                             console.log(error)
                         })
@@ -180,50 +181,8 @@ const mutations = {
                                 slug: slug || ''
                             }
                         })).then(response => {
-                            var data = response.data ?? null;
-
-                            if (!data) {
-                                console.error('No data found!');
-                                return;
-                            }
-
-                            var $ = window.jQuery;
-                            var table = $(".metaslider table#metaslider-slides-list");
-                            
-                            data.forEach(function(slide) {
-                                // Compile Vue fields
-                                var res = window.metaslider.app.Vue.compile(slide['html']);
-                                const cont_ = (new window.metaslider.app.Vue({
-                                    render: res.render,
-                                    staticRenderFns: res.staticRenderFns
-                                }).$mount()).$el;
-
-                                // Mount the slide to the beginning or end of the list
-                                // Here we may follow an inverted approach due import 
-                                window.metaslider.newSlideOrder === 'last' 
-                                    ? table.prepend(cont_)
-                                    : table.append(cont_);
-                            });
-
-                            // Hide loading box
-                            $('#loading-add-sample-slides-notice').hide();
-
-                            var APP = window.metaslider.app.MetaSlider;
-
-                            // Add timeouts to give some breating room to the notice animations
-                            setTimeout(function () {
-                                if (APP) {
-                                    const message = data.length == 1 ? APP.__('1 slide added successfully', 'ml-slider') : APP.__('%s slides added successfully')
-                                    APP.notifySuccess(
-                                        'metaslider/slides-created',
-                                        APP.sprintf(message, data.length),
-                                        true
-                                    )
-                                }
-                                setTimeout(function () {
-                                    APP && APP.triggerEvent('metaslider/save')
-                                }, 1000);
-                            }, 1000);
+                            // This will trigger sampleSlidesWereAdded()
+                            window.location.href = window.location.href.replace('metaslider_add_sample_slides', 'metaslider_add_sample_slides_after');
                         }).catch(error => {
                             console.log(error)
                         })

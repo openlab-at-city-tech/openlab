@@ -496,7 +496,7 @@ function name_directory_show_directory($attributes)
         echo '<div class="name_directory_column name_directory_nr' . (int)$directory['nr_columns'] . '">';
 
         $i = 1;
-        $split_i = 1;
+        $split_i = 0;
         $this_letter = '---';
         foreach($names as $entry)
         {

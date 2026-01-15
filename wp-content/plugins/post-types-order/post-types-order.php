@@ -4,16 +4,17 @@
 * Plugin URI: http://www.nsp-code.com
 * Description: Posts Order and Post Types Objects Order using a Drag and Drop Sortable javascript capability
 * Author: Nsp Code
-* Author URI: http://www.nsp-code.com 
-* Version: 2.3.7
+* Author URI: https://www.nsp-code.com 
+* Version: 2.4.1
 * Text Domain: post-types-order
 * Domain Path: /languages/
+* PHP tested up to: 8.4
 */
 
     define('CPTPATH',   plugin_dir_path(__FILE__));
     define('CPTURL',    plugins_url('', __FILE__));
     
-    define('PTO_VERSION',          '2.3.7');
+    define('PTO_VERSION',          '2.4.1');
     
     include_once(CPTPATH . '/include/class.cpto.php');
     include_once(CPTPATH . '/include/class.functions.php');
@@ -25,7 +26,6 @@
     */
     function cpto_class_load()
         {
-            
             global $CPTO;
             $CPTO   =   new CPTO();
         }
@@ -38,7 +38,7 @@
     */
     function cpto_load_textdomain() 
         {
-            load_plugin_textdomain('post-types-order', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+            load_plugin_textdomain('post-types-order', '', dirname( plugin_basename( __FILE__ ) ) . '/languages');
         }
     add_action( 'plugins_loaded', 'cpto_load_textdomain'); 
         

@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Go to General Settings": [
+                "Vai alle Impostazioni Generali"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Per utilizzare le funzionalità IA, configura la tua chiave API e accetta l'accordo sulla privacy dei dati nelle Impostazioni Generali, quindi abilita IA Ricerca o IA Chat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Per utilizzare i Dati di addestramento, abilita IA Chat o IA Ricerca nelle rispettive schede."
+            ],
+            "Data Collection": [
+                "Raccolta dati"
+            ],
+            "OpenAI API Key Required": [
+                "Chiave API OpenAI richiesta"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Per utilizzare le funzionalità IA, è necessario configurare la chiave API OpenAI."
+            ],
+            "Configure API Key": [
+                "Configura chiave API"
+            ],
+            "Failed to load tab data": [
+                "Impossibile caricare i dati della scheda"
+            ],
+            "Unknown tab": [
+                "Scheda sconosciuta"
+            ],
+            "AI Configuration": [
+                "Configurazione IA"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Errore: Nessuna scheda configurata. Si prega di verificare la configurazione."
+            ],
+            "New training data collection created": [
+                "Nuova raccolta di dati di addestramento creata"
+            ],
+            "Failed to create collection": [
+                "Impossibile creare la raccolta"
+            ],
+            "AI features must be enabled to access this tab": [
+                "Le funzionalità IA devono essere abilitate per accedere a questa scheda"
+            ],
+            "Reloading page...": [
+                "Ricaricando la pagina..."
+            ]
+        }
+    }
+}

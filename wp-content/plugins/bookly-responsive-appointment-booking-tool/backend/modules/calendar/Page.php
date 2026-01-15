@@ -92,6 +92,9 @@ class Page extends Lib\Base\Ajax
                     'active' => (int) Config::packagesActive(),
                     'title' => __( 'Package', 'bookly' ),
                 ),
+                'events' => array(
+                    'attendees' => __( 'Attendees', 'bookly' ),
+                )
             ) ) );
 
         $refresh_rate = get_user_meta( get_current_user_id(), 'bookly_calendar_refresh_rate', true );
@@ -388,9 +391,9 @@ class Page extends Lib\Base\Ajax
                     'tooltip' => Lib\Utils\Codes::stringify( $appointment['duration'] >= DAY_IN_SECONDS ? $tooltip_all_day : $tooltip, $codes, false, array(), true ),
                     'desc' => $codes['description'],
                     'staffId' => $appointment['staff_id'],
-                    'series_id' => (int) $appointment['series_id'],
-                    'package_id' => (int) $appointment['package_id'],
-                    'waitlisted' => (int) $appointment['on_waiting_list'],
+                    'series_id' => $participants === 'one' ? (int) $appointment['series_id'] : null,
+                    'package_id' => $participants === 'one' ? (int) $appointment['package_id'] : null,
+                    'waitlisted' => $participants === 'one' ? (int) $appointment['on_waiting_list'] : null,
                     'staff_any' => (int) $appointment['staff_any'],
                     'overall_status' => $overall_status,
                 ),

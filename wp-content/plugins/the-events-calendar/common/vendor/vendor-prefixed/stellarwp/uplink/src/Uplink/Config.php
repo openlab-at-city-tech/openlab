@@ -64,7 +64,7 @@ class Config {
 	public static function get_container() {
 		if ( self::$container === null ) {
 			throw new RuntimeException(
-				__( 'You must provide a container via StellarWP\Uplink\Config::set_container() before attempting to fetch it.', 'tribe-common' )
+				__( 'You must provide a container via StellarWP\Uplink\Config::set_container() before attempting to fetch it.', '%TEXTDOMAIN%' )
 			);
 		}
 
@@ -81,7 +81,7 @@ class Config {
 	public static function get_hook_prefix(): string {
 		if ( self::$hook_prefix === null ) {
 			throw new RuntimeException(
-				__( 'You must provide a hook prefix via StellarWP\Uplink\Config::set_hook_prefix() before attempting to fetch it.', 'tribe-common' )
+				__( 'You must provide a hook prefix via StellarWP\Uplink\Config::set_hook_prefix() before attempting to fetch it.', '%TEXTDOMAIN%' )
 			);
 		}
 
@@ -98,7 +98,7 @@ class Config {
 	public static function get_hook_prefix_underscored(): string {
 		if ( self::$hook_prefix === null ) {
 			throw new RuntimeException(
-				__( 'You must provide a hook prefix via StellarWP\Uplink\Config::set_hook_prefix() before attempting to fetch it.', 'tribe-common' )
+				__( 'You must provide a hook prefix via StellarWP\Uplink\Config::set_hook_prefix() before attempting to fetch it.', '%TEXTDOMAIN%' )
 			);
 		}
 
@@ -174,7 +174,7 @@ class Config {
 	public static function set_token_auth_prefix( string $prefix ): void {
 		if ( ! self::has_container() ) {
 			throw new RuntimeException(
-				__( 'You must set a container with StellarWP\Uplink\Config::set_container() before setting a token auth prefix.', 'tribe-common' )
+				__( 'You must set a container with StellarWP\Uplink\Config::set_container() before setting a token auth prefix.', '%TEXTDOMAIN%' )
 			);
 		}
 
@@ -187,7 +187,7 @@ class Config {
 		if ( strlen( $key ) > $max_length ) {
 			throw new InvalidArgumentException(
 				sprintf(
-					__( 'The token auth prefix must be at most %d characters, including a trailing hyphen.', 'tribe-common' ),
+					__( 'The token auth prefix must be at most %d characters, including a trailing hyphen.', '%TEXTDOMAIN%' ),
 					absint( $max_length - strlen( Token_Manager::TOKEN_SUFFIX ) )
 				)
 			);

@@ -15,6 +15,10 @@ use Automattic\Jetpack\Status\Host;
 use Jetpack_Gutenberg;
 use WP_Block_Template;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 require_once __DIR__ . '/class-sharing-source-block.php';
 require_once __DIR__ . '/components/social-icons.php';
 
@@ -199,9 +203,7 @@ function sharing_process_requests() {
 		}
 
 		$service = new $services[ ( $service_name ) ]( $service_name, array() ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( $service ) {
-			$service->process_request( $post, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		}
+		$service->process_request( $post, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 }
 

@@ -7,6 +7,10 @@
 
 namespace Automattic\Jetpack\UnauthFileUpload;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 add_action( 'wp_ajax_jetpack_unauth_file_download', __NAMESPACE__ . '\handle_file_download' );
 add_filter( 'jetpack_unauth_file_upload_get_file', __NAMESPACE__ . '\get_file_content', 10, 2 );
 add_filter( 'jetpack_unauth_file_download_url', __NAMESPACE__ . '\filter_get_download_url', 10, 2 );
@@ -65,9 +69,14 @@ function handle_file_download() {
 	 */
 	$file = apply_filters( 'jetpack_unauth_file_upload_get_file', array(), $file_id );
 
-	if ( is_wp_error( $file ) || empty( $file ) ) {
+	if ( is_wp_error( $file ) || empty( $file ) || ! is_array( $file ) ) {
 		wp_die( esc_html__( 'Error retrieving file content.', 'jetpack' ) );
 	}
+
+	// Given $file can be manipulated by a filter, make sure everything is as it should be.
+	$file['content'] = $file['content'] ?? '';
+	$file['type']    = $file['type'] ?? 'application/octet-stream';
+	$file['name']    = $file['name'] ?? '';
 
 	$is_preview = isset( $_GET['preview'] ) && 'true' === $_GET['preview'];
 
@@ -93,7 +102,7 @@ function handle_file_download() {
 
 	// Output file content and exit
 	echo $file['content']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Binary file data
-	exit;
+	exit( 0 );
 }
 
 /**

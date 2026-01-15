@@ -24,6 +24,7 @@ class Payment extends Base
         'customer_group',
         'tax_in_price',
         'tax_paid',
+        'child_tax_paid',
         'extras_multiply_nop',
         'gateway_ref_id',
         'tips',
@@ -55,6 +56,7 @@ class Payment extends Base
             case Lib\Entities\Payment::ITEM_APPOINTMENT:
             case Lib\Entities\Payment::ITEM_PACKAGE:
             case Lib\Entities\Payment::ITEM_GIFT_CARD:
+            case Lib\Entities\Payment::ITEM_EVENT_ATTENDEE:
                 $this->data['items'][] = $details->getData();
                 if ( ! isset( $this->data['subtotal']['price'] ) ) {
                     $this->data['subtotal']['deposit'] = 0;
@@ -76,7 +78,9 @@ class Payment extends Base
      */
     public function getItems()
     {
-        return $this->data['items'] ?: array();
+        return array_key_exists( 'items', $this->data )
+            ? $this->data['items']
+            : array();
     }
 
     /**

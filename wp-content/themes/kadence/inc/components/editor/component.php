@@ -66,9 +66,9 @@ class Component implements Component_Interface {
 						"link" => true, 
 						"palette" => [
 							[
-							"name" => "Accent", 
-							"slug" => "theme-palette1", 
-							"color" => "var(--global-palette1)" 
+								"name" => "Accent", 
+								"slug" => "theme-palette1", 
+								"color" => "var(--global-palette1)" 
 							], 
 							[
 								"name" => "Accent - alt", 
@@ -109,8 +109,38 @@ class Component implements Component_Interface {
 								"name" => "White or offwhite", 
 								"slug" => "theme-palette9", 
 								"color" => "var(--global-palette9)" 
-								] 
-							] 
+							],
+							[
+								"name" => "Accent - Complement", 
+								"slug" => "theme-palette10", 
+								"color" => "var(--global-palette10)" 
+							],
+							[
+								"name" => "Notices - Success", 
+								"slug" => "theme-palette11", 
+								"color" => "var(--global-palette11)" 
+							],
+							[
+								"name" => "Notices - Info", 
+								"slug" => "theme-palette12", 
+								"color" => "var(--global-palette12)" 
+							],
+							[
+								"name" => "Notices - Alert", 
+								"slug" => "theme-palette13", 
+								"color" => "var(--global-palette13)" 
+							],
+							[
+								"name" => "Notices - Warning", 
+								"slug" => "theme-palette14", 
+								"color" => "var(--global-palette14)" 
+							],
+							[
+								"name" => "Notices - Rating", 
+								"slug" => "theme-palette15", 
+								"color" => "var(--global-palette15)" 
+							]
+						]
 					], 
 					"layout" => [
 						"contentSize" => "var(--global-calc-content-width)", 

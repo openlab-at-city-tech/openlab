@@ -628,6 +628,8 @@ function tribe_get_event_categories( $post_id = null, $args = [] ) {
  *
  * Display the event tags.
  *
+ * @since 6.15.11 Changed HTML output from definition list to list item structure for improved accessibility.
+ *
  * @param null|string $label     The label for the tags.
  * @param string      $separator The delimiter for the tags.
  * @param bool        $echo      Whether to echo the tags or return them.
@@ -643,7 +645,7 @@ function tribe_meta_event_tags( $label = null, $separator = ', ', $echo = true )
 	}
 
 	$tribe_ecp = Tribe__Events__Main::instance();
-	$list      = get_the_term_list( get_the_ID(), 'post_tag', '<dt class="tribe-event-tags-label">' . $label . '</dt><dd class="tribe-event-tags">', $separator, '</dd>' );
+	$list      = get_the_term_list( get_the_ID(), 'post_tag', '<li class="tribe-events-meta-item"><span class="tribe-event-tags-label tribe-events-meta-label">' . $label . '</span><span class="tribe-event-tags tribe-events-meta-value">', $separator, '</span></li>' );
 	/**
 	 * Filters the HTML output of the event tags.
 	 *
@@ -708,6 +710,7 @@ if ( ! function_exists( 'tribe_meta_event_archive_tags' ) ) {
 	 * Display the event tags in a list with links to the event tag archive.
 	 *
 	 * @since 5.16.0
+	 * @since 6.15.11 Changed HTML output from definition list to list item structure for improved accessibility.
 	 *
 	 * @param null|string $label     The label for the term list.
 	 * @param string      $separator The separator of each term.
@@ -755,8 +758,8 @@ if ( ! function_exists( 'tribe_meta_event_archive_tags' ) ) {
 			$term_links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . $term->name . '</a>';
 		}
 
-		$before = '<dt class="tribe-event-tags-label">' . $label . '</dt><dd class="tribe-event-tags">';
-		$after  = '</dd>';
+		$before = '<li class="tribe-events-meta-item"><span class="tribe-event-tags-label tribe-events-meta-label">' . $label . '</span><span class="tribe-event-tags tribe-events-meta-value">';
+		$after  = '</span></li>';
 		$list   = $before . implode( $separator, $term_links ) . $after;
 
 		if ( $echo ) {
@@ -1516,7 +1519,8 @@ function tec_events_get_current_view() {
  */
 function tribe_events_promo_banner( $echo = true ) {
 	if ( tribe_get_option( 'donate-link', false ) == true && ! tribe_is_bot() ) {
-		$promo = apply_filters( 'tribe_events_promo_banner_message', sprintf( esc_html__( 'Calendar powered by %s', 'the-events-calendar' ), '<a class="tribe-common-anchor-thin vcard url org fn" href="' . Tribe__Events__Main::$tecUrl . 'product/wordpress-events-calendar/?utm_medium=plugin-tec&utm_source=banner&utm_campaign=in-app">' . esc_html__( 'The Events Calendar', 'the-events-calendar' ) . '</a>' ) );
+		// translators: %s: The Events Calendar Link element.
+		$promo = apply_filters( 'tribe_events_promo_banner_message', sprintf( esc_html__( 'Calendar powered by %s', 'the-events-calendar' ), '<a target="_blank" rel="noopener noreferrer" class="tribe-common-anchor-thin vcard url org fn" href="' . esc_url( Tribe__Events__Main::$tecUrl . 'products/wordpress-events-calendar/?utm_medium=plugin-tec&utm_source=banner&utm_campaign=in-app' ) . '">' . esc_html__( 'The Events Calendar', 'the-events-calendar' ) . '</a>' ) ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$html  = apply_filters( 'tribe_events_promo_banner', sprintf( '<p class="tribe-events-promo tribe-common-b1 tribe-events-c-promo">%s</p>', $promo ), $promo );
 		if ( $echo ) {
 			echo $html;

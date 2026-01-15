@@ -1,6 +1,5 @@
 <?php
-
-//------------------------------------------
+// © JetSloth — SPDX-License-Identifier: GPL-2.0-or-later
 
 GFForms::include_addon_framework();
 
@@ -25,25 +24,22 @@ class GFImageChoices extends GFAddOn {
     protected $_defaultLightboxImageSize = "full";
     protected $_defaultImageSize = "medium";
 
-	protected $_supported_field_types = ['radio', 'checkbox', 'survey', 'poll', 'quiz', 'post_custom_field', 'product', 'option'];
+	protected $_supported_field_types = ['radio', 'checkbox', 'survey', 'poll', 'quiz', 'post_custom_field', 'product', 'option', 'shipping', 'multi_choice'];
 	protected $_supported_input_types = ['radio', 'checkbox'];
 	protected $_standard_merge_tags = ['all_fields', 'pricing_fields'];//'all_quiz_results'
 
 
-    public function get_license_key($init = false) {
-	    $key = ( defined('GF_IMAGE_CHOICES_LICENSE') ) ? GF_IMAGE_CHOICES_LICENSE : $this->get_plugin_setting( 'gf_image_choices_license_key' );
-	    if ( $init && false === get_transient('gf_image_choices_license_check') ) {
-		    $settings = $this->get_plugin_settings();
-		    if ( false === $settings ) {
-			    $settings = array();
-		    }
-		    $settings['gf_image_choices_license_key'] = $key;
-		    $this->update_plugin_settings($settings);
-		    $this->license_validation( null, $key );
-		    set_transient('gf_image_choices_license_check', '1', DAY_IN_SECONDS);
-	    }
-        return $key;
-    }
+	/**
+	 * Detect if this plugin is network-activated (Multisite).
+	 */
+	private function is_network_activated(): bool {
+		if ( ! is_multisite() ) {
+			return false;
+		}
+		$plugin = plugin_basename( $this->_full_path );
+		$active = (array) get_site_option( 'active_sitewide_plugins', [] );
+		return isset( $active[ $plugin ] );
+	}
 
 	/**
 	 * Gets the supported field types and wraps them in a filter.
@@ -131,12 +127,12 @@ class GFImageChoices extends GFAddOn {
 	}
 
 	public function field_supports_image_choices( $field ) {
-		if ( empty($field) ) {
+		if ( !$field instanceof GF_Field ) {
 			return false;
 		}
-		$is_supported_field_type = ( is_object( $field ) && property_exists($field, 'type') && in_array($field->type, $this->get_supported_field_types()) );
-		$is_supported_input_type = ( in_array($field->type, $this->get_supported_input_types()) || ( property_exists($field, 'inputType') && !empty($field->inputType) && in_array($field->inputType, $this->get_supported_input_types()) ) );
-		return ($is_supported_field_type && $is_supported_input_type);
+		$is_supported_field_type = in_array( rgobj($field, 'type'), $this->get_supported_field_types() );
+		$is_supported_input_type = in_array( $field->get_input_type(), $this->get_supported_input_types() );
+		return ( $is_supported_field_type && $is_supported_input_type );
 	}
 
     public function field_has_image_choices_enabled( $field ) {
@@ -160,7 +156,7 @@ class GFImageChoices extends GFAddOn {
 	 */
 	public function init() {
 
-		$this->get_license_key(true);
+        $this->init_license();
 
 		// add a special class to relevant fields so we can identify them later
 		add_action( 'gform_field_css_class', array( $this, 'add_custom_class' ), 10, 3 );
@@ -285,7 +281,7 @@ class GFImageChoices extends GFAddOn {
 
         $admin_script = array(
 	        'handle'   => 'gf_image_choices_admin',
-	        'src'      => $this->get_base_url() . '/js/gf_image_choices_admin.js',
+	        'src'      => $this->get_base_url() . '/js/gf_image_choices_admin' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.js',
 	        'version'  => $this->_version,
 	        'deps'     => $admin_js_deps,
 	        'callback' => array( $this, 'localize_admin_scripts' ),
@@ -296,7 +292,7 @@ class GFImageChoices extends GFAddOn {
 
         $lightbox_script = array(
 	        'handle'  => 'jetsloth_lightbox',
-	        'src'     => $this->get_base_url() . '/js/jetsloth-lightbox.js',
+	        'src'     => $this->get_base_url() . '/lib/jetsloth-lightbox.js',
 	        'version' => $this->_version,
 	        'deps'     => array( 'jquery' ),
 	        'enqueue' => array(
@@ -308,7 +304,7 @@ class GFImageChoices extends GFAddOn {
 
         $main_script = array(
 	        'handle'  => 'gf_image_choices',
-	        'src'     => $this->get_base_url() . '/js/gf_image_choices.js',
+	        'src'     => $this->get_base_url() . '/js/gf_image_choices' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.js',
 	        'version' => $this->_version,
 	        'deps'    => $gf_image_choices_js_deps,
 	        'callback' => array( $this, 'localize_scripts' ),
@@ -363,8 +359,12 @@ class GFImageChoices extends GFAddOn {
 		$admin_styles_deps = array('code-editor', 'wp-color-picker');
 
 		$admin_styles = array(
-			'handle'  => $use_new_features ? 'gf_image_choices_admin' : 'gf_image_choices_legacy_admin',
-			'src'     => $use_new_features ? $this->get_base_url() . '/css/gf_image_choices_admin.css' : $this->get_base_url() . '/css/gf_image_choices_legacy_admin.css',
+			'handle'  => $use_new_features ?
+				'gf_image_choices_admin' :
+				'gf_image_choices_legacy_admin',
+			'src'     => $use_new_features ?
+				$this->get_base_url() . '/css/gf_image_choices_admin' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.css' :
+				$this->get_base_url() . '/css/gf_image_choices_legacy_admin' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.css',
 			'version' => $this->_version,
             'deps' => $admin_styles_deps,
 			'enqueue' => array(
@@ -375,8 +375,12 @@ class GFImageChoices extends GFAddOn {
 		);
 
 		$frontend_styles = array(
-			'handle'  => $use_new_features ? 'gf_image_choices' : 'gf_image_choices_legacy',
-			'src'     => $use_new_features ? $this->get_base_url() . '/css/gf_image_choices.css' : $this->get_base_url() . '/css/gf_image_choices_legacy.css',
+			'handle'  => $use_new_features ?
+				'gf_image_choices' :
+				'gf_image_choices_legacy',
+			'src'     => $use_new_features ?
+				$this->get_base_url() . '/css/gf_image_choices' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.css' :
+				$this->get_base_url() . '/css/gf_image_choices_legacy' . ( apply_filters('gfic_minified_assets', true) ? '.min' : '' ) . '.css',
 			'version' => $this->_version,
 			'media'   => 'screen',
 			'enqueue' => array(
@@ -923,8 +927,7 @@ class GFImageChoices extends GFAddOn {
 			'useLightboxWarning'    => esc_html__( "It looks like we don't have the media ID for the selected image(s), which is needed for the lightbox functionality. In order for lightbox to work with this field, you might want to remove and re-add the image(s) again or use one of the available filters to add the ID or the large image URL.", 'gf_image_choices' ),
 		) );
 
-		$js_name = $use_new_features ? 'gf_image_choices_admin' : 'gf_image_choices';
-		wp_localize_script( $js_name, 'imageChoicesVars', array(
+		wp_localize_script( 'gf_image_choices_admin', 'imageChoicesVars', array(
 			'gf_version' => GFCommon::$version,
 			'version' => $this->_version,
 			'form_settings' => admin_url( "admin.php?subview=settings&page=gf_edit_forms&view=settings&id=" ),
@@ -982,9 +985,7 @@ class GFImageChoices extends GFAddOn {
         $plugin_settings = $this->get_plugin_settings();
         $use_new_features = $this->use_new_features();
 
-		//$license = $this->get_plugin_settings_value('gf_image_choices_license_key', "", $plugin_settings);
-        $license = $this->get_license_key();
-		$status = get_option('gf_image_choices_license_status');
+		$const_key = $this->get_const_license_key();
 
 		$license_field = array(
 			'name' => 'gf_image_choices_license_key',
@@ -993,17 +994,13 @@ class GFImageChoices extends GFAddOn {
 			'type' => 'text',
 			'input_type' => 'password',
 			'class' => 'medium',
-			'default_value' => ( defined('GF_IMAGE_CHOICES_LICENSE') ) ? GF_IMAGE_CHOICES_LICENSE : '',
+			'default_value' => $this->get_license_key(),
+			'after_input' => ( !empty($const_key) ) ? '<div class="alert gforms_note_info">' . __( "Your license key is defined as a constant (likely in wp-config.php) and can't be edited here.", 'gf_image_choices' ) . '</div>' : '',
+            'disabled' => ( !empty($const_key) ),
 			'validation_callback' => array($this, 'license_validation'),
 			'feedback_callback' => array($this, 'license_feedback'),
 			'error_message' => esc_html__( 'Invalid license', 'gf_image_choices' ),
 		);
-
-        /*
-		if (!empty($license) && !empty($status)) {
-			$license_field['after_input'] = ($status == 'valid') ? ' License is valid' : ' Invalid or expired license';
-		}
-        */
 
 		$license_section = array(
 			'type' => 'section',
@@ -2733,7 +2730,7 @@ class GFImageChoices extends GFAddOn {
 			$markup = '<div class="gf-image-choices-entry"><div class="gf-product-image-entry-wrap">';
 			$markup .= '<span class="gf-product-image-entry-image">';
 			if (!empty($src)) {
-				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%;" />';
+				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%; margin:0 auto;" />';
 			}
 			$markup .= '</span>';
 			if (!empty($text_value)) {
@@ -2744,7 +2741,12 @@ class GFImageChoices extends GFAddOn {
 		}
 		else {
 
-			$markup = '<div style="display: block; text-align: center;"><span style="display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: center;">';
+			$inline_align = apply_filters('gfic_inline_image_align', '');
+			if ( !in_array($inline_align, ['center', 'left', 'right']) ) {
+				$inline_align = 'centre';
+			}
+
+			$markup = '<div style="display: block; text-align: '. $inline_align .';"><span style="display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: '. $inline_align .';">';
 			$markup .= '<span style="display: inline-block;">';
 			if (!empty($src)) {
 				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%;" />';
@@ -2782,7 +2784,12 @@ class GFImageChoices extends GFAddOn {
 		}
 		else {
 
-			$markup = '<span style="display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: center;">';
+			$inline_align = apply_filters('gfic_inline_image_align', '');
+			if ( !in_array($inline_align, ['center', 'left', 'right']) ) {
+				$inline_align = 'centre';
+			}
+
+			$markup = '<span style="display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: '. $inline_align .';">';
 			$markup .= '<span style="display: inline-block;">';
 			if (!empty($src)) {
 				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%;" />';
@@ -2806,7 +2813,11 @@ class GFImageChoices extends GFAddOn {
 			array_push($choice_images_markup, '</div>');
 		}
 		else {
-			array_unshift($choice_images_markup, '<div style="display: block; text-align: center;">');
+			$inline_align = apply_filters('gfic_inline_image_align', '');
+            if ( !in_array($inline_align, ['center', 'left', 'right']) ) {
+	            $inline_align = 'centre';
+            }
+			array_unshift($choice_images_markup, '<div style="display: block; text-align: '. $inline_align .';">');
 			array_push($choice_images_markup, '</div>');
 		}
 
@@ -3030,6 +3041,7 @@ class GFImageChoices extends GFAddOn {
 			switch( $field->type ) {
 				case "product" :
 				case "option" :
+				case "shipping" :
 					$choice_value = (strpos($raw_value, "|") !== FALSE) ? strstr($raw_value, "|", true) : $raw_value;
 					$choice_value_or_text = 'value';
 					break;
@@ -3041,7 +3053,7 @@ class GFImageChoices extends GFAddOn {
 
 			$image_item_markup = '';
 			$image = $this->get_choice_image_src($field, $choice_value, $choice_value_or_text);
-			$price = ( ($field->type == 'product' || $field->type == 'option') && strpos($raw_value, "|") !== FALSE ) ? substr($raw_value, strpos($raw_value, "|") + 1) : '';
+			$price = ( ($field->type == 'product' || $field->type == 'option' || $field->type == 'shipping') && strpos($raw_value, "|") !== FALSE ) ? substr($raw_value, strpos($raw_value, "|") + 1) : '';
 
 			if ($is_image_specific_modifier) {
 				//$image_item_markup = $this->get_choice_image_item_markup($image, $text, $modifier);
@@ -3270,6 +3282,11 @@ class GFImageChoices extends GFAddOn {
 				$ul->setAttribute('style', 'list-style: none; display: block; text-align: left;');// inline styles for notification email
 			}
 
+			$inline_align = apply_filters('gfic_inline_image_align', '');
+			if ( !in_array($inline_align, ['center', 'left', 'right']) ) {
+				$inline_align = 'centre';
+			}
+
 			$li_elems = $dom->getElementsByTagName('li');
 			foreach($li_elems as $i => $li) {
 				$cls = '';
@@ -3278,7 +3295,7 @@ class GFImageChoices extends GFAddOn {
 				}
 				$cls .= 'gquiz-image-choices-choice';
 				$li->setAttribute('class', $cls);
-				$li->setAttribute('style', 'display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: center; position: relative; text-align: center;');// inline styles for notification email
+				$li->setAttribute('style', 'display: inline-block; vertical-align: top; margin: 0 10px 20px; position: relative; text-align: '. $inline_align .';');// inline styles for notification email
 
 				$choice = $choices_data[$i];
 
@@ -3444,7 +3461,7 @@ class GFImageChoices extends GFAddOn {
 
 	        // IMAGE CHOICES
 
-            $type_property = ($field->type == 'survey' || $field->type == 'poll' || $field->type == 'quiz' || $field->type == 'post_custom_field' || $field->type == 'product' || $field->type == 'option') ? 'inputType' : 'type';
+            $type_property = ($field->type == 'survey' || $field->type == 'poll' || $field->type == 'quiz' || $field->type == 'post_custom_field' || $field->type == 'product' || $field->type == 'option' || $field->type == 'shipping' || $field->type == 'multi_choice') ? 'inputType' : 'type';
 
             // Product field doesn't have checkboxes, only radio
             // Option field has both
@@ -3926,7 +3943,7 @@ class GFImageChoices extends GFAddOn {
                         }
                     }
                 }
-                else if ($field->type == 'option') {
+                else if ($field->type == 'option' || $field->type == 'shipping') {
 
                     // product option field RADIO - single selection - saved as
                     // Value ($Price)
@@ -4442,6 +4459,7 @@ class GFImageChoices extends GFAddOn {
 			'cover' => esc_html__("Cover", 'gf_image_choices'),
 			'contain' => esc_html__("Contained", 'gf_image_choices'),
 			'natural' => esc_html__("Natural", 'gf_image_choices'),
+			'square' => esc_html__("Square", 'gf_image_choices'),
 		);
 	}
 
@@ -4798,7 +4816,7 @@ class GFImageChoices extends GFAddOn {
 		    $lightbox_img = str_replace('$', '\$', $lightbox_img);
 		    $lightbox_attr = "data-lightbox-src='" . $lightbox_img . "'";
 
-		    $lightbox_button = "<a href='{$lightbox_img}' class='ic-product-image-lightbox-btn'><i></i></a>";
+		    $lightbox_button = "<a href='{$lightbox_img}' class='ic-product-image-lightbox-btn gform-theme__disable-reset'><i></i></a>";
 
 	    }
 
@@ -4823,9 +4841,30 @@ class GFImageChoices extends GFAddOn {
 
 	    $content = str_replace("<label class='gfield_label", "{$image_wrap}<label class='gfield_label", $content);
 
-        $element = ( $description_setting == 'above' ) ? "div" : "label";
+	    $element = ( $description_setting == 'above' ) ? "div" : "label";
+        $search_str = "</{$element}><div class='ginput_container";
+        $replace_str = "</{$element}>{$price_text}<div class='ginput_container";
 
-	    return str_replace("</{$element}><div class='ginput_container", "</{$element}>{$price_text}<div class='ginput_container", $content);
+        if ( function_exists('gp_inventory') ) {
+            $in_stock = true;
+	        if ( function_exists('gp_inventory_type_choices') && gp_inventory_type_choices()->is_applicable_field( $field ) ) {
+		        $in_stock = gp_inventory_type_choices()->is_in_stock( $field );
+	        }
+            elseif ( function_exists('gp_inventory_type_advanced') && gp_inventory_type_advanced()->is_applicable_field( $field ) ) {
+	            $in_stock = ( (int) gp_inventory_type_advanced()->get_available_stock( $field ) > 0 );
+	        }
+            elseif ( function_exists('gp_inventory_type_simple') && gp_inventory_type_simple()->is_applicable_field( $field ) ) {
+	            $in_stock = ( (int) gp_inventory_type_simple()->get_available_stock( $field ) > 0 );
+	        }
+
+            if ( !$in_stock ) {
+	            // when GP Inventory is enabled and it's out of stock, the markup is a little different
+	            $search_str = "</label>";
+	            $replace_str = "</label>{$price_text}";
+            }
+        }
+
+	    return str_replace($search_str, $replace_str, $content);
 
     }
 
@@ -4953,7 +4992,7 @@ class GFImageChoices extends GFAddOn {
 			}
 
 		}
-		else if ($field->type != 'option' || GFCommon::is_form_editor()) {
+		else if ( ($field->type != 'option' && $field->type != 'shipping') || GFCommon::is_form_editor()) {
 
 			$choice_markup = preg_replace('#<label\b([^>]*)>(.*?)</label\b[^>]*>#s', implode("", array(
 				'<label ${1} >',
@@ -4964,7 +5003,7 @@ class GFImageChoices extends GFAddOn {
 
 		}
 		else {
-			// OPTION FIELD
+			// OPTION FIELD / SHIPPING FIELD
 			$choice_markup = str_replace('<label', '<label data-img="'.$img.'" data-lightbox-src="'.$lightboxImg.'" data-text="'.esc_attr($choice['text']).'"', $choice_markup);
 		}
 
@@ -4983,7 +5022,8 @@ class GFImageChoices extends GFAddOn {
         if ( $this->use_new_features() ) {
 
 	        if ( $field_theme == "polaroid" || $field_theme == "float-card" ) {
-		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$jmh_id}' ", $choice_markup );
+		        //$choice_markup = str_replace( "<label ", "<label data-jmh='{$jmh_id}' ", $choice_markup );
+		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$jmh_id}_label' ", $choice_markup );
 	        }
 	        if ( $field_theme == "cover-tile" && $field_image_style == "natural" ) {
 		        $choice_id = $jmh_id;
@@ -4993,8 +5033,10 @@ class GFImageChoices extends GFAddOn {
 				        break;
 			        }
 		        }
-		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$choice_id}' ", $choice_markup );
-		        $choice_markup = str_replace( 'class="image-choices-choice-image-wrap"', 'class="image-choices-choice-image-wrap" data-jmh="'.$choice_id.'"', $choice_markup );
+//		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$choice_id}' ", $choice_markup );
+//		        $choice_markup = str_replace( 'class="image-choices-choice-image-wrap"', 'class="image-choices-choice-image-wrap" data-jmh="'.$choice_id.'"', $choice_markup );
+		        $choice_markup = str_replace( "<label ", "<label data-jmh='{$jmh_id}_label' ", $choice_markup );
+		        $choice_markup = str_replace( 'class="image-choices-choice-image-wrap"', 'class="image-choices-choice-image-wrap" data-jmh="'.$jmh_id.'_image"', $choice_markup );
 	        }
 
         }
@@ -5006,10 +5048,15 @@ class GFImageChoices extends GFAddOn {
 
 	public function gfpdf_format_image_item_markup( $html, $size ) {
 
+		$inline_align = apply_filters('gfic_inline_image_align', '');
+		if ( !in_array($inline_align, ['center', 'left', 'right']) ) {
+			$inline_align = 'centre';
+		}
+
 		$html = str_replace( 'width:80px;', 'width:'.$size.';', $html );
 		$html = str_replace( ['<span', 'span>'], ['<div', 'div>'], $html );
-		$html = str_replace( 'margin: 0 10px 20px; text-align: center;', 'margin: 0 10px 20px; text-align: left; width:'.$size.'; float:left;', $html );
-		$html = str_replace( 'font-size: 12px;', 'font-size: 12px; text-align: center;', $html );
+		$html = str_replace( 'margin: 0 10px 20px; text-align: '. $inline_align .';', 'margin: 0 10px 20px; text-align: left; width:'.$size.'; float:left;', $html );
+		$html = str_replace( 'font-size: 12px;', 'font-size: 12px; text-align: '. $inline_align .';', $html );
 
 		return $html;
 
@@ -5034,6 +5081,8 @@ class GFImageChoices extends GFAddOn {
 
 		$form_id = rgar($form, "id");
 		$size = $image_width."px";
+
+        // TODO: shipping field? $products['shipping']
 
 		foreach ( $products['products'] as $field_id => $product ) {
 
@@ -5248,7 +5297,7 @@ class GFImageChoices extends GFAddOn {
 	public function gf_plugin_row($plugin_file='', $plugin_data=array(), $status='') {
 		$row = "";
 		$license_key = $this->get_license_key();
-		$license_status = get_option('gf_image_choices_license_status', '');
+		$license_status = $this->get_license_status($license_key);
 		if ( empty($license_key) || empty($license_status) ) {
 			ob_start();
 			?>
@@ -5281,7 +5330,7 @@ class GFImageChoices extends GFAddOn {
 			<?php
 			$row = ob_get_clean();
 		}
-		else if( !empty($license_key) && $license_status != 'valid' ) {
+		else if( !empty($license_key) && $license_status != 'valid' && $license_status != 'unknown' ) {
 			ob_start();
 			?>
             <tr class="plugin-update-tr">
@@ -5319,93 +5368,275 @@ class GFImageChoices extends GFAddOn {
 
 
 
+	/**********************************************
+	 *
+	 *   LICENSE
+	 *
+	 **********************************************/
+
+
+	private const STATUS_TTL = WEEK_IN_SECONDS;   // cache of 'valid'/'expired'/etc.
+	private const LAST_STATUS_TTL = MONTH_IN_SECONDS;  // last known (for UI/guardrails)
+	private const CHECK_THROTTLE_TTL = HOUR_IN_SECONDS;   // burst guard when status cache is cold
+
+	/**
+	 * Prefix for all caches/options for this product.
+	 * If you reuse this pattern in other addons, change the prefix per product.
+	 */
+	private function t_prefix(): string {
+		return 'gf_image_choices_';
+	}
+
+	public function get_const_license_key() {
+		return defined( 'GF_IMAGE_CHOICES_LICENSE' ) ? GF_IMAGE_CHOICES_LICENSE : ''; // keep if constant may be absent on some installs
+	}
+
+	/** md5 hash of the license key (avoid storing raw key in option names) */
+	private function key_hash( string $key ): string {
+		return md5( trim( $key ) );
+	}
+
+	/** Build a transient/option key that is product-scoped and (optionally) license-scoped. */
+	private function t_key( string $suffix, string $key = '' ): string {
+		$hash = $key !== '' ? '_' . $this->key_hash( $key ) : '';
+		return $this->t_prefix() . $suffix . $hash;
+	}
+
+	public function init_license() {
+
+		// constant overrides saved key
+		$saved_key = $this->get_license_key();
+		$const_key = $this->get_const_license_key();
+
+		if ( ! empty( $const_key ) && $saved_key !== $const_key ) {
+			// force constant into settings
+			$settings = $this->get_plugin_settings();
+			if ( false === $settings ) {
+				$settings = array();
+			}
+			$settings[ $this->t_key("license_key") ] = $const_key;
+			$this->update_plugin_settings( $settings );
+
+			if ( ! empty( $saved_key ) ) {
+				// deactivate old key (no extra check call)
+				$this->deactivate_license_key( $saved_key );
+			}
+			$key = $const_key;
+		}
+		else {
+			$key = $saved_key;
+		}
+
+		// activate current key if needed
+		$this->activate_license_key( $key );
+	}
+
+
+	public function get_license_key() {
+		return $this->get_plugin_setting( $this->t_key("license_key") );
+	}
+
+	private function activate_license_key( $key, $force = false ) {
+		if ( empty( $key ) ) {
+			return;
+		}
+
+		$activated_key = $this->t_key( 'license_activated', $key );
+		$activated     = get_option( $activated_key );
+
+		if ( ! empty( $activated ) && $force !== true ) {
+			// already activated, skip
+			return;
+		}
+
+		$status = $this->get_license_status( $key );
+		if ( $status === 'valid' ) {
+			// already active for this site; update local flag
+			update_option( $activated_key, '1', false );
+			return;
+		}
+
+		$response = $this->perform_edd_license_request( 'activate_license', $key );
+		$status   = rgobj( $response, 'license', '' );
+
+		if ( ! empty( $status ) ) {
+			$this->update_license_status( $key, $status );
+			if ( $status === 'valid' ) {
+				update_option( $activated_key, '1', false );
+			}
+		}
+	}
+
+	private function deactivate_license_key( $key, $force = false ) {
+		if ( empty( $key ) ) {
+			return;
+		}
+
+		// Use cached status only to decide whether to skip; no forced network check.
+		$current_status = get_transient( $this->t_key( 'license_status', $key ) );
+		if ( $current_status === 'site_inactive' && $force !== true ) {
+			return;
+		}
+
+		// Single remote call to deactivate
+		$this->perform_edd_license_request( 'deactivate_license', $key );
+
+		// Clear local state
+		delete_transient( $this->t_key( 'license_status', $key ) );
+		delete_option( $this->t_key( 'license_activated', $key ) );
+
+		// Track last known status for UI/guards
+		set_transient( $this->t_key( 'last_status', $key ), 'site_inactive', self::LAST_STATUS_TTL );
+	}
+
 	/**
 	 * Determine if the license key is valid so the appropriate icon can be displayed next to the field.
 	 *
 	 * @param string $value The current value of the license_key field.
-	 * @param array $field The field properties.
+	 * @param array  $field The field properties.
 	 *
 	 * @return bool|null
 	 */
 	public function license_feedback( $value, $field = null ) {
-		if ( empty( $value ) ) {
-			return null;
-		}
-
-		// Send the remote request to check the license is valid
-		$license_data = $this->perform_edd_license_request( 'check_license', $value );
-
-		$valid = null;
-		if ( empty( $license_data ) || !is_object($license_data) || !property_exists($license_data, 'license') || $license_data->license == 'invalid' ) {
-			$valid = false;
-		}
-        elseif ( $license_data->license == 'valid' ) {
-			$valid = true;
-		}
-
-		if (!empty($license_data) && is_object($license_data) && property_exists($license_data, 'license')) {
-			update_option('gf_image_choices_license_status', $license_data->license);
-		}
-
-		return $valid;
+		$status = $this->get_license_status( $value );
+		return is_null( $status ) ? null : ( $status === 'valid' );
 	}
 
+	private function update_license_status( $key, $status ) {
+		// Per-key caches
+		set_transient( $this->t_key( 'last_status', $key ),    $status, self::LAST_STATUS_TTL );
+		set_transient( $this->t_key( 'license_status', $key ), $status, self::STATUS_TTL );
+	}
 
 	/**
-	 * Handle license key activation or deactivation.
+	 * Handle license key validation (maybe activate)
+	 * Note: This gets called AFTER settings are saved
 	 *
-	 * @param array $field The field properties.
+	 * @param array  $field         The field properties.
 	 * @param string $field_setting The submitted value of the license_key field.
 	 */
 	public function license_validation( $field, $field_setting ) {
-		//$old_license = $this->get_plugin_setting( 'gf_image_choices_license_key' );
-		$old_license = $this->get_license_key();
+		$prev_key_opt = $this->t_key( 'prev_key' );
+		$previous_key = get_option( $prev_key_opt );
 
-		if ( $old_license && $field_setting != $old_license ) {
-			// Send the remote request to deactivate the old license
-			$response = $this->perform_edd_license_request( 'deactivate_license', $old_license );
-			if ( !empty($response) && is_object($response) && property_exists($response, 'license') && $response->license == 'deactivated' ) {
-				delete_option('gf_image_choices_license_status');
-			}
+		if ( ! empty( $previous_key ) && $previous_key !== $field_setting ) {
+			// new key submitted: deactivate old one
+			$this->deactivate_license_key( $previous_key );
 		}
 
-		if ( ! empty( $field_setting ) ) {
-			// Send the remote request to activate the new license
-			$response = $this->perform_edd_license_request( 'activate_license', $field_setting );
-			if ( !empty($response) && is_object($response) && property_exists($response, 'license') ) {
-				update_option('gf_image_choices_license_status', $response->license);
-			}
+		// We can skip force here; admin save is still cheap but respects caches if warm.
+		$status    = $this->get_license_status( $field_setting, false );
+		$activated = get_option( $this->t_key( 'license_activated', $field_setting ) );
+
+		if ( $status === 'site_inactive' || empty( $activated ) ) {
+			$this->activate_license_key( $field_setting, true );
 		}
+
+		update_option( $prev_key_opt, $field_setting, false );
 	}
 
+	/**
+	 * Get the current license status with caching + throttle.
+	 *
+	 * Behavior:
+	 * - If week cache exists → return it (no network).
+	 * - If cache missing:
+	 *     - If throttle (1h) is present and not forcing → return last known (or 'unknown') without network.
+	 *     - Else perform a single network check, set throttle (1h), set caches.
+	 */
+	public function get_license_status( $key, $force = false ) {
+		if ( empty( $key ) ) {
+			return null;
+		}
+
+		$status_t = $this->t_key( 'license_status', $key );
+		$throttle_t = $this->t_key( 'license_checked', $key );
+		$last_t = $this->t_key( 'last_status', $key );
+
+		// 1) Week-long per-key cache
+		$status = get_transient( $status_t );
+		if ( $status !== false && ! $force ) {
+			return $status;
+		}
+
+		// 2) If not forcing and throttle exists, avoid another network hit
+		if ( ! $force && get_transient( $throttle_t ) !== false ) {
+			$last = get_transient( $last_t );
+			$this->log_debug( "get_license_status() using last_status::{$last}" );
+			return $last !== false ? $last : 'unknown';
+		}
+
+		// 3) Perform a single check, with throttle guard
+		set_transient( $throttle_t, '1', self::CHECK_THROTTLE_TTL );
+
+		$license_data = $this->perform_edd_license_request( 'check_license', $key );
+		if ( ! is_object( $license_data ) ) {
+			set_transient( $last_t, 'unknown', self::LAST_STATUS_TTL );
+			return 'unknown';
+		}
+
+		$status = rgobj( $license_data, 'license', '' );
+		if ( empty( $status ) ) {
+			set_transient( $last_t, 'unknown', self::LAST_STATUS_TTL );
+			return 'unknown';
+		}
+
+		$this->update_license_status( $key, $status );
+		return $status;
+	}
 
 	/**
 	 * Send a request to the EDD store url.
 	 *
 	 * @param string $edd_action The action to perform (check_license, activate_license or deactivate_license).
-	 * @param string $license The license key.
+	 * @param string $license    The license key.
 	 *
 	 * @return object
 	 */
 	public function perform_edd_license_request( $edd_action, $license ) {
 
-		// Prepare the request arguments
 		$args = array(
 			'timeout' => GFIC_TIMEOUT,
 			'sslverify' => GFIC_SSL_VERIFY,
+			'headers' => array(
+				'x-jetsloth-license' => '1',
+			),
 			'body' => array(
-				'edd_action' => $edd_action,
-				'license' => trim($license),
-				'item_name' => urlencode(GFIC_NAME),
+				'edd_action' => $edd_action,// activate_license | deactivate_license | check_license | get_version
+				'license' => trim( $license ),
+				'item_name' => GFIC_NAME,
+				'version' => GFIC_VERSION,
 				'url' => home_url(),
-			)
+			),
 		);
 
-		// Send the remote request
-		$response = wp_remote_post(GFIC_HOME, $args);
+		$response = wp_remote_post( GFIC_HOME, $args );
 
-		return json_decode( wp_remote_retrieve_body( $response ) );
+		if ( is_wp_error( $response ) ) {
+			$this->log_debug( 'EDD request error: ' . $response->get_error_message() );
+			return (object) array();
+		}
+
+		$code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body( $response );
+
+		if ( $code < 200 || $code >= 300 ) {
+			$this->log_debug( 'EDD HTTP ' . $code . ': ' . $body );
+			return (object) array();
+		}
+
+		$result = json_decode( $body );
+		//$this->log_debug( 'perform_edd_license_request() result:: ' . print_r( $result, true ) );
+
+		return is_object( $result ) ? $result : (object) array();
 	}
+
+
+	/**********************************************
+	 *
+	 *   DEBUGGING
+	 *
+	 **********************************************/
 
 
 	public function debug_output($data = '', $background='black', $color='white') {

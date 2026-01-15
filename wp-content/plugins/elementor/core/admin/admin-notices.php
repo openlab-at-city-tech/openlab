@@ -19,6 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Admin_Notices extends Module {
 
 	const DEFAULT_EXCLUDED_PAGES = [ 'plugins.php', 'plugin-install.php', 'plugin-editor.php' ];
+	const LOCAL_GOOGLE_FONTS_DISABLED_NOTICE_ID = 'local_google_fonts_disabled';
+
+	const EXIT_EARLY_FOR_BACKWARD_COMPATIBILITY = false;
 
 	private $plain_notices = [
 		'api_notice',
@@ -28,9 +31,11 @@ class Admin_Notices extends Module {
 		'rate_us_feedback',
 		'role_manager_promote',
 		'experiment_promotion',
+		'send_app_promotion',
 		'site_mailer_promotion',
 		'plugin_image_optimization',
 		'ally_pages_promotion',
+		self::LOCAL_GOOGLE_FONTS_DISABLED_NOTICE_ID,
 	];
 
 	private $elementor_pages_count = null;
@@ -92,7 +97,7 @@ class Admin_Notices extends Module {
 			return false;
 		}
 
-		if ( ! in_array( $this->current_screen_id, [ 'toplevel_page_elementor', 'edit-elementor_library', 'elementor_page_elementor-system-info', 'dashboard' ], true ) ) {
+		if ( ! $this->is_elementor_admin_screen_with_system_info() ) {
 			return false;
 		}
 
@@ -168,7 +173,7 @@ class Admin_Notices extends Module {
 			return false;
 		}
 
-		if ( ! in_array( $this->current_screen_id, [ 'toplevel_page_elementor', 'edit-elementor_library', 'elementor_page_elementor-system-info', 'dashboard' ], true ) ) {
+		if ( ! $this->is_elementor_admin_screen_with_system_info() ) {
 			return false;
 		}
 
@@ -390,8 +395,8 @@ class Admin_Notices extends Module {
 
 		$experiments = Plugin::$instance->experiments;
 		$is_all_performance_features_active = (
-			$experiments->is_feature_active( 'e_element_cache' ) &&
-			$experiments->is_feature_active( 'e_font_icon_svg' )
+			$experiments->is_feature_active( 'e_font_icon_svg' ) &&
+			$experiments->is_feature_active( 'e_optimized_markup' )
 		);
 
 		if ( $is_all_performance_features_active ) {
@@ -428,6 +433,131 @@ class Admin_Notices extends Module {
 		return class_exists( 'WooCommerce' );
 	}
 
+	private function get_installed_form_plugin_name() {
+		static $detected_form_plugin = null;
+
+		if ( null !== $detected_form_plugin ) {
+			return $detected_form_plugin;
+		}
+
+		$form_plugins_constants_to_name_mapper = [
+			'WPFORMS_VERSION' => 'WPForms',
+			'WPCF7_VERSION' => 'Contact Form 7',
+		];
+
+		foreach ( $form_plugins_constants_to_name_mapper as $constant => $name ) {
+			if ( defined( $constant ) ) {
+				$detected_form_plugin = $name;
+				return $detected_form_plugin;
+			}
+		}
+
+		$form_plugins_classes_to_name_mapper = [
+			'\GFCommon' => 'Gravity Forms',
+			'\Ninja_Forms' => 'Ninja Forms',
+		];
+
+		foreach ( $form_plugins_classes_to_name_mapper as $class => $name ) {
+			if ( class_exists( $class ) ) {
+				$detected_form_plugin = $name;
+				return $detected_form_plugin;
+			}
+		}
+
+		$detected_form_plugin = false;
+		return $detected_form_plugin;
+	}
+
+	private function notice_send_app_promotion() {
+		return self::EXIT_EARLY_FOR_BACKWARD_COMPATIBILITY;
+
+		$notice_id = 'send_app_promotion';
+
+		if ( ! $this->is_elementor_page() && ! $this->is_elementor_admin_screen() ) {
+			return false;
+		}
+
+		if ( time() < $this->get_install_time() + ( 60 * DAY_IN_SECONDS ) ) {
+			return false;
+		}
+
+		if ( ! current_user_can( 'install_plugins' ) || User::is_user_notice_viewed( $notice_id ) ) {
+			return false;
+		}
+
+		$plugin_file_path = 'send/send-app.php';
+		$plugin_slug = 'send-app';
+
+		$cta_data = $this->get_plugin_cta_data( $plugin_slug, $plugin_file_path );
+		if ( empty( $cta_data ) ) {
+			return false;
+		}
+
+		$title = sprintf( esc_html__( 'Turn leads into loyal shoppers', 'elementor' ) );
+
+		$options = [
+			'title' => $title,
+			'description' => esc_html__( 'Collecting leads is just the beginning. With Send by Elementor, you can manage contacts, launch automations, and turn form submissions into sales.', 'elementor' ),
+			'id' => $notice_id,
+			'type' => 'cta',
+			'button' => [
+				'text' => $cta_data['text'],
+				'url' => $cta_data['url'],
+				'type' => 'cta',
+			],
+			'button_secondary' => [
+				'text' => esc_html__( 'Learn more', 'elementor' ),
+				'url' => 'https://go.elementor.com/Formslearnmore',
+				'new_tab' => true,
+				'type' => 'cta',
+			],
+		];
+
+		$this->print_admin_notice( $options );
+
+		return true;
+	}
+
+	private function notice_local_google_fonts_disabled() {
+
+		if ( ! $this->is_elementor_page() && ! $this->is_elementor_admin_screen() ) {
+			return false;
+		}
+
+		if ( User::is_user_notice_viewed( self::LOCAL_GOOGLE_FONTS_DISABLED_NOTICE_ID ) ) {
+			return false;
+		}
+
+		$is_local_gf_enabled = (bool) get_option( 'elementor_local_google_fonts', '0' );
+
+		if ( $is_local_gf_enabled ) {
+			return false;
+		}
+
+		$options = [
+			'title' => esc_html__( 'Important: Local Google Fonts Settings in Elementor', 'elementor' ),
+			'description' => esc_html__( 'Please note: The "Load Google Fonts Locally" feature has been disabled by default on all websites. To turn it back on, go to Elementor → Settings → Performance → Enable Load Google Fonts Locally.', 'elementor' ),
+			'id' => self::LOCAL_GOOGLE_FONTS_DISABLED_NOTICE_ID,
+			'type' => '',
+			'button' => [
+				'text' => esc_html__( 'Take me there', 'elementor' ),
+				'url' => '../wp-admin/admin.php?page=elementor-settings#tab-performance',
+				'new_tab' => false,
+				'type' => 'cta',
+			],
+			'button_secondary' => [
+				'text' => esc_html__( 'Learn more', 'elementor' ),
+				'url' => 'https://go.elementor.com/wp-dash-google-fonts-locally-notice/',
+				'new_tab' => true,
+				'type' => 'cta',
+			],
+		];
+
+		$this->print_admin_notice( $options );
+
+		return true;
+	}
+
 	private function notice_ally_pages_promotion() {
 		global $pagenow;
 		$notice_id = 'ally_pages_promotion';
@@ -437,6 +567,10 @@ class Admin_Notices extends Module {
 		}
 
 		if ( ! current_user_can( 'manage_options' ) || User::is_user_notice_viewed( $notice_id ) ) {
+			return false;
+		}
+
+		if ( ! User::has_plugin_notice_been_displayed_for_required_time( 'image_optimization', WEEK_IN_SECONDS ) ) {
 			return false;
 		}
 
@@ -485,7 +619,7 @@ class Admin_Notices extends Module {
 			return false;
 		}
 
-		if ( ! $this->is_elementor_page() && ! in_array( $this->current_screen_id, [ 'toplevel_page_elementor', 'edit-elementor_library', 'dashboard' ], true ) ) {
+		if ( ! $this->is_elementor_page() && ! $this->is_elementor_admin_screen() ) {
 			return false;
 		}
 
@@ -556,6 +690,14 @@ class Admin_Notices extends Module {
 		return 0 === strpos( $this->current_screen_id, 'elementor_page' );
 	}
 
+	private function is_elementor_admin_screen(): bool {
+		return in_array( $this->current_screen_id, [ 'toplevel_page_elementor', 'edit-elementor_library' ], true );
+	}
+
+	private function is_elementor_admin_screen_with_system_info(): bool {
+		return in_array( $this->current_screen_id, [ 'toplevel_page_elementor', 'edit-elementor_library', 'elementor_page_elementor-system-info', 'dashboard' ], true );
+	}
+
 	private function get_plugin_cta_data( $plugin_slug, $plugin_file_path ) {
 		if ( is_plugin_active( $plugin_file_path ) ) {
 			return false;
@@ -592,6 +734,8 @@ class Admin_Notices extends Module {
 		if ( ! current_user_can( 'manage_options' ) || User::is_user_notice_viewed( $notice_id ) ) {
 			return false;
 		}
+
+		User::set_user_notice_first_time( 'image_optimization' );
 
 		$attachments = new \WP_Query( [
 			'post_type' => 'attachment',
@@ -780,7 +924,7 @@ class Admin_Notices extends Module {
 		set_transient( sanitize_key( $_GET['plg_campaign_name'] ), $campaign_data, 30 * DAY_IN_SECONDS );
 	}
 
-	private static function add_plg_campaign_data( $url, $campaign_data ) {
+	public static function add_plg_campaign_data( $url, $campaign_data ) {
 
 		foreach ( [ 'name', 'campaign' ] as $key ) {
 			if ( empty( $campaign_data[ $key ] ) ) {

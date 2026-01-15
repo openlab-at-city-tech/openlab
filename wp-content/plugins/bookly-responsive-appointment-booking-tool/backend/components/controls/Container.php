@@ -17,7 +17,7 @@ class Container extends Lib\Base\Component
         if ( empty( $id ) ) {
             $id = 'container_' . mt_rand( 10000, 99999 );
         }
-        $opened = (boolean) $opened;
+        $opened = (bool) $opened;
         self::renderTemplate( 'container', compact( 'title', 'id', 'opened' ) );
     }
 

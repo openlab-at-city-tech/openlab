@@ -1,4 +1,12 @@
-/*! elementor - v3.30.0 - 07-07-2025 */
+:root {
+  --direction-multiplier: 1;
+}
+
+html[dir=rtl],
+body.rtl {
+  --direction-multiplier: -1;
+}
+
 .elementor-hidden {
   display: none;
 }
@@ -493,7 +501,7 @@
   justify-content: flex-end;
 }
 #elementor-toast .dialog-buttons-wrapper:not(:empty) {
-  margin-top: 15px;
+  margin-block-start: 15px;
 }
 #elementor-toast .dialog-button {
   font-size: 12px;
@@ -603,8 +611,8 @@
 .elementor-finder__results__category .eicon-loading {
   display: none;
   position: absolute;
-  right: 10px;
-  top: 30px;
+  inset-block-start: 30px;
+  inset-inline-end: 10px;
   color: var(--e-a-color-info);
   font-size: 14px;
 }

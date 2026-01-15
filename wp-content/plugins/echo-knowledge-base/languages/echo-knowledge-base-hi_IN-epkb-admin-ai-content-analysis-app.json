@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Loading...": [
+                "लोड हो रहा है..."
+            ],
+            "AI Features Required": [
+                "AI सुविधाओं की आवश्यकता"
+            ],
+            "Go to AI Settings": [
+                "एआई सेटिंग्स पर जाएँ"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "AI फीचर्स सक्षम नहीं हैं। कंटेंट एनालिसिस का उपयोग करने के लिए कृपया AI फीचर्स सक्षम करें।."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Content Analysis कॉन्फ़िगरेशन लोड करने में विफल रहा।."
+            ],
+            "Content Analysis component not loaded.": [
+                "Content Analysis घटक लोड नहीं हुआ।."
+            ]
+        }
+    }
+}

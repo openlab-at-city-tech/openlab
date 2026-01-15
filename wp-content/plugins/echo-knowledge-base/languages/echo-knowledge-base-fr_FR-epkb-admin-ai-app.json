@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Go to General Settings": [
+                "Aller dans les Paramètres généraux"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "Pour utiliser les fonctionnalités IA, veuillez configurer votre clé API et accepter l'accord de confidentialité des données dans les Paramètres généraux, puis activer IA Recherche ou IA Chat."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "Pour utiliser les données d'apprentissage automatique, veuillez activer soit IA Chat ou IA Recherche dans leurs onglets respectifs."
+            ],
+            "Data Collection": [
+                "Collecte de données"
+            ],
+            "OpenAI API Key Required": [
+                "Clé API OpenAI requise"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "Pour utiliser les fonctionnalités d'IA, vous devez configurer votre clé API OpenAI."
+            ],
+            "Configure API Key": [
+                "Configurer la clé API"
+            ],
+            "Failed to load tab data": [
+                "Échec du chargement des données de l'onglet"
+            ],
+            "Unknown tab": [
+                "Onglet inconnu"
+            ],
+            "AI Configuration": [
+                "Configuration de l'IA"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "Erreur : Aucun onglet configuré. Veuillez vérifier la configuration."
+            ],
+            "New training data collection created": [
+                "Nouvelle collecte de données d'entraînement créée"
+            ],
+            "Failed to create collection": [
+                "Échec de la création de la collection"
+            ],
+            "AI features must be enabled to access this tab": [
+                "Les fonctionnalités d'IA doivent être activées pour accéder à cet onglet"
+            ],
+            "Reloading page...": [
+                "Rafraîchissement de la page..."
+            ]
+        }
+    }
+}

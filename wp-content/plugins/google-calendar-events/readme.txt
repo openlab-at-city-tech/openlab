@@ -4,7 +4,7 @@ Tags: google calendar, events, website calendar, wp calendar, wp calendar widget
 Requires at least: 4.2
 Requires PHP: 7.3
 Tested up to: 6.8.1
-Stable tag: 3.5.8
+Stable tag: 3.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,10 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.5.9 =
+* Fix: Resolved a critical issue where the recent update caused site breakage for users who are using various page builders.
+* Dev: Users can now control Lazy Loading functionality via a dedicated toggle in the Advanced settings.
 
 = 3.5.8 =
 * Fix: Fixed issue where the calendar incorrectly calculated weekday offsets when the week start day was changed in advanced settings.

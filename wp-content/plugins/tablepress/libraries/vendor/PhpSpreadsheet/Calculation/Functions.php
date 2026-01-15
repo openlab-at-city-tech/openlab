@@ -233,7 +233,7 @@ class Functions
 	 *
 	 * @param mixed $array Array to be flattened
 	 *
-	 * @return array Flattened array
+	 * @return array<mixed> Flattened array
 	 */
 	public static function flattenArray($array): array
 	{
@@ -263,7 +263,7 @@ class Functions
 	 *
 	 * @param mixed $array Array to be flattened
 	 *
-	 * @return array Flattened array
+	 * @return array<mixed> Flattened array
 	 */
 	public static function flattenArray2(...$array): array
 	{
@@ -305,7 +305,7 @@ class Functions
 	 *
 	 * @param array|mixed $array Array to be flattened
 	 *
-	 * @return array Flattened array
+	 * @return array<mixed> Flattened array
 	 */
 	public static function flattenArrayIndexed($array): array
 	{
@@ -376,7 +376,7 @@ class Functions
 	public static function trimSheetFromCellReference(string $coordinate): string
 	{
 		if (str_contains($coordinate, '!')) {
-			$coordinate = substr($coordinate, strrpos($coordinate, '!') + 1);
+			$coordinate = (string) substr($coordinate, strrpos($coordinate, '!') + 1);
 		}
 
 		return $coordinate;

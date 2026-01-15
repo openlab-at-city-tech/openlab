@@ -60,7 +60,7 @@ class Dialog extends Lib\Base\Component
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'start_now_text' => __( 'You\'re about to send an SMS Campaign. If you\'re sure about the setup, click \'Start Now\'. Otherwise, please take a moment to review the details.', 'bookly' ),
                 'run' => __( 'Start Now', 'bookly' ),
-                'doc_hint' => sprintf( __( 'Start typing "{" to see the available codes. For more information, see the <a href="%s" target="_blank">documentation</a> page', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-sms-campaigns' ),
+                'doc_hint' => sprintf( __( 'Start typing "{" to see the available codes. For more information, see the <a href="%s" target="_blank">documentation</a> page', 'bookly' ), 'https://hub.bookly.pro/go/bookly-sms-campaigns' ),
             ),
         ) );
     }

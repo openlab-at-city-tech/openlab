@@ -96,7 +96,7 @@ class EPKB_Categories_DB {
 	}
 
 	/**
-	 * Count articles in category and sub-category
+	 * Count articles in category (direct articles only, not including sub-categories)
 	 *
 	 * @param $kb_id
 	 * @param $category_id
@@ -106,7 +106,7 @@ class EPKB_Categories_DB {
 
 		$article_db = new EPKB_Articles_DB();
 
-		$articles = $article_db->get_articles_by_sub_or_category( $kb_id, $category_id, 'date', -1, true, false );
+		$articles = $article_db->get_articles_by_sub_or_category( $kb_id, $category_id, 'date', 500, false, false );
 
 		return count( $articles );
 	}

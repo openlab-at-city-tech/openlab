@@ -790,6 +790,21 @@ $settings = array(
 			),
 		),
 	),
+	'header_sticky_box_shadow' => array(
+		'control_type' => 'kadence_shadow_control',
+		'section'      => 'header_sticky_design',
+		'label'        => esc_html__( 'Sticky Header Box Shadow', 'kadence' ),
+		'default'      => kadence()->default( 'header_sticky_box_shadow' ),
+		'live_method'     => array(
+			array(
+				'type'     => 'css_boxshadow',
+				'selector' => '.site-main-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-upper-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-top-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-bottom-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck',
+				'property' => 'box-shadow',
+				'pattern'  => '$',
+				'key'      => 'box-shadow',
+			),
+		),
+	),
 );
 if ( class_exists( 'woocommerce' ) ) {
 	$settings = array_merge(

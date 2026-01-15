@@ -17,9 +17,13 @@ class Request {
 	 * Determine whether the current request is for accessing the frontend.
 	 * Also update Vary headers to indicate that the response may vary by Accept header.
 	 *
+	 * @since 6.0.3 Added $send_vary_headers argument.
+	 *
+	 * @param bool $send_vary_headers Whether to send Vary headers.
+	 *
 	 * @return bool True if it's a frontend request, false otherwise.
 	 */
-	public static function is_frontend() {
+	public static function is_frontend( $send_vary_headers = true ) {
 		$is_frontend        = true;
 		$is_varying_request = true;
 
@@ -31,6 +35,7 @@ class Request {
 			|| Constants::is_true( 'REST_REQUEST' )
 			|| Constants::is_true( 'REST_API_REQUEST' )
 			|| Constants::is_true( 'WP_CLI' )
+			|| Constants::is_true( 'WPCOM_CLI_SCRIPT' ) // Special case for CLI scripts on WP.com that aren't using WP CLI.
 		) {
 			$is_frontend        = false;
 			$is_varying_request = false;
@@ -45,7 +50,7 @@ class Request {
 		* Check existing headers for the request.
 		* If there is no existing Vary Accept header, add one.
 		*/
-		if ( $is_varying_request && ! headers_sent() ) {
+		if ( $send_vary_headers && $is_varying_request && ! headers_sent() ) {
 			$headers           = headers_list();
 			$vary_header_parts = self::get_vary_headers( $headers );
 
@@ -56,10 +61,12 @@ class Request {
 		 * Filter whether the current request is for accessing the frontend.
 		 *
 		 * @since jetpack-9.0.0
+		 * @since 6.0.3 Added $send_vary_headers argument.
 		 *
 		 * @param bool $is_frontend Whether the current request is for accessing the frontend.
+		 * @param bool $send_vary_headers Whether to send Vary headers.
 		 */
-		return (bool) apply_filters( 'jetpack_is_frontend', $is_frontend );
+		return (bool) apply_filters( 'jetpack_is_frontend', $is_frontend, $send_vary_headers );
 	}
 
 	/**

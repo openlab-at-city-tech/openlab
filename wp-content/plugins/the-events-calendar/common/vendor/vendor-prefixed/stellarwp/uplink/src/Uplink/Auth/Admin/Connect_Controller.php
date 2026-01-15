@@ -87,7 +87,7 @@ final class Connect_Controller {
 
 		if ( ! $this->authorizer->can_auth() ) {
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Sorry, you do not have permission to connect this site.', 'tribe-common' ),
+				__( 'Sorry, you do not have permission to connect this site.', '%TEXTDOMAIN%' ),
 				true
 			) );
 
@@ -105,7 +105,7 @@ final class Connect_Controller {
 			if ( Config::get_storage_driver() === Transient_Storage::class && is_plugin_active( 'litespeed-cache/litespeed-cache.php' ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
 					sprintf(
-						__( 'The Litespeed plugin was detected, ensure "Store Transients" is set to ON and try again. See the <a href="%s" target="_blank">Litespeed documentation</a> for more information.', 'tribe-common' ),
+						__( 'The Litespeed plugin was detected, ensure "Store Transients" is set to ON and try again. See the <a href="%s" target="_blank">Litespeed documentation</a> for more information.', '%TEXTDOMAIN%' ),
 						esc_url( 'https://docs.litespeedtech.com/lscache/lscwp/cache/#store-transients' )
 					),
 					true
@@ -113,7 +113,7 @@ final class Connect_Controller {
 			}
 
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Unable to save token data: nonce verification failed.', 'tribe-common' ),
+				__( 'Unable to save token data: nonce verification failed.', '%TEXTDOMAIN%' ),
 				true
 			) );
 
@@ -125,7 +125,7 @@ final class Connect_Controller {
 
 		if ( ! $plugin ) {
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Plugin or Service slug not found.', 'tribe-common' ),
+				__( 'Plugin or Service slug not found.', '%TEXTDOMAIN%' ),
 				true
 			) );
 
@@ -135,7 +135,7 @@ final class Connect_Controller {
 		try {
 			if ( ! $this->connector->connect( $args[ self::TOKEN ] ?? '', $plugin ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
-					__( 'Error storing token.', 'tribe-common' ),
+					__( 'Error storing token.', '%TEXTDOMAIN%' ),
 					true
 				) );
 
@@ -156,7 +156,7 @@ final class Connect_Controller {
 		if ( $license ) {
 			if ( ! $plugin->set_license_key( $license, 'network' ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
-					__( 'Error storing license key.', 'tribe-common' ),
+					__( 'Error storing license key.', '%TEXTDOMAIN%' ),
 				true
 				) );
 
@@ -166,7 +166,7 @@ final class Connect_Controller {
 
 		$this->notice->add(
 			new Notice( Notice::SUCCESS,
-				__( 'Connected successfully.', 'tribe-common' ),
+				__( 'Connected successfully.', '%TEXTDOMAIN%' ),
 				true
 			)
 		);

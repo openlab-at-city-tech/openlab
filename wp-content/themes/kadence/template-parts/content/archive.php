@@ -14,7 +14,7 @@ do_action( 'kadence_hero_header' );
 ?>
 <div id="primary" class="content-area">
 	<div class="content-container site-container">
-		<main id="main" class="site-main" role="main">
+		<div id="main" class="site-main">
 			<?php
 			/**
 			 * Hook for anything before main content
@@ -25,7 +25,7 @@ do_action( 'kadence_hero_header' );
 			}
 			if ( have_posts() ) {
 				?>
-				<div id="archive-container" class="<?php echo esc_attr( implode( ' ', get_archive_container_classes() ) ); ?>"<?php echo ( get_archive_infinite_attributes() ? " data-infinite-scroll='" . esc_attr( get_archive_infinite_attributes() ) . "'" : '' ); ?>>
+				<ul id="archive-container" class="<?php echo esc_attr( implode( ' ', get_archive_container_classes() ) ); ?>"<?php echo get_archive_infinite_attributes() ? " data-infinite-scroll='" . esc_attr( get_archive_infinite_attributes() ) . "'" : ''; ?>>
 					<?php
 					while ( have_posts() ) {
 						the_post();
@@ -35,7 +35,7 @@ do_action( 'kadence_hero_header' );
 						do_action( 'kadence_loop_entry' );
 					}
 					?>
-				</div>
+				</ul>
 				<?php
 				get_template_part( 'template-parts/content/pagination' );
 			} else {
@@ -46,7 +46,7 @@ do_action( 'kadence_hero_header' );
 			 */
 			do_action( 'kadence_after_main_content' );
 			?>
-		</main><!-- #main -->
+		</div><!-- #main -->
 		<?php
 		get_sidebar();
 		?>

@@ -35,7 +35,7 @@ jQuery(function ($) {
             $txt.text(BooklyCloudPanelL10n.cloud_support_text);
             $exp.text(BooklyCloudPanelL10n.cloud_support_exp_date);
             $hiw.append(
-                $('<a href="https://api.booking-wp-plugin.com/go/bookly-support" target="_blank"></a>')
+                $('<a href="https://hub.bookly.pro/go/bookly-support" target="_blank"></a>')
                     .text(BooklyCloudPanelL10n.cloud_support_hiw)
                     .append(' <i class="fas fa-external-link-alt fa-sm"></i>')
             );

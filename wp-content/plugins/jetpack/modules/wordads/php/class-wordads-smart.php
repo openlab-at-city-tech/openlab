@@ -7,6 +7,10 @@
 
 use Automattic\Jetpack\Assets;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 // phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedScript
 
 require_once WORDADS_ROOT . '/php/class-wordads-array-utils.php';
@@ -150,7 +154,7 @@ class WordAds_Smart {
 
 		wp_enqueue_script(
 			'adflow_config',
-			$this->get_config_url(), // The URL is not escaped because we need two parameters to pass.
+			esc_url( $this->get_config_url() ),
 			array( 'adflow_script_loader' ),
 			JETPACK__VERSION,
 			false
@@ -248,9 +252,8 @@ class WordAds_Smart {
 	 */
 	private function get_config_url(): string {
 		return sprintf(
-			'https://public-api.wordpress.com/wpcom/v2/sites/%1$d/adflow/conf/?_jsonp=a8c_adflow_callback&is_singular_post=%2$d&',
-			$this->params->blog_id,
-			(int) is_singular( 'post' )
+			'https://public-api.wordpress.com/wpcom/v2/sites/%1$d/adflow/conf/?_jsonp=a8c_adflow_callback',
+			$this->params->blog_id
 		);
 	}
 

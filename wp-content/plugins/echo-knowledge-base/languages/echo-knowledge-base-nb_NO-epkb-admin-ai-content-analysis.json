@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Error": [
+                "Feil"
+            ],
+            "Analyze Content": [
+                "Analyser innhold"
+            ],
+            "Improve Content": [
+                "Forbedre innhold"
+            ],
+            "Improve": [
+                "Forbedre"
+            ],
+            "Demo Analytics": [
+                "Demoanalyse"
+            ],
+            "Actions": [
+                "Handlinger"
+            ],
+            "Analyzing": [
+                "Analyserer"
+            ],
+            "No articles found": [
+                "Ingen artikler funnet"
+            ],
+            "To Analyze": [
+                "Analyser"
+            ],
+            "To Improve": [
+                "Forbedre"
+            ],
+            "Please select exactly one article to improve": [
+                "Vennligst velg nøyaktig én dokumentasjonsside å forbedre"
+            ],
+            "Demo Data Displayed": [
+                "Demodata vist"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "Dette er demodata for analyseformål. Når du oppretter nye dokumentasjonssider, kan du analysere dem for å se faktiske resultater av innholdsanalyse."
+            ],
+            "Select All That Need Analysis": [
+                "Velg alle som trenger analyse"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Analyser (Sync ikke lastet inn)"
+            ],
+            "Score Legend": [
+                "Poengforklaring"
+            ],
+            "Excellent": [
+                "Utmerket"
+            ],
+            "Good": [
+                "Bra"
+            ],
+            "Below 60%": [
+                "Under 60%"
+            ],
+            "Needs Improvement": [
+                "Behov for forbedring"
+            ],
+            "Importance Legend": [
+                "Betydningsforklaring"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "Basert på artikkelvisninger - høyere visninger gir høyere prioritet."
+            ],
+            "Status Legend": [
+                "Statusforklaring"
+            ],
+            "Not analyzed or updated": [
+                "Ikke analysert eller oppdatert"
+            ],
+            "Score below 80%": [
+                "Poeng under 80%"
+            ],
+            "Done": [
+                "Ferdig"
+            ],
+            "Completed": [
+                "Fullført"
+            ],
+            "Ignored": [
+                "Ignorert"
+            ],
+            "Not important now": [
+                "Ikke viktig nå"
+            ],
+            "In progress": [
+                "Pågår"
+            ],
+            "Failed - retry needed": [
+                "Feilet - nytt forsøk nødvendig"
+            ],
+            "Invalid status": [
+                "Ugyldig status"
+            ],
+            "Failed to update article status": [
+                "Feilet i å oppdatere artikkelstatus"
+            ],
+            "Error updating article status": [
+                "Feil ved oppdatering av artikkelstatus"
+            ],
+            "Ignore": [
+                "Ignorer"
+            ],
+            "Remove": [
+                "Fjern"
+            ],
+            "Loading articles...": [
+                "Laster artikler..."
+            ],
+            "Important and Low Score": [
+                "Viktig og lav poengsum"
+            ],
+            "Top Important": [
+                "Viktigste"
+            ],
+            "Lowest Score": [
+                "Laveste poengsum"
+            ],
+            "Recently Analyzed": [
+                "Nylig analysert"
+            ],
+            "Unknown sub-tab": [
+                "Ukjent underfane"
+            ]
+        }
+    }
+}

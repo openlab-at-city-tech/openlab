@@ -625,45 +625,8 @@ class MetaSlide
         if ( ! $attachment_id ) {
             $attachment_id  = get_post_thumbnail_id( $this->slide->ID );
         }
-        
-        $image_sizes = wp_get_attachment_image_src( $attachment_id, 'full' );
 
-        if ( is_array( $image_sizes ) && count( $image_sizes ) ) {
-            $original_width = $image_sizes[1]; // Image width value from array
-            
-            // Find the closest image size to $width in width
-            $sizes = get_intermediate_image_sizes(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_intermediate_image_sizes_get_intermediate_image_sizes
-
-            // Default if no smaller size is found
-            $closest_size = 'full'; 
-
-            foreach ( $sizes as $size ) {
-                $size_info  = image_get_intermediate_size( $attachment_id, $size );
-
-                if ( isset( $size_info['width'] ) 
-                    && $size_info['width'] >= $width 
-                    && $size_info['width'] < $original_width 
-                ) {
-                    $closest_size = $size;
-                    break;
-                }
-            }
-
-            // Get the URL of the closest image size.
-            $closest_image = wp_get_attachment_image_src( $attachment_id, $closest_size );
-            
-            // $closest_image[0] URL
-            // $closest_image[1] width
-            // $closest_image[2] height
-            // $closest_image[3] boolean for: is the image cropped?
-
-            if ( is_array( $closest_image ) ) {
-                $image_ = is_ssl() ? set_url_scheme( $closest_image[0], 'https' ) : set_url_scheme( $closest_image[0], 'http' );
-                return $image_;
-            }
-        }
-
-        return METASLIDER_ASSETS_URL . 'metaslider/placeholder-thumb.jpg';
+        return metaslider_intermediate_image_src( $width, $attachment_id );
     }
 
     /**
@@ -729,6 +692,53 @@ class MetaSlide
         $html .= ' /><span></span>
         </label>
         </div>';
+
+        return $html;
+    }
+
+    /**
+     * HTML output for select field
+     * 
+     * @since 3.102
+     * 
+     * @param string $name   Valid input name
+     * @param array $options Array of options. 
+     *                       e.g. array(
+     *                          array(
+     *                              'label' => 'Lorem', 
+     *                              'value' => 'lorem')
+     *                          ),
+     *                          array(
+     *                              'label' => 'Ipsum', 
+     *                              'value' => 'ipsum')
+     *                          )
+     *                       )
+     * @param bool $value    e.g. 'lorem'
+     * @param array $attrs   Optional array of attributes. e.g. array( 'lorem' => 'value' )
+     * @param string $class  Optional CSS classes for the select tag
+     * 
+     * @return html
+     */
+    public function dropdown_field( $name, $options, $value, $attrs = array(), $class = '' )
+    {
+        $html = '<select name="' . 
+                esc_attr( $name ) . '"';
+                // Append $attrs as valid HTML attributes
+                foreach( $attrs as $item => $value ) {
+                    $html .= ' ' . esc_attr( $item ) . '="' . esc_attr( $value ) . '"';
+                }
+        $html .= ' class="ms-dropdown-field' . 
+            esc_attr( ! empty( $class ) ? ' ' . $class : '' ) . '">';
+
+        // Append <option> tags
+        foreach( $options as $item ) {
+            $html .= '<option value="' . 
+                esc_attr( $item['value'] ) . '"' . 
+                ( $value == $item['value'] ? ' selected' : '' ) . '>' . 
+                esc_html( $item['label'] ) . '</option>';
+        }
+
+        $html .= '</select>';
 
         return $html;
     }
@@ -830,4 +840,50 @@ class MetaSlide
         return $content;
     }
     
+    /**
+     * Display the Hide slide button in the slide header
+     *
+     * @since 3.100
+     */
+    public function get_hide_slide_button_html()
+    {
+        //$slide_type = get_post_meta($this->slide->ID, 'ml-slider_type', true);
+        $hide_slide = metaslider_option_is_enabled(get_post_meta($this->slide->ID, '_meta_slider_slide_is_hidden', true));
+        ?>
+
+        <button type="button" title="<?php
+        _e('Hide slide', 'ml-slider'); ?>" class="hide-slide toolbar-button alignright tipsy-tooltip-top">
+            <input class="hide-slide" type="checkbox" name="attachment[<?php
+            echo esc_attr($this->slide->ID); ?>][hide_slide]" <?php
+            echo($hide_slide ? 'checked="checked"' : ''); ?>>
+            <svg class="feather feather-eye" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true" data-reactid="501">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg class="feather feather-eye-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true" data-reactid="496">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+        </button>
+        <?php
+    }
+
+    /**
+    * Check if we're using native width/height from slideshow main options
+    * or custom image width/height
+    * 
+    * @since 3.100
+    * 
+    * @param $side string 'width' or 'height' only
+    * 
+    * @return int|bool
+    */
+    public function image_cropped_size( $side )
+    {
+        return metaslider_image_cropped_size(  $side, $this->settings );
+    }
 }

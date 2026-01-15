@@ -1,10 +1,10 @@
-=== Breadcrumb ===
+=== Breadcrumb -  Breadcrumb for WooCommerce and Custom Post Types ===
 	Contributors: PickPlugins
 	Donate link: https://pickplugins.com/breadcrumb/
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
 	Tested up to: 6.8
-	Stable tag: 1.5.50
+	Stable tag: 1.5.51
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.51 =
+    * 2025-11-29 - fix - Escapicing issue fixed.
 
 	= 1.5.50 =
     * 2025-05-10 - fix - screen readers issue fixed.

@@ -2,7 +2,7 @@
 Contributors: andergmartins, htmgarcia, publishpress, stevejburge, rochdesigns
 Tags: slider, video slider, image slider, carousel slider, gallery
 Requires at least: 5.0
-Stable tag: 3.99.0
+Stable tag: 3.103.0
 Requires PHP: 7.0
 Tested up to: 6.8
 License: GPLv2 or later
@@ -12,7 +12,7 @@ Slider, gallery, carousel plugin for WordPress. Build your image slider, video s
 
 == Description ==
 
-With MetaSlider, you can create a powerful, SEO-optimized slider, slideshow, carousel, or gallery in minutes. MetaSlider is world’s #1 responsive WordPress slider plugin. MetaSlider is the best choice for image, photo, video (YouTube, Vimeo, TikTok, local, and external), layer, WooCommerce products, and post feed sliders!
+With MetaSlider, you can create a powerful, SEO-optimized slider, slideshow, carousel, or gallery in minutes. MetaSlider is world’s #1 responsive WordPress slider plugin. MetaSlider is the best choice for image and photo sliders. [MetaSlider Pro](https://www.metaslider.com/upgrade/) add support for video (YouTube, Vimeo, TikTok, local, and external), layer, WooCommerce products, custom HTML, single post, post feed sliders and more!
 
 [youtube https://www.youtube.com/watch?v=zBFMhVjlGhs]
 
@@ -78,7 +78,7 @@ With [MetaSlider Pro](https://www.metaslider.com/upgrade/) you can create [Exter
 
 **Optimized for Speed**
 
-[MetaSlider is fast](https://www.metaslider.com/fastest-wordpress-slideshow-plugin/). Only the minimum JavaScript/CSS is included on your page to power your slider, slideshow, carousel, or gallery. We have optimized the MetaSlider plugin so that your images, photos, videos (YouTube and Vimeo), layers, products, and post feeds, load quickly without slowing down your website visitors’ experience.
+[MetaSlider is fast](https://www.metaslider.com/fastest-wordpress-slideshow-plugin/). Only the minimum JavaScript/CSS is included on your page to power your slider, slideshow, carousel, or gallery. We have optimized the Free and Pro MetaSlider plugins so that your images, photos, videos (YouTube and Vimeo), layers, products, and post feeds, load quickly without slowing down your website visitors’ experience.
 
 **Unsplash Integration**
 
@@ -92,7 +92,7 @@ The MetaSlider team works really hard to make sure the plugin is accessible for 
 
 MetaSlider is a responsive, SEO-optimized WordPress plugin that lets you create a slider, slideshow, carousel, and gallery in seconds.
 
-Your MetaSlider responsive slider, slideshow, carousel, or gallery will adapt to the width of the device they’re being displayed on, including desktop, mobile or tablet. The content will be responsive regardless of the type of content you use: image, photo, video (YouTube and Vimeo), layer, product, and post feed slides.
+Your MetaSlider responsive slider, slideshow, carousel, or gallery will adapt to the width of the device they’re being displayed on, including desktop, mobile or tablet. The content will be responsive regardless of the type of content you use in the Free or Pro version. Your images, photos, videos, layer, products, and posts will load incredibly quickly.
 
 The MetaSlider SEO tab lets you set image title and alt text for your slides. The title text should provide additional information about the slide, whereas the alt text should be used to describe the image itself. This data allows search engines to ‘read’ your slides and helps with search engine rankings!
 
@@ -134,7 +134,7 @@ MetaSlider offers responsive image and photo lightbox support with the [MetaSlid
 
 ### Slider Plugin Integrations
 
-MetaSlider is integrated with other popular WordPress plugins, including [WooCommerce](https://www.metaslider.com/docs/metaslider-and-woocommerce/), [The Events Calendar](https://www.metaslider.com/docs/metaslider-and-the-events-calendar/), [Advanced Custom Fields](https://www.metaslider.com/docs/advanced-custom-fields-metaslider/), and [WPML](https://www.metaslider.com/docs/wpml). This enables you to seamlessly show the most engaging content to your audience in a slider, slideshow, carousel, or gallery.
+MetaSlider Pro is integrated with other popular WordPress plugins, including [WooCommerce](https://www.metaslider.com/docs/metaslider-and-woocommerce/), [The Events Calendar](https://www.metaslider.com/docs/metaslider-and-the-events-calendar/), [Advanced Custom Fields](https://www.metaslider.com/docs/advanced-custom-fields-metaslider/), and [WPML](https://www.metaslider.com/docs/wpml). This enables you to seamlessly show the most engaging content to your audience in a slider, slideshow, carousel, or gallery.
 
 You can use the popular events management plugin “The Events Calendar” with MetaSlider’s new Post Feed Slides. MetaSlider detects if you have The Events Calendar plugin activated and offers you the ability to order by event date, so you can show off your upcoming events in a slider, slideshow, or carousel.
 
@@ -142,7 +142,7 @@ WooCommerce sliders are also easy with MetaSlider. You can show the products you
 
 ### Carousel Sliders
 
-In addition to creating traditional sliders and slideshows, you can use MetaSlider to build carousels that allow you to show multiple images at any one time. [MetaSlider carousels](https://www.metaslider.com/docs/carousel-slideshow/) are compatible with all slide types, including image, photo, video (YouTube, Vimeo, and local), layer, WooCommerce product, and Post Feed slides. They’re ideal for showing a list of your latest posts or to use as a “Featured Product” slider for your homepage.
+In addition to creating traditional sliders and slideshows, you can use MetaSlider to build carousels that allow you to show multiple images at any one time. [MetaSlider carousels](https://www.metaslider.com/docs/carousel-slideshow/) are compatible with all slide types in Free and Pro, including image, photo, video (YouTube, Vimeo, and local), layer, WooCommerce product, and Post Feed slides. They’re ideal for showing a list of your latest posts or to use as a “Featured Product” slider for your homepage.
 
 ### Support for Every Type of Content Slider
 
@@ -319,6 +319,90 @@ Yes, you can build Elementor slides and Beaver Builder slideshows. You can creat
 
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.103.0] - Nov 20, 2025 =
+
+* ADDED: Font size support to TinyMCE, #1884;
+* ADDED: Setting to enable overflow for body, #1792;
+* ADDED: Disable the whole slideshow edit screen when saving changes, #1564;
+* ADDED: Promo ad for Flush cache setting, #1897;
+* FIXED: is_plugin_active() is undefined, #1888, #1859;
+* FIXED: Bug in bulk upload, #1861;
+* FIXED: Navigation still shows when products are only three, #1885;
+* FIXED: Settings can be undefined for slideshow created through quickstart, #1776;
+* CHANGED: Italian, Spanish and French translation updates, #1883;
+* CHANGED: Improve import/export, #1886;
+* CHANGED: Optimize metaslider_filter_unsafe_html for reuse in pro, #1894;
+* CHANGED: Replace ver=1.0.0 from theme's CSS and JS with the actual plugin version, #1378;
+
+= [3.102.0] - Oct 16, 2025 =
+
+* ADDED: Promo for WooCommerce slide type, #1862;
+* FIXED: Make add button text from TinyMCE translatable, #1875;
+* FIXED: USe the same color picker in TinyMCE, #1873;
+* FIXED: Add aria-label on navigation, #1800;
+* CHANGED: Axios to 1.12.0, #1857;
+* CHANGED: Italian, Spanish and French translation updates, #1865;
+* REMOVED: AppSero, #1869;
+
+= [3.101.0] - Sep 11, 2025 =
+
+* ADDED: Notice box when “Recommended Theme Options” is disabled, #1837;
+* ADDED: Minimum WordPress and PHP version to main plugin, #742;
+* ADDED: Lazy Load as an option, #369, #1847, #1854;
+* ADDED: Loading options, #1799, #1829;
+* ADDED: Promo page for Theme Editor, #1738, #1850;
+* ADDED: Button to add a slide in the slides list area, #1768, #1813, #1849, #1810;
+* ADDED: A copy icon to the copy shortcode, #1815;
+* ADDED: Toggle for sidebar sections, #1811;
+* ADDED: Promo for Post Images slide type, #1823;
+* ADDED: Dynamic navigation settings in slideshow edit screen, #1830;
+* FIXED: Bottom margin issue in Nexus, #1838;
+* FIXED: The accessibility options are disabled when using quickstart, #1769;
+* FIXED: Default navigation is missing on hover options, #1807;
+* FIXED: Reverse label, #1840;
+* FIXED: Default auto play global setting is ignored by quickstart, #1801;
+* FIXED: “Hover pause” disabled doesn’t apply with “Loop Carousel Continuously” enabled, #1663;
+* FIXED: Loop Carousel Continuously leaves slide empty after a few cycles, #1845;
+* FIXED: Margins of slide caption are too wide when on mobile portrait using Clarity theme, #1783;
+* FIXED: Responsiveness of Jenga theme when on mobile portrait, #1788;
+* FIXED: Device settings break sites when body:after's content is already taken, #1805;
+* FIXED: Jenga dot navs missing active, #1821;
+* FIXED: Some classes from main wrapper are missing when no theme is assigned, #1812;
+* FIXED: Progress bar: when turn on/off, may not target to show/hide its customize color option #1825;
+* FIXED: image_cropped_size() may slow down slideshow init, #1827;
+* CHANGED: "Slide Types" not "Actions", #1834;
+* CHANGED: Allow to display more items when Carousel mode is enabled, #1839;
+* CHANGED: Alternative approach to get_plugins() to get plugins information, #101;
+* CHANGED: Base theme description to differentiate from having no theme, #1657;
+* CHANGED: Replace Pro banners with settings icons, #1775;
+* CHANGED: Device tab: update tooltip text, #1804;
+* CHANGED: The color of the slideshow edit's Save button, #1766;
+* CHANGED: Rename "Device Options" to "Shortcodes" for consistency reasons, #1808;
+* CHANGED: Better way to check which slides are invisible, #1822;
+* CHANGED: Update pro features table, #1851;
+* REMOVED: Non valid FlexSlider params, #1826;
+
+= [3.100.1] - Jul 24, 2025 =
+
+* FIXED: Remove body overflow when swipe is enabled, #1791;
+
+= [3.100.0] - Jul 21, 2025 =
+
+* ADDED: Slide visibility support, #1667;
+* ADDED: Ad for new custom width/height crop settings, #1765;
+* ADDED: Ad for Advanced tab, #1764;
+* FIXED: Margin for thumbnails is gone, #1742;
+* FIXED: slider is undefined, #1752;
+* FIXED: Active slide class doesn't match with visible slide when reverse is enabled, #1518;
+* FIXED: Slide delay tooltip is out of date, #1758;
+* FIXED: Theme promos overlap in medium to small screensizes, #1763;
+* FIXED: Call to member function add_page in null, #1767;
+* FIXED: Website overflow to improve touch swipe, #1781;
+* FIXED: Precognition theme propagates its navigation to other slideshows, #1780;
+* CHANGED: Move "Reverse" to Transition Options, #1540;
+* CHANGED: Set Carousel mode default to more than 1, #1732;
+* CHANGED: Enable all Accessibility options by default, #1753;
 
 = [3.99.0] - Jun 11, 2025 =
 

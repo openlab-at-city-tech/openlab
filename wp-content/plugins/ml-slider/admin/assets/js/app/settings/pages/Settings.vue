@@ -160,6 +160,10 @@
 				<template slot="header">{{ __('Enable TinyMCE', 'ml-slider') }}</template>
 				<template slot="description">{{ __('TinyMCE is a WYSIWYG editor you can use in slide captions.', 'ml-slider') }}</template>
 			</switch-single-input>
+			<switch-single-input v-model="globalSettings.fixTouchSwipe" @change="saveGlobalSettings()">
+				<template slot="header">{{ __('Fix Touch Swipe', 'ml-slider') }}</template>
+				<template slot="description">{{ __("If Touch Swipe doesn't work as expected, enable this setting.", 'ml-slider') }}</template>
+			</switch-single-input>
 			<switch-single-input v-model="globalSettings.autoThemeConfig" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Recommended Theme Options', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Automatically apply recommended slideshow options when selecting a theme. This will replace some of the previous options.', 'ml-slider') }}</template>
@@ -212,6 +216,18 @@
 			</template>
 		</template>
 	</split-layout>
+	<!-- Pro Ads -->
+	<split-layout :loading="loading" class="lg:mt-6" v-if="!isPro()">
+		<template slot="header">{{ __('Pro Settings', 'ml-slider') }}</template>
+		<template slot="description">{{ __('Update the MetaSlider Pro settings.', 'ml-slider') }}</template>
+		<template slot="fields">
+			<switch-single-input-ad :value="false">
+				<template slot="header">{{ __('Flush Cache when Saving Changes', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to automatically flush cache when saving slideshow changes. Support WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
+				<template slot="proText">{{ __('This feature is available in MetaSlider Pro', 'ml-slider') }}</template>
+			</switch-single-input-ad>
+		</template>
+	</split-layout>
 	<!-- Pro settings -->
 	<split-layout :loading="loading" class="lg:mt-6" v-if="isPro()">
 		<template slot="header">{{ __('Pro Settings', 'ml-slider') }}</template>
@@ -222,15 +238,30 @@
 				name="default-slideshow-width" 
 				wrapper-class="w-24" 
 				@click="saveProSettings()">
-				<template slot="header">{{ __('Maximum Number of Custom Fields in Post Feed Slides', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Maximum Number of Custom Fields in Post Feed and WooCommerce Slides', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Select how many custom fields will display in the dropdown menu when you are inserting tags.', 'ml-slider') }}</template>
 				<template slot="input-label">
-					{{ __('Change the maximum custom fields for Post Feed', 'ml-slider') }}
+					{{ __('Change the maximum custom fields for Post Feed and WooCommerce', 'ml-slider') }}
+				</template>
+			</text-single-input>
+			<text-single-input 
+				v-model="proSettings.postFeedTitleLength" 
+				name="default-slideshow-width" 
+				wrapper-class="w-24" 
+				@click="saveProSettings()">
+				<template slot="header">{{ __('Maximum Title Length in Post Feed and WooCommerce Slides', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Select the maximum title length for post titles.', 'ml-slider') }}</template>
+				<template slot="input-label">
+					{{ __('Change the maximum title length for Post Feed and WooCommerce post titles', 'ml-slider') }}
 				</template>
 			</text-single-input>
 			<switch-single-input v-model="proSettings.legacyThemeEditor" @change="saveProSettings()">
 				<template slot="header">{{ __('Enable Legacy Theme Editor', 'ml-slider') }}</template>
 				<template slot="description">{{ __('This setting allows you to enable the legacy Theme Editor.', 'ml-slider') }}</template>
+			</switch-single-input>
+			<switch-single-input v-model="proSettings.flushCache" @change="saveProSettings()">
+				<template slot="header">{{ __('Flush Cache when Saving Changes', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to automatically flush cache when saving slideshow changes. Support WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
 			</switch-single-input>
 		</template>
 	</split-layout>
@@ -242,6 +273,7 @@ import { default as SplitLayout } from '../layouts/_split'
 import { default as TextSingle } from '../inputs/_textSingle'
 import { default as TextMultiple } from '../inputs/_textMultiple'
 import { default as SwitchSingle } from '../inputs/_switchSingle'
+import { default as SwitchSingleAd } from '../inputs/_switchSingleAd'
 import { default as SelectField } from '../inputs/_selectField'
 import { default as WarningAlert } from '../inputs/alerts/_warningSmall'
 import { Settings } from '../../api'
@@ -252,6 +284,7 @@ export default {
 		'text-single-input' : TextSingle,
 		'text-multiple-input' : TextMultiple,
 		'switch-single-input' : SwitchSingle,
+		'switch-single-input-ad' : SwitchSingleAd,
 		'select-field-input' : SelectField,
 		'alert-warning-small': WarningAlert
 	},
@@ -282,6 +315,7 @@ export default {
 				mobileSettings: true,
 				legacyWidget: true,
 				tinyMce: true,
+				fixTouchSwipe: false,
 				autoThemeConfig: true,
 				dashboardSort: 'ID',
 				dashboardOrder: 'asc',
@@ -289,8 +323,10 @@ export default {
 
 			},
 			proSettings: {
-				postFeedFields: 30,
-				legacyThemeEditor: false // false means legacy Theme editor is disabled
+				postFeedFields: 100,
+				legacyThemeEditor: false, // false means legacy Theme editor is disabled
+				postFeedTitleLength: 100,
+				flushCache: false
 			},
 			legacySlideshows: {}
 
@@ -321,7 +357,8 @@ export default {
 		navigationOptions() {
 			const baseOptions = [
 				{ value: false, label: this.__('Hidden', 'ml-slider') },
-				{ value: true, label: this.__('Dots', 'ml-slider') }
+				{ value: true, label: this.__('Dots', 'ml-slider') },
+				{ value: 'dots_onhover', label: this.__('Dots - Visible On Hover', 'ml-slider') }
 			];
 
 			return [
@@ -332,8 +369,18 @@ export default {
 					disabled: !this.isPro() 
 				},
 				{ 
+					value: 'thumbs_onhover', 
+					label: this.isPro() ? this.__('Thumbnails - Visible On Hover', 'ml-slider') : this.__('Thumbnails - Visible On Hover (Pro)', 'ml-slider'), 
+					disabled: !this.isPro() 
+				},
+				{ 
 					value: 'filmstrip', 
 					label: this.isPro() ? this.__('Filmstrip', 'ml-slider') : this.__('Filmstrip (Pro)', 'ml-slider'),  
+					disabled: !this.isPro() 
+				},
+				{ 
+					value: 'filmstrip_onhover', 
+					label: this.isPro() ? this.__('Filmstrip - Visible On Hover', 'ml-slider') : this.__('Filmstrip - Visible On Hover (Pro)', 'ml-slider'),  
 					disabled: !this.isPro() 
 				}
 			];

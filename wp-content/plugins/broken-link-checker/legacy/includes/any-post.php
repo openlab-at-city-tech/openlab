@@ -78,7 +78,14 @@ class blcPostTypeOverlord {
 		add_action( 'untrash_post', array( &$this, 'post_saved' ) );
 
 		//Highlight and nofollow broken links in posts & pages
-		if ( $this->plugin_conf->options['mark_broken_links'] || $this->plugin_conf->options['nofollow_broken_links'] ) {
+		// Only do this for logged-in users to avoid issues for regular visitors.
+		if (
+			is_user_logged_in() &&
+			(
+				$this->plugin_conf->options['mark_broken_links'] ||
+				$this->plugin_conf->options['nofollow_broken_links']
+			)
+		) {
 			add_filter( 'the_content', array( &$this, 'hook_the_content' ) );
 			if ( $this->plugin_conf->options['mark_broken_links'] && ! empty( $this->plugin_conf->options['broken_link_css'] ) ) {
 				add_action( 'wp_head', array( &$this, 'hook_wp_head' ) );
@@ -440,7 +447,7 @@ class blcPostTypeOverlord {
 	 * @return void
 	 */
 	function hook_wp_head() {
-		echo '<style type="text/css">',$this->plugin_conf->options['broken_link_css'],'</style>';
+		echo '<style>',$this->plugin_conf->options['broken_link_css'],'</style>';
 	}
 }
 
@@ -542,12 +549,21 @@ class blcAnyPostContainer extends blcContainer {
 	 */
 	function ui_get_source( $container_field = '', $context = 'display' ) {
 		$source = '<a class="row-title" href="%s" title="%s">%s</a>';
-		$source = sprintf(
-			$source,
-			$this->get_edit_url(),
-			esc_attr( __( 'Edit this item' ) ),
-			get_the_title( $this->container_id )
-		);
+		if ( 'email' === $context ) {
+			$source = sprintf(
+				$source,
+				get_the_permalink( $this->container_id ),
+				esc_attr( __( 'View this item' ) ),
+				get_the_title( $this->container_id )
+			);
+		} else {
+			$source = sprintf(
+				$source,
+				$this->get_edit_url(),
+				esc_attr( __( 'Edit this item' ) ),
+				get_the_title( $this->container_id )
+			);
+		}
 
 		return $source;
 	}

@@ -660,8 +660,4 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 		return $output;
 	}
-
-	public function generate_non_modular_kb_main_page() {
-		// for compatibility reasons
-	}
 }

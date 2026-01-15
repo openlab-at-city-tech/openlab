@@ -30,7 +30,7 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * @access protected
 	 * @var    string $_min_gravityforms_version The minimum version required.
 	 */
-	protected $_min_gravityforms_version = '2.0.8';
+	protected $_min_gravityforms_version = '2.9.0';
 
 	/**
 	 * Defines the plugin slug.
@@ -258,6 +258,12 @@ class GF_Dropbox extends GFFeedAddOn {
 		// Attach files to notification
 		add_filter( 'gform_pre_send_email', array( $this, 'filter_gform_pre_send_email' ), 10, 4 );
 
+        // Adding support for delayed payment.
+		$this->add_delayed_payment_support(
+			array(
+				'option_label' => esc_html__( 'Upload files to Dropbox only when payment is received.', 'gravityformsdropbox' ),
+			)
+		);
 	}
 
 	/**
@@ -1818,6 +1824,7 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * Process queued feed.
 	 *
 	 * @since  1.0
+	 * @since  3.3 Updated to save the feed status to the entry meta.
 	 */
 	public function maybe_process_feed_on_post_request() {
 
@@ -1838,9 +1845,14 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		// Get feed, entry and form data.
 		$data  = json_decode( base64_decode( $data ), true );
-		$feed  = $this->get_feed( (int) $data[0] );
-		$entry = GFAPI::get_entry( (int) $data[1] );
-		$form  = GFAPI::get_form( (int) $data[2] );
+
+		$feed_id  = (int) rgar( $data, 0 );
+		$entry_id = (int) rgar( $data, 1 );
+		$form_id  = (int) rgar( $data, 2 );
+
+		$feed  = $this->get_feed( $feed_id );
+		$entry = GFAPI::get_entry( $entry_id );
+		$form  = GFAPI::get_form( $form_id );
 
 		// Run feed through pre-processor.
 		$feeds = $this->pre_process_feeds( array( $feed ), $entry, $form );
@@ -1856,7 +1868,11 @@ class GF_Dropbox extends GFFeedAddOn {
 		$this->log_debug( __METHOD__ . '(): Processing request for entry #' . $entry['id'] .' , feed #' . $feed['id'] );
 
 		// Process feed.
-		$this->process_feed_files( $feed, $entry, $form );
+		$result = $this->process_feed_files( $feed, $entry, $form );
+
+		if ( $this->is_gravityforms_supported( '2.9.3.2' ) ) {
+			$this->save_entry_feed_status( $result, $entry_id, $feed_id, $form_id );
+		}
 
 		// Update entry links and send notifications if last feed being processed.
 		if ( rgpost( 'is_last_feed' ) ) {
@@ -1888,10 +1904,13 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * Process feed.
 	 *
 	 * @since  1.0
+	 * @since  3.3 Updated return value, so the feed status can be saved to the entry meta.
 	 *
 	 * @param array $feed  Feed object.
 	 * @param array $entry Entry object.
 	 * @param array $form  Form object.
+	 *
+	 * @return WP_Error|array
 	 */
 	public function process_feed_files( $feed, $entry, $form ) {
 
@@ -1901,12 +1920,14 @@ class GF_Dropbox extends GFFeedAddOn {
 			// Log that feed cannot be processed.
 			$this->add_feed_error( esc_html__( 'Feed was not processed because API was not initialized.', 'gravityformsdropbox' ), $feed, $entry, $form );
 
-			return;
+			return new WP_Error( 'api_not_initialized', 'API was not initialized.' );
 
 		}
 
 		// Log that we are processing form fields.
 		$this->log_debug( __METHOD__ . '(): Checking form fields for files to process.' );
+
+		$count = 0;
 
 		// Loop through form fields.
 		foreach ( $form['fields'] as $field ) {
@@ -1928,10 +1949,15 @@ class GF_Dropbox extends GFFeedAddOn {
 			$this->log_debug( __METHOD__ . "(): Processing field: {$field->label}(#{$field->id} - {$field->type})." );
 
 			// Call the processing method for input type.
-			call_user_func_array( array( $this, 'process_' . $input_type . '_fields' ), array( $field, $feed, $entry, $form ) );
+			$count += call_user_func_array( array( $this, 'process_' . $input_type . '_fields' ), array( $field, $feed, $entry, $form ) );
 
 		}
 
+		if ( $count ) {
+			$this->add_note( rgar( $entry, 'id' ), esc_html( sprintf( _n( '%d file uploaded.', '%d files uploaded.', $count, 'gravityformsdropbox' ), $count ) ), 'success' );
+		}
+
+		return $entry;
 	}
 
 	/**
@@ -1972,11 +1998,14 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * Process Dropbox upload fields.
 	 *
 	 * @since  1.0
+	 * @since  3.3 Updated to return number of files uploaded to Dropbox.
 	 *
 	 * @param GF_Field_Dropbox $field Field object.
 	 * @param array            $feed  Feed object.
 	 * @param array            $entry Entry object.
 	 * @param array            $form  Form object.
+	 *
+	 * @return int
 	 */
 	public function process_dropbox_fields( $field, $feed, $entry, $form ) {
 
@@ -1987,7 +2016,7 @@ class GF_Dropbox extends GFFeedAddOn {
 		if ( rgblank( $field_value ) ) {
 			$this->log_debug( __METHOD__ . '(): Aborting; field value is empty.' );
 
-			return;
+			return 0;
 		}
 
 		// Log beginning of file upload for field.
@@ -1997,6 +2026,7 @@ class GF_Dropbox extends GFFeedAddOn {
 		$existing     = gform_get_meta( $entry['id'], $meta_key );
 		$files        = json_decode( $field_value, true );
 		$update_entry = false;
+		$count        = 0;
 
 		// Copy files to Dropbox.
 		foreach ( $files as &$file ) {
@@ -2060,10 +2090,11 @@ class GF_Dropbox extends GFFeedAddOn {
 			}
 
 			$update_entry = true;
+			$count++;
 		}
 
 		if ( ! $update_entry ) {
-			return;
+			return 0;
 		}
 
 		gform_update_meta( $entry['id'], $meta_key, $files, $form['id'] );
@@ -2071,17 +2102,21 @@ class GF_Dropbox extends GFFeedAddOn {
 		$this->log_debug( __METHOD__ . '(): Updated field entry value: ' . $entry_value );
 		GFAPI::update_entry_field( $entry['id'], $field->id, $entry_value );
 
+		return $count;
 	}
 
 	/**
 	 * Process file upload fields.
 	 *
 	 * @since  1.0
+	 * @since  3.3 Updated to return number of files uploaded to Dropbox.
 	 *
 	 * @param GF_Field_FileUpload $field Field object.
 	 * @param array               $feed  Feed object.
 	 * @param array               $entry Entry object.
 	 * @param array               $form  Form object.
+	 *
+	 * @return int
 	 */
 	public function process_fileupload_fields( $field, $feed, $entry, $form ) {
 
@@ -2090,30 +2125,41 @@ class GF_Dropbox extends GFFeedAddOn {
 		if ( rgblank( $field_value ) ) {
 			$this->log_debug( __METHOD__ . '(): Aborting; field value is empty.' );
 
-			return;
+			return 0;
+		}
+
+		$urls = $this->is_json( $field_value ) ? json_decode( $field_value, true ) : array( $field_value );
+		if ( GFCommon::is_empty_array( $urls ) ) {
+			$this->log_debug( __METHOD__ . '(): Aborting; no files found.' );
+
+			return 0;
 		}
 
 		$this->log_debug( __METHOD__ . '(): Beginning upload of file upload field #' . $field->id . '.' );
 
-		$meta_key     = $this->get_existing_files_meta_key( $field );
-		$existing     = gform_get_meta( $entry['id'], $meta_key );
-		$urls         = $field->multipleFiles ? json_decode( $field_value, true ) : array( $field_value );
-		$update_entry = false;
+		$entry_id        = absint( rgar( $entry, 'id' ) );
+        $form_id         = absint( rgar( $form, 'id' ) );
+		$meta_key        = $this->get_existing_files_meta_key( $field );
+		$existing        = gform_get_meta( $entry_id, $meta_key );
+		$update_entry    = false;
+		$count           = 0;
+		$upload_root_url = rgar( GF_Field_FileUpload::get_upload_root_info( $form_id ), 'url' );
 
 		foreach ( $urls as &$url ) {
-			if ( ! $this->should_upload_file( $url, $existing, $field, $form, $entry, $feed ) ) {
+			if ( ! $this->should_upload_file( $url, $existing, $field, $form, $entry, $feed ) || ! str_starts_with( $url, $upload_root_url ) ) {
 				$this->log_debug( __METHOD__ . '(): Not uploading file: ' . $url );
 				continue;
 			}
 
-			$get_path_args = array( $url );
-			if ( $this->is_gravityforms_supported( '2.5.15.2' ) ) {
-				$get_path_args[] = $entry['id'];
+			$path = GFFormsModel::get_physical_file_path( $url, $entry_id );
+			if ( ! file_exists( $path ) ) {
+				$this->log_debug( __METHOD__ . '(): File does not exist. Not uploading file: ' . $url );
+				continue;
 			}
 
 			$file_info = array(
 				'name'        => basename( $url ),
-				'path'        => call_user_func_array( 'GFFormsModel::get_physical_file_path', $get_path_args ),
+				'path'        => $path,
 				'url'         => $url,
 				'destination' => rgars( $feed, 'meta/destinationFolder' ),
 			);
@@ -2127,17 +2173,19 @@ class GF_Dropbox extends GFFeedAddOn {
 
 			$url          = $new_url;
 			$update_entry = true;
+			$count++;
 		}
 
 		if ( ! $update_entry ) {
-			return;
+			return 0;
 		}
 
-		gform_update_meta( $entry['id'], $meta_key, $urls, $form['id'] );
-		$entry_value = $field->multipleFiles ? json_encode( $urls ) : $urls[0];
+		gform_update_meta( $entry_id, $meta_key, $urls, $form_id );
+		$entry_value = $field->multipleFiles || $field->storageType === 'json' ? json_encode( $urls ) : $urls[0];
 		$this->log_debug( __METHOD__ . '(): Updated field entry value: ' . $entry_value );
-		GFAPI::update_entry_field( $entry['id'], $field->id, $entry_value );
+		GFAPI::update_entry_field( $entry_id, $field->id, $entry_value );
 
+		return $count;
 	}
 
 	/**
@@ -2177,9 +2225,11 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		$filter_args = array( 'gform_dropbox_should_upload_file', $form['id'], $field->id );
 
-		if ( function_exists( 'gf_has_filters' ) && gf_has_filters( $filter_args ) ) {
-			$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_dropbox_should_upload_file.' );
+		if ( ! gf_has_filters( $filter_args ) ) {
+            return $should_upload_file;
 		}
+
+		$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_dropbox_should_upload_file.' );
 
 		/**
 		 * Provides a way to prevent the uploading of a file to Dropbox.

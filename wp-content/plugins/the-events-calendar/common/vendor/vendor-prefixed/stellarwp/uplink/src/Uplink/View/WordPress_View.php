@@ -87,7 +87,7 @@ final class WordPress_View implements Contracts\View {
 
 		if( $path === false ) {
 			throw new FileNotFoundException(
-				sprintf( __( 'View file "%s" not found or not readable.', 'tribe-common' ), $file )
+				sprintf( __( 'View file "%s" not found or not readable.', '%TEXTDOMAIN%' ), $file )
 			);
 		}
 

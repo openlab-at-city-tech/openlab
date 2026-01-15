@@ -2,6 +2,7 @@
 use Bookly\Lib\Entities\CustomerAppointment;
 use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Lib\Utils;
+use Bookly\Lib\Entities;
 
 $statuses = CustomerAppointment::getStatuses();
 $service_dropdown_data = Utils\Common::getServiceDataForDropDown( 's.type <> "package"' );
@@ -56,6 +57,40 @@ $service_dropdown_data = Utils\Common::getServiceDataForDropDown( 's.type <> "pa
                     </div>
                 </div>
                 <small class="form-text text-muted"><?php esc_html_e( 'Choose whether notification should be sent for specific services only or not.', 'bookly' ) ?></small>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bookly-js-payment-statuses-container border-left ml-4 pl-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label><?php esc_html_e( 'Associated payment status', 'bookly' ) ?></label>
+                <ul class="bookly-js-payment-statuses"
+                    data-icon-class="far fa-credit-card"
+                    data-txt-select-all="<?php esc_attr_e( 'All', 'bookly' ) ?>"
+                    data-txt-all-selected="<?php esc_attr_e( 'All', 'bookly' ) ?>"
+                    data-txt-nothing-selected="<?php esc_attr_e( 'Nothing selected', 'bookly' ) ?>"
+                >
+                    <li data-input-name="notification[settings][payment_statuses][]" data-value="any">
+                        <?php esc_html_e( 'Any status', 'bookly' ) ?>
+                        <ul>
+                            <?php foreach ( array( Entities\Payment::STATUS_PENDING, Entities\Payment::STATUS_COMPLETED ) as $status ) : ?>
+                                <li data-input-name="notification[settings][payment_statuses][]"
+                                    data-value="<?php echo esc_attr( $status ) ?>"
+                                >
+                                    <?php echo esc_html( Entities\Payment::statusToString( $status ) ) ?>
+                                </li>
+                            <?php endforeach ?>
+                        </ul>
+                    </li>
+
+                    <li data-flatten-if-single data-input-name="notification[settings][payment_statuses][]" data-value="no_payment">
+                        <?php esc_html_e( 'No payment', 'bookly' ) ?>
+                    </li>
+
+                </ul>
+                <small class="form-text text-muted"><?php esc_html_e( 'Select the payment status required for this notification to be sent', 'bookly' ) ?></small>
             </div>
         </div>
     </div>

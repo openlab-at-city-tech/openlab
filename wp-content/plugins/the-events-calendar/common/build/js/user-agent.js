@@ -1,0 +1,1 @@
+!function(){const o=window.navigator.userAgent;Object.entries({android:/android/i,iphone:/iPhone/i,ipad:/iPad/i}).forEach((([n,i])=>{o.match(i)&&document.body.classList.add(`tec-is-${n}`)}))}(),window.tec=window.tec||{},window.tec.common=window.tec.common||{},window.tec.common.userAgent={};

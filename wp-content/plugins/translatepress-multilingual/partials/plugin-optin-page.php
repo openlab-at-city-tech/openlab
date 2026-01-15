@@ -77,9 +77,9 @@ if ( !defined('ABSPATH' ) )
             </div>
 
             <div class="trp-optin-page__footer-links">
-                <a target="_blank" href="https://translatepress.com/privacy-policy/"><?php esc_html_e( 'Privacy Policy', 'translatepress-multilingual' ); ?></a>
+                <a target="_blank" href="https://translatepress.com/privacy-policy/?utm_source=tp-plugin-optin&utm_medium=client-site&utm_campaign=privacy-policy"><?php esc_html_e( 'Privacy Policy', 'translatepress-multilingual' ); /* [utm70] */ ?></a>
                 -
-                <a target="_blank" href="https://translatepress.com/terms-conditions/#section10"><?php esc_html_e( 'Terms of Service', 'translatepress-multilingual' ); ?></a>
+                <a target="_blank" href="https://translatepress.com/terms-conditions/?utm_source=tp-plugin-optin&utm_medium=client-site&utm_campaign=terms-conditions#section10"><?php esc_html_e( 'Terms of Service', 'translatepress-multilingual' );/* [utm71] */ ?></a>
             </div>
         </div>
     </div>

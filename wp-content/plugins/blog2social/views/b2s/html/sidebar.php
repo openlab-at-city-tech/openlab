@@ -52,9 +52,9 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                         <?php
                                         if (B2S_PLUGIN_USER_VERSION == 0) {
                                             if ((defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()) || get_option('B2S_PLUGIN_DISABLE_TRAIL') == true) {
-                                                echo '<a class="btn-link b2s-free-link padding-left-5" target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '">' . esc_html__('Upgrade to Premium', 'blog2social') . '</a>';
+                                                echo '<a class="btn-link b2s-free-link padding-left-5" target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade to Premium', 'blog2social') . '</a>';
                                             } else {
-                                                echo '<br><a class="btn-link b2s-free-link padding-left-16" target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('feature')) . '">' . esc_html__('Start your 30-day free Premium trial', 'blog2social') . '</a>';
+                                                echo '<br><a class="btn-link b2s-free-link padding-left-16" target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('trial')) . '">' . esc_html__('Start your 30-day free Premium trial', 'blog2social') . '</a>';
                                             }
                                         }
                                         ?>
@@ -110,7 +110,7 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                             ?>
                                             <div class="media-body b2s-font-size-11">
                                                 <span class="b2s-span-float-left"><span id="current_licence_open_sched_post_quota" class="b2s-text-bold"><?php echo (int) $openCond ?></span> <?php esc_html_e("remaining from", "blog2social") ?> <?php echo (int) $totalCond; ?></span>
-                                                <?php $linkRouting = ((defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time()) || (B2S_PLUGIN_USER_VERSION == 0)) ? 'affiliate' : 'addon_post_volume'; ?>
+                                                <?php $linkRouting = ((defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time()) || (B2S_PLUGIN_USER_VERSION == 0)) ? 'upgrade_version' : 'addon_post_volume'; ?>
                                                 <span class="b2s-span-float-right"><a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink($linkRouting)); ?>"><?php esc_html_e("Need more?", "blog2social") ?></a></span>
                                                 <div class="clearfix"></div>
                                             </div>
@@ -258,7 +258,7 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                             <?php } ?>
                             <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_PLANS', B2S_PLUGIN_ADMIN)) { ?> 
                                 <li class="b2s-list-margin-left-10">
-                                    <i class="glyphicon glyphicon-signal glyphicon-success"></i> <a href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" target="_blank" class="b2s-sidebar-menu-item"><?php esc_html_e("Plans & Prices", "blog2social") ?></a> 
+                                    <i class="glyphicon glyphicon-signal glyphicon-success"></i> <a href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" target="_blank" class="b2s-sidebar-menu-item"><?php esc_html_e("Plans & Prices", "blog2social") ?></a> 
                                 </li>
                             <?php } ?>
                         </ul>

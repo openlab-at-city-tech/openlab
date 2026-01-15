@@ -52,8 +52,12 @@ abstract class Schema
 
         $this->dropTableForeignKeys( $table, $columns );
 
+        $real_table_name = $this->getTableName( $table );
+
         foreach ( $columns as $column ) {
-            $wpdb->query( "ALTER TABLE `$table` DROP COLUMN `$column`" );
+            if ( $this->existsColumn( $table, $column ) ) {
+                $wpdb->query( 'ALTER TABLE `' . $real_table_name . '` DROP COLUMN `' . $column . '`' );
+            }
         }
     }
 
@@ -67,15 +71,16 @@ abstract class Schema
     {
         global $wpdb;
 
+        $real_table_name = $this->getTableName( $table );
         $get_foreign_keys = sprintf(
             'SELECT CONSTRAINT_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
                 WHERE TABLE_SCHEMA = SCHEMA() AND TABLE_NAME = "%s" AND COLUMN_NAME IN (%s) AND REFERENCED_TABLE_NAME IS NOT NULL',
-            $table,
+            $real_table_name,
             implode( ', ', array_fill( 0, count( $columns ), '%s' ) )
         );
         $constraints = $wpdb->get_results( $wpdb->prepare( $get_foreign_keys, $columns ) );
         foreach ( $constraints as $foreign_key ) {
-            $wpdb->query( "ALTER TABLE `$table` DROP FOREIGN KEY `$foreign_key->CONSTRAINT_NAME`" );
+            $wpdb->query( "ALTER TABLE `$real_table_name` DROP FOREIGN KEY `$foreign_key->CONSTRAINT_NAME`" );
         }
     }
 

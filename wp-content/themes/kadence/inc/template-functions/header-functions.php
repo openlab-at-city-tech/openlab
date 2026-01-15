@@ -10,7 +10,6 @@ namespace Kadence;
 use function Kadence\kadence;
 use function get_template_part;
 use function add_action;
-use function render_block;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,7 +36,7 @@ function header_markup() {
  */
 function top_header() {
 	if ( kadence()->display_header_row( 'top' ) ) {
-		kadence()->get_template( 'template-parts/header/header', 'row', array( 'row' => 'top' ) );
+		kadence()->get_template( 'template-parts/header/header', 'row', [ 'row' => 'top' ] );
 	}
 }
 
@@ -46,7 +45,7 @@ function top_header() {
  */
 function main_header() {
 	if ( kadence()->display_header_row( 'main' ) ) {
-		kadence()->get_template( 'template-parts/header/header', 'row', array( 'row' => 'main' ) );
+		kadence()->get_template( 'template-parts/header/header', 'row', [ 'row' => 'main' ] );
 	}
 }
 
@@ -55,7 +54,7 @@ function main_header() {
  */
 function bottom_header() {
 	if ( kadence()->display_header_row( 'bottom' ) ) {
-		kadence()->get_template( 'template-parts/header/header', 'row', array( 'row' => 'bottom' ) );
+		kadence()->get_template( 'template-parts/header/header', 'row', [ 'row' => 'bottom' ] );
 	}
 }
 
@@ -81,7 +80,7 @@ function mobile_header() {
  */
 function mobile_top_header() {
 	if ( kadence()->display_mobile_header_row( 'top' ) ) {
-		kadence()->get_template( 'template-parts/header/mobile-header', 'row', array( 'mobile_row' => 'top' ) );
+		kadence()->get_template( 'template-parts/header/mobile-header', 'row', [ 'mobile_row' => 'top' ] );
 	}
 }
 
@@ -90,7 +89,7 @@ function mobile_top_header() {
  */
 function mobile_main_header() {
 	if ( kadence()->display_mobile_header_row( 'main' ) ) {
-		kadence()->get_template( 'template-parts/header/mobile-header', 'row', array( 'mobile_row' => 'main' ) );
+		kadence()->get_template( 'template-parts/header/mobile-header', 'row', [ 'mobile_row' => 'main' ] );
 	}
 }
 
@@ -99,7 +98,7 @@ function mobile_main_header() {
  */
 function mobile_bottom_header() {
 	if ( kadence()->display_mobile_header_row( 'bottom' ) ) {
-		kadence()->get_template( 'template-parts/header/mobile-header', 'row', array( 'mobile_row' => 'bottom' ) );
+		kadence()->get_template( 'template-parts/header/mobile-header', 'row', [ 'mobile_row' => 'bottom' ] );
 	}
 }
 
@@ -128,8 +127,8 @@ function header_row_class( $row ) {
  */
 function site_branding() {
 	$layout   = kadence()->option( 'logo_layout' );
-	$includes = array();
-	$layouts  = array();
+	$includes = [];
+	$layouts  = [];
 	if ( is_array( $layout ) && isset( $layout['include'] ) ) {
 		if ( isset( $layout['layout'] ) ) {
 			if ( isset( $layout['layout']['desktop'] ) && ! empty( $layout['layout']['desktop'] ) ) {
@@ -154,7 +153,7 @@ function site_branding() {
 			}
 		}
 	}
-	$layout_slug = isset( $layouts['desktop'] ) ? $layouts['desktop'] : 'standard';
+	$layout_slug = $layouts['desktop'] ?? 'standard';
 	if ( 'title_logo' === $layout_slug || 'title_tag_logo' === $layout_slug ) {
 		$layout_class = 'standard-reverse';
 	} elseif ( 'top_logo_title' === $layout_slug || 'top_logo_title_tag' === $layout_slug ) {
@@ -181,7 +180,7 @@ function site_branding() {
 				do_action( 'before_kadence_logo_output' );
 				if ( kadence()->desk_transparent_header() && kadence()->option( 'transparent_header_custom_logo' ) && kadence()->option( 'transparent_header_logo' ) ) {
 					render_custom_logo( 'transparent_header_logo', 'kadence-transparent-logo' );
-				} else if ( ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) && kadence()->option( 'logo_icon' ) ) {
+				} elseif ( ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) && kadence()->option( 'logo_icon' ) ) {
 					logo_icon();
 				} else {
 					custom_logo();
@@ -225,36 +224,35 @@ function logo_icon() {
  * Desktop Navigation
  */
 function primary_navigation() {
-    	$openType = get_theme_mod('primary_navigation_open_type');
-    ?>
-    <nav id="site-navigation" class="main-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'primary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'kadence' ); ?>">
-    <?php kadence()->customizer_quick_link(); ?>
-        <div class="primary-menu-container header-menu-container">
-    <?php
-    if ( kadence()->is_primary_nav_menu_active() ) {
-        kadence()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) );
-    } else {
-        kadence()->display_fallback_menu();
-    }
-    ?>
-        </div>
-    </nav><!-- #site-navigation -->
-    <?php
-
+		$openType = get_theme_mod( 'primary_navigation_open_type' );
+	?>
+	<nav id="site-navigation" class="main-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'primary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary', 'kadence' ); ?>">
+	<?php kadence()->customizer_quick_link(); ?>
+		<div class="primary-menu-container header-menu-container">
+	<?php
+	if ( kadence()->is_primary_nav_menu_active() ) {
+		kadence()->display_primary_nav_menu( [ 'menu_id' => 'primary-menu' ] );
+	} else {
+		kadence()->display_fallback_menu();
+	}
+	?>
+		</div>
+	</nav><!-- #site-navigation -->
+	<?php
 }
 
 /**
  * Desktop Navigation
  */
 function secondary_navigation() {
-		$openType = get_theme_mod('secondary_navigation_open_type');
+		$openType = get_theme_mod( 'secondary_navigation_open_type' );
 	?>
-	<nav id="secondary-navigation" class="secondary-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'secondary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Secondary Navigation', 'kadence' ); ?>">
+	<nav id="secondary-navigation" class="secondary-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'secondary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Secondary', 'kadence' ); ?>">
 		<?php kadence()->customizer_quick_link(); ?>
 			<div class="secondary-menu-container header-menu-container">
 		<?php
 		if ( kadence()->is_secondary_nav_menu_active() ) {
-			kadence()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) );
+			kadence()->display_secondary_nav_menu( [ 'menu_id' => 'secondary-menu' ] );
 		} else {
 			kadence()->display_fallback_menu();
 		}
@@ -279,10 +277,9 @@ function render_custom_logo( $option_string = '', $custom_class = 'extra-custom-
 
 	// We have a logo. Logo is go.
 	if ( $custom_logo_id ) {
-		$custom_logo_attr = array(
+		$custom_logo_attr = [
 			'class' => 'custom-logo ' . $custom_class,
-			'loading' => false,
-		);
+		];
 
 		/*
 		* If the logo alt attribute is empty, get the site title and explicitly
@@ -333,10 +330,9 @@ function custom_logo( $blog_id = 0 ) {
 
 	// We have a logo. Logo is go.
 	if ( $custom_logo_id ) {
-		$custom_logo_attr = array(
+		$custom_logo_attr = [
 			'class' => 'custom-logo',
-			'loading' => false,
-		);
+		];
 
 		/*
 		* If the logo alt attribute is empty, get the site title and explicitly
@@ -382,17 +378,17 @@ function custom_logo( $blog_id = 0 ) {
  */
 function mobile_site_branding() {
 	$layout   = kadence()->option( 'logo_layout' );
-	$includes = array();
-	$layouts  = array();
+	$includes = [];
+	$layouts  = [];
 	if ( is_array( $layout ) && isset( $layout['include'] ) ) {
-		foreach ( array( 'mobile', 'tablet', 'desktop' ) as $device ) {
+		foreach ( [ 'mobile', 'tablet', 'desktop' ] as $device ) {
 			if ( isset( $layout['layout'] ) ) {
 				if ( isset( $layout['layout'][ $device ] ) && ! empty( $layout['layout'][ $device ] ) ) {
 					$layouts[ $device ] = $layout['layout'][ $device ];
 				}
 			}
 			// if ( 'desktop' === $device && ! empty( $includes ) ) {
-			// 	continue;
+			// continue;
 			// }
 			if ( isset( $layout['include'][ $device ] ) && ! empty( $layout['include'][ $device ] ) ) {
 				if ( strpos( $layout['include'][ $device ], 'logo' ) !== false ) {
@@ -426,19 +422,15 @@ function mobile_site_branding() {
 			$tab_layout_class = 'standard site-brand-logo-only';
 		} elseif ( 'standard' === $layouts['tablet'] ) {
 			$tab_layout_class = 'standard';
-		} else {
-			if ( ! in_array( 'title', $includes, true ) ) {
+		} elseif ( ! in_array( 'title', $includes, true ) ) {
 				$tab_layout_class = 'inherit site-brand-logo-only';
-			} else {
-				$tab_layout_class = 'inherit';
-			}
-		}
-	} else {
-		if ( ! in_array( 'title', $includes, true ) ) {
-			$tab_layout_class = 'inherit site-brand-logo-only';
 		} else {
 			$tab_layout_class = 'inherit';
 		}
+	} elseif ( ! in_array( 'title', $includes, true ) ) {
+			$tab_layout_class = 'inherit site-brand-logo-only';
+	} else {
+		$tab_layout_class = 'inherit';
 	}
 	if ( isset( $layouts['mobile'] ) ) {
 		if ( 'title_logo' === $layouts['mobile'] || 'title_tag_logo' === $layouts['mobile'] ) {
@@ -462,7 +454,7 @@ function mobile_site_branding() {
 
 	$has_mobile_tagline_and_logo = in_array( 'tagline', $includes, true ) && ( ! isset( $layouts['mobile'] ) || ( isset( $layouts['mobile'] ) && 'top_title_logo_tag' !== $layouts['mobile'] ) );
 
-	echo '<div class="site-branding mobile-site-branding branding-layout-' . esc_attr( isset( $layouts['desktop'] ) ? $layouts['desktop'] : 'standard' ) . ' branding-tablet-layout-' . esc_attr( $tab_layout_class ) . ' branding-mobile-layout-' . esc_attr( $mobile_layout_class ) . '">';
+	echo '<div class="site-branding mobile-site-branding branding-layout-' . esc_attr( $layouts['desktop'] ?? 'standard' ) . ' branding-tablet-layout-' . esc_attr( $tab_layout_class ) . ' branding-mobile-layout-' . esc_attr( $mobile_layout_class ) . '">';
 	echo '<a class="brand' . ( in_array( 'logo', $includes, true ) && ( kadence()->option( 'custom_logo' ) || ( ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) && kadence()->option( 'logo_icon' ) ) ) ? ' has-logo-image' : '' ) . ( in_array( 'logo', $includes, true ) && 'no' !== kadence()->option( 'mobile_header_sticky' ) && ( kadence()->option( 'header_sticky_custom_mobile_logo' ) && kadence()->option( 'header_sticky_mobile_logo' ) || kadence()->option( 'header_sticky_custom_logo' ) && kadence()->option( 'header_sticky_logo' ) ) ? ' has-sticky-logo' : '' ) . '" href="' . esc_url( apply_filters( 'kadence_logo_url', home_url( '/' ) ) ) . '" rel="home">';
 	foreach ( $includes as $include ) {
 		switch ( $include ) {
@@ -472,14 +464,12 @@ function mobile_site_branding() {
 					render_custom_logo( 'transparent_header_mobile_logo', 'kadence-transparent-logo' );
 				} elseif ( kadence()->mobile_transparent_header() && kadence()->option( 'transparent_header_custom_logo' ) && kadence()->option( 'transparent_header_logo' ) ) {
 					render_custom_logo( 'transparent_header_logo', 'kadence-transparent-logo' );
-				} else if ( ! kadence()->option( 'use_mobile_logo' ) && ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) && kadence()->option( 'logo_icon' ) ) {
+				} elseif ( ! kadence()->option( 'use_mobile_logo' ) && ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) && kadence()->option( 'logo_icon' ) ) {
 					logo_icon();
-				} else {
-					if ( kadence()->option( 'use_mobile_logo' ) && kadence()->option( 'mobile_logo' ) ) {
+				} elseif ( kadence()->option( 'use_mobile_logo' ) && kadence()->option( 'mobile_logo' ) ) {
 						render_custom_logo( 'mobile_logo' );
-					} else {
-						custom_logo();
-					}
+				} else {
+					custom_logo();
 				}
 				if ( 'no' !== kadence()->option( 'mobile_header_sticky' ) && kadence()->option( 'header_sticky_custom_mobile_logo' ) && kadence()->option( 'header_sticky_mobile_logo' ) ) {
 					render_custom_logo( 'header_sticky_mobile_logo', 'kadence-sticky-logo' );
@@ -582,12 +572,12 @@ function navigation_popup() {
 			<div class="drawer-header">
 				<button class="menu-toggle-close drawer-toggle" aria-label="<?php esc_attr_e( 'Close menu', 'kadence' ); ?>"  data-toggle-target="#mobile-drawer" data-toggle-body-class="showing-popup-drawer-from-<?php echo esc_attr( 'sidepanel' === kadence()->option( 'header_popup_layout' ) ? kadence()->option( 'header_popup_side' ) : 'full' ); ?>" aria-expanded="false" data-set-focus=".menu-toggle-open"
 				<?php
-					if ( kadence()->is_amp() ) {
-						?>
+				if ( kadence()->is_amp() ) {
+					?>
 						on="tap:AMP.setState( { siteNavigationMenu: { expanded: ! siteNavigationMenu.expanded } } )"
 						[aria-expanded]="siteNavigationMenu.expanded ? 'true' : 'false'"
-						<?php
-					}
+					<?php
+				}
 				?>
 			>
 					<span class="toggle-close-bar"></span>
@@ -608,14 +598,27 @@ function navigation_popup() {
  */
 function mobile_navigation() {
 	?>
-	<nav id="mobile-site-navigation" class="mobile-navigation drawer-navigation drawer-navigation-parent-toggle-<?php echo esc_attr( kadence()->option( 'mobile_navigation_parent_toggle' ) ? 'true' : 'false' ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Mobile Navigation', 'kadence' ); ?>">
+	<nav id="mobile-site-navigation" class="mobile-navigation drawer-navigation drawer-navigation-parent-toggle-<?php echo esc_attr( kadence()->option( 'mobile_navigation_parent_toggle' ) ? 'true' : 'false' ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Mobile', 'kadence' ); ?>">
 		<?php kadence()->customizer_quick_link(); ?>
 		<div class="mobile-menu-container drawer-menu-container">
 			<?php
 			if ( kadence()->is_mobile_nav_menu_active() ) {
-				kadence()->display_mobile_nav_menu( array( 'menu_id' => 'mobile-menu', 'menu_class' => ( kadence()->option( 'mobile_navigation_collapse' ) ? 'menu has-collapse-sub-nav' : 'menu' ) ) );
+				kadence()->display_mobile_nav_menu(
+					[
+						'menu_id'    => 'mobile-menu',
+						'menu_class' => ( kadence()->option( 'mobile_navigation_collapse' ) ? 'menu has-collapse-sub-nav' : 'menu' ),
+					] 
+				);
 			} elseif ( kadence()->is_primary_nav_menu_active() ) {
-				kadence()->display_primary_nav_menu( array( 'menu_id' => 'mobile-menu', 'menu_class' => ( kadence()->option( 'mobile_navigation_collapse' ) ? 'menu has-collapse-sub-nav' : 'menu' ), 'show_toggles' => ( kadence()->option( 'mobile_navigation_collapse' ) ? true : false ), 'sub_arrows' => false, 'mega_support' => apply_filters( 'kadence_mobile_allow_mega_support', true ) ) );
+				kadence()->display_primary_nav_menu(
+					[
+						'menu_id'      => 'mobile-menu',
+						'menu_class'   => ( kadence()->option( 'mobile_navigation_collapse' ) ? 'menu has-collapse-sub-nav' : 'menu' ),
+						'show_toggles' => ( kadence()->option( 'mobile_navigation_collapse' ) ? true : false ),
+						'sub_arrows'   => false,
+						'mega_support' => apply_filters( 'kadence_mobile_allow_mega_support', true ),
+					] 
+				);
 			} else {
 				kadence()->display_fallback_menu();
 			}
@@ -639,13 +642,13 @@ function header_html() {
 		if ( $wpautop ) {
 			echo do_shortcode( wpautop( $content ) );
 		} else {
-			$array = array(
-				'<p>[' => '[',
-				']</p>' => ']',
+			$array   = [
+				'<p>['    => '[',
+				']</p>'   => ']',
 				'<p></p>' => '',
 				']<br />' => ']',
 				'<br />[' => '[',
-			);
+			];
 			$content = strtr( $content, $array );
 			echo do_shortcode( $content );
 		}
@@ -686,7 +689,7 @@ function header_button() {
 		return;
 	}
 	if ( $label || is_customize_preview() ) {
-		$wrap_classes   = array();
+		$wrap_classes   = [];
 		$wrap_classes[] = 'header-button-wrap';
 		if ( 'loggedin' === kadence()->option( 'header_button_visibility' ) ) {
 			$wrap_classes[] = 'vs-logged-out-false';
@@ -697,7 +700,7 @@ function header_button() {
 		echo '<div class="' . esc_attr( implode( ' ', $wrap_classes ) ) . '">';
 		kadence()->customizer_quick_link();
 		echo '<div class="header-button-inner-wrap">';
-		$rel = array();
+		$rel = [];
 		if ( kadence()->option( 'header_button_target' ) ) {
 			$rel[] = 'noopener';
 			$rel[] = 'noreferrer';
@@ -728,7 +731,7 @@ function mobile_button() {
 		return;
 	}
 	if ( $label || is_customize_preview() ) {
-		$wrap_classes   = array();
+		$wrap_classes   = [];
 		$wrap_classes[] = 'mobile-header-button-wrap';
 		if ( 'loggedin' === kadence()->option( 'mobile_button_visibility' ) ) {
 			$wrap_classes[] = 'vs-logged-out-false';
@@ -738,7 +741,7 @@ function mobile_button() {
 		}
 		echo '<div class="' . esc_attr( implode( ' ', $wrap_classes ) ) . '">';
 		kadence()->customizer_quick_link();
-		$rel = array();
+		$rel = [];
 		if ( kadence()->option( 'mobile_button_target' ) ) {
 			$rel[] = 'noopener';
 			$rel[] = 'noreferrer';
@@ -749,7 +752,7 @@ function mobile_button() {
 		if ( kadence()->option( 'mobile_button_sponsored' ) ) {
 			$rel[] = 'sponsored';
 		}
-		$classes   = array();
+		$classes   = [];
 		$classes[] = 'button';
 		$classes[] = 'mobile-header-button';
 		$classes[] = 'button-size-' . esc_attr( kadence()->option( 'mobile_button_size' ) );
@@ -916,10 +919,11 @@ function mobile_cart() {
  * Desktop Social
  */
 function header_social() {
-	$items      = kadence()->sub_option( 'header_social_items', 'items' );
-	$show_label = kadence()->option( 'header_social_show_label' );
-	$brand_colors = kadence()->option( 'header_social_brand' );
-	$brand_color_class = '';
+	$items                     = kadence()->sub_option( 'header_social_items', 'items' );
+	$show_label                = kadence()->option( 'header_social_show_label' );
+	$brand_colors              = kadence()->option( 'header_social_brand' );
+	$social_links_open_new_tab = kadence()->option( 'social_links_open_new_tab' );
+	$brand_color_class         = '';
 	if ( 'onhover' === $brand_colors ) {
 		$brand_color_class = ' social-show-brand-hover';
 	} elseif ( 'untilhover' === $brand_colors ) {
@@ -942,10 +946,18 @@ function header_social() {
 						$link = 'mailto:' . $link;
 					}
 				}
-				echo '<a href="' . esc_attr( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="_blank" rel="noopener noreferrer"  ' ) . 'class="social-button header-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
+				echo '<a href="' . esc_attr( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="' . esc_attr( $social_links_open_new_tab ? '_blank' : '_self' ) . '" rel="noopener noreferrer"  ' ) . 'class="social-button header-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
 				if ( 'image' === $item['source'] ) {
 					if ( $item['imageid'] && wp_get_attachment_image( $item['imageid'], 'full', true ) ) {
-						echo wp_get_attachment_image( $item['imageid'], 'full', true, array( 'class' => 'social-icon-image', 'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px' ) );
+						echo wp_get_attachment_image(
+							$item['imageid'],
+							'full',
+							true,
+							[
+								'class' => 'social-icon-image',
+								'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px',
+							] 
+						);
 					} elseif ( ! empty( $item['url'] ) ) {
 						echo '<img src="' . esc_attr( $item['url'] ) . '" alt="' . esc_attr( $item['label'] ) . '" class="social-icon-image" style="max-width:' . esc_attr( $item['width'] ) . 'px"/>';
 					}
@@ -971,10 +983,11 @@ function header_social() {
  * Mobile Social
  */
 function mobile_social() {
-	$items      = kadence()->sub_option( 'header_mobile_social_items', 'items' );
-	$show_label = kadence()->option( 'header_mobile_social_show_label' );
-	$brand_colors = kadence()->option( 'header_mobile_social_brand' );
-	$brand_color_class = '';
+	$items                     = kadence()->sub_option( 'header_mobile_social_items', 'items' );
+	$show_label                = kadence()->option( 'header_mobile_social_show_label' );
+	$brand_colors              = kadence()->option( 'header_mobile_social_brand' );
+	$social_links_open_new_tab = kadence()->option( 'social_links_open_new_tab' );
+	$brand_color_class         = '';
 	if ( 'onhover' === $brand_colors ) {
 		$brand_color_class = ' social-show-brand-hover';
 	} elseif ( 'untilhover' === $brand_colors ) {
@@ -997,10 +1010,18 @@ function mobile_social() {
 						$link = 'mailto:' . $link;
 					}
 				}
-				echo '<a href="' . esc_attr( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="_blank" rel="noopener noreferrer"  ' ) . 'class="social-button header-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
+				echo '<a href="' . esc_attr( $link ) . '"' . ( $show_label ? '' : ' aria-label="' . esc_attr( $item['label'] ) . '"' ) . ' ' . ( 'phone' === $item['id'] || 'email' === $item['id'] || apply_filters( 'kadence_social_link_target', false, $item ) ? '' : 'target="' . esc_attr( $social_links_open_new_tab ? '_blank' : '_self' ) . '" rel="noopener noreferrer"  ' ) . 'class="social-button header-social-item social-link-' . esc_attr( $item['id'] ) . esc_attr( 'image' === $item['source'] ? ' has-custom-image' : '' ) . '">';
 				if ( 'image' === $item['source'] ) {
 					if ( $item['imageid'] && wp_get_attachment_image( $item['imageid'], 'full', true ) ) {
-						echo wp_get_attachment_image( $item['imageid'], 'full', true, array( 'class' => 'social-icon-image', 'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px' ) );
+						echo wp_get_attachment_image(
+							$item['imageid'],
+							'full',
+							true,
+							[
+								'class' => 'social-icon-image',
+								'style' => 'max-width:' . esc_attr( $item['width'] ) . 'px',
+							] 
+						);
 					} elseif ( ! empty( $item['url'] ) ) {
 						echo '<img src="' . esc_attr( $item['url'] ) . '" alt="' . esc_attr( $item['label'] ) . '" class="social-icon-image" style="max-width:' . esc_attr( $item['width'] ) . 'px"/>';
 					}
@@ -1043,7 +1064,7 @@ function header_search() {
 			<?php
 		}
 		?>
-		<button class="search-toggle-open drawer-toggle search-toggle-style-<?php echo esc_attr( kadence()->option( 'header_search_style' ) ); ?>" aria-label="<?php esc_attr_e( 'View Search Form', 'kadence' ); ?>" data-toggle-target="#search-drawer" data-toggle-body-class="showing-popup-drawer-from-full" aria-expanded="false" data-set-focus="#search-drawer .search-field"
+		<button class="search-toggle-open drawer-toggle search-toggle-style-<?php echo esc_attr( kadence()->option( 'header_search_style' ) ); ?>" aria-label="<?php esc_attr_e( 'View Search Form', 'kadence' ); ?>" aria-haspopup="dialog" aria-controls="search-drawer" data-toggle-target="#search-drawer" data-toggle-body-class="showing-popup-drawer-from-full" aria-expanded="false" data-set-focus="#search-drawer .search-field"
 			<?php
 			if ( kadence()->is_amp() ) {
 				?>
@@ -1058,7 +1079,7 @@ function header_search() {
 			$label = kadence()->option( 'header_search_label' );
 			if ( ! empty( $label ) || is_customize_preview() ) {
 				?>
-				<span class="search-toggle-label vs-lg-<?php echo ( kadence()->sub_option( 'header_search_label_visiblity', 'desktop' ) ? 'true' : 'false' ); ?> vs-md-<?php echo ( kadence()->sub_option( 'header_search_label_visiblity', 'tablet' ) ? 'true' : 'false' ); ?> vs-sm-<?php echo ( kadence()->sub_option( 'header_search_label_visiblity', 'mobile' ) ? 'true' : 'false' ); ?>"><?php echo esc_html( $label ); ?></span>
+				<span class="search-toggle-label vs-lg-<?php echo kadence()->sub_option( 'header_search_label_visiblity', 'desktop' ) ? 'true' : 'false'; ?> vs-md-<?php echo kadence()->sub_option( 'header_search_label_visiblity', 'tablet' ) ? 'true' : 'false'; ?> vs-sm-<?php echo kadence()->sub_option( 'header_search_label_visiblity', 'mobile' ) ? 'true' : 'false'; ?>"><?php echo esc_html( $label ); ?></span>
 				<?php
 			}
 			?>
@@ -1080,7 +1101,7 @@ function search_toggle() {
  */
 function search_modal() {
 	?>
-	<div id="search-drawer" class="popup-drawer popup-drawer-layout-fullwidth" data-drawer-target-string="#search-drawer"
+	<div id="search-drawer" aria-modal="true" role="dialog" aria-label="<?php esc_attr_e( 'Search', 'kadence' ); ?>" class="popup-drawer popup-drawer-layout-fullwidth" data-drawer-target-string="#search-drawer"
 		<?php
 		if ( kadence()->is_amp() ) {
 			?>
@@ -1092,7 +1113,7 @@ function search_modal() {
 		<div class="drawer-overlay" data-drawer-target-string="#search-drawer"></div>
 		<div class="drawer-inner">
 			<div class="drawer-header">
-				<button class="search-toggle-close drawer-toggle" aria-label="<?php esc_attr_e( 'Close search', 'kadence' ); ?>"  data-toggle-target="#search-drawer" data-toggle-body-class="showing-popup-drawer-from-full" aria-expanded="false" data-set-focus=".search-toggle-open"
+				<button class="search-toggle-close drawer-toggle" aria-label="<?php esc_attr_e( 'Close search', 'kadence' ); ?>"  data-toggle-target="#search-drawer" data-toggle-body-class="showing-popup-drawer-from-full" data-set-focus=".search-toggle-open"
 				<?php
 				if ( kadence()->is_amp() ) {
 					?>

@@ -12,7 +12,7 @@ GFForms::include_addon_framework();
 class GFSurvey extends GFAddOn {
 
 	protected $_version = GF_SURVEY_VERSION;
-	protected $_min_gravityforms_version = '2.0';
+	protected $_min_gravityforms_version = '2.8.0';
 	protected $_slug = 'gravityformssurvey';
 	protected $_path = 'gravityformssurvey/survey.php';
 	protected $_full_path = __FILE__;
@@ -71,6 +71,8 @@ class GFSurvey extends GFAddOn {
 	 */
 	public function pre_init() {
 		parent::pre_init();
+
+		require_once( 'includes/class-gf-survey-utils.php' );
 
 		if ( $this->is_gravityforms_supported() && class_exists( 'GF_Field' ) ) {
 			require_once( 'includes/class-gf-field-survey.php' );
@@ -161,6 +163,17 @@ class GFSurvey extends GFAddOn {
 
 
 	// # SCRIPTS & STYLES -----------------------------------------------------------------------------------------------
+
+	/**
+	 * Return the plugin's icon for the plugin/form settings menu.
+	 *
+	 * @since 4.3
+	 *
+	 * @return string
+	 */
+	public function get_menu_icon() {
+		return 'gform-icon--survey';
+	}
 
 	/**
 	 * Return the scripts which should be enqueued.
@@ -442,18 +455,31 @@ class GFSurvey extends GFAddOn {
 	 * @return array Returns an array containing the custom css properties to be output to the page.
 	 */
 	public function theme_layer_form_css_properties( $form_id, $settings, $block_settings ) {
+        // Bail out if the form doesn't have any survey fields.
+		if ( empty( GFFormsModel::get_fields_by_type( GFAPI::get_form( $form_id ), array( 'survey' ) ) ) ) {
+			return array();
+		}
 
-		$label_color = rgar( $block_settings, 'labelColor' );
+        // TODO: should this be something more readily available from GF Core (assuming there isn't something already)?
+        // Bail out if the form is not using the Orbital theme and isn't in a conversational form.
+		$default_settings = \GFForms::get_service_container()->get( \Gravity_Forms\Gravity_Forms\Form_Display\GF_Form_Display_Service_Provider::BLOCK_STYLES_DEFAULTS );
+		$applied_settings = wp_parse_args( $block_settings, $default_settings );
+		if ( $applied_settings['theme'] !== 'orbital' && ! GF_Survey_Utils::is_conversational_form( \GFAPI::get_form( $form_id ) ) ) {
+			return array();
+		}
+
+        // Bail out and use the defaults if we don't have the correct setting required.
+		$label_color = GF_Survey_Utils::is_conversational_form( \GFAPI::get_form( $form_id ) ) ? rgar( $settings, 'text_color' ) : rgar( $applied_settings, 'labelColor' );
 		if ( ! $label_color ) {
 			return array();
 		}
 
-		$color_util          = new \Gravity_Forms\Gravity_Forms\Util\Colors\Color_Modifier();
-		$rgb                 = $color_util->convert_hex_to_rgb( $label_color );
-		$encoded_color       = urlencode( $label_color );
+		$color_util    = new \Gravity_Forms\Gravity_Forms\Util\Colors\Color_Modifier();
+		$rgb           = $color_util->convert_hex_to_rgb( $label_color );
+		$encoded_color = urlencode( $label_color );
 		return array(
-			'gform-survey-theme-field-likert-row-odd-background-color' => "rgb({$rgb['r']},{$rgb['g']},{$rgb['b']},0.08)",
-			'gform-survey-theme-icon-control-rank' => "url(\"data:image/svg+xml,%3Csvg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 0C4.26522 5.96046e-08 4.51957 0.105357 4.70711 0.292893L7.70711 3.29289C8.09763 3.68342 8.09763 4.31658 7.70711 4.70711C7.31658 5.09763 6.68342 5.09763 6.29289 4.70711L4 2.41421L1.70711 4.70711C1.31658 5.09763 0.683417 5.09763 0.292893 4.70711C-0.0976311 4.31658 -0.097631 3.68342 0.292893 3.29289L3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0ZM0.292893 9.29289C0.683417 8.90237 1.31658 8.90237 1.70711 9.29289L4 11.5858L6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289C8.09763 9.68342 8.09763 10.3166 7.70711 10.7071L4.70711 13.7071C4.31658 14.0976 3.68342 14.0976 3.29289 13.7071L0.292893 10.7071C-0.0976311 10.3166 -0.0976311 9.68342 0.292893 9.29289Z' fill='{$encoded_color}'/%3E%3C/svg%3E\")",
+			'gf-survey-field-likert-row-odd-bg-color' => "rgb({$rgb['r']},{$rgb['g']},{$rgb['b']},0.08)",
+			'gf-survey-icon-control-rank' => "url(\"data:image/svg+xml,%3Csvg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M4 0C4.26522 5.96046e-08 4.51957 0.105357 4.70711 0.292893L7.70711 3.29289C8.09763 3.68342 8.09763 4.31658 7.70711 4.70711C7.31658 5.09763 6.68342 5.09763 6.29289 4.70711L4 2.41421L1.70711 4.70711C1.31658 5.09763 0.683417 5.09763 0.292893 4.70711C-0.0976311 4.31658 -0.097631 3.68342 0.292893 3.29289L3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0ZM0.292893 9.29289C0.683417 8.90237 1.31658 8.90237 1.70711 9.29289L4 11.5858L6.29289 9.29289C6.68342 8.90237 7.31658 8.90237 7.70711 9.29289C8.09763 9.68342 8.09763 10.3166 7.70711 10.7071L4.70711 13.7071C4.31658 14.0976 3.68342 14.0976 3.29289 13.7071L0.292893 10.7071C-0.0976311 10.3166 -0.0976311 9.68342 0.292893 9.29289Z' fill='{$encoded_color}'/%3E%3C/svg%3E\")",
 		);
 	}
 

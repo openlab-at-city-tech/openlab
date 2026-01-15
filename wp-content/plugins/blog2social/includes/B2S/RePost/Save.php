@@ -88,7 +88,7 @@ class B2S_RePost_Save {
                 $selectedTwitterProfile = (isset($twitter) && !empty($twitter)) ? (int) $twitter : '';
                 if (((int) $value->networkId != 2 && (int) $value->networkId != 45) || (((int) $value->networkId == 2 || (int) $value->networkId == 45) && (empty($selectedTwitterProfile) || ((int) $selectedTwitterProfile == (int) $value->networkAuthId)))) {
                     $schedDate = $this->getPostDateTime($startDate, $settings, $value->networkAuthId);
-                    $schedDateUtc =  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($schedDate, ($this->userTimezone * -1))), new DateTimeZone(date_default_timezone_get()));
+                    $schedDateUtc = wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($schedDate, ($this->userTimezone * -1))), new DateTimeZone(date_default_timezone_get()));
                     $shareApprove = (isset($value->instant_sharing) && (int) $value->instant_sharing == 1) ? 1 : 0;
                     $defaultPostData = $this->defaultPostData;
                     if ((int) $value->networkId == 1 || (int) $value->networkId == 3 || (int) $value->networkId == 19) {
@@ -182,6 +182,33 @@ class B2S_RePost_Save {
                 $excerpt_min = (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'])) ? $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_min'] : 0;
                 $excerpt_max = (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_max'])) ? $tempOptionPostFormat[$networkId][$networkType]['short_text']['excerpt_range_max'] : 0;
                 $limit = (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) ? $tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'] : 0;
+            }
+
+
+            //Share Settings
+            $postData['share_settings'] = array('mode' => 0); //share as draft - tiktok
+            if ($networkId == 36) {
+                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+                $optionsShareSettings = $options->_getOption("share_settings");
+
+                //is directly?
+                if (isset($optionsShareSettings[$networkAuthId]["share_as_draft"]) && $optionsShareSettings[$networkAuthId]["share_as_draft"] == false) {
+                   
+                    $postData['share_settings']['mode'] = 1;
+                    if (isset($optionsShareSettings[$networkAuthId]['status_privacy'])) {
+                        $postData['share_settings']['status_privacy'] = $optionsShareSettings[$networkAuthId]['status_privacy'];
+                    }
+                    if (isset($optionsShareSettings[$networkAuthId]['allow_comment'])) {
+                        $postData['share_settings']['allow_comment'] = $optionsShareSettings[$networkAuthId]['allow_comment'] == true ? 1 : 0;
+                    }
+                    if (isset($optionsShareSettings[$networkAuthId]["promotion_option_organic"])) {
+                        $postData['share_settings']["promotion_option_organic"] = $optionsShareSettings[$networkAuthId]["promotion_option_organic"] == true ? 1 : 0;
+                    }
+                    if (isset($optionsShareSettings[$networkAuthId]["promotion_option_branded"])) {
+                        $postData['share_settings']["promotion_option_branded"] = $optionsShareSettings[$networkAuthId]["promotion_option_branded"] == true ? 1 : 0;
+                    }
+                }
+                $postData['custom_title'] = wp_strip_all_tags($this->title);
             }
 
             //PostFormat
@@ -462,7 +489,7 @@ class B2S_RePost_Save {
                     'post_id' => $this->postId,
                     'blog_user_id' => $this->blogUserId,
                     'user_timezone' => $this->userTimezone,
-                    'publish_date' =>  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate(gmdate('Y-m-d H:i:s'), $this->userTimezone * (-1))), new DateTimeZone(date_default_timezone_get())),
+                    'publish_date' => wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate(gmdate('Y-m-d H:i:s'), $this->userTimezone * (-1))), new DateTimeZone(date_default_timezone_get())),
                     'publish_error_code' => 'DEPRECATED_NETWORK_8',
                     'network_details_id' => $networkDetailsId), array('%d', '%d', '%s', '%s', '%s', '%d'));
             } else {
@@ -491,7 +518,7 @@ class B2S_RePost_Save {
 
     public function deletePostsByBlogPost($blogPostId = 0) {
         global $wpdb;
-        $schedDataResult = $wpdb->get_results( $wpdb->prepare("SELECT id as b2sPostId FROM {$wpdb->prefix}b2s_posts WHERE post_id = %d AND b.sched_type = %d AND b.publish_date = %s AND b.hide = %d", (int) $blogPostId, 5, "0000-00-00 00:00:00", 0));
+        $schedDataResult = $wpdb->get_results($wpdb->prepare("SELECT id as b2sPostId FROM {$wpdb->prefix}b2s_posts WHERE post_id = %d AND b.sched_type = %d AND b.publish_date = %s AND b.hide = %d", (int) $blogPostId, 5, "0000-00-00 00:00:00", 0));
         $delete_scheds = array();
         foreach ($schedDataResult as $k => $value) {
             array_push($delete_scheds, $value->b2sPostId);

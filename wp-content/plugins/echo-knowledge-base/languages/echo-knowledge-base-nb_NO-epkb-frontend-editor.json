@@ -1,0 +1,15 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
+                "Kunnskapsbase-redigereren er deaktivert mens ${ builderName } er aktiv. Ønsker du å gå til innstillingene for kunnskapsbasen i stedet?"
+            ]
+        }
+    }
+}

@@ -26,11 +26,11 @@ class Page extends Lib\Base\Component
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'anyTime' => __( 'Any time', 'bookly' ), 'createdAtAnyTime' => __( 'Created at any time', 'bookly' ), ) ),
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
             'zeroRecords' => __( 'No appointments for selected period.', 'bookly' ),
-            'processing' => __( 'Processing...', 'bookly' ),
+            'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
             'edit' => __( 'Edit', 'bookly' ),
-            'no_result_found' => __( 'No result found', 'bookly' ),
+            'no_result_found' => __( 'No results found', 'bookly' ),
             'searching' => __( 'Searching', 'bookly' ),
             'attachments' => __( 'Attachments', 'bookly' ),
             'tasks' => array(

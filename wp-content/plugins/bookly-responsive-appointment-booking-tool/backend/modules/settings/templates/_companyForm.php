@@ -4,14 +4,15 @@ use Bookly\Backend\Components\Controls\Inputs as ControlsInputs;
 use Bookly\Backend\Components\Settings\Inputs;
 use Bookly\Backend\Components\Settings\Selects;
 use Bookly\Lib\Utils\Common;
+
 $sizes = array(
-    array( '1', __( '1 - 9 employees', 'bookly' ) ),
-    array( '10', __( '10 - 19 employees', 'bookly' ) ),
-    array( '20', __( '20 - 49 employees', 'bookly' ) ),
-    array( '50', __( '50 - 249 employees', 'bookly' ) ),
-    array( '250', __( '250 or more employees', 'bookly' ) ),
+        array( '1', __( '1 - 9 employees', 'bookly' ) ),
+        array( '10', __( '10 - 19 employees', 'bookly' ) ),
+        array( '20', __( '20 - 49 employees', 'bookly' ) ),
+        array( '50', __( '50 - 249 employees', 'bookly' ) ),
+        array( '250', __( '250 or more employees', 'bookly' ) ),
 );
-if (! get_option( 'bookly_co_size' ) ) {
+if ( ! get_option( 'bookly_co_size' ) ) {
     array_unshift( $sizes, array( '', __( 'Select company size', 'bookly' ) ) );
 }
 ?>
@@ -24,10 +25,10 @@ if (! get_option( 'bookly_co_size' ) ) {
                            data-default="<?php form_option( 'bookly_co_logo_attachment_id' ) ?>"
                            value="<?php form_option( 'bookly_co_logo_attachment_id' ) ?>"
                     />
-                    <?php $img = wp_get_attachment_image_src( get_option( 'bookly_co_logo_attachment_id' ), 'thumbnail' ) ?>
+                    <?php $img = Common::getAttachmentUrl( get_option( 'bookly_co_logo_attachment_id' ), 'thumbnail' ) ?>
                     <div class="bookly-thumb bookly-js-image<?php echo esc_attr( $img ? ' bookly-thumb-with-image' : '' ) ?>"
-                         data-style="<?php echo esc_attr( $img ? 'background-image: url(' . $img[0] . '); background-size: cover;' : '' ) ?>"
-                         style="<?php echo esc_attr( $img ? 'background-image: url(' . $img[0] . '); background-size: cover;' : '' ) ?>"
+                         data-style="<?php echo esc_attr( $img ? 'background-image: url(' . $img . '); background-size: cover;' : '' ) ?>"
+                         style="<?php echo esc_attr( $img ? 'background-image: url(' . $img . '); background-size: cover;' : '' ) ?>"
                     >
                         <i class="fas fa-fw fa-4x fa-camera mt-2 text-white w-100"></i>
                         <?php if ( current_user_can( 'upload_files' ) ) : ?>

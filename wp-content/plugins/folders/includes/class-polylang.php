@@ -73,7 +73,7 @@ class WCP_Folder_PolyLang
 
         if ($this->active) {
             if (isset($polylang->curlang) && is_object($polylang->curlang)) {
-                if(method_exists($polylang->curlang, 'get_tax_prop')) {
+                if (method_exists($polylang->curlang, 'get_tax_prop')) {
                     $this->poly_lang_term_taxonomy_id = $polylang->curlang->get_tax_prop('language', 'term_taxonomy_id');
                 } else {
                     $this->poly_lang_term_taxonomy_id = $polylang->curlang->term_taxonomy_id;
@@ -83,8 +83,18 @@ class WCP_Folder_PolyLang
                 add_filter('premio_folder_un_categorized_items', [$this, 'un_categorized_items'], 10, 2);
                 add_filter('premio_folder_all_categorized_items', [$this, 'all_categorized_items'], 10, 2);
             }
-        }
 
+            $user_id = get_current_user_id();
+            $current = pll_current_language();
+            $previous = get_user_meta($user_id, '_admin_lang_last', true);
+            $previous = $previous ? $previous : 'all';
+            $current = $current ? $current : 'all';
+
+            if ($previous !== $current) {
+                delete_transient("premio_folders_without_trash");
+                update_user_meta($user_id, '_admin_lang_last', $current);
+            }
+        }
     }//end init()
 
 

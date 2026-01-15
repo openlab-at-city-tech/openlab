@@ -604,7 +604,21 @@ class Functions {
 	 */
 	public static function json_wrap( &$any, $seen_nodes = array() ) {
 		if ( is_object( $any ) ) {
-			$input        = get_object_vars( $any );
+			$input = get_object_vars( $any );
+
+			// WordPress 6.9 introduced lazy-loading of WP_User `roles`, `caps`, and `allcaps` properties.
+			// It also made said properties protected, so we need to access them and set them as keys manually.
+			if ( $any instanceof \WP_User ) {
+				$roles   = $any->roles;
+				$caps    = $any->caps;
+				$allcaps = $any->allcaps;
+
+				// For WordPress <6.8 the below are redundant. :shrug:
+				$input['roles']   = $roles;
+				$input['caps']    = $caps;
+				$input['allcaps'] = $allcaps;
+			}
+
 			$input['__o'] = 1;
 		} else {
 			$input = &$any;
@@ -747,34 +761,5 @@ class Functions {
 	 */
 	public static function get_jetpack_package_versions() {
 		return apply_filters( 'jetpack_package_versions', array() );
-	}
-
-	/**
-	 * Get the environment type with support for 'sandbox'.
-	 *
-	 * Extends WordPress core's wp_get_environment_type() to support additional
-	 * environment types like 'sandbox'.
-	 *
-	 * @return string Environment type (local, development, staging, production, or sandbox).
-	 */
-	public static function get_environment_type() {
-		$env_type = '';
-
-		if ( function_exists( 'getenv' ) ) {
-			$has_env = getenv( 'WP_ENVIRONMENT_TYPE' );
-			if ( false !== $has_env ) {
-				$env_type = $has_env;
-			}
-		}
-
-		if ( defined( 'WP_ENVIRONMENT_TYPE' ) && WP_ENVIRONMENT_TYPE ) {
-			$env_type = WP_ENVIRONMENT_TYPE;
-		}
-
-		if ( 'sandbox' === $env_type ) {
-			return 'sandbox';
-		}
-
-		return wp_get_environment_type();
 	}
 }

@@ -39,7 +39,7 @@ class Initializer {
 	 *
 	 * @var string
 	 */
-	const PACKAGE_VERSION = '5.17.1';
+	const PACKAGE_VERSION = '5.28.0';
 
 	/**
 	 * HTML container ID for the IDC screen on My Jetpack page.
@@ -211,10 +211,6 @@ class Initializer {
 		self::$site_info = self::get_site_info();
 		add_filter( 'identity_crisis_container_id', array( static::class, 'get_idc_container_id' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ) );
-		// Product statuses are constantly changing, so we never want to cache the page.
-		header( 'Cache-Control: no-cache, no-store, must-revalidate' );
-		header( 'Pragma: no-cache' );
-		header( 'Expires: 0' );
 	}
 
 	/**
@@ -353,9 +349,6 @@ class Initializer {
 		$plugin_slugs = array_map(
 			static function ( $slug ) {
 				$parts = explode( '/', $slug );
-				if ( empty( $parts ) ) {
-					return '';
-				}
 				// Return the last segment of the filepath without the PHP extension
 				return str_replace( '.php', '', $parts[ count( $parts ) - 1 ] );
 			},
@@ -410,9 +403,6 @@ class Initializer {
 		$plugin_slugs              = array_map(
 			static function ( $slug ) {
 				$parts = explode( '/', $slug );
-				if ( empty( $parts ) ) {
-					return '';
-				}
 				// Return the last segment of the filepath without the PHP extension
 				return str_replace( '.php', '', $parts[ count( $parts ) - 1 ] );
 			},
@@ -514,10 +504,6 @@ class Initializer {
 	 */
 	public static function should_initialize() {
 		$should = true;
-
-		if ( is_multisite() ) {
-			$should = false;
-		}
 
 		// All options presented in My Jetpack require a connection to WordPress.com.
 		if ( ( new Status() )->is_offline_mode() ) {
@@ -705,6 +691,14 @@ class Initializer {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
+
+		// Don't show any red bubbles when Jetpack is disconnected
+		// Users can't act on most alerts without a connection
+		$connection = new Connection_Manager();
+		if ( ! $connection->is_connected() ) {
+			return;
+		}
+
 		$rbn = new Red_Bubble_Notifications();
 
 		// filters for the items in this file

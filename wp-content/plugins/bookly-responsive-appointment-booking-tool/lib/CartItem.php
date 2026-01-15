@@ -6,6 +6,8 @@ class CartItem
     const TYPE_APPOINTMENT = 'appointment';
     const TYPE_PACKAGE = 'package';
     const TYPE_GIFT_CARD = 'gift_card';
+    const TYPE_EVENT = 'event';
+    const TYPE_CHILD_PAYMENT = 'child_payment';
 
     // Step service
     /** @var  string */
@@ -30,6 +32,10 @@ class CartItem
     protected $units;
     /** @var  int */
     protected $cart_type_id;
+    /** @var  int */
+    protected $ticket_type_id;
+    /** @var  int */
+    protected $payment_id;
 
     // Step extras
     /** @var  array */
@@ -185,7 +191,7 @@ class CartItem
         }
         list ( $service_id, $staff_id, , $location_id ) = $this->slots[0];
         $staff_service = new Entities\StaffService();
-        $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id  ) ?: null;
+        $location_id = Proxy\Locations::prepareStaffLocationId( $location_id, $staff_id ) ?: null;
         $staff_service->loadBy( compact( 'staff_id', 'service_id', 'location_id' ) );
         if ( ! $staff_service->isLoaded() ) {
             $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
@@ -716,6 +722,43 @@ class CartItem
     public function setConsiderExtrasDuration( $consider_extras_duration )
     {
         $this->consider_extras_duration = $consider_extras_duration;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTicketTypeId()
+    {
+        return $this->ticket_type_id;
+    }
+
+    /**
+     * @param int $ticket_type_id
+     */
+    public function setTicketTypeId( $ticket_type_id )
+    {
+        $this->ticket_type_id = $ticket_type_id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentId()
+    {
+        return $this->payment_id;
+    }
+
+    /**
+     * @param int $payment_id
+     * @return CartItem
+     */
+    public function setPaymentId( $payment_id )
+    {
+        $this->payment_id = $payment_id;
 
         return $this;
     }

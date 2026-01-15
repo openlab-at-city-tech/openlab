@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "articles": [
+                "लेख"
+            ],
+            "Analyze Content": [
+                "सामग्री विश्लेषण करें"
+            ],
+            "No articles found to analyze": [
+                "विश्लेषण के लिए कोई डॉक्यूमेंटेशन पेज नहीं मिला"
+            ],
+            "of": [
+                "में से"
+            ],
+            "Analysis canceled": [
+                "विश्लेषण रद्द किया गया"
+            ],
+            "Failed to cancel analysis": [
+                "विश्लेषण रद्द करने में असफल"
+            ],
+            "Calculating...": [
+                "गणना चल रही है..."
+            ],
+            "Analysis failed": [
+                "विश्लेषण असफल रहा"
+            ],
+            "Content analysis completed successfully!": [
+                "सामग्री विश्लेषण सफलतापूर्वक पूर्ण हुआ!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "OpenAI से संपर्क करते समय पुनः प्रयास की सीमा पहुँच गई है।."
+            ],
+            "Failed to start analysis": [
+                "विश्लेषण शुरू करने में असफल रहा"
+            ],
+            "Analysis Job Running": [
+                "विश्लेषण कार्य चल रहा है"
+            ],
+            "Wait": [
+                "इंतजार करें"
+            ],
+            "articles selected for analysis": [
+                "विश्लेषण के लिए चयनित लेख"
+            ],
+            "Analysis in Progress": [
+                "विश्लेषण प्रगति पर है"
+            ],
+            "Stop Analysis": [
+                "विश्लेषण रोकें"
+            ],
+            "Starting analysis...": [
+                "विश्लेषण शुरू किया जा रहा है..."
+            ],
+            "article": [
+                "लेख"
+            ],
+            "Analyzing": [
+                "विश्लेषण किया जा रहा है"
+            ],
+            "Completed! Analyzed": [
+                "पूर्ण हो गया! विश्लेषण किया गया"
+            ],
+            "error": [
+                "त्रुटि"
+            ],
+            "errors": [
+                "त्रुटियाँ"
+            ],
+            "with": [
+                "के साथ"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "त्रुटियों के बाद विश्लेषण रुक गया। विश्लेषण किया गया"
+            ],
+            "Remaining Time:": [
+                "शेष समय:"
+            ]
+        }
+    }
+}

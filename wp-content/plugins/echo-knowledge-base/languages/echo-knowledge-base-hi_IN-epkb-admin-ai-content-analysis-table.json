@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "शीर्षक"
+            ],
+            "Status": [
+                "स्थिति"
+            ],
+            "All": [
+                "सभी"
+            ],
+            "Page": [
+                "पृष्ठ"
+            ],
+            "Close": [
+                "बंद करें"
+            ],
+            "Recent": [
+                "हालिया"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "selected": [
+                "चयनित"
+            ],
+            "Next": [
+                "अगला"
+            ],
+            "Previous": [
+                "पिछला"
+            ],
+            "Today": [
+                "आज"
+            ],
+            "Yesterday": [
+                "कल"
+            ],
+            "Loading...": [
+                "लोड हो रहा है..."
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "of": [
+                "में से"
+            ],
+            "Searching...": [
+                "खोज हो रही है..."
+            ],
+            "Refreshing...": [
+                "ताज़ा किया जा रहा है..."
+            ],
+            "Refresh": [
+                "ताज़ा करें"
+            ],
+            "Failed to fetch analysis data": [
+                "विश्लेषण डेटा प्राप्त करने में विफल रहा"
+            ],
+            "Data refreshed successfully": [
+                "डेटा सफलतापूर्वक ताज़ा किया गया"
+            ],
+            "Delete Selected Items": [
+                "चयनित आइटम हटाएं"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "क्या आप चयनित आइटम हटाना चाहते हैं?"
+            ],
+            "Items deleted successfully": [
+                "चयनित आइटम सफलतापूर्वक हटाए गए"
+            ],
+            "Unknown error occurred": [
+                "अज्ञात त्रुटि उत्पन्न हुई"
+            ],
+            "No articles need analysis": [
+                "विश्लेषण के लिए कोई लेख आवश्यक नहीं है"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "सभी लेखों का विश्लेषण कर लिया गया। बहुत अच्छा!"
+            ],
+            "No articles need improvement": [
+                "कोई लेख सुधार की आवश्यकता नहीं है"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "सभी विश्लेषण किए गए लेखों के स्कोर 80% से ऊपर हैं। शानदार!"
+            ],
+            "No recent articles": [
+                "हाल के लेख नहीं हैं"
+            ],
+            "No articles have been modified recently.": [
+                "हाल में कोई लेख संशोधित नहीं किया गया है।."
+            ],
+            "No articles found": [
+                "कोई लेख नहीं मिला"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "इस ज्ञान-आधार में कोई लेख उपलब्ध नहीं है। विश्लेषण शुरू करने के लिए कुछ लेख बनाएं।."
+            ],
+            "To Analyze": [
+                "विश्लेषण करें"
+            ],
+            "To Improve": [
+                "सुधारें"
+            ],
+            "Search by title...": [
+                "शीर्षक से खोजें..."
+            ],
+            "Loading content analysis data...": [
+                "सामग्री विश्लेषण डेटा लोड हो रहा है..."
+            ],
+            "Score": [
+                "स्कोर"
+            ],
+            "Sort": [
+                "क्रमबद्ध करें"
+            ],
+            "Importance": [
+                "महत्व"
+            ],
+            "Last Modified": [
+                "अंतिम संशोधित"
+            ],
+            "No articles match your search": [
+                "आपकी खोज से कोई डॉक्यूमेंटेशन पेज नहीं मिला"
+            ],
+            "View detailed analysis": [
+                "विस्तृत विश्लेषण देखें"
+            ],
+            "days ago": [
+                "दिन पहले"
+            ],
+            "week ago": [
+                "एक सप्ताह पहले"
+            ],
+            "weeks ago": [
+                "कुछ सप्ताह पहले"
+            ],
+            "Content Analysis Error": [
+                "सामग्री विश्लेषण त्रुटि"
+            ],
+            "ERROR": [
+                "त्रुटि"
+            ],
+            "Article ID:": [
+                "डॉक्यूमेंटेशन पेज ID:"
+            ],
+            "Error Processing Content Analysis": [
+                "सामग्री विश्लेषण के दौरान त्रुटि"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "यह डॉक्यूमेंटेशन पेज विश्लेषण नहीं किया जा सका। कृपया पुनः प्रयास करें या डॉक्यूमेंटेशन पेज की सामग्री में समस्याओं के लिए जाँच करें।."
+            ]
+        }
+    }
+}

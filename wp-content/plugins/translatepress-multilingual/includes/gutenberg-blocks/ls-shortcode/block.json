@@ -1,6 +1,6 @@
 {
     "$schema": "https://schemas.wp.org/trunk/block.json",
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "trp/language-switcher",
     "title": "Language Switcher",
     "category": "trp-block",
@@ -28,5 +28,6 @@
             "is_editor": true
         }
     },
+    "editorStyle": "file:../../../assets/css/trp-language-switcher-v2.css",
     "editorScript": "trp-block-ls-shortcode"
 }

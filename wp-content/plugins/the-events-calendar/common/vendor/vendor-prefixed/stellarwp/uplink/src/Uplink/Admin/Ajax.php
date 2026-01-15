@@ -39,7 +39,7 @@ class Ajax {
 		if ( empty( $submission['key'] ) || ! wp_verify_nonce( $submission['_wpnonce'], $this->group->get_name() ) ) {
 			wp_send_json_error( [
 				'status'  => 0,
-				'message' => __( 'Invalid request: nonce field is expired. Please try again.', 'tribe-common' ),
+				'message' => __( 'Invalid request: nonce field is expired. Please try again.', '%TEXTDOMAIN%' ),
 			] );
 		}
 
@@ -49,7 +49,7 @@ class Ajax {
 		if ( ! $plugin ) {
 			wp_send_json_error( [
 				'message'    => sprintf(
-					__( 'Error: The plugin with slug "%s" was not found. It is impossible to validate the license key, please contact the plugin author.', 'tribe-common' ),
+					__( 'Error: The plugin with slug "%s" was not found. It is impossible to validate the license key, please contact the plugin author.', '%TEXTDOMAIN%' ),
 					$submission['slug']
 				),
 				'submission' => $submission,

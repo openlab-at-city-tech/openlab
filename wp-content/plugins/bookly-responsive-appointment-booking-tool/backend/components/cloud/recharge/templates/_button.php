@@ -27,7 +27,7 @@ $disabled = $type === Amounts::RECHARGE_TYPE_AUTO && $cloud->account->autoRechar
                     background: radial-gradient(circle, #faf2cc 0%, #fff 100%);
                 ">
                     <i class="fas fa-headset"></i>
-                    <?php printf( _n( '%s day', '%s days', $recharge['extend_support'], 'bookly' ), "<b>+{$recharge['extend_support']}</b>" ) ?>
+                    <?php printf( _n( '%d day', '%d days', $recharge['extend_support'], 'bookly' ), "<b>+{$recharge['extend_support']}</b>" ) ?>
                 </div>
             <?php endif ?>
         </div>

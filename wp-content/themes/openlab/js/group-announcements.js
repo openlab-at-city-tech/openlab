@@ -418,6 +418,16 @@
 		quillEditors[ editorId ] = new Quill( $editorDiv[0], {
 				modules: {
 						toolbar: '#' + toolbarId,
+						keyboard: {
+							bindings: {
+								tab: {
+									key: 9,
+									handler: function(range, context) {
+										return true;
+									}
+								}
+							}
+						},
 						clipboard: {
 							matchVisual: false
 						}

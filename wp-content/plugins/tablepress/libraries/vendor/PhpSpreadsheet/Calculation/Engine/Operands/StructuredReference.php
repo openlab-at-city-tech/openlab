@@ -6,6 +6,7 @@ use TablePress\PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 use TablePress\PhpOffice\PhpSpreadsheet\Calculation\Exception;
 use TablePress\PhpOffice\PhpSpreadsheet\Cell\Cell;
 use TablePress\PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use TablePress\PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use TablePress\PhpOffice\PhpSpreadsheet\Worksheet\Table;
 use Stringable;
 
@@ -47,6 +48,7 @@ final class StructuredReference implements Operand
 
 	private ?int $totalsRow;
 
+	/** @var mixed[] */
 	private array $columns;
 
 	public function __construct(string $structuredReference)
@@ -54,6 +56,7 @@ final class StructuredReference implements Operand
 		$this->value = $structuredReference;
 	}
 
+	/** @param string[] $matches */
 	public static function fromParser(string $formula, int $index, array $matches): self
 	{
 		$val = $matches[0];
@@ -62,12 +65,12 @@ final class StructuredReference implements Operand
 			- substr_count($val, self::CLOSE_BRACE);
 		while ($srCount > 0) {
 			$srIndex = strlen($val);
-			$srStringRemainder = substr($formula, $index + $srIndex);
+			$srStringRemainder = (string) substr($formula, $index + $srIndex);
 			$closingPos = strpos($srStringRemainder, self::CLOSE_BRACE);
 			if ($closingPos === false) {
 				throw new Exception("Formula Error: No closing ']' to match opening '['");
 			}
-			$srStringRemainder = substr($srStringRemainder, 0, $closingPos + 1);
+			$srStringRemainder = (string) substr($srStringRemainder, 0, $closingPos + 1);
 			--$srCount;
 			if (str_contains($srStringRemainder, self::OPEN_BRACE)) {
 				++$srCount;
@@ -171,14 +174,20 @@ final class StructuredReference implements Operand
 		return $table;
 	}
 
+	/**
+	 * @param array{array{string, int}, array{string, int}} $tableRange
+	 *
+	 * @return mixed[]
+	 */
 	private function getColumns(Cell $cell, array $tableRange): array
 	{
 		$worksheet = $cell->getWorksheet();
 		$cellReference = $cell->getCoordinate();
 
 		$columns = [];
-		$lastColumn = ++$tableRange[1][0];
-		for ($column = $tableRange[0][0]; $column !== $lastColumn; ++$column) {
+		$lastColumn = StringHelper::stringIncrement($tableRange[1][0]);
+		for ($column = $tableRange[0][0]; $column !== $lastColumn; StringHelper::stringIncrement($column)) {
+			/** @var string $column */
 			$columns[$column] = $worksheet
 				->getCell($column . ($this->headersRow ?? ($this->firstDataRow - 1)))
 				->getCalculatedValue();
@@ -196,7 +205,7 @@ final class StructuredReference implements Operand
 		$reference = str_replace('[' . self::ITEM_SPECIFIER_THIS_ROW . '],', '', $reference);
 
 		foreach ($this->columns as $columnId => $columnName) {
-			$columnName = str_replace("\u{a0}", ' ', $columnName);
+			$columnName = str_replace("\u{a0}", ' ', $columnName); //* @phpstan-ignore-line
 			$reference = $this->adjustRowReference($columnName, $reference, $cell, $columnId);
 		}
 
@@ -340,7 +349,7 @@ final class StructuredReference implements Operand
 	{
 		$columnsSelected = false;
 		foreach ($this->columns as $columnId => $columnName) {
-			$columnName = str_replace("\u{a0}", ' ', $columnName ?? '');
+			$columnName = str_replace("\u{a0}", ' ', $columnName ?? ''); //* @phpstan-ignore-line
 			$cellFrom = "{$columnId}{$startRow}";
 			$cellTo = "{$columnId}{$endRow}";
 			$cellReference = ($cellFrom === $cellTo) ? $cellFrom : "{$cellFrom}:{$cellTo}";

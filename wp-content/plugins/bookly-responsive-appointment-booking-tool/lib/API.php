@@ -3,7 +3,7 @@ namespace Bookly\Lib;
 
 abstract class API
 {
-    const API_URL = 'https://api.booking-wp-plugin.com';
+    const API_URL = 'https://hub.bookly.pro';
 
     /**
      * Get info.
@@ -12,7 +12,7 @@ abstract class API
      */
     public static function getInfo( $news_date )
     {
-        $url = add_query_arg( array( 'site_url' => site_url(), 'news_date' => $news_date ), self::API_URL . '/1.1/info' );
+        $url = add_query_arg( array( 'site_url' => site_url(), 'news_date' => $news_date ), self::API_URL . '/1.2/info' );
         $response = wp_remote_get( $url, array(
             'sslverify' => false,
             'timeout' => 25,

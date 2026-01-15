@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Learn More": [
+                "さらに詳しく"
+            ],
+            "Copied!": [
+                "コピーしました"
+            ],
+            "Copy": [
+                "コピー"
+            ],
+            "All features unlocked": [
+                "すべての機能が解放されました。"
+            ],
+            "Get Started": [
+                "はじめる"
+            ],
+            "Use Code:": [
+                "コードを使用:"
+            ],
+            "Unlock Premium AI Features": [
+                "プレミアムAI機能を有効化"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "高度なAI機能でナレッジベースを次のレベルへ"
+            ],
+            "Premium Features": [
+                "プレミアム機能"
+            ],
+            "Choose Your Plan": [
+                "プランを選択"
+            ],
+            "Flexible pricing to match your needs": [
+                "ニーズに合わせた柔軟な価格設定"
+            ],
+            "What Our Customers Say": [
+                "お客様の声"
+            ],
+            "Get AI Features": [
+                "AI機能を利用する"
+            ]
+        }
+    }
+}

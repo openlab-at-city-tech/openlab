@@ -19,12 +19,14 @@ class EPKB_Shortcodes {
 		'widg-tags-list',
 		'widg-tag-articles',
 		'epkb-faqs',
-		'widg-popular-articles'
+		'widg-popular-articles',
+		'ai-advanced-search'
 	);
 
 	public function __construct() {
 		new EPKB_Articles_Index_Shortcode();
 		new EPKB_Faqs_Shortcode();
+		new EPKB_AI_Advanced_Search_Shortcode();
     }
 
 	/**

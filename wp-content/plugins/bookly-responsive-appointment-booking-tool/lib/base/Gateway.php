@@ -188,12 +188,33 @@ abstract class Gateway
     {
         $payment = $this->getPayment();
 
+        $this->completePayment( $payment );
+    }
+
+    /**
+     * @param Entities\Payment|null $payment
+     * @return void
+     */
+    public function completePayment( $payment )
+    {
         $required_sync = false;
         if ( $payment ) {
             // Re-fetch a status from the database
             $status = Entities\Payment::query()->where( 'id', $payment->getId() )->fetchVar( 'status' );
             if ( $status !== Entities\Payment::STATUS_COMPLETED ) {
                 if ( $payment->getType() !== Entities\Payment::TYPE_LOCAL || $payment->getTotal() == 0 ) {
+                    if ( $payment->getParentId() ) {
+                        $parent_payment = Entities\Payment::find( $payment->getParentId() );
+                        $details = $parent_payment->getDetailsData();
+                        $details_data = $details->getData();
+                        $details_data['child_tax_paid'] = ( isset( $details_data['child_tax_paid'] ) ? $details_data['child_tax_paid'] : 0 ) + $payment->getTax();
+                        $details->setData( $details_data );
+                        $parent_payment->setChildPaid( $parent_payment->getChildPaid() + $payment->getPaid() )->save();
+                        if ( $parent_payment->getStatus() === Entities\Payment::STATUS_PENDING && $parent_payment->getTotal() === $parent_payment->getChildPaid() + $parent_payment->getPaid() ) {
+                            $this->completePayment( $parent_payment );
+                        }
+                        $parent_payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
+                    }
                     $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                 }
                 if ( $payment->getCouponId() ) {
@@ -208,6 +229,7 @@ abstract class Gateway
         if ( $required_sync ) {
             if ( $payment ) {
                 Payment\Proxy\Pro::completeGiftCard( $payment );
+                Payment\Proxy\Events::completeEventAttendee( $payment );
             }
             $order_id = $payment
                 ? $payment->getOrderId()
@@ -252,13 +274,14 @@ abstract class Gateway
         if ( $payment ) {
             $path = explode( '\\', get_class( $this ) );
             if ( $payment->getStatus() === Entities\Payment::STATUS_COMPLETED ) {
-                BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
+                BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, 128 ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
+
                 return;
             }
 
             Payment\Proxy\Shared::rollbackPayment( $payment );
 
-            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail' );
+            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, 128 ), $_SERVER['REMOTE_ADDR'], 'call fail' );
             $this->removeCascade( $payment );
         }
 
@@ -386,7 +409,7 @@ abstract class Gateway
      */
     protected function createPayment()
     {
-        if ( $this->request->getGateway()->getType() !== null ) {
+        if ( ! $this->payment && $this->request->getGateway()->getType() !== null ) {
             $this->payment = new Entities\Payment();
 
             return $this->payment
@@ -472,5 +495,13 @@ abstract class Gateway
         }
 
         return $codes;
+    }
+
+    /**
+     * @return BooklyLib\DataHolders\Booking\Order
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 }

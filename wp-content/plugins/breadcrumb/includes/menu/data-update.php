@@ -17,8 +17,12 @@ $breadcrumb_info = get_option('breadcrumb_info');
 
 <div class="wrap">
 
-    <div id="icon-tools" class="icon32"><br></div><?php echo "<h2>" . sprintf(__('%s Data - Update'), breadcrumb_plugin_name) . "</h2>"; ?>
-
+    <div id="icon-tools" class="icon32"><br></div>
+    <h2>
+        <?php
+        /* translators: %s: Plugin Name */
+        echo sprintf(__('%s Data - Update', 'breadcrumb'), breadcrumb_plugin_name); ?>
+    </h2>
     <?php
 
     //var_dump($breadcrumb_info);

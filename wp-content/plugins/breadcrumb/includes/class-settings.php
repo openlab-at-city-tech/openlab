@@ -25,18 +25,22 @@ class class_breadcrumb_settings
 		$v1_5_39 = isset($breadcrumb_info['v1_5_39']) ? $breadcrumb_info['v1_5_39'] : 'no';
 
 
+		// add_submenu_page('tools.php', __('Breadcrumb', 'breadcrumb'), __('Breadcrumb', 'breadcrumb'), 'manage_options', 'breadcrumb', array($this, 'dashboard'));
 
 
 		add_menu_page(__('Breadcrumb', 'breadcrumb'), __('Breadcrumb', 'breadcrumb'), 'manage_options', 'breadcrumb_settings', array($this, 'breadcrumb_settings'), breadcrumb_plugin_url . 'assets/admin/images/right-arrow.png');
-
-		if ($v1_5_39 != 'yes') {
-			add_submenu_page('breadcrumb_settings', 'Data Update', 'Data Update', 'manage_options', 'breadcrumb-data-update', array($this, 'data_update'));
-		}
 	}
 
 	public function data_update()
 	{
 		include(breadcrumb_plugin_dir . 'includes/menu/data-update.php');
+	}
+
+	public function dashboard()
+	{
+		//include(breadcrumb_plugin_dir . 'includes/menu/dashboard.php');
+
+		//include('menu/dashboard.php');
 	}
 }
 

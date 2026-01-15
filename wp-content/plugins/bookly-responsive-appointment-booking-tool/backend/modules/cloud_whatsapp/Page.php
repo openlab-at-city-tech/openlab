@@ -47,7 +47,7 @@ class Page extends Lib\Base\Component
                     'lastMonth' => __( 'Last month', 'bookly' ),
                     'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
                     'noResults' => __( 'No records.', 'bookly' ),
-                    'processing' => __( 'Processing...', 'bookly' ),
+                    'processing' => __( 'Processing', 'bookly' ) . '…',
                     'emptyTable' => __( 'No data available in table', 'bookly' ),
                     'loadingRecords' => __( 'Loading...', 'bookly' ),
                     'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),

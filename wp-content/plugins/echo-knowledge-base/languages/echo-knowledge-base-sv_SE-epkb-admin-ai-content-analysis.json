@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Error": [
+                "Fel"
+            ],
+            "Analyze Content": [
+                "Analysera innehåll"
+            ],
+            "Improve Content": [
+                "Förbättra innehåll"
+            ],
+            "Improve": [
+                "Förbättra"
+            ],
+            "Demo Analytics": [
+                "Demoanalys"
+            ],
+            "Actions": [
+                "Åtgärder"
+            ],
+            "Analyzing": [
+                "Analyserar"
+            ],
+            "No articles found": [
+                "Inga dokumentationssidor hittades"
+            ],
+            "To Analyze": [
+                "Analysera"
+            ],
+            "To Improve": [
+                "Förbättra"
+            ],
+            "Please select exactly one article to improve": [
+                "Vänligen välj exakt en artikel att förbättra"
+            ],
+            "Demo Data Displayed": [
+                "Demodata visad"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "Detta är demodata för användningsstatistik och rapportering som visas i demonstrationssyfte. När du skapar nya artiklar kan du analysera dem för att se verkliga innehållsanalysresultat."
+            ],
+            "Select All That Need Analysis": [
+                "Välj allt som behöver analyseras"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Analysera (synkronisering inte laddad)"
+            ],
+            "Score Legend": [
+                "Poänglegend"
+            ],
+            "Excellent": [
+                "Utmärkt"
+            ],
+            "Good": [
+                "Bra"
+            ],
+            "Below 60%": [
+                "Under 60%"
+            ],
+            "Needs Improvement": [
+                "Behöver förbättring"
+            ],
+            "Importance Legend": [
+                "Viktighetslegend"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "Baserat på antalet visningar av artikeln – fler visningar innebär högre prioritet."
+            ],
+            "Status Legend": [
+                "Statuslegend"
+            ],
+            "Not analyzed or updated": [
+                "Inte analyserad eller uppdaterad"
+            ],
+            "Score below 80%": [
+                "Poäng under 80%"
+            ],
+            "Done": [
+                "Klart"
+            ],
+            "Completed": [
+                "Slutfört"
+            ],
+            "Ignored": [
+                "Ignorerad"
+            ],
+            "Not important now": [
+                "Inte viktigt just nu"
+            ],
+            "In progress": [
+                "Pågående"
+            ],
+            "Failed - retry needed": [
+                "Misslyckades - krävs försök igen"
+            ],
+            "Invalid status": [
+                "Ogiltig status"
+            ],
+            "Failed to update article status": [
+                "Misslyckades med att uppdatera artikelstatus"
+            ],
+            "Error updating article status": [
+                "Fel vid uppdatering av artikelstatus"
+            ],
+            "Ignore": [
+                "Ignorera"
+            ],
+            "Remove": [
+                "Ta bort"
+            ],
+            "Loading articles...": [
+                "Laddar artiklar..."
+            ],
+            "Important and Low Score": [
+                "Viktigt och låga poäng"
+            ],
+            "Top Important": [
+                "Toppprioritet"
+            ],
+            "Lowest Score": [
+                "Lägsta poäng"
+            ],
+            "Recently Analyzed": [
+                "Senast analyserad"
+            ],
+            "Unknown sub-tab": [
+                "Okänd underflik"
+            ]
+        }
+    }
+}

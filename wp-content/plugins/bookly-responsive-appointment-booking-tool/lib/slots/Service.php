@@ -3,7 +3,7 @@ namespace Bookly\Lib\Slots;
 
 class Service
 {
-    /** @var double */
+    /** @var float */
     protected $price;
     /** @var int */
     protected $capacity_min;
@@ -21,7 +21,7 @@ class Service
     /**
      * Constructor.
      *
-     * @param double $price
+     * @param float $price
      * @param int $capacity_min
      * @param int $capacity_max
      * @param string $staff_preference_rule
@@ -37,7 +37,7 @@ class Service
         $staff_preference_settings,
         $staff_preference_order
     ) {
-        $this->price = (double) $price;
+        $this->price = (float) $price;
         $this->capacity_min = (int) $capacity_min;
         $this->capacity_max = (int) $capacity_max;
 

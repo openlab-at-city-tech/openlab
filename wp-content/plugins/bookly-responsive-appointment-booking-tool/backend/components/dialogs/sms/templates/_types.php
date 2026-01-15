@@ -17,6 +17,9 @@ use Bookly\Backend\Components\Dialogs\Sms\Dialog;
                     <?php Config::recurringAppointmentsActive() && Dialog::renderOption( Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::packagesActive() && Dialog::renderOption( Notification::TYPE_NEW_PACKAGE, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
                     <?php Config::packagesActive() && Dialog::renderOption( Notification::TYPE_PACKAGE_DELETED, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>
+                    <?php Config::eventsActive() && Dialog::renderOption( Notification::TYPE_NEW_EVENT, array( 'staff', 'admin', 'custom', 'organizer' ) ) ?>
+                    <?php Config::eventsActive() && Dialog::renderOption( Notification::TYPE_NEW_ATTENDEES, array( 'customer', 'staff', 'admin', 'custom', 'organizer' ) ) ?>
+                    <?php Config::eventsActive() && Dialog::renderOption( Notification::TYPE_ATTENDEE_DELETED, array( 'customer', 'staff', 'admin', 'custom', 'organizer' ) ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_CUSTOMER_NEW_WP_USER, array( 'customer' ) ) ?>
                     <?php Config::proActive() && Dialog::renderOption( Notification::TYPE_STAFF_NEW_WP_USER, array( 'staff' ) ) ?>
                     <?php Config::proActive() && get_option( 'bookly_cloud_token' ) != '' && Cloud\API::getInstance()->account->productActive( Cloud\Account::PRODUCT_GIFT ) && Dialog::renderOption( Notification::TYPE_NEW_GIFT_CARD, array( 'customer', 'staff', 'admin', 'custom' ) ) ?>

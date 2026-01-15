@@ -35,8 +35,7 @@ function epkb_add_plugin_row_meta( $links, $file ) {
 		return $links;
 	}
 
-	$links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=epkb-kb-need-help' ) ) . '">' . esc_html__( 'Get Started', 'echo-knowledge-base' ) . '</a>';
-	$links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=epkb-add-ons#new-features__year-2024' ) ) . '">' . esc_html__( "What's New", 'echo-knowledge-base' ) . '</a>';
+	$links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=epkb-dashboard' ) ) . '">' . esc_html__( 'Dashboard', 'echo-knowledge-base' ) . '</a>';
 
 	return $links;
 }

@@ -1,10 +1,9 @@
 === Post Types Order  ===
 Contributors: nsp-code, tdgu
-Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
-Tested up to: 6.8.2
-Stable tag: 2.3.7
+Tested up to: 6.9
+Stable tag: 2.4.1
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -27,7 +26,7 @@ This plugin was designed to be user-friendly, ensuring that anyone can easily us
 * A new settings page will be added under Settings > Post Types Order. Visit this page and save the options for the first time.
 * With the <strong>AutoSort</strong> option enabled, no code changes are needed, the plugin will automatically apply the customized post order.
 * Use the Re-Order interface, available for every non-hierarchical custom post type, to change the post order as needed.
-* For sorting posts via code, include 'orderby' => 'menu_order' within the custom query arguments. For more details, visit this guide [Sample Usage](http://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
+* For sorting posts via code, include 'orderby' => 'menu_order' within the custom query arguments. For more details, visit this guide [Sample Usage](https://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
   
 = Example of Usage =
 [youtube https://www.youtube.com/watch?v=6-so4UH-n6M] 
@@ -36,11 +35,11 @@ As you can see, reordering posts is as simple as dragging and dropping, with the
 
 If the post order doesn’t update on your site, it could be due to one of two reasons: either there was a mistake during setup, or your theme/plugin is using a custom query that doesn't follow WordPress Codex standards. But don’t worry—we’re here to help! You can report the issue in the forum, where many users are happy to assist, or you can contact us directly.
 
-If you encounter any problems with the plugin, feel free to reach out via the forum or contact us directly through our [support page](http://www.nsp-code.com), and we’ll take a look.
+If you encounter any problems with the plugin, feel free to reach out via the forum or contact us directly through our [support page](https://www.nsp-code.com), and we’ll take a look.
 
 
 = Need advanced features ? = 
-For advanced features and functionality, check out the extended version of this plugin at [Advanced Post Types Order](http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-post-types-order/)
+For advanced features and functionality, check out the extended version of this plugin at [Advanced Post Types Order](https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-post-types-order/)
  * Hierarchically post types order
  * Manual Drag & Drop / Automatic Sorting
  * Specify exact area where to apply through conditionals
@@ -60,7 +59,7 @@ For advanced features and functionality, check out the extended version of this 
 
 
 <br />
-<br />This plugin is developed by <a target="_blank" href="http://www.nsp-code.com">Nsp-Code</a>
+<br />This plugin is developed by <a target="_blank" href="https://www.nsp-code.com">Nsp-Code</a>
 
 == Installation ==
 
@@ -104,18 +103,33 @@ All ideas are welcome! I add them to my list for future versions. However, this 
 
 = Can I exclude certain queries from the custom sort when AutoSort is enabled? =
 
-Yes, you can! To exclude certain queries, include the `ignore_custom_sort` argument in your custom query. An example is available at [Sample Usage](http://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
+Yes, you can! To exclude certain queries, include the `ignore_custom_sort` argument in your custom query. An example is available at [Sample Usage](https://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
 
 = How can I force custom sorting for specific queries when AutoSort is enabled? =
 
-You can use the `pto/posts_orderby` filter to force the sort. An example is provided at [Sample Usage](http://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
+You can use the `pto/posts_orderby` filter to force the sort. An example is provided at [Sample Usage](https://www.nsp-code.com/sample-code-on-how-to-apply-the-sort-for-post-types-order-plugin/)
 
 = I need additional features like front-end sorting, shortcodes, filters, conditionals, advanced queries, or taxonomy/category sorting =
 
-Consider upgrading to our advanced version of this plugin, which offers these features at a very reasonable price [Advanced Post Types Order](http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-post-types-order/)
+Consider upgrading to our advanced version of this plugin, which offers these features at a very reasonable price [Advanced Post Types Order](https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-post-types-order/)
 
 
 == Changelog ==
+
+= 2.4.1 = 
+ - Added a reset button that restores the list to its default order.
+ - Added PHPCS ignore rules to prevent unnecessary scanning in reports.
+ - Use esc_url when output the plugin images.
+ - Remove the FALSE within load_plugin_textdomain()
+ - Performed minor layout refinements.
+ - Updated all HTTP links to use HTTPS.
+ - Completed WordPress 6.9 compatibility review and updated the plugin tag accordingly.
+
+= 2.4 = 
+ - If query already sorting by FIELD, ignore the custom order. 
+ - Compatibility class file changes. 
+ - Compatibility file for Advanced Custom Fields PRO
+ 
 
 = 2.3.7 = 
  - Code improvements.

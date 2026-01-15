@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings": [
+                "सेटिंग्स"
+            ],
+            "Page": [
+                "पृष्ठ"
+            ],
+            "Settings saved successfully": [
+                "सेटिंग्स सफलतापूर्वक सहेजी गईं"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Next": [
+                "अगला"
+            ],
+            "Previous": [
+                "पिछला"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
+            ],
+            "Go to General Settings": [
+                "सामान्य सेटिंग्स पर जाएँ"
+            ],
+            "Chat History": [
+                "चैट इतिहास"
+            ],
+            "API Configuration": [
+                "API विन्यास"
+            ],
+            "AI Assistant": [
+                "एआई सहायक"
+            ],
+            "Save Settings": [
+                "सेटिंग्स सहेजें"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "Delete Selected": [
+                "चयनित को हटाएं"
+            ],
+            "of": [
+                "में से"
+            ],
+            "Reset": [
+                "रीसेट"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "क्या आप चयनित वार्तालाप हटाना चाहते हैं?"
+            ],
+            "Delete Conversations": [
+                "वार्तालाप हटाएं"
+            ],
+            "Deleting conversations...": [
+                "वार्तालाप हटाए जा रहे हैं..."
+            ],
+            "Conversations refreshed successfully": [
+                "वार्तालाप सफलतापूर्वक ताज़ा कर दिए गए।"
+            ],
+            "Search conversations...": [
+                "वार्तालाप खोजें..."
+            ],
+            "Refreshing...": [
+                "ताज़ा किया जा रहा है..."
+            ],
+            "Refresh": [
+                "ताज़ा करें"
+            ],
+            "Loading conversations...": [
+                "संवाद लोड हो रहे हैं..."
+            ],
+            "No conversations found": [
+                "कोई संवाद नहीं मिला"
+            ],
+            "Time": [
+                "समय"
+            ],
+            "User": [
+                "उपयोगकर्ता"
+            ],
+            "Conversation": [
+                "संवाद"
+            ],
+            "Searching server for more results...": [
+                "अधिक परिणामों के लिए सर्वर खोज रहा है..."
+            ],
+            "Conversation Details": [
+                "संवाद विवरण"
+            ],
+            "Select a conversation to view details": [
+                "विस्तार देखने के लिए एक संवाद चुनें"
+            ],
+            "Conversation Info": [
+                "संवाद जानकारी"
+            ],
+            "User:": [
+                "उपयोगकर्ता:"
+            ],
+            "Started:": [
+                "शुरू हुआ:"
+            ],
+            "Messages:": [
+                "संदेश:"
+            ],
+            "Status:": [
+                "स्थिति:"
+            ],
+            "Rating:": [
+                "रेटिंग:"
+            ],
+            "Full Conversation": [
+                "पूरा संवाद"
+            ],
+            "No messages in this conversation.": [
+                "इस संवाद में कोई संदेश नहीं है।."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं?"
+            ],
+            "Reset Instructions": [
+                "निर्देश रीसेट करें"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं? आपके कस्टम निर्देश खो जाएंगे।."
+            ],
+            "Reset to Default": [
+                "डिफ़ॉल्ट पर रीसेट करें"
+            ],
+            "Failed to load conversations": [
+                "संवाद लोड करने में असफल"
+            ],
+            "Failed to save settings": [
+                "सेटिंग्स सहेजने में असफल"
+            ],
+            "Conversations deleted successfully": [
+                "संवाद सफलतापूर्वक हटाए गए"
+            ],
+            "Failed to delete conversations": [
+                "संवाद हटाने में असफल"
+            ],
+            "AI Chat is Disabled": [
+                "AI चैट अक्षम है"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "चैट इतिहास देखने के लिए, कृपया सेटिंग्स टैब में AI चैट सक्षम करें।."
+            ],
+            "Go to Settings": [
+                "सेटिंग्स पर जाएँ"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "OpenAI API कुंजी कॉन्फ़िगर नहीं की गई है। AI चैट सुविधाओं के उपयोग के लिए कृपया सामान्य सेटिंग्स में इसे कॉन्फ़िगर करें।."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "AI चैट सुविधाओं के उपयोग के लिए कृपया सामान्य सेटिंग्स में डेटा गोपनीयता समझौते को स्वीकार करें।."
+            ]
+        }
+    }
+}

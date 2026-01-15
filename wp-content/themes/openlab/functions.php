@@ -63,6 +63,16 @@ function openlab_load_scripts() {
      */
     if (!is_admin()) {
 
+        // Polyfills for legacy browser support (Map, Set, Element.prototype.matches, Node.prototype.contains)
+        // Required by the inert polyfill for older browsers
+        wp_register_script('polyfill-io', 'https://polyfill.io/v3/polyfill.min.js?features=Map%2CSet%2CElement.prototype.matches%2CNode.prototype.contains', array(), null, false);
+        wp_enqueue_script('polyfill-io');
+
+        // Inert polyfill for older browsers that don't support the native inert attribute
+        // See: https://github.com/WICG/inert
+        wp_register_script('wicg-inert', 'https://cdn.jsdelivr.net/npm/wicg-inert@3.1.2/dist/inert.min.js', array('polyfill-io'), '3.1.2', false);
+        wp_enqueue_script('wicg-inert');
+
         //google fonts
         wp_register_style('google-open-sans', set_url_scheme('http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic'), array(), '2014', 'all');
         wp_enqueue_style('google-open-sans');

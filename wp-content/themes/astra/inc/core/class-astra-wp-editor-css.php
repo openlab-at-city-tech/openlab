@@ -467,7 +467,7 @@ class Astra_WP_Editor_CSS {
 			'.wp-block-post-content'           => array(
 				'color' => esc_attr( $text_color ),
 			),
-			'.has-text-color .block-editor-block-list__block:not(:is(.wp-block-heading, .wp-block-button))' => array(
+			'.has-text-color .block-editor-block-list__block:not(:is(.wp-block-heading, .wp-block-button, .wp-block-spectra-pro-form-link))' => array(
 				'color' => 'inherit',
 			),
 			'.wp-block-cover:not(.has-text-color.has-link-color) .wp-block-cover__inner-container .block-editor-rich-text__editable.wp-block-paragraph' => array(

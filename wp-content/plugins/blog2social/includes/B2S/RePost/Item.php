@@ -51,7 +51,7 @@ class B2S_RePost_Item {
 
         $content = '';
         $content .= '<h3 class="b2s-re-post-h3">' . esc_html__('Re-share your blog content automatically on your social media channels.', 'blog2social') . ((!$isPremium) ? ' <span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') . ' (<a href="' . esc_url(B2S_Tools::getSupportLink('network_guide_re_sharer')) . '" target="_blank">' . esc_html__('Guide', 'blog2social') . '</a>)</h3>';
-        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
+        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
         $content .= '<div class="col-md-12 b2s-re-post-settings-header">';
         $content .= '<i class="glyphicon glyphicon-cog b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Settings', 'blog2social') . '</span><span class="b2s-re-post-headline"><i class="glyphicon glyphicon-chevron-up b2s-re-post-settings-toggle b2s-icon-size"></i></span>';
         $content .= '</div>';
@@ -61,7 +61,7 @@ class B2S_RePost_Item {
         //Post Settings
         $content .= '<div class="col-md-12 col-lg-6">';
         $content .= '<h4>' . esc_html__('Which content should be shared?', 'blog2social') . '</h4>';
-        $content .= '<div class="alert alert-info b2s-re-post-limit-info" style="display:none;"> <a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a> ' . esc_html__('your Blog2Social license to extend the quota for the number of posts in your queue.', 'blog2social') . '</div>';
+        $content .= '<div class="alert alert-info b2s-re-post-limit-info" style="display:none;"> <a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a> ' . esc_html__('your Blog2Social license to extend the quota for the number of posts in your queue.', 'blog2social') . '</div>';
 
         $content .= '<span>' . esc_html__('Number of posts', 'blog2social') . ' </span>';
         $content .= '<select name="b2s-re-post-limit" class="b2s-re-post-limit">';
@@ -160,7 +160,7 @@ class B2S_RePost_Item {
         $postItem = new B2S_Post_Item('repost');
         $postItem->currentPage = 1;
         $limit = unserialize(B2S_PLUGIN_RE_POST_LIMIT);
-        $needMoreBtn = (B2S_PLUGIN_USER_VERSION <= 2) ? '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Need more?', 'blog2social') . '</a>' : '';
+        $needMoreBtn = (B2S_PLUGIN_USER_VERSION <= 2) ? '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('upgrade_version')) . '" target="_blank">' . esc_html__('Need more?', 'blog2social') . '</a>' : '';
         $content = '';
         $content .= '<div class="col-md-12 b2s-re-post-queue-header">';
         $content .= '<i class="glyphicon glyphicon-random b2s-icon-size"></i><span class="b2s-re-post-headline"> ' . esc_html__('Queue', 'blog2social') . '</span>';

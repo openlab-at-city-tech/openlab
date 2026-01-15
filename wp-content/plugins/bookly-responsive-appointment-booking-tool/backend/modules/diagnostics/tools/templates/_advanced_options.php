@@ -1,5 +1,4 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
-use Bookly\Backend\Components\Controls\Inputs;
 
 /** @var array $list */
 ?>

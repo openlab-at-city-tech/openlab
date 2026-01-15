@@ -642,7 +642,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				$_pagely->purgeAll();
 			}
 		}
-		// Pressidum.
+		// Pressidium.
 		if ( is_callable( array( 'Ninukis_Plugin', 'get_instance' ) ) ) {
 			$_pressidum = Ninukis_Plugin::get_instance(); // @phpstan-ignore class.notFound
 			if ( is_callable( array( $_pressidum, 'purgeAllCaches' ) ) ) {
@@ -809,7 +809,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				'datatables_custom_commands'  => '',
 			),
 			'visibility'    => array(
-				'rows'    => array( 1 ), // One visbile row.
+				'rows'    => array( 1 ), // One visible row.
 				'columns' => array( 1 ), // One visible column.
 			),
 		);
@@ -1262,7 +1262,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		/**
 		 * Load WP export functions.
 		 */
-		require_once ABSPATH . 'wp-admin/includes/export.php'; // @phpstan-ignore requireOnce.fileNotFound (This is a WordPress core file that always exists.)
+		require_once ABSPATH . 'wp-admin/includes/export.php';
 		$value = wxr_cdata( implode( ',', $table_ids ) );
 
 		// Hijack the filter and print extra XML code for our faked post meta field.

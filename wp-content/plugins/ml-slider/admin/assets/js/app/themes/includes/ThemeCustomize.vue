@@ -16,7 +16,12 @@
                     <tr v-if="(row_item.type === 'color' || row_item.type === 'fields') && (typeof row_item.slideshow_edit === 'undefined' || row_item.slideshow_edit)"
                         :class="section_item.name ? 'customizer-' + section_item.name : ''">
                         <td>
-                            {{ row_item.label }}
+                            {{ row_item.label }} 
+                            <span v-if="row_item.info" 
+                                class="dashicons dashicons-info tipsy-tooltip-top" 
+                                style="line-height: 1.2em;" 
+                                :original-title="row_item.info">
+                            </span>
                         </td>
                         <td>
                             <!-- If type is 'fields', let's look for the list of fields -->

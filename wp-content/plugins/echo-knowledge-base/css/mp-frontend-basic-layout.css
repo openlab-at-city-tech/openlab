@@ -220,6 +220,13 @@
   max-width: 100% !important;
 }
 
+body.wp-theme-hueman[class*=-epkb_post_type] .main-inner {
+  padding: 0 !important;
+}
+body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman[class*=-epkb_post_type] .main::after {
+  display: none !important;
+}
+
 /* Public
 --------------------------------------------------------------*/
 /* Use Search Box styles as a function to let to include its styles inside CSS selectors via '@use/@include' instead of deprecated @import */

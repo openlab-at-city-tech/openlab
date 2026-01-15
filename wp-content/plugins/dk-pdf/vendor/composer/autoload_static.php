@@ -4,19 +4,40 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcffb84a19b38683013ce9f785c83df8a
+class ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70
 {
     public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'Psr\\Container\\' => 14,
+        ),
+        'I' => 
+        array (
+            'Inpsyde\\Modularity\\' => 19,
+        ),
         'D' => 
         array (
             'Dinamiko\\DKPDF\\Vendor\\' => 22,
+            'Dinamiko\\DKPDF\\' => 15,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Inpsyde\\Modularity\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/inpsyde/modularity/src',
+        ),
         'Dinamiko\\DKPDF\\Vendor\\' => 
         array (
             0 => __DIR__ . '/../..' . '/lib/packages',
+        ),
+        'Dinamiko\\DKPDF\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules',
         ),
     );
 
@@ -27,9 +48,9 @@ class ComposerStaticInitcffb84a19b38683013ce9f785c83df8a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcffb84a19b38683013ce9f785c83df8a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcffb84a19b38683013ce9f785c83df8a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcffb84a19b38683013ce9f785c83df8a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70::$classMap;
 
         }, null, ClassLoader::class);
     }

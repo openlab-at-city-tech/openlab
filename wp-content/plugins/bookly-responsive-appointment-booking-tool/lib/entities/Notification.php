@@ -27,6 +27,9 @@ class Notification extends Lib\Base\Entity
     const TYPE_MAILING                                       = 'mailing';
     const TYPE_NEW_GIFT_CARD                                 = 'new_gift_card';
     const TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN                  = 'mobile_sc_grant_access_token';
+    const TYPE_NEW_EVENT                                     = 'new_event';
+    const TYPE_NEW_ATTENDEES                                 = 'new_attendees';
+    const TYPE_ATTENDEE_DELETED                              = 'attendee_deleted';
 
     /** @var array Human readable notification titles */
     public static $titles;
@@ -58,6 +61,8 @@ class Notification extends Lib\Base\Entity
     /** @var  string */
     protected $custom_recipients;
     /** @var  bool */
+    protected $to_organizer = 0;
+    /** @var  bool */
     protected $attach_ics = 0;
     /** @var  bool */
     protected $attach_invoice = 0;
@@ -69,21 +74,22 @@ class Notification extends Lib\Base\Entity
     protected static $table = 'bookly_notifications';
 
     protected static $schema = array(
-        'id'             => array( 'format' => '%d' ),
-        'gateway'        => array( 'format' => '%s' ),
-        'type'           => array( 'format' => '%s' ),
-        'active'         => array( 'format' => '%d' ),
-        'name'           => array( 'format' => '%s' ),
-        'subject'        => array( 'format' => '%s' ),
-        'message'        => array( 'format' => '%s' ),
-        'to_staff'       => array( 'format' => '%d' ),
-        'to_customer'    => array( 'format' => '%d' ),
-        'to_admin'       => array( 'format' => '%d' ),
-        'to_custom'      => array( 'format' => '%d' ),
+        'id' => array( 'format' => '%d' ),
+        'gateway' => array( 'format' => '%s' ),
+        'type' => array( 'format' => '%s' ),
+        'active' => array( 'format' => '%d' ),
+        'name' => array( 'format' => '%s' ),
+        'subject' => array( 'format' => '%s' ),
+        'message' => array( 'format' => '%s' ),
+        'to_staff' => array( 'format' => '%d' ),
+        'to_customer' => array( 'format' => '%d' ),
+        'to_admin' => array( 'format' => '%d' ),
+        'to_custom' => array( 'format' => '%d' ),
         'custom_recipients' => array( 'format' => '%s' ),
-        'attach_ics'     => array( 'format' => '%d' ),
+        'to_organizer' => array( 'format' => '%d' ),
+        'attach_ics' => array( 'format' => '%d' ),
         'attach_invoice' => array( 'format' => '%d' ),
-        'settings'       => array( 'format' => '%s' ),
+        'settings' => array( 'format' => '%s' ),
     );
 
     /**************************************************************************
@@ -263,6 +269,9 @@ class Notification extends Lib\Base\Entity
                 self::TYPE_NEW_GIFT_CARD                       => 70,
                 self::TYPE_NEW_PACKAGE                         => 81,
                 self::TYPE_PACKAGE_DELETED                     => 83,
+                self::TYPE_NEW_EVENT                           => 84,
+                self::TYPE_NEW_ATTENDEES                       => 85,
+                self::TYPE_ATTENDEE_DELETED                    => 86,
                 self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN        => 90,
             );
         }
@@ -275,25 +284,28 @@ class Notification extends Lib\Base\Entity
     {
         if ( self::$icons === null ) {
             self::$icons = array(
-                self::TYPE_NEW_BOOKING                                   => 'far fa-calendar-check',
-                self::TYPE_NEW_BOOKING_RECURRING                         => 'far fa-calendar-alt',
-                self::TYPE_NEW_BOOKING_COMBINED                          => 'fas fa-cart-plus',
-                self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED           => 'fas fa-arrows-alt-h',
+                self::TYPE_NEW_BOOKING => 'far fa-calendar-check',
+                self::TYPE_NEW_BOOKING_RECURRING => 'far fa-calendar-alt',
+                self::TYPE_NEW_BOOKING_COMBINED => 'fas fa-cart-plus',
+                self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED => 'fas fa-arrows-alt-h',
                 self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING => 'fas fa-exchange-alt',
-                self::TYPE_NEW_PACKAGE                                   => 'far fa-calendar-plus',
-                self::TYPE_PACKAGE_DELETED                               => 'far fa-calendar-minus',
-                self::TYPE_CUSTOMER_NEW_WP_USER                          => 'fas fa-user-plus',
-                self::TYPE_STAFF_NEW_WP_USER                             => 'fas fa-user-plus',
-                self::TYPE_STAFF_WAITING_LIST                            => 'fas fa-list-ol',
-                self::TYPE_FREE_PLACE_WAITING_LIST                       => 'fas fa-street-view',
-                self::TYPE_APPOINTMENT_REMINDER                          => 'far fa-bell',
-                self::TYPE_LAST_CUSTOMER_APPOINTMENT                     => 'fas fa-award',
-                self::TYPE_CUSTOMER_BIRTHDAY                             => 'fas fa-gift',
-                self::TYPE_STAFF_DAY_AGENDA                              => 'far fa-list-alt',
-                self::TYPE_VERIFY_EMAIL                                  => 'fas fa-address-card',
-                self::TYPE_VERIFY_PHONE                                  => 'fas fa-address-card',
-                self::TYPE_NEW_GIFT_CARD                                 => 'fas fa-gifts',
-                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN                  => 'fas fa-key',
+                self::TYPE_NEW_PACKAGE => 'far fa-calendar-plus',
+                self::TYPE_PACKAGE_DELETED => 'far fa-calendar-minus',
+                self::TYPE_CUSTOMER_NEW_WP_USER => 'fas fa-user-plus',
+                self::TYPE_STAFF_NEW_WP_USER => 'fas fa-user-plus',
+                self::TYPE_STAFF_WAITING_LIST => 'fas fa-list-ol',
+                self::TYPE_FREE_PLACE_WAITING_LIST => 'fas fa-street-view',
+                self::TYPE_APPOINTMENT_REMINDER => 'far fa-bell',
+                self::TYPE_LAST_CUSTOMER_APPOINTMENT => 'fas fa-award',
+                self::TYPE_CUSTOMER_BIRTHDAY => 'fas fa-gift',
+                self::TYPE_STAFF_DAY_AGENDA => 'far fa-list-alt',
+                self::TYPE_VERIFY_EMAIL => 'fas fa-address-card',
+                self::TYPE_VERIFY_PHONE => 'fas fa-address-card',
+                self::TYPE_NEW_GIFT_CARD => 'fas fa-gifts',
+                self::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN => 'fas fa-key',
+                self::TYPE_NEW_EVENT => 'fas fa-ticket-alt',
+                self::TYPE_NEW_ATTENDEES => 'fas fa-user-check',
+                self::TYPE_ATTENDEE_DELETED => 'fas fa-ticket-alt',
             );
         }
     }
@@ -485,6 +497,25 @@ class Notification extends Lib\Base\Entity
     public function setCustomRecipients( $custom_recipients )
     {
         $this->custom_recipients = $custom_recipients;
+
+        return $this;
+    }
+
+    /**
+     * @return bool|int
+     */
+    public function getToOrganizer()
+    {
+        return $this->to_organizer;
+    }
+
+    /**
+     * @param bool|int $to_organizer
+     * @return Notification
+     */
+    public function setToOrganizer( $to_organizer )
+    {
+        $this->to_organizer = $to_organizer;
 
         return $this;
     }

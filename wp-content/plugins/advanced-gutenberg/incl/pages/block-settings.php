@@ -6,7 +6,7 @@ add_thickbox();
 
 $blocks_list_saved = get_option('advgb_blocks_list');
 $advgb_blocks      = [];
-
+$free_version      = false;
 if (gettype($blocks_list_saved) === 'array') {
     foreach ($blocks_list_saved as $block) {
         if (strpos($block['name'], 'advgb/') === false) {
@@ -16,6 +16,11 @@ if (gettype($blocks_list_saved) === 'array') {
             array_push($advgb_blocks, $block);
         }
     }
+}
+
+if (!defined('ADVANCED_GUTENBERG_PRO_LOADED')) {
+    $advgb_blocks = array_merge($advgb_blocks, PublishPress\Blocks\Utilities::getProBlocks());
+    $free_version      = true;
 }
 
 /**
@@ -100,9 +105,6 @@ if (defined('ADVANCED_GUTENBERG_PRO_LOADED')) {
         <ul class="blocks-config-list clearfix">
             <?php foreach ($advgb_blocks as $block) : ?>
                 <?php $iconColor = '';
-                if (in_array($block['name'], $excluded_blocks_config)) {
-                    continue;
-                }
                 if (isset($block['iconColor'])) :
                     $iconColor = 'style="color:' . esc_attr($block['iconColor']) . '"';
                 endif;
@@ -113,16 +115,30 @@ if (defined('ADVANCED_GUTENBERG_PRO_LOADED')) {
                     //$block['title'] = str_replace( 'PublishPress', '', $new_titles[$block['name']] ); // Remove 'PublishPress'
                     //$block['title'] = str_replace( '-', '', $block['title'] ); // Remove hyphen in RTL and LTR
                 }
+                $blur_class = '';
+                $isProPromo = false;
+                if ($free_version && isset($block['isPro']) && $block['isPro'] ===  true) {
+                    $blur_class = 'advgb-blur';
+                    $isProPromo = true;
+                }
                 ?>
-            <li class="block-config-item advgb-settings-option" title="<?php echo esc_attr(__($block['title'], 'advanced-gutenberg')); ?>">
-                <span class="block-icon" <?php echo $iconColor ?>>
+            <li class="block-config-item advgb-settings-option">
+                <span class="block-icon <?php echo esc_attr($blur_class); ?>" <?php echo $iconColor ?>>
                     <?php echo html_entity_decode(html_entity_decode(stripslashes($block['icon']))); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped ?>
                 </span>
-                <span class="block-title"><?php echo esc_html(__($block['title'], 'advanced-gutenberg')); ?></span>
-                <i class="dashicons dashicons-admin-generic block-config-button"
-                   title="<?php esc_attr_e('Edit', 'advanced-gutenberg') ?>"
-                   data-block="<?php echo esc_attr($block['name']); ?>"
-                ></i>
+                <span class="block-title  <?php echo esc_attr($blur_class); ?>"><?php echo esc_html(__($block['title'], 'advanced-gutenberg')); ?></span>
+                <?php if ($isProPromo) : ?>
+                    <span class="advgb-pro-small-overlay-text" style="float: right;">
+                        <a class="advgb-pro-link clickable" href="<?php echo esc_url(ADVANCED_GUTENBERG_UPGRADE_LINK); ?>" target="_blank">
+                            <span class="dashicons dashicons-lock"></span> <?php esc_html_e('Pro', 'advanced-gutenberg') ?>
+                        </a>
+                    </span>
+                <?php elseif (!in_array($block['name'], $excluded_blocks_config)) : ?>
+                    <i class="dashicons dashicons-admin-generic block-config-button"
+                    title="<?php esc_attr_e('Edit', 'advanced-gutenberg') ?>"
+                    data-block="<?php echo esc_attr($block['name']); ?>"
+                    ></i>
+                <?php endif; ?>
             </li>
             <?php endforeach; ?>
         </ul>

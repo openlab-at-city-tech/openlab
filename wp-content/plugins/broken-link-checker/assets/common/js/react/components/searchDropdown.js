@@ -6,22 +6,20 @@ export function SearchDropdown( props ) {
     const [searchResultsFieldStatus, setSearchResultsFieldStatus] = useState( 'closed' );
     const [textareaValue, setTextareaValue] = useState( '' );
     const [dropdownMarkup, setDropdownMarkup] = useState( '' );
+    const [selectedItemIdx, setSelectedItemIdx] = useState( -1 );
     const [reset, setReset] = useState( false );
 
     let searchResultsItems = [];
+    if ( props.searchResults ) {
+        searchResultsItems = props.searchResults;
+    }
 
     /**
      * Sets the dropdown content when there's a change on any of props.searchResults, props.showDefaultMessage, props.showNoResultsMessage
      */
     useEffect(() => {
-        if ( props.searchResults ) {
-            searchResultsItems = props.searchResults;
-        } else {
-            searchResultsItems = [];
-        }
-
         if ( ! props.showDefaultMessage && ! props.showNoResultsMessage ) {
-            setDropdownMarkup( printItems() );
+            setDropdownMarkup( printItems( selectedItemIdx ) );
         } else {
             setDropdownMarkup( dropdownContent() );
         }
@@ -35,6 +33,14 @@ export function SearchDropdown( props ) {
         setDropdownMarkup( getDefaultMessage() );
     }, [] );
 
+    /**
+     * Resets selected item index when loading new results.
+     */
+    useEffect(() => {
+        if(props.isLoading) {
+            setSelectedItemIdx(-1);
+        }
+    });
     /**
      * On dropdown container focus, the textarea gets focused so user can start typing immediately.
      * @param el
@@ -60,7 +66,80 @@ export function SearchDropdown( props ) {
      */
     const handleSearchDropdownKeyDown = ( el ) => {
         setTextareaValue( el.currentTarget.value )
-        setSearchResultsFieldStatus( 'open' );
+        
+        // Handle ArrowDown
+        if ( el.key === 'ArrowDown' && selectedItemIdx < searchResultsItems.length - 1 ) {
+            el.preventDefault();
+            const searchResult = el.currentTarget.querySelector( `.sui-search-dropdown` );
+            if ( searchResult ) {
+                searchResult.focus();
+                const selected = selectedItemIdx + 1;
+                setSelectedItemIdx( selected );
+                
+                setDropdownMarkup( printItems( selected ) );
+            }
+        }
+
+        // Handle ArrowUp
+        if ( el.key === 'ArrowUp' && selectedItemIdx >= -1 ) {
+            el.preventDefault();
+            const searchResult = el.currentTarget.querySelector( `.sui-search-dropdown` );
+            if ( searchResult ) {
+                searchResult.focus();
+                const selected = selectedItemIdx - 1;
+                setSelectedItemIdx( selected );
+
+                setDropdownMarkup( printItems( selected ) );
+            }
+        }
+
+        // Handle Home key - select first item
+        if ( el.key === 'Home' && searchResultsItems.length > 0 ) {
+            el.preventDefault();
+            setSelectedItemIdx( 0 );
+            setDropdownMarkup( printItems( 0 ) );
+        }
+
+        // Handle End key - select last item
+        if ( el.key === 'End' && searchResultsItems.length > 0 ) {
+            el.preventDefault();
+            const lastIdx = searchResultsItems.length - 1;
+            setSelectedItemIdx( lastIdx );
+            setDropdownMarkup( printItems( lastIdx ) );
+        }
+
+        // Handle Enter
+        if ( el.key === 'Enter' && selectedItemIdx >= 0 ) {
+            el.preventDefault();
+            const selectedItem = searchResultsItems[ selectedItemIdx ];
+            if ( selectedItem && typeof selectedItem.onClick === 'function' ) {
+                selectedItem.onClick();
+
+                clearDropdown();
+                setSearchResultsFieldStatus( 'closed' );
+                el.currentTarget.querySelector( 'textarea' ).blur();
+                el.currentTarget.blur();
+                return;
+            }
+        }
+
+        // Handle Escape - close dropdown
+        if ( el.key === 'Escape' ) {
+            el.preventDefault();
+            clearDropdown();
+            setSearchResultsFieldStatus( 'closed' );
+            const textarea = el.currentTarget.querySelector( 'textarea' );
+            if ( textarea ) {
+                textarea.blur();
+            }
+            return;
+        }
+
+        // Don't open dropdown on Tab or other non-printing keys
+        if ( el.key !== 'Tab' && el.key !== 'Shift' && el.key !== 'Control' && 
+             el.key !== 'Alt' && el.key !== 'Meta' && el.key !== 'CapsLock' ) {
+            setSearchResultsFieldStatus( 'open' );
+        }
     }
 
     /**
@@ -84,6 +163,7 @@ export function SearchDropdown( props ) {
             ) {
                 setSearchResultsFieldStatus( 'closed' );
                 setTextareaValue( '' );
+                setSelectedItemIdx( -1 );
             }
 
             clearInterval( blurTimer );
@@ -98,27 +178,44 @@ export function SearchDropdown( props ) {
     const clearDropdown = () => {
         setSearchResultsFieldStatus( 'closed' );
         setTextareaValue( '' );
+        setSelectedItemIdx( -1 );
         //props.searchResults = [];
         setDropdownMarkup( '');
         //props.showDefaultMessage = true;
         //props.showNoResultsMessage = false;
         setDropdownMarkup( getDefaultMessage() );
-        setReset( true )
+        setReset( true );
     }
 
-    const printItems = () => {
+    const printItems = ( selected ) => {
         if ( typeof searchResultsItems !== 'undefined' && searchResultsItems.length > 0 ) {
+            let selectedItem;
+            if (props.isLoading) {
+                selectedItem = -1;
+            } else {
+                selectedItem = selected;
+            }
             return (
                 searchResultsItems.map(
-                    (listItem) => (
+                    (listItem, index) => (
                         ( typeof listItem !== 'undefined' && listItem.hasOwnProperty( 'key' ) ) &&
                         <li
                             key={`${props.id}-${listItem.key}`}
-                            className={"select2-results__option select2-results__option--selectable"}
+                            id={`${props.id}-option-${index}`}
+                            className={`select2-results__option select2-results__option--selectable${selectedItem === index ? ' select2-results__option--selected' : ''}`}
                             onClick={() => {
                                 listItem.onClick();
                                 clearDropdown();
                             } }
+                            onKeyDown={(e) => {
+                                if ( e.key === 'Enter' || e.key === ' ' ) {
+                                    e.preventDefault();
+                                    listItem.onClick();
+                                    clearDropdown();
+                                }
+                            }}
+                            role="option"
+                            aria-selected={selectedItem === index ? 'true' : 'false'}
                         >
                             {listItem.display}
                         </li>
@@ -129,34 +226,40 @@ export function SearchDropdown( props ) {
     }
 
     const getDefaultMessage = () => {
-        return <li
-            role="alert"
-            aria-live="assertive"
-            className="select2-results__option select2-results__message"
-        >
+        return <div className="select2-results__option select2-results__message">
             {props.defaultMessage}
-        </li>;
+        </div>;
+    }
+
+    const getNoResultsMessage = () => {
+        return <div className="select2-results__option select2-results__message">
+            {props.noResultsMessage}
+        </div>;
     }
 
     const dropdownContent = () => {
-
         if ( props.showDefaultMessage && props.defaultMessage ) {
             return getDefaultMessage();
         } else if ( props.showNoResultsMessage && props.noResultsMessage ) {
-            return <li
-                role="alert"
-                aria-live="assertive"
-                className="select2-results__option select2-results__message"
-            >
-                {props.noResultsMessage}
-            </li>;
+            return getNoResultsMessage();
         }
-        return printItems();
+        return printItems(selectedItemIdx);
     }
 
+    let searchStatus;
+    if (props.isLoading) {
+        searchStatus = __('Loading results', 'broken-link-checker');
+    } else if (props.showNoResultsMessage && props.noResultsMessage){
+        searchStatus = props.noResultsMessage;
+    } else if (props.showDefaultMessage && props.defaultMessage) {
+        searchStatus = props.defaultMessage;
+    } else {
+        searchStatus = `${searchResultsItems.length} ${searchResultsItems.length === 1 ? 'result' : 'results'} available`;
+    }
 
     return(
         <div
+            ref={props.containerRef}
             className={`blc-search-dropdown-container blc-search-dropdown-container-${searchResultsFieldStatus}`}
             id={`blc-search-dropdown-container-${props.id}`}
             onFocus={(e)=> { handleSearchDropdownFocus(e) }}
@@ -187,8 +290,9 @@ export function SearchDropdown( props ) {
                         className="select2-selection select2-selection--multiple"
                         id={`blc-search-dropdown__renderer_wrap-${props.id}`}
                         role="combobox"
-                        aria-haspopup="true"
-                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                        aria-expanded={searchResultsFieldStatus === 'open' ? 'true' : 'false'}
+                        aria-controls={`select2-${props.id}-results1`}
                         tabIndex="-1"
                         aria-disabled="false"
                     >
@@ -210,7 +314,8 @@ export function SearchDropdown( props ) {
                                     aria-autocomplete="list"
                                     autoComplete="off"
                                     aria-label={props.ariaLabel}
-                                    aria-describedby={`select2-${props.id}-container`}
+                                    aria-required={props.required ? 'true' : 'false'}
+                                    aria-activedescendant={selectedItemIdx >= 0 ? `${props.id}-option-${selectedItemIdx}` : ''}
                                     placeholder={props.placeholder}
                                     onKeyDown={props.onKeyDown}
                                     onClick={props.onClick}
@@ -237,16 +342,28 @@ export function SearchDropdown( props ) {
                     dir="ltr"
                 >
                     <span className="select2-results">
-                        <ul
-                            className="select2-results__options"
-                            role="listbox"
-                            aria-multiselectable="true"
-                            id={`select2-${props.id}-results1`}
-                            aria-expanded="true"
-                            aria-hidden="false"
-                        >
+                        <span 
+                            role="status"
+                            aria-live="polite"
+                            className="sui-screen-reader-text">
+                            {searchStatus}
+                            </span>
+                        {( props.showDefaultMessage || props.showNoResultsMessage ) ? (
+                            <div className="select2-results__options" style={{display: 'flex'}}>
                             {dropdownMarkup}
-                        </ul>
+                            </div>
+                        ) : (
+                            <ul
+                                className="select2-results__options"
+                                role="listbox"
+                                aria-multiselectable="true"
+                                id={`select2-${props.id}-results1`}
+                                aria-label={props.ariaLabel || props.placeholder}
+                                aria-hidden={searchResultsFieldStatus === 'closed' ? 'true' : 'false'}
+                            >
+                                {dropdownMarkup}
+                            </ul>
+                        )}
                     </span>
                 </span>
             </span>

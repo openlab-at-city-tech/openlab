@@ -352,12 +352,101 @@ class EPKB_Site_Builders {
 	 * @return bool
 	 */
 	public static function has_page_builder_enabled() {
-		return self::is_elementor_enabled() || 
-			   self::is_divi_enabled() || 
-			   self::is_wpb_enabled() || 
-			   self::is_vc_enabled() || 
-			   self::is_beaver_enabled() || 
+		return self::is_elementor_enabled() ||
+			   self::is_divi_enabled() ||
+			   self::is_wpb_enabled() ||
+			   self::is_vc_enabled() ||
+			   self::is_beaver_enabled() ||
 			   self::is_so_enabled();
+	}
+
+	/**
+	 * Check if article content contains page builder shortcodes/tags
+	 *
+	 * @param string $content
+	 * @return bool
+	 */
+	public static function has_page_builder_content( $content ) {
+
+		$content = trim( $content );
+		if ( empty( $content ) || strlen( $content ) < 10 ) {
+			return false;
+		}
+
+		// Divi check - look for Divi builder shortcodes
+		if ( self::is_divi_enabled() ) {
+			if ( strpos( $content, '[et_pb_' ) !== false ||
+				 strpos( $content, 'et_pb_section' ) !== false ) {
+				return true;
+			}
+		}
+
+		// WPBakery/Visual Composer check
+		if ( self::is_wpb_enabled() || self::is_vc_enabled() ) {
+			if ( strpos( $content, '[vc_' ) !== false ||
+				 strpos( $content, 'vc_row' ) !== false ||
+				 strpos( $content, '[vcv_' ) !== false ) {
+				return true;
+			}
+		}
+
+		// Beaver Builder check
+		if ( self::is_beaver_enabled() ) {
+			if ( strpos( $content, '[fl_builder_' ) !== false ||
+				 strpos( $content, 'fl-builder-content' ) !== false ) {
+				return true;
+			}
+		}
+
+		// SiteOrigin Page Builder check
+		if ( self::is_so_enabled() ) {
+			if ( strpos( $content, '[siteorigin_widget' ) !== false ||
+				 strpos( $content, 'panel-layout' ) !== false ) {
+				return true;
+			}
+		}
+
+		// Check for other common shortcodes that might need special handling
+		$shortcodes_to_check = array(
+			'[fusion_',      // Avada Fusion Builder
+			'[av_',          // Enfold Avia Builder
+			'[cs_',          // Cornerstone
+			'[ultimate_',    // Ultimate Addons
+			'[porto_',       // Porto theme
+			'[rev_slider',   // Revolution Slider
+			'[layerslider',  // LayerSlider
+		);
+
+		foreach ( $shortcodes_to_check as $shortcode ) {
+			if ( strpos( $content, $shortcode ) !== false ) {
+				return true;
+			}
+		}
+
+		// Check for Gutenberg blocks (but exclude simple paragraph blocks)
+		if ( strpos( $content, '<!-- wp:' ) !== false ) {
+			// Check for complex blocks that might need page reload
+			$complex_blocks = array(
+				'<!-- wp:columns',
+				'<!-- wp:group',
+				'<!-- wp:cover',
+				'<!-- wp:media-text',
+				'<!-- wp:buttons',
+				'<!-- wp:gallery',
+				'<!-- wp:table',
+				'<!-- wp:embed',
+				'<!-- wp:shortcode',
+				'<!-- wp:html'
+			);
+
+			foreach ( $complex_blocks as $block ) {
+				if ( strpos( $content, $block ) !== false ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public static function is_elementor_enabled() {

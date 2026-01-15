@@ -1,0 +1,69 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Close": [
+                "बंद करें"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Loading...": [
+                "लोड हो रहा है..."
+            ],
+            "General Settings": [
+                "सामान्य सेटिंग्स"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "आपका सत्र समाप्त हो गया है। कृपया पृष्ठ को ताज़ा करें।."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "बहुत अधिक अनुरोध हैं। कृपया एक पल प्रतीक्षा करें और फिर से प्रयास करें।."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "अप्रत्याशित त्रुटि हो गई। कृपया फिर से कोशिश करें।."
+            ],
+            "Confirm Action": [
+                "क्रिया की पुष्टि करें"
+            ],
+            "Are you sure you want to proceed?": [
+                "क्या आप आगे बढ़ना चाहते हैं?"
+            ],
+            "Confirm": [
+                "पुष्टि करें"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "AI सुविधाओं का उपयोग करने के लिए, कृपया अपनी API कुंजी कॉन्फ़िगर करें और डेटा गोपनीयता समझौता स्वीकार करें"
+            ],
+            "Session Expired": [
+                "सत्र समाप्त"
+            ],
+            "Refresh Page": [
+                "पृष्ठ को ताज़ा करें"
+            ],
+            "No results found": [
+                "कोई परिणाम नहीं मिला"
+            ],
+            "Tutorial": [
+                "ट्यूटोरियल"
+            ],
+            "Learn how to use this feature": [
+                "इस सुविधा का उपयोग कैसे करें"
+            ],
+            "Tutorial Screenshot": [
+                "ट्यूटोरियल स्क्रीनशॉट"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "यह इस सुविधा के उपयोग को समझाने वाला एक ट्यूटोरियल है।."
+            ],
+            "Close Tutorial": [
+                "ट्यूटोरियल बंद करें"
+            ]
+        }
+    }
+}

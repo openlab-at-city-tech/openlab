@@ -201,7 +201,7 @@ class Page extends Lib\Base\Ajax
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
-            'processing' => __( 'Processing...', 'bookly' ),
+            'processing' => __( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
         ) );

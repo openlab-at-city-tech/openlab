@@ -25,6 +25,10 @@ window.GFDropbox = null;
 		}
 
 		this.createDropboxButton = function() {
+			if ( ! document.querySelector( '#field_' + this.fieldUniqueIdentifier + ' .ginput_container' ) ) {
+				return;
+			}
+
 			var button = Dropbox.createChooseButton( {
 				extensions:  this.extensions,
 				linkType:    this.linkType,
@@ -45,6 +49,9 @@ window.GFDropbox = null;
 		}
 
 		this.getFieldValue = function() {
+			if ( ! document.getElementById( 'input_' + this.fieldUniqueIdentifier ) ) {
+				return;
+			}
 
 			var value = document.getElementById( 'input_' + this.fieldUniqueIdentifier ).value || [];
 
@@ -63,6 +70,9 @@ window.GFDropbox = null;
 		}
 
 		this.refreshPreview = function() {
+			if ( ! document.getElementById( 'gform_preview_' + this.fieldUniqueIdentifier ) ) {
+				return;
+			}
 
 			var preview = document.getElementById( 'gform_preview_' + this.fieldUniqueIdentifier ),
 				files = GFDropboxObj.getFieldValue();

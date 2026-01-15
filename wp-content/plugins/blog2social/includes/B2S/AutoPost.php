@@ -47,7 +47,7 @@ class B2S_AutoPost {
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0, $networkKind = 0) {
 
-
+     
         if ((int) $networkId > 0 && (int) $networkAuthId > 0) {
             $postData = array('content' => '', 'custom_title' => '', 'tags' => array(), 'network_auth_id' => (int) $networkAuthId);
 
@@ -87,8 +87,38 @@ class B2S_AutoPost {
                 $limit = (isset($tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'])) ? $tempOptionPostFormat[$networkId][$networkType]['short_text']['limit'] : 0;
             }
 
+
+            //Share Settings
+            $postData['share_settings'] = array('mode' => 0); //share as draft - tiktok
+            
+            if ($networkId == 36) {
+                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+                $optionsShareSettings = $options->_getOption("share_settings");
+                //is directly?
+                if (isset($optionsShareSettings[$networkAuthId]["share_as_draft"]) && $optionsShareSettings[$networkAuthId]["share_as_draft"] == false) {
+                    $postData['share_settings']['mode'] = 1;
+                    if (isset($optionsShareSettings[$networkAuthId]['status_privacy'])) {
+                        $postData['share_settings']['status_privacy'] = $optionsShareSettings[$networkAuthId]['status_privacy'];
+                    }
+
+                    if (isset($optionsShareSettings[$networkAuthId]['allow_comment'])) {
+                        $postData['share_settings']['allow_comment'] = $optionsShareSettings[$networkAuthId]['allow_comment'] == true ? 1 : 0;
+                    }
+
+                    if (isset($optionsShareSettings[$networkAuthId]["promotion_option_organic"])) {
+                        $postData['share_settings']["promotion_option_organic"] = $optionsShareSettings[$networkAuthId]["promotion_option_organic"] == true ? 1 : 0;
+                    }
+
+                    if (isset($optionsShareSettings[$networkAuthId]["promotion_option_branded"])) {
+                        $postData['share_settings']["promotion_option_branded"] = $optionsShareSettings[$networkAuthId]["promotion_option_branded"] == true ? 1 : 0;
+                    }
+                }
+
+                $postData['custom_title'] = wp_strip_all_tags($this->title);
+            }
+
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43, 44, 45))) {
+            if (in_array($networkId, array(1, 2, 3, 4, 12, 17, 19, 24, 43, 44, 45))) {
                 //Get: client settings
                 if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && ((int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 0 || (int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 1)) {
                     $postData['post_format'] = (int) $tempOptionPostFormat[$networkId][$networkType]['format'];
@@ -96,7 +126,17 @@ class B2S_AutoPost {
                     //Set: default settings
                     $postData['post_format'] = isset($this->default_template[$networkId][$networkType]['format']) ? (int) $this->default_template[$networkId][$networkType]['format'] : 0;
                 }
+
+
+                //Tumblr Post-Format different Link=3
+                if ($networkId == 4) {
+
+                    if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && $tempOptionPostFormat[$networkId][$networkType]['format'] == 3) {
+                        $postData['post_format'] = 3;
+                    }
+                }
             }
+
             //Special
             if (array_key_exists($networkId, $tempOptionPostFormat)) {
 
@@ -178,9 +218,25 @@ class B2S_AutoPost {
                     }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }
+
+                if ($networkId == 4) {
+                    $postData['custom_title'] = wp_strip_all_tags($this->title);
+                    //$postData['content'] = $this->contentHtml;
+                    if ($this->allowHashTag) {
+                        if (is_array($this->keywords) && !empty($this->keywords)) {
+                            foreach ($this->keywords as $tag) {
+                                $postData['tags'][] = str_replace(" ", "", $tag->name);
+                            }
+                        }
+                    }
+                }
+                if($networkId == 39) {
+                    $postData['custom_title'] = wp_strip_all_tags($this->title);
+                }
             } else {
                 if ($networkId == 4) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
+
                     $postData['content'] = $this->contentHtml;
                     if ($this->allowHashTag) {
                         if (is_array($this->keywords) && !empty($this->keywords)) {
@@ -322,7 +378,7 @@ class B2S_AutoPost {
 
         global $wpdb;
         if ($this->userVersion >= 3) {
-            
+
             $dataString = $wpdb->get_var($wpdb->prepare("SELECT `data` FROM `{$wpdb->prefix}b2s_posts_network_details` WHERE `network_auth_id` = %d", (int) $network_auth_id));
             if ($dataString !== NULL && !empty($dataString)) {
                 $networkAuthData = unserialize($dataString);
@@ -347,28 +403,28 @@ class B2S_AutoPost {
         //Option: Publish with Delay
         if ((int) $this->delay > 0) {
             $time = "+ " . $this->delay . " minutes";
-            $sched_date =  wp_date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
-            $sched_date_utc =  wp_date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
+            $sched_date = wp_date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
+            $sched_date_utc = wp_date('Y-m-d H:i:s', strtotime($time, strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
         }
 
         //Option: at best times 
         if ($sched_type == 2 && $this->myTimeSettings !== false && is_array($this->myTimeSettings) && isset($this->myTimeSettings['times']) && is_array($this->myTimeSettings['times'])) {
             if (isset($this->myTimeSettings['times']['delay_day'][$network_auth_id]) && isset($this->myTimeSettings['times']['time'][$network_auth_id]) && !empty($this->myTimeSettings['times']['time'][$network_auth_id])) {
-                $tempSchedDate =  wp_date('Y-m-d', strtotime($sched_date), new DateTimeZone(date_default_timezone_get()));
-                $networkSchedDate =  wp_date('Y-m-d H:i:00', strtotime($tempSchedDate . ' ' . $this->myTimeSettings['times']['time'][$network_auth_id]), new DateTimeZone(date_default_timezone_get()));
+                $tempSchedDate = wp_date('Y-m-d', strtotime($sched_date), new DateTimeZone(date_default_timezone_get()));
+                $networkSchedDate = wp_date('Y-m-d H:i:00', strtotime($tempSchedDate . ' ' . $this->myTimeSettings['times']['time'][$network_auth_id]), new DateTimeZone(date_default_timezone_get()));
                 if ((int) $this->myTimeSettings['times']['delay_day'][$network_auth_id] > 0) {
-                    $sched_date =  wp_date('Y-m-d H:i:s', strtotime('+' . $this->myTimeSettings['times']['delay_day'][$network_auth_id] . ' days', strtotime($networkSchedDate)), new DateTimeZone(date_default_timezone_get()));
-                    $sched_date_utc =  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))),new DateTimeZone(date_default_timezone_get()));
+                    $sched_date = wp_date('Y-m-d H:i:s', strtotime('+' . $this->myTimeSettings['times']['delay_day'][$network_auth_id] . ' days', strtotime($networkSchedDate)), new DateTimeZone(date_default_timezone_get()));
+                    $sched_date_utc = wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                 } else {
                     if ($networkSchedDate >= $sched_date) {
                         //Scheduling
                         $sched_date = $networkSchedDate;
 
-                        $sched_date_utc =  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
+                        $sched_date_utc = wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                     } else {
                         //Scheduling on next Day by Past
-                        $sched_date =  wp_date('Y-m-d H:i:s', strtotime('+1 days', strtotime($networkSchedDate)), new DateTimeZone(date_default_timezone_get()));
-                        $sched_date_utc =  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
+                        $sched_date = wp_date('Y-m-d H:i:s', strtotime('+1 days', strtotime($networkSchedDate)), new DateTimeZone(date_default_timezone_get()));
+                        $sched_date_utc = wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($sched_date, $this->blogPostData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                     }
                 }
             }
@@ -393,20 +449,20 @@ class B2S_AutoPost {
         //Option: Re-Post / after 24h
         $echoDates = array();
         if ($this->echo == 1) {
-            $date =  wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
-            $date_utc =  wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
+            $date = wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
+            $date_utc = wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
             //after 48h
         } else if ($this->echo == 2) {
-            $date =  wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
-            $date_utc =  wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
+            $date = wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
+            $date_utc = wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
             //both  
         } else if ($this->echo == 3) {
-            $date =  wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
-            $date_utc =  wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
-            $date2 =  wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
-            $date2_utc =  wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
+            $date = wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
+            $date_utc = wp_date('Y-m-d H:i:s', strtotime("+1 day", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
+            $date2 = wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date)), new DateTimeZone(date_default_timezone_get()));
+            $date2_utc = wp_date('Y-m-d H:i:s', strtotime("+2 days", strtotime($sched_date_utc)), new DateTimeZone(date_default_timezone_get()));
             $echoDates[] = array("date" => $date, "date_utc" => $date_utc);
             $echoDates[] = array("date" => $date2, "date_utc" => $date2_utc);
         }
@@ -428,7 +484,7 @@ class B2S_AutoPost {
                 'network_details_id' => $networkDetailsId,
                 'post_for_approve' => (int) $shareApprove,
                 'hook_action' => (((int) $shareApprove == 0) ? 1 : 0),
-                'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? 1 : 0) : 0)
+                'post_format' => ((isset($shareData['post_format']) && $shareData['post_format'] !== '') ? (((int) $shareData['post_format'] > 0) ? $shareData['post_format'] : 0) : 0)
                     ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
             $insertId = $wpdb->insert_id;
             B2S_Rating::trigger();

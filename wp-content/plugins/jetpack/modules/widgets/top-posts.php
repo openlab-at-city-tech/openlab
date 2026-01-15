@@ -17,6 +17,10 @@ use Automattic\Jetpack\Stats\WPCOM_Stats;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 // Register the widget for use in Appearance -> Widgets
 add_action( 'widgets_init', 'jetpack_top_posts_widget_init' );
 
@@ -147,7 +151,7 @@ class Jetpack_Top_Posts_Widget extends WP_Widget {
 
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_html_e( 'Maximum number of posts to show (no more than 10):', 'jetpack' ); ?></label>
-			<input id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" type="number" value="<?php echo (int) $count; ?>" min="1" max="10" />
+			<input id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" type="number" value="<?php echo esc_attr( (string) $count ); ?>" min="1" max="10" />
 		</p>
 
 		<?php if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) : ?>
@@ -434,8 +438,8 @@ class Jetpack_Top_Posts_Widget extends WP_Widget {
 						$post['post_id'],
 						array(
 							'fallback_to_avatars' => (bool) $get_image_options['fallback_to_avatars'],
-							'width'               => (int) $width,
-							'height'              => (int) $height,
+							'width'               => $width,
+							'height'              => $height,
 							'avatar_size'         => (int) $get_image_options['avatar_size'],
 						)
 					);
@@ -704,14 +708,14 @@ class Jetpack_Top_Posts_Widget extends WP_Widget {
 		$days = (int) apply_filters( 'jetpack_top_posts_days', 2, $args );
 
 		/** Handling situations where the number of days makes no sense - allows for unlimited days where $days = -1 */
-		if ( 0 === $days || false === $days ) {
+		if ( 0 === $days ) {
 			$days = 2;
 		}
 
 		$query_args      = array(
 			'max'       => 11,
 			'summarize' => 1,
-			'num'       => (int) $days,
+			'num'       => $days,
 		);
 		$wpcom_stats     = new WPCOM_Stats();
 		$post_view_posts = $wpcom_stats->convert_stats_array_to_object(

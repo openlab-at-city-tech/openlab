@@ -81,7 +81,7 @@ use Bookly\Lib\Config;
     <div class="form-group">
         <label for="bookly-info"><?php esc_html_e( 'Info', 'bookly' ) ?></label>
         <textarea id="bookly-info" name="info" rows="3" class="form-control"><?php echo esc_textarea( $staff->getInfo() ) ?></textarea>
-        <small class="form-text text-muted"><?php printf( esc_html__( 'This text can be inserted into notifications with %s code.', 'bookly' ), '{staff_info}' ) ?></small>
+        <small class="form-text text-muted"><?php printf( esc_html__( 'This text can be inserted into notifications with %s code', 'bookly' ), '{staff_info}' ) ?></small>
     </div>
     <div class='form-group pb-2'>
         <label><?php esc_html_e( 'Color', 'bookly' ) ?></label>

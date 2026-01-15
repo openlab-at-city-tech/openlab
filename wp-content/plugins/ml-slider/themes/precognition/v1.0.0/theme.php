@@ -34,7 +34,6 @@ class MetaSlider_Theme_Precognition extends MetaSlider_Theme_Base
     {
         parent::__construct($this->id, $this->version);
         add_filter('metaslider_flex_slider_parameters', array($this, 'use_manual_controls'), 10, 3);
-        add_filter('metaslider_flex_slider_get_html', array($this, 'add_title_to_replace_dots'), 10, 3);
     }
 
     /**
@@ -49,7 +48,7 @@ class MetaSlider_Theme_Precognition extends MetaSlider_Theme_Base
     public function use_manual_controls($options, $slideshow_id, $settings)
     {
         // Only enable this for dots nav
-        if ('true' === $settings['navigation']) {
+        if (('true' === $settings['navigation'] || 'dots_onhover' === $settings['navigation']) && 'false' === $settings['carouselMode']) {
             $options['manualControls'] = "'.titleNav-{$slideshow_id} li a'";
         }
         return $options;
@@ -60,8 +59,8 @@ class MetaSlider_Theme_Precognition extends MetaSlider_Theme_Base
      */
     public function enqueue_assets()
     {
-        wp_enqueue_style('metaslider_precognition_theme_styles', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/style.css', array('metaslider-public'), '1.0.0');
-        wp_enqueue_script('metaslider_precognition_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_style('metaslider_precognition_theme_styles', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/style.css', array('metaslider-public'), METASLIDER_VERSION);
+        wp_enqueue_script('metaslider_precognition_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script.js', array('jquery'), METASLIDER_VERSION, true);
     }
 }
 

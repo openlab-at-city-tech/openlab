@@ -54,7 +54,7 @@ class Inputs
 
             return str_replace( array( '-', '_' ), array( ' ', ' ' ), ucfirst( $value ) );
         };
-        $reorder = esc_attr__( 'Reorder', 'bookly' );
+        $reorder = esc_attr_x( 'Reorder', 'order of elements', 'bookly' );
         $getItem = function ( $value, $title ) use ( $option_name, $reorder ) {
             return strtr(
                 '<div>

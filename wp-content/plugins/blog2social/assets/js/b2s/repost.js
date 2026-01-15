@@ -134,6 +134,7 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
     jQuery('.b2s-re-post-no-content').hide();
     jQuery('.b2s-re-post-content-in-queue').hide();
     jQuery('.b2s-re-post-limit-error').hide();
+    jQuery('.no_network_in_group').hide();
     jQuery('.b2s-loading-area').show();
     jQuery.ajax({
         url: ajaxurl,
@@ -189,6 +190,11 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
                     jQuery('.b2s-re-post-limit-error').show();
                     return false;
                 }
+                if(data.error == 'no_network_in_group'){
+                    jQuery('.no_network_in_group').show();
+                    return false;
+                }
+
                 jQuery('.b2s-server-connection-fail').show();
             }
         }
@@ -696,9 +702,9 @@ function padDate(n) {
 }
 
 
-function checkSchedDateTime() {
-    var dateElement = '#b2s-change-date';
-    var timeElement = '#b2s-change-time';
+function checkSchedDateTimeCalendar(dataNetworkAuthId) {
+    var dateElement = '.b2s-post-item-details-release-input-date[data-network-auth-id="' + dataNetworkAuthId + '"]';
+    var timeElement = '.b2s-post-item-details-release-input-time[data-network-auth-id="' + dataNetworkAuthId + '"]';
     var dateStr = jQuery(dateElement).val();
     var minStr = jQuery(timeElement).val();
     var timeZone = parseInt(jQuery('#user_timezone').val()) * (-1);
@@ -728,13 +734,12 @@ function checkSchedDateTime() {
     var enter = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], hour, minParts3[1]);
     //compare enter date time with allowed user time
     if (enter.getTime() < now.getTime()) {
-//enter set on next 15 minutes and calculate on user timezone
+        //enter set on next 15 minutes and calculate on user timezone
         enter.setTime(now.getTime() + (900000 - (now.getTime() % 900000)) - (3600000 * (timeZone + offset)));
         jQuery(dateElement).datepicker('update', enter);
         jQuery(timeElement).timepicker('setTime', enter);
     }
 }
-
 jQuery(document).on('click', '.b2s-sched-calendar-btn', function () {
     if (jQuery('#b2s-sched-calendar-area').is(":visible")) {
         jQuery('#b2s-sched-calendar-btn-text').text(jQuery(this).attr('data-show-calendar-btn-title'));
@@ -1100,3 +1105,221 @@ function renderCalender() {
 
     });
 }
+
+
+jQuery(document).on('click', '.b2s-get-settings-sched-time-default', function () {
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_get_settings_sched_time_default',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            if (data.result == true) {
+                var tomorrow = new Date();
+                if (jQuery('#b2sBlogPostSchedDate').length > 0) {
+                    tomorrow.setTime(jQuery('#b2sBlogPostSchedDate').val());
+                }
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                var tomorrowMonth = ("0" + (tomorrow.getMonth() + 1)).slice(-2);
+                var tomorrowDate = ("0" + tomorrow.getDate()).slice(-2);
+                var dateTomorrow = tomorrow.getFullYear() + "-" + tomorrowMonth + "-" + tomorrowDate;
+                var today = new Date();
+                if (jQuery('#b2sBlogPostSchedDate').length > 0) {
+                    today.setTime(jQuery('#b2sBlogPostSchedDate').val());
+                }
+
+                var todayMonth = ("0" + (today.getMonth() + 1)).slice(-2);
+                var todayDate = ("0" + today.getDate()).slice(-2);
+                var dateToday = today.getFullYear() + "-" + todayMonth + "-" + todayDate;
+                var lang = jQuery('#b2sUserLang').val();
+                if (lang == "de") {
+                    dateTomorrow = tomorrowDate + "." + tomorrowMonth + "." + tomorrow.getFullYear();
+                    dateToday = todayDate + "." + todayMonth + "." + today.getFullYear();
+                }
+
+                jQuery.each(data.times, function (network_id, time) {
+                    if (jQuery('.b2s-post-item[data-network-id="' + network_id + '"]').is(":visible")) {
+                        time.forEach(function (network_type_time, count) {
+                            if (network_type_time != "") {
+
+
+                                var hours = network_type_time.substring(0, 2);
+                                if (lang == "en") {
+                                    var timeparts = network_type_time.split(' ');
+                                    hours = (timeparts[1] == 'AM') ? hours : (parseInt(hours) + 12);
+                                }
+                                if (hours < today.getHours()) {
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').val(dateTomorrow);
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').datepicker('update', dateTomorrow);
+                                } else {
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').val(dateToday);
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').datepicker('update', dateToday);
+                                }
+                                jQuery('.b2s-post-item-details-release-input-time[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').val(network_type_time);
+                                jQuery('.b2s-post-item-details-release-input-time[data-network-id="' + network_id + '"][data-network-type="' + count + '"][data-network-count="0"]').timepicker('setTime', network_type_time);
+
+                                count++;
+                            }
+                        });
+                    }
+                });
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+            }
+        }
+    });
+    return false;
+});
+
+
+jQuery(document).on('click', '.b2s-get-settings-sched-time-user', function () {
+    jQuery('.b2s-server-connection-fail').hide();
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_get_settings_sched_time_user',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            var tomorrow = new Date();
+            if (jQuery('#b2sBlogPostSchedDate').length > 0) {
+                tomorrow.setTime(jQuery('#b2sBlogPostSchedDate').val());
+            }
+
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            var tomorrowMonth = ("0" + (tomorrow.getMonth() + 1)).slice(-2);
+            var tomorrowDate = ("0" + tomorrow.getDate()).slice(-2);
+            var dateTomorrow = tomorrow.getFullYear() + "-" + tomorrowMonth + "-" + tomorrowDate;
+            var today = new Date();
+            if (jQuery('#b2sBlogPostSchedDate').length > 0) {
+                today.setTime(jQuery('#b2sBlogPostSchedDate').val());
+            }
+
+            var todayMonth = ("0" + (today.getMonth() + 1)).slice(-2);
+            var todayDate = ("0" + today.getDate()).slice(-2);
+            var dateToday = today.getFullYear() + "-" + todayMonth + "-" + todayDate;
+            var lang = jQuery('#b2sUserLang').val();
+            if (lang == "de") {
+                dateTomorrow = tomorrowDate + "." + tomorrowMonth + "." + tomorrow.getFullYear();
+                dateToday = todayDate + "." + todayMonth + "." + today.getFullYear();
+            }
+            if (data.result == true) {
+                //V5.1.0 seeding
+                if (data.type == 'new') {
+                    //new
+                    jQuery.each(data.times, function (network_auth_id, time) {
+                        if (jQuery('.b2s-post-item[data-network-auth-id="' + network_auth_id + '"]').is(":visible")) {
+                            //is not set special dates
+                            if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + network_auth_id + '"]').val() == '0') {
+                                jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + network_auth_id + '"]').val('1').trigger("change");
+                            }
+                            var hours = time.substring(0, 2);
+                            var timeparts = time.split(' ');
+                            if (typeof timeparts[1] != 'undefined') {
+                                hours = (timeparts[1] == 'AM') ? hours : (parseInt(hours) + 12);
+                            }
+
+                            var isDelay = false;
+                            var delayDay = data.delay_day[network_auth_id];
+                            if (delayDay != undefined) {
+                                if (delayDay > 0) {
+                                    var delay = new Date();
+                                    if (jQuery('#b2sBlogPostSchedDate').length > 0) {
+                                        delay.setTime(jQuery('#b2sBlogPostSchedDate').val());
+                                    }
+                                    delay.setDate(delay.getDate() + parseInt(delayDay));
+                                    var delayMonth = ("0" + (delay.getMonth() + 1)).slice(-2);
+                                    var delayDate = ("0" + delay.getDate()).slice(-2);
+                                    var dateDelay = delay.getFullYear() + "-" + delayMonth + "-" + delayDate;
+                                    if (lang == 'de') {
+                                        dateDelay = delayDate + '.' + delayMonth + "." + delay.getFullYear();
+                                    }
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').val(dateDelay);
+                                    isDelay = true;
+
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').datepicker('update', dateDelay);
+                                }
+                            }
+                            if (!isDelay) {
+                                if (hours < today.getHours()) {
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').val(dateTomorrow);
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').datepicker('update', dateTomorrow);
+                                } else {
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').val(dateToday);
+                                    jQuery('.b2s-post-item-details-release-input-date[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').datepicker('update', dateToday);
+                                }
+                            }
+                            jQuery('.b2s-post-item-details-release-input-time[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').val(time);
+                            jQuery('.b2s-post-item-details-release-input-time[data-network-auth-id="' + network_auth_id + '"][data-network-count="0"]').timepicker('setTime', new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, time.slice(3, 5)));
+                        }
+                    });
+                } else {
+                    //old
+                    jQuery.each(data.times, function (network_id, time) {
+                        if (jQuery('.b2s-post-item[data-network-id="' + network_id + '"]').is(":visible")) {
+                            time.forEach(function (network_type_time, count) {
+                                if (network_type_time != "") {
+                                    var networkAuthId = jQuery(this).attr('data-network-auth-id');
+                                    //is not set special dates
+                                    if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"]').val() != '1') {
+                                        jQuery('.b2s-post-item-details-release-input-date-select[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"]').val('1').trigger("change");
+                                    }
+                                    var hours = network_type_time.substring(0, 2);
+                                    if (lang == "en") {
+                                        var timeparts = network_type_time.split(' ');
+                                        hours = (timeparts[1] == 'AM') ? hours : (parseInt(hours) + 12);
+                                    }
+                                    if (hours < today.getHours()) {
+                                        jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').val(dateTomorrow);
+                                        jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').datepicker('update', dateTomorrow);
+                                    } else {
+                                        jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').val(dateToday);
+                                        jQuery('.b2s-post-item-details-release-input-date[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').datepicker('update', dateToday);
+                                    }
+                                    jQuery('.b2s-post-item-details-release-input-time[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').val(network_type_time);
+                                    jQuery('.b2s-post-item-details-release-input-time[data-network-id="' + network_id + '"][data-network-auth-id="' + networkAuthId + '"][data-network-type="' + count + '"][data-network-count="0"]').timepicker('setTime', network_type_time);
+                                    count++;
+                                }
+                            });
+                        }
+                    });
+                }
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                //default load best Times
+                //jQuery('.b2s-get-settings-sched-time-default').trigger('click');
+                //set current time
+                jQuery('.b2s-post-item:visible').each(function () {
+                    var networkAuthId = jQuery(this).attr('data-network-auth-id');
+                    if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').is(':not(:disabled)')) {
+                        //is not set special dates
+                        if (jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val() != '1') {
+                            jQuery('.b2s-post-item-details-release-input-date-select[data-network-auth-id="' + networkAuthId + '"]').val('1').trigger("change");
+                        }
+                    }
+                });
+            }
+        }
+    });
+    return false;
+});

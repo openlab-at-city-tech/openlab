@@ -1,0 +1,51 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "Mehr erfahren"
+            ],
+            "Copied!": [
+                "Kopiert!"
+            ],
+            "Copy": [
+                "Kopieren"
+            ],
+            "All features unlocked": [
+                "Alle Funktionen freigeschaltet"
+            ],
+            "Get Started": [
+                "Erste Schritte"
+            ],
+            "Use Code:": [
+                "Code verwenden:"
+            ],
+            "Unlock Premium AI Features": [
+                "Premium-AI-Funktionen freischalten"
+            ],
+            "Take your knowledge base to the next level with advanced AI capabilities": [
+                "Bringen Sie Ihre Wissensdatenbank mit fortgeschrittenen KI-Funktionen auf das nächste Level"
+            ],
+            "Premium Features": [
+                "Premium-Funktionen"
+            ],
+            "Choose Your Plan": [
+                "Wählen Sie Ihren Plan"
+            ],
+            "Flexible pricing to match your needs": [
+                "Flexible Preisgestaltung, die sich nach Ihren Bedürfnissen richtet"
+            ],
+            "What Our Customers Say": [
+                "Was unsere Kunden sagen"
+            ],
+            "Get AI Features": [
+                "KI-Funktionen nutzen"
+            ]
+        }
+    }
+}

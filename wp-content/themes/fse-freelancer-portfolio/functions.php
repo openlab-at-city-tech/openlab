@@ -193,3 +193,15 @@ add_action('after_switch_theme', 'fse_freelancer_portfolio_getstart_setup_option
 function fse_freelancer_portfolio_getstart_setup_options () {
     update_option('fse_freelancer_portfolio_admin_notice', FALSE );
 }
+
+add_action('admin_bar_menu', 'your_plugin_adminbar_link', 100);
+function your_plugin_adminbar_link($wp_admin_bar) {
+    $wp_admin_bar->add_node([
+        'id'    => 'yourplugin_upgrade',
+        'title' => ' Upgrade to Pro',
+        'href'  => 'https://www.cretathemes.com/products/portfolio-wordpress-theme',
+        'meta'  => array(
+            'target' => '_blank',
+        )
+    ]);
+}

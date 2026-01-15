@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "शीर्षक"
+            ],
+            "Filter": [
+                "फ़िल्टर"
+            ],
+            "Status": [
+                "स्थिति"
+            ],
+            "All": [
+                "सभी"
+            ],
+            "Page": [
+                "पृष्ठ"
+            ],
+            "Close": [
+                "बंद करें"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "selected": [
+                "चयनित"
+            ],
+            "Article": [
+                "लेख"
+            ],
+            "Updated": [
+                "अपडेट किया गया"
+            ],
+            "Next": [
+                "अगला"
+            ],
+            "Previous": [
+                "पिछला"
+            ],
+            "Loading...": [
+                "लोड हो रहा है..."
+            ],
+            "Error": [
+                "त्रुटि"
+            ],
+            "Pending": [
+                "स्थगित"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "of": [
+                "में से"
+            ],
+            "Refreshing...": [
+                "ताज़ा किया जा रहा है..."
+            ],
+            "Refresh": [
+                "ताज़ा करें"
+            ],
+            "Searching server for more results...": [
+                "अधिक परिणामों के लिए सर्वर खोज रहा है..."
+            ],
+            "Data refreshed successfully": [
+                "डेटा सफलतापूर्वक ताज़ा किया गया"
+            ],
+            "Delete Selected Items": [
+                "चयनित आइटम हटाएं"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "क्या आप चयनित आइटम हटाना चाहते हैं?"
+            ],
+            "Items deleted successfully": [
+                "चयनित आइटम सफलतापूर्वक हटाए गए"
+            ],
+            "Sort": [
+                "क्रमबद्ध करें"
+            ],
+            "Completed": [
+                "पूर्ण"
+            ],
+            "Outdated": [
+                "पुराना"
+            ],
+            "Added": [
+                "जोड़ा गया"
+            ],
+            "Failed to load training data": [
+                "मशीन लर्निंग डेटा लोड करने में विफल"
+            ],
+            "Failed to delete items": [
+                "आइटम हटाने में विफल"
+            ],
+            "Delete Items": [
+                "आइटम हटाएं"
+            ],
+            "Syncing": [
+                "समन्वय हो रहा है"
+            ],
+            "Canceled": [
+                "रद्द किया गया"
+            ],
+            "How to get started": [
+                "शुरू कैसे करें"
+            ],
+            "Choose Training Data": [
+                "Machine learning data चुनें"
+            ],
+            "Pick the content types to include.": [
+                "शामिल करने के लिए सामग्री प्रकार चुनें।."
+            ],
+            "Send Data to AI": [
+                "एआई में डेटा भेजें"
+            ],
+            "Select items in the table, then sync them.": [
+                "तालिका में आइटम चुनें, फिर उन्हें सिंक करें."
+            ],
+            "Other Actions": [
+                "अन्य क्रियाएं"
+            ],
+            "Rename the collection or delete items.": [
+                "संग्रह का नाम बदलें या आइटम हटाएं."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "टिप: प्रवाह का परीक्षण करने के लिए छोटे सेट से शुरू करें."
+            ],
+            "Sync": [
+                "सिंक"
+            ],
+            "Sync Complete": [
+                "सिंक पूर्ण"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "शीर्षक, प्रकार, URL, या ID से खोजें..."
+            ],
+            "Preparing sync...": [
+                "सिंक तैयार हो रहा है..."
+            ],
+            "Loading training data...": [
+                "Machine learning data लोड हो रहा है..."
+            ],
+            "Type": [
+                "प्रकार"
+            ],
+            "No training data found": [
+                "कोई Machine learning data नहीं मिला"
+            ],
+            "Edit note": [
+                "नोट संपादित करें"
+            ],
+            "View Error": [
+                "त्रुटि देखें"
+            ],
+            "View content": [
+                "सामग्री देखें"
+            ],
+            "KB Files": [
+                "KB फ़ाइलें"
+            ],
+            "Never": [
+                "कभी नहीं"
+            ],
+            "Error Details": [
+                "त्रुटि विवरण"
+            ],
+            "Failed to load content": [
+                "सामग्री लोड करने में विफल रहा"
+            ],
+            "Post ID:": [
+                "पोस्ट ID:"
+            ],
+            "Loading content...": [
+                "सामग्री लोड हो रही है..."
+            ],
+            "Error Processing Content": [
+                "सामग्री प्रसंस्करण में त्रुटि"
+            ],
+            "Original Content": [
+                "मूल सामग्री"
+            ],
+            "Processed Content": [
+                "प्रसंस्कृत सामग्री"
+            ],
+            "No content available": [
+                "कोई सामग्री उपलब्ध नहीं है"
+            ],
+            "No processed content available": [
+                "कोई प्रसंस्कृत सामग्री उपलब्ध नहीं है"
+            ]
+        }
+    }
+}

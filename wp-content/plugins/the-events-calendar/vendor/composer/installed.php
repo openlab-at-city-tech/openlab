@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'the-events-calendar/the-events-calendar',
-        'pretty_version' => 'dev-release/T25.flash',
-        'version' => 'dev-release/T25.flash',
-        'reference' => '23e387e1bc44da312488035de51f4fca71ba7764',
+        'pretty_version' => 'dev-release/T25.moonknight.2',
+        'version' => 'dev-release/T25.moonknight.2',
+        'reference' => '6939590d50e69e9ebc00897c5f1d2ec2fc082db5',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'the-events-calendar/the-events-calendar' => array(
-            'pretty_version' => 'dev-release/T25.flash',
-            'version' => 'dev-release/T25.flash',
-            'reference' => '23e387e1bc44da312488035de51f4fca71ba7764',
+            'pretty_version' => 'dev-release/T25.moonknight.2',
+            'version' => 'dev-release/T25.moonknight.2',
+            'reference' => '6939590d50e69e9ebc00897c5f1d2ec2fc082db5',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

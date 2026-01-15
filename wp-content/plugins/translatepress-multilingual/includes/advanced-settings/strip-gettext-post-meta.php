@@ -26,9 +26,12 @@ function trp_filter_trpgettext_from_updated_post_meta($meta_id, $object_id, $met
 	$option = get_option( 'trp_advanced_settings', true );
 	if ( isset( $option['strip_gettext_post_meta'] ) && $option['strip_gettext_post_meta'] === 'yes' && class_exists( 'TRP_Translation_Manager' ) ){
 		if ( is_serialized($meta_value) ){
-			$unserialized_meta_value = unserialize($meta_value);
-			$stripped_meta_value = trp_strip_gettext_array( $unserialized_meta_value );
-			$stripped_meta_value = serialize( $stripped_meta_value );
+			// Security fix: Skip processing serialized data to prevent PHP object injection
+			// Only process plain text meta values
+            // https://www.php.net/manual/en/function.unserialize.php
+            // Do not pass untrusted user input to unserialize() regardless of the options value of allowed_classes.
+            // Unserialization can result in code being loaded and executed due to object instantiation and autoloading, and a malicious user may be able to exploit this.
+			return;
 		}else{
 			$stripped_meta_value = trp_strip_gettext_array( $meta_value );
 		}

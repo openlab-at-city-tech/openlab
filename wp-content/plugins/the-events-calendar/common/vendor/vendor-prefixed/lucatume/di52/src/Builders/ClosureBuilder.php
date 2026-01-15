@@ -1,19 +1,18 @@
 <?php
+
 /**
  * Closure-based builder.
  *
  * @package lucatume\DI52
  */
-
 namespace TEC\Common\lucatume\DI52\Builders;
 
 use Closure;
 use TEC\Common\lucatume\DI52\Container;
-
 /**
  * Class ClosureBuilder
  *
- * @package TEC\Common\lucatume\DI52\Builders
+ * @package \TEC\Common\lucatume\DI52\Builders
  */
 class ClosureBuilder implements BuilderInterface
 {
@@ -23,14 +22,12 @@ class ClosureBuilder implements BuilderInterface
      * @var Container
      */
     protected $container;
-
     /**
      * A reference to the closure the builder should run to build.
      *
      * @var Closure
      */
     protected $closure;
-
     /**
      * ClosureBuilder constructor.
      *
@@ -42,7 +39,6 @@ class ClosureBuilder implements BuilderInterface
         $this->container = $container;
         $this->closure = $closure;
     }
-
     /**
      * Calls the Closure handled by the builder to return the built implementation.
      *

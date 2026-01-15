@@ -1,0 +1,90 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Cancel": [
+                "Annuller"
+            ],
+            "articles": [
+                "artikler"
+            ],
+            "Analyze Content": [
+                "Analyser indhold"
+            ],
+            "No articles found to analyze": [
+                "Ingen artikler fundet til analyse"
+            ],
+            "of": [
+                "af"
+            ],
+            "Analysis canceled": [
+                "Analyse annulleret"
+            ],
+            "Failed to cancel analysis": [
+                "Kunne ikke annullere analysen"
+            ],
+            "Calculating...": [
+                "Beregner..."
+            ],
+            "Analysis failed": [
+                "Analysen mislykkedes"
+            ],
+            "Content analysis completed successfully!": [
+                "Indholdsanalysen er gennemført med succes!"
+            ],
+            "Retry limit reached while contacting OpenAI.": [
+                "Genforsøgslimiten nået ved kontakt til OpenAI."
+            ],
+            "Failed to start analysis": [
+                "Kunne ikke starte analysen"
+            ],
+            "Analysis Job Running": [
+                "Analysejob kører"
+            ],
+            "Wait": [
+                "Vent"
+            ],
+            "articles selected for analysis": [
+                "artikler udvalgt til analyse"
+            ],
+            "Analysis in Progress": [
+                "Analyse i gang"
+            ],
+            "Stop Analysis": [
+                "Stop analysen"
+            ],
+            "Starting analysis...": [
+                "Starter analyse..."
+            ],
+            "article": [
+                "Dokumentationsside"
+            ],
+            "Analyzing": [
+                "Analyserer"
+            ],
+            "Completed! Analyzed": [
+                "Færdig! Analyseret"
+            ],
+            "error": [
+                "fejl"
+            ],
+            "errors": [
+                "fejl"
+            ],
+            "with": [
+                "med"
+            ],
+            "Analysis stopped after errors. Analyzed": [
+                "Analysen stoppede efter fejl. Analyseret"
+            ],
+            "Remaining Time:": [
+                "Resterende tid:"
+            ]
+        }
+    }
+}

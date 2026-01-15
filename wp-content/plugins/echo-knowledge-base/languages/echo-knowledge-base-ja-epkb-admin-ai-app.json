@@ -1,0 +1,57 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Go to General Settings": [
+                "一般設定へ移動"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
+                "AI機能を使用するには、一般設定でAPIキーを設定し、データプライバシー同意に同意してください。その后、AI検索またはAIチャットを有効にしてください。."
+            ],
+            "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
+                "機械学習データを使用するには、それぞれのタブでAIチャットまたはAI検索のいずれかを有効にしてください。."
+            ],
+            "Data Collection": [
+                "データ収集"
+            ],
+            "OpenAI API Key Required": [
+                "OpenAI APIキーが必要です"
+            ],
+            "To use AI features, you need to configure your OpenAI API key.": [
+                "AI機能を使用するには、OpenAI APIキーを設定してください。."
+            ],
+            "Configure API Key": [
+                "APIキーを設定"
+            ],
+            "Failed to load tab data": [
+                "タブデータの読み込みに失敗しました。"
+            ],
+            "Unknown tab": [
+                "不明なタブ"
+            ],
+            "AI Configuration": [
+                "AI設定"
+            ],
+            "Error: No tabs configured. Please check the configuration.": [
+                "エラー: 設定されているタブがありません。設定を確認してください。."
+            ],
+            "New training data collection created": [
+                "新規の機械学習データ収集が作成されました"
+            ],
+            "Failed to create collection": [
+                "コレクションの作成に失敗しました"
+            ],
+            "AI features must be enabled to access this tab": [
+                "このタブを表示するには、AI機能を有効にしてください。"
+            ],
+            "Reloading page...": [
+                "ページを再読み込みしています..."
+            ]
+        }
+    }
+}

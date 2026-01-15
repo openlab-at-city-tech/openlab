@@ -565,11 +565,14 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 
 		// DataTables datetime format string handling.
 		if ( ! empty( $this->datatables_datetime_formats ) ) {
-			// Create a command like `DataTable.datetime('MM/DD/YYYY');DataTable.datetime('DD.MM.YYYY');`.
+			// Create a command like `DataTable.datetime("MM/DD/YYYY");DataTable.datetime("DD.MM.YYYY");`.
 			$datatables_datetime_command = implode(
 				'',
 				array_map(
-					static fn( string $datetime_format ): string => "DataTable.datetime('{$datetime_format}');",
+					static function ( string $datetime_format ): string {
+						$datetime_format = wp_json_encode( $datetime_format, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES );
+						return "DataTable.datetime({$datetime_format});";
+					},
 					$this->datatables_datetime_formats,
 				)
 			) . "\n";
@@ -901,7 +904,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 
 		// Maybe print a list of used render options.
 		if ( $render_options['shortcode_debug'] && is_user_logged_in() ) {
-			$output .= '<pre>' . var_export( $render_options, true ) . '</pre>'; // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
+			$output .= '<pre>' . esc_html( wp_json_encode( $render_options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) ) . '</pre>'; // @phpstan-ignore argument.type
 		}
 
 		return $output;

@@ -33,6 +33,7 @@ class Payment extends Lib\Base\Entity
     const ITEM_PACKAGE = 'package';
     const ITEM_GIFT_CARD = 'gift_card';
     const ITEM_ADJUSTMENT = 'adjustment';
+    const ITEM_EVENT_ATTENDEE = 'event_attendee';
 
     /** @var int */
     protected $coupon_id;
@@ -47,6 +48,8 @@ class Payment extends Lib\Base\Entity
     /** @var float */
     protected $paid;
     /** @var float */
+    protected $child_paid = 0;
+    /** @var float */
     protected $gateway_price_correction;
     /** @var string */
     protected $paid_type = self::PAY_IN_FULL;
@@ -58,6 +61,10 @@ class Payment extends Lib\Base\Entity
     protected $details;
     /** @var int */
     protected $order_id;
+    /** @var int */
+    protected $customer_id;
+    /** @var int */
+    protected $parent_id;
     /** @var string */
     protected $ref_id;
     /** @var string */
@@ -82,12 +89,15 @@ class Payment extends Lib\Base\Entity
         'total' => array( 'format' => '%f' ),
         'tax' => array( 'format' => '%f' ),
         'paid' => array( 'format' => '%f' ),
+        'child_paid' => array( 'format' => '%f' ),
         'paid_type' => array( 'format' => '%s' ),
         'gateway_price_correction' => array( 'format' => '%f' ),
         'status' => array( 'format' => '%s' ),
         'token' => array( 'format' => '%s' ),
         'details' => array( 'format' => '%s' ),
         'order_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Order' ) ),
+        'customer_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Customer' ) ),
+        'parent_id' => array( 'format' => '%d', 'reference' => array( 'entity' => 'Payment' ) ),
         'ref_id' => array( 'format' => '%s' ),
         'invoice_id' => array( 'format' => '%s' ),
         'created_at' => array( 'format' => '%s' ),
@@ -334,7 +344,9 @@ class Payment extends Lib\Base\Entity
                 'gateway' => $this->getType(),
                 'gateway_ref_id' => isset ( $data['gateway_ref_id'] ) ? $data['gateway_ref_id'] : null,
                 'paid' => $this->paid,
+                'child_paid' => $this->child_paid,
                 'tax_paid' => $data['tax_paid'],
+                'child_tax_paid' => $data['child_tax_paid'],
                 'total' => $this->total,
                 'tax_total' => $this->tax,
                 'tax_in_price' => $data['tax_in_price'],
@@ -511,6 +523,25 @@ class Payment extends Lib\Base\Entity
     }
 
     /**
+     * @return float
+     */
+    public function getChildPaid()
+    {
+        return $this->child_paid;
+    }
+
+    /**
+     * @param float $child_paid
+     * @return Payment
+     */
+    public function setChildPaid( $child_paid )
+    {
+        $this->child_paid = $child_paid;
+
+        return $this;
+    }
+
+    /**
      * Gets fee
      *
      * @return float
@@ -617,6 +648,44 @@ class Payment extends Lib\Base\Entity
     public function setOrderId( $order_id )
     {
         $this->order_id = $order_id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCustomerId()
+    {
+        return $this->customer_id;
+    }
+
+    /**
+     * @param int $customer_id
+     * @return Payment
+     */
+    public function setCustomerId( $customer_id )
+    {
+        $this->customer_id = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parent_id;
+    }
+
+    /**
+     * @param int $parent_id
+     * @return Payment
+     */
+    public function setParentId( $parent_id )
+    {
+        $this->parent_id = $parent_id;
 
         return $this;
     }
@@ -769,6 +838,10 @@ class Payment extends Lib\Base\Entity
             $this->setToken( Lib\Utils\Common::generateToken( get_class( $this ), 'token' ) );
         }
         if ( $this->details_data !== null ) {
+            $details_data = $this->details_data;
+            if ( $customer = $details_data->getCustomer() ) {
+                $this->setCustomerId( $customer->getId() );
+            }
             $this->details = json_encode( $this->details_data->getData() );
             // optimization
             $this->details_data = null;

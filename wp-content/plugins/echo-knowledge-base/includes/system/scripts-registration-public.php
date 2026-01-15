@@ -39,13 +39,59 @@ function epkb_load_public_resources() {
 	wp_register_style( 'epkb-icon-fonts', Echo_Knowledge_Base::$plugin_url . 'css/epkb-icon-fonts' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
 	wp_register_style( 'epkb-shortcodes', Echo_Knowledge_Base::$plugin_url . 'css/shortcodes' . $suffix . '.css', array( 'epkb-icon-fonts' ), Echo_Knowledge_Base::$version );
 	wp_register_style( 'epkb-frontend-editor', Echo_Knowledge_Base::$plugin_url . 'css/frontend-editor' . $suffix . '.css', array('wp-color-picker'), Echo_Knowledge_Base::$version );
+	
+	// Register mp-frontend-sidebar-layout for ELAY versions 3.2.0 or less
+	if ( EPKB_Utilities::is_elegant_layouts_enabled() && class_exists( 'Echo_Elegant_Layouts' ) && 
+	     version_compare( Echo_Elegant_Layouts::$version, '3.2.0', '<=' ) ) {
+		wp_register_style( 'epkb-mp-frontend-sidebar-layout-legacy', Echo_Knowledge_Base::$plugin_url . 'css/mp-frontend-sidebar-layout-legacy' . $suffix . '.css', array( 'epkb-icon-fonts' ), Echo_Knowledge_Base::$version );
+		if ( is_rtl() ) {
+			wp_register_style( 'epkb-mp-frontend-sidebar-layout-legacy-rtl', Echo_Knowledge_Base::$plugin_url . 'css/mp-frontend-sidebar-layout-legacy-rtl' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+		}
+	}
+	
+	if ( is_rtl() ) {
+		wp_register_style( 'epkb-frontend-editor-rtl', Echo_Knowledge_Base::$plugin_url . 'css/frontend-editor-rtl' . $suffix . '.css', array('wp-color-picker'), Echo_Knowledge_Base::$version );
+	}
+
 	wp_register_script( 'epkb-public-scripts', Echo_Knowledge_Base::$plugin_url . 'js/public-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
 	wp_register_script( 'epkb-faq-shortcode-scripts', Echo_Knowledge_Base::$plugin_url . 'js/faq-shortcode-scripts' . $suffix . '.js', array('jquery'), Echo_Knowledge_Base::$version );
 	wp_register_script( 'epkb-admin-form-controls-scripts', Echo_Knowledge_Base::$plugin_url . 'js/admin-form-controls' . $suffix . '.js', array('jquery', 'jquery-ui-core','jquery-ui-dialog','jquery-effects-core','jquery-effects-bounce', 'jquery-ui-sortable'), Echo_Knowledge_Base::$version );
 	wp_register_script( 'epkb-frontend-editor', Echo_Knowledge_Base::$plugin_url . 'js/frontend-editor' . $suffix . '.js', array('jquery', 'jquery-ui-draggable', 'jquery-ui-slider', 'jquery-ui-widget', 'wp-i18n', 'iris', 'wp-color-picker'), Echo_Knowledge_Base::$version, true );
 
+	// AI Chat Widget resources
+	wp_register_style( 'epkb-ai-chat-widget', Echo_Knowledge_Base::$plugin_url . 'css/ai-chat-widget' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+	
+	$ai_suffix = ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG && file_exists( Echo_Knowledge_Base::$plugin_dir . 'js/ai/admin-ai-app.js' ) ) ? '' : '.min';
+	
+	// Register modular AI chat components
+	wp_register_script( 'epkb-ai-chat-util', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat-util' . $ai_suffix . '.js', array(), Echo_Knowledge_Base::$version, true );
+	wp_register_script( 'epkb-ai-chat-cache', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat-cache' . $ai_suffix . '.js', array(), Echo_Knowledge_Base::$version, true );
+	wp_register_script( 'epkb-ai-chat-session', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat-session' . $ai_suffix . '.js', array(), Echo_Knowledge_Base::$version, true );
+	wp_register_script( 'epkb-ai-chat-api', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat-api' . $ai_suffix . '.js', array( 'epkb-ai-chat-util' ), Echo_Knowledge_Base::$version, true );
+	wp_register_script( 'epkb-ai-chat-display', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat-display' . $ai_suffix . '.js', array( 'epkb-ai-chat-util' ), Echo_Knowledge_Base::$version, true );
+
+	// Register AI search script
+	wp_register_script( 'epkb-ai-search', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-search' . $ai_suffix . '.js', array( 'jquery', 'epkb-public-scripts', 'epkb-ai-chat-util', 'epkb-marked' ), Echo_Knowledge_Base::$version, true );
+
+	// Register AI search results scripts and styles (used for dialog, shortcode, and blocks)
+	wp_register_script( 'epkb-ai-search-results', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-search-results' . $ai_suffix . '.js', array( 'jquery', 'epkb-ai-chat-util', 'epkb-marked' ), Echo_Knowledge_Base::$version, true );
+	wp_register_style( 'epkb-ai-search-results', Echo_Knowledge_Base::$plugin_url . 'css/ai-search-results' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+
+	// Register AI search results shortcode styles (JS is included in ai-search-results.js)
+	wp_register_style( 'epkb-ai-search-results-shortcode', Echo_Knowledge_Base::$plugin_url . 'css/ai-search-results-shortcode' . $suffix . '.css', array(), Echo_Knowledge_Base::$version );
+
+	// Check if wp-element is available, otherwise use react/react-dom directly
+	if ( wp_script_is( 'wp-element', 'registered' ) ) {
+		wp_register_script( 'epkb-ai-chat', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat' . $ai_suffix . '.js', array( 'wp-element', 'epkb-ai-chat-util', 'epkb-ai-chat-cache', 'epkb-ai-chat-session', 'epkb-ai-chat-api', 'epkb-ai-chat-display', 'epkb-marked' ), Echo_Knowledge_Base::$version, true );
+	} else {
+		wp_register_script( 'epkb-ai-chat', Echo_Knowledge_Base::$plugin_url . 'js/ai/ai-chat' . $ai_suffix . '.js', array( 'react', 'react-dom', 'epkb-ai-chat-util', 'epkb-ai-chat-cache', 'epkb-ai-chat-session', 'epkb-ai-chat-api', 'epkb-ai-chat-display', 'epkb-marked' ), Echo_Knowledge_Base::$version, true );
+	}
+
+	// Register marked library for markdown parsing
+	wp_register_script( 'epkb-marked', Echo_Knowledge_Base::$plugin_url . 'js/lib/marked' . $suffix . '.js', array(), Echo_Knowledge_Base::$version, true );
+
 	$epkb_vars = array(
-		'ajaxurl'                       => admin_url( 'admin-ajax.php', 'relative' ),
+		'ajaxurl'                       => admin_url( 'admin-ajax.php' ),
 		'msg_try_again'                 => esc_html__( 'Please try again later.', 'echo-knowledge-base' ),
 		'error_occurred'                => esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (1936)',
 		'not_saved'                     => esc_html__( 'Error occurred', 'echo-knowledge-base' ). ' (2456)',
@@ -63,6 +109,8 @@ function epkb_load_public_resources() {
 		'fe_send_report_error' 	    	=> esc_html__( 'Could not submit the error.', 'echo-knowledge-base' ) . EPKB_Utilities::contact_us_for_support(),
 		'fe_update_preview_error'		=> esc_html( 'Frontend Editor AJAX error: failed to update setting preview' ),	// do not translate reporting error
 		'fe_save_settings_error'		=> esc_html( 'Frontend Editor AJAX error: failed to save setting' ),	// do not translate reporting error
+		'ai_error_generic'              => esc_html__( 'Unable to connect. Please refresh the page and try again.', 'echo-knowledge-base' ),
+		'is_admin'						=> current_user_can( 'manage_options' ),
 	);
 
 	// add article views counter method only for KB article pages
@@ -75,10 +123,87 @@ function epkb_load_public_resources() {
 
 	wp_localize_script( 'epkb-public-scripts', 'epkb_vars', $epkb_vars );
 
+	// Check if AI chat should be loaded on this specific page based on display settings
+	if ( EPKB_AI_Chat_Frontend::can_display_chat_widget() ) {
+		// Ensure React is available - enqueue react/react-dom if wp-element isn't available
+		if ( ! wp_script_is( 'wp-element', 'registered' ) ) {
+			// React might not be registered on frontend, so check and enqueue if needed
+			if ( ! wp_script_is( 'react', 'registered' ) ) {
+				wp_enqueue_script( 'react' );
+			}
+			if ( ! wp_script_is( 'react-dom', 'registered' ) ) {
+				wp_enqueue_script( 'react-dom' );
+			}
+		}
+
+		wp_enqueue_style( 'epkb-ai-chat-widget' );
+		wp_enqueue_script( 'epkb-ai-chat-util' );
+		wp_enqueue_script( 'epkb-ai-chat-cache' );
+		wp_enqueue_script( 'epkb-ai-chat-session' );
+		wp_enqueue_script( 'epkb-ai-chat-api' );
+		wp_enqueue_script( 'epkb-ai-chat' );
+
+		// Get widget configuration
+		$widget_config = EPKB_AI_Chat_Widget_Config_Specs::get_widget_config( EPKB_AI_Chat_Widget_Config_Specs::DEFAULT_WIDGET_ID );
+
+		wp_localize_script( 'epkb-ai-chat', 'epkbAIChat', array(
+			'rest_url'                        => esc_url_raw( rest_url() ),
+			'rest_nonce'                      => epkb_get_instance()->security_obj->get_nonce(),  // Force nonce generation for REST API
+			'widget_id'                       => EPKB_AI_Chat_Widget_Config_Specs::DEFAULT_WIDGET_ID,
+			'page_object_id'                  => get_the_ID(),
+
+			// Widget configuration
+			'widget_enabled'               => $widget_config['widget_enabled'],
+			'widget_header_title'             => esc_html( $widget_config['widget_header_title'] ),
+			'input_placeholder_text'          => esc_html( $widget_config['input_placeholder_text'] ),
+			'welcome_message'                 => wp_kses_post( $widget_config['welcome_message'] ),
+			'launcher_background_color'       => $widget_config['launcher_background_color'],
+			'widget_header_background_color'  => $widget_config['widget_header_background_color'],
+			'error_generic_message'           => esc_html( $widget_config['error_generic_message'] ),
+			'error_network_message'           => esc_html( $widget_config['error_network_message'] ),
+			'error_timeout_message'           => esc_html( $widget_config['error_timeout_message'] ),
+			'error_rate_limit_message'        => esc_html( $widget_config['error_rate_limit_message'] ),
+		) );
+	}
+
     // load public resources only if this is: KB Main Page, Article Page, or Category Archive page
     if ( empty( $eckb_kb_id ) ) {
         return;
     }
+
+	// Enqueue AI search script if AI search is enabled - only on KB pages
+	if ( EPKB_AI_Utilities::is_ai_search_enabled() ) {
+		wp_enqueue_script( 'epkb-ai-chat-util' );
+		wp_enqueue_script( 'epkb-marked' );
+		wp_enqueue_script( 'epkb-ai-search' );
+		
+		// Localize script with AI Search specific data
+		wp_localize_script( 'epkb-ai-search', 'epkbAISearch', array(
+			'rest_url'              => esc_url_raw( rest_url() ),
+			'rest_nonce'            => epkb_get_instance()->security_obj->get_nonce(),  // Force nonce generation for REST API
+			'search_endpoint'       => 'epkb-public/v1/ai-search/search',
+			'msg_loading'           => esc_html__( 'Searching...', 'echo-knowledge-base' ),
+			'msg_error'             => esc_html__( 'Sorry, an error occurred during search. Please try again.', 'echo-knowledge-base' ),
+			'msg_no_results'        => esc_html__( 'No results found. Please try a different search term.', 'echo-knowledge-base' ),
+			'msg_try_again'         => esc_html__( 'Please try again later.', 'echo-knowledge-base' ),
+			'is_admin'              => current_user_can( 'manage_options' ),
+		) );
+	}
+
+	// Enqueue AI Search Results if enabled
+	if ( EPKB_AI_Utilities::is_ai_search_advanced_enabled() ) {
+		wp_enqueue_style( 'epkb-ai-search-results' );
+		wp_enqueue_script( 'epkb-ai-search-results' );
+
+		// Localize script with search results data
+		wp_localize_script( 'epkb-ai-search-results', 'epkbAISearchResults', array(
+			'rest_url'          => esc_url_raw( rest_url() ),
+			'rest_nonce'        => epkb_get_instance()->security_obj->get_nonce(),
+			'i18n'              => EPKB_AI_Search_Results_Display::get_script_data(),
+		) );
+
+		// Shortcode assets are enqueued directly within the shortcode output.
+	}
 
 	/**
 	 * KB PAGES
@@ -89,7 +214,6 @@ function epkb_load_public_resources() {
 	// CASE: KB Category Archive page
 	$current_css_file_slug = '';
 	if ( is_archive() ) {
-		$page_type = 'archive';
 		$current_css_file_slug = 'cp-frontend-layout';
 
 		if ( EPKB_KB_Handler::is_kb_tag_taxonomy( $GLOBALS['taxonomy'] ) ) {
@@ -114,17 +238,15 @@ function epkb_load_public_resources() {
 		if ( isset( $_GET[$search_query_param] ) ) {
 			$current_css_file_slug = 'sp-frontend-layout';
 		} else {
-			$is_modular_main_page = $kb_config['modular_main_page_toggle'] == 'on';
-			$modular_css_file_slug = $is_modular_main_page ? '-modular' : '';
 			switch ( $kb_config['kb_main_page_layout'] ) {
-				case 'Tabs': $current_css_file_slug = 'mp-frontend' . $modular_css_file_slug . '-tab-layout'; break;
-				case 'Categories': $current_css_file_slug = 'mp-frontend' . $modular_css_file_slug . '-category-layout'; break;
-				case 'Grid': $current_css_file_slug = EPKB_Utilities::is_elegant_layouts_enabled() ? 'mp-frontend' . $modular_css_file_slug . '-grid-layout' : 'mp-frontend' . $modular_css_file_slug . '-basic-layout'; break;
-				case 'Sidebar': $current_css_file_slug = EPKB_Utilities::is_elegant_layouts_enabled() ? 'mp-frontend' . $modular_css_file_slug . '-sidebar-layout' : 'mp-frontend' . $modular_css_file_slug . '-basic-layout'; break;
-				case 'Classic': $current_css_file_slug = $is_modular_main_page ? 'mp-frontend-modular-classic-layout' : 'mp-frontend-basic-layout'; break;
-				case 'Drill-Down': $current_css_file_slug = $is_modular_main_page ? 'mp-frontend-modular-drill-down-layout' : 'mp-frontend-basic-layout'; break;
+				case 'Tabs': $current_css_file_slug = 'mp-frontend-modular-tab-layout'; break;
+				case 'Categories': $current_css_file_slug = 'mp-frontend-modular-category-layout'; break;
+				case 'Grid': $current_css_file_slug = EPKB_Utilities::is_elegant_layouts_enabled() ? 'mp-frontend-modular-grid-layout' : 'mp-frontend-modular-basic-layout'; break;
+				case 'Sidebar': $current_css_file_slug = EPKB_Utilities::is_elegant_layouts_enabled() ? 'mp-frontend-modular-sidebar-layout' : 'mp-frontend-modular-basic-layout'; break;
+				case 'Classic': $current_css_file_slug = 'mp-frontend-modular-classic-layout'; break;
+				case 'Drill-Down': $current_css_file_slug = 'mp-frontend-modular-drill-down-layout'; break;
 				case 'Basic':
-				default: $current_css_file_slug = 'mp-frontend' . $modular_css_file_slug . '-basic-layout'; break;
+				default: $current_css_file_slug = 'mp-frontend-modular-basic-layout'; break;
 			}
 		}
 
@@ -162,7 +284,7 @@ function epkb_load_public_resources() {
 add_action( 'wp_enqueue_scripts', 'epkb_load_public_resources', 500 );
 
 /**
- * Queue for FRONT-END pages using our plugin features
+ * KB Main Page with shortcode -> Queue for FRONT-END pages
  * @noinspection PhpUnusedParameterInspection
  * @param int $kb_id - legacy
  */
@@ -204,6 +326,12 @@ function epkb_enqueue_public_resources( $kb_id=0 ) {
 		'ap-frontend-layout',
 	];
 
+	// Only enqueue mp-frontend-sidebar-layout-legacy if ELAY is version 3.2.0 or less
+	if ( EPKB_Utilities::is_elegant_layouts_enabled() && class_exists( 'Echo_Elegant_Layouts' ) && 
+	     version_compare( Echo_Elegant_Layouts::$version, '3.2.0', '<=' ) ) {
+		$css_slugs[] = 'mp-frontend-sidebar-layout-legacy';
+	}
+
 	// enqueue once only slug that was registered earlier
 	foreach ( $css_slugs as $one_slug ) {
 		if ( ! wp_style_is( 'epkb-' . $one_slug, 'registered' ) || wp_style_is( 'epkb-' . $one_slug ) ) {
@@ -228,7 +356,7 @@ function epkb_enqueue_public_resources( $kb_id=0 ) {
 
 	wp_enqueue_script( 'epkb-public-scripts' );
 
-	epkb_enqueue_google_fonts();
+	epkb_enqueue_google_fonts( $kb_config );
 	epkb_enqueue_the_content_scripts();
 }
 add_action( 'epkb_enqueue_scripts', 'epkb_enqueue_public_resources' ); // use this action in any place to add scripts $kb_id as a parameter
@@ -372,7 +500,7 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 		';
 	}
 
-	if ( $is_kb_main_page && $kb_config['modular_main_page_toggle'] == 'on' ) {
+	if ( $is_kb_main_page ) {
 		$output .= EPKB_Modular_Main_Page::get_all_inline_styles( $kb_config );
 	}
 
@@ -401,11 +529,10 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 		}';
 
 		// include inline styles for Search Module for Articles page only if it is used:
-		// - is Article CSS slug and Modular toggle is 'on' (only Modular Search has inline CSS)
+		// - is Article CSS slug (only Modular Search has inline CSS)
 		// - is not Advanced search (Advanced Search uses its own Search box and styles)
 		// - is first KB version 7.3.0 or higher
-		if ( $css_file_slug == 'ap-frontend-layout' && $kb_config['modular_main_page_toggle'] == 'on'
-			&& ! EPKB_Utilities::is_advanced_search_enabled( $kb_config ) ) {
+		if ( $css_file_slug == 'ap-frontend-layout' && ! EPKB_Utilities::is_advanced_search_enabled( $kb_config ) ) {
 			$output .= EPKB_ML_Search::get_inline_styles( $kb_config, true );
 		}
 	}
@@ -452,10 +579,7 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 /**
  * Enqueue fonts that are configured in KB config
  */
-function epkb_enqueue_google_fonts() {
-
-	$kb_id = EPKB_Utilities::get_eckb_kb_id();
-	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+function epkb_enqueue_google_fonts( $kb_config ) {
 	foreach ( $kb_config as $name => $value ) {
 		if ( is_array( $value ) && ! empty( $value['font-family'] ) ) {
 			$font_link = EPKB_Typography::get_google_font_link( $value['font-family'] );
@@ -545,21 +669,44 @@ function epkb_front_end_body_classes( $classes ) {
 	// adjust for KB Pages
 	$is_kb_main_page = EPKB_Utilities::is_kb_main_page();
 	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
-	if ( $kb_config['templates_for_kb'] == 'kb_templates' ) {
+	
+	// Determine template type
+	$is_kb_template = $kb_config['templates_for_kb'] == 'kb_templates';
+	$template_prefix = $is_kb_template ? 'eckb-kb-template-' : 'eckb-kb-current-theme-template-';
+	
+	
+
+	// Determine page type and add appropriate class
+	if ( $is_kb_main_page ) {
+		$classes[] = $template_prefix . 'main-page';
+	} elseif ( is_archive() ) {
+		// Archive pages have their own template setting
+		$is_archive_kb_template = $kb_config['template_for_archive_page'] == 'kb_templates';
+		$archive_template_prefix = $is_archive_kb_template ? 'eckb-kb-template-' : 'eckb-kb-current-theme-template-';
+		
+		// Check if it's tag archive or category archive
+		if ( isset( $GLOBALS['taxonomy'] ) && EPKB_KB_Handler::is_kb_tag_taxonomy( $GLOBALS['taxonomy'] ) ) {
+			$classes[] = $archive_template_prefix . 'tag-page';
+		} else {
+			$classes[] = $archive_template_prefix . 'category-page';
+		}
+	} else {
+		// Check if it's an article page
+		$post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : '';
+		if ( ! empty( $post ) && $post instanceof WP_Post && EPKB_KB_Handler::is_kb_post_type( $post->post_type ) ) {
+			$classes[] = $template_prefix . 'article-page';
+		}
+	}
+
+	// Keep existing class for backward compatibility
+	if ( $is_kb_template ) {
 		$classes[] = 'eckb-kb-template-active';
 	}
 
-	if ( $is_kb_main_page ) {
-		return $classes;
-	}
-
-	$post = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : '';
-	if ( empty( $post ) || ! $post instanceof WP_Post ) {
-		return $classes;
-	}
-
-	// adjust TOC for Article and Category Archive Pages
-	$classes[] = 'eckb-front-end-body';
+	 //Keep existing class for non-main pages for backward compatibility
+	 if ( ! $is_kb_main_page ) {
+	 	$classes[] = 'eckb-front-end-body';
+	 }
 
 	return $classes;
 
@@ -669,8 +816,14 @@ function epkb_add_admin_bar_fe_page_button( WP_Admin_Bar $wp_admin_bar ) {
 		return;
 	}
 	
+	// Get the current KB ID
+	$kb_id = EPKB_Utilities::get_eckb_kb_id( '' );
+	if ( empty( $kb_id ) ) {
+		return;
+	}
+	
 	// show the Frontend Editor link on KB Main Page, KB Article Pages, Category Archive Pages
-	$url = add_query_arg( ['action' => 'epkb_load_editor'] );
+	$url = add_query_arg( ['action' => 'epkb_load_editor', 'epkb_kb_id' => $kb_id] );
 	$label = '<span class="ab-label">' . esc_html__( 'Open KB Frontend Editor', 'echo-knowledge-base' ) . '</span>';
 	$wp_admin_bar->add_menu( array(
 	    'id'    => 'epkb-edit-mode-button',

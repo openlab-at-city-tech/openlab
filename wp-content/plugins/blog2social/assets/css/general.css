@@ -7242,6 +7242,17 @@ input[type="checkbox"].error + label{
     color: #f14242 !important;
 }
 
+.b2s-color-dark-grey{
+   color: #334155 !important;
+}
+
+.b2s-bg-color-dark-grey{
+   background-color: #334155 !important;
+}
+.b2s-bg-color-white{
+   background-color: #ffffff !important;
+}
+
 .b2s-version-info{
     font-size: 12px;
 }
@@ -8129,6 +8140,10 @@ CSS CheckBOX
     margin-top: 5px !important;
 }
 
+.b2s-margin-top-0{
+    margin-top: 0px !important;
+}
+
 .b2s-margin-top-8{
     margin-top: 8px;
 }
@@ -8480,3 +8495,143 @@ CSS CheckBOX
 .b2s-font-size-12 {
     font-size: 12px !important;
 }
+
+/*Werbeaufrufe neu */
+
+.modal-advertising-content {
+    /*background-image: url(../img/bg-best-times-2.png);*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0rem 2rem 0rem;
+    width: 500px;
+    border: none;
+}
+.modal-advertising-header {
+    border-bottom: none;
+    padding: 1rem 0rem 0rem;
+}
+
+.modal-advertising-body {
+    position: relative;
+}
+.hr-advertising-left {
+    margin-inline-start: 0;
+    width: 65px;
+    height: 6px;
+    margin-bottom: 1rem;
+    border-top: 6px solid #79b331;
+}
+
+.modal-advertising-body ul {
+    padding-left: 20px;
+    list-style-image: url(../images/advertising-modal/check-icon-12px.png);
+}
+.modal-advertising-body ul.list-unstyled li {
+    padding-bottom: 10px;
+    padding-left: 5px;
+   
+}
+.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+   
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+.button.close {
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.modal-advertising-header .close {
+    color: #fff;
+    opacity: 1;
+    font-size: 28px;
+    text-shadow: none;
+    transition: color 0.3s 
+ease, transform 0.3s 
+ease;
+}
+.modal-advertising-header .close:hover {
+  color: #79b331; /* oder eine andere Farbe beim Hover */
+  transform: scale(1.2); /* leichte Vergrößerung beim Hover */
+  cursor: pointer;
+}
+.modal-advertising-header .close {
+    margin-top: -10px;
+}
+
+.b2s-bg-white {
+    background-color: #ffffff !important;
+}
+.b2s-bg-dark-grey {
+    background-color: #334155 !important;
+}
+.b2s-bg-green {
+    background-color: #79b331 !important;
+}
+.modal-advertising-network {
+    width: 400px;
+}
+.modal-advertising-network-body {
+    text-align: left;
+    padding: 1rem 3rem 3rem;
+    font-size: 16px;
+}
+.modal-advertising-network-logo {
+    width: 30px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+.modal-advertising-network-title{
+    margin-top: 0;
+    font-size: 18px;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.modal-advertising-network-list{
+
+    padding-left: 25px;
+    list-style-image: url(../images/advertising-modal/check-icon-green-14px.png);
+
+}
+.modal-advertising-network-upgrade-btn {
+    background-color: #79b331;
+    color: #ffffff;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border: none;
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+}
+.modal-advertising-network-header{
+    padding: 15px;
+}
+.modal-advertising-network-subline{
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+.b2s-advertise-upgrade-btn {
+    border-radius: 25px; 
+    padding: 10px 20px; 
+    margin-top: 1rem; 
+    margin-bottom: 4rem; 
+    font-weight: 600;
+}
+.modal-advertising-midtext{
+    margin: 0 0 10px!important;
+}
+

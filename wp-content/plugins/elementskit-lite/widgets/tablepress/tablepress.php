@@ -698,9 +698,13 @@ class ElementsKit_Widget_TablePress extends Widget_Base {
 		}
 		
 		if ( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
-			\TablePress::load_controller( 'frontend' );
-			$controller = new \TablePress_Frontend_Controller();
-			$controller->init_shortcodes();
+			// Only initialize shortcodes if they haven't been registered yet
+			if ( ! shortcode_exists( \TablePress::$shortcode ) ) {
+				
+				\TablePress::load_controller( 'frontend' );
+				$controller = new \TablePress_Frontend_Controller();
+				$controller->init_shortcodes();
+			}
 		}
 
 		$attributes = [

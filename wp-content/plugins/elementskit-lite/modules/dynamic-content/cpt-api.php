@@ -22,6 +22,7 @@ class ElementsKit_Cpt_Api extends Core\Handler_Api {
 				$defaults        = array(
 					'post_content' => '',
 					'post_title'   => $builder_post_title,
+					'post_name'    => $builder_post_title,
 					'post_status'  => 'publish',
 					'post_type'    => 'elementskit_content',
 				);

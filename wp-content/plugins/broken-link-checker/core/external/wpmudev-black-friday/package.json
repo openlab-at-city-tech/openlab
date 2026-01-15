@@ -1,0 +1,34 @@
+{
+  "name": "wpmudev-black-friday",
+  "version": "2.0.0",
+  "description": "WPMUDEV Black Friday deal submodule",
+  "main": "load.php",
+  "scripts": {
+    "watch": "wp-scripts start src/banner.js",
+    "compile": "wp-scripts build src/banner.js",
+    "build": "wp-scripts build src/banner.js && wp-scripts plugin-zip"
+  },
+  "author": "WPMU DEV",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@wpmudev/shared-notifications-black-friday": "^1.0.0"
+  },
+  "devDependencies": {
+    "@wordpress/components": "^30.4.0",
+    "@wordpress/dom-ready": "^4.34.0",
+    "@wordpress/element": "^5.35.0",
+    "@wordpress/hooks": "^4.31.0",
+    "@wordpress/scripts": "^30.27.0",
+    "rimraf": "^6.1.0"
+  },
+  "files": [
+    "build/**",
+    "assets/**",
+    "includes/**",
+    "*.php",
+    "*.md",
+    "LICENSE",
+    "!package.json",
+    "!README.md"
+  ]
+}

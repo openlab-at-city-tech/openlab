@@ -150,15 +150,140 @@ jQuery(document).on('click', '.b2sAddonFeatureModalBtn', function () {
     return false;
 });
 
-//PREMIUM
-jQuery(document).on('click', '.b2sPreFeatureModalBtn', function () {
-    jQuery('#b2sPreFeatureModal').modal('show');
-    jQuery('#b2sPreFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
+jQuery(document).on('click', '.b2sPreFeatureEditAndDeleteModal', function () {
+       jQuery("#b2sPreFeatureEditAndDeleteModal").modal('show');
+});
+
+jQuery(document).on('click', '.b2sPreFeatureAutoPosterModal', function () {
+       jQuery("#b2sPreFeatureAutoPosterModal").modal('show');
+});
+
+jQuery(document).on('click', '.b2sPreFeatureReshareModal', function () {
+       jQuery("#b2sPreFeatureReshareModal").modal('show');
+});
+
+jQuery(document).on('click', '.b2sProFeatureMultiImageModal', function () {
+    jQuery("#b2sProFeatureMultiImageModal").modal('show');
+});
+
+jQuery(document).on('click', '.b2sPreFeaturePostFormatModal', function () {
+    jQuery("#b2sPreFeaturePostFormatModal").modal('show');
+});
+
+jQuery(document).on('click', '.b2sPreFeatureNetworksModal', function () {
+
+    //check for network specific Network Modals
+    var networkId = jQuery(this).closest('.list-group-item').attr('data-network-id');//network View
+    if(networkId == null){
+        networkId=  jQuery(this).closest('li').attr('data-network-id'); //Portal View in Ship
+        
+    }
+    if(networkId != null && networkId != undefined && networkId != 0 && (jQuery(this).hasClass('b2s-network-auth-btn') || jQuery(this).hasClass('b2s-network-list-add-btn'))){
+       var modalHasNetworkContent= setNetworkAdModal(networkId);
+
+        if(modalHasNetworkContent){
+            jQuery('.modal-advertising-network-modal-network').modal('show');
+            return false;
+        }
+    }
+    //default Modal
+    jQuery("#b2sPreFeatureNetworksModal").modal('show');
     return false;
 });
 
+jQuery(document).on('click', '.b2sProFeatureNetworksModal', function () {
+
+    //check for network specific Network Modals
+    var networkId = jQuery(this).closest('.list-group-item').attr('data-network-id');//network View
+    if(networkId == null){
+        networkId=  jQuery(this).closest('li').attr('data-network-id'); //Portal View in Ship
+    }
+
+    if(networkId != null && networkId != undefined && networkId != 0 && (jQuery(this).hasClass('b2s-network-auth-btn') || jQuery(this).hasClass('b2s-network-list-add-btn'))){
+        
+        var modalHasNetworkContent= setNetworkAdModal(networkId);
+
+        if(modalHasNetworkContent){
+            jQuery('.modal-advertising-network-modal-network').modal('show');
+            return false;
+        }
+    }
+    //default Modal
+    jQuery("#b2sProFeatureNetworksModal").modal('show');
+    return false;
+
+});
+
+jQuery(document).on('click', '.b2sBusinessFeatureNetworksModal', function () {
+
+    //check for network specific Network Modals
+    var networkId = jQuery(this).closest('.list-group-item').attr('data-network-id');//network View
+    if(networkId == null){
+        networkId=  jQuery(this).closest('li').attr('data-network-id'); //Portal View in Ship
+    }
+
+    if(networkId != null && networkId != undefined && networkId != 0 && (jQuery(this).hasClass('b2s-network-auth-btn') || jQuery(this).hasClass('b2s-network-list-add-btn'))){
+        
+        var modalHasNetworkContent= setNetworkAdModal(networkId);
+
+        if(modalHasNetworkContent){
+           
+            jQuery('.modal-advertising-network-modal-network').modal('show'); 
+            return false;
+
+        }
+    }
+    
+    //default Modal
+    jQuery("#b2sBusinessFeatureNetworksModal").modal('show');
+    return false;
+
+});
+
+function setNetworkAdModal(networkId){
+    
+    jQuery('.modal-advertising-network-title').hide();
+    jQuery('.modal-advertising-network-subline').hide();
+    jQuery('.modal-advertising-network-list').hide();
+    jQuery('.modal-advertising-network-bottomtext').hide();
+    jQuery('.modal-advertising-network-upgrade-btn').hide();
+    jQuery('.modal-advertising-network-subline[data-network-id="' + networkId + '"]').show();
+    jQuery('.modal-advertising-network-title[data-network-id="' + networkId + '"]').show();
+    jQuery('.modal-advertising-network-list[data-network-id="' + networkId + '"]').show();
+    jQuery('.modal-advertising-network-bottomtext[data-network-id="' + networkId + '"]').show();
+    jQuery('.modal-advertising-network-upgrade-btn[data-network-id="' + networkId + '"]').show();
+    
+    if(jQuery('.modal-advertising-network-title[data-network-id="' + networkId + '"]').length > 0){
+        return true;
+    } 
+    return false;
+}
+
+jQuery(document).on('click', '.b2sPreFeatureBestTimesModal', function () {
+    jQuery("#b2sPreFeatureBestTimesModal").modal('show');
+    return false;
+});
+
+jQuery(document).on('click', '.b2sProFeatureNetworkGroupsModal', function () {
+    jQuery("#b2sProFeatureNetworkGroupsModal").modal('show');
+    return false;
+})
+
+
 //PREMIUM-PRO
 jQuery(document).on('click', '.b2sProFeatureModalBtn', function () {
+
+    //check for network specific 
+    var networkId = jQuery(this).closest('.list-group-item').attr('data-network-id');
+
+    if(networkId != null && networkId != undefined && networkId != 0 && (jQuery(this).hasClass('b2s-network-auth-btn') || jQuery(this).hasClass('b2s-network-list-add-btn'))){
+      
+        if(jQuery('.modal-advertising-network-modal-network-'+networkId).length > 0){
+            jQuery('.modal-advertising-network-modal-network-'+networkId).modal('show');
+            return false;
+        }
+    }
+
     jQuery('#b2sProFeatureModal').modal('show');
     jQuery('#b2sProFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
     jQuery('#b2sProFeatureModal').find('.modal-body').hide();
@@ -166,14 +291,6 @@ jQuery(document).on('click', '.b2sProFeatureModalBtn', function () {
     return false;
 });
 
-//PREMIUM-BUSINESS
-jQuery(document).on('click', '.b2sBusinessFeatureModalBtn', function () {
-    jQuery('#b2sBusinessFeatureModal').modal('show');
-    jQuery('#b2sBusinessFeatureModal').find('.modal-title').html(jQuery(this).attr('data-title'));
-    jQuery('#b2sBusinessFeatureModal').find('.modal-body').hide();
-    jQuery('#b2sBusinessFeatureModal').find('.' + jQuery(this).attr('data-type')).show();
-    return false;
-});
 
 jQuery(document).on('heartbeat-send', function (e, data) {
     data['client'] = 'b2s';

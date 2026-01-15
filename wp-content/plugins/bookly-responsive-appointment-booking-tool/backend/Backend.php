@@ -150,6 +150,7 @@ abstract class Backend
                 }
                 Lib\Proxy\Locations::addBooklyMenuItem();
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
+                    Lib\Proxy\Events::addBooklyMenuItem();
                     Lib\Proxy\Packages::addBooklyMenuItem();
                 }
                 if ( $current_user->has_cap( $required_capability ) ) {

@@ -8,7 +8,7 @@
 class EPKB_Upgrades {
 
 	const GRID_UPGRADE_DONE = 3;
-	const NOT_INITIALIZED = '12.30.99'; // TODO remove 2025
+	const NOT_INITIALIZED = '12.30.99'; // TODO remove 2026
 
 	public function __construct() {
 		// will run after plugin is updated but not always like front-end rendering
@@ -208,6 +208,42 @@ class EPKB_Upgrades {
 
 		if ( version_compare( $last_version, '13.60.0', '<' ) ) {	
 			self::upgrade_to_v13_60_0( $kb_config );
+		}
+
+		if ( version_compare( $last_version, '15.210.0', '<' ) ) {
+			self::upgrade_to_v15_210_0( $kb_config );
+		}
+	}
+
+	private static function upgrade_to_v15_210_0( &$kb_config ) {
+		global $wpdb;
+
+		/*** Update AI instructions if user hasn't changed them from old default **/
+
+		$old_instructions = sprintf(
+			__( 'Avoid answering questions unrelated to your knowledge. DO NOT mention, reference, or describe documents, files, files you uploaded, or sources. Do not guess, speculate, or use outside knowledge. ONLY use the provided content. If no relevant information is found, reply exactly with: "%s"', 'echo-knowledge-base' ),
+			EPKB_AI_Config_Specs::get_ai_refusal_prompt()
+		);
+
+		$default_instructions = sprintf(
+			__( 'You may ONLY answer using information from the vector store. Do not mention references, documents, files, or sources. Do not reveal retrieval, guess, speculate, or use outside knowledge. If no relevant information is found, reply exactly: "%s". If relevant information is found, you may give structured explanations, including comparisons, pros and cons, or decision factors, but only if they are in the data. Answer only what the data supports; when unsure, leave it out.', 'echo-knowledge-base' ),
+			EPKB_AI_Config_Specs::get_ai_refusal_prompt()
+		);
+
+		// Get current AI search instructions
+		$current_search_instructions = EPKB_AI_Config_Specs::get_config_value( 'ai_search_instructions' );
+
+		// If the current instructions match the old default, update to new default
+		if ( $current_search_instructions === $old_instructions ) {
+			EPKB_AI_Config_Specs::update_config_value( 'ai_search_instructions', $default_instructions );
+		}
+
+		// Get current AI chat instructions
+		$current_chat_instructions = EPKB_AI_Config_Specs::get_config_value( 'ai_chat_instructions' );
+
+		// If the current instructions match the old default, update to new default
+		if ( $current_chat_instructions === $old_instructions ) {
+			EPKB_AI_Config_Specs::update_config_value( 'ai_chat_instructions', $default_instructions );
 		}
 	}
 
@@ -451,14 +487,9 @@ class EPKB_Upgrades {
 			$kb_config['ml_categories_articles_sidebar_location'] = 'right';
 		}
 
-		// starting from version 11.30.0 the Main Page is Modular by default (the toggle is 'on' in specs); ensure it is 'off' if the user did not use Modular before the upgrade
-		if ( $kb_config['kb_main_page_layout'] != 'Modular' ) {
-			$kb_config['modular_main_page_toggle'] = 'off';
-		}
 
 		// transfer storing values of Modular config to corresponding refactored settings only if the Modular Main Page Layout is enabled, otherwise the default values will be used from specs
 		if ( $kb_config['kb_main_page_layout'] == 'Modular' ) {
-			$kb_config['modular_main_page_toggle'] = 'on';
 
 			// do not add Popular Articles to Featured Articles module after upgrade
 			$kb_config['ml_articles_list_column_1'] = 'none';
@@ -558,7 +589,7 @@ class EPKB_Upgrades {
 		$current_version = Echo_Knowledge_Base::$version;
 		$new_version = empty( $args['new_version'] ) ? $current_version : $args['new_version'];
 
-		// versions x.y0.z are major releases
+		// versions x.y11.z are major releases
 		if ( ! preg_match( '/^\d+\.\d{1,}11\.\d+$/', $new_version ) ) {
 			return;
 		}

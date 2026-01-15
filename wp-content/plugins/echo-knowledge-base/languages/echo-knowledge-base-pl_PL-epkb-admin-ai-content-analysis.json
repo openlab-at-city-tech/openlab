@@ -1,0 +1,138 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Error": [
+                "Błąd"
+            ],
+            "Analyze Content": [
+                "Analizuj treść"
+            ],
+            "Improve Content": [
+                "Ulepsz treść"
+            ],
+            "Improve": [
+                "Ulepsz"
+            ],
+            "Demo Analytics": [
+                "Analizy demonstracyjne"
+            ],
+            "Actions": [
+                "Działania"
+            ],
+            "Analyzing": [
+                "Analizowanie"
+            ],
+            "No articles found": [
+                "Nie znaleziono artykułów"
+            ],
+            "To Analyze": [
+                "Do analizy"
+            ],
+            "To Improve": [
+                "Do ulepszenia"
+            ],
+            "Please select exactly one article to improve": [
+                "Proszę wybrać dokładnie jedną stronę dokumentacyjną do ulepszenia"
+            ],
+            "Demo Data Displayed": [
+                "Wyświetlono dane demonstracyjne"
+            ],
+            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
+                "To są demonstracyjne dane analityczne wyświetlane w celach demonstracyjnych. Po utworzeniu nowych stron dokumentacyjnych możesz je analizować, aby zobaczyć rzeczywiste wyniki analizy treści."
+            ],
+            "Select All That Need Analysis": [
+                "Wybierz wszystkie, które wymagają analizy"
+            ],
+            "Analyze (Sync not loaded)": [
+                "Analizuj (Synchronizacja niezaładowana)"
+            ],
+            "Score Legend": [
+                "Legenda wyników"
+            ],
+            "Excellent": [
+                "Doskonały"
+            ],
+            "Good": [
+                "Dobry"
+            ],
+            "Below 60%": [
+                "Poniżej 60%"
+            ],
+            "Needs Improvement": [
+                "Wymaga poprawy"
+            ],
+            "Importance Legend": [
+                "Legenda ważności"
+            ],
+            "Based on article views - higher views mean higher priority.": [
+                "Na podstawie wyświetleń stron dokumentacyjnych – wyższa liczba wyświetleń oznacza wyższy priorytet."
+            ],
+            "Status Legend": [
+                "Legenda statusu"
+            ],
+            "Not analyzed or updated": [
+                "Nie analizowano ani nie zaktualizowano"
+            ],
+            "Score below 80%": [
+                "Wynik poniżej 80%"
+            ],
+            "Done": [
+                "Zrobione"
+            ],
+            "Completed": [
+                "Zakończono"
+            ],
+            "Ignored": [
+                "Zignorowano"
+            ],
+            "Not important now": [
+                "Teraz nieistotne"
+            ],
+            "In progress": [
+                "W trakcie"
+            ],
+            "Failed - retry needed": [
+                "Niepowodzenie — konieczna ponowna próba"
+            ],
+            "Invalid status": [
+                "Nieprawidłowy status"
+            ],
+            "Failed to update article status": [
+                "Nie udało się zaktualizować statusu artykułu"
+            ],
+            "Error updating article status": [
+                "Błąd aktualizacji statusu artykułu"
+            ],
+            "Ignore": [
+                "Zignoruj"
+            ],
+            "Remove": [
+                "Usuń"
+            ],
+            "Loading articles...": [
+                "Ładowanie artykułów..."
+            ],
+            "Important and Low Score": [
+                "Ważny i niski wynik"
+            ],
+            "Top Important": [
+                "Najważniejsze"
+            ],
+            "Lowest Score": [
+                "Najniższy wynik"
+            ],
+            "Recently Analyzed": [
+                "Ostatnio analizowane"
+            ],
+            "Unknown sub-tab": [
+                "Nieznana podzakładka"
+            ]
+        }
+    }
+}

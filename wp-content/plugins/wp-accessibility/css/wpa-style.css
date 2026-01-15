@@ -2,7 +2,6 @@
 .wpa-hide-ltr#skiplinks a, .wpa-hide-ltr#skiplinks a:hover, .wpa-hide-ltr#skiplinks a:visited,
 .wpa-hide-rtl#skiplinks a, .wpa-hide-rtl#skiplinks a:hover, .wpa-hide-rtl#skiplinks a:visited {
 	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
@@ -16,7 +15,6 @@
 .wpa-hide-ltr#skiplinks a:focus,
 .wpa-hide-rtl#skiplinks a:focus {
 	background-color: #eee;
-	clip: auto !important;
 	clip-path: none;
 	color: #444;
 	display: block;
@@ -60,81 +58,52 @@ div.aligncenter.wpa-ld {
 	outline-offset: 1px;
 }
 
-.wpa-alt button.wpa-toggle,
-.wpa-ld a.wpa-toggle, .wpa-ld button.wpa-toggle {
-	bottom: 2px;
-	left: 2px;
-	position: absolute;
-	line-height: 1.4;
-	min-width: 24px;
-}
-
-.top-left .wpa-alt a.wpa-toggle, .top-left .wpa-alt button.wpa-toggle,
-.top-left .wpa-ld a.wpa-toggle, .top-left .wpa-ld button.wpa-toggle {
-	top: 2px;
-	bottom: auto;
-}
-
-.top-right .wpa-alt a.wpa-toggle, .top-right .wpa-alt button.wpa-toggle,
-.top-right .wpa-ld a.wpa-toggle, .top-right .wpa-ld button.wpa-toggle {
-	top: 2px;
-	right: 2px;
-	left: auto;
-	bottom: auto;
-}
-
-.bottom-right .wpa-alt a.wpa-toggle, .bottom-right .wpa-alt button.wpa-toggle,
-.bottom-right .wpa-ld a.wpa-toggle, .bottom-right .wpa-ld button.wpa-toggle {
-	right: 2px;
-	left: auto;
-}
-
-.wpa-alt .wpa-ld button {
-	left: 2.5em;
-}
-
-.top-right .wpa-alt .wpa-ld button,
-.bottom-right .wpa-alt .wpa-ld button {
-	left: auto;
-	right: 2.5em;
-}
-
-.wpa-alt button.wpa-toggle, .wpa-alt button.wpa-toggle:active, .wpa-alt button.wpa-toggle:focus, .wpa-alt button.wpa-toggle:hover,
-.wpa-ld button.wpa-toggle, .wpa-ld button.wpa-toggle:active, .wpa-ld button.wpa-toggle:focus, .wpa-ld button.wpa-toggle:hover {
-	border: 1px solid #777;
-	border-radius: 2px;
-	z-index: 10;
-}
-
 .wpa-ld .longdesc {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	overflow-y: scroll;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	background: rgba(255, 255, 255, .95);
-	padding: 2em 1em;
-	text-align: left;
+	background: rgba(255, 255, 255, .92);
+	color: #111;
+	padding: 46px 1rem 1rem;
+	text-align: start;
+}
+
+.wpa-ld .longdesc,
+.wpa-ld .longdesc p {
+	font-size: clamp( 16px, 1rem, 24px );
+}
+
+.wpa-ld .longdesc-link {
+	position: absolute;
+	display: inline-block;
+	right: 3px;
+	bottom: 3px;
+	color: #000;
+	background: rgba(255, 255, 255, .92);
+	font-size: clamp( 14px, .875rem, 20px );
+	padding: 2px;
+	border-radius: 3px;
 }
 
 .wpa-alt .wpa-alt-text {
 	position: absolute;
 	width: calc( 100% - 2em );
-	height: 6em;
+	height: fit-content;
 	bottom: 0;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	background: rgba(255, 255, 255, .95);
-	padding: 1.5em;
-	margin: 1em;
+	background: rgba(255, 255, 255, .92);
+	padding: 1rem;
+	margin: 1rem;
 	border-radius: 15px;
 	box-shadow: 0 0 6px #333;
-	text-align: left;
+	text-align: start;
 	z-index: 10;
+	font-size: clamp( 16px, 1rem, 24px );
+	line-height: 1.5;
+	color: #111;
 }
 
 .top-right .wpa-alt .wpa-alt-text,
@@ -147,32 +116,6 @@ div.aligncenter.wpa-ld {
 .rtl .wpa-alt .wpa-alt-text,
 .rtl .wpa-ld .longdesc {
 	text-align: right;
-}
-
-.wpa-alt button.wpa-toggle, .wpa-alt button.wpa-toggle:active, .wpa-alt button.wpa-toggle:focus, .wpa-alt button.wpa-toggle:hover, .wpa-alt a.wpa-toggle,
-.wpa-ld button.wpa-toggle, .wpa-ld button.wpa-toggle:active, .wpa-ld button.wpa-toggle:focus, .wpa-ld button.wpa-toggle:hover, .wpa-ld a.wpa-toggle {
-	font-size: 1rem;
-	background: rgba(255, 255, 255, .8) !important;
-	padding: 0;
-	font-weight: 700;
-	font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
-	color: #000 !important;
-	padding: 2px 4px;
-	border-radius: 3px;
-}
-
-.wpa-ld .dashicons, .wpa-ld .dashicons:before {
-	line-height: inherit;
-}
-
-.wpa-alt button:focus, .wpa-alt button:hover,
-.wpa-ld button:focus, .wpa-ld button:hover {
-	background: rgba(0, 0, 0, .8) !important;
-	color: #fff !important;
-	border: 1px solid #000 !important;
-	cursor: pointer;
-	outline: 2px solid #a00 !important;
-	outline-offset: 1px;
 }
 
 .template-longdesc {
@@ -190,7 +133,6 @@ div.aligncenter.wpa-ld {
 
 label.wpa-screen-reader-text {
 	border: 0;
-	clip: rect(1px, 1px, 1px, 1px);
 	clip-path: inset(50%);
 	height: 1px;
 	margin: -1px;
@@ -220,4 +162,94 @@ label.wpa-screen-reader-text {
 .wpa-excerpt .wp-block-post-excerpt .continue {
 	margin-top: 1rem;
 	display: block;
+}
+
+.wpa-alt button.wpa-toggle, .wpa-alt a.wpa-toggle,
+.wpa-ld button.wpa-toggle, .wpa-ld a.wpa-toggle,
+button.wpa-video {
+	all: unset;
+	background: #111;
+	display: block;
+	color: #fff;
+	border-radius: 32px !important;
+	height: 28px !important;
+	width: 28px !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	position: absolute !important;
+	z-index: 10;
+	padding: 4px !important;
+	border: 1px solid currentColor !important;
+}
+
+.wpa-alt button {
+	font-family: monospace !important;
+	font-size: clamp( 14px,.875rem,20px ) !important;
+}
+
+.wpa-alt button.wpa-toggle:active,
+.wpa-ld button.wpa-toggle:active {
+	background: #f6f6f6;
+	color: #111;
+}
+
+.wpa-ld button.wpa-toggle,
+.wpa-alt button.wpa-toggle,
+button.wpa-video {
+	top: 4px;
+	left: 4px;
+}
+
+.wpa-ld button.wpa-toggle:focus, .wpa-ld button.wpa-toggle:hover,
+.wpa-alt button.wpa-toggle:focus, .wpa-alt button.wpa-toggle:hover,
+button.wpa-video:hover,
+button.wpa-video:focus {
+	outline: 2px solid currentColor;
+	outline-offset: 1px;
+}
+
+button.wpa-video[aria-pressed=true] .dashicons::before {
+	content: "\f522" / '';
+}
+
+.wpa-alt button.wpa-toggle[aria-expanded=true],
+.wpa-ld button.wpa-toggle[aria-expanded=true] {
+	color: #111;
+	background: #f6f6f6;
+}
+
+.wpa-alt button:focus, .wpa-alt button:hover,
+.wpa-ld button:focus, .wpa-ld button:hover {
+	cursor: pointer;
+}
+
+.top-left .wpa-alt a.wpa-toggle, .top-left .wpa-alt button.wpa-toggle,
+.top-left .wpa-ld a.wpa-toggle, .top-left .wpa-ld button.wpa-toggle {
+	top: 4px;
+	bottom: auto;
+}
+
+.top-right .wpa-alt a.wpa-toggle, .top-right .wpa-alt button.wpa-toggle,
+.top-right .wpa-ld a.wpa-toggle, .top-right .wpa-ld button.wpa-toggle {
+	top: 4px;
+	right: 4px;
+	left: auto;
+	bottom: auto;
+}
+
+.bottom-right .wpa-alt a.wpa-toggle, .bottom-right .wpa-alt button.wpa-toggle,
+.bottom-right .wpa-ld a.wpa-toggle, .bottom-right .wpa-ld button.wpa-toggle {
+	right: 4px;
+	left: auto;
+}
+
+.wpa-alt .wpa-ld button {
+	left: 46px;
+}
+
+.top-right .wpa-alt .wpa-ld button,
+.bottom-right .wpa-alt .wpa-ld button {
+	left: auto;
+	right: 46px;
 }

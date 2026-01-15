@@ -1,3 +1,13 @@
+### 4.5.1 | 2025-11-18
+- Fixed an issue where attempting to publish a Zap returns a production.ERROR on Zapier.
+- Updated authentication to check for read/write permissions on the REST API Key.
+
+### 4.5.0 | 2025-09-04
+- Updated "Steps to Connect a Zap" to provide a correction.
+
+### 4.4.0 | 2025-03-19
+- AF: Updated process_feed() return value for compatibility with Gravity Forms 2.9.4, so the framework can save the feed status to the entry meta.
+
 ### 4.3.0 | 2024-03-06
 - Added support for async (background) feed processing to improve form submission performance.
 - Fixed an issue which causes entries from translated sites to fail.

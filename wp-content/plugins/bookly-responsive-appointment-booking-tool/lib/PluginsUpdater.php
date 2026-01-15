@@ -28,7 +28,7 @@ class PluginsUpdater
             PluginsUpdater::renderModal();
         } );
 
-        add_action( 'update_plugins_api.booking-wp-plugin.com', function( $update, $plugin_data, $plugin_file, $locales ) {
+        add_action( 'update_plugins_hub.bookly.pro', function( $update, $plugin_data, $plugin_file, $locales ) {
             if ( $plugin_data['Author'] === 'Nota-Info' ) {
                 if ( ! is_array( $update ) ) {
                     $update = array();
@@ -94,7 +94,7 @@ class PluginsUpdater
                 }
             }
         } else {
-            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Invalid request for speed up update addons', null, json_encode( $_POST, JSON_PRETTY_PRINT ) );
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Invalid request for speed up update addons', null, json_encode( $_POST, 128 ) );
         }
 
         wp_send_json_success();
@@ -274,8 +274,8 @@ class PluginsUpdater
                     <div class="update-message notice inline notice-error notice-alt">
                         <p>
                            ' . esc_html__( 'Important', 'bookly' ) . '!<br>
-                           ' . sprintf( esc_html__( 'You haven\'t entered the purchase code which results in impossibility to see if there is a new version available. Enter your purchase code in Settings > %sPurchase Code%s.', 'bookly' ),
-                '<a href="' . Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Settings\Page::pageSlug(), array( 'tab' => 'purchase_code' ) ) . '">', '</a>' ) . '
+                           ' . sprintf( esc_html__( 'You haven\'t entered the purchase code which results in impossibility to see if there is a new version available. Enter your purchase code in %sAdd-ons%s section.', 'bookly' ),
+                           '<a href="' . Utils\Common::escAdminUrl( \Bookly\Backend\Modules\Shop\Page::pageSlug() ) . '">', '</a>' ) . '
                            </p>
                     </div>
                 </td>
@@ -299,10 +299,7 @@ class PluginsUpdater
                         <p>
                            ' . esc_html__( 'Important', 'bookly' ) . '!<br>
                            ' . esc_html__( 'Though, every new version is thoroughly tested to its highest quality before deploying, we can\'t guarantee that after update the plugin will work properly on all WordPress configurations and completely protect it from the influence of other plugins.', 'bookly' ) . '<br>
-                           ' . sprintf( __( 'There is a small risk that some issues may appear as a result of updating the plugin. Please note that, according to %1$s Envato rules %2$s, we will be able to help you only if you have active item support period.', 'bookly' ),
-                    '<a href="https://themeforest.net/page/item_support_policy" target="_blank">',
-                    '</a>'
-                ) . '<br>
+                           ' . '<br>
                     ' . sprintf( __( 'You can renew support %1$s here %3$s or %2$s I\'ve already renewed support. %3$s', 'bookly' ),
                     '<a href="' . esc_url( array_key_exists( 'renew_support', $data ) ? $data['renew_support'] : 'https://codecanyon.net/user/nota-info' ) . '" target="_blank">',
                     '<a href="#" data-bookly-plugin="' . $bookly_plugin::getRootNamespace() . '">',

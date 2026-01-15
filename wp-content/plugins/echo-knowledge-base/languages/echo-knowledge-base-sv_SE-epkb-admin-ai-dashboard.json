@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn more": [
+                "Lär dig mer"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Vote for Top 3 Features": [
+                "Rösta på de tre främsta funktionerna"
+            ],
+            "First Name": [
+                "Förnamn"
+            ],
+            "(optional)": [
+                "(valfritt)"
+            ],
+            "Email": [
+                "E-post"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "Misslyckades med att skicka din röst. Försök igen."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "Steg 1: Konfigurera API-nyckel och integritet"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "Ange din OpenAI API-nyckel och godkänn dataskyddsavtalet."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "Steg 2: Aktivera AI Chatt och/eller AI Sökning"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "Aktivera AI-sök- eller AI-chattfunktioner för din webbplats."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "Steg 3: Lägg till maskininlärningsdata och synkronisera"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "Välj innehåll och synkronisera det till OpenAI för AI-behandling."
+            ],
+            "Go to Settings": [
+                "Gå till Inställningar"
+            ],
+            "Completed": [
+                "Slutfört"
+            ],
+            "Warnings": [
+                "Varningar"
+            ],
+            "Welcome to AI Features!": [
+                "Välkommen till AI-funktioner!"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "Låt oss hjälpa dig att komma igång med AI-drivet chat och AI-sökning i bara några få steg."
+            ],
+            "Complete Your Setup": [
+                "Slutför din installation"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "Bara några få steg till för att aktivera AI-funktioner:"
+            ],
+            "Setup Steps": [
+                "Installationssteg"
+            ],
+            "Configure API Key & Privacy": [
+                "Konfigurera API-nyckel och sekretess"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "Lägg till din OpenAI API-nyckel och godkänn dataskyddsavtalet"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "Aktivera AI-chatt och/eller AI-sökning"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "Aktivera AI-sökning eller AI-chattfunktioner för din webbplats"
+            ],
+            "Enable AI Features": [
+                "Aktivera AI-funktioner"
+            ],
+            "Add Training Data & Sync": [
+                "Lägg till maskininlärningsdata och synkronisera"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "Välj innehåll och synkronisera det till OpenAI för AI-behandling"
+            ],
+            "Go to Training Data": [
+                "Gå till maskininlärningsdata"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "Hjälp oss prioritera funktioner genom att lämna din information:"
+            ],
+            "Describe Your Feature Request": [
+                "Beskriv din begäran om en funktion"
+            ],
+            "Please describe the feature you would like to see...": [
+                "Vänligen beskriv den funktion du skulle vilja se..."
+            ],
+            "Submit Vote": [
+                "Skicka röst"
+            ],
+            "Please describe the feature you would like to see.": [
+                "Vänligen beskriv den funktion du vill se."
+            ],
+            "Please enter a valid email address.": [
+                "Vänligen ange en giltig e-postadress."
+            ],
+            "Please select at least one feature to vote for.": [
+                "Vänligen välj minst en funktion att rösta på."
+            ],
+            "Submitting your vote...": [
+                "Skickar din röst..."
+            ],
+            "Thank you for voting!": [
+                "Tack för din röst!"
+            ],
+            "An error occurred. Please try again.": [
+                "Ett fel uppstod. Försök igen."
+            ],
+            "Latest AI Updates": [
+                "Senaste AI-uppdateringar"
+            ],
+            "Select the features you would like to see implemented:": [
+                "Välj de funktioner du vill se implementeras:"
+            ],
+            "Released": [
+                "Släpppt"
+            ],
+            "feature selected": [
+                "funktionen vald"
+            ],
+            "features selected": [
+                "funktioner valda"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "Obs: Din feedback hjälper oss att prioritera utvecklingen. Funktioner kan ändras."
+            ]
+        }
+    }
+}

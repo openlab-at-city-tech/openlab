@@ -191,6 +191,8 @@ class Settings extends Settings_Base {
             'custom_js' => '',
 
             'load_scripts_in_footer' => false,
+
+            'allow_html_in_title' => false,
         )
     );
 
@@ -227,6 +229,7 @@ class Settings extends Settings_Base {
             );
         }
 
+        $settings['sanitize'] = $this->get_option( 'advanced.allow_html_in_title' ) ? 'purify' : null;
         $settings['viewers'] = array(
             'pdfjs' => array(
                 'url' => ARIFANCYLIGHTBOX_URL . 'assets/pdfjs/web/viewer.html',

@@ -51,6 +51,14 @@
             </tr>
             <tr>
                 <td>
+                    <h4><?php esc_html_e('Toggle your slide\'s visibility', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Hide any slide, without having to delete them.', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot available"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
                     <h4><?php esc_html_e('Thumbnail navigation', 'ml-slider');?></h4>
                     <p><?php esc_html_e('Allow users to browse your slideshows using thumbnail navigation.', 'ml-slider');?></p>
                 </td>
@@ -115,6 +123,14 @@
             </tr>
             <tr>
                 <td>
+                    <h4><?php esc_html_e('Add Post Images slides', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Extract images from the current post and displays them as slides.', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
                     <h4><?php esc_html_e('Add custom CSS', 'ml-slider');?></h4>
                     <p><?php esc_html_e('Customize your slideshows to fit with your website.', 'ml-slider');?></p>
                 </td>
@@ -131,8 +147,32 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Toggle your slide\'s visibility', 'ml-slider');?></h4>
-                    <p><?php esc_html_e('Hide any slide, without having to delete them.', 'ml-slider');?></p>
+                    <h4><?php esc_html_e('WooCommerce integrations', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Display your products as slides with support for product galleries.', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php esc_html_e('Advanced Custom Fields integrations', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Display ACF image and gallery fields.', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php esc_html_e('The Events Calendar integrations', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Display your events as slides.', 'ml-slider');?></p>
+                </td>
+                <td><div class="dot unavailable"></div></td>
+                <td><div class="dot available"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4><?php esc_html_e('Repeating Slides support', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Repeat a slide multiple times.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
                 <td><div class="dot available"></div></td>

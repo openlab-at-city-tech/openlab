@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Settings saved successfully": [
+                "設定が正常に保存されました"
+            ],
+            "Saving...": [
+                "保存中..."
+            ],
+            "Save Settings": [
+                "設定を保存"
+            ],
+            "Failed to save settings": [
+                "設定の保存に失敗しました"
+            ],
+            "Sending...": [
+                "送信中..."
+            ],
+            "Test email sent successfully": [
+                "テストメールの送信に成功しました。"
+            ],
+            "Failed to send test email": [
+                "テストメールの送信に失敗しました。"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "テストメールの送信に失敗しました。接続を確認してください。."
+            ]
+        }
+    }
+}

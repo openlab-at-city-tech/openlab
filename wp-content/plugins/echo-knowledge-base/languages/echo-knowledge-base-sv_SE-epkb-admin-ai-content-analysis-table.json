@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Rubrik"
+            ],
+            "Status": [
+                "Status"
+            ],
+            "All": [
+                "Alla"
+            ],
+            "Page": [
+                "Sida"
+            ],
+            "Close": [
+                "Stäng"
+            ],
+            "Recent": [
+                "Senaste"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "selected": [
+                "Vald"
+            ],
+            "Next": [
+                "Nästa"
+            ],
+            "Previous": [
+                "Föregående"
+            ],
+            "Today": [
+                "Idag"
+            ],
+            "Yesterday": [
+                "Igår"
+            ],
+            "Loading...": [
+                "Laddar in …"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "of": [
+                "av"
+            ],
+            "Searching...": [
+                "Söker …"
+            ],
+            "Refreshing...": [
+                "Uppdaterar..."
+            ],
+            "Refresh": [
+                "Uppdatera"
+            ],
+            "Failed to fetch analysis data": [
+                "Misslyckades med att hämta analysdata"
+            ],
+            "Data refreshed successfully": [
+                "Data uppdaterades framgångsrikt"
+            ],
+            "Delete Selected Items": [
+                "Radera valda objekt"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Är du säker på att du vill radera de valda objekten?"
+            ],
+            "Items deleted successfully": [
+                "Valda objekt har raderats framgångsrikt"
+            ],
+            "Unknown error occurred": [
+                "Ett okänt fel uppstod"
+            ],
+            "No articles need analysis": [
+                "Inga dokumentationssidor behöver analyseras"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "Alla dokumentationssidor har analyserats. Bra jobbat!"
+            ],
+            "No articles need improvement": [
+                "Inga dokumentationssidor behöver förbättras"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "Alla analyserade dokumentationssidor har över 80%. Utmärkt!"
+            ],
+            "No recent articles": [
+                "Inga nya dokumentationssidor"
+            ],
+            "No articles have been modified recently.": [
+                "Inga dokumentationssidor har ändrats nyligen."
+            ],
+            "No articles found": [
+                "Inga dokumentationssidor hittades"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "Inga dokumentationssidor finns i denna kunskapsbas. Skapa några dokumentationssidor för att börja analysera."
+            ],
+            "To Analyze": [
+                "Analysera"
+            ],
+            "To Improve": [
+                "Förbättra"
+            ],
+            "Search by title...": [
+                "Sök efter titel..."
+            ],
+            "Loading content analysis data...": [
+                "Laddar innehållsanalysdata..."
+            ],
+            "Score": [
+                "Poäng"
+            ],
+            "Sort": [
+                "Sortera"
+            ],
+            "Importance": [
+                "Viktighet"
+            ],
+            "Last Modified": [
+                "Senast ändrad"
+            ],
+            "No articles match your search": [
+                "Inga artiklar matchar din sökning"
+            ],
+            "View detailed analysis": [
+                "Visa detaljerad analys"
+            ],
+            "days ago": [
+                "dagar sedan"
+            ],
+            "week ago": [
+                "förra veckan"
+            ],
+            "weeks ago": [
+                "veckor sedan"
+            ],
+            "Content Analysis Error": [
+                "Fel vid innehållsanalys"
+            ],
+            "ERROR": [
+                "FEL"
+            ],
+            "Article ID:": [
+                "Artikel-ID:"
+            ],
+            "Error Processing Content Analysis": [
+                "Fel vid bearbetning av innehållsanalys"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "Denna artikel kunde inte analyseras. Försök igen eller kontrollera innehållet i artikeln för problem."
+            ]
+        }
+    }
+}

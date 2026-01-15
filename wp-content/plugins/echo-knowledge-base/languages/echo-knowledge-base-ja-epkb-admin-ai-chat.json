@@ -1,0 +1,168 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Settings": [
+                "設定"
+            ],
+            "Page": [
+                "固定ページ"
+            ],
+            "Settings saved successfully": [
+                "設定が正常に保存されました"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "Next": [
+                "次"
+            ],
+            "Previous": [
+                "前"
+            ],
+            "Saving...": [
+                "保存中..."
+            ],
+            "Go to General Settings": [
+                "一般設定へ移動"
+            ],
+            "Chat History": [
+                "チャット履歴"
+            ],
+            "API Configuration": [
+                "API 設定"
+            ],
+            "AI Assistant": [
+                "AIアシスタント"
+            ],
+            "Save Settings": [
+                "設定を保存"
+            ],
+            "Delete": [
+                "削除"
+            ],
+            "Delete Selected": [
+                "選択した項目を削除"
+            ],
+            "of": [
+                "の"
+            ],
+            "Reset": [
+                "リセット"
+            ],
+            "Are you sure you want to delete the selected conversations?": [
+                "選択した会話を削除してもよろしいですか？"
+            ],
+            "Delete Conversations": [
+                "会話を削除"
+            ],
+            "Deleting conversations...": [
+                "会話を削除しています..."
+            ],
+            "Conversations refreshed successfully": [
+                "会話を正常に更新しました"
+            ],
+            "Search conversations...": [
+                "会話を検索しています..."
+            ],
+            "Refreshing...": [
+                "更新しています..."
+            ],
+            "Refresh": [
+                "更新"
+            ],
+            "Loading conversations...": [
+                "会話を読み込み中..."
+            ],
+            "No conversations found": [
+                "会話が見つかりませんでした"
+            ],
+            "Time": [
+                "時間"
+            ],
+            "User": [
+                "ユーザー"
+            ],
+            "Conversation": [
+                "会話"
+            ],
+            "Searching server for more results...": [
+                "サーバーから追加の結果を検索しています..."
+            ],
+            "Conversation Details": [
+                "会話の詳細"
+            ],
+            "Select a conversation to view details": [
+                "詳細を表示する会話を選択してください"
+            ],
+            "Conversation Info": [
+                "会話情報"
+            ],
+            "User:": [
+                "ユーザー:"
+            ],
+            "Started:": [
+                "開始時:"
+            ],
+            "Messages:": [
+                "メッセージ:"
+            ],
+            "Status:": [
+                "ステータス:"
+            ],
+            "Rating:": [
+                "評価:"
+            ],
+            "Full Conversation": [
+                "全会話"
+            ],
+            "No messages in this conversation.": [
+                "この会話にはメッセージがありません。."
+            ],
+            "Are you sure you want to reset to default instructions?": [
+                "デフォルトの指示にリセットしてもよろしいですか？"
+            ],
+            "Reset Instructions": [
+                "指示をリセット"
+            ],
+            "Are you sure you want to reset to default instructions? Your custom instructions will be lost.": [
+                "デフォルトの指示にリセットしてもよろしいですか？カスタム指示は失われます。."
+            ],
+            "Reset to Default": [
+                "デフォルトに戻す"
+            ],
+            "Failed to load conversations": [
+                "会話の読み込みに失敗しました"
+            ],
+            "Failed to save settings": [
+                "設定の保存に失敗しました"
+            ],
+            "Conversations deleted successfully": [
+                "会話の削除に成功しました"
+            ],
+            "Failed to delete conversations": [
+                "会話の削除に失敗しました"
+            ],
+            "AI Chat is Disabled": [
+                "AI チャットは無効です"
+            ],
+            "To view chat history, please enable AI Chat in the Settings tab.": [
+                "チャット履歴を表示するには、設定タブで AI チャットを有効にしてください。."
+            ],
+            "Go to Settings": [
+                "設定へ移動"
+            ],
+            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "OpenAI API キーが設定されていません。AI チャット機能を使用するには、一般設定で設定してください。."
+            ],
+            "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
+                "AI チャット機能を使用するには、一般設定でデータプライバシー同意を承認してください。."
+            ]
+        }
+    }
+}

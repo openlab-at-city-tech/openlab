@@ -10,7 +10,7 @@
  * Plugin Name:       Broken Link Checker
  * Plugin URI:        https://wordpress.org/plugins/broken-link-checker/
  * Description:       Easily find and fix broken links on your entire site with our Local Link checker or the new Cloud Link scanner, absolutely free! Improve user experience and SEO by ensuring all your links are working.
- * Version:           2.4.6
+ * Version:           2.4.7
  * Requires at least: 5.2
  * Requires PHP:      7.4
  * Author:            WPMU DEV
@@ -42,7 +42,7 @@ defined( 'WPINC' ) || die;
 
 // Plugin version.
 if ( ! defined( 'WPMUDEV_BLC_VERSION' ) ) {
-	define( 'WPMUDEV_BLC_VERSION', '2.4.6' );
+	define( 'WPMUDEV_BLC_VERSION', '2.4.7' );
 }
 
 // Define WPMUDEV_BLC_PLUGIN_FILE.

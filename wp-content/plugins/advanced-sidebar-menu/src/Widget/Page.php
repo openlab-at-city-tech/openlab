@@ -9,18 +9,20 @@ use Advanced_Sidebar_Menu\Utils;
 /**
  * Parent child menu based on pages.
  *
- * @author   OnPoint Plugins
+ * @author         OnPoint Plugins
  *
  * @phpstan-import-type PAGE_SETTINGS from PageMenu
  * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @formatter:off
  * @phpstan-type DEFAULTS \Required<\Pick<PAGE_SETTINGS,'display_all'|'exclude'|'include_childless_parent'|'include_parent'|'levels'|'order_by'|'title'>>
- * @formatter:on
+ * @formatter      :on
  *
  * @implements Widget<PAGE_SETTINGS, DEFAULTS>
  * @implements WidgetWithId<PAGE_SETTINGS, DEFAULTS>
  * @extends \WP_Widget<PAGE_SETTINGS>
+ *
+ * @phpstan-ignore class.implementsDeprecatedInterface (Remove when minimum PRO version requires the basic version 9.8.0)
  */
 class Page extends \WP_Widget implements Widget, WidgetWithId {
 	/**

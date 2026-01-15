@@ -32,11 +32,14 @@ use Tribe\Utils\{
 /**
  * Abstract class for promotional content with banners.
  *
+ * Concrete classes must:
+ * - Use ONE of: Has_Generic_Upsell_Opportunity OR Has_Targeted_Creative_Upsell
+ * - Use appropriate traits (Has_Datetime_Conditions, Is_Dismissible, Requires_Capability)
+ * - Implement should_display() to compose the display logic they need
+ *
  * @since 6.8.2
  */
-abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstract {
-	use Dismissible_Trait;
-
+abstract class Promotional_Content_Abstract {
 	/**
 	 * Background color for the promotional content.
 	 * Must match the background color of the image.
@@ -48,11 +51,63 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 	protected string $background_color = 'transparent';
 
 	/**
-	 * @inheritdoc
+	 * Register actions and filters.
+	 *
+	 * Concrete classes should implement this to hook their specific handlers
+	 * (e.g., dismiss handlers from Is_Dismissible trait).
+	 *
+	 * @since 6.8.2
+	 *
+	 * @return void
 	 */
-	public function hook(): void {
-		// Only hook the AJAX dismiss handler - sidebar integration is handled by Controller.
-		add_action( 'wp_ajax_tec_conditional_content_dismiss', [ $this, 'handle_dismiss' ] );
+	abstract public function hook(): void;
+
+	/**
+	 * Whether the promotional content is dismissible.
+	 * Defaults to false, the Is_Dismissible trait must be used to override this.
+	 *
+	 * @since 6.9.8
+	 *
+	 * @return bool
+	 */
+	public function is_dismissible(): bool {
+		return false;
+	}
+
+	/**
+	 * Whether the promotional content is date bound.
+	 * Defaults to false, the Has_Datetime_Conditions trait must be used to override this.
+	 *
+	 * @since 6.9.8
+	 *
+	 * @return bool
+	 */
+	public function is_date_bound() {
+		return false;
+	}
+
+	/**
+	 * Whether the promotional content is targeted.
+	 * Defaults to false, the Has_Targeted_Creative_Upsell trait must be used to override this.
+	 *
+	 * @since 6.9.8
+	 *
+	 * @return bool
+	 */
+	public function is_targeted(): bool {
+		return false;
+	}
+
+	/**
+	 * Whether the promotional content requires a capability.
+	 * Defaults to false, the Requires_Capability trait must be used to override this.
+	 *
+	 * @since 6.9.8
+	 *
+	 * @return bool
+	 */
+	public function requires_capability(): bool {
+		return false;
 	}
 
 	/**
@@ -131,6 +186,8 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 	/**
 	 * Get the full slug with year.
 	 *
+	 * Requires $slug property to be defined in concrete class.
+	 *
 	 * @since 6.8.2
 	 *
 	 * @return string
@@ -141,47 +198,16 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 	}
 
 	/**
-	 * @inheritdoc
+	 * Determines if the promotional content should be displayed.
+	 *
+	 * Concrete classes must implement this to compose their display logic
+	 * using checks from traits (e.g., capability, dismissal, datetime, upsell).
+	 *
+	 * @since 6.8.2
+	 *
+	 * @return bool Whether the content should display.
 	 */
-	protected function get_start_time(): ?Date_I18n {
-		$date = parent::get_start_time();
-		if ( null === $date ) {
-			return null;
-		}
-
-		$date = $date->setTime( 4, 0 );
-
-		return $date;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function get_end_time(): ?Date_I18n {
-		$date = parent::get_end_time();
-		if ( null === $date ) {
-			return null;
-		}
-
-		$date = $date->setTime( 4, 0 );
-
-		return $date;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	protected function should_display(): bool {
-		if ( $this->has_user_dismissed() ) {
-			return false;
-		}
-
-		if ( tec_should_hide_upsell( $this->get_slug() ) ) {
-			return false;
-		}
-
-		return parent::should_display();
-	}
+	abstract protected function should_display(): bool;
 
 	/**
 	 * Render the header notice.
@@ -236,24 +262,63 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 
 		$template_args = [
 			'background_color' => $this->get_background_color(),
-			'wide_image_src'   => tribe_resource_url( 'images/conditional-content/' . $this->get_wide_banner_image(), false, null, \Tribe__Main::instance() ),
-			'narrow_image_src' => tribe_resource_url( 'images/conditional-content/' . $this->get_narrow_banner_image(), false, null, \Tribe__Main::instance() ),
+			'wide_image_src'   => $this->get_wide_banner_image_url(),
+			'narrow_image_src' => $this->get_narrow_banner_image_url(),
 			'is_responsive'    => true,
 			'is_sidebar'       => false,
-			'link'             => $this->get_link_url(),
-			'nonce'            => $this->get_nonce(),
+			'link'             => $this->get_creative_link_url(),
 			'sale_name'        => $sale_name,
 			'slug'             => $this->get_slug(),
 			'year'             => $year,
-			'a11y_text'        => sprintf(
-				/* translators: %1$s: Sale year (numeric), %2$s: Sale name */
-				_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-				$year,
-				$sale_name
-			),
+			'a11y_text'        => $this->get_creative_alt_text(),
 		];
 
+		if ( $this->is_dismissible() ) {
+			$template_args['nonce'] = $this->get_nonce();
+		}
+
 		return $this->get_template()->template( $this->get_template_slug(), $template_args, false );
+	}
+
+	/**
+	 * Add the dismiss button to the container.
+	 *
+	 * @since 6.9.8
+	 *
+	 * @param Container $container The container to add the dismiss button to.
+	 *
+	 * @return void
+	 */
+	protected function do_dismiss_button( &$container ): void {
+		if ( ! $this->is_dismissible() ) {
+			return;
+		}
+
+		$button_attr = new Attributes(
+			[
+				'data-tec-conditional-content-dismiss-button' => true,
+				'data-tec-conditional-content-dismiss-slug'   => $this->get_slug(),
+				'data-tec-conditional-content-dismiss-nonce'  => $this->get_nonce(),
+				'style'                                       => 'position: absolute; top: 0; right: 0; background: transparent; border: 0; color: #fff; padding: 0.5em; cursor: pointer;',
+			]
+		);
+		$button      = new Button( null, $button_attr );
+		$button->add_child(
+			new Div( new Element_Classes( [ 'dashicons', 'dashicons-dismiss' ] ) )
+		);
+
+		$container->add_child( $button );
+		$container->add_child(
+			new Image(
+				$this->get_sidebar_image_url(),
+				new Attributes(
+					[
+						'alt'  => $this->get_creative_alt_text(),
+						'role' => 'presentation',
+					]
+				)
+			)
+		);
 	}
 
 	/**
@@ -269,21 +334,19 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 
 		$template_args = [
 			'background_color' => $this->get_background_color(),
-			'image_src'        => tribe_resource_url( 'images/conditional-content/' . $this->get_wide_banner_image(), false, null, \Tribe__Main::instance() ),
+			'image_src'        => $this->get_wide_banner_image_url(),
 			'is_narrow'        => false,
 			'is_sidebar'       => false,
-			'link'             => $this->get_link_url(),
-			'nonce'            => $this->get_nonce(),
+			'link'             => $this->get_creative_link_url(),
 			'sale_name'        => $sale_name,
 			'slug'             => $this->get_slug(),
 			'year'             => $year,
-			'a11y_text'        => sprintf(
-				/* translators: %1$s: Sale year (numeric), %2$s: Sale name */
-				_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-				$year,
-				$sale_name
-			),
+			'a11y_text'        => $this->get_creative_alt_text(),
 		];
+
+		if ( $this->is_dismissible() ) {
+			$template_args['nonce'] = $this->get_nonce();
+		}
 
 		return $this->get_template()->template( $this->get_template_slug(), $template_args, false );
 	}
@@ -326,21 +389,19 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 
 		$template_args = [
 			'background_color' => $this->get_background_color(),
-			'image_src'        => tribe_resource_url( 'images/conditional-content/' . $this->get_narrow_banner_image(), false, null, \Tribe__Main::instance() ),
+			'image_src'        => $this->get_narrow_banner_image_url(),
 			'is_narrow'        => true,
 			'is_sidebar'       => false,
-			'link'             => $this->get_link_url(),
-			'nonce'            => $this->get_nonce(),
+			'link'             => $this->get_creative_link_url(),
 			'sale_name'        => $sale_name,
 			'slug'             => $this->get_slug(),
 			'year'             => $year,
-			'a11y_text'        => sprintf(
-				/* translators: %1$s: Sale year (numeric), %2$s: Sale name */
-				_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-				$year,
-				$sale_name
-			),
+			'a11y_text'        => $this->get_creative_alt_text(),
 		];
+
+		if ( $this->is_dismissible() ) {
+			$template_args['nonce'] = $this->get_nonce();
+		}
 
 		return $this->get_template()->template( $this->get_template_slug(), $template_args, false );
 	}
@@ -396,7 +457,7 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 	 * @since 6.8.2
 	 *
 	 * @param Settings_Sidebar_Section[] $sections The sidebar sections.
-	 * @param Settings_Sidebar           $sidebar  Sidebar instance.
+	 * @param Settings_Sidebar           $sidebar  Unused. Sidebar instance.
 	 *
 	 * @return Settings_Sidebar_Section[]
 	 */
@@ -419,40 +480,9 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 		 */
 		do_action( "tec_conditional_content_{$this->slug}", 'sidebar-filter', $this );
 
-		$translated_title = sprintf(
-			/* translators: %1$s: Sale year, %2$s: Sale name */
-			esc_attr_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-			esc_attr( $year ),
-			esc_attr( $sale_name )
-		);
-
 		$container = new Container();
-
-		$button_attr = new Attributes(
-			[
-				'data-tec-conditional-content-dismiss-button' => true,
-				'data-tec-conditional-content-dismiss-slug'   => $this->get_slug(),
-				'data-tec-conditional-content-dismiss-nonce'  => $this->get_nonce(),
-				'style'                                       => 'position: absolute; top: 0; right: 0; background: transparent; border: 0; color: #fff; padding: 0.5em; cursor: pointer;',
-			]
-		);
-		$button      = new Button( null, $button_attr );
-		$button->add_child(
-			new Div( new Element_Classes( [ 'dashicons', 'dashicons-dismiss' ] ) )
-		);
-
-		$container->add_child( $button );
-		$container->add_child(
-			new Image(
-				tribe_resource_url( 'images/conditional-content/' . $this->get_sidebar_image(), false, null, \Tribe__Main::instance() ),
-				new Attributes(
-					[
-						'alt'  => $translated_title,
-						'role' => 'presentation',
-					]
-				)
-			)
-		);
+		// Conditionally add the dismiss button.
+		$this->do_dismiss_button( $container );
 
 		// Prepend to sections array.
 		array_unshift(
@@ -461,17 +491,17 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 				->add_elements(
 					[
 						new Link(
-							$this->get_link_url(),
+							$this->get_creative_link_url(),
 							$container,
 							null,
 							new Attributes(
 								[
-									'title'                                          => $translated_title,
+									'title'                                          => $this->get_creative_alt_text(),
 									'target'                                         => '_blank',
 									'rel'                                            => 'noopener nofollow',
 									'style'                                          => 'position: relative; display:block;',
 									// Dismiss container attributes.
-									'data-tec-conditional-content-dismiss-container' => true,
+									'data-tec-conditional-content-dismiss-container' => $this->is_dismissible(),
 								]
 							)
 						),
@@ -492,12 +522,12 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 	 * @return void
 	 */
 	public function include_sidebar_object( $sidebar ): void {
-		$cache = tribe_cache();
-		if ( ! empty( $cache[ __METHOD__ ] ) ) {
+		$cache_key = 'include_sidebar_object_' . $this->get_slug();
+		$cache     = tribe_cache();
+
+		if ( $cache->get( $cache_key ) ) {
 			return;
 		}
-
-		$cache[ __METHOD__ ] = true;
 
 		// Check if the content should currently be displayed.
 		if ( ! $this->should_display() ) {
@@ -517,62 +547,34 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 		 */
 		do_action( "tec_conditional_content_{$this->slug}", 'sidebar-object', $this );
 
-		$translated_title = sprintf(
-			/* translators: %1$s: Sale year, %2$s: Sale name */
-			esc_attr_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-			esc_attr( $year ),
-			esc_attr( $sale_name )
-		);
-
-		$container   = new Container();
-		$button_attr = new Attributes(
-			[
-				'data-tec-conditional-content-dismiss-button' => true,
-				'data-tec-conditional-content-dismiss-slug'   => $this->get_slug(),
-				'data-tec-conditional-content-dismiss-nonce'  => $this->get_nonce(),
-				'style'                                       => 'position: absolute; top: 0; right: 0; background: transparent; border: 0; color: #fff; padding: 0.5em; cursor: pointer;',
-			]
-		);
-		$button      = new Button( null, $button_attr );
-		$button->add_child(
-			new Div( new Element_Classes( [ 'dashicons', 'dashicons-dismiss' ] ) )
-		);
-
-		$container->add_child( $button );
-		$container->add_child(
-			new Image(
-				tribe_resource_url( 'images/conditional-content/' . $this->get_sidebar_image(), false, null, \Tribe__Main::instance() ),
-				new Attributes(
-					[
-						'alt'  => $translated_title,
-						'role' => 'presentation',
-					]
-				)
-			)
-		);
+		$container = new Container();
+		// Conditionally add the dismiss button.
+		$this->do_dismiss_button( $container );
 
 		$sidebar->prepend_section(
-			( new Settings_Section() )
+			( new Settings_Sidebar_Section() )
 				->add_elements(
 					[
 						new Link(
-							$this->get_link_url(),
+							$this->get_creative_link_url(),
 							$container,
 							null,
 							new Attributes(
 								[
-									'title'                                          => $translated_title,
+									'title'                                          => $this->get_creative_alt_text(),
 									'target'                                         => '_blank',
 									'rel'                                            => 'noopener nofollow',
 									'style'                                          => 'position: relative; display:block;',
 									// Dismiss container attributes.
-									'data-tec-conditional-content-dismiss-container' => true,
+									'data-tec-conditional-content-dismiss-container' => $this->is_dismissible(),
 								]
 							)
 						),
 					]
 				)
 		);
+
+		$cache->set( $cache_key, true, 5 * MINUTE_IN_SECONDS );
 	}
 
 	/**
@@ -603,22 +605,107 @@ abstract class Promotional_Content_Abstract extends Datetime_Conditional_Abstrac
 
 		$template_args = [
 			'background_color' => $this->get_background_color(),
-			'image_src'        => tribe_resource_url( 'images/conditional-content/' . $this->get_sidebar_image(), false, null, \Tribe__Main::instance() ),
+			'image_src'        => $this->get_sidebar_image_url(),
 			'is_narrow'        => false,
 			'is_sidebar'       => true,
-			'link'             => $this->get_link_url(),
-			'nonce'            => $this->get_nonce(),
+			'link'             => $this->get_creative_link_url(),
 			'sale_name'        => $sale_name,
 			'slug'             => $this->get_slug(),
 			'year'             => $year,
-			'a11y_text'        => sprintf(
-				/* translators: %1$s: Sale year (numeric), %2$s: Sale name */
-				_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
-				$year,
-				$sale_name
-			),
+			'a11y_text'        => $this->get_creative_alt_text(),
 		];
 
+		if ( $this->is_dismissible() ) {
+			$template_args['nonce'] = $this->get_nonce();
+		}
+
 		$this->get_template()->template( $this->get_template_slug(), $template_args, true );
+	}
+
+	/**
+	 * Find an image file with automatic format detection (jpg, with png fallback).
+	 *
+	 * @since 6.9.8
+	 *
+	 * @param string $base_path The base path without extension (e.g., 'black-friday-2025/top-wide').
+	 *
+	 * @return string The filename with extension, or the base path with .png if neither format exists.
+	 */
+	protected function find_image_with_format( string $base_path ): string {
+		$base_dir = \Tribe__Main::instance()->plugin_path . 'src/resources/images/conditional-content/';
+
+		// Try .jpg first.
+		if ( file_exists( $base_dir . $base_path . '.jpg' ) ) {
+			return $base_path . '.jpg';
+		}
+
+		// Fall back to .png.
+		return $base_path . '.png';
+	}
+
+	/**
+	 * Get the wide banner image URL.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return string The wide banner image URL.
+	 */
+	protected function get_wide_banner_image_url(): string {
+		$image_path = $this->find_image_with_format( $this->get_slug() . '/top-wide' );
+		return tribe_resource_url( 'images/conditional-content/' . $image_path, false, null, \Tribe__Main::instance() );
+	}
+
+	/**
+	 * Get the narrow banner image URL.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return string The narrow banner image URL.
+	 */
+	protected function get_narrow_banner_image_url(): string {
+		$image_path = $this->find_image_with_format( $this->get_slug() . '/top-narrow' );
+		return tribe_resource_url( 'images/conditional-content/' . $image_path, false, null, \Tribe__Main::instance() );
+	}
+
+	/**
+	 * Get the sidebar image URL.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return string The sidebar image URL.
+	 */
+	protected function get_sidebar_image_url(): string {
+		$image_path = $this->find_image_with_format( $this->get_slug() . '/sidebar' );
+		return tribe_resource_url( 'images/conditional-content/' . $image_path, false, null, \Tribe__Main::instance() );
+	}
+
+	/**
+	 * Get the link URL for the creative.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return string The link URL.
+	 */
+	protected function get_creative_link_url(): string {
+		return $this->get_link_url();
+	}
+
+	/**
+	 * Get the alt text for the creative.
+	 *
+	 * @since 6.8.3
+	 *
+	 * @return string The alt text.
+	 */
+	protected function get_creative_alt_text(): string {
+		$year      = date_i18n( 'Y' );
+		$sale_name = $this->get_sale_name();
+
+		return sprintf(
+			/* translators: %1$s: Sale year (numeric), %2$s: Sale name */
+			_x( '%1$s %2$s for The Events Calendar plugins, add-ons and bundles.', 'Alt text for the Sale Ad', 'tribe-common' ),
+			$year,
+			$sale_name
+		);
 	}
 }

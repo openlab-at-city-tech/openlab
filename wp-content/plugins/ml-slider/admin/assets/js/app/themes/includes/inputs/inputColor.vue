@@ -1,5 +1,8 @@
 <template v-if="item.length">
-    <div class="ms-color-tooltip-wrapper">
+    <div :class="[
+      'ms-color-tooltip-wrapper', 
+      item.name ? item.name : ''
+    ]">
         <input 
             type="text" 
             class="colorpicker"

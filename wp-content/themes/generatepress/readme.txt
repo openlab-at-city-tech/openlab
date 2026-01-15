@@ -6,8 +6,8 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: two-columns, three-columns, one-column, right-sidebar, left-sidebar, footer-widgets, blog, e-commerce, flexible-header, full-width-template, buddypress, custom-header, custom-background, custom-menu, custom-colors, sticky-post, threaded-comments, translation-ready, rtl-language-support, featured-images, theme-options
 Requires at least: 6.5
 Requires PHP: 7.4
-Tested up to: 6.8
-Stable tag: 3.6.0
+Tested up to: 6.9
+Stable tag: 3.6.1
 
 GeneratePress is a lightweight WordPress theme built with a focus on speed and usability.
 
@@ -79,12 +79,6 @@ http://www.gnu.org/licenses/gpl.html
 Font License: SIL OFL 1.1 - http://scripts.sil.org/OFL
 Code License: MIT License - http://opensource.org/licenses/mit-license.html
 
-= classList =
-
-By Eli Grey, http://eligrey.com
-License: Dedicated to the public domain.
-See https://github.com/eligrey/classList.js/blob/master/LICENSE.md
-
 = selectWoo =
 
 MIT License: https://github.com/woocommerce/selectWoo/blob/master/LICENSE.md
@@ -99,6 +93,9 @@ By Jed Watson
 MIT License: https://github.com/JedWatson/react-select/blob/master/LICENSE
 
 == Changelog ==
+
+= 3.6.1 =
+* Tweak: Remove conditional IE script to prevent notice in WP 6.9
 
 = 3.6.0 =
 * Fix: Inability to add more than one font in the Font Manager

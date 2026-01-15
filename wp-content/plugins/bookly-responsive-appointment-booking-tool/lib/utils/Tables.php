@@ -15,6 +15,7 @@ abstract class Tables
     const DISCOUNTS = 'discounts';
     const EMAIL_LOGS = 'email_logs';
     const EMAIL_NOTIFICATIONS = 'email_notifications';
+    const EVENTS = 'events';
     const GIFT_CARDS = 'gift_cards';
     const GIFT_CARD_TYPES = 'gift_card_types';
     const LOCATIONS = 'locations';
@@ -51,7 +52,7 @@ abstract class Tables
             case self::APPOINTMENTS:
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
-                    'no' => esc_html__( 'No.', 'bookly' ),
+                    'no' => esc_html_x( 'No.', 'number', 'bookly' ),
                     'start_date' => esc_html__( 'Appointment date', 'bookly' ),
                     'staff_name' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_employee' ) ),
                     'customer_full_name' => esc_html__( 'Customer name', 'bookly' ),
@@ -113,7 +114,7 @@ abstract class Tables
                 break;
             case self::PAYMENTS:
                 $columns = array(
-                    'id' => esc_html__( 'No.', 'bookly' ),
+                    'id' => esc_html_x( 'No.', 'number', 'bookly' ),
                     'created_at' => esc_html__( 'Date', 'bookly' ),
                     'type' => esc_html__( 'Type', 'bookly' ),
                     'customer' => esc_html__( 'Customer', 'bookly' ),
@@ -230,8 +231,7 @@ abstract class Tables
                 $columns = array(
                     'id' => esc_html__( 'ID', 'bookly' ),
                     'full_name' => esc_html__( 'Name', 'bookly' ),
-                    'email' => esc_html__( 'Email', 'bookly' ),
-                    'cloud_msc_token' => esc_html__( 'Access token', 'bookly' ),
+                    'token' => esc_html__( 'Access token', 'bookly' ),
                 );
                 break;
             case self::CUSTOMER_CABINET_APPOINTMENTS:

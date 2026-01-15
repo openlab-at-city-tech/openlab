@@ -238,9 +238,35 @@ class TRP_Advanced_Tab {
 	 * Advanced page content
 	 */
 
-	public function get_registered_advanced_settings(){
-		return apply_filters( 'trp_register_advanced_settings', array() );
-	}
+    public function get_registered_advanced_settings() {
+        // Pull everything registered by add-ons / filters
+        $settings = apply_filters( 'trp_register_advanced_settings', array() );
+
+        $trp = TRP_Translate_Press::get_trp_instance();
+
+        $ls_tab         = is_object( $trp ) ? $trp->get_component( 'language_switcher_tab' ) : null;
+        $legacy_enabled = $ls_tab->is_legacy_enabled();
+
+        // Filter out all settings that belong to the "language_switcher" container if legacy language switcher is disabled
+        if ( !$legacy_enabled ) {
+            $settings = array_values(
+                array_filter(
+                    $settings,
+                    static function ( $item ) {
+                        if ( !is_array( $item ) || !isset( $item['container'] ) ) {
+                            return true;
+                        }
+
+                        // Drop anything grouped under the language_switcher container
+                        // (container titles, elements, separators, etc.).
+                        return ( $item['container'] !== 'language_switcher' );
+                    }
+                )
+            );
+        }
+
+        return $settings;
+    }
 
 	/*
 	 * Require the custom codes from the specified folder
@@ -282,6 +308,7 @@ class TRP_Advanced_Tab {
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/html-lang-remove-locale.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/serve-similar-translation.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/disable-gettext-strings.php');
+        include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/manual-translation-only.php');
         //we can remove this at some point
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/load-legacy-seo-pack.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/load-legacy-language-switcher.php');

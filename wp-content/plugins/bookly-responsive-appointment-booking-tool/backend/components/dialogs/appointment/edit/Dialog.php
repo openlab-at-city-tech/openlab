@@ -67,7 +67,7 @@ class Dialog extends Lib\Base\Component
                 'remove_customer' => __( 'Remove customer', 'bookly' ),
                 'search_customers' => __( '-- Search customers --', 'bookly' ),
                 'new_customer' => __( 'New customer', 'bookly' ),
-                'no_result_found' => __( 'No result found', 'bookly' ),
+                'no_result_found' => __( 'No results found', 'bookly' ),
                 'searching' => __( 'Searching', 'bookly' ),
                 'save' => __( 'Save', 'bookly' ),
                 'close' => __( 'Close', 'bookly' ),
@@ -77,7 +77,7 @@ class Dialog extends Lib\Base\Component
                 'send_as_for_new' => __( 'Send as for new', 'bookly' ),
                 'send' => __( 'Send', 'bookly' ),
                 'view' => __( 'View', 'bookly' ),
-                'internal_note_help' => __( 'This text can be inserted into notifications with {internal_note} code', 'bookly' ),
+                'internal_note_help' => sprintf( __( 'This text can be inserted into notifications with %s code', 'bookly' ), '{internal_note}' ),
                 'notices' => array(
                     'service_required' => __( 'Please select a service', 'bookly' ),
                     'provider_required' => __( 'Please select a provider', 'bookly' ),

@@ -54,6 +54,37 @@ class Feed
     }
 
     /**
+     * Create ICS file.
+     *
+     * @return bool|string
+     */
+    public function create()
+    {
+        $body = $this->render();
+        if ( $body ) {
+            $path = tempnam( get_temp_dir(), 'Bookly_' );
+
+            if ( $path ) {
+                $info = pathinfo( $path );
+                $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['filename'] );
+                if ( rename( $path, $new_path ) ) {
+                    $path = $new_path;
+                } else {
+                    $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['basename'] );
+                    if ( rename( $path, $new_path ) ) {
+                        $path = $new_path;
+                    }
+                }
+                Lib\Utils\Common::getFilesystem()->put_contents( $path, $body );
+
+                return $path;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param UserBookingData $userData
      * @return Feed
      */
@@ -65,7 +96,41 @@ class Feed
         if ( $userData->load() && $userData->getOrderId() ) {
             $order = new Lib\Entities\Order( array( 'id' => $userData->getOrderId() ) );
             $description_template = Lib\Utils\Codes::getICSDescriptionTemplate();
-            foreach ( $order->getCaItems() as $data ) {
+            foreach ( $order->getItems() as $data ) {
+                if ( $data['type'] === 'appointment' ) {
+                    $description_codes = Lib\Utils\Codes::getICSCodes( $data['item'] );
+                    $staff = Lib\Entities\Staff::find( $data['item']->getAppointment()->getStaffId() );
+
+                    $ics->addEvent(
+                        $data['item']->getAppointment()->getStartDate(),
+                        $data['item']->getAppointment()->getEndDate(),
+                        $data['title'],
+                        $staff->getFullName(),
+                        $staff->getEmail(),
+                        Lib\Utils\Codes::replace( $description_template, $description_codes, false ),
+                        $data['item']->getAppointment()->getLocationId()
+                    );
+                }
+            }
+        }
+
+        return $ics;
+    }
+
+    /**
+     * @param Lib\Entities\Order $order
+     * @return Feed
+     */
+    public static function createFromOrder( Lib\Entities\Order $order )
+    {
+        $items = $order->getItems();
+        if ( $items && $items[0]['type'] === 'event' ) {
+            $ics = Lib\Proxy\Events::getIcsFromOrder( $order );
+        } else {
+            // Generate ICS feed.
+            $ics = new self();
+            $description_template = Lib\Utils\Codes::getICSDescriptionTemplate();
+            foreach ( $order->getItems() as $data ) {
                 $description_codes = Lib\Utils\Codes::getICSCodes( $data['item'] );
                 $staff = Lib\Entities\Staff::find( $data['item']->getAppointment()->getStaffId() );
 
@@ -79,33 +144,6 @@ class Feed
                     $data['item']->getAppointment()->getLocationId()
                 );
             }
-        }
-
-        return $ics;
-    }
-
-    /**
-     * @param Lib\Entities\Order $order
-     * @return Feed
-     */
-    public static function createFromOrder( Lib\Entities\Order $order )
-    {
-        // Generate ICS feed.
-        $ics = new self();
-        $description_template = Lib\Utils\Codes::getICSDescriptionTemplate();
-        foreach ( $order->getCaItems() as $data ) {
-            $description_codes = Lib\Utils\Codes::getICSCodes( $data['item'] );
-            $staff = Lib\Entities\Staff::find( $data['item']->getAppointment()->getStaffId() );
-
-            $ics->addEvent(
-                $data['item']->getAppointment()->getStartDate(),
-                $data['item']->getAppointment()->getEndDate(),
-                $data['title'],
-                $staff->getFullName(),
-                $staff->getEmail(),
-                Lib\Utils\Codes::replace( $description_template, $description_codes, false ),
-                $data['item']->getAppointment()->getLocationId()
-            );
         }
 
         return $ics;

@@ -2,6 +2,24 @@
 
 Numbers in brackets show the issue number in https://github.com/wp-document-revisions/wp-document-revisions/issues/
 
+### 3.7.0
+
+* NEW: Protect document revision deletion by Database cleaners that use WordPress API to delete them. (#364)
+* NEW: Filter 'document_allow_revision_deletion' to allow revision deletion by trusted plugins,e.g. PublishPress Revisions. (#364)
+* NEW: PublishPress support withdrawn as replaced by PublishPress Statuses.
+* NEW: Filter 'document_validate' to bypass structure validation for a specific document.
+* NEW: Filter 'document_thumbnail' used to override the thumbnail image size on document lists.
+* NEW: Image size post_thumbnail no longer created when theme does not create it; instead equivalent used on rendering. (#356)
+* FIX: Document revision limits not working in non-admin contexts (e.g. with PublishPress Revisions plugin). (#366)
+* FIX: Additional edge cases for revision deletion protection by plugin-managed operations. (#368)
+* FIX: Document slug sanitization to prevent invalid characters like whitespace in URLs. (#369)
+* FIX: Translations need to be called on 'init', not 'plugins_loaded'.
+* FIX: Uploading twice between document saves creates orphan attachment on deletion (#353)
+* FIX: TypeError: window.WPDocumentRevisions is undefined (#348)
+* FIX: Ensure File descriptor of Document Upload includes subdir component. (#342)
+* DEV: Improved test coverage and compatibility testing for PHP 7.4-8.3 and WordPress 4.9+.
+* DEV: Updated REST API tests for compatibility with latest WordPress versions. (#347)
+
 ### 3.6.0
 
 * NEW: Integrate with PublishPress Statuses plugin for custom statuses. (#335)
@@ -258,7 +276,7 @@ Updated documentation.
 * If you would like to help out by testing early releases, please try the continuously updated [development version](https://github.com/wp-document-revisions/wp-document-revisions/tree/develop). Any [feedback](https://github.com/wp-document-revisions/wp-document-revisions/issues?direction=desc&sort=created&state=open), technical or prose is helpful.
 * Added Spanish Translation Support (es_ES — special thanks to [TradiArt](http://www.tradiart.com/))
 * Document URL slug (used for archive and prefixing all documents) now customizable via settings page and translatable. (e.g., <http://domain.com/documentos/2012/04/test.txt> rather than /documents/)
-* Subscribers and unauthenticated users no longer have the ability to read revisions by default (you can override this setting using the [Members plugin](http://wordpress.org/extend/plugins/members/).
+* Subscribers and unauthenticated users no longer have the ability to read revisions by default (you can override this setting using the [Members plugin](http://wordpress.org/plugins/members/).
 * Attempts to access unauthorized files now properly respond with HTTP code 403 (rather than 500 previously). Note: attempting to access private documents will continue to result in 404s.
 * Enhanced authentication prior to serving files now provides developers more granular control of permissions via `serve_document_auth` filter.
 * Better Edit Flow support (can now toggle document support on and off using native Edit Flow user interface). Note: You may need to manually toggle on custom status support for documents after upgrading.
@@ -306,7 +324,7 @@ Updated documentation.
 * Menu item now reads "All Documents" (rather than simply "Documents") for clarity
 * Fix for E_WARNING level error on edit-tags.php with custom taxonomies
 * Taxonomy counts (e.g., workflow states) now reflects non-published documents
-* Better translation support (see the [FAQ](http://wordpress.org/extend/plugins/wp-document-revisions/faq/) if you are interested in translating the plugin into your language)
+* Better translation support (see the [FAQ](http://wordpress.org/plugins/wp-document-revisions/faq/) if you are interested in translating the plugin into your language)
 * Compatibility fix for WordPress SEO's "Clean Permalinks" mode
 
 ### 1.2
@@ -321,7 +339,7 @@ Updated documentation.
 
 ### 1.1
 
-* Added support for the [Edit Flow Plugin](http://wordpress.org/extend/plugins/edit-flow/) if installed
+* Added support for the [Edit Flow Plugin](http://wordpress.org/plugins/edit-flow/) if installed
 * Added "Currently Editing" column to documents list to display document's lock holder, if any
 * Added support for new help tabs in WordPress versions 3.3 and greater
 * Fixed bug where media library would trigger an SQL error when no documents had been uploaded

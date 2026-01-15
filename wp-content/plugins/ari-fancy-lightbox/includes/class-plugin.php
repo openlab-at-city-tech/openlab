@@ -113,6 +113,8 @@ class Plugin extends Ari_Plugin {
 
         wp_register_script( 'ari-fancybox', $options->assets_url . 'fancybox/jquery.fancybox.min.js', array( 'jquery' ), $options->version );
         wp_register_style( 'ari-fancybox', $options->assets_url . 'fancybox/jquery.fancybox.min.css', array(), $options->version );
+
+        wp_register_script( 'ari-fancybox-purify', $options->assets_url . 'utils/purify.min.js', array(), $options->version );
     }
 
     private function admin_init() {

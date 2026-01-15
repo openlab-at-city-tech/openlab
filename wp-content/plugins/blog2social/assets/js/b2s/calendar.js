@@ -4,6 +4,11 @@ var curSource = new Array();
 curSource[0] = ajaxurl + '?action=b2s_get_calendar_events&filter_network_auth=all&filter_network=all&filter_status=0&b2s_security_nonce=' + jQuery('#b2s_security_nonce').val();
 var newSource = new Array();
 
+function capitalizeFirst(text) {
+    if (!text) return text;
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 jQuery(document).ready(function () {
     jQuery('#b2s_calendar').fullCalendar({
         header: {
@@ -28,16 +33,33 @@ jQuery(document).ready(function () {
             $isRelayPost = '';
             $isCuratedPost = '';
             $isRePost = '';
+            $isVideoPost = '';
+
             if (event.post_type == 'b2s_ex_post') {
-                $isCuratedPost = ' (Curated Post)';
+
+                if(event.display_post_format!= 'wp'){
+                    $isCuratedPost = '('+capitalizeFirst(event.display_post_format)+')';
+                }else{
+                    $isCuratedPost = '';
+                }
             }
+            
+            if(event.display_post_format == 'video' || event.post_type == 'attachment'){
+                $isVideoPost = ' (Video)';
+            }
+          
+            if(event.display_post_format == 'wp' && event.post_type != 'attachment' && event.post_type != 'b2s_ex_post' ){
+                $isCuratedPost = ' (Wordpress)';
+            }
+
             if (event.relay_primary_post_id > 0) {
                 $isRelayPost = ' (Retweet)';
             }
             if (event.b2s_sched_type == 5) {
                 $isRePost = ' (Re-Share)';
             }
-            $network_name = jQuery("<span>").text(event.author + $isRelayPost + $isCuratedPost + $isRePost).addClass("network-name").css("display", "block");
+          
+            $network_name = jQuery("<span>").text(event.author + $isRelayPost + $isCuratedPost + $isVideoPost + $isRePost).addClass("network-name").css("display", "block");
             element.find(".fc-time").after($network_name);
             element.html(element.html());
             $parent = element.parent();
@@ -248,9 +270,11 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
     }
 
     //MaxSchedDate
-    var maxDate = new Date();
-    maxDate.setTime(jQuery('#b2sMaxSchedDate').val());
-
+    var maxDateStr = jQuery('#b2sMaxSchedDate').val(); 
+    var datePart = maxDateStr.split(' ')[0];           
+    var parts = datePart.split('-');                  
+    var maxDate = new Date(parts[0], parts[1]-1, parts[2]); 
+    
     jQuery(".b2s-post-item-details-release-input-date").datepicker({
         format: dateFormat,
         language: language,
@@ -270,10 +294,10 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
         snapToStep: true
     });
     jQuery(".b2s-post-item-details-release-input-date").datepicker().on('changeDate', function (e) {
-        checkSchedDateTime(network_auth_id);
+        checkSchedDateTimeCalendar(network_auth_id);
     });
     jQuery('.b2s-post-item-details-release-input-time').timepicker().on('changeTime.timepicker', function (e) {
-        checkSchedDateTime(network_auth_id);
+        checkSchedDateTimeCalendar(network_auth_id);
     });
     init();
 
@@ -411,7 +435,7 @@ jQuery(document).on('click', '#b2s-sort-reset-btn', function () {
 
 jQuery(document).on('click', '.b2s-calendar-sched-new-post-btn', function () {
     if (jQuery('#user_version').val() == 0) {
-        jQuery('#b2s-sched-post-modal').modal('show');
+        jQuery('#b2sPreFeatureScheduleModal').modal('show');
         return false;
     }
     jQuery('#b2s-show-post-type-modal').modal('show');
@@ -680,7 +704,7 @@ jQuery('#b2s-info-change-meta-tag-modal').on('hidden.bs.modal', function () {
     jQuery('body').addClass('modal-open');
 });
 //jQuery(this).attr('data-network-auth-id')
-function checkSchedDateTime(dataNetworkAuthId) {
+function checkSchedDateTimeCalendar(dataNetworkAuthId) {
     var dateElement = '.b2s-post-item-details-release-input-date[data-network-auth-id="' + dataNetworkAuthId + '"]';
     var timeElement = '.b2s-post-item-details-release-input-time[data-network-auth-id="' + dataNetworkAuthId + '"]';
     var dateStr = jQuery(dateElement).val();

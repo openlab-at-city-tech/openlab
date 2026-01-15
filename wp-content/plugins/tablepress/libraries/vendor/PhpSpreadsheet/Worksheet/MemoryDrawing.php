@@ -66,7 +66,9 @@ class MemoryDrawing extends BaseDrawing
 	public function __destruct()
 	{
 		if ($this->imageResource) {
-			@imagedestroy($this->imageResource);
+			if (\PHP_VERSION_ID < 80000) {
+				@imagedestroy($this->imageResource);
+			}
 			$this->imageResource = null;
 		}
 		$this->worksheet = null;
@@ -131,9 +133,6 @@ class MemoryDrawing extends BaseDrawing
 	public static function fromStream($imageStream): self
 	{
 		$streamValue = stream_get_contents($imageStream);
-		if ($streamValue === false) {
-			throw new Exception('Unable to read data from stream');
-		}
 
 		return self::fromString($streamValue);
 	}

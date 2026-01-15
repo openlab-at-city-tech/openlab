@@ -7,6 +7,10 @@
 
 use Automattic\Jetpack\Status\Host;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 define( 'WORDADS_ROOT', __DIR__ );
 define( 'WORDADS_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WORDADS_FILE_PATH', WORDADS_ROOT . '/' . basename( __FILE__ ) );
@@ -659,7 +663,6 @@ HTML;
 		$snippet = '';
 		if ( 'iponweb' === $type ) {
 			$section_id = WORDADS_API_TEST_ID;
-			$snippet    = '';
 
 			if ( 'top' === $spot ) {
 				// mrec for mobile, leaderboard for desktop.
@@ -916,10 +919,6 @@ HTML;
 	public function get_ad_div( $spot, $snippet, array $css_classes = array() ) {
 		if ( strpos( strtolower( $spot ), 'amp' ) === false && ! 'inline' === $spot ) {
 			return $snippet; // we don't want dynamic ads to be inserted for AMP & Gutenberg.
-		}
-
-		if ( empty( $css_classes ) ) {
-			$css_classes = array();
 		}
 
 		$css_classes[] = 'wpcnt';

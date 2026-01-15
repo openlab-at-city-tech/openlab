@@ -7,15 +7,19 @@
  */
 class EPKB_Article_Count_Handler {
 
-	private $kb_id;
-
 	/**
-	 * Class constructor.
+	 * Constructor
 	 *
-	 * @return void
+	 * Initializes the article counter functionality.
+	 * For admin area, it hooks into 'admin_init' to ensure all classes are loaded.
+	 * For frontend, it hooks into 'init' to be available immediately for static method calls.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', [ $this, 'init' ] );
+		// For admin area, delay initialization to admin_init to ensure all classes are loaded
+		if ( is_admin() ) {
+			add_action( 'after_setup_theme', array( $this, 'init' ) );
+			//add_action( 'admin_init', [ $this, 'init' ] );
+		}
 	}
 
 	/**
@@ -24,12 +28,12 @@ class EPKB_Article_Count_Handler {
 	 * @return void
 	 */
 	public function init() {
-		$this->kb_id = EPKB_KB_Handler::get_current_kb_id();
-		if ( empty( $this->kb_id ) ) {
+		$kb_id = EPKB_KB_Handler::get_current_kb_id();
+		if ( empty( $kb_id ) ) {
 			return;
 		}
 
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $this->kb_id, true );
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
 		if ( is_wp_error( $kb_config ) ) {
 			return;
 		}
@@ -39,10 +43,10 @@ class EPKB_Article_Count_Handler {
 			return;
 		}
 
-		add_action( 'add_meta_boxes', [ $this, 'show_article_counter_meta_box' ] );
-		add_action( 'save_post', [ $this, 'save_article_metabox' ], 10, 2 );
-		add_action( 'admin_init', array( $this, 'add_ID_to_columns_list' ) );
-		add_action( 'pre_get_posts', array( $this, 'sort_by_views' ) );
+		add_action( 'add_meta_boxes', [ $this, 'admin_show_article_counter_meta_box'] );
+		add_action( 'save_post', [ $this, 'admin_save_article_metabox'], 10, 2 );
+		add_action( 'admin_init', array( $this, 'admin_add_ID_to_columns_list') );
+		add_action( 'pre_get_posts', array( $this, 'admin_sort_by_views') );
 	}
 
 	/**
@@ -92,69 +96,6 @@ class EPKB_Article_Count_Handler {
 		return true;
 	}
 
-	function show_article_counter_meta_box() {
-		global $post, $pagenow;
-
-		if ( empty( $post ) || ! $post instanceof WP_Post ) {
-			return;
-		}
-
-		if ( $pagenow != 'post-new.php' && $pagenow != 'post.php' ) {
-			return;
-		}
-
-		// ignore non-KB posts
-		$kb_id = EPKB_KB_Handler::get_current_kb_id();
-		if ( empty( $kb_id ) ) {
-			return;
-		}
-
-		add_meta_box( 'epkb_article_counter_meta_box', esc_html__( 'KB Article Views', 'echo-knowledge-base' ), array( $this, 'display_article_counter_meta_box' ), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
-	}
-
-	/**
-	 * Display HTML for views meta box
-	 */
-	public function display_article_counter_meta_box() {
-		global $post; ?>
-		<input id="epkb-article-views" name="epkb-article-views" type="number"
-			   value="<?php echo esc_attr( EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) ); ?>"
-			   min="0"><?php
-	}
-
-	/**
-	 * When page is added/updated, check if it contains KB articl views parameter
-	 *
-	 * @param int $post_id Post ID.
-	 * @param WP_Post $post Post object.
-	 */
-	function save_article_metabox( $post_id, $post ) {
-
-		// ignore autosave/revision which is not article submission; same with ajax and bulk edit
-		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty( $post->post_status ) ) {
-			return;
-		}
-
-		// get new 'epkb-article-views' value
-		$views = (int)EPKB_Utilities::post( 'epkb-article-views', 0 );
-		$views = max( $views, 0 );
-
-		// get old 'epkb-article-views' value
-		$old_views = (int)EPKB_Utilities::get_postmeta( $post_id, 'epkb-article-views', 0 );
-
-		if ( $views == $old_views ) {
-			return;
-		}
-
-		// update this year counters
-		$year = date( 'Y' );
-		$week_number = date( 'W' );
-		EPKB_Utilities::save_postmeta( $post_id, 'epkb-article-views-' . $year, [ $week_number => $views ], true );
-
-		// save new 'epkb-article-views' value
-		EPKB_Utilities::save_postmeta( $post_id, 'epkb-article-views', $views, true );
-	}
-
 	/**
 	 * Check if article was viewed within the last 6 hours by looking up article last viewed time using article ID in cookie
 	 *
@@ -191,9 +132,7 @@ class EPKB_Article_Count_Handler {
 	 * @param int $article_id
 	 * @return void
 	 */
-
-	public static function update_article_view_time_cookie( $article_id ) {
-		$article_views = [];
+	private static function update_article_view_time_cookie( $article_id ) {
 
 		if ( headers_sent() ) {
 			return;
@@ -212,7 +151,7 @@ class EPKB_Article_Count_Handler {
 				continue;
 			}
 
-            // remove articles viewed more than 6 hours ago
+			// remove articles viewed more than 6 hours ago
 			if ( (int)$value < ( time() - 6 * HOUR_IN_SECONDS ) ) {
 				unset( $article_views[ $key ] );
 				continue;
@@ -225,20 +164,102 @@ class EPKB_Article_Count_Handler {
 	}
 
 	/**
-	 * Add Views to All articles pages
+	 * Get article views counter value to display on the frontend
+	 * @return int
 	 */
-	public function add_ID_to_columns_list() {
+	public static function get_article_views_counter_frontend() {
+		global $post;
 
-		$kb_post_type = EPKB_KB_Handler::get_post_type( $this->kb_id );
+		if ( empty( $post ) or ! isset( $post->ID ) ) {
+			return 1;
+		}
 
-		add_action( "manage_" . $kb_post_type . "_posts_columns", array( $this, 'add_column_heading' ), 99, 1 );
-		add_filter( "manage_" . $kb_post_type . "_posts_custom_column", array( $this, 'add_column_value' ), 99, 2 );
-		add_filter( "manage_edit-" . $kb_post_type . "_sortable_columns", array( $this, 'add_sortable_columns' ), 99 );
+		return EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 );
 	}
 
-	public function add_column_heading( $columns ) {
+	public function admin_show_article_counter_meta_box() {
+		global $post, $pagenow;
+
+		if ( empty( $post ) || ! $post instanceof WP_Post ) {
+			return;
+		}
+
+		if ( $pagenow != 'post-new.php' && $pagenow != 'post.php' ) {
+			return;
+		}
+
+		// ignore non-KB posts
+		$kb_id = EPKB_KB_Handler::get_current_kb_id();
+		if ( empty( $kb_id ) ) {
+			return;
+		}
+
+		add_meta_box( 'epkb_article_counter_meta_box', esc_html__( 'KB Article Views', 'echo-knowledge-base' ), array( $this, 'admin_display_article_counter_meta_box'), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
+	}
+
+	/**
+	 * Display HTML for views meta box
+	 */
+	public function admin_display_article_counter_meta_box() {
+		global $post; ?>
+		<input id="epkb-article-views" name="epkb-article-views" type="number"
+			   value="<?php echo esc_attr( EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) ); ?>"
+			   min="0"><?php
+	}
+
+	/**
+	 * When page is added/updated, check if it contains KB articl views parameter
+	 *
+	 * @param int $post_id Post ID.
+	 * @param WP_Post $post Post object.
+	 */
+	public function admin_save_article_metabox( $post_id, $post ) {
+
+		// ignore autosave/revision which is not article submission; same with ajax and bulk edit
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty( $post->post_status ) ) {
+			return;
+		}
+
+		// get new 'epkb-article-views' value
+		$views = (int)EPKB_Utilities::post( 'epkb-article-views', 0 );
+		$views = max( $views, 0 );
+
+		// get old 'epkb-article-views' value
+		$old_views = (int)EPKB_Utilities::get_postmeta( $post_id, 'epkb-article-views', 0 );
+
+		if ( $views == $old_views ) {
+			return;
+		}
+
+		// update this year counters
+		$year = date( 'Y' );
+		$week_number = date( 'W' );
+		EPKB_Utilities::save_postmeta( $post_id, 'epkb-article-views-' . $year, [ $week_number => $views ], true );
+
+		// save new 'epkb-article-views' value
+		EPKB_Utilities::save_postmeta( $post_id, 'epkb-article-views', $views, true );
+	}
+
+	/**
+	 * Add Views to All articles pages
+	 */
+	public function admin_add_ID_to_columns_list() {
+
+		$kb_id = EPKB_KB_Handler::get_current_kb_id();
+		if ( empty( $kb_id ) ) {
+			return;
+		}
+		$kb_post_type = EPKB_KB_Handler::get_post_type( $kb_id );
+
+		add_action( "manage_" . $kb_post_type . "_posts_columns", array( $this, 'admin_add_column_heading'), 99, 1 );
+		add_filter( "manage_" . $kb_post_type . "_posts_custom_column", array( $this, 'admin_add_column_value'), 99, 2 );
+		add_filter( "manage_edit-" . $kb_post_type . "_sortable_columns", array( $this, 'admin_add_sortable_columns'), 99 );
+	}
+
+	public function admin_add_column_heading( $columns ) {
 
 		$columns = empty( $columns ) ? array() : $columns;
+
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 		if ( empty( $kb_id ) ) {
 			return $columns;
@@ -249,7 +270,7 @@ class EPKB_Article_Count_Handler {
 		return $columns;
 	}
 
-	public function add_column_value( $column_name, $post_id ) {
+	public function admin_add_column_value( $column_name, $post_id ) {
 
 		if ( $column_name != 'epkb_article_views' ) {
 			return;
@@ -260,7 +281,7 @@ class EPKB_Article_Count_Handler {
 		echo esc_html( $view_count );
 	}
 
-	public function add_sortable_columns( $sortable_columns ) {
+	public function admin_add_sortable_columns( $sortable_columns ) {
 		$sortable_columns['epkb_article_views'] = 'epkb_article_views';
 		return $sortable_columns;
 	}
@@ -269,13 +290,18 @@ class EPKB_Article_Count_Handler {
 	 * User sorts by views column values.
 	 * @param WP_Query $query
 	 */
-	public function sort_by_views( $query ) {
+	public function admin_sort_by_views( $query ) {
 
 		if ( ! is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
 
-		$kb_post_type = EPKB_KB_Handler::get_post_type( $this->kb_id );
+		$kb_id = EPKB_KB_Handler::get_current_kb_id();
+		if ( empty( $kb_id ) ) {
+			return;
+		}
+
+		$kb_post_type = EPKB_KB_Handler::get_post_type( $kb_id );
 		if ( $query->query['post_type'] != $kb_post_type ) {
 			return;
 		}
@@ -299,19 +325,5 @@ class EPKB_Article_Count_Handler {
 		) );
 
 		$query->set( 'orderby', 'meta_value_num' );
-	}
-
-	/**
-	 * Get article views counter value to display on the frontend
-	 * @return int
-	 */
-	public static function get_article_views_counter_frontend() {
-		global $post;
-
-		if ( empty( $post ) or ! isset( $post->ID ) ) {
-			return 1;
-		}
-
-        return EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 );
 	}
 }

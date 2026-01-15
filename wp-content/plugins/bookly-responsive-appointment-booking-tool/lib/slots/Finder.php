@@ -689,6 +689,23 @@ class Finder
             ) );
         }
 
+        $events = Lib\Proxy\Events::getList( array_keys( $this->staff ), $this->start_dp->value(), $this->end_dp->value() ) ?: array();
+        foreach ( $events as $event ) {
+            $this->staff[ $event['staff_id'] ]->addBooking( new Booking(
+                $event['location_id'],
+                null,
+                0,
+                0,
+                $event['start_date'],
+                $event['end_date'],
+                0,
+                0,
+                0,
+                false,
+                false
+            ) );
+        }
+
         // Cart bookings.
         $this->handleCartBookings();
 

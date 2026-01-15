@@ -19,8 +19,8 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 
 ?>
 
-<div class="flyout-menu" id="favorites-flyout" role="menu">
-	<div class="drawer-panel-submenu">
+<div class="flyout-menu" id="favorites-flyout" data-default-panel="favorites-root">
+	<div class="drawer-panel drawer-panel-root" id="favorites-root" inert>
 		<div class="flyout-heading">
 			<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 			<span>My Favorites</span>
@@ -28,9 +28,18 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 		<ul class="drawer-list">
 			<?php if ( $user_favorites ) : ?>
 				<?php foreach ( $user_favorites as $user_favorite ) : ?>
+					<?php
+					$group_url  = $user_favorite->get_group_url();
+					$group_name = $user_favorite->get_group_name();
+
+					if ( ! $group_url || ! $group_name ) {
+						continue;
+					}
+
+					?>
 					<li class="drawer-item">
-						<a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
-							<?php echo esc_html( $user_favorite->get_group_name() ); ?>
+						<a href="<?php echo esc_attr( $group_url ); ?>">
+							<?php echo esc_html( $group_name ); ?>
 						</a>
 					</li>
 				<?php endforeach; ?>

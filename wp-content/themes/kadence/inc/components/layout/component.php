@@ -903,6 +903,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				}
 			}
 		}
+
+		$post_classname = get_post_meta( get_the_ID(), '_kad_post_classname', true );
+
+		if ( isset( $post_classname ) && ! empty( $post_classname ) ) {
+			$classes[] = $post_classname;
+		}
+
 		$classes[] = 'content-title-style-' . esc_attr( self::get_title_layout() );
 		$classes[] = 'content-width-' . esc_attr( self::get_layout() );
 		$classes[] = 'content-style-' . esc_attr( self::get_boxed() );

@@ -10,13 +10,13 @@ use Bookly\Backend\Components\Controls\Buttons;
             </div>
             <div class="modal-body text-center">
                 <div class="bookly-js-success">
-                    <h3 class="text-success pb-0 mb-0"><?php esc_html_e( 'Congrats!', 'bookly' ) ?></h3>
+                    <h3 class="text-success pb-0 mb-0"><?php esc_html_e( 'Congratulations!!!', 'bookly' ) ?></h3>
                     <div class="text-success py-5">
                         <i class="mx-auto bookly-success-icon"></i>
                     </div>
                 </div>
                 <div class="bookly-js-fail">
-                    <h3 class="text-danger pb-0 mb-0"><?php esc_html_e( 'Oops!', 'bookly' ) ?></h3>
+                    <h3 class="text-danger pb-0 mb-0"><?php esc_html_e( 'Oops', 'bookly' ) ?>!</h3>
                     <div class="text-danger py-5">
                         <i class="mx-auto bookly-fail-icon"></i>
                     </div>

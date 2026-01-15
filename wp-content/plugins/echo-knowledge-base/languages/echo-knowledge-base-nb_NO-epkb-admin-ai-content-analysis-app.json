@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Loading...": [
+                "Laster..."
+            ],
+            "AI Features Required": [
+                "AI-funksjoner kreves"
+            ],
+            "Go to AI Settings": [
+                "Gå til AI-innstillinger"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "AI-funksjoner er ikke aktivert. Vennligst aktiver AI-funksjonene for å bruke Innholdsanalyse."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Klarte ikke å laste inn konfigurasjonen for Innholdsanalyse."
+            ],
+            "Content Analysis component not loaded.": [
+                "Innholdsanalysekomponenten er ikke lastet inn."
+            ]
+        }
+    }
+}

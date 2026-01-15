@@ -75,6 +75,7 @@ class Ajax_Get {
 
         if (isset($_POST['url']) && !empty($_POST['url'])) {
             $data = B2S_Util::scrapeUrl(esc_url_raw(wp_unslash($_POST['url'])));
+           
             $scrapeError = ($data !== false) ? false : true;
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/View.php');
             $curation = new B2S_Curation_View();
@@ -114,13 +115,13 @@ class Ajax_Get {
                                 }
                             }
                         }
-                        echo json_encode(array('result' => true, 'preview' => $preview, 'scrapeError' => $scrapeError, 'settings' => $curation->getShippingDetails($result->data->mandant, $result->data->auth)));
+                        echo json_encode(array('result' => true, 'ogdata'=> json_encode($data),  'preview' => $preview, 'scrapeError' => $scrapeError, 'settings' => $curation->getShippingDetails($result->data->mandant, $result->data->auth)));
                         wp_die();
                     }
-                    echo json_encode(array('result' => false, 'preview' => $preview, 'scrapeError' => $scrapeError, 'error' => 'NO_AUTH'));
+                    echo json_encode(array('result' => false, 'ogdata'=> json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError, 'error' => 'NO_AUTH'));
                     wp_die();
                 } else {
-                    echo json_encode(array('result' => true, 'preview' => $preview, 'scrapeError' => $scrapeError));
+                    echo json_encode(array('result' => true,  'ogdata'=> json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError));
                     wp_die();
                 }
             }
@@ -655,7 +656,9 @@ class Ajax_Get {
             $calendar = B2S_Calendar_Filter::getByTimespam(sanitize_text_field(wp_unslash($_GET['start'])) . " 00:00:00", sanitize_text_field(wp_unslash($_GET['end'])) . " 23:59:59", $network_id, $network_details_id, $status);
         } else {
             $calendar = B2S_Calendar_Filter::getAll($network_id, $network_details_id);
+           
         }
+    
         echo json_encode($calendar->asCalendarArray());
         wp_die();
        
@@ -751,9 +754,8 @@ class Ajax_Get {
                 update_option("B2S_MULTI_WIDGET", array("timestamp" => wp_date("Y-m-d H:i:s", null, new DateTimeZone(date_default_timezone_get())), "content" => $content), false);
                 $option = $content;
             }
-            
-            //For Plugin Check, wp_kses is doubled to make output safe
-            echo wp_kses(B2S_Tools::esc_html_array($option, array(
+       
+            $outputContent = B2S_Tools::esc_html_array($option, array(
                 'div' => array(
                     'class' => array(),
                     'style' => array()
@@ -772,28 +774,11 @@ class Ajax_Get {
                     'class' => array(),
                     'title' => array()
                 )
-            )), 
-            array(
-                'div' => array(
-                    'class' => array(),
-                    'style' => array()
-                ),
-                'img' => array(
-                    'src' => array(),
-                    'alt' => array(),
-                    'style' => array()
-                ),
-                'p' => array(
-                    'style' => array()
-                ),
-                'a' => array(
-                    'href' => array(),
-                    'target' => array(),
-                    'class' => array(),
-                    'title' => array()
-                )
-            )
-        );
+            ));
+
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo $outputContent;
+      
         wp_die();
       
     }
@@ -910,6 +895,11 @@ class Ajax_Get {
             wp_die();
         }
 
+        if (B2S_PLUGIN_USER_VERSION < 1) {
+            echo json_encode(array('result' => true, 'content' => 'b2s_upgrade_required'));
+            wp_die();
+        }
+
         if (isset($_GET['networkId']) && (int) $_GET['networkId'] > 0) {
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php');
             $networkItem = new B2S_Network_Item(false);
@@ -1004,6 +994,7 @@ class Ajax_Get {
 
         $result = array();
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php');
+        require_once (B2S_PLUGIN_DIR . 'includes/B2S/Settings/Share.php');
         $networkItem = new B2S_Network_Item();
         if (isset($_GET['owner']) && (int) $_GET['owner'] > 0) {
             $owner = stripslashes(get_user_by('id', (int) $_GET['owner'])->display_name);
@@ -1027,6 +1018,11 @@ class Ajax_Get {
         if (isset($_GET['networkAuthId']) && (int) $_GET['networkAuthId'] > 0) {
             $result['urlParameter'] = $networkItem->getUrlParameterSettings((int) $_GET['networkAuthId'], (int) $_GET['networkId']);
         }
+
+        $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+        $currentShareSettings = $options->_getOption("share_settings");
+        $shareSettingsItem = new B2S_Settings_Share($networkAuthId, $networkId, $currentShareSettings);
+        $result['shareSettings'] = $shareSettingsItem->getShareSettingsHtml();
 
         echo json_encode(array('result' => true, 'data' => json_encode($result)));
         wp_die();

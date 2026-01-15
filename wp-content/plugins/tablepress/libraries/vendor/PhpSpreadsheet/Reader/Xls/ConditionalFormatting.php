@@ -48,6 +48,8 @@ class ConditionalFormatting extends Xls
 	 * Parse conditional formatting blocks.
 	 *
 	 * @see https://www.openoffice.org/sc/excelfileformat.pdf Search for CFHEADER followed by CFRULE
+	 *
+	 * @return mixed[]
 	 */
 	protected function readCFHeader2(Xls $xls): array
 	{
@@ -66,13 +68,14 @@ class ConditionalFormatting extends Xls
 
 		// offset: var; size: var; cell range address list with
 		$cellRangeAddressList = ($xls->version == self::XLS_BIFF8)
-			? Biff8::readBIFF8CellRangeAddressList(substr($recordData, 12))
-			: Biff5::readBIFF5CellRangeAddressList(substr($recordData, 12));
+			? Biff8::readBIFF8CellRangeAddressList((string) substr($recordData, 12))
+			: Biff5::readBIFF5CellRangeAddressList((string) substr($recordData, 12));
 		$cellRangeAddresses = $cellRangeAddressList['cellRangeAddresses'];
 
 		return $cellRangeAddresses;
 	}
 
+	/** @param string[] $cellRangeAddresses */
 	protected function readCFRule2(array $cellRangeAddresses, Xls $xls): void
 	{
 		$length = self::getUInt2d($xls->data, $xls->pos + 2);
@@ -127,7 +130,7 @@ class ConditionalFormatting extends Xls
 		$offset = 12;
 
 		if ($hasFontRecord === true) {
-			$fontStyle = substr($recordData, $offset, 118);
+			$fontStyle = (string) substr($recordData, $offset, 118);
 			$this->getCFFontStyle($fontStyle, $style, $xls);
 			$offset += 118;
 			$noFormatSet = false;
@@ -140,14 +143,14 @@ class ConditionalFormatting extends Xls
 		}
 
 		if ($hasBorderRecord === true) {
-			$borderStyle = substr($recordData, $offset, 8);
+			$borderStyle = (string) substr($recordData, $offset, 8);
 			$this->getCFBorderStyle($borderStyle, $style, $hasBorderLeft, $hasBorderRight, $hasBorderTop, $hasBorderBottom, $xls);
 			$offset += 8;
 			$noFormatSet = false;
 		}
 
 		if ($hasFillRecord === true) {
-			$fillStyle = substr($recordData, $offset, 4);
+			$fillStyle = (string) substr($recordData, $offset, 4);
 			$this->getCFFillStyle($fillStyle, $style, $xls);
 			$offset += 4;
 			$noFormatSet = false;
@@ -212,7 +215,9 @@ class ConditionalFormatting extends Xls
 		$color = self::getInt4d($options, 80);
 
 		if ($color !== -1) {
-			$style->getFont()->getColor()->setRGB(Color::map($color, $xls->palette, $xls->version)['rgb']);
+			$style->getFont()
+				->getColor()
+				->setRGB(Color::map($color, $xls->palette, $xls->version)['rgb']);
 		}
 	}
 
@@ -222,6 +227,7 @@ class ConditionalFormatting extends Xls
 
 	private function getCFBorderStyle(string $options, Style $style, bool $hasBorderLeft, bool $hasBorderRight, bool $hasBorderTop, bool $hasBorderBottom, Xls $xls): void
 	{
+		/** @var false|int[] */
 		$valueArray = unpack('V', $options);
 		$value = is_array($valueArray) ? $valueArray[1] : 0;
 		$left = $value & 15;
@@ -230,7 +236,8 @@ class ConditionalFormatting extends Xls
 		$bottom = ($value >> 12) & 15;
 		$leftc = ($value >> 16) & 0x7F;
 		$rightc = ($value >> 23) & 0x7F;
-		$valueArray = unpack('V', substr($options, 4));
+		/** @var false|int[] */
+		$valueArray = unpack('V', (string) substr($options, 4));
 		$value = is_array($valueArray) ? $valueArray[1] : 0;
 		$topc = $value & 0x7F;
 		$bottomc = ($value & 0x3F80) >> 7;
@@ -296,7 +303,7 @@ class ConditionalFormatting extends Xls
 				private function readCFFormula(string $recordData, int $offset, int $size, Xls $xls)
 	{
 		try {
-			$formula = substr($recordData, $offset, $size);
+			$formula = (string) substr($recordData, $offset, $size);
 			$formula = pack('v', $size) . $formula; // prepend the length
 
 			$formula = $xls->getFormulaFromStructure($formula);
@@ -310,10 +317,9 @@ class ConditionalFormatting extends Xls
 		}
 	}
 
-	/**
+	/** @param string[] $cellRanges
 				 * @param null|float|int|string $formula1
-				 * @param null|float|int|string $formula2
-				 */
+				 * @param null|float|int|string $formula2 */
 				private function setCFRules(array $cellRanges, string $type, string $operator, $formula1, $formula2, Style $style, bool $noFormatSet, Xls $xls): void
 	{
 		foreach ($cellRanges as $cellRange) {
@@ -330,10 +336,14 @@ class ConditionalFormatting extends Xls
 			}
 			$conditional->setStyle($style);
 
-			$conditionalStyles = $xls->phpSheet->getStyle($cellRange)->getConditionalStyles();
+			$conditionalStyles = $xls->phpSheet
+				->getStyle($cellRange)
+				->getConditionalStyles();
 			$conditionalStyles[] = $conditional;
 
-			$xls->phpSheet->getStyle($cellRange)->setConditionalStyles($conditionalStyles);
+			$xls->phpSheet
+				->getStyle($cellRange)
+				->setConditionalStyles($conditionalStyles);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 class Advanced_Excerpt {
-	
+
 	private $plugin_version;
 	private $plugin_file_path;
 	private $plugin_dir_path;
@@ -14,7 +14,7 @@ class Advanced_Excerpt {
 	 * Some of the following options below are linked to checkboxes on the plugin's option page.
 	 * If any checkbox options are added/removed/modified in the future please ensure you also update
 	 * the $checkbox_options variable in the update_options() method.
-	 */ 
+	 */
 	public $default_options = array(
 		'length' => 40,
 		'length_type' => 'words',
@@ -88,7 +88,7 @@ class Advanced_Excerpt {
 	function hook_content_filters() {
 		/*
 		 * Allow developers to skip running the advanced excerpt filters on certain page types.
-		 * They can do so by using the "Disable On" checkboxes on the options page or 
+		 * They can do so by using the "Disable On" checkboxes on the options page or
 		 * by passing in an array of page types they'd like to skip
 		 * e.g. array( 'search', 'author' );
 		 * The filter, when implemented, takes precedence over the options page selection.
@@ -102,7 +102,7 @@ class Advanced_Excerpt {
 
 		$page_types = $this->get_current_page_types();
 		$skip_page_types = array_unique( array_merge( array( 'singular' ), $this->options['exclude_pages'] ) );
-		$skip_page_types = apply_filters( 'advanced_excerpt_skip_page_types', $skip_page_types ); 
+		$skip_page_types = apply_filters( 'advanced_excerpt_skip_page_types', $skip_page_types );
 		$page_type_matches = array_intersect( $page_types, $skip_page_types );
 		if ( !empty( $page_types ) && !empty( $page_type_matches ) ) return;
 
@@ -138,7 +138,7 @@ class Advanced_Excerpt {
 	}
 
 	function load_options() {
-		/* 
+		/*
 		 * An older version of this plugin used to individually store each of it's options as a row in wp_options (1 row per option).
 		 * The code below checks if their installations once used an older version of this plugin and attempts to update
 		 * the option storage to the new method (all options stored in a single row in the DB as an array)
@@ -243,18 +243,25 @@ class Advanced_Excerpt {
 	}
 
 	function filter_excerpt( $content ) {
+		// OpenLab: Prevent recursion.
+		remove_filter( 'get_the_excerpt', array( $this, 'filter_excerpt' ) );
+
 		$this->filter_type = 'excerpt';
-		return $this->filter( $content );
+		$filtered_content = $this->filter( $content );
+
+		add_filter( 'get_the_excerpt', array( $this, 'filter_excerpt' ) );
+
+		return $filtered_content;
 	}
 
 	function filter( $content ) {
 
 		extract( wp_parse_args( $this->options, $this->default_options ), EXTR_SKIP );
-		
+
 		if ( true === apply_filters( 'advanced_excerpt_skip_excerpt_filtering', false ) ) {
 			return $content;
         }
-        
+
         if ( is_post_type_archive( 'tribe_events' ) ) {
             return $content;
         }
@@ -269,15 +276,15 @@ class Advanced_Excerpt {
 			if ( ! $no_custom_from_custom ) {
 				if ( $link_on_custom_excerpt ) {
 					return $this->text_add_more( $content, '', ( $add_link ) ? $read_more : false, ( $link_new_tab ) ? true : false, ( $link_screen_reader ) ? true : false );
-				}	
-				return $content; 
+				}
+				return $content;
 			}
 		}
 
 		// prevent recursion on 'the_content' hook
 		$content_has_filter = false;
-		if ( has_filter( 'the_content', array( $this, 'filter_content' ) ) ) { 
-			remove_filter( 'the_content', array( $this, 'filter_content' ) ); 
+		if ( has_filter( 'the_content', array( $this, 'filter_content' ) ) ) {
+			remove_filter( 'the_content', array( $this, 'filter_content' ) );
 			$content_has_filter = true;
 		}
 
@@ -296,7 +303,7 @@ class Advanced_Excerpt {
 		$text = apply_filters( 'the_content', $text );
 
 		// add our filter back in
-		if ( $content_has_filter ) { 
+		if ( $content_has_filter ) {
             add_filter( 'the_content', array( $this, 'filter_content' ) );
 		}
 
@@ -403,7 +410,7 @@ class Advanced_Excerpt {
 			} else {
 				$link_template = apply_filters( 'advanced_excerpt_read_more_link_template', ' <a href="%1$s" class="read-more">%2$s %3$s</a>', get_permalink(), $read_more );
 			}
-			
+
 			$read_more = str_replace( '{title}', get_the_title(), $read_more );
 			$read_more = do_shortcode( $read_more );
 			$read_more = apply_filters( 'advanced_excerpt_read_more_text', $read_more );
@@ -412,7 +419,7 @@ class Advanced_Excerpt {
 
 		}
 
-		$pos = strrpos( $text, '</' );	
+		$pos = strrpos( $text, '</' );
 
 		if ( $pos !== false ) {
 			// get the "clean" name of the last closing tag in the text, e.g. p, a, strong, div
@@ -460,7 +467,7 @@ class Advanced_Excerpt {
 		update_option( 'advanced_excerpt', $this->options );
 
 		wp_redirect( admin_url( $this->plugin_base ) . '&settings-updated=1' );
-		exit;		
+		exit;
 	}
 
 	function page_options() {

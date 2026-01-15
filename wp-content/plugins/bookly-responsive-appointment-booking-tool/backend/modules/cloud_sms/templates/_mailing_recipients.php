@@ -1,6 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Dialogs;
-use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Controls\Buttons;
 /** @var array $datatable */
 ?>
@@ -32,7 +31,6 @@ use Bookly\Backend\Components\Controls\Buttons;
                 <th><?php echo esc_html( $datatable['titles'][ $column ] ) ?></th>
             <?php endif ?>
         <?php endforeach ?>
-        <th width='16'><?php Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-mr-check-all' ) ) ?></th>
     </tr>
     </thead>
 </table>

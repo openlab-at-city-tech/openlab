@@ -133,6 +133,30 @@ class Component implements Component_Interface {
 						$palette[$active][8]['color'] = $value['color'];
 						$update_palette = true;
 					}
+					if ( 'palette10' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][9]['color'] = $value['color'];
+						$update_palette = true;
+					}
+					if ( 'palette11' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][10]['color'] = $value['color'];
+						$update_palette = true;
+					}
+					if ( 'palette12' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][11]['color'] = $value['color'];
+						$update_palette = true;
+					}
+					if ( 'palette13' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][12]['color'] = $value['color'];
+						$update_palette = true;
+					}
+					if ( 'palette14' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][13]['color'] = $value['color'];
+						$update_palette = true;
+					}
+					if ( 'palette15' == $value['_id'] && ! empty( $value['color'] ) ) {
+						$palette[$active][14]['color'] = $value['color'];
+						$update_palette = true;
+					}
 				}
 				$current = \Elementor\Plugin::$instance->kits_manager->get_current_settings();
 				if ( $current && isset( $current['custom_colors'] ) && $update_palette ) {

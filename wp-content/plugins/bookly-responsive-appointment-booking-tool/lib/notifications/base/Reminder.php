@@ -239,7 +239,7 @@ abstract class Reminder
      */
     public static function sendToStaff( Staff $staff, Notification $notification, Codes $codes, $attachments = null, $reply_to = null, $queue = null )
     {
-        if ( ! $notification->getToStaff() || $staff->isArchived() ) {
+        if ( ( ! $notification->getToStaff() && ! $notification->getToOrganizer() ) || $staff->isArchived() ) {
             // No recipient.
             return false;
         }

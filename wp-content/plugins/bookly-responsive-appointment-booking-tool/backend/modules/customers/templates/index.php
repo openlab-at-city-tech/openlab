@@ -1,6 +1,5 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
-use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components\Dialogs;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Customers\Proxy;
@@ -40,7 +39,6 @@ use Bookly\Lib\Utils\Common;
                                 <?php endif ?>
                             <?php endforeach ?>
                             <th></th>
-                            <th width="16"><?php Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
                         </tr>
                         </thead>
                     </table>
@@ -53,7 +51,7 @@ use Bookly\Lib\Utils\Common;
                             <button type="button" id="bookly-select-for-merge" class="btn btn-default"><i class="fas fa-fw fa-plus mr-lg-1"></i><span class="d-none d-lg-inline"><?php esc_html_e( 'Select for merge', 'bookly' ) ?>…</span></button>
                         </div>
                         <div class="col-auto pr-0">
-                            <?php Buttons::renderDelete(); ?>
+                            <?php Buttons::renderDelete( 'bookly-customers-list-delete-button' ) ?>
                         </div>
                     </div>
 

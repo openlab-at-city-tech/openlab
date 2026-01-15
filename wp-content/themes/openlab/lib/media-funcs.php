@@ -19,8 +19,8 @@ function openlab_get_home_slider() {
 	$slider_query = new WP_Query($slider_args);
 
 	if ($slider_query->have_posts()):
-		$slider_mup = '<div class="camera_wrap clearfix" tabindex="-1" aria-hidden="true">';
-		$slider_sr_mup = '<div class="camera_wrap_sr" role="widget"><h2 class="sr-only">Slideshow Content</h2><ul class="list-unstyled">';
+		$slider_mup = '<div class="camera_wrap clearfix" tabindex="-1">';
+		$slider_sr_mup = '<div class="camera_wrap_sr"><h2 class="sr-only">Slideshow Content</h2><ul class="list-unstyled">';
 		while ($slider_query->have_posts()) : $slider_query->the_post();
 			//if the featured image is not set, slider will not be added
 			if (get_post_thumbnail_id()) {

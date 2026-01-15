@@ -27,7 +27,15 @@
 .container {
 	max-width: theme('screens.lg');
 }
-
+pre#shortcode > div:after {
+  content: "";
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='%23e07736'><path stroke-linecap='round' stroke-linejoin='round' d='M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75'/></svg>") no-repeat center;
+  background-size: contain;
+  margin-left: 15px;
+}
 pre#shortcode::selection,
 pre#shortcode *::selection {
 	@apply bg-blue-highlight text-gray-darker;
@@ -46,7 +54,7 @@ eventually be removed/refactored */
 .metaslider.wrap div.error {
     clear: both
 }
-.metaslider .left input[type=text],
+.metaslider .left input[type=text]:not(.tox-input-wrapper input),
 .metaslider .left textarea {
     border: 1px solid #8c8f94;
     border-radius: 4px;
@@ -96,21 +104,67 @@ eventually be removed/refactored */
 
 /* Settings table */
 .metaslider .ms-settings-table {
+    border-color: #c3c4c7;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    width: 100%;
+    background: #fff;
+    margin-bottom: 20px;
+}
+.metaslider .ms-settings-table .ms-settings-box-inner {
+    margin: 22px 0;
+    width: 100%;
+}
+.metaslider .ms-settings-table .ms-highlight {
+    color: #50575e;
+    background: #f1f1f1;
+    font-size: 1.2em;
+    font-weight: 700;
+    line-height: 2em;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding: 6px 20px;
+    border-width: 1px 0;
+    border-color: #c3c4c7;
+    border-style: solid;
+}
+.metaslider .ms-settings-table .css-prop-wrap input[type="number"] {
+    -moz-appearance: textfield;
+    width: 40px;
+    font-size: 0.7rem !important;
+}
+.metaslider .ms-settings-table .css-prop-wrap input[type=number]::-webkit-inner-spin-button,
+.metaslider .ms-settings-table .css-prop-wrap input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.metaslider .ms-settings-table .css-prop-wrap span {
+    font-size: 0.7rem;
+    display: block;
+}
+
+.metaslider .ms-settings-table .wp-picker-container .wp-color-result-text, 
+.metaslider .ms-settings-table .wp-picker-container .wp-picker-clear {
+  display: none;
+}
+.metaslider .ms-settings-table .wp-picker-container .wp-picker-holder, 
+.metaslider .ms-settings-table .wp-picker-container .wp-picker-input-wrap {
+  position: absolute;
+  z-index: 9999;
+}
+
+.metaslider #metaslider_configuration .slider-lib {
+    margin-bottom: 20px;
+}
+.metaslider .ms-settings-table {
     box-shadow: 0 1px 1px rgba(0,0,0,.04);
     width: 100%;
     border-collapse: collapse;
     border-bottom: 1px solid #c3c4c7;
 }
 .metaslider .ms-settings-table tr {
-    border-style: solid;
-    border-width: 0 1px;
-    border-color: #c3c4c7;
-    background: #fff; 
-}
-.metaslider .ms-settings-table tr.highlight {
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    background: #f1f1f1;
+    
 }
 .metaslider .ms-settings-table tr.slider-lib {
     background: transparent;
@@ -140,8 +194,26 @@ eventually be removed/refactored */
 .metaslider .ms-settings-table tr:not(.highlight) td:nth-of-type(2) {
     width: 60%;
 }
-.metaslider .ms-settings-table tr.empty-row-spacing td {
-    height: 22px;
+
+/* Toggle settings */
+.metaslider .ms-settings-table .ms-highlight {
+  cursor: pointer;
+  user-select: none;
+}
+.metaslider .ms-settings-table .ms-highlight .ms-toggle-static {
+  float: right;
+}
+.metaslider .ms-settings-table .ms-highlight .ms-toggle-static span {
+  margin-top: 6px;
+}
+.metaslider .ms-settings-table .ms-settings-box.ms-on .ms-highlight .ms-toggle-static span:before {
+  content: "\f343";
+}
+.metaslider .ms-settings-table .ms-settings-box.ms-off .ms-highlight .ms-toggle-static span:before {
+  content: "\f347";
+}
+.metaslider .ms-settings-table .ms-settings-box.ms-off .ms-highlight {
+    border-bottom: none;
 }
 
 /* Switch button */
@@ -169,6 +241,9 @@ eventually be removed/refactored */
     -ms-transform: translateX(20px);
     -o-transform: translateX(20px);
     transform: translateX(20px);
+}
+.metaslider .ms-switch-button label input[disabled] + span {
+    cursor: not-allowed;
 }
 .metaslider .ms-switch-button label span {
     position: absolute;
@@ -557,8 +632,13 @@ eventually be removed/refactored */
     cursor: pointer;
 }
 
-.metaslider .right table {
+.metaslider #metaslider_configuration table.ms-settings-table:last-of-type {
     margin: 0 0 22px 0;
+}
+
+.metaslider #metaslider_configuration table.ms-settings-table:not(:last-of-type) {
+    margin: 0;
+    border-bottom: none !important;
 }
 
 .metaslider select {
@@ -613,13 +693,13 @@ eventually be removed/refactored */
     width: 125px;
 }
 
-.metaslider .tabs-content .row input {
+.metaslider .tabs-content .row input:not(.tox-input-wrapper input) {
     margin-right: 5px;
     margin-bottom: 0px;
     margin-left: 0px;
 }
 
-.metaslider .tabs-content .row input[type="text"] {
+.metaslider .tabs-content .row input[type="text"]:not(.tox-input-wrapper input) {
     width: 100%;
 }
 
@@ -718,12 +798,12 @@ eventually be removed/refactored */
 	padding-top: 1rem;
 }
 
-.metaslider .tabs-content .schedule_placeholder {
+.metaslider .tabs-content .pro-feature_placeholder {
 	text-align: center;
 	padding-top: 10px;
 }
 
-.metaslider .tabs-content .schedule_placeholder h4 {
+.metaslider .tabs-content .pro-feature_placeholder h4 {
 	font-weight: normal;
 }
 
@@ -987,6 +1067,62 @@ input[type="radio"] {
     color: #000;
     display: inline-block;
     padding: 10px 20px;
+}
+.tox-tinymce-aux .colorpicker {
+    width: 183px !important;
+}
+.tox-tinymce-aux .wp-picker-container {
+    display: flex;
+    flex-direction: column;
+
+    > .wp-color-result {
+        order: 0;
+        width: 32px;
+    }
+    > .wp-picker-input-wrap {
+        order: 2;
+    }
+    > .wp-picker-holder {
+        order: 1;
+    }
+    .wp-color-result.button {
+        margin-bottom: 0;
+    }
+    .wp-picker-input-wrap {
+        display: block;
+        margin-top: 6px;
+
+        input {
+            border: 1px solid;
+        }
+        .screen-reader-text {
+            display: none !important;
+        }
+    }
+    .wp-picker-input-wrap,
+    .wp-picker-holder {
+        z-index: 9999;
+    }
+    .wp-color-result-text, 
+    .wp-picker-clear {
+        display: none;
+    }
+    .wp-picker-holder {
+
+        .iris-picker  {
+            position: relative;
+            min-height: 225px;
+
+            .iris-picker-inner,
+            .iris-palette-container {
+                position: absolute;
+            }
+        }
+    }
+}
+.tox .tox-number-input input {
+    margin: 0 !important;
+    min-height: 28px;
 }
 
  /* Spin an svg */
@@ -1344,6 +1480,12 @@ input.no_last_pass {
 .metaslider_page_upgrade-metaslider #ms-toolbar .container{
 	margin: 0;
 }
+.metaslider_page_upgrade-metaslider-theme-editor #ms-toolbar .container{
+	max-width: unset;
+}
+.metaslider_page_upgrade-metaslider-theme-editor div#wpbody-content {
+    background: transparent !important;
+}
 .metaslider_upgrade{
 	margin: 30px auto;
 	max-width: 80%;
@@ -1501,7 +1643,7 @@ input.no_last_pass {
 #slideshows-list {
     margin: 10px;
 }
-.metaslider [class*="tipsy-tooltip"].dashicons {
+.metaslider [class*="tipsy-tooltip"].dashicons:not(.is-pro-setting) {
 	opacity: 0.5;
 	font-size: 1rem;
 	line-height: 30px;
@@ -1743,7 +1885,7 @@ td .dot.available {
 	background-color: #F0F0F1;
 	padding: 30px 0;
 }
-.css-manager-ad-container .probutton, .schedule_placeholder .probutton{
+.css-manager-ad-container .probutton, .pro-feature_placeholder .probutton{
 	color: #fff;
 	background: #dd6923;
 	padding: 12px 30px !important;
@@ -1757,26 +1899,26 @@ td .dot.available {
 	line-height: 1.8 !important;
 	white-space: unset;
 }
-.schedule_placeholder .probutton {
+.pro-feature_placeholder .probutton {
 	margin-top: 0!important;
 	margin-bottom: 15px;
 }
 .css-manager-ad-container .dashicons.dashicons-external,
-.schedule_placeholder .dashicons.dashicons-external{
+.pro-feature_placeholder .dashicons.dashicons-external{
 	margin-top: 5px;
 }
-.css-manager-ad-container h1, .schedule_placeholder h1 {
+.css-manager-ad-container h1, .pro-feature_placeholder h1 {
 	color: #29375b;
 	font-size: 28px;
 	line-height: 1.2;
 	font-weight: 600 !important;
 }
-.schedule_placeholder h1 {
+.pro-feature_placeholder h1 {
     margin-bottom: 5px!important;
 }
 .css-manager-ad-container li,
 .css-manager-ad-container p,
-.schedule_placeholder p {
+.pro-feature_placeholder p {
 	font-size: 16px !important;
 	font-style: normal !important;
 	color: #3c434a !important;
@@ -1787,8 +1929,8 @@ td .dot.available {
 	box-shadow: 0px 5px 5px 0px silver;
 }
 
-#loading-add-sample-slides-notice,
-#add-first-slide-notice {
+.ms-loading-settings,
+#loading-add-sample-slides-notice {
     height: 200px;
     text-align: center;
     width: 100%;
@@ -1799,6 +1941,40 @@ td .dot.available {
     background: #fff;
 }
 
+#add-new-slide-wide {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    font-size: 1.3em;
+    text-align: center;
+    width: 100%;
+
+    &.ms-add-new-first {
+        margin-bottom: 22px;
+    }
+
+    a {
+        padding: 25px;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+
+        span {
+            white-space: nowrap;
+            line-height: 1.4em;
+        }
+
+        &:hover {
+            color: rgba(35,41,45) !important;
+            background: #f1f1f1;
+        }
+
+        &:focus {
+            box-shadow: none !important;
+        }
+    }
+}
+
+.ms-loading-settings > span,
 #loading-add-sample-slides-notice > span {
     padding-left: 30px;
     background-repeat: no-repeat;
@@ -2006,30 +2182,54 @@ td .dot.available {
 	display: none;
 }
 
-.metaslider .ms-settings-table .is-pro-setting {
+.metaslider .is-pro-setting {
     width: 30px;
     opacity: 1;
     color: #333;
+    font-size: 1rem;
+    line-height: 1.2rem;
 }
 
-.metaslider .ms-settings-table .is-pro-setting:hover {
+.metaslider .ms-settings-table .is-pro-setting {
+    font-size: 1rem;
+	line-height: 30px;
+}
+
+.metaslider .ms-settings-table .checkbox .is-pro-setting {
+	line-height: 22px;
+}
+
+.metaslider .is-pro-setting:hover {
     color: #333;
 }
 
-.metaslider .ms-settings-table .is-pro-setting:focus {
+.metaslider .is-pro-setting:focus {
     box-shadow: none;
 }
 
-.metaslider .ms-settings-table .is-pro-setting:before {
+.metaslider .is-pro-setting:before {
     background: #feb123;
     padding: 4px;
     border-radius: 50%;
+}
+
+.metaslider-ui .metaslider-slides-container .slide.slide-is-hidden td > *:not(.metaslider-ui-controls) {
+	opacity: .2;
 }
 
 /* Force display inline-block when flex class (for FlexSlider) conflicts */
 .metaslider .ms-settings-table select.flex.inline-block,
 .metaslider .ms-settings-table input.flex.inline-block {
     display: inline-block !important;
+}
+
+#ms-save.ms-toolbar-button:not(.disabled) {
+    background: #007cba !important;
+}
+#ms-save.ms-toolbar-button:not(.disabled):hover,
+#ms-save.ms-toolbar-button:not(.disabled):focus,
+#ms-save.ms-toolbar-button:not(.disabled):active {
+    background: #006ba1 !important;
 }
 
 @media only screen and (min-width : 320px) {
@@ -2129,6 +2329,10 @@ td .dot.available {
     /* Edit slideshow */
     .metaslider-ui .metaslider-slides-container .metaslider-ui-inner .thumb {
         height: 240px;
+    }
+    /* Upgrade pages */
+    .metaslider_page_upgrade-metaslider-theme-editor .ms-panel-container {
+        flex-direction: column;
     }
 }
 

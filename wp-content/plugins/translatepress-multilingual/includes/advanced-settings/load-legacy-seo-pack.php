@@ -13,7 +13,8 @@ function trp_register_load_legacy_seo_pack( $settings_array ){
             'name'          => 'load_legacy_seo_pack',
             'type'          => 'checkbox',
             'label'         => esc_html__( 'Load legacy SEO Pack Add-On', 'translatepress-multilingual' ),
-            'description'   => wp_kses( __( 'In case the recent migration to the new slug rewrite is causing trouble, set this to Yes to use the old method <br> Please <a href="https://translatepress.com/support/open-ticket/" target="_blank">open a support ticket</a> letting us know of the issues you are having.', 'translatepress-multilingual' ), array( 'br' => array(), 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+            //[utm41]
+            'description'   => wp_kses( __( 'In case the recent migration to the new slug rewrite is causing trouble, set this to Yes to use the old method <br> Please <a href="https://translatepress.com/support/open-ticket/?utm_source=tp-advanced&utm_medium=client-site&utm_campaign=troubleshooting" target="_blank">open a support ticket</a> letting us know of the issues you are having.', 'translatepress-multilingual' ), array( 'br' => array(), 'a' => array( 'href' => array(), 'target' => array() ) ) ),
             'id'            => 'troubleshooting',
             'container'     => 'troubleshooting'
         );

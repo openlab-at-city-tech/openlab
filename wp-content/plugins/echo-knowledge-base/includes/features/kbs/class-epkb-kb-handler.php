@@ -454,7 +454,7 @@ class EPKB_KB_Handler {
 		if ( is_wp_error( $kb_id ) ) {
 			$kb_id = self::get_kb_id_from_tag_taxonomy_name( $taxonomy );
 			if ( is_wp_error( $kb_id ) ) {
-				return new WP_Error('49', "kb_id not found");
+				return new WP_Error('49', __( 'KB ID not found', 'echo-knowledge-base' ) );
 			}
 		}
 
@@ -472,17 +472,17 @@ class EPKB_KB_Handler {
 
 		if ( empty( $category_name ) || ! is_string( $category_name )
 			|| strpos( $category_name, self::KB_POST_TYPE_PREFIX ) === false || strpos( $category_name, self::KB_CATEGORY_TAXONOMY_SUFFIX ) === false ) {
-			return new WP_Error('40', "kb_id not found");
+			return new WP_Error('40', __( 'KB ID not found', 'echo-knowledge-base' ) );
 		}
 
 		$kb_id = str_replace( array( self::KB_POST_TYPE_PREFIX, self::KB_CATEGORY_TAXONOMY_SUFFIX ), '', $category_name );
 
 		if ( empty( $kb_id ) ) {
-			return new WP_Error('41', "kb_id not found");
+			return new WP_Error('41', __( 'KB ID not found', 'echo-knowledge-base' ) );
 		}
 
 		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
-			return new WP_Error('42', "kb_id not valid");
+			return new WP_Error('42', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		}
 
 		return $kb_id;
@@ -499,17 +499,17 @@ class EPKB_KB_Handler {
 
 		if ( empty($tag_name) || ! is_string($tag_name)
 			|| strpos( $tag_name, self::KB_POST_TYPE_PREFIX ) === false || strpos( $tag_name, self::KB_TAG_TAXONOMY_SUFFIX ) === false ) {
-			return new WP_Error('50', "kb_id not found");
+			return new WP_Error('50', __( 'KB ID not found', 'echo-knowledge-base' ) );
 		}
 
 		$kb_id = str_replace( array( self::KB_POST_TYPE_PREFIX, self::KB_TAG_TAXONOMY_SUFFIX ), '', $tag_name );
 
 		if ( empty($kb_id) ) {
-			return new WP_Error( '51', "kb_id not found" );
+			return new WP_Error( '51', __( 'KB ID not found', 'echo-knowledge-base' ) );
 		}
 
 		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
-			return new WP_Error( '52', "kb_id not valid" );
+			return new WP_Error( '52', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		}
 
 		return $kb_id;
@@ -525,12 +525,12 @@ class EPKB_KB_Handler {
 	public static function get_kb_id_from_post_type( $post_type ) {
 
 		if ( empty( $post_type ) || ! is_string( $post_type ) || strpos( $post_type, self::KB_POST_TYPE_PREFIX ) === false ) {
-			return new WP_Error('35', "kb_id not found");
+			return new WP_Error('35', __( 'KB ID not found', 'echo-knowledge-base' ) );
 		}
 
 		$kb_id = str_replace( self::KB_POST_TYPE_PREFIX, '', $post_type );
 		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
-			return new WP_Error('36', "kb_id not valid");
+			return new WP_Error('36', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		}
 
 		return $kb_id;
@@ -545,15 +545,15 @@ class EPKB_KB_Handler {
 
 		$parts = explode('?', $endpoint);
 		if ( empty($parts) ) {
-			return new WP_Error('37', "kb_id not valid");
+			return new WP_Error('37', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		}
 
 		$parts = explode('/', $parts[0]);
 		if ( empty($parts) ) {
-			return new WP_Error('37', "kb_id not valid");
+			return new WP_Error('37', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		}
 
-		$kb_id = new WP_Error('38', "kb_id not valid");
+		$kb_id = new WP_Error('38', __( 'KB ID not valid', 'echo-knowledge-base' ) );
 		foreach( $parts as $part ) {
 			if ( ! self::is_kb_post_type( $part ) ) {
 				continue;
@@ -673,6 +673,43 @@ class EPKB_KB_Handler {
 		}
 
 		return (int)$number;
+	}
+
+	public static function reset_kb_main_pages() {
+
+		if ( ! EPKB_Utilities::is_multiple_kbs_enabled() ) {
+			return;
+		}
+
+		// ensure that KB #1 has unique kb_articles_common_path; if other KB has the same kb_articles_common_path, then change it
+		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs( true );
+		if ( count( $all_kb_configs ) < 2 ) {
+			return;
+		}
+
+		$first_kb_articles_common_path = reset( $all_kb_configs )['kb_articles_common_path'];
+		foreach ( $all_kb_configs as $one_kb_config ) {
+			if ( $one_kb_config['id'] == EPKB_KB_Config_DB::DEFAULT_KB_ID ) {
+				continue;
+			}
+
+			if ( $one_kb_config['kb_articles_common_path'] == $first_kb_articles_common_path ) {
+				$one_kb_config['kb_articles_common_path'] = $one_kb_config['kb_articles_common_path'] . '-' . $one_kb_config['id'];
+				epkb_get_instance()->kb_config_obj->update_kb_configuration( $one_kb_config['id'], $one_kb_config );
+				// flush rewrite rules
+				flush_rewrite_rules();
+			}
+		}
+
+		// get all KB Main Pages
+		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs( true );
+		foreach ( $all_kb_configs as $one_kb_config ) {
+			if ( empty( $one_kb_config['kb_main_pages'] ) || ! is_array( $one_kb_config['kb_main_pages'] ) ) {
+				continue;
+			}
+
+			self::get_kb_main_pages( $one_kb_config );
+		}
 	}
 
 	/**

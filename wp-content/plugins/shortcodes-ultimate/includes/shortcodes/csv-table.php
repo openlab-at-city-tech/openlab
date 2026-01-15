@@ -90,7 +90,49 @@ function su_shortcode_csv_table( $atts = null, $content = null ) {
 		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
 	}
 
-	$response = wp_safe_remote_get( $atts['url'] );
+	$parsed_url = wp_parse_url( $atts['url'] );
+	if ( ! $parsed_url || ! isset( $parsed_url['host'] ) ) {
+		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
+	}
+
+	$host = $parsed_url['host'];
+	$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+	if ( $host === $site_host ) {
+		$ip = null;
+	} else {
+		if ( filter_var( $host, FILTER_VALIDATE_IP ) ) {
+			$ip = $host;
+		} else {
+			$ip = gethostbyname( $host );
+			if ( $ip === $host ) {
+				return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
+			}
+		}
+
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+			return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
+		}
+	}
+
+	if ( $ip !== null ) {
+		$internal_ips = array(
+			'169.254.169.254',
+			'100.100.100.200',
+			'192.0.0.192',
+		);
+
+		if ( in_array( $ip, $internal_ips, true ) ) {
+			return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );
+		}
+	}
+
+	$response = wp_safe_remote_get(
+		$atts['url'],
+		array(
+			'redirection' => 0,
+		)
+	);
 
 	if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
 		return su_error_message( 'CSV Table', __( 'invalid URL', 'shortcodes-ultimate' ) );

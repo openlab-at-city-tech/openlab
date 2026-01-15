@@ -4,7 +4,7 @@ defined('ABSPATH') || die;
 // Check current tab parameter from URL. e.g. 'admin.php?page=lorem&tab=something'
 $current_tab = isset($_GET['tab']) && ! empty($_GET['tab'])
                 ? sanitize_text_field($_GET['tab'])
-                : 'controls';
+                : 'presets-admin';
 ?>
 
 <div class="publishpress-admin wrap">
@@ -33,6 +33,10 @@ $current_tab = isset($_GET['tab']) && ! empty($_GET['tab'])
 
     <?php
     $tabs = [
+        [
+            'title' => esc_html__('Presets', 'advanced-gutenberg'),
+            'slug' => 'presets-admin'
+        ],
         [
             'title' => esc_html__('Controls', 'advanced-gutenberg'),
             'slug' => 'controls'

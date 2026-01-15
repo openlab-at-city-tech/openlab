@@ -22,9 +22,9 @@ function ed11y_add_action_links( $links ) {
 /**
  * Return the default plugin settings.
  *
- * @param string $option False for all, or specify one by key.
+ * @param bool|string $option False for all, or specify one by key.
  */
-function ed11y_get_default_options( $option = false ) {
+function ed11y_get_default_options( string $option = '' ) {
 
 	$incompatible = array(
 		'Twenty Seventeen',
@@ -46,6 +46,7 @@ function ed11y_get_default_options( $option = false ) {
 		'ed11y_theme'               => 'sleekTheme',
 		'ed11y_checkRoots'          => false,
 		'ed11y_livecheck'           => 'all',
+		'ed11y_alert_mode'          => 'polite',
 
 		'ed11y_ignore_elements'     => '#comments *, .wp-block-post-comments *, img.avatar',
 		'ed11y_link_ignore_strings' => false,
@@ -58,6 +59,7 @@ function ed11y_get_default_options( $option = false ) {
 		'ed11y_checkvisibility'     => $check_visibility,
 		'ed11y_no_run'              => false,
 		'ed11y_report_restrict'     => false,
+		'ed11y_hide_report_link'    => false,
 		'ed11y_custom_tests'        => 0,
 	);
 
@@ -148,7 +150,7 @@ function ed11y_enqueue_editor_content_assets() {
 				'ed11yVars',
 				array(
 					'worker'  => trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor-worker.js?ver=' . Editoria11y::ED11Y_VERSION,
-					'options' => ed11y_get_params( wp_get_current_user() ),
+					'options' => ed11y_get_params( wp_get_current_user(), 'editing' ),
 				)
 			);
 			wp_enqueue_style(
@@ -169,9 +171,9 @@ add_action( 'admin_enqueue_scripts', 'ed11y_enqueue_editor_content_assets' );
  * @SuppressWarnings(PHPMD.StaticAccess)
  *
  * @param Object $user WP_User.
+ * @param String $context Viewing or editing mode.
  */
-function ed11y_get_params( $user ) {
-
+function ed11y_get_params( object $user, string $context = 'viewing' ) {
 	// Get settings array from cache, if available.
 	$ed1vals = get_site_transient( 'editoria11y_settinges' );
 	if ( false === $ed1vals ) {
@@ -189,7 +191,10 @@ function ed11y_get_params( $user ) {
 		$ed1vals['preventCheckingIfPresent'] = $settings['ed11y_no_run'];
 		$ed1vals['liveCheck']                = $settings['ed11y_livecheck'];
 		$ed1vals['customTests']              = $settings['ed11y_custom_tests'];
-		$ed1vals['cssLocation']              = trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css';
+		$ed1vals['hideReportLink']           = $settings['ed11y_hide_report_link'];
+		$ed1vals['alertMode']                = $settings['ed11y_alert_mode'];
+		$ed1vals['cssLocation']              = trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css?ver=' . Editoria11y::ED11Y_VERSION;
+		$ed1vals['mceInnerJS']               = trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-mce-inner.js?ver=' . Editoria11y::ED11Y_VERSION;
 		$ed1vals['adminUrl']                 = get_admin_url();
 		set_site_transient( 'editoria11y_settings', $ed1vals, 360 );
 	}
@@ -241,9 +246,17 @@ function ed11y_get_params( $user ) {
 	}
 
 	// Mode is assertive from 0ms to 10minutes after a post is modified.
-	$page_edited          = get_post_modified_time( 'U', true );
-	$page_edited          = $page_edited ? abs( 1 + $page_edited - time() ) : false;
-	$ed1vals['alertMode'] = $page_edited && $page_edited < 600 ? 'assertive' : 'polite';
+	$page_edited = get_post_modified_time( 'U', true );
+	$page_edited = $page_edited ? abs( 1 + $page_edited - time() ) : false;
+	if ( 'polite' === $ed1vals['alertMode'] && $page_edited && $page_edited < 600 ) {
+		$ed1vals['alertMode'] = 'assertive';
+	}
+
+	if ( 'editing' === $context ) {
+		$ed1vals = apply_filters( 'editoria11y_editing_params', $ed1vals );
+	} else {
+		$ed1vals = apply_filters( 'editoria11y_viewing_params', $ed1vals );
+	}
 
 	// Lazy-create DB if network activation failed.
 	if ( ! Editoria11y::check_tables() ) {
@@ -362,7 +375,6 @@ add_filter( 'old_slug_redirect_url', 'ed11y_old_slug_redirect_url_filter' );
 
 /**
  * Load live checker when editor is present.
- * THIS IS NOT WORKING FOR NEW EDITOR
  * */
 function ed11y_editor_init() {
 	if ( 'none' !== ed11y_get_plugin_settings( 'ed11y_livecheck', false ) ) {

@@ -92,13 +92,13 @@ class EPKB_Layout_Category_Sidebar {
 						<li class="eckb--acll__cat-item <?php echo ( $active ? 'eckb--acll__cat-item--active' : '' ); ?>">
 							<a href="<?php echo esc_url( $term_link ); ?>">
 								<div>
-									<span class="eckb-acll__cat-item__name">
-										<?php echo esc_html( $top_category_name ); ?>
+									<span class="eckb-acll__cat-item__name">										<?php
+										echo esc_html( $top_category_name ); ?>
 									</span>
 								</div>
 								<div>
-									<span class="eckb-acll__cat-item__count">
-										<?php echo esc_html( $count ); ?>
+									<span class="eckb-acll__cat-item__count">										<?php echo
+										esc_html( $count ); ?>
 									</span>
 								</div>
 							</a>

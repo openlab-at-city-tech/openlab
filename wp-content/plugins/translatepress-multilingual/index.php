@@ -3,14 +3,14 @@
 Plugin Name: TranslatePress - Multilingual
 Plugin URI: https://translatepress.com/
 Description: Experience a better way of translating your WordPress site using a visual front-end translation editor, with full support for WooCommerce and site builders.
-Version: 2.10.2
+Version: 3.0.5
 Author: Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban
 Author URI: https://cozmoslabs.com/
 Text Domain: translatepress-multilingual
 Domain Path: /languages
 License: GPL2
 WC requires at least: 2.5.0
-WC tested up to: 10.1.1
+WC tested up to: 10.3.5
 
 == Copyright ==
 Copyright 2017 Cozmoslabs (www.cozmoslabs.com)
@@ -50,7 +50,7 @@ function trp_enable_translatepress(){
 if ( trp_enable_translatepress() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'class-translate-press.php';
 
-	/** License classes includes here
+	/** License classes includes heresettings
 	 * Since version 1.4.6
 	 * It need to be outside of a hook so it load before the classes that are in the addons, that we are trying to phase out
 	 */
@@ -74,11 +74,27 @@ function trp_translatepress_disabled_notice(){
 add_action( 'activated_plugin', 'trp_plugin_activation_redirect' );
 function trp_plugin_activation_redirect( $plugin ){
 
-	if( !wp_doing_ajax() && $plugin == plugin_basename( __FILE__ ) ) {
-		wp_safe_redirect( admin_url( 'options-general.php?page=translate-press' ) );
-		exit();
-	}
+    $trp_instance_for_tp_product_name = TRP_Translate_Press::get_trp_instance();
 
+    // redirect on free plugin activation - keep simple for now, more conditions to be added
+
+    if ( !wp_doing_ajax() && $plugin == plugin_basename( __FILE__ ) ) {
+
+        if (get_option('trp_onboarding_started') === false ){
+
+        //    this could be used after we make the save settings function in onboarding to check onboarding completion
+        //    || get_option('trp_onboarding_completed') === 'false' || get_option('trp_onboarding_completed') == 'no' ) {
+            add_option('trp_onboarding_started', 'yes');
+            wp_safe_redirect(admin_url('admin.php?page=trp-onboarding&step=welcome') );
+            exit();
+
+        } else {
+
+            wp_safe_redirect(admin_url('options-general.php?page=translate-press'));
+            exit();
+
+        }
+    }
 }
 
 //This is for the DEV version

@@ -69,10 +69,6 @@ class EPKB_Articles_Admin {
 			return;
 		}
 
-		// add flag for get started page
-		if ( ! EPKB_Core_Utilities::run_setup_wizard_first_time() ) {
-			EPKB_Core_Utilities::add_kb_flag( 'edit_articles_categories_visited' );
-		}
 
 		$this->update_articles_sequence( $kb_id );
 	}
@@ -316,7 +312,7 @@ class EPKB_Articles_Admin {
 		}
 
 		wp_dropdown_categories( array(
-			'show_option_all' => esc_html__("Show All {$info_taxonomy->label}"),
+			'show_option_all' => sprintf( esc_html__( 'Show All %s', 'echo-knowledge-base' ), $info_taxonomy->label ),
 			'taxonomy'        => $taxonomy,
 			'name'            => $taxonomy,
 			'orderby'         => 'name',

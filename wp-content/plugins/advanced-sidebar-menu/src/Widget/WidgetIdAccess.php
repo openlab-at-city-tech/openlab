@@ -16,7 +16,7 @@ namespace Advanced_Sidebar_Menu\Widget;
  * @property-read bool|string  $id
  * @property-read bool|int     $number
  *
- * @phpstan-require-implements WidgetId
+ * @phpstan-require-implements Widget
  */
 trait WidgetIdAccess {
 	/**

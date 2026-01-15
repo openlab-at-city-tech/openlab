@@ -1,7 +1,8 @@
 <?php
 
 /** @var array|WP_Error $compatible_plugins */
-$compatible_plugins = Akismet_Compatible_Plugins::get_installed_compatible_plugins();
+$bypass_cache = ! empty( $_GET['akismet_refresh_compatible_plugins'] );
+$compatible_plugins = Akismet_Compatible_Plugins::get_installed_compatible_plugins( $bypass_cache );
 if ( is_array( $compatible_plugins ) ) :
 
 	$compatible_plugin_count = count( $compatible_plugins );
@@ -24,14 +25,14 @@ if ( is_array( $compatible_plugins ) ) :
 			echo '<p>';
 
 			if ( 0 === $compatible_plugin_count ) {
-				echo '<a class="akismet-settings__external-link" href="https://akismet.com/developers/plugins-and-libraries/">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins">';
 				echo esc_html( __( 'See supported integrations', 'akismet' ) );
 				echo '</a>';
 			} else {
 				echo esc_html(
 					_n(
-						"The plugin you've installed is compatible. Follow the documentation link to get started.",
-						"The plugins you've installed are compatible. Follow the documentation links to get started.",
+						"This plugin you've installed is compatible. Follow the documentation link to get started.",
+						"These plugins you've installed are compatible. Follow the documentation links to get started.",
 						$compatible_plugin_count,
 						'akismet'
 					)
@@ -75,7 +76,7 @@ if ( is_array( $compatible_plugins ) ) :
 								<h3 class="akismet-compatible-plugins__card-title"><?php echo esc_html( $compatible_plugin['name'] ); ?></h3>
 								<div class="akismet-compatible-plugins__docs">
 									<a
-										class="akismet-settings__external-link"
+										class="akismet-external-link"
 										href="<?php echo esc_url( $compatible_plugin['help_url'] ); ?>"
 										aria-label="
 											<?php

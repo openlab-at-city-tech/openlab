@@ -74,7 +74,7 @@ class Database extends Tool
                                 if ( $success !== true ) {
                                     $errors[] = sprintf( 'Can`t change column <b>%s.%s</b>, Error:%s', $table_name, $column, $success );
                                 } else {
-                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), JSON_PRETTY_PRINT ), 'change column ' . $table_name . '.' . $column );
+                                    Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, 'Schema', null, $sql, 'differences:' . PHP_EOL . json_encode( array_diff_assoc( $actual, $expect ), 128 ), 'change column ' . $table_name . '.' . $column );
                                 }
                             }
                         } else {

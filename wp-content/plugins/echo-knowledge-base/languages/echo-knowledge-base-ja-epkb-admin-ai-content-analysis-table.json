@@ -1,0 +1,162 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Title": [
+                "タイトル"
+            ],
+            "Status": [
+                "ステータス"
+            ],
+            "All": [
+                "すべて"
+            ],
+            "Page": [
+                "固定ページ"
+            ],
+            "Close": [
+                "閉じる"
+            ],
+            "Recent": [
+                "最近"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "selected": [
+                "選択済み"
+            ],
+            "Next": [
+                "次"
+            ],
+            "Previous": [
+                "前"
+            ],
+            "Today": [
+                "今日"
+            ],
+            "Yesterday": [
+                "昨日"
+            ],
+            "Loading...": [
+                "読み込み中…"
+            ],
+            "Delete": [
+                "削除"
+            ],
+            "of": [
+                "の"
+            ],
+            "Searching...": [
+                "検索しています..."
+            ],
+            "Refreshing...": [
+                "更新しています..."
+            ],
+            "Refresh": [
+                "更新"
+            ],
+            "Failed to fetch analysis data": [
+                "分析データの取得に失敗しました"
+            ],
+            "Data refreshed successfully": [
+                "データを正常に更新しました"
+            ],
+            "Delete Selected Items": [
+                "選択した項目を削除"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "選択した項目を削除してもよろしいですか？"
+            ],
+            "Items deleted successfully": [
+                "選択した項目は正常に削除されました"
+            ],
+            "Unknown error occurred": [
+                "不明なエラーが発生しました"
+            ],
+            "No articles need analysis": [
+                "分析が必要な記事はありません"
+            ],
+            "All articles have been analyzed. Great job!": [
+                "すべての記事が分析されました。素晴らしいです！"
+            ],
+            "No articles need improvement": [
+                "改善が必要な記事はありません"
+            ],
+            "All analyzed articles have scores above 80%. Excellent!": [
+                "分析済みの記事はすべて80％を超えるスコアです。素晴らしいです！"
+            ],
+            "No recent articles": [
+                "最近の記事はありません"
+            ],
+            "No articles have been modified recently.": [
+                "最近変更された記事はありません."
+            ],
+            "No articles found": [
+                "記事が見つかりません"
+            ],
+            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
+                "このナレッジベースには記事がありません。分析を開始するにはいくつかの記事を作成してください。."
+            ],
+            "To Analyze": [
+                "分析する"
+            ],
+            "To Improve": [
+                "改善する"
+            ],
+            "Search by title...": [
+                "タイトルで検索..."
+            ],
+            "Loading content analysis data...": [
+                "コンテンツ分析データを読み込み中..."
+            ],
+            "Score": [
+                "スコア"
+            ],
+            "Sort": [
+                "並べ替え"
+            ],
+            "Importance": [
+                "重要度"
+            ],
+            "Last Modified": [
+                "最終更新日"
+            ],
+            "No articles match your search": [
+                "検索条件に一致する記事はありません"
+            ],
+            "View detailed analysis": [
+                "詳細分析を表示"
+            ],
+            "days ago": [
+                "日前"
+            ],
+            "week ago": [
+                "1週間前"
+            ],
+            "weeks ago": [
+                "数週間前"
+            ],
+            "Content Analysis Error": [
+                "コンテンツ分析エラー"
+            ],
+            "ERROR": [
+                "エラー"
+            ],
+            "Article ID:": [
+                "記事ID:"
+            ],
+            "Error Processing Content Analysis": [
+                "コンテンツ分析の処理エラー"
+            ],
+            "This article could not be analyzed. Please try again or check the article content for issues.": [
+                "この記事は分析できませんでした。もう一度お試しください。記事の内容に問題がないか確認してください。."
+            ]
+        }
+    }
+}

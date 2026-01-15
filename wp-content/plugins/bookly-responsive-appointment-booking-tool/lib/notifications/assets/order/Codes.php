@@ -37,6 +37,8 @@ class Codes extends Base\Codes
     // Invoices
     public $invoice_date;
     public $invoice_due_date;
+    // Checkout Forms
+    public $checkout_forms = array();
 
     /** @var Order */
     protected $order;

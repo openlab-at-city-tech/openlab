@@ -18,35 +18,6 @@ class EPKB_Config_Tools_Page {
 
 		$secondary_tabs = [];
 
-		// SECONDARY VIEW: SETTINGS
-		$secondary_tabs[] = array(
-
-			// Shared
-			'list_key'              => 'settings',
-
-			// Secondary Panel Item
-			'label_text'            => esc_html__( 'Settings', 'echo-knowledge-base' ),
-
-			// Secondary Boxes List
-			'list_top_actions_html' => '',
-			'boxes_list'            =>  self::get_settings_boxes( $kb_config )
-		);
-
-		// SECONDARY VIEW: MENU ACCESS CONTROL
-		$secondary_tabs[] = array(
-
-			// Shared
-			'list_key'              => 'access-control',
-
-			// Secondary Panel Item
-			'label_text'            => esc_html__( 'Menu Access Control', 'echo-knowledge-base' ),
-
-			// Secondary Boxes List
-			'list_top_actions_html' => '<div class="epkb-admin__list-actions-row">' . EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save Access Control Settings', 'echo-knowledge-base' ),
-											 'epkb_save_access_control', 'epkb-admin__save-access-control-btn', '', true, true, 'epkb-success-btn' ) . '</div>',
-			'boxes_list'            => EPKB_Admin_UI_Access::get_access_boxes( $kb_config ),
-		);
-
 		// SECONDARY VIEW: EXPORT
 		$secondary_tabs[] = array(
 
@@ -98,6 +69,21 @@ class EPKB_Config_Tools_Page {
 
 			// Secondary Boxes List
 			'boxes_list' => self::get_other_boxes( $kb_config )
+		);
+
+		// SECONDARY VIEW: MENU ACCESS CONTROL
+		$secondary_tabs[] = array(
+
+			// Shared
+			'list_key'              => 'access-control',
+
+			// Secondary Panel Item
+			'label_text'            => esc_html__( 'Menu Access Control', 'echo-knowledge-base' ),
+
+			// Secondary Boxes List
+			'list_top_actions_html' => '<div class="epkb-admin__list-actions-row">' . EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save Access Control Settings', 'echo-knowledge-base' ),
+											 'epkb_save_access_control', 'epkb-admin__save-access-control-btn', '', true, true, 'epkb-success-btn' ) . '</div>',
+			'boxes_list'            => EPKB_Admin_UI_Access::get_access_boxes( $kb_config ),
 		);
 
 		// SECONDARY VIEW: DEBUG
@@ -957,86 +943,6 @@ class EPKB_Config_Tools_Page {
 		return apply_filters( 'epkb_convert_post_types', $cpts );
 	}
 
-	/**
-	 * Get boxes for Tools panel, Settings subpanel
-	 *
-	 * @param $kb_config
-	 * @return array
-	 */
-	private static function get_settings_boxes( $kb_config ) {
-
-		$boxes_config = [];
-		$specs = EPKB_KB_Config_Specs::get_fields_specification( $kb_config['id'] );
-
-		ob_start(); ?>
-
-		<form id="epkb-tools-settings-form" class="epkb-tools-settings-form epkb-admin__kb__form epkb-admin__form" method="POST">			<?php
-			// Box: KB Main Page - Page Title
-			EPKB_HTML_Elements::checkbox_toggle( [
-				'id' => 'template_main_page_display_title',
-				'name' => 'template_main_page_display_title',
-				'text' => $specs['template_main_page_display_title']['label'],
-				'textLoc' => 'left',
-				'checked' => ( !empty( $kb_config['template_main_page_display_title'] ) && $kb_config['template_main_page_display_title'] == 'on' ),
-			] );
-
-			// Box: Typography
-			$font_family = empty( $kb_config['general_typography']['font-family'] ) ? 'Inherit' : $kb_config['general_typography']['font-family']; ?>
-			<div class="epkb-input-group epkb-general_typography-loader-wrap">
-				<label class="" for="general_typography_font_family"><?php esc_html_e( 'Font Family', 'echo-knowledge-base' ); ?></label>
-				<div class="input_container">
-					<div class="epkb-general_typography-current"><?php echo esc_html( $font_family ); ?></div>
-					<button type="button" class="epkb-primary-btn epkb-general_typography-loader" data-selected="<?php echo esc_attr( $kb_config['general_typography']['font-family'] ); ?>"><?php esc_html_e( 'Choose Font Family', 'echo-knowledge-base' ); ?></button>
-				</div>
-			</div>
-			<input type="hidden" id="general_typography_font_family" name="general_typography[font-family]" value="<?php echo esc_attr( $kb_config['general_typography']['font-family'] ); ?>">			<?php
-
-			// Box: KB Nickname
-			EPKB_HTML_Elements::text( [
-				'name' => 'kb_name',
-				'specs' => 'kb_name',
-				'value' => $kb_config['kb_name'],
-				'input_size' => 'large',
-				'label' => esc_html__( 'KB Nickname', 'echo-knowledge-base' ),
-				'desc' => esc_html__( 'Give your Knowledge Base a name. The name will show when we refer to it or when you see a list of post types.', 'echo-knowledge-base' ),
-			] );
-
-			// Box: Frontend Editor Toggle Visibility
-			EPKB_HTML_Elements::checkbox_toggle( [
-				'id' => 'frontend_editor_switch_visibility_toggle',
-				'name' => 'frontend_editor_switch_visibility_toggle',
-				'text' => $specs['frontend_editor_switch_visibility_toggle']['label'],
-				'textLoc' => 'left',
-				'checked' => ( !empty( $kb_config['frontend_editor_switch_visibility_toggle'] ) && $kb_config['frontend_editor_switch_visibility_toggle'] == 'on' ),
-			] );
-
-			// Box: Custom CSS
-			EPKB_HTML_Elements::textarea( [
-				'name' => 'epkb_ml_custom_css',
-				'label' => esc_html__( 'Custom CSS for Main Page', 'echo-knowledge-base' ),
-				'value' => $kb_config['modular_main_page_custom_css_toggle'] == 'off' ? '' : EPKB_Utilities::get_kb_option( $kb_config['id'], 'epkb_ml_custom_css', '' ),
-				'main_tag' => 'div',
-				'input_group_class' => 'epkb-input-group epkb-admin__textarea-field',
-				'setting_help_text' => [[
-					'help_desc' => esc_html__( 'Please use this custom box for minor css modifications. if your css requirements are more advanced or involve a significant amount of code, please utilize your child theme instead.', 'echo-knowledge-base' ),
-					'is_bottom_text' => true,
-				]],
-			] );
-
-			EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save Settings', 'echo-knowledge-base' ), 'epkb_save_tools_settings', '', '', false, '', 'epkb-success-btn' ); ?>
-		</form><?php
-		
-		$form_html = ob_get_clean();
-		
-		// Return a single box containing the entire form
-		$boxes_config[] = array(
-			'title' => esc_html__( 'General Settings', 'echo-knowledge-base' ),
-			'html' => $form_html,
-		);
-
-		return $boxes_config;
-	}
-
 	/*
 	 * Get boxes for Tools panel, Debug subpanel
 	 *
@@ -1082,6 +988,20 @@ class EPKB_Config_Tools_Page {
 
 		$delete_kb_handler = new EPKB_Delete_KB();
 		$specification = EPKB_Core_Utilities::retrieve_all_kb_specs( $kb_config['id'] );
+
+		// KB Nickname
+		$boxes_config[] = array(
+			'title' => esc_html__( 'KB Nickname', 'echo-knowledge-base' ),
+			'html'  => self::get_kb_nickname_html( $kb_config ),
+		);
+
+		// Sidebar Introduction Text - only show if using Sidebar Layout (shortcode or block)
+		if ( EPKB_Utilities::is_elegant_layouts_enabled() ) {
+			$boxes_config[] = array(
+				'title' => esc_html__( 'Sidebar Layout - Introduction Text', 'echo-knowledge-base' ),
+				'html'  => self::get_sidebar_intro_text_html( $kb_config ),
+			);
+		}
 
 		// Translations
 		if ( ! EPKB_Utilities::is_amag_on() ) {
@@ -1334,11 +1254,9 @@ class EPKB_Config_Tools_Page {
 				$kb_config = get_option( EPKB_KB_Config_DB::KB_CONFIG_PREFIX . $kb_id );
 			}
 
-			$output .= "KB Main Page Has KB Blocks: " . EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config ) ? 'Yes' . "\n" : 'No' . "\n";
-
 			// if KB configuration is missing then return error
 			if ( empty( $kb_config ) || ! is_array( $kb_config ) ) {
-				$output .= "Did not find KB configuration (DB231) for KB ID " . $kb_id . "\n";
+				$output .= "Did not find KB configuration (DB231) for KB ID " . $kb_id . "\n\n";
 				continue;
 			}
 
@@ -1347,6 +1265,14 @@ class EPKB_Config_Tools_Page {
 			}
 
 			$output .= 'KB Config ' . $kb_id . "\n\n";
+
+			$output .= 'KB Main Page Has KB Blocks: ' . ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config ) ? 'Yes' : 'No' ) . "\n";
+			if ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config ) ) {
+				$kb_main_page = get_post( EPKB_KB_Handler::get_first_kb_main_page_id( $kb_config ) );
+				$output .= 'KB Main Page Block Layout: ' . EPKB_Block_Utilities::get_kb_block_layout( $kb_main_page );
+			}
+			$output .= "\n\n";
+
 			$specs = EPKB_KB_Config_Specs::get_fields_specification( $kb_id );
 			$output .= '- KB URL  = ' . EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) . "\n";
 			foreach( $kb_config as $name => $value ) {
@@ -1360,11 +1286,167 @@ class EPKB_Config_Tools_Page {
 			}
 
 			$output .= "\n\n";
+
+			// Add multilang debug info for this KB if WPML is enabled
+			if ( EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
+				$output .= self::get_polylang_debug_info( $kb_id );
+				$output .= "\n\n";
+			}
 		}
 
 		// retrieve add-on data
 		$add_on_output = apply_filters( 'eckb_add_on_debug_data', '' );
 		$output .= is_string( $add_on_output ) ? $add_on_output : '';
+
+		// retrieve AI Configuration
+		$output .= "\n\nAI Configuration:\n";
+		$output .= "==================\n";
+		
+		// Get AI configuration
+		$ai_config = EPKB_AI_Config_Specs::get_config();
+		$ai_specs = EPKB_AI_Config_Specs::get_config_fields_specifications();
+		
+		if ( ! empty( $ai_config ) ) {
+			// Loop through all AI configuration fields
+			foreach ( $ai_specs as $field_name => $field_spec ) {
+				$value = isset( $ai_config[$field_name] ) ? $ai_config[$field_name] : $field_spec['default'];
+				
+				// Format the value based on field type and name
+				if ( $field_name === 'ai_key' ) {
+					// Mask API key for security
+					$formatted_value = ! empty( $value ) && $value !== '' ? 'Yes (configured)' : 'No (not configured)';
+				} elseif ( $field_name === 'ai_organization_id' ) {
+					// Partially mask organization ID
+					$formatted_value = ! empty( $value ) ? substr( $value, 0, 10 ) . '...' : 'Not set';
+				} elseif ( strpos( $field_name, '_instructions' ) !== false ) {
+					// For instruction fields, show full content and length
+					if ( ! empty( $value ) ) {
+						$formatted_value = "\n" . str_repeat( ' ', 4 ) . $value . "\n" . str_repeat( ' ', 4 ) . '(' . strlen( $value ) . ' chars)';
+					} else {
+						$formatted_value = 'Not set (0 chars)';
+					}
+				} elseif ( $field_spec['type'] === EPKB_Input_Filter::CHECKBOX ) {
+					// Format checkbox values
+					$formatted_value = ( ! empty( $value ) && $value === 'on' ) ? 'Yes' : 'No';
+				} elseif ( $field_spec['type'] === EPKB_Input_Filter::SELECTION && ! empty( $field_spec['options'] ) ) {
+					// Show selection value with label if available
+					$formatted_value = ! empty( $value ) ? $value : 'Not set';
+					if ( isset( $field_spec['options'][$value] ) ) {
+						$option_value = $field_spec['options'][$value];
+						// Handle array option values (convert to string)
+						$formatted_value = is_array( $option_value ) ? wp_json_encode( $option_value ) : $option_value;
+					}
+				} else {
+					// Default formatting
+					$formatted_value = ! empty( $value ) ? $value : ( isset( $field_spec['default'] ) ? $field_spec['default'] : 'Not set' );
+				}
+				
+				// Ensure formatted_value is a string before concatenation
+				if ( is_array( $formatted_value ) ) {
+					$formatted_value = wp_json_encode( $formatted_value );
+				} elseif ( ! is_string( $formatted_value ) && ! is_numeric( $formatted_value ) ) {
+					$formatted_value = strval( $formatted_value );
+				}
+				
+				$output .= '- ' . $field_name . ' = ' . $formatted_value . "\n";
+			}
+		} else {
+			$output .= "No AI configuration found.\n";
+		}
+		
+		// AI Sync Status
+		$output .= "\n\nAI Sync Status:\n";
+		$output .= "==================\n";
+		
+		// Check sync lock
+		$sync_lock = get_transient( 'epkb_ai_sync_lock' );
+		$output .= "Sync Lock: " . ( $sync_lock !== false ? 'Active (locked at ' . date( 'Y-m-d H:i:s', $sync_lock ) . ')' : 'Not active' ) . "\n";
+		
+		// Check sync status
+		$sync_status = get_transient( 'epkb_ai_sync_status' );
+		if ( ! empty( $sync_status ) && is_array( $sync_status ) ) {
+			$output .= "Sync Type: " . ( ! empty( $sync_status['type'] ) ? $sync_status['type'] : 'N/A' ) . "\n";
+			$output .= "Sync Start Time: " . ( ! empty( $sync_status['start_time'] ) ? $sync_status['start_time'] : 'N/A' ) . "\n";
+			$output .= "Current Step: " . ( ! empty( $sync_status['current_step'] ) ? $sync_status['current_step'] : 'N/A' ) . "\n";
+			$output .= "Progress: " . ( ! empty( $sync_status['current'] ) ? $sync_status['current'] : '0' ) . " / " . ( ! empty( $sync_status['total'] ) ? $sync_status['total'] : '0' ) . "\n";
+		} else {
+			$output .= "No active sync status.\n";
+		}
+		
+		// Last sync info
+		$last_sync_completed = get_option( 'epkb_ai_last_sync_completed', 0 );
+		if ( $last_sync_completed > 0 ) {
+			$output .= "Last Sync Completed: " . date( 'Y-m-d H:i:s', $last_sync_completed ) . " (" . human_time_diff( $last_sync_completed ) . " ago)\n";
+		} else {
+			$output .= "Last Sync Completed: Never\n";
+		}
+		
+		// Check for sync errors
+		$sync_error = get_transient( 'epkb_ai_sync_error' );
+		if ( ! empty( $sync_error ) ) {
+			$output .= "Sync Error: " . ( is_string( $sync_error ) ? $sync_error : wp_json_encode( $sync_error ) ) . "\n";
+		}
+		
+		// AI Training Data Collections
+		$output .= "\n\nAI Training Data Collections:\n";
+		$output .= "==================\n";
+		
+		$collections = get_option( 'epkb_ai_training_data_collections', array() );
+		if ( ! empty( $collections ) && is_array( $collections ) ) {
+			foreach ( $collections as $collection ) {
+				$output .= "\nCollection ID: " . ( ! empty( $collection['id'] ) ? $collection['id'] : 'N/A' ) . "\n";
+				$output .= "Name: " . ( ! empty( $collection['name'] ) ? $collection['name'] : 'N/A' ) . "\n";
+				$output .= "Vector Store ID: " . ( ! empty( $collection['vector_store_id'] ) ? $collection['vector_store_id'] : 'Not created' ) . "\n";
+				$output .= "Vector Store Status: " . ( ! empty( $collection['vector_store_status'] ) ? $collection['vector_store_status'] : 'N/A' ) . "\n";
+				$output .= "Status: " . ( ! empty( $collection['status'] ) ? $collection['status'] : 'N/A' ) . "\n";
+				$output .= "Created: " . ( ! empty( $collection['created_at'] ) ? $collection['created_at'] : 'N/A' ) . "\n";
+				$output .= "Last Modified: " . ( ! empty( $collection['last_modified'] ) ? $collection['last_modified'] : 'N/A' ) . "\n";
+				
+				// Get record counts from database if available
+				if ( ! empty( $collection['id'] ) && class_exists( 'EPKB_AI_Training_Data_DB' ) ) {
+					$db = new EPKB_AI_Training_Data_DB( true );
+					$counts = $db->get_status_counts( $collection['id'] );
+					if ( ! empty( $counts ) ) {
+						$output .= "Records - Total: " . array_sum( $counts ) . " (";
+						$status_parts = array();
+						foreach ( $counts as $status => $count ) {
+							if ( $count > 0 ) {
+								$status_parts[] = ucfirst( $status ) . ": " . $count;
+							}
+						}
+						$output .= implode( ', ', $status_parts ) . ")\n";
+					}
+				}
+			}
+		} else {
+			$output .= "No training data collections found.\n";
+		}
+		
+		
+		// AI Activity Logs
+		$output .= "\n\nAI Activity Logs (Last 50):\n";
+		$output .= "==================\n";
+		$ai_logs = EPKB_AI_Log::get_logs_for_display();
+		if ( empty( $ai_logs ) ) {
+			$output .= "No AI logs found.\n";
+		} else {
+			// Show last 50 logs instead of 100 for better readability
+			$recent_logs = array_slice( $ai_logs, -50 );
+			foreach ( $recent_logs as $log ) {
+				$output .= "\n[" . ( isset( $log['timestamp'] ) ? $log['timestamp'] : 'N/A' ) . "] ";
+				$output .= "[" . ( isset( $log['level'] ) ? strtoupper( $log['level'] ) : 'INFO' ) . "] ";
+				$output .= isset( $log['message'] ) ? $log['message'] : 'No message';
+				if ( ! empty( $log['context'] ) && is_array( $log['context'] ) ) {
+					$output .= " | Context: " . wp_json_encode( $log['context'] );
+				}
+				$output .= "\n";
+			}
+		}
+		
+		// Error notification count
+		$current_date = date( 'Y-m-d' );
+		$error_count = get_transient( 'epkb_ai_error_notification_count_' . $current_date );
+		$output .= "Error Notifications Today: " . ( $error_count !== false ? $error_count : '0' ) . "\n";
 
 		$output .= '</textarea>';
 
@@ -1504,18 +1586,19 @@ class EPKB_Config_Tools_Page {
 		$active_plugins = get_option( 'active_plugins', array() );
 
 		$kb_plugins = array(
+			'Knowledge Base for Documents and FAQs',
+			'AI Features',
 			'KB - Article Rating and Feedback',
 			'KB - Links Editor','Articles Import and Export',
 			'KB - Multiple Knowledge Bases','KB - Widgets',
-			'Knowledge Base for Documents and FAQs',
 			'KB - Elegant Layouts',
 			'KB - Advanced Search',
 			'Knowledge Base with Access Manager',
 			'KB - Custom Roles',
 			'KB Groups',
 			'KB - Articles Import and Export',
-			'Blocks for Documents, Articles and FAQs',
-			'Creative Addons for Elementor' );
+			'Creative Addons for Elementor'
+		);
 
 		echo "\n\n";
 		echo "KB PLUGINS:	         \n\n";
@@ -1531,15 +1614,17 @@ class EPKB_Config_Tools_Page {
 		}
 
 		echo "\n\n";
-		echo "OTHER PLUGINS:	         \n\n";
 
+		$other_plugins = false;
 		foreach ( $plugins as $plugin_path => $plugin ) {
 			// If the plugin isn't active, don't show it.
 			if ( ! in_array( $plugin_path, $active_plugins ) )
 				continue;
 
 			if ( ! in_array($plugin['Name'], $kb_plugins)) {
+				echo ( $other_plugins ? '' : "OTHER PLUGINS:	         \n\n" );
 				echo "		" . esc_html( $plugin['Name'] . ': ' . $plugin['Version'] ) . "\n";
+				$other_plugins = true;
 			}
 		}
 
@@ -1728,5 +1813,244 @@ class EPKB_Config_Tools_Page {
 		</form><?php
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Display KB Nickname field
+	 * @param $kb_config
+	 * @return string
+	 */
+	private static function get_kb_nickname_html( $kb_config ) {
+
+		ob_start(); ?>
+
+		<form id="epkb-kb-nickname__form" class="epkb-kb-nickname__form epkb-admin__kb__form" method="POST">
+			<p class="epkb-kb-nickname__form-title">    <?php
+				esc_html_e( 'Give your Knowledge Base a name. The name will show when we refer to it or when you see a list of post types.', 'echo-knowledge-base' ); ?>
+			</p>    <?php
+			EPKB_HTML_Elements::text( array(
+				'title'     => '',
+				'label'     => esc_html__( 'Knowledge Base Name', 'echo-knowledge-base' ),
+				'value' => $kb_config['kb_name'],
+				'name'    => 'kb_name',
+				'specs' => 'kb_name',
+				'required' => true,
+				'input_size' => 'large',
+			) );
+			EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'epkb_save_kb_name', '', '', false, '', 'epkb-primary-btn' );  ?>
+		</form><?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Display Sidebar Introduction Text editor
+	 * @param $kb_config
+	 * @return string
+	 */
+	private static function get_sidebar_intro_text_html( $kb_config ) {
+
+		// Get full configuration including add-on settings (for Elegant Layouts)
+		$add_ons_kb_config = apply_filters( 'elay_block_config', $kb_config, $kb_config['id'] );
+		if ( is_wp_error( $add_ons_kb_config ) || empty( $add_ons_kb_config ) || ! is_array( $add_ons_kb_config ) || count( $add_ons_kb_config ) < 100 ) {
+			$add_ons_kb_config = $kb_config;
+		}
+
+		$sidebar_intro_text = isset( $add_ons_kb_config['sidebar_main_page_intro_text'] ) ? $add_ons_kb_config['sidebar_main_page_intro_text'] : '<missing>';
+		
+		// Apply the same filter used in the frontend to get the actual value
+		$sidebar_intro_text = apply_filters( 'eckb_main_page_sidebar_intro_text', $sidebar_intro_text, $kb_config['id'] );
+		
+		ob_start(); 
+		
+		// Ensure editor scripts are enqueued
+		wp_enqueue_editor(); ?>
+
+		<form id="epkb-sidebar-intro-text__form" class="epkb-sidebar-intro-text__form epkb-admin__kb__form" method="POST">
+			<p class="epkb-sidebar-intro-text__form-title">    <?php
+				esc_html_e( 'Enter the introduction text for the Sidebar Layout main page. This text appears at the top of the sidebar navigation.', 'echo-knowledge-base' ); ?>
+			</p>
+			<br>
+			<!-- Hidden field to debug value -->
+			<input type="hidden" id="epkb_sidebar_intro_text_debug" value="<?php echo esc_attr( $sidebar_intro_text ); ?>" />
+			<div class="epkb-input-group epkb-admin__wp-editor-field">
+				<label for="epkb_sidebar_main_page_intro_text"><?php echo esc_html__( 'Introduction Text', 'echo-knowledge-base' ); ?></label>
+				<div class="input_container ekb-wp-editor"><?php
+					// Use wp_editor with full editor capabilities
+					wp_editor( $sidebar_intro_text, 'epkb_sidebar_main_page_intro_text', array( 
+						'textarea_name' => 'sidebar_main_page_intro_text',
+						'media_buttons' => false,  // Keep media buttons off for intro text
+						'teeny' => false,          // Use full editor not teeny
+						'textarea_rows' => 12,
+						'quicktags' => true,
+						'wpautop' => true,
+						'tinymce' => true          // Let WordPress handle the full TinyMCE configuration
+					) ); ?>
+				</div>
+			</div>    <?php
+			EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'epkb_save_sidebar_intro_text', '', '', false, '', 'epkb-primary-btn' );  ?>
+		</form><?php
+
+		return ob_get_clean();
+	}
+
+	/**
+	 * Get Polylang/WPML debug information for troubleshooting multilingual issues
+	 *
+	 * @return string
+	 */
+	private static function get_polylang_debug_info( $kb_id = 1 ) {
+		
+		// Get the KB configuration for the selected KB
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+		if ( is_wp_error( $kb_config ) ) {
+			return '';
+		}
+
+		// Only output debug info if WPML is enabled for this KB
+		if ( empty( $kb_config['wpml_is_enabled'] ) || $kb_config['wpml_is_enabled'] != 'on' ) {
+			return '';
+		}
+
+		$output = "Polylang/WPML Debug Information:\n";
+		$output .= "================================\n\n";
+
+		// Check if Polylang is active
+		if ( function_exists( 'pll_languages_list' ) ) {
+			$output .= "Polylang Status: Active\n";
+			$output .= "Polylang Version: " . ( defined( 'POLYLANG_VERSION' ) ? POLYLANG_VERSION : 'Unknown' ) . "\n\n";
+
+			// Get all languages
+			$languages = pll_languages_list( array( 'fields' => '' ) );
+			$output .= "Configured Languages:\n";
+			foreach ( $languages as $lang ) {
+				$output .= "  - " . $lang->name . " (" . $lang->slug . ")";
+				$output .= " [Locale: " . $lang->locale . "]";
+				$output .= " [Home URL: " . $lang->home_url . "]";
+				$output .= $lang->is_default ? " [DEFAULT]" : "";
+				$output .= "\n";
+			}
+			$output .= "\n";
+
+			// Get current language
+			if ( function_exists( 'pll_current_language' ) ) {
+				$current_lang = pll_current_language();
+				$output .= "Current Language: " . ( $current_lang ? $current_lang : 'Not set' ) . "\n";
+			}
+
+			// Check URL modifications
+			if ( function_exists( 'PLL' ) && isset( PLL()->options ) ) {
+				$options = PLL()->options;
+				$output .= "\nPolylang Settings:\n";
+				$output .= "  - Hide default language in URL: " . ( ! empty( $options['hide_default'] ) ? 'Yes' : 'No' ) . "\n";
+				$output .= "  - Force language in links: " . ( ! empty( $options['force_lang'] ) ? $options['force_lang'] : 'Not set' ) . "\n";
+				$output .= "  - Rewrite rules: " . ( ! empty( $options['rewrite'] ) ? $options['rewrite'] : 'Not set' ) . "\n";
+			}
+		} elseif ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+			$output .= "WPML Status: Active\n";
+			$output .= "WPML Version: " . ICL_SITEPRESS_VERSION . "\n\n";
+		} else {
+			$output .= "Polylang/WPML Status: Not Active\n\n";
+		}
+
+		// Display KB-specific multilingual settings
+		$output .= "\nKB " . $kb_id . " Multilingual Settings:\n";
+		$output .= "  - wpml_is_enabled: Yes\n";
+		$output .= "  - kb_articles_common_path: " . $kb_config['kb_articles_common_path'] . "\n";
+		$output .= "  - category_slug: " . $kb_config['category_slug'] . "\n";
+		$output .= "  - categories_in_url_enabled: " . $kb_config['categories_in_url_enabled'] . "\n\n";
+
+		// Check taxonomies registration
+		$category_taxonomy = EPKB_KB_Handler::get_category_taxonomy_name( $kb_id );
+		$tag_taxonomy = EPKB_KB_Handler::get_tag_taxonomy_name( $kb_id );
+
+		$output .= "Taxonomy Registration:\n";
+		$output .= "  - Category taxonomy: " . $category_taxonomy . " - " . ( taxonomy_exists( $category_taxonomy ) ? "Registered" : "NOT REGISTERED" ) . "\n";
+		$output .= "  - Tag taxonomy: " . $tag_taxonomy . " - " . ( taxonomy_exists( $tag_taxonomy ) ? "Registered" : "NOT REGISTERED" ) . "\n\n";
+
+		// Check if taxonomies are translatable in Polylang
+		if ( function_exists( 'pll_is_translated_taxonomy' ) ) {
+			$output .= "Polylang Taxonomy Translation:\n";
+			$output .= "  - Category taxonomy translatable: " . ( pll_is_translated_taxonomy( $category_taxonomy ) ? "Yes" : "No" ) . "\n";
+			$output .= "  - Tag taxonomy translatable: " . ( pll_is_translated_taxonomy( $tag_taxonomy ) ? "Yes" : "No" ) . "\n\n";
+		}
+
+		// Get some example category URLs for each language
+		if ( function_exists( 'pll_languages_list' ) && taxonomy_exists( $category_taxonomy ) ) {
+			$categories = get_terms( array(
+				'taxonomy' => $category_taxonomy,
+				'hide_empty' => false,
+				'number' => 3
+			) );
+
+			if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) {
+				$output .= "Sample Category URLs by Language:\n";
+				$first_category = $categories[0];
+				$languages = pll_languages_list( array( 'fields' => '' ) );
+
+				foreach ( $languages as $lang ) {
+					// Get translated category
+					$translated_cat_id = function_exists( 'pll_get_term' ) ? pll_get_term( $first_category->term_id, $lang->slug ) : $first_category->term_id;
+					if ( $translated_cat_id ) {
+						$cat_url = get_term_link( $translated_cat_id, $category_taxonomy );
+						$output .= "  - " . $lang->name . ": " . ( is_wp_error( $cat_url ) ? "Error: " . $cat_url->get_error_message() : $cat_url ) . "\n";
+					}
+				}
+				$output .= "\n";
+			}
+		}
+
+		// Display current rewrite rules for KB categories
+		global $wp_rewrite;
+		$output .= "Rewrite Rules for KB " . $kb_id . " Categories:\n";
+		$category_base = $kb_config['kb_articles_common_path'] . '/' . $kb_config['category_slug'];
+		$found_rules = false;
+
+		if ( ! empty( $wp_rewrite->rules ) ) {
+			foreach ( $wp_rewrite->rules as $pattern => $rule ) {
+				if ( strpos( $pattern, $category_base ) !== false || strpos( $rule, $category_taxonomy ) !== false ) {
+					$output .= "  Pattern: " . $pattern . "\n";
+					$output .= "  Rule: " . $rule . "\n\n";
+					$found_rules = true;
+				}
+			}
+		}
+
+		if ( ! $found_rules ) {
+			$output .= "  No rewrite rules found for category base: " . $category_base . "\n\n";
+		}
+
+		// Check if rewrite rules need flushing
+		$output .= "\nRewrite Rules Status:\n";
+		$output .= "  - Total rules count: " . ( ! empty( $wp_rewrite->rules ) ? count( $wp_rewrite->rules ) : 0 ) . "\n";
+		$output .= "  - Permalink structure: " . get_option( 'permalink_structure' ) . "\n\n";
+
+		// Debug current request if on a category archive
+		if ( ! empty( $_SERVER['REQUEST_URI'] ) ) {
+			$output .= "Current Request Debug:\n";
+			$output .= "  - REQUEST_URI: " . $_SERVER['REQUEST_URI'] . "\n";
+			if ( ! empty( $GLOBALS['wp']->query_vars ) ) {
+				$output .= "  - Query vars: " . print_r( $GLOBALS['wp']->query_vars, true ) . "\n";
+			}
+		}
+
+		// Troubleshooting recommendations
+		$output .= "\nTroubleshooting Recommendations for 404 Issues:\n";
+		$output .= "================================================\n";
+		$output .= "1. Flush Rewrite Rules:\n";
+		$output .= "   - Go to Settings > Permalinks and click 'Save Changes' (without making changes)\n";
+		$output .= "   - Or deactivate and reactivate the Echo Knowledge Base plugin\n\n";
+		$output .= "2. Check Polylang Settings:\n";
+		$output .= "   - Ensure KB categories are set as translatable in Languages > Settings > Custom post types and Taxonomies\n";
+		$output .= "   - Check 'Hide URL language information for default language' setting\n\n";
+		$output .= "3. Verify Category Translations:\n";
+		$output .= "   - Make sure categories have translations for all languages\n";
+		$output .= "   - Check that category slugs are unique for each language\n\n";
+		$output .= "4. Common Issues with English (Default Language):\n";
+		$output .= "   - If 'Hide default language in URL' is enabled, English URLs won't have /en/ prefix\n";
+		$output .= "   - This can cause conflicts with rewrite rules expecting language prefixes\n";
+		$output .= "   - Try disabling 'Hide default language in URL' temporarily to test\n\n";
+
+		return $output;
 	}
 }

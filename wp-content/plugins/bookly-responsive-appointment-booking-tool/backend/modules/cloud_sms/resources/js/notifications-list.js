@@ -1,8 +1,7 @@
 jQuery(function ($) {
     'use strict';
     window.BooklyNotificationsList = function () {
-        let $notificationList = $('#bookly-js-notification-list'),
-            $btnCheckAll = $('#bookly-check-all', $notificationList),
+        let $notificationList = $('#bookly-notification-list'),
             $modalTestEmail = $('#bookly-test-email-notifications-modal'),
             $btnTestEmail = $('#bookly-js-test-email-notifications'),
             $testNotificationsList = $('#bookly-js-test-notifications-list', $modalTestEmail),
@@ -95,7 +94,7 @@ jQuery(function ($) {
                 processing: BooklyL10n.processing,
                 loadingRecords: BooklyL10n.loadingRecords
             },
-            row_with_checkbox: true
+            add_checkbox_column: true
         }).on('click', '[data-action=toggle-active]', function (e) {
             e.preventDefault();
             let $tr = $(this).closest('tr');
@@ -139,19 +138,6 @@ jQuery(function ($) {
                 }
             })
         ;
-
-        /**
-         * Select all notifications.
-         */
-        $btnCheckAll
-            .on('change', function () {
-                $('tbody input:checkbox', $notificationList).prop('checked', this.checked);
-            });
-
-        $notificationList
-            .on('change', 'tbody input:checkbox', function () {
-                $btnCheckAll.prop('checked', $notificationList.find('tbody input:not(:checked)').length === 0);
-            });
 
         /**
          * Delete notifications.

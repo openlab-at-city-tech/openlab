@@ -1,6 +1,12 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="row bg-light py-3 pl-3 mt-n3 mb-3">
-    <button class="btn btn-link bookly-js-back" type="button" ><i class="fas fa-fw fa-chevron-left ml-1"></i><?php esc_html_e( 'Back to the list of amounts', 'bookly' ) ?></button>
+    <div class="col">
+        <button class="btn btn-link bookly-js-back" type="button"><i class="fas fa-fw fa-chevron-left ml-1"></i><?php esc_html_e( 'Back to the list of amounts', 'bookly' ) ?></button>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-link bookly-js-add-promo" type="button"><?php esc_html_e( 'Add Promo Code', 'bookly' ) ?></button>
+        <button class="btn btn-link bookly-js-remove-promo" type="button"><?php esc_html_e( 'Remove Promo Code', 'bookly' ) ?></button>
+    </div>
 </div>
 <h4 class="text-center pb-2"><?php esc_html_e( 'Please select a payment method', 'bookly' ) ?></h4>
 <div class="row justify-content-center pb-0 mt-3">
@@ -43,6 +49,25 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="bookly-js-promo-section" style="display: none;">
+                    <div class="form-row align-content-center mt-4">
+                        <div class="col">
+                            <input type="text" class="form-control form-control-lg bookly-js-promo-code" placeholder="<?php esc_attr_e( 'Enter promo code', 'bookly' ) ?>" />
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-lg bg-success text-white bookly-js-apply-promo ladda-button" type="button" data-style="zoom-in" disabled><?php esc_html_e( 'Apply', 'bookly' ) ?></button>
+                        </div>
+                    </div>
+                    <div class="bookly-js-promo-error alert alert-danger mt-2 mb-0" style="display: none;">
+                        <?php esc_html_e( 'This promo code is not valid', 'bookly' ) ?>
+                    </div>
+                </div>
+
+                <div class="bookly-js-promo-success border alert mt-4 mb-0 text-center text-success" style="display: none;">
+                    <div><strong><?php esc_html_e( 'Promo code applied!', 'bookly' ) ?></strong></div>
+                    <div><strong class="bookly-js-promo-success-info"></strong></div>
                 </div>
             </div>
         </div>

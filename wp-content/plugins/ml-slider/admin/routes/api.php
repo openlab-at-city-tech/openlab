@@ -1001,27 +1001,7 @@ class MetaSlider_Api
 
         // TODO: validate the license if not ''
 
-        // If the user has opted out, clean up. If they opt in, that will load on next WP reload
-        if (!isset($settings['optIn']) || (isset($settings['optIn']) && !filter_var($settings['optIn'], FILTER_VALIDATE_BOOLEAN))) {
-            if (!class_exists('MetaSlider_Analytics')) {
-                require_once(METASLIDER_PATH . 'admin/support/Analytics.php');
-            }
-            $analytics = new MetaSlider_Analytics();
-            $analytics->optout();
-
-            // This includes a setting "metaslider_user_explicitly_opted_out" which can be used elsewhere to
-            // say "Hey, this user actually pressed the button to enable or disable their 'opt' preference"
-            update_option('metaslider_user_explicitly_opted_out', get_current_user_id() . ':' . time(), true);
-        }
-
         update_option('metaslider_global_settings', $settings, true);
-
-        // This is meant to keep track of the user who opted in last. This is so that the user is
-        // able to understand exactly when the optin occured and by whom exactly.
-        if (isset($settings['optIn']) && filter_var($settings['optIn'], FILTER_VALIDATE_BOOLEAN)) {
-            $analytics = new MetaSlider_Analytics();
-            $analytics->optin();
-        }
 
         // for legacy library
         update_option('metaslider_new_user', 'old');
@@ -1055,6 +1035,8 @@ class MetaSlider_Api
     /**
      * Get ids of images based on filename. Used during import
      *
+     * @deprecated 3.103 - We no longer use filenames to identify images during import
+     * 
      * @param object $request The request
      */
     public function get_image_ids_from_file_name($request)

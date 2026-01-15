@@ -28,7 +28,7 @@ class Option_Storage implements Storage {
 		if ( ! $option_name ) {
 			throw new InvalidArgumentException(
 				__( 'You must set a token prefix with StellarWP\Uplink\Config::set_hook_prefix() before using Option Storage.',
-					'tribe-common' )
+					'%TEXTDOMAIN%' )
 			);
 		}
 

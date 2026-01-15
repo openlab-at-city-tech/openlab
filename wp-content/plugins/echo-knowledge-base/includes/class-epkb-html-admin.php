@@ -22,11 +22,11 @@ class EPKB_HTML_Admin {
 	 * @param string $content_type
 	 * @param string $position
 	 */
-	public static function admin_header( $kb_config, $permissions, $content_type='header', $position = '' ) {  ?>
+	public static function admin_header( $kb_config, $permissions, $content_type='header' ) {  ?>
 
 		<!-- Admin Header -->
 		<div class="epkb-admin__header">
-			<div class="epkb-admin__section-wrap <?php echo empty( $position ) ? '' : 'epkb-admin__section-wrap--' . esc_attr( $position ); ?> epkb-admin__section-wrap__header">   <?php
+			<div class="epkb-admin__section-wrap epkb-admin__section-wrap__header">   <?php
 
 				switch ( $content_type ) {
 					case 'header':
@@ -57,7 +57,7 @@ class EPKB_HTML_Admin {
 
 		if ( ! empty( $kb_config ) ) {
 			$link_output = EPKB_Core_Utilities::get_current_kb_main_page_link( $kb_config, esc_html__( 'View KB', 'echo-knowledge-base' ), 'epkb-admin__header__view-kb__link' );
-			if ( empty( $link_output ) && $kb_config['modular_main_page_toggle'] == 'on' && EPKB_Admin_UI_Access::is_user_access_to_context_allowed('admin_eckb_access_frontend_editor_write')) {
+			if ( empty( $link_output ) && EPKB_Admin_UI_Access::is_user_access_to_context_allowed('admin_eckb_access_frontend_editor_write')) {
 				$link_output = '<a href="' . esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) . '&page=epkb-kb-configuration&setup-wizard-on' ) ) .
 					'" class="epkb-admin__header__view-kb__link" target="_blank">' . esc_html__( "Setup KB", "echo-knowledge-base" ) . '</a>';
 			}
@@ -323,6 +323,8 @@ class EPKB_HTML_Admin {
 
 		// CASE: Horizontal boxes
 		if ( ! empty( $page_view['horizontal_boxes'] ) && is_array( $page_view['horizontal_boxes'] ) ) {	?>
+
+			<div class="epkb-admin__boxes-list__settings-title"><?php esc_html_e( 'Customize Knowledge Base Pages', 'echo-knowledge-base' ); ?></div>
 			<!-- Admin Form -->
 			<div class="epkb-setting-box-container epkb-setting-box-container--horizontal"><?php
 				foreach ( $page_view['horizontal_boxes']['boxes'] as $box_config ) {
@@ -715,47 +717,6 @@ class EPKB_HTML_Admin {
 	}
 
 	/**
-	 * Display modal form in admin area for user to submit an error to support. For example Setup Wizard/Editor encounters error.
-	 */
-	public static function display_report_admin_error_form() {     ?>
-
-		<!-- Submit Error Form -->
-		<div class="epkb-admin__error-form__container" style="display:none!important;">
-			<div class="epkb-admin__error-form__wrap">
-				<div class="epkb-admin__scroll-container">
-					<div class="epkb-admin__white-box">
-
-						<h4 class="epkb-admin__error-form__title"></h4>
-						<div class="epkb-admin__error-form__desc"></div>
-
-						<form id="epkb-admin__error-form" method="post">				<?php
-
-							EPKB_HTML_Admin::nonce();				?>
-
-							<input type="hidden" name="action" value="epkb_report_admin_error" >
-							<div class="epkb-admin__error-form__body">
-
-								<label for="epkb-admin__error-form__message"><?php esc_html_e( 'Error Details', 'echo-knowledge-base' ); ?>*</label>
-								<textarea name="admin_error" class="admin_error" required id="epkb-admin__error-form__message"></textarea>
-
-								<div class="epkb-admin__error-form__btn-wrap">
-									<input type="submit" name="submit_error" value="<?php esc_attr_e( 'Submit', 'echo-knowledge-base' ); ?>" class="epkb-admin__error-form__btn epkb-admin__error-form__btn-submit">
-									<span class="epkb-admin__error-form__btn epkb-admin__error-form__btn-cancel"><?php esc_html_e( 'Cancel', 'echo-knowledge-base' ); ?></span>
-								</div>
-
-								<div class="epkb-admin__error-form__response"></div>
-							</div>
-						</form>
-
-						<div class="epkb-close-notice epkbfa epkbfa-window-close"></div>
-
-					</div>
-				</div>
-			</div>
-		</div>      <?php
-	}
-
-	/**
 	 * Display or return HTML input for wpnonce
 	 *
 	 * @param false $return_html
@@ -883,7 +844,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Main Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ) . '?action=epkb_load_editor'; ?>"
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
 				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -903,7 +864,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Article Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_article_url( $kb_config ) ) . '?epkb_fe_reopen_feature=none'; ?>"
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_article_url( $kb_config ) ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
 				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -929,7 +890,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change Category Archive Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( $first_kb_archive_url ) . '?epkb_fe_reopen_feature=archive-page-settings'; ?>"
+			<a href="<?php echo esc_url( $first_kb_archive_url ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
 					 target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -951,28 +912,6 @@ class EPKB_HTML_Admin {
 		) );
 	}
 
-	/**
-	 * Display message for users with legacy KB Main Page to switch to modular KB Main Page TODO FUTURE: remove
-	 * @param $kb_config
-	 * @param $kb_config_specs
-	 * @return false|string
-	 */
-	public static function display_modular_main_page_toggle( $kb_config, $kb_config_specs ) {
-		ob_start();	?>
-		<p>	<?php
-			esc_html_e( 'You are using the legacy main page. Please upgrade to the Modular Main Page before accessing Settings.', 'echo-knowledge-base' );	?>
-			<a href="https://www.echoknowledgebase.com/documentation/modular-layout/" target="_blank"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a>
-		</p>
-		<div class="epkb-admin__kb__form">	<?php
-			EPKB_HTML_Elements::checkbox_toggle( array(
-				'id'        => 'modular_main_page_toggle',
-				'text'      => $kb_config_specs['modular_main_page_toggle']['label'],
-				'checked'   => $kb_config['modular_main_page_toggle'] == 'on',
-				'name'      => 'modular_main_page_toggle',
-			) );	?>
-		</div>	<?php
-		return ob_get_clean();
-	}
 
 	/**
 	 * Display boxes in single row
@@ -995,7 +934,12 @@ class EPKB_HTML_Admin {
 					if ( !empty( $box_config['is_open_settings_link'] ) ) {	?>
 						<a class="epkb-primary-btn epkb-admin__form-tab-settings-link" href="#tools__settings"><?php esc_html_e( 'View Settings', 'echo-knowledge-base' ); ?></a>	<?php
 					}
-					if ( !empty( $box_config['message'] ) ) {	?>
+					if ( !empty( $box_config['message_html'] ) ) {	?>
+						<p class="epkb-admin__boxes-list__box__message"><?php echo wp_kses_post( $box_config['message_html'] ); ?></p> 	<?php
+						if ( !empty( $box_config['message_link_text'] ) && !empty( $box_config['message_link'] ) ) {	?>
+							<a href="<?php echo esc_url( $box_config['message_link'] ); ?>" target="_blank"><?php echo esc_html( $box_config['message_link_text'] ); ?></a>	<?php
+						}
+					} else if ( !empty( $box_config['message'] ) ) {	?>
 						<p class="epkb-admin__boxes-list__box__message"><?php echo esc_html( $box_config['message'] ); ?></p> 	<?php
 						if ( !empty( $box_config['message_link_text'] ) && !empty( $box_config['message_link'] ) ) {	?>
 							<a href="<?php echo esc_url( $box_config['message_link'] ); ?>" target="_blank"><?php echo esc_html( $box_config['message_link_text'] ); ?></a>	<?php

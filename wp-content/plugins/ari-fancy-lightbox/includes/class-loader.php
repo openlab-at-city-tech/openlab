@@ -28,7 +28,12 @@ class Loader {
             wp_deregister_style( 'fancybox' );
         }
 
+        $allow_html_in_title = $this->settings->get_option( 'advanced.allow_html_in_title' );
+
         wp_enqueue_style( 'ari-fancybox' );
+        if ( $allow_html_in_title ) {
+            wp_enqueue_script( 'ari-fancybox-purify', '', array(), ARIFANCYLIGHTBOX_VERSION, $this->load_scripts_in_footer );
+        }
         wp_enqueue_script( 'ari-fancybox', '', array(), ARIFANCYLIGHTBOX_VERSION, $this->load_scripts_in_footer );
 
         do_action( 'ari-fancybox-enqueue-scripts' );

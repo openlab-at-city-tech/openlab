@@ -7,8 +7,6 @@ class Shop extends Lib\Base\Entity
 {
     /** @var  int */
     protected $plugin_id;
-    /** @var  string */
-    protected $type;
     /** @var  int */
     protected $highlighted;
     /** @var  int */
@@ -29,6 +27,8 @@ class Shop extends Lib\Base\Entity
     protected $image;
     /** @var float */
     protected $price;
+    /** @var string */
+    protected $sub_price;
     /** @var int */
     protected $sales;
     /** @var float */
@@ -40,6 +40,12 @@ class Shop extends Lib\Base\Entity
     /** @var  int */
     protected $seen = 0;
     /** @var  string */
+    protected $license;
+    /** @var  string */
+    protected $bundle_plugins;
+    /** @var  int */
+    protected $visible = 1;
+    /** @var  string */
     protected $created_at;
 
     protected static $table = 'bookly_shop';
@@ -47,7 +53,6 @@ class Shop extends Lib\Base\Entity
     protected static $schema = array(
         'id' => array( 'format' => '%d' ),
         'plugin_id' => array( 'format' => '%d' ),
-        'type' => array( 'format' => '%s' ),
         'highlighted' => array( 'format' => '%d' ),
         'priority' => array( 'format' => '%d' ),
         'demo_url' => array( 'format' => '%s' ),
@@ -58,11 +63,15 @@ class Shop extends Lib\Base\Entity
         'icon' => array( 'format' => '%s' ),
         'image' => array( 'format' => '%s' ),
         'price' => array( 'format' => '%f' ),
+        'sub_price' => array( 'format' => '%s' ),
         'sales' => array( 'format' => '%d' ),
         'rating' => array( 'format' => '%f' ),
         'reviews' => array( 'format' => '%d' ),
         'published' => array( 'format' => '%s' ),
         'seen' => array( 'format' => '%d' ),
+        'license' => array( 'format' => '%s' ),
+        'bundle_plugins' => array( 'format' => '%s' ),
+        'visible' => array( 'format' => '%d' ),
         'created_at' => array( 'format' => '%s' ),
     );
 
@@ -158,29 +167,6 @@ class Shop extends Lib\Base\Entity
     public function setDemoUrl( $demo_url )
     {
         $this->demo_url = $demo_url;
-
-        return $this;
-    }
-
-    /**
-     * Gets type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Sets type
-     *
-     * @param string $type
-     * @return $this
-     */
-    public function setType( $type )
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -328,7 +314,7 @@ class Shop extends Lib\Base\Entity
      *
      * @return float
      */
-    public function getPrice()
+    public function getLifeTimePrice()
     {
         return $this->price;
     }
@@ -339,9 +325,32 @@ class Shop extends Lib\Base\Entity
      * @param float $price
      * @return $this
      */
-    public function setPrice( $price )
+    public function setLifeTimePrice( $price )
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * Gets price
+     *
+     * @return string
+     */
+    public function getSubscriptionPrice()
+    {
+        return $this->sub_price;
+    }
+
+    /**
+     * Sets price
+     *
+     * @param string $price
+     * @return $this
+     */
+    public function setSubscriptionPrice( $price )
+    {
+        $this->sub_price = $price;
 
         return $this;
     }
@@ -480,6 +489,44 @@ class Shop extends Lib\Base\Entity
     public function setCreatedAt( $created_at )
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBundlePlugins()
+    {
+        return $this->bundle_plugins;
+    }
+
+    /**
+     * @param string $bundle_plugins
+     * @return Shop
+     */
+    public function setBundlePlugins( $bundle_plugins )
+    {
+        $this->bundle_plugins = $bundle_plugins;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @param int $visible
+     * @return Shop
+     */
+    public function setVisible( $visible )
+    {
+        $this->visible = $visible;
 
         return $this;
     }

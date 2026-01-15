@@ -45,7 +45,7 @@ use Bookly\Backend\Components\Dialogs\MobileStaffCabinet\AccessEdit;
             </table>
 
             <div class='text-right mt-3'>
-                <?php Controls\Buttons::renderDelete( 'bookly-js-revoke', null, __( 'Revoke', 'bookly' ) ) ?>
+                <?php Controls\Buttons::renderDelete( 'bookly-keys-list-delete-button', null, __( 'Revoke', 'bookly' ) ) ?>
             </div>
         </div>
     </div>

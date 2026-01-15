@@ -7,8 +7,6 @@ jQuery(document).ready(function($) {
 		return;
 	}
 
-	let admin_report_error_form = $( '.epkb-admin__error-form__container' );
-
 	/**
 	 * Handle Setup Wizard Apply Button
 	 */
@@ -113,21 +111,37 @@ jQuery(document).ready(function($) {
 
 		modular_setup_wizard_switch_step( nextStep );
 
-		// Presets Content Show Option
-		const content_show_option = $('.epkb-config-setup-wizard-modular .epkb-setup-wizard-theme-content-show-option');
-		if ( content_show_option.length > 0 && next_step_header.hasClass( 'epkb-wc-step-header--design' ) ) {
+		// Design step handling
+		if ( next_step_header.hasClass( 'epkb-wc-step-header--design' ) ) {
 
 			let selected_layout = $('.epkb-config-setup-wizard-modular input[name="epkb-layout"]:checked').val();
 			if ( typeof selected_layout == 'undefined' ) {
 				selected_layout = '';
 			}
-			const wizard_content = $('.epkb-config-setup-wizard-modular .epkb-wizard-content .eckb-wizard-step-design');
-			content_show_option.show();
-			if ( $( '.epkb-config-setup-wizard-modular input[name=epkb-setup-wizard-theme-content-show-option__toggle]' ).prop('checked') ) {
-				wizard_content.addClass('epkb-wc-step-panel--active');
-			} else {
-				wizard_content.removeClass('epkb-wc-step-panel--active');
+
+			// Ensure the selected layout is marked as active in the presets step
+			if ( selected_layout ) {
+				let presets_step = wizard.find( '.epkb-setup-wizard-step-container--presets' );
+				presets_step.find( '.epkb-setup-wizard-module-layout' ).removeClass( 'epkb-setup-wizard-module-layout--active' );
+				presets_step.find( '.epkb-setup-wizard-module-settings-row' ).removeClass( 'epkb-setup-wizard-module-settings-row--active' );
+				presets_step.find( '.epkb-setup-wizard-module-layout--' + selected_layout ).addClass( 'epkb-setup-wizard-module-layout--active' );
+				presets_step.find( '.epkb-setup-wizard-module-settings-row--' + selected_layout ).addClass( 'epkb-setup-wizard-module-settings-row--active' );
 			}
+
+			// Presets Content Show Option (only exists when NOT first setup)
+			const content_show_option = $('.epkb-config-setup-wizard-modular .epkb-setup-wizard-theme-content-show-option');
+			if ( content_show_option.length > 0 ) {
+				const wizard_content = $('.epkb-config-setup-wizard-modular .epkb-wizard-content .eckb-wizard-step-design');
+				content_show_option.show();
+				if ( $( '.epkb-config-setup-wizard-modular input[name=epkb-setup-wizard-theme-content-show-option__toggle]' ).prop('checked') ) {
+					wizard_content.addClass('epkb-wc-step-panel--active');
+				} else {
+					wizard_content.removeClass('epkb-wc-step-panel--active');
+				}
+			}
+
+			// Load live previews when entering the design step
+			setTimeout(load_visible_preset_previews, 100);
 		}
 
 		// Scroll page to top
@@ -461,6 +475,9 @@ jQuery(document).ready(function($) {
 		presets_step.find( '.epkb-setup-wizard-module-settings-row--' + layout_name ).addClass( 'epkb-setup-wizard-module-settings-row--active' );
 
 		update_article_navigation( layout_name );
+
+		// Load live previews for the new layout
+		setTimeout(load_visible_preset_previews, 100);
 	} );
 
 	function update_article_navigation( layout_name ) {
@@ -499,6 +516,129 @@ jQuery(document).ready(function($) {
 		active_layout.find( '.epkb-setup-wizard-module-preset' ).removeClass( 'epkb-setup-wizard-module-preset--active' );
 		active_layout.find( '.epkb-setup-wizard-module-preset--' + preset_name ).addClass( 'epkb-setup-wizard-module-preset--active' );
 	} );
+
+
+
+	/**
+	 * Load live preview for a preset
+	 */
+
+	let presetHtmlCache = {};
+
+	function replaceWizardCss(data, preset) {
+		if (!data || !data.css_file_slug) return;
+
+		// Add the main CSS file ONLY ONCE (shared across all presets of same layout)
+		if ($('#epkb-wizard-' + data.css_file_slug + '-css').length === 0) {
+			$('head').append('<link rel="stylesheet" id="epkb-wizard-' + data.css_file_slug + '-css" href="' + data.css_file_url + '" media="all">');
+		}
+
+		// Add RTL CSS if needed
+		if (data.css_file_rtl_url && $('#epkb-wizard-' + data.css_file_slug + '-rtl-css').length === 0) {
+			$('head').append('<link rel="stylesheet" id="epkb-wizard-' + data.css_file_slug + '-rtl-css" href="' + data.css_file_rtl_url + '" media="all">');
+		}
+
+		// Add inline CSS (theme-specific styles) with UNIQUE ID per preset so they don't conflict
+		if (data.css && preset) {
+			let styleId = 'epkb-wizard-preview-styles-' + preset;
+			// Remove old version of THIS preset's styles
+			$('#' + styleId).remove();
+			// Add new version
+			$('head').append('<style id="' + styleId + '">' + data.css + '</style>');
+		}
+	}
+
+	function load_preset_live_preview( preset_container ) {
+		let layout = preset_container.data('layout');
+		let preset = preset_container.data('preset');
+		let preview_container = preset_container.find('.epkb-setup-wizard-module-preset__preview');
+		let loading_spinner = preview_container.find('.epkb-setup-wizard-module-preset__preview-loading');
+
+		// Check if already loaded (has live preview content)
+		if (preset_container.hasClass('epkb-setup-wizard-module-preset--loaded')) {
+			return;
+		}
+
+		// Show loading spinner
+		loading_spinner.show();
+
+		if (presetHtmlCache[preset]) {
+			// Hide spinner
+			loading_spinner.hide();
+
+			// Clear any existing content and set cached HTML
+			preview_container.html(presetHtmlCache[preset].html);
+
+			// Replace CSS (pass preset name for unique styling)
+			replaceWizardCss(presetHtmlCache[preset], preset);
+
+			// Mark as loaded
+			preset_container.addClass('epkb-setup-wizard-module-preset--loaded');
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_get_wizard_preset_preview',
+			_wpnonce_epkb_ajax_action: $('#_wpnonce_epkb_ajax_action').val(),
+			epkb_wizard_kb_id: $('#epkb_wizard_kb_id').val(),
+			layout: layout,
+			preset: preset
+		};
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			url: ajaxurl,
+			data: postData
+		}).done(function (response) {
+			// Hide loading spinner
+			loading_spinner.hide();
+
+			if ( response.success && response.data ) {
+
+				// Cache the HTML + CSS info
+				presetHtmlCache[preset] = {
+					html: response.data.html,
+					css_file_slug: response.data.css_file_slug,
+					css_file_url: response.data.css_file_url,
+					css_file_rtl_url: response.data.css_file_rtl_url,
+					css: response.data.css
+				};
+
+			// Clear any existing content and set live HTML
+			preview_container.html(response.data.html);
+
+			// Replace CSS (pass preset name for unique styling)
+			replaceWizardCss(presetHtmlCache[preset], preset);
+
+			// Mark as loaded
+			preset_container.addClass('epkb-setup-wizard-module-preset--loaded');
+			} else {
+				// Show error (clear existing content first)
+				preview_container.html('<div class="epkb-setup-wizard-module-preset__preview-error">' + ( response?.message ?? epkb_vars.unknown_error ) + '</div>');
+			}
+		}).fail(function (response, textStatus, error) {
+			// Hide loading spinner and show error (clear existing content first)
+			loading_spinner.hide();
+			preview_container.html('<div class="epkb-setup-wizard-module-preset__preview-error">' + (error ?? epkb_vars.unknown_error) + '</div>');
+		});
+	}
+
+	/**
+	 * Load live previews for all visible presets in the active layout
+	 */
+	function load_visible_preset_previews() {
+		let active_layout = $('.epkb-setup-wizard-step-container--presets .epkb-setup-wizard-module-layout--active');
+		if (active_layout.length === 0) {
+			return;
+		}
+
+		// Load all presets in the active layout
+		active_layout.find('.epkb-setup-wizard-module-preset').each(function() {
+			load_preset_live_preview($(this));
+		});
+	}
 
 
 	/*************************************************************************************************
@@ -591,10 +731,7 @@ jQuery(document).ready(function($) {
 			if ( theResponse.error || typeof theResponse.message === 'undefined' ) {
 				//noinspection JSUnresolvedVariable,JSUnusedAssignment
 				errorMsg = theResponse.message ? theResponse.message : epkb_admin_notification('', epkb_vars.reload_try_again, 'error');
-				$(admin_report_error_form).find('.epkb-admin__error-form__title').text(epkb_vars.setup_wizard_error_title);
-				$(admin_report_error_form).find('.epkb-admin__error-form__desc').text(epkb_vars.setup_wizard_error_desc);
-				$(admin_report_error_form).find('#epkb-admin__error-form__message').val('Setup Wizard: ' + $(errorMsg).text().trim());
-				$(admin_report_error_form).css('display', 'block', 'important');
+				console.error( 'Setup Wizard Error:', theResponse );
 				return;
 			}
 
@@ -611,7 +748,7 @@ jQuery(document).ready(function($) {
 
 			// On internal server error assume the error is outside Setup Wizard - force finish the Setup Wizard like on success
 			let current_url = window.location.href;
-			let success_url = current_url.replace( '&page=epkb-kb-configuration&setup-wizard-on', '&page=epkb-kb-need-help&epkb_after_kb_setup' );
+			let success_url = current_url.replace( '&page=epkb-kb-configuration&setup-wizard-on', '&page=epkb-dashboard&epkb_after_kb_setup' );
 			$('#epkb-wizard-success-message').addClass('epkb-dialog-box-form--active');
 			$('#epkb-wizard-success-message .epkb-accept-button').on('click', function () {
 				window.location = success_url;
@@ -663,7 +800,7 @@ jQuery(document).ready(function($) {
 		});
 
 		// Add "Layout Setup" Choose button click event
-		wizard.find( '#epkb-wsb-step-3-panel .epkb-setup-wizard-step__item .epkb-setup-wizard-step__item-description .epkb-setup-wizard-step__item-description__button-pro' ).on( 'click', function( e ){
+		wizard.find( '.epkb-setup-wizard-step__item .epkb-setup-wizard-step__item-description .epkb-setup-wizard-step__item-description__button-pro' ).on( 'click', function( e ){
 			const popup_id = $( this ).data( "target" );
 			$( '#' + popup_id ).addClass( 'epkb-dialog-pro-feature-ad--active' );
 		});
@@ -722,54 +859,6 @@ jQuery(document).ready(function($) {
 	// Close Button Message if Close Icon clicked
 	$(document).on( 'click', '.epkb-close-notice', function(){
 		$( this ).parent().addClass( 'fadeOutDown' );
-	});
-
-
-	/**
-	 * Report the Report Error Form
-	 */
-	// Close Error Submit Form if Close Icon or Close Button clicked
-	$( admin_report_error_form ).on( 'click', '.epkb-close-notice, .epkb-admin__error-form__btn-cancel', function(){
-		window.location = epkb_vars.need_help_url;
-	});
-
-	// Submit the Report Error Form
-	$( admin_report_error_form ).find( '#epkb-admin__error-form' ).on( 'submit', function ( event ) {
-		event.preventDefault();
-
-		let $form = $(this);
-
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: ajaxurl,
-			data: $form.serialize(),
-			beforeSend: function (xhr) {
-				// block the form and add loader
-				$form.find( '.epkb-admin__error-form__btn-wrap, input, label, textarea' ).slideUp( 'fast' );
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).addClass( 'epkb-admin__error-form__response--active' );
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( epkb_vars.sending_error_report );
-			}
-		}).done(function (response) {
-			// success message
-			if ( typeof response.success !== 'undefined' && response.success == false ) {
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( response.data );
-			} else if ( typeof response.success !== 'undefined' && response.success == true ) {
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( response.data );
-			} else {
-				// something went wrong
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( epkb_vars.send_report_error );
-			}
-		}).fail(function (response, textStatus, error) {
-			// something went wrong
-			$( admin_report_error_form ).find( '.epkb-admin__error-form__response' ).html( epkb_vars.send_report_error );
-		}).always(function () {
-			// remove form loader
-			$( admin_report_error_form ).find( 'input, textarea' ).prop( 'disabled', false );
-			setTimeout( function() {
-				window.location = epkb_vars.need_help_url;
-			}, 1000 );
-		});
 	});
 
 	//Dismiss ongoing notice

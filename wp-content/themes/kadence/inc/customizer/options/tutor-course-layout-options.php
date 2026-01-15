@@ -263,7 +263,7 @@ $settings = array(
 		'live_method'     => array(
 			array(
 				'type'     => 'css_typography',
-				'selector' => '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title .tutor-fs-4',
+				'selector' => '.tutor-single-course-lead-info h1.tutor-course-header-h1, .tutor-course-details-title.tutor-fs-4',
 				'property' => 'font',
 				'key'      => 'typography',
 			),

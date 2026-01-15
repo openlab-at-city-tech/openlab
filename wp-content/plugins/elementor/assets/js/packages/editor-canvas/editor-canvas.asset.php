@@ -9,6 +9,7 @@ return [
 	'handle' => 'elementor-v2-editor-canvas',
 	'deps' => [
 		'elementor-v2-editor',
+		'elementor-v2-editor-documents',
 		'elementor-v2-editor-elements',
 		'elementor-v2-editor-notifications',
 		'elementor-v2-editor-props',

@@ -358,7 +358,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 					'elementskit-border-star elementskit-bullet' => esc_html__( 'Solid with bullet', 'elementskit-lite' ),
 					'ekit_border_custom' => esc_html__( 'Custom', 'elementskit-lite' ),
 				],
-				'default' => 'elementskit-border-divider',
+				'default' => 'elementskit-border-divider ekit-dotted',
 				'condition' => [
 					'ekit_heading_show_seperator' => 'yes',
 				],
@@ -392,7 +392,7 @@ class ElementsKit_Widget_Heading extends Widget_Base {
 					'active' => true,
 				],
 				'default' => [
-					'url' => Utils::get_placeholder_image_src(),
+					'url' => '',
 					'id'    => -1
 				],
 				'condition' => [

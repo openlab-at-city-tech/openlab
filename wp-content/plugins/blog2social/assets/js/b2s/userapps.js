@@ -7,6 +7,7 @@ jQuery(document).on('click', '.b2s-network-add-user-app-btn', function () {
     //X Violations 11/24
     if (network_id == "2") {
         jQuery("#b2sXViolationModal").modal('show');
+    
     } else {
         if (jQuery('#b2s-user-app-count-current[data-network-id="' + network_id + '"]')[0].innerText < jQuery('#b2s-network-app-full-count[data-network-id="' + network_id + '"]')[0].innerText) {
             jQuery('#b2s-edit-user-app-id').val("");
@@ -24,11 +25,11 @@ jQuery(document).on('click', '.b2s-network-add-user-app-btn', function () {
             jQuery("#b2sAddUserAppModal").modal('show');
 
         } else if (jQuery("#b2s-user-license").val() == 1) {
-            jQuery("#b2sBuyAddonAppsModal").modal('show');
-
+            //jQuery("#b2sBuyAddonAppsModal").modal('show');
+            jQuery('#b2sProFeatureUserAppsModal').modal('show');
         } else {
-            jQuery('#b2sPreFeatureModal').modal('show');
-
+           // jQuery('#b2sPreFeatureModal').modal('show');
+            jQuery('#b2sProFeatureUserAppsModal').modal('show');
         }
         jQuery('#b2s-add-user-app-network-id').val(jQuery(this).attr("data-network-id"));
     }

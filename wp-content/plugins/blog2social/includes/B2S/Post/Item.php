@@ -202,7 +202,7 @@ class B2S_Post_Item {
    
         $addLimit= $wpdb->prepare(  "LIMIT %d,%d", $numOfEntries, $this->results_per_page);
 
-
+        
         $wpdb->query("SET SQL_BIG_SELECTS = 1");
         if ($this->type == 'all') {
             $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`, posts.`post_date`, posts.`post_type`, posts.`post_status`, posts.`post_title`, b2s_drafts.blog_user_id as draft_blog_user_id, b2s_favorites.blog_user_id as favorites_blog_user_id
@@ -212,11 +212,11 @@ class B2S_Post_Item {
 		WHERE $addSearchType $addSearchAuthorId $addSearchPostTitle $addNotAdmin
                 AND  $postTypes $leftJoinWhere
 		ORDER BY `" . $order . "` " . $sortType . " " . $addLimit;
-
+             
             //No unprepared User Input
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $this->postData = $wpdb->get_results($sqlPosts);
-
+      
             $sqlPostsTotal = "SELECT DISTINCT posts.`ID`
 		FROM `$wpdb->posts` posts $leftJoin $leftJoin2 $leftJoin3 $leftJoin4
 		WHERE $addSearchType $addSearchAuthorId $addSearchPostTitle $addNotAdmin
@@ -289,12 +289,11 @@ class B2S_Post_Item {
                 if (!empty($this->searchPostType) && $this->searchPostType == 'attachment') {
                     $postTypes .= " AND posts.`post_mime_type` LIKE '%video%' ";
                 }
-
-
-                $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`,posts.`post_type`,posts.`post_title`,posts.`post_date`, " . $select . ", filter.`id` 
+    
+                $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`,posts.`post_type`,posts.`post_title`,posts.`post_date`, " . $select . ", filter.`id`,filter.`display_post_format` 
                             FROM `$wpdb->posts` posts $leftJoin $leftJoin2
                                 INNER JOIN(
-                                        SELECT a.`id`,$selectInnerJoin, a.`blog_user_id`, a.`hide`, a.`post_id` $sharedToNetworkSelect
+                                        SELECT a.`id`,$selectInnerJoin, a.`blog_user_id`,a.`hide`, a.`display_post_format`, a.`post_id` $sharedToNetworkSelect
                                             FROM `{$wpdb->prefix}b2s_posts` a $addInnerJoinLeftJoin $addInnerJoinLeftJoinNetwork $sharedToNetworkJoin
                                                   WHERE $addInnnerJoinLeftJoinWhere $addInnnerJoinLeftJoinWhereNetwork $addSearchBlogPostId $addSearchShowByDate $where 
                                          ) filter
@@ -485,8 +484,10 @@ class B2S_Post_Item {
         }
     }
 
+  
     public function getItemHtml($selectSchedDate = "") {
         $this->getData();
+       
         if ($this->rawResponse) {
             try {
                 foreach ($this->postData as $index => $post) {
@@ -545,9 +546,40 @@ class B2S_Post_Item {
                 $postTitle = (mb_strlen(trim($postTitle), 'UTF-8') > 80 ? mb_substr($postTitle, 0, 77, 'UTF-8') . '...' : $postTitle);
             }
 
-            //Content Curation
-            $curated = (isset($var->post_type) && strtolower($var->post_type) == 'b2s_ex_post') ? ' - <strong>' . esc_html__('curated post', 'blog2social') . '</strong>' : '';
+            //Default to Wordpress
+            $postFormatText = esc_html__('Wordpress Content', 'blog2social');
+            //Since 8.7.0 Show Post Type instead of curated
+            $prefix = ' - ';    
+            if(isset($var->post_type) && strtolower($var->post_type) == 'b2s_ex_post'){
 
+                $postFormatText = '';
+
+                if(isset($var->display_post_format) && !empty($var->display_post_format)) {
+
+                    if($var->display_post_format=="text"){
+                        $postFormatText =esc_html__('Text Post', 'blog2social');
+                    }
+                    if($var->display_post_format=="link"){
+                        $postFormatText = esc_html__('Link Post', 'blog2social');
+                    }
+                    if($var->display_post_format=="image"){
+                        $postFormatText = esc_html__('Image Post', 'blog2social');
+                    }
+                    if($var->display_post_format=="video"){
+                        $postFormatText = esc_html__('Video Post', 'blog2social');
+                    }
+
+                    //Old curation posts that are defaultet to wp
+                    if($var->display_post_format=="wp"){
+                        $postFormatText = '';
+                        $prefix= "";
+                    }
+                }
+            }
+
+            $curated = '<strong>'. $prefix .  $postFormatText   . '</strong>';
+            
+            //Content Curation
             if ($this->type == 'all') {
                 $userInfoName = get_the_author_meta('display_name', $var->post_author);
                 $lastPublish = $this->getLastPublish($var->ID);
@@ -1120,13 +1152,23 @@ class B2S_Post_Item {
                     }
 
                     $addPostFormat = '';
+                 
                     $isVideo = '';
                     if (isset($var->post_format) && $var->post_format != null && (int) $var->post_format >= 0) {
                         $addPostFormat = esc_html__('post format', 'blog2social') . ': ';
                         if ((int) $var->post_format == 0) {
-                            $addPostFormat .= esc_html__('Link Post', 'blog2social');
+                            if($var->network_id==4){
+
+                                $addPostFormat .= esc_html__('Text Post', 'blog2social');
+                            }else
+                            {
+                                $addPostFormat .= esc_html__('Link Post', 'blog2social');
+                            }
+                          
                         } else if ((int) $var->post_format == 1) {
                             $addPostFormat .= esc_html__('Image Post', 'blog2social');
+                        } else if ((int) $var->post_format == 3) {
+                            $addPostFormat .= esc_html__('Link Post', 'blog2social');
                         } else {
                             $addPostFormat .= esc_html__('Video Post', 'blog2social');
                             $isVideo = '&isVideo=1';
@@ -1216,7 +1258,7 @@ class B2S_Post_Item {
                     $content .= '</div><p class="info">' . $publishLink;
 
                     if ((int) $var->hook_action == 0) {
-                        $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                        $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
                         $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                     }
 
@@ -1230,7 +1272,7 @@ class B2S_Post_Item {
                                 </li>';
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-publish-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-publish-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
                 $content .= esc_html__('Delete from reporting', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
@@ -1298,7 +1340,7 @@ class B2S_Post_Item {
                                 </li>';
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-approve-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_html__('You want to delete your Social Media post?', 'blog2social') . '">';
+                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-approve-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_html__('You want to delete your Social Media post?', 'blog2social') . '">';
                 $content .= esc_html__('Delete', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
@@ -1393,11 +1435,11 @@ class B2S_Post_Item {
 
                     if ((int) $var->v2_id == 0 && empty($schedInProcess)) {
                         if ((B2S_PLUGIN_USER_VERSION > 0) && $var->post_format != 2) {
-                            $content .= ((B2S_PLUGIN_USER_VERSION > 0) ? ' <a href="#" class="b2s-post-edit-sched-btn" data-network-auth-id="' . esc_attr($var->network_auth_id) . '" data-network-type="' . esc_attr($var->network_type) . '" data-network-id="' . esc_attr($var->network_id) . '" data-post-id="' . esc_attr($var->post_id) . '" data-b2s-id="' . esc_attr($var->id) . '" data-relay-primary-post-id="' . esc_attr($var->relay_primary_post_id) . '" >' : ' <a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">');
+                            $content .= ((B2S_PLUGIN_USER_VERSION > 0) ? ' <a href="#" class="b2s-post-edit-sched-btn" data-network-auth-id="' . esc_attr($var->network_auth_id) . '" data-network-type="' . esc_attr($var->network_type) . '" data-network-id="' . esc_attr($var->network_id) . '" data-post-id="' . esc_attr($var->post_id) . '" data-b2s-id="' . esc_attr($var->id) . '" data-relay-primary-post-id="' . esc_attr($var->relay_primary_post_id) . '" >' : ' <a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">');
                             $content .= esc_html__('edit', 'blog2social') . '</a> ';
                             $content .= '|';
                         } else if (B2S_PLUGIN_USER_VERSION == 0) {
-                            $content .= ' <a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">';
+                            $content .= ' <a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to edit your scheduled post?', 'blog2social') . '">';
                         }
                     }
                     $content .= '<a href="#" class="b2s-post-sched-area-drop-btn" data-post-id="' . esc_attr($var->id) . '"> ' . esc_html__('Delete', 'blog2social') . '</a> ';
@@ -1523,10 +1565,17 @@ class B2S_Post_Item {
                         if (isset($var->post_format) && $var->post_format != null && (int) $var->post_format >= 0) {
                             $addPostFormat = esc_html__('post format', 'blog2social') . ': ';
                             if ((int) $var->post_format == 0) {
+                                if($var->network_id==4){
+                                    $addPostFormat .= esc_html__('Text Post', 'blog2social');
+                                }else
+                                {
                                 $addPostFormat .= esc_html__('Link Post', 'blog2social');
+                                }
                             } else if ((int) $var->post_format == 1) {
                                 $addPostFormat .= esc_html__('Image Post', 'blog2social');
-                            } else {
+                            } else if ((int) $var->post_format == 3) {
+                            $addPostFormat .= esc_html__('Link Post', 'blog2social');
+                            } else{
                                 $addPostFormat .= esc_html__('Video Post', 'blog2social');
                                 $isVideo = '&isVideo=1';
                             }
@@ -1603,7 +1652,7 @@ class B2S_Post_Item {
                         $content .= '</div><p class="info">' . $publishLink;
 
                         if ((int) $var->hook_action == 0) {
-                            $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                            $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
                             $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                         }
                         if (!empty($error)) {

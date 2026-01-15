@@ -1,0 +1,291 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Demo Article": [
+                "デモ記事"
+            ],
+            "Categories": [
+                "カテゴリー"
+            ],
+            "Article Content": [
+                "記事の内容"
+            ],
+            "Analyzing...": [
+                "分析中..."
+            ],
+            "Content Gaps Analysis": [
+                "コンテンツギャップ分析"
+            ],
+            "AI-Powered Tag Suggestions": [
+                "AI搭載タグ提案"
+            ],
+            "Gap analysis is only available with AI Features add-on.": [
+                "ギャップ分析は AI Features アドオンでのみ利用できます。."
+            ],
+            "Readability": [
+                "可読性"
+            ],
+            "Tag added successfully": [
+                "タグを正常に追加しました。"
+            ],
+            "Tag removed successfully": [
+                "タグを正常に削除しました。"
+            ],
+            "Tag updated successfully": [
+                "タグを正常に更新しました。"
+            ],
+            "Add New Tag": [
+                "新規タグを追加"
+            ],
+            "taxonomy general name\u0004Tags": [
+                "タグ"
+            ],
+            "Edit Article": [
+                "記事を編集"
+            ],
+            "View Article": [
+                "記事を読む"
+            ],
+            "Failed to save tag changes": [
+                "タグ変更の保存に失敗しました"
+            ],
+            "Failed to add tag": [
+                "タグの追加に失敗しました"
+            ],
+            "Failed to remove tag": [
+                "タグの削除に失敗しました"
+            ],
+            "Failed to remove tags": [
+                "タグの削除に失敗しました"
+            ],
+            "Failed to update tag": [
+                "タグの更新に失敗しました"
+            ],
+            "Not Analyzed": [
+                "分析されていません"
+            ],
+            "Demo Analysis Data": [
+                "デモ分析データ"
+            ],
+            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
+                "これは、デモ目的のサンプル分析データを含むデモ記事です。実際のコンテンツ分析結果を見るには、独自の記事を作成してください。."
+            ],
+            "Loading analysis details...": [
+                "分析の詳細を読み込み中..."
+            ],
+            "No analysis details available for this article.": [
+                "この記事の分析詳細は利用できません。."
+            ],
+            "Content Gaps": [
+                "コンテンツの不足"
+            ],
+            "Overall Score": [
+                "総合スコア"
+            ],
+            "Article Importance": [
+                "記事の重要度"
+            ],
+            "Readability analysis completed": [
+                "可読性分析が完了しました"
+            ],
+            "Failed to run readability analysis": [
+                "可読性分析の実行に失敗しました"
+            ],
+            "Re-analyze": [
+                "再分析"
+            ],
+            "Readability Analysis": [
+                "可読性分析"
+            ],
+            "No readability issues found. The article is clear and well-written.": [
+                "可読性に問題は見つかりませんでした。記事は明確で読みやすく、よく書かれています。."
+            ],
+            "Analysis Error": [
+                "分析エラー"
+            ],
+            "An error occurred during readability analysis.": [
+                "可読性分析中にエラーが発生しました。."
+            ],
+            "Retrying analysis...": [
+                "分析を再試行しています..."
+            ],
+            "Retry Analysis": [
+                "分析を再試行"
+            ],
+            "Analyzing article readability...": [
+                "記事の可読性を分析しています..."
+            ],
+            "Click the button below to analyze this article's readability using AI.": [
+                "以下のボタンをクリックして、この記事の可読性をAIで分析します。."
+            ],
+            "Run Readability Analysis": [
+                "可読性分析を実行"
+            ],
+            "No article content available": [
+                "記事の内容は利用できません。"
+            ],
+            "Content Gaps analysis completed": [
+                "コンテンツギャップ分析が完了しました。"
+            ],
+            "Failed to run Content Gaps analysis": [
+                "コンテンツギャップ分析の実行に失敗しました。"
+            ],
+            "No content gaps found. The article appears to be comprehensive.": [
+                "コンテンツのギャップは見つかりませんでした。記事は網羅的です。."
+            ],
+            "An error occurred during Content Gaps analysis.": [
+                "コンテンツギャップ分析中にエラーが発生しました。."
+            ],
+            "Learn More About AI Features": [
+                "AI機能について詳しく知る"
+            ],
+            "Analyzing article for content gaps...": [
+                "記事のコンテンツギャップを分析中..."
+            ],
+            "Click the button below to analyze this article for missing content using AI.": [
+                "以下のボタンをクリックして、この記事の不足しているコンテンツをAIで分析します。."
+            ],
+            "Run Content Gaps Analysis": [
+                "コンテンツギャップ分析を実行"
+            ],
+            "Tags analysis completed": [
+                "タグ分析が完了しました"
+            ],
+            "Failed to run tags analysis": [
+                "タグ分析の実行に失敗しました"
+            ],
+            "Re-analyze Tags": [
+                "タグを再分析"
+            ],
+            "Tag Count": [
+                "タグ数"
+            ],
+            "The number of tags is within the recommended range (3-10).": [
+                "タグの数は推奨範囲内です（3-10個）."
+            ],
+            "Tag Relevance": [
+                "タグの関連性"
+            ],
+            "Not Applicable due to missing tags": [
+                "欠落しているタグのため該当なし"
+            ],
+            "All tags are relevant and appear in the article content.": [
+                "すべてのタグは関連性が高く、記事の内容に表示されています。."
+            ],
+            "Tag Format": [
+                "タグ形式"
+            ],
+            "All tags are properly formatted and follow best practices.": [
+                "すべてのタグは正しくフォーマットされ、ベストプラクティスに従っています。."
+            ],
+            "Duplicate Tags": [
+                "重複タグ"
+            ],
+            "No duplicate or similar tags found.": [
+                "重複または類似のタグは見つかりませんでした。."
+            ],
+            "Article has the right number of categories (1-3).": [
+                "記事は適切なカテゴリ数を持っています（1-3）。."
+            ],
+            "Add": [
+                "追加"
+            ],
+            "Based on AI content analysis, consider adding these tags:": [
+                "AIコンテンツ分析に基づき、以下のタグを追加してください。"
+            ],
+            "Get the AI Features add-on to unlock AI-powered tag suggestions.": [
+                "AI機能アドオンを取得して、AI搭載のタグ提案を利用できるようにします。."
+            ],
+            "No tag suggestions available for this article at this time.": [
+                "現時点ではこの記事のタグ提案は利用できません。."
+            ],
+            "Broad Tags": [
+                "汎用タグ"
+            ],
+            "(General categories)": [
+                "(一般的なカテゴリ)"
+            ],
+            "Specific Tags": [
+                "特定のタグ"
+            ],
+            "(Detailed topics)": [
+                "(詳細なトピック)"
+            ],
+            "Article Tags": [
+                "記事タグ"
+            ],
+            "Restore tag": [
+                "タグを復元"
+            ],
+            "Mark for deletion": [
+                "削除対象としてマーク"
+            ],
+            "No tags": [
+                "タグなし"
+            ],
+            "Remove tag": [
+                "タグを削除"
+            ],
+            "Tag name": [
+                "タグ名"
+            ],
+            "Tag Best Practices": [
+                "タグのベストプラクティス"
+            ],
+            "Guidelines:": [
+                "ガイドライン："
+            ],
+            "Relevant & Keyword-Rich:": [
+                "関連性が高く、キーワードが豊富："
+            ],
+            "Use descriptive tags matching content and search terms.": [
+                "コンテンツと検索語に合った説明的なタグを使用してください。."
+            ],
+            "Avoid Duplicates:": [
+                "重複を避ける："
+            ],
+            "Don't reuse category names as tags (or vice versa).": [
+                "カテゴリ名をタグとして再利用しないでください（その逆も同様）。."
+            ],
+            "Reuse Consistently:": [
+                "一貫性を持って再利用してください："
+            ],
+            "Stick to a strategy; avoid unique tags per post to prevent \"tag bloat\" (thin pages hurt SEO). Tags should group multiple posts; noindex thin archives (≤2 posts).": [
+                "戦略を遵守し、投稿ごとに固有のタグを避け、タグ過多を防ぎます（薄いページはSEOに悪影響を与えます）。タグは複数の投稿をまとめるべきです。薄いアーカイブは noindex にします（投稿数が ≤2 件）。."
+            ],
+            "Keep Short:": [
+                "短く保つ："
+            ],
+            "1–3 words, reusable.": [
+                "1–3語、再利用可能。."
+            ],
+            "Editor Checklist:": [
+                "エディターのチェックリスト："
+            ],
+            "Groups ≥3 posts (now or soon)?": [
+                "3件以上の投稿をグループ化しますか（今すぐ／近いうちに）？"
+            ],
+            "1–3 words, distinct from existing tags/categories?": [
+                "既存のタグやカテゴリとは区別される1–3語ですか？"
+            ],
+            "Merge synonyms instead of new tags?": [
+                "新しいタグを作成する代わりに同義語を統合しますか？"
+            ],
+            "Noindex if thin; index if substantial with description?": [
+                "薄い場合は noindex、説明が充実している場合は index しますか？"
+            ],
+            "Note: Saving will update tag archive page redirects (optional)": [
+                "注：保存するとタグアーカイブページのリダイレクトが更新されます（任意）"
+            ],
+            "Save Changes": [
+                "変更を保存"
+            ]
+        }
+    }
+}

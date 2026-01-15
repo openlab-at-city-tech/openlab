@@ -425,6 +425,14 @@ class ElementsKit_Widget_Button extends Widget_Base {
 			  'selector' => '{{WRAPPER}} .elementskit-btn',
 			]
 		);
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+			  'name' => 'ekit_btn_hover_box_shadow_group',
+			  'label' => esc_html__( 'Hover Box Shadow', 'elementskit-lite' ),
+			  'selector' => '{{WRAPPER}} .elementskit-btn:hover',
+			]
+		);
 
 
 		$this->end_controls_section();

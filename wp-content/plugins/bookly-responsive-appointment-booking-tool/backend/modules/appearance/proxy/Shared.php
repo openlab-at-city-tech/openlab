@@ -4,6 +4,7 @@ namespace Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Lib;
 
 /**
+ * @method static array prepareAppearances( array $appearances ) Alter array of appearances forms to be displayed in Bookly Appearance.
  * @method static array prepareCodes( array $codes ) Alter array of codes to be displayed in Bookly Appearance.
  * @method static string prepareGatewayTitle( string $title, string $gateway ) Get payment system title.
  * @method static array prepareOptions( array $options_to_save, array $options ) Alter array of options to be saved in Bookly Appearance.

@@ -91,7 +91,7 @@ abstract class Webhook extends Base {
 
 		add_action( 'init', array( $this, 'set_endpoints' ) );
 		add_filter( 'query_vars', array( $this, 'pass_tag_to_query_vars' ) );
-		add_filter( 'parse_request', array( $this, 'parse_request' ) );
+		add_action( 'parse_request', array( $this, 'parse_request' ) );
 		add_action( 'wpmudev_blc_plugin_activated', array( $this, 'flush_rewrite_rules_on_activate' ) );
 		add_action( 'wpmudev_blc_plugin_deactivated', array( $this, 'flush_rewrite_rules_on_deactivate' ) );
 	}
@@ -144,7 +144,7 @@ abstract class Webhook extends Base {
 	 *
 	 * @return void
 	 */
-	public function parse_request( &$wp ) {
+	public function parse_request( $wp ) {
 
 		if ( Utilities::plain_permalinks_mode() ) {
 			$wp->query_vars = wp_parse_args( $this->sanitize_array( $_GET ), $wp->query_vars );

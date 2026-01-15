@@ -28,6 +28,7 @@ class Account extends Base
     const SET_INVOICE_DATA               = '/1.1/users/%token%/invoice';                  //POST
     const SEND_WEEKLY_SUMMARY            = '/1.0/users/%token%/weekly-summary/send';      //POST || DELETE
     const PRODUCTS                       = '/1.0/users/%token%/products';                 //GET
+    const VERIFY_PROMO_CODE              = '/1.1/users/%token%/verify-promo-code';        //POST
 
     const PRODUCT_SMS_NOTIFICATIONS = 'sms';
     const PRODUCT_STRIPE = 'stripe';
@@ -96,7 +97,7 @@ class Account extends Base
         $data = array( '_username' => $username, '_password' => $password, 'country' => $country );
 
         if ( $password !== $password_repeat && ! empty ( $password ) ) {
-            $this->api->addError( __( 'Passwords must be the same.', 'bookly' ) );
+            $this->api->addError( __( 'Passwords don\'t match', 'bookly' ) );
 
             return false;
         }
@@ -262,17 +263,19 @@ class Account extends Base
     /**
      * Get PayPal billing agreement url, (for enabling auto recharge)
      *
-     * @param string $recharge_id
+     * @param int $recharge_id
+     * @param string $promo_code
      * @param string $url
      * @return bool|string
      */
-    public function getBillingAgreementUrl( $recharge_id, $url )
+    public function getBillingAgreementUrl( $recharge_id, $promo_code, $url )
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest(
                 self::CREATE_BILLING_AGREEMENT,
                 array(
                     'recharge' => $recharge_id,
+                    'promo_code' => $promo_code,
                     'enabled_url' => $url . '#auto-recharge=enabled',
                     'cancelled_url' => $url . '#auto-recharge=cancelled',
                 )
@@ -410,16 +413,18 @@ class Account extends Base
      * Create Stripe Checkout session
      *
      * @param int $recharge
+     * @param string $promo_code
      * @param string $mode
      * @param string $url
      * @return array|false
      */
-    public function createStripeCheckoutSession( $recharge, $mode, $url )
+    public function createStripeCheckoutSession( $recharge, $promo_code, $mode, $url )
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest( self::CREATE_STRIPE_CHECKOUT_SESSION, array(
                 'mode' => $mode,
                 'recharge' => $recharge,
+                'promo_code' => $promo_code,
                 'success_url' => $url . ( $mode == 'setup' ? '#auto-recharge=enabled' : '#payment=accepted' ),
                 'cancel_url' => $url . ( $mode == 'setup' ? '#auto-recharge=cancelled' : '#payment=cancelled' ),
             ) );
@@ -436,14 +441,16 @@ class Account extends Base
      * Create PayPal order
      *
      * @param int $recharge
+     * @param string $promo_code
      * @param string $url
      * @return array|false
      */
-    public function createPayPalOrder( $recharge, $url )
+    public function createPayPalOrder( $recharge, $promo_code, $url )
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest( self::CREATE_PAYPAL_ORDER, array(
                 'recharge' => $recharge,
+                'promo_code' => $promo_code,
                 'success_url' => $url . '#payment=accepted',
                 'cancel_url' => $url . '#payment=cancelled',
             ) );
@@ -827,5 +834,21 @@ class Account extends Base
         );
 
         return array_key_exists( $this->getAutoRechargeGateway(), $titles ) ? $titles[ $this->getAutoRechargeGateway() ] : '';
+    }
+
+    /**
+     * @param string $promo_code
+     * @return array|false
+     */
+    public function verifyPromoCode( $promo_code )
+    {
+        if ( $promo_code && $this->api->getToken() ) {
+            $response = $this->api->sendPostRequest( self::VERIFY_PROMO_CODE, array( 'promo_code' => $promo_code ) );
+            if ( $response ) {
+                return $response;
+            }
+        }
+
+        return false;
     }
 }

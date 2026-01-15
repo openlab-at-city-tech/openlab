@@ -8,9 +8,10 @@
 get_header();
 ?>
 
-<h1 class="site-title sr-only"><?php bloginfo( 'name' ); ?></h1>
-
 <div id="openlab-main-content" class="clearfix row-home-top" role="main">
+
+	<h1 class="site-title sr-only"><?php bloginfo( 'name' ); ?></h1>
+
     <div class="no-gutter no-gutter-right login">
         <div id="cuny_openlab_jump_start">
             <?php cuny_home_login(); ?>

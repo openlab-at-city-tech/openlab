@@ -1,0 +1,72 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Close": [
+                "Закрити"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "Loading...": [
+                "Завантаження..."
+            ],
+            "General Settings": [
+                "Загальні налаштування"
+            ],
+            "Your session has expired. Please refresh the page.": [
+                "Ваш сеанс закінчився. Оновіть сторінку."
+            ],
+            "Too many requests. Please wait a moment and try again.": [
+                "Занадто багато запитів. Будь ласка, зачекайте мить і спробуйте знову."
+            ],
+            "An unexpected error occurred. Please try again.": [
+                "Сталася непередбачена помилка. Будь ласка, спробуйте ще раз."
+            ],
+            "Confirm Action": [
+                "Підтвердити дію"
+            ],
+            "Are you sure you want to proceed?": [
+                "Ви впевнені, що хочете продовжити?"
+            ],
+            "Confirm": [
+                "Підтвердити"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
+                "Щоб використовувати функції ШІ, налаштуйте свій API-ключ та прийміть угоду про конфіденційність даних у"
+            ],
+            "Session Expired": [
+                "Сесія закінчилася"
+            ],
+            "Refresh Page": [
+                "Оновити сторінку"
+            ],
+            "No results found": [
+                "Результатів не знайдено"
+            ],
+            "Tutorial": [
+                "Посібник"
+            ],
+            "Learn how to use this feature": [
+                "Дізнайтеся, як користуватися цією функцією"
+            ],
+            "Tutorial Screenshot": [
+                "Скріншот посібника"
+            ],
+            "This is a tutorial explaining how to use this feature.": [
+                "Це посібник, який пояснює, як користуватися цією функцією."
+            ],
+            "Close Tutorial": [
+                "Закрити посібник"
+            ],
+            "Show Tutorial": [
+                "Показати посібник"
+            ]
+        }
+    }
+}

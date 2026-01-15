@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "da_DK",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Settings saved successfully": [
+                "Indstillinger gemt"
+            ],
+            "Saving...": [
+                "Gemmer..."
+            ],
+            "Save Settings": [
+                "Gem indstillinger"
+            ],
+            "Failed to save settings": [
+                "Kunne ikke gemme indstillinger"
+            ],
+            "Sending...": [
+                "Sender..."
+            ],
+            "Test email sent successfully": [
+                "Test-e-mail sendt med succes"
+            ],
+            "Failed to send test email": [
+                "Kunne ikke sende test-e-mail"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Kunne ikke sende test-e-mail. Tjek din forbindelse."
+            ]
+        }
+    }
+}

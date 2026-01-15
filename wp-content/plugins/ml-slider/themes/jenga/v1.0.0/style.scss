@@ -96,6 +96,8 @@
 			}
 		}
 		ul.flex-direction-nav {
+			margin-top: 15px;
+			
 			li {
 				a {
 					background: 0;
@@ -106,7 +108,7 @@
 					margin: 0;
 					overflow: hidden;
 					position: relative;
-					top: 15px;
+					top: 0;
 					-webkit-transition: all .2s ease-in-out;
 					transition: all .2s ease-in-out;
 					width: 32px;

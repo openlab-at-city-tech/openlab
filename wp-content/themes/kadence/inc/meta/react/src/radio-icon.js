@@ -48,7 +48,7 @@ class RadioIconComponent extends Component {
 				<ButtonGroup className="kadence-radio-container-control">
 					{ Object.keys( this.props.options ).map( ( item ) => {
 						return (
-							<Fragment>
+							<Fragment key={ item }>
 								{ this.props.options[ item ].tooltip && (
 									<Tooltip text={ this.props.options[ item ].tooltip }>
 										<Button
@@ -105,9 +105,5 @@ class RadioIconComponent extends Component {
 		);
 	}
 }
-
-RadioIconComponent.propTypes = {
-	control: PropTypes.object.isRequired
-};
 
 export default RadioIconComponent;

@@ -101,7 +101,7 @@ class Page extends Lib\Base\Component
                     __( 'If you\'re importing a large CSV file, make sure to check your server limits, as exceeding them may disrupt the import.', 'bookly' ) . ' ' . __( 'If you still need to import a large file, you can split it into several parts and upload them one by one.', 'bookly' )
                 ),
                 'choose_file' => __( 'Choose CSV file to import', 'bookly'),
-                'doc_link' => sprintf( __( 'You can find full import guide in <a href="%s" target=_blank>our documentation</a>.', 'bookly' ), 'https://api.booking-wp-plugin.com/go/bookly-import-guide' ),
+                'doc_link' => sprintf( __( 'You can find full import guide in <a href="%s" target=_blank>our documentation</a>.', 'bookly' ), 'https://hub.bookly.pro/go/bookly-import-guide' ),
                 'understand' => __( 'I understand that I am proceeding with the import at my own risk.', 'bookly' ),
                 'proceed' => __( 'Proceed', 'bookly' ),
                 'header_text' => sprintf( '%s %s', __( 'When importing data from a CSV file, map the columns in your file to the corresponding fields in Bookly.', 'bookly' ), __( 'Use the dropdown menus and input fields to specify which data from your CSV should be imported to each field.', 'bookly' ) ),

@@ -12,6 +12,13 @@ class Akismet {
 	const MAX_DELAY_BEFORE_MODERATION_EMAIL = 86400; // One day in seconds
 	const ALERT_CODE_COMMERCIAL             = 30001;
 
+	// User account status constants
+	const USER_STATUS_ACTIVE    = 'active';
+	const USER_STATUS_NO_SUB    = 'no-sub';
+	const USER_STATUS_MISSING   = 'missing';
+	const USER_STATUS_CANCELLED = 'cancelled';
+	const USER_STATUS_SUSPENDED = 'suspended';
+
 	public static $limit_notices = array(
 		10501 => 'FIRST_MONTH_OVER_LIMIT',
 		10502 => 'SECOND_MONTH_OVER_LIMIT',
@@ -864,7 +871,7 @@ class Akismet {
 
 	/**
 	 * Get the full comment history for a given comment, as an array in reverse chronological order.
-	 * Each entry will have an 'event', a 'time', and possible a 'message' member (if the entry is old enough).
+	 * Each entry will have an 'event', a 'time', and possibly a 'message' member (if the entry is old enough).
 	 * Some entries will also have a 'user' or 'meta' member.
 	 *
 	 * @param int $comment_id The relevant comment ID.
@@ -915,7 +922,17 @@ class Akismet {
 		$history[] = array( 'time' => 445856427, 'event' => 'webhook-ham-noaction' );
 		*/
 
-		usort( $history, array( 'Akismet', '_cmp_time' ) );
+		// Validate history entries to guard against malformed data.
+		// In one case, serialized data was returned in $entry instead of an array.
+		$history = array_filter(
+			$history,
+			function ( $entry ) {
+				return is_array( $entry ) && isset( $entry['time'] ) && is_numeric( $entry['time'] );
+			}
+		);
+
+		usort( $history, 'Akismet::_cmp_time' );
+
 		return $history;
 	}
 
@@ -1712,6 +1729,7 @@ class Akismet {
 			'upgrade-url',
 			'upgrade-type',
 			'upgrade-via-support',
+			'recommended-plan-name',
 		);
 
 		foreach ( $alert_header_names as $alert_header_name ) {

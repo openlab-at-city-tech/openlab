@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Title": [
+                "タイトル"
+            ],
+            "Filter": [
+                "フィルター"
+            ],
+            "Status": [
+                "ステータス"
+            ],
+            "All": [
+                "すべて"
+            ],
+            "Page": [
+                "固定ページ"
+            ],
+            "Close": [
+                "閉じる"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "selected": [
+                "選択済み"
+            ],
+            "Article": [
+                "記事"
+            ],
+            "Updated": [
+                "更新済み"
+            ],
+            "Next": [
+                "次"
+            ],
+            "Previous": [
+                "前"
+            ],
+            "Loading...": [
+                "読み込み中…"
+            ],
+            "Error": [
+                "エラー"
+            ],
+            "Pending": [
+                "承認待ち"
+            ],
+            "Delete": [
+                "削除"
+            ],
+            "of": [
+                "の"
+            ],
+            "Refreshing...": [
+                "更新しています..."
+            ],
+            "Refresh": [
+                "更新"
+            ],
+            "Searching server for more results...": [
+                "サーバーから追加の結果を検索しています..."
+            ],
+            "Data refreshed successfully": [
+                "データを正常に更新しました"
+            ],
+            "Delete Selected Items": [
+                "選択した項目を削除"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "選択した項目を削除してもよろしいですか？"
+            ],
+            "Items deleted successfully": [
+                "選択した項目は正常に削除されました"
+            ],
+            "Sort": [
+                "並べ替え"
+            ],
+            "Completed": [
+                "完了済み"
+            ],
+            "Outdated": [
+                "時代遅れ"
+            ],
+            "Added": [
+                "追加済み"
+            ],
+            "Failed to load training data": [
+                "機械学習データの読み込みに失敗しました"
+            ],
+            "Failed to delete items": [
+                "アイテムの削除に失敗しました"
+            ],
+            "Delete Items": [
+                "アイテムを削除"
+            ],
+            "Syncing": [
+                "同期中"
+            ],
+            "Canceled": [
+                "キャンセル済み"
+            ],
+            "How to get started": [
+                "はじめ方"
+            ],
+            "Choose Training Data": [
+                "機械学習データを選択"
+            ],
+            "Pick the content types to include.": [
+                "含めるコンテンツタイプを選択してください。."
+            ],
+            "Send Data to AI": [
+                "データをAIに送信"
+            ],
+            "Select items in the table, then sync them.": [
+                "表の項目を選択してから同期します。."
+            ],
+            "Other Actions": [
+                "その他の操作"
+            ],
+            "Rename the collection or delete items.": [
+                "コレクション名を変更するか、アイテムを削除します。."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "ヒント: 処理の流れをテストするために、少量のセットで始めてください。."
+            ],
+            "Sync": [
+                "同期"
+            ],
+            "Sync Complete": [
+                "同期完了"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "タイトル、タイプ、URL、またはIDで検索..."
+            ],
+            "Preparing sync...": [
+                "同期を準備しています..."
+            ],
+            "Loading training data...": [
+                "機械学習データを読み込み中..."
+            ],
+            "Type": [
+                "タイプ"
+            ],
+            "No training data found": [
+                "機械学習データが見つかりませんでした"
+            ],
+            "Edit note": [
+                "メモを編集"
+            ],
+            "View Error": [
+                "エラーを表示"
+            ],
+            "View content": [
+                "コンテンツを表示"
+            ],
+            "KB Files": [
+                "KB ファイル"
+            ],
+            "Never": [
+                "決して"
+            ],
+            "Error Details": [
+                "エラー詳細"
+            ],
+            "Failed to load content": [
+                "コンテンツの読み込みに失敗しました"
+            ],
+            "Post ID:": [
+                "投稿ID:"
+            ],
+            "Loading content...": [
+                "コンテンツを読み込み中..."
+            ],
+            "Error Processing Content": [
+                "コンテンツの処理中にエラーが発生しました"
+            ],
+            "Original Content": [
+                "元のコンテンツ"
+            ],
+            "Processed Content": [
+                "処理済みコンテンツ"
+            ],
+            "No content available": [
+                "利用可能なコンテンツがありません"
+            ],
+            "No processed content available": [
+                "処理済みのコンテンツはありません"
+            ]
+        }
+    }
+}

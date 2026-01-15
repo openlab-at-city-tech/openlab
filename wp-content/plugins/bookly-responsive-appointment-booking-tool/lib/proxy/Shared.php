@@ -11,7 +11,7 @@ use Bookly\Lib;
  * @method static void   deleteCustomerAppointment( Lib\Entities\CustomerAppointment $ca ) Deleting customer appointment
  * @method static void   doDailyRoutine() Execute daily routines.
  * @method static void   doHourlyRoutine() Execute hourly routines.
- * @method static void   unpaidPayments( array $payments )
+ * @method static void   unpaidPayments( array $payment_ids )
  * @method static array  prepareAppointmentCodes( array $codes, Lib\Entities\Appointment $appointment ) Prepare codes for given appointment.
  * @method static array  prepareCaSeSt( array $result ) Prepare Categories Services Staff data
  * @method static Lib\Query prepareCaSeStQuery( Lib\Query $query ) Prepare CaSeSt query

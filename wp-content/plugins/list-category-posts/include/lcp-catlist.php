@@ -91,6 +91,14 @@ class CatList{
     // http://core.trac.wordpress.org/browser/tags/3.7.1/src/wp-includes/post.php#L1686
     $args['posts_per_page'] = $args['numberposts'];
 
+    if (isset($args['post_status'])){
+      $statuses = $this->sanitize_status($args['post_status']);
+      if ($statuses !== '') {
+        $args['post_status'] = $statuses;
+      } else {
+        unset($args['post_status']);
+      }
+    }
     do_action( 'lcp_pre_run_query', $args );
 
     if ('no' === $this->params['main_query']) {
@@ -444,16 +452,23 @@ class CatList{
     if (isset($this->params['content']) &&
         ($this->params['content'] =='yes' || $this->params['content'] == 'full') &&
         $single->post_content){
-      // get_extended - get content split by <!--more-->
-      $lcp_extended = get_extended($single->post_content);
-      $lcp_content = $lcp_extended['main'];
-      $lcp_content = apply_filters('the_content', $lcp_content);
-      $lcp_content = str_replace(']]>', ']]&gt', $lcp_content);
+      // If the post is password protected, set the password form in the content.
+      if (post_password_required($single)) {
+        $lcp_content = get_the_password_form($single);
+        return $lcp_content;
+      } else {
+        // get_extended - get content split by <!--more-->
+        $lcp_extended = get_extended($single->post_content);
+        $lcp_content = $lcp_extended['main'];
+        $lcp_content = apply_filters('the_content', $lcp_content);
+        $lcp_content = str_replace(']]>', ']]&gt', $lcp_content);
+      }
 
       if ($this->params['content'] == 'full') {
         $lcp_extended_content = str_replace(
           ']]>',
-          ']]&gt', apply_filters('the_content', $lcp_extended['extended'])
+          ']]&gt',
+          apply_filters('the_content', $lcp_extended['extended'])
         );
         $lcp_content .= $lcp_extended_content;
       } else {
@@ -468,7 +483,7 @@ class CatList{
       }
       return $lcp_content;
     } else {
-        return null;
+      return null;
     }
   }
 
@@ -597,5 +612,16 @@ class CatList{
           'previous'    => $this->params['pagination_prev'],
     );
     return LcpPaginator::get_instance()->get_pagination($paginator_params);
+  }
+
+  // Sanitizes the statuses for post_status. Checks if current user is either editor or
+  // admininstrator. Other users can't see draft or private posts.
+  private function sanitize_status($statuses){
+    if (in_array('private', $statuses) || in_array('draft', $statuses)) {
+      if ( !( current_user_can('editor') || current_user_can('administrator')) ) {
+        return implode(',', array_diff($statuses, array('private', 'draft')));
+      }
+    }
+    return $statuses;
   }
 }

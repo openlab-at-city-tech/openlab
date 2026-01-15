@@ -89,24 +89,26 @@ class Soliloquy_Posttype_Lite {
 				'query_var'           => false,
 				'show_in_rest'        => true,
 				'rest_base'           => 'soliloquy',
-				'capability_type'     => 'page',
+				'capability_type'     => 'post',
 				'capabilities'        => [
-					'publish_posts' => 'upload_files',
-					'delete_posts'  => 'upload_files',
-					'edit_post'     => 'upload_files',
-					'delete_post'   => 'upload_files',
-					'read_post'     => 'upload_files',
-					'create_posts'  => 'upload_files',
+					'read_post' => 'read', // Allow any logged-in user to read (filtered by map_meta_cap).
 				],
 				'menu_position'       => apply_filters( 'soliloquy_post_type_menu_position', 248 ),
 				'menu_icon'           => plugins_url( 'assets/css/images/menu-icon@2x.png', $this->base->file ),
-				'supports'            => [ 'title' ],
+				'supports'            => [ 'title', 'author' ],
 			]
 		);
 
 		// Register the post type with WordPress.
 		register_post_type( 'soliloquy', $args );
+
+		// Add Soliloquy meta data to REST API.
+		add_filter( 'rest_prepare_soliloquy', [ $this, 'prepare_meta' ], 10, 3 );
+
+		// Map meta capabilities for proper ownership checks.
+		add_filter( 'map_meta_cap', [ $this, 'map_meta_cap' ], 10, 4 );
 	}
+
 	/**
 	 * Helper Method to add Soliloquy Meta data to the Rest API
 	 *
@@ -124,6 +126,58 @@ class Soliloquy_Posttype_Lite {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Map meta capabilities for Soliloquy post type.
+	 *
+	 * @since 2.8.1
+	 * @param array  $caps    Required capabilities.
+	 * @param string $cap     Capability being checked.
+	 * @param int    $user_id User ID.
+	 * @param array  $args    Additional arguments (post ID).
+	 * @return array Modified capabilities.
+	 */
+	public function map_meta_cap( $caps, $cap, $user_id, $args ) {
+		if ( ! in_array( $cap, [ 'edit_post', 'delete_post', 'read_post' ], true ) ) {
+			return $caps;
+		}
+
+		$post_id = isset( $args[0] ) ? (int) $args[0] : 0;
+		if ( ! $post_id ) {
+			return $caps;
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post || 'soliloquy' !== $post->post_type ) {
+			return $caps;
+		}
+
+		$user = get_userdata( $user_id );
+		if ( ! $user ) {
+			return $caps;
+		}
+
+		$post_author = (int) $post->post_author;
+
+		// Block authors from accessing sliders they don't own.
+		if ( in_array( 'author', $user->roles, true ) && $user_id !== $post_author ) {
+			return [ 'do_not_allow' ];
+		}
+
+		if ( 'edit_post' === $cap ) {
+			$caps = ( $user_id === $post_author ) ? [ 'edit_posts' ] : [ 'edit_others_posts' ];
+		}
+
+		if ( 'delete_post' === $cap ) {
+			$caps = ( $user_id === $post_author ) ? [ 'delete_posts' ] : [ 'delete_others_posts' ];
+		}
+
+		if ( 'read_post' === $cap ) {
+			$caps = ( 'private' === $post->post_status ) ? [ 'read_private_posts' ] : [ 'read' ];
+		}
+
+		return $caps;
 	}
 
 	/**

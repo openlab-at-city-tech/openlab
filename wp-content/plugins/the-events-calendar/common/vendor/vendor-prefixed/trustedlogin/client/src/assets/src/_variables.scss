@@ -1,0 +1,31 @@
+$container-width-min: 300px !default;
+$container-width-max: 680px !default;
+$border-radius-base: 4px !default;
+$border-radius-small: 3px !default;
+$border-radius-large: 5px !default;
+$gutter-width: 10px !default;
+$large-icon-size: 32px !default;
+$medium-icon-size: 24px !default;
+$small-icon-size: 18px !default;
+$vertical-spacing: 24px !default;
+
+// Colors
+$color-111: #191E23 !default;
+$color-222: #23282D !default;
+$color-333: #32373C !default;
+$color-444: #40464D !default;
+$color-555: #555D66 !default;
+$color-666: #6C7781 !default;
+$color-777: #7E8993 !default;
+$color-888: #8F98A1 !default;
+$color-light-grey-900: #a2aab2 !default;
+$color-light-grey-800: #b5bcc2 !default;
+$color-light-grey-700: #ccd0d4 !default;
+$color-light-grey-600: #d7dade !default;
+$color-light-grey-500: #e2e4e7 !default;
+$color-light-grey-400: #e8eaeb !default;
+$color-light-grey-300: #edeff0 !default;
+$color-light-grey-200: #f3f4f5 !default;
+$color-light-grey-100: #fbfbfc !default;
+$color-green: #328540 !default;
+$color-red: #c0461e !default;

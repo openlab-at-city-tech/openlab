@@ -1,5 +1,5 @@
 :root {
-    --bookly-css-version: "24.9";
+    --bookly-css-version: "26.0";
 }
 
 .bookly-list-none {
@@ -94,6 +94,7 @@
 }
 
 .bookly-form input[type="text"],
+.bookly-form input[type="tel"],
 .bookly-form input[type="number"],
 .bookly-form input[type="password"],
 .bookly-form select,
@@ -106,6 +107,7 @@
 }
 
 .bookly-form input[type="text"],
+.bookly-form input[type="tel"],
 .bookly-form input[type="number"],
 .bookly-form input[type="password"],
 .bookly-form select {
@@ -113,6 +115,7 @@
 }
 
 .bookly-form input[type="text"],
+.bookly-form input[type="tel"],
 .bookly-form input[type="checkbox"],
 .bookly-form input[type="radio"],
 .bookly-form input[type="number"],
@@ -125,6 +128,7 @@
 }
 
 .bookly-form input[type="text"],
+.bookly-form input[type="tel"],
 .bookly-form input[type="number"],
 .bookly-form input[type="password"],
 .bookly-form textarea {
@@ -134,6 +138,7 @@
 }
 
 .bookly-form input[type="text"]:not(.iti__tel-input),
+.bookly-form input[type="tel"]:not(.iti__tel-input),
 .bookly-form input[type="number"],
 .bookly-form input[type="password"],
 .bookly-form textarea {
@@ -703,6 +708,7 @@ span.bookly-round {
 
     .bookly-columnizer .bookly-hour:hover .bookly-hour-icon span {
         margin-left: 4px;
+        margin-right: 4px;
         margin-top: 4px;
         background: var(--bookly-main-color);
         width: 8px;
@@ -1837,6 +1843,7 @@ ol.bookly-stepper {
 
 /* Border */
 .bookly-form input[type="text"].bookly-error,
+.bookly-form input[type="tel"].bookly-error,
 .bookly-form input[type="password"].bookly-error,
 .bookly-form select.bookly-error,
 .bookly-form textarea.bookly-error,
@@ -1862,8 +1869,7 @@ ol.bookly-stepper {
 
 .bookly-form .bookly-columnizer .bookly-hour:active .bookly-hour-icon span {
     background-color: var(--bookly-main-color) !important;
-    margin-left: 3px;
-    margin-top: 3px;
+    margin: 3px;
     width: 10px;
     height: 10px;
     border: none;

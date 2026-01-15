@@ -337,7 +337,7 @@ class GF_Zapier extends GFFeedAddOn {
 			$feed = $this->get_current_feed();
 		}
 
-		return (bool) rgar( $feed['meta'], 'legacy' );
+		return (bool) rgars( $feed, 'meta/legacy' );
 	}
 
 	/**
@@ -516,46 +516,88 @@ class GF_Zapier extends GFFeedAddOn {
 	 * Send trigger request to Zapier.
 	 *
 	 * @since 4.0
+	 * @since 4.4 Updated return value for consistency with other add-ons, so the framework can save the feed status to the entry meta.
 	 *
 	 * @param array $feed  The current Feed object.
 	 * @param array $entry The current Entry object.
 	 * @param array $form  The current Form object.
 	 *
-	 * @return bool
+	 * @return bool|WP_Error|array
 	 */
 	public function process_feed( $feed, $entry, $form ) {
 		$body    = $this->get_body( $entry, $form, $feed );
 		$headers = array();
-		if ( empty( $entry ) ) {
+		$is_test = empty( $entry );
+
+		if ( $is_test ) {
 			$headers['X-Hook-Test'] = 'true';
 		}
 
 		$json_body = json_encode( $body );
 		if ( empty( $body ) ) {
-			$this->log_debug( 'There is no field data to send to Zapier.' );
+			if ( $is_test ) {
+				$this->log_debug( __METHOD__ . '(): There is no field data to send to Zapier.' );
 
-			return false;
+				return false;
+			}
+
+			$this->add_feed_error( esc_html__( 'There was no data to send to Zapier.', 'gravityformszapier' ), $feed, $entry, $form );
+
+			return new WP_Error( 'empty_body', 'Request body was empty.' );
 		}
 
-		$this->log_debug( 'Posting to url: ' . $feed['meta']['zapURL'] . ' data: ' . print_r( $body, true ) );
+		$this->log_debug( __METHOD__ . '(): Posting to url: ' . $feed['meta']['zapURL'] . ' data: ' . print_r( $body, true ) );
 
 		$form_data = array( 'sslverify' => false, 'ssl' => true, 'body' => $json_body, 'headers' => $headers );
 		$response  = wp_remote_post( $feed['meta']['zapURL'], $form_data );
 
 		if ( is_wp_error( $response ) ) {
-			$this->log_error( 'The following error occurred: ' . print_r( $response, true ) );
+			if ( $is_test ) {
+				$this->log_error( __METHOD__ . '(): The following error occurred: ' . print_r( $response, true ) );
 
-			return false;
-		} else {
-			$this->log_debug( 'Successful response from Zap: ' . print_r( $response, true ) );
-
-			if ( ! empty( $entry ) ) {
-				$this->log_debug( 'Marking entry #'.$entry['id'].' as fulfilled.' );
-				gform_update_meta( $entry['id'], $this->_slug.'_is_fulfilled', true );
+				return false;
 			}
 
-			return true;
+			$this->add_feed_error( sprintf( esc_html__( 'An error occurred when sending the entry to Zapier. %s', 'gravityformszapier' ), $response->get_error_message() ), $feed, $entry, $form );
+
+			return $response;
 		}
+
+		$this->log_debug( __METHOD__ . '(): Response from Zapier: ' . print_r( $response, true ) );
+		$code = wp_remote_retrieve_response_code( $response );
+
+		if ( $code === 200 ) {
+			if ( $is_test ) {
+				return true;
+			}
+
+			$response_body = GFCommon::maybe_decode_json( wp_remote_retrieve_body( $response ) );
+
+			$this->log_debug( __METHOD__ . '(): Marking entry #' . $entry['id'] . ' as fulfilled.' );
+			gform_update_meta( $entry['id'], $this->_slug . '_is_fulfilled', true );
+			$this->add_note( rgar( $entry, 'id' ), sprintf( esc_html__( 'Entry sent to Zapier. Request ID: %s.', 'gravityformszapier' ), rgar( $response_body, 'request_id' ) ), 'success' );
+
+			return $entry;
+		} elseif ( in_array( $code, array( 404, 410 ), true ) ) {
+			$this->update_feed_active( rgar( $feed, 'id' ), false );
+
+			if ( $is_test ) {
+				return false;
+			}
+
+			$this->add_feed_error( esc_html__( 'The Zap is disabled or no longer exists. The feed has been set to inactive.', 'gravityformszapier' ), $feed, $entry, $form );
+
+			return new WP_Error( $code, 'The Zap is disabled or no longer exists.' );
+		} else {
+			if ( $is_test ) {
+				return false;
+			}
+
+			$this->add_feed_error( sprintf( esc_html__( 'There was an issue sending the entry to Zapier. Response code: %d. Message: %s.', 'gravityformszapier' ), $code, wp_remote_retrieve_response_message( $response ) ), $feed, $entry, $form );
+
+			return new WP_Error( $code, 'There was an issue sending the entry to Zapier.', $response );
+		}
+
 	}
 
 	/**

@@ -1124,6 +1124,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.site-header-row-container):not(.item-hidden-above):not(.site-main-header-wrap), #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.item-hidden-above) > .site-header-row-container-inner' );
 			$css->render_background( kadence()->sub_option( 'header_sticky_background', 'desktop' ), $css );
 			$css->add_property( 'border-bottom', $css->render_border( kadence()->sub_option( 'header_sticky_bottom_border', 'desktop' ) ) );
+			$css->set_selector('.site-main-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-upper-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-top-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-bottom-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck');
+			$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'header_sticky_box_shadow' ) ) );
 			$css->start_media_query( $media_query['tablet'] );
 			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.site-header-row-container):not(.item-hidden-above):not(.site-main-header-wrap), #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.item-hidden-above) > .site-header-row-container-inner' );
 			$css->render_background( kadence()->sub_option( 'header_sticky_background', 'tablet' ), $css );
@@ -1360,6 +1362,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'dropdown_navigation_shadow' ), kadence()->default( 'dropdown_navigation_shadow' ) ) );
 		$css->set_selector( '.header-navigation .header-menu-container ul ul li.menu-item, .header-menu-container ul.menu > li.kadence-menu-mega-enabled > ul > li.menu-item > a' );
 		$css->add_property( 'border-bottom', $css->render_border( kadence()->option( 'dropdown_navigation_divider' ) ) );
+		$css->add_property( 'border-radius', $css->render_measure( kadence()->option( 'dropdown_navigation_border_radius' ) ) );
 		$css->set_selector( '.header-navigation .header-menu-container ul ul li.menu-item > a' );
 		$css->add_property( 'width', kadence()->sub_option( 'dropdown_navigation_width', 'size' ) . kadence()->sub_option( 'dropdown_navigation_width', 'unit' ) );
 		$css->add_property( 'padding-top', $css->render_size( kadence()->option( 'dropdown_navigation_vertical_spacing' ) ) );
@@ -1369,9 +1372,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( '.header-navigation .header-menu-container ul ul li.menu-item > a:hover' );
 		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'dropdown_navigation_color', 'hover' ) ) );
 		$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'dropdown_navigation_background', 'hover' ) ) );
+		$css->add_property( 'border-radius', $css->render_measure( kadence()->option( 'dropdown_navigation_border_radius' ) ) );
 		$css->set_selector( '.header-navigation .header-menu-container ul ul li.menu-item.current-menu-item > a' );
 		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'dropdown_navigation_color', 'active' ) ) );
 		$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'dropdown_navigation_background', 'active' ) ) );
+		$css->add_property( 'border-radius', $css->render_measure( kadence()->option( 'dropdown_navigation_border_radius' ) ) );
 		// Mobile Toggle.
 		$css->set_selector( '.mobile-toggle-open-container .menu-toggle-open, .mobile-toggle-open-container .menu-toggle-open:focus' );
 		$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'mobile_trigger_background', 'color' ) ) );
@@ -1754,17 +1759,36 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
 		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
 		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette10', kadence()->palette_option( 'palette10' ) );
+		$css->add_property( '--global-palette11', kadence()->palette_option( 'palette11' ) );
+		$css->add_property( '--global-palette12', kadence()->palette_option( 'palette12' ) );
+		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
+		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
+		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
 		$css->add_property( '--global-palette9rgb', $css->hex2rgb( kadence()->palette_option( 'palette9' ) ) );
 		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
 		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
 		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
 
+		// Button Primary.
 		$css->add_property( '--global-palette-btn-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'hover' ) ) );
-
 		$css->add_property( '--global-palette-btn', $css->render_color( kadence()->sub_option( 'buttons_color', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-hover', $css->render_color( kadence()->sub_option( 'buttons_color', 'hover' ) ) );
 
+		// Button Secondary.
+		$css->add_property( '--global-palette-btn-sec-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-sec', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-hover', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'hover' ) ) );
+
+		// Button Outline.
+		$css->add_property( '--global-palette-btn-out-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-out', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-hover', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+
+		// Fonts
 		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );
 		$css->add_property( '--global-heading-font-family', $css->render_font_family( kadence()->option( 'heading_font' ) ) );
 		//$css->add_property( '--global-h1-font-family', $css->render_font_family( kadence()->option( 'h1_font' ) ) );
@@ -1800,6 +1824,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( '--e-global-color-kadence7', 'var(--global-palette7)' );
 			$css->add_property( '--e-global-color-kadence8', 'var(--global-palette8)' );
 			$css->add_property( '--e-global-color-kadence9', 'var(--global-palette9)' );
+			$css->add_property( '--e-global-color-kadence10', 'var(--global-palette10)' );
+			$css->add_property( '--e-global-color-kadence11', 'var(--global-palette11)' );
+			$css->add_property( '--e-global-color-kadence12', 'var(--global-palette12)' );
+			$css->add_property( '--e-global-color-kadence13', 'var(--global-palette13)' );
+			$css->add_property( '--e-global-color-kadence14', 'var(--global-palette14)' );
+			$css->add_property( '--e-global-color-kadence15', 'var(--global-palette15)' );
+
 		}
 		// Divi Editor.
 		if ( class_exists( 'ET_Builder_Plugin' ) ) {
@@ -2182,6 +2213,84 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 		}
 		$css->stop_media_query();
+
+		// Secondary Button.
+		if ( substr( kadence()->sub_option( 'buttons_secondary_background', 'color' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_secondary_background', 'color' ), 0, strlen( 'radial' ) ) === 'radial' ) {
+			$css->set_selector( '.elementor-button-wrapper .elementor-button.button-style-secondary' );
+			$css->add_property( 'background-image', 'var(--global-palette-btn-bg)' );
+			$css->set_selector( '.elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus' );
+			if ( substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'radial' ) ) === 'radial'  ) {
+				$css->add_property( 'background-image', 'var(--global-palette-btn-bg-hover)' );
+			} else {
+				$css->add_property( 'background', 'var(--global-palette-btn-bg-hover)' );
+			}
+		}
+		$css->set_selector( 'button.button-style-secondary, .button.button-style-secondary, .wp-block-button__link.button-style-secondary, input[type="button"].button-style-secondary, input[type="reset"].button-style-secondary, input[type="submit"].button-style-secondary, .fl-button.button-style-secondary, .elementor-button-wrapper .elementor-button.button-style-secondary, .wc-block-components-checkout-place-order-button.button-style-secondary, .wc-block-cart__submit.button-style-secondary' );
+		$css->render_font( kadence()->option( 'buttons_typography' ), $css );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_secondary_border_radius' ), 'desktop' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_secondary_padding' ), 'desktop' ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_secondary_border' ), 'desktop' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'color' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_secondary_shadow' ), kadence()->default( 'buttons_secondary_shadow' ) ) );
+		$css->set_selector( 'button.button-style-secondary:hover, button.button-style-secondary:focus, button.button-style-secondary:active, .button.button-style-secondary:hover, .button.button-style-secondary:focus, .button.button-style-secondary:active, .wp-block-button__link.button-style-secondary:hover, .wp-block-button__link.button-style-secondary:focus, .wp-block-button__link.button-style-secondary:active, input[type="button"].button-style-secondary:hover, input[type="button"].button-style-secondary:focus, input[type="button"].button-style-secondary:active, input[type="reset"].button-style-secondary:hover, input[type="reset"].button-style-secondary:focus, input[type="reset"].button-style-secondary:active, input[type="submit"].button-style-secondary:hover, input[type="submit"].button-style-secondary:focus, input[type="submit"].button-style-secondary:active, .elementor-button-wrapper .elementor-button.button-style-secondary:hover, .elementor-button-wrapper .elementor-button.button-style-secondary:focus, .elementor-button-wrapper .elementor-button.button-style-secondary:active, .wc-block-cart__submit.button-style-secondary:hover' );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'hover' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_secondary_shadow_hover' ), kadence()->default( 'buttons_secondary_shadow_hover' ) ) );
+		$css->start_media_query( $media_query['tablet'] );
+		$css->set_selector( 'button.button-style-secondary, .button.button-style-secondary, .wp-block-button__link.button-style-secondary, input[type="button"].button-style-secondary, input[type="reset"].button-style-secondary, input[type="submit"].button-style-secondary, .fl-button.button-style-secondary, .elementor-button-wrapper .elementor-button.button-style-secondary, .wc-block-components-checkout-place-order-button.button-style-secondary, .wc-block-cart__submit.button-style-secondary' );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_secondary_border' ), 'tablet' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'color' ) ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_secondary_border_radius' ), 'tablet' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_secondary_padding' ), 'tablet' ) );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_secondary_typography' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_secondary_typography' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_secondary_typography' ), 'tablet' ) );
+		$css->stop_media_query();
+		$css->start_media_query( $media_query['mobile'] );
+		$css->set_selector( 'button.button-style-secondary, .button.button-style-secondary, .wp-block-button__link.button-style-secondary, input[type="button"].button-style-secondary, input[type="reset"].button-style-secondary, input[type="submit"].button-style-secondary, .fl-button.button-style-secondary, .elementor-button-wrapper .elementor-button.button-style-secondary, .wc-block-components-checkout-place-order-button.button-style-secondary, .wc-block-cart__submit.button-style-secondary' );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_secondary_padding' ), 'mobile' ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_secondary_border_radius' ), 'mobile' ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_secondary_border' ), 'mobile' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'color' ) ) );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_secondary_typography' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_secondary_typography' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_secondary_typography' ), 'mobile' ) );
+		$css->stop_media_query();
+
+		// Outline Button.
+		$css->set_selector( '.button.button-style-outline, .wp-block-button.is-style-outline .wp-block-button__link, .wp-block-button.is-style-outline .wp-element-button, .button.kb-btn-global-outline:not(.has-text-color)' );
+		$css->render_font( kadence()->option( 'buttons_outline_typography' ), $css );
+		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'desktop' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'desktop' ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'desktop' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'color' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow' ), kadence()->default( 'buttons_outline_shadow' ) ) );
+		$css->set_selector( '.button.button-style-outline:hover, .wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-button.is-style-outline .wp-element-button:hover, .button.kb-btn-global-outline:not(.has-text-color):hover, .button.button-style-outline:active, .wp-block-button.is-style-outline .wp-block-button__link:active, .wp-block-button.is-style-outline .wp-element-button:active, .button.kb-btn-global-outline:not(.has-text-color):active, .button.button-style-outline:focus, .wp-block-button.is-style-outline .wp-block-button__link:focus, .wp-block-button.is-style-outline .wp-element-button:focus, .button.kb-btn-global-outline:not(.has-text-color):focus' );
+		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'desktop' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'hover' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow_hover' ), kadence()->default( 'buttons_outline_shadow_hover' ) ) );
+		$css->start_media_query( $media_query['tablet'] );
+		$css->set_selector( '.button.button-style-outline, .wp-block-button.is-style-outline .wp-block-button__link, .wp-block-button.is-style-outline .wp-element-button, .button.kb-btn-global-outline:not(.has-text-color)' );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'tablet' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'color' ) ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'tablet' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'tablet' ) );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_outline_typography' ), 'tablet' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_outline_typography' ), 'tablet' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_outline_typography' ), 'tablet' ) );
+		$css->stop_media_query();
+		$css->start_media_query( $media_query['mobile'] );
+		$css->set_selector( '.button.button-style-outline, .wp-block-button.is-style-outline .wp-block-button__link, .wp-block-button.is-style-outline .wp-element-button, .button.kb-btn-global-outline:not(.has-text-color)' );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'mobile' ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'mobile' ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'mobile' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'color' ) ) );
+		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'buttons_outline_typography' ), 'mobile' ) );
+		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'buttons_outline_typography' ), 'mobile' ) );
+		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'buttons_outline_typography' ), 'mobile' ) );
+		$css->stop_media_query();
+
 		// Image.
 		$css->set_selector( '.entry-content :where(.wp-block-image) img, .entry-content :where(.wp-block-kadence-image) img' );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'image_border_radius' ), 'desktop' ) );
@@ -3110,14 +3219,35 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
 		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
 		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette10', kadence()->palette_option( 'palette10' ) );
+		$css->add_property( '--global-palette11', kadence()->palette_option( 'palette11' ) );
+		$css->add_property( '--global-palette12', kadence()->palette_option( 'palette12' ) );
+		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
+		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
+		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
+
 		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
 		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
 		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
 
+		// Button
 		$css->add_property( '--global-palette-btn', $css->render_color( kadence()->sub_option( 'buttons_color', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-hover', $css->render_color( kadence()->sub_option( 'buttons_color', 'hover' ) ) );
 		$css->add_property( '--global-palette-btn-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'color' ) ) );
 		$css->add_property( '--global-palette-btn-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'hover' ) ) );
+
+		// Button Secondary.
+		$css->add_property( '--global-palette-btn-sec-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-sec', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-sec-hover', $css->render_color( kadence()->sub_option( 'buttons_secondary_color', 'hover' ) ) );
+
+		// Button Outline.
+		$css->add_property( '--global-palette-btn-out-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn-out', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-out-hover', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+
 		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-display-fallback-font', apply_filters( 'kadence_theme_global_display_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );
@@ -3189,6 +3319,37 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( ':root .has-theme-palette-9-color' );
 		$css->add_property( 'color', 'var(--global-palette9)' );
 
+		$css->set_selector( ':root .has-theme-palette-10-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette10)' );
+		$css->set_selector( ':root .has-theme-palette-10-color' );
+		$css->add_property( 'color', 'var(--global-palette10)' );
+
+		$css->set_selector( ':root .has-theme-palette-11-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette11)' );
+		$css->set_selector( ':root .has-theme-palette-11-color' );
+		$css->add_property( 'color', 'var(--global-palette11)' );
+
+		$css->set_selector( ':root .has-theme-palette-12-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette12)' );
+		$css->set_selector( ':root .has-theme-palette-12-color' );
+		$css->add_property( 'color', 'var(--global-palette12)' );
+
+		$css->set_selector( ':root .has-theme-palette-13-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette13)' );
+		$css->set_selector( ':root .has-theme-palette-13-color' );
+		$css->add_property( 'color', 'var(--global-palette13)' );
+
+		$css->set_selector( ':root .has-theme-palette-14-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette14)' );
+		$css->set_selector( ':root .has-theme-palette-14-color' );
+		$css->add_property( 'color', 'var(--global-palette14)' );
+
+		$css->set_selector( ':root .has-theme-palette-15-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette15)' );
+		$css->set_selector( ':root .has-theme-palette-15-color' );
+		$css->add_property( 'color', 'var(--global-palette15)' );
+
+
 		$css->set_selector( ':root .has-theme-palette1-background-color' );
 		$css->add_property( 'background-color', 'var(--global-palette1)' );
 		$css->set_selector( ':root .has-theme-palette1-color' );
@@ -3232,6 +3393,37 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'background-color', 'var(--global-palette9)' );
 		$css->set_selector( ':root .has-theme-palette9-color' );
 		$css->add_property( 'color', 'var(--global-palette9)' );
+
+		$css->set_selector( ':root .has-theme-palette10-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette10)' );
+		$css->set_selector( ':root .has-theme-palette10-color' );
+		$css->add_property( 'color', 'var(--global-palette10)' );
+
+		$css->set_selector( ':root .has-theme-palette11-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette11)' );
+		$css->set_selector( ':root .has-theme-palette11-color' );
+		$css->add_property( 'color', 'var(--global-palette11)' );
+
+		$css->set_selector( ':root .has-theme-palette12-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette12)' );
+		$css->set_selector( ':root .has-theme-palette12-color' );
+		$css->add_property( 'color', 'var(--global-palette12)' );
+
+		$css->set_selector( ':root .has-theme-palette13-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette13)' );
+		$css->set_selector( ':root .has-theme-palette13-color' );
+		$css->add_property( 'color', 'var(--global-palette13)' );
+
+		$css->set_selector( ':root .has-theme-palette14-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette14)' );
+		$css->set_selector( ':root .has-theme-palette14-color' );
+		$css->add_property( 'color', 'var(--global-palette14)' );
+
+		$css->set_selector( ':root .has-theme-palette15-background-color' );
+		$css->add_property( 'background-color', 'var(--global-palette15)' );
+		$css->set_selector( ':root .has-theme-palette15-color' );
+		$css->add_property( 'color', 'var(--global-palette15)' );
+
 		// Buttons.
 		$css->set_selector( '.editor-styles-wrapper .wp-block-button .wp-block-button__link, .editor-styles-wrapper .kt-button.kb-btn-global-inherit' );
 		$css->render_font( kadence()->option( 'buttons_typography' ), $css );
@@ -3263,6 +3455,53 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_border_colors', 'hover' ) ) );
 		$css->set_selector( '.editor-styles-wrapper .wp-block-button .wp-block-button__link:hover, .editor-styles-wrapper .kb-forms-submit:hover, .editor-styles-wrapper .kt-button:hover' );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_shadow_hover' ), kadence()->default( 'buttons_shadow_hover' ) ) );
+
+		// Secondary Buttons.
+		$css->set_selector( 
+			'.editor-styles-wrapper button.button-style-secondary, 
+			.editor-styles-wrapper .button.button-style-secondary, 
+			.editor-styles-wrapper .kt-button.button-style-secondary, 
+			.editor-styles-wrapper .wp-block-button__link.button-style-secondary' 
+		);
+		$css->render_font( kadence()->option( 'buttons_secondary_typography' ), $css );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_secondary_border_radius' ), 'desktop' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_secondary_padding' ), 'desktop' ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_secondary_shadow' ), kadence()->default( 'buttons_secondary_shadow' ) ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_secondary_border' ), 'desktop' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'color' ) ) );
+		$css->set_selector( '.editor-styles-wrapper button.button-style-secondary:hover, .editor-styles-wrapper .button.button-style-secondary:hover, .editor-styles-wrapper .wp-block-button__link.button-style-secondary:hover' );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_secondary_border_colors', 'hover' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_secondary_shadow_hover' ), kadence()->default( 'buttons_secondary_shadow_hover' ) ) );
+
+		// Outline Buttons.
+		$css->set_selector(
+			'.editor-styles-wrapper button.button-style-outline, 
+			.editor-styles-wrapper .button.button-style-outline, 
+			.editor-styles-wrapper .wp-block-button__link.button-style-outline, 
+			.editor-styles-wrapper .wp-block-button.is-style-outline .wp-block-button__link, 
+			.editor-styles-wrapper .wp-block-button.is-style-outline .wp-element-button, 
+			.editor-styles-wrapper .kt-button.kb-btn-global-outline:not(.has-text-color)' 
+		);
+		$css->render_font( kadence()->option( 'buttons_outline_typography' ), $css );
+		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'desktop' ) );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'desktop' ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow' ), kadence()->default( 'buttons_outline_shadow' ) ) );
+		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'desktop' ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'color' ) ) );
+		$css->set_selector(
+			'.editor-styles-wrapper button.button-style-outline:hover, 
+			.editor-styles-wrapper .button.button-style-outline:hover, 
+			.editor-styles-wrapper .wp-block-button__link.button-style-outline:hover, 
+			.editor-styles-wrapper .wp-block-button.is-style-outline .wp-block-button__link:hover, 
+			.editor-styles-wrapper .wp-block-button.is-style-outline .wp-element-button:hover, 
+			.editor-styles-wrapper .kt-button.kb-btn-global-outline:not(.has-text-color):hover'
+		);
+		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'hover' ) ) );
+		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow_hover' ), kadence()->default( 'buttons_outline_shadow_hover' ) ) );
+
+		// Images.
 		$css->set_selector( '.editor-styles-wrapper :where(.wp-block-image) img, .editor-styles-wrapper :where(.wp-block-kadence-image) img' );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'image_border_radius' ), 'desktop' ) );
 
@@ -3466,71 +3705,71 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( '.block-editor-page.kadence-preview-width-mobile .editor-styles-wrapper:before' );
 		$css->add_property( 'max-width', '390px !important' );
 		// Heading Fonts.
-		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .editor-styles-wrapper .block-editor-block-list__layout h2, .editor-styles-wrapper .block-editor-block-list__layout h3, .editor-styles-wrapper .block-editor-block-list__layout h4, .editor-styles-wrapper .block-editor-block-list__layout h5, .editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper h1, .editor-styles-wrapper h2, .editor-styles-wrapper h3, .editor-styles-wrapper h4, .editor-styles-wrapper h5, .editor-styles-wrapper h6' );
 		$css->add_property( 'font-family', $css->render_font_family( kadence()->option( 'heading_font' ) ) );
-		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
 		$css->render_font( kadence()->option( 'h1_font' ), $css );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h2' );
+		$css->set_selector( '.editor-styles-wrapper h2' );
 		$css->render_font( kadence()->option( 'h2_font' ), $css );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h3' );
+		$css->set_selector( '.editor-styles-wrapper h3' );
 		$css->render_font( kadence()->option( 'h3_font' ), $css );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h4' );
+		$css->set_selector( '.editor-styles-wrapper h4' );
 		$css->render_font( kadence()->option( 'h4_font' ), $css );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h5' );
+		$css->set_selector( '.editor-styles-wrapper h5' );
 		$css->render_font( kadence()->option( 'h5_font' ), $css );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->set_selector( '.editor-styles-wrapper h6' );
 		$css->render_font( kadence()->option( 'h6_font' ), $css );
 
 		// Add responsive font sizes for headings
 		$css->start_media_query( $media_query['tablet'] );
-		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h1_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h1_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h1_font' ), 'tablet' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h2' );
+		$css->set_selector( '.editor-styles-wrapper h2' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h2_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h2_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h2_font' ), 'tablet' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h3' );
+		$css->set_selector( '.editor-styles-wrapper h3' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h3_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h3_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h3_font' ), 'tablet' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h4' );
+		$css->set_selector( '.editor-styles-wrapper h4' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h4_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h4_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h4_font' ), 'tablet' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h5' );
+		$css->set_selector( '.editor-styles-wrapper h5' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h5_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h5_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h5_font' ), 'tablet' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->set_selector( '.editor-styles-wrapper h6' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h6_font' ), 'tablet' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h6_font' ), 'tablet' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h6_font' ), 'tablet' ) );
 		$css->stop_media_query();
 
 		$css->start_media_query( $media_query['mobile'] );
-		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper .block-editor-block-list__layout h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
+		$css->set_selector( '.editor-styles-wrapper .editor-post-title .editor-post-title__input, .editor-styles-wrapper h1, .block-editor-page .editor-post-title.wp-block .editor-post-title.wp-block__input, .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper h1' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h1_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h1_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h1_font' ), 'mobile' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h2' );
+		$css->set_selector( '.editor-styles-wrapper h2' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h2_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h2_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h2_font' ), 'mobile' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h3' );
+		$css->set_selector( '.editor-styles-wrapper h3' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h3_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h3_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h3_font' ), 'mobile' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h4' );
+		$css->set_selector( '.editor-styles-wrapper h4' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h4_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h4_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h4_font' ), 'mobile' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h5' );
+		$css->set_selector( '.editor-styles-wrapper h5' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h5_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h5_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h5_font' ), 'mobile' ) );
-		$css->set_selector( '.editor-styles-wrapper .block-editor-block-list__layout h6' );
+		$css->set_selector( '.editor-styles-wrapper h6' );
 		$css->add_property( 'font-size', $this->render_font_size( kadence()->option( 'h6_font' ), 'mobile' ) );
 		$css->add_property( 'line-height', $this->render_font_height( kadence()->option( 'h6_font' ), 'mobile' ) );
 		$css->add_property( 'letter-spacing', $this->render_font_spacing( kadence()->option( 'h6_font' ), 'mobile' ) );
@@ -3557,6 +3796,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
 		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
 		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette10', kadence()->palette_option( 'palette10' ) );
+		$css->add_property( '--global-palette11', kadence()->palette_option( 'palette11' ) );
+		$css->add_property( '--global-palette12', kadence()->palette_option( 'palette12' ) );
+		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
+		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
+		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
 		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-display-fallback-font', apply_filters( 'kadence_theme_global_display_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );

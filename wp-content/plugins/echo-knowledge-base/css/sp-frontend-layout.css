@@ -220,6 +220,13 @@
   max-width: 100% !important;
 }
 
+body.wp-theme-hueman[class*=-epkb_post_type] .main-inner {
+  padding: 0 !important;
+}
+body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman[class*=-epkb_post_type] .main::after {
+  display: none !important;
+}
+
 /* Public
 --------------------------------------------------------------*/
 @keyframes spin {

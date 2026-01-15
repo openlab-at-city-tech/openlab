@@ -412,7 +412,6 @@ class B2S_Util {
         $postContent = B2S_Util::convertLiElements($postContent);
         $prepareContent = ($allowHtml !== false) ? self::cleanContent(self::cleanHtmlAttr(strip_shortcodes(self::cleanShortCodeByCaption($postContent)))) : self::cleanContent(strip_shortcodes($postContent));
         $prepareContent = ($allowEmoji !== false) ? $prepareContent : self::remove4byte($prepareContent);
-        //$prepareContent = preg_replace('/(?:[ \t]*(?:\n|\r\n?)){3,}/', "\n\n", $prepareContent);
 
         if ($allowHtml !== false) {
 
@@ -510,6 +509,25 @@ class B2S_Util {
         return preg_replace('/(<[^>]+) id=[\"\'].*?[\"\']/i', '$1', $postContent);
     }
 
+    public static function b2sValidateUrl($url) {
+
+        $url = esc_url_raw(trim($url));
+        if (empty($url)) {
+            return false;
+        }
+
+        $parts = wp_parse_url($url);
+        if (empty($parts['host'])) {
+            return false;
+        }
+
+        if (empty($parts['scheme']) || !in_array(strtolower($parts['scheme']), ['http', 'https'], true)) {
+            return false;
+        }
+
+        return $url;
+    }
+
     public static function cleanContent($postContent) {
         return preg_replace('/\[.*?(?=\])\]/s', '', $postContent);
     }
@@ -522,15 +540,20 @@ class B2S_Util {
 
 //check is shortcode in content
             if (preg_match('/\[(.*?)\]/s', $postContent)) {
+
 //check has crawled content from frontend
-
                 $dbContent = get_option('B2S_PLUGIN_POST_CONTENT_' . $postId);
-
                 if ($dbContent !== false) {
                     return $dbContent;
                 } else {
-//crawl content from frontend
 
+                    $postUrl = self::b2sValidateUrl($postUrl);
+
+                    if (!$postUrl) {
+                        return $postContent;
+                    }
+
+//crawl content from frontend
                     $postUrl = add_query_arg(array('b2s_get_full_content' => 1, 'no_cache' => 1, 'lang' => $postLang), $postUrl);
                     $wpVersion = get_bloginfo('version');
                     $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
@@ -547,7 +570,7 @@ class B2S_Util {
                         'user-agent' => $ua
                     );
 
-                    $wpB2sGetFullContent = wp_remote_get($postUrl, $args); //slot 11 seconds       
+                    $wpB2sGetFullContent = wp_safe_remote_get($postUrl, $args); //slot 11 seconds       
 
                     if (is_array($wpB2sGetFullContent) && !is_wp_error($wpB2sGetFullContent)) {
 //get crwaled content from db - hide cache by get_options
@@ -635,7 +658,7 @@ class B2S_Util {
         $hour = substr($rand, 0, 2);
         $minute = substr($rand, 2, 2);
         $timeSlots = array('00', '15', '30', '45');
-        $minuteRound = $timeSlots[($minute % 5)];
+        $minuteRound = $timeSlots[($minute % 4)];
         return $hour . ':' . $minuteRound;
     }
 
@@ -645,7 +668,7 @@ class B2S_Util {
         return wp_date($slug, strtotime(wp_date('Y-m-d ' . $time . ':00:00', null, new DateTimeZone(date_default_timezone_get()))), new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getExcerpt($text, $count = 400, $max = false, $add = false) {
+    public static function getExcerpt($text, $count = 400, $max = false, $add = false, $customStops = array()) {
 
         //Bug: Converting json + PHP Extension
         if (function_exists('mb_strlen') && function_exists('mb_substr') && function_exists('mb_stripos') && function_exists('mb_strripos')) {
@@ -679,11 +702,12 @@ class B2S_Util {
                 }
             }
             $tmpText = implode(array_slice($parts, 0, $last_taken));
-
+      
             //Old case: first whole set in $text is greater than $count, do cut off by word -until V7.5.5
             if (empty($tmpText)) {
 
-                $stops = array('.', '?', '!', '#', '(');
+                $stops = !empty($customStops) && is_array($customStops) ? $customStops : array('.', '?', '!', '#', '(');
+         
                 $min = $count;
                 $cleanTruncateWord = true;
                 $max = ($max !== false) ? ($max - $min) : ($min - 1);

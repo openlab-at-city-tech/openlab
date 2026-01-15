@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Password Policy Manager
  * Description: This plugin enables configurable password policies for the Stronger passwords. We Support Password expiration, Enforce strong password for all Users in the free version of the plugin.
- * Version: 2.0.5
+ * Version: 2.0.6
  * Author: miniOrange
  * Author URI: https://miniorange.com
  * Text Domain: password-policy-manager
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 	define( 'MOPPM_HOST_NAME', 'https://login.xecurify.com' );
-	define( 'MOPPM_VERSION', '2.0.5' );
+	define( 'MOPPM_VERSION', '2.0.6' );
 	define( 'MOPPM_TEST_MODE', false );
 	global $moppm_dir,$moppm_directory_url;
 	$moppm_dir           = plugin_dir_url( __FILE__ );
@@ -185,14 +185,14 @@ if ( ! class_exists( 'MOPPM' ) ) {
 				var data = {
 				'action'					: 'moppm_ajax',
 				'option' 					: 'moppm_black_friday_remove',
-				'nonce'						:  '<?php echo esc_js( wp_create_nonce( 'moppm-remove-offer-banner' ) ); ?>'
+				'nonce'						:  '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>'
 				};
 				jQuery.post(ajaxurl, data, function(response) {
-						var response = response.replace(/\s+/g,' ').trim();
-						if(response !== 'ERROR')
-						{
-							jQuery(".moppm-black-friday").slideToggle();
-						}
+					var response = response.replace(/\s+/g,' ').trim();
+					if(response !== 'ERROR')
+					{
+						jQuery(".moppm-black-friday").slideToggle();
+					}
 				});
 		})
 
@@ -607,7 +607,7 @@ if ( ! class_exists( 'MOPPM' ) ) {
 		 */
 		public function moppm_includes() {
 			require_once 'helper' . DIRECTORY_SEPARATOR . 'class-moppm-utility.php';
-			require_once 'controllers' . DIRECTORY_SEPARATOR . 'class-moppm-ajax.php';
+			require_once 'handler' . DIRECTORY_SEPARATOR . 'class-moppm-ajax.php';
 			require_once 'database' . DIRECTORY_SEPARATOR . 'class-moppm-database.php';
 			require_once 'api' . DIRECTORY_SEPARATOR . 'class-moppm-api.php';
 			require_once 'helper' . DIRECTORY_SEPARATOR . 'class-moppm-constants.php';

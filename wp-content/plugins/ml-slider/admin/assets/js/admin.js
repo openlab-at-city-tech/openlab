@@ -194,7 +194,10 @@ window.jQuery(function ($) {
         // Remove filters to don't allow to insert other media type different to images
         $('#media-attachment-filters').remove();
     })
-    create_slides.on('all', function (){ $('.media-button').text( APP.__('Add to slideshow', 'ml-slider') ); });
+    create_slides.on('all', function (){ 
+        $('.media-frame-menu-heading').text( APP.__('Slide Types', 'ml-slider') );
+        $('.media-button').text( APP.__('Add to slideshow', 'ml-slider') ); 
+    });
 
     APP && create_slides.on('open', function () {
         APP.notifyInfo('metaslider/add-slide-opening-ui', APP.__('Opening add slide UI...', 'ml-slider'))
@@ -439,8 +442,9 @@ window.jQuery(function ($) {
     });
 
     /**
-     * Show/hide Auto play and Play / pause if Carousel mode and Loop continuously are both enabled
+     * Show/hide Auto play, Play / pause & Lazy load images if Carousel mode and Loop continuously are both enabled
      * 
+     * @since 3.101 - Added Lazy load images
      * @since 3.90
      */
     var showHideAutoPlay = function () {
@@ -449,21 +453,24 @@ window.jQuery(function ($) {
         var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
         var pausePlay = $('.ms-settings-table input[name="settings[pausePlay]"]');
         var progressBar = $('.ms-settings-table input[name="settings[progressBar]"]');
+        var lazyLoad = $('.ms-settings-table input[name="settings[lazyLoad]"]');
 
         if (carouselMode.is(':checked') && infiniteLoop.is(':checked')) {
-            // Hide "Auto play" and "Play / pause" if "Carousel mode" AND "Loop carousel continuously" are enabled
+            // Hide "Auto play", "Play / pause" and "Lazy Load Images" if "Carousel mode" AND "Loop carousel continuously" are enabled
             autoPlay.parents('tr').hide();
             pausePlay.parents('tr').hide();
+            lazyLoad.parents('tr').hide();
         } else {
-            // Show "Auto play" and "Play / pause" if "Carousel mode" OR "Loop carousel continuously" are disabled
+            // Show "Auto play", "Play / pause" and "Lazy Load Images" if "Carousel mode" OR "Loop carousel continuously" are disabled
             autoPlay.parents('tr').show();
             pausePlay.parents('tr').show();
+            lazyLoad.parents('tr').show();
         }
 
         var showProgressBar = autoPlay.is(':checked') && (!carouselMode.is(':checked') || !infiniteLoop.is(':checked')) ? true : false;
 
         progressBar.parents('tr').toggle(showProgressBar);
-        $('tr.customizer-slideshow').eq(3).toggle(showProgressBar);
+        $('.slideshow_progress_bar_color').parents('tr.customizer-slideshow').toggle(showProgressBar && progressBar.is(':checked'));
     }
     showHideAutoPlay();
 
@@ -571,7 +578,7 @@ window.jQuery(function ($) {
      */
     var showHideCustomNavigationColor = function () {
         var navigation = $('.ms-settings-table select[name="settings[navigation]"]').val();
-        if (navigation === 'true') {
+        if (navigation === 'true' || navigation === 'dots_onhover') {
             $('tr.customizer-navigation').show();
         } else {
             $('tr.customizer-navigation').hide();
@@ -644,6 +651,7 @@ window.jQuery(function ($) {
      * @since 3.94
      */
     $('.metaslider').on('change', '.ms-settings-table input[name="settings[progressBar]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
+        console.log('trigger!');
         showHideCustomProgressBarColor();
     });
 
@@ -677,7 +685,7 @@ window.jQuery(function ($) {
         var showProgressBar = autoPlay.is(':checked') && (!carouselMode.is(':checked') || !infiniteLoop.is(':checked')) ? true : false;
 
         progressBar.parents('tr').toggle(showProgressBar);
-        $('tr.customizer-slideshow').eq(3).toggle(showProgressBar);
+        $('.slideshow_progress_bar_color').parents('tr.customizer-slideshow').toggle(showProgressBar && progressBar.is(':checked'));
     }
     setTimeout(function () {
         showHideCustomProgressBarColor();
@@ -739,7 +747,7 @@ window.jQuery(function ($) {
         delete window.metaslider.slide_type
     }
 
-    var add_image_apis = window.metaslider.add_image_apis = function (slide_type, slide_id) {
+    var add_image_apis = window.metaslider.add_image_apis = function (slide_type, slide_id, unsplash = true) {
 
         // This is the pro layer screen (not currently used)
         if ($('.media-menu-item.active:contains("Layer")').length) {
@@ -759,8 +767,10 @@ window.jQuery(function ($) {
 
         // Unsplash - First remove potentially leftover tabs in case the WP close event doesn't fire
         $('.unsplash-tab').remove()
-        $('.media-frame-router .media-router').append('<a href="#" id="unsplash-tab" class="text-black hover:text-blue-dark unsplash-tab media-menu-item">Unsplash Library</a>')
-        $('.toplevel_page_metaslider').on('click', '.unsplash-tab', unsplash_api_events)
+        if (unsplash) {
+            $('.media-frame-router .media-router').append('<a href="#" id="unsplash-tab" class="text-black hover:text-blue-dark unsplash-tab media-menu-item">Unsplash Library</a>')
+            $('.toplevel_page_metaslider').on('click', '.unsplash-tab', unsplash_api_events)
+        }
 
         // Each API will fake the container, so if we click on a native WP container, we should delete the API container
         $('.media-frame-router .media-router .media-menu-item').on('click', function () {
@@ -1172,6 +1182,7 @@ window.jQuery(function ($) {
     /**
      * Hide 'Click the "Add Slide" button to create your slideshow' notice
      * 
+     * @deprecated 3.101
      * @since 3.80
      */
     var hideNoSlidesNotice = function () {
@@ -1195,7 +1206,6 @@ window.jQuery(function ($) {
                 for (const mutation of mutationsList) {
                     if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                         addTooltips();
-                        hideNoSlidesNotice();
                     }
                 }
             }
@@ -1375,7 +1385,7 @@ window.jQuery(function ($) {
 
     /* Add mobile icon for slides with existing mobile setting */
     var show_mobile_icon = function (slide_id) {
-        var mobile_label = APP && APP.__('Device options are enabled for this slide. Adjust using the Mobile tab.', 'ml-slider');
+        var mobile_label = APP && APP.__('Device options are enabled for this slide. Adjust using the Device tab.', 'ml-slider');
         var mobile_checkboxes = $('#metaslider-slides-list #'+ slide_id +' .mobile-checkbox:checked');
         var icon = '<span class="mobile_setting_enabled float-left tipsy-tooltip-top" title="'+ mobile_label +'"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
         var mobile_enabled = $('#metaslider-slides-list #'+ slide_id +' .slide-details .mobile_setting_enabled');
@@ -1398,19 +1408,6 @@ window.jQuery(function ($) {
         show_mobile_icon('slide-'+slider_id);
     });
 
-    /* Hide the Device Options section when all options are hidden */
-    function mobileSectionChecker(){
-        if ($('[name="settings[links]"]').val() == 'false' && $('[name="settings[navigation]"]').val() == 'false') {
-            $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').hide();
-        } else {
-            $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').show();
-        }
-    }
-    $('[name="settings[navigation]"], [name="settings[links]"]').on('change', function(){
-        mobileSectionChecker();
-    });
-    mobileSectionChecker();
-
     //thumbnail animation on dashboard page
     $(".slidethumb").each(function() {
         var count = 1; 
@@ -1420,6 +1417,20 @@ window.jQuery(function ($) {
             container.find(":nth-child(" + count + ")").fadeIn();
         }, 2000);
     });
+
+    /**
+     * Trigger slideshow save after a quickstart has been created
+     *
+     * @since 3.103 - Previously removed on 3.98
+     */
+    var sampleSlidesWereAdded = function () {
+        if (window.location.href.indexOf('metaslider_add_sample_slides_after') !== -1) {
+            setTimeout(function () {
+                APP && APP.triggerEvent('metaslider/save');
+            }, 1000);
+        }
+    }
+    sampleSlidesWereAdded();
 
     /* Dashboard modal */
     $(".open-modal").on("click", function () {
@@ -1433,7 +1444,78 @@ window.jQuery(function ($) {
         let id = $(this).data("id") || $(this).attr("id").replace("overlay-", "");
         $("#modal-" + id).fadeOut();
         $("#overlay-" + id).fadeOut();
-    });  
+    }); 
+    
+    /**
+     * Hide slide
+     */
+    // Stop propagation
+    $(".metaslider").on('click', 'button.hide-slide input[type=checkbox]', function(e){
+        e.stopPropagation();
+    });
+    // Button click handler
+    $(".metaslider").on('click', 'button.hide-slide', function(e) {
+        e.stopPropagation();
+        $(this).find('input[type=checkbox]').trigger('click');
+        $(this).closest('tr.slide').toggleClass('slide-is-hidden', $(this).find('input[type=checkbox]').is(':checked'));
+    });
+
+    /**
+     * Set Hiden slide class on page load
+     */
+    $(".metaslider button.hide-slide input[type=checkbox]").each(function(i) {
+        $(this).closest('tr.slide').toggleClass('slide-is-hidden', $(this).is(':checked'));
+    });
+
+    /**
+     * Toggle all settings boxes on load
+     * 
+     * @since 3.101
+     */
+    var toggleSettingsBoxes = function() {
+        $('.ms-settings-box').each(function () {
+            var box = $(this);
+            var isVisible = box.hasClass('ms-on') ? true : false;
+            var table = box.find('.ms-settings-box-inner');
+
+            if (isVisible) {
+                table.show();
+            } else {
+                table.hide();
+            }
+        });
+        // Patch to make sure disabled attribute remains for some checkboxes
+        $('.disabled-checkbox').each(function() {
+            $(this).attr('disabled', true);
+        });
+        $('.ms-loading-settings').remove();
+        $('.ms-settings-table').fadeIn();
+    }
+    toggleSettingsBoxes();
+
+    /**
+     * Event trigger to show/hide a settings box
+     * 
+     * @since 3.101
+     */
+    $('.ms-highlight').on('click', function (e) {
+        e.preventDefault();
+
+        var btn = $(this);
+        var box = btn.parents('.ms-settings-box');
+        var isVisible = box.hasClass('ms-on') ? true : false;
+        var table = box.find('.ms-settings-box-inner');
+
+        box.removeClass('ms-on ms-off');
+
+        if (isVisible) {
+            table.hide();
+            box.addClass('ms-off');
+        } else {
+            table.show();
+            box.addClass('ms-on');
+        }
+    });
 });
 
 /**

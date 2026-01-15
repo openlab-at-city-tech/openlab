@@ -17,6 +17,10 @@ use Jetpack_Gutenberg;
 use Jetpack_Memberships;
 use Jetpack_Subscriptions_Widget;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 require_once __DIR__ . '/class-jetpack-subscription-site.php';
 require_once __DIR__ . '/constants.php';
 require_once JETPACK__PLUGIN_DIR . 'extensions/blocks/premium-content/_inc/subscription-service/include.php';
@@ -58,8 +62,9 @@ function register_block() {
 		Blocks::jetpack_register_block(
 			__DIR__,
 			array(
-				'render_callback' => __NAMESPACE__ . '\render_block',
-				'supports'        => array(
+				'render_callback'       => __NAMESPACE__ . '\render_block',
+				'render_email_callback' => __NAMESPACE__ . '\render_email',
+				'supports'              => array(
 					'spacing' => array(
 						'margin'  => true,
 						'padding' => true,
@@ -819,6 +824,7 @@ function render_for_website( $data, $classes, $styles ) {
 									required="required"
 									type="email"
 									name="email"
+									autocomplete="email"
 									%1$s
 									style="%2$s"
 									placeholder="%3$s"
@@ -926,6 +932,57 @@ function render_for_email( $data, $styles ) {
 }
 
 /**
+ * WooCommerce Email Editor render callback for the subscriptions block.
+ *
+ * @param string $block_content The block content.
+ * @param array  $parsed_block  The parsed block data.
+ * @param object $rendering_context The email rendering context.
+ *
+ * @return string
+ */
+function render_email( $block_content, array $parsed_block, $rendering_context ) {
+	if ( ! isset( $parsed_block['attrs'] ) || ! is_array( $parsed_block['attrs'] ) || ! function_exists( '\Automattic\Jetpack\Extensions\Button\render_email' ) || ! class_exists( '\Automattic\WooCommerce\EmailEditor\Integrations\Core\Renderer\Blocks\Button' ) ) {
+		return '';
+	}
+
+	// Map subscription block attributes to button block attributes
+	$button_attributes = array(
+		'text'                  => ! empty( $parsed_block['attrs']['submitButtonText'] ) ? sanitize_text_field( $parsed_block['attrs']['submitButtonText'] ) : __( 'Subscribe', 'jetpack' ),
+		'url'                   => get_post_permalink(),
+		'element'               => 'a',
+		// Map background colors
+		'backgroundColor'       => $parsed_block['attrs']['buttonBackgroundColor'] ?? null,
+		'customBackgroundColor' => $parsed_block['attrs']['customButtonBackgroundColor'] ?? null,
+		// Map text colors
+		'textColor'             => $parsed_block['attrs']['textColor'] ?? null,
+		'customTextColor'       => $parsed_block['attrs']['customTextColor'] ?? null,
+		// Map borders
+		'borderRadius'          => $parsed_block['attrs']['borderRadius'] ?? 0,
+		'borderWeight'          => $parsed_block['attrs']['borderWeight'] ?? 1,
+		'borderColor'           => $parsed_block['attrs']['borderColor'] ?? null,
+		'customBorderColor'     => $parsed_block['attrs']['customBorderColor'] ?? null,
+		// Map typography
+		'fontSize'              => $parsed_block['attrs']['fontSize'] ?? null,
+		'customFontSize'        => $parsed_block['attrs']['customFontSize'] ?? null,
+		// Map spacing
+		'padding'               => $parsed_block['attrs']['padding'] ?? null,
+	);
+
+	// Create a mock button block structure
+	$button_parsed_block = array(
+		'attrs'       => $button_attributes,
+		'email_attrs' => $parsed_block['email_attrs'] ?? array(),
+	);
+
+	// Call the Jetpack button's email rendering
+	return \Automattic\Jetpack\Extensions\Button\render_email(
+		$block_content,
+		$button_parsed_block,
+		$rendering_context
+	);
+}
+
+/**
  * Filter excerpts looking for subscription data.
  *
  * @param string   $excerpt The extrapolated excerpt string.
@@ -936,13 +993,14 @@ function render_for_email( $data, $styles ) {
 function jetpack_filter_excerpt_for_newsletter( $excerpt, $post = null ) {
 	// The blogmagazine theme is overriding WP core `get_the_excerpt` filter and only passing the excerpt
 	// TODO: Until this is fixed, return the excerpt without gating. See https://github.com/Automattic/jetpack/pull/28102#issuecomment-1369161116
-	if ( $post && str_contains( $post->post_content, '<!-- wp:jetpack/subscriptions -->' ) ) {
+	if ( $post instanceof \WP_Post && str_contains( $post->post_content, '<!-- wp:jetpack/subscriptions -->' ) ) {
 		$excerpt .= sprintf(
 			// translators: %s is the permalink url to the current post.
 			__( "<p><a href='%s'>View post</a> to subscribe to site newsletter.</p>", 'jetpack' ),
 			get_post_permalink()
 		);
 	}
+
 	return $excerpt;
 }
 

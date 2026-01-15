@@ -137,7 +137,7 @@ $panels = [
 
 ?>
 
-<div class="flyout-menu" id="my-openlab-flyout" role="menu" data-default-panel="panel-root">
+<div class="flyout-menu" id="my-openlab-flyout" data-default-panel="panel-root">
 
 	<?php foreach ( $panels as $panel_id => $items ) : ?>
 		<?php
@@ -150,7 +150,7 @@ $panels = [
 
 		$panel_classes_string = implode( ' ', array_map( 'sanitize_html_class', $panel_classes ) );
 		?>
-		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" aria-hidden="true">
+		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" inert>
 			<div class="flyout-heading">
 				<?php if ( 'root' === $panel_id ) : ?>
 					<a href="<?php echo esc_url( bp_loggedin_user_url() ); ?>">
@@ -181,7 +181,7 @@ $panels = [
 						// Drawer target (not a link)
 						?>
 						<li class="<?php echo esc_attr( $class_attr ); ?>">
-							<button class="nav-item has-submenu flyout-action-button flyout-submenu-toggle" data-target="panel-<?php echo esc_attr( $item['target'] ); ?>">
+							<button class="nav-item has-submenu flyout-action-button flyout-submenu-toggle" data-target="panel-<?php echo esc_attr( $item['target'] ); ?>" aria-expanded="false">
 								<span><?php echo esc_html( $item['text'] ); ?></span>
 								<span class="right-chevron"><?php echo $right_chevron_svg; ?></span>
 							</button>

@@ -124,6 +124,8 @@ class Theme_Customizer {
 		'general-layout',
 		'general-colors',
 		'general-button',
+		'secondary-button',
+		'outline-button',
 		'general-typography',
 		'general-social',
 		'general-scroll-to-top',
@@ -685,9 +687,19 @@ class Theme_Customizer {
 					'priority' => 9,
 				),
 				'general_buttons' => array(
-					'title'    => __( 'Buttons', 'kadence' ),
+					'title'    => __( 'Base Button Styles', 'kadence' ),
 					'panel'    => 'design',
-					'priority' => 10,
+					'priority' => 12,
+				),
+				'secondary_button' => array(
+					'title'    => __( 'Secondary Button', 'kadence' ),
+					'panel'    => 'design',
+					'priority' => 13,
+				),
+				'outline_button' => array(
+					'title'    => __( 'Outline Button', 'kadence' ),
+					'panel'    => 'design',
+					'priority' => 14,
 				),
 				'general_typography' => array(
 					'title'    => __( 'Typography', 'kadence' ),
@@ -2002,13 +2014,32 @@ class Theme_Customizer {
 			--global-palette7: ' . kadence()->palette_option( 'palette7' ) . ';
 			--global-palette8: ' . kadence()->palette_option( 'palette8' ) . ';
 			--global-palette9: ' . kadence()->palette_option( 'palette9' ) . ';
+			--global-palette10: ' . kadence()->palette_option( 'palette10' ) . ';
+			--global-palette11: ' . kadence()->palette_option( 'palette11' ) . ';
+			--global-palette12: ' . kadence()->palette_option( 'palette12' ) . ';
+			--global-palette13: ' . kadence()->palette_option( 'palette13' ) . ';
+			--global-palette14: ' . kadence()->palette_option( 'palette14' ) . ';
+			--global-palette15: ' . kadence()->palette_option( 'palette15' ) . ';
+			--global-palette16: blue;
 			--global-palette-highlight: ' . $this->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) . ';
 			--global-palette-highlight-alt: ' . $this->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) . ';
 			--global-palette-highlight-alt2: ' . $this->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) . ';
+			
 			--global-palette-btn: ' . $this->render_color( kadence()->sub_option( 'buttons_color', 'color' ) ) . ';
 			--global-palette-btn-hover: ' . $this->render_color( kadence()->sub_option( 'buttons_color', 'hover' ) ) . ';
 			--global-palette-btn-bg: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'color' ) ) . ';
 			--global-palette-btn-bg-hover: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'hover' ) ) . ';
+
+			--global-palette-btn-sec: ' . $this->render_color( kadence()->sub_option( 'buttons_secondary_color', 'color' ) ) . ';
+			--global-palette-btn-sec-hover: ' . $this->render_color( kadence()->sub_option( 'buttons_secondary_color', 'hover' ) ) . ';
+			--global-palette-btn-sec-bg: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'color' ) ) . ';
+			--global-palette-btn-sec-bg-hover: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_secondary_background', 'hover' ) ) . ';
+
+			--global-palette-btn-out: ' . $this->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) . ';
+			--global-palette-btn-out-hover: ' . $this->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) . ';
+			--global-palette-btn-out-bg: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'color' ) ) . ';
+			--global-palette-btn-out-bg-hover: ' . $this->render_color_or_gradient( kadence()->sub_option( 'buttons_outline_background', 'hover' ) ) . ';
+
 			--global-base-font: ' . kadence()->sub_option( 'base_font', 'family' ) . ';
 			--global-heading-font: ' . ( 'inherit' !== kadence()->sub_option( 'heading_font', 'family' ) ? kadence()->sub_option( 'heading_font', 'family' ) : 'var(--global-base-font)' ) . ';
 		}';

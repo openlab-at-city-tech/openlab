@@ -1,0 +1,30 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Loading...": [
+                "Завантаження..."
+            ],
+            "AI Features Required": [
+                "Необхідні функції AI"
+            ],
+            "Go to AI Settings": [
+                "Перейдіть до налаштувань ШІ"
+            ],
+            "AI features are not enabled. Please enable AI features to use Content Analysis.": [
+                "Функції AI не увімкнені. Увімкніть функції AI, щоб використовувати Аналіз контенту."
+            ],
+            "Failed to load Content Analysis configuration.": [
+                "Не вдалося завантажити конфігурацію Аналізу контенту."
+            ],
+            "Content Analysis component not loaded.": [
+                "Компонент Аналізу контенту не завантажено."
+            ]
+        }
+    }
+}

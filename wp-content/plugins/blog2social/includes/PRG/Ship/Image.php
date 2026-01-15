@@ -18,7 +18,7 @@ class PRG_Ship_Image {
                 $content .='<div class="prg-image-item">';
                 $content .='<div class="prg-image-item-thumb">';
                 $content .='<label for="prg-image-count-' . esc_attr($tempCountImage) . '">';
-                $content .='<img class="img-thumbnail" alt="blogImage" src="' . esc_url($image[0]) . '">';
+                $content .='<img class="img-thumbnail" alt="" src="' . esc_url($image[0]) . '">';
                 $content .= '</label>';
                 $content .='</div>';
                 $content .='<div class="prg-image-item-caption text-center">';

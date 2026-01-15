@@ -23,6 +23,7 @@ abstract class EPKB_Layout {
 	protected $has_kb_categories = true;
 	protected $active_theme = 'unknown';
 	protected $displayed_article_ids = array();
+	protected $wizard_demo_icons = array();
 
 	/**
 	 * Show the KB Main page with list of categories and articles
@@ -32,7 +33,7 @@ abstract class EPKB_Layout {
 	 * @param array $article_seq
 	 * @param array $categories_seq
 	 */
-	public function display_non_modular_kb_main_page( $kb_config, $is_ordering_wizard_on=false, $article_seq=array(), $categories_seq=array() ) {
+	public function setup_kb_main_page( $kb_config, $is_ordering_wizard_on=false, $article_seq=array(), $categories_seq=array() ) {
 
 		// set initial data
 		$this->kb_config = $kb_config;
@@ -60,14 +61,7 @@ abstract class EPKB_Layout {
 		if ( isset( $this->articles_seq_data[0] ) ) {
 			$this->category_seq_data[0] = array();
 		}
-
-		$this->generate_non_modular_kb_main_page();
 	}
-
-	/**
-	 * Generate content of the KB main page
-	 */
-	protected abstract function generate_non_modular_kb_main_page();
 
 	/**
 	 * Display a link to a KB article.
@@ -86,13 +80,6 @@ abstract class EPKB_Layout {
 		$seq_no = $this->displayed_article_ids[$article_id];
 
 		EPKB_Utilities::get_single_article_link( $this->kb_config, $title, $article_id, $layout, $seq_no );
-	}
-
-	/**
-	 * Display a search form for core layouts for non-modular Main Page
-	 */
-	public function get_search_form() {
-		EPKB_KB_Search::get_search_form( $this->kb_config );
 	}
 
 	/**
@@ -121,7 +108,12 @@ abstract class EPKB_Layout {
 	 */
 	protected function get_category_icons() {
 
-		// handle block Editor or Visual Editor with theme preset selection
+		// handle Setup Wizard preview with demo category icons
+		if ( ! empty( $this->wizard_demo_icons ) ) {
+			return $this->wizard_demo_icons;
+		}
+
+		// handle block Editor or Frontend Editor with theme preset selection
 		if ( ( EPKB_Utilities::get( 'is_editor_preview', null ) || EPKB_Utilities::get( 'epkb-editor-page-loaded' ) == '1' ) && ! empty( $this->kb_config['theme_presets'] ) && $this->kb_config['theme_presets'] !== 'current' ) {
 			$category_icons = EPKB_Core_Utilities::get_or_update_new_category_icons( $this->kb_config, $this->kb_config['theme_presets'] );
 			if ( ! empty( $category_icons ) ) {

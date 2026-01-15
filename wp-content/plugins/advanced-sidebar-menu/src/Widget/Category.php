@@ -7,20 +7,22 @@ use Advanced_Sidebar_Menu\Menus\Category as CategoryMenu;
 /**
  * Creates a Widget of parent Child Categories
  *
- * @author   OnPoint Plugins
+ * @author         OnPoint Plugins
  *
- * @package  Advanced Sidebar Menu
+ * @package        Advanced Sidebar Menu
  *
  * @phpstan-import-type CATEGORY_SETTINGS from CategoryMenu
  * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @formatter:off
  * @phpstan-type DEFAULTS \Required<\Pick<CATEGORY_SETTINGS,'title'|'exclude'|'display_all'|'include_childless_parent'|'include_parent'|'levels'|'new_widget'|'single'>>
- * @formatter:on
+ * @formatter      :on
  *
  * @implements Widget<CATEGORY_SETTINGS, DEFAULTS>
  * @implements WidgetWithId<CATEGORY_SETTINGS, DEFAULTS>
  * @extends \WP_Widget<CATEGORY_SETTINGS>
+ *
+ * @phpstan-ignore class.implementsDeprecatedInterface (Remove when minimum PRO version requires the basic version 9.8.0)
  */
 class Category extends \WP_Widget implements Widget, WidgetWithId {
 	/**

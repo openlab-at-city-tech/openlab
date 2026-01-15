@@ -227,6 +227,19 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 = 3.0.7 (Released: October, 2025) =
 * Resolved minor css errors.
 
+= 3.0.8 (Released: October, 2025) =
+* Resolved css error for preview.
+* Updated style variation.
+* Resolved error for page.html.
+
+= 3.0.9 (Released: November, 2025) =
+* Resolved minor bugs.
+
+= 3.1 (Released: November, 2025) =
+* Added animation on frontpage.
+* Added pro link in admin dashboard topbar.
+* Resolved get started page css error.
+
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023

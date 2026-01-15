@@ -110,14 +110,21 @@ body .form-inline{
     padding: 5px;
 }
 .b2s-panel-body-dashboard{
-    height: 275px !important;
+    min-height: 222.5px !important;
 }
 .b2s-panel-body-dashboard-premium{
-    height: 225px !important;
+    min-height: 225.5px !important;
 }
 
 .b2s-panel-body-dashboard-small{
-    height: 200px !important;
+    min-height: 222.5px !important;
+}
+
+.panel-body-dashboard-padding{
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    
 }
 
 .b2s-btn-dashboard-outline {
@@ -164,7 +171,7 @@ body .form-inline{
 }
 
 .b2s-panel-height-300{
-    height:300px !important;
+    min-height:300px !important;
 }
 
 /*wigdet calender*/
@@ -272,4 +279,44 @@ ul.b2s-timeline > li:before {
     width: 20px;
     height: 20px;
     z-index: 400;
+}
+
+@media ( max-width: 1300px) and (min-width: 768px) {
+  .custom-col {
+    width: 45% !important;
+    max-width: 45% !important;
+    float: left;
+    clear: none;
+  }
+}
+
+.custom-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* optional spacing */
+}
+
+.custom-col {
+  border: 1px dashed red;
+  background: rgba(255, 0, 0, 0.05);
+}
+
+.custom-flex{
+  
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 15px;
+
+}
+.flex-item {
+  flex: 1 1 260px;
+  min-width: 260px;
+  box-sizing: border-box;
+
+}
+
+.panel-top-margin{
+
+    height: 50px;
 }

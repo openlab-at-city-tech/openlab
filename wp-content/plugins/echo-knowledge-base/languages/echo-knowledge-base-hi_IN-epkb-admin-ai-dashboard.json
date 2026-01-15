@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn more": [
+                "अधिक जानें"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Vote for Top 3 Features": [
+                "शीर्ष 3 सुविधाओं के लिए वोट दें"
+            ],
+            "First Name": [
+                "पहला नाम"
+            ],
+            "(optional)": [
+                "(वैकल्पिक)"
+            ],
+            "Email": [
+                "ईमेल"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "मतदान जमा करने में विफल रहा। कृपया पुनः प्रयास करें।."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "चरण 1: API कुंजी और गोपनीयता कॉन्फ़िगर करें"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "अपनी OpenAI API कुंजी जोड़ें और डेटा गोपनीयता समझौता स्वीकार करें।."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "चरण 2: AI चैट और/या AI खोज सक्षम करें"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "अपनी वेबसाइट के लिए AI खोज या चैट सुविधाओं को सक्षम करें।."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "चरण 3: प्रशिक्षण डेटा जोड़ें और सिंक करें"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "सामग्री चुनें और AI प्रोसेसिंग के लिए OpenAI के साथ सिंक करें।."
+            ],
+            "Go to Settings": [
+                "सेटिंग्स पर जाएँ"
+            ],
+            "Completed": [
+                "पूर्ण"
+            ],
+            "Warnings": [
+                "चेतावनाएं"
+            ],
+            "Welcome to AI Features!": [
+                "AI सुविधाओं में आपका स्वागत है!"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "बस कुछ ही चरणों में AI-चैट और AI-खोज सेटअप करें."
+            ],
+            "Complete Your Setup": [
+                "अपना सेटअप पूरा करें"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "AI सुविधाओं को सक्षम करने के लिए बस कुछ और कदम:"
+            ],
+            "Setup Steps": [
+                "सेटअप चरण"
+            ],
+            "Configure API Key & Privacy": [
+                "एपीआई कुंजी और गोपनीयता कॉन्फ़िगर करें"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "अपनी OpenAI API कुंजी जोड़ें और डेटा गोपनीयता समझौते को स्वीकार करें"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "AI-चैट और/या AI-खोज सक्षम करें"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "अपनी वेबसाइट के लिए AI-खोज या AI-चैट सुविधाओं को सक्षम करें"
+            ],
+            "Enable AI Features": [
+                "एआई सुविधाएं सक्षम करें"
+            ],
+            "Add Training Data & Sync": [
+                "मशीन लर्निंग डेटा जोड़ें और सिंक करें"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "सामग्री चुनें और एआई प्रसंस्करण के लिए OpenAI में सिंक करें"
+            ],
+            "Go to Training Data": [
+                "मशीन लर्निंग डेटा पर जाएँ"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "अपनी जानकारी देकर सुविधाओं को प्राथमिकता निर्धारित करने में हमारी मदद करें:"
+            ],
+            "Describe Your Feature Request": [
+                "अपना फीचर अनुरोध विवरण दें"
+            ],
+            "Please describe the feature you would like to see...": [
+                "कृपया वह फीचर बताएं जिसे आप देखना चाहेंगे..."
+            ],
+            "Submit Vote": [
+                "वोट जमा करें"
+            ],
+            "Please describe the feature you would like to see.": [
+                "कृपया वह फीचर बताएं जिसे आप देखना चाहेंगे।."
+            ],
+            "Please enter a valid email address.": [
+                "कृपया एक मान्य ईमेल पता दर्ज करें।."
+            ],
+            "Please select at least one feature to vote for.": [
+                "कम से कम एक फीचर चुनें ताकि आप वोट दे सकें।."
+            ],
+            "Submitting your vote...": [
+                "आपका वोट भेजा जा रहा है..."
+            ],
+            "Thank you for voting!": [
+                "वोट करने के लिए धन्यवाद!"
+            ],
+            "An error occurred. Please try again.": [
+                "एक त्रुटि हुई है। कृपया पुनः प्रयास करें।."
+            ],
+            "Latest AI Updates": [
+                "ताज़ा एआई अपडेट्स"
+            ],
+            "Select the features you would like to see implemented:": [
+                "वे फीचर्स चुनें जिन्हें आप लागू होते देखना चाहते हैं:"
+            ],
+            "Released": [
+                "रिलीज़ किया गया"
+            ],
+            "feature selected": [
+                "चयनित फीचर"
+            ],
+            "features selected": [
+                "चयनित फीचर्स"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "नोट: आपकी प्रतिक्रिया विकास को प्राथमिकता बनाने में हमारी मदद करती है। फीचर्स बदले जा सकते हैं।."
+            ]
+        }
+    }
+}

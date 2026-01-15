@@ -4,7 +4,7 @@ Tags: pdf, wordpress pdf generator, pdf generator, woocommerce pdf, post to pdf
 Requires at least: 3.9.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.0.2
+Stable tag: 2.2.0
 License: MIT
 
 DK PDF allows your site visitors generate PDF files from WordPress posts, pages, custom post types and WooCommerce products using a button.
@@ -21,21 +21,26 @@ Generate stunning, brand-consistent PDF files from your WordPress posts, pages, 
 
 == Powerful features that deliver results ==
 
-* Multi-Content Generation: Create PDFs from posts, pages, custom post types, taxonomies, and WooCommerce products
-* Selective Content Display: Choose exactly what appears in your PDFs - featured images, post dates, authors, categories, and more
-* WooCommerce Integration: Include product details like prices, SKUs, categories, and more
-* Header & Footer Control: Add logo, custom text, and branding elements to headers and footers
-* Custom CSS Support: Apply your own styling to match your brand perfectly
-* Smart Content Control: Use powerful shortcodes to hide sections, create column layouts, and add page breaks exactly where you need them
-* Template Overrides: Create custom templates in your theme for complete design control
-* WordPress Hooks: Extensive filter and action hooks for advanced customization
+* **Multi-Content Generation**: Create PDFs from posts, pages, custom post types, taxonomies, WooCommerce products, shop and categories
+* **Selective Content Display**: Choose exactly what appears in your PDFs - featured images, post dates, authors, categories, and more
+* **Custom Fields Support**: see [documentation](https://dinamiko.dev/docs/custom-fields/)
+* **Button Visibility by User Role**: Control which WordPress user roles can see and generate PDFs, see [documentation](https://dinamiko.dev/docs/pdf-button-visibility-by-role/)
+* **WooCommerce Integration**: Include product details like prices, SKUs, categories, and more
+* **Header & Footer Control**: Add logo, custom text, and branding elements to headers and footers
+* **Custom CSS Support**: Apply your own styling to match your brand perfectly
+* **Smart Content Control**: Use powerful shortcodes to hide sections, create column layouts, and add page breaks exactly where you need them
+* **Template Overrides**: Create custom templates in your theme for complete design and content control
+* **WordPress Hooks**: Extensive filter and action hooks for advanced customization
 
 == Perfect for every use case ==
 
-* Content Creators & Bloggers: Transform your best blog posts into downloadable PDFs for lead magnets or offline reading.
-* E-commerce Sites: Create product catalogs and detailed product sheets from your WooCommerce products.
-* Developers: Build custom PDF solutions for clients using template overrides and WordPress hooks.
-* Educational Sites: Convert course materials, lessons, and resources into portable PDF formats.
+* **Content Creators & Bloggers**: Transform your best blog posts into downloadable PDFs for lead magnets or offline reading.
+* **E-commerce Sites**: Create product catalogs and detailed product sheets from your WooCommerce products.
+* **Developers**: Build custom PDF solutions for clients using template overrides and WordPress hooks.
+* **Educational Sites**: Convert course materials, lessons, and resources into portable PDF formats.
+
+== DK PDF Custom Services ==
+Need custom functionality for the DK PDF Plugin? I provide [professional customization services](https://dinamiko.dev/dk-pdf-custom-services/) to extend and enhance your PDF generation capabilities.
 
 == Installation ==
 
@@ -58,8 +63,19 @@ Installing "DK PDF" can be done either by searching for "DK PDF" via the "Plugin
 9. WooCommerce Product PDF
 10. WooCommerce Shop PDF
 11. Disable PDF Button Metabox
+12. Custom Fields support
 
 == Changelog ==
+
+= 2.2.0 =
+- Enhancement - Add button visibility by role.
+- Enhancement - Add max. number of items to display in the PDF.
+- Fix - Fatal error with composer package versions.
+- Fix - Wrong header and footer title for categories and shop.
+
+= 2.1.0 =
+- Enhancement - Add custom fields support.
+- Fix - Display pdf button in wc taxonomies to apply.
 
 = 2.0.2 =
 - Fix - Wrong post content in single templates.

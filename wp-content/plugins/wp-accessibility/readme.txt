@@ -5,7 +5,7 @@ Tags: accessibility, wcag, a11y, section508, alt text
 Requires at least: 5.9
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 2.1.19
+Stable tag: 2.2.6
 Text Domain: wp-accessibility
 License: GPLv3
 
@@ -21,11 +21,11 @@ All features can be disabled according to your theme's needs. For advanced users
 
 = Theme Accessibility Features added by WP Accessibility =
 
-These are features that address issues caused by inaccessible themes. 
+These are features that address issues caused by inaccessible themes.
 
 * Add skip links with user-defined targets. (Customizable targets and appearance.)
 * Add language and text direction attributes to your HTML attribute if missing.
-* Add an outline to the keyboard focus state for focusable elements. 
+* Add an outline to the keyboard focus state for focusable elements.
 * Add a long description to images. Use the image's "Description" field to add long descriptions.
 * Enforcement for alt attributes on images in the Classic editor.
 * Identify images without alt attributes in the Media Library
@@ -36,7 +36,7 @@ These are features that address issues caused by inaccessible themes.
 
 = WordPress Core Accessibility Issues fixed by WP Accessibility =
 
-These are features that address issues caused by current or past WordPress core accessibility issues. (Issues added in content, such as target or title attributes, are persistent even when WordPress is updated.) 
+These are features that address issues caused by current or past WordPress core accessibility issues. (Issues added in content, such as target or title attributes, are persistent even when WordPress is updated.)
 
 * Force a search page error when a search is made with an empty text string. (If your theme has a search.php template.)
 * Remove redundant title attributes from tag clouds.
@@ -44,7 +44,7 @@ These are features that address issues caused by current or past WordPress core 
 
 Content specific fixes:
 
-* Strip title attributes from images inserted into content. 
+* Strip title attributes from images inserted into content.
 * Remove the target attribute from links.
 
 = Accessibility Tools in WP Accessibility: =
@@ -81,6 +81,55 @@ WP Accessibility includes a statistics collection feature to help you identify h
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+= 2.2.6 =
+
+* Bug fix: Incorrect call to `.removeAttr` triggered catch condition on all URLs, throwing unnecessary console messages.
+
+= 2.2.5 =
+
+* Bug fix: Toolbar preference cookies not set.
+
+= 2.2.4 =
+
+* Bug fix: Remove `html { will-change: filter }` due to Safari/iOS conflicts.
+* Change: Treat `role="slider"` the same as `role="button"` for high contrast.
+* Change: log cases where `href` is a non-link-like value.
+
+= 2.2.3 =
+
+* Change: Support and synchronize multiple toolbars on a single screen.
+* Feature: Option to switch the default File block behavior to 'link' instead of 'embed'.
+
+= 2.2.2 =
+
+* Bug fix: Rewrite in JS changed the data format sent to the server for stats.
+* Bug fix: Incorrect selector for tracking stats on fontsize switcher.
+* Bug fix: Internal label in stats incorrect for contrast changes.
+
+= 2.2.1 =
+
+* Bug fix: Undeclared variable in JS.
+* Bug fix: Incorrect variable used to report errors in console.
+* Change: Only add longdesc image block variation if a UI is enabled.
+
+= 2.2.0 =
+
+* Feature: Option for automatic insertion of play/pause button on autoplay videos without controls.
+* Feature: Automatically pause autoplay videos if prefers-reduced-motion enabled.
+* Change: Refactor all front-end JS to remove jQuery dependency.
+* Change: Design changes to alt text and long description buttons for consistency.
+* Change: Expand focusable element selector list: more thorough, now does not select the a11y toolbar itself.
+* Change: Add design CSS for longdesc link.
+* Change: Omit buttons with `role="button"` from fake button selector.
+* Change: Keep title attributes on images if they are different from the alt text.
+* Change: Also remove target attributes on URL fragments.
+* Change: Find non-link elements with `role="link"` and make focusable.
+* Change: Make links using `a` with `role="link"` and no href focusable.
+* Change: Add link styles on `role="link"`.
+* Bug Fix: Apply grayscale on `html` element to prevent shifts in position.
+* Bug Fix: Modernize screen reader text classes.
+* Bug Fix: Change how version number is handled. Automatic updates don't execute activation, so version wasn't getting incremented.
 
 = 2.1.19 =
 

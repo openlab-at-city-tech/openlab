@@ -3,7 +3,7 @@ use Bookly\Lib;
 
 ?>
 <!--
-Plugin Name: Bookly – Responsive WordPress Appointment Booking and Scheduling Plugin
+Plugin Name: Bookly - Responsive WordPress Appointment Booking and Scheduling Plugin
 Plugin URI: https://www.booking-wp-plugin.com/?utm_source=bookly_admin&utm_medium=plugins_page&utm_campaign=plugins_page
 Version: <?php echo Lib\Plugin::getVersion() ?>
 -->

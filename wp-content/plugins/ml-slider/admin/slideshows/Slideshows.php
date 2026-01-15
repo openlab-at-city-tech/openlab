@@ -155,6 +155,9 @@ class MetaSlider_Slideshows
 
         update_post_meta($slideshow_id, 'ml-slider_settings', $new_settings);
 
+        // @since 3.103
+        do_action( 'metaslider_save_slideshow', $slideshow_id, $new_settings );
+
         return $slideshow_id;
     }
 
@@ -261,20 +264,22 @@ class MetaSlider_Slideshows
             if (isset($slideshow_export['meta']['metaslider_extra_slideshow_css'])) {
                 $slideshow_export['meta']['metaslider_extra_slideshow_css'] = str_replace(
                     'metaslider-id-' . $slideshow->ID,
-                    'metaslider-id-{#ID#}', // To replace with correct ID during import
+                    'metaslider-id-{#ID#}', // Replace with correct ID during import
                     $slideshow_export['meta']['metaslider_extra_slideshow_css']
                 );
             }
 
-            // Unset unecessary meta
+            // Unset unneeded meta
             unset($slideshow_export['meta']['metaslider_copy_of']);
 
             $slides = get_posts(array(
                 'post_type' => array('ml-slide'),
                 'post_status' => array('publish'),
-                'lang' => '', // polylang, ingore language filter
-                'suppress_filters' => 1, // wpml, ignore language filter
+                'lang' => '', // polylang, ignore language filter
+                'suppress_filters' => 1,
                 'posts_per_page' => -1,
+                'orderby' => 'menu_order',
+                'order' => 'ASC',
                 'tax_query' => array(
                     array(
                         'taxonomy' => 'ml-slider',
@@ -286,6 +291,7 @@ class MetaSlider_Slideshows
 
             $slides_export = array();
             foreach ($slides as $key => $slide) {
+                // Default thumbnail
                 $image = get_post(get_post_meta($slide->ID, '_thumbnail_id', true));
                 $image_name = isset($image->post_name) ? $image->post_name : '';
                 $image_alt_name = isset($image->post_title) ? $image->post_title : '';
@@ -296,10 +302,11 @@ class MetaSlider_Slideshows
                     $image_alt_name = $image_name;
                     $image_name = $slide_type . '_' . $image_name;
                 }
+
                 $slides_export[$key] = array(
                     'original_id' => $slide->ID,
                     'order' => $slide->menu_order,
-                    'post_excerpt' => $this->stub_image_urls_from_string($slide->post_excerpt),
+                    'post_excerpt' => $slide->post_excerpt, //$this->stub_image_urls_from_string($slide->post_excerpt)
                     'image' => $image_name,
                     'image_alt' => $image_alt_name,
                     'meta' =>  array()
@@ -307,11 +314,59 @@ class MetaSlider_Slideshows
 
                 // Replace content url with placeholder for easier importing
                 foreach (get_post_meta($slide->ID) as $metakey => $value) {
-                    $slides_export[$key]['meta'][$metakey] = $this->stub_image_urls_from_string($value[0]);
+                    $slides_export[$key]['meta'][$metakey] = $value[0]; //$this->stub_image_urls_from_string($value[0])
                 }
 
-                // Unset unnecessary meta
-                unset($slides_export[$key]['meta']['_thumbnail_id']);
+                // Local videos - uses duplicated meta keys,
+                // so we need to make them unique for json by renaming the meta keys to video_id_1_, video_id_2_, video_id_3_
+                if ( in_array( $slide_type, array( 'local_video', 'html_overlay' ) ) ) {
+                    // Remove meta video id - we'll add it next with unique names if multiple
+                    unset( $slides_export[$key]['meta']['ml-slider_video_id'] );
+
+                    $count_ = 1;
+                    foreach ( get_post_meta($slide->ID, 'ml-slider_video_id', false ) as $metakey => $value ) {
+                        $video_url = wp_get_attachment_url( $value );
+                        
+                        if ( $video_url ) {
+                            $slides_export[$key]['video_url_' . $count_] = $video_url;
+                            $slides_export[$key]['meta']['video_id_' . $count_ . '_'] = $value;
+                            $count_++;
+                        }
+                    }
+                }
+
+                // External videos - uses duplicated meta keys,
+                // so we need to make them unique for json by renaming the meta keys to video_id_1_, video_id_2_, video_id_3_
+                if ( in_array( $slide_type, array( 'external_video', 'html_overlay' ) ) ) {
+                    // Remove meta video id - we'll add it next with unique names if multiple
+                    unset( $slides_export[$key]['meta']['ml-slider_video_url'] );
+
+                    $count_ = 1;
+                    foreach ( get_post_meta($slide->ID, 'ml-slider_video_url', false ) as $metakey => $value ) {
+                        $slides_export[$key]['meta']['video_exturl_' . $count_ . '_'] = $value;
+                        $count_++;
+                    }
+                }
+
+                // Images - get images URL for an easier importing and sync
+                $images_ = array(
+                    '_thumbnail_id' => 'image_url', // Regular slide thumbnail
+                    '_meta_slider_slide_thumbnail_id' => 'custom_image_url' // Custom slide thumbnail
+                );
+
+                foreach ( $images_ as $meta_key => $export_key ) {
+                    $image_id = $slides_export[$key]['meta'][ $meta_key ] ?? null;
+                    
+                    if ( $image_id ) {
+                        $image_url = wp_get_attachment_url( $image_id );
+                        
+                        if ( $image_url ) {
+                            $slides_export[$key][ $export_key ] = $image_url;
+                        }
+                        
+                        unset( $slides_export[$key]['meta'][ $meta_key ] );
+                    }
+                }
             }
 
             $slideshow_export['slides'] = $slides_export;
@@ -320,10 +375,15 @@ class MetaSlider_Slideshows
             unset($slides_export);
             unset($slideshow_export);
         }
+
+        // Add metadata
         $export['metadata'] = array(
             'version' => $this->plugin->version,
-            'date' => date("Y/m/d") // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            'date' => date("Y/m/d"), // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+            'domain' => home_url(),
+            'environment' => function_exists('wp_get_environment_type') ? wp_get_environment_type() : 'unknown'
         );
+
         return $export;
     }
 
@@ -397,7 +457,7 @@ class MetaSlider_Slideshows
                         'post_title' => "Slider {$new_slideshow_id} - {$slide['meta']['ml-slider_type']}",
                         'post_status' => 'publish',
                         'post_type' => 'ml-slide',
-                        'post_excerpt' => $this->restore_image_urls_from_string($slide['post_excerpt']),
+                        'post_excerpt' => $slide['post_excerpt'], //$this->restore_image_urls_from_string($slide['post_excerpt'])
                         'menu_order' => $slide['order']
                     ), true);
 
@@ -405,13 +465,72 @@ class MetaSlider_Slideshows
                         throw new Exception($new_slideshow_id->get_error_message());
                     }
 
-                    // Update the thumbnail from the computed new image id
+                    /*/ Update the thumbnail from the computed new image id
                     if (isset($slide['id'])) {
                         $slide['meta']['_thumbnail_id'] = $slide['id'];
+                    }*/
+                        
+                    $slide_type = $slide['meta']['ml-slider_type'] ?? null;
+
+                    // Local videos - upload videos and get new attachment IDs
+                    if ( in_array( $slide_type, array( 'local_video', 'html_overlay' ) ) ) {
+                        $videos_ = array(
+                            'video_id_1_' => 'video_url_1',
+                            'video_id_2_' => 'video_url_2',
+                            'video_id_3_' => 'video_url_3'
+                        );
+
+                        foreach ( $videos_ as $meta_key => $export_key ) {
+                            if ( isset( $slide[$export_key] ) ) {
+                                $attachment_id = $this->import_file_to_media_library( $slide[$export_key] );
+
+                                if ( is_wp_error( $attachment_id ) ) {
+                                    // Log and collect the error
+                                    $error_message = sprintf(
+                                        __( 'Failed to import video from URL: %s. Error: %s', 'ml-slider' ),
+                                        esc_url( $slide[$export_key] ),
+                                        $attachment_id->get_error_message()
+                                    );
+                                    array_push( $errors[$index], $error_message );
+
+                                    // Continue to next slide instead of aborting all
+                                    continue;
+                                }
+                                
+                                $slide['meta'][$meta_key] = $attachment_id;
+                            }
+                        }
+                    }
+
+                    // Images - get images URL for an easier import and sync
+                    $images_ = array(
+                        '_thumbnail_id' => 'image_url', // Regular slide thumbnail
+                        '_meta_slider_slide_thumbnail_id' => 'custom_image_url' // Custom slide thumbnail
+                    );
+
+                    foreach ( $images_ as $meta_key => $export_key ) {
+                        if ( isset( $slide[$export_key] ) ) {
+                            $attachment_id = $this->import_file_to_media_library( $slide[$export_key] );
+
+                            if ( is_wp_error( $attachment_id ) ) {
+                                // Log and collect the error
+                                $error_message = sprintf(
+                                    __( 'Failed to import image from URL: %s. Error: %s', 'ml-slider' ),
+                                    esc_url( $slide[$export_key] ),
+                                    $attachment_id->get_error_message()
+                                );
+                                array_push( $errors[$index], $error_message );
+
+                                // Continue to next slide instead of aborting all
+                                continue;
+                            }
+                            
+                            $slide['meta'][$meta_key] = $attachment_id;
+                        }
                     }
 
                     foreach ($slide['meta'] as $key => $value) {
-                        $value = $this->restore_image_urls_from_string($value);
+                        //$value = $this->restore_image_urls_from_string($value);
 
                         // @since 3.95 - Stop the process and cleanup if we catch non valid data in JSON
                         if ( is_serialized( $value ) && substr( trim( $value ), 0, 2 ) === 'O:' ) {
@@ -424,7 +543,20 @@ class MetaSlider_Slideshows
                             );
                         }
 
-                        add_post_meta($new_slide_id, $key, $this->maybe_unserialize($value));
+                        if ( in_array( $slide_type, array( 'local_video', 'html_overlay' ) ) 
+                            && in_array( $key, array( 'video_id_1_', 'video_id_2_', 'video_id_3_' ) ) 
+                        ) {
+                            // Local videos - adjust meta to allow duplicated meta keys
+                            add_post_meta( $new_slide_id, 'ml-slider_video_id', $this->maybe_unserialize( $value ) );
+                        } elseif ( in_array( $slide_type, array( 'external_video', 'html_overlay' ) ) 
+                            && in_array( $key, array( 'video_exturl_1_', 'video_exturl_2_', 'video_exturl_3_' ) ) 
+                        ) {
+                            // External videos - adjust meta to allow duplicated meta keys
+                            add_post_meta( $new_slide_id, 'ml-slider_video_url', $this->maybe_unserialize( $value ) );
+                        } else {
+                            // Other meta
+                            add_post_meta( $new_slide_id, $key, $this->maybe_unserialize( $value ) );
+                        }
                     }
 
                     wp_set_post_terms($new_slide_id, $term['term_id'], 'ml-slider', true);
@@ -501,6 +633,8 @@ class MetaSlider_Slideshows
      * Used by a callback to replace images with a stub containing the name and title
      * Makes it possibel to look up images later
      *
+     * @deprecated since 3.103
+     * 
      * @see stub_image_urls_from_string()
      * @param array $matches - The image
      *
@@ -520,6 +654,8 @@ class MetaSlider_Slideshows
      * This is the reverse of the above. IT will attempt to find the image locally
      * {#CONTENTURL#}{#URLname:/2020/04/imagename.jpg#}{#filename:imagename#}{#filetitle:imagename#}
      *
+     * @deprecated since 3.103
+     * 
      * @see restore_image_urls_from_string()
      * @param array $image_data - The image
      *
@@ -982,5 +1118,44 @@ class MetaSlider_Slideshows
             ob_clean();
             return new WP_Error('preview_failed', $e->getMessage());
         }
+    }
+
+    /**
+     * Upload images from URL to Media Library
+     * 
+     * @since 3.103
+     * 
+     * @param string $image_url - The full URL of the image to import
+     * 
+     * @return int|WP_Error - Attachment ID on success, WP_Error on failure
+     */
+    public function import_file_to_media_library( $image_url ) {
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        // Sideload the image into the uploads directory
+        $tmp = download_url( $image_url );
+
+        if ( is_wp_error( $tmp ) ) {
+            return $tmp; // Return error object if download failed
+        }
+
+        // Get the filename and extension
+        $file_array = [
+            'name'     => basename( parse_url( $image_url, PHP_URL_PATH ) ),
+            'tmp_name' => $tmp,
+        ];
+
+        // Do the actual media upload (sideload)
+        $attachment_id = media_handle_sideload( $file_array, 0 );
+
+        // Cleanup temp file if there was an error
+        if ( is_wp_error( $attachment_id ) ) {
+            @unlink( $file_array['tmp_name'] );
+            return $attachment_id;
+        }
+
+        return $attachment_id;
     }
 }

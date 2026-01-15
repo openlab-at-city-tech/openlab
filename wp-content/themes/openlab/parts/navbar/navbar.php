@@ -47,7 +47,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 
 		<?php if ( is_user_logged_in() ) : ?>
 			<div class="navbar-action-link navbar-action-link-favorites navbar-action-link-toggleable">
-				<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="favorites-flyout">
+				<button class="navbar-flyout-toggle" aria-expanded="false" aria-controls="favorites-flyout">
 					<span class="screen-reader-text">Favorites</span>
 					<span class="icon-default"><?php get_template_part( 'parts/navbar/favorites-icon' ); ?></span>
 					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
@@ -56,7 +56,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 
 			<div class="navbar-action-link navbar-action-link-my-openlab navbar-action-link-toggleable <?php echo esc_attr( $my_openlab_is_current_class ); ?>">
 				<span class="screen-reader-text">My OpenLab</span>
-				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
+				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-expanded="false" aria-controls="my-openlab-flyout">
 					<span class="screen-reader-text">My OpenLab</span>
 					<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
 					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
@@ -64,7 +64,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 			</div>
 		<?php else : ?>
 			<div class="navbar-action-link navbar-action-link-login navbar-action-link-toggleable">
-				<button class="navbar-flyout-toggle navbar-flyout-toggle-login" aria-haspopup="true" aria-expanded="false" aria-controls="login-flyout">
+				<button class="navbar-flyout-toggle navbar-flyout-toggle-login" aria-expanded="false" aria-controls="login-flyout">
 					<span>Sign In</span>
 					<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
 					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
@@ -73,7 +73,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 		<?php endif; ?>
 
 		<div class="navbar-action-link navbar-action-link-main-menu navbar-action-link-toggleable">
-			<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="main-menu-flyout">
+			<button class="navbar-flyout-toggle" aria-expanded="false" aria-controls="main-menu-flyout">
 				<span class="screen-reader-text">Main Menu</span>
 				<span class="icon-default"><?php get_template_part( 'parts/navbar/menu-icon' ); ?></span>
 				<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
@@ -85,7 +85,7 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 	<div class="shadow-mask-right"></div>
 </nav>
 
-<div class="openlab-navbar-drawer" aria-hidden="true">
+<div class="openlab-navbar-drawer" inert>
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>

@@ -1,7 +1,6 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Settings\Selects;
-use Bookly\Backend\Components\Controls;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Log;
 
@@ -48,6 +47,11 @@ use Bookly\Lib\Utils\Log;
                     <input class="form-control" type="text" id="bookly-log-search" placeholder="<?php esc_attr_e( 'Quick search', 'bookly' ) ?>"/>
                 </div>
             </div>
+            <div class="col-auto">
+                <button class="btn btn-default bookly-js-reload-log" type="button" style="">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
         </div>
         <table id="bookly-logs-table" class="table table-striped table-hover nowrap w-100 bookly-table-wrap text-left">
             <thead>
@@ -57,9 +61,6 @@ use Bookly\Lib\Utils\Log;
                         <th><?php echo esc_html( $datatables['logs']['titles'][ $column ] ) ?></th>
                     <?php endif ?>
                 <?php endforeach ?>
-                <?php if ( $debug ) : ?>
-                    <th width="16"><?php Controls\Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
-                <?php endif ?>
             </tr>
             </thead>
         </table>
@@ -69,7 +70,7 @@ use Bookly\Lib\Utils\Log;
         </div>
     </div>
     <?php
-    Selects::renderSingle( 'bookly_logs_expire', __( 'Keep logs', 'bookly' ), null, array( array( '7', sprintf( _n( '%s day', '%s days', 7, 'bookly' ), 7 ) ), array( '30', sprintf( _n( '%s day', '%s days', 30, 'bookly' ), 30 ) ), array( '90', sprintf( _n( '%s day', '%s days', 90, 'bookly' ), 90 ) ), array( '365', sprintf( _n( '%s day', '%s days', 365, 'bookly' ), 365 ) ) ) );
+    Selects::renderSingle( 'bookly_logs_expire', __( 'Keep logs', 'bookly' ), null, array( array( '7', sprintf( _n( '%d day', '%d days', 7, 'bookly' ), 7 ) ), array( '30', sprintf( _n( '%d day', '%d days', 30, 'bookly' ), 30 ) ), array( '90', sprintf( _n( '%d day', '%d days', 90, 'bookly' ), 90 ) ), array( '365', sprintf( _n( '%d day', '%d days', 365, 'bookly' ), 365 ) ) ) );
     ?>
     <?php if ( $debug ): ?>
         <div class="row">

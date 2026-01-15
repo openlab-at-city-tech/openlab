@@ -126,6 +126,36 @@ class Component implements Component_Interface {
 					'slug'  => 'theme-palette9',
 					'color' => kadence()->palette_option( 'palette9' ),
 				),
+				array(
+					'name'  => __( 'Accent - Complement', 'kadence' ),
+					'slug'  => 'theme-palette10',
+					'color' => kadence()->palette_option( 'palette10' ),
+				),
+				array(
+					'name'  => __( 'Notices - Success', 'kadence' ),
+					'slug'  => 'theme-palette11',
+					'color' => kadence()->palette_option( 'palette11' ),
+				),
+				array(
+					'name'  => __( 'Notices - Info', 'kadence' ),
+					'slug'  => 'theme-palette12',
+					'color' => kadence()->palette_option( 'palette12' ),
+				),
+				array(
+					'name'  => __( 'Notices - Alert', 'kadence' ),
+					'slug'  => 'theme-palette13',
+					'color' => kadence()->palette_option( 'palette13' ),
+				),
+				array(
+					'name'  => __( 'Notices - Warning', 'kadence' ),
+					'slug'  => 'theme-palette14',
+					'color' => kadence()->palette_option( 'palette14' ),
+				),
+				array(
+					'name'  => __( 'Notices - Rating', 'kadence' ),
+					'slug'  => 'theme-palette15',
+					'color' => kadence()->palette_option( 'palette15' ),
+				)
 			)
 		);
 	}

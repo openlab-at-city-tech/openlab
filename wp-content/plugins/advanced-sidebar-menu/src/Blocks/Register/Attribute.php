@@ -32,7 +32,7 @@ class Attribute implements AttributeRules {
 	/**
 	 * Default value for this attribute.
 	 *
-	 * @phsptan-var 'string'|'int'|'bool'|'array'|'object'|null
+	 * @phsptan-var string|int|bool|array|object|null
 	 * @var mixed
 	 */
 	public $default;

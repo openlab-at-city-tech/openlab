@@ -23,6 +23,10 @@
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Status\Host;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 Assets::add_resource_hint(
 	array(
 		'//widgets.wp.com',
@@ -343,7 +347,7 @@ class Jetpack_Likes {
 				),
 				array( 'jquery' ),
 				JETPACK__VERSION,
-				$in_footer = false
+				false
 			);
 			wp_enqueue_script(
 				'likes-post-count-jetpack',
@@ -353,7 +357,7 @@ class Jetpack_Likes {
 				),
 				array( 'jquery', 'likes-post-count' ),
 				JETPACK__VERSION,
-				$in_footer = false
+				false
 			);
 		}
 	}

@@ -14,9 +14,6 @@ class EPKB_Categories_Admin {
 		add_action( 'edited_term', array( $this, 'update_categories_sequence' ), 10, 3 );
 		add_action( 'delete_term', array( $this, 'update_categories_sequence' ), 10, 3 );
 
-		// check flag for get started page
-		add_action( 'created_term', array( $this, 'update_edit_articles_categories_visited_flag' ), 10, 3 );
-		add_action( 'edited_term', array( $this, 'update_edit_articles_categories_visited_flag' ), 10, 3 );
 	}
 
 	/**
@@ -256,18 +253,4 @@ class EPKB_Categories_Admin {
 		return $new_cat_ids_obj->ids_array;
 	}
 
-	public function update_edit_articles_categories_visited_flag( $updated_term_id=0, $taxonomy_id=0, $taxonomy_slug='' ) {
-
-		$kb_id = EPKB_KB_Handler::get_kb_id_from_category_taxonomy_name( $taxonomy_slug );
-		if ( is_wp_error( $kb_id ) ) {
-			return false;
-		}
-
-		// add flag for get started page
-		if ( ! EPKB_Core_Utilities::run_setup_wizard_first_time() ) {
-			EPKB_Core_Utilities::add_kb_flag( 'edit_articles_categories_visited' );
-		}
-
-		return true;
-	}
 }

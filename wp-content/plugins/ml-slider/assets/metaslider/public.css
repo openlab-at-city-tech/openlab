@@ -186,8 +186,13 @@ body .metaslider .flexslider .flex-direction-nav li {
     opacity: 1.0 !important;
 }
 
+.metaslider .flex-control-thumbs {
+    margin: 5px -5px 0 -5px;
+}
+
 .metaslider .flex-control-thumbs li {
     width: auto;
+    margin: 5px;
 }
 
 .metaslider ol.flex-control-thumbs img,
@@ -478,6 +483,37 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
 	outline: 2px solid #007cba;
 	outline-offset: -2px;
 }
+/* Loading */
+.ms-slider-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    background: #f2f2f2;
+    z-index: 11;
+}
+
+/* Remove bottom spacing when using container to have full control of spacing 
+ * through Container's margin and padding settings */
+.metaslider-container-box .metaslider.metaslider-flex.ml-slider .flexslider {
+    margin-bottom: 0;
+}
+.metaslider-container-box .metaslider.metaslider-flex.ml-slider {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.metaslider-container-box .metaslider.metaslider-flex.ml-slider .flexslider .flex-control-nav:not(.flex-control-thumbs) {
+    margin-bottom: 0;
+}
+/*.metaslider-container-box .metaslider.metaslider-flex.ml-slider .flexslider .slides li {
+    margin-top: 0;
+    margin-bottom: 0;
+}*/
+
 @media only screen and (max-width : 767px) {
     .metaslider.ms-theme-precognition .flex-control-nav li a {
         text-indent: -9999px !important;

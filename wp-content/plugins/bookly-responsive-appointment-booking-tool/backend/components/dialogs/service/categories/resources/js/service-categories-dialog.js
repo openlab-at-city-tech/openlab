@@ -5,7 +5,7 @@ jQuery(function($) {
         $categories = $('#bookly-services-categories', $dialog),
         $template = $('#bookly-new-category-template').clone().removeAttr('id').addClass('bookly-js-category-wrap'),
         $newCategory = $('#bookly-js-new-category', $dialog),
-        $servicesList = $('#services-list'),
+        $servicesList = $('#bookly-services-list'),
         $save = $('#bookly-save', $dialog),
         $thumb_container,
         frame = wp.media({

@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Updated": [
+                "Оновлено"
+            ],
+            "Error": [
+                "Помилка"
+            ],
+            "No posts found to sync": [
+                "Публікацій не знайдено для синхронізації"
+            ],
+            "Pending": [
+                "Очікує перевірки"
+            ],
+            "of": [
+                "з"
+            ],
+            "errors": [
+                "помилки"
+            ],
+            "with": [
+                "з"
+            ],
+            "Sync canceled": [
+                "Синхронізацію скасовано"
+            ],
+            "Failed to cancel sync": [
+                "Не вдалося скасувати синхронізацію"
+            ],
+            "A sync job is already running.": [
+                "Завдання синхронізації вже виконується."
+            ],
+            "Failed to start sync": [
+                "Не вдалося запустити синхронізацію"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "Потрібен ключ API OpenAI для синхронізації вмісту. Налаштуйте його в Загальних налаштуваннях."
+            ],
+            "Sync Method": [
+                "Метод синхронізації"
+            ],
+            "Basic Timer": [
+                "Базовий таймер"
+            ],
+            "Select All Filtered Records": [
+                "Вибрати всі відфільтровані записи"
+            ],
+            "Select All Records": [
+                "Вибрати всі записи"
+            ],
+            "Outdated": [
+                "Застаріло"
+            ],
+            "Added": [
+                "Додано"
+            ],
+            "Selected": [
+                "Вибрано"
+            ],
+            "Records": [
+                "Записи"
+            ],
+            "selected records": [
+                "обрані записи"
+            ],
+            "Sync in Progress": [
+                "Синхронізація виконується"
+            ],
+            "Cancel Sync": [
+                "Скасувати синхронізацію"
+            ],
+            "API key required": [
+                "Потрібен ключ API"
+            ],
+            "Select at least one item to sync": [
+                "Виберіть хоча б один елемент для синхронізації"
+            ],
+            "Start Sync": [
+                "Почати синхронізацію"
+            ],
+            "Sync started successfully! ": [
+                "Синхронізацію успішно запущено!"
+            ],
+            "Starting sync...": [
+                "Починаю синхронізацію..."
+            ],
+            "Retrying failed posts:": [
+                "Повторна відправка невдалих публікацій:"
+            ],
+            "Processing": [
+                "Обробка"
+            ],
+            "posts": [
+                "публікації"
+            ],
+            "Completed! Processed": [
+                "Виконано! Оброблено"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "Синхронізацію зупинено після 5 послідовних помилок. Оброблено"
+            ],
+            "posts with": [
+                "пости з"
+            ],
+            "total errors": [
+                "Усього помилок"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "Запланована синхронізація, очікування запуску..."
+            ]
+        }
+    }
+}

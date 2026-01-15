@@ -17,6 +17,7 @@ class Ajax extends Lib\Base\Ajax
         Lib\Utils\Tables::DISCOUNTS,
         Lib\Utils\Tables::EMAIL_LOGS,
         Lib\Utils\Tables::EMAIL_NOTIFICATIONS,
+        Lib\Utils\Tables::EVENTS,
         Lib\Utils\Tables::GIFT_CARDS,
         Lib\Utils\Tables::GIFT_CARD_TYPES,
         Lib\Utils\Tables::LOCATIONS,

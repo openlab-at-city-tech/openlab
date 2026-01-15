@@ -39,8 +39,6 @@ class Meow_WPMC_Core {
 		return $this->shortcode_analysis;
 	}
 
-	private $ref_index_exists = false;
-
 	public function __construct() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		add_action( 'init', array( $this, 'init' ) );
@@ -64,7 +62,7 @@ class Meow_WPMC_Core {
 		$this->upload_url = substr( $uploaddir['baseurl'], strlen( $this->site_url ) );
 		$this->check_content = $this->get_option( 'content' );
 		$this->debug_logs = $this->get_option( 'debuglogs' );
-		$this->is_rest = MeowCommon_Helpers::is_rest();
+		$this->is_rest = MeowKit_WPMC_Helpers::is_rest();
 		$this->is_cli = defined( 'WP_CLI' ) && WP_CLI;
 		$this->shortcode_analysis = !$this->get_option( 'shortcodes_disabled' );
 		$this->use_cached_references = $this->get_option( 'use_cached_references' );
@@ -1556,73 +1554,67 @@ class Meow_WPMC_Core {
 
 	}
 
-	//* Let's only use transient to avoid PHP memory issues. Commented out the CLI version.
 	private function get_cached_ids() {
-		//if( !$this->is_cli ) {
-			$cached_ids = get_transient($this->cached_ids_key);
-			return $cached_ids !== false ? $cached_ids : array();
-		//}
-
-		
-		// if( $this->is_cli ) {
-		// 	return $this->cached_ids_cli;
-		// }
-		
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_cache";
+		$cached_ids = $wpdb->get_col( $wpdb->prepare(
+			"SELECT cache_value FROM $table_name WHERE cache_key = %s AND cache_type = %s",
+			$this->cached_ids_key,
+			'id'
+		) );
+		return $cached_ids ? $cached_ids : array();
 	}
 
 	private function get_cached_urls() {
-		//if( !$this->is_cli ) {
-			$cached_urls = get_transient($this->cached_urls_key);
-			return $cached_urls !== false ? $cached_urls : array();
-		//}
-
-		// if( $this->is_cli ) {
-		// 	return $this->cached_urls_cli;
-		// }
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_cache";
+		$cached_urls = $wpdb->get_col( $wpdb->prepare(
+			"SELECT cache_value FROM $table_name WHERE cache_key = %s AND cache_type = %s",
+			$this->cached_urls_key,
+			'url'
+		) );
+		return $cached_urls ? $cached_urls : array();
 	}
 
 	private function add_cached_id($id) {
-		$cached_ids = $this->get_cached_ids();
-		if ( !in_array( $id, $cached_ids ) ) {
-			$cached_ids[] = $id;
-
-			// if( $this->is_cli ) {
-			// 	$this->cached_ids_cli[] = $id;
-			// }
-
-			//if( !$this->is_cli ) {
-				set_transient( $this->cached_ids_key, $cached_ids, 0 );
-			//}
-
-			return true;
-			
-		}
-
-		return false;
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_cache";
+		
+		// Try to insert, ignore if duplicate (UNIQUE KEY will prevent duplicates)
+		$result = $wpdb->query( $wpdb->prepare(
+			"INSERT IGNORE INTO $table_name (cache_key, cache_value, cache_type) VALUES (%s, %s, %s)",
+			$this->cached_ids_key,
+			$id,
+			'id'
+		) );
+		
+		// Return true if a row was inserted
+		return $result > 0;
 	}
 
 	private function add_cached_url($url) {
-		$cached_urls = $this->get_cached_urls();
-		if ( !in_array( $url, $cached_urls ) ) {
-			$cached_urls[] = $url;
-
-			// if( $this->is_cli ) {
-			// 	$this->cached_urls_cli[] = $url;
-			// }
-			//if ( !$this->is_cli ) {
-				set_transient($this->cached_urls_key, $cached_urls, 0);
-			//}
-			
-			return true;
-		}
-
-		return false;
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_cache";
+		
+		// Try to insert, ignore if duplicate (UNIQUE KEY will prevent duplicates)
+		$result = $wpdb->query( $wpdb->prepare(
+			"INSERT IGNORE INTO $table_name (cache_key, cache_value, cache_type) VALUES (%s, %s, %s)",
+			$this->cached_urls_key,
+			$url,
+			'url'
+		) );
+		
+		// Return true if a row was inserted
+		return $result > 0;
 	}
 
 	function reset_cached_references() {
-		delete_transient( $this->cached_ids_key );
-		delete_transient( $this->cached_urls_key );
-
+		global $wpdb;
+		$table_name = $wpdb->prefix . "mclean_cache";
+		
+		// Delete all cached references from the cache table
+		$wpdb->query( "TRUNCATE TABLE $table_name" );
+		
 		$this->cached_ids_cli = array();
 		$this->cached_urls_cli = array();
 	}
@@ -1966,7 +1958,6 @@ class Meow_WPMC_Core {
 		global $wpdb;
 
 		$table = $wpdb->prefix . "mclean_refs";
-		$this->create_mediaId_index( $table );
 
 		$row = null;
 		if ( !empty( $mediaId ) ) {
@@ -1986,20 +1977,6 @@ class Meow_WPMC_Core {
 			}
 		}
 		return false;
-	}
-
-	function create_mediaId_index( $table ) {
-		if ( $this->ref_index_exists ) return;
-
-		global $wpdb;
-		// If the index already exists, return
-		$index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}mclean_refs WHERE Key_name = 'mediaId_index'" );
-		if ( !empty( $index ) ) {
-			$this->ref_index_exists = true;
-			return;
-		}
-
-		$wpdb->query("CREATE INDEX mediaId_index ON $table (mediaId)");
 	}
 
 	function get_full_upload_path( $relative_path ) {
@@ -2351,32 +2328,8 @@ class Meow_WPMC_Core {
 }
 
 // Check the DB. If does not exist, let's create it.
-// TODO: When PHP 7 only, let's clean this and use anonymous functions.
 function wpmc_check_database() {
-	global $wpdb;
-	static $wpmc_check_database_done = false;
-	if ( $wpmc_check_database_done ) {
-		return true;
-	}
-	$table_refs = $wpdb->prefix . "mclean_refs";
-	$table_scan = $wpdb->prefix . "mclean_scan";
-	$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs )
-		|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan ) );
-	if ( !$db_init ) {
-		wpmc_create_database();
-		$db_init = !( strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_refs'" ) ) != strtolower( $table_refs )
-			|| strtolower( $wpdb->get_var( "SHOW TABLES LIKE '$table_scan'" ) ) != strtolower( $table_scan ) );
-	}
-
-	// Check if parentId column exists in the table
-	// TODO: Delete this after June 2024
-	$parentIdExists = $wpdb->get_var( "SHOW COLUMNS FROM $table_refs LIKE 'parentId'" );
-	if ( !$parentIdExists ) {
-		$wpdb->query( "ALTER TABLE $table_refs ADD parentId BIGINT(20) NULL;" );
-		$wpdb->query( "ALTER TABLE $table_scan ADD parentId BIGINT(20) NULL;" );
-	}
-
-	$wpmc_check_database_done = true;
+	wpmc_create_database();
 }
 
 function wpmc_create_database() {
@@ -2394,12 +2347,13 @@ function wpmc_create_database() {
 		deleted TINYINT(1) NOT NULL DEFAULT 0,
 		issue TINYTEXT NOT NULL,
 		parentId BIGINT(20) NULL,
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+		KEY PostIdIndex (postId),
+		KEY IgnoredIndex (ignored)
 	) " . $charset_collate . ";" ;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
-	$sql="ALTER TABLE $table_name ADD INDEX IgnoredIndex (ignored) USING BTREE;";
-	$wpdb->query($sql);
+	
 	$table_name = $wpdb->prefix . "mclean_refs";
 	$charset_collate = $wpdb->get_charset_collate();
 	// This key doesn't work on too many installs because of the 'Specified key was too long' issue
@@ -2410,9 +2364,22 @@ function wpmc_create_database() {
 		mediaUrl TINYTEXT NULL,
 		originType TINYTEXT NOT NULL,
 		parentId BIGINT(20) NULL,
-		PRIMARY KEY  (id)
+		PRIMARY KEY  (id),
+		KEY mediaId_index (mediaId)
 	) " . $charset_collate . ";";
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+	
+	// Create cache table for cached IDs and URLs
+	$table_name = $wpdb->prefix . "mclean_cache";
+	$sql = "CREATE TABLE $table_name (
+		id BIGINT(20) NOT NULL AUTO_INCREMENT,
+		cache_key VARCHAR(50) NOT NULL,
+		cache_value VARCHAR(255) NOT NULL,
+		cache_type VARCHAR(20) NOT NULL,
+		PRIMARY KEY  (id),
+		UNIQUE KEY cache_lookup (cache_key, cache_value, cache_type)
+	) " . $charset_collate . ";";
 	dbDelta( $sql );
 }
 
@@ -2421,7 +2388,8 @@ function wpmc_remove_database() {
 	$table_name1 = $wpdb->prefix . "mclean_scan";
 	$table_name2 = $wpdb->prefix . "mclean_refs";
 	$table_name3 = $wpdb->prefix . "wpmcleaner";
-	$sql = "DROP TABLE IF EXISTS $table_name1, $table_name2, $table_name3;";
+	$table_name4 = $wpdb->prefix . "mclean_cache";
+	$sql = "DROP TABLE IF EXISTS $table_name1, $table_name2, $table_name3, $table_name4;";
 	$wpdb->query( $sql );
 }
 

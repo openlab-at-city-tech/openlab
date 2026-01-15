@@ -52,12 +52,6 @@ class Akismet_Compatible_Plugins {
 	 */
 	protected const CACHE_KEY = 'akismet_compatible_plugin_list';
 
-	/**
-	 * The cache group for things cached in this class.
-	 *
-	 * @var string
-	 */
-	protected const CACHE_GROUP = 'akismet_compatible_plugins';
 
 	/**
 	 * How many plugins should be visible by default?
@@ -69,6 +63,7 @@ class Akismet_Compatible_Plugins {
 	/**
 	 * Get the list of active, installed compatible plugins.
 	 *
+	 * @param bool $bypass_cache Whether to bypass the cache and fetch fresh data.
 	 * @return WP_Error|array {
 	 *     Array of active, installed compatible plugins with their metadata.
 	 *     @type string $name     The display name of the plugin
@@ -76,9 +71,9 @@ class Akismet_Compatible_Plugins {
 	 *     @type string $logo     URL or path to the plugin's logo
 	 * }
 	 */
-	public static function get_installed_compatible_plugins() {
+	public static function get_installed_compatible_plugins( bool $bypass_cache = false ) {
 		// Retrieve and validate the full compatible plugins list.
-		$compatible_plugins = static::get_compatible_plugins();
+		$compatible_plugins = static::get_compatible_plugins( $bypass_cache );
 
 		if ( empty( $compatible_plugins ) ) {
 			return new WP_Error(
@@ -149,13 +144,14 @@ class Akismet_Compatible_Plugins {
 	/**
 	 * Gets plugins that are compatible with Akismet from the Akismet API.
 	 *
+	 * @param bool $bypass_cache Whether to bypass the cache and fetch fresh data.
 	 * @return array
 	 */
-	private static function get_compatible_plugins(): array {
+	private static function get_compatible_plugins( bool $bypass_cache = false ): array {
 		// Return cached result if present (false => cache miss; empty array is valid).
 		$cached_plugins = static::get_cached_plugins();
 
-		if ( $cached_plugins ) {
+		if ( false !== $cached_plugins && ! $bypass_cache ) {
 			return $cached_plugins;
 		}
 
@@ -278,10 +274,9 @@ class Akismet_Compatible_Plugins {
 	private static function set_cached_plugins( array $plugins ): bool {
 		$_blog_id = (int) get_current_blog_id();
 
-		return wp_cache_set(
+		return set_transient(
 			static::CACHE_KEY . "_$_blog_id",
 			$plugins,
-			static::CACHE_GROUP . "_$_blog_id",
 			DAY_IN_SECONDS
 		);
 	}
@@ -294,9 +289,8 @@ class Akismet_Compatible_Plugins {
 	private static function get_cached_plugins() {
 		$_blog_id = (int) get_current_blog_id();
 
-		return wp_cache_get(
-			static::CACHE_KEY . "_$_blog_id",
-			static::CACHE_GROUP . "_$_blog_id"
+		return get_transient(
+			static::CACHE_KEY . "_$_blog_id"
 		);
 	}
 
@@ -308,9 +302,8 @@ class Akismet_Compatible_Plugins {
 	private static function purge_cache(): bool {
 		$_blog_id = (int) get_current_blog_id();
 
-		return wp_cache_delete(
-			static::CACHE_KEY . "_$_blog_id",
-			static::CACHE_GROUP . "_$_blog_id"
+		return delete_transient(
+			static::CACHE_KEY . "_$_blog_id"
 		);
 	}
 }

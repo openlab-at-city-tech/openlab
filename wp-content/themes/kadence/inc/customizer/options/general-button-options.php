@@ -1,6 +1,6 @@
 <?php
 /**
- * Header Main Row Options
+ * Primary Button Options
  *
  * @package Kadence
  */

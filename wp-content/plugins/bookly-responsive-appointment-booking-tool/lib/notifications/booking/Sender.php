@@ -36,7 +36,7 @@ abstract class Sender extends BaseSender
      * @param bool $force_new_booking
      * @param NotificationList|null $queue
      */
-    public static function sendForCA( CustomerAppointment $ca, Appointment $appointment = null, $codes_data = array(), $force_new_booking = false, $queue = null )
+    public static function sendForCA( CustomerAppointment $ca, $appointment = null, $codes_data = array(), $force_new_booking = false, $queue = null )
     {
         $simple = Simple::create( $ca );
         if ( $appointment ) {

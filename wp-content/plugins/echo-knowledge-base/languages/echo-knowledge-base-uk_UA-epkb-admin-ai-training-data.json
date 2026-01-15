@@ -1,0 +1,267 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "uk_UA",
+                "plural-forms": "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Back": [
+                "Назад"
+            ],
+            "Save": [
+                "Зберегти"
+            ],
+            "Cancel": [
+                "Скасувати"
+            ],
+            "Saving...": [
+                "Збереження..."
+            ],
+            "Collection name cannot be empty": [
+                "Назва колекції не може бути порожньою"
+            ],
+            "Data Collection": [
+                "Збір даних"
+            ],
+            "Note updated successfully": [
+                "Примітку успішно оновлено"
+            ],
+            "Note deleted successfully": [
+                "Примітку успішно видалено"
+            ],
+            "Delete": [
+                "Видалити"
+            ],
+            "Delete Selected": [
+                "Видалити обрані"
+            ],
+            "Failed to create collection": [
+                "Не вдалося створити колекцію"
+            ],
+            "How to get started": [
+                "Як розпочати"
+            ],
+            "Choose Training Data": [
+                "Виберіть дані машинного навчання"
+            ],
+            "Pick the content types to include.": [
+                "Виберіть типи вмісту, які потрібно включити."
+            ],
+            "Send Data to AI": [
+                "Надіслати дані ШІ"
+            ],
+            "Select items in the table, then sync them.": [
+                "Виберіть елементи у таблиці, а потім синхронізуйте їх."
+            ],
+            "Other Actions": [
+                "Інші дії"
+            ],
+            "Rename the collection or delete items.": [
+                "Перейменуйте збірку даних або видаліть елементи."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Порада: розпочніть з невеликого набору, щоб перевірити процес."
+            ],
+            "Failed to load note content": [
+                "Не вдалося завантажити вміст примітки"
+            ],
+            "Please enter both title and content for the note": [
+                "Будь ласка, введіть заголовок та вміст примітки"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "Не вдалося видалити примітку. Оновіть сторінку та спробуйте знову."
+            ],
+            "Delete Note": [
+                "Видалити примітку"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "Ви впевнені, що хочете видалити цю примітку? Цю дію неможливо скасувати."
+            ],
+            "Failed to delete note": [
+                "Не вдалося видалити примітку"
+            ],
+            "Edit Note": [
+                "Редагувати примітку"
+            ],
+            "Add Note": [
+                "Додати примітку"
+            ],
+            "Loading note content...": [
+                "Завантажується вміст примітки..."
+            ],
+            "Note Title": [
+                "Заголовок примітки"
+            ],
+            "Enter note title...": [
+                "Введіть заголовок примітки..."
+            ],
+            "Note Content": [
+                "Вміст нотатки"
+            ],
+            "Enter note content...": [
+                "Введіть вміст нотатки..."
+            ],
+            "Deleting...": [
+                "Видалення..."
+            ],
+            "Save Note": [
+                "Зберегти нотатку"
+            ],
+            "Collection name updated successfully": [
+                "Назву колекції успішно оновлено"
+            ],
+            "Failed to update collection name": [
+                "Не вдалося оновити назву колекції"
+            ],
+            "Delete Collection": [
+                "Видалити колекцію"
+            ],
+            "Are you sure you want to delete this collection?": [
+                "Ви впевнені, що хочете видалити цю колекцію?"
+            ],
+            "Type the collection name to confirm:": [
+                "Введіть назву колекції для підтвердження:"
+            ],
+            "Enter collection name": [
+                "Введіть назву колекції"
+            ],
+            "Collection deleted successfully": [
+                "Колекцію успішно видалено"
+            ],
+            "Failed to delete collection": [
+                "Не вдалося видалити колекцію"
+            ],
+            "Please select at least one data type": [
+                "Виберіть хоча б один тип даних"
+            ],
+            "Data added successfully": [
+                "Дані успішно додано"
+            ],
+            "Failed to add data": [
+                "Не вдалося додати дані"
+            ],
+            "Choose an Action": [
+                "Оберіть дію"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Не можна змінювати дії під час синхронізації"
+            ],
+            "Add Training Data": [
+                "Додати дані для навчання"
+            ],
+            "Cannot navigate while sync is in progress": [
+                "Не можна переходити під час синхронізації"
+            ],
+            "Choose which content types you want to include in your AI training data.": [
+                "Виберіть, які типи контенту ви хочете включити до ваших даних для навчання ШІ."
+            ],
+            "Access Manager Notice": [
+                "Повідомлення менеджера доступу"
+            ],
+            "Currently only publicly accessible articles can be uploaded to AI. Articles with access restrictions will not be included in the training data.": [
+                "Наразі до ШІ можна завантажувати лише публічно доступні статті. Статті з обмеженим доступом не будуть включені до даних для навчання."
+            ],
+            "Loading content types...": [
+                "Завантаження типів контенту..."
+            ],
+            "available": [
+                "доступно"
+            ],
+            "added": [
+                "додано"
+            ],
+            "excluded": [
+                "виключено"
+            ],
+            "No eligible content": [
+                "Немає придатного контенту"
+            ],
+            "No published content available": [
+                "Немає опублікованого контенту"
+            ],
+            "All eligible items already added to collection": [
+                "Усі придатні елементи вже додані до колекції"
+            ],
+            "No content types available.": [
+                "Немає доступних типів контенту."
+            ],
+            "Adding Data...": [
+                "Додавання даних..."
+            ],
+            "Add Data": [
+                "Додати дані"
+            ],
+            "Notes": [
+                "Примітки"
+            ],
+            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
+                "Додайте власні примітки, щоб допомогти штучному інтелекту навчитися за допомогою конкретної інформації, рекомендацій або контексту, яких може не бути у вашому звичайному контенті."
+            ],
+            "Select items from the table and choose a sync method to update your AI training data.": [
+                "Виберіть елементи з таблиці та оберіть спосіб синхронізації для оновлення даних для машинного навчання."
+            ],
+            "Manage your collection settings and data.": [
+                "Керуйте налаштуваннями колекції та даними."
+            ],
+            "Collection Name": [
+                "Назва колекції"
+            ],
+            "Change the display name for this collection.": [
+                "Змінити відображуване ім'я цієї колекції."
+            ],
+            "Unable to delete items. Please refresh the page and try again.": [
+                "Не вдалося видалити елементи. Оновіть сторінку та спробуйте ще раз."
+            ],
+            "Selected Records": [
+                "Обрані записи"
+            ],
+            "Delete the selected training data items from this collection.": [
+                "Видалити обрані елементи даних для машинного навчання з цієї колекції."
+            ],
+            "This will permanently delete all training data in this collection.": [
+                "Це назавжди видалить усі дані для машинного навчання з цієї колекції."
+            ],
+            "Note added successfully": [
+                "Примітку успішно додано"
+            ],
+            "AI Features Pro is not properly configured. Please ensure the plugin is activated.": [
+                "AI Features Pro неправильно налаштований. Переконайтеся, що плагін активовано."
+            ],
+            "Failed to save note": [
+                "Не вдалося зберегти примітку"
+            ],
+            "Unable to determine next collection ID": [
+                "Не вдалося визначити наступний ідентифікатор колекції"
+            ],
+            "Creating new collection...": [
+                "Створюється нова колекція..."
+            ],
+            "Collection created successfully": [
+                "Колекція успішно створена"
+            ],
+            "Sync in progress. Please wait...": [
+                "Синхронізація триває. Будь ласка, зачекайте."
+            ],
+            "Training Data Tutorial": [
+                "Посібник із даних для машинного навчання"
+            ],
+            "Learn how to manage and sync your knowledge base content for AI features.": [
+                "Дізнайтеся, як керувати та синхронізувати вміст бази знань для функцій штучного інтелекту."
+            ],
+            "Training Data Tutorial Screenshot": [
+                "Скріншот навчального посібника з даних для машинного навчання"
+            ],
+            "<h4>Getting Started with Training Data</h4><ul><li>Create collections to organize your content for AI processing</li><li>Sync your articles and pages to train the AI on your knowledge base</li><li>Monitor sync status and manage training data items</li><li>Select which post types to include in each collection</li></ul>": [
+                "<h4>Початок роботи з даними для машинного навчання</h4><ul><li>Створюйте колекції, щоб упорядкувати ваш вміст для обробки ШІ</li><li>Синхронізуйте свої статті та сторінки, щоб навчити ШІ на основі вашої бази знань</li><li>Контролюйте стан синхронізації та керуйте елементами даних для машинного навчання</li><li>Виберіть, які типи записів слід включити до кожної колекції</li></ul>"
+            ],
+            "No collections available. Click \"Add New\" to create one.": [
+                "Немає доступних колекцій. Натисні «Додати нову», щоб створити одну."
+            ],
+            "No training data configuration available.": [
+                "Немає конфігурації даних для машинного навчання."
+            ]
+        }
+    }
+}

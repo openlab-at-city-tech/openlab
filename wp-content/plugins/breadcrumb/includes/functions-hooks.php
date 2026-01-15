@@ -561,7 +561,7 @@ function breadcrumb_permalink_post_title($breadcrumb_items)
 
     return array(
         'link' => get_permalink($post_id),
-        'title' => strip_tags(get_the_title($post_id)),
+        'title' => wp_strip_all_tags(get_the_title($post_id)),
     );
 }
 

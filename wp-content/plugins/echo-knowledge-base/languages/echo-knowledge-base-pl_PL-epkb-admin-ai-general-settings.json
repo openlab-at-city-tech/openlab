@@ -1,0 +1,36 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
+            },
+            "Settings saved successfully": [
+                "Ustawienia zapisane pomyślnie"
+            ],
+            "Saving...": [
+                "Zapisywanie..."
+            ],
+            "Save Settings": [
+                "Zapisz ustawienia"
+            ],
+            "Failed to save settings": [
+                "Nie udało się zapisać ustawień"
+            ],
+            "Sending...": [
+                "Wysyłanie..."
+            ],
+            "Test email sent successfully": [
+                "Wiadomość testowa została pomyślnie wysłana"
+            ],
+            "Failed to send test email": [
+                "Nie udało się wysłać wiadomości testowej"
+            ],
+            "Failed to send test email. Please check your connection.": [
+                "Nie udało się wysłać wiadomości testowej. Sprawdź połączenie."
+            ]
+        }
+    }
+}

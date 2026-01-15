@@ -148,7 +148,7 @@ use Bookly\Lib\Utils\Common;
         <p class="text-center">
             <a class="btn btn-xlg btn-success-outline"
                href="<?php echo Common::escAdminUrl( Bookly\Backend\Modules\Services\Page::pageSlug() ) ?>">
-                <?php esc_html_e( 'Add Service', 'bookly' ) ?>
+                <?php esc_html_e( 'Add service', 'bookly' ) ?>
             </a>
         </p>
     <?php endif ?>

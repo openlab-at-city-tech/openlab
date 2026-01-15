@@ -60,6 +60,7 @@ class Mappress_Compliance {
 					'leaflet.js',
 					'leaflet.markercluster.js',
 					'leaflet-omnivore.min.js',
+					'leaflet-togeojson.min.js',
 					'build/index_mappress',
 				),
 				'enable_placeholder' => 1,

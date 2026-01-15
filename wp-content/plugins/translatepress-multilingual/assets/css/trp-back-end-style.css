@@ -219,6 +219,7 @@ div.trp-switch .trp-switch-input {
     left: 0;
     right: 0;
     bottom: 0;
+    margin-bottom: auto !important;
     background-color: #ffffff;
     border: 1px solid #949494;
     border-radius: 28px;
@@ -751,6 +752,11 @@ input.trp-language-slug{
     margin-right: 19px;
 }
 
+/* Re-run Setup Wizard */
+#trp-re-run-setup{
+    width: fit-content;
+}
+
 /* Automatic Translation */
 .trp-settings-switch__wrapper{
     gap: 24px;
@@ -869,7 +875,7 @@ input.trp-language-slug{
 .trp-upsale-text-red{
     color: #8A6412;
     font-size: 14px;
-    line-height: 0.5;
+
     vertical-align: middle;
     font-weight: 454;
 }
@@ -1602,6 +1608,14 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
 
 .trp-ls-v2-card .trp-ls-v2-cta {
     margin: 0;
+}
+
+.trp-bf-notice-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-left: 15px;
+    gap: 8px;
 }
 
 /* Media Queries */

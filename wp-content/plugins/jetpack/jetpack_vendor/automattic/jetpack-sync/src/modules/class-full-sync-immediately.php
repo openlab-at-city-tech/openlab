@@ -13,6 +13,10 @@ use Automattic\Jetpack\Sync\Lock;
 use Automattic\Jetpack\Sync\Modules;
 use Automattic\Jetpack\Sync\Settings;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 /**
  * This class does a full resync of the database by
  * sending an outbound action for every single object
@@ -390,7 +394,7 @@ class Full_Sync_Immediately extends Module {
 		$started = $this->get_status()['started'];
 
 		foreach ( $this->get_remaining_modules_to_send() as $module ) {
-			$progress[ $module->name() ] = $module->send_full_sync_actions( $config[ $module->name() ], $progress[ $module->name() ], $send_until );
+			$progress[ $module->name() ] = $module->send_full_sync_actions( $config[ $module->name() ], $progress[ $module->name() ], $send_until, $started );
 			if ( isset( $progress[ $module->name() ]['error'] ) ) {
 				unset( $progress[ $module->name() ]['error'] );
 				$this->update_status( array( 'progress' => $progress ) );

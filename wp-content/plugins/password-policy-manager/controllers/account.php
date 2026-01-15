@@ -55,7 +55,7 @@ if ( get_site_option( 'moppm_verify_customer' ) === 'true' ) {
  */
 function moppm_register_user() {
 	$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
-	if ( ! wp_verify_nonce( $nonce, 'moppm-account-nonce' ) ) {
+	if ( ! wp_verify_nonce( $nonce, 'moppm-account-nonce' ) || ! current_user_can( 'manage_options' ) ) {
 		do_action( 'moppm_show_message', MOPPM_Messages::show_message( 'ERROR' ), 'ERROR' );
 		return;
 	}
@@ -77,7 +77,6 @@ function moppm_register_user() {
 	}
 		update_site_option( 'moppm_email', $email );
 		update_site_option( 'company', $company );
-		update_site_option( 'password', $password );
 		$user    = new MOPPM_Api();
 		$content = json_decode( $user->check_user( $email ), true );
 	switch ( $content['status'] ) {

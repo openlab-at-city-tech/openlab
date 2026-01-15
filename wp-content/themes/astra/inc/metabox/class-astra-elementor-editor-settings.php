@@ -872,6 +872,7 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 			}
 
 			// Replace only the first occurrence of stroke='#D1D5DB' with a semi-transparent color.
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, transforms SVG colors for dark mode
 			$svg = preg_replace( "/stroke='#D1D5DB'/", "stroke='#9DA5AE55'", $svg, 1 );
 
 			// Perform bulk replacements for remaining known values.

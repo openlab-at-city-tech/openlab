@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Updated": [
+                "Oppdatert"
+            ],
+            "Error": [
+                "Feil"
+            ],
+            "No posts found to sync": [
+                "Ingen innlegg funnet for synkronisering"
+            ],
+            "Pending": [
+                "Ventende"
+            ],
+            "of": [
+                "av"
+            ],
+            "errors": [
+                "feil"
+            ],
+            "with": [
+                "med"
+            ],
+            "Sync canceled": [
+                "Synkronisering avbrutt"
+            ],
+            "Failed to cancel sync": [
+                "Kunne ikke avbryte synkroniseringen"
+            ],
+            "A sync job is already running.": [
+                "En synkroniseringsjobb kjører allerede."
+            ],
+            "Failed to start sync": [
+                "Kunne ikke starte synkronisering"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "OpenAI API-nøkkel er påkrevd for å synkronisere innhold. Vennligst konfigurer den i Generelle innstillinger."
+            ],
+            "Sync Method": [
+                "Synkroniseringsmetode"
+            ],
+            "Basic Timer": [
+                "Grunnleggende timer"
+            ],
+            "Select All Filtered Records": [
+                "Velg alle filtrerte poster"
+            ],
+            "Select All Records": [
+                "Velg alle poster"
+            ],
+            "Outdated": [
+                "Utdatert"
+            ],
+            "Added": [
+                "Lagt til"
+            ],
+            "Selected": [
+                "Valgt"
+            ],
+            "Records": [
+                "Poster"
+            ],
+            "selected records": [
+                "valgte poster"
+            ],
+            "Sync in Progress": [
+                "Synkronisering pågår"
+            ],
+            "Cancel Sync": [
+                "Avbryt synkronisering"
+            ],
+            "API key required": [
+                "API-nøkkel påkrevd"
+            ],
+            "Select at least one item to sync": [
+                "Velg minst ett element å synkronisere"
+            ],
+            "Start Sync": [
+                "Start synkronisering"
+            ],
+            "Sync started successfully! ": [
+                "Synkronisering startet vellykket!"
+            ],
+            "Starting sync...": [
+                "Starter synkronisering..."
+            ],
+            "Retrying failed posts:": [
+                "Gjenforsøker mislykkede poster:"
+            ],
+            "Processing": [
+                "Behandler"
+            ],
+            "posts": [
+                "poster"
+            ],
+            "Completed! Processed": [
+                "Ferdig! Behandlet"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "Synkronisering stoppet etter 5 påfølgende feil. Behandlet"
+            ],
+            "posts with": [
+                "poster med"
+            ],
+            "total errors": [
+                "totale feil"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "Planlagt synkronisering, venter på å starte..."
+            ]
+        }
+    }
+}

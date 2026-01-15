@@ -338,6 +338,9 @@ abstract class Component extends Cache
                     $path = Lib\Plugin::getDirectory() . '/path';
                     $assets_version = Lib\Plugin::getVersion();
                     break;
+                case 'plugin':
+                    $path = $plugin_class::getDirectory() . '/path';
+                    break;
                 default:
                     $path = $source . '/path';
             }

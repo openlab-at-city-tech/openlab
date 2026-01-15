@@ -311,7 +311,8 @@ class TRP_Language_Switcher{
 
                 <?php
                 if( $this->settings['trp-ls-show-poweredby'] == 'yes' ){
-	                $powered_by = '<div id="trp-floater-poweredby">Powered by <a href="https://translatepress.com/?utm_source=language_switcher&utm_medium=clientsite&utm_campaign=TPLS" rel="nofollow" target="_blank" title="WordPress Translation Plugin">TranslatePress</a></div>';
+                    //[utm9]
+	                $powered_by = '<div id="trp-floater-poweredby">Powered by <a href="https://translatepress.com/?utm_source=frontend-ls&utm_medium=client-site&utm_campaign=powered-by-tp" rel="nofollow" target="_blank" title="WordPress Translation Plugin">TranslatePress</a></div>';
                 } else {
 	                $powered_by = '';
                 }
@@ -380,6 +381,8 @@ class TRP_Language_Switcher{
 
     /**
      * Return flag html.
+     *
+     * @important This function is used in WP Rocket plugin. Please don't remove it or change its signature.
      *
      * @param string $language_code         Language code.
      * @param string $language_name         Language full name or shortname.

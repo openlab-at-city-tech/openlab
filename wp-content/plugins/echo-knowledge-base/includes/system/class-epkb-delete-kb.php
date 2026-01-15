@@ -82,6 +82,15 @@ class EPKB_Delete_KB {
 		// Remove all database tables
 		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "epkb_kb_search_data" );
 		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "epkb_article_ratings" );
+		
+		// Remove AI database tables
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "epkb_ai_training_data" );
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "epkb_ai_messages" );
+		
+		// Remove AI options
+		delete_option( 'epkb_ai_configuration' );
+		delete_option( 'epkb_ai_widget_configuration' );
+		delete_option( 'epkb_ai_training_data_configuration' );
 
 		set_transient( '_epkb_delete_all_kb_data', true, DAY_IN_SECONDS );
 

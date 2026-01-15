@@ -3,7 +3,7 @@ $modules_all    = \ElementsKit_Lite\Config\Module_List::instance()->get_list( 'o
 $modules_active = \ElementsKit_Lite\Config\Module_List::instance()->get_list( 'active' );
 ?>
 <pre>
-<?php 
+<?php
 $x = \ElementsKit_Lite\Libs\Framework\Attr::instance()->utils->get_option( 'module_list', array() );
 // print_r($modules_active) ;
 ?>
@@ -22,29 +22,37 @@ $x = \ElementsKit_Lite\Libs\Framework\Attr::instance()->utils->get_option( 'modu
 			<li><a href="edit.php?post_type=elementskit_widget"><?php esc_html_e( 'Widget Builder', 'elementskit-lite' ); ?></a></li>
 		</div>
 		<div class="attr-row">
-			<?php 
+			<?php
 			foreach ( $modules_all as $module => $module_config ) :
 				if ( ! isset( $module_config['package'] ) ) {
 					$module_config['package'] = ''; // for avoiding error when add module from theme
 				}
+
+				$data_attr = ( $module_config['package'] != 'pro-disabled' ? '' : 'data-attr-toggle="modal" data-target="#elementskit_go_pro_modal"' );
+
+				// Skip upcoming modules
+				$attributes = isset($module_config['attributes']) ? $module_config['attributes'] : array();
+				if(in_array('upcoming', $attributes)) {
+					continue;
+				}
 				?>
-			<div class="attr-col-md-6 attr-col-lg-4" <?php echo ( $module_config['package'] != 'pro-disabled' ? '' : 'data-attr-toggle="modal" data-target="#elementskit_go_pro_modal"' ); ?>>
-				<?php
-				$this->utils->input(
-					array(
-						'type'    => 'switch',
-						'name'    => 'module_list[]',
-						'value'   => $module,
-						'class'   => 'ekit-content-type-' . $module_config['package'],
-						'attr'    => ( $module_config['package'] != 'pro-disabled' ? array() : array( 'disabled' => 'disabled' ) ),
-						'label'   => $module_config['title'],
-						'options' => array(
-							'checked' => ( isset( $modules_active[ $module ] ) ? true : false ),
-						),
-					)
-				);
-				?>
-			</div>
+				<div class="attr-col-md-6 attr-col-lg-4" <?php echo esc_attr($data_attr); ?>>
+					<?php
+					$this->utils->input(
+						array(
+							'type'    => 'switch',
+							'name'    => 'module_list[]',
+							'value'   => $module,
+							'class'   => 'ekit-content-type-' . $module_config['package'],
+							'attr'    => ( $module_config['package'] != 'pro-disabled' ? array() : array( 'disabled' => 'disabled' ) ),
+							'label'   => $module_config['title'],
+							'options' => array(
+								'checked' => ( isset( $modules_active[ $module ] ) ? true : false ),
+							),
+						)
+					);
+					?>
+				</div>
 			<?php endforeach; ?>
 		</div>
 	</div>

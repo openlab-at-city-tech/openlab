@@ -115,7 +115,7 @@ $networkData = $networkItem->getData();
                                             <button href="#" class="btn btn-default btn-sm b2s-network-add-mandant-btn">
                                                 <span class="glyphicon glyphicon-plus"></span> <?php esc_html_e('Create new network collection', 'blog2social') ?> <span class="label label-success"></button>
                                         <?php } else { ?>
-                                            <button href="#" class="btn btn-default btn-sm b2s-btn-disabled b2sProFeatureModalBtn" data-type="create-network-profile" data-title="<?php esc_html_e('You want to define a new combination of networks?', 'blog2social') ?>">
+                                            <button href="#" class="btn btn-default btn-sm b2s-btn-disabled b2sProFeatureNetworkGroupsModal" data-type="create-network-profile" data-title="<?php esc_html_e('You want to define a new combination of networks?', 'blog2social') ?>">
                                                 <span class="glyphicon glyphicon-plus"></span> <?php esc_html_e('Create new network collection', 'blog2social') ?> <span class="label label-success"> <?php esc_html_e("PRO", "blog2social") ?></span></button>
                                         <?php } ?>
 
@@ -129,7 +129,7 @@ $networkData = $networkItem->getData();
                                         <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                                             <a href="#" class="btn btn-default btn-sm b2s-get-settings-sched-time-default">
                                             <?php } else { ?>
-                                                <a href="#" class="btn btn-default btn-sm b2s-btn-disabled" data-title = "<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>" data-toggle ="modal" data-target ="#b2sInfoSchedTimesModal">
+                                                <a href="#" class="btn btn-default btn-sm b2s-btn-disabled b2sPreFeatureBestTimesModal" data-title = "<?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social') ?>" >
                                                 <?php } ?>  <span class="glyphicon glyphicon-time"></span> <?php esc_html_e('Load Best Times', 'blog2social'); ?></a>
                                     </div>
                                 </div>
@@ -411,6 +411,7 @@ $networkData = $networkItem->getData();
                 <div class="clearfix"></div>
                 <?php esc_html_e('Loading...', 'blog2social') ?>
             </div>
+            <div class="alert alert-danger b2s-edit-template-user-upgrade-required" style="display: none;"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e("Upgrade of your B2S User Version is required for this feature.", 'blog2social'); ?></div>
             <div class="modal-body b2s-edit-template-content">
 
             </div>
@@ -528,6 +529,12 @@ $networkData = $networkItem->getData();
             <div class="modal-body">
                 <div class="b2s-network-auth-settings-content">
                     <?php if (B2S_PLUGIN_USER_VERSION >= 3) { ?>
+                        <div  style="display: none;" class="b2-share-settings">
+                            <div class=""><h4><?php esc_html_e('Share Settings', 'blog2social') ?></h4></div>
+                            <div class= "b2-share-settings-content">
+
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-12 b2s-text-bold"><h4><?php esc_html_e('URL Parameters', 'blog2social') ?></h4></div>
                             <div class="col-md-12"><div class="alert alert-danger b2s-url-parameter-error" data-error-reason="save" style="display:none;"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The parameters could not be saved. Please try again.', 'blog2social') ?></div></div>
@@ -626,7 +633,7 @@ $networkData = $networkItem->getData();
                     <?php } else { ?>
                         <div class="alert alert-info">
                             <?php esc_html_e('Upgrade to Blog2Social Business to easily bundle your connections into network collection and assign your social media connections to other blog users. You can update and delete the connections as well as select forums or boards. Other users will be able to use the social media connection you assigned to them to post and schedule to your social media profile, page or group.', 'blog2social'); ?>
-                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="b2s-bold b2s-text-underline"><?php esc_html_e('Upgrade to Blog2Social Business', 'blog2social'); ?></a>
+                            <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="b2s-bold b2s-text-underline"><?php esc_html_e('Upgrade to Blog2Social Business', 'blog2social'); ?></a>
                         </div>
                         <div class="row b2s-btn-disabled">
                             <div class="col-md-12 b2s-text-bold"><h4><?php esc_html_e('URL Parameters', 'blog2social') ?></h4></div>
@@ -837,62 +844,14 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
-<div class="modal fade" id="b2sNetworkAddonInfo" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddonInfo" aria-hidden="true" data-backdrop="false"  style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddonInfo" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('Network connections', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <?php esc_html_e('With Blog2Social you can connect up to 16 social media networks and share your posts on your favourite social media accounts automatically.', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php esc_html_e('Each license has a specified number of accounts you can connect per social media network.', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php esc_html_e('Smart: 3 (per user)', 'blog2social'); ?>
-                        <br>
-                        <?php esc_html_e('Pro: 5 (per user)', 'blog2social'); ?>
-                        <br>
-                        <?php esc_html_e('Business: 15 (per user)', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php esc_html_e('For example: With the Pro license, each user can connect 5 Facebook accounts + 5 Twitter accounts + 5 Instagram accounts + ...', 'blog2social'); ?>
-                        <br>
-                        <br>    
-                        <?php esc_html_e('You can also purchase additional groups and sites as add-on to your active Blog2Social Premium Pro or Premium Business license:', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php esc_html_e('Facebook groups', 'blog2social'); ?>
-                        <br>
-                        <?php esc_html_e('Facebook pages', 'blog2social'); ?>
-                        <br>
-                        <?php esc_html_e('LinkedIn pages', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php esc_html_e('For example: If you purchase 5 Facebook groups, these additional 5 Facebook groups are available for all users. So, when 5 users are activated for the Pro or Business license, each user can connect 1 additional Facebook group, or one user can connect 5 additional Facebook groups.', 'blog2social'); ?>
-                        <br>
-                        <br>
-                        <?php echo wp_kses(sprintf(
-                            // translators: %s is a link
-                            __('<a href="%s" target="_blank">Get more information on how to add more sites or groups.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_addon_faq'))),
-                            array(
-                                'a' => array(
-                                    'href' => array(),
-                                    'target' => array()
-                                    )
-                                )
-                            );
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<?php
+
+    include (B2S_PLUGIN_DIR . 'views/b2s/partials/network-modal.php');     
+    
+    $modalNames = array("b2sPreFeatureNetworksModal", "b2sProFeatureNetworksModal","b2sProFeatureEditTemplateModal", "b2sProFeatureNetworkGroupsModal", "b2sBusinessFeatureNetworksModal");
+    include (B2S_PLUGIN_DIR . 'views/b2s/partials/general-modal.php');     
+      
+?>
 
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserTimeFormat" value="<?php echo esc_attr($optionUserTimeFormat); ?>">

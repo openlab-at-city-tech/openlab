@@ -113,8 +113,18 @@ function ed11y_setting_sections_fields() {
 
 	// Add live check field.
 	add_settings_field(
+		'ed11y_alert_mode',
+		esc_html__( 'Checker mode on page', 'editoria11y' ),
+		'ed11y_alert_mode_field',
+		'ed11y',
+		'ed11y_basic',
+		array( 'label_for' => 'ed11y_alert_mode' )
+	);
+
+	// Add live check field.
+	add_settings_field(
 		'ed11y_livecheck',
-		esc_html__( 'Check inside the block editor', 'editoria11y' ),
+		esc_html__( 'Checker mode inside editor', 'editoria11y' ),
 		'ed11y_livecheck_field',
 		'ed11y',
 		'ed11y_basic',
@@ -232,6 +242,16 @@ function ed11y_setting_sections_fields() {
 		'ed11y_compatibility_settings',
 		array( 'label_for' => 'ed11y_no_run' )
 	);
+
+	// Add reports permission field.
+	add_settings_field(
+		'ed11y_hide_report_link',
+		esc_html__( 'Hide reports shortcut on toggle', 'editoria11y' ),
+		'ed11y_hide_report_link_field',
+		'ed11y',
+		'ed11y_compatibility_settings',
+		array( 'label_for' => 'ed11y_hide_report_link_field' )
+	);
 }
 add_action( 'admin_init', 'ed11y_setting_sections_fields' );
 
@@ -251,6 +271,26 @@ function ed11y_theme_field() {
 	<?php
 }
 
+
+/**
+ * Alert_mode field
+ */
+function ed11y_alert_mode_field() {
+	$settings = ed11y_get_plugin_settings( 'ed11y_alert_mode' );
+	?>
+
+	<select name="ed11y_plugin_settings[ed11y_alert_mode]" id="ed11y-alert_mode" name="ed11y_alert_mode" class="form-select" aria-describedby="alert_mode_description">
+		<option <?php echo 'polite' === $settings ? 'selected="true"' : ''; ?>value="polite">Start open if there are alerts (recommended)</option>
+		<option <?php echo 'assertive' === $settings ? 'selected="true"' : ''; ?>value="assertive">Start open if there are new alerts</option>
+		<option <?php echo 'active' === $settings ? 'selected="true"' : ''; ?>value="active">Always start open</option>
+		<option <?php echo 'minimized' === $settings ? 'selected="true"' : ''; ?>value="minimized">Start minimized</option>
+	</select>
+	<p id="alert_mode_description">
+		Automatically open the control panel while viewing posts and pages.
+	</p>
+	<?php
+}
+
 /**
  * Livecheck field
  */
@@ -259,12 +299,13 @@ function ed11y_livecheck_field() {
 	?>
 
 	<select name="ed11y_plugin_settings[ed11y_livecheck]" id="ed11y-livecheck" name="ed11y_livecheck" class="form-select" aria-describedby="livecheck_description">
-		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">Check while editing, and always show tips</option>
-		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Check while editing</option>
-		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">Do not check while editing</option>
+		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">Start open (recommended)</option>
+		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Remember user preference</option>
+		<option <?php echo 'minimized' === $settings ? 'selected="true"' : ''; ?>value="minimized">Start minimized</option>
+		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">Do not show checker while editing</option>
 	</select>
 	<p id="livecheck_description">
-		Activates when editing posts or pages in the default block editor (Gutenberg).
+		Shows tips while editing post and page content (not templates or layouts).
 	</p>
 	<?php
 }
@@ -300,7 +341,7 @@ function ed11y_check_roots_field() {
 			echo wp_kses(
 				__(
 					'Editoria11y works best when it only checks content editors can...edit.
-			If it is flagging issues in your header or footer, put CSS selectors here for the elements 
+			If it is flagging issues in your header or footer, put CSS selectors here for the elements
 			that contain your editable content, e.g. <code>#content, footer</code>',
 					'editoria11y'
 				),
@@ -492,6 +533,23 @@ function ed11y_no_run_field() {
 }
 
 /**
+ * Dashboard shortcut for editors field
+ */
+function ed11y_hide_report_link_field() {
+	$settings = ed11y_get_plugin_settings( 'ed11y_hide_report_link' );
+	?>
+	<input type="checkbox" aria-describedby="ed11y_hide_report_link_description" name="ed11y_plugin_settings[ed11y_hide_report_link]" id="ed11y_hide_report_link_field" value="1"
+		<?php checked( '1', $settings ); ?>
+	/>
+	<p id="ed11y_hide_report_link_description">
+		<?php
+		echo wp_kses( __( 'Reports will still be available on the WordPress admin dashboard.', 'editoria11y' ), ed11y_allowed_html() );
+		?>
+	</p>
+	<?php
+}
+
+/**
  * Render the plugin settings page.
  */
 function ed11y_plugin_settings_render_page() {
@@ -522,7 +580,7 @@ function ed11y_plugin_settings_render_page() {
 						Getting started
 					</h2>
 					<p>Editoria11y should work out of the box in most themes (view a
-						<a href="https://jjameson.mycpanel.princeton.edu/editoria11y/">demo of the authoring experience</a>).
+						<a href="https://editoria11y.princeton.edu/demo/">demo of the authoring experience</a>).
 						<ol>
 							<li>If authors do not see the checker toggle, check your <a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console" class="ext" data-extlink="">browser console</a> for errors, and make sure the theme is not hiding <code>ed11y-element-panel</code>.</li>
 							<li>If the checker toggle is <strong>present</strong> but not finding much: make sure your content areas are listed in "Check content in these containers". It is not uncommon for themes to insert editable content outside the <code>main</code> element.</li></ol>
@@ -603,12 +661,17 @@ function ed11y_plugin_settings_validate( $settings ) {
 	// Allowed characters: , . : empty space.
 	$special_chars = '/[^.,:a-zA-Z0-9 ]/';
 
-	$settings['ed11y_livecheck'] = preg_replace(
+	$settings['ed11y_livecheck']  = preg_replace(
 		$special_chars,
 		'',
 		sanitize_text_field( $settings['ed11y_livecheck'] )
 	);
-	$settings['ed11y_theme']     = preg_replace(
+	$settings['ed11y_alert_mode'] = preg_replace(
+		$special_chars,
+		'',
+		sanitize_text_field( $settings['ed11y_alert_mode'] )
+	);
+	$settings['ed11y_theme']      = preg_replace(
 		$special_chars,
 		'',
 		sanitize_text_field( $settings['ed11y_theme'] )
@@ -687,7 +750,7 @@ add_action( 'admin_menu', 'ed11y_dashboard_menu' );
 function ed11y_dashboard_menu() {
 	$setting    = ed11y_get_plugin_settings( 'ed11y_report_restrict' );
 	$capability = '1' === $setting ? 'manage_options' : 'edit_others_posts';
-	add_menu_page( esc_html__( 'Editoria11y', 'editoria11y' ), esc_html__( 'Editoria11y', 'editoria11y' ), $capability, ED11Y_SRC . 'admin.php', 'editoria11y_dashboard', 'dashicons-chart-bar', 90 );
+	add_menu_page( esc_html__( 'Editoria11y', 'editoria11y' ), esc_html__( 'Editoria11y', 'editoria11y' ), $capability, 'editoria11y', 'editoria11y_dashboard', 'dashicons-chart-bar', 90 );
 }
 
 /**

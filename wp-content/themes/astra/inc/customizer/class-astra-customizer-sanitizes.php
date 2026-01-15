@@ -114,8 +114,11 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			}
 
 			// Strip php tags.
+			 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/<\?(=|php)(.+?)\?>/i', '', $original_content );
+			 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/<\?(.*)\?>/Us', '', $content );
+			 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/<\%(.*)\%>/Us', '', $content );
 
 			if ( false !== strpos( $content, '<?php' ) || ( false !== strpos( $content, '<%' ) ) ) {
@@ -123,7 +126,9 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			}
 
 			// Strip comments.
+			 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/<!--(.*)-->/Us', '', $content );
+			 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/\/\*(.*)\*\//Us', '', $content );
 
 			if ( false !== strpos( $content, '<!--' ) || ( false !== strpos( $content, '/*' ) ) ) {
@@ -131,6 +136,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			}
 
 			// Strip line breaks.
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 			$content = preg_replace( '/\r|\n/', '', $content );
 
 			// Find the start and end tags so we can cut out miscellaneous garbage.
@@ -626,6 +632,7 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 			// CSS variable value sanitize.
 			if ( 0 === strpos( $color, 'var(--' ) ) {
+				 // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Safe usage: no /e modifier, sanitizes SVG by removing PHP tags
 				return preg_replace( '/[^A-Za-z0-9_)(\-,.]/', '', $color );
 			}
 

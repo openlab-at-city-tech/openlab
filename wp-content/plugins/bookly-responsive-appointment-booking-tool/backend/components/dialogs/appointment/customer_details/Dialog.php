@@ -36,7 +36,7 @@ class Dialog extends Lib\Base\Component
                 'nop' => __( 'Number of persons', 'bookly' ),
                 'status' => __( 'Status', 'bookly' ),
                 'notes' => __( 'Appointment notes', 'bookly' ),
-                'notes_help' => __( 'This text can be inserted into notifications with {appointment_notes} code', 'bookly' ),
+                'notes_help' => sprintf( __( 'This text can be inserted into notifications with %s code', 'bookly' ), '{appointment_notes}' ),
                 'timezone' => __( 'Timezone', 'bookly' ),
                 'apply' => __( 'Apply', 'bookly' ),
                 'cancel' => __( 'Cancel', 'bookly' ),

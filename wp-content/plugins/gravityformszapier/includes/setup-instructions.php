@@ -59,7 +59,7 @@
 				<li><?php
 					printf(
 						// translators: Placeholders represent opening and closing strong tag.
-						esc_html__( 'Select a %1$sUser%2$s account with permissions to view and edit entries.', 'gravityformszapier' ),
+						esc_html__( 'Select a User account with the %1$sgravityforms_edit_forms%2$s capability.', 'gravityformszapier' ),
 						'<strong>',
 						'</strong>'
 					);

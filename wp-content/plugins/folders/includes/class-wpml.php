@@ -118,6 +118,18 @@ class WCP_Folder_WPML
 
             $this->sitepress         = $sitepress;
             $this->post_translations = $sitepress->post_translations();
+
+            $user_id = get_current_user_id();
+
+            $current = apply_filters('wpml_current_language', null);
+            $previous = get_user_meta($user_id, '_icl_admin_language_last', true);
+            $previous = $previous ? $previous : 'all';
+            $current = $current ? $current : 'all';
+
+            if ($previous !== $current) {
+                delete_transient("premio_folders_without_trash");
+                update_user_meta($user_id, '_icl_admin_language_last', $current);
+            }
         }
 
         if ($this->isWPMLActive) {
@@ -185,24 +197,6 @@ class WCP_Folder_WPML
 
             $query            = $wpdb->prepare($query, [$term_taxonomy_id, $this->lang]);
             $all_ids          = $wpdb->get_var($query);
-//            $counter          = 0;
-//            if (count($all_ids) > 0) {
-//                $select = "SELECT COUNT(P.ID) as total_records FROM {$wpdb->posts} AS P";
-//                $where = ["P.ID = (%s)"];
-//
-//                if($post_type == 'attachment') {
-//                    $where[] = " (P.post_status = 'inherit' OR P.post_status = 'private')";
-//                } else {
-//                    $where[] = " P.post_status != 'trash'";
-//                }
-//
-//                $join = apply_filters( 'folders_count_join_query', "" );
-//                $where = apply_filters( 'folders_count_where_query', $where );
-//
-//                $query = $select . $join . " WHERE ".implode( ' AND ', $where );
-////                $query   = $wpdb->prepare($query, [implode(',', $all_ids)]);
-////                $counter = $wpdb->get_var($query);
-//            }
 
             return !empty($all_ids) ? $all_ids : 0;
         }//end if

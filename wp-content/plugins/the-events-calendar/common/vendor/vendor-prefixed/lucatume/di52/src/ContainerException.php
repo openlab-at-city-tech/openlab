@@ -1,21 +1,20 @@
 <?php
+
 /**
  * An exception thrown while trying to build or resolve a binding in the container.
  *
  * @package lucatume\DI52
  */
-
 namespace TEC\Common\lucatume\DI52;
 
 use Exception;
 use TEC\Common\Psr\Container\ContainerExceptionInterface;
 use ReflectionClass;
 use Throwable;
-
 /**
  * Class ContainerException
  *
- * @package lucatume\DI52
+ * @package \lucatume\DI52
  */
 class ContainerException extends Exception implements ContainerExceptionInterface
 {
@@ -30,20 +29,16 @@ class ContainerException extends Exception implements ContainerExceptionInterfac
     private static function getPropertyValue($object, $property)
     {
         $reflectionClass = new ReflectionClass($object);
-
         do {
             if ($reflectionClass->hasProperty($property)) {
                 $traceProperty = $reflectionClass->getProperty($property);
                 $traceProperty->setAccessible(true);
                 return $traceProperty->getValue($object);
             }
-
             $reflectionClass = $reflectionClass->getParentClass();
         } while ($reflectionClass instanceof ReflectionClass);
-
         return null;
     }
-
     /**
      * Sets a private or protected property on an object.
      *
@@ -56,7 +51,6 @@ class ContainerException extends Exception implements ContainerExceptionInterfac
     private static function setPropertyValue($object, $property, $value)
     {
         $reflectionClass = new ReflectionClass($object);
-
         do {
             if ($reflectionClass->hasProperty($property)) {
                 $traceProperty = $reflectionClass->getProperty($property);
@@ -64,13 +58,10 @@ class ContainerException extends Exception implements ContainerExceptionInterfac
                 $traceProperty->setValue($object, $value);
                 return true;
             }
-
             $reflectionClass = $reflectionClass->getParentClass();
         } while ($reflectionClass instanceof ReflectionClass);
-
         return false;
     }
-
     /**
      * Formats an error message to provide a useful debug message.
      *
@@ -88,17 +79,10 @@ class ContainerException extends Exception implements ContainerExceptionInterfac
         } else {
             $last = array_pop($buildLine) ?: $idString;
         }
-        $lastEntry = "Error while making {$last}: " . lcfirst(
-            rtrim(
-                str_replace('"', '', $thrown->getMessage()),
-                '.'
-            )
-        ) . '.';
+        $lastEntry = "Error while making {$last}: " . lcfirst(rtrim(str_replace('"', '', $thrown->getMessage()), '.')) . '.';
         $frags = array_merge($buildLine, [$lastEntry]);
-
         return implode("\n\t=> ", $frags);
     }
-
     /**
      * Builds a container exception from a throwable.
      *
@@ -111,24 +95,13 @@ class ContainerException extends Exception implements ContainerExceptionInterfac
      */
     public static function fromThrowable($id, $thrown, $maskThrowables, array $buildLine)
     {
-        $message = ($maskThrowables & Container::EXCEPTION_MASK_MESSAGE) ?
-            self::makeBuildLineErrorMessage($id, $thrown, $buildLine)
-            : $thrown->getMessage();
-
-        $exceptionClass = $thrown instanceof self ?
-            get_class($thrown)
-            : self::class;
-
+        $message = $maskThrowables & Container::EXCEPTION_MASK_MESSAGE ? self::makeBuildLineErrorMessage($id, $thrown, $buildLine) : $thrown->getMessage();
+        $exceptionClass = $thrown instanceof self ? get_class($thrown) : self::class;
         $built = new $exceptionClass($message, $thrown->getCode(), $thrown);
-
-        if (($maskThrowables & Container::EXCEPTION_MASK_FILE_LINE)
-            && ($thrownFile = self::getPropertyValue($thrown, 'file'))
-            && ($thrownLine = self::getPropertyValue($thrown, 'line'))
-        ) {
+        if ($maskThrowables & Container::EXCEPTION_MASK_FILE_LINE && ($thrownFile = self::getPropertyValue($thrown, 'file')) && $thrownLine = self::getPropertyValue($thrown, 'line')) {
             self::setPropertyValue($built, 'file', $thrownFile);
             self::setPropertyValue($built, 'line', $thrownLine);
         }
-
         return $built;
     }
 }

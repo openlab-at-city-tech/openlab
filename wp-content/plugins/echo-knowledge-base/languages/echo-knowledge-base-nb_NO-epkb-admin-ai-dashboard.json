@@ -1,0 +1,147 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "nb_NO",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn more": [
+                "Lær mer"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Vote for Top 3 Features": [
+                "Stem på de tre beste funksjonene"
+            ],
+            "First Name": [
+                "Fornavn"
+            ],
+            "(optional)": [
+                "(valgfritt)"
+            ],
+            "Email": [
+                "E-post"
+            ],
+            "Failed to submit vote. Please try again.": [
+                "Kunne ikke sende stemme. Vennligst prøv igjen."
+            ],
+            "Step 1: Configure API Key & Privacy": [
+                "Trinn 1: Konfigurer API-nøkkel og personvern"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement.": [
+                "Legg til OpenAI API-nøkkelen din og godta personvernavtalen."
+            ],
+            "Step 2: Enable AI Chat and/or AI Search": [
+                "Trinn 2: Aktiver AI-chat og/eller AI-søk"
+            ],
+            "Enable AI Search or Chat features for your website.": [
+                "Aktiver AI-søk eller AI-chat-funksjoner for nettstedet ditt."
+            ],
+            "Step 3: Add Training Data & Sync": [
+                "Trinn 3: Legg til maskinlæringsdata og synkroniser"
+            ],
+            "Select content and sync it to OpenAI for AI processing.": [
+                "Velg innhold og synkroniser det til OpenAI for AI-behandling."
+            ],
+            "Go to Settings": [
+                "Gå til Innstillinger"
+            ],
+            "Completed": [
+                "Fullført"
+            ],
+            "Warnings": [
+                "Advarsler"
+            ],
+            "Welcome to AI Features!": [
+                "Velkommen til AI-funksjoner!"
+            ],
+            "Let's get you set up with AI-powered chat and search in just a few steps.": [
+                "La oss få deg i gang med AI-drevet chat og søk i bare noen få trinn."
+            ],
+            "Complete Your Setup": [
+                "Fullfør oppsettet"
+            ],
+            "Just a few more steps to enable AI features:": [
+                "Bare noen få trinn til for å aktivere AI-funksjonene:"
+            ],
+            "Setup Steps": [
+                "Oppsettstrinn"
+            ],
+            "Configure API Key & Privacy": [
+                "Konfigurer API-nøkkel og personvern"
+            ],
+            "Add your OpenAI API key and accept the data privacy agreement": [
+                "Legg til OpenAI API-nøkkelen din og aksepter dataprivatlivsavtalen"
+            ],
+            "Enable AI Chat and/or AI Search": [
+                "Aktiver AI-chat og/eller AI-søk-funksjoner for nettstedet ditt"
+            ],
+            "Enable AI Search or Chat features for your website": [
+                "Aktiver AI-søk eller chatfunksjoner for nettstedet ditt"
+            ],
+            "Enable AI Features": [
+                "Aktiver AI-funksjoner"
+            ],
+            "Add Training Data & Sync": [
+                "Legg til treningsdata og synkroniser"
+            ],
+            "Select content and sync it to OpenAI for AI processing": [
+                "Velg innhold og synkroniser det til OpenAI for AI-behandling"
+            ],
+            "Go to Training Data": [
+                "Gå til treningsdata"
+            ],
+            "Help us prioritize features by providing your information:": [
+                "Hjelp oss med å prioritere funksjoner ved å oppgi informasjonen din:"
+            ],
+            "Describe Your Feature Request": [
+                "Beskriv funksjonsforespørselen din"
+            ],
+            "Please describe the feature you would like to see...": [
+                "Vennligst beskriv funksjonen du ønsker å se..."
+            ],
+            "Submit Vote": [
+                "Send inn stemme"
+            ],
+            "Please describe the feature you would like to see.": [
+                "Beskriv funksjonen du ønsker å se."
+            ],
+            "Please enter a valid email address.": [
+                "Vennligst oppgi en gyldig e-postadresse."
+            ],
+            "Please select at least one feature to vote for.": [
+                "Vennligst velg minst en funksjon å stemme på."
+            ],
+            "Submitting your vote...": [
+                "Sender inn stemmen din..."
+            ],
+            "Thank you for voting!": [
+                "Takk for at du stemte!"
+            ],
+            "An error occurred. Please try again.": [
+                "En feil oppstod. Vennligst prøv igjen."
+            ],
+            "Latest AI Updates": [
+                "Siste AI-oppdateringer"
+            ],
+            "Select the features you would like to see implemented:": [
+                "Velg funksjonene du ønsker å få implementert:"
+            ],
+            "Released": [
+                "Lansert"
+            ],
+            "feature selected": [
+                "funksjon valgt"
+            ],
+            "features selected": [
+                "funksjoner valgt"
+            ],
+            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
+                "Merk: Tilbakemeldingene dine hjelper oss å prioritere utviklingen. Funksjoner kan endres."
+            ]
+        }
+    }
+}

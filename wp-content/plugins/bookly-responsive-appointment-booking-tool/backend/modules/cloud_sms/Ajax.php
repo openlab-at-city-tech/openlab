@@ -468,21 +468,4 @@ class Ajax extends Lib\Base\Ajax
 
         wp_send_json_success();
     }
-
-    /**
-     * Delete attachment files
-     *
-     * @param $queue_data
-     */
-    private static function _deleteAttachmentFiles( $queue_data )
-    {
-        $fs = Lib\Utils\Common::getFilesystem();
-        foreach ( $queue_data as $data ) {
-            foreach ( $data as $message ) {
-                foreach ( $message['attachments'] as $file ) {
-                    $fs->delete( $file, false, 'f' );
-                }
-            }
-        }
-    }
 }

@@ -38,6 +38,7 @@ class CellValue extends WizardAbstract implements WizardInterface
 
 	protected string $operator = Conditional::OPERATOR_EQUAL;
 
+	/** @var array<int|string> */
 	protected array $operand = [0];
 
 	/**
@@ -68,7 +69,7 @@ class CellValue extends WizardAbstract implements WizardInterface
 			$operand = $this->validateOperand($operand, $operandValueType);
 		}
 
-		$this->operand[$index] = $operand;
+		$this->operand[$index] = $operand; //* @phpstan-ignore-line
 		$this->operandValueType[$index] = $operandValueType;
 	}
 
@@ -114,7 +115,7 @@ class CellValue extends WizardAbstract implements WizardInterface
 	protected static function unwrapString(string $condition): string
 	{
 		if ((str_starts_with($condition, '"')) && (str_starts_with(strrev($condition), '"'))) {
-			$condition = substr($condition, 1, -1);
+			$condition = (string) substr($condition, 1, -1);
 		}
 
 		return str_replace('""', '"', $condition);

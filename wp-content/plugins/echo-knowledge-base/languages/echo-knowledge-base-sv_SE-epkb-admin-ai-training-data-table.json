@@ -1,0 +1,198 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Title": [
+                "Rubrik"
+            ],
+            "Filter": [
+                "Filtrera"
+            ],
+            "Status": [
+                "Status"
+            ],
+            "All": [
+                "Alla"
+            ],
+            "Page": [
+                "Sida"
+            ],
+            "Close": [
+                "Stäng"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "selected": [
+                "Vald"
+            ],
+            "Article": [
+                "Artikel"
+            ],
+            "Updated": [
+                "Uppdaterad"
+            ],
+            "Next": [
+                "Nästa"
+            ],
+            "Previous": [
+                "Föregående"
+            ],
+            "Loading...": [
+                "Laddar in …"
+            ],
+            "Error": [
+                "Fel"
+            ],
+            "Pending": [
+                "Väntande"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "of": [
+                "av"
+            ],
+            "Refreshing...": [
+                "Uppdaterar..."
+            ],
+            "Refresh": [
+                "Uppdatera"
+            ],
+            "Searching server for more results...": [
+                "Söker efter fler resultat från servern..."
+            ],
+            "Data refreshed successfully": [
+                "Data uppdaterades framgångsrikt"
+            ],
+            "Delete Selected Items": [
+                "Radera valda objekt"
+            ],
+            "Are you sure you want to delete the selected items?": [
+                "Är du säker på att du vill radera de valda objekten?"
+            ],
+            "Items deleted successfully": [
+                "Valda objekt har raderats framgångsrikt"
+            ],
+            "Sort": [
+                "Sortera"
+            ],
+            "Completed": [
+                "Slutfört"
+            ],
+            "Outdated": [
+                "Föråldrad"
+            ],
+            "Added": [
+                "Tillagt"
+            ],
+            "Failed to load training data": [
+                "Misslyckades att läsa in maskininlärningsdata"
+            ],
+            "Failed to delete items": [
+                "Misslyckades att radera objekt"
+            ],
+            "Delete Items": [
+                "Radera objekt"
+            ],
+            "Syncing": [
+                "Synkronisering pågår"
+            ],
+            "Canceled": [
+                "Avbrutet"
+            ],
+            "How to get started": [
+                "Kom igång"
+            ],
+            "Choose Training Data": [
+                "Välj maskininlärningsdata"
+            ],
+            "Pick the content types to include.": [
+                "Välj vilka innehållstyper som ska ingå."
+            ],
+            "Send Data to AI": [
+                "Skicka data till AI"
+            ],
+            "Select items in the table, then sync them.": [
+                "Välj objekten i tabellen och synkronisera dem."
+            ],
+            "Other Actions": [
+                "Andra åtgärder"
+            ],
+            "Rename the collection or delete items.": [
+                "Byt namn på samlingen eller ta bort objekt."
+            ],
+            "Tip: Start with a small set to test the flow.": [
+                "Tips: Börja med ett litet urval för att testa flödet."
+            ],
+            "Sync": [
+                "Synkronisera"
+            ],
+            "Sync Complete": [
+                "Synkronisering slutförd"
+            ],
+            "Search by title, type, URL, or ID...": [
+                "Sök efter titel, typ, URL eller ID..."
+            ],
+            "Preparing sync...": [
+                "Förbereder synkronisering..."
+            ],
+            "Loading training data...": [
+                "Läser in maskininlärningsdata..."
+            ],
+            "Type": [
+                "Typ"
+            ],
+            "No training data found": [
+                "Ingen maskininlärningsdata hittades"
+            ],
+            "Edit note": [
+                "Redigera anteckning"
+            ],
+            "View Error": [
+                "Visa fel"
+            ],
+            "View content": [
+                "Visa innehåll"
+            ],
+            "KB Files": [
+                "KB-filer"
+            ],
+            "Never": [
+                "Aldrig"
+            ],
+            "Error Details": [
+                "Feldetaljer"
+            ],
+            "Failed to load content": [
+                "Misslyckades med att ladda innehåll"
+            ],
+            "Post ID:": [
+                "Inläggs-ID:"
+            ],
+            "Loading content...": [
+                "Laddar innehåll..."
+            ],
+            "Error Processing Content": [
+                "Fel vid behandling av innehåll"
+            ],
+            "Original Content": [
+                "Originalinnehåll"
+            ],
+            "Processed Content": [
+                "Bearbetat innehåll"
+            ],
+            "No content available": [
+                "Inget innehåll tillgängligt"
+            ],
+            "No processed content available": [
+                "Inget bearbetat innehåll tillgängligt"
+            ]
+        }
+    }
+}

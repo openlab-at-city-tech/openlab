@@ -204,7 +204,7 @@ function moppm_update_site_limit() {
 }
 
 function moppm_upgradeform(planType, planname) {
-	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_update_plan' ) ); ?>';
+	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm-admin-action-nonce' ) ); ?>';
 	const url = `https://portal.miniorange.com/initializepayment?requestOrigin=${planType}`;
 	var data = {
 	'action': 'moppm_ajax',

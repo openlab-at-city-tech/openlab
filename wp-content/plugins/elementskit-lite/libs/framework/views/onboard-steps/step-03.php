@@ -21,7 +21,7 @@
 		$tablekit = $pluginStatus->get_status( 'table-builder-block/table-builder-block.php' );
 
 		$woocommerce = $pluginStatus->get_status( 'woocommerce/woocommerce.php' );
-		$shopengine_pre_check = $woocommerce['status'] == 'activated' ? 'checked' : '';
+		$shopengine_pre_check = $woocommerce['status'] == 'activated' ? '' : '';
 		?>
 		<div class="attr-col-lg-3">
 			<div class="ekit-onboard-single-plugin <?php echo $getgenie['status'] == 'activated' ? 'activated' : ''; ?>">
@@ -31,7 +31,7 @@
 					</div>
 					<?php if($getgenie['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="getgenie/getgenie.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="getgenie/getgenie.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -65,7 +65,7 @@
 					</div>
 					<?php if($metform['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="metform/metform.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="metform/metform.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -82,7 +82,7 @@
 					</div>
 					<?php if($emailkit['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="emailkit/EmailKit.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="emailkit/EmailKit.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -99,7 +99,7 @@
 					</div>
 					<?php if($popupkit['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="popup-builder-block/popup-builder-block.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="popup-builder-block/popup-builder-block.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -116,7 +116,7 @@
 					</div>
 					<?php if($review['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="wp-ultimate-review/wp-ultimate-review.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="wp-ultimate-review/wp-ultimate-review.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -133,7 +133,7 @@
 					</div>
 					<?php if($social['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="wp-social/wp-social.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="wp-social/wp-social.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -152,7 +152,7 @@
 					</div>
 					<?php if($gutenkit['status'] !== 'activated') : ?>
 						<div class="ekit-onboard-single-plugin--checkbox-wrapper">
-							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="gutenkit-blocks-addon/gutenkit-blocks-addon.php" name="our_plugins[]" checked>
+							<input type="checkbox" class="ekit-onboard-single-plugin--input" value="gutenkit-blocks-addon/gutenkit-blocks-addon.php" name="our_plugins[]">
 						</div>
 					<?php endif; ?>
 					<p class="ekit-onboard-single-plugin--description">
@@ -165,14 +165,21 @@
 </div>
 <div class="ekit-onboard-pagination">
 	<a class="ekit-onboard-btn ekit-onboard-pagi-btn prev" href="#">
-		<i class="icon icon-arrow-left"></i>
+		<i class="icon icon-left-arrow"></i>
 		<?php echo esc_html__( 'Back', 'elementskit-lite' ); ?>
 	</a>
-	<a class="ekit-onboard-btn ekit-onboard-pagi-btn next" href="#">
-		<?php echo esc_html__( 'Next Step', 'elementskit-lite' ); ?>
+	<a class="ekit-onboard-btn ekit-onboard-pagi-btn next continue" href="#">
+		<?php echo esc_html__( 'Continue', 'elementskit-lite' ); ?>
+	</a>
+	<a
+	class="ekit-onboard-btn ekit-onboard-pagi-btn next"
+	href="#"
+	onclick="document.querySelectorAll('.ekit-onboard-plugin-list input[type=checkbox]').forEach(cb => cb.checked = true);"
+	>
+		<?php echo esc_html__( 'Unlock All & Continue', 'elementskit-lite' ); ?>
 	</a>
 </div>
-<div class="ekit-onboard-shapes">
+<div class="ekit-onboard-shapes" style="display: none;">
 	<img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-06.png" alt="" class="shape-06">
 	<img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-10.png" alt="" class="shape-10">
 	<img src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shape-11.png" alt="" class="shape-11">

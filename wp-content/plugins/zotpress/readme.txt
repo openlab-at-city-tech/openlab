@@ -8,7 +8,7 @@ Author URI: http://katieseaborn.com/
 Author: Katie Seaborn
 Requires at least: 3.5
 Tested up to: 6.8
-Stable tag: 7.4.1
+Stable tag: 7.4.2
 License: Apache2.0
 
 Zotpress displays your Zotero citations on WordPress.
@@ -71,6 +71,11 @@ The F.A.Q. can be found on the "Help" page of every Zotpress installation. If yo
 6. Allow visitors to search your library by item metadata or tag, or both.
 
 == Changelog ==
+
+= 7.4.2 =
+
+* Fixed sidebar HTML escaping issue.
+* Fixed script warning.
 
 = 7.4.1 =
 

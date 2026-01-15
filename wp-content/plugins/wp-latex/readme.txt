@@ -1,7 +1,7 @@
 === WP LaTeX ===
 Contributors: mdawaffe, sidney, automattic
 Tags: latex, math, equations, WordPress.com
-Stable tag: 1.9.2
+Stable tag: 1.9.3
 Requires at least: 3.2
 Tested up to: 4.1
 
@@ -167,6 +167,10 @@ installation procedure.
 [Simple Mathjax](http://wordpress.org/plugins/simple-mathjax/)
 
 == Change Log ==
+
+= 1.9.3 =
+* Bug Fix: Fix interactions between LaTeX, `wptexturize()`, and `wpautop()`.
+* Bug Fix: Fix specifying size in `$latex$` format.
 
 = 1.9.2 =
 * Bug Fix: Add SSL Support: http://wordpress.org/support/topic/lack-of-https-support

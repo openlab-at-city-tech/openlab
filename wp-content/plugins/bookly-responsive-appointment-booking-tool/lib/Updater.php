@@ -3,6 +3,187 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_26_0()
+    {
+        /** @global \wpdb $wpdb */
+        global $wpdb;
+
+        $this->alterTables( array(
+            'bookly_shop' => array(
+                'ALTER TABLE `%s` CHANGE `bundle_plugins` `bundle_plugins` TEXT DEFAULT NULL',
+                'DELETE FROM `%s` WHERE `slug` = \'bookly-bundle-ultimate\''
+            ),
+        ) );
+
+        if ( $business_license = $wpdb->get_var( 'SELECT `license` FROM `' . $this->getTableName( 'bookly_shop' ) . '` WHERE `slug` = \'bookly-bundle-business\'' ) ) {
+            update_option( 'bookly_bundle_business_purchase_code', $business_license );
+        }
+    }
+
+    function update_25_9()
+    {
+        $disposable_options = array();
+
+        global $wpdb;
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-copy', function( $self ) use ( $wpdb ) {
+            $records = $wpdb->get_results( 'SELECT option_name, option_value FROM `' . $wpdb->options . '` WHERE `option_name` LIKE \'bookly\_%\_envato\_purchase\_code\'', ARRAY_A );
+            foreach ( $records as $record ) {
+                if ( $record['option_value'] ) {
+                    $plugin_slug = str_replace( array( 'bookly', '_envato_purchase_code', '_' ), array( 'bookly-addon', '', '-' ), $record['option_name'] );
+                    $wpdb->update(
+                        $self->getTableName( 'bookly_shop' ),
+                        array( 'license' => $record['option_value'] ),
+                        array( 'slug' => $plugin_slug )
+                    );
+                }
+                add_option( str_replace( '_envato', '', $record['option_name'] ), $record['option_value'] );
+            }
+        } );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
+    function update_25_8()
+    {
+        $disposable_options = array();
+        $disposable_options[] = $this->disposable( __FUNCTION__ . '-update-schema', function( $self ) {
+            add_option( 'bookly_temporary_logs_mobile_staff_cabinet', '0' );
+            $self->alterTables( array(
+                'bookly_shop' => array(
+                    'ALTER TABLE `%s` ADD COLUMN `bundle_plugins` VARCHAR(256) DEFAULT NULL AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `license` VARCHAR(32) DEFAULT NULL AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `visible` TINYINT DEFAULT 1 AFTER `seen`',
+                    'ALTER TABLE `%s` ADD COLUMN `sub_price` VARCHAR(64) AFTER `price`',
+                ),
+            ) );
+        } );
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
+    function update_25_4()
+    {
+        $disposable_options = array();
+
+        $this->createTables( array(
+            'bookly_auths' =>
+                'CREATE TABLE IF NOT EXISTS `%s` (
+                        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `staff_id` INT UNSIGNED NULL,
+                        `wp_user_id` INT UNSIGNED NULL,
+                        `token` VARCHAR(32) NOT NULL,
+                        `created_at` DATETIME NOT NULL,
+                    CONSTRAINT
+                        FOREIGN KEY (staff_id)
+                        REFERENCES ' . $this->getTableName( 'bookly_staff' ) . '(id)
+                        ON DELETE CASCADE
+                        ON UPDATE CASCADE
+                    ) ENGINE = INNODB',
+        ) );
+
+        if ( $this->existsColumn( 'bookly_staff', 'cloud_msc_token' ) ) {
+            $disposable_options[] = $this->disposable( __FUNCTION__ . '-migrate-data', function( $self ) {
+                /** @global \wpdb $wpdb */
+                global $wpdb;
+
+                $staff_table = $self->getTableName( 'bookly_staff' );
+                $auths_table = $self->getTableName( 'bookly_auths' );
+
+                $records = $wpdb->get_results( 'SELECT id, `cloud_msc_token` FROM `' . $staff_table . '` WHERE `cloud_msc_token` IS NOT NULL', ARRAY_A );
+                foreach ( $records as $record ) {
+                    if ( $record['cloud_msc_token'] ) {
+                        $wpdb->insert( $auths_table, array(
+                            'staff_id' => $record['id'] ?: null,
+                            'token' => $record['cloud_msc_token'],
+                            'created_at' => current_time( 'mysql' ),
+                        ) );
+                    }
+                    $wpdb->update( $staff_table,
+                        array( 'cloud_msc_token' => null, ),
+                        array( 'id' => $record['id'] )
+                    );
+                }
+            } );
+        }
+
+        $this->dropTableColumns( 'bookly_staff', array( 'cloud_msc_token' ) );
+
+        if ( ! $this->existsColumn( 'bookly_payments', 'customer_id' ) ) {
+            $this->alterTables( array(
+                'bookly_payments' => array(
+                    'ALTER TABLE `%s` ADD `customer_id` INT UNSIGNED DEFAULT NULL AFTER `id`',
+                ),
+            ) );
+        }
+
+        if ( $this->existsColumn( 'bookly_payments', 'customer_id' ) ) {
+            if ( ! $this->existsColumn( 'bookly_payments', 'customer_id_processed' ) ) {
+                $this->alterTables( array(
+                    'bookly_payments' => array(
+                        'ALTER TABLE `%s` ADD `customer_id_processed` TINYINT(1) DEFAULT 0',
+                    ),
+                ) );
+            }
+
+            $disposable_options[] = $this->disposable( __FUNCTION__ . '-add-customer-id', function( $self ) {
+                /** @global \wpdb $wpdb */
+                global $wpdb;
+
+                $payments_table = $self->getTableName( 'bookly_payments' );
+                $customers_table = $self->getTableName( 'bookly_customers' );
+
+                $update = 'UPDATE `' . $payments_table . '` SET `customer_id` = %d, `customer_id_processed` = 1 WHERE id = %d';
+                do {
+                    $records = $wpdb->get_results( 'SELECT id, `details` FROM `' . $payments_table . '` WHERE `customer_id_processed` = 0 AND `details` IS NOT NULL LIMIT 100', ARRAY_A );
+                    foreach ( $records as $record ) {
+                        try {
+                            $details = json_decode( $record['details'], true );
+                            if ( isset( $details['customer_id'] ) && $wpdb->get_results( 'SELECT id FROM `' . $customers_table . '` WHERE `id` = ' . ( (int) $details['customer_id'] ) . ' LIMIT 1' ) ) {
+                                $wpdb->query( $wpdb->prepare( $update, $details['customer_id'], $record['id'] ) );
+                            } else {
+                                $wpdb->query( $wpdb->prepare( 'UPDATE `' . $payments_table . '` SET `customer_id_processed` = 1 WHERE id = %d', $record['id'] ) );
+                            }
+                        } catch ( \Exception $e ) {
+                            $wpdb->query( $wpdb->prepare( 'UPDATE `' . $payments_table . '` SET `customer_id_processed` = 1 WHERE id = %d', $record['id'] ) );
+                        }
+                    }
+                } while ( count( $records ) > 0 );
+
+                $self->dropTableColumns( 'bookly_payments', array( 'customer_id_processed' ) );
+
+                $self->alterTables( array(
+                    'bookly_payments' => array(
+                        'ALTER TABLE `%s` ADD `parent_id` INT UNSIGNED DEFAULT NULL AFTER `customer_id`',
+                        'ALTER TABLE `%s` ADD `child_paid` DECIMAL(10,2) NOT NULL DEFAULT 0.00 AFTER `paid`',
+                        'ALTER TABLE `%s` ADD CONSTRAINT FOREIGN KEY (`parent_id`) REFERENCES `' . $payments_table . '`(`id`) ON DELETE CASCADE ON UPDATE CASCADE',
+                        'ALTER TABLE `%s` ADD CONSTRAINT FOREIGN KEY (`customer_id`) REFERENCES `' . $customers_table . '`(`id`) ON DELETE SET NULL ON UPDATE CASCADE',
+                    ),
+                ) );
+
+            } );
+        }
+
+        foreach ( $disposable_options as $option_name ) {
+            delete_option( $option_name );
+        }
+    }
+
+    function update_25_0()
+    {
+        $this->alterTables( array(
+            'bookly_notifications' => array(
+                'ALTER TABLE `%s` ADD COLUMN `to_organizer` TINYINT(1) NOT NULL DEFAULT 0 AFTER `custom_recipients`',
+            ),
+            'bookly_shop' => array(
+                'ALTER TABLE `%s` DROP COLUMN `type`',
+            ),
+        ) );
+    }
+
     function update_24_9()
     {
         $this->alterTables( array(
@@ -168,9 +349,7 @@ class Updater extends Base\Updater
                     }
                 } while ( count( $records ) > 0 );
 
-                $self->dropTableColumns(
-                    $payments_table, array( 'target_processed', 'target' )
-                );
+                $self->dropTableColumns( 'bookly_payments', array( 'target_processed', 'target' ) );
             } );
 
             foreach ( $disposable_options as $option_name ) {
@@ -199,9 +378,7 @@ class Updater extends Base\Updater
                 ),
             ) );
 
-            $self->dropTableColumns(
-                $self->getTableName( 'bookly_staff' ), array( 'zoom_jwt_api_key', 'zoom_jwt_api_secret' )
-            );
+            $self->dropTableColumns( 'bookly_staff', array( 'zoom_jwt_api_key', 'zoom_jwt_api_secret' ) );
         } );
 
         $disposable_options[] = $this->disposable( __FUNCTION__ . '-alter-customer', function( $self ) {
@@ -490,7 +667,7 @@ class Updater extends Base\Updater
             ),
         ) );
 
-        $this->dropTableColumns( $this->getTableName( 'bookly_customer_appointments' ), array( 'extras_consider_duration' ) );
+        $this->dropTableColumns( 'bookly_customer_appointments', array( 'extras_consider_duration' ) );
     }
 
     function update_20_6()
@@ -798,7 +975,7 @@ class Updater extends Base\Updater
         $staff_table = $this->getTableName( 'bookly_staff' );
         $wpdb->update( $staff_table, array( 'zoom_authentication' => 'jwt' ), array( 'zoom_personal' => '1' ) );
 
-        $this->dropTableColumns( $staff_table, array( 'zoom_personal' ) );
+        $this->dropTableColumns( 'bookly_staff', array( 'zoom_personal' ) );
     }
 
     function update_19_5()
@@ -1451,7 +1628,7 @@ class Updater extends Base\Updater
     {
         global $wpdb;
 
-        $this->dropTableForeignKeys( $this->getTableName( 'bookly_staff_schedule_items' ), array( 'staff_id' ) );
+        $this->dropTableForeignKeys( 'bookly_staff_schedule_items', array( 'staff_id' ) );
 
         $this->alterTables( array(
             'bookly_staff' => array(
@@ -1492,7 +1669,7 @@ class Updater extends Base\Updater
         $wpdb->query( sprintf( 'UPDATE `%s` SET `staff_preference_settings` = "{}"', $this->getTableName( 'bookly_services' ) ) );
         $wpdb->query( sprintf( 'UPDATE `%s` `ca` LEFT JOIN `%s` `a` ON `a`.`id` = `ca`.`appointment_id` SET `ca`.`series_id`=`a`.`series_id`', $this->getTableName( 'bookly_customer_appointments' ), $this->getTableName( 'bookly_appointments' ) ) );
 
-        $this->dropTableColumns( $this->getTableName( 'bookly_appointments' ), array( 'series_id' ) );
+        $this->dropTableColumns( 'bookly_appointments', array( 'series_id' ) );
 
         $notifications_table = $this->getTableName( 'bookly_notifications' );
         $records = $wpdb->get_results(
@@ -1612,7 +1789,7 @@ class Updater extends Base\Updater
                 'message_id' => 0,
                 'type' => 'simple',
                 'subject' => 'Major update. Introducing the new Free version of Bookly.',
-                'body' => 'Hello.<br/><br/>Recently Bookly Lite was updated to the latest version – Bookly 16.0. Bookly Lite rebrands into Bookly with more features available for free. Paid version will be available with Pro add-on and other add-ons to bring even more features and flexibility into the booking process.<br/><br/>Take a moment to read our <a href="https://www.booking-wp-plugin.com/bookly-major-update/?utm_campaign=migration_free&utm_medium=cpc&utm_source=newsletter" target="_blank">blog post</a> to see a full list of updates available in the new free version of Bookly.<br/><br/>Thank you',
+                'body' => 'Hello.<br/><br/>Recently Bookly Lite was updated to the latest version - Bookly 16.0. Bookly Lite rebrands into Bookly with more features available for free. Paid version will be available with Pro add-on and other add-ons to bring even more features and flexibility into the booking process.<br/><br/>Take a moment to read our <a href="https://www.booking-wp-plugin.com/bookly-major-update/?utm_campaign=migration_free&utm_medium=cpc&utm_source=newsletter" target="_blank">blog post</a> to see a full list of updates available in the new free version of Bookly.<br/><br/>Thank you',
                 'created' => current_time( 'mysql' ),
             ) );
         } else {

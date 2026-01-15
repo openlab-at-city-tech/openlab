@@ -118,6 +118,10 @@ class Schema
                 if ( $type === 'mediumtext' ) {
                     $type = 'text';
                 }
+                // MariaDB 11.8.3
+                if ( $type === 'tinyint(4)' ) {
+                    $type = 'tinyint';
+                }
                 break;
             case 'MySql':
             default:

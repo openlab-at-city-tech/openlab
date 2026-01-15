@@ -1,0 +1,120 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Updated": [
+                "更新済み"
+            ],
+            "Error": [
+                "エラー"
+            ],
+            "No posts found to sync": [
+                "同期する投稿が見つかりません"
+            ],
+            "Pending": [
+                "承認待ち"
+            ],
+            "of": [
+                "の"
+            ],
+            "errors": [
+                "エラー"
+            ],
+            "with": [
+                "と"
+            ],
+            "Sync canceled": [
+                "同期がキャンセルされました"
+            ],
+            "Failed to cancel sync": [
+                "同期のキャンセルに失敗しました"
+            ],
+            "A sync job is already running.": [
+                "同期処理が既に実行中です。."
+            ],
+            "Failed to start sync": [
+                "同期の開始に失敗しました"
+            ],
+            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
+                "コンテンツを同期するには OpenAI API キーが必要です。一般設定で設定してください。."
+            ],
+            "Sync Method": [
+                "同期方法"
+            ],
+            "Basic Timer": [
+                "基本タイマー"
+            ],
+            "Select All Filtered Records": [
+                "絞り込み済みのすべてのレコードを選択"
+            ],
+            "Select All Records": [
+                "すべてのレコードを選択"
+            ],
+            "Outdated": [
+                "時代遅れ"
+            ],
+            "Added": [
+                "追加済み"
+            ],
+            "Selected": [
+                "選択済み"
+            ],
+            "Records": [
+                "レコード"
+            ],
+            "selected records": [
+                "選択済みのレコード"
+            ],
+            "Sync in Progress": [
+                "同期中"
+            ],
+            "Cancel Sync": [
+                "同期をキャンセル"
+            ],
+            "API key required": [
+                "APIキーが必要です"
+            ],
+            "Select at least one item to sync": [
+                "同期するには、少なくとも1つの項目を選択してください"
+            ],
+            "Start Sync": [
+                "同期を開始"
+            ],
+            "Sync started successfully! ": [
+                "同期が正常に開始されました！"
+            ],
+            "Starting sync...": [
+                "同期を開始しています..."
+            ],
+            "Retrying failed posts:": [
+                "失敗した投稿を再試行中:"
+            ],
+            "Processing": [
+                "処理中"
+            ],
+            "posts": [
+                "投稿"
+            ],
+            "Completed! Processed": [
+                "完了しました。処理済み"
+            ],
+            "Sync stopped after 5 consecutive errors. Processed": [
+                "連続して5回のエラーの後、同期を停止しました。処理済み"
+            ],
+            "posts with": [
+                "投稿と"
+            ],
+            "total errors": [
+                "総エラー数"
+            ],
+            "Sync scheduled, waiting to start...": [
+                "同期がスケジュールされています。開始を待機しています..."
+            ]
+        }
+    }
+}

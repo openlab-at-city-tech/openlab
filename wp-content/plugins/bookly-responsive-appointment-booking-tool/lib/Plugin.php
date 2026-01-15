@@ -41,8 +41,6 @@ abstract class Plugin extends Base\Plugin
      */
     protected static function registerAjax()
     {
-        Backend\Modules\Diagnostics\Ajax::init();
-
         Backend\Components\Cloud\Account\Ajax::init();
         Backend\Components\Cloud\Recharge\Ajax::init();
         Backend\Components\Dashboard\Appointments\Ajax::init();
@@ -86,6 +84,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\CloudWhatsapp\Ajax::init();
         Backend\Modules\CloudZapier\Ajax::init();
         Backend\Modules\Customers\Ajax::init();
+        Backend\Modules\Diagnostics\Ajax::init();
         Backend\Modules\News\Ajax::init();
         Backend\Modules\Notifications\Ajax::init();
         Backend\Modules\Payments\Ajax::init();

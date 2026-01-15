@@ -39,6 +39,7 @@ class GP_Media_Library extends GWPerk {
 		// functionality
 		add_filter( 'gform_entry_post_save', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
 		add_action( 'gform_post_add_entry', array( $this, 'maybe_upload_to_media_library' ), 10, 2 );
+		add_action( 'gform_after_submission', array( $this, 'maybe_refresh_media_library_links' ), 10, 2 );
 		add_action( 'gform_after_update_entry', array( $this, 'maybe_upload_to_media_library_after_update' ), 10, 2 );
 		add_action( 'wp_ajax_rg_delete_file', array( $this, 'hijack_delete_file' ), 9 );
 		add_action( 'gform_delete_lead', array( $this, 'maybe_delete_from_media_library' ) );
@@ -155,10 +156,28 @@ class GP_Media_Library extends GWPerk {
 	## FUNCTIONALITY ##
 
 	public function maybe_upload_to_media_library( $entry, $form ) {
+		// GFStripe shouldn't process upload via `gform_post_add_entry`, the media library file isn't ready yet.
+		// GFStripe should only upload to media library via `gform_entry_post_save`
+		if ( class_exists( 'GFStripe' ) && class_exists( 'GFAPI' ) ) {
+			$functions = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+
+			$found_gfstripe        = false;
+			$found_gfapi_add_entry = false;
+			foreach ( $functions as $func ) {
+				if ( rgar( $func, 'class' ) === 'GFStripe' && $func['function'] === 'maybe_thankyou_page' ) {
+					$found_gfstripe = true;
+				}
+
+				if ( rgar( $func, 'class' ) === 'GFAPI' && $func['function'] === 'add_entry' ) {
+					$found_gfapi_add_entry = true;
+				}
+			}
+			if ( $found_gfstripe && $found_gfapi_add_entry ) {
+				return $entry;
+			}
+		}
 
 		$this->log( sprintf( 'Checking for files to upload from entry (ID: %d).', $entry['id'] ) );
-
-		$has_change = false;
 
 		foreach ( $form['fields'] as $field ) {
 
@@ -178,7 +197,6 @@ class GP_Media_Library extends GWPerk {
 				continue;
 			}
 
-			$has_change = true;
 			$ids        = $this->upload_to_media_library( $value, $field, $entry );
 			$new_value  = array();
 
@@ -213,13 +231,29 @@ class GP_Media_Library extends GWPerk {
 			$entry[ $field->id ]                                 = $new_value;
 			$entry[ $this->get_file_ids_meta_key( $field->id ) ] = $ids;
 
-		}
-
-		if ( $has_change ) {
+			// Temporarily disable revisions for updates triggered here on Media Library Upload.
+			add_filter( 'gravityview/entry-revisions/add-revision', '__return_false', 9951 );
+			// Update entry with the new value on the field as well storing the Media Library file IDs in the meta.
 			GFAPI::update_entry( $entry );
+			// Remove the filter after the Media Library update is complete.
+			remove_filter( 'gravityview/entry-revisions/add-revision', '__return_false', 9951 );
+
 		}
 
 		return $entry;
+	}
+
+	function maybe_refresh_media_library_links( $entry, $form ) {
+		foreach ( $form['fields'] as $field ) {
+
+			if ( ! $this->is_applicable_field( $field ) ) {
+				continue;
+			}
+
+			$value = $entry[ $field->id ];
+
+			GFAPI::update_entry_field( $entry['id'], $field->id, $value );
+		}
 	}
 
 	public function maybe_upload_to_media_library_after_update( $form, $entry_id ) {
@@ -368,14 +402,15 @@ class GP_Media_Library extends GWPerk {
 		}
 
 		$attachment = get_post( $attachment_id );
+		$url        = wp_get_attachment_url( $attachment_id );
 
 		$file_path_info = array(
 			'path'      => trailingslashit( pathinfo( get_attached_file( $attachment_id ) )['dirname'] ),
-			'url'       => trailingslashit( dirname( $attachment->guid ) ),
-			'file_name' => wp_basename( $attachment->guid ),
+			'url'       => trailingslashit( dirname( $url ) ),
+			'file_name' => wp_basename( $url ),
 		);
 
-		$file_url_hash = GF_Field_FileUpload::get_file_upload_path_meta_key_hash( $attachment->guid );
+		$file_url_hash = GF_Field_FileUpload::get_file_upload_path_meta_key_hash( $url );
 
 		return (bool) gform_add_meta( $entry_id, $file_url_hash, $file_path_info );
 	}
@@ -591,7 +626,18 @@ class GP_Media_Library extends GWPerk {
 			$modifiers = array_filter( explode( ':', $match[2] ) );
 			$replace   = array();
 
-			if ( ! isset( $image_ids[ $input_id ] ) || empty( $modifiers ) ) {
+			/**
+			 * Filter the list of merge tag modifiers that should be skipped for GP Media Library image merge tag replacement.
+			 *
+			 * @since 1.2.35
+			 *
+			 * @param array $skip_modifiers List of modifier strings to skip.
+			 * @param array $modifiers      The current list of modifiers for this merge tag.
+			 * @param int   $input_id       The input ID for the merge tag.
+			 * @param array $image_ids      The image IDs for the field/input.
+			 */
+			$skip_modifiers = apply_filters( 'gpml_image_merge_tag_skip_modifiers', array(), $modifiers, $input_id, $image_ids );
+			if ( ! isset( $image_ids[ $input_id ] ) || empty( $modifiers ) || array_intersect( $skip_modifiers, $modifiers ) ) {
 				continue;
 			}
 
@@ -1028,7 +1074,7 @@ class GP_Media_Library extends GWPerk {
 
 		foreach ( $file_ids as $file_id ) {
 			$src = wp_get_attachment_url( $file_id );
-			if ( strpos( $content, $src ) !== false ) {
+			if ( $src && strpos( $content, $src ) !== false ) {
 				$thumbnail = wp_get_attachment_image_src( $file_id, 'medium' );
 				$image     = new GravityView_Image( array(
 					'src'   => $thumbnail[0],

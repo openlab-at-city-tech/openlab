@@ -3,6 +3,7 @@
  * Display functions (template-tags) for use in WordPress templates.
  */
 
+use TEC\Common\Key_Value_Cache\Key_Value_Cache_Interface;
 use TEC\Common\StellarWP\Assets\Asset;
 use TEC\Common\StellarWP\Assets\Assets;
 
@@ -1058,4 +1059,39 @@ if ( ! function_exists( 'tec_assets' ) ) {
 		return $registered;
 	}
 	//phpcs:enable Squiz.Commenting.FunctionComment.ParamCommentFullStop
+}
+
+if ( ! function_exists( 'tec_kv_cache' ) ) {
+	/**
+	 * Returns the shared instance of the key-value cache API object.
+	 *
+	 * @since 6.9.1
+	 *
+	 * @return Key_Value_Cache_Interface The shared instance of the key-value cache API object.
+	 */
+	function tec_kv_cache(): Key_Value_Cache_Interface {
+		return tribe( Key_Value_Cache_Interface::class );
+	}
+}
+
+
+if ( ! function_exists( 'tec_get_admin_region' ) ) {
+	/**
+	 * Returns the region of the current admin page:
+	 * 'tickets' for Tickets admin pages, 'events' for Events admin pages.
+	 * Relies on plugins identifying their admin page regions viw the hook `tec_get_admin_region.`
+	 *
+	 * @since 6.11.0
+	 *
+	 * @return bool|string|null The region of the current admin page.
+	 *                           False if we are not on an admin page.
+	 *                           Null if we are not on a TEC admin page.
+	 */
+	function tec_get_admin_region() {
+		if ( ! is_admin() ) {
+			return false;
+		}
+
+		return apply_filters( 'tec_get_admin_region', null );
+	}
 }

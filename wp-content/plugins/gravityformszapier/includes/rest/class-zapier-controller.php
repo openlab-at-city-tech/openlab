@@ -6,6 +6,7 @@ defined( 'ABSPATH' ) || die();
 
 use GF_REST_Controller;
 use GFAPI;
+use GFWebAPI;
 use WP_Error;
 use WP_REST_Request;
 
@@ -29,7 +30,8 @@ abstract class Zapier_Controller extends GF_REST_Controller {
 	}
 
 	/**
-	 * Determines if the user has the required capability to get the item.
+	 * Determines if the user has the required capability to get the item and
+	 * validates that the rest_api Key has the required read/write permissions.
 	 *
 	 * @since 4.1
 	 *
@@ -38,7 +40,32 @@ abstract class Zapier_Controller extends GF_REST_Controller {
 	 * @return bool
 	 */
 	public function get_item_permissions_check( $request ) {
-		return $this->current_user_can_any( 'gravityforms_edit_forms', $request );
+		$auth = $request->get_header( 'authorization' );
+		if ( ! $auth || stripos( $auth, 'basic ' ) !== 0 ) {
+			return false;
+		}
+
+		$decoded              = base64_decode( trim( substr( $auth, 6 ) ) );
+		list( $consumer_key ) = explode( ':', $decoded, 2 );
+		$consumer_key         = trim( $consumer_key );
+		if ( $consumer_key === '' ) {
+			return false;
+		}
+
+		$consumer_key = GFWebAPI::api_hash( sanitize_text_field( $consumer_key ) );
+		global $wpdb;
+		$user = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"
+					SELECT key_id, user_id, permissions, consumer_key, consumer_secret, nonces
+					FROM {$wpdb->prefix}gf_rest_api_keys
+					WHERE consumer_key = %s
+				",
+				$consumer_key
+			)
+		);
+
+		return $this->current_user_can_any( 'gravityforms_edit_forms', $request ) && ( isset( $user->permissions ) && $user->permissions === 'read_write' );
 	}
 
 	/**
@@ -55,5 +82,4 @@ abstract class Zapier_Controller extends GF_REST_Controller {
 	protected function get_sample_data( $form, $admin_labels = false, $entry = null ) {
 		return gf_zapier()->get_body( $entry, $form, array( 'meta' => array( 'adminLabels' => $admin_labels ) ) );
 	}
-
 }

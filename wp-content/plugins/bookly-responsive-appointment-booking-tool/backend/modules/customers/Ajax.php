@@ -42,11 +42,8 @@ class Ajax extends Lib\Base\Ajax
                         WHERE ca.customer_id = c.id
                 ) AS total_appointments,
                 (
-                    SELECT SUM(p.total) FROM ' . Lib\Entities\Payment::getTableName() . ' p
-                        WHERE p.id IN (
-                            SELECT DISTINCT ca.payment_id FROM ' . Lib\Entities\CustomerAppointment::getTableName() . ' ca
-                                WHERE ca.customer_id = c.id
-                        )
+                    SELECT SUM(p.paid) FROM ' . Lib\Entities\Payment::getTableName() . ' p
+                        WHERE p.customer_id = c.id
                 ) AS payments,
                 wpu.display_name AS wp_user';
 

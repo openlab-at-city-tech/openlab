@@ -1,5 +1,9 @@
 <?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
 new WPCOM_JSON_API_Site_Settings_V1_4_Endpoint(
 	array(
 		'description'      => 'Get detailed settings information about a site.',
@@ -149,6 +153,7 @@ new WPCOM_JSON_API_Site_Settings_V1_4_Endpoint(
 			'jetpack_comment_form_color_scheme'         => '(string) The color scheme for the comment form',
 			'is_fully_managed_agency_site'              => '(bool) Whether the site is a fully managed agency site',
 			'wpcom_hide_action_bar'                     => '(bool) Whether to hide the Action bar',
+			'mcp_abilities'                             => '(array) List of MCP Abilities',
 		),
 
 		'response_format' => array(
@@ -161,6 +166,8 @@ new WPCOM_JSON_API_Site_Settings_V1_4_Endpoint(
 
 /**
  * Settings v1_4 endpoint class.
+ *
+ * @phan-constructor-used-for-side-effects
  */
 class WPCOM_JSON_API_Site_Settings_V1_4_Endpoint extends WPCOM_JSON_API_Site_Settings_V1_3_Endpoint {
 

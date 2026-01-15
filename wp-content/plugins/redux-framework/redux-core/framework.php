@@ -32,7 +32,8 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/class-redux-core.php';
 
-Redux_Core::$version    = '4.5.8';
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals -- Variable is inside a prefixed class.
+Redux_Core::$version    = '4.5.9';
 Redux_Core::$redux_path = __DIR__;
 Redux_Core::instance();
 
@@ -421,7 +422,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 * @since 4.0.0
 		 */
 		private function deprecated_filesystem( $filesystem ) {
-			//_deprecated_function( esc_html__( 'The global variable "$filesystem" of the ReduxFramework object', 'redux-framework' ), '4.5.1', 'Redux_Core::$filesystem' );
+			// _deprecated_function( esc_html__( 'The global variable "$filesystem" of the ReduxFramework object', 'redux-framework' ), '4.5.1', 'Redux_Core::$filesystem' );
 
 			return $filesystem;
 		}
