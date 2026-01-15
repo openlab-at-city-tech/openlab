@@ -9962,6 +9962,10 @@ body form .checkbox-list-container {
     right: -30px;
   }
 }
+.home-page #whos-online .avatar-block .cuny-member .item-avatar a:focus {
+  border: 1px solid #000000;
+  display: block;
+}
 .home-page #whos-online .avatar-block .cuny-member:hover {
   border: 1px solid #000000;
 }
