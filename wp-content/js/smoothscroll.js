@@ -3953,6 +3953,9 @@ OpenLab.nav = (function ($) {
 					e.stopImmediatePropagation();
 
 					var thisElem = $( this );
+					
+					// Track if this was triggered by keyboard (not mouse)
+					var triggeredByKeyboard = ( e.clientX === 0 && e.clientY === 0 );
 
 					thisElem.addClass( 'active' );
 					if ( ! thisElem.hasClass( 'in-action' )) {
@@ -3982,7 +3985,7 @@ OpenLab.nav = (function ($) {
 								}
 							);
 
-							OpenLab.nav.showNavMenu( thisElem, thisTargetElem );
+							OpenLab.nav.showNavMenu( thisElem, thisTargetElem, triggeredByKeyboard );
 
 						}
 					}
@@ -4087,8 +4090,11 @@ OpenLab.nav = (function ($) {
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
 
-					// Focus management: return focus to toggle button when content is hidden
-					thisElem.trigger( 'focus' );
+					// Focus management: return focus to toggle button only if focus was inside the collapsed content
+					var activeElement = document.activeElement;
+					if ( activeElement && $( thisToggleTarget ).find( activeElement ).length > 0 ) {
+						thisElem.trigger( 'focus' );
+					}
 
 					if (thisAnchor) {
 						$.smoothScroll(
@@ -4101,11 +4107,16 @@ OpenLab.nav = (function ($) {
 				}
 			);
 		},
-		showNavMenu: function (thisElem, thisTargetElem) {
+		showNavMenu: function (thisElem, thisTargetElem, triggeredByKeyboard) {
 			var plusHeight = OpenLab.nav.plusHeight;
 
 			if (thisElem.attr( 'data-plusheight' )) {
 				plusHeight = parseInt( thisElem.data( 'plusheight' ) );
+			}
+			
+			// Default to false if not provided
+			if (typeof triggeredByKeyboard === 'undefined') {
+				triggeredByKeyboard = false;
 			}
 
 			// Update ARIA attributes immediately
@@ -4148,10 +4159,12 @@ OpenLab.nav = (function ($) {
 						}
 					);
 
-					// Focus management: move focus to first focusable element in the revealed content
-					var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])' );
-					if ( focusableElements.length > 0 ) {
-						focusableElements.first().trigger( 'focus' );
+					// Focus management: only move focus if triggered by keyboard
+					if ( triggeredByKeyboard ) {
+						var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])' );
+						if ( focusableElements.length > 0 ) {
+							focusableElements.first().trigger( 'focus' );
+						}
 					}
 				}
 			);
