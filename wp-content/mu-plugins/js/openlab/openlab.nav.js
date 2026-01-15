@@ -216,7 +216,8 @@ OpenLab.nav = (function ($) {
 					var thisElem = $( this );
 					
 					// Track if this was triggered by keyboard (not mouse)
-					var triggeredByKeyboard = ( e.clientX === 0 && e.clientY === 0 );
+					// For click events, detail is 0 for keyboard, > 0 for mouse
+					var triggeredByKeyboard = ( e.detail === 0 );
 
 					thisElem.addClass( 'active' );
 					if ( ! thisElem.hasClass( 'in-action' )) {
