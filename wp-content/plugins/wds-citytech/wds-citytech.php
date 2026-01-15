@@ -3916,3 +3916,13 @@ add_action(
 	},
 	100
 );
+
+/**
+ * Removes the 'two-factor' column from the Users admin table.
+ */
+function openlab_remove_two_factor_column_from_users_admin_table( $columns ) {
+	unset( $columns['two-factor'] );
+	return $columns;
+}
+add_filter( 'manage_users_columns', 'openlab_remove_two_factor_column_from_users_admin_table', 100 );
+add_filter( 'wpmu_users_columns', 'openlab_remove_two_factor_column_from_users_admin_table', 100 );
