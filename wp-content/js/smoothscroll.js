@@ -4087,6 +4087,9 @@ OpenLab.nav = (function ($) {
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
 
+					// Focus management: return focus to toggle button when content is hidden
+					thisElem.trigger( 'focus' );
+
 					if (thisAnchor) {
 						$.smoothScroll(
 							{
@@ -4143,7 +4146,13 @@ OpenLab.nav = (function ($) {
 								}
 							);
 						}
-					)
+					);
+
+					// Focus management: move focus to first focusable element in the revealed content
+					var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])' );
+					if ( focusableElements.length > 0 ) {
+						focusableElements.first().trigger( 'focus' );
+					}
 				}
 			);
 		},
