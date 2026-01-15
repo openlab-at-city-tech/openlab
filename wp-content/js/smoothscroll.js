@@ -4068,6 +4068,8 @@ OpenLab.nav = (function ($) {
 			if (backgroundOnly && triggerBackgroundOnlyCheck) {
 				thisElem.removeClass( 'in-action' );
 				thisElem.removeClass( 'active' );
+				// Update ARIA attributes
+				thisElem.attr( 'aria-expanded', 'false' );
 				$( thisToggleTarget ).css(
 					{
 						'display': ''
@@ -4081,6 +4083,9 @@ OpenLab.nav = (function ($) {
 				function () {
 					thisElem.removeClass( 'in-action' );
 					thisElem.removeClass( 'active' );
+					// Update ARIA attributes
+					thisElem.attr( 'aria-expanded', 'false' );
+					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
 
 					if (thisAnchor) {
 						$.smoothScroll(
@@ -4099,6 +4104,10 @@ OpenLab.nav = (function ($) {
 			if (thisElem.attr( 'data-plusheight' )) {
 				plusHeight = parseInt( thisElem.data( 'plusheight' ) );
 			}
+
+			// Update ARIA attributes immediately
+			thisElem.attr( 'aria-expanded', 'true' );
+			thisTargetElem.attr( 'aria-hidden', 'false' );
 
 			thisTargetElem.slideDown(
 				700,
