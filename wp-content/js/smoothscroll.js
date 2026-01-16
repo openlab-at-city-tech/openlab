@@ -4160,12 +4160,11 @@ OpenLab.nav = (function ($) {
 						}
 					);
 
-					// Focus management: only move focus if triggered by keyboard
-					if ( triggeredByKeyboard ) {
-						var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
-						if ( focusableElements.length > 0 ) {
-							focusableElements.first().trigger( 'focus' );
-						}
+					// Focus management: always move focus to first focusable element in the menu
+					// This ensures screen readers announce the menu content and improves navigation
+					var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
+					if ( focusableElements.length > 0 ) {
+						focusableElements.first().trigger( 'focus' );
 					}
 				}
 			);
