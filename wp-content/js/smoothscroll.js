@@ -4124,6 +4124,30 @@ OpenLab.nav = (function ($) {
 			thisElem.attr( 'aria-expanded', 'true' );
 			thisTargetElem.attr( 'aria-hidden', 'false' );
 
+			// Add a close button if one doesn't already exist
+			var closeButtonClass = 'openlab-menu-close-btn';
+			if ( ! thisTargetElem.find( '.' + closeButtonClass ).length ) {
+				var closeButton = $( '<button>', {
+					'class': closeButtonClass + ' sr-only sr-only-focusable',
+					'type': 'button',
+					'aria-label': 'Close menu',
+					'text': 'Close menu'
+				} );
+				
+				// Store reference to the toggle button for the close button's click handler
+				closeButton.data( 'toggle-button', thisElem );
+				closeButton.data( 'target-menu', thisTargetElem );
+				
+				// Add click handler for close button
+				closeButton.on( 'click', function() {
+					var toggleBtn = $( this ).data( 'toggle-button' );
+					var targetMenu = $( this ).data( 'target-menu' );
+					OpenLab.nav.hideNavMenu( toggleBtn, targetMenu );
+				} );
+				
+				thisTargetElem.append( closeButton );
+			}
+
 			thisTargetElem.slideDown(
 				700,
 				function () {
