@@ -6,6 +6,9 @@
 ?>
 
 <div class="flyout-menu flyout-menu-login" id="login-flyout">
+	<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="login-flyout" aria-label="Close Sign In menu">
+		Close
+	</button>
 	<div class="flyout-menu-login-login">
 		<form name="navbar-login-form" class="standard-form" action="<?php echo esc_attr( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
 			<label for="navbar-user-login">Username</label>

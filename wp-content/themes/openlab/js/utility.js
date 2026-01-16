@@ -767,6 +767,7 @@ OpenLab.utility = (function ($) {
 		},
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
+			const announcer = document.getElementById('flyout-announcer');
 
 			// Initialize all flyout panels as inert.
 			// Using the native 'inert' attribute instead of aria-hidden for better accessibility.
@@ -776,8 +777,38 @@ OpenLab.utility = (function ($) {
 				panel.inert = true;
 			});
 
+			// Helper function to announce flyout state changes for screen readers
+			const announceFlyout = function(menuName, isOpening) {
+				if (!announcer) return;
+				
+				const action = isOpening ? 'opened' : 'closed';
+				announcer.textContent = `${menuName} menu ${action}`;
+				
+				// Clear the announcement after a short delay
+				setTimeout(() => {
+					announcer.textContent = '';
+				}, 1000);
+			};
+
+			// Helper function to get menu name from ID
+			const getMenuName = function(menuId) {
+				const nameMap = {
+					'favorites-flyout': 'Favorites',
+					'my-openlab-flyout': 'My OpenLab',
+					'login-flyout': 'Sign In',
+					'main-menu-flyout': 'Main Menu'
+				};
+				return nameMap[menuId] || 'Menu';
+			};
+
 			// Function to close all drawers
-			const closeAllDrawers = function() {
+			const closeAllDrawers = function(returnFocusTo = null) {
+				// Announce closure if any drawer was open
+				const openMenu = document.querySelector('.flyout-menu.is-open');
+				if (openMenu && announcer) {
+					announceFlyout(getMenuName(openMenu.id), false);
+				}
+
 				document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
 					el.classList.remove('is-open')
 				);
@@ -806,84 +837,91 @@ OpenLab.utility = (function ($) {
 				document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
 					el.setAttribute('aria-expanded', 'false')
 				);
+
+				// Return focus if specified
+				if (returnFocusTo) {
+					// Small delay to ensure drawer is closed before moving focus
+					setTimeout(() => {
+						returnFocusTo.focus();
+					}, 50);
+				}
+			};
+
+			// Helper function to open a flyout menu
+			const openFlyout = function(toggle) {
+				const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+				// Close all open menus first
+				closeAllDrawers();
+
+				// If was closed, open it
+				if ( ! isOpen ) {
+					const menuId = toggle.getAttribute('aria-controls');
+					const menu = document.getElementById(menuId);
+					menu.classList.add('is-open');
+
+					const defaultPanelId = menu.getAttribute('data-default-panel');
+					const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
+					if ( defaultPanel ) {
+						defaultPanel.classList.add('active');
+						defaultPanel.inert = false;
+					}
+
+					document.body.classList.add( 'drawer-open' );
+					drawer.inert = false;
+					drawer.classList.add('is-open');
+					drawer.scrollTop = 0;
+
+					toggle.setAttribute('aria-expanded', 'true');
+					toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+					// Announce that the menu opened
+					announceFlyout(getMenuName(menuId), true);
+
+					// Move focus to first menu item after inert is removed and drawer is fully open
+					// Use requestAnimationFrame to ensure browser has processed the inert removal
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
+							// Try to find the first focusable menu item (link, button, or input)
+							// Prefer actual menu items over the close button
+							let firstFocusable = null;
+							
+							// For login flyout, focus on the username input
+							if (menuId === 'login-flyout') {
+								firstFocusable = menu.querySelector('#navbar-user-login');
+							}
+							
+							// For other flyouts, focus on first link or button in the drawer-list
+							if (!firstFocusable) {
+								firstFocusable = menu.querySelector('.drawer-list a, .drawer-list button');
+							}
+							
+							// Fallback to close button if no menu items found
+							if (!firstFocusable) {
+								firstFocusable = menu.querySelector('.flyout-close-button');
+							}
+							
+							if (firstFocusable) {
+								firstFocusable.focus();
+							}
+						});
+					});
+				}
 			};
 
 			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
-				// Handle click events
+				// Handle click events (including VoiceOver activation)
 				toggle.addEventListener('click', (e) => {
 					e.preventDefault();
-
-					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-
-					// Close all open menus first
-					closeAllDrawers();
-
-					// If was closed, open it
-					if ( ! isOpen ) {
-						const menuId = toggle.getAttribute('aria-controls');
-						const menu = document.getElementById(menuId);
-						menu.classList.add('is-open');
-
-						const defaultPanelId = menu.getAttribute('data-default-panel');
-						const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
-						if ( defaultPanel ) {
-							defaultPanel.classList.add('active');
-							defaultPanel.inert = false;
-						}
-
-						document.body.classList.add( 'drawer-open' );
-						drawer.inert = false;
-						drawer.classList.add('is-open');
-						drawer.scrollTop = 0;
-
-						toggle.setAttribute('aria-expanded', 'true');
-						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
-					}
+					openFlyout(toggle);
 				});
 
-				// Handle keyboard events for Enter/Space to ensure focus moves
+				// Handle keyboard events for Enter/Space
 				toggle.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-
-						const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-
-						// Close all open menus first
-						closeAllDrawers();
-
-						// If was closed, open it and move focus
-						if ( ! isOpen ) {
-							const menuId = toggle.getAttribute('aria-controls');
-							const menu = document.getElementById(menuId);
-							menu.classList.add('is-open');
-
-							const defaultPanelId = menu.getAttribute('data-default-panel');
-							const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
-							if ( defaultPanel ) {
-								defaultPanel.classList.add('active');
-								defaultPanel.inert = false;
-							}
-
-							document.body.classList.add( 'drawer-open' );
-							drawer.inert = false;
-							drawer.classList.add('is-open');
-							drawer.scrollTop = 0;
-
-							toggle.setAttribute('aria-expanded', 'true');
-							toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
-
-							// Move focus to first item in panel after drawer is open
-							if ( defaultPanel ) {
-								// Wait for transitions to complete before moving focus
-								setTimeout(() => {
-									const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
-									if (firstFocusable) {
-										firstFocusable.focus();
-									}
-								}, 100);
-							}
-						}
+						openFlyout(toggle);
 					}
 				});
 			});
@@ -939,6 +977,22 @@ OpenLab.utility = (function ($) {
 				menu.hidden = true;
 			});
 
+			// Handling close buttons in flyouts.
+			const closeButtons = document.querySelectorAll('.flyout-close-button');
+			closeButtons.forEach(button => {
+				button.addEventListener('click', function (e) {
+					e.preventDefault();
+					
+					const flyoutId = this.getAttribute('data-flyout-close');
+					
+					// Find the toggle button associated with this flyout
+					const toggle = document.querySelector(`[aria-controls="${flyoutId}"]`);
+					
+					// Close the drawer and return focus to the toggle
+					closeAllDrawers(toggle);
+				});
+			});
+
 			// Close flyout menus when clicking outside.
 			document.addEventListener('click', function (e) {
 				const nav = document.querySelector('.openlab-navbar');
@@ -958,12 +1012,8 @@ OpenLab.utility = (function ($) {
 						// Find the open toggle BEFORE closing
 						const openToggle = document.querySelector('.navbar-flyout-toggle[aria-expanded="true"]');
 						
-						closeAllDrawers();
-						
-						// Return focus to the toggle button that was open
-						if (openToggle) {
-							openToggle.focus();
-						}
+						// Close the drawer and return focus to the toggle
+						closeAllDrawers(openToggle);
 					}
 				}
 			});
