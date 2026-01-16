@@ -847,95 +847,63 @@ OpenLab.utility = (function ($) {
 				}
 			};
 
-			// Handling the drawer toggle button.
-			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
-				// Handle click events
-				toggle.addEventListener('click', (e) => {
-					e.preventDefault();
+			// Helper function to open a flyout menu
+			const openFlyout = function(toggle) {
+				const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
-					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+				// Close all open menus first
+				closeAllDrawers();
 
-					// Close all open menus first
-					closeAllDrawers();
+				// If was closed, open it
+				if ( ! isOpen ) {
+					const menuId = toggle.getAttribute('aria-controls');
+					const menu = document.getElementById(menuId);
+					menu.classList.add('is-open');
 
-					// If was closed, open it
-					if ( ! isOpen ) {
-						const menuId = toggle.getAttribute('aria-controls');
-						const menu = document.getElementById(menuId);
-						menu.classList.add('is-open');
+					const defaultPanelId = menu.getAttribute('data-default-panel');
+					const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
+					if ( defaultPanel ) {
+						defaultPanel.classList.add('active');
+						defaultPanel.inert = false;
+					}
 
-						const defaultPanelId = menu.getAttribute('data-default-panel');
-						const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
-						if ( defaultPanel ) {
-							defaultPanel.classList.add('active');
-							defaultPanel.inert = false;
-						}
+					document.body.classList.add( 'drawer-open' );
+					drawer.inert = false;
+					drawer.classList.add('is-open');
+					drawer.scrollTop = 0;
 
-						document.body.classList.add( 'drawer-open' );
-						drawer.inert = false;
-						drawer.classList.add('is-open');
-						drawer.scrollTop = 0;
+					toggle.setAttribute('aria-expanded', 'true');
+					toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
 
-						toggle.setAttribute('aria-expanded', 'true');
-						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+					// Announce that the menu opened
+					announceFlyout(getMenuName(menuId), true);
 
-						// Announce that the menu opened
-						announceFlyout(getMenuName(menuId), true);
-
-						// Move focus to close button (first focusable element in menu) after drawer is open
-						// Wait for transitions to complete before moving focus
-						setTimeout(() => {
+					// Move focus to close button after inert is removed and drawer is fully open
+					// Use requestAnimationFrame to ensure browser has processed the inert removal
+					requestAnimationFrame(() => {
+						requestAnimationFrame(() => {
 							const closeButton = menu.querySelector('.flyout-close-button');
 							if (closeButton) {
 								closeButton.focus();
 							}
-						}, 100);
-					}
+						});
+					});
+				}
+			};
+
+			// Handling the drawer toggle button.
+			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+				// Handle click events (including VoiceOver activation)
+				toggle.addEventListener('click', (e) => {
+					e.preventDefault();
+					openFlyout(toggle);
 				});
 
-				// Handle keyboard events for Enter/Space to ensure focus moves
+				// Handle keyboard events for Enter/Space
 				toggle.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-
-						const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-
-						// Close all open menus first
-						closeAllDrawers();
-
-						// If was closed, open it and move focus
-						if ( ! isOpen ) {
-							const menuId = toggle.getAttribute('aria-controls');
-							const menu = document.getElementById(menuId);
-							menu.classList.add('is-open');
-
-							const defaultPanelId = menu.getAttribute('data-default-panel');
-							const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
-							if ( defaultPanel ) {
-								defaultPanel.classList.add('active');
-								defaultPanel.inert = false;
-							}
-
-							document.body.classList.add( 'drawer-open' );
-							drawer.inert = false;
-							drawer.classList.add('is-open');
-							drawer.scrollTop = 0;
-
-							toggle.setAttribute('aria-expanded', 'true');
-							toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
-
-							// Announce that the menu opened
-							announceFlyout(getMenuName(menuId), true);
-
-							// Move focus to close button (first focusable element in menu) after drawer is open
-							// Wait for transitions to complete before moving focus
-							setTimeout(() => {
-								const closeButton = menu.querySelector('.flyout-close-button');
-								if (closeButton) {
-									closeButton.focus();
-								}
-							}, 100);
-						}
+						openFlyout(toggle);
 					}
 				});
 			});
