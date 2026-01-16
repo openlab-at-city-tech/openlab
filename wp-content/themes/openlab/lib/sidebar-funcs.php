@@ -7,8 +7,11 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
 
     $pull_classes = ($type == 'groups' ? ' pull-right' : '');
     $pull_classes .= ($mobile_dropdown ? ' mobile-dropdown' : '');
+    
+    // Add aria-hidden for mobile dropdowns
+    $aria_hidden = $mobile_dropdown ? ' aria-hidden="true"' : '';
 
-    echo '<div id="sidebar" role="complementary" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"><div class="sidebar-wrapper">';
+    echo '<div id="sidebar" role="complementary" class="sidebar col-sm-6 col-xs-24' . $pull_classes . ' type-' . $type . $extra_classes . '"' . $aria_hidden . '><div class="sidebar-wrapper">';
 
     switch ($type) {
         case 'actions':
@@ -57,12 +60,12 @@ function openlab_bp_mobile_sidebar($type) {
 
     switch ($type) {
         case 'members':
-            echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix">';
+            echo '<div id="sidebar-mobile" class="sidebar group-single-item mobile-dropdown clearfix" aria-hidden="true">';
             openlab_member_sidebar_menu(true);
             echo '</div>';
             break;
         case 'about':
-            echo '<div id="sidebar-mobile" class="sidebar clearfix mobile-dropdown">';
+            echo '<div id="sidebar-mobile" class="sidebar clearfix mobile-dropdown" aria-hidden="true">';
             $args = array(
                 'theme_location' => 'aboutmenu',
                 'container' => 'div',
@@ -95,7 +98,7 @@ function openlab_group_sidebar($mobile = false) {
                 <div class="wrapper-block">
                     <?php openlab_bp_group_site_pages(); ?>
                 </div>
-                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper wrapper-block">
+                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper wrapper-block" aria-hidden="true">
                     <div id="item-buttons" class="profile-nav sidebar-block clearfix">
                         <ul class="sidebar-nav clearfix">
                             <?php bp_get_options_nav(); ?>
