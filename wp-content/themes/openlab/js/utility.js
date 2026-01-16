@@ -878,13 +878,31 @@ OpenLab.utility = (function ($) {
 					// Announce that the menu opened
 					announceFlyout(getMenuName(menuId), true);
 
-					// Move focus to close button after inert is removed and drawer is fully open
+					// Move focus to first menu item after inert is removed and drawer is fully open
 					// Use requestAnimationFrame to ensure browser has processed the inert removal
 					requestAnimationFrame(() => {
 						requestAnimationFrame(() => {
-							const closeButton = menu.querySelector('.flyout-close-button');
-							if (closeButton) {
-								closeButton.focus();
+							// Try to find the first focusable menu item (link, button, or input)
+							// Prefer actual menu items over the close button
+							let firstFocusable = null;
+							
+							// For login flyout, focus on the username input
+							if (menuId === 'login-flyout') {
+								firstFocusable = menu.querySelector('#navbar-user-login');
+							}
+							
+							// For other flyouts, focus on first link or button in the drawer-list
+							if (!firstFocusable) {
+								firstFocusable = menu.querySelector('.drawer-list a, .drawer-list button');
+							}
+							
+							// Fallback to close button if no menu items found
+							if (!firstFocusable) {
+								firstFocusable = menu.querySelector('.flyout-close-button');
+							}
+							
+							if (firstFocusable) {
+								firstFocusable.focus();
 							}
 						});
 					});
