@@ -998,7 +998,6 @@ OpenLab.utility = (function ($) {
 					e.preventDefault();
 					
 					const flyoutId = this.getAttribute('data-flyout-close');
-					const flyout = document.getElementById(flyoutId);
 					
 					// Find the toggle button associated with this flyout
 					const toggle = document.querySelector(`[aria-controls="${flyoutId}"]`);
