@@ -3953,6 +3953,10 @@ OpenLab.nav = (function ($) {
 					e.stopImmediatePropagation();
 
 					var thisElem = $( this );
+					
+					// Track if this was triggered by keyboard (not mouse)
+					// For click events, detail is 0 for keyboard, > 0 for mouse
+					var triggeredByKeyboard = ( e.detail === 0 );
 
 					thisElem.addClass( 'active' );
 					if ( ! thisElem.hasClass( 'in-action' )) {
@@ -3982,7 +3986,7 @@ OpenLab.nav = (function ($) {
 								}
 							);
 
-							OpenLab.nav.showNavMenu( thisElem, thisTargetElem );
+							OpenLab.nav.showNavMenu( thisElem, thisTargetElem, triggeredByKeyboard );
 
 						}
 					}
@@ -4068,6 +4072,8 @@ OpenLab.nav = (function ($) {
 			if (backgroundOnly && triggerBackgroundOnlyCheck) {
 				thisElem.removeClass( 'in-action' );
 				thisElem.removeClass( 'active' );
+				// Update ARIA attributes
+				thisElem.attr( 'aria-expanded', 'false' );
 				$( thisToggleTarget ).css(
 					{
 						'display': ''
@@ -4081,6 +4087,15 @@ OpenLab.nav = (function ($) {
 				function () {
 					thisElem.removeClass( 'in-action' );
 					thisElem.removeClass( 'active' );
+					// Update ARIA attributes
+					thisElem.attr( 'aria-expanded', 'false' );
+					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
+
+					// Focus management: return focus to toggle button only if focus was inside the collapsed content
+					var activeElement = document.activeElement;
+					if ( activeElement && thisToggleTarget[0] && $.contains( thisToggleTarget[0], activeElement ) ) {
+						thisElem.trigger( 'focus' );
+					}
 
 					if (thisAnchor) {
 						$.smoothScroll(
@@ -4093,11 +4108,44 @@ OpenLab.nav = (function ($) {
 				}
 			);
 		},
-		showNavMenu: function (thisElem, thisTargetElem) {
+		showNavMenu: function (thisElem, thisTargetElem, triggeredByKeyboard) {
 			var plusHeight = OpenLab.nav.plusHeight;
 
 			if (thisElem.attr( 'data-plusheight' )) {
 				plusHeight = parseInt( thisElem.data( 'plusheight' ) );
+			}
+			
+			// Default to false if not provided
+			if (typeof triggeredByKeyboard === 'undefined') {
+				triggeredByKeyboard = false;
+			}
+
+			// Update ARIA attributes immediately
+			thisElem.attr( 'aria-expanded', 'true' );
+			thisTargetElem.attr( 'aria-hidden', 'false' );
+
+			// Add a close button if one doesn't already exist
+			var closeButtonClass = 'openlab-menu-close-btn';
+			if ( ! thisTargetElem.find( '.' + closeButtonClass ).length ) {
+				var closeButton = $( '<button>', {
+					'class': closeButtonClass + ' sr-only sr-only-focusable',
+					'type': 'button',
+					'aria-label': 'Close menu',
+					'text': 'Close menu'
+				} );
+				
+				// Store reference to the toggle button for the close button's click handler
+				closeButton.data( 'toggle-button', thisElem );
+				closeButton.data( 'target-menu', thisTargetElem );
+				
+				// Add click handler for close button
+				closeButton.on( 'click', function() {
+					var toggleBtn = $( this ).data( 'toggle-button' );
+					var targetMenu = $( this ).data( 'target-menu' );
+					OpenLab.nav.hideNavMenu( toggleBtn, targetMenu );
+				} );
+				
+				thisTargetElem.append( closeButton );
 			}
 
 			thisTargetElem.slideDown(
@@ -4134,7 +4182,14 @@ OpenLab.nav = (function ($) {
 								}
 							);
 						}
-					)
+					);
+
+					// Focus management: always move focus to first focusable element in the menu
+					// This ensures screen readers announce the menu content and improves navigation
+					var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
+					if ( focusableElements.length > 0 ) {
+						focusableElements.first().trigger( 'focus' );
+					}
 				}
 			);
 		},
