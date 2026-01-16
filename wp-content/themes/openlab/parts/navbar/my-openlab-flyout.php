@@ -168,6 +168,12 @@ $panels = [
 				<?php endif; ?>
 			</div>
 
+			<?php if ( 'root' === $panel_id ) : ?>
+				<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="my-openlab-flyout" aria-label="Close My OpenLab menu">
+					Close
+				</button>
+			<?php endif; ?>
+
 			<ul class="drawer-list">
 				<?php foreach ( $items as $item ) :
 					$classes = [ 'drawer-item' ];

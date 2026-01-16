@@ -36,6 +36,9 @@ if ( is_user_logged_in() ) {
 				<span>OpenLab</span>
 			</a>
 		</div>
+		<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="main-menu-flyout" aria-label="Close Main Menu">
+			Close
+		</button>
 		<ul class="drawer-list">
 			<?php foreach ( $all_nav_links as $link_key => $link ) : ?>
 				<?php
