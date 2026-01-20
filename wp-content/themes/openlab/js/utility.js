@@ -683,11 +683,14 @@ OpenLab.utility = (function ($) {
 						}
 					);
 
-					// Disable the select if it has no enabled options
-					if ( ! hasEnabledOptions ) {
-						$select.prop( 'disabled', true );
-					} else {
-						$select.prop( 'disabled', false );
+					// Only disable Department select if it has no enabled options
+					// School and Office selects are controlled by mutual exclusion logic
+					if ( selectId === 'department-select' ) {
+						if ( ! hasEnabledOptions ) {
+							$select.prop( 'disabled', true );
+						} else {
+							$select.prop( 'disabled', false );
+						}
 					}
 				}
 			);
