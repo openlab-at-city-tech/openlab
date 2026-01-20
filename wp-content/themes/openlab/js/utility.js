@@ -499,6 +499,11 @@ OpenLab.utility = (function ($) {
 			$( '.academic-unit-type-select select' ).each(
 				function() {
 					var selectId = $( this ).attr( 'id' );
+					if ( ! selectId ) {
+						console.warn( 'Academic unit select found without an id attribute', this );
+						return;
+					}
+					
 					var options = [];
 					$( this ).find( 'option' ).each(
 						function() {
@@ -586,6 +591,7 @@ OpenLab.utility = (function ($) {
 					// Get the full list of options for this select from memory
 					var fullOptions = OpenLab.utility.fullAcademicUnitOptions[selectId];
 					if ( ! fullOptions ) {
+						console.warn( 'No stored options found for select', selectId );
 						return;
 					}
 
@@ -627,7 +633,8 @@ OpenLab.utility = (function ($) {
 
 								$select.append( $option );
 
-								if ( optionData.classes.indexOf( 'academic-unit-nonempty' ) !== -1 ) {
+								var optionClasses = optionData.classes || '';
+								if ( optionClasses.indexOf( 'academic-unit-nonempty' ) !== -1 ) {
 									hasEnabledOptions = true;
 								}
 							}
