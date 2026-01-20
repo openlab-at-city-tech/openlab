@@ -537,6 +537,12 @@ OpenLab.utility = (function ($) {
 		updateAcademicUnitFilters: function( changedSelect ) {
 			var selectedSlugs  = [];
 			
+			// Helper function to check if a value represents "no selection"
+			// Both empty string and "all" are treated as no selection
+			var isNoSelection = function( value ) {
+				return !value || value === '' || value === 'all';
+			};
+			
 			// Determine mutual exclusion based on which select changed
 			var excludeUnitType = '';
 			var $schoolSelect = $( '#school-select' );
@@ -546,15 +552,15 @@ OpenLab.utility = (function ($) {
 				var changedUnitType = $( changedSelect ).data( 'unittype' );
 				var changedValue = $( changedSelect ).val();
 				
-				// If a school or office was selected, disable and clear the other
-				if ( changedUnitType === 'school' && changedValue && changedValue !== '' ) {
+				// If a school or office was selected (not empty and not "all"), disable and clear the other
+				if ( changedUnitType === 'school' && !isNoSelection( changedValue ) ) {
 					excludeUnitType = 'office';
 					$officeSelect.val( '' ).prop( 'disabled', true );
-				} else if ( changedUnitType === 'office' && changedValue && changedValue !== '' ) {
+				} else if ( changedUnitType === 'office' && !isNoSelection( changedValue ) ) {
 					excludeUnitType = 'school';
 					$schoolSelect.val( '' ).prop( 'disabled', true );
 				} else if ( changedUnitType === 'school' || changedUnitType === 'office' ) {
-					// If school or office was cleared, re-enable the other
+					// If school or office was cleared (set to empty or "all"), re-enable the other
 					$schoolSelect.prop( 'disabled', false );
 					$officeSelect.prop( 'disabled', false );
 				}
@@ -563,10 +569,10 @@ OpenLab.utility = (function ($) {
 				var schoolValue = $schoolSelect.val();
 				var officeValue = $officeSelect.val();
 				
-				if ( schoolValue && schoolValue !== '' ) {
+				if ( !isNoSelection( schoolValue ) ) {
 					excludeUnitType = 'office';
 					$officeSelect.prop( 'disabled', true );
-				} else if ( officeValue && officeValue !== '' ) {
+				} else if ( !isNoSelection( officeValue ) ) {
 					excludeUnitType = 'school';
 					$schoolSelect.prop( 'disabled', true );
 				}
@@ -589,28 +595,24 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
 
 			// Build selectedSlugs from the selected units (excluding the disabled type)
+			// Note: both empty string and "all" are treated as "no selection" and don't add to filter
 			var $selectedUnits = $( '.academic-unit:selected' );
 			$selectedUnits.each(
 				function( k, v ) {
-					if ( v.value.length > 0 ) {
-						var $option = $( v );
-						var optionUnitType = $option.data( 'academic-unit-type' );
-						
-						// Skip if this is the excluded unit type
-						if ( excludeUnitType !== '' && optionUnitType === excludeUnitType ) {
-							return;
-						}
-
-						if ( 'all' === v.value ) {
-							$option.siblings( '.academic-unit-nonempty' ).each(
-								function( k, v ) {
-									selectedSlugs.push( v.value );
-								}
-							);
-						} else {
-							selectedSlugs.push( v.value );
-						}
+					// Skip empty values and "all" - they mean "no filter"
+					if ( !v.value || v.value === '' || v.value === 'all' ) {
+						return;
 					}
+					
+					var $option = $( v );
+					var optionUnitType = $option.data( 'academic-unit-type' );
+					
+					// Skip if this is the excluded unit type
+					if ( excludeUnitType !== '' && optionUnitType === excludeUnitType ) {
+						return;
+					}
+
+					selectedSlugs.push( v.value );
 				}
 			);
 
