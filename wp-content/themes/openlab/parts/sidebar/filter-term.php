@@ -2,7 +2,7 @@
 $current_term = openlab_get_current_filter( 'term' );
 ?>
 
-<div class="custom-select">
+<div class="styled-select">
 	<label for="course-term-select" class="sr-only">Select Semester</label>
 	<select name="term" class="last-select" id="course-term-select">
 		<option value='' <?php selected( '', $current_term ) ?>>Select Semester</option>

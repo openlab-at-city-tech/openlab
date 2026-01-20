@@ -73,7 +73,7 @@ if ( 'school' === $url_param && 'all' !== $current_unit ) {
 
 ?>
 
-<div class="sidebar-filter custom-select academic-unit-type-select" id="academic-unit-type-select-<?php echo esc_attr( $url_param ); ?>">
+<div class="sidebar-filter styled-select academic-unit-type-select" id="academic-unit-type-select-<?php echo esc_attr( $url_param ); ?>">
 	<label for="<?php echo esc_attr( $url_param ); ?>-select" class="sr-only"><?php echo esc_html( $label ); ?></label>
 	<select name="<?php echo esc_attr( $url_param ); ?>" class="last-select" id="<?php echo esc_attr( $url_param ); ?>-select" data-unittype="<?php echo esc_attr( $url_param ); ?>">
 

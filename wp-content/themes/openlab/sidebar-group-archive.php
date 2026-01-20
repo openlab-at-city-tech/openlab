@@ -38,14 +38,14 @@ if ( bp_is_members_directory() ) {
         <form id="group_seq_form" name="group_seq_form" action="#" method="get">
 			<?php get_template_part( 'parts/sidebar/filter-search' ); ?>
 
-            <div id="sidebarCustomSelect" class="custom-select-parent">
+            <div id="sidebarCustomSelect" class="styled-select-parent">
 				<p>Narrow down your results using some of the filters below.</p>
 
 				<?php if ( $is_search ) : ?>
 					<?php get_template_part( 'parts/sidebar/filter-group-type' ); ?>
 				<?php endif; ?>
 
-				<div class="custom-select" id="schoolSelect">
+				<div class="styled-select" id="schoolSelect">
 					<?php
 					set_query_var( 'academic_unit_type', 'school' );
 					get_template_part( 'parts/sidebar/filter-academic-unit' );
@@ -53,7 +53,7 @@ if ( bp_is_members_directory() ) {
 				</div>
 
 				<?php if ( 'course' !== $group_type ) : ?>
-					<div class="custom-select" id="officeSelect">
+					<div class="styled-select" id="officeSelect">
 						<?php
 						set_query_var( 'academic_unit_type', 'office' );
 						get_template_part( 'parts/sidebar/filter-academic-unit' );
@@ -61,7 +61,7 @@ if ( bp_is_members_directory() ) {
 					</div>
 				<?php endif; ?>
 
-				<div class="custom-select" id="departmentSelect">
+				<div class="styled-select" id="departmentSelect">
 					<?php
 					set_query_var( 'academic_unit_type', 'department' );
 					get_template_part( 'parts/sidebar/filter-academic-unit' );
