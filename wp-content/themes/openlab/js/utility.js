@@ -525,23 +525,57 @@ OpenLab.utility = (function ($) {
 			// Attach change event listeners
 			$( '.academic-unit-type-select select' ).on(
 				'change',
-				function() {
-					OpenLab.utility.updateAcademicUnitFilters();
+				function(e) {
+					OpenLab.utility.updateAcademicUnitFilters( e.target );
 				}
 			);
 			
 			// Initial update
-			OpenLab.utility.updateAcademicUnitFilters();
+			OpenLab.utility.updateAcademicUnitFilters( null );
 		},
 
-		updateAcademicUnitFilters: function() {
+		updateAcademicUnitFilters: function( changedSelect ) {
 			var selectedSlugs  = [];
-			var $selectedUnits = $( '.academic-unit:selected' );
 			
-			// Track current top-level selections to detect changes
+			// Determine mutual exclusion based on which select changed
+			var excludeUnitType = '';
+			var $schoolSelect = $( '#school-select' );
+			var $officeSelect = $( '#office-select' );
+			
+			if ( changedSelect ) {
+				var changedUnitType = $( changedSelect ).data( 'unittype' );
+				var changedValue = $( changedSelect ).val();
+				
+				// If a school or office was selected, disable and clear the other
+				if ( changedUnitType === 'school' && changedValue && changedValue !== '' ) {
+					excludeUnitType = 'office';
+					$officeSelect.val( '' ).prop( 'disabled', true );
+				} else if ( changedUnitType === 'office' && changedValue && changedValue !== '' ) {
+					excludeUnitType = 'school';
+					$schoolSelect.val( '' ).prop( 'disabled', true );
+				} else if ( changedUnitType === 'school' || changedUnitType === 'office' ) {
+					// If school or office was cleared, re-enable the other
+					$schoolSelect.prop( 'disabled', false );
+					$officeSelect.prop( 'disabled', false );
+				}
+			} else {
+				// Initial load - determine state from current values
+				var schoolValue = $schoolSelect.val();
+				var officeValue = $officeSelect.val();
+				
+				if ( schoolValue && schoolValue !== '' ) {
+					excludeUnitType = 'office';
+					$officeSelect.prop( 'disabled', true );
+				} else if ( officeValue && officeValue !== '' ) {
+					excludeUnitType = 'school';
+					$schoolSelect.prop( 'disabled', true );
+				}
+			}
+			
+			// Track current top-level selections to detect changes for Department reset
 			var currentTopLevelSelections = {
-				school: $( '#school-select' ).val(),
-				office: $( '#office-select' ).val()
+				school: $schoolSelect.val(),
+				office: $officeSelect.val()
 			};
 			
 			// Check if top-level selection has changed
@@ -554,38 +588,21 @@ OpenLab.utility = (function ($) {
 			// Store current selections for next comparison
 			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
 
-			// Determine first whether both Schools and Offices are selected. If so, drop one before creating selectedUnits.
-			var excludeUnitType = '';
-			$selectedUnits.each(
-				function( k, v ) {
-					if ( excludeUnitType !== '' ) {
-						return;
-					}
-
-					if ( v.value.length > 0 && 'all' !== v.value ) {
-						switch ( v.dataset.academicUnitType ) {
-							case 'school' :
-								excludeUnitType = 'office';
-								break;
-
-							case 'office' :
-								excludeUnitType = 'school';
-								break;
-						}
-					}
-				}
-			);
-
+			// Build selectedSlugs from the selected units (excluding the disabled type)
+			var $selectedUnits = $( '.academic-unit:selected' );
 			$selectedUnits.each(
 				function( k, v ) {
 					if ( v.value.length > 0 ) {
-
-						if ( excludeUnitType === v.dataset.academicUnitType ) {
+						var $option = $( v );
+						var optionUnitType = $option.data( 'academic-unit-type' );
+						
+						// Skip if this is the excluded unit type
+						if ( excludeUnitType !== '' && optionUnitType === excludeUnitType ) {
 							return;
 						}
 
 						if ( 'all' === v.value ) {
-							$( v ).siblings( '.academic-unit-nonempty' ).each(
+							$option.siblings( '.academic-unit-nonempty' ).each(
 								function( k, v ) {
 									selectedSlugs.push( v.value );
 								}
@@ -674,13 +691,6 @@ OpenLab.utility = (function ($) {
 					}
 				}
 			);
-
-			// If there is an excluded unit type, disable that dropdown and reset its value.
-			if ( excludeUnitType !== '' ) {
-				var $excludedSelect = $('#' + excludeUnitType + '-select');
-				$excludedSelect.prop('disabled', true);
-				$excludedSelect.val(''); // Zero out the excluded unit type
-			}
 		},
 		sliderTagManagerTracking: function () {
 
