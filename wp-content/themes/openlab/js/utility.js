@@ -14,6 +14,7 @@ OpenLab.utility = (function ($) {
 		uiCheck: {},
 		selectDisplay: {},
 		fullAcademicUnitOptions: {},
+		previousTopLevelSelections: {},
 		init: function () {
 
 			OpenLab.utility.adjustLoginBox();
@@ -536,6 +537,22 @@ OpenLab.utility = (function ($) {
 		updateAcademicUnitFilters: function() {
 			var selectedSlugs  = [];
 			var $selectedUnits = $( '.academic-unit:selected' );
+			
+			// Track current top-level selections to detect changes
+			var currentTopLevelSelections = {
+				school: $( '#school-select' ).val(),
+				office: $( '#office-select' ).val()
+			};
+			
+			// Check if top-level selection has changed
+			var topLevelChanged = false;
+			if ( OpenLab.utility.previousTopLevelSelections.school !== currentTopLevelSelections.school || 
+			     OpenLab.utility.previousTopLevelSelections.office !== currentTopLevelSelections.office ) {
+				topLevelChanged = true;
+			}
+			
+			// Store current selections for next comparison
+			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
 
 			// Determine first whether both Schools and Offices are selected. If so, drop one before creating selectedUnits.
 			var excludeUnitType = '';
@@ -597,6 +614,13 @@ OpenLab.utility = (function ($) {
 
 					// Clear current options
 					$select.empty();
+					
+					// If this is the department select and a top-level selection changed, reset its value
+					var shouldResetSelection = false;
+					if ( selectId === 'department-select' && topLevelChanged ) {
+						shouldResetSelection = true;
+						currentValue = ''; // Reset to empty selection
+					}
 
 					// Rebuild options based on parent selection
 					var hasEnabledOptions = false;
@@ -627,6 +651,7 @@ OpenLab.utility = (function ($) {
 									.data( 'academic-unit-type', optionData.academicUnitType )
 									.data( 'parent', optionData.parent );
 
+								// Select this option if it matches currentValue
 								if ( optionData.value === currentValue ) {
 									$option.prop( 'selected', true );
 								}
@@ -650,9 +675,11 @@ OpenLab.utility = (function ($) {
 				}
 			);
 
-			// If there is an excluded unit type, disable that dropdown.
+			// If there is an excluded unit type, disable that dropdown and reset its value.
 			if ( excludeUnitType !== '' ) {
-				$('#' + excludeUnitType + '-select').prop('disabled', true);
+				var $excludedSelect = $('#' + excludeUnitType + '-select');
+				$excludedSelect.prop('disabled', true);
+				$excludedSelect.val(''); // Zero out the excluded unit type
 			}
 		},
 		sliderTagManagerTracking: function () {
