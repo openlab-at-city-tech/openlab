@@ -657,6 +657,10 @@ OpenLab.utility = (function ($) {
 							else if ( 'undefined' === typeof thisParent || thisParent === '' ) {
 								shouldInclude = true;
 							}
+							// If no parent filter is active (selectedSlugs is empty), show all departments
+							else if ( selectedSlugs.length === 0 ) {
+								shouldInclude = true;
+							}
 							// Include items whose parent is selected
 							else if ( -1 !== selectedSlugs.indexOf( thisParent ) ) {
 								shouldInclude = true;
