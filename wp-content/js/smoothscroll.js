@@ -3939,13 +3939,26 @@ OpenLab.nav = (function ($) {
 		setMainContentInert: function () {
 			var mainContent = document.getElementById( 'openlab-main-content' );
 			if ( mainContent ) {
-				mainContent.setAttribute( 'inert', '' );
+				// Set inert on children instead of parent to exclude toggle buttons
+				Array.from( mainContent.children ).forEach( function( child ) {
+					// Don't set inert on toggle buttons so they can still be clicked to close the menu
+					if ( ! child.classList.contains( 'direct-toggle' ) && ! child.classList.contains( 'mobile-toggle' ) ) {
+						child.setAttribute( 'inert', '' );
+						child.setAttribute( 'data-inert-added', 'true' );
+					}
+				} );
 			}
 		},
 		removeMainContentInert: function () {
 			var mainContent = document.getElementById( 'openlab-main-content' );
 			if ( mainContent ) {
-				mainContent.removeAttribute( 'inert' );
+				// Remove inert from all children that we added it to
+				Array.from( mainContent.children ).forEach( function( child ) {
+					if ( child.hasAttribute( 'data-inert-added' ) ) {
+						child.removeAttribute( 'inert' );
+						child.removeAttribute( 'data-inert-added' );
+					}
+				} );
 			}
 		},
 		directToggleAction: function () {
