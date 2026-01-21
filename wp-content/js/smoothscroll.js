@@ -3941,8 +3941,12 @@ OpenLab.nav = (function ($) {
 			if ( mainContent ) {
 				// Set inert on children instead of parent to exclude toggle buttons
 				Array.from( mainContent.children ).forEach( function( child ) {
-					// Don't set inert on toggle buttons so they can still be clicked to close the menu
-					if ( ! child.classList.contains( 'direct-toggle' ) && ! child.classList.contains( 'mobile-toggle' ) ) {
+					// Don't set inert on toggle buttons or elements containing toggle buttons
+					var hasToggleButton = child.classList.contains( 'direct-toggle' ) || 
+					                      child.classList.contains( 'mobile-toggle' ) ||
+					                      child.querySelector( '.direct-toggle, .mobile-toggle' );
+					
+					if ( ! hasToggleButton ) {
 						child.setAttribute( 'inert', '' );
 						child.setAttribute( 'data-inert-added', 'true' );
 					}
