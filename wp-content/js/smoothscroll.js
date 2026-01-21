@@ -3942,6 +3942,7 @@ OpenLab.nav = (function ($) {
 				// Set inert on children instead of parent to exclude toggle buttons
 				Array.from( mainContent.children ).forEach( function( child ) {
 					// Don't set inert on toggle buttons or elements containing toggle buttons
+					// Use short-circuit evaluation to avoid unnecessary querySelector calls
 					var hasToggleButton = child.classList.contains( 'direct-toggle' ) || 
 					                      child.classList.contains( 'mobile-toggle' ) ||
 					                      child.querySelector( '.direct-toggle, .mobile-toggle' );
