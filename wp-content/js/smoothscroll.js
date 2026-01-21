@@ -3936,6 +3936,18 @@ OpenLab.nav = (function ($) {
 			$( '#wpadminbar .screen-reader-shortcut' ).remove();
 
 		},
+		setMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				mainContent.setAttribute( 'inert', '' );
+			}
+		},
+		removeMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				mainContent.removeAttribute( 'inert' );
+			}
+		},
 		directToggleAction: function () {
 
 			//if there is no direct toggle, we're done
@@ -4080,10 +4092,7 @@ OpenLab.nav = (function ($) {
 					}
 				);
 				// Remove inert from main content
-				var mainContent = document.getElementById( 'openlab-main-content' );
-				if ( mainContent ) {
-					mainContent.removeAttribute( 'inert' );
-				}
+				OpenLab.nav.removeMainContentInert();
 				return false;
 			}
 
@@ -4097,10 +4106,7 @@ OpenLab.nav = (function ($) {
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
 
 					// Remove inert from main content
-					var mainContent = document.getElementById( 'openlab-main-content' );
-					if ( mainContent ) {
-						mainContent.removeAttribute( 'inert' );
-					}
+					OpenLab.nav.removeMainContentInert();
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -4136,10 +4142,7 @@ OpenLab.nav = (function ($) {
 			thisTargetElem.attr( 'aria-hidden', 'false' );
 
 			// Set main content to inert when menu is open
-			var mainContent = document.getElementById( 'openlab-main-content' );
-			if ( mainContent ) {
-				mainContent.setAttribute( 'inert', '' );
-			}
+			OpenLab.nav.setMainContentInert();
 
 			// Add a close button if one doesn't already exist
 			var closeButtonClass = 'openlab-menu-close-btn';
