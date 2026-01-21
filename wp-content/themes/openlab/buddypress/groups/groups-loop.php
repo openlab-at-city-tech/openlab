@@ -256,7 +256,7 @@ $show_group_type_flag = openlab_is_search_results_page() || openlab_is_resources
 								<div class="group-type-flag"><?php echo openlab_get_group_type_label( [ 'case' => 'upper' ] ); ?></div>
 							<?php endif; ?>
 
-							<a href="<?php bp_group_permalink() ?>"><img class="img-responsive" src ="<?php echo $group_avatar; ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/></a>
+							<img class="img-responsive" src ="<?php echo $group_avatar; ?>" alt="<?php echo esc_attr( bp_get_group_name() ); ?>"/>
 
 							<?php if ( $group_site_url && wds_site_can_be_viewed() ) : ?>
 								<a class="group-site-link" href="<?php echo esc_attr( $group_site_url ); ?>"><?php esc_html_e( 'Visit Site', 'openlab-theme' ); ?><span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
