@@ -4079,6 +4079,11 @@ OpenLab.nav = (function ($) {
 						'display': ''
 					}
 				);
+				// Remove inert from main content
+				var mainContent = document.getElementById( 'openlab-main-content' );
+				if ( mainContent ) {
+					mainContent.removeAttribute( 'inert' );
+				}
 				return false;
 			}
 
@@ -4090,6 +4095,12 @@ OpenLab.nav = (function ($) {
 					// Update ARIA attributes
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
+
+					// Remove inert from main content
+					var mainContent = document.getElementById( 'openlab-main-content' );
+					if ( mainContent ) {
+						mainContent.removeAttribute( 'inert' );
+					}
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -4123,6 +4134,12 @@ OpenLab.nav = (function ($) {
 			// Update ARIA attributes immediately
 			thisElem.attr( 'aria-expanded', 'true' );
 			thisTargetElem.attr( 'aria-hidden', 'false' );
+
+			// Set main content to inert when menu is open
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				mainContent.setAttribute( 'inert', '' );
+			}
 
 			// Add a close button if one doesn't already exist
 			var closeButtonClass = 'openlab-menu-close-btn';
