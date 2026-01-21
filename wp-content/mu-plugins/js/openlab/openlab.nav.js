@@ -197,6 +197,36 @@ OpenLab.nav = (function ($) {
 			$( '#wpadminbar .screen-reader-shortcut' ).remove();
 
 		},
+		setMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Set inert on children instead of parent to exclude toggle buttons
+				Array.from( mainContent.children ).forEach( function( child ) {
+					// Don't set inert on toggle buttons or elements containing toggle buttons
+					// Use short-circuit evaluation to avoid unnecessary querySelector calls
+					var hasToggleButton = child.classList.contains( 'direct-toggle' ) || 
+					                      child.classList.contains( 'mobile-toggle' ) ||
+					                      child.querySelector( '.direct-toggle, .mobile-toggle' );
+					
+					if ( ! hasToggleButton ) {
+						child.setAttribute( 'inert', '' );
+						child.setAttribute( 'data-inert-added', 'true' );
+					}
+				} );
+			}
+		},
+		removeMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Remove inert from all children that we added it to
+				Array.from( mainContent.children ).forEach( function( child ) {
+					if ( child.hasAttribute( 'data-inert-added' ) ) {
+						child.removeAttribute( 'inert' );
+						child.removeAttribute( 'data-inert-added' );
+					}
+				} );
+			}
+		},
 		directToggleAction: function () {
 
 			//if there is no direct toggle, we're done
@@ -340,6 +370,8 @@ OpenLab.nav = (function ($) {
 						'display': ''
 					}
 				);
+				// Remove inert from main content
+				OpenLab.nav.removeMainContentInert();
 				return false;
 			}
 
@@ -351,6 +383,9 @@ OpenLab.nav = (function ($) {
 					// Update ARIA attributes
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
+
+					// Remove inert from main content
+					OpenLab.nav.removeMainContentInert();
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -384,6 +419,9 @@ OpenLab.nav = (function ($) {
 			// Update ARIA attributes immediately
 			thisElem.attr( 'aria-expanded', 'true' );
 			thisTargetElem.attr( 'aria-hidden', 'false' );
+
+			// Set main content to inert when menu is open
+			OpenLab.nav.setMainContentInert();
 
 			// Add a close button if one doesn't already exist
 			var closeButtonClass = 'openlab-menu-close-btn';
