@@ -200,18 +200,22 @@ OpenLab.nav = (function ($) {
 		setMainContentInert: function () {
 			var mainContent = document.getElementById( 'openlab-main-content' );
 			if ( mainContent ) {
-				// Set inert on children instead of parent to exclude toggle buttons
+				// Set inert on all children of main content
 				Array.from( mainContent.children ).forEach( function( child ) {
-					// Don't set inert on toggle buttons or elements containing toggle buttons
-					// Use short-circuit evaluation to avoid unnecessary querySelector calls
-					var hasToggleButton = child.classList.contains( 'direct-toggle' ) || 
-					                      child.classList.contains( 'mobile-toggle' ) ||
-					                      child.querySelector( '.direct-toggle, .mobile-toggle' );
-					
-					if ( ! hasToggleButton ) {
-						child.setAttribute( 'inert', '' );
-						child.setAttribute( 'data-inert-added', 'true' );
+					child.setAttribute( 'inert', '' );
+					child.setAttribute( 'data-inert-added', 'true' );
+				} );
+				
+				// Hide toggle buttons from screen readers when menu is open
+				// Users can close the menu via the close button inside the menu
+				var toggleButtons = mainContent.querySelectorAll( '.direct-toggle, .mobile-toggle' );
+				toggleButtons.forEach( function( button ) {
+					// Store original aria-hidden state
+					if ( button.hasAttribute( 'aria-hidden' ) ) {
+						button.setAttribute( 'data-original-aria-hidden', button.getAttribute( 'aria-hidden' ) );
 					}
+					button.setAttribute( 'aria-hidden', 'true' );
+					button.setAttribute( 'data-aria-hidden-added', 'true' );
 				} );
 			}
 		},
@@ -224,6 +228,18 @@ OpenLab.nav = (function ($) {
 						child.removeAttribute( 'inert' );
 						child.removeAttribute( 'data-inert-added' );
 					}
+				} );
+				
+				// Restore toggle button visibility to screen readers
+				var toggleButtons = mainContent.querySelectorAll( '[data-aria-hidden-added]' );
+				toggleButtons.forEach( function( button ) {
+					if ( button.hasAttribute( 'data-original-aria-hidden' ) ) {
+						button.setAttribute( 'aria-hidden', button.getAttribute( 'data-original-aria-hidden' ) );
+						button.removeAttribute( 'data-original-aria-hidden' );
+					} else {
+						button.removeAttribute( 'aria-hidden' );
+					}
+					button.removeAttribute( 'data-aria-hidden-added' );
 				} );
 			}
 		},
