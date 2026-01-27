@@ -1140,32 +1140,86 @@ OpenLab.utility = (function ($) {
 				}
 				sidebar.setAttribute('data-directory-toggle-initialized', 'true');
 				
+				// Helper to get all focusable elements in the sidebar
+				const getFocusableElements = () => {
+					const selector = 
+						'input:not([disabled]):not([tabindex="-1"]), ' +
+						'select:not([disabled]):not([tabindex="-1"]), ' +
+						'textarea:not([disabled]):not([tabindex="-1"]), ' +
+						'a[href]:not([tabindex="-1"]), ' +
+						'button:not([disabled]):not([tabindex="-1"]), ' +
+						'[tabindex]:not([tabindex="-1"])';
+					return Array.from(sidebar.querySelectorAll(selector));
+				};
+				
+				// Focus trap handler to keep focus between toggle button and sidebar
+				const handleFocusTrap = (e) => {
+					// Only trap when Tab key is pressed
+					if (e.key !== 'Tab') {
+						return;
+					}
+					
+					const focusableElements = getFocusableElements();
+					if (focusableElements.length === 0) {
+						return;
+					}
+					
+					const firstFocusable = focusableElements[0];
+					const lastFocusable = focusableElements[focusableElements.length - 1];
+					
+					// If shift+tab from first element in sidebar, go to toggle button
+					if (e.shiftKey && document.activeElement === firstFocusable) {
+						e.preventDefault();
+						toggle.focus();
+					}
+					// If tab from last element in sidebar, go to toggle button
+					else if (!e.shiftKey && document.activeElement === lastFocusable) {
+						e.preventDefault();
+						toggle.focus();
+					}
+				};
+				
+				// Handle tab from toggle button to sidebar
+				const handleToggleTab = (e) => {
+					if (e.key !== 'Tab' || e.shiftKey) {
+						return;
+					}
+					
+					// Only trap if sidebar is visible
+					if (!$(sidebar).is(':visible')) {
+						return;
+					}
+					
+					const focusableElements = getFocusableElements();
+					if (focusableElements.length > 0) {
+						e.preventDefault();
+						focusableElements[0].focus();
+					}
+				};
+				
 				// Listen for Bootstrap collapse events to manage focus and accessibility
 				$(sidebar).on('shown.bs.collapse', function() {
 					// Remove aria-hidden from sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.removeAttribute('aria-hidden');
 					
-					// Move focus to the first focusable element in the sidebar
-					// Use requestAnimationFrame to ensure sidebar is fully visible
+					// Set up focus trap
+					sidebar.addEventListener('keydown', handleFocusTrap);
+					toggle.addEventListener('keydown', handleToggleTab);
+					
+					// Move focus to the toggle button to start the focus trap sequence
+					// This ensures the first tab goes to the sidebar
 					requestAnimationFrame(() => {
-						// Comprehensive selector for focusable elements, excluding disabled and negative tabindex
-						const firstFocusable = sidebar.querySelector(
-							'input:not([disabled]):not([tabindex="-1"]), ' +
-							'select:not([disabled]):not([tabindex="-1"]), ' +
-							'textarea:not([disabled]):not([tabindex="-1"]), ' +
-							'a[href]:not([tabindex="-1"]), ' +
-							'button:not([disabled]):not([tabindex="-1"]), ' +
-							'[tabindex]:not([tabindex="-1"])'
-						);
-						if (firstFocusable) {
-							firstFocusable.focus();
-						}
+						toggle.focus();
 					});
 				});
 				
 				$(sidebar).on('hidden.bs.collapse', function() {
 					// Add aria-hidden back to sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.setAttribute('aria-hidden', 'true');
+					
+					// Remove focus trap
+					sidebar.removeEventListener('keydown', handleFocusTrap);
+					toggle.removeEventListener('keydown', handleToggleTab);
 					
 					// Return focus to the toggle button
 					toggle.focus();
