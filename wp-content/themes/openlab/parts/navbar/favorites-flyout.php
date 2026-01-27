@@ -25,9 +25,7 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 			<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 			<span>My Favorites</span>
 		</div>
-		<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="favorites-flyout" aria-label="Close Favorites menu">
-			Close
-		</button>
+
 		<ul class="drawer-list">
 			<?php if ( $user_favorites ) : ?>
 				<?php foreach ( $user_favorites as $user_favorite ) : ?>
@@ -54,5 +52,9 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 				</li>
 			<?php endif; ?>
 		</ul>
+
+		<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="favorites-flyout" aria-label="Close Favorites menu">
+			Close
+		</button>
 	</div>
 </div>
