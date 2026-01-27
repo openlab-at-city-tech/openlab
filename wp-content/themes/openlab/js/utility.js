@@ -27,6 +27,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initClickableCards();
 			OpenLab.utility.initAvatarUploadCustomizations();
 			OpenLab.utility.setUpNav();
+			OpenLab.utility.setUpDirectoryToggle();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -1111,6 +1112,63 @@ OpenLab.utility = (function ($) {
 			// Prevent touchmove on the drawer to avoid scrolling the page.
 			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
 				e.stopPropagation();
+			});
+		},
+		setUpDirectoryToggle: function() {
+			// Set up focus and accessibility for directory sidebar toggles (e.g., people-archive, group-archive)
+			// These use Bootstrap collapse but need proper focus management and z-index to remain accessible
+			const directToggles = document.querySelectorAll('.direct-toggle');
+			
+			if (directToggles.length === 0) {
+				return;
+			}
+			
+			directToggles.forEach(toggle => {
+				const targetId = toggle.getAttribute('data-target');
+				if (!targetId) {
+					return;
+				}
+				
+				const sidebar = document.querySelector(targetId);
+				if (!sidebar) {
+					return;
+				}
+				
+				// Listen for Bootstrap collapse events to manage focus and accessibility
+				$(sidebar).on('shown.bs.collapse', function() {
+					// When sidebar is shown, update aria-expanded
+					toggle.setAttribute('aria-expanded', 'true');
+					
+					// Remove aria-hidden from sidebar
+					sidebar.removeAttribute('aria-hidden');
+					
+					// Move focus to the first focusable element in the sidebar
+					// Use requestAnimationFrame to ensure sidebar is fully visible
+					requestAnimationFrame(() => {
+						const firstFocusable = sidebar.querySelector('input, select, textarea, a, button');
+						if (firstFocusable) {
+							firstFocusable.focus();
+						}
+					});
+				});
+				
+				$(sidebar).on('hidden.bs.collapse', function() {
+					// When sidebar is hidden, update aria-expanded
+					toggle.setAttribute('aria-expanded', 'false');
+					
+					// Add aria-hidden back to sidebar
+					sidebar.setAttribute('aria-hidden', 'true');
+					
+					// Return focus to the toggle button
+					toggle.focus();
+				});
+				
+				// Handle Escape key to close sidebar
+				sidebar.addEventListener('keydown', function(e) {
+					if (e.key === 'Escape' || e.key === 'Esc') {
+						$(sidebar).collapse('hide');
+					}
+				});
 			});
 		},
 		runAfterTransition: function(el, callback, fallbackDuration = 50) {

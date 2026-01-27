@@ -8725,7 +8725,7 @@ h1.entry-title .direct-toggle {
   position: absolute;
   top: -21px;
   right: 0;
-  z-index: 1;
+  z-index: 11;
 }
 h1.entry-title .direct-toggle .icon-bar {
   background: #ff5959;
