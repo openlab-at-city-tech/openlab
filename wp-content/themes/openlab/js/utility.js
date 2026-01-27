@@ -909,9 +909,11 @@ OpenLab.utility = (function ($) {
 				drawer.inert = true;
 				drawer.classList.remove('is-open');
 				
-				// Set all panels as inert
+				// Set all panels as inert and reset their state
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
 					panel.inert = true;
+					// Reset panel states to ensure clean slate when reopening
+					panel.classList.remove('active', 'covered', 'is-leaving');
 				});
 				
 				// Close all submenus
