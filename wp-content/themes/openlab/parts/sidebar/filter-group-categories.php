@@ -21,7 +21,7 @@ $option_value_bpcgc = openlab_get_current_filter( 'cat' );
 ?>
 
 <?php if ( $group_terms ) : ?>
-	<div class="custom-select">
+	<div class="styled-select">
 		<label for="bp-group-categories-select" class="sr-only"><?php echo esc_html_e( 'Select: Category', 'openlab-theme' ); ?></label>
 		<select name="cat" class="last-select" id="bp-group-categories-select">
 			<option value="" <?php selected( '', $option_value_bpcgc ) ?>><?php esc_html_e( 'Category', 'openlab-theme' ); ?></option>

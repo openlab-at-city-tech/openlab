@@ -2,7 +2,7 @@ if (window.OpenLab === undefined) {
 	var OpenLab = {};
 }
 
-var resizeTimer, select2args;
+var resizeTimer;
 
 OpenLab.utility = (function ($) {
 
@@ -13,7 +13,8 @@ OpenLab.utility = (function ($) {
 		mapCheck: {},
 		uiCheck: {},
 		selectDisplay: {},
-		customSelectHTML: '',
+		fullAcademicUnitOptions: {},
+		previousTopLevelSelections: {},
 		init: function () {
 
 			OpenLab.utility.adjustLoginBox();
@@ -494,129 +495,211 @@ OpenLab.utility = (function ($) {
 			);
 
 		},
-		customSelects: function (resize) {
-			select2args = {
-				minimumResultsForSearch: Infinity,
-				theme: 'default openlab-select2-container',
-				width: "100%",
-				escapeMarkup: function (text) {
-					return text;
-				}
-			}
-
-			//custom select arrows
-			if (resize) {
-				$( '.custom-select-parent' ).html( OpenLab.utility.customSelectHTML );
-				$( '.custom-select select' ).select2( select2args );
-			} else {
-				OpenLab.utility.customSelectHTML = $( '.custom-select-parent' ).html();
-				$( '.custom-select select' ).select2( select2args );
-			}
-
-			$( '.academic-unit-type-select' ).on(
-				'select2:select',
+		initAcademicUnitSelects: function() {
+			// Store the full state of academic unit options for later filtering
+			$( '.academic-unit-type-select select' ).each(
 				function() {
-					OpenLab.utility.updateAcademicUnitFilters();
+					var selectId = $( this ).attr( 'id' );
+					if ( ! selectId ) {
+						console.warn( 'Academic unit select found without an id attribute', this );
+						return;
+					}
+					
+					var options = [];
+					$( this ).find( 'option' ).each(
+						function() {
+							options.push({
+								value: $( this ).val(),
+								text: $( this ).text(),
+								academicUnitType: $( this ).data( 'academic-unit-type' ),
+								parent: $( this ).data( 'parent' ),
+								classes: $( this ).attr( 'class' ) || '',
+								selected: $( this ).is( ':selected' )
+							});
+						}
+					);
+					OpenLab.utility.fullAcademicUnitOptions[selectId] = options;
 				}
 			);
-			OpenLab.utility.updateAcademicUnitFilters();
+
+			// Attach change event listeners
+			$( '.academic-unit-type-select select' ).on(
+				'change',
+				function(e) {
+					OpenLab.utility.updateAcademicUnitFilters( e.target );
+				}
+			);
+			
+			// Initial update
+			OpenLab.utility.updateAcademicUnitFilters( null );
 		},
 
-		updateAcademicUnitFilters: function() {
+		updateAcademicUnitFilters: function( changedSelect ) {
 			var selectedSlugs  = [];
-			var $selectedUnits = $( '.academic-unit:selected' );
-
-			// Determine first whether both Schools and Offices are selected. If so, drop one before creating selectedUnits.
+			
+			// Helper function to check if a value represents "no selection"
+			// Both empty string and "all" are treated as no selection
+			var isNoSelection = function( value ) {
+				return !value || value === '' || value === 'all';
+			};
+			
+			// Determine mutual exclusion based on which select changed
 			var excludeUnitType = '';
+			var $schoolSelect = $( '#school-select' );
+			var $officeSelect = $( '#office-select' );
+			
+			if ( changedSelect ) {
+				var changedUnitType = $( changedSelect ).data( 'unittype' );
+				var changedValue = $( changedSelect ).val();
+				
+				// If a school or office was selected (not empty and not "all"), disable and clear the other
+				if ( changedUnitType === 'school' && !isNoSelection( changedValue ) ) {
+					excludeUnitType = 'office';
+					$officeSelect.val( '' ).prop( 'disabled', true );
+				} else if ( changedUnitType === 'office' && !isNoSelection( changedValue ) ) {
+					excludeUnitType = 'school';
+					$schoolSelect.val( '' ).prop( 'disabled', true );
+				} else if ( changedUnitType === 'school' || changedUnitType === 'office' ) {
+					// If school or office was cleared (set to empty or "all"), re-enable the other
+					$schoolSelect.prop( 'disabled', false );
+					$officeSelect.prop( 'disabled', false );
+				}
+			} else {
+				// Initial load - determine state from current values
+				var schoolValue = $schoolSelect.val();
+				var officeValue = $officeSelect.val();
+				
+				if ( !isNoSelection( schoolValue ) ) {
+					excludeUnitType = 'office';
+					$officeSelect.prop( 'disabled', true );
+				} else if ( !isNoSelection( officeValue ) ) {
+					excludeUnitType = 'school';
+					$schoolSelect.prop( 'disabled', true );
+				}
+			}
+			
+			// Track current top-level selections to detect changes for Department reset
+			var currentTopLevelSelections = {
+				school: $schoolSelect.val(),
+				office: $officeSelect.val()
+			};
+			
+			// Check if top-level selection has changed
+			var topLevelChanged = false;
+			if ( OpenLab.utility.previousTopLevelSelections.school !== currentTopLevelSelections.school || 
+			     OpenLab.utility.previousTopLevelSelections.office !== currentTopLevelSelections.office ) {
+				topLevelChanged = true;
+			}
+			
+			// Store current selections for next comparison
+			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
+
+			// Build selectedSlugs from the selected units (excluding the disabled type)
+			// Note: both empty string and "all" are treated as "no selection" and don't add to filter
+			var $selectedUnits = $( '.academic-unit:selected' );
 			$selectedUnits.each(
 				function( k, v ) {
-					if ( excludeUnitType !== '' ) {
+					// Skip empty values and "all" - they mean "no filter"
+					if ( !v.value || v.value === '' || v.value === 'all' ) {
+						return;
+					}
+					
+					var $option = $( v );
+					var optionUnitType = $option.data( 'academic-unit-type' );
+					
+					// Skip if this is the excluded unit type
+					if ( excludeUnitType !== '' && optionUnitType === excludeUnitType ) {
 						return;
 					}
 
-					if ( v.value.length > 0 && 'all' !== v.value ) {
-						switch ( v.dataset.academicUnitType ) {
-							case 'school' :
-								excludeUnitType = 'office';
-								break;
-
-							case 'office' :
-								excludeUnitType = 'school';
-								break;
-						}
-					}
+					selectedSlugs.push( v.value );
 				}
 			);
 
-			$selectedUnits.each(
-				function( k, v ) {
-					if ( v.value.length > 0 ) {
-
-						if ( excludeUnitType === v.dataset.academicUnitType ) {
-							return;
-						}
-
-						if ( 'all' === v.value ) {
-							$( v ).siblings( '.academic-unit-nonempty' ).each(
-								function( k, v ) {
-									selectedSlugs.push( v.value );
-								}
-							);
-						} else {
-							selectedSlugs.push( v.value );
-						}
-					}
-				}
-			);
-
-			// Mark all disabled for reenabling later.
-			var $academicUnits = $( '.academic-unit' );
-			$academicUnits.prop( 'disabled', true ).removeClass( 'academic-unit-enabled' );
-
-			$academicUnits.each(
-				function( k, v ) {
-					var $thisFilter = $( v );
-					var thisParent  = $thisFilter.data( 'parent' );
-
-					// Enable items with no parent, or those with a selected parent.
-					if ( 'undefined' === typeof thisParent || thisParent.length === 0 || -1 !== selectedSlugs.indexOf( thisParent ) ) {
-						$thisFilter.prop( 'disabled', false );
-						if ( $thisFilter.hasClass( 'academic-unit-nonempty' ) ) {
-							$thisFilter.addClass( 'academic-unit-enabled' );
-						}
-					}
-				}
-			);
-
-			/*
-			TODO!!
-			- Form submit handler
-			- Ensure it works for member directory
-			*/
-
-			// Select2 needs to reinitialize to pickup the 'disabled' changes.
+			// Rebuild options for each academic unit selector based on selected parents
 			var $academicUnitSelectors = $( '.academic-unit-type-select select' );
-			$academicUnitSelectors.prop( 'disabled', false );
 			$academicUnitSelectors.each(
 				function( k, v ) {
-					if ( $( v ).find( '.academic-unit-enabled' ).length === 0 ) {
-						$( v ).prop( 'disabled', true );
+					var $select = $( v );
+					var selectId = $select.attr( 'id' );
+					var currentValue = $select.val();
+					
+					// Get the full list of options for this select from memory
+					var fullOptions = OpenLab.utility.fullAcademicUnitOptions[selectId];
+					if ( ! fullOptions ) {
+						console.warn( 'No stored options found for select', selectId );
+						return;
+					}
+
+					// Clear current options
+					$select.empty();
+					
+					// If this is the department select and a top-level selection changed, reset its value
+					var shouldResetSelection = false;
+					if ( selectId === 'department-select' && topLevelChanged ) {
+						shouldResetSelection = true;
+						currentValue = ''; // Reset to empty selection
+					}
+
+					// Rebuild options based on parent selection
+					var hasEnabledOptions = false;
+					$.each(
+						fullOptions,
+						function( idx, optionData ) {
+							var thisParent = optionData.parent;
+							var shouldInclude = false;
+
+							// Always include empty option and "all" option
+							if ( optionData.value === '' || optionData.value === 'all' ) {
+								shouldInclude = true;
+							}
+							// Include items with no parent
+							else if ( 'undefined' === typeof thisParent || thisParent === '' ) {
+								shouldInclude = true;
+							}
+							// If no parent filter is active (selectedSlugs is empty), show all departments
+							else if ( selectedSlugs.length === 0 ) {
+								shouldInclude = true;
+							}
+							// Include items whose parent is selected
+							else if ( -1 !== selectedSlugs.indexOf( thisParent ) ) {
+								shouldInclude = true;
+							}
+
+							if ( shouldInclude ) {
+								var $option = $( '<option></option>' )
+									.val( optionData.value )
+									.text( optionData.text )
+									.attr( 'class', optionData.classes )
+									.data( 'academic-unit-type', optionData.academicUnitType )
+									.data( 'parent', optionData.parent );
+
+								// Select this option if it matches currentValue
+								if ( optionData.value === currentValue ) {
+									$option.prop( 'selected', true );
+								}
+
+								$select.append( $option );
+
+								var optionClasses = optionData.classes || '';
+								if ( optionClasses.indexOf( 'academic-unit-nonempty' ) !== -1 ) {
+									hasEnabledOptions = true;
+								}
+							}
+						}
+					);
+
+					// Only disable Department select if it has no enabled options
+					// School and Office selects are controlled by mutual exclusion logic
+					if ( selectId === 'department-select' ) {
+						if ( ! hasEnabledOptions ) {
+							$select.prop( 'disabled', true );
+						} else {
+							$select.prop( 'disabled', false );
+						}
 					}
 				}
 			);
-
-			// Reinitialize.
-			if ( $academicUnitSelectors.length > 0 ) {
-				$academicUnitSelectors.select2( 'destroy' );
-
-				var auSelect2Args = Object.assign( {}, select2args, { theme: 'default openlab-academic-units-select2-container' } );
-				$academicUnitSelectors.select2( auSelect2Args );
-			}
-
-			// If there is an excluded unit type, disable that dropdown.
-			if ( excludeUnitType !== '' ) {
-				$('#' + excludeUnitType + '-select').attr('disabled', 'disabled');
-			}
 		},
 		sliderTagManagerTracking: function () {
 
@@ -1346,7 +1429,6 @@ OpenLab.utility = (function ($) {
 				function () {
 
 					OpenLab.utility.adjustLoginBox();
-					OpenLab.utility.customSelects( true );
 
 					if ($( '#home-new-member-wrap' ).length) {
 						OpenLab.utility.setUpNewMembersBox( true );
@@ -1364,7 +1446,7 @@ OpenLab.utility = (function ($) {
 
 			$( 'html' ).removeClass( 'page-loading' );
 			OpenLab.utility.detectZoom();
-			OpenLab.utility.customSelects( false );
+			OpenLab.utility.initAcademicUnitSelects();
 			OpenLab.utility.venueMapControl();
 			OpenLab.utility.venueDropdownControl();
 

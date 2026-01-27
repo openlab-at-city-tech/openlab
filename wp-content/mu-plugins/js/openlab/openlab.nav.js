@@ -197,6 +197,52 @@ OpenLab.nav = (function ($) {
 			$( '#wpadminbar .screen-reader-shortcut' ).remove();
 
 		},
+		setMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Set inert on all children of main content
+				Array.from( mainContent.children ).forEach( function( child ) {
+					child.setAttribute( 'inert', '' );
+					child.setAttribute( 'data-inert-added', 'true' );
+				} );
+				
+				// Hide toggle buttons from screen readers when menu is open
+				// Users can close the menu via the close button inside the menu
+				var toggleButtons = mainContent.querySelectorAll( '.direct-toggle, .mobile-toggle' );
+				toggleButtons.forEach( function( button ) {
+					// Store original aria-hidden state
+					if ( button.hasAttribute( 'aria-hidden' ) ) {
+						button.setAttribute( 'data-original-aria-hidden', button.getAttribute( 'aria-hidden' ) );
+					}
+					button.setAttribute( 'aria-hidden', 'true' );
+					button.setAttribute( 'data-aria-hidden-added', 'true' );
+				} );
+			}
+		},
+		removeMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Remove inert from all children that we added it to
+				Array.from( mainContent.children ).forEach( function( child ) {
+					if ( child.hasAttribute( 'data-inert-added' ) ) {
+						child.removeAttribute( 'inert' );
+						child.removeAttribute( 'data-inert-added' );
+					}
+				} );
+				
+				// Restore toggle button visibility to screen readers
+				var toggleButtons = mainContent.querySelectorAll( '[data-aria-hidden-added]' );
+				toggleButtons.forEach( function( button ) {
+					if ( button.hasAttribute( 'data-original-aria-hidden' ) ) {
+						button.setAttribute( 'aria-hidden', button.getAttribute( 'data-original-aria-hidden' ) );
+						button.removeAttribute( 'data-original-aria-hidden' );
+					} else {
+						button.removeAttribute( 'aria-hidden' );
+					}
+					button.removeAttribute( 'data-aria-hidden-added' );
+				} );
+			}
+		},
 		directToggleAction: function () {
 
 			//if there is no direct toggle, we're done
@@ -340,6 +386,8 @@ OpenLab.nav = (function ($) {
 						'display': ''
 					}
 				);
+				// Remove inert from main content
+				OpenLab.nav.removeMainContentInert();
 				return false;
 			}
 
@@ -351,6 +399,9 @@ OpenLab.nav = (function ($) {
 					// Update ARIA attributes
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
+
+					// Remove inert from main content
+					OpenLab.nav.removeMainContentInert();
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -384,6 +435,9 @@ OpenLab.nav = (function ($) {
 			// Update ARIA attributes immediately
 			thisElem.attr( 'aria-expanded', 'true' );
 			thisTargetElem.attr( 'aria-hidden', 'false' );
+
+			// Set main content to inert when menu is open
+			OpenLab.nav.setMainContentInert();
 
 			// Add a close button if one doesn't already exist
 			var closeButtonClass = 'openlab-menu-close-btn';

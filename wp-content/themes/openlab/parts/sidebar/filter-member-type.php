@@ -18,7 +18,7 @@ foreach ( $type_slugs as $type_slug ) {
 
 ?>
 
-<div class="custom-select">
+<div class="styled-select">
 	<label for="portfolio-user-member-type-select" class="sr-only">Select Member Type</label>
 	<select name="member_type" class="last-select" id="portfolio-user-member-type-select">
 		<option value='' <?php selected( '', $current_member_type ) ?>>Select Member Type</option>

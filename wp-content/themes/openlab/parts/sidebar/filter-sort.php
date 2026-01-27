@@ -1,7 +1,7 @@
 <?php
 $option_value = openlab_get_current_filter( 'sort' );
 ?>
-<div class="custom-select">
+<div class="styled-select">
 	<label for="sequence-select" class="sr-only"><?php echo esc_html_e( 'Select: Order', 'openlab-theme' ); ?></label>
 	<select name="sort" class="last-select" id="sequence-select">
 		<option <?php selected( $option_value, 'alphabetical' ) ?> value='alphabetical'><?php esc_html_e( 'Alphabetical', 'openlab-theme' ); ?></option>
