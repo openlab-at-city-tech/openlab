@@ -374,6 +374,11 @@ OpenLab.nav = (function ($) {
 				);
 				// Remove inert from main content
 				OpenLab.nav.removeMainContentInert();
+				
+				// Remove focus trap handlers
+				$( thisToggleTarget ).off( 'keydown.focustrap' );
+				thisElem.off( 'keydown.toggletab' );
+				
 				return false;
 			}
 
@@ -388,6 +393,10 @@ OpenLab.nav = (function ($) {
 
 					// Remove inert from main content
 					OpenLab.nav.removeMainContentInert();
+					
+					// Remove focus trap handlers
+					$( thisToggleTarget ).off( 'keydown.focustrap' );
+					thisElem.off( 'keydown.toggletab' );
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -449,6 +458,63 @@ OpenLab.nav = (function ($) {
 				thisTargetElem.append( closeButton );
 			}
 
+			// Set up focus trap for this menu
+			// Remove any existing handlers first to avoid duplicates
+			var focusTrapHandler = function( e ) {
+				if ( e.key !== 'Tab' ) {
+					return;
+				}
+				
+				var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
+				if ( focusableElements.length === 0 ) {
+					return;
+				}
+				
+				var firstFocusable = focusableElements.first()[0];
+				var lastFocusable = focusableElements.last()[0];
+				
+				// If shift+tab from first element in menu, go to toggle button
+				if ( e.shiftKey && document.activeElement === firstFocusable ) {
+					e.preventDefault();
+					thisElem.trigger( 'focus' );
+				}
+				// If tab from last element in menu, go to toggle button
+				else if ( ! e.shiftKey && document.activeElement === lastFocusable ) {
+					e.preventDefault();
+					thisElem.trigger( 'focus' );
+				}
+			};
+			
+			// Handle tab from toggle button to menu
+			var toggleTabHandler = function( e ) {
+				if ( e.key !== 'Tab' || e.shiftKey ) {
+					return;
+				}
+				
+				// Only trap if menu is visible
+				if ( ! thisTargetElem.is( ':visible' ) ) {
+					return;
+				}
+				
+				var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
+				if ( focusableElements.length > 0 ) {
+					e.preventDefault();
+					focusableElements.first().trigger( 'focus' );
+				}
+			};
+			
+			// Store handlers on the elements so we can remove them later
+			thisTargetElem.data( 'focus-trap-handler', focusTrapHandler );
+			thisElem.data( 'toggle-tab-handler', toggleTabHandler );
+			
+			// Remove any existing handlers before adding new ones
+			thisTargetElem.off( 'keydown.focustrap' );
+			thisElem.off( 'keydown.toggletab' );
+			
+			// Add handlers with namespaced events for easy removal
+			thisTargetElem.on( 'keydown.focustrap', focusTrapHandler );
+			thisElem.on( 'keydown.toggletab', toggleTabHandler );
+
 			thisTargetElem.slideDown(
 				700,
 				function () {
@@ -485,12 +551,9 @@ OpenLab.nav = (function ($) {
 						}
 					);
 
-					// Focus management: always move focus to first focusable element in the menu
-					// This ensures screen readers announce the menu content and improves navigation
-					var focusableElements = thisTargetElem.find( 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [contenteditable="true"], summary, [tabindex]:not([tabindex="-1"])' );
-					if ( focusableElements.length > 0 ) {
-						focusableElements.first().trigger( 'focus' );
-					}
+					// Focus management: move focus to toggle button to start the focus trap
+					// User can then tab to the first element in the menu
+					thisElem.trigger( 'focus' );
 				}
 			);
 		},
