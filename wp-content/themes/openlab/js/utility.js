@@ -27,6 +27,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initClickableCards();
 			OpenLab.utility.initAvatarUploadCustomizations();
 			OpenLab.utility.setUpNav();
+			OpenLab.utility.setUpDirectoryToggle();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -1112,6 +1113,10 @@ OpenLab.utility = (function ($) {
 			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
 				e.stopPropagation();
 			});
+		},
+		setUpDirectoryToggle: function() {
+			// Note: Directory toggles are handled by OpenLab.nav.directToggleAction() in openlab.nav.js
+			// Focus trap logic has been moved there to work with the correct target element (thisTargetElem)
 		},
 		runAfterTransition: function(el, callback, fallbackDuration = 50) {
 			const style = window.getComputedStyle(el);
