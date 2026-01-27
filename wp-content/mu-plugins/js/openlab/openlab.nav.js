@@ -200,23 +200,21 @@ OpenLab.nav = (function ($) {
 		setMainContentInert: function () {
 			var mainContent = document.getElementById( 'openlab-main-content' );
 			if ( mainContent ) {
-				// Set inert on all children of main content
+				// Set inert on all children of main content, except those containing toggle buttons
+				// This ensures toggle buttons remain accessible even when the menu is open
 				Array.from( mainContent.children ).forEach( function( child ) {
-					child.setAttribute( 'inert', '' );
-					child.setAttribute( 'data-inert-added', 'true' );
+					// Check if this child contains a direct-toggle or mobile-toggle element
+					var hasToggleButton = child.querySelector( '.direct-toggle, .mobile-toggle' );
+					
+					// Only set inert if this child doesn't contain a toggle button
+					if ( ! hasToggleButton ) {
+						child.setAttribute( 'inert', '' );
+						child.setAttribute( 'data-inert-added', 'true' );
+					}
 				} );
 				
-				// Hide toggle buttons from screen readers when menu is open
-				// Users can close the menu via the close button inside the menu
-				var toggleButtons = mainContent.querySelectorAll( '.direct-toggle, .mobile-toggle' );
-				toggleButtons.forEach( function( button ) {
-					// Store original aria-hidden state
-					if ( button.hasAttribute( 'aria-hidden' ) ) {
-						button.setAttribute( 'data-original-aria-hidden', button.getAttribute( 'aria-hidden' ) );
-					}
-					button.setAttribute( 'aria-hidden', 'true' );
-					button.setAttribute( 'data-aria-hidden-added', 'true' );
-				} );
+				// Note: We no longer hide toggle buttons from screen readers
+				// They remain accessible so users can close the menu by clicking them again
 			}
 		},
 		removeMainContentInert: function () {
@@ -228,18 +226,6 @@ OpenLab.nav = (function ($) {
 						child.removeAttribute( 'inert' );
 						child.removeAttribute( 'data-inert-added' );
 					}
-				} );
-				
-				// Restore toggle button visibility to screen readers
-				var toggleButtons = mainContent.querySelectorAll( '[data-aria-hidden-added]' );
-				toggleButtons.forEach( function( button ) {
-					if ( button.hasAttribute( 'data-original-aria-hidden' ) ) {
-						button.setAttribute( 'aria-hidden', button.getAttribute( 'data-original-aria-hidden' ) );
-						button.removeAttribute( 'data-original-aria-hidden' );
-					} else {
-						button.removeAttribute( 'aria-hidden' );
-					}
-					button.removeAttribute( 'data-aria-hidden-added' );
 				} );
 			}
 		},

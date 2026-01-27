@@ -1134,18 +1134,29 @@ OpenLab.utility = (function ($) {
 					return;
 				}
 				
+				// Guard against duplicate event listeners by checking if already initialized
+				if (sidebar.hasAttribute('data-directory-toggle-initialized')) {
+					return;
+				}
+				sidebar.setAttribute('data-directory-toggle-initialized', 'true');
+				
 				// Listen for Bootstrap collapse events to manage focus and accessibility
 				$(sidebar).on('shown.bs.collapse', function() {
-					// When sidebar is shown, update aria-expanded
-					toggle.setAttribute('aria-expanded', 'true');
-					
-					// Remove aria-hidden from sidebar
+					// Remove aria-hidden from sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.removeAttribute('aria-hidden');
 					
 					// Move focus to the first focusable element in the sidebar
 					// Use requestAnimationFrame to ensure sidebar is fully visible
 					requestAnimationFrame(() => {
-						const firstFocusable = sidebar.querySelector('input, select, textarea, a, button');
+						// Comprehensive selector for focusable elements, excluding disabled and negative tabindex
+						const firstFocusable = sidebar.querySelector(
+							'input:not([disabled]):not([tabindex="-1"]), ' +
+							'select:not([disabled]):not([tabindex="-1"]), ' +
+							'textarea:not([disabled]):not([tabindex="-1"]), ' +
+							'a[href]:not([tabindex="-1"]), ' +
+							'button:not([disabled]):not([tabindex="-1"]), ' +
+							'[tabindex]:not([tabindex="-1"])'
+						);
 						if (firstFocusable) {
 							firstFocusable.focus();
 						}
@@ -1153,10 +1164,7 @@ OpenLab.utility = (function ($) {
 				});
 				
 				$(sidebar).on('hidden.bs.collapse', function() {
-					// When sidebar is hidden, update aria-expanded
-					toggle.setAttribute('aria-expanded', 'false');
-					
-					// Add aria-hidden back to sidebar
+					// Add aria-hidden back to sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.setAttribute('aria-hidden', 'true');
 					
 					// Return focus to the toggle button
