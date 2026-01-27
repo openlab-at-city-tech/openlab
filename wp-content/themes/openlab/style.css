@@ -9500,7 +9500,7 @@ body form .checkbox-list-container {
   pointer-events: none;
 }
 .styled-select select:focus {
-  outline: 2px solid #49cabe;
+  outline: 2px solid #000000;
   outline-offset: 2px;
 }
 .styled-select select:disabled {
