@@ -505,7 +505,7 @@ OpenLab.utility = (function ($) {
 						console.warn( 'Academic unit select found without an id attribute', this );
 						return;
 					}
-					
+
 					var options = [];
 					$( this ).find( 'option' ).each(
 						function() {
@@ -530,29 +530,29 @@ OpenLab.utility = (function ($) {
 					OpenLab.utility.updateAcademicUnitFilters( e.target );
 				}
 			);
-			
+
 			// Initial update
 			OpenLab.utility.updateAcademicUnitFilters( null );
 		},
 
 		updateAcademicUnitFilters: function( changedSelect ) {
 			var selectedSlugs  = [];
-			
+
 			// Helper function to check if a value represents "no selection"
 			// Both empty string and "all" are treated as no selection
 			var isNoSelection = function( value ) {
 				return !value || value === '' || value === 'all';
 			};
-			
+
 			// Determine mutual exclusion based on which select changed
 			var excludeUnitType = '';
 			var $schoolSelect = $( '#school-select' );
 			var $officeSelect = $( '#office-select' );
-			
+
 			if ( changedSelect ) {
 				var changedUnitType = $( changedSelect ).data( 'unittype' );
 				var changedValue = $( changedSelect ).val();
-				
+
 				// If a school or office was selected (not empty and not "all"), disable and clear the other
 				if ( changedUnitType === 'school' && !isNoSelection( changedValue ) ) {
 					excludeUnitType = 'office';
@@ -569,7 +569,7 @@ OpenLab.utility = (function ($) {
 				// Initial load - determine state from current values
 				var schoolValue = $schoolSelect.val();
 				var officeValue = $officeSelect.val();
-				
+
 				if ( !isNoSelection( schoolValue ) ) {
 					excludeUnitType = 'office';
 					$officeSelect.prop( 'disabled', true );
@@ -578,20 +578,20 @@ OpenLab.utility = (function ($) {
 					$schoolSelect.prop( 'disabled', true );
 				}
 			}
-			
+
 			// Track current top-level selections to detect changes for Department reset
 			var currentTopLevelSelections = {
 				school: $schoolSelect.val(),
 				office: $officeSelect.val()
 			};
-			
+
 			// Check if top-level selection has changed
 			var topLevelChanged = false;
-			if ( OpenLab.utility.previousTopLevelSelections.school !== currentTopLevelSelections.school || 
+			if ( OpenLab.utility.previousTopLevelSelections.school !== currentTopLevelSelections.school ||
 			     OpenLab.utility.previousTopLevelSelections.office !== currentTopLevelSelections.office ) {
 				topLevelChanged = true;
 			}
-			
+
 			// Store current selections for next comparison
 			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
 
@@ -604,10 +604,10 @@ OpenLab.utility = (function ($) {
 					if ( !v.value || v.value === '' || v.value === 'all' ) {
 						return;
 					}
-					
+
 					var $option = $( v );
 					var optionUnitType = $option.data( 'academic-unit-type' );
-					
+
 					// Skip if this is the excluded unit type
 					if ( excludeUnitType !== '' && optionUnitType === excludeUnitType ) {
 						return;
@@ -624,7 +624,7 @@ OpenLab.utility = (function ($) {
 					var $select = $( v );
 					var selectId = $select.attr( 'id' );
 					var currentValue = $select.val();
-					
+
 					// Get the full list of options for this select from memory
 					var fullOptions = OpenLab.utility.fullAcademicUnitOptions[selectId];
 					if ( ! fullOptions ) {
@@ -634,7 +634,7 @@ OpenLab.utility = (function ($) {
 
 					// Clear current options
 					$select.empty();
-					
+
 					// If this is the department select and a top-level selection changed, reset its value
 					var shouldResetSelection = false;
 					if ( selectId === 'department-select' && topLevelChanged ) {
@@ -864,10 +864,10 @@ OpenLab.utility = (function ($) {
 			// Helper function to announce flyout state changes for screen readers
 			const announceFlyout = function(menuName, isOpening) {
 				if (!announcer) return;
-				
+
 				const action = isOpening ? 'opened' : 'closed';
 				announcer.textContent = `${menuName} menu ${action}`;
-				
+
 				// Clear the announcement after a short delay
 				setTimeout(() => {
 					announcer.textContent = '';
@@ -896,26 +896,26 @@ OpenLab.utility = (function ($) {
 				document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
 					el.classList.remove('is-open')
 				);
-				
+
 				document.querySelectorAll('.flyout-menu').forEach(el =>
 					el.classList.remove('is-open')
 				);
-				
+
 				document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
 					el.setAttribute('aria-expanded', 'false')
 				);
-				
+
 				document.body.classList.remove('drawer-open');
 				drawer.inert = true;
 				drawer.classList.remove('is-open');
-				
+
 				// Set all panels as inert and reset their state
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
 					panel.inert = true;
 					// Reset panel states to ensure clean slate when reopening
 					panel.classList.remove('active', 'covered', 'is-leaving');
 				});
-				
+
 				// Close all submenus
 				document.querySelectorAll('.flyout-submenu').forEach(el => {
 					el.hidden = true;
@@ -971,22 +971,22 @@ OpenLab.utility = (function ($) {
 							// Try to find the first focusable menu item (link, button, or input)
 							// Prefer actual menu items over the close button
 							let firstFocusable = null;
-							
+
 							// For login flyout, focus on the username input
 							if (menuId === 'login-flyout') {
 								firstFocusable = menu.querySelector('#navbar-user-login');
 							}
-							
+
 							// For other flyouts, focus on first link or button in the drawer-list
 							if (!firstFocusable) {
 								firstFocusable = menu.querySelector('.drawer-list a, .drawer-list button');
 							}
-							
+
 							// Fallback to close button if no menu items found
 							if (!firstFocusable) {
 								firstFocusable = menu.querySelector('.flyout-close-button');
 							}
-							
+
 							if (firstFocusable) {
 								firstFocusable.focus();
 							}
@@ -1020,10 +1020,10 @@ OpenLab.utility = (function ($) {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
 					const isKeyboardEvent = e.detail === 0;
-					
+
 					// Update aria-expanded when opening submenu
 					this.setAttribute('aria-expanded', 'true');
-					
+
 					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
 				});
 			});
@@ -1034,7 +1034,7 @@ OpenLab.utility = (function ($) {
 				const handleBack = function(switchFocus) {
 					const currentPanel = this.closest('.drawer-panel');
 					const targetId = this.getAttribute('data-back');
-					
+
 					// Reset aria-expanded on submenu toggles when going back
 					const targetPanel = document.getElementById(targetId);
 					if (targetPanel) {
@@ -1042,7 +1042,7 @@ OpenLab.utility = (function ($) {
 							submenuToggle.setAttribute('aria-expanded', 'false');
 						});
 					}
-					
+
 					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
 				};
 
@@ -1068,12 +1068,12 @@ OpenLab.utility = (function ($) {
 			closeButtons.forEach(button => {
 				button.addEventListener('click', function (e) {
 					e.preventDefault();
-					
+
 					const flyoutId = this.getAttribute('data-flyout-close');
-					
+
 					// Find the toggle button associated with this flyout
 					const toggle = document.querySelector(`[aria-controls="${flyoutId}"]`);
-					
+
 					// Close the drawer and return focus to the toggle
 					closeAllDrawers(toggle);
 				});
@@ -1097,12 +1097,42 @@ OpenLab.utility = (function ($) {
 					if (isDrawerOpen) {
 						// Find the open toggle BEFORE closing
 						const openToggle = document.querySelector('.navbar-flyout-toggle[aria-expanded="true"]');
-						
+
 						// Close the drawer and return focus to the toggle
 						closeAllDrawers(openToggle);
 					}
 				}
 			});
+
+			// Close flyout menus when tabbing past them.
+			// This handles the case where a user tabs through all items in a flyout
+			// and the focus moves to an element outside the flyout drawer.
+			// Also handles VoiceOver navigation on iOS/macOS.
+			const handleFocusLeave = function() {
+				// Use setTimeout to allow the browser to update document.activeElement
+				setTimeout(() => {
+					const isDrawerOpen = document.body.classList.contains('drawer-open');
+					if (!isDrawerOpen) {
+						return;
+					}
+
+					// Check if the new focused element is outside the drawer
+					const newFocus = document.activeElement;
+					const nav = document.querySelector('.openlab-navbar');
+
+					// If focus moved outside both the drawer and navbar, close the drawer
+					if (newFocus && !drawer.contains(newFocus) && (!nav || !nav.contains(newFocus))) {
+						closeAllDrawers();
+					}
+				}, 0);
+			};
+
+			// Listen for focusout (keyboard navigation)
+			drawer.addEventListener('focusout', handleFocusLeave);
+
+			// Listen for blur events which may be more reliable with screen readers
+			// Using capture phase to catch blur events from child elements
+			drawer.addEventListener('blur', handleFocusLeave, true);
 
 			// Adding the just-clicked class to non-toggleable links.
 			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
@@ -1120,33 +1150,33 @@ OpenLab.utility = (function ($) {
 			// Set up focus and accessibility for directory sidebar toggles (e.g., people-archive, group-archive)
 			// These use Bootstrap collapse but need proper focus management and z-index to remain accessible
 			const directToggles = document.querySelectorAll('.direct-toggle');
-			
+
 			if (directToggles.length === 0) {
 				return;
 			}
-			
+
 			directToggles.forEach(toggle => {
 				const targetId = toggle.getAttribute('data-target');
 				if (!targetId) {
 					return;
 				}
-				
+
 				const sidebar = document.querySelector(targetId);
 				if (!sidebar) {
 					return;
 				}
-				
+
 				// Guard against duplicate event listeners by checking if already initialized
 				if (sidebar.hasAttribute('data-directory-toggle-initialized')) {
 					return;
 				}
 				sidebar.setAttribute('data-directory-toggle-initialized', 'true');
-				
+
 				// Listen for Bootstrap collapse events to manage focus and accessibility
 				$(sidebar).on('shown.bs.collapse', function() {
 					// Remove aria-hidden from sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.removeAttribute('aria-hidden');
-					
+
 					// Move focus to the first focusable element in the sidebar
 					// Use requestAnimationFrame to ensure sidebar is fully visible
 					requestAnimationFrame(() => {
@@ -1164,15 +1194,15 @@ OpenLab.utility = (function ($) {
 						}
 					});
 				});
-				
+
 				$(sidebar).on('hidden.bs.collapse', function() {
 					// Add aria-hidden back to sidebar (Bootstrap handles aria-expanded on toggle)
 					sidebar.setAttribute('aria-hidden', 'true');
-					
+
 					// Return focus to the toggle button
 					toggle.focus();
 				});
-				
+
 				// Handle Escape key to close sidebar
 				sidebar.addEventListener('keydown', function(e) {
 					if (e.key === 'Escape' || e.key === 'Esc') {
