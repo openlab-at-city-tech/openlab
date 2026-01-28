@@ -1068,32 +1068,14 @@ OpenLab.utility = (function ($) {
 			closeButtons.forEach(button => {
 				button.addEventListener('click', function (e) {
 					e.preventDefault();
-					
+
 					const flyoutId = this.getAttribute('data-flyout-close');
-					
+
 					// Find the toggle button associated with this flyout
 					const toggle = document.querySelector(`[aria-controls="${flyoutId}"]`);
-					
+
 					// Close the drawer and return focus to the toggle
 					closeAllDrawers(toggle);
-				});
-				
-				// Close drawer when tabbing away from the close button
-				button.addEventListener('blur', function(e) {
-					setTimeout(() => {
-						const isDrawerOpen = document.body.classList.contains('drawer-open');
-						if (!isDrawerOpen) {
-							return;
-						}
-						
-						const newFocus = document.activeElement;
-						const nav = document.querySelector('.openlab-navbar');
-						
-						// If focus moved outside both the drawer and navbar, close the drawer
-						if (newFocus && !drawer.contains(newFocus) && (!nav || !nav.contains(newFocus))) {
-							closeAllDrawers();
-						}
-					}, 0);
 				});
 			});
 
