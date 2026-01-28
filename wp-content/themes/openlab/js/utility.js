@@ -1151,6 +1151,23 @@ OpenLab.utility = (function ($) {
 			// Listen for blur events which may be more reliable with screen readers
 			// Using capture phase to catch blur events from child elements
 			drawer.addEventListener('blur', handleFocusLeave, true);
+			
+			// Listen for focusin globally to handle VoiceOver navigation
+			// focusin bubbles (unlike focus) and is more reliable with screen readers
+			document.addEventListener('focusin', function(e) {
+				const isDrawerOpen = document.body.classList.contains('drawer-open');
+				if (!isDrawerOpen) {
+					return;
+				}
+				
+				const focusedElement = e.target;
+				const nav = document.querySelector('.openlab-navbar');
+				
+				// If focus moved to an element outside both the drawer and navbar, close the drawer
+				if (focusedElement && !drawer.contains(focusedElement) && (!nav || !nav.contains(focusedElement))) {
+					closeAllDrawers();
+				}
+			});
 
 			// Adding the just-clicked class to non-toggleable links.
 			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
