@@ -1162,9 +1162,25 @@ OpenLab.utility = (function ($) {
 					const newFocus = document.activeElement;
 					const nav = document.querySelector('.openlab-navbar');
 
+					// Don't close if focus is still in the drawer
+					if (drawer.contains(newFocus)) {
+						return;
+					}
+
+					// Special case: Check if focus moved to a toggle button in the navbar
+					// This happens when back-tabbing from the drawer
+					const isToggleButton = newFocus && newFocus.classList && newFocus.classList.contains('navbar-flyout-toggle');
+					
+					if (isToggleButton) {
+						// Close the drawer when focus moves to any toggle button
+						// Don't return focus since the user explicitly navigated to a toggle
+						closeAllDrawers();
+						return;
+					}
+
 					// If focus moved outside both the drawer and navbar, close the drawer
 					// and return focus to the toggle that opened it
-					if (newFocus && !drawer.contains(newFocus) && (!nav || !nav.contains(newFocus))) {
+					if (newFocus && (!nav || !nav.contains(newFocus))) {
 						closeAllDrawers(currentOpenToggle);
 					}
 				}, 0);
