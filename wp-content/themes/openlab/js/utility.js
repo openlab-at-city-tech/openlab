@@ -852,6 +852,10 @@ OpenLab.utility = (function ($) {
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 			const announcer = document.getElementById('flyout-announcer');
+			
+			// Flag to track when navigating between submenu panels
+			// This prevents handleFocusLeave from closing the drawer during submenu navigation
+			let isNavigatingToSubmenu = false;
 
 			// Initialize all flyout panels as inert.
 			// Using the native 'inert' attribute instead of aria-hidden for better accessibility.
@@ -1023,8 +1027,18 @@ OpenLab.utility = (function ($) {
 
 					// Update aria-expanded when opening submenu
 					this.setAttribute('aria-expanded', 'true');
+					
+					// Set flag to prevent handleFocusLeave from closing the drawer
+					// during the submenu navigation
+					isNavigatingToSubmenu = true;
 
 					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
+					
+					// Reset the flag after the panel transition completes
+					// Using a timeout slightly longer than the transition duration (600ms)
+					setTimeout(() => {
+						isNavigatingToSubmenu = false;
+					}, 650);
 				});
 			});
 
@@ -1042,8 +1056,18 @@ OpenLab.utility = (function ($) {
 							submenuToggle.setAttribute('aria-expanded', 'false');
 						});
 					}
+					
+					// Set flag to prevent handleFocusLeave from closing the drawer
+					// during the back navigation
+					isNavigatingToSubmenu = true;
 
 					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
+					
+					// Reset the flag after the panel transition completes
+					// Using a timeout slightly longer than the transition duration (600ms)
+					setTimeout(() => {
+						isNavigatingToSubmenu = false;
+					}, 650);
 				};
 
 				toggle.addEventListener('click', function (e) {
@@ -1113,6 +1137,11 @@ OpenLab.utility = (function ($) {
 				setTimeout(() => {
 					const isDrawerOpen = document.body.classList.contains('drawer-open');
 					if (!isDrawerOpen) {
+						return;
+					}
+					
+					// Don't close the drawer if we're in the middle of navigating to a submenu
+					if (isNavigatingToSubmenu) {
 						return;
 					}
 
