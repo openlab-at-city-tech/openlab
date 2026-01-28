@@ -1107,7 +1107,7 @@ OpenLab.utility = (function ($) {
 			// Close flyout menus when tabbing past them.
 			// This handles the case where a user tabs through all items in a flyout
 			// and the focus moves to an element outside the flyout drawer.
-			drawer.addEventListener('focusout', function(e) {
+			drawer.addEventListener('focusout', function() {
 				// Use setTimeout to allow the browser to update document.activeElement
 				setTimeout(() => {
 					const isDrawerOpen = document.body.classList.contains('drawer-open');
