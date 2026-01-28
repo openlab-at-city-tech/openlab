@@ -1104,6 +1104,28 @@ OpenLab.utility = (function ($) {
 				}
 			});
 
+			// Close flyout menus when tabbing past them.
+			// This handles the case where a user tabs through all items in a flyout
+			// and the focus moves to an element outside the flyout drawer.
+			drawer.addEventListener('focusout', function(e) {
+				// Use setTimeout to allow the browser to update document.activeElement
+				setTimeout(() => {
+					const isDrawerOpen = document.body.classList.contains('drawer-open');
+					if (!isDrawerOpen) {
+						return;
+					}
+
+					// Check if the new focused element is outside the drawer
+					const newFocus = document.activeElement;
+					const nav = document.querySelector('.openlab-navbar');
+					
+					// If focus moved outside both the drawer and navbar, close the drawer
+					if (newFocus && !drawer.contains(newFocus) && !nav.contains(newFocus)) {
+						closeAllDrawers();
+					}
+				}, 0);
+			});
+
 			// Adding the just-clicked class to non-toggleable links.
 			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
 				link.addEventListener( 'click', function (e) {
