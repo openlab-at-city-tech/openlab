@@ -1120,7 +1120,7 @@ OpenLab.utility = (function ($) {
 					const nav = document.querySelector('.openlab-navbar');
 					
 					// If focus moved outside both the drawer and navbar, close the drawer
-					if (newFocus && !drawer.contains(newFocus) && !nav.contains(newFocus)) {
+					if (newFocus && !drawer.contains(newFocus) && (!nav || !nav.contains(newFocus))) {
 						closeAllDrawers();
 					}
 				}, 0);
