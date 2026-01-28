@@ -1023,7 +1023,6 @@ OpenLab.utility = (function ($) {
 
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
-					const isKeyboardEvent = e.detail === 0;
 
 					// Update aria-expanded when opening submenu
 					this.setAttribute('aria-expanded', 'true');
@@ -1032,7 +1031,7 @@ OpenLab.utility = (function ($) {
 					// during the submenu navigation
 					isNavigatingToSubmenu = true;
 
-					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
+					OpenLab.utility.switchToNavPanel( targetId, true, 'forward', this.closest('.drawer-panel') );
 					
 					// Reset the flag after the panel transition completes
 					const targetPanel = document.getElementById(targetId);
