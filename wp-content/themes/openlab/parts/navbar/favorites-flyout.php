@@ -53,7 +53,7 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 			<?php endif; ?>
 		</ul>
 
-		<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="favorites-flyout" aria-label="Close Favorites menu">
+		<button class="flyout-close-button" data-flyout-close="favorites-flyout" aria-label="Close Favorites menu">
 			Close
 		</button>
 	</div>

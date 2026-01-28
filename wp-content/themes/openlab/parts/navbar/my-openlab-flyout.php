@@ -201,7 +201,7 @@ $panels = [
 			</ul>
 
 			<?php if ( 'root' === $panel_id ) : ?>
-				<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="my-openlab-flyout" aria-label="Close My OpenLab menu">
+				<button class="flyout-close-button" data-flyout-close="my-openlab-flyout" aria-label="Close My OpenLab menu">
 					Close
 				</button>
 			<?php endif; ?>
