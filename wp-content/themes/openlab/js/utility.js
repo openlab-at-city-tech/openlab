@@ -1075,7 +1075,7 @@ OpenLab.utility = (function ($) {
 
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
-					handleBack.call(this, false);
+					handleBack.call(this, true);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
