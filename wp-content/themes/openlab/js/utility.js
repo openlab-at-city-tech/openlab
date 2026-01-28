@@ -1035,10 +1035,12 @@ OpenLab.utility = (function ($) {
 					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
 					
 					// Reset the flag after the panel transition completes
-					// Using a timeout slightly longer than the transition duration (600ms)
-					setTimeout(() => {
-						isNavigatingToSubmenu = false;
-					}, 650);
+					const targetPanel = document.getElementById(targetId);
+					if (targetPanel) {
+						OpenLab.utility.runAfterTransition(targetPanel, () => {
+							isNavigatingToSubmenu = false;
+						}, 600);
+					}
 				});
 			});
 
@@ -1064,10 +1066,11 @@ OpenLab.utility = (function ($) {
 					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
 					
 					// Reset the flag after the panel transition completes
-					// Using a timeout slightly longer than the transition duration (600ms)
-					setTimeout(() => {
-						isNavigatingToSubmenu = false;
-					}, 650);
+					if (targetPanel) {
+						OpenLab.utility.runAfterTransition(targetPanel, () => {
+							isNavigatingToSubmenu = false;
+						}, 600);
+					}
 				};
 
 				toggle.addEventListener('click', function (e) {
