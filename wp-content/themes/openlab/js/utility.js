@@ -1172,9 +1172,9 @@ OpenLab.utility = (function ($) {
 					const isToggleButton = newFocus && newFocus.classList && newFocus.classList.contains('navbar-flyout-toggle');
 					
 					if (isToggleButton) {
-						// Close the drawer when focus moves to any toggle button
-						// Don't return focus since the user explicitly navigated to a toggle
-						closeAllDrawers();
+						// When back-tabbing from the drawer, focus may land on the wrong toggle
+						// due to DOM order. Close the drawer and redirect focus to the correct toggle.
+						closeAllDrawers(currentOpenToggle);
 						return;
 					}
 
