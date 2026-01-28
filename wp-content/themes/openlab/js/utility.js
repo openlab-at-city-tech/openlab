@@ -1107,7 +1107,8 @@ OpenLab.utility = (function ($) {
 			// Close flyout menus when tabbing past them.
 			// This handles the case where a user tabs through all items in a flyout
 			// and the focus moves to an element outside the flyout drawer.
-			drawer.addEventListener('focusout', function() {
+			// Also handles VoiceOver navigation on iOS/macOS.
+			const handleFocusLeave = function() {
 				// Use setTimeout to allow the browser to update document.activeElement
 				setTimeout(() => {
 					const isDrawerOpen = document.body.classList.contains('drawer-open');
@@ -1124,7 +1125,14 @@ OpenLab.utility = (function ($) {
 						closeAllDrawers();
 					}
 				}, 0);
-			});
+			};
+			
+			// Listen for focusout (keyboard navigation)
+			drawer.addEventListener('focusout', handleFocusLeave);
+			
+			// Listen for blur events which may be more reliable with screen readers
+			// Using capture phase to catch blur events from child elements
+			drawer.addEventListener('blur', handleFocusLeave, true);
 
 			// Adding the just-clicked class to non-toggleable links.
 			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
