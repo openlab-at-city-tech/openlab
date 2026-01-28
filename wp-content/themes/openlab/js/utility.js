@@ -856,6 +856,10 @@ OpenLab.utility = (function ($) {
 			// Flag to track when navigating between submenu panels
 			// This prevents handleFocusLeave from closing the drawer during submenu navigation
 			let isNavigatingToSubmenu = false;
+			
+			// Track which toggle opened the current flyout
+			// Used to return focus to the correct toggle when closing via backward navigation
+			let currentOpenToggle = null;
 
 			// Initialize all flyout panels as inert.
 			// Using the native 'inert' attribute instead of aria-hidden for better accessibility.
@@ -928,6 +932,9 @@ OpenLab.utility = (function ($) {
 					el.setAttribute('aria-expanded', 'false')
 				);
 
+				// Clear the current open toggle reference
+				currentOpenToggle = null;
+
 				// Return focus if specified
 				if (returnFocusTo) {
 					// Small delay to ensure drawer is closed before moving focus
@@ -964,6 +971,10 @@ OpenLab.utility = (function ($) {
 
 					toggle.setAttribute('aria-expanded', 'true');
 					toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+					// Store the toggle that opened this flyout
+					// This allows us to return focus to the correct toggle when closing
+					currentOpenToggle = toggle;
 
 					// Announce that the menu opened
 					announceFlyout(getMenuName(menuId), true);
@@ -1151,9 +1162,26 @@ OpenLab.utility = (function ($) {
 					const newFocus = document.activeElement;
 					const nav = document.querySelector('.openlab-navbar');
 
+					// Don't close if focus is still in the drawer
+					if (drawer.contains(newFocus)) {
+						return;
+					}
+
+					// Special case: Check if focus moved to a toggle button in the navbar
+					// This happens when back-tabbing from the drawer
+					const isToggleButton = newFocus && newFocus.classList && newFocus.classList.contains('navbar-flyout-toggle');
+					
+					if (isToggleButton) {
+						// When back-tabbing from the drawer, focus may land on the wrong toggle
+						// due to DOM order. Close the drawer and redirect focus to the correct toggle.
+						closeAllDrawers(currentOpenToggle);
+						return;
+					}
+
 					// If focus moved outside both the drawer and navbar, close the drawer
-					if (newFocus && !drawer.contains(newFocus) && (!nav || !nav.contains(newFocus))) {
-						closeAllDrawers();
+					// and return focus to the toggle that opened it
+					if (newFocus && (!nav || !nav.contains(newFocus))) {
+						closeAllDrawers(currentOpenToggle);
 					}
 				}, 0);
 			};
