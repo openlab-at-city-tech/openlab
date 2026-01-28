@@ -64,7 +64,7 @@ if ( is_user_logged_in() ) {
 			<?php endforeach; ?>
 		</ul>
 
-		<button class="flyout-close-button" data-flyout-close="main-menu-flyout" aria-label="Close Main Menu">
+		<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="main-menu-flyout" aria-label="Close Main Menu">
 			Close
 		</button>
 	</div>

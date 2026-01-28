@@ -27,7 +27,7 @@
 		Need an account? <strong><a href="<?php echo esc_url( site_url( 'register' ) ); ?>" class="register-link">Sign Up</a></strong>
 	</div>
 
-	<button class="flyout-close-button" data-flyout-close="login-flyout" aria-label="Close Sign In menu">
+	<button class="flyout-close-button sr-only sr-only-focusable" data-flyout-close="login-flyout" aria-label="Close Sign In menu">
 		Close
 	</button>
 </div>
