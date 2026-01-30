@@ -1016,30 +1016,26 @@ OpenLab.utility = (function ($) {
 
 			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
-				// Set flag on mousedown to prevent handleFocusLeave from interfering
-				// mousedown fires before focusout, allowing us to prevent premature drawer closing
+				// Handle mouse interactions on mousedown (fires before focusout)
+				// This prevents the race condition with handleFocusLeave
 				toggle.addEventListener('mousedown', (e) => {
-					isTogglingDrawer = true;
-				});
-
-				// Handle click events (including VoiceOver activation)
-				toggle.addEventListener('click', (e) => {
 					e.preventDefault();
+					isTogglingDrawer = true;
 					openFlyout(toggle);
-					// Clear flag after the click handler completes
+					// Clear flag after the handler completes
 					setTimeout(() => {
 						isTogglingDrawer = false;
 					}, 0);
 				});
 
 				// Handle keyboard events for Enter/Space
-				// keydown fires before focusout, so setting the flag here works correctly
+				// keydown fires before focusout, so this prevents the race condition
 				toggle.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
 						isTogglingDrawer = true;
 						openFlyout(toggle);
-						// Clear flag after the keydown handler completes
+						// Clear flag after the handler completes
 						setTimeout(() => {
 							isTogglingDrawer = false;
 						}, 0);
