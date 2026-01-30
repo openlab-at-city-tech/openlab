@@ -3616,8 +3616,9 @@ a.external-link {
 .sidebar-filter-group-type,
 .sidebar-filter-open-cloneable {
 	.form-group {
-		display: flex;
-		gap: 10px;
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.5rem 1rem; /* row gap, column gap */
 	}
 }
 

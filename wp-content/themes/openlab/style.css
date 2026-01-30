@@ -10485,8 +10485,10 @@ a.external-link::after {
 }
 .sidebar-filter-group-type .form-group,
 .sidebar-filter-open-cloneable .form-group {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+  /* row gap, column gap */
 }
 .sidebar-filter-group-type {
   margin: 5px 5px 15px 5px;
