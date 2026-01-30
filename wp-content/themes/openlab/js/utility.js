@@ -857,6 +857,10 @@ OpenLab.utility = (function ($) {
 			// This prevents handleFocusLeave from closing the drawer during submenu navigation
 			let isNavigatingToSubmenu = false;
 			
+			// Flag to track when a toggle button is being actively clicked/activated
+			// This prevents handleFocusLeave from interfering with the toggle's click handler
+			let isTogglingDrawer = false;
+			
 			// Track which toggle opened the current flyout
 			// Used to return focus to the correct toggle when closing via backward navigation
 			let currentOpenToggle = null;
@@ -1012,17 +1016,29 @@ OpenLab.utility = (function ($) {
 
 			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
-				// Handle click events (including VoiceOver activation)
-				toggle.addEventListener('click', (e) => {
+				// Handle mouse interactions on mousedown (fires before focusout)
+				// This prevents the race condition with handleFocusLeave
+				toggle.addEventListener('mousedown', (e) => {
 					e.preventDefault();
+					isTogglingDrawer = true;
 					openFlyout(toggle);
+					// Clear flag after the handler completes
+					setTimeout(() => {
+						isTogglingDrawer = false;
+					}, 0);
 				});
 
 				// Handle keyboard events for Enter/Space
+				// keydown fires before focusout, so this prevents the race condition
 				toggle.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
+						isTogglingDrawer = true;
 						openFlyout(toggle);
+						// Clear flag after the handler completes
+						setTimeout(() => {
+							isTogglingDrawer = false;
+						}, 0);
 					}
 				});
 			});
@@ -1155,6 +1171,12 @@ OpenLab.utility = (function ($) {
 					
 					// Don't close the drawer if we're in the middle of navigating to a submenu
 					if (isNavigatingToSubmenu) {
+						return;
+					}
+					
+					// Don't close the drawer if we're in the middle of toggling it
+					// This prevents interference with click/keyboard activation of toggle buttons
+					if (isTogglingDrawer) {
 						return;
 					}
 
