@@ -857,6 +857,10 @@ OpenLab.utility = (function ($) {
 			// This prevents handleFocusLeave from closing the drawer during submenu navigation
 			let isNavigatingToSubmenu = false;
 			
+			// Flag to track when a toggle button is being actively clicked/activated
+			// This prevents handleFocusLeave from interfering with the toggle's click handler
+			let isTogglingDrawer = false;
+			
 			// Track which toggle opened the current flyout
 			// Used to return focus to the correct toggle when closing via backward navigation
 			let currentOpenToggle = null;
@@ -1015,14 +1019,28 @@ OpenLab.utility = (function ($) {
 				// Handle click events (including VoiceOver activation)
 				toggle.addEventListener('click', (e) => {
 					e.preventDefault();
+					// Set flag to prevent handleFocusLeave from interfering
+					isTogglingDrawer = true;
 					openFlyout(toggle);
+					// Clear flag after the click handler completes
+					// Use setTimeout to ensure it clears after any focus changes
+					setTimeout(() => {
+						isTogglingDrawer = false;
+					}, 0);
 				});
 
 				// Handle keyboard events for Enter/Space
 				toggle.addEventListener('keydown', (e) => {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
+						// Set flag to prevent handleFocusLeave from interfering
+						isTogglingDrawer = true;
 						openFlyout(toggle);
+						// Clear flag after the keydown handler completes
+						// Use setTimeout to ensure it clears after any focus changes
+						setTimeout(() => {
+							isTogglingDrawer = false;
+						}, 0);
 					}
 				});
 			});
@@ -1155,6 +1173,12 @@ OpenLab.utility = (function ($) {
 					
 					// Don't close the drawer if we're in the middle of navigating to a submenu
 					if (isNavigatingToSubmenu) {
+						return;
+					}
+					
+					// Don't close the drawer if we're in the middle of toggling it
+					// This prevents interference with click/keyboard activation of toggle buttons
+					if (isTogglingDrawer) {
 						return;
 					}
 
