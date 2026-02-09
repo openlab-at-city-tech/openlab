@@ -9,7 +9,7 @@ use function OpenLab\Attributions\Helpers\get_supported_post_types;
 
 function render_attributions( $content ) {
 	if ( ! is_singular( get_supported_post_types() ) ) {
-		return $content;
+		return openlab_remove_attribution_spans_from_content( $content );
 	}
 
 	$post         = get_post();
@@ -34,6 +34,30 @@ function render_attributions( $content ) {
 	return openlab_get_formatted_content_with_attributions( $content );
 }
 add_filter( 'the_content', __NAMESPACE__ . '\\render_attributions', 12 );
+
+/**
+ * Remove content <span> attributions when printing it on the public site.
+ */
+function openlab_remove_attribution_spans_from_content( $content = '' ) {
+	$doc = new DOMDocument();
+
+	$encoding = get_option( 'blog_charset' );
+
+	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+	@$doc->loadHTML( '<?xml encoding="' . $encoding . '">' . $content );
+
+	$finder     = new \DomXPath( $doc );
+	$class_name = 'attribution-anchor';
+
+	$nodes = $finder->query( "//*[contains(@class, '$class_name')]" );
+
+	foreach ( $nodes as $node ) {
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$node->parentNode->removeChild( $node );
+	}
+
+	return $doc->saveHTML();
+}
 
 /**
  * Replace content <span> attributions with <a> tags when printing it on the public site.
