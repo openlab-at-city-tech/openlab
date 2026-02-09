@@ -7716,7 +7716,6 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 }
 .openlab-navbar-drawer .flyout-menu li.my-openlab-logout a {
   align-items: center;
-  color: #F56A6A;
   display: flex;
   gap: 12px;
 }
