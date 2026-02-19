@@ -3,12 +3,12 @@ jQuery(document).ready( function( $ ) {
 
 	var app = {
 		init: function() {
-			// Handle "In Page TOC".
-			$( '#ez-toc-container' ).attr( 'aria-expanded', ! options.hideByDefault );
+			// Handle "In Page TOC" - set initial state on toggle, not container
+			var inPageToggle = $( '#ez-toc-container .ez-toc-toggle' );
+			inPageToggle.attr( 'aria-expanded', ! options.hideByDefault );
 			$( '#ez-toc-container' ).on( 'click', '.ez-toc-toggle', app.handleInPageToggle );
 
 			var toggle = $( 'a.ez-toc-toggle' );
-
 			toggle.css( 'display', 'inline' );
 
 			// No need to continue if we don't have widget.
@@ -21,11 +21,13 @@ jQuery(document).ready( function( $ ) {
 			app.setUpObserver();
 			app.observeSections();
 
-			// Hide by default on
+			// Hide by default - set on toggle button, not container
 			if ( window.innerWidth < 1023 || options.hideByDefault ) {
-				app.container.attr( 'aria-expanded', 'false' );
+				app.container.find('.ez-toc-toggle').attr( 'aria-expanded', 'false' );
+				app.container.addClass( 'toc-collapsed' );
 			} else {
-				app.container.attr( 'aria-expanded', 'true' );
+				app.container.find('.ez-toc-toggle').attr( 'aria-expanded', 'true' );
+				app.container.removeClass( 'toc-collapsed' );
 			}
 
 			/*
@@ -133,12 +135,14 @@ jQuery(document).ready( function( $ ) {
 
 		handleScroll: function() {
 			var scrollTop = app.window.scrollTop();
-			var containerHeight = window.innerHeight - app.offset
+			var containerHeight = window.innerHeight - app.offset;
+			var toggle = app.container.find('.ez-toc-toggle');
+			var isExpanded = toggle.attr( 'aria-expanded' ) === 'true';
 
 			if ( scrollTop >= app.containerTop ) {
 				app.container.addClass( 'toc-fixed' );
 
-				if ( 'true' === app.container.attr( 'aria-expanded' ) ) {
+				if ( isExpanded ) {
 					app.container.css( 'height', containerHeight );
 					app.setNavHeight();
 				}
@@ -151,10 +155,12 @@ jQuery(document).ready( function( $ ) {
 		},
 
 		handleResize: function() {
-			// Update cached offest
+			// Update cached offset
 			app.offset = app.getTopNavOffeset();
+			var toggle = app.container.find('.ez-toc-toggle');
+			var isExpanded = toggle.attr( 'aria-expanded' ) === 'true';
 
-			if ( 'true' === app.container.attr( 'aria-expanded' ) ) {
+			if ( isExpanded ) {
 				app.container.css( 'height', window.innerHeight - app.offset );
 				app.setNavHeight();
 			}
@@ -170,18 +176,36 @@ jQuery(document).ready( function( $ ) {
 		handleToggle: function( event ) {
 			event.preventDefault();
 
-			var isExpanded = app.container.attr( 'aria-expanded' );
-			app.container.attr( 'aria-expanded', ( isExpanded === 'true' ) ? 'false' : 'true' );
+			var toggle = $(this);
+			var isExpanded = toggle.attr( 'aria-expanded' ) === 'true';
+
+			toggle.attr( 'aria-expanded', ! isExpanded );
+
+			// Add/remove visual class on container for styling
+			if ( isExpanded ) {
+				app.container.addClass( 'toc-collapsed' );
+			} else {
+				app.container.removeClass( 'toc-collapsed' );
+			}
+
 			app.container.css( 'height', 'auto' );
 		},
 
 		handleInPageToggle: function( event ) {
 			event.preventDefault();
 
-			var container = $(this).closest( '#ez-toc-container' );
-			var isExpanded = container.attr( 'aria-expanded' );
+			var toggle = $(this);
+			var container = toggle.closest( '#ez-toc-container' );
+			var isExpanded = toggle.attr( 'aria-expanded' ) === 'true';
 
-			container.attr( 'aria-expanded', ( isExpanded === 'true' ) ? 'false' : 'true' );
+			toggle.attr( 'aria-expanded', ! isExpanded );
+
+			// Add/remove visual class on container for styling
+			if ( isExpanded ) {
+				container.addClass( 'toc-collapsed' );
+			} else {
+				container.removeClass( 'toc-collapsed' );
+			}
 		},
 
 		getTopNavOffeset: function() {
@@ -208,9 +232,11 @@ jQuery(document).ready( function( $ ) {
 		maybeCollapse: function( containerHeight ) {
 			var containerOffset = app.container.offset().top + containerHeight;
 			var contentOffset = app.content.offset().top + app.content.height();
+			var toggle = app.container.find('.ez-toc-toggle');
 
 			if ( containerOffset > contentOffset ) {
-				app.container.attr( 'aria-expanded', 'false' );
+				toggle.attr( 'aria-expanded', 'false' );
+				app.container.addClass( 'toc-collapsed' );
 				app.container.css( 'height', 'auto' );
 
 				// Set flag when collapse is triggered by footer.
@@ -218,7 +244,8 @@ jQuery(document).ready( function( $ ) {
 			}
 
 			if ( containerOffset < contentOffset && app.footerCollapse ) {
-				app.container.attr( 'aria-expanded', 'true' );
+				toggle.attr( 'aria-expanded', 'true' );
+				app.container.removeClass( 'toc-collapsed' );
 				app.container.css( 'height', containerHeight );
 
 				app.footerCollapse = false;

@@ -9,7 +9,7 @@ $group_type = openlab_get_group_directory_group_type();
 
 ?>
 
-<div class="custom-select sidebar-filter sidebar-filter-active">
+<div class="styled-select sidebar-filter sidebar-filter-active">
 	<label for="active-status" class="sr-only">Active Status</label>
 	<select name="active-status" class="last-select" id="active-status">
 		<option value='' <?php selected( '', $is_active ) ?>>Active Status</option>

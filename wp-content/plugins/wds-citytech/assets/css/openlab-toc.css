@@ -53,12 +53,12 @@ body:not(.admin-bar) .toc-fixed {
 	height: 100%;
 }
 
-.sidebar .ez-toc[aria-expanded="false"] nav {
+.sidebar .toc-collapsed nav {
 	display: none;
 }
 
 /** In page TOC */
-#ez-toc-container[aria-expanded="false"] nav {
+#ez-toc-container.toc-collapsed nav {
 	display: none;
 }
 
@@ -77,7 +77,7 @@ body:not(.admin-bar) .toc-fixed {
 		height: 100%;
 	}
 
-	.sidebar .ez-toc[aria-expanded="false"] .widget-title {
+	.sidebar .ez-toc.toc-collapsed .widget-title {
 		border: none;
 		margin: 0;
 		padding: 0;
@@ -89,7 +89,7 @@ body:not(.admin-bar) .toc-fixed {
 		top: 113px;
 	}
 
-	.sidebar .ez-toc[aria-expanded="false"] .ez-toc-title {
+	.sidebar .ez-toc.toc-collapsed .ez-toc-title {
 		display: none;
 	}
 }

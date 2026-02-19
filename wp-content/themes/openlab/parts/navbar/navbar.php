@@ -85,6 +85,9 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 </nav>
 
 <div class="openlab-navbar-drawer" inert>
+	<!-- ARIA live region for announcing flyout state changes -->
+	<div class="sr-only" aria-live="polite" aria-atomic="true" id="flyout-announcer"></div>
+	
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>

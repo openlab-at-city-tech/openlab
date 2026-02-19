@@ -211,24 +211,23 @@ function openlab_list_members( $view ) {
 				//the following checks the current $id agains the passed list from the query
 				$member_id = $members_template->member->id;
 
-				$registered = bp_format_time( strtotime( $members_template->member->user_registered ), true )
+				$registered = bp_format_time( strtotime( $members_template->member->user_registered ), true );
+
+				$user_avatar = bp_core_fetch_avatar(
+					array(
+						'item_id' => bp_get_member_user_id(),
+						'object'  => 'member',
+						'type'    => 'full',
+						'html'    => false,
+					)
+				);
+
 				?>
 				<div class="group-item col-md-8 col-xs-12">
 					<div class="group-item-wrapper">
 						<div class="row">
 							<div class="item-avatar col-md-10 col-xs-8">
-								<a href="<?php bp_member_permalink(); ?>"><img class="img-responsive" src ="
-																	  <?php
-																		echo bp_core_fetch_avatar(
-																			array(
-																				'item_id' => bp_get_member_user_id(),
-																				'object'  => 'member',
-																				'type'    => 'full',
-																				'html'    => false,
-																			)
-																		);
-																		?>
-																		" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/></a>
+								<img class="img-responsive" src="<?php echo esc_url( $user_avatar ); ?>" alt="<?php echo esc_attr( sprintf( 'Avatar of %s', bp_get_member_name() ) ); ?>"/>
 							</div>
 							<div class="item col-md-14 col-xs-16">
 								<h2 class="item-title"><a class="truncate-on-the-fly no-deco" data-basewidth="100" data-basevalue="20" data-minvalue="20" data-srprovider="true" href="<?php bp_member_permalink(); ?>" title="<?php bp_member_name(); ?>"><?php bp_member_name(); ?></a></h2>

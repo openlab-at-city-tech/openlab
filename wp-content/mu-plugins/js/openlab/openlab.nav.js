@@ -197,6 +197,91 @@ OpenLab.nav = (function ($) {
 			$( '#wpadminbar .screen-reader-shortcut' ).remove();
 
 		},
+		setMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Set inert on all children of main content, except those containing toggle buttons
+				// This ensures toggle buttons remain accessible even when the menu is open
+				Array.from( mainContent.children ).forEach( function( child ) {
+					// Check if this child contains a direct-toggle or mobile-toggle element
+					var hasToggleButton = child.querySelector( '.direct-toggle, .mobile-toggle' );
+					
+					// Only set inert if this child doesn't contain a toggle button
+					if ( ! hasToggleButton ) {
+						child.setAttribute( 'inert', '' );
+						child.setAttribute( 'data-inert-added', 'true' );
+					}
+				} );
+				
+				// Note: We no longer hide toggle buttons from screen readers
+				// They remain accessible so users can close the menu by clicking them again
+			}
+		},
+		removeMainContentInert: function () {
+			var mainContent = document.getElementById( 'openlab-main-content' );
+			if ( mainContent ) {
+				// Remove inert from all children that we added it to
+				Array.from( mainContent.children ).forEach( function( child ) {
+					if ( child.hasAttribute( 'data-inert-added' ) ) {
+						child.removeAttribute( 'inert' );
+						child.removeAttribute( 'data-inert-added' );
+					}
+				} );
+			}
+		},
+		moveTargetAfterToggle: function ( toggleElem, targetElem ) {
+			// Store the original position so we can restore it later
+			// We'll store a reference to the next sibling and parent
+			var $target = $( targetElem );
+			
+			// Only move if not already moved
+			if ( $target.data( 'original-position-stored' ) ) {
+				return;
+			}
+			
+			var originalNextSibling = $target[0].nextSibling;
+			var originalParent = $target[0].parentNode;
+			
+			// Store original position info
+			$target.data( 'original-next-sibling', originalNextSibling );
+			$target.data( 'original-parent', originalParent );
+			$target.data( 'original-position-stored', true );
+			
+			// Move the target element to appear right after the toggle button's parent container
+			// For directory toggles, the button is inside h1.entry-title, so we want the sidebar
+			// to appear after the entire main content area for proper visual flow
+			var $toggleParent = toggleElem.closest( '#openlab-main-content' );
+			if ( $toggleParent.length ) {
+				// Insert the target after the main content wrapper
+				$toggleParent.after( $target );
+			} else {
+				// Fallback: insert after the toggle button itself
+				toggleElem.after( $target );
+			}
+		},
+		restoreTargetPosition: function ( targetElem ) {
+			var $target = $( targetElem );
+			
+			// Only restore if we previously moved it
+			if ( ! $target.data( 'original-position-stored' ) ) {
+				return;
+			}
+			
+			var originalNextSibling = $target.data( 'original-next-sibling' );
+			var originalParent = $target.data( 'original-parent' );
+			
+			// Restore to original position
+			if ( originalNextSibling ) {
+				originalParent.insertBefore( $target[0], originalNextSibling );
+			} else {
+				originalParent.appendChild( $target[0] );
+			}
+			
+			// Clear stored position data
+			$target.removeData( 'original-next-sibling' );
+			$target.removeData( 'original-parent' );
+			$target.removeData( 'original-position-stored' );
+		},
 		directToggleAction: function () {
 
 			//if there is no direct toggle, we're done
@@ -340,6 +425,12 @@ OpenLab.nav = (function ($) {
 						'display': ''
 					}
 				);
+				// Remove inert from main content
+				OpenLab.nav.removeMainContentInert();
+				
+				// Restore original DOM position if it was moved
+				OpenLab.nav.restoreTargetPosition( thisToggleTarget );
+				
 				return false;
 			}
 
@@ -351,6 +442,12 @@ OpenLab.nav = (function ($) {
 					// Update ARIA attributes
 					thisElem.attr( 'aria-expanded', 'false' );
 					$( thisToggleTarget ).attr( 'aria-hidden', 'true' );
+
+					// Remove inert from main content
+					OpenLab.nav.removeMainContentInert();
+
+					// Restore original DOM position if it was moved
+					OpenLab.nav.restoreTargetPosition( thisToggleTarget );
 
 					// Focus management: return focus to toggle button only if focus was inside the collapsed content
 					var activeElement = document.activeElement;
@@ -384,6 +481,13 @@ OpenLab.nav = (function ($) {
 			// Update ARIA attributes immediately
 			thisElem.attr( 'aria-expanded', 'true' );
 			thisTargetElem.attr( 'aria-hidden', 'false' );
+
+			// Set main content to inert when menu is open
+			OpenLab.nav.setMainContentInert();
+
+			// Move the target element in the DOM to appear after the toggle button
+			// This makes keyboard navigation natural without needing a focus trap
+			OpenLab.nav.moveTargetAfterToggle( thisElem, thisTargetElem );
 
 			// Add a close button if one doesn't already exist
 			var closeButtonClass = 'openlab-menu-close-btn';

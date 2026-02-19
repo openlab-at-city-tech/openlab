@@ -265,7 +265,7 @@ function openlab_stay_up_to_date() {
 			<div class="sidebar-block">
 				<div class="clearfix">
 					<div class="activity-avatar pull-left">
-						<a href="<?php echo esc_url( $link['url'] ); ?>"><img class="img-responsive" src="<?php echo esc_url( $link['avatar'] ); ?>" alt="Avatar of <?php echo esc_attr( $link['title'] ); ?>" /></a>
+						<img class="img-responsive" src="<?php echo esc_url( $link['avatar'] ); ?>" alt="Avatar of <?php echo esc_attr( $link['title'] ); ?>" />
 					</div>
 
 					<div class="up-to-date-site-title">
