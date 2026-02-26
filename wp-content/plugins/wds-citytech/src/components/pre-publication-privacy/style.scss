@@ -1,0 +1,84 @@
+.editor-post-publish-panel__prepublish,
+.post-publish-panel__postpublish {
+	display: flex;
+	flex-direction: column;
+	padding-top: 1px !important;
+
+	.components-panel__body {
+		margin-top: -1px;
+		order: 3;
+	}
+
+	.openlab-hide-visibility {
+		display: none !important;
+	}
+
+	.components-panel__body.openlab-pre-publication-privacy-panel {
+		order: 1;
+
+		.editor-post-publish-panel__header-publish-button {
+			justify-content: flex-start;
+			text-align: left;
+		}
+
+		.components-panel__body-title {
+			padding-left: 30px;
+			position: relative;
+
+			&:before {
+				background: #f97a14;
+				border-radius: 100%;
+				content: '';
+				height: 20px;
+				left: 20px;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 20px;
+			}
+		}
+	}
+
+	.altis-publication-checklist__panel {
+		order: 2;
+		border-top: none;
+
+		&--to-complete .components-panel__body-title .components-button {
+			--indicator-size: 0.8em;
+
+			align-items: center;
+			position: relative;
+
+			svg {
+				fill: #f97a14;
+				height: 30px;
+				margin-left: auto;
+				width: 30px;
+			}
+
+			&::before {
+				content: '';
+				width: calc( var( --indicator-size ) + 0.5em );
+			}
+
+			&::after {
+				background: #f97a14;
+				border-radius: 100%;
+				content: '';
+				height: var( --indicator-size );
+				margin-top: calc( -1 * var( --indicator-size ) / 2 );
+				position: absolute;
+				top: 50%;
+				width: var( --indicator-size );
+			}
+		}
+
+		&--completed .components-panel__body-title .components-button::after {
+			background: #3fcf8e;
+		}
+
+		&--completed .components-panel__body-title .components-button svg {
+			fill: #3fcf8e;
+		}
+	}
+}
