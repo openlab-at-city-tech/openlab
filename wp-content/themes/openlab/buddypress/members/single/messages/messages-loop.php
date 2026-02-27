@@ -44,7 +44,15 @@
 							<span class="fa fa-undo"></span> <span class="timestamp"><?php bp_message_thread_last_post_date() ?></span>
 						</div>
 
-						<p class="thread-excerpt"><?php bp_message_thread_excerpt() ?>... <a href="<?php bp_message_thread_view_link() ?>" class="read-more" title="<?php _e( 'View Message', 'buddypress' ); ?>">See More</a></p>
+						<p class="thread-excerpt">
+							<?php
+							$excerpt       = bp_get_message_thread_excerpt();
+							$non_excerpted = wp_strip_all_tags( $GLOBALS['messages_template']->thread->last_message_content );
+							$ellipsis		= ( strlen( $non_excerpted ) > strlen( $excerpt ) ) ? '&hellip;' : '';
+
+							echo $excerpt . $ellipsis;
+							?>
+						</p>
 
 						<?php do_action( 'bp_messages_inbox_list_item' ) ?>
 					</div>
