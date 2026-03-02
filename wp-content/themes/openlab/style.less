@@ -3350,13 +3350,15 @@ body form{
 	}
 }
 .group-archive-page .sidebar.mobile-dropdown {
-	background: @white;
-	padding: 0 5%;
-	.filter{
-		background: @5gray;
-		margin-bottom: 42px;
-		padding: 1% 4%;
-		width: 100%;
+	@media(max-width: @screen-xs-max){
+		background: @white;
+		padding: 0 5%;
+		.filter{
+			background: @5gray;
+			margin-bottom: 42px;
+			padding: 1% 4%;
+			width: 100%;
+		}
 	}
 }
 .portfolio-site-link {

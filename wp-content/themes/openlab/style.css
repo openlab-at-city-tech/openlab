@@ -10202,15 +10202,17 @@ body form .checkbox-list-container {
     width: 80%;
   }
 }
-.group-archive-page .sidebar.mobile-dropdown {
-  background: #ffffff;
-  padding: 0 5%;
-}
-.group-archive-page .sidebar.mobile-dropdown .filter {
-  background: #f0f0f0;
-  margin-bottom: 42px;
-  padding: 1% 4%;
-  width: 100%;
+@media (max-width: 767px) {
+  .group-archive-page .sidebar.mobile-dropdown {
+    background: #ffffff;
+    padding: 0 5%;
+  }
+  .group-archive-page .sidebar.mobile-dropdown .filter {
+    background: #f0f0f0;
+    margin-bottom: 42px;
+    padding: 1% 4%;
+    width: 100%;
+  }
 }
 .portfolio-site-link {
   font-size: 1.1em;
