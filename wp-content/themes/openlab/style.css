@@ -7841,6 +7841,11 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-navbar-drawer .nav-item:hover {
   background-color: #f0f0f0;
 }
+.openlab-navbar-drawer .nav-item:focus.flyout-subnav-back,
+.openlab-navbar-drawer .nav-item:hover.flyout-subnav-back {
+  background-color: inherit;
+  text-decoration: underline;
+}
 .openlab-navbar-drawer button.flyout-action-button {
   background: none;
   padding: 0;
@@ -7883,6 +7888,10 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-navbar-drawer .flyout-subnav-heading {
   padding: 0 var(--flyout-h-padding);
   font-weight: 700;
+}
+.openlab-navbar-drawer .flyout-subnav-heading .nav-item:focus,
+.openlab-navbar-drawer .flyout-subnav-heading .nav-item:hover {
+  background-color: inherit;
 }
 .openlab-navbar-drawer .drawer-panel {
   position: absolute;
