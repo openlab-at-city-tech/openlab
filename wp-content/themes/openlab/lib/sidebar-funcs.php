@@ -32,8 +32,8 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
             wp_nav_menu($args);
             echo '</div>';
 
-			echo '<h2 class="sidebar-title hidden-xs">Learn More</h2>';
-            echo '<div class="sidebar-block sidebar-block-learnmore hidden-xs">';
+			echo '<h2 class="sidebar-title">Learn More</h2>';
+            echo '<div class="sidebar-block sidebar-block-learnmore">';
 			openlab_learnmore_sidebar();
             echo '</div>';
 
