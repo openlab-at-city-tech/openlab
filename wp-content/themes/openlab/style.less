@@ -3284,80 +3284,81 @@ body form{
                     }
                 }
             }
-    }
+		}
+	}
 }
-	ul.sidebar-nav{
-		margin: 0;
-		padding: 0px 0 7px;
-		list-style-type: none;
-		background: rgba(239, 239, 239);
-		border-radius: @border-radius-bottom;
-		li{
-			background: rgba(239, 239, 239);
-			width: 100% !important;
-			margin: 0;
-			a{
-				color: @black;
-				display: block;
-				text-decoration: none;
-				font-weight: @semibold;
-				padding: 6px 15px;
-			}
-			&:hover,
-				&:focus{
-				> a{
-					background: @cyan;
-					color: @black;
-				}
-			}
-			&.current-menu-item,
-			&.selected-page{
-				> a{
-					background: @cyan;
-					color: @black;
-				}
-			}
-			ul{
-				border-left: 1px solid @30gray;
-				margin: 0 0 8px 20px;
-				list-style-type: none;
-				padding: 0;
-				width: 75%;
-				float: right;
-				li{
-					padding-right: 22px;
-					a{
-						font-weight: 300;
-						line-height: 2.3em;
-						padding: 0 15px;
-						border-left: none !important;
-						border-right: 1px solid @30gray;
-						margin: 1px 0 0;
-						width: 100%;
-					}
 
-					&.selected-page {
-						& > a {
-							background: transparent;
-							font-weight: @bold;
-						}
+ul.sidebar-nav{
+	margin: 0;
+	padding: 0px 0 7px;
+	list-style-type: none;
+	background: rgba(239, 239, 239);
+	border-radius: @border-radius-bottom;
+	li{
+		background: rgba(239, 239, 239);
+		width: 100% !important;
+		margin: 0;
+		a{
+			color: @black;
+			display: block;
+			text-decoration: none;
+			font-weight: @semibold;
+			padding: 6px 15px;
+		}
+		&:hover,
+			&:focus{
+			> a{
+				background: @cyan;
+				color: @black;
+			}
+		}
+		&.current-menu-item,
+		&.selected-page{
+			> a{
+				background: @cyan;
+				color: @black;
+			}
+		}
+		ul{
+			border-left: 1px solid @30gray;
+			margin: 0 0 8px 20px;
+			list-style-type: none;
+			padding: 0;
+			width: 75%;
+			float: right;
+			li{
+				padding-right: 22px;
+				a{
+					font-weight: 300;
+					line-height: 2.3em;
+					padding: 0 15px;
+					border-left: none !important;
+					border-right: 1px solid @30gray;
+					margin: 1px 0 0;
+					width: 100%;
+				}
+
+				&.selected-page {
+					& > a {
+						background: transparent;
+						font-weight: @bold;
 					}
 				}
-				> li {
-					&:last-child {
-						padding-bottom: 15px;
-					}
+			}
+			> li {
+				&:last-child {
+					padding-bottom: 15px;
 				}
 			}
-			&.current-menu-item{
-				ul{
-					display: block;
-				}
+		}
+		&.current-menu-item{
+			ul{
+				display: block;
 			}
-			@media (max-width: @screen-xs-max){
-				float: right;
-				width: 80%;
-			}
+		}
+		@media (max-width: @screen-xs-max){
+			float: right;
+			width: 80%;
 		}
 	}
 }
