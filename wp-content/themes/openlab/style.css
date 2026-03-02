@@ -10172,8 +10172,8 @@ ul.sidebar-nav li:focus > a {
 }
 ul.sidebar-nav li.current-menu-item > a,
 ul.sidebar-nav li.selected-page > a {
-  background: #63dfd2;
-  color: #000000;
+  background: #63dfd2 !important;
+  color: #000000 !important;
 }
 ul.sidebar-nav li ul {
   border-left: 1px solid #bbbbbb;
