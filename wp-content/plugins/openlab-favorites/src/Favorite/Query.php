@@ -49,6 +49,15 @@ class Query {
 			$retval[ $found_id ] = $i;
 		}
 
+		// When no group name is found, it probably means the group is deleted.
+		// Remove from the results.
+		$retval = array_filter(
+			$retval,
+			function( $item ) {
+				return ! empty( $item->get_group_name() );
+			}
+		);
+
 		// For now, hardcoding the order to alphabetical by name.
 		uasort(
 			$retval,
@@ -56,7 +65,6 @@ class Query {
 				return strcmp( $a->get_group_name(), $b->get_group_name() );
 			}
 		);
-
 
 		return $retval;
 	}
