@@ -3324,30 +3324,31 @@ ul.sidebar-nav{
 			margin: 0 0 8px 20px;
 			list-style-type: none;
 			padding: 0;
-			width: 75%;
-			float: right;
+			@media (max-width: @screen-xs-max){
+				float: right;
+				width: 75%;
+			}
 			li{
 				padding-right: 22px;
 				a{
-					font-weight: 300;
+					font-weight: 300 !important;
 					line-height: 2.3em;
 					padding: 0 15px;
 					border-left: none !important;
-					border-right: 1px solid @30gray;
 					margin: 1px 0 0;
 					width: 100%;
+
+					@media (max-width: @screen-xs-max){
+						border-right: 1px solid @30gray;
+						width: 100% !important;
+					}
 				}
 
 				&.selected-page {
 					& > a {
-						background: transparent;
-						font-weight: @bold;
+						background: transparent !important;
+						font-weight: @bold !important;
 					}
-				}
-			}
-			> li {
-				&:last-child {
-					padding-bottom: 15px;
 				}
 			}
 		}
@@ -3362,6 +3363,7 @@ ul.sidebar-nav{
 		}
 	}
 }
+.page-id-17872 .sidebar.mobile-dropdown, /* Resources directory */
 .group-archive-page .sidebar.mobile-dropdown {
 	@media(max-width: @screen-xs-max){
 		background: @white;
