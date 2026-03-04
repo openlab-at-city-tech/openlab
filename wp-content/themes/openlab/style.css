@@ -10218,15 +10218,11 @@ ul.sidebar-nav li.current-menu-item ul {
   }
 }
 @media (max-width: 767px) {
-  .page-id-13510 .sidebar.mobile-dropdown,
-  .page-id-17872 .sidebar.mobile-dropdown,
-  .group-archive-page .sidebar.mobile-dropdown {
+  .sidebar.mobile-dropdown.type-groups {
     background: #ffffff;
     padding: 0 5%;
   }
-  .page-id-13510 .sidebar.mobile-dropdown .filter,
-  .page-id-17872 .sidebar.mobile-dropdown .filter,
-  .group-archive-page .sidebar.mobile-dropdown .filter {
+  .sidebar.mobile-dropdown.type-groups .filter {
     background: #f0f0f0;
     margin-bottom: 42px;
     padding: 1% 4%;
