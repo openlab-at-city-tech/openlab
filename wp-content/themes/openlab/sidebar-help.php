@@ -4,7 +4,7 @@
  */ ?>
 
 <h2 class="sidebar-title hidden-xs">Help</h2>
-<div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper" aria-hidden="true">
+<div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper">
 <div class="sidebar-block clearfix">
 <?php
 $args = array(

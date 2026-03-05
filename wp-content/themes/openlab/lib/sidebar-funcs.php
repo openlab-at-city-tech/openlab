@@ -102,7 +102,7 @@ function openlab_group_sidebar($mobile = false) {
                 <div class="wrapper-block">
                     <?php openlab_bp_group_site_pages(); ?>
                 </div>
-                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper wrapper-block" aria-hidden="true">
+                <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper wrapper-block">
                     <div id="item-buttons" class="profile-nav sidebar-block clearfix">
                         <ul class="sidebar-nav clearfix">
                             <?php bp_get_options_nav(); ?>
