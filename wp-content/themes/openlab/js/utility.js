@@ -998,7 +998,7 @@ OpenLab.utility = (function ($) {
 
 							// For other flyouts, focus on first link or button in the drawer-list
 							if (!firstFocusable) {
-								firstFocusable = menu.querySelector('.drawer-list a, .drawer-list button');
+								firstFocusable = menu.querySelector('.flyout-heading a, .drawer-list a, .drawer-list button');
 							}
 
 							// Fallback to close button if no menu items found
@@ -1348,7 +1348,7 @@ OpenLab.utility = (function ($) {
 
 			// Focus management
 			if (switchFocus) {
-				const firstFocusable = targetPanel.querySelector('.drawer-list button, .drawer-list a');
+				const firstFocusable = targetPanel.querySelector('.flyout-heading a, .drawer-list button, .drawer-list a');
 				if (firstFocusable) {
 						OpenLab.utility.runAfterTransition(targetPanel, () => {
 							firstFocusable.focus();
