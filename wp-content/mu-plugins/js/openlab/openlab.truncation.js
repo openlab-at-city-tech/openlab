@@ -66,32 +66,7 @@ OpenLab.truncation = (function ($) {
                 }
 
                 var container_w = thisElem.parent().width();
-
-                if (thisElem.data('link')) {
-
-                    var omissionText = 'See More';
-
-                    //for screen reader only append
-                    //provides screen reader with addtional information in-link
-                    if (thisElem.data('includename')) {
-
-                        var nameTrunc = thisElem.data('includename');
-
-                        //if the groupname is truncated, let's use that
-                        var srprovider = thisElem.closest('.truncate-combo').find('[data-srprovider]');
-
-                        if (srprovider.length) {
-                            nameTrunc = srprovider.text();
-                        }
-
-                        omissionText = omissionText + ' <div class="sr-only sr-only-groupname">' + nameTrunc + '</div>';
-
-                    }
-
-                    var thisOmission = '<a href="' + thisElem.data('link') + '">' + omissionText + '</a>';
-                } else {
-                    var thisOmission = '';
-                }
+								var thisOmission = '';
 
                 if (container_w < truncationBaseWidth) {
                     var truncationValue = truncationBaseValue - (Math.round(((truncationBaseWidth - container_w) / truncationBaseWidth) * 100));
