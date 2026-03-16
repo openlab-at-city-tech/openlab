@@ -364,9 +364,6 @@ function cuny_home_square( $type ) {
 							); // WPCS: XSS ok
 							?>
 						</p>
-						<p class="see-more">
-							<span class="semibold" href="<?php echo esc_attr( bp_get_group_permalink() ); ?>">See More<span class="sr-only"> <?php echo esc_html( bp_get_group_name() ); ?></span></span>
-						</p>
 					</div>
 				</div>
 					<?php

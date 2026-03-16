@@ -852,15 +852,15 @@ OpenLab.utility = (function ($) {
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
 			const announcer = document.getElementById('flyout-announcer');
-			
+
 			// Flag to track when navigating between submenu panels
 			// This prevents handleFocusLeave from closing the drawer during submenu navigation
 			let isNavigatingToSubmenu = false;
-			
+
 			// Flag to track when a toggle button is being actively clicked/activated
 			// This prevents handleFocusLeave from interfering with the toggle's click handler
 			let isTogglingDrawer = false;
-			
+
 			// Track which toggle opened the current flyout
 			// Used to return focus to the correct toggle when closing via backward navigation
 			let currentOpenToggle = null;
@@ -998,7 +998,7 @@ OpenLab.utility = (function ($) {
 
 							// For other flyouts, focus on first link or button in the drawer-list
 							if (!firstFocusable) {
-								firstFocusable = menu.querySelector('.drawer-list a, .drawer-list button');
+								firstFocusable = menu.querySelector('.flyout-heading a, .drawer-list a, .drawer-list button');
 							}
 
 							// Fallback to close button if no menu items found
@@ -1053,13 +1053,13 @@ OpenLab.utility = (function ($) {
 
 					// Update aria-expanded when opening submenu
 					this.setAttribute('aria-expanded', 'true');
-					
+
 					// Set flag to prevent handleFocusLeave from closing the drawer
 					// during the submenu navigation
 					isNavigatingToSubmenu = true;
 
 					OpenLab.utility.switchToNavPanel( targetId, true, 'forward', this.closest('.drawer-panel') );
-					
+
 					// Reset the flag after the panel transition completes
 					const targetPanel = document.getElementById(targetId);
 					if (targetPanel) {
@@ -1084,13 +1084,13 @@ OpenLab.utility = (function ($) {
 							submenuToggle.setAttribute('aria-expanded', 'false');
 						});
 					}
-					
+
 					// Set flag to prevent handleFocusLeave from closing the drawer
 					// during the back navigation
 					isNavigatingToSubmenu = true;
 
 					OpenLab.utility.switchToNavPanel(targetId, switchFocus, 'backward', currentPanel);
-					
+
 					// Reset the flag after the panel transition completes
 					if (targetPanel) {
 						OpenLab.utility.runAfterTransition(targetPanel, () => {
@@ -1168,12 +1168,12 @@ OpenLab.utility = (function ($) {
 					if (!isDrawerOpen) {
 						return;
 					}
-					
+
 					// Don't close the drawer if we're in the middle of navigating to a submenu
 					if (isNavigatingToSubmenu) {
 						return;
 					}
-					
+
 					// Don't close the drawer if we're in the middle of toggling it
 					// This prevents interference with click/keyboard activation of toggle buttons
 					if (isTogglingDrawer) {
@@ -1192,7 +1192,7 @@ OpenLab.utility = (function ($) {
 					// Special case: Check if focus moved to a toggle button in the navbar
 					// This happens when back-tabbing from the drawer
 					const isToggleButton = newFocus && newFocus.classList && newFocus.classList.contains('navbar-flyout-toggle');
-					
+
 					if (isToggleButton) {
 						// When back-tabbing from the drawer, focus may land on the wrong toggle
 						// due to DOM order. Close the drawer and redirect focus to the correct toggle.
@@ -1348,7 +1348,7 @@ OpenLab.utility = (function ($) {
 
 			// Focus management
 			if (switchFocus) {
-				const firstFocusable = targetPanel.querySelector('.drawer-list button, .drawer-list a');
+				const firstFocusable = targetPanel.querySelector('.flyout-heading a, .drawer-list button, .drawer-list a');
 				if (firstFocusable) {
 						OpenLab.utility.runAfterTransition(targetPanel, () => {
 							firstFocusable.focus();

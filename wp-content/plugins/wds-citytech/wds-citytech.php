@@ -405,9 +405,9 @@ add_action( 'wp_ajax_wds_load_group_departments', 'wds_load_group_departments' )
  */
 function openlab_get_school_list() {
 	return array(
-		'arts'    => 'Arts & Sciences',
+		'arts'    => 'Arts and Sciences',
 		'studies' => 'Professional Studies',
-		'tech'    => 'Technology & Design',
+		'tech'    => 'Technology and Design',
 		'other'   => 'Other',
 	);
 }
@@ -470,9 +470,9 @@ function openlab_get_department_list( $school = '', $label_type = 'full' ) {
 function openlab_get_office_list() {
 	return array(
 		'academic-affairs' => 'Academic Affairs',
-		'administration'   => 'Administration & Finance',
+		'administration'   => 'Administration and Finance',
 		'president'        => 'President\'s Office',
-		'student-affairs'  => 'Student Affairs & Enrollment Management',
+		'student-affairs'  => 'Student Affairs and Enrollment Management',
 	);
 }
 
@@ -498,11 +498,11 @@ function openlab_get_entity_departments( $entity = null ) {
 			),
 			'construction-management-and-civil-engineering-technology' => array(
 				'label'       => 'Construction Management and Civil Engineering Technology',
-				'short_label' => 'Construction & Civil Engineering Tech',
+				'short_label' => 'Construction and Civil Engineering Tech',
 			),
 			'electrical-and-telecommunications-engineering-technology' => array(
 				'label'       => 'Electrical and Telecommunications Engineering Technology',
-				'short_label' => 'Electrical & Telecom Engineering Tech',
+				'short_label' => 'Electrical and Telecom Engineering Tech',
 			),
 			'entertainment-technology'          => array(
 				'label' => 'Entertainment Technology',
@@ -569,7 +569,7 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Humanities',
 			),
 			'liberal-arts'                       => array(
-				'label' => 'Liberal Arts & Sciences',
+				'label' => 'Liberal Arts and Sciences',
 			),
 			'library'                            => array(
 				'label' => 'Library',
@@ -654,13 +654,13 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'School of Professional Studies, Dean’s Office',
 			),
 			'tech-dean'                          => array(
-				'label' => 'School of Technology & Design, Dean’s Office',
+				'label' => 'School of Technology and Design, Dean’s Office',
 			),
 			'sponsored-programs'                 => array(
 				'label' => 'Sponsored Programs',
 			),
 			'undergraduate-research'             => array(
-				'label' => 'Undergraduate Research & Emerging Scholars',
+				'label' => 'Undergraduate Research and Emerging Scholars',
 			),
 		),
 		'student-affairs'  => array(
@@ -668,7 +668,7 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Admissions',
 			),
 			'athletics'                        => array(
-				'label' => 'Athletics & Recreation',
+				'label' => 'Athletics and Recreation',
 			),
 			'center-for-student-accessibility' => array(
 				'label' => 'Center for Student Accessibility',
@@ -704,10 +704,10 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Student Affairs',
 			),
 			'student-life'                     => array(
-				'label' => 'Student Life & Development',
+				'label' => 'Student Life and Development',
 			),
 			'transfer-and-recruitment'         => array(
-				'label' => 'Transfer & Recruitment Office',
+				'label' => 'Transfer and Recruitment Office',
 			),
 			'veterans-support-services'        => array(
 				'label' => 'Veterans Support Services',
@@ -721,7 +721,7 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Bookstore',
 			),
 			'buildings-and-grounds'         => array(
-				'label' => 'Buildings & Grounds',
+				'label' => 'Buildings and Grounds',
 			),
 			'business-office'               => array(
 				'label' => 'Business Office',
@@ -730,7 +730,7 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Computer Information Services',
 			),
 			'health-and-safety'             => array(
-				'label' => 'Health & Safety',
+				'label' => 'Health and Safety',
 			),
 			'human-resources'               => array(
 				'label' => 'Human Resources',
@@ -750,7 +750,7 @@ function openlab_get_entity_departments( $entity = null ) {
 				'label' => 'Communications',
 			),
 			'image-and-visual-communications'   => array(
-				'label' => 'Image & Visual Communications',
+				'label' => 'Image and Visual Communications',
 			),
 			'legal-and-title-ix'                => array(
 				'label' => 'Legal and Title IX',

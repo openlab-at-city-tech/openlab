@@ -23,9 +23,9 @@
     </head>
 
     <body <?php body_class(); ?>>
-		<?php get_template_part( 'parts/navbar/navbar' ); ?>
-
         <?php echo openlab_primary_skip_link(); ?>
+
+		<?php get_template_part( 'parts/navbar/navbar' ); ?>
 
         <div class="page-table">
 
