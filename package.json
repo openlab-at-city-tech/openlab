@@ -8,12 +8,12 @@
   "author": "OpenLab Development Team",
   "license": "ISC",
   "devDependencies": {
-    "grunt": "^1.5.3",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-cssmin": "^3.0.0"
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-cssmin": "*"
   },
   "description": "",
   "dependencies": {
-    "grunt-contrib-less": "^2.0.0"
+    "grunt-contrib-less": "*"
   }
 }
