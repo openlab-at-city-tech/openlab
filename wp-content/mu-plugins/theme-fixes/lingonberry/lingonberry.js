@@ -22,5 +22,16 @@
 		if (navToggle) {
 			navToggle.innerHTML += '<span class="sr-only">Toggle navigation</span><span class="nav-toggle-icon"></span>';
 		}
+
+		/* If `.blog-title-wrapper a.logo` doesn't have any content, add the blog title as text */
+		$('.blog-title-wrapper > a.logo').each(function() {
+			var $link = $(this);
+			if ($link.text().trim() === '') {
+				var blogTitle = $('.blog-title a').text().trim();
+				if ( blogTitle ) {
+					$link.append( '<span class="sr-only">' + blogTitle + '</span>' );
+				}
+			}
+		});
 	});
 }(jQuery));
