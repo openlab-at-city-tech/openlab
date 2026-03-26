@@ -28,6 +28,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initAvatarUploadCustomizations();
 			OpenLab.utility.setUpNav();
 			OpenLab.utility.setUpDirectoryToggle();
+			OpenLab.utility.accessibilityFixes();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -1292,6 +1293,22 @@ OpenLab.utility = (function ($) {
 				});
 			});
 		},
+
+		/**
+		 * Misc accessibility functions that have to happen when content is loaded.
+		 */
+		accessibilityFixes: function() {
+			// Shimming the plupload file input for BP avatar upload.
+			var shimInput = document.querySelector( '.moxie-shim input[type="file"]' );
+
+			if ( shimInput ) {
+				shimInput.setAttribute(
+					'aria-label',
+					'Upload photo. You can also drag and drop an image file here.'
+				);
+			}
+		},
+
 		runAfterTransition: function(el, callback, fallbackDuration = 50) {
 			const style = window.getComputedStyle(el);
 			const duration = parseFloat(style.transitionDuration || '0') || 0;
