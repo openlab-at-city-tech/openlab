@@ -16,5 +16,11 @@
 			var $bubble = $(this);
 			$bubble.html('<span class="sr-only">' + $bubble.attr('title') + '</span>');
 		});
+
+		/* Add text to nav toggle button */
+		const navToggle = document.querySelector('.nav-toggle');
+		if (navToggle) {
+			navToggle.innerHTML += '<span class="sr-only">Toggle navigation</span><span class="nav-toggle-icon"></span>';
+		}
 	});
 }(jQuery));
