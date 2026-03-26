@@ -862,6 +862,15 @@ OpenLab.utility = (function ($) {
 			// This prevents handleFocusLeave from interfering with the toggle's click handler
 			let isTogglingDrawer = false;
 
+			// Flag to track whether a mouse button is held down inside the drawer.
+			// Safari does not focus <a> elements on click, so a mousedown on a drawer link
+			// causes focusout to fire with document.activeElement === body. Without this
+			// guard, handleFocusLeave would call closeAllDrawers() (setting drawer.inert=true)
+			// before the click event fires, preventing navigation.
+			let isMouseDownInDrawer = false;
+			drawer.addEventListener('mousedown', () => { isMouseDownInDrawer = true; });
+			document.addEventListener('mouseup', () => { isMouseDownInDrawer = false; });
+
 			// Track which toggle opened the current flyout
 			// Used to return focus to the correct toggle when closing via backward navigation
 			let currentOpenToggle = null;
@@ -1178,6 +1187,13 @@ OpenLab.utility = (function ($) {
 					// Don't close the drawer if we're in the middle of toggling it
 					// This prevents interference with click/keyboard activation of toggle buttons
 					if (isTogglingDrawer) {
+						return;
+					}
+
+					// Don't close if a mousedown is active inside the drawer (Safari fix).
+					// Safari doesn't focus <a> elements on click, so without this guard the
+					// focusout handler would close the drawer before the click event fires.
+					if (isMouseDownInDrawer) {
 						return;
 					}
 
