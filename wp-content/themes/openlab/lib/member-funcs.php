@@ -2001,7 +2001,7 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 								<div class="form-group social-link-fields-service">
 									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-service">Platform</label>
 
-									<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>">
+									<select name="social-links[<?php echo esc_attr( $sfi ); ?>][service]" id="social-links-<?php echo esc_attr( $sfi ); ?>-service">
 										<option value="">- Select a platform -</option>
 										<?php foreach ( $social_fields as $social_field_slug => $social_field_data ) : ?>
 											<option value="<?php echo esc_attr( $social_field_slug ); ?>" <?php selected( $social_field_slug, $saved_social_field_slug ); ?>><?php echo esc_html( $social_field_data['title'] ); ?></option>
