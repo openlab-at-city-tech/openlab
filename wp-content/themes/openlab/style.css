@@ -9864,6 +9864,12 @@ body form .checkbox-list-container {
     margin-bottom: 21px;
   }
 }
+.home-page #cac-featured .cfcw-content .cfcw-image-wrapper a:focus,
+.home-page #cac-featured .cfcw-content .cfcw-image-wrapper a:hover {
+  display: inline-block;
+  outline: 1px solid #999;
+  outline-offset: -1px;
+}
 .home-page #cac-featured .cfcw-content p {
   font-weight: 400;
 }
