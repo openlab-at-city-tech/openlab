@@ -135,7 +135,7 @@
 
 							var emailDomain = 'citytech.cuny.edu';
 							if ( 'student' === selectedAccountType || 'alumni' === selectedAccountType ) {
-								emailDomain = 'mail.citytech.cuny.edu';
+								emailDomain = 'stu-mail.citytech.cuny.edu';
 							}
 
 							// Show nothing if user has selected Student but account format doesn't match.
@@ -173,7 +173,7 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			if (0 <= email.indexOf('@mail.citytech.cuny.edu')) {
+			if (0 <= email.indexOf('@mail.citytech.cuny.edu') || 0 <= email.indexOf('@stu-mail.citytech.cuny.edu')) {
 				emailtype = 'student';
 			} else if (0 <= email.indexOf('@citytech.cuny.edu')) {
 				emailtype = 'fs';
@@ -459,7 +459,7 @@
 			var helper = '';
 
 			if ( 'student' === accountType ) {
-				helper = 'Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
+				helper = 'Example: first.lastname@stu-mail.citytech.cuny.edu or first.lastname1@stu-mail.citytech.cuny.edu.';
 			} else if ( 'faculty' === accountType ) {
 				helper = 'Example: first.lastname12@citytech.cuny.edu.';
 			}
@@ -724,7 +724,7 @@
 		var email = $('#signup_email').val();
 		var emailtype;
 
-		if (0 <= email.indexOf('mail.citytech.cuny.edu')) {
+		if (0 <= email.indexOf('mail.citytech.cuny.edu') || 0 <= email.indexOf('stu-mail.citytech.cuny.edu')) {
 			emailtype = 'student';
 		} else if (0 <= email.indexOf('citytech.cuny.edu')) {
 			emailtype = 'fs';

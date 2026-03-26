@@ -452,7 +452,7 @@ add_action(
 				continue;
 			}
 
-			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu' ];
+			$email_domains = [ 'citytech.cuny.edu', 'mail.citytech.cuny.edu', 'stu-mail.citytech.cuny.edu' ];
 			$emaildomain   = strtolower( substr( $email, 1 + strpos( $email, '@' ) ) );
 			if ( ! in_array( $emaildomain, $email_domains, true ) ) {
 				$status['illegal_address'][] = $email;

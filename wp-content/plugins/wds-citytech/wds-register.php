@@ -108,8 +108,8 @@ function wds_email_validate() {
 	switch ( $account_type ) {
 		case 'student':
 		case 'alumni':
-			if ( 'mail.citytech.cuny.edu' !== $domain ) {
-				$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
+			if ( 'stu-mail.citytech.cuny.edu' !== $domain && 'mail.citytech.cuny.edu' !== $domain ) {
+				$bp->signup->errors['signup_email'] = 'Students must register with an @stu-mail.citytech.cuny.edu e-mail address!';
 			}
 			break;
 
