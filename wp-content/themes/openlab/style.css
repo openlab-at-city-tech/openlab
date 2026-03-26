@@ -8729,12 +8729,13 @@ h1.entry-title .directory-title-meta a:hover {
   text-decoration: underline;
 }
 h1.entry-title .direct-toggle {
-  background: #d1d1d1;
-  height: 47px;
+  background: transparent;
+  width: 26px;
+  height: 26px;
   border: none;
-  color: #ff5959;
   position: absolute;
-  top: -21px;
+  padding: 0;
+  top: -5px;
   right: 0;
   z-index: 11;
 }
@@ -8745,6 +8746,22 @@ h1.entry-title .direct-toggle .icon-bar {
   height: 3px;
   margin: 4px auto;
   width: 22px;
+}
+h1.entry-title .direct-toggle .toggle-icon {
+  background: url('images/filters.svg') no-repeat left center;
+  background-size: contain;
+  display: block;
+  height: 22px;
+  width: 20px;
+}
+h1.entry-title .direct-toggle.active {
+  top: -4px;
+  right: 2px;
+}
+h1.entry-title .direct-toggle.active .toggle-icon {
+  background-image: url('images/close.svg');
+  height: 26px;
+  width: 26px;
 }
 @media (max-width: 767px) {
   h1.entry-title {
