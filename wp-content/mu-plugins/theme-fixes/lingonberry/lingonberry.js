@@ -33,5 +33,15 @@
 				}
 			}
 		});
+
+		/* Remove restrictions on text-scaling and zooming from the viewport meta tag */
+		var viewportMeta = document.querySelector('meta[name="viewport"]');
+		if (viewportMeta) {
+			var content = viewportMeta.getAttribute('content');
+			content = content.replace(/user-scalable=no,?\s*/g, '');
+			content = content.replace(/maximum-scale=1,?\s*/g, '');
+			content = content.replace(/minimum-scale=1,?\s*/g, '');
+			viewportMeta.setAttribute('content', content);
+		}
 	});
 }(jQuery));
