@@ -1,0 +1,25 @@
+<svg width="209" height="136" viewBox="0 0 209 136" fill="none">
+    <g clip-path="url(#clip0_phts)">
+        <rect x="80.2002" y="44" width="48" height="48" fill="#43A6DB"/>
+        <circle cx="70.7002" cy="78.5" r="40.5" fill="#86D0F9"/>
+    </g>
+    <g clip-path="url(#clip1_phts)">
+        <rect x="131.2" y="44" width="48" height="48" fill="#B6DDAD"/>
+        <rect x="152.2" y="65" width="33" height="33" fill="#96CE89"/>
+    </g>
+    <g clip-path="url(#clip2_phts)">
+        <rect x="29.2002" y="44" width="48" height="48" fill="#F6966B"/>
+        <path d="M38.6485 61L76.6485 99H7.2002L38.6485 61Z" fill="#F9BBA0"/>
+    </g>
+    <defs>
+        <clipPath id="clip0_phts">
+            <rect x="80.2002" y="44" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+        <clipPath id="clip1_phts">
+            <rect x="131.2" y="44" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+        <clipPath id="clip2_phts">
+            <rect x="29.2002" y="44" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>

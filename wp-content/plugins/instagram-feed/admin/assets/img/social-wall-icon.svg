@@ -1,0 +1,38 @@
+<svg width="74" height="74" viewBox="0 0 74 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_dd_168_5688)">
+        <rect x="5" y="1" width="64" height="64" rx="16" fill="white"/>
+        <rect x="5.5" y="1.5" width="63" height="63" rx="15.5" stroke="#E6E6EB"/>
+        <mask id="mask0_168_5688" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="26" y="21" width="36"
+              height="36">
+            <rect x="26" y="21" width="36" height="36" fill="#D9D9D9"/>
+        </mask>
+        <g mask="url(#mask0_168_5688)">
+            <path d="M28.3844 43.2564C27.7075 43.2564 27.128 43.0154 26.6459 42.5333C26.1639 42.0513 25.9229 41.4718 25.9229 40.7948V23.5641C25.9229 22.8872 26.1639 22.3077 26.6459 21.8256C27.128 21.3436 27.7075 21.1025 28.3844 21.1025H33.3075C33.9844 21.1025 34.5639 21.3436 35.0459 21.8256C35.528 22.3077 35.769 22.8872 35.769 23.5641V40.7948C35.769 41.4718 35.528 42.0513 35.0459 42.5333C34.5639 43.0154 33.9844 43.2564 33.3075 43.2564H28.3844ZM40.6921 43.2564C40.0152 43.2564 39.4357 43.0154 38.9536 42.5333C38.4716 42.0513 38.2305 41.4718 38.2305 40.7948V34.641C38.2305 33.9641 38.4716 33.3846 38.9536 32.9025C39.4357 32.4205 40.0152 32.1795 40.6921 32.1795H45.6152C46.2921 32.1795 46.8716 32.4205 47.3536 32.9025C47.8357 33.3846 48.0767 33.9641 48.0767 34.641V40.7948C48.0767 41.4718 47.8357 42.0513 47.3536 42.5333C46.8716 43.0154 46.2921 43.2564 45.6152 43.2564H40.6921ZM40.6921 29.7179C40.0152 29.7179 39.4357 29.4769 38.9536 28.9948C38.4716 28.5128 38.2305 27.9333 38.2305 27.2564V23.5641C38.2305 22.8872 38.4716 22.3077 38.9536 21.8256C39.4357 21.3436 40.0152 21.1025 40.6921 21.1025H45.6152C46.2921 21.1025 46.8716 21.3436 47.3536 21.8256C47.8357 22.3077 48.0767 22.8872 48.0767 23.5641V27.2564C48.0767 27.9333 47.8357 28.5128 47.3536 28.9948C46.8716 29.4769 46.2921 29.7179 45.6152 29.7179H40.6921Z"
+                  fill="url(#paint0_linear_168_5688)"/>
+        </g>
+    </g>
+    <defs>
+        <filter id="filter0_dd_168_5688" x="0" y="0" width="74" height="74" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="2.5"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_168_5688"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="1"/>
+            <feGaussianBlur stdDeviation="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+            <feBlend mode="normal" in2="effect1_dropShadow_168_5688" result="effect2_dropShadow_168_5688"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_168_5688" result="shape"/>
+        </filter>
+        <linearGradient id="paint0_linear_168_5688" x1="36.9998" y1="21.1025" x2="36.9998" y2="43.2564"
+                        gradientUnits="userSpaceOnUse">
+            <stop stop-color="#ED4944"/>
+            <stop offset="1" stop-color="#FCA699"/>
+        </linearGradient>
+    </defs>
+</svg>

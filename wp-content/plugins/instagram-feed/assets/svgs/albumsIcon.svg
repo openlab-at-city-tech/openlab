@@ -1,0 +1,18 @@
+<svg width="210" height="136" viewBox="0 0 210 136" fill="none">
+    <g clip-path="url(#clip0_albm)">
+        <rect x="76.1187" y="39.7202" width="57.7627" height="57.7627" fill="#43A6DB"/>
+        <rect x="101.39" y="64.9917" width="39.7119" height="39.7119" fill="#86D0F9"/>
+    </g>
+    <g clip-path="url(#clip1_albm)">
+        <rect x="70.1016" y="32.5" width="57.7627" height="57.7627" fill="#F9BBA0"/>
+        <path d="M81.4715 52.9575L127.2 98.6863H43.627L81.4715 52.9575Z" fill="#F6966B"/>
+    </g>
+    <defs>
+        <clipPath id="clip0_albm">
+            <rect x="76.1187" y="39.7202" width="57.7627" height="57.7627" rx="1.20339" fill="white"/>
+        </clipPath>
+        <clipPath id="clip1_albm">
+            <rect x="70.1016" y="32.5" width="57.7627" height="57.7627" rx="1.20339" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>

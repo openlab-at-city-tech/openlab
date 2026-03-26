@@ -1,0 +1,78 @@
+<svg width="260" height="126" viewBox="0 0 260 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#usrtimlineclip0)">
+        <g filter="url(#usrtimlinefilter0_ddd)">
+            <g clip-path="url(#usrtimlineclip1)">
+                <rect x="64" y="23" width="131" height="113" rx="2" fill="white"/>
+                <rect x="112.027" y="38" width="46" height="6" rx="1" fill="#DCDDE1"/>
+                <rect x="112.027" y="49" width="28" height="6" rx="1" fill="#DCDDE1"/>
+                <g clip-path="url(#usrtimlineclip2)">
+                    <rect x="133.027" y="121" width="48" height="48" rx="1" fill="#F9BBA0"/>
+                </g>
+                <g clip-path="url(#usrtimlineclip3)">
+                    <rect x="133.027" y="67" width="48" height="48" fill="#43A6DB"/>
+                    <circle cx="123.527" cy="101.5" r="40.5" fill="#86D0F9"/>
+                </g>
+                <g clip-path="url(#usrtimlineclip4)">
+                    <rect x="79.0273" y="121" width="48" height="48" fill="#B6DDAD"/>
+                </g>
+                <g clip-path="url(#usrtimlineclip5)">
+                    <rect x="79.0273" y="67" width="48" height="48" fill="#F6966B"/>
+                    <path d="M88.4756 84L126.476 122H57.0273L88.4756 84Z" fill="#F9BBA0"/>
+                </g>
+                <circle cx="92.0273" cy="45" r="10" fill="#DCDDE1"/>
+                <circle cx="92.0273" cy="45" r="12" stroke="url(#usrtimlinepaint0_linear)"/>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <filter id="usrtimlinefilter0_ddd" x="51" y="16" width="157" height="139" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="6"/>
+            <feGaussianBlur stdDeviation="6.5"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="1"/>
+            <feGaussianBlur stdDeviation="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.11 0"/>
+            <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feOffset dy="3"/>
+            <feGaussianBlur stdDeviation="3"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0"/>
+            <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow" result="shape"/>
+        </filter>
+        <linearGradient id="usrtimlinepaint0_linear" x1="88.5773" y1="78.9" x2="139.127" y2="27.3"
+                        gradientUnits="userSpaceOnUse">
+            <stop stop-color="white"/>
+            <stop offset="0.147864" stop-color="#F6640E"/>
+            <stop offset="0.443974" stop-color="#BA03A7"/>
+            <stop offset="0.733337" stop-color="#6A01B9"/>
+            <stop offset="1" stop-color="#6B01B9"/>
+        </linearGradient>
+        <clipPath id="usrtimlineclip0">
+            <rect width="259.056" height="126" fill="white"/>
+        </clipPath>
+        <clipPath id="usrtimlineclip1">
+            <rect x="64" y="23" width="131" height="113" rx="2" fill="white"/>
+        </clipPath>
+        <clipPath id="usrtimlineclip2">
+            <rect x="133.027" y="121" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+        <clipPath id="usrtimlineclip3">
+            <rect x="133.027" y="67" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+        <clipPath id="usrtimlineclip4">
+            <rect x="79.0273" y="121" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+        <clipPath id="usrtimlineclip5">
+            <rect x="79.0273" y="67" width="48" height="48" rx="1" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>

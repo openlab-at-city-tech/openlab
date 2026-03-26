@@ -1,0 +1,41 @@
+<svg width="396" height="264" viewBox="0 0 396 264" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50.5998 136.122L48.2638 134.019L39.3134 143.959L49.2538 152.91L51.3572 150.574L43.7685 143.726L50.5998 136.122Z"
+          fill="#8C8F9A"/>
+    <path d="M347.201 119.809L345.097 122.145L352.686 128.993L345.855 136.597L348.191 138.7L357.141 128.76L347.201 119.809Z"
+          fill="#8C8F9A"/>
+    <g clip-path="url(#lightboxxclip0_557_20899)" filter="url(#lightboxxfilter0_d_557_20899)">
+        <rect width="261.925" height="173.162" transform="translate(62.6831 52.3919) rotate(-3)" fill="white"/>
+        <rect x="112.468" y="187.874" width="93.129" height="5.82056" rx="1.45514"
+              transform="rotate(-3 112.468 187.874)" fill="#D0D1D7"/>
+        <rect x="113.151" y="200.952" width="53.8402" height="5.82056" rx="1.45514"
+              transform="rotate(-3 113.151 200.952)" fill="#D0D1D7"/>
+        <circle cx="94.1753" cy="195.21" r="8.73084" transform="rotate(-3 94.1753 195.21)" fill="#DCDDE1"/>
+        <g clip-path="url(#lightboxxclip1_557_20899)">
+            <rect x="62.6812" y="52.3918" width="262.169" height="173.162" transform="rotate(-3 62.6812 52.3918)"
+                  fill="#FE544F"/>
+            <rect x="191.14" y="20.5734" width="271.58" height="334.479" rx="55.73"
+                  transform="rotate(2.99107 191.14 20.5734)" fill="#DCDDE1"/>
+            <circle cx="141.741" cy="201.742" r="113.935" transform="rotate(-3 141.741 201.742)" fill="#0096CC"/>
+        </g>
+    </g>
+    <defs>
+        <filter id="lightboxxfilter0_d_557_20899" x="53.8243" y="34.2544" width="288.346" height="204.35"
+                filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                           result="hardAlpha"/>
+            <feMorphology radius="3.32203" operator="erode" in="SourceAlpha" result="effect1_dropShadow_557_20899"/>
+            <feOffset dy="4.42938"/>
+            <feGaussianBlur stdDeviation="6.0904"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_557_20899"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_557_20899" result="shape"/>
+        </filter>
+        <clipPath id="lightboxxclip0_557_20899">
+            <rect width="261.925" height="173.162" fill="white" transform="translate(62.6831 52.3919) rotate(-3)"/>
+        </clipPath>
+        <clipPath id="lightboxxclip1_557_20899">
+            <rect width="262.15" height="121.608" fill="white" transform="translate(62.6821 52.3919) rotate(-3)"/>
+        </clipPath>
+    </defs>
+</svg>
