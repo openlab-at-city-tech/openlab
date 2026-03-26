@@ -1,3 +1,16 @@
+body,
+.archive-title {
+	color: #000;
+}
+
+a {
+	color: #1F69FF;
+}
+
+.blog-title a:hover {
+	color: #9E9E9E !important;
+}
+
 .post-title a:hover {
 	text-decoration: underline;
 }
