@@ -741,6 +741,7 @@ function wds_bp_group_meta() {
 												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 											</div>
 											<div class="col-sm-13">
+												<label class="sr-only" for="clone-destination-path">Site clone destination path</label>
 												<input
 													class="form-control domain-validate"
 													size="40"
@@ -856,6 +857,7 @@ function wds_bp_group_meta() {
 										</div>
 
 										<div class="col-sm-13">
+											<label class="sr-only" for="new-site-domain">New site path</label>
 											<input
 												id="new-site-domain"
 												class="form-control domain-validate"
