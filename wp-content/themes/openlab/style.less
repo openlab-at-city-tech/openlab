@@ -1779,13 +1779,22 @@ h1.entry-title{
 			width: 20px;
 		}
 
+		&.navigation-toggle {
+			width: 32px;
+			.toggle-icon {
+				width: 32px;
+				background: url('images/dots.svg') no-repeat left center;
+			}
+		}
+
 		&.active {
 			top: -4px;
 			right: 2px;
+			width: 26px !important;
 			.toggle-icon {
 				background-image: url('images/close.svg');
 				height: 26px;
-				width: 26px;
+				width: 26px !important;
 			}
 		}
     }

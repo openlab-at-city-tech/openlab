@@ -8754,14 +8754,22 @@ h1.entry-title .direct-toggle .toggle-icon {
   height: 22px;
   width: 20px;
 }
+h1.entry-title .direct-toggle.navigation-toggle {
+  width: 32px;
+}
+h1.entry-title .direct-toggle.navigation-toggle .toggle-icon {
+  width: 32px;
+  background: url('images/dots.svg') no-repeat left center;
+}
 h1.entry-title .direct-toggle.active {
   top: -4px;
   right: 2px;
+  width: 26px !important;
 }
 h1.entry-title .direct-toggle.active .toggle-icon {
   background-image: url('images/close.svg');
   height: 26px;
-  width: 26px;
+  width: 26px !important;
 }
 @media (max-width: 767px) {
   h1.entry-title {
