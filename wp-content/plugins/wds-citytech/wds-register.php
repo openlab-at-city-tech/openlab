@@ -192,10 +192,11 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			?>
 			<div class="form-group editfield field_name alt">
 				<div class="error-container" id="academic-unit-selector-error"></div>
-				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
+				<label for="ol-departments"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"
 				  class="form-control"
+				  id="ol-departments"
 				  data-parsley-required
 				  data-parsley-required-message="You must provide a Major Program of Study"
 				  data-parsley-errors-container="#academic-unit-selector-error">
