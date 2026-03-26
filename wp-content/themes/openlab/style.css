@@ -8704,6 +8704,9 @@ a.disabled-link {
     flex-direction: column;
   }
 }
+.drag-drop .drag-drop-inside p {
+  color: #333;
+}
 /**page**/
 h1.entry-title {
   border-bottom: 1px solid #bbbbbb;
@@ -8811,8 +8814,8 @@ body .btn-default:hover.btn-primary {
   color: #ffffff;
 }
 body .btn-disabled {
-  opacity: 0.65;
-  filter: alpha(opacity=65);
+  opacity: 0.75;
+  filter: alpha(opacity=75);
   box-shadow: none;
 }
 body .font-size.font-12 {
