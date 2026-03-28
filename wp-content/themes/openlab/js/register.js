@@ -106,6 +106,51 @@
 		var asyncLoaded = false;
 		formValidation($signup_form);
 
+		/**
+		 * Validate all visible form fields that appear before the focused element in the DOM.
+		 * This ensures users who skip fields with the mouse see error messages when they
+		 * move focus forward, rather than reaching the submit button with no explanation.
+		 */
+		function validatePrecedingFields( $focusedElement ) {
+			var $focusedGroup = $focusedElement.closest( '.form-group' );
+			var $allVisibleGroups = $signup_form.find( '.form-group:visible' );
+			var focusedIndex;
+
+			if ( $focusedGroup.length ) {
+				focusedIndex = $allVisibleGroups.index( $focusedGroup );
+				// Fall back to validating all groups if the focused group isn't found.
+				if ( focusedIndex === -1 ) {
+					focusedIndex = $allVisibleGroups.length;
+				}
+			} else {
+				// Element not in a .form-group (e.g. the submit button): validate all.
+				focusedIndex = $allVisibleGroups.length;
+			}
+
+			if ( focusedIndex <= 0 ) {
+				return;
+			}
+
+			$allVisibleGroups.slice( 0, focusedIndex ).each( function() {
+				$( this ).find( 'input, select, textarea' ).each( function() {
+					try {
+						$( this ).parsley().validate();
+					} catch ( e ) {}
+				} );
+			} );
+		}
+
+		// On focus of any form field, validate all visible preceding fields.
+		$signup_form.on( 'focus', 'input, select, textarea', function() {
+			validatePrecedingFields( $( this ) );
+		} );
+
+		// Also trigger on submit button hover, since the button itself is the "destination"
+		// when a user mouses straight to it.
+		$signup_form.on( 'mouseenter', '#signup_submit', function() {
+			validatePrecedingFields( $( this ) );
+		} );
+
 				$('.email-autocomplete').each(function(){
 					var emailInput = $(this);
 					var inputHasAutocomplete = false;
