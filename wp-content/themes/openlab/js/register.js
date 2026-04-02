@@ -502,7 +502,7 @@
 			var helper = '';
 
 			if ( 'student' === accountType ) {
-				helper = 'Example: first.lastname@stu-mail.citytech.cuny.edu or first.lastname1@stu-mail.citytech.cuny.edu.';
+				helper = 'Example: first.lastname##@stu-mail.citytech.cuny.edu.';
 			} else if ( 'faculty' === accountType ) {
 				helper = 'Example: first.lastname12@citytech.cuny.edu.';
 			}
