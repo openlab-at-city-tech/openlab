@@ -3040,6 +3040,8 @@ function openlab_academic_unit_selector( $args = array() ) {
 
 	?>
 
+	<div class="error-container" id="academic-unit-selector-error"></div>
+
 	<div class="<?php echo esc_attr( $selector_class ); ?>">
 
 	<?php if ( in_array( 'school', $entities, true ) ) : ?>
@@ -3111,7 +3113,6 @@ function openlab_academic_unit_selector( $args = array() ) {
 				</ul>
 			</div>
 		</div>
-		<div class="error-container" id="academic-unit-selector-error"></div>
 	</fieldset>
 
 	<?php wp_nonce_field( 'openlab_academic_unit_selector', 'openlab-academic-unit-selector-nonce' ); ?>
