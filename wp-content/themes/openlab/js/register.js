@@ -216,106 +216,96 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			if (0 <= email.indexOf('@mail.citytech.cuny.edu') || 0 <= email.indexOf('@stu-mail.citytech.cuny.edu')) {
-				emailtype = 'student';
-			} else if (0 <= email.indexOf('@citytech.cuny.edu')) {
-				emailtype = 'fs';
-			} else {
-				emailtype = 'nonct';
+			const isCityTechEmail = 0 <= email.indexOf('@stu-mail.citytech.cuny.edu') || 0 <= email.indexOf('@citytech.cuny.edu');
+
+			if ( isCityTechEmail ) {
+				return;
 			}
 
-			if ('nonct' == emailtype) {
-				// Fade out and show a 'Checking' message.
-				$emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
-				$emaillabel.css('color', '#000');
-				$emaillabel.fadeIn();
-				$emaillabel.addClass('error');
+			// Fade out and show a 'Checking' message.
+			$emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
+			$emaillabel.css('color', '#000');
+			$emaillabel.fadeIn();
+			$emaillabel.addClass('error');
 
-				// Non-City Tech requires an AJAX request for verification.
-				$.post(ajaxurl, {
-					action: 'cac_ajax_email_check',
-					'email': email,
-					'code': $('#signup_validation_code').val(),
-				},
-				function (response) {
-					var message = '';
-					var show_validation = false;
-					var emailCode = response.emailCode;
+			// Non-City Tech requires an AJAX request for verification.
+			$.post(ajaxurl, {
+				action: 'cac_ajax_email_check',
+				'email': email,
+				'code': $('#signup_validation_code').val(),
+			},
+			function (response) {
+				var message = '';
+				var show_validation = false;
+				var emailCode = response.emailCode;
 
-					switch (emailCode) {
-						/*
-							* Return values:
-							*   1: success
-							*   2: no email provided
-							*   3: not a valid email address
-							*   4: unsafe
-							*   5: not in domain whitelist
-							*   6: email exists
-							*   7: Is a student email
-							*/
-						case "6" :
-							message = 'An account already exists using that email address.';
-							break;
-						case "5" :
-						case "4" :
-							message = 'Must be a City Tech email address.';
-							show_validation = true;
-							break;
-						case "3" :
-							message = 'Not a well-formed email address. Please try again.';
-							break;
-						case "2" :
-							message = 'The Email Address field is required.';
-							break;
+				switch (emailCode) {
+					/*
+						* Return values:
+						*   1: success
+						*   2: no email provided
+						*   3: not a valid email address
+						*   4: unsafe
+						*   5: not in domain whitelist
+						*   6: email exists
+						*   7: Is a student email
+						*/
+					case "6" :
+						message = 'An account already exists using that email address.';
+						break;
+					case "5" :
+					case "4" :
+						message = 'Must be a City Tech email address.';
+						show_validation = true;
+						break;
+					case "3" :
+						message = 'Not a well-formed email address. Please try again.';
+						break;
+					case "2" :
+						message = 'The Email Address field is required.';
+						break;
 
-						case '1' :
-							message = '&mdash; OK!';
-							break;
-						default :
-							message = '';
-							break;
+					case '1' :
+						message = '&mdash; OK!';
+						break;
+					default :
+						message = '';
+						break;
+				}
+
+				message = '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + message + '</li></ul>';
+
+				if (emailCode != '1' && emailCode != '5' && emailCode != '4') {
+					$emaillabel.fadeOut(function () {
+						$emaillabel.html(message);
+						$emaillabel.fadeIn();
+					});
+				} else if (emailCode == '1') {
+					$emaillabel.fadeOut(function () {
+						$emaillabel.html(message);
+						$emaillabel.fadeIn();
+					});
+					$( '#register-avatar-upload' ).show();
+				} else {
+					$emaillabel.fadeOut();
+
+					// Don't add more than one
+					if (!$validationdiv.length) {
+						var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code" role="alert">Signup code <em aria-hidden="true">(required)</em> <span>Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
+						$('input#signup_email').before(valbox);
+						$validationdiv = $('#validation-code');
 					}
+				}
 
-					message = '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + message + '</li></ul>';
+				if (show_validation) {
+					$validationdiv.show();
+				} else {
+					$validationdiv.hide();
+					//$emailconfirm.focus();
+				}
 
-					if (emailCode != '1' && emailCode != '5' && emailCode != '4') {
-						$emaillabel.fadeOut(function () {
-							$emaillabel.html(message);
-							$emaillabel.fadeIn();
-						});
-					} else if (emailCode == '1') {
-						$emaillabel.fadeOut(function () {
-							$emaillabel.html(message);
-							$emaillabel.fadeIn();
-						});
-						$( '#register-avatar-upload' ).show();
-					} else {
-						$emaillabel.fadeOut();
-
-						// Don't add more than one
-						if (!$validationdiv.length) {
-							var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code" role="alert">Signup code <em aria-hidden="true">(required)</em> <span>Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
-							$('input#signup_email').before(valbox);
-							$validationdiv = $('#validation-code');
-						}
-					}
-
-					if (show_validation) {
-						$validationdiv.show();
-					} else {
-						$validationdiv.hide();
-						//$emailconfirm.focus();
-					}
-
-					set_account_type_fields(response.accountType);
-				});
-
-			} else {
-				$validationdiv.hide();
-				$emaillabel.fadeOut();
-				//$emailconfirm.focus();
-				set_account_type_fields();
-			}
+				set_account_type_fields(response.accountType);
+			});
 		});
 
 		$(document).on('blur', '#signup_validation_code', function() {
@@ -369,6 +359,7 @@
 		$account_type_field.on('change', function () {
 			set_email_label( this.value );
 			set_email_helper( this.value );
+			set_validation_rules( this.value );
 			load_account_type_description( this.value );
 			load_account_type_fields();
 			init_visible_metaboxes();
@@ -510,6 +501,30 @@
 			$('.email-requirements').fadeOut( function() {
 				$(this).html( helper ).fadeIn();
 			} );
+		}
+
+		function set_validation_rules( accountType ) {
+			const $emailField = $('#signup_email');
+
+			const removedValidators = [ 'data-parsley-studentemail', 'data-parsley-facultystaffemail' ];
+			for ( const validator of removedValidators ) {
+				$emailField.removeAttr( validator );
+			}
+
+			switch ( accountType ) {
+				case 'student' :
+					$emailField.attr( 'data-parsley-studentemail', '' );
+				break;
+
+				case 'faculty' :
+				case 'staff' :
+					$emailField.attr( 'data-parsley-facultystaffemail', '' );
+				break;
+
+				default :
+					$emailField.removeAttr( 'data-parsley-studentemail' );
+				break;
+			}
 		}
 
 		function get_account_type_option_markup( value, text, typeSelected ) {

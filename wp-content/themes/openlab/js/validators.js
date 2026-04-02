@@ -27,6 +27,24 @@
         }
     });
 
+		window.Parsley.addValidator('studentemail', {
+			validateString: function (value) {
+				return /^([a-zA-Z\-\._]+)*[0-9]{2}@stu-mail\.citytech\.cuny\.edu$/.test( value );
+			},
+			messages: {
+				en: 'Please enter a valid BMCC student email address.'
+			}
+		});
+
+		window.Parsley.addValidator('facultystaffemail', {
+			validateString: function (value) {
+				return /^([a-zA-Z0-9\-\._]+)@citytech\.cuny\.edu$/.test( value );
+			},
+			messages: {
+				en: 'Please enter a valid BMCC faculty/staff email address.'
+			}
+		});
+
     // Revalidate confirm fields when primary fields change.
     // This ensures that when email/password is updated after the confirm field,
     // the confirm field's equalto validation is re-checked.
