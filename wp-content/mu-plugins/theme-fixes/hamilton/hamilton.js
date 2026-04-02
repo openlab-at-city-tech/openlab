@@ -31,6 +31,10 @@
 			var $el = $(e.target);
 			toggleMenu($el);
 		});
+
+		// Remove `aria-hidden` from .sub-menu elements.
+		// The theme incorrectly uses it.
+		$('.sub-menu').removeAttr('aria-hidden');
 	});
 
 	$(window).on('load resize orientationchange', function(){
