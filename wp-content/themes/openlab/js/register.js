@@ -29,19 +29,6 @@
 			if ( errorMsg.length === 0 ) {
 				errorMsg = $(this.$element.data('parsley-errors-container')).find('li:first');
 			}
-
-			var jsElem = errorMsg[0];
-						if ( 'undefined' !== typeof jsElem ) {
-							jsElem.style.clip = 'auto';
-							var alertText = document.createTextNode(" ");
-							jsElem.appendChild(alertText);
-							jsElem.style.display = 'none';
-							jsElem.style.display = 'inline';
-						}
-
-			if (errorMsg.attr('role') !== 'alert') {
-				errorMsg.attr('role', 'alert');
-			}
 		}).on('field:success', function (formInstance) {
 
 			this.$element.closest('.form-group')
@@ -54,8 +41,6 @@
 			if (errorMsg.length === 0) {
 				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
 			}
-
-			errorMsg.attr('role', '');
 		});
 
 		var inputBlacklist = [
@@ -449,7 +434,7 @@
 			$( '.username-contains-last-name-error' ).remove();
 
 			if ( show ) {
-				$( '#signup_username' ).after( '<div class="username-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your username. Are you sure?</div>' );
+				$( '#signup_username' ).after( '<div class="username-contains-last-name-error field-contains-last-name-error error" role="alert">It looks like you’re using your last name in your username. Are you sure?</div>' );
 			}
 		}
 
@@ -474,7 +459,7 @@
 			$( '.display-name-contains-last-name-error' ).remove();
 
 			if ( show ) {
-				$( '#field_1' ).after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
+				$( '#field_1' ).after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error" role="alert">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
 			}
 		}
 

@@ -191,7 +191,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			}
 			?>
 			<div class="form-group editfield field_name alt">
-				<div class="error-container" id="academic-unit-selector-error"></div>
+				<div class="error-container" id="academic-unit-selector-error" role="alert"></div>
 				<label for="ol-departments"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"
@@ -262,7 +262,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				if ( bp_get_the_profile_field_is_required() ) {
 
 					$this_field = bp_get_the_profile_field_input_name();
-					$return    .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+					$return    .= "<div id='{$this_field}_confirm_error' class='error-container' role='alert'></div>";
 
 				}
 
@@ -304,7 +304,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				if ( bp_get_the_profile_field_is_required() ) {
 
 					$this_field = bp_get_the_profile_field_input_name();
-					$return    .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+					$return    .= "<div id='{$this_field}_confirm_error' class='error-container' role='alert'></div>";
 
 				}
 
