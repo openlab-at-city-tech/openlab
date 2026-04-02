@@ -28,18 +28,18 @@
 			setTimeout(function() {
 				// Get the error container ID from the parsley data attribute
 				var errorContainerId = self.$element.data('parsley-errors-container');
-				
+
 				// Clean up the ID (remove the # if present)
 				if (errorContainerId && errorContainerId.charAt(0) === '#') {
 					errorContainerId = errorContainerId.substring(1);
 				}
-				
+
 				// Find the actual error <li> element and give it an ID for aria-describedby
 				var fieldId = self.$element.attr('id');
 				var errorMsgId = fieldId + '-error-msg';
 				var $errorContainer = $('#' + errorContainerId);
 				var $errorLi = $errorContainer.find('li:first');
-				
+
 				if ($errorLi.length > 0) {
 					$errorLi.attr('id', errorMsgId);
 					self.$element.attr('aria-describedby', errorMsgId);
