@@ -29,6 +29,22 @@
 			if ( errorMsg.length === 0 ) {
 				errorMsg = $(this.$element.data('parsley-errors-container')).find('li:first');
 			}
+
+			// Announce to live region for screen readers
+			if ( errorMsg.length > 0 ) {
+				var $srMessage = $('#submitSrMessage');
+				var fieldLabel = $('label[for="' + this.$element.attr('id') + '"]').find('.label-text').text();
+				if (!fieldLabel) {
+					fieldLabel = $('label[for="' + this.$element.attr('id') + '"]').text();
+				}
+				var errorText = errorMsg.text();
+				var announcement = fieldLabel ? fieldLabel + ': ' + errorText : errorText;
+				$srMessage.text(announcement).attr('aria-live', 'assertive');
+				// Reset to polite after announcement
+				setTimeout(function() {
+					$srMessage.attr('aria-live', 'polite');
+				}, 1000);
+			}
 		}).on('field:success', function (formInstance) {
 
 			this.$element.closest('.form-group')
@@ -41,6 +57,9 @@
 			if (errorMsg.length === 0) {
 				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
 			}
+
+			// Clear live region message when field becomes valid
+			$('#submitSrMessage').text('').attr('aria-live', 'polite');
 		});
 
 		var inputBlacklist = [
