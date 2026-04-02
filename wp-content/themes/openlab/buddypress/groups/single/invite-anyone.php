@@ -224,7 +224,7 @@ $group_type_label = openlab_get_group_type_label( 'case=upper' );
 					</div>
 
 				<?php else : ?>
-					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( $group_type_label ); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your <?php echo esc_html( $group_type_label ); ?> and will receive notification via email.</p>
+					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( $group_type_label ); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your <?php echo esc_html( $group_type_label ); ?> and will receive notification via email. Note: Due to recent changes to college email, you may have issues with this feature. <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">Contact</a> the OpenLab Team for help.</p>
 
 					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially associated with this <?php echo esc_html( $group_type_label ); ?> or have approved this action.</label></p>
 
