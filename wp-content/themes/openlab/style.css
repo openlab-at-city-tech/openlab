@@ -10201,6 +10201,7 @@ ul.sidebar-nav li a {
 }
 ul.sidebar-nav li:hover > a,
 ul.sidebar-nav li a:focus,
+ul.sidebar-nav li:focus-within > a,
 ul.sidebar-nav li a:active {
   background: #63dfd2 !important;
   color: #000000;
