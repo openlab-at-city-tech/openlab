@@ -3342,12 +3342,11 @@ ul.sidebar-nav{
 			font-weight: @semibold;
 			padding: 6px 15px;
 		}
-		&:hover,
-			&:focus{
-			> a{
-				background: @cyan;
-				color: @black;
-			}
+		&:hover > a,
+		a:focus,
+		a:active {
+			background: @cyan !important;
+			color: @black;
 		}
 		&.current-menu-item,
 		&.selected-page{

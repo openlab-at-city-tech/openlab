@@ -971,12 +971,6 @@ hr {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
-.sr-only.sr-live-region {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-}
 .sr-only-focusable:active,
 .sr-only-focusable:focus {
   position: static;
@@ -10206,8 +10200,9 @@ ul.sidebar-nav li a {
   padding: 6px 15px;
 }
 ul.sidebar-nav li:hover > a,
-ul.sidebar-nav li:focus > a {
-  background: #63dfd2;
+ul.sidebar-nav li a:focus,
+ul.sidebar-nav li a:active {
+  background: #63dfd2 !important;
   color: #000000;
 }
 ul.sidebar-nav li.current-menu-item > a,
@@ -12975,4 +12970,10 @@ p.private-membership-indicator {
 #site-options.selected-external #check-note-wrapper,
 #site-options.selected-external #find-feeds {
   display: block !important;
+}
+.sr-only.sr-live-region {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
