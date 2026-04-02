@@ -191,7 +191,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			}
 			?>
 			<div class="form-group editfield field_name alt">
-				<div class="error-container" id="academic-unit-selector-error" role="alert"></div>
+				<div class="error-container" role="alert" id="academic-unit-selector-error"></div>
 				<label for="ol-departments"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"

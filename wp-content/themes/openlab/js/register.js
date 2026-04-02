@@ -9,8 +9,10 @@
 		$account_type_field = $('#openlab-account-type');
 
 		var registrationFormValidation = $signup_form.parsley({
-			errorsWrapper: '<ul class="parsley-errors-list"></ul>'
+			errorsWrapper: '<ul class="parsley-errors-list"></ul>',
+			errorTemplate: '<li></li>'
 		}).on('field:error', function (formInstance) {
+			var self = this;
 
 			this.$element.closest('.form-group')
 					.find('.other-errors').remove();
@@ -19,47 +21,39 @@
 					.addClass('has-error')
 					.find('.error-container').addClass('error');
 
-			var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
+			// Set aria-invalid for accessibility
+			this.$element.attr('aria-invalid', 'true');
 
-			//in some cases errorMsg is further up the chain
-			if (errorMsg.length === 0) {
-				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
-			}
-
-			if ( errorMsg.length === 0 ) {
-				errorMsg = $(this.$element.data('parsley-errors-container')).find('li:first');
-			}
-
-			// Announce to live region for screen readers
-			if ( errorMsg.length > 0 ) {
-				var $srMessage = $('#submitSrMessage');
-				var fieldLabel = $('label[for="' + this.$element.attr('id') + '"]').find('.label-text').text();
-				if (!fieldLabel) {
-					fieldLabel = $('label[for="' + this.$element.attr('id') + '"]').text();
+			// Small delay to ensure Parsley has rendered the error message
+			setTimeout(function() {
+				// Get the error container ID from the parsley data attribute
+				var errorContainerId = self.$element.data('parsley-errors-container');
+				
+				// Clean up the ID (remove the # if present)
+				if (errorContainerId && errorContainerId.charAt(0) === '#') {
+					errorContainerId = errorContainerId.substring(1);
 				}
-				var errorText = errorMsg.text();
-				var announcement = fieldLabel ? fieldLabel + ': ' + errorText : errorText;
-				$srMessage.text(announcement).attr('aria-live', 'assertive');
-				// Reset to polite after announcement
-				setTimeout(function() {
-					$srMessage.attr('aria-live', 'polite');
-				}, 1000);
-			}
+				
+				// Find the actual error <li> element and give it an ID for aria-describedby
+				var fieldId = self.$element.attr('id');
+				var errorMsgId = fieldId + '-error-msg';
+				var $errorContainer = $('#' + errorContainerId);
+				var $errorLi = $errorContainer.find('li:first');
+				
+				if ($errorLi.length > 0) {
+					$errorLi.attr('id', errorMsgId);
+					self.$element.attr('aria-describedby', errorMsgId);
+				}
+			}, 50);
 		}).on('field:success', function (formInstance) {
 
 			this.$element.closest('.form-group')
 					.removeClass('has-error')
 					.find('.error-container').removeClass('error');
 
-			var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
-
-			//in some cases errorMsg is further up the chain
-			if (errorMsg.length === 0) {
-				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
-			}
-
-			// Clear live region message when field becomes valid
-			$('#submitSrMessage').text('').attr('aria-live', 'polite');
+			// Clear aria attributes when field becomes valid
+			this.$element.attr('aria-invalid', 'false');
+			this.$element.removeAttr('aria-describedby');
 		});
 
 		var inputBlacklist = [

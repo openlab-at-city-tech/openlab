@@ -971,6 +971,12 @@ hr {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+.sr-only.sr-live-region {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
 .sr-only-focusable:active,
 .sr-only-focusable:focus {
   position: static;
