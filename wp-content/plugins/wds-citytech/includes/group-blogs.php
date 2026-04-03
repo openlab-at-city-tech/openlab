@@ -1022,7 +1022,7 @@ function openlab_group_member_role_settings( $group_type ) {
 						</li>
 
 						<li>
-							<label for="member_role_admin"><?php echo esc_html( $group_type_name_uc ); ?> moderators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
+							<label for="member_role_mod"><?php echo esc_html( $group_type_name_uc ); ?> moderators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
 							<select class="form-control" name="member_role_mod" id="member_role_mod">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['mod'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
