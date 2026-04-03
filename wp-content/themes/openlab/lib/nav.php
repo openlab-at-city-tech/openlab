@@ -139,7 +139,7 @@ function openlab_toggle_button($target = '#menu', $backgroundonly = false){
     $aria_controls = ltrim( $target, '#' );
 
     $button = <<<HTML
-            <button id="{$button_id}" data-target="{$target}" data-backgroundonly="{$backgroundonly}" class="mobile-toggle direct-toggle navigation-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="{$aria_controls}">
+            <button id="{$button_id}" data-target="{$target}" data-backgroundonly="{$backgroundonly}" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="{$aria_controls}">
 				<span class="toggle-icon"></span>
                 <span class="sr-only">Toggle navigation</span>
             </button>
