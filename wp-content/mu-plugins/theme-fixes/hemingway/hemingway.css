@@ -5,17 +5,42 @@ body,
 
 a,
 body .widget_text a,
+body .widget_text a:hover,
 body .widget_recent_entries a,
+body .widget_recent_entries a:hover,
 body .widget_archive a,
+body .widget_archive a:hover,
 body .widget_categories a,
+body .widget_categories a:hover,
+body .widget_recent_comments a,
+body .widget_recent_comments a:hover,
+body .widget_meta a,
+body .widget_meta a:hover,
 body .post-categories a,
-body .post-nav a:hover
+body .post-categories a:hover,
+body .post-title a,
+body .post-title a:hover,
+body .post-nav a:hover,
+body .post-meta a:hover
 {
 	color: #1F69FF;
 }
 
-button:hover, .button:hover, .faux-button:hover, a.more-link:hover, .wp-block-button__link:hover, .wp-block-file__button:hover, input[type="button"]:hover, input[type="reset"]:hover, input[type="submit"]:hover {
+button:hover,
+.button:hover,
+.faux-button:hover,
+a.more-link:hover,
+.wp-block-button__link:hover,
+.wp-block-file__button:hover,
+.content #respond input[type="submit"]:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
 	background-color: #1F69FF;
+}
+
+.search-form .search-submit {
+	background-color: #000;
 }
 
 .blog-title a:hover {
