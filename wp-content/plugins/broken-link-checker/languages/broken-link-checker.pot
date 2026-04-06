@@ -1,15 +1,15 @@
-# Copyright (C) 2025 WPMU DEV
+# Copyright (C) 2026 WPMU DEV
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Broken Link Checker 2.4.7\n"
+"Project-Id-Version: Broken Link Checker 2.4.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/build\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-19T12:22:46+00:00\n"
+"POT-Creation-Date: 2026-03-10T10:11:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 
@@ -20,7 +20,7 @@ msgstr ""
 #: app/emails/recipient-activation/class-controller.php:88
 #: app/emails/scan-report/class-controller.php:101
 #: core/external/plugins-cross-sell-page/core/plugins-list.php:152
-#: legacy/core/core.php:3964
+#: legacy/core/core.php:3977
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:229
 msgid "Broken Link Checker"
 msgstr ""
@@ -91,16 +91,16 @@ msgid "Cloud-based Broken Link Checker is currently active on your site. <a href
 msgstr ""
 
 #: app/admin-notices/multisite/class-controller.php:113
-#: legacy/core/core.php:2851
-#: legacy/core/core.php:3293
-#: legacy/core/core.php:3402
-#: legacy/core/core.php:3457
-#: legacy/core/core.php:3472
-#: legacy/core/core.php:3519
-#: legacy/core/core.php:3558
-#: legacy/core/core.php:3684
-#: legacy/core/core.php:3744
-#: legacy/core/core.php:3824
+#: legacy/core/core.php:2864
+#: legacy/core/core.php:3306
+#: legacy/core/core.php:3415
+#: legacy/core/core.php:3470
+#: legacy/core/core.php:3485
+#: legacy/core/core.php:3532
+#: legacy/core/core.php:3571
+#: legacy/core/core.php:3697
+#: legacy/core/core.php:3757
+#: legacy/core/core.php:3837
 #: legacy/includes/screen-options/screen-options.php:185
 msgid "You're not allowed to do that!"
 msgstr ""
@@ -1271,7 +1271,7 @@ msgstr ""
 
 #: legacy/core/core.php:1381
 #: legacy/core/core.php:1478
-#: legacy/core/core.php:4073
+#: legacy/core/core.php:4086
 #, php-format
 msgid "%s seconds"
 msgstr ""
@@ -1414,8 +1414,8 @@ msgid "Enter the keys of acf fields you want to check (one per line). If a field
 msgstr ""
 
 #: legacy/core/core.php:1968
-#: legacy/core/core.php:2058
-#: legacy/core/core.php:2090
+#: legacy/core/core.php:2071
+#: legacy/core/core.php:2103
 #, php-format
 msgid "Database error : %s"
 msgstr ""
@@ -1428,179 +1428,183 @@ msgstr ""
 msgid "Invalid search query."
 msgstr ""
 
-#: legacy/core/core.php:2053
+#: legacy/core/core.php:2057
+msgid "Invalid search query: contains forbidden parameters."
+msgstr ""
+
+#: legacy/core/core.php:2066
 #, php-format
 msgid "Filter \"%s\" created"
 msgstr ""
 
-#: legacy/core/core.php:2080
+#: legacy/core/core.php:2093
 msgid "Filter ID not specified."
 msgstr ""
 
-#: legacy/core/core.php:2087
+#: legacy/core/core.php:2100
 msgid "Filter deleted"
 msgstr ""
 
-#: legacy/core/core.php:2137
+#: legacy/core/core.php:2150
 #, php-format
 msgid "Replaced %d redirect with a direct link"
 msgid_plural "Replaced %d redirects with direct links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2148
+#: legacy/core/core.php:2161
 #, php-format
 msgid "Failed to fix %d redirect"
 msgid_plural "Failed to fix %d redirects"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2159
+#: legacy/core/core.php:2172
 msgid "None of the selected links are redirects!"
 msgstr ""
 
-#: legacy/core/core.php:2246
+#: legacy/core/core.php:2259
 #, php-format
 msgid "%d link updated."
 msgid_plural "%d links updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2257
+#: legacy/core/core.php:2270
 #, php-format
 msgid "Failed to update %d link."
 msgid_plural "Failed to update %d links."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2350
+#: legacy/core/core.php:2363
 #, php-format
 msgid "%d link removed"
 msgid_plural "%d links removed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2361
+#: legacy/core/core.php:2374
 #, php-format
 msgid "Failed to remove %d link"
 msgid_plural "Failed to remove %d links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2476
+#: legacy/core/core.php:2489
 #, php-format
 msgid "%d item was skipped because it can't be moved to the Trash. You need to delete it manually."
 msgid_plural "%d items were skipped because they can't be moved to the Trash. You need to delete them manually."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2498
+#: legacy/core/core.php:2511
 msgid "Didn't find anything to delete!"
 msgstr ""
 
-#: legacy/core/core.php:2537
+#: legacy/core/core.php:2550
 #, php-format
 msgid "%d link scheduled for rechecking"
 msgid_plural "%d links scheduled for rechecking"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2587
-#: legacy/core/core.php:3488
+#: legacy/core/core.php:2600
+#: legacy/core/core.php:3501
 msgid "This link was manually marked as working by the user."
 msgstr ""
 
-#: legacy/core/core.php:2595
-#: legacy/core/core.php:2659
+#: legacy/core/core.php:2608
+#: legacy/core/core.php:2672
 #, php-format
 msgid "Couldn't modify link %d"
 msgstr ""
 
-#: legacy/core/core.php:2606
+#: legacy/core/core.php:2619
 #, php-format
 msgid "%d link marked as not broken"
 msgid_plural "%d links marked as not broken"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2670
+#: legacy/core/core.php:2683
 #, php-format
 msgid "%d link dismissed"
 msgid_plural "%d links dismissed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:2740
+#: legacy/core/core.php:2753
 msgid "The \"Warnings\" page lists problems that are probably temporary or suspected to be false positives.<br> Warnings that persist for a long time will usually be reclassified as broken links."
 msgstr ""
 
-#: legacy/core/core.php:2745
+#: legacy/core/core.php:2758
 msgctxt "admin notice under Tools - Broken links - Warnings"
 msgid "Hide notice"
 msgstr ""
 
-#: legacy/core/core.php:2751
+#: legacy/core/core.php:2764
 msgctxt "a link from the admin notice under Tools - Broken links - Warnings"
 msgid "Change warning settings"
 msgstr ""
 
-#: legacy/core/core.php:2776
+#: legacy/core/core.php:2789
 msgid "Table columns"
 msgstr ""
 
-#: legacy/core/core.php:2795
+#: legacy/core/core.php:2808
 msgid "Show on screen"
 msgstr ""
 
-#: legacy/core/core.php:2802
+#: legacy/core/core.php:2815
 msgid "links"
 msgstr ""
 
-#: legacy/core/core.php:2803
+#: legacy/core/core.php:2816
 #: legacy/includes/admin/table-printer.php:175
 msgid "Apply"
 msgstr ""
 
-#: legacy/core/core.php:2807
+#: legacy/core/core.php:2820
 msgid "Misc"
 msgstr ""
 
-#: legacy/core/core.php:2822
+#: legacy/core/core.php:2835
 #, php-format
 msgid "Highlight links broken for at least %s days"
 msgstr ""
 
-#: legacy/core/core.php:2831
+#: legacy/core/core.php:2844
 msgid "Color-code status codes"
 msgstr ""
 
-#: legacy/core/core.php:3325
+#: legacy/core/core.php:3338
 msgid "View broken links"
 msgstr ""
 
-#: legacy/core/core.php:3326
+#: legacy/core/core.php:3339
 #, php-format
 msgid "Found %d broken link"
 msgid_plural "Found %d broken links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:3332
+#: legacy/core/core.php:3345
 msgid "No broken links found."
 msgstr ""
 
-#: legacy/core/core.php:3339
+#: legacy/core/core.php:3352
 #, php-format
 msgid "%d URL in the work queue"
 msgid_plural "%d URLs in the work queue"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:3343
+#: legacy/core/core.php:3356
 msgid "No URLs in the work queue."
 msgstr ""
 
-#: legacy/core/core.php:3349
+#: legacy/core/core.php:3362
 #, php-format
 msgctxt "for the \"Detected X unique URLs in Y links\" message"
 msgid "%d unique URL"
@@ -1608,7 +1612,7 @@ msgid_plural "%d unique URLs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:3353
+#: legacy/core/core.php:3366
 #, php-format
 msgctxt "for the \"Detected X unique URLs in Y links\" message"
 msgid "%d link"
@@ -1616,186 +1620,186 @@ msgid_plural "%d links"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:3359
+#: legacy/core/core.php:3372
 #, php-format
 msgid "Detected %1$s in %2$s and still searching..."
 msgstr ""
 
-#: legacy/core/core.php:3365
+#: legacy/core/core.php:3378
 #, php-format
 msgid "Detected %1$s in %2$s."
 msgstr ""
 
-#: legacy/core/core.php:3372
+#: legacy/core/core.php:3385
 msgid "Searching your blog for links..."
 msgstr ""
 
-#: legacy/core/core.php:3374
+#: legacy/core/core.php:3387
 msgid "No links detected."
 msgstr ""
 
-#: legacy/core/core.php:3411
+#: legacy/core/core.php:3424
 msgctxt "current load"
 msgid "Unknown"
 msgstr ""
 
-#: legacy/core/core.php:3480
-#: legacy/core/core.php:3527
-#: legacy/core/core.php:3581
-#: legacy/core/core.php:3698
-#: legacy/core/core.php:3767
-#: legacy/core/core.php:3847
+#: legacy/core/core.php:3493
+#: legacy/core/core.php:3540
+#: legacy/core/core.php:3594
+#: legacy/core/core.php:3711
+#: legacy/core/core.php:3780
+#: legacy/core/core.php:3860
 #, php-format
 msgid "Oops, I can't find the link %d"
 msgstr ""
 
-#: legacy/core/core.php:3500
-#: legacy/core/core.php:3541
+#: legacy/core/core.php:3513
+#: legacy/core/core.php:3554
 msgid "Oops, couldn't modify the link!"
 msgstr ""
 
-#: legacy/core/core.php:3503
-#: legacy/core/core.php:3544
-#: legacy/core/core.php:3732
-#: legacy/core/core.php:3754
-#: legacy/core/core.php:3834
+#: legacy/core/core.php:3516
+#: legacy/core/core.php:3557
+#: legacy/core/core.php:3745
+#: legacy/core/core.php:3767
+#: legacy/core/core.php:3847
 msgid "Error : link_id not specified"
 msgstr ""
 
-#: legacy/core/core.php:3568
+#: legacy/core/core.php:3581
 msgid "Error : link_id or new_url not specified"
 msgstr ""
 
-#: legacy/core/core.php:3594
-#: legacy/core/core.php:3608
+#: legacy/core/core.php:3607
+#: legacy/core/core.php:3621
 msgid "Oops, the new URL is invalid!"
 msgstr ""
 
-#: legacy/core/core.php:3628
+#: legacy/core/core.php:3641
 msgid "An unexpected error occurred!"
 msgstr ""
 
-#: legacy/core/core.php:3711
+#: legacy/core/core.php:3724
 msgid "An unexpected error occured!"
 msgstr ""
 
-#: legacy/core/core.php:3883
+#: legacy/core/core.php:3896
 msgid "You don't have sufficient privileges to access this information!"
 msgstr ""
 
-#: legacy/core/core.php:3896
+#: legacy/core/core.php:3909
 msgid "Error : link ID not specified"
 msgstr ""
 
-#: legacy/core/core.php:3910
+#: legacy/core/core.php:3923
 #, php-format
 msgid "Failed to load link details (%s)"
 msgstr ""
 
-#: legacy/core/core.php:3984
+#: legacy/core/core.php:3997
 msgid "PHP version"
 msgstr ""
 
-#: legacy/core/core.php:3990
+#: legacy/core/core.php:4003
 msgid "MySQL version"
 msgstr ""
 
-#: legacy/core/core.php:4003
+#: legacy/core/core.php:4016
 msgid "You have an old version of CURL. Redirect detection may not work properly."
 msgstr ""
 
-#: legacy/core/core.php:4014
-#: legacy/core/core.php:4030
-#: legacy/core/core.php:4035
+#: legacy/core/core.php:4027
+#: legacy/core/core.php:4043
+#: legacy/core/core.php:4048
 msgid "Not installed"
 msgstr ""
 
-#: legacy/core/core.php:4017
+#: legacy/core/core.php:4030
 msgid "CURL version"
 msgstr ""
 
-#: legacy/core/core.php:4023
+#: legacy/core/core.php:4036
 msgid "Installed"
 msgstr ""
 
-#: legacy/core/core.php:4036
+#: legacy/core/core.php:4049
 msgid "You must have either CURL or Snoopy installed for the plugin to work!"
 msgstr ""
 
-#: legacy/core/core.php:4046
+#: legacy/core/core.php:4059
 msgid "On"
 msgstr ""
 
-#: legacy/core/core.php:4047
+#: legacy/core/core.php:4060
 msgid "Redirects may be detected as broken links when safe_mode is on."
 msgstr ""
 
-#: legacy/core/core.php:4052
-#: legacy/core/core.php:4066
+#: legacy/core/core.php:4065
+#: legacy/core/core.php:4079
 msgid "Off"
 msgstr ""
 
-#: legacy/core/core.php:4060
+#: legacy/core/core.php:4073
 #, php-format
 msgid "On ( %s )"
 msgstr ""
 
-#: legacy/core/core.php:4061
+#: legacy/core/core.php:4074
 msgid "Redirects may be detected as broken links when open_basedir is on."
 msgstr ""
 
-#: legacy/core/core.php:4079
+#: legacy/core/core.php:4092
 msgid "Database character set"
 msgstr ""
 
-#: legacy/core/core.php:4098
+#: legacy/core/core.php:4111
 msgid "If this value is zero even after several page reloads you have probably encountered a bug."
 msgstr ""
 
-#: legacy/core/core.php:4239
-#: legacy/core/core.php:4364
+#: legacy/core/core.php:4252
+#: legacy/core/core.php:4377
 #, php-format
 msgid "[%s] Broken links detected"
 msgstr ""
 
-#: legacy/core/core.php:4244
+#: legacy/core/core.php:4257
 #, php-format
 msgid "Broken Link Checker has detected %d new broken link on your site."
 msgid_plural "Broken Link Checker has detected %d new broken links on your site."
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:4276
+#: legacy/core/core.php:4289
 #, php-format
 msgid "Here's a list of the first %d broken links:"
 msgid_plural "Here's a list of the first %d broken links:"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/core/core.php:4285
+#: legacy/core/core.php:4298
 msgid "Here's a list of the new broken links: "
 msgstr ""
 
-#: legacy/core/core.php:4295
+#: legacy/core/core.php:4308
 #, php-format
 msgid "Link text : %s"
 msgstr ""
 
-#: legacy/core/core.php:4296
+#: legacy/core/core.php:4309
 #, php-format
 msgid "Link URL : <a href=\"%1$s\">%2$s</a>"
 msgstr ""
 
-#: legacy/core/core.php:4297
+#: legacy/core/core.php:4310
 #, php-format
 msgid "Source : View: %s | Edit: %s"
 msgstr ""
 
-#: legacy/core/core.php:4311
+#: legacy/core/core.php:4324
 msgid "You can see all broken links here:"
 msgstr ""
 
-#: legacy/core/core.php:4369
+#: legacy/core/core.php:4382
 #, php-format
 msgid "Broken Link Checker has detected %d new broken link in your posts."
 msgid_plural "Broken Link Checker has detected %d new broken links in your posts."
@@ -2517,7 +2521,7 @@ msgid "Search Results"
 msgstr ""
 
 #: legacy/includes/link-query.php:83
-#: legacy/includes/link-query.php:131
+#: legacy/includes/link-query.php:133
 msgid "No links found for your query"
 msgstr ""
 
