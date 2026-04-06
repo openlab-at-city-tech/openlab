@@ -1,8 +1,10 @@
 === Dynamic Widgets ===
 Contributors: vivwebs, Qurl
 Tags: widget, dynamic, rules, logic, condition
-Tested up to: 6.6
-Stable tag: 1.6.5
+Tested up to: 6.9
+Stable tag: 1.6.6
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Dynamic Widgets gives you full control on which pages a widget will display. It lets you dynamicly show or hide widgets on WordPress pages.
 
@@ -175,6 +177,10 @@ Since version 3.8, WPEC uses the by WordPress provided Custom Post Types and Cus
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
 == Changelog ==
+
+= Version 1.6.6 =
+
+* Fixed domain condition
 
 = Version 1.6.5 =
 
