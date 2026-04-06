@@ -1,42 +1,42 @@
-=== Gutenberg Blocks - PublishPress Blocks Controls, Visibility, Reusable Blocks ===
+=== PublishPress Blocks - Block Controls, Block Visibility, Block Permissions ===
 Contributors: publishpress, stevejburge, htmgarcia, olatechpro
-Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks, accordion block, gallery block, slider block, tabs block, maps block, block controls
+Tags: gutenberg, gutenberg blocks, block editor, block visibility, block permissions
 Requires at least: 5.5
-Tested up to: 6.8
-Stable tag: 3.6.0
+Tested up to: 6.9
+Stable tag: 3.6.2
 Requires PHP: 7.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-PublishPress Blocks include accordions, tables, tabs, and more. Plus it has block controls for visibility, devices, user roles.
+PublishPress Blocks is your complete solution for the WordPress block editor. You can control block permissions, styles, visibility, usage and more.
 
 == Description ==
 
-[PublishPress Blocks](https://publishpress.com/blocks/) has everything you need to build professional websites with the WordPress block editor. The extra blocks include layout options, sliders, buttons, icons, image galleries, maps, tabs, testimonials, accordions, and more.
-
-Plus, this plugin has complete set of management tools for blocks. You can control which users can add which blocks to posts. You can manage block visibility, including user role, date, time, device, screen size, and day of the week. Plus you can set default CSS styles, find all your blocks, access reusable blocks, and much more.
+[PublishPress Blocks](https://publishpress.com/blocks/) has everything you need to build professional websites with the WordPress block editor. This plugin has complete set of management tools for blocks. You can control which users can add which blocks to posts. You can manage block visibility, including user roles, date, time, device, screen size, and day of the week. Plus you can set default CSS styles, find all your blocks, manage your reusable blocks, and much more.
 
 ## Powerful block editor features in PublishPress Blocks
 
 - **Block Permissions**: You can control who can use each block, including default WordPress blocks.
+- **Extra Blocks**: There are over 20 extra blocks including accordions, tabs, and sliders.
 - **PublishPress Blocks**: The blocks include accordions, galleries, sliders, tabs, maps, tables, recent posts, and more.
 - **Block Styles**: You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks.
 - **Block Controls**: You can control block visibility, including user role, date, time, device, day of the week, and more.
 - **Block Usage**: You can scan the posts on your website to find where your blocks are used.
 - **Reusable Blocks**: You get easy access to manage and edit all the reusable blocks on your site.
+- **Auto-Insert Blocks**: Automatically insert blocks into any location in your posts.
 
 ## PublishPress Blocks Pro
 
 > <strong>Upgrade to Blocks Pro</strong><br />
 > This plugin is the free version of PublishPress Blocks. The Pro version comes with faster support and all the features you need to super-charge the WordPress block editor. <a href="https://publishpress.com/blocks"  title="Blocks Pro">Click here to purchase the best premium WordPress blocks plugin now!</a>
 
-## Feature 1. Block Permissions
+## Block Permissions: Control Who Use Each Block
 
 PublishPress Blocks allows you to enable or disable Gutenberg blocks for user roles. For example, you can disable the “Classic” block if you don’t want users to rely on the old WordPress editor. Using the PublishPress Blocks plugin, you can allow some user roles to use the Gutenberg blocks that you choose. You can select which blocks in the Blocks list will be available to each role.
 
-[Click here to see how to control permissions for Gutenberg blocks](https://publishpress.com/knowledge-base/editor-profiles/).
+[Click here to see how to control who can use each block](https://publishpress.com/knowledge-base/editor-profiles/).
 
-## Feature 2. Over 20 Extra Gutenberg Blocks
+## Extra Blocks: Over 20 Extra Gutenberg Blocks
 
 PublishPress Blocks has everything you need to build professional websites with WordPress. Here's an introduction to the blocks available with the PublishPress Blocks plugin:
 
@@ -70,7 +70,7 @@ And there are also special blocks and features available in PublishPress Blocks 
 - **[Pricing Table block](https://publishpress.com/knowledge-base/pricing-table-block/)**: With the Pro version of the PublishPress Blocks plugin, you can create a Pricing Table block when you need to show people the purchase or subscription options on your site.
 - **[Google Fonts with core blocks](hhttps://publishpress.com/knowledge-base/core-blocks/)**: The Pro version of the PublishPress Blocks allow you to add use Google fonts with some core Gutenberg blocks such as paragraph and heading.
 
-PublishPress Blocks features **the best content block in WordPress**. You can use the "Content Display" block to create blog layouts, lists of posts by a specific author, or even complete newspaperfrontpages.
+PublishPress Blocks features **the best content block in WordPress**. You can use the "Content Display" block to create blog layouts, lists of posts by a specific author, or even complete newspaper frontpages.
 
 This block allows you to show posts, pages and other content types in many beautiful layouts. These layout options are *Grid*, *Frontpage*, *List*, *Newspaper*, *Masonry*, and *Slider*.
 
@@ -78,40 +78,58 @@ You also have dozens of different ways to customize your content. You can filter
 
 We've already mentioned many features of the Content Display block. So what are you waiting for? **Install PublishPress Blocks and check out the Content Display block**. This block really is the best way to showcase your posts in the Gutenberg editor.
 
-## Feature 3. Block Styles
+## Block Styles: Custom Design for Your Blocks
 
-You create custom, reusable CSS styles and make them available to end users. Name the style, and let the content editors use it when they need it. This is a very useful feature that empowers your users to add pre-defined CSS styles to any Gutenberg block.
+You can create custom styles for blocks and make them available to end users. Name the style, and let the content editors use it when they need it. There's an easy-to-use tool for creating styles, or you can bring your own CSS.
 
 [Click here to see how to create block styles](https://publishpress.com/knowledge-base/custom-css/).
 
-## Feature 4. Block Controls
+## Block Controls: Control Block Visibility on Your Site's Frontend
 
-Using the PublishPress Blocks plugin, you can schedule when blocks are shown, and add user role restrictions.
+With Block Controls, you can schedule when blocks are shown, and also add user role restrictions. You can show blocks based on device type, browser, operating system, cookies, user data, and much more.
 
-Block Controls works with almost any block, including blocks from third party plugins.
+[Click here to read how to use block controls](https://publishpress.com/knowledge-base/how-to-use-block-controls/).
 
-[Click here to read how to use block controls](https://publishpress.com/knowledge-base/how-to-use-block-controls/)
+There are over a dozen different kinds of block visibility control available:
 
-There are four different kinds of block visibility control available:
+- **[Schedule](https://publishpress.com/knowledge-base/schedule-control/)**: schedule when to start showing and/or stop showing a block.
+- **[User roles](https://publishpress.com/knowledge-base/user-roles-control/)**: choose which users can see your blocks.
+- **[Device Width](https://publishpress.com/knowledge-base/device-type-control/)**: show and hide blocks on specific device sizes.
+- **[Device Type](https://publishpress.com/knowledge-base/device-type/)**: Select what type of device this block will be visible on.
+- **[Browser](https://publishpress.com/knowledge-base/browser-control/)**: Choose which browsers can see this block.
+- **[Operating System](https://publishpress.com/knowledge-base/operating-system-control/)**: Choose which operating systems can see this block.
+- **[Cookie](https://publishpress.com/knowledge-base/cookie-control/)**: Show or hide the block based on cookie values.
+- **[User Meta](https://publishpress.com/knowledge-base/user-meta-control/)**: Show or hide block based on user meta values.
+- **[Post Meta](https://publishpress.com/knowledge-base/post-meta-control/)**: Show or hide block based on post meta values.
+- **[Query String](https://publishpress.com/knowledge-base/query-string-control/)**: Show or hide block based on URL query parameters.
+- **[Capabilities](https://publishpress.com/knowledge-base/capabilities-control/)**: Show or hide block based on user capabilities.
+- **[Term Archives](https://publishpress.com/knowledge-base/term-archives-control/)**: Choose on which taxonomies and terms archive pages your blocks can be displayed.
+- **[Pages](https://publishpress.com/knowledge-base/pages-control/)**: Choose in which pages this block can be displayed.
 
-- **Schedule control**: schedule when to start showing and/or stop showing a block.
-- **User roles control**: choose which users can see your blocks.
-- **Term archives control**: choose on which taxonomies and terms archive pages your blocks can be displayed.
-- **Device Type**: select what type of device this block will be visible on.
-- **Device Width**: set the minimum and maximum screen widths for this block to display.
-- **Pages control**: choose in which pages this block can be displayed.
 
-## Feature 5. Block Usage
+## Block Usage: Find Your Blocks
 
 The Block Usage feature allows you to search for and find any usage of blocks on your site. Find your blocks quickly. Using this screen, you can scan all the content on your site and find where each block is located.
 
 [Click here for more on the Block Usage Screen](https://publishpress.com/knowledge-base/block-usage/).
 
-## Feature 6. Reusable Blocks
+## Reusable Blocks: Build a Block Once and Use it Everywhere
 
 When you are using PublishPress Blocks, a submenu for Reusable Blocks is enabled by default. This submenu allows you to reach the “Reusable blocks” page screen that is normally difficult to find in WordPress. Reusable blocks are an incredibly useful feature in the Gutenberg block editor. They allow you to create content once and use it multiple times inside different posts and pages.
 
 [Click here for more on the Reusable Blocks Screen](https://publishpress.com/knowledge-base/how-to-enable-disable-reusable-blocks-submenu/).
+
+## Reusable Blocks: Build a Block Once and Use it Everywhere
+
+When you are using PublishPress Blocks, a submenu for Reusable Blocks is enabled by default. This submenu allows you to reach the “Reusable blocks” page screen that is normally difficult to find in WordPress. Reusable blocks are an incredibly useful feature in the Gutenberg block editor. They allow you to create content once and use it multiple times inside different posts and pages.
+
+[Click here for more on the Reusable Blocks Screen](https://publishpress.com/knowledge-base/how-to-enable-disable-reusable-blocks-submenu/).
+
+## Auto-Insert Blocks
+
+The Auto-Insert Blocks feature allows you to automatically insert reusable blocks into posts. You can choose to insert your blocks according position, categories, tags, and other criteria. This ideal for adding promotional banners, newsletter sign-ups, or anything that needs to be shown multiple times in your posts.
+
+[Click here for more on Auto-Insert Blocks](https://publishpress.com/knowledge-base/auto-insert-blocks/).
 
 ## Join PublishPress and get the Pro plugins
 

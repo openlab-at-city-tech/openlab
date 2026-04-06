@@ -9,18 +9,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-11T15:24:54+00:00\n"
+"POT-Creation-Date: 2025-12-15T13:55:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: advanced-gutenberg\n"
 
 #. Plugin Name of the plugin
 #: advanced-gutenberg.php
-#: incl/advanced-gutenberg-main.php:174
-#: incl/advanced-gutenberg-main.php:1879
+#: incl/advanced-gutenberg-main.php:175
 #: incl/pages/block-settings.php:95
 #: incl/pages/main.php:8
-#: incl/pages/main.php:31
 msgid "PublishPress Blocks"
 msgstr ""
 
@@ -44,150 +42,155 @@ msgstr ""
 msgid "https://publishpress.com/"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:445
-#: incl/advanced-gutenberg-main.php:911
-#: incl/advanced-gutenberg-main.php:2094
-#: incl/advanced-gutenberg-main.php:3320
-#: incl/advanced-gutenberg-main.php:5925
+#: incl/advanced-gutenberg-main.php:446
+#: incl/advanced-gutenberg-main.php:915
+#: incl/advanced-gutenberg-main.php:2098
+#: incl/advanced-gutenberg-main.php:3364
+#: incl/advanced-gutenberg-main.php:5969
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:446
-#: incl/advanced-gutenberg-main.php:2095
-#: incl/advanced-gutenberg-main.php:3321
+#: incl/advanced-gutenberg-main.php:447
+#: incl/advanced-gutenberg-main.php:2099
+#: incl/advanced-gutenberg-main.php:3365
 #: incl/pages/block-settings.php:133
 msgid "Pro"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:885
+#: incl/advanced-gutenberg-main.php:889
 #, php-format
 msgid "You're using PublishPress Blocks Free. The Pro version has more features and support. %sUpgrade to Pro%s"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1120
-#: incl/advanced-gutenberg-main.php:1246
-#: incl/advanced-gutenberg-main.php:1307
+#: incl/advanced-gutenberg-main.php:1124
+#: incl/advanced-gutenberg-main.php:1250
+#: incl/advanced-gutenberg-main.php:1311
 #: incl/block-styles/block-styles.php:234
 msgid "No permission!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1257
-#: incl/advanced-gutenberg-main.php:1313
-#: incl/advanced-gutenberg-main.php:1373
-#: incl/advanced-gutenberg-main.php:1465
+#: incl/advanced-gutenberg-main.php:1261
+#: incl/advanced-gutenberg-main.php:1317
+#: incl/advanced-gutenberg-main.php:1377
+#: incl/advanced-gutenberg-main.php:1469
 #: incl/block-styles/block-styles.php:241
 msgid "Invalid nonce token!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1261
+#: incl/advanced-gutenberg-main.php:1265
 msgid "Error: wrong data"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1292
+#: incl/advanced-gutenberg-main.php:1296
 msgid "Error: can't edit this feature"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1378
-#: incl/advanced-gutenberg-main.php:1470
-#: incl/advanced-gutenberg-main.php:1523
+#: incl/advanced-gutenberg-main.php:1382
+#: incl/advanced-gutenberg-main.php:1474
+#: incl/advanced-gutenberg-main.php:1527
 msgid "Bad Request!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1386
-#: incl/advanced-gutenberg-main.php:1478
-#: incl/advanced-gutenberg-main.php:1531
+#: incl/advanced-gutenberg-main.php:1390
+#: incl/advanced-gutenberg-main.php:1482
+#: incl/advanced-gutenberg-main.php:1535
 msgid "Server error. Try again later!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1394
-#: incl/advanced-gutenberg-main.php:1486
-#: incl/advanced-gutenberg-main.php:1539
+#: incl/advanced-gutenberg-main.php:1398
+#: incl/advanced-gutenberg-main.php:1490
+#: incl/advanced-gutenberg-main.php:1543
 msgid "Cannot validate captcha"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1399
-#: incl/advanced-gutenberg-main.php:1491
-#: incl/advanced-gutenberg-main.php:1544
+#: incl/advanced-gutenberg-main.php:1403
+#: incl/advanced-gutenberg-main.php:1495
+#: incl/advanced-gutenberg-main.php:1548
 msgid "Captcha validation error"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1424
+#: incl/advanced-gutenberg-main.php:1428
 #: incl/pages/settings/forms.php:24
 msgid "Website Contact"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1430
+#: incl/advanced-gutenberg-main.php:1434
 msgid "You have received a contact from your website."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1433
+#: incl/advanced-gutenberg-main.php:1437
 msgid "Name"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1435
+#: incl/advanced-gutenberg-main.php:1439
 #: incl/block-settings-main.php:808
 #: incl/block-settings-main.php:849
 #: incl/block-settings-main.php:890
 msgid "Email"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1437
+#: incl/advanced-gutenberg-main.php:1441
 msgid "Date"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1439
+#: incl/advanced-gutenberg-main.php:1443
 msgid "Message"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1447
+#: incl/advanced-gutenberg-main.php:1451
 msgid "Error while sending the form. Please try again."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1547
+#: incl/advanced-gutenberg-main.php:1551
 msgid "Captcha validated"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1550
+#: incl/advanced-gutenberg-main.php:1554
 msgid "Captcha is empty"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1865
-#: incl/advanced-gutenberg-main.php:5912
+#: incl/advanced-gutenberg-main.php:1869
+#: incl/advanced-gutenberg-main.php:5956
 msgid "Dashboard"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1872
-#: incl/advanced-gutenberg-main.php:2185
+#: incl/advanced-gutenberg-main.php:1876
+#: incl/advanced-gutenberg-main.php:2189
 #: incl/pages/main.php:21
 msgid "Block Permissions"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1886
+#: incl/advanced-gutenberg-main.php:1883
+#: incl/pages/main.php:31
+msgid "Extra Blocks"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:1890
 #: incl/pages/custom-styles.php:9
 #: incl/pages/main.php:41
 msgid "Block Styles"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1893
+#: incl/advanced-gutenberg-main.php:1897
 #: incl/pages/block-controls.php:30
 #: incl/pages/main.php:51
 msgid "Block Controls"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1900
-#: incl/advanced-gutenberg-main.php:3631
+#: incl/advanced-gutenberg-main.php:1904
+#: incl/advanced-gutenberg-main.php:3675
 #: incl/pages/main.php:61
 msgid "Block Usage"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1907
-#: incl/advanced-gutenberg-main.php:5944
-#: incl/advanced-gutenberg-main.php:5946
+#: incl/advanced-gutenberg-main.php:1911
+#: incl/advanced-gutenberg-main.php:5988
+#: incl/advanced-gutenberg-main.php:5990
 #: incl/pages/main.php:71
 msgid "Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1914
+#: incl/advanced-gutenberg-main.php:1918
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:117
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:155
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:156
@@ -195,113 +198,113 @@ msgstr ""
 msgid "Auto Insert Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1921
-#: incl/advanced-gutenberg-main.php:5918
+#: incl/advanced-gutenberg-main.php:1925
+#: incl/advanced-gutenberg-main.php:5962
 #: incl/pages/settings.php:26
 msgid "Settings"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2160
-#: incl/advanced-gutenberg-main.php:2206
-#: incl/advanced-gutenberg-main.php:2250
-#: incl/advanced-gutenberg-main.php:2286
-#: incl/advanced-gutenberg-main.php:2332
+#: incl/advanced-gutenberg-main.php:2164
+#: incl/advanced-gutenberg-main.php:2210
+#: incl/advanced-gutenberg-main.php:2254
+#: incl/advanced-gutenberg-main.php:2290
+#: incl/advanced-gutenberg-main.php:2336
 #, php-format
 msgid "This feature is disabled. In order to use, please enable back through %sDashboard%s."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2405
+#: incl/advanced-gutenberg-main.php:2409
 #, php-format
 msgid "If you like %sPublishPress Blocks%s please leave us a %s rating. Thank you!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2422
+#: incl/advanced-gutenberg-main.php:2426
 msgid "About PublishPress Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2425
+#: incl/advanced-gutenberg-main.php:2429
 msgid "About"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2432
-#: incl/advanced-gutenberg-main.php:2435
+#: incl/advanced-gutenberg-main.php:2436
+#: incl/advanced-gutenberg-main.php:2439
 msgid "Documentation"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2443
+#: incl/advanced-gutenberg-main.php:2447
 msgid "Contact the PublishPress team"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2446
+#: incl/advanced-gutenberg-main.php:2450
 msgid "Contact"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2454
+#: incl/advanced-gutenberg-main.php:2458
 msgid "PublishPress Blocks logo"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3477
+#: incl/advanced-gutenberg-main.php:3521
 #, php-format
 msgid "%s saved successfully!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3487
+#: incl/advanced-gutenberg-main.php:3531
 #, php-format
 msgid "%s can't be saved. Please try again."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3543
+#: incl/advanced-gutenberg-main.php:3587
 #: incl/pages/block-controls/blocks.php:13
 #: incl/pages/block-settings.php:102
 msgid "Search blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3548
+#: incl/advanced-gutenberg-main.php:3592
 msgid "Enable or disable all blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3561
-#: incl/advanced-gutenberg-main.php:3607
+#: incl/advanced-gutenberg-main.php:3605
+#: incl/advanced-gutenberg-main.php:3651
 #: incl/pages/block-controls/blocks.php:31
 #: incl/pages/block-controls/blocks.php:79
 msgid "To save this configuration, enable at least one block."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3572
-#: incl/advanced-gutenberg-main.php:3596
+#: incl/advanced-gutenberg-main.php:3616
+#: incl/advanced-gutenberg-main.php:3640
 msgid "Save Role Block Permissions"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3576
-#: incl/advanced-gutenberg-main.php:3600
+#: incl/advanced-gutenberg-main.php:3620
+#: incl/advanced-gutenberg-main.php:3644
 msgid "Save Permission for all Roles"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3585
-#: incl/advanced-gutenberg-main.php:3641
+#: incl/advanced-gutenberg-main.php:3629
+#: incl/advanced-gutenberg-main.php:3685
 #: incl/pages/block-controls/blocks.php:56
 msgid "Loading..."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3634
+#: incl/advanced-gutenberg-main.php:3678
 msgid "Scan Block Usage"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3977
-#: incl/advanced-gutenberg-main.php:3978
+#: incl/advanced-gutenberg-main.php:4021
+#: incl/advanced-gutenberg-main.php:4022
 msgid "Block Config"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4037
+#: incl/advanced-gutenberg-main.php:4081
 msgid "Default configuration for this block is not available."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4103
+#: incl/advanced-gutenberg-main.php:4147
 #, php-format
 msgid "Page not found. Go to %sDashboard%s"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4516
+#: incl/advanced-gutenberg-main.php:4560
 #: incl/block-styles/block-styles.php:977
 #: incl/block-styles/block-styles.php:996
 #: incl/block-styles/block-styles.php:1166
@@ -321,141 +324,141 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4530
+#: incl/advanced-gutenberg-main.php:4574
 msgid "Type field not defined"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4805
+#: incl/advanced-gutenberg-main.php:4849
 msgid "User registration is currently not allowed."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4809
+#: incl/advanced-gutenberg-main.php:4853
 msgid "Captcha must be checked!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4810
+#: incl/advanced-gutenberg-main.php:4854
 msgid "Username or password is incorrect!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5945
+#: incl/advanced-gutenberg-main.php:5989
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:198
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:87
 msgid "Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5947
+#: incl/advanced-gutenberg-main.php:5991
 msgid "All Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5948
+#: incl/advanced-gutenberg-main.php:5992
 msgid "Add New"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5949
+#: incl/advanced-gutenberg-main.php:5993
 msgid "Add New Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5950
+#: incl/advanced-gutenberg-main.php:5994
 msgid "Edit Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5951
+#: incl/advanced-gutenberg-main.php:5995
 msgid "New Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5952
+#: incl/advanced-gutenberg-main.php:5996
 msgid "View Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5953
+#: incl/advanced-gutenberg-main.php:5997
 msgid "View Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5954
+#: incl/advanced-gutenberg-main.php:5998
 msgid "Search Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5955
+#: incl/advanced-gutenberg-main.php:5999
 msgid "No reusable blocks found."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5956
+#: incl/advanced-gutenberg-main.php:6000
 msgid "No reusable blocks found in Trash."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5957
+#: incl/advanced-gutenberg-main.php:6001
 msgid "Parent Reusable Block:"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5958
+#: incl/advanced-gutenberg-main.php:6002
 msgid "Reusable Block Archives"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5976
+#: incl/advanced-gutenberg-main.php:6020
 msgid "Reusable Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5977
+#: incl/advanced-gutenberg-main.php:6021
 msgid "Reusable Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5978
+#: incl/advanced-gutenberg-main.php:6022
 msgid "Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5979
+#: incl/advanced-gutenberg-main.php:6023
 msgid "All Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5980
+#: incl/advanced-gutenberg-main.php:6024
 msgid "Edit Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5981
+#: incl/advanced-gutenberg-main.php:6025
 msgid "View Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5982
+#: incl/advanced-gutenberg-main.php:6026
 msgid "Update Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5983
+#: incl/advanced-gutenberg-main.php:6027
 msgid "Add New Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5984
+#: incl/advanced-gutenberg-main.php:6028
 msgid "New Block Category Name"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5985
+#: incl/advanced-gutenberg-main.php:6029
 msgid "Parent Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5986
+#: incl/advanced-gutenberg-main.php:6030
 msgid "Parent Block Category:"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5987
+#: incl/advanced-gutenberg-main.php:6031
 msgid "Search Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5988
+#: incl/advanced-gutenberg-main.php:6032
 msgid "Popular Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5989
+#: incl/advanced-gutenberg-main.php:6033
 msgid "Separate block categories with commas"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5990
+#: incl/advanced-gutenberg-main.php:6034
 msgid "Add or remove block categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5991
+#: incl/advanced-gutenberg-main.php:6035
 msgid "Choose from the most used block categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5992
+#: incl/advanced-gutenberg-main.php:6036
 msgid "No block categories found."
 msgstr ""
 
@@ -504,102 +507,97 @@ msgstr ""
 msgid "Targeting"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:201
-#: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:533
-msgid "Priority"
-msgstr ""
-
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:217
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:216
 msgid "Block not found"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:266
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:265
 #, php-format
 msgid "Post Types: %s"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:284
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:283
 #, php-format
 msgid "Authors: %s"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:325
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:324
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:407
 msgid "January"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:326
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:325
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:408
 msgid "February"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:327
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:326
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:409
 msgid "March"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:328
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:327
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:410
 msgid "April"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:329
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:328
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:411
 msgid "May"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:330
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:329
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:412
 msgid "June"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:331
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:330
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:413
 msgid "July"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:332
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:331
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:414
 msgid "August"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:333
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:332
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:415
 msgid "September"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:334
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:333
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:416
 msgid "October"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:335
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:334
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:417
 msgid "November"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:336
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:335
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:418
 msgid "December"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:343
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:350
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:342
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:349
 #, php-format
 msgid "Post Created in: %s"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:365
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:364
 #, php-format
 msgid "Specific Post IDs: %s"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:380
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:379
 #, php-format
 msgid "Exclude Post IDs: %s"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:385
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:384
 #: incl/block-settings-main.php:344
 #: incl/block-settings-main.php:474
 #: incl/block-settings-main.php:1556
@@ -619,36 +617,36 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:848
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:842
 msgid "Duplicate this auto insert rule"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:849
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:843
 msgid "Duplicate"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:866
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:860
 msgid "Invalid request"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:875
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:869
 msgid "Security check failed"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:881
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:875
 msgid "You do not have permission to duplicate this item"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:891
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:885
 #, php-format
 msgid "Auto insert block duplicated successfully. <a href=\"%s\">Edit the new rule</a>"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:897
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:891
 msgid "Error duplicating auto insert block"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:929
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:923
 #: incl/pages/custom-styles.php:26
 msgid "Copy"
 msgstr ""
@@ -885,6 +883,10 @@ msgstr ""
 msgid "Enter comma-separated post IDs to exclude (e.g., 123,456,789)."
 msgstr ""
 
+#: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:533
+msgid "Priority"
+msgstr ""
+
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:537
 msgid "This option decides which rule runs first if you have multiple rules targeting the same position in a post. For example, 9 will run before 10."
 msgstr ""
@@ -950,6 +952,8 @@ msgstr ""
 #: incl/block-styles/block-styles.php:2232
 #: incl/block-styles/block-styles.php:2301
 #: incl/block-styles/block-styles.php:2388
+#: assets/blocks/tabs/block.jsx:116
+#: assets/blocks/tabs/block.jsx:142
 #: assets/blocks/testimonial/block.jsx:368
 msgid "Background Color"
 msgstr ""
@@ -976,6 +980,8 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1891
 #: incl/block-styles/block-styles.php:2306
 #: incl/block-styles/block-styles.php:2393
+#: assets/blocks/tabs/block.jsx:121
+#: assets/blocks/tabs/block.jsx:147
 msgid "Text Color"
 msgstr ""
 
@@ -1027,6 +1033,7 @@ msgstr ""
 #: incl/block-settings-main.php:1218
 #: incl/block-settings-main.php:1374
 #: incl/block-settings-main.php:1720
+#: assets/blocks/tabs/block.jsx:153
 msgid "Border Settings"
 msgstr ""
 
@@ -1035,6 +1042,7 @@ msgstr ""
 #: incl/block-settings-main.php:1044
 #: incl/block-settings-main.php:1226
 #: incl/block-settings-main.php:1382
+#: assets/blocks/tabs/block.jsx:155
 msgid "Border Style"
 msgstr ""
 
@@ -1048,6 +1056,7 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1418
 #: incl/block-styles/block-styles.php:1446
 #: incl/block-styles/block-styles.php:1474
+#: assets/blocks/tabs/block.jsx:158
 msgid "Solid"
 msgstr ""
 
@@ -1061,6 +1070,7 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1419
 #: incl/block-styles/block-styles.php:1447
 #: incl/block-styles/block-styles.php:1475
+#: assets/blocks/tabs/block.jsx:159
 msgid "Dashed"
 msgstr ""
 
@@ -1074,6 +1084,7 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1420
 #: incl/block-styles/block-styles.php:1448
 #: incl/block-styles/block-styles.php:1476
+#: assets/blocks/tabs/block.jsx:160
 msgid "Dotted"
 msgstr ""
 
@@ -1088,6 +1099,8 @@ msgstr ""
 #: incl/block-settings-main.php:1885
 #: incl/block-styles/block-styles.php:1596
 #: incl/block-styles/block-styles.php:2086
+#: assets/blocks/tabs/block.jsx:165
+#: assets/blocks/tabs/block.jsx:169
 #: assets/blocks/testimonial/block.jsx:373
 msgid "Border Color"
 msgstr ""
@@ -1759,10 +1772,12 @@ msgid "Icon Space"
 msgstr ""
 
 #: incl/block-settings-main.php:952
+#: assets/blocks/summary/block.jsx:325
 msgid "Load minimized"
 msgstr ""
 
 #: incl/block-settings-main.php:957
+#: assets/blocks/summary/block.jsx:331
 msgid "Table of Contents header title"
 msgstr ""
 
@@ -3086,6 +3101,7 @@ msgid "Social Links - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:74
+#: assets/blocks/summary/block.jsx:22
 msgid "Table of Contents - PublishPress"
 msgstr ""
 
@@ -3540,6 +3556,145 @@ msgstr ""
 
 #: install.php:37
 msgid "Please update Gutenberg then comeback later!"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:43
+msgid "Insert Table of Contents"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:72
+msgid "After manually changing the anchor, remember to refresh Table of Contents block to make the links work!"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:269
+msgid "Table of Contents"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:274
+msgid "Your current post/page has no headings. Try add some headings and update this block later"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:279
+msgid "Update"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:316
+msgid "Update Table of Contents"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:323
+msgid "Table of Contents settings"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:333
+msgid "Enter header…"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:338
+#: assets/blocks/summary/block.jsx:342
+msgid "Anchor Color"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:393
+msgid "Show the table of contents of current post/page."
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:399
+msgid "summary"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:399
+msgid "table of content"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:399
+msgid "table of contents"
+msgstr ""
+
+#: assets/blocks/summary/block.jsx:399
+msgid "list"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:112
+msgid "Tab Colors"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:126
+msgid "Active Tab Background Color"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:131
+msgid "Active Tab Text Color"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:138
+msgid "Body Colors"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:176
+msgid "Border width"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:183
+msgid "Border radius"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:213
+msgid "Title…"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:216
+msgid "Remove tab"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:234
+msgid "Add tab"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:238
+msgid "New Tab"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:238
+msgid "Enter your content."
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:263
+msgid "Enter text…"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:296
+msgid "Tab 1"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:297
+#: assets/blocks/tabs/block.jsx:301
+#: assets/blocks/tabs/block.jsx:305
+msgid "Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated."
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:300
+msgid "Tab 2"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:304
+msgid "Tab 3"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:354
+msgid "Tabs (deprecated) - PublishPress"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:355
+msgid "Create horizontal or vertical tabs to display your content."
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:361
+msgid "tabs"
+msgstr ""
+
+#: assets/blocks/tabs/block.jsx:361
+msgid "cards"
 msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:230

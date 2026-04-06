@@ -28,7 +28,7 @@ defined('ABSPATH') || die;
                         ],
                         [
                             'name' => 'enable_advgb_blocks',
-                            'title' => __('PublishPress Blocks', 'advanced-gutenberg'),
+                            'title' => __('Extra Blocks', 'advanced-gutenberg'),
                             'description' => __(
                                 'Enable extra blocks including content displays, sliders, buttons, icons, tabs, accordions, and more.',
                                 'advanced-gutenberg'
