@@ -341,7 +341,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 .mapp-list .mapp-item {
-	align-items: center;
 	border-bottom: 1px solid lightgray;
 	display: flex;
 	cursor: pointer;
@@ -358,12 +357,15 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 .mapp-list .mapp-info {
+	display: flex;
 	flex: 1;
+	flex-direction: column; 
 }
 
 .mapp-list .mapp-info .mapp-template {
 	align-items: center;
 	display: flex;
+	flex: 1;
 }
 
 .mapp-list .mapp-title {
@@ -383,10 +385,6 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	display: flex;
 	justify-content: center;
 	padding: 10px;
-}
-
-.mapp-list .mapp-dir-wrapper {
-	margin-top: 10px;
 }
 
 /* Make directions look like a link */
@@ -722,9 +720,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 /*
 	------------------------------------------------------------------------------------------------------------
-	Infobox
-
-	- This applies only to Infoboxes!  Google standard infoWindow / Leaflet popup use class .mapp-iw instead
+	Infobox (Popup)
 
 	.mapp-ib-wrapper						- positioning element
 		.mapp-ib-content					- box + tip
@@ -1012,16 +1008,11 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	margin-right: 10px;
 }
 
-.mapp-list.mapp-thumb-left .mapp-item {
-	align-items: start;
-}
-
 .mapp-list.mapp-thumb-left .mapp-info .mapp-template {
 	flex-direction: row-reverse;
 }
 
 .mapp-list.mapp-thumb-right .mapp-item {
-	align-items: start;
 	flex-direction: row-reverse;
 }
 

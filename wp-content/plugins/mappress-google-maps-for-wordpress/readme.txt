@@ -6,7 +6,7 @@ Tags: maps, google maps, leaflet, store locator, map plugin
 Requires at least: 5.9.5
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 2.95.3
+Stable tag: 2.95.12
 
 MapPress is the easiest way to add unlimited interactive Google and Leaflet maps to WordPress.
 
@@ -92,6 +92,53 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.95.12 =
+* Changed: save options when tileservice changes
+* Changed: allow 'lon' as synonym for 'lng' when importing
+* Fixed: 'post types' filter not displaying checkboxes correctly
+* Fixed: try to give better errors on import invalid JSON
+
+= 2.95.11 =
+* Fixed: fatal error in wpml module
+
+= 2.95.10 =
+* Fixed: template editor not saving properly
+
+= 2.95.9 = 
+* Fixed: lines attribute not saving in Gutenberg block
+* Fixed: string saving with WPML
+
+= 2.95.8 =
+* Fixed: error in filters dropdown from 2.95.7
+
+= 2.95.7 =
+* Added: travel lines can now be toggled on/off in the map editor
+* Added: Google Material Symbols font for icon editor
+* Added: new WPML integration to allow map POI translation 
+* Changed: remove top margin from 'directions' wrapper div
+* Fixed: error when displaying filters but custom CSS has hidden the header
+* Fixed: scrollbars not restored closing icon editor with escape key
+
+= 2.95.6 = 
+* Added: new setting for 'directions' text for easier change/translation
+* Fixed: error when creating new MapBox style
+* Fixed: Nominatim geocoder was not honoring lat, lng entry
+* Fixed: default google directions to https
+* Changed: removed google directions server URL setting 
+* Changed: adjustments to POI list CSS for padding
+
+= 2.95.5 =
+* Changed: improved merging of queries when using ACF location fields
+* Fixed: Google drawing manager displayed twice on the map
+* Fixed: better error highlighting in settings page
+* Fixed: updated importer to treat input/radio/select fields as strings, checkboxes as arrays
+* Fixed: additional bug fixes for template handling
+
+= 2.95.4 =
+* Added: better error handling for empty/missing template files
+* Changed: move 'mapp_filters_get' query parameter to build version
+* Fixed: scrollbars not restored after dialog box is closed
 
 = 2.95.3 = 
 * Added: JS event on map ready.  See documentation for details.
