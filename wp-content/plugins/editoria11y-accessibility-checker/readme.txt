@@ -1,8 +1,8 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 2.1.7
-Tested up to: 6.9
+Stable tag: 2.1.12
+Tested up to: 7.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,22 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 4. Checker set to dark theme, asking if the whole sentence needs to be in caps lock.
 
 == Changelog ==
+
+= 2.1.12 =
+* Dashboard compatibility with author enumeration blocking security plugins.
+
+= 2.1.11 =
+* Fixes cache buster for the dashboard.
+
+= 2.1.10 =
+* Fixes double-escaping of characters on the dashboard.
+
+= 2.1.9 =
+* Adds actions to modify the reports page.
+* Renames report page to align with Drupal -- "Content Accessibility Report" rather than "Editoria11y."
+
+= 2.1.8 =
+* No code changes, just improved wording for the assertiveness levels configuration settings.
 
 = 2.1.7 =
 * Adds option on the plugin settings page to select between the library's various assertiveness levels: start open for any issues, start open for new issues, always start open, start minimized.
