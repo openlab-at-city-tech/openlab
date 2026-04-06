@@ -82,6 +82,10 @@ class DLM_Admin_Media_Insert {
 		// phpcs:ignore
 		if ( ! empty( $_POST['download_url'] ) && ! empty( $_POST['download_title'] ) && isset( $_POST['quick-add-nonce'] ) && wp_verify_nonce( $_POST['quick-add-nonce'], 'quick-add' ) ) {
 
+			if ( ! current_user_can( 'manage_downloads' ) ) {
+				wp_die( esc_html__( 'You do not have sufficient permissions to perform this action.', 'download-monitor' ) );
+			}
+
 			$url     = esc_url_raw( wp_unslash( $_POST['download_url'] ) );
 			$title   = sanitize_text_field( wp_unslash( $_POST['download_title'] ) );
 			$version = isset( $_POST['download_version'] ) ? sanitize_text_field( wp_unslash( $_POST['download_version'] ) ) : '';

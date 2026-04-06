@@ -290,6 +290,7 @@ return array(
     'WPChill\\DownloadMonitor\\Util\\PageCreator' => $baseDir . '/src/Util/PageCreator.php',
     'WPChill_About_Us' => $baseDir . '/includes/admin/wpchill/class-wpchill-about-us.php',
     'WPChill_Notifications' => $baseDir . '/includes/admin/wpchill/class-wpchill-notifications.php',
+    'WPChill_Remote_Upsells' => $baseDir . '/includes/admin/wpchill/class-wpchill-upsells.php',
     'WPChill_Rest_Api' => $baseDir . '/includes/admin/wpchill/class-wpchill-rest-api.php',
     'WPChill_Welcome' => $baseDir . '/includes/submodules/banner/class-wpchill-welcome.php',
     'WP_DLM' => $baseDir . '/src/DLM.php',

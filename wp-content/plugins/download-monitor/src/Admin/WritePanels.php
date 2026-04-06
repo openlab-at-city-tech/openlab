@@ -633,7 +633,7 @@ class DLM_Admin_Writepanels {
 				// sanatize post data
 				$file_id             = absint( $downloadable_file_id[ $i ] );
 				$file_menu_order     = absint( $downloadable_file_menu_order[ $i ] );
-				$file_version        = strtolower( sanitize_text_field( $downloadable_file_version[ $i ] ) );
+				$file_version        = ( sanitize_text_field( $downloadable_file_version[ $i ] ) );
 				$file_date_hour      = ( ! empty( $downloadable_file_date_hour[ $i ] ) ) ? absint( $downloadable_file_date_hour[ $i ] ) : 0;
 				$file_date_minute    = ! empty( $downloadable_file_date_minute[ $i ] ) ? absint( $downloadable_file_date_minute[ $i ] ) : 0;
 				$file_date           = ! empty( $downloadable_file_date[ $i ] ) ? sanitize_text_field( $downloadable_file_date[ $i ] ) : new DateTime();

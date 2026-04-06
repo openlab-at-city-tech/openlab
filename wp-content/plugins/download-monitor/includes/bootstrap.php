@@ -33,6 +33,9 @@ require_once dirname( DLM_PLUGIN_FILE ) . '/includes/admin/class-dlm-upsells.php
 // load the wpchill notifications.
 require_once dirname( DLM_PLUGIN_FILE ) . '/includes/admin/wpchill/class-wpchill-notifications.php';
 
+// load the wpchill upsells system.
+require_once dirname( DLM_PLUGIN_FILE ) . '/includes/admin/wpchill/class-wpchill-upsells.php';
+
 // include installer functions.
 require_once 'installer-functions.php';
 

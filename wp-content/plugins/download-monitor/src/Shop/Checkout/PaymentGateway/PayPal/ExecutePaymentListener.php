@@ -38,6 +38,7 @@ class ExecutePaymentListener {
 
 		if ( empty( $order_id ) || empty( $order_hash ) ) {
 			$this->execute_failed( $order_id, $order_hash );
+			return;
 		}
 
 		/** @var \WPChill\DownloadMonitor\Shop\Order\Repository $order_repo */
@@ -53,16 +54,41 @@ class ExecutePaymentListener {
 			return;
 		}
 
+		// Verify order_hash against the retrieved order (timing-safe) to prevent IDOR.
+		if ( ! hash_equals( (string) $order->get_hash(), (string) $order_hash ) ) {
+			$this->execute_failed( $order_id, $order_hash );
+			return;
+		}
+
 		/**
-		 * Get payment identifier
+		 * Get payment identifier (PayPal order ID / token)
 		 */
 		$token = '';
 		if ( isset( $_GET['token'] ) ) {
 			$token = sanitize_text_field( wp_unslash( $_GET['token'] ) );
 		}
 
+		if ( empty( $token ) ) {
+			$this->execute_failed( $order_id, $order_hash );
+			return;
+		}
+
+		// Bind token to this order: token must match one of this order's transactions (PayPal order ID).
+		$transactions = $order->get_transactions();
+		$token_belongs_to_order = false;
+		foreach ( $transactions as $transaction ) {
+			if ( hash_equals( (string) $transaction->get_processor_transaction_id(), (string) $token ) ) {
+				$token_belongs_to_order = true;
+				break;
+			}
+		}
+		if ( ! $token_belongs_to_order ) {
+			$this->execute_failed( $order_id, $order_hash );
+			return;
+		}
+
 		/**
-		 * Execute the payement
+		 * Execute the payment
 		 */
 		try {
 
@@ -70,7 +96,15 @@ class ExecutePaymentListener {
 			$capture->set_client( $this->gateway->get_api_context() )
 					->set_order_id( $token );
 
-			$response = $capture->captureOrder();
+			$capture_result = $capture->captureOrder();
+
+			// Handle capture failures safely (e.g. network error, invalid token).
+			if ( null === $capture_result || ! $capture_result->has_response() ) {
+				$this->execute_failed( $order->get_id(), $order->get_hash() );
+				return;
+			}
+
+			$response = $capture_result;
 
 			// if payment is not approved, exit;
 			if ( $response->getStatus() !== "COMPLETED" ) {
@@ -80,11 +114,11 @@ class ExecutePaymentListener {
 			/**
 			 * Update transaction in local database
 			 */
-
-			// update the order status to 'completed'
-			$transactions = $order->get_transactions();
+			// Update the transaction that belongs to this token (already validated above).
+			$transaction_updated = false;
+			$transactions         = $order->get_transactions();
 			foreach ( $transactions as $transaction ) {
-				if ( $transaction->get_processor_transaction_id() == $response->getId() ) {
+				if ( hash_equals( (string) $transaction->get_processor_transaction_id(), (string) $token ) ) {
 					$transaction->set_status( Services::get()->service( 'order_transaction_factory' )->make_status( 'success' ) );
 					$transaction->set_processor_status( $response->getStatus() );
 
@@ -95,9 +129,15 @@ class ExecutePaymentListener {
 					}
 
 					$order->set_transactions( $transactions );
+					$transaction_updated = true;
 					break;
 				}
+			}
 
+			// Only complete the order if we actually updated a matching transaction (prevents token/amount mismatch).
+			if ( ! $transaction_updated ) {
+				$this->execute_failed( $order->get_id(), $order->get_hash() );
+				return;
 			}
 
 			// set order as completed, this also persists the order

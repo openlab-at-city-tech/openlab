@@ -10,6 +10,8 @@ class DLM_Installer {
 	 * Install all requirements for Download Monitor
 	 */
 	public function install() {
+		global $wp_rewrite;
+
 		// Init User Roles
 		$this->init_user_roles();
 
@@ -29,9 +31,6 @@ class DLM_Installer {
 
 		// No Access Page
 		$this->add_no_access_page();
-		// Add endpoints
-		$dlm_download_handler = new DLM_Download_Handler();
-		$dlm_download_handler->add_endpoint();
 
 		// Set default 'No access message'
 		$dlm_no_access_error = get_option( 'dlm_no_access_error', '' );
@@ -53,9 +52,14 @@ class DLM_Installer {
 		update_option( DLM_Constants::OPTION_CURRENT_VERSION, DLM_VERSION );
 		// Update options that may have been moved
 		$this->update_options();
-
 		// add rewrite rules
-		add_rewrite_endpoint( 'download-id', EP_ALL );
+
+		if ( $wp_rewrite ) {
+			// Add endpoints
+			$dlm_download_handler = new DLM_Download_Handler();
+			$dlm_download_handler->add_endpoint();
+			add_rewrite_endpoint( 'download-id', EP_ALL );
+		}
 
 		// flush rewrite rules
 		flush_rewrite_rules( false );
@@ -184,6 +188,10 @@ class DLM_Installer {
 		  PRIMARY KEY (`key`)
 		  )
 	ENGINE = InnoDB {$collate};";
+
+		if ( ! function_exists( 'dbDelta' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
 
 		foreach ( $tables_sql as $sql ) {
 			dbDelta( $sql );
@@ -392,7 +400,7 @@ class DLM_Installer {
 	 *
 	 * @since 5.0.0
 	 */
-	public function recreate_tables(){
+	public function recreate_tables() {
 		$this->install_tables();
 	}
 }

@@ -26,6 +26,15 @@ class CaptureOrder {
 		$this->response = $response;
 	}
 
+	/**
+	 * Whether a response was set (e.g. capture succeeded).
+	 *
+	 * @return bool
+	 */
+	public function has_response() {
+		return isset( $this->response->result );
+	}
+
 	public function getStatus() {
 		return $this->response->result->status;
 	}
@@ -50,7 +59,7 @@ class CaptureOrder {
     public function captureOrder() {
 		try {
 
-			$request = new OrdersCaptureRequest( $this->order_id );
+			$request  = new OrdersCaptureRequest( $this->order_id );
 			$request->body = self::buildRequestBody();
 			$response = $this->client->execute( $request );
 
@@ -59,8 +68,8 @@ class CaptureOrder {
 
 		} catch ( PayPalHttp\HttpException $ex ) {
 
-			//print_r($ex->getMessage());
-
+			// Capture failed (e.g. invalid token, already captured, network error).
+			return null;
 		}
     }
 

@@ -406,6 +406,7 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 				$exclude_tag
 			) : '';
 			$order          = strtoupper( $order );
+			$order          = in_array( $order, array( 'ASC', 'DESC' ), true ) ? $order : 'DESC';
 			$meta_key       = '';
 			$order_by_count = '';
 

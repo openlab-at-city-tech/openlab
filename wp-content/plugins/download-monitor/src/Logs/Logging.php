@@ -159,8 +159,18 @@ class DLM_Logging {
 		$cookie      = 'true' === $_POST['cookie'];
 		$current_url = ( isset( $_POST['currentURL'] ) ) ? esc_url_raw( $_POST['currentURL'] ) : '-';
 		// Set our objects
-		$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
-		$version  = download_monitor()->service( 'version_repository' )->retrieve_single( $version_id );
+		try {
+			$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
+		} catch ( \Exception $e ) {
+			die();
+		}
+
+		try {
+			$version = download_monitor()->service( 'version_repository' )->retrieve_single( $version_id );
+		} catch ( \Exception $e ) {
+			die();
+		}
+
 		$download->set_version( $version );
 		// Truly log the corresponding status
 		$this->log( $download, $version, $status, $cookie, $current_url );

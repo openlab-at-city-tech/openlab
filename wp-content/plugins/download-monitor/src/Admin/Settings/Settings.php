@@ -193,22 +193,6 @@ class DLM_Admin_Settings {
 								'desc'        => __( "The message that will be displayed to visitors when they don't have access to a file.", 'download-monitor' ),
 								'type'        => 'textarea',
 							),
-							array(
-								'name'        => 'dlm_ip_blacklist',
-								'std'         => '192.168.0.0/24',
-								'label'       => __( 'Blacklist IPs', 'download-monitor' ),
-								'desc'        => __( 'List IP Addresses to blacklist, 1 per line. Use IP/CIDR netmask format for ranges. IPv4 examples: <strong>198.51.100.1</strong> or <strong>198.51.100.0/24</strong>. IPv6 examples: <strong>2001:db8::1</strong> or <strong>2001:db8::/32</strong>.', 'download-monitor' ),
-								'placeholder' => '',
-								'type'        => 'textarea',
-							),
-							array(
-								'name'        => 'dlm_user_agent_blacklist',
-								'std'         => 'Googlebot',
-								'label'       => __( 'Blacklist user agents', 'download-monitor' ),
-								'desc'        => __( 'List browser user agents to blacklist, 1 per line.  Partial matches are sufficient. Regex matching is allowed by surrounding the pattern with forward slashes, e.g. <strong>/^Mozilla.+Googlebot/</strong>', 'download-monitor' ),
-								'placeholder' => '',
-								'type'        => 'textarea',
-							),
 						),
 					),
 					'logging'    => array(
