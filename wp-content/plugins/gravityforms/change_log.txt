@@ -1,3 +1,85 @@
+### 2.9.31 | 2026-04-02
+- Added security enhancements.
+- Fixed an issue with new AJAX and multi-page forms where the gform_unique_id input is not populated when the value is generated server-side during pagination.
+- Fixed a JavaScript error that occurs when attempting to delete an uploaded file from a Post Image field.
+- Fixed an issue with the single File Upload field where a file count validation error occurs if the existing file is not removed when a new file is selected.
+- Fixed a broken link on Import Forms page.
+- Fixed an issue where the complex validation message for the Date field used default English labels instead of the customized placeholders.
+- API: deprecated `GFCommon::get_lead_field_display()` and added `GFField::get_value_all_fields_merge_tag()`.
+
+### 2.9.30 | 2026-03-19
+- Added [`gform_field_sidebar_messages`](https://docs.gravityforms.com/gform_field_sidebar_messages/) filter to allow customization of the field sidebar messages in the form editor.
+- Fixed some display issues in the dashboard with WordPress 7.0-beta.
+- Fixed a PHP fatal error that occurs when a payment add-on processes a submission with a choice-based pricing field where the selected choice value includes a pipe character followed by non-numeric characters.
+- Fixed an issue where gravityforms.js could reset the gform.instances object, usually when scripts are optimized by the theme or another plugin, resulting in a JS error on form display or submission.
+- AF: Fixed duplicate `SHOW TABLES LIKE 'wp_gf_addon_feed'` queries.
+- API: Fixed an issue where the form object is included in the REST API form submission response.
+
+### 2.9.29 | 2026-03-10
+- Added security enhancements.
+- Added support for a new notification event (Payment Processing - stale) that allows notifications to be sent when payments are taking an unusually long time to process. This will be initially available in the upcoming Stripe Add-on v.7.0.
+- Added [`gform/ajax/pre_display_confirmation`](https://docs.gravityforms.com/gform-ajax-pre_display_confirmation/) filter to displayConfirmation() in ajax.js.
+- Fixed some display issues in the dashboard with WordPress 7.0-beta.
+- Fixed an issue where saving for later via the save and continue feature is not aborted when honeypot validation fails and the honeypot is set to "Create an entry and mark it as spam".
+- Updated the multi-file upload field trash icon to meet the WCAG 2.1 color contrast standards.
+- Updated form title handling in the form switcher to prevent issues with special characters.
+- API: Fixed field map default choices not populating on new feeds and empty value selection not saving on existing feeds.
+- API: Changed the third parameter of `GFCommon::get_lead_field_display()` from `$currency` (string) to `$entry` (array).
+- API: Changed the second parameter of `GF_Field::get_value_entry_detail()` from `$currency` (string) to `$entry` (array).
+
+### 2.9.28 | 2026-02-19
+- Fixed an issue where the File Upload field includes `gform_hidden` class even when the input is not hidden.
+- Fixed an issue that prevents svgs from displaying in the Orbital theme.
+- Fixed a PHP fatal error that can occur during background task processing if an empty batch hasn't been deleted.
+- Fixed a PHP fatal error that can occur when sending telemetry data.
+- API: Fixed an issue with the `gform.products.getPaymentAmount()` method returning an incorrect value when the total is filtered via the `gform_product_total` filter.
+
+### 2.9.27 | 2026-02-05
+- Fixed an issue that causes incorrect error messages about version requirements when updating network-activated add-ons.
+- Fixed an issue that prevents the merge tag drop down from rendering on the form settings notifications.
+- Fixed an issue that causes console errors when switching from compact view in the form editor.
+- Fixed a PHP fatal error that occurs on submission if the currency input value is modified to an array.
+- Fixed an issue where `gform_is_delayed_pre_process_feed` does not work correctly with the Stripe Payment Element.
+- Fixed an issue where denying all capabilities to admin user role doesn't work with the Members plugin.
+
+### 2.9.26 | 2026-01-22
+- Added Support Request and Square Course Registration form templates to the templates library.
+- Added a hidden input to the form footer with a value of the form's currency code.
+- Updated the `gform/conditionalLogic/applyRules/end` JS action so that if the field being processed is a page or section, the action passes the IDs of the fields within the page or section.
+- Updated CLI detection to ensure JS hooks are loaded when necessary.
+- Fixed a JS console error on the reCAPTCHA settings page in No-Conflict mode.
+- Fixed an issue where the conditional logic and edit choices flyout closes unexpectedly when you release the mouse button outside it.
+- Deprecated the `gform_input_mask_script` filter, which will be removed in Gravity Forms 3.0.
+- API: Updated the frontend feed data to include the product ID mapped to a subscription's setup fee.
+- API: Fixed a layout issue so that the "Card" field type in the Settings API fills the width of the settings page.
+- API: Fixed an issues with the gform.product.getPaymentAmount() method where a dynamically populated hidden product quantity is not taken into account when calculating the amount.
+- API: Added client side logging functionality.
+
+### 2.9.25 | 2026-01-08
+- Added the [`gform_is_feed_error_retryable`](https://docs.gravityforms.com/gform_is_feed_error_retryable/) filter, which can be used to prevent a feed remaining in the queue for another attempt if an error occurred.
+- Added the [`gform_pre_log_message`](https://docs.gravityforms.com/gform_pre_log_message) action hook to allow developers to do an action before a message is logged, whether or not logging is enabled. Credit: Gravity Wiz Team.
+- Added alt attribute to the QR code image in the REST API settings for improved accessibility.
+- Updated `gf_feed_processor()` to accept an optional `$add_on` parameter.
+- Updated the colors of save buttons and error messages throughout the settings pages for improved accessibility.
+- Updated email notifications to no longer use the 'From' email as the default 'From' name if no name is specified.  `From` name will be empty, which lets other plugins such as Gravity SMTP override it.
+- Fixed an issue where a programmatic submission of a multipage form page progresses to the next page when the next button is hidden/disabled by conditional logic.
+- Fixed PHP warnings that occur when editing a page that includes a scheduled form with an end date in the past.
+- Fixed an issue that causes the €, £, Kč, ₪, ¥, RM, zł, ฿ currency symbols to display as a code in the Shipping and Total fields when conditional logic is enabled.
+- Fixed an issue where the entry list would revert back to "all" filter when using the enter key to search within a filtered view (e.g. Trash or Spam).
+- Fixed a PHP warning that occurs when the [`gform_email_field_rejectable_values`](https://docs.gravityforms.com/gform_email_field_rejectable_values/) filter returns a large array of values.
+- Fixed an issue with payment amount calculation that does not take dynamically-populated product prices into account in certain situations.
+- AF: Updated `GFFeedAddOn::maybe_process_feed()` to use separate background processors for each add-on, so pausing the queue on a feed processing error doesn't impact other add-ons.
+
+### 2.9.24 | 2025-12-10
+- Added security enhancements.
+- Updated the background processor to dispatch queued tasks on shutdown to improve performance.
+- Updated messages about functionality that will be removed or deprecated in future versions to 4.0 instead of 3.1, to reflect our new [version numbering system](https://docs.gravityforms.com/version-numbering/).
+- Updated the logic that determines whether an update — including for add-ons — can be installed automatically, to ensure compatibility with the change to the [version numbering system](https://docs.gravityforms.com/version-numbering/).
+- Updated the minimum WordPress version (for support) on the System Status page to 6.8.
+- Fixed deprecation notices for the `seems_utf8()` function in WordPress 6.9.
+- Fixed an issue where some uploaded files are not attached to notifications when stored outside the default form/year/month folders.
+- Removed the invalid maxlength attribute from class-gf-field-time.php.
+
 ### 2.9.23 | 2025-11-25
 - Added a check for minimum requirements compatibility when an update is available.
 - Added a hook for [`gform_before_delete_field`](https://docs.gravityforms.com/gform_before_delete_field/) in the init_ajax() function.

@@ -24,7 +24,7 @@ class GF_Ajax_Handler {
 	 * @since 2.9.0
 	 *
 	 * @deprecated 2.9.9 Use GFAPI::validate_form() instead.
-	 * @remove-in 3.1.0
+	 * @remove-in 4.0
 	 */
 	public function validate_form() {
 
@@ -117,7 +117,13 @@ class GF_Ajax_Handler {
 		$result = \GFAPI::submit_form( $form_id, array(), $field_values, $target_page, $source_page, \GFFormDisplay::SUBMISSION_INITIATED_BY_WEBFORM );
 
 		if ( is_wp_error( $result ) ) {
-			GFCommon::send_json_error( $result->get_error_message() );
+			if ( $result->get_error_code() === 'button_logic_error' ) {
+				$message = esc_html__( 'There was a problem with your submission.', 'gravityforms' ) . ' ' . $result->get_error_message();
+			} else {
+				$message = $result->get_error_message();
+			}
+
+			GFCommon::send_json_error( $message );
 		}
 
 		$form = $result['form'];
@@ -139,6 +145,9 @@ class GF_Ajax_Handler {
 
 			// Getting the field markup for the target page if the form is a multipage form.
 			$result['page_markup'] = \GFFormDisplay::get_page( $form_id, $page_number, $field_values, $theme, $style, $submission_method );
+
+			// Ensure the form UUID is maintained on page changes.
+			$result['form_unique_id'] = \GFFormsModel::get_form_unique_id( $form_id );
 		}
 
 		$result['submission_type'] = $this->get_submission_type( $target_page, $source_page );

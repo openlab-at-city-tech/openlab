@@ -29,7 +29,7 @@ function gformBindFormatPricingFields(){
  * Namespace to store our JavaScript class instances
  */
 
-gform.instances = {};
+gform.instances = gform.instances || {};
 
 //----------------------------------------
 //------ CONSOLE FUNCTIONS ---------------
@@ -710,8 +710,8 @@ function gformDeleteUploadedFile(formId, fieldId, deleteButton){
     var fileId = filePreview.id;
     filePreview.remove();
 
-    //displaying single file upload field
-    parent.find('input[type="file"],.validation_message,#extensions_message_' + formId + '_' + fieldId).removeClass("gform_hidden");
+    //removing the gform_hidden class
+    parent.find('.validation_message,#extensions_message_' + formId + '_' + fieldId).removeClass("gform_hidden");
 
     //displaying post image label
     parent.find(".ginput_post_image_file").show();
@@ -1058,8 +1058,9 @@ function gformGetBasePrice(formId, productFieldId){
         productField = jQuery(".gfield_product" + suffix + " select, .gfield_product" + suffix + " input:checked, .gfield_donation" + suffix + " select, .gfield_donation" + suffix + " input:checked");
         var val = productField.val();
         if(val){
-            val = val.split("|");
-            price = val.length > 1 ? val[1] : 0;
+            const value = gformParseChoiceValue( val );
+            val = value.name;
+            price = value.price || 0;
         }
 
         //If field is hidden by conditional logic, don't count it for the total
@@ -1071,6 +1072,36 @@ function gformGetBasePrice(formId, productFieldId){
     var c = new gform.Currency(gf_global.gf_currency_config);
     price = c.toNumber(price);
     return price === false ? 0 : price;
+}
+
+/**
+ * @function gformParseChoiceValue
+ * @description Parse a choice value into its name and price components.
+ *
+ * @since 2.9.30
+ *
+ * @param {string} value The choice value string in the format "name|price".
+ *
+ * @return {object} Returns an object in the format: { price: PRODUCT_PRICE, name: PRODUCT_NAME }
+ */
+function gformParseChoiceValue( value ) {
+	if ( window.gform?.products?.parser?.parseChoiceValue ) {
+		return window.gform.products.parser.parseChoiceValue( value );
+	}
+
+	if ( ! value ) {
+		return { name: null, price: null };
+	}
+
+	const idx = value.lastIndexOf( '|' );
+	if ( idx === -1 ) {
+		return { name: value, price: null };
+	}
+
+	const name = value.slice( 0, idx );
+	const price = gformToNumber( value.slice( idx + 1 ) );
+
+	return { name, price };
 }
 
 function gformFormatMoney(text, isNumeric){
@@ -1136,11 +1167,10 @@ function gformGetProductIds(parent_class, element){
 }
 
 function gformGetPrice(text){
-    var val = text.split("|");
-    var currency = new gform.Currency(gf_global.gf_currency_config);
+    var val = gformParseChoiceValue( text );
 
-    if(val.length > 1 && currency.toNumber(val[1]) !== false)
-         return currency.toNumber(val[1]);
+    if(val.price)
+         return val.price;
 
     return 0;
 }
@@ -1853,7 +1883,7 @@ function gformInitCurrencyFormatFields(fieldList){
 
 /**
  * @var {Object} GFMergeTag Handles MergeTag Operations.
- * @remove-in 3.1
+ * @remove-in 4.0
  * @deprecated Use gform.mergeTags instead.
  */
 var GFMergeTag = function() {
@@ -1863,7 +1893,7 @@ var GFMergeTag = function() {
 	 * @param inputId The input Id to get the merge tag from. This could be a field id (i.e. 1) or a specific input Id for multi-input fields (i.e. 1.2)
 	 * @param modifier The merge tag modifier to be used. i.e. value, currency, price, etc...
 	 * @returns       Returns a string containing the merge tag value for the specified input Id
-     * @remove-in 3.1
+     * @remove-in 4.0
 	 * @deprecated Use gform.mergeTags.getFieldValue() instead.
 	 */
 	GFMergeTag.getMergeTagValue = function( formId, inputId, modifier ) {
@@ -1888,7 +1918,7 @@ var GFMergeTag = function() {
 	 * @param formId    The current form Id
 	 * @param text      The text containing merge tags
 	 * @returns         Retuns the original "text" strings with all merge tags replaced with the appropriate merge tag values
-     * @remove-in 3.1
+     * @remove-in 4.0
 	 * @deprecated Use gform.mergeTags.replaceMergeTags() instead.
 	 */
 	GFMergeTag.replaceMergeTags = function( formId, text ) {
@@ -1897,7 +1927,7 @@ var GFMergeTag = function() {
 
 	/**
 	 * @deprecated Use gform.mergeTags.formatValue() instead.
-     * @remove-in 3.1
+     * @remove-in 4.0
 	 */
 	GFMergeTag.formatValue = function( value, modifier ) {
 		return gform.mergeTags.formatValue( value, modifier );
@@ -1911,7 +1941,7 @@ var GFMergeTag = function() {
 	 *
 	 * @returns Returns an array with all the merge tags that were matched in the original text
 	 * @deprecated Use gform.mergeTags.parseMergeTags() instead.
-     * @remove-in 3.1
+     * @remove-in 4.0
 	 */
 	GFMergeTag.parseMergeTags = function( text, regEx ) {
 		return gform.mergeTags.parseMergeTags( text, regEx );

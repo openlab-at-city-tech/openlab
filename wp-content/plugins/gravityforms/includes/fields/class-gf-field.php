@@ -595,6 +595,17 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 		// Get the field sidebar messages, this could be an array of messages or a warning message string.
 		$field_sidebar_messages  = GFCommon::is_form_editor() ? $this->get_field_sidebar_messages() : '';
+
+		/**
+		 * Allows the field sidebar messages to be modified.
+		 *
+		 * @since 2.9.30
+		 *
+		 * @param array|string $field_sidebar_messages The field sidebar messages.
+		 * @param GF_Field     $field                  The field object.
+		 */
+		$field_sidebar_messages = $is_form_editor ? apply_filters( 'gform_field_sidebar_messages', $field_sidebar_messages, $this ) : $field_sidebar_messages;
+
 		$sidebar_message_type    = 'warning';
 		$sidebar_message_content = $field_sidebar_messages;
 
@@ -813,7 +824,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 				return false;
 			} elseif ( $this->enablePrice ) {
-				list( $label, $price ) = rgexplode( '|', $value, 2 );
+				list( $label, $price ) = rgexplode( '|', $value, 2, true );
 				$is_empty = ( strlen( trim( $price ) ) <= 0 );
 
 				return $is_empty;
@@ -1184,22 +1195,40 @@ class GF_Field extends stdClass implements ArrayAccess {
 	}
 
 	/**
+	 * Returns the field value formatted for the {all_fields} merge tag (email output).
+	 *
+	 * @since 2.9.31
+	 *
+	 * @param string|array $value    The field value.
+	 * @param array        $entry    The entry.
+	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
+	 *
+	 * @return string|false
+	 */
+	public function get_value_all_fields_merge_tag( $value, $entry, $use_text, $format ) {
+
+		return $this->get_value_entry_detail( $value, $entry, $use_text, $format, 'email' );
+	}
+
+	/**
 	 * Format the entry value for display on the entry detail page and for the {all_fields} merge tag.
 	 *
 	 * Return a value that's safe to display for the context of the given $format.
 	 *
 	 * @since 1.9
 	 * @since 2.9.14 Updated to display an inline error message on the entry detail page for array-based values.
+	 * @since 2.9.29 Changed the second parameter $currency (string) to $entry (array).
 	 *
 	 * @param string|array $value    The field value.
-	 * @param string       $currency The entry currency code.
+	 * @param array        $entry    The entry.
 	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
 	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
 	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
 	 *
 	 * @return string|false
 	 */
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
 
 		if ( is_array( $value ) ) {
 			if ( ! $this->is_entry_detail() ) {
@@ -1318,7 +1347,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$price = '';
 
 		if ( $this->enablePrice ) {
-			$parts = explode( '|', $value );
+			$parts = rgexplode( '|', $value, 2, true );
 			$value = $parts[0];
 
 			if ( ! empty( $parts[1] ) ) {
@@ -1802,6 +1831,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$conditional         = "<span class='gfield-compact-icon--conditional' id='gfield_{$this->id}-conditional-logic-icon' title='" . esc_attr( 'Conditional Logic', 'gravityforms' ) . "' style='display: {$conditional_display}' aria-label=" . esc_html( 'Conditional Logic', 'gravityforms' ) . ">" . GFCommon::get_icon_markup( array( 'icon' => 'gform-icon--conditional-logic' ) ) . "<span class='screen-reader-text'>" . esc_attr( 'This field has conditional logic enabled.', 'gravityforms' ) . "</span></span>";
 
 		$field_sidebar_messages    = $this->get_field_sidebar_messages();
+		$field_sidebar_messages    = GFCommon::is_form_editor() ? apply_filters( 'gform_field_sidebar_messages', $field_sidebar_messages, $this ) : $field_sidebar_messages;
 		$sidebar_message           = is_array( rgar( $field_sidebar_messages, '0' ) ) ? array_shift( $field_sidebar_messages ) : $field_sidebar_messages;
 		$compact_view_sidebar_message_icon = '';
 		if ( ! empty( $sidebar_message ) ) {

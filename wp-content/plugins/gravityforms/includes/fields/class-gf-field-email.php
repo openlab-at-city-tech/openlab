@@ -137,9 +137,9 @@ class GF_Field_Email extends GF_Field {
 	 * @return bool
 	 */
 	public function is_email_rejected( $email ) {
-		$form_id           = absint( $this->formId );
-		$field_id          = absint( $this->id );
-		$field             = $this;
+		$form_id  = absint( $this->formId );
+		$field_id = absint( $this->id );
+		$field    = $this;
 
 		if ( GFCommon::is_preview() ) {
 			$rejectable_values = array();
@@ -170,9 +170,10 @@ class GF_Field_Email extends GF_Field {
 			return false;
 		}
 
-		$pattern = '/' . implode( '|', array_map( 'preg_quote', $rejectable_values ) ) . '/i';
-		if ( preg_match( $pattern, $email ) ) {
-			return true;
+		foreach ( $rejectable_values as $value ) {
+			if ( stripos( $email, $value ) !== false ) {
+				return true;
+			}
 		}
 
 		return false;
@@ -309,7 +310,21 @@ class GF_Field_Email extends GF_Field {
 		}
 	}
 
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	/**
+	 * Format the entry value for display on the entry detail page and for the {all_fields} merge tag.
+	 *
+	 * @since 1.9
+	 * @since 2.9.29 Changed the second parameter $currency (string) to $entry (array).
+	 *
+	 * @param string|array $value    The field value.
+	 * @param array        $entry    The entry.
+	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
+	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
+	 *
+	 * @return string
+	 */
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
 		if ( GFCommon::is_valid_email( $value ) && $format == 'html'  ) {
 			return sprintf( "<a href='mailto:%s'>%s</a>", esc_attr( $value ), esc_html( $value ) );
 		}

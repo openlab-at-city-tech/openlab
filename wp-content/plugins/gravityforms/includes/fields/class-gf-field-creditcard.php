@@ -506,17 +506,33 @@ class GF_Field_CreditCard extends GF_Field {
 
 	}
 
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	/**
+	 * Format the entry value for display on the entry detail page and for the {all_fields} merge tag.
+	 *
+	 * @since 1.9
+	 * @since 2.9.29 Changed the second parameter $currency (string) to $entry (array).
+	 *
+	 * @param string|array $value    The field value.
+	 * @param array        $entry    The entry.
+	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
+	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
+	 *
+	 * @return string
+	 */
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
 
 		if ( is_array( $value ) ) {
 			$card_number = trim( rgget( $this->id . '.1', $value ) );
 			$card_type   = trim( rgget( $this->id . '.4', $value ) );
 			$separator   = $format == 'html' ? '<br/>' : "\n";
-
+			if ( $format === 'html' ) {
+				$card_type   = esc_html( $card_type );
+				$card_number = esc_html( $card_number );
+			}
 			return empty( $card_number ) ? '' : $card_type . $separator . $card_number;
-		} else {
-			return '';
 		}
+		return '';
 	}
 
 	public function get_form_inline_script_on_page_render( $form ) {
@@ -573,13 +589,12 @@ class GF_Field_CreditCard extends GF_Field {
 			$value              = substr( $value, - 4, 4 );
 			$value              = str_pad( $value, $card_number_length, 'X', STR_PAD_LEFT );
 		} elseif ( $input_id == '4' ) {
-
 			$value = rgpost( "input_{$field_id_token}_4" );
 
 			if ( ! $value ) {
 				$card_number = rgpost( "input_{$field_id_token}_1" );
 				$card_type   = GFCommon::get_card_type( $card_number );
-				$value       = $card_type ? $card_type['name'] : '';
+				$value       = $card_type ? strip_tags( $card_type['name'] ) : '';
 			}
 		} else {
 			$value = '';

@@ -522,8 +522,9 @@ class GF_Field_FileUpload extends GF_Field {
 					'multipart'           => true,
 					'urlstream_upload'    => false,
 					'multipart_params'    => array(
-						'form_id'  => $form_id,
-						'field_id' => $id,
+						'form_id'                                   => $form_id,
+						'field_id'                                  => $id,
+						"_gform_file_upload_nonce_{$form_id}_{$id}" => wp_create_nonce( "gform_file_upload_{$form_id}_{$id}" ),
 					),
 					'gf_vars'             => array(
 						'max_files'             => $max_files,
@@ -531,10 +532,6 @@ class GF_Field_FileUpload extends GF_Field {
 						'disallowed_extensions' => $disallowed_extensions,
 					),
 				);
-
-				if ( GFCommon::form_requires_login( $form ) ) {
-					$plupload_init['multipart_params'][ '_gform_file_upload_nonce_' . $form_id ] = wp_create_nonce( 'gform_file_upload_' . $form_id, '_gform_file_upload_nonce_' . $form_id );
-				}
 			}
 
 			$plupload_init = gf_apply_filters( array( 'gform_plupload_settings', $form_id ), $plupload_init, $form_id, $this );
@@ -623,7 +620,7 @@ class GF_Field_FileUpload extends GF_Field {
 				$file_index         = intval( $file_index );
 				$file_url           = esc_attr( $file_url );
 				$display_file_url   = GFCommon::truncate_url( $file_url );
-				$file_url           = $this->get_download_url( $file_url );
+				$file_url           = $this->get_download_url( $file_url, false, $lead_id );
 
 				$preview .= "<div id='preview_file_{$file_index}' class='ginput_preview'>
 								<a href='{$file_url}' target='_blank' aria-label='{$view_file_text}'>{$display_file_url}</a>
@@ -639,41 +636,11 @@ class GF_Field_FileUpload extends GF_Field {
 			$files = $this->get_submission_files_for_preview();
 
 			if ( ! empty( $files ) ) {
-				$preview   = sprintf( "<div id='%s' class='ginput_preview_list'>", $file_list_id );
+				$preview = sprintf( "<div id='%s' class='ginput_preview_list'>", $file_list_id );
 				foreach ( $files as $file_info ) {
-
-					if ( GFCommon::is_legacy_markup_enabled( $form ) ) {
-						$file_upload_markup = "<img alt='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' class='gform_delete' src='" . GFCommon::get_base_url() . "/images/delete.png' onclick='gformDeleteUploadedFile({$form_id}, {$id}, this);' onkeypress='gformDeleteUploadedFile({$form_id}, {$id}, this);' /> <strong>" . esc_html( $file_info['uploaded_filename'] ) . '</strong>';
-					} else {
-						$file_upload_markup = sprintf( '<span class="gfield_fileupload_filename">%s</span>', esc_html( $file_info['uploaded_filename'] ) );
-						// TODO: get file size $file_upload_markup .= sprintf( '<span class="gfield_fileupload_filesize">%s</span>', esc_html( $file_info['uploaded_filesize'] ) );
-						$file_upload_markup .= '<span class="gfield_fileupload_progress gfield_fileupload_progress_complete"><span class="gfield_fileupload_progressbar"><span class="gfield_fileupload_progressbar_progress" style="width: 100%;"></span></span><span class="gfield_fileupload_percent">100%</span></span>';
-						$file_upload_markup .= sprintf(
-							'<button class="gform_delete_file gform-theme-button gform-theme-button--simple" onclick="gformDeleteUploadedFile( %d, %d, this );"><span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">%s: %s</span></button>',
-							$form_id,
-							$id,
-							esc_html__( 'Delete this file', 'gravityforms' ),
-							esc_html( $file_info['uploaded_filename'] )
-						);
-					}
-
-					/**
-					 * Modify the HTML for the Multi-File Upload "preview."
-					 *
-					 * @since Unknown
-					 *
-					 * @param string $file_upload_markup The current HTML for the field.
-					 * @param array  $file_info          Details about the file uploaded.
-					 * @param int    $form_id            The current Form ID.
-					 * @param int    $id                 The current Field ID.
-					 */
-					$file_upload_markup = apply_filters( 'gform_file_upload_markup', $file_upload_markup, $file_info, $form_id, $id );
-					$preview           .= sprintf( "<div id='%s' class='ginput_preview'>%s</div>", esc_attr( rgar( $file_info, 'id' ) ), $file_upload_markup );
+					$preview .= $this->get_file_preview_markup( $file_info, $form );
 				}
 				$preview .= '</div>';
-				if ( ! $multiple_files ) {
-					$upload = str_replace( " class='", " class='gform_hidden ", $upload );
-				}
 
 				return "<div class='ginput_container ginput_container_fileupload'>" . $upload . " {$preview}</div>";
 			} else {
@@ -683,6 +650,50 @@ class GF_Field_FileUpload extends GF_Field {
 				return "<div class='ginput_container ginput_container_fileupload'>$upload $preview</div>";
 			}
 		}
+	}
+
+	/**
+	 * Returns the file preview HTML for the given uploaded file.
+	 *
+	 * @since 2.9.31
+	 *
+	 * @param array $file The uploaded file details.
+	 * @param array $form The current form.
+	 *
+	 * @return string
+	 */
+	public function get_file_preview_markup( $file, $form ) {
+		$form_id = absint( rgar( $form, 'id' ) );
+		$id      = absint( $this->id );
+
+		if ( GFCommon::is_legacy_markup_enabled( $form ) ) {
+			$markup = "<img alt='" . esc_attr__( 'Delete file', 'gravityforms' ) . "' class='gform_delete' src='" . GFCommon::get_base_url() . "/images/delete.png' onclick='gformDeleteUploadedFile({$form_id}, {$id}, this);' onkeypress='gformDeleteUploadedFile({$form_id}, {$id}, this);' /> <strong>" . esc_html( rgar( $file, 'uploaded_filename' ) ) . '</strong>';
+		} else {
+			$markup = sprintf( '<span class="gfield_fileupload_filename">%s</span>', esc_html( rgar( $file, 'uploaded_filename' ) ) );
+			// TODO: get file size $markup .= sprintf( '<span class="gfield_fileupload_filesize">%s</span>', esc_html( rgar( $file, 'uploaded_filesize' ) ) );
+			$markup .= '<span class="gfield_fileupload_progress gfield_fileupload_progress_complete"><span class="gfield_fileupload_progressbar"><span class="gfield_fileupload_progressbar_progress" style="width: 100%;"></span></span><span class="gfield_fileupload_percent">100%</span></span>';
+			$markup .= sprintf(
+				'<button class="gform_delete_file gform-theme-button gform-theme-button--simple" onclick="gformDeleteUploadedFile( %d, %d, this );"><span class="dashicons dashicons-trash" aria-hidden="true"></span><span class="screen-reader-text">%s: %s</span></button>',
+				$form_id,
+				$id,
+				esc_html__( 'Delete this file', 'gravityforms' ),
+				esc_html( rgar( $file, 'uploaded_filename' ) )
+			);
+		}
+
+		/**
+		 * Modify the HTML for the uploaed file preview.
+		 *
+		 * @since Unknown
+		 *
+		 * @param string $markup  The file preview HTML.
+		 * @param array  $file    Details about the uploaded file.
+		 * @param int    $form_id The current Form ID.
+		 * @param int    $id      The current Field ID.
+		 */
+		$markup = apply_filters( 'gform_file_upload_markup', $markup, $file, $form_id, $id );
+
+		return sprintf( "<div id='%s' class='ginput_preview'>%s</div>", esc_attr( rgar( $file, 'id' ) ), $markup );
 	}
 
 	/**
@@ -781,7 +792,7 @@ class GF_Field_FileUpload extends GF_Field {
 	 *
 	 * @since 2.7.4
 	 * @deprecated 2.9.18
-	 * @remove-in 3.1
+	 * @remove-in 4.0
 	 *
 	 * @param $input_name
 	 * @param $key
@@ -1155,7 +1166,7 @@ class GF_Field_FileUpload extends GF_Field {
 		if ( ! empty( $file_path ) ) {
 			//displaying thumbnail (if file is an image) or an icon based on the extension
 			$thumb     = GFEntryList::get_icon_url( $file_path );
-			$file_path = $this->get_download_url( $file_path );
+			$file_path = $this->get_download_url( $file_path, false, rgar( $entry, 'id' ) );
 			$file_path = esc_attr( $file_path );
 			$value = "<a href='$file_path' target='_blank'><span class='screen-reader-text'>" . esc_html__( 'View the image', 'gravityforms' ) . "</span><span class='screen-reader-text'>" . esc_html__( '(opens in a new tab)', 'gravityforms' ) . "</span><img src='$thumb' alt='' /></a>";
 		}
@@ -1166,16 +1177,17 @@ class GF_Field_FileUpload extends GF_Field {
 	 * Format the entry value for display on the entry detail page and for the {all_fields} merge tag.
 	 *
 	 * @since 2.9.18 Updated to use $this->get_file_name_from_url().
+	 * @since 2.9.29 Changed the second parameter $currency (string) to $entry (array).
 	 *
 	 * @param string|array $value    The field value.
-	 * @param string       $currency The entry currency code.
+	 * @param array        $entry    The entry.
 	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
 	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text, or url.
 	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
 	 *
 	 * @return string|false
 	 */
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
 		if ( empty( $value ) ) {
 			return '';
 		}
@@ -1188,9 +1200,10 @@ class GF_Field_FileUpload extends GF_Field {
 			$files = array_filter( array( $value ) );
 		}
 
-		$force_download = in_array( 'download', $this->get_modifiers() );
-
 		if ( ! empty( $files ) ) {
+			$force_download = in_array( 'download', $this->get_modifiers() );
+			$entry_id       = rgar( $entry, 'id' );
+
 			foreach ( $files as $file_path ) {
 				if ( is_array( $file_path ) ) {
 					$basename  = rgar( $file_path, 'uploaded_name' );
@@ -1199,7 +1212,7 @@ class GF_Field_FileUpload extends GF_Field {
 					$basename = rgar( $this->get_file_name_from_url( $file_path ), 'sanitized', $file_path );
 				}
 
-				$file_path = $this->get_download_url( $file_path, $force_download );
+				$file_path = $this->get_download_url( $file_path, $force_download, $entry_id );
 
 				/**
 				 * Allow for override of SSL replacement
@@ -1267,6 +1280,7 @@ class GF_Field_FileUpload extends GF_Field {
 		}
 
 		$force_download = in_array( 'download', $this->get_modifiers() );
+		$entry_id       = rgar( $entry, 'id' );
 
 		$files = json_decode( $raw_value, true );
 		if ( ! is_array( $files ) ) {
@@ -1277,7 +1291,7 @@ class GF_Field_FileUpload extends GF_Field {
 			if ( is_array( $file ) ) {
 				$file = rgar( $file, 'tmp_url' );
 			}
-			$file = str_replace( ' ', '%20', $this->get_download_url( $file, $force_download ) );
+			$file = str_replace( ' ', '%20', $this->get_download_url( $file, $force_download, $entry_id ) );
 			if ( $esc_html ) {
 				$file = esc_html( $file );
 			}
@@ -1356,15 +1370,16 @@ class GF_Field_FileUpload extends GF_Field {
 	/**
 	 * Returns the download URL for a file. The URL is not escaped for output.
 	 *
-	 * @since  2.0
-	 * @access public
+	 * @since 2.0
+	 * @since 2.9.29 Added the $entry_id param.
 	 *
 	 * @param string $file           The complete file URL.
 	 * @param bool   $force_download If the download should be forced. Defaults to false.
+	 * @param int    $entry_id       The entry ID. Optional.
 	 *
 	 * @return string
 	 */
-	public function get_download_url( $file, $force_download = false ) {
+	public function get_download_url( $file, $force_download = false, $entry_id = 0 ) {
 		$download_url = $file;
 
 		$secure_download_location = true;
@@ -1411,11 +1426,17 @@ class GF_Field_FileUpload extends GF_Field {
 				'gf-download' => urlencode( $file ),
 				'form-id'     => $this->formId,
 				'field-id'    => $this->id,
-				'hash'        => GFCommon::generate_download_hash( $this->formId, $this->id, $file ),
+				'entry-id'    => absint( $entry_id ),
+				'hash'        => GFCommon::generate_download_hash( $this->formId, $this->id, $file, $entry_id ),
 			);
 			if ( $force_download ) {
 				$args['dl'] = 1;
 			}
+
+			if ( empty( $args['entry-id'] ) ) {
+				unset( $args['entry-id'] );
+			}
+
 			$download_url = add_query_arg( $args, $download_url );
 		}
 
