@@ -250,6 +250,12 @@ public function setMap_event($a_map_event){
 public function setTaxonomy($a_tagged_filter_type){
 // CVE-2024-3604
   $this->tagged_filter_type = sanitize_text_field($a_tagged_filter_type);  
+
+  if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $this->tagged_filter_type)) {
+    Osm::traceText(DEBUG_ERROR, "tagged_filter_type Error");
+    $this->tagged_filter_type = 'osm_all'; // Standardwert setzen
+  }
+  
 }
 
 public function setMapAttr($a_attribution){
@@ -259,6 +265,15 @@ public function setMapAttr($a_attribution){
   else {
     $this->attribution = 1;
   }
+}
+
+public function setSetupMapName($name) {
+    $name = wp_unslash( $name );
+    if ( ! preg_match( '/^[a-zA-Z0-9_\-]+$/', $name ) ) {
+        Osm::traceText(DEBUG_ERROR, 'Invalid setup_map_name: ' . $name );
+        $name = 'osm_map';
+    }
+    $this->setup_map_name = $name;
 }
 
 public function setMapBorder($a_map_border){
@@ -291,6 +306,7 @@ public function setMapBorder($a_map_border){
     $this->setTaxonomy($a_tagged_filter_type);
     $this->setMapZoom($a_zoom);
     $this->setMapAttr($attribution);
+    $this->setSetupMapName($setup_map_name);
     $this->setMapBorder($a_map_border);
 }
 
