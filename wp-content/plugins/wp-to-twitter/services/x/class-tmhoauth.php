@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 

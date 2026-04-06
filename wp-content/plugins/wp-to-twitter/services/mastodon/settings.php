@@ -5,7 +5,7 @@
  * @category Mastodon
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.xposterpro.com
  */
 
@@ -141,7 +141,7 @@ function wtt_connect_mastodon( $auth = false ) {
 				<li><?php echo esc_html_e( 'Click on "New application".', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Name your application.', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Add your website URL', 'wp-to-twitter' ); ?></li>
-				<li><?php echo esc_html_e( 'Set the API Scopes for your application. Required: <code>read</code>, <code>write:statuses</code> and <code>write:media</code>.', 'wp-to-twitter' ); ?></li>
+				<li><?php echo wp_kses_post( 'Set the API Scopes for your application. Required: <code>read</code>, <code>write:statuses</code> and <code>write:media</code>.', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Submit your application.', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Select your application from the list of "Your Applications."', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Copy your Access Token', 'wp-to-twitter' ); ?></li>

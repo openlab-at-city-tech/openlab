@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -79,7 +79,7 @@ function wpt_set_log( $data, $id, $message, $http = '200' ) {
 			'http'    => (string) $http,
 		);
 		delete_transient( $id . '_' . $data );
-		set_transient( $id . '_' . $data, $message );
+		set_transient( $id . '_' . $data, $message, 300 );
 	}
 	delete_transient( $data . '_last' );
 	set_transient( $data . '_last', array( $id, $message ), 300 );
@@ -104,6 +104,26 @@ function wpt_get_log( $data, $id ) {
 
 	return $log;
 }
+
+/**
+ * Clean up status update logs. Run once on admin load.
+ *
+ * @param int $id Post ID.
+ */
+function wpt_clean_logs( $id ) {
+	$cleaned = get_option( 'wpt_logs_cleaned', 'false' );
+	if ( 'false' === $cleaned ) {
+		// one-time bulk remove logs that missed transient expiration.
+		global $wpdb;
+		$query = $wpdb->get_results( $wpdb->prepare( 'SELECT option_id FROM ' . $wpdb->options . ' WHERE option_name LIKE %s', '%wpt_status_message%' ) );
+
+		foreach ( $query as $result ) {
+			$wpdb->delete( $wpdb->options, array( 'option_id' => $result->option_id ), array( '%d' ) );
+		}
+		update_option( 'wpt_logs_cleaned', 'true' );
+	}
+}
+add_action( 'admin_init', 'wpt_clean_logs' );
 
 /**
  * Test function to see whether options are functioning.
