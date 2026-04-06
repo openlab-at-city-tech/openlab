@@ -4,10 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1730544c896394ef2203f2d3c727e3d7
+class ComposerStaticInit7460e3b88c77139583bebf977199b732
 {
     public static $prefixLengthsPsr4 = array (
-        'T' => 
+        'T' =>
         array (
             'Tribe\\' => 6,
             'TEC\\Event_Automator\\' => 20,
@@ -38,126 +38,126 @@ class ComposerStaticInit1730544c896394ef2203f2d3c727e3d7
             'TEC\\Common\\Firebase\\JWT\\' => 24,
             'TEC\\Common\\' => 11,
         ),
-        'S' => 
+        'S' =>
         array (
             'ScssPhp\\ScssPhp\\' => 16,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Tribe\\' => 
+        'Tribe\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Tribe',
         ),
-        'TEC\\Event_Automator\\' => 
+        'TEC\\Event_Automator\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Common/Event_Automator',
         ),
-        'TEC\\Common\\lucatume\\DI52\\' => 
+        'TEC\\Common\\lucatume\\DI52\\' =>
         array (
             0 => __DIR__ . '/..' . '/lucatume/di52/src',
         ),
-        'TEC\\Common\\TrustedLogin\\' => 
+        'TEC\\Common\\TrustedLogin\\' =>
         array (
             0 => __DIR__ . '/..' . '/trustedlogin/client/src',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Views\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/views',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/assets',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/admin-views',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/views',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/resources',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry',
         ),
-        'TEC\\Common\\StellarWP\\Shepherd\\' => 
+        'TEC\\Common\\StellarWP\\Shepherd\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/shepherd/src',
         ),
-        'TEC\\Common\\StellarWP\\Schema\\' => 
+        'TEC\\Common\\StellarWP\\Schema\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/schema/src/Schema',
         ),
-        'TEC\\Common\\StellarWP\\SchemaModels\\' => 
+        'TEC\\Common\\StellarWP\\SchemaModels\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/schema-models/src',
         ),
-        'TEC\\Common\\StellarWP\\Models\\' => 
+        'TEC\\Common\\StellarWP\\Models\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/models/src/Models',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => 
+        'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/assets/js',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => 
+        'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/admin-views',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\' => 
+        'TEC\\Common\\StellarWP\\Installer\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/Installer',
         ),
-        'TEC\\Common\\StellarWP\\DB\\' => 
+        'TEC\\Common\\StellarWP\\DB\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/db/src/DB',
         ),
-        'TEC\\Common\\StellarWP\\ContainerContract\\' => 
+        'TEC\\Common\\StellarWP\\ContainerContract\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/container-contract/src',
         ),
-        'TEC\\Common\\StellarWP\\Assets\\' => 
+        'TEC\\Common\\StellarWP\\Assets\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/assets/src/Assets',
         ),
-        'TEC\\Common\\StellarWP\\Arrays\\' => 
+        'TEC\\Common\\StellarWP\\Arrays\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/arrays/src/Arrays',
         ),
-        'TEC\\Common\\StellarWP\\AdminNotices\\' => 
+        'TEC\\Common\\StellarWP\\AdminNotices\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/admin-notices/src',
         ),
-        'TEC\\Common\\Psr\\Log\\' => 
+        'TEC\\Common\\Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'TEC\\Common\\Psr\\Container\\' => 
+        'TEC\\Common\\Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'TEC\\Common\\Monolog\\' => 
+        'TEC\\Common\\Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'TEC\\Common\\Firebase\\JWT\\' => 
+        'TEC\\Common\\Firebase\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
-        'TEC\\Common\\' => 
+        'TEC\\Common\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Common',
         ),
-        'ScssPhp\\ScssPhp\\' => 
+        'ScssPhp\\ScssPhp\\' =>
         array (
             0 => __DIR__ . '/..' . '/scssphp/scssphp/src',
         ),
@@ -170,9 +170,9 @@ class ComposerStaticInit1730544c896394ef2203f2d3c727e3d7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1730544c896394ef2203f2d3c727e3d7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1730544c896394ef2203f2d3c727e3d7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1730544c896394ef2203f2d3c727e3d7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7460e3b88c77139583bebf977199b732::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7460e3b88c77139583bebf977199b732::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7460e3b88c77139583bebf977199b732::$classMap;
 
         }, null, ClassLoader::class);
     }
