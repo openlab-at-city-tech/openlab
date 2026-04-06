@@ -8,10 +8,10 @@
  * Plugin Name:       Content Aware Sidebars
  * Plugin URI:        https://dev.institute/wordpress-sidebars/
  * Description:       Unlimited custom sidebars and widget areas for any post, page, category etc.
- * Version:           3.21.2
+ * Version:           3.21.3
  * Author:            DEV Institute
  * Author URI:        https://dev.institute
- * Requires at least: 5.5
+ * Requires at least: 5.6
  * Requires PHP:      7.1
  * Text Domain:       content-aware-sidebars
  * Domain Path:       /lang/
@@ -43,7 +43,7 @@ if (!class_exists('CAS_App')) {
     // Load dependencies
     $cas_dir_path = plugin_dir_path(__FILE__);
 
-    require $cas_dir_path . 'lib/wp-content-aware-engine/bootstrap.php';
+    require $cas_dir_path . 'lib/wp-content-aware-engine/start.php';
     require $cas_dir_path . 'lib/wp-db-updater/wp-db-updater.php';
     require $cas_dir_path . 'app.php';
     require $cas_dir_path . 'lib/wp-pointer-tour/wp-pointer-tour.php';

@@ -119,8 +119,10 @@ class WPCAModule_taxonomy extends WPCAModule_Base
             }
         } elseif (is_tax() || is_category() || is_tag()) {
             $term = get_queried_object();
-            $this->post_taxonomies[] = $term->taxonomy;
-            $this->post_terms[] = $term;
+            if($term instanceof WP_Term) {
+                $this->post_taxonomies[] = $term->taxonomy;
+                $this->post_terms[] = $term;
+            }
         }
 
         return $this->post_taxonomies;
