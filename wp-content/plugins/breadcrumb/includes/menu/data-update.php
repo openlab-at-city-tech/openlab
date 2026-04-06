@@ -21,7 +21,7 @@ $breadcrumb_info = get_option('breadcrumb_info');
     <h2>
         <?php
         /* translators: %s: Plugin Name */
-        echo sprintf(__('%s Data - Update', 'breadcrumb'), breadcrumb_plugin_name); ?>
+        echo esc_html(sprintf(__('%s Data - Update', 'breadcrumb'), breadcrumb_plugin_name)); ?>
     </h2>
     <?php
 
@@ -40,7 +40,7 @@ $breadcrumb_info = get_option('breadcrumb_info');
     ?>
         <p>
             <?php
-            echo 'Settings updated for ' . $postType;
+            echo esc_html('Settings updated for ' . $postType);
             ?>
         </p>
     <?php

@@ -50,7 +50,7 @@ function breadcrumb_main_items($atts)
             $link = apply_filters('breadcrumb_link_url', $link);
 
             if (!empty($title)) {
-                ?><li><a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url_raw($link); ?>"><span><?php echo wp_kses_post($title); ?></span></a><span class="separator"><?php echo wp_kses_post($breadcrumb_separator); ?></span></li>
+                ?><li><a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url($link); ?>"><span><?php echo wp_kses_post($title); ?></span></a><span class="separator"><?php echo wp_kses_post($breadcrumb_separator); ?></span></li>
     <?php
             }
         }
@@ -80,7 +80,7 @@ function breadcrumb_main_items($atts)
                             "@type": "ListItem",
                             "position": <?php echo esc_attr($i); ?>,
                             "item": {
-                                "@id": "<?php echo esc_url_raw($link); ?>",
+                                "@id": "<?php echo esc_url($link); ?>",
                                 "name": "<?php echo wp_kses_post($title); ?>"
                             }
                         }
@@ -106,6 +106,8 @@ function breadcrumb_main_items($atts)
         function breadcrumb_main_style_css()
         {
 
+global $breadcrumbCss;
+
             $breadcrumb_font_size = get_option('breadcrumb_font_size');
             $breadcrumb_link_color = get_option('breadcrumb_link_color', '#fff');
             $breadcrumb_separator_color = get_option('breadcrumb_separator_color');
@@ -122,29 +124,26 @@ function breadcrumb_main_items($atts)
             $breadcrumb_display_last_separator = get_option('breadcrumb_display_last_separator');
             $breadcrumb_themes = get_option('breadcrumb_themes', 'theme5');
 
+ob_start();
 ?>
-    <style type="text/css">
+
         .breadcrumb-container {
             font-size: 13px;
         }
-
         .breadcrumb-container ul {
             margin: 0;
             padding: 0;
         }
-
         .breadcrumb-container li {
             box-sizing: unset;
             display: inline-block;
             margin: 0;
             padding: 0;
         }
-
         .breadcrumb-container li a {
             box-sizing: unset;
             padding: 0 10px;
         }
-
         .breadcrumb-container {
             <?php if (!empty($breadcrumb_font_size)): ?>font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
             <?php endif; ?><?php if (!empty($breadcrumb_padding)): ?>padding: <?php echo esc_attr($breadcrumb_padding); ?>;
@@ -164,37 +163,65 @@ function breadcrumb_main_items($atts)
             <?php endif; ?><?php if (!empty($breadcrumb_font_size)): ?>font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
             <?php endif; ?>
         }
-
         .breadcrumb-container li:last-child .separator {
             display: none;
         }
-    </style>
 <?php
 
+$style = ob_get_clean();
+
+
             $themes_css = breadcrumb_themes_css($breadcrumb_themes);
+            $breadcrumb_custom_css = get_option('breadcrumb_custom_css');
 
-            //To Code reviewers
-            // no need escape here we have already done for each variable above
+$style = $style . $themes_css;
 
-            echo ($themes_css);
+$breadcrumbCss = $style . $breadcrumb_custom_css;
+
+            
         }
 
 
 
         add_action('breadcrumb_main_end', 'breadcrumb_main_custom_scripts');
 
+
+
+function breadcrumb_inline_css() {
+
+global $breadcrumbCss;
+
+
+
+    if ( empty( $breadcrumbCss ) ) {
+        return;
+    }
+
+
+
+    wp_register_style( 'breadcrumb-style', false );
+    wp_enqueue_style( 'breadcrumb-style' );
+
+
+    wp_add_inline_style( 'breadcrumb-style', $breadcrumbCss );
+}
+add_action( 'wp_footer', 'breadcrumb_inline_css' );
+
+
+
+
+
+
+
+
+
         function breadcrumb_main_custom_scripts()
         {
 
             $breadcrumb_custom_js = get_option('breadcrumb_custom_js');
-            $breadcrumb_custom_css = get_option('breadcrumb_custom_css');
 
 ?>
-    <style type="text/css">
-        <?php
-            echo wp_kses_post($breadcrumb_custom_css);
-        ?>
-    </style>
+   
     <script>
         <?php
             echo esc_js($breadcrumb_custom_js);

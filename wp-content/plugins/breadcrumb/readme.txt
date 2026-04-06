@@ -3,8 +3,8 @@
 	Donate link: https://pickplugins.com/breadcrumb/
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 6.8
-	Stable tag: 1.5.51
+	Tested up to: 6.9
+	Stable tag: 1.5.54
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,16 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+
+	= 1.5.54 =
+    * 2025-12-17 - fix - Broken builder settings page issue fixed.
+
+	= 1.5.53 =
+    * 2025-12-12 - fix - Escapicing issue fixed.
+
+	= 1.5.52 =
+    * 2025-12-05 - fix - Admin settings class escapig issue fixed
 
 	= 1.5.51 =
     * 2025-11-29 - fix - Escapicing issue fixed.

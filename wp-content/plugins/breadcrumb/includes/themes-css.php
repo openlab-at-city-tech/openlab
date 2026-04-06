@@ -15,7 +15,6 @@ function breadcrumb_themes_css($theme){
 
     ob_start();
     ?>
-    <style type="text/css">
         .breadcrumb-container.theme1 li {
             margin: 0;
             padding: 0;
@@ -27,7 +26,6 @@ function breadcrumb_themes_css($theme){
             padding: 5px 10px;
             text-decoration: none;
         }
-    </style>
     <?php
 
     $breadcrumb_themes_css['theme1'] = ob_get_clean();
@@ -36,7 +34,6 @@ function breadcrumb_themes_css($theme){
     ob_start();
 
     ?>
-    <style type="text/css">
         .breadcrumb-container.theme2 li {
             margin: 0;
             padding: 0;
@@ -50,7 +47,6 @@ function breadcrumb_themes_css($theme){
             padding: 5px 10px;
             text-decoration: none;
         }
-    </style>
     <?php
 
     $breadcrumb_themes_css['theme2'] = ob_get_clean();
@@ -60,14 +56,10 @@ function breadcrumb_themes_css($theme){
     ob_start();
 
     ?>
-    <style type="text/css">
-
         .breadcrumb-container.theme3 li {
             margin: 0;
             padding: 0;
         }
-
-
         .breadcrumb-container.theme3 a {
             background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             border-top: 1px solid rgb(139, 139, 139);
@@ -77,7 +69,6 @@ function breadcrumb_themes_css($theme){
             padding: 5px 10px;
             text-decoration: none;
         }
-    </style>
     <?php
 
     $breadcrumb_themes_css['theme3'] = ob_get_clean();
@@ -86,14 +77,11 @@ function breadcrumb_themes_css($theme){
     ob_start();
 
     ?>
-    <style type="text/css">
-
         .breadcrumb-container.theme4 li {
             display: inline-block;
             margin: 0 14px;
             padding: 0;
         }
-
         .breadcrumb-container.theme4 a {
             background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             color: rgb(102, 102, 102);
@@ -105,8 +93,6 @@ function breadcrumb_themes_css($theme){
             text-decoration: none;
             position:relative;
         }
-
-
         .breadcrumb-container.theme4 a::after {
             -moz-border-bottom-colors: none;
             -moz-border-left-colors: none;
@@ -125,11 +111,9 @@ function breadcrumb_themes_css($theme){
             top: 0;
             width: 0;
         }
-
         .breadcrumb-container.theme4 .separator {
             display: none;
         }
-    </style>
     <?php
 
     $breadcrumb_themes_css['theme4'] = ob_get_clean();
@@ -139,13 +123,11 @@ function breadcrumb_themes_css($theme){
     ob_start();
 
     ?>
-    <style type="text/css">
         .breadcrumb-container.theme5 li {
             display: inline-block;
             margin: 0 14px;
             padding: 0;
         }
-
         .breadcrumb-container.theme5 a {
             background: <?php echo esc_attr($breadcrumb_bg_color); ?>;
             color: rgb(102, 102, 102);
@@ -157,7 +139,6 @@ function breadcrumb_themes_css($theme){
             text-decoration: none;
             position:relative;
         }
-
         .breadcrumb-container.theme5 a::before {
             -moz-border-bottom-colors: none;
             -moz-border-left-colors: none;
@@ -193,12 +174,9 @@ function breadcrumb_themes_css($theme){
             top: 0;
             width: 0;
         }
-
         .breadcrumb-container.theme5 .separator {
             display: none;
         }
-
-    </style>
     <?php
 
     $breadcrumb_themes_css['theme5'] = ob_get_clean();

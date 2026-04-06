@@ -40,6 +40,16 @@ class class_breadcrumb_shortcodes
         do_action('breadcrumb_main', $atts);
 
 
+$css = "
+    .breadcrumb-container.theme5 a {
+        color: #f00;
+        background-color: #ff0;
+    }
+    ";
+
+    // Add styles safely
+    wp_add_inline_style( 'breadcrumb-style', $css );
+
         //wp_enqueue_style( 'font-awesome-5' );
 
 

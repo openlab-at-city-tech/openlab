@@ -90,7 +90,7 @@ array_multisort($tabs_sorted, SORT_ASC, $breadcrumb_settings_tabs);
         /* translators: %s: Plugin Name */
         echo esc_html(sprintf(__('%s Settings', 'breadcrumb'), breadcrumb_plugin_name)); ?>
     </h2>
-    <form method="post" action="<?php echo esc_url(str_replace('%7E', '~', $_SERVER['REQUEST_URI'])); ?>">
+    <form method="post" action="<?php echo isset($_SERVER['REQUEST_URI']) ? esc_url(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']))) : ""; ?>">
 
         <input type="hidden" name="breadcrumb_hidden" value="Y">
         <input type="hidden" name="tab" value="<?php echo esc_attr($current_tab); ?>">
