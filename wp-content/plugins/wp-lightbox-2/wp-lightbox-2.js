@@ -1,12 +1,12 @@
 /**
  * Plugin Name: WP Lightbox 2
- * Plugin URI: http://yepinol.com/lightbox-2-plugin-wordpress/
+ * Plugin URI:  https://yepinol.com/lightbox-2-plugin-wordpress/
  * Description: This plugin used to add the lightbox (overlay) effect to the current page images on your WordPress blog.
- * Version:       2.28.9.2.1
- * Author:        Pankaj Jha
- * Author URI:    http://onlinewebapplication.com/
- * License:       GNU General Public License, v2 (or newer)
- * License URI:  http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * Version:     2.28.9.2.1
+ * Author:      Pankaj Jha
+ * Author URI:  https://onlinewebapplication.com/
+ * License:     GNU General Public License, v2 (or newer)
+ * License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 /*  Copyright 2011 Pankaj Jha (onlinewebapplication.com)
 
@@ -31,7 +31,7 @@
  * This package is distributed under the BSD license.
  * For full license information, see LICENSE.TXT
  *
- * Based on Lightbox 2 by Lokesh Dhakar (http://www.huddletogether.com/projects/lightbox2/)
+ * Based on Lightbox 2 by Lokesh Dhakar (https://www.huddletogether.com/projects/lightbox2/)
  * Originally written to make use of the Prototype framework, and Script.acalo.us, now altered to use jQuery.
  **/
  /** toyNN: davidtg@comtrya.com: fixed IE7-8 incompatabilities in 1.3.* branch **/ 
@@ -55,7 +55,7 @@
             // if (opts.followScroll) { $(window).bind('scroll', orientListener); }
             $('#overlay').remove();
             $('#lightbox').remove();
-            opts.isIE8 = isIE8(); // //http://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
+            opts.isIE8 = isIE8(); // //https://www.grayston.net/2011/internet-explorer-v8-and-opacity-issues/
             opts.inprogress = false;
             // if jsonData, build the imageArray from data provided in JSON format
             if (opts.jsonData && opts.jsonData.length > 0) {
@@ -125,7 +125,7 @@
 			//$(document).width() returns width of HTML document 
             return new Array($(document).width(), pgDocHeight, $(window).width(), viewportHeight, $(document).height());
         };
-        //code for IE8 check provided by http://kangax.github.com/cft/
+        //code for IE8 check provided by https://kangax.github.com/cft/
         function isIE8() {
             var isBuggy = false;
             if (document.createElement) {
