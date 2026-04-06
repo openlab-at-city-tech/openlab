@@ -4,21 +4,21 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196
+class ComposerStaticInitda17d7fb7088e8c3367db8d75da905de
 {
     public static $files = array (
         '50f1a0479b2a5847c529d784c54cebe2' => __DIR__ . '/..' . '/codeinwp/themeisle-sdk/load.php',
     );
 
     public static $prefixLengthsPsr4 = array (
-        'T' => 
+        'T' =>
         array (
             'TIOB\\' => 5,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'TIOB\\' => 
+        'TIOB\\' =>
         array (
             0 => __DIR__ . '/../..' . '/includes',
         ),
@@ -36,8 +36,10 @@ class ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196
         'TIOB\\Importers\\Helpers\\Importer_Alterator' => __DIR__ . '/../..' . '/includes/Importers/Helpers/Importer_Alterator.php',
         'TIOB\\Importers\\Helpers\\Quiet_Skin' => __DIR__ . '/../..' . '/includes/Importers/Helpers/Quiet_Skin.php',
         'TIOB\\Importers\\Helpers\\Quiet_Skin_Legacy' => __DIR__ . '/../..' . '/includes/Importers/Helpers/Quiet_Skin_Legacy.php',
+        'TIOB\\Importers\\Helpers\\Slug_Mapping' => __DIR__ . '/../..' . '/includes/Importers/Helpers/Slug_Mapping.php',
         'TIOB\\Importers\\Plugin_Importer' => __DIR__ . '/../..' . '/includes/Importers/Plugin_Importer.php',
         'TIOB\\Importers\\Theme_Mods_Importer' => __DIR__ . '/../..' . '/includes/Importers/Theme_Mods_Importer.php',
+        'TIOB\\Importers\\WP\\Atomic_Wind_Meta_Handler' => __DIR__ . '/../..' . '/includes/Importers/WP/Atomic_Wind_Meta_Handler.php',
         'TIOB\\Importers\\WP\\Beaver_Data_Fix' => __DIR__ . '/../..' . '/includes/Importers/WP/Beaver_Data_Fix.php',
         'TIOB\\Importers\\WP\\Beaver_ParserXML' => __DIR__ . '/../..' . '/includes/Importers/WP/Beaver_ParserXML.php',
         'TIOB\\Importers\\WP\\Elementor_Meta_Handler' => __DIR__ . '/../..' . '/includes/Importers/WP/Elementor_Meta_Handler.php',
@@ -60,9 +62,9 @@ class ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitea344f8e0aaf51a385fd7c59e8011196::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitda17d7fb7088e8c3367db8d75da905de::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitda17d7fb7088e8c3367db8d75da905de::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitda17d7fb7088e8c3367db8d75da905de::$classMap;
 
         }, null, ClassLoader::class);
     }

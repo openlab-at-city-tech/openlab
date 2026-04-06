@@ -245,6 +245,8 @@ class Announcements extends Abstract_Module {
 			return;
 		}
 
+		$logo_url           = ! empty( $data['logo_url'] ) ? $data['logo_url'] : $this->get_sdk_uri() . 'assets/images/themeisle-logo.png';
+		$cta_label          = ! empty( $data['cta_label'] ) ? $data['cta_label'] : Loader::$labels['announcements']['notice_link_label'];
 		$sale_url           = ! empty( $data['sale_url'] ) ? $data['sale_url'] : '';
 		$hide_other_notices = ! empty( $data['hide_other_notices'] ) ? $data['hide_other_notices'] : ! $can_dismiss;
 		$dismiss_notice_url = wp_nonce_url( 
@@ -340,7 +342,7 @@ class Announcements extends Abstract_Module {
 				<div class="themeisle-sale-logo">
 					<img
 						width="45"
-						src="<?php echo esc_url( $this->get_sdk_uri() . 'assets/images/themeisle-logo.png' ); ?>"
+						src="<?php echo esc_url( $logo_url ); ?>"
 					/>
 				</div>
 				<div class="themeisle-sale-content">
@@ -360,7 +362,7 @@ class Announcements extends Abstract_Module {
 						target="_blank"
 						class="button button-primary themeisle-sale-button"
 					>
-					<?php echo esc_html( Loader::$labels['announcements']['notice_link_label'] ); ?>
+					<?php echo esc_html( $cta_label ); ?>
 					</a>
 				</div>
 				<?php if ( $can_dismiss ) : ?>
