@@ -3,16 +3,32 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, categories sort
 Requires at least: 2.8
-Tested up to: 6.8
-Stable tag: 1.9.1
+Tested up to: 6.9
+Stable tag: 1.9.5
 
-Order Categories and all custom taxonomies terms (hierarchically) using a Drag and Drop Sortable JavaScript capability. 
+Drag-and-drop ordering for Categories & any taxonomy (hierarchically) using a Drag and Drop Sortable JavaScript capability.
 
 == Description ==
 
-Order Categories and all custom taxonomies terms (hierarchically) using a Drag and Drop Sortable javascript capability. <strong>No Theme/plugins update is required</strong> the code apply the customised sorting to the front queries on the fly.
-If multiple taxonomies are created for a custom post type, a menu will allow to chose the one need to be sorted. If child categories (terms) are defined, those can be ordered too using the same interface.
-<br />Also you can have the admin terms interface sorted per your new sort.
+Easily control the order of Categories and any hierarchical taxonomy with a simple drag-and-drop interface. Reorder parent and child terms visually in the admin and choose whether the plugin automatically applies your custom term order to front-end queries.
+
+<h3>Key features</h3>
+<ul>
+<li>Intuitive drag-and-drop reordering for Categories and all hierarchical taxonomies. </li>
+
+<li>Option to auto-apply the custom term order to front-end queries (no theme/plugin edits required). </li>
+
+<li>Keep the admin term lists in your new order (makes management and editorial workflows consistent). </li>
+
+<li>Works with multiple taxonomies per post type — switch between taxonomies from the same interface. </li>
+
+<li>Multisite aware and regularly updated for modern WordPress and PHP versions (see changelog for compatibility notes).</li>
+</ul>
+
+<h3>How it works</h3>
+After activating the plugin, a new Taxonomy Order page becomes available under the custom post type menu. Simply open it and drag terms into the exact order you want — including parent/child hierarchy.
+Use the plugin’s Taxonomy Order screen to drag terms into the order you want. To apply the custom order automatically across your site, enable the Autosort option — the plugin will adjust term queries on the fly so your chosen order shows without template changes. If you prefer to control ordering in code, include orderby => 'term_order' when calling get_terms() to use the plugin’s order programmatically.
+
 <br />This plugin is developed by <a target="_blank" href="http://www.nsp-code.com">Nsp-Code</a>
 
 <br />See the <a target="_blank" href="https://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order</a> for advanced features.
@@ -59,6 +75,20 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 Consider upgrading to our advanced version of this plugin at a very resonable price <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order Order</a>
 
 == Change Log ==
+
+= 1.9.5 =
+ - Add a Settings link for the plugin in the Plugins area to make it easier for users to access and get started.
+ - Implement minor code improvements.
+
+= 1.9.4 =
+ - On Rest Request, evaluate the admin sort settings to apply or not the customized order.
+
+= 1.9.3 =
+ - Improved plugin page description
+ - Use sanitize_text_field and wp_unslash for the options form
+ - Include FALSE argument in the wp_register_script
+ - WordPress 6.9 compatibility check 
+ - WordPress 6.9 tag update 
 
 = 1.9.1 =
  - Replace all _e with escaping function esc_html_e
