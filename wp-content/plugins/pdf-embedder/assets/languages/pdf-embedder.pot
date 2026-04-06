@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PDF Embedder 4.9.2\n"
+"Project-Id-Version: PDF Embedder 4.9.3\n"
 "Report-Msgid-Bugs-To: https://wp-pdf.com/contact/\n"
 "Last-Translator: WP PDF <support@wp-pdf.com>\n"
 "Language-Team: WP PDF <support@wp-pdf.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-25T13:03:35+00:00\n"
+"POT-Creation-Date: 2025-12-30T10:45:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pdf-embedder\n"
 
 #. Plugin Name of the plugin
@@ -17,7 +17,7 @@ msgstr ""
 #: pdf_embedder.php
 #: src/Admin/Admin.php:122
 #: src/Admin/Admin.php:130
-#: src/Admin/MediaLibrary.php:28
+#: src/Admin/MediaLibrary.php:35
 #: block/src/edit.js:164
 #: block/src/edit.js:171
 #: block/src/index.js:21
@@ -41,6 +41,7 @@ msgstr ""
 
 #. translators: %s - WPBeginner URL for recommended WordPress hosting.
 #: requirements.php:17
+#, php-format
 msgid "Your site is running an <strong>insecure version</strong> of PHP that is no longer supported. Please contact your web hosting provider to update your PHP version or switch to a <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">recommended WordPress hosting company</a>."
 msgstr ""
 
@@ -137,33 +138,34 @@ msgstr ""
 
 #. translators: $1$s - PDF Embedder plugin name, $2$s - WP.org review link, $3$s - WP.org review link.
 #: src/Admin/Admin.php:449
+#, php-format
 msgid "Please rate %1$s <a href=\"%2$s\" target=\"_blank\" rel=\"noopener noreferrer\">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href=\"%3$s\" target=\"_blank\">WordPress.org</a> to help us spread the word."
 msgstr ""
 
-#: src/Admin/Admin.php:571
-#: src/Admin/Pages/Settings.php:24
+#: src/Admin/Admin.php:581
+#: src/Admin/Pages/Settings.php:23
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/Admin.php:572
+#: src/Admin/Admin.php:582
 msgid "Premium"
 msgstr ""
 
-#: src/Admin/Admin.php:573
+#: src/Admin/Admin.php:583
 #: src/Admin/Pages/Secure.php:23
 #: src/Plugin.php:169
 msgid "Secure"
 msgstr ""
 
-#: src/Admin/Admin.php:594
+#: src/Admin/Admin.php:604
 msgid "Settings saved."
 msgstr ""
 
-#: src/Admin/Education/DemoContent.php:42
+#: src/Admin/Education/DemoContent.php:43
 msgid "Premium Features"
 msgstr ""
 
-#: src/Admin/Education/DemoContent.php:45
+#: src/Admin/Education/DemoContent.php:46
 #: src/Admin/Pages/Mobile.php:40
 #: src/Admin/Pages/Secure.php:40
 #: src/Admin/Pages/Watermarks.php:39
@@ -172,7 +174,7 @@ msgstr ""
 #: block/src/edu/demo-pages-scroll.js:52
 #: block/src/edu/demo-watermark.js:156
 #: block/src/edu/demo-zoom.js:61
-#: block/src/edu/upsell-modal.js:41
+#: block/src/edu/upsell-modal.js:44
 msgid "Upgrade to Pro"
 msgstr ""
 
@@ -194,11 +196,13 @@ msgstr ""
 
 #. translators: %s - URL to the documentation.
 #: src/Admin/Education/GetStarted.php:115
+#, php-format
 msgid "Use the PDF Embedder shortcode to easily embed your PDFs. Learn more about embedding with Shortcodes <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr ""
 
 #. translators: %s - URL to the documentation.
 #: src/Admin/Education/GetStarted.php:136
+#, php-format
 msgid "Need more help? Check out our <a href=\"%s\" target=\"_blank\">Documentation here</a> →"
 msgstr ""
 
@@ -208,6 +212,7 @@ msgstr ""
 
 #. translators: %1$s - URL to wp-pdf.com.
 #: src/Admin/Education/SettingsTopBar.php:80
+#, php-format
 msgid "<strong>You're using PDF Embedder Lite.</strong> To unlock more features <a href=\"%1$s\" target=\"_blank\"><strong>consider upgrading to Premium</strong></a> for %2$s off."
 msgstr ""
 
@@ -252,43 +257,47 @@ msgid "Unspecified error"
 msgstr ""
 
 #. translators: %s - URL to the settings page.
-#: src/Admin/MediaLibrary.php:69
-#: src/Admin/MediaLibrary.php:151
+#: src/Admin/MediaLibrary.php:76
+#: src/Admin/MediaLibrary.php:158
+#, php-format
 msgid "<a href=\"%s\">Learn more</a>"
 msgstr ""
 
 #. translators: %s - URL to wp-pdf.com page.
-#: src/Admin/MediaLibrary.php:92
+#: src/Admin/MediaLibrary.php:99
+#, php-format
 msgid "Not tracked. <a href=\"%s\" target=\"_blank\">Learn more</a>"
 msgstr ""
 
-#: src/Admin/MediaLibrary.php:103
+#: src/Admin/MediaLibrary.php:110
 msgid "PDF Downloads / Views"
 msgstr ""
 
-#: src/Admin/MediaLibrary.php:143
+#: src/Admin/MediaLibrary.php:150
 msgid "Secured PDF"
 msgstr ""
 
-#: src/Admin/MediaLibrary.php:147
+#: src/Admin/MediaLibrary.php:154
 msgid "Not Secured PDF."
 msgstr ""
 
 #. translators: %s - URL to wp-pdf.com page.
-#: src/Admin/MediaLibrary.php:168
+#: src/Admin/MediaLibrary.php:175
+#, php-format
 msgid "Track downloads and views with <a href=\"%s\" target=\"_blank\">PDF Embedder Premium</a>."
 msgstr ""
 
-#: src/Admin/MediaLibrary.php:210
+#: src/Admin/MediaLibrary.php:217
 msgid "PDFs"
 msgstr ""
 
-#: src/Admin/MediaLibrary.php:211
+#: src/Admin/MediaLibrary.php:218
 msgid "Manage PDFs"
 msgstr ""
 
 #. translators: %s - number of PDF files.
-#: src/Admin/MediaLibrary.php:213
+#: src/Admin/MediaLibrary.php:220
+#, php-format
 msgid "PDF <span class=\"count\">(%s)</span>"
 msgid_plural "PDFs <span class=\"count\">(%s)</span>"
 msgstr[0] ""
@@ -312,10 +321,11 @@ msgstr ""
 
 #. translators: %1$s - URL to wpbeginner.com, %2$s - URL to wpforms.com, %3$s - URL to wpmailsmtp.com.
 #: src/Admin/Pages/About.php:47
-msgid "PDF Embedder is brought to you by the same team that’s behind the largest WordPress resource site, <a href=\"%1$s\" target=\"_blank\">WPBeginner</a>, the most popular forms plugin, <a href=\"%2$s\" target=\"_blank\">WPForms</a>, the most popular SMTP and Email Log plugin, <a href=\"%3$s\" target=\"_blank\">WP Mail SMTP</a>, and more!"
+#, php-format
+msgid "PDF Embedder is brought to you by the same team that’s behind the largest WordPress resource site, <a href=\"%1$s\" target=\"_blank\">WPBeginner</a>, the most popular forms plugin, <a href=\"%2$s\" target=\"_blank\">WPForms</a>, the most popular SMTP and Email Log plugin, <a href=\"%3$s\" target=\"_blank\">WP Mail SMTP</a>, the best WordPress analytics plugin, <a href=\"%4$s\" target=\"_blank\">MonsterInsights</a>, and more!"
 msgstr ""
 
-#: src/Admin/Pages/About.php:62
+#: src/Admin/Pages/About.php:63
 msgid "Yup, we know a thing or two about building awesome products that customers love."
 msgstr ""
 
@@ -391,81 +401,82 @@ msgstr ""
 msgid "Protect your PDFs using PDF Embedder Premium"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:38
+#: src/Admin/Pages/Settings.php:37
 msgid "PDF Embedder Configuration"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:42
+#: src/Admin/Pages/Settings.php:41
 msgid "To use the plugin, just embed PDFs in the same way as you would normally embed images in your posts/pages - but try with a PDF file instead."
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:45
+#: src/Admin/Pages/Settings.php:44
 msgid "From the post editor, click Add Media, and then drag-and-drop your PDF file into the media library. When you insert the PDF into your post, it will automatically embed using the plugin's viewer."
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:51
+#: src/Admin/Pages/Settings.php:50
 msgid "Default Viewer Settings"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:56
+#: src/Admin/Pages/Settings.php:55
 #: block/src/edit.js:96
 #: block/src/edu/demo-mobile.js:19
 msgid "Width"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:65
+#: src/Admin/Pages/Settings.php:64
 #: block/src/edit.js:102
 msgid "Height"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:77
+#: src/Admin/Pages/Settings.php:76
 #: block/src/edit.js:63
 msgid "Enter <code>max</code> or an integer number of pixels."
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:89
+#: src/Admin/Pages/Settings.php:88
 msgid "Toolbar Location"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:93
+#: src/Admin/Pages/Settings.php:92
 #: block/src/edit.js:114
 msgid "Top"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:96
+#: src/Admin/Pages/Settings.php:95
 #: block/src/edit.js:115
 msgid "Bottom"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:99
+#: src/Admin/Pages/Settings.php:98
 #: block/src/edit.js:116
 #: block/src/edu/demo-pages-scroll.js:33
 msgid "Both"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:102
+#: src/Admin/Pages/Settings.php:101
 msgid "No Toolbar"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:112
+#: src/Admin/Pages/Settings.php:111
 msgid "Toolbar Visibility"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:117
+#: src/Admin/Pages/Settings.php:116
 msgid "On hover"
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:124
+#: src/Admin/Pages/Settings.php:123
 #: block/src/edit.js:131
 msgid "Always visible"
 msgstr ""
 
 #. translators: %s - URL to wp-pdf.com doc.
-#: src/Admin/Pages/Settings.php:135
+#: src/Admin/Pages/Settings.php:134
+#, php-format
 msgid "You can override these defaults for specific embeds by modifying the shortcodes - see <a href=\"%s\" target=\"_blank\">instructions</a>."
 msgstr ""
 
-#: src/Admin/Pages/Settings.php:163
+#: src/Admin/Pages/Settings.php:162
 msgid "Save Changes"
 msgstr ""
 
@@ -495,6 +506,7 @@ msgstr ""
 
 #. translators: %s - status.
 #: src/Admin/Partners.php:91
+#, php-format
 msgid "Status: %s"
 msgstr ""
 
@@ -878,11 +890,12 @@ msgid "Overriding the Default Zoom value when in full screen mode."
 msgstr ""
 
 #. translators: %s: block section name
-#: block/src/edu/upsell-modal.js:22
+#: block/src/edu/upsell-modal.js:25
+#, js-format
 msgid "%s is a PRO Feature"
 msgstr ""
 
-#: block/src/edu/upsell-modal.js:26
+#: block/src/edu/upsell-modal.js:29
 msgid "We're sorry, this feature is not currently available. Please upgrade to the Premium version of the plugin to unlock all the powerful features."
 msgstr ""
 

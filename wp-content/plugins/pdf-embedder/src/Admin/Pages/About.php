@@ -44,7 +44,7 @@ class About extends Page {
 				<?php
 				printf(
 					wp_kses( /* translators: %1$s - URL to wpbeginner.com, %2$s - URL to wpforms.com, %3$s - URL to wpmailsmtp.com. */
-						__( 'PDF Embedder is brought to you by the same team that’s behind the largest WordPress resource site, <a href="%1$s" target="_blank">WPBeginner</a>, the most popular forms plugin, <a href="%2$s" target="_blank">WPForms</a>, the most popular SMTP and Email Log plugin, <a href="%3$s" target="_blank">WP Mail SMTP</a>, and more!', 'pdf-embedder' ),
+						__( 'PDF Embedder is brought to you by the same team that’s behind the largest WordPress resource site, <a href="%1$s" target="_blank">WPBeginner</a>, the most popular forms plugin, <a href="%2$s" target="_blank">WPForms</a>, the most popular SMTP and Email Log plugin, <a href="%3$s" target="_blank">WP Mail SMTP</a>, the best WordPress analytics plugin, <a href="%4$s" target="_blank">MonsterInsights</a>, and more!', 'pdf-embedder' ),
 						[
 							'a' => [
 								'href'  => true,
@@ -54,7 +54,8 @@ class About extends Page {
 					),
 					'https://www.wpbeginner.com/?utm_source=pdfembedderplugin&amp;utm_medium=pluginaboutpage&amp;utm_campaign=aboutpdfembedder',
 					'https://wpforms.com/?utm_source=pdfembedderplugin&amp;utm_medium=pluginaboutpage&amp;utm_campaign=aboutpdfembedder',
-					'https://wpmailsmtp.com/?utm_source=pdfembedderplugin&amp;utm_medium=pluginaboutpage&amp;utm_campaign=aboutpdfembedder'
+					'https://wpmailsmtp.com/?utm_source=pdfembedderplugin&amp;utm_medium=pluginaboutpage&amp;utm_campaign=aboutpdfembedder',
+					'https://www.monsterinsights.com/?utm_source=pdfembedderplugin&amp;utm_medium=pluginaboutpage&amp;utm_campaign=aboutpdfembedder'
 				);
 				?>
 			</p>

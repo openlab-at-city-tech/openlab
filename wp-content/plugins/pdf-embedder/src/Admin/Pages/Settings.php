@@ -2,7 +2,6 @@
 
 namespace PDFEmbedder\Admin\Pages;
 
-use PDFEmbedder\Options;
 use PDFEmbedder\Helpers\Links;
 
 /**

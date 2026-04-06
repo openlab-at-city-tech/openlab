@@ -11,14 +11,14 @@ class ComposerStaticInitc435c53d74ac03240f74da72ce957c81
     );
 
     public static $prefixLengthsPsr4 = array (
-        'P' => 
+        'P' =>
         array (
             'PDFEmbedder\\' => 12,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'PDFEmbedder\\' => 
+        'PDFEmbedder\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

@@ -9,6 +9,14 @@
 			e.preventDefault();
 
 			if ( ! $( '#pdfemb-getstarted' ).hasClass( 'hidden' ) ) {
+				$( '#pdfemb-getstarted' ).slideUp( 'fast', function() {
+					$( this ).addClass( 'hidden' );
+				});
+
+				$.post( ajaxurl, {
+					action: 'pdfemb_admin_settings_getstarted_dismiss',
+				} );
+
 				return;
 			}
 

@@ -2,6 +2,8 @@
 
 namespace PDFEmbedder\Helpers;
 
+use PDFEmbedder\Admin\MediaLibrary;
+
 /**
  * Helper methods to perform various checks across the plugin.
  *
@@ -68,7 +70,7 @@ class Check {
 		global $post;
 
 		return isset( $post, $post->post_type, $post->post_mime_type ) &&
-			$post->post_type === 'attachment' && $post->post_mime_type === 'application/pdf' &&
+			$post->post_type === 'attachment' && $post->post_mime_type === MediaLibrary::MIME_TYPE &&
 			is_singular();
 	}
 }

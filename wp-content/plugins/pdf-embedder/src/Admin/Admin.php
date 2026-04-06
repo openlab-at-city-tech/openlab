@@ -486,7 +486,7 @@ class Admin {
 		} elseif ( $id > 0 ) {
 			$post = get_post( $id );
 
-			if ( $post && isset( $post->post_mime_type ) && $post->post_mime_type === 'application/pdf' ) {
+			if ( $post && isset( $post->post_mime_type ) && $post->post_mime_type === MediaLibrary::MIME_TYPE ) {
 				$pdf_url = wp_get_attachment_url( $id );
 				$title   = get_the_title( $id );
 			}
@@ -532,7 +532,7 @@ class Admin {
 	 *
 	 * @since 4.8.0
 	 */
-	public function is_admin_page(): bool {
+	public function is_admin_page( string $section = '' ): bool {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
@@ -546,6 +546,16 @@ class Admin {
 			strpos( $_REQUEST['page'], self::SLUG ) === false
 		) {
 			return false;
+		}
+
+		if ( $section !== '' ) {
+			if ( empty( $_REQUEST['section'] ) ) {
+				$_REQUEST['section'] = $this->get_current_section();
+			}
+
+			if ( sanitize_key( $_REQUEST['section'] ) !== $section ) {
+				return false;
+			}
 		}
 
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
@@ -775,10 +785,12 @@ class Admin {
 	 *
 	 * @param string $section Section to link to.
 	 */
-	public function get_url( string $section = 'settings' ): string {
+	public function get_url( string $section = '' ): string {
 
 		if ( ! empty( $section ) ) {
 			$section = sanitize_key( $section );
+		} else {
+			$section = $this->get_current_section();
 		}
 
 		return Multisite::is_network_activated()
@@ -790,8 +802,6 @@ class Admin {
 	 * Get the current section.
 	 *
 	 * @since 4.9.0
-	 *
-	 * @return string Current section.
 	 */
 	public function get_current_section(): string {
 
@@ -800,6 +810,23 @@ class Admin {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$section = isset( $_GET['section'] ) ? sanitize_key( $_GET['section'] ) : '';
 
-		return array_key_exists( $section, $sections ) ? $section : 'settings';
+		return array_key_exists( $section, $sections ) ? $section : $this->get_default_section();
+	}
+
+	/**
+	 * Get the default section.
+	 *
+	 * @since 4.9.3
+	 */
+	public function get_default_section(): string {
+
+		/**
+		 * Filter the default admin section.
+		 *
+		 * @since 4.9.3
+		 *
+		 * @param string $default_section Default section slug.
+		 */
+		return apply_filters( 'pdfemb_admin_sections_default', 'settings' );
 	}
 }

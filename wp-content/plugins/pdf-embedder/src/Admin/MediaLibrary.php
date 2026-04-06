@@ -14,6 +14,13 @@ use PDFEmbedder\Helpers\Links;
 class MediaLibrary {
 
 	/**
+	 * MIME type for PDFs.
+	 *
+	 * @since 4.9.3
+	 */
+	public const MIME_TYPE = 'application/pdf';
+
+	/**
 	 * Assign all hooks to proper places.
 	 *
 	 * @since 4.7.0
@@ -44,7 +51,7 @@ class MediaLibrary {
 	 */
 	public function attachment_fields_to_edit( $form_fields, $attachment ): array {
 
-		if ( ! isset( $attachment->post_mime_type ) || $attachment->post_mime_type !== 'application/pdf' ) {
+		if ( ! isset( $attachment->post_mime_type ) || $attachment->post_mime_type !== self::MIME_TYPE ) {
 			return $form_fields;
 		}
 
@@ -115,7 +122,7 @@ class MediaLibrary {
 	 */
 	public function add_meta_boxes_attachment( WP_Post $attachment ) {
 
-		if ( $attachment->post_mime_type !== 'application/pdf' ) {
+		if ( $attachment->post_mime_type !== self::MIME_TYPE ) {
 			return;
 		}
 
@@ -192,7 +199,7 @@ class MediaLibrary {
 	 */
 	public function add_pdf_to_upload_mimes( $mimes, $user ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
-		$mimes['pdf'] = 'application/pdf';
+		$mimes['pdf'] = self::MIME_TYPE;
 
 		return $mimes;
 	}
@@ -206,7 +213,7 @@ class MediaLibrary {
 	 */
 	public function add_pdf_mime_type( $post_mime_types ): array {
 
-		$post_mime_types['application/pdf'] = [
+		$post_mime_types[ self::MIME_TYPE ] = [
 			__( 'PDFs', 'pdf-embedder' ),
 			__( 'Manage PDFs', 'pdf-embedder' ),
 			/* translators: %s - number of PDF files. */

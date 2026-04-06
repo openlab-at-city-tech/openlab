@@ -1,3 +1,9 @@
+= 4.9.3 =
+* Changed: Compatibility with WordPress 6.9.
+* Changed: "Get Started" section in the plugin admin area can now be closed by clicking the same link in the plugin header again.
+* Fixed: Adjust plugin links inside our block in the Block Editor.
+* Fixed: Other minor code improvements and fixes, not visible but still valuable for plugin maintenance in the future.
+
 = 4.9.2 =
 * Changed: When just installed, the plugin was not saving its settings into the database upon activation. This caused the plugin to not work properly until the settings were saved at least once.
 * Fixed: PDF Viewer Toolbar was displayed on the front-end even when disabled using block/shortcode attributes until the plugin settings were saved at least once.
