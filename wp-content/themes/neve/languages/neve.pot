@@ -1,4 +1,4 @@
-# Copyright (C) 2025 ThemeIsle
+# Copyright (C) 2026 ThemeIsle
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-26T16:23:07+00:00\n"
+"POT-Creation-Date: 2026-03-09T11:33:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: neve\n"
@@ -150,7 +150,7 @@ msgstr ""
 #: neve/header-footer-grid/Core/Builder/Header.php:70
 #: neve/header-footer-grid/Core/Components/Button.php:165
 #: neve/inc/admin/dashboard/main.php:350
-#: neve/inc/core/front_end.php:580
+#: neve/inc/core/front_end.php:573
 #: neve/inc/customizer/controls/simple_upsell.php:92
 #: neve/inc/customizer/controls/simple_upsell_section.php:66
 #: neve/assets/apps/customizer-controls/build/controls.js:5
@@ -501,7 +501,7 @@ msgstr ""
 #: neve/inc/admin/dashboard/main.php:1078
 #: neve/inc/admin/hooks_upsells.php:221
 #: neve/inc/admin/hooks_upsells.php:222
-#: neve/inc/core/front_end.php:572
+#: neve/inc/core/front_end.php:565
 msgid "Custom Layouts"
 msgstr ""
 
@@ -725,22 +725,22 @@ msgid "Easy Digital Downloads Cart"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetFour.php:32
-#: neve/inc/core/front_end.php:537
+#: neve/inc/core/front_end.php:530
 msgid "Footer Four"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetOne.php:31
-#: neve/inc/core/front_end.php:534
+#: neve/inc/core/front_end.php:527
 msgid "Footer One"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetThree.php:31
-#: neve/inc/core/front_end.php:536
+#: neve/inc/core/front_end.php:529
 msgid "Footer Three"
 msgstr ""
 
 #: neve/header-footer-grid/Core/Components/FooterWidgetTwo.php:32
-#: neve/inc/core/front_end.php:535
+#: neve/inc/core/front_end.php:528
 msgid "Footer Two"
 msgstr ""
 
@@ -1262,7 +1262,7 @@ msgstr ""
 #. translators: %s - Theme name
 #: neve/inc/admin/dashboard/main.php:174
 #: neve/inc/admin/dashboard/main.php:176
-#: neve/inc/core/front_end.php:583
+#: neve/inc/core/front_end.php:576
 #: neve/assets/apps/metabox/build/index.js:2
 #, php-format,js-format
 msgid "%s Options"
@@ -1558,7 +1558,7 @@ msgid "Remove Neve branding and rebrand it as your own for client websites."
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:754
-#: neve/inc/core/front_end.php:569
+#: neve/inc/core/front_end.php:562
 msgid "Header Booster"
 msgstr ""
 
@@ -1567,7 +1567,7 @@ msgid "Create unique sticky & transparent headers that adapt to scroll. Perfect 
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:761
-#: neve/inc/core/front_end.php:571
+#: neve/inc/core/front_end.php:564
 msgid "WooCommerce Booster"
 msgstr ""
 
@@ -1588,7 +1588,7 @@ msgid "Enhance your Easy Digital Downloads store with additional customization s
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:772
-#: neve/inc/core/front_end.php:570
+#: neve/inc/core/front_end.php:563
 msgid "Blog Booster"
 msgstr ""
 
@@ -1630,12 +1630,12 @@ msgid "Create conditional headers, footers, and content blocks. Perfect for cust
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:814
-#: neve/inc/core/front_end.php:575
+#: neve/inc/core/front_end.php:568
 msgid "Elementor Booster"
 msgstr ""
 
 #: neve/inc/admin/dashboard/main.php:815
-#: neve/inc/core/front_end.php:578
+#: neve/inc/core/front_end.php:571
 msgid "Leverage the true flexibility of Elementor with powerful addons and templates that you can import with just one click."
 msgstr ""
 
@@ -1911,7 +1911,7 @@ msgid "No Sidebar"
 msgstr ""
 
 #: neve/inc/admin/metabox/main.php:61
-#: neve/inc/core/front_end.php:527
+#: neve/inc/core/front_end.php:520
 #: neve/assets/apps/metabox/build/index.js:1
 msgid "Sidebar"
 msgstr ""
@@ -2247,129 +2247,129 @@ msgstr ""
 msgid "Explore a vast library of pre-designed sites within Neve. Visit our constantly growing collection of demos to find the perfect starting point for your project."
 msgstr ""
 
-#: neve/inc/core/front_end.php:528
+#: neve/inc/core/front_end.php:521
 msgid "Shop Sidebar"
 msgstr ""
 
-#: neve/inc/core/front_end.php:563
+#: neve/inc/core/front_end.php:556
 msgid "Add item"
 msgstr ""
 
-#: neve/inc/core/front_end.php:564
+#: neve/inc/core/front_end.php:557
 msgid "Add items by clicking the ones below."
 msgstr ""
 
-#: neve/inc/core/front_end.php:565
+#: neve/inc/core/front_end.php:558
 msgid "All items are already selected."
 msgstr ""
 
-#: neve/inc/core/front_end.php:566
+#: neve/inc/core/front_end.php:559
 msgid "Page Layout"
 msgstr ""
 
-#: neve/inc/core/front_end.php:567
+#: neve/inc/core/front_end.php:560
 msgid "Page Title"
 msgstr ""
 
-#: neve/inc/core/front_end.php:568
+#: neve/inc/core/front_end.php:561
 msgid "Upgrade to Neve Pro and unlock all components, including Wish List, Breadcrumbs, Custom Layouts and many more."
 msgstr ""
 
-#: neve/inc/core/front_end.php:573
+#: neve/inc/core/front_end.php:566
 msgid "White Label module"
 msgstr ""
 
-#: neve/inc/core/front_end.php:574
+#: neve/inc/core/front_end.php:567
 msgid "Scroll to Top module"
 msgstr ""
 
-#: neve/inc/core/front_end.php:576
+#: neve/inc/core/front_end.php:569
 msgid "Extend your header with more components and settings, build sticky/transparent headers or display them conditionally."
 msgstr ""
 
-#: neve/inc/core/front_end.php:577
+#: neve/inc/core/front_end.php:570
 msgid "Easily create custom headers and footers as well as adding your own custom code or content in any of the hooks locations."
 msgstr ""
 
-#: neve/inc/core/front_end.php:579
+#: neve/inc/core/front_end.php:572
 msgid "Get the PRO version!"
 msgstr ""
 
-#: neve/inc/core/front_end.php:581
+#: neve/inc/core/front_end.php:574
 msgid "Filter"
 msgstr ""
 
-#: neve/inc/core/front_end.php:584
+#: neve/inc/core/front_end.php:577
 msgid "Migrating builder data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:585
+#: neve/inc/core/front_end.php:578
 msgid "Rolling back builder"
 msgstr ""
 
-#: neve/inc/core/front_end.php:586
+#: neve/inc/core/front_end.php:579
 msgid "Removing old data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:587
+#: neve/inc/core/front_end.php:580
 msgid "You must save the current customizer values before running the migration."
 msgstr ""
 
-#: neve/inc/core/front_end.php:588
+#: neve/inc/core/front_end.php:581
 #: neve/assets/apps/dashboard/build/dashboard.js:2
 msgid "Something went wrong. Please reload the page and try again."
 msgstr ""
 
-#: neve/inc/core/front_end.php:589
+#: neve/inc/core/front_end.php:582
 msgid "Want to roll back to the old builder?"
 msgstr ""
 
-#: neve/inc/core/front_end.php:590
+#: neve/inc/core/front_end.php:583
 msgid "We've created a new Header/Footer Builder experience! You can always roll back to the old builder from right here."
 msgstr ""
 
-#: neve/inc/core/front_end.php:591
+#: neve/inc/core/front_end.php:584
 msgid "Some manual adjustments may be required."
 msgstr ""
 
-#: neve/inc/core/front_end.php:592
+#: neve/inc/core/front_end.php:585
 msgid "Reload"
 msgstr ""
 
-#: neve/inc/core/front_end.php:593
+#: neve/inc/core/front_end.php:586
 msgid "Migrate Builders Data"
 msgstr ""
 
-#: neve/inc/core/front_end.php:594
+#: neve/inc/core/front_end.php:587
 msgid "Legacy Skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:595
+#: neve/inc/core/front_end.php:588
 msgid "Neve 3.0"
 msgstr ""
 
-#: neve/inc/core/front_end.php:596
+#: neve/inc/core/front_end.php:589
 msgid "Switching skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:597
+#: neve/inc/core/front_end.php:590
 msgid "Switch Skin"
 msgstr ""
 
-#: neve/inc/core/front_end.php:598
+#: neve/inc/core/front_end.php:591
 msgid "Dismiss"
 msgstr ""
 
-#: neve/inc/core/front_end.php:599
+#: neve/inc/core/front_end.php:592
 msgid "Roll Back"
 msgstr ""
 
-#: neve/inc/core/front_end.php:600
+#: neve/inc/core/front_end.php:593
 msgid "Add a customizable scroll-to-top button that appears exactly when needed. Style it to match your brand."
 msgstr ""
 
 #. translators: %s - Module name for the upsell
-#: neve/inc/core/front_end.php:602
+#: neve/inc/core/front_end.php:595
 #, php-format
 msgid "Unlock %s with the Pro version."
 msgstr ""
@@ -3286,16 +3286,16 @@ msgid_plural "%s Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: neve/inc/views/pluggable/pagination.php:273
+#: neve/inc/views/pluggable/pagination.php:267
 #: neve/inc/views/template_parts.php:539
 msgid "Pages:"
 msgstr ""
 
-#: neve/inc/views/pluggable/pagination.php:290
+#: neve/inc/views/pluggable/pagination.php:284
 msgid "previous"
 msgstr ""
 
-#: neve/inc/views/pluggable/pagination.php:295
+#: neve/inc/views/pluggable/pagination.php:289
 msgid "next"
 msgstr ""
 

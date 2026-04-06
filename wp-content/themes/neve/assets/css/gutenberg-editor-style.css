@@ -73,7 +73,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.editor-styles-wrapper, .editor-styles-wrapper > * {
+.editor-styles-wrapper, .editor-styles-wrapper > *:not(.block-canvas-cover) {
   background-color: var(--nv-site-bg);
   color: var(--nv-text-color);
 }
