@@ -232,11 +232,10 @@ class OLE
 		} else {
 			$path .= '&blockId=' . $blockIdOrPps;
 		}
-
-		$resource = fopen($path, 'rb');
-		if ($resource === false) {
-			throw new Exception("Unable to open stream $path");
-		}
+								if (!fopen($path, 'rb')) {
+									throw new Exception("Unable to open stream $path");
+								}
+								$resource = fopen($path, 'rb');
 
 		return $resource;
 	}
@@ -509,7 +508,7 @@ class OLE
 		}
 		$dateTime = Date::dateTimeFromTimestamp("$date");
 
-		// days from 1-1-1601 until the beggining of UNIX era
+		// days from 1-1-1601 until the beginning of UNIX era
 		$days = 134774;
 		// calculate seconds
 		$big_date = $days * 24 * 3600 + (float) $dateTime->format('U');
