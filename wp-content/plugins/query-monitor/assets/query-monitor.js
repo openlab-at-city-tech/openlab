@@ -80,7 +80,8 @@ if ( window.jQuery ) {
 				$('#wp-admin-bar-query-monitor')
 					.addClass('qm-error')
 					.find('a').eq(0)
-					.text(qm_l10n.fatal_error);
+					.text(qm_l10n.fatal_error)
+					.attr('href','#qm-fatal');
 
 				var fatal_container = document.createDocumentFragment();
 
@@ -110,6 +111,12 @@ if ( window.jQuery ) {
 			}
 		}
 
+		var close_container = function(){
+			container.removeClass('qm-show').height('').width('');
+			body.css( 'margin-bottom', '' );
+			localStorage.removeItem( container_pinned_key );
+		};
+
 		var link_click = function(e){
 			var href = $( this ).attr('href') || $( this ).data('qm-href');
 
@@ -117,8 +124,13 @@ if ( window.jQuery ) {
 				return;
 			}
 
-			show_panel( href );
-			$(href).focus();
+			if ( '#qm-overview' === href && container.hasClass( 'qm-show' ) ) {
+				close_container();
+			} else {
+				show_panel( href );
+				$(href).trigger('focus');
+			}
+
 			$('#wp-admin-bar-query-monitor').removeClass('hover');
 			e.preventDefault();
 		};
@@ -313,7 +325,7 @@ if ( window.jQuery ) {
 			$('#qm-' + target).find('.qm-filter').not('[data-filter="' + filter + '"]').val('').removeClass('qm-highlight').trigger('change');
 			$('#qm-' + target).find('[data-filter="' + filter + '"]').val(value).addClass('qm-highlight').trigger('change');
 			show_panel( '#qm-' + target );
-			$('#qm-' + target).focus();
+			$('#qm-' + target).trigger('focus');
 			e.preventDefault();
 		});
 
@@ -590,15 +602,12 @@ if ( window.jQuery ) {
 			}
 		});
 
-		$('.qm-button-container-close').on('click',function(){
-			container.removeClass('qm-show').height('').width('');
-			body.css( 'margin-bottom', '' );
-			localStorage.removeItem( container_pinned_key );
-		});
+		$('#qm-title').on('dblclick',close_container);
+		$('.qm-button-container-close').on('click',close_container);
 
 		$('.qm-button-container-settings,a[href="#qm-settings"]').on('click',function(){
 			show_panel( '#qm-settings' );
-			$('#qm-settings').focus();
+			$('#qm-settings').trigger('focus');
 		});
 
 		$('.qm-button-container-position').on('click',function(){
@@ -628,7 +637,7 @@ if ( window.jQuery ) {
 
 		$('.qm-title-heading select').on('change',function(){
 			show_panel( $(this).val() );
-			$($(this).val()).focus();
+			$($(this).val()).trigger('focus');
 		});
 
 	} );

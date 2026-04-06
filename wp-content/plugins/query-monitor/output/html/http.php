@@ -62,29 +62,29 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 
 			$this->before_tabular_output();
 
-			echo '<thead>';
-			echo '<tr>';
-			echo '<th scope="col">' . esc_html__( 'Method', 'query-monitor' ) . '</th>';
-			echo '<th scope="col" class="qm-filterable-column">';
+			echo '<thead>' . "\n";
+			echo '<tr>' . "\n";
+			echo '<th scope="col">' . esc_html__( 'Method', 'query-monitor' ) . '</th>' . "\n";
+			echo '<th scope="col" class="qm-filterable-column">' . "\n";
 			echo $this->build_filter( 'host', $hosts, __( 'URL', 'query-monitor' ) ); // WPCS: XSS ok.
-			echo '</th>';
+			echo '</th>' . "\n";
 			echo '<th scope="col" class="qm-filterable-column">';
 			echo $this->build_filter( 'type', $status_output, __( 'Status', 'query-monitor' ) ); // WPCS: XSS ok.
-			echo '</th>';
-			echo '<th scope="col">' . esc_html__( 'Caller', 'query-monitor' ) . '</th>';
+			echo '</th>' . "\n";
+			echo '<th scope="col">' . esc_html__( 'Caller', 'query-monitor' ) . '</th>' . "\n";
 			echo '<th scope="col" class="qm-filterable-column">';
 
 			$values = wp_list_pluck( $components, 'name' );
 
 			echo $this->build_filter( 'component', $values, __( 'Component', 'query-monitor' ) ); // WPCS: XSS ok.
-			echo '</th>';
-			echo '<th scope="col" class="qm-num">' . esc_html__( 'Response Size', 'query-monitor' ) . '</th>';
-			echo '<th scope="col" class="qm-num">' . esc_html__( 'Timeout', 'query-monitor' ) . '</th>';
-			echo '<th scope="col" class="qm-num">' . esc_html__( 'Time', 'query-monitor' ) . '</th>';
-			echo '</tr>';
-			echo '</thead>';
+			echo '</th>' . "\n";
+			echo '<th scope="col" class="qm-num">' . esc_html__( 'Response Size', 'query-monitor' ) . '</th>' . "\n";
+			echo '<th scope="col" class="qm-num">' . esc_html__( 'Timeout', 'query-monitor' ) . '</th>' . "\n";
+			echo '<th scope="col" class="qm-num">' . esc_html__( 'Time', 'query-monitor' ) . '</th>' . "\n";
+			echo '</tr>' . "\n";
+			echo '</thead>' . "\n";
 
-			echo '<tbody>';
+			echo '<tbody>' . "\n";
 			$i = 0;
 
 			foreach ( $data->http as $row ) {
@@ -176,14 +176,18 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				}
 
 				printf( // WPCS: XSS ok.
-					'<tr %s class="%s">',
+					'<tr %s class="%s">' . "\n",
 					$attr,
 					esc_attr( $css )
 				);
 				printf(
-					'<td>%s</td>',
+					'<td>%s</td>' . "\n",
 					esc_html( $row['args']['method'] )
 				);
+
+				if ( $is_error && 'GET' === $row['args']['method'] ) {
+					$url .= sprintf( ' <a href="%s">%s</a>', esc_url( $row['url'] ), QueryMonitor::icon( 'external' ) );
+				}
 
 				if ( $row['intercepted'] ) {
 					$url = sprintf(
@@ -208,7 +212,7 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				}
 
 				printf( // WPCS: XSS ok.
-					'<td class="qm-url qm-ltr qm-wrap">%s%s</td>',
+					'<td class="qm-url qm-ltr qm-wrap">%s%s</td>' . "\n",
 					$info,
 					$url
 				);
@@ -239,7 +243,7 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				}
 
 				if ( $row['intercepted'] && ! $is_error ) {
-					echo '<td class="qm-col-status"></td>';
+					echo '<td class="qm-col-status"></td>' . "\n";
 				} else {
 					$show_toggle = ! empty( $row['info'] );
 
@@ -251,8 +255,10 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 					echo esc_html( $response );
 
 					if ( $show_toggle ) {
-						echo self::build_toggler(); // WPCS: XSS ok;
-						echo '<ul class="qm-toggled">';
+						/* translators: 1: HTTP request method, 2: Request URL, 3: HTTP response status */
+						$status_context = sprintf( __( '%1$s to %2$s with status %3$s', 'query-monitor' ), $row['args']['method'], $row['url'], $response );
+						echo self::build_toggler( $status_context ); // WPCS: XSS ok;
+						echo '<ul class="qm-toggled">' . "\n";
 					}
 
 					if ( ! empty( $row['info'] ) ) {
@@ -266,7 +272,7 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 								continue;
 							}
 							printf(
-								'<li><span class="qm-info qm-supplemental">%1$s: %2$s</span></li>',
+								'<li><span class="qm-info qm-supplemental">%1$s: %2$s</span></li>' . "\n",
 								esc_html( $value ),
 								esc_html( number_format_i18n( $row['info'][ $key ], 4 ) )
 							);
@@ -281,7 +287,7 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 								continue;
 							}
 							printf(
-								'<li><span class="qm-info qm-supplemental">%1$s: %2$s</span></li>',
+								'<li><span class="qm-info qm-supplemental">%1$s: %2$s</span></li>' . "\n",
 								esc_html( $value ),
 								esc_html( $row['info'][ $key ] )
 							);
@@ -289,10 +295,10 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 					}
 
 					if ( $show_toggle ) {
-						echo '</ul>';
+						echo '</ul>' . "\n";
 					}
 
-					echo '</td>';
+					echo '</td>' . "\n";
 				}
 
 				$caller = array_shift( $stack );
@@ -300,31 +306,31 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				echo '<td class="qm-has-toggle qm-nowrap qm-ltr">';
 
 				if ( ! empty( $stack ) ) {
-					echo self::build_toggler(); // WPCS: XSS ok;
+					echo self::build_toggler( $caller ); // WPCS: XSS ok;
 				}
 
-				echo '<ol>';
+				echo '<ol>' . "\n";
 
-				echo "<li>{$caller}</li>"; // WPCS: XSS ok.
+				echo "<li>{$caller}</li>\n"; // WPCS: XSS ok.
 
 				if ( ! empty( $stack ) ) {
-					echo '<div class="qm-toggled"><li>' . implode( '</li><li>', $stack ) . '</li></div>'; // WPCS: XSS ok.
+					echo '<div class="qm-toggled"><li>' . implode( "</li>\n<li>", $stack ) . '</li></div>' . "\n"; // WPCS: XSS ok.
 				}
 
-				echo '</ol></td>';
+				echo '</ol></td>' . "\n";
 
 				printf(
-					'<td class="qm-nowrap">%s</td>',
+					'<td class="qm-nowrap">%s</td>' . "\n",
 					esc_html( $component->name )
 				);
 
 				printf(
-					'<td class="qm-nowrap qm-num">%s</td>',
+					'<td class="qm-nowrap qm-num">%s</td>' . "\n",
 					esc_html( $size )
 				);
 
 				printf(
-					'<td class="qm-num">%s</td>',
+					'<td class="qm-num">%s</td>' . "\n",
 					esc_html( $timeout )
 				);
 
@@ -335,30 +341,30 @@ class QM_Output_Html_HTTP extends QM_Output_Html {
 				}
 
 				printf(
-					'<td class="qm-num">%s</td>',
+					'<td class="qm-num">%s</td>' . "\n",
 					esc_html( $stime )
 				);
-				echo '</tr>';
+				echo '</tr>' . "\n";
 			}
 
-			echo '</tbody>';
-			echo '<tfoot>';
+			echo '</tbody>' . "\n";
+			echo '<tfoot>' . "\n";
 
 			$total_stime = number_format_i18n( $data->ltime, 4 );
 			$count = count( $data->http );
 
-			echo '<tr>';
+			echo '<tr>' . "\n";
 			printf(
-				'<td colspan="7">%s</td>',
+				'<td colspan="7">%s</td>' . "\n",
 				sprintf(
 					/* translators: %s: Number of HTTP API requests */
 					esc_html( _nx( 'Total: %s', 'Total: %s', $count, 'HTTP API calls', 'query-monitor' ) ),
 					'<span class="qm-items-number">' . esc_html( number_format_i18n( $count ) ) . '</span>'
 				)
 			);
-			echo '<td class="qm-num qm-items-time">' . esc_html( $total_stime ) . '</td>';
-			echo '</tr>';
-			echo '</tfoot>';
+			echo '<td class="qm-num qm-items-time">' . esc_html( $total_stime ) . '</td>' . "\n";
+			echo '</tr>' . "\n";
+			echo '</tfoot>' . "\n";
 
 			$this->after_tabular_output();
 		} else {
