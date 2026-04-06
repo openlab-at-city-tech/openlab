@@ -415,6 +415,13 @@ $settings               = [
 		'default'      => kadence()->default( 'xing_link' ),
 		'label'        => esc_html__( 'Xing', 'kadence' ),
 	],
+	'yelp_link'                 => [
+		'control_type' => 'kadence_text_control',
+		'section'      => 'general_social',
+		'sanitize'     => 'esc_url_raw',
+		'default'      => kadence()->default( 'yelp_link' ),
+		'label'        => esc_html__( 'Yelp', 'kadence' ),
+	],
 	'custom1_link'              => [
 		'control_type' => 'kadence_text_control',
 		'section'      => 'general_social',

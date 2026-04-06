@@ -21,7 +21,7 @@ class KadenceGradientColorPicker extends Component {
 	render() {
 		const getColorValue = () => {
 			let color;
-			const paletteIndex = this.state.color.match(/\d+$/)?.[0] - 1;
+			const paletteIndex = this.state.color?.match(/\d+$/)?.[0] - 1;
 			if (
 				undefined !== this.state.color &&
 				"" !== this.state.color &&

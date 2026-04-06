@@ -1254,7 +1254,7 @@ class TypographyComponent extends Component {
 							<Button
 								className="reset kadence-reset"
 								onClick={() => {
-									this.updateValues(this.defaultValue);
+									this.updateValues(JSON.parse(JSON.stringify(this.defaultValue)));
 								}}
 							>
 								<Dashicon icon="image-rotate" />
@@ -1500,6 +1500,7 @@ class TypographyComponent extends Component {
 							)}
 						{"all" === this.controlParams.options && (
 							<ColorControl
+								key={this.state.value.color}
 								presetColors={this.state.colorPalette}
 								color={
 									undefined !== this.state.value.color &&

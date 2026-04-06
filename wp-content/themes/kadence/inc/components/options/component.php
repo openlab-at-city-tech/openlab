@@ -2683,6 +2683,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					'post_related'                         => true,
 					'post_related_style'                   => 'wide',
 					'post_related_carousel_loop'           => true,
+					'post_related_carousel_dots'           => true,
 					'post_related_columns'                 => '',
 					'post_related_title'                   => '',
 					'post_related_orderby'                 => '',
@@ -3163,6 +3164,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					'search_archive_column_layout'         => 'grid',
 					// Product Archive Controls.
 					'product_archive_toggle'               => true,
+					'product_archive_default_view'         => 'grid',
 					'product_archive_show_order'           => true,
 					'product_archive_show_results_count'   => true,
 					'product_archive_style'                => 'action-on-hover',

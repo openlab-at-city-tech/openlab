@@ -666,11 +666,15 @@ class Component implements Component_Interface {
 		}
 		if ( $main_term ) {
 			$term_title = $main_term->name;
-			echo '<div class="single-product-category">';
-			echo '<a href="' . esc_attr( get_term_link( $main_term->slug, 'product_cat' ) ) . '" class="product-single-category single-category">';
-			echo esc_html( $term_title );
-			echo '</a>';
-			echo '</div>';
+            $term_link = get_term_link( $main_term->slug, 'product_cat' );
+
+            if ( is_string( $term_link ) ) {
+                echo '<div class="single-product-category">';
+                echo '<a href="' . esc_attr( $term_link ) . '" class="product-single-category single-category">';
+                echo esc_html( $term_title );
+                echo '</a>';
+                echo '</div>';
+            }
 		}
 	}
 	/**
@@ -1150,8 +1154,12 @@ class Component implements Component_Interface {
 		} else {
 			$attributes = '';
 		}
-		return '<ul class="products ' . esc_attr( $columns_class ) . ' woo-archive-' . esc_attr( $product_style ) . ' woo-archive-btn-' . esc_attr( $product_btn_style ) . ( $main_archive_loop ? ' ' . $main_archive_loop : '' ) . ( $align_archive_button ? ' ' . $align_archive_button : '' ) . '  woo-archive-image-hover-' . esc_attr( $product_image_hover_style ) . '"' . ( $attributes ? " data-infinite-scroll='" . esc_attr( $attributes ) . "'" : '' ) . '>';
 
+		if ( ! kadence()->option( 'product_archive_toggle' ) ) {
+			$columns_class .= sprintf( ' products-%s-view', kadence()->option( 'product_archive_default_view' ) );
+		}
+
+		return '<ul class="products ' . esc_attr( $columns_class ) . ' woo-archive-' . esc_attr( $product_style ) . ' woo-archive-btn-' . esc_attr( $product_btn_style ) . ( $main_archive_loop ? ' ' . $main_archive_loop : '' ) . ( $align_archive_button ? ' ' . $align_archive_button : '' ) . '  woo-archive-image-hover-' . esc_attr( $product_image_hover_style ) . '"' . ( $attributes ? " data-infinite-scroll='" . esc_attr( $attributes ) . "'" : '' ) . '>';
 	}
 	/**
 	 * Get Archive infinite attributes

@@ -594,6 +594,34 @@ $settings = array(
 		'label'        => esc_html__( 'Show Archive Grid/List Toggle?', 'kadence' ),
 		'transport'    => 'refresh',
 	),
+	'product_archive_default_view' => [
+		'control_type' => 'kadence_radio_icon_control',
+		'section'      => 'woocommerce_product_catalog',
+		'priority'     => 7,
+		'default'      => kadence()->default( 'product_archive_default_view' ),
+		'label'        => esc_html__( 'Default Archive View', 'kadence' ),
+		'transport'    => 'refresh',
+		'context'      => [
+			[
+				'setting'  => 'product_archive_toggle',
+				'operator' => '=',
+				'value'    => false,
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'grid' => [
+					'tooltip' => __( 'Grid', 'kadence' ),
+					'icon'    => 'grid',
+				],
+				'list' => [
+					'tooltip'  => __( 'List', 'kadence' ),
+					'dashicon' => 'list-view',
+				],
+			],
+			'responsive' => false,
+		],
+	],
 	'product_archive_image_hover_switch' => array(
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'woocommerce_product_catalog',

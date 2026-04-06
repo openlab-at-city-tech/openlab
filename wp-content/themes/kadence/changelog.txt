@@ -1,3 +1,19 @@
+= 1.4.5 | 25th February 2026
+* Fix: Archive Title color reset not working in Customizer
+
+= 1.4.4 | 11th February 2026
+* Add: Setting to select the default layout for product archive when Grid/List toggle is disabled
+* Fix: Yelp Social Icon for the Theme Header does not have URL field
+* Fix: Uncaught error on some woocommerce installs
+* Update: Related Posts slider aria role for the slide item
+* Fix: Related Posts Carousel triggers PSI "elements contain focusable descendents" warning.
+* Fix: Menu Item aria attribute issue
+* Fix: Table of Contents link styles when inside a group
+
+= 1.4.3 | 8th January 2026
+* Fix: Customizer Color Picker not working when on Tablet or Mobile settings
+* Fix: Theme archive layout issues with featured image disabled
+
 = 1.4.2 | 18th November 2025
 * Fix: Optimized group block removed the wide-width and full width layout options
 * Fix: Syntax error reported in theme.json

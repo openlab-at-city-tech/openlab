@@ -997,6 +997,22 @@ $kadence_post_settings = array(
 		'label'        => esc_html__( 'Show Related Posts?', 'kadence' ),
 		'transport'    => 'refresh',
 	),
+	'post_related_carousel_dots' => array(
+		'control_type' => 'kadence_switch_control',
+		'sanitize'     => 'kadence_sanitize_toggle',
+		'section'      => 'post_layout',
+		'priority'     => 20,
+		'default'      => kadence()->default( 'post_related_carousel_dots' ),
+		'label'        => esc_html__( 'Show Related Posts Pagination Dots?', 'kadence' ),
+		'transport'    => 'refresh',
+		'context'      => array(
+			array(
+				'setting'    => 'post_related',
+				'operator'   => '=',
+				'value'      => true,
+			),
+		),
+	),
 	'post_related_columns' => array(
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'post_layout',
