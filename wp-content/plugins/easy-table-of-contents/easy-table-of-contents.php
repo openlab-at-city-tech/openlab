@@ -3,7 +3,7 @@
  * Plugin Name: Easy Table of Contents
  * Plugin URI: https://tocwp.com/
  * Description: Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
- * Version: 2.0.78
+ * Version: 2.0.82.2
  * Author: Magazine3
  * Author URI: https://tocwp.com/
  * Text Domain: easy-table-of-contents
@@ -28,13 +28,13 @@
  * @package  Easy Table of Contents
  * @category Plugin
  * @author   Magazine3
- * @version  2.0.78
+ * @version  2.0.82.2
  */
 
-use Easy_Plugins\Table_Of_Contents\Debug;
-use function Easy_Plugins\Table_Of_Contents\Cord\insertElementByPTag;
-use function Easy_Plugins\Table_Of_Contents\Cord\insertElementByImgTag;
-use function Easy_Plugins\Table_Of_Contents\Cord\mb_find_replace;
+use Eztoc\Table_Of_Contents\Debug;
+use function Eztoc\Table_Of_Contents\Cord\insertElementByPTag;
+use function Eztoc\Table_Of_Contents\Cord\insertElementByImgTag;
+use function Eztoc\Table_Of_Contents\Cord\mb_find_replace;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -52,7 +52,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @since 1.0
 		 * @var string
 		 */
-		const VERSION = '2.0.78';
+		const VERSION = '2.0.82.2';
 
 		/**
 		 * Stores the instance of this class.
@@ -178,8 +178,12 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				}
 				add_filter( 'term_description',  array( __CLASS__, 'toc_term_content_filter' ), 99,2);
 				add_filter( 'woocommerce_taxonomy_archive_description_raw',  array( __CLASS__, 'toc_category_content_filter_woocommerce' ), 99,2);
-				add_shortcode( 'ez-toc', array( __CLASS__, 'shortcode' ) );                                    
-				add_shortcode( apply_filters( 'ez_toc_shortcode', 'toc' ), array( __CLASS__, 'shortcode' ) );
+				add_shortcode( 'ez-toc', array( __CLASS__, 'shortcode' ) );  
+				//This is legacy hook,it will be removed in future versions.  
+				$eztoc_shortcode =  apply_filters( 'ez_toc_shortcode', 'toc' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+				//This is the new hook , it should be used instead of the legacy one.
+				$eztoc_shortcode =  apply_filters( 'eztoc_shortcode', 'toc' );
+				add_shortcode( $eztoc_shortcode, array( __CLASS__, 'shortcode' ) );
 				add_shortcode( 'ez-toc-widget-sticky', array( __CLASS__, 'ez_toc_widget_sticky_shortcode' ) );
 				add_action( 'wp_footer', array(__CLASS__, 'sticky_toggle_content' ) );
 				add_filter( 'wpseo_schema_graph', array( __CLASS__, 'ez_toc_schema_sitenav_yoast_compat'), 10, 1 );
@@ -238,8 +242,12 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				}
 
 			}
-			
-			return apply_filters( 'ez_toc_sidebar_has_toc_filter', $status );
+			//This is legacy hook,it will be removed in future versions.
+			$eztoc_sidebar_has_toc_filter =  apply_filters( 'ez_toc_sidebar_has_toc_filter', $status ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+			//This is the new hook , it should be used instead of the legacy one.
+			$eztoc_sidebar_has_toc_filter =  apply_filters( 'eztoc_sidebar_has_toc_filter', $status );
+
+			return $eztoc_sidebar_has_toc_filter;
 		}
                 
         /**
@@ -254,9 +262,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			if ( ezTOC_Option::get( 'exclude_css' ) && 'css' == ezTOC_Option::get( 'toc_loading' ) ) {
                                 
 				$cssChecked = '#ez-toc-container input[type="checkbox"]:checked + nav, #ez-toc-widget-container input[type="checkbox"]:checked + nav {opacity: 0;max-height: 0;border: none;display: none;}';
-				wp_register_style( 'ez-toc-exclude-toggle-css', false, array(), ezTOC::VERSION );
-				wp_enqueue_style( 'ez-toc-exclude-toggle-css', false, array(), ezTOC::VERSION );
-				wp_add_inline_style( 'ez-toc-exclude-toggle-css', $cssChecked );
+				wp_register_style( 'eztoc-exclude-toggle-css', false, array(), ezTOC::VERSION );
+				wp_enqueue_style( 'eztoc-exclude-toggle-css', false, array(), ezTOC::VERSION );
+				wp_add_inline_style( 'eztoc-exclude-toggle-css', $cssChecked );
 			}
         }
         
@@ -294,10 +302,13 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			$domain = 'easy-table-of-contents';
 
 			// Set filter for plugin's languages directory
-			$languagesDirectory = apply_filters( "ez_{$domain}_languages_directory", EZ_TOC_DIR_NAME . '/languages/' );
+			//This is legacy hook,it will be removed in future versions.
+			$languagesDirectory = apply_filters( "ez_{$domain}_languages_directory", EZ_TOC_DIR_NAME . '/languages/' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+			//This is the new hook , it should be used instead of the legacy one.
+			$languagesDirectory = apply_filters( "eztoc_{$domain}_languages_directory", EZ_TOC_DIR_NAME . '/languages/' );
 
 			// Traditional WordPress plugin locale filter
-			$locale   = apply_filters( 'plugin_locale', get_locale(), $domain );
+			$locale   = apply_filters( 'plugin_locale', get_locale(), $domain ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Using WP Core hook
 			$fileName = sprintf( '%1$s-%2$s.mo', $domain, $locale );
 
 			// Setup paths to current locale file
@@ -317,6 +328,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			} else {
 
 				// Load the default language files
+				// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- Using for compatibility.
 				load_plugin_textdomain( $domain, false, $languagesDirectory );
 			}
 		}
@@ -333,9 +345,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$inline_css .= self::inline_counting_css( ezTOC_Option::get( 'heading-text-direction', 'ltr' ), 'ez-toc-sticky-toggle-direction', 'ez-toc-sticky-toggle-counter', 'counter', 'ez-toc-sticky-container' );
 					$inline_css .= self::inline_sticky_toggle_css();
 
-					wp_register_style( 'ez-toc-sticky-style', false, array(), ezTOC::VERSION );
-					wp_enqueue_style( 'ez-toc-sticky-style', false, array(), ezTOC::VERSION );
-					wp_add_inline_style( 'ez-toc-sticky-style', $inline_css );
+					wp_register_style( 'eztoc-sticky-style', false, array(), ezTOC::VERSION );
+					wp_enqueue_style( 'eztoc-sticky-style', false, array(), ezTOC::VERSION );
+					wp_add_inline_style( 'eztoc-sticky-style', $inline_css );
 
 				}
 				
@@ -355,9 +367,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$inline_css .= self::inline_counting_css( ezTOC_Option::get( 'heading-text-direction', 'ltr' ),'ez-toc-widget-direction','ez-toc-widget-container', 'counter', 'ez-toc-widget-container' );
 					$inline_css .= self::inline_css();
 
-					wp_register_style( 'ez-toc-style', false, array(), ezTOC::VERSION );
-					wp_enqueue_style( 'ez-toc-style', false, array(), ezTOC::VERSION );
-					wp_add_inline_style( 'ez-toc-style', $inline_css );
+					wp_register_style( 'eztoc-style', false, array(), ezTOC::VERSION );
+					wp_enqueue_style( 'eztoc-style', false, array(), ezTOC::VERSION );
+					wp_add_inline_style( 'eztoc-style', $inline_css );
 
 				}
 				
@@ -500,7 +512,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				// If SCRIPT_DEBUG is set and TRUE load the non-minified JS files, otherwise, load the minified files.
 				$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';				
 
-				if ( in_array( 'js_composer_salient/js_composer.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {					
+				if ( eztoc_is_plugin_active( 'js_composer_salient/js_composer.php') ) {					
 					$postMetaContent = get_post_meta( $eztoc_post_id, '_nectar_portfolio_extra_content',true );
 					if( !empty( $postMetaContent ) ){
 						update_option( 'ez-toc-post-meta-content', array( $eztoc_post_id => do_shortcode( $postMetaContent ) ) );
@@ -508,26 +520,34 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				}
 									
 				// Register stylesheet which can be called later using wp_enqueue_style() 
-				wp_register_style( 'ez-toc', EZ_TOC_URL . "assets/css/screen{$min}.css",array( ), ezTOC::VERSION );
-				wp_register_style( 'ez-toc-sticky', EZ_TOC_URL . "assets/css/ez-toc-sticky{$min}.css", array(), self::VERSION );
+				wp_register_style( 'eztoc', EZ_TOC_URL . "assets/css/screen{$min}.css",array( ), ezTOC::VERSION );
+				wp_register_style( 'eztoc-sticky', EZ_TOC_URL . "assets/css/ez-toc-sticky{$min}.css", array(), self::VERSION );
 
 				// Register scripts which can be called later using wp_enqueue_script() 																																
 				$in_footer = true;
 				if ( ezTOC_Option::get( 'load_js_in' ) == 'header' ) {
 					$in_footer = false;
 				}
-				wp_register_script( 'ez-toc-sticky', EZ_TOC_URL . "assets/js/ez-toc-sticky{$min}.js", array( 'jquery'), ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/ez-toc-sticky{$min}.js" ), $in_footer );				
-				wp_register_script( 'ez-toc-js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie{$min}.js", array(), '2.2.1', $in_footer );
-				wp_register_script( 'ez-toc-jquery-sticky-kit', EZ_TOC_URL . "vendor/sticky-kit/jquery.sticky-kit{$min}.js", array( 'jquery' ), '1.9.2', $in_footer );                        			
-				wp_register_script( 'ez-toc-js', EZ_TOC_URL . "assets/js/front{$min}.js", array( 'jquery', 'ez-toc-js-cookie', 'ez-toc-jquery-sticky-kit' ), ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/front{$min}.js" ), $in_footer );
-				wp_register_script( 'ez-toc-scroll-scriptjs', apply_filters('ez_toc_smscroll_jsfile_filter',EZ_TOC_URL . "assets/js/smooth_scroll{$min}.js"), array( 'jquery' ), ezTOC::VERSION, $in_footer );
+				wp_register_script( 'eztoc-sticky', EZ_TOC_URL . "assets/js/ez-toc-sticky{$min}.js", array( 'jquery'), ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/ez-toc-sticky{$min}.js" ), $in_footer );				
+				wp_register_script( 'eztoc-js-cookie', EZ_TOC_URL . "vendor/js-cookie/js.cookie{$min}.js", array(), '2.2.1', $in_footer );
+				wp_register_script( 'eztoc-jquery-sticky-kit', EZ_TOC_URL . "vendor/sticky-kit/jquery.sticky-kit{$min}.js", array( 'jquery' ), '1.9.2', $in_footer );                        			
+				wp_register_script( 'eztoc-js', EZ_TOC_URL . "assets/js/front{$min}.js", array( 'jquery', 'eztoc-js-cookie', 'eztoc-jquery-sticky-kit' ), ezTOC::VERSION . '-' . filemtime( EZ_TOC_PATH . "/assets/js/front{$min}.js" ), $in_footer );
+				//This is legacy hook,it will be removed in future versions.
+				$eztoc_smscroll_jsfile_filter =  apply_filters('ez_toc_smscroll_jsfile_filter',EZ_TOC_URL . "assets/js/smooth_scroll{$min}.js"); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+				//This is the new hook , it should be used instead of the legacy one.
+				$eztoc_smscroll_jsfile_filter =  apply_filters('eztoc_smscroll_jsfile_filter',EZ_TOC_URL . "assets/js/smooth_scroll{$min}.js");
+				wp_register_script( 'eztoc-scroll-scriptjs', $eztoc_smscroll_jsfile_filter, array( 'jquery' ), ezTOC::VERSION, $in_footer );
+				wp_register_script( 'eztoc-elementor-anchor-fix', EZ_TOC_URL . 'assets/js/elementor-toc-anchor-fix.js', array(), ezTOC::VERSION, $in_footer );
 				self::localize_scripts();
 																													
 				if ( self::is_enqueue_scripts_eligible() ) {
+					if ( eztoc_is_plugin_active( 'elementor/elementor.php' ) ) {
+						wp_enqueue_script( 'eztoc-elementor-anchor-fix' );
+					}
 					self::enqueue_registered_script();	
 					self::enqueue_registered_style();	
 					self::inline_main_counting_css();
-					if ( in_array( 'js_composer/js_composer.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+					if ( eztoc_is_plugin_active( 'js_composer/js_composer.php') ) {
 						self::inline_wp_bakery_js();
 					}												
 				}											
@@ -538,6 +558,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					self::inline_main_counting_sticky_css();					
 				}
 				
+				$eztoc_current_theme = wp_get_theme();
 
 				/**
 				 * Foodie Pro Theme Compatibility
@@ -545,10 +566,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				 * in right way
 				 * @since 2.0.39
 				 */
-				if ( 'Foodie Pro' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+				if ( 'Foodie Pro' == $eztoc_current_theme->get( 'Name' ) ) {
 
-					wp_register_style( 'ez-toc-foodie-pro', EZ_TOC_URL . "assets/css/foodie-pro{$min}.css",array(), ezTOC::VERSION );
-					wp_enqueue_style( 'ez-toc-foodie-pro' );
+					wp_register_style( 'eztoc-foodie-pro', EZ_TOC_URL . "assets/css/foodie-pro{$min}.css",array(), ezTOC::VERSION );
+					wp_enqueue_style( 'eztoc-foodie-pro' );
 
 				}
 
@@ -558,10 +579,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				 * on links of our Easy TOC container
 				 * @since 2.0.38
 				 */
-				if ( 'Thrive Theme Builder' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+				if ( 'Thrive Theme Builder' == $eztoc_current_theme->get( 'Name' ) ) {
 
-					wp_register_style( 'ez-toc-thrive-theme-builder', EZ_TOC_URL . "assets/css/thrive-theme-builder{$min}.css",array(), ezTOC::VERSION );
-					wp_enqueue_style( 'ez-toc-thrive-theme-builder' );
+					wp_register_style( 'eztoc-thrive-theme-builder', EZ_TOC_URL . "assets/css/thrive-theme-builder{$min}.css",array(), ezTOC::VERSION );
+					wp_enqueue_style( 'eztoc-thrive-theme-builder' );
 
 				}
 				
@@ -578,10 +599,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
          *
          */
 		public static function localize_scripts(){
-				global $ez_toc_shortcode_attr;				
+				global $eztoc_shortcode_attr;				
 			    $eztoc_post_id = get_the_ID();
 				$js_vars = array();
-
+				$eztoc_current_theme = wp_get_theme();
 				if ( ezTOC_Option::get( 'smooth_scroll' ) ) {
 					$js_vars['smooth_scroll'] = true;
 				}else{
@@ -618,7 +639,10 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				if (ezTOC_Option::get( 'toc_loading' ) != 'css') {
 					$icon = ezTOC::get_toc_toggle_icon();
 					if( function_exists( 'ez_toc_pro_activation_link' ) ) {
-							$icon = apply_filters('ez_toc_modify_icon',$icon);
+						//This is legacy hook,it will be removed in future versions.
+						$icon = apply_filters('ez_toc_modify_icon',$icon); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+						//This is the new hook , it should be used instead of the legacy one.
+						$icon = apply_filters('eztoc_modify_icon',$icon);
 					}
 					$js_vars['fallbackIcon'] = $icon;
 				}
@@ -631,7 +655,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$js_vars['ajax_toggle'] = true;
 				}
 
-				if(isset($ez_toc_shortcode_attr['initial_view']) && $ez_toc_shortcode_attr['initial_view'] == 'show'){
+				if(isset($eztoc_shortcode_attr['initial_view']) && $eztoc_shortcode_attr['initial_view'] == 'show'){
 					$js_vars['visibility_hide_by_default'] = false;
 				}
 
@@ -649,14 +673,14 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				 * If Chamomile theme is active then remove hamburger div from content
 				 * @since 2.0.53
 				 * */
-				if ( 'Chamomile' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+				if ( 'Chamomile' == $eztoc_current_theme->get( 'Name' ) ) {
 					$js_vars['chamomile_theme_is_on'] = true;
 				}else{
 					$js_vars['chamomile_theme_is_on'] = false;
 				}
 				
 				if ( 0 < count( $js_vars ) ) {
-					wp_localize_script( 'ez-toc-js', 'ezTOC', $js_vars );
+					wp_localize_script( 'eztoc-js', 'ezTOC', $js_vars );
 					// smooth scroll js localization
 					$js_scroll = array();
 					$js_scroll['scroll_offset'] = esc_js( $offset );					
@@ -666,7 +690,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					if(ezTOC_Option::get( 'smooth_scroll' ) && ezTOC_Option::get( 'avoid_anch_jump' )){
 						$js_scroll['JumpJsLinks'] = true;
 					}
-					wp_localize_script( 'ez-toc-scroll-scriptjs', 'eztoc_smooth_local', $js_scroll );						
+					wp_localize_script( 'eztoc-scroll-scriptjs', 'eztoc_smooth_local', $js_scroll );						
 				}
 				//localize sticky js
 
@@ -676,7 +700,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					if( (( 1 == ezTOC_Option::get('sticky-toggle-close-on-mobile', 0) || '1' == ezTOC_Option::get('sticky-toggle-close-on-mobile', 0) || true == ezTOC_Option::get('sticky-toggle-close-on-mobile', 0) ) && wp_is_mobile()) ||  ( 1 == ezTOC_Option::get('sticky-toggle-close-on-desktop', 0) || '1' == ezTOC_Option::get('sticky-toggle-close-on-desktop', 0) || true == ezTOC_Option::get('sticky-toggle-close-on-desktop', 0) ) ) {
 						$js_sticky['close_on_link_click'] = true;
 					}
-					wp_localize_script( 'ez-toc-sticky', 'eztoc_sticky_local', $js_sticky );
+					wp_localize_script( 'eztoc-sticky', 'eztoc_sticky_local', $js_sticky );
 				}
 
 		}
@@ -695,9 +719,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			
 			if ( ! ezTOC_Option::get( 'exclude_css' )){
 				if ( ! ezTOC_Option::get( 'inline_css' ) ) {
-					wp_enqueue_style( 'ez-toc-sticky' );
+					wp_enqueue_style( 'eztoc-sticky' );
 					$css = self::inline_sticky_toggle_css();
-					wp_add_inline_style( 'ez-toc-sticky', $css );
+					wp_add_inline_style( 'eztoc-sticky', $css );
 				}
 			}
 												
@@ -716,9 +740,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			
 			if( ! ezTOC_Option::get( 'exclude_css' ) ) {
 				if ( ! ezTOC_Option::get( 'inline_css' ) ) {
-					wp_enqueue_style( 'ez-toc' );
+					wp_enqueue_style( 'eztoc' );
 					$css = self::inline_css();
-					wp_add_inline_style( 'ez-toc', $css );
+					wp_add_inline_style( 'eztoc', $css );
 				}
 			}
 												
@@ -737,9 +761,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			if (ezTOC_Option::get( 'toc_loading' ) == 'js') {
 					if ( ezTOC_Option::get( 'smooth_scroll' ) ) {
-						wp_enqueue_script( 'ez-toc-scroll-scriptjs' );
+						wp_enqueue_script( 'eztoc-scroll-scriptjs' );
 					}					
-					wp_enqueue_script( 'ez-toc-js' );
+					wp_enqueue_script( 'eztoc-js' );
 			}
 
 		}
@@ -756,7 +780,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
          */
 		public static function enqueue_registered_sticky_script(){
 
-			wp_enqueue_script( 'ez-toc-sticky');
+			wp_enqueue_script( 'eztoc-sticky');
 
 		}
                         
@@ -819,8 +843,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		public static function inline_css() {
 
 			$css = '';
-
-			if('Chamomile' == apply_filters( 'current_theme', get_option( 'current_theme' ) )){
+			$eztoc_current_theme = wp_get_theme();
+			if('Chamomile' == $eztoc_current_theme->get( 'Name' )){
 				$css .= '@media screen and (max-width: 1000px) {
 				          #ez-toc-container nav{
 				            display: block;        
@@ -889,8 +913,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				}
                                 
 			}
-
-			return apply_filters('ez_toc_pro_inline_css',$css);
+			return apply_filters('eztoc_pro_inline_css',$css);
 			
 		}
 
@@ -907,7 +930,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				if ( ! ezTOC_Option::get( 'inline_css' ) ) {
 					$css = '';
 					$css = self::inline_counting_css( ezTOC_Option::get( 'heading-text-direction', 'ltr' ), 'ez-toc-sticky-toggle-direction', 'ez-toc-sticky-toggle-counter', 'counter', 'ez-toc-sticky-container' ); 
-					wp_add_inline_style( 'ez-toc-sticky', $css );
+					wp_add_inline_style( 'eztoc-sticky', $css );
 				}
 			}            	                                               
 
@@ -927,7 +950,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$css = '';
 					$css .= self::inline_counting_css( ezTOC_Option::get( 'heading-text-direction', 'ltr' ) );
 					$css .= self::inline_counting_css( ezTOC_Option::get( 'heading-text-direction', 'ltr' ),'ez-toc-widget-direction','ez-toc-widget-container', 'counter', 'ez-toc-widget-container' );            		
-					wp_add_inline_style( 'ez-toc', $css );
+					wp_add_inline_style( 'eztoc', $css );
 				}
 			}
                         
@@ -961,9 +984,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$marginCSS = 'margin-left: .2em;';
 					$floatPosition = 'float: right;';
 				}
-		
+				$eztoc_current_theme = wp_get_theme();
 				$importantItem = '';
-				if ( 'Edition Child' == apply_filters( 'current_theme', get_option( 'current_theme' ) ) ) {
+				if ( 'Edition Child' == $eztoc_current_theme->get( 'Name' ) ) {
 					$importantItem = ' !important';
 				}
 		
@@ -1186,8 +1209,11 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			$stickyAddlCss="";
 			$stickyHeadTxtWeight =600;
 			$stickyHeadTxtSize =18;
-		
-			$stickyAddlCss = apply_filters('ez_toc_sticky_pro_css', $stickyAddlCss );
+			
+			//This is legacy hook,it will be removed in future versions.
+			$stickyAddlCss = apply_filters('ez_toc_sticky_pro_css', $stickyAddlCss ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+			//This is the new hook , it should be used instead of the legacy one.
+			$stickyAddlCss = apply_filters('eztoc_sticky_pro_css', $stickyAddlCss );
 
             $inline_sticky_css = ".ez-toc-sticky-fixed{position: fixed;top: 0;left: 0;z-index: 999999;width: auto;max-width: 100%;} .ez-toc-sticky-fixed .ez-toc-sidebar {position: relative;top: auto;{$custom_width};box-shadow: 1px 1px 10px 3px rgb(0 0 0 / 20%);box-sizing: border-box;padding: 20px 30px;background: {$stickyBgColor};margin-left: 0 !important; {$custom_height} overflow-y: auto;overflow-x: hidden;} .ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container { padding: 0px;border: none;margin-bottom: 0;margin-top: {$topMarginStickyContainer};} #ez-toc-sticky-container a { color: #000;} .ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container {border-bottom-color: #EEEEEE;background-color: {$stickyHeadBgColor};padding:15px;border-bottom: 1px solid #e5e5e5;width: 100%;position: absolute;height: auto;top: 0;left: 0;z-index: 99999999;} .ez-toc-sticky-fixed .ez-toc-sidebar .ez-toc-sticky-title-container .ez-toc-sticky-title {font-weight: {$stickyHeadTxtWeight};font-size: {$stickyHeadTxtSize}px;color: {$stickyHeadTxtColor};} .ez-toc-sticky-fixed .ez-toc-close-icon {-webkit-appearance: none;padding: 0;cursor: pointer;background: 0 0;border: 0;float: right;font-size: 30px;font-weight: 600;line-height: 1;position: relative;color: {$stickyHeadTxtColor};top: -2px;text-decoration: none;} .ez-toc-open-icon {position: fixed;left: 0px;top:{$stickyToggleAlignTop};text-decoration: none;font-weight: bold;padding: 5px 10px 15px 10px;box-shadow: 1px -5px 10px 5px rgb(0 0 0 / 10%);background-color: {$stickyHeadBgColor};color:{$stickyHeadTxtColor};display: inline-grid;line-height: 1.4;border-radius: 0px 10px 10px 0px;z-index: 999999;} .ez-toc-sticky-fixed.hide {-webkit-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);-ms-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);-o-transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);transition: opacity 0.3s linear, left 0.3s cubic-bezier(0.4, 0, 1, 1);left: -100%;} .ez-toc-sticky-fixed.show {-webkit-transition: left 0.3s linear, left 0.3s easy-out;-moz-transition: left 0.3s linear;-o-transition: left 0.3s linear;transition: left 0.3s linear;left: 0;} .ez-toc-open-icon span.arrow { font-size: 18px; } .ez-toc-open-icon span.text {font-size: 13px;writing-mode: vertical-rl;text-orientation: mixed;} @media screen  and (max-device-width: 640px) {.ez-toc-sticky-fixed .ez-toc-sidebar {min-width: auto;} .ez-toc-sticky-fixed .ez-toc-sidebar.show { padding-top: 35px; } .ez-toc-sticky-fixed .ez-toc-sidebar #ez-toc-sticky-container { min-width: 100%; } }{$stickyAddlCss}";
 			
@@ -1200,7 +1226,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				
 		public static function is_enqueue_scripts_sticky_eligible() {
 
-			return ez_toc_stikcy_enable_support_status();
+			return eztoc_stikcy_enable_support_status();
 
 		}
 		public static function is_enqueue_scripts_eligible() {
@@ -1208,7 +1234,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			$isEligible = self::is_eligible( get_post() );
 
 			if($isEligible){
-				if(!ez_toc_auto_device_target_status()){
+				if(!eztoc_auto_device_target_status()){
 					$isEligible = false;
 				}
 			}
@@ -1246,7 +1272,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			 * Easy TOC Run On Amp Pages Check
 			 * @since 2.0.46
 			 */
-			if ( ( ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) !== false && 0 == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || '0' == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || false == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) ) && !ez_toc_non_amp() ) {
+			if ( ( ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) !== false && 0 == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || '0' == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || false == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) ) && !eztoc_non_amp() ) {
 				Debug::log( 'non_amp', 'Is frontpage, TOC is not enabled.', false );
 				return false;                            
 			}
@@ -1261,15 +1287,18 @@ if ( ! class_exists( 'ezTOC' ) ) {
 				$urls_arr = explode(PHP_EOL, $all_urls);
 				if(is_array($urls_arr)){
 					foreach ($urls_arr as $url_arr) {
-						if ( isset($_SERVER['REQUEST_URI']) && false !== strpos( $_SERVER['REQUEST_URI'], trim($url_arr) ) ) {
+						if ( isset($_SERVER['REQUEST_URI']) && false !== strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), trim($url_arr) ) ) {
 							Debug::log( 'is_restricted_path', 'In restricted path, post not eligible.', ezTOC_Option::get( 'restrict_path' ) );
 							return false;
 						}
 					}
 				}
 			}
-						
-			if ( has_shortcode( $post->post_content, apply_filters( 'ez_toc_shortcode', 'toc' ) ) || has_shortcode( $post->post_content, 'ez-toc' ) ) {
+			//This is legacy hook,it will be removed in future versions.
+			$eztoc_shortcode = apply_filters( 'ez_toc_shortcode', 'toc' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+			//This is the new hook , it should be used instead of the legacy one.
+			$eztoc_shortcode = apply_filters( 'eztoc_shortcode', 'toc' );			
+			if ( has_shortcode( $post->post_content, $eztoc_shortcode ) || has_shortcode( $post->post_content, 'ez-toc' ) ) {
 				Debug::log( 'has_ez_toc_shortcode', 'Has instance of shortcode.', true );
 				return true;
 			}
@@ -1301,7 +1330,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					/**
 					 * @link https://wordpress.org/support/topic/restrict-path-logic-does-not-work-correctly?
 					 */
-					if ( isset($_SERVER['REQUEST_URI']) && false !== strpos( ezTOC_Option::get( 'restrict_path' ), $_SERVER['REQUEST_URI'] ) ) {
+					if ( isset($_SERVER['REQUEST_URI']) && false !== strpos( ezTOC_Option::get( 'restrict_path' ), sanitize_text_field(wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) ) {
 
 						Debug::log( 'is_restricted_path', 'In restricted path, post not eligible.', ezTOC_Option::get( 'restrict_path' ) );
 						return false;
@@ -1359,7 +1388,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			$post = null;
 
-			if ( isset( self::$store[ $id ] ) && self::$store[ $id ] instanceof ezTOC_Post && !in_array( 'js_composer_salient/js_composer.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+			if ( isset( self::$store[ $id ] ) && self::$store[ $id ] instanceof ezTOC_Post && !eztoc_is_plugin_active( 'js_composer_salient/js_composer.php' ) ) {
 
 				$post = self::$store[ $id ];
 			} else {
@@ -1374,6 +1403,120 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			}
 
 			return $post;
+		}
+
+		/**
+		 * Sanitize a CSS color value for safe output in `<style>` context.
+		 *
+		 * Allows: hex colors, rgb()/rgba(), hsl()/hsla(), `var(--token)`,
+		 * and a small set of CSS keywords.
+		 *
+		 * @since 2.0.83
+		 *
+		 * @param mixed $value
+		 * @return string
+		 */
+		public static function sanitize_css_color( $value ) {
+			if ( ! is_string( $value ) ) {
+				return '';
+			}
+
+			$value = trim( $value );
+			if ( '' === $value ) {
+				return '';
+			}
+
+			$keywords = array(
+				'transparent',
+				'currentcolor',
+				'inherit',
+				'initial',
+				'unset',
+				'revert',
+				'revert-layer',
+			);
+			if ( in_array( strtolower( $value ), $keywords, true ) ) {
+				return $value;
+			}
+
+			$hex = sanitize_hex_color( $value );
+			if ( ! empty( $hex ) ) {
+				return $hex;
+			}
+
+			if ( preg_match( '/^var\\(--[A-Za-z0-9_-]+\\)$/', $value ) ) {
+				return $value;
+			}
+
+			// rgb() / rgba()
+			if ( preg_match( '/^rgba?\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})(?:\\s*,\\s*(0|1|0?\\.\\d+)\\s*)?\\)$/', $value, $m ) ) {
+				$r = (int) $m[1];
+				$g = (int) $m[2];
+				$b = (int) $m[3];
+				if ( $r >= 0 && $r <= 255 && $g >= 0 && $g <= 255 && $b >= 0 && $b <= 255 ) {
+					return $value;
+				}
+			}
+
+			// hsl() / hsla()
+			if ( preg_match( '/^hsla?\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})%\\s*,\\s*(\\d{1,3})%(?:\\s*,\\s*(0|1|0?\\.\\d+)\\s*)?\\)$/', $value, $m ) ) {
+				$h = (int) $m[1];
+				$s = (int) $m[2];
+				$l = (int) $m[3];
+				if ( $h >= 0 && $h <= 360 && $s >= 0 && $s <= 100 && $l >= 0 && $l <= 100 ) {
+					return $value;
+				}
+			}
+
+			return '';
+		}
+
+		/**
+		 * Sanitize a CSS length unit for safe concatenation.
+		 *
+		 * @since 2.0.83
+		 *
+		 * @param mixed  $unit
+		 * @param array  $allowed
+		 * @param string $default
+		 * @return string
+		 */
+		public static function sanitize_css_unit( $unit, array $allowed, $default ) {
+			if ( ! is_string( $unit ) ) {
+				return $default;
+			}
+			$unit = trim( $unit );
+			return in_array( $unit, $allowed, true ) ? $unit : $default;
+		}
+
+		/**
+		 * Sanitize a CSS font-weight.
+		 *
+		 * @since 2.0.83
+		 *
+		 * @param mixed $value
+		 * @param string $default
+		 * @return string
+		 */
+		private static function sanitize_css_font_weight( $value, $default = '' ) {
+			if ( ! is_string( $value ) ) {
+				return $default;
+			}
+			$value = trim( $value );
+			if ( '' === $value ) {
+				return $default;
+			}
+
+			$lower = strtolower( $value );
+			if ( in_array( $lower, array( 'normal', 'bold', 'bolder', 'lighter', 'inherit', 'initial', 'unset', 'revert' ), true ) ) {
+				return $value;
+			}
+
+			if ( preg_match( '/^(100|200|300|400|500|600|700|800|900)$/', $value ) ) {
+				return $value;
+			}
+
+			return $default;
 		}
 
         /**
@@ -1396,6 +1539,20 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
             if ( 'ez-toc-widget-sticky' == $tag ) {
     
+                // Check which attributes were actually provided before shortcode_atts sets defaults
+                $has_title = isset( $atts['title'] );
+                $has_title_font_size = isset( $atts['title_font_size'] );
+                $has_title_font_size_unit = isset( $atts['title_font_size_unit'] );
+                $has_title_font_weight = isset( $atts['title_font_weight'] );
+                $has_title_font_color = isset( $atts['title_font_color'] );
+                $has_text_font_size = isset( $atts['text_font_size'] );
+                $has_text_font_size_unit = isset( $atts['text_font_size_unit'] );
+                $has_text_font_weight = isset( $atts['text_font_weight'] );
+                $has_text_font_color = isset( $atts['text_font_color'] );
+                $has_scroll_fixed_position = isset( $atts['scroll_fixed_position'] );
+                $has_toc_background_color = isset( $atts['toc_background_color'] );
+                $has_toc_title_background_color = isset( $atts['toc_title_background_color'] );
+                
                 extract( shortcode_atts( array(
                     'highlight_color' => '#ededed',
                     'title' => 'Table of Contents',
@@ -1416,6 +1573,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					'text_font_size_unit' => '%',
 					'text_font_weight' => '400',
 					'text_font_color' => '',
+                    'toc_background_color' => '',
+                    'toc_title_background_color' => '',
                     'ez_toc_widget_sticky_before_widget_container' => '',
                     'ez_toc_widget_sticky_before_widget' => '',
                     'ez_toc_widget_sticky_before' => '',
@@ -1426,14 +1585,27 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					'device_target'=> ''
                 ), $atts ) );
 
+				// Sanitize shortcode attributes that are used in `<style>` context.
+				$title_font_color = self::sanitize_css_color( $title_font_color );
+				$text_font_color  = self::sanitize_css_color( $text_font_color );
+				$highlight_color   = self::sanitize_css_color( $highlight_color );
+				$toc_background_color = self::sanitize_css_color( $toc_background_color );
+				$toc_title_background_color = self::sanitize_css_color( $toc_title_background_color );
+
+				$title_font_size_unit = self::sanitize_css_unit( $title_font_size_unit, array( '%', 'px', 'pt', 'em', 'rem', 'vw', 'vh' ), '%' );
+				$text_font_size_unit  = self::sanitize_css_unit( $text_font_size_unit, array( '%', 'px', 'pt', 'em', 'rem', 'vw', 'vh' ), '%' );
+
+				$title_font_weight = self::sanitize_css_font_weight( $title_font_weight, '600' );
+				$text_font_weight  = self::sanitize_css_font_weight( $text_font_weight, '400' );
+
                 $widget_name = esc_html( 'ezTOC_WidgetSticky' );
                 
                 $instance = array(
-                    'title' => ( ! empty ( $title ) ) ? $title : '',
-					'sidebar_sticky_title' => ( ! empty ( $title ) ) ? $title : '',
+                    'title' => ( $has_title && ! empty ( $title ) ) ? $title : ezTOC_Option::get( 'heading_text', 'Table of Contents' ),
+					'sidebar_sticky_title' => ( $has_title && ! empty ( $title ) ) ? $title : ezTOC_Option::get( 'heading_text', 'Table of Contents' ),
                     'highlight_color' => ( ! empty ( $highlight_color ) ) ? $highlight_color : '#ededed',
                     'advanced_options' => ( ! empty ( $advanced_options ) ) ? $advanced_options : '',
-                    'scroll_fixed_position' => ( ! empty ( $scroll_fixed_position ) ) ? ( int ) $scroll_fixed_position : 30,
+                    'scroll_fixed_position' => ( $has_scroll_fixed_position && ! empty ( $scroll_fixed_position ) ) ? ( int ) $scroll_fixed_position : (int) ezTOC_Option::get( 'smooth_scroll_offset', 30 ),
                     'sidebar_width' => ( ! empty ( $sidebar_width ) ) ? ( 'auto' == $sidebar_width ) ? $sidebar_width : ( int ) wp_strip_all_tags ( $sidebar_width ) : 'auto',
                     'sidebar_width_size_unit' => ( ! empty ( $sidebar_width_size_unit ) ) ? $sidebar_width_size_unit : 'none',
                     'fixed_top_position' => ( ! empty ( $fixed_top_position ) ) ? ( 'auto' == $fixed_top_position ) ? $fixed_top_position : ( int ) wp_strip_all_tags ( $fixed_top_position ) : 30,
@@ -1441,14 +1613,16 @@ if ( ! class_exists( 'ezTOC' ) ) {
                     'navigation_scroll_bar' => ( ! empty ( $navigation_scroll_bar ) ) ? $navigation_scroll_bar : 'on',
                     'scroll_max_height' => ( ! empty ( $scroll_max_height ) ) ? ( 'auto' == $scroll_max_height ) ? $scroll_max_height : ( int ) wp_strip_all_tags ( $scroll_max_height ) : 'auto',
                     'scroll_max_height_size_unit' => ( ! empty ( $scroll_max_height_size_unit ) ) ? $scroll_max_height_size_unit : 'none',
-					'sidebar_sticky_title_size' => ( ! empty ( $title_font_size ) ) ? ( 'auto' == $title_font_size ) ? $title_font_size : ( int ) wp_strip_all_tags ( $title_font_size ) : '120',
-					'sidebar_sticky_title_size_unit' => ( ! empty ( $title_font_size_unit ) ) ? $title_font_size_unit : '%',
-					'sidebar_sticky_title_weight' => ( ! empty ( $title_font_weight ) ) ? $title_font_weight : '600',
-					'sidebar_sticky_title_color' => ( ! empty ( $title_font_color ) ) ? $title_font_color : '',
-					'sidebar_sticky_size' => ( ! empty ( $text_font_size ) ) ? ( 'auto' == $text_font_size ) ? $text_font_size : ( int ) wp_strip_all_tags ( $text_font_size ) : '100',
-					'sidebar_sticky_size_unit' => ( ! empty ( $text_font_size_unit ) ) ? $text_font_size_unit : '%',
-					'sidebar_sticky_weight' => ( ! empty ( $text_font_weight ) ) ? $text_font_weight : '400',
-					'sidebar_sticky_color' => ( ! empty ( $text_font_color ) ) ? $text_font_color : '',
+					'sidebar_sticky_title_size' => ( $has_title_font_size && ! empty ( $title_font_size ) ) ? ( 'auto' == $title_font_size ) ? $title_font_size : ( int ) wp_strip_all_tags ( $title_font_size ) : (int) ezTOC_Option::get( 'title_font_size', 120 ),
+					'sidebar_sticky_title_size_unit' => ( $has_title_font_size_unit && ! empty ( $title_font_size_unit ) ) ? $title_font_size_unit : ezTOC_Option::get( 'title_font_size_units', '%' ),
+					'sidebar_sticky_title_weight' => ( $has_title_font_weight && ! empty ( $title_font_weight ) ) ? $title_font_weight : ezTOC_Option::get( 'title_font_weight', '600' ),
+					'sidebar_sticky_title_color' => ( $has_title_font_color && ! empty ( $title_font_color ) ) ? $title_font_color : self::sanitize_css_color( ezTOC_Option::get( 'custom_title_colour', '' ) ),
+					'sidebar_sticky_size' => ( $has_text_font_size && ! empty ( $text_font_size ) ) ? ( 'auto' == $text_font_size ) ? $text_font_size : ( int ) wp_strip_all_tags ( $text_font_size ) : (int) ezTOC_Option::get( 'font_size', 95 ),
+					'sidebar_sticky_size_unit' => ( $has_text_font_size_unit && ! empty ( $text_font_size_unit ) ) ? $text_font_size_unit : ezTOC_Option::get( 'font_size_units', '%' ),
+					'sidebar_sticky_weight' => ( $has_text_font_weight && ! empty ( $text_font_weight ) ) ? $text_font_weight : ezTOC_Option::get( 'font_weight', '400' ),
+					'sidebar_sticky_color' => ( $has_text_font_color && ! empty ( $text_font_color ) ) ? $text_font_color : self::sanitize_css_color( ezTOC_Option::get( 'custom_link_colour', '' ) ),
+					'toc_background_color' => ( $has_toc_background_color && ! empty ( $toc_background_color ) ) ? $toc_background_color : self::sanitize_css_color( ezTOC_Option::get( 'custom_background_colour', '' ) ),
+					'toc_title_background_color' => ( $has_toc_title_background_color && ! empty ( $toc_title_background_color ) ) ? $toc_title_background_color : self::sanitize_css_color( ezTOC_Option::get( 'custom_title_background', '' ) ),
 					'show_toggle' => ( ! empty ( $show_toggle ) ) ? $show_toggle : '',
 					'device_target' => ( ! empty ( $device_target ) ) ? $device_target : ''
                 );
@@ -1497,14 +1671,14 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @return string
 		 */
 		public static function shortcode( $atts, $content, $tag ) {
-				global $ez_toc_shortcode_attr;
-				$ez_toc_shortcode_attr = $atts;
+				global $eztoc_shortcode_attr;
+				$eztoc_shortcode_attr = $atts;
 				$html = '';
 				
-				if(!ez_toc_shortcode_enable_support_status($atts)){
+				if(!eztoc_shortcode_enable_support_status($atts)){
 					return $html;
 				}
-				if( ( ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) !== false && 0 == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || '0' == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || false == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) ) && !ez_toc_non_amp() ){
+				if( ( ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) !== false && 0 == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || '0' == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) || false == ezTOC_Option::get( 'toc-run-on-amp-pages', 1 ) ) && !eztoc_non_amp() ){
 					return $html;
 				}
 				//Enqueue css and styles if that has not been added by wp_enqueue_scripts			
@@ -1589,7 +1763,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					$options['wrapping'] = $atts["wrapping"];
 				}
 				if(isset($atts["columns"]) && $atts["columns"] != ''){
-					$options['columns'] = $atts["columns"];
+					$options['columns'] = absint( $atts["columns"] );
 				}
 				if(isset($atts["word_count_limit"]) && $atts["word_count_limit"] != ''){
 					$options['word_count_limit'] = $atts["word_count_limit"];
@@ -1662,8 +1836,12 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			 * @since 2.0
 			 *
 			 * @param bool $apply
-			 */			
-			return apply_filters( 'ez_toc_maybe_apply_the_content_filter', $apply );
+			 */
+			//This is legacy hook,it will be removed in future versions.
+			$eztoc_maybe_apply_the_content_filter = apply_filters( 'ez_toc_maybe_apply_the_content_filter', $apply ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+			//This is the new hook , it should be used instead of the legacy one.
+			$eztoc_maybe_apply_the_content_filter = apply_filters( 'eztoc_maybe_apply_the_content_filter', $apply );	 		
+			return $eztoc_maybe_apply_the_content_filter;
 		}
 
 		/**
@@ -1697,9 +1875,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			}
 			// Fix for getting current page id when sub-queries are used on the page
 			$ez_toc_current_post_id = function_exists('get_queried_object_id')?get_queried_object_id():get_the_ID();
-
+			$eztoc_current_theme = wp_get_theme();
 			// Bail if post not eligible and widget is not active.
-			if(apply_filters( 'current_theme', get_option( 'current_theme' ) ) == 'MicrojobEngine Child' || class_exists( 'Timber' ) ){
+			if('MicrojobEngine Child' == $eztoc_current_theme->get( 'Name' ) || class_exists( 'Timber' ) ){
 				$isEligible = self::is_eligible( get_post($ez_toc_current_post_id) );
 			}else{
 				$isEligible = self::is_eligible( get_post() );
@@ -1721,7 +1899,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			$isEligible = apply_filters('eztoc_do_shortcode',$isEligible);
 
 			if($isEligible){
-				if(!ez_toc_auto_device_target_status()){
+				if(!eztoc_auto_device_target_status()){
 					$isEligible = false;
 				}
 			}
@@ -1738,8 +1916,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			if ( ! $isEligible ) {
 				return Debug::log()->appendTo( $content );
 			}
-			
-			if(apply_filters( 'current_theme', get_option( 'current_theme' ) ) == 'MicrojobEngine Child'  || class_exists( 'Timber' ) ){
+			$eztoc_current_theme = wp_get_theme();
+			if($eztoc_current_theme->get('Name') == 'MicrojobEngine Child'  || class_exists( 'Timber' ) ){
 				$post = self::get( $ez_toc_current_post_id );
 			}else{
 				$post = self::get( get_the_ID());
@@ -1825,13 +2003,13 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					if($exc_blkqt == true){
 						preg_match_all("/<blockquote(.*?)>(.*?)<\/blockquote>/s", $content, $blockquotes);
 						if(!empty($blockquotes)){
-					    	$content = ez_toc_para_blockquote_replace($blockquotes, $content, 1);
+					    	$content = eztoc_para_blockquote_replace($blockquotes, $content, 1);
 					   	}
 					}
 					$content = insertElementByPTag( mb_find_replace( $find, $replace, $content ), $toc );
 					//add blockqoute back
 					if($exc_blkqt == true && !empty($blockquotes)){
-					    $content = ez_toc_para_blockquote_replace($blockquotes, $content, 2);
+					    $content = eztoc_para_blockquote_replace($blockquotes, $content, 2);
 				    }
 					break;
 				case 'aftercustompara':
@@ -1844,7 +2022,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					if($exc_blkqt == true){
 						preg_match_all("/<blockquote(.*?)>(.*?)<\/blockquote>/s", $content, $blockquotes);
 						if(!empty($blockquotes)){
-					    	$content = ez_toc_para_blockquote_replace($blockquotes, $content, 1);
+					    	$content = eztoc_para_blockquote_replace($blockquotes, $content, 1);
 					   	}
 					}
 					$paragraph_index  = get_post_meta( get_the_ID(), '_ez-toc-s_custom_para_number', true );
@@ -1877,7 +2055,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					}
 					//add blockqoute back
 					if($exc_blkqt == true && !empty($blockquotes)){
-					    $content = ez_toc_para_blockquote_replace($blockquotes, $content, 2);
+					    $content = eztoc_para_blockquote_replace($blockquotes, $content, 2);
 				    }
 					break;	
 				case 'aftercustomimg':
@@ -2151,7 +2329,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		$isEligible = apply_filters('eztoc_do_shortcode',$isEligible);
 		
 		if($isEligible){
-			if(!ez_toc_auto_device_target_status()){
+			if(!eztoc_auto_device_target_status()){
 				$isEligible = false;
 			}
 		}
@@ -2229,8 +2407,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @return mixed
 		 */
 		public static function toc_get_the_archive_description( $description ) {
-			$current_theme = wp_get_theme();
-			if (  ( $current_theme->get( 'Name' ) === 'Kadence' || $current_theme->get( 'Template' ) === 'kadence' ) && function_exists('is_product_category') && is_product_category() ) {
+			$eztoc_current_theme = wp_get_theme();
+			if (  ( $eztoc_current_theme->get( 'Name' ) === 'Kadence' || $eztoc_current_theme->get( 'Template' ) === 'kadence' ) && function_exists('is_product_category') && is_product_category() ) {
 				if( true == ezTOC_Option::get( 'include_product_category', false) ) {
 					if(!is_admin() && !empty($description)){
 						return self::the_content($description);
@@ -2264,10 +2442,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 	add_action( 'plugins_loaded', 'ezTOC' );
 }
 
-register_activation_hook(__FILE__, 'ez_toc_activate');
-function ez_toc_activate($network_wide) {
+register_activation_hook(__FILE__, 'eztoc_activate');
+function eztoc_activate($network_wide) {
 	if ( !( is_multisite() && $network_wide ) ) {
     	add_option('ez_toc_do_activation_redirect', true);
 	}
 }
-

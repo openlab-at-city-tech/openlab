@@ -5,7 +5,7 @@ Tags: table of contents, toc
 Requires at least: 5.0
 Tested up to: 6.9
 Requires PHP: 5.6.20
-Stable tag: 2.0.78
+Stable tag: 2.0.82.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,44 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 4. Activate the plugin on the Plugins admin page.
 
 == Changelog ==
+= 2.0.82.2 26/03/2026 =
+* Fixed: Missing null check for global $post causing PHP warnings in REST API post creation #951
+* Fixed: cn_toc_admin_data is not defined ReferenceError: #950
+
+= 2.0.82.1 21/03/2026 =
+* Fixed: Sticky TOC does not open after the latest update (version 2.0.82). #949
+* Fixed: Table Numbers and Sticky TOC Not Rendering (Counter & Sticky Function Failure) #948
+
+= 2.0.82 20/03/2026 =
+* Fixed: Underlined Header Issue in elementor text editor #944
+* Fixed: 'Disable Sticky TOC' setting ignored (Pro filter result overwritten by free plugin) #940
+* Fixed: Authenticated (Contributor+) CSS Injection in <= 2.0.80  reported by Wordfence (type5afe)
+
+= 2.0.81 18/02/2026 =
+* Fixed: Make "Exclude Headings by Class" work if class is contained inside the heading #941
+* Fixed: CSRF vulnerabilty in <= 2.0.80  reported by Patchstack (Mike Montoya)
+* Fixed: Import not working #938
+* Compatibility: Compatibility with hubbub pro #939
+
+= 2.0.80 31/12/2025 =
+* Fixed: Alternate heading option is not working #932
+* Fixed: View more is not working properly #933
+* Fixed: Headings not showing in TOC when using captial H2 #916
+* Fixed: Title is not redirecting correctly (user-specific issue) #934
+* Fixed: Read Time option is not working properly #935
+* Fixed: Export Setting option is not working as expected. #936
+
+= 2.0.79.2 09/12/2025 =
+* Fixed: Pro settings are not visible #931
+
+= 2.0.79.1 09/12/2025 =
+* Fixed: Error in v2.0.79 - White Screen of Death #930
+
+= 2.0.79 08/12/2025 =
+* Fixed: Vulnerability Authenticated (Contributor+) Stored Cross-Site Scripting reported by Wordfence (Jack Taylor)
+* Improvement: Code Improvement #928
+* Test: Tested upto WordPress 6.9
+
 = 2.0.78 27/11/2025 =
 * Added: Promotion Banner BFCM #926
 * Compatibility Added: Need to make a compatible with the SeedProd builder. #922
@@ -230,38 +268,6 @@ Easy Table Contents is a fork of the excellent [Table of Contents Plus](https://
 
 = 2.0.68.1 21/07/2024 =
 * Fix: Fatal error when inline css is enabled in  version 2.0.68
-
-= 2.0.68 20/07/2024 =
-* Fix: Stored XSS Security Vulnerability disclosed by Cleantalk (Dmitrii Ignatyev)
-* Compatibility: Tested with WordPress version 6.6  #780
-
-= 2.0.67.1 19/06/2024 =
-* Bug: Plugin Does Not Save Changes in recent version 2.0.67 #771
-
-= 2.0.67 18/06/2024 =
-* New: Read Time in Minutes option for individual posts and set the translation for reading time. #763
-* New: Exclude heading by id option #768
-* New: Exclude TOC added using shortcode on specific pages/posts [post_not_in="1,2"] #758
-* Compatibility: Added compatibility with the theme StoreHub #760
-* Compatibility: Conflict issue with custom theme(user specific issue) #750
-* Compatibility: Conflict issue with DIVI theme #749
-* Bug: Highlight Heading colors are not getting customized #755
-* Bug: Sticky TOC appears on homepage without enabling option when front page is set #754
-* Bug: TOC is showing on homepage's post's excerpt Avada theme conflict #757
-* Fix: Passing null to parameter #1 ($string) of type string is deprecated #769
-* Fix: Patched Security Vulnerability disclosed by Dmitrii Ignatyev from cleantalk.org
-
-= 2.0.66.1 15/05/2024 =
-* Bug: ETOC version 2.0.66 giving **Fatal error**: Uncaught TypeError: method_exists() #752
-
-= 2.0.66 15/05/2024 =
-* Bug: Multiple warnings showing when ACF support is enabled in TOC #738
-* Bug: Conflict issue with Avada child theme. #740
-* Bug: The editing/updating of the post/page is slowing down if the plugin is activated with Block based themes #741
-* Bug: Positions & Alignment is not being changed globally #743
-* New: Option for showing promt if no headings available #654
-* New: Option or shortcode like [initial_view="Show"] for specific pages/post. #732
-* Fix: Patched Stored XSS Vulnerability disclosed by Dmitrii Ignatyev from cleantalk.org
 
 
 Full changelog available at [changelog.txt](https://plugins.svn.wordpress.org/easy-table-of-contents/trunk/changelog.txt)

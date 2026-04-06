@@ -73,8 +73,8 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
             wp_enqueue_script ( 'underscore' );
 
             $widgetStickyAdminCSSVersion = ezTOC::VERSION . '-' . filemtime ( EZ_TOC_PATH . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR . "ez-toc-widget-sticky-admin$min.css" );
-            wp_register_style ( 'ez-toc-widget-sticky-admin', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky-admin$min.css", array(), $widgetStickyAdminCSSVersion );
-            wp_enqueue_style ( 'ez-toc-widget-sticky-admin', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky-admin$min.css", array(), $widgetStickyAdminCSSVersion );
+            wp_register_style ( 'eztoc-widget-sticky-admin', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky-admin$min.css", array(), $widgetStickyAdminCSSVersion );
+            wp_enqueue_style ( 'eztoc-widget-sticky-admin', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky-admin$min.css", array(), $widgetStickyAdminCSSVersion );
         }
 
         /**
@@ -313,7 +313,10 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                 {
 
                     $custom_classes = explode ( ' ', $custom_classes );
-                    $custom_classes = apply_filters ( 'ez_toc_widget_sticky_container_class', $custom_classes, $this );
+                    //This is legacy filter hook,it will be removed in future versions.
+                    $custom_classes = apply_filters ( 'ez_toc_widget_sticky_container_class', $custom_classes, $this ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+                    //This is the new action hook , it should be used instead of the legacy one.
+                    $custom_classes = apply_filters ( 'eztoc_widget_sticky_container_class', $custom_classes, $this );
 
                     if ( is_array ( $custom_classes ) )
                     {
@@ -325,13 +328,21 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                 $class = array_filter ( $class );
                 $class = array_map ( 'trim', $class );
                 $class = array_map ( 'sanitize_html_class', $class );
-                //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
+                //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
                 echo $before_widget;
-                do_action ( 'ez_toc_widget_sticky_before_widget_container' );
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_before_widget_container' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_before_widget_container' );
 
                 echo '<div id="ez-toc-widget-sticky-container" class="ez-toc-widget-sticky-container ez-toc-widget-sticky-container-' .esc_attr($this->id). ' ' . esc_attr(implode ( ' ', $class )) . '">' . PHP_EOL;
 
-                do_action ( 'ez_toc_widget_sticky_before_widget' );
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_before_widget' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_before_widget' );
 
                 /**
                  * @todo Instead of inline style, use the shadow DOM.
@@ -345,36 +356,47 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                     if( isset($instance[ 'heading_label_tag' ]) && $instance[ 'heading_label_tag' ] != 'default' && in_array($instance[ 'heading_label_tag' ], $this->allowed_tags) ){
                         echo '<'.esc_attr($instance[ 'heading_label_tag' ]).' class="widget-title">';
                     }else{
-                        echo $before_title;  //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
+                        echo $before_title;  //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
                     }
                     ?>
 
-                    <?php if(isset($instance[ 'sidebar_sticky_title_size' ]) && isset($instance[ 'sidebar_sticky_title_size_unit' ])){
-                            $title_font_size = $instance[ 'sidebar_sticky_title_size' ].$instance[ 'sidebar_sticky_title_size_unit' ];
-                        }else{
+                    <?php
+                        if ( isset( $instance['sidebar_sticky_title_size'] ) && isset( $instance['sidebar_sticky_title_size_unit'] ) ) {
+                            $title_unit = ezTOC::sanitize_css_unit( $instance['sidebar_sticky_title_size_unit'], array( '%', 'px', 'pt', 'em', 'rem', 'vw', 'vh' ), '%' );
+                            $title_font_size = (int) $instance['sidebar_sticky_title_size'] . $title_unit;
+                        } else {
                             $title_font_size = '120%';
-                        } ?>
+                        }
+                    ?>
 
                     <span class="ez-toc-widget-sticky-title-container">
                         <style>
                             #<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-title , .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-title {
                                 font-size: <?php echo esc_attr ( $title_font_size ); ?>;
                                 font-weight: <?php echo esc_attr ( isset($instance[ 'sidebar_sticky_title_weight' ]) ? $instance[ 'sidebar_sticky_title_weight' ] : '' ); ?>;
-                                color: <?php echo esc_attr (isset($instance[ 'sidebar_sticky_title_color' ]) ? $instance[ 'sidebar_sticky_title_color' ] : '' ); ?>;
+                                color: <?php echo esc_attr( isset( $instance['sidebar_sticky_title_color'] ) ? ezTOC::sanitize_css_color( $instance['sidebar_sticky_title_color'] ) : '' ); ?>;
                             }
                             #<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-list li a , .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-list li a{
 												<?php if( isset ( $instance[ 'sidebar_sticky_size' ] ) && isset($instance[ 'sidebar_sticky_size_unit' ]) ){ ?>
-			                                    font-size: <?php echo esc_attr ( $instance[ 'sidebar_sticky_size' ].$instance[ 'sidebar_sticky_size_unit' ] ); } ?>;
+			                                    font-size: <?php echo esc_attr( (int) $instance['sidebar_sticky_size'] . ezTOC::sanitize_css_unit( $instance['sidebar_sticky_size_unit'], array( '%', 'px', 'pt', 'em', 'rem', 'vw', 'vh' ), '%' ) ); } ?>;
 												<?php if( isset ( $instance[ 'sidebar_sticky_weight' ] ) && ! empty( $instance[ 'sidebar_sticky_weight' ] )){ ?>
 			                                    font-weight: <?php echo esc_attr ( $instance[ 'sidebar_sticky_weight' ] ); } ?>;
 												<?php if( isset ( $instance[ 'sidebar_sticky_color' ] ) && ! empty($instance[ 'sidebar_sticky_color' ])){ ?>
-			                                    color: <?php echo esc_attr ( $instance[ 'sidebar_sticky_color' ] ); } ?>;
+			                                    color: <?php echo esc_attr( ezTOC::sanitize_css_color( $instance['sidebar_sticky_color'] ) ); } ?>;
 
 							}
                             #<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-container ul.ez-toc-widget-sticky-list li.active > a, .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> ul.ez-toc-widget-sticky-list li.active > a{
-                                background-color: <?php echo esc_attr ( isset($instance[ 'highlight_color' ]) ? $instance[ 'highlight_color' ] : '' ); ?>;
-                                color: <?php echo esc_attr ( isset($instance[ 'active_section_text_color' ]) ? $instance[ 'active_section_text_color' ] : '' ); ?>;
+                                background-color: <?php echo esc_attr( isset( $instance['highlight_color'] ) ? ezTOC::sanitize_css_color( $instance['highlight_color'] ) : '' ); ?>;
+                                color: <?php echo esc_attr( isset( $instance['active_section_text_color'] ) ? ezTOC::sanitize_css_color( $instance['active_section_text_color'] ) : '' ); ?>;
                             }
+                            <?php if (!empty($instance['toc_background_color'])): ?>
+                            .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> { background-color: <?php echo esc_attr( ezTOC::sanitize_css_color( $instance['toc_background_color'] ) ); ?> !important; }
+                            .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> .ez-toc-sidebar { background-color: <?php echo esc_attr( ezTOC::sanitize_css_color( $instance['toc_background_color'] ) ); ?> !important; }
+                            <?php endif; ?>
+                            <?php if (!empty($instance['toc_title_background_color'])): ?>
+                            .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> .ez-toc-widget-sticky-title-container { background-color: <?php echo esc_attr( ezTOC::sanitize_css_color( $instance['toc_title_background_color'] ) ); ?> !important; }
+                            .ez-toc-widget-sticky-container-<?php echo esc_attr($this->id) ?> .ez-toc-sticky-title-container { background-color: <?php echo esc_attr( ezTOC::sanitize_css_color( $instance['toc_title_background_color'] ) ); ?> !important; }
+                            <?php endif; ?>
                         </style>
                         <?php
                         $toggle_enabled = ezTOC_Option::get( 'visibility_on_header_text' ) ? 'true' : 'false';
@@ -388,12 +410,12 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
 
 
                                 <?php
-                                //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
+                                //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
                                 echo $header_label;
                                 if ( ( ! empty($instance[ 'show_toggle' ] ) && $instance[ 'show_toggle' ] == 'true' ) || ( empty( $instance[ 'show_toggle' ] ) && ezTOC_Option::get ( 'visibility' ) ) )
                                 {
 
-                                    echo '<a href="#" class="ez-toc-widget-sticky-pull-right ez-toc-widget-sticky-btn ez-toc-widget-sticky-btn-xs ez-toc-widget-sticky-btn-default ez-toc-widget-sticky-toggle" aria-label="'.esc_attr__('Widget Easy TOC toggle icon','easy-table-of-contents').'"><span style="border: 0;padding: 0;margin: 0;position: absolute !important;height: 1px;width: 1px;overflow: hidden;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);clip-path: inset(50%);white-space: nowrap;">Toggle Table of Content</span>' . ezTOC::get_toc_toggle_icon () . '</a>'; //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
+                                    echo '<a href="#" class="ez-toc-widget-sticky-pull-right ez-toc-widget-sticky-btn ez-toc-widget-sticky-btn-xs ez-toc-widget-sticky-btn-default ez-toc-widget-sticky-toggle" aria-label="'.esc_attr__('Widget Easy TOC toggle icon','easy-table-of-contents').'"><span style="border: 0;padding: 0;margin: 0;position: absolute !important;height: 1px;width: 1px;overflow: hidden;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);clip-path: inset(50%);white-space: nowrap;">Toggle Table of Content</span>' . ezTOC::get_toc_toggle_icon () . '</a>'; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
                                 }
                                 ?>
 
@@ -414,11 +436,11 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                                 if ( ezTOC_Option::get( 'visibility_on_header_text' ) ) {
                                     $htmlCSSIcon = '<label for="ez-toc-widget-sticky-cssicon-toggle-item-' . esc_attr($cssIconID) . '" style="cursor:pointer">' . esc_html($header_label) . '<span class="ez-toc-widget-sticky-pull-right ez-toc-widget-sticky-btn ez-toc-widget-sticky-btn-xs ez-toc-widget-sticky-btn-default ez-toc-widget-sticky-toggle"><span style="border: 0;padding: 0;margin: 0;position: absolute !important;height: 1px;width: 1px;overflow: hidden;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);clip-path: inset(50%);white-space: nowrap;">Toggle Table of Content</span>' . esc_html(ezTOC::get_toc_toggle_icon( 'widget-with-visibility_on_header_text' )) . '</span></label>';
                                 } else {
-                                    //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
+                                    //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
                                     echo $header_label;
                                     $htmlCSSIcon = '<label for="ez-toc-widget-sticky-cssicon-toggle-item-' . esc_attr($cssIconID) . '" class="ez-toc-widget-sticky-pull-right ez-toc-widget-sticky-btn ez-toc-widget-sticky-btn-xs ez-toc-widget-sticky-btn-default ez-toc-widget-sticky-toggle"><span style="border: 0;padding: 0;margin: 0;position: absolute !important;height: 1px;width: 1px;overflow: hidden;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);clip-path: inset(50%);white-space: nowrap;">Toggle Table of Content</span>' . esc_html(ezTOC::get_toc_toggle_icon( 'widget-with-visibility_on_header_text' )) . '</label>';
                                 }
-                                //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
+                                //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : Already escaped.
                                 echo $htmlCSSIcon;
                                 ?>
                             <?php endif; ?>
@@ -429,38 +451,54 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                         if( isset($instance[ 'heading_label_tag' ]) && $instance[ 'heading_label_tag' ] != 'default' && in_array($instance[ 'heading_label_tag' ], $this->allowed_tags) ){
                             echo '</'.esc_attr($instance[ 'heading_label_tag' ]).'>';
                         }else{
-                            echo $after_title;  //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
+                            echo $after_title;  //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
                         }?>
                     <?php if ( 'css' == ezTOC_Option::get ( 'toc_loading' ) ): ?>
                         <label for="ez-toc-widget-sticky-cssicon-toggle-item-count-<?php echo esc_attr($cssIconID) ?>" class="cssiconcheckbox">1</label><input type="checkbox" id="ez-toc-widget-sticky-cssicon-toggle-item-<?php echo esc_attr($cssIconID) ?>" <?php esc_attr($toggle_view) ?> style="display:none" />
                     <?php endif; ?>
                     <?php
                 }
-                do_action ( 'ez_toc_widget_sticky_before' );
-                //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : getTOCList output is escaped.
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_before' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_before' );
+                //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Reason : getTOCList output is escaped.
                 echo '<nav>' . PHP_EOL . $post->getTOCList( 'ez-toc-widget-sticky' ) . '</nav>' . PHP_EOL;
-                do_action ( 'ez_toc_widget_sticky_after' );
-                do_action ( 'ez_toc_widget_sticky_after_widget' );
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_after' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_after' );
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_after_widget' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_after_widget' );
 
                 echo '</div>' . PHP_EOL;
-                do_action ( 'ez_toc_widget_sticky_after_widget_container' );
+                //This is legacy action hook,it will be removed in future versions.
+                do_action ( 'ez_toc_widget_sticky_after_widget_container' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
 
-                //phpcs:ignore  WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
+                //This is the new action hook , it should be used instead of the legacy one.
+                do_action ( 'eztoc_widget_sticky_after_widget_container' );
+
+                //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped in the core
                 echo $after_widget;
 
                 // Enqueue the script.
                 $widgetCSSVersion = ezTOC::VERSION . '-' . filemtime ( EZ_TOC_PATH . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "css" . DIRECTORY_SEPARATOR . "ez-toc-widget-sticky$min.css" );
-                wp_register_style ( 'ez-toc-widget-sticky', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky$min.css", array(), $widgetCSSVersion );
-                wp_enqueue_style ( 'ez-toc-widget-sticky', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky$min.css", array(), $widgetCSSVersion );
+                wp_register_style ( 'eztoc-widget-sticky', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky$min.css", array(), $widgetCSSVersion );
+                wp_enqueue_style ( 'eztoc-widget-sticky', EZ_TOC_URL . "assets/css/ez-toc-widget-sticky$min.css", array(), $widgetCSSVersion );
 
-                wp_add_inline_style ( 'ez-toc-widget-sticky', ezTOC::inline_counting_css ( ezTOC_Option::get ( 'heading-text-direction', 'ltr' ), 'ez-toc-widget-sticky-direction', 'ez-toc-widget-sticky-container', 'counter', 'ez-toc-widget-sticky-container' ) );
+                wp_add_inline_style ( 'eztoc-widget-sticky', ezTOC::inline_counting_css ( ezTOC_Option::get ( 'heading-text-direction', 'ltr' ), 'ez-toc-widget-sticky-direction', 'ez-toc-widget-sticky-container', 'counter', 'ez-toc-widget-sticky-container' ) );
                 
                 $widgetJSVersion = ezTOC::VERSION . '-' . filemtime ( EZ_TOC_PATH . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "js" . DIRECTORY_SEPARATOR . "ez-toc-widget-sticky$min.js" );
-                wp_register_script ( 'ez-toc-widget-stickyjs', EZ_TOC_URL . "assets/js/ez-toc-widget-sticky$min.js", array( 'jquery' ), $widgetJSVersion , true);
-                wp_enqueue_script ( 'ez-toc-widget-stickyjs', EZ_TOC_URL . "assets/js/ez-toc-widget-sticky$min.js", array( 'jquery' ), $widgetJSVersion , true);
+                wp_register_script ( 'eztoc-widget-stickyjs', EZ_TOC_URL . "assets/js/ez-toc-widget-sticky$min.js", array( 'jquery' ), $widgetJSVersion , true);
+                wp_enqueue_script ( 'eztoc-widget-stickyjs', EZ_TOC_URL . "assets/js/ez-toc-widget-sticky$min.js", array( 'jquery' ), $widgetJSVersion , true);
                 if ( 0 < count ( $js_vars ) )
                 {
-                    wp_localize_script ( 'ez-toc-widget-stickyjs', 'ezTocWidgetSticky', $js_vars );
+                    wp_localize_script ( 'eztoc-widget-stickyjs', 'ezTocWidgetSticky', $js_vars );
                 }
             }
         }
@@ -498,6 +536,8 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                 $instance[ 'sidebar_sticky_size_unit' ] = wp_strip_all_tags ( $new_instance[ 'sidebar_sticky_size_unit' ] );
                 $instance[ 'sidebar_sticky_weight' ] = wp_strip_all_tags ( $new_instance[ 'sidebar_sticky_weight' ] );
                 $instance[ 'sidebar_sticky_color' ] = wp_strip_all_tags ( $new_instance[ 'sidebar_sticky_color' ] );
+                $instance[ 'toc_background_color' ] = wp_strip_all_tags ( $new_instance[ 'toc_background_color' ] );
+                $instance[ 'toc_title_background_color' ] = wp_strip_all_tags ( $new_instance[ 'toc_title_background_color' ] );
                 $instance[ 'heading_label_tag' ] = wp_strip_all_tags ( $new_instance[ 'heading_label_tag' ] );
             } else
             {
@@ -510,6 +550,8 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                 $instance[ 'sidebar_sticky_size_unit' ] = '%';
                 $instance[ 'sidebar_sticky_weight' ] = '400';
                 $instance[ 'sidebar_sticky_color' ] = 'inherit';
+                $instance[ 'toc_background_color' ] = '';
+                $instance[ 'toc_title_background_color' ] = '';
                 $instance[ 'heading_label_tag' ] = 'default';
             }
 
@@ -570,6 +612,8 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                 'sidebar_sticky_size_unit' => '%',
                 'sidebar_sticky_weight' => '500',
                 'sidebar_sticky_color' => '',
+                'toc_background_color' => '',
+                'toc_title_background_color' => '',
                 'sidebar_width' => 'auto',
                 'sidebar_width_size_unit' => 'none',
                 'fixed_top_position' => 30,
@@ -587,6 +631,8 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
             $active_section_text_color = esc_attr ( $instance[ 'active_section_text_color' ] );
             $title_color = esc_attr ( $instance[ 'sidebar_sticky_title_color' ] );
             $text_color = esc_attr ( $instance[ 'sidebar_sticky_color' ] );
+            $toc_background_color = esc_attr ( $instance[ 'toc_background_color' ] );
+            $toc_title_background_color = esc_attr ( $instance[ 'toc_title_background_color' ] );
             ?>
             <p>
                 <label for="<?php echo esc_attr($this->get_field_id( 'title' )); ?>"><?php esc_html_e ( 'Title', 'easy-table-of-contents' ); ?>:</label>
@@ -672,6 +718,16 @@ if ( ! class_exists ( 'ezTOC_WidgetSticky' ) )
                     <p class="ez-toc-widget-form-group" style="margin: 0;margin-top: 7px;">
                         <label for="<?php echo esc_attr($this->get_field_id( 'active_section_text_color' )); ?>" style="margin-right: 12px;"><?php esc_html_e ( 'Active Section Text Color:', 'easy-table-of-contents' ); ?></label><br>
                         <input type="text" name="<?php echo esc_attr($this->get_field_name( 'active_section_text_color' )); ?>" class="color-picker" id="<?php echo esc_attr($this->get_field_id( 'active_section_text_color' )); ?>" value="<?php echo esc_attr($active_section_text_color); ?>" data-default-color="<?php echo esc_attr($defaults[ 'active_section_text_color' ]); ?>" />
+                    </p>
+
+                    <p class="ez-toc-widget-form-group" style="margin: 0;margin-top: 7px;">
+                        <label for="<?php echo esc_attr($this->get_field_id( 'toc_background_color' )); ?>" style="margin-right: 12px;"><?php esc_html_e ( 'TOC Background Color:', 'easy-table-of-contents' ); ?></label><br>
+                        <input type="text" name="<?php echo esc_attr($this->get_field_name( 'toc_background_color' )); ?>" class="color-picker" id="<?php echo esc_attr($this->get_field_id( 'toc_background_color' )); ?>" value="<?php echo esc_attr($toc_background_color); ?>" data-default-color="<?php echo esc_attr($defaults[ 'toc_background_color' ]); ?>" />
+                    </p>
+
+                    <p class="ez-toc-widget-form-group" style="margin: 0;margin-top: 7px;">
+                        <label for="<?php echo esc_attr($this->get_field_id( 'toc_title_background_color' )); ?>" style="margin-right: 12px;"><?php esc_html_e ( 'TOC Title Background Color:', 'easy-table-of-contents' ); ?></label><br>
+                        <input type="text" name="<?php echo esc_attr($this->get_field_name( 'toc_title_background_color' )); ?>" class="color-picker" id="<?php echo esc_attr($this->get_field_id( 'toc_title_background_color' )); ?>" value="<?php echo esc_attr($toc_title_background_color); ?>" data-default-color="<?php echo esc_attr($defaults[ 'toc_title_background_color' ]); ?>" />
                     </p>
 
                     <div class="ez-toc-widget-form-group">
