@@ -88,12 +88,13 @@ if ( ! class_exists( 'Kenta_Copyright_Element' ) ) {
 			$theme_info  = sprintf( '<a href="%s" target="_blank">%s</a>', esc_url( $theme->get( 'ThemeURI' ) ), $theme->get( 'Name' ) );
 			$author_info = sprintf( '<a href="%s" target="_blank">%s</a>', esc_url( $theme->get( 'AuthorURI' ) ), $theme->get( 'Author' ) );
 
-			$text = CZ::get( $this->getSlug( 'text' ) ) ?? 'Copyright &copy; {current_year}  -  {about_theme} By {about_author}';
+			$text = CZ::get( $this->getSlug( 'text' ) ) ?? 'Copyright &copy; {current_year}  -  {about_theme} By {about_author_text}';
 
 			$text = str_replace( '{current_year}', date( 'Y' ), $text );
 			$text = str_replace( '{site_title}', get_bloginfo( 'name' ), $text );
 			$text = str_replace( '{about_theme}', $theme_info, $text );
 			$text = str_replace( '{about_author}', $author_info, $text );
+			$text = str_replace( '{about_author_text}', $theme->get( 'Author' ), $text );
 
 			?>
             <div <?php $this->print_attribute_string( 'copyright' ); ?>>

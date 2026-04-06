@@ -2,16 +2,16 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Kenta 1.4.9\n"
+"Project-Id-Version: Kenta 1.4.11\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/kenta\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-28T03:15:34+00:00\n"
+"POT-Creation-Date: 2025-12-23T07:15:59+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: kenta\n"
 
 #. Theme Name of the theme
@@ -45,6 +45,7 @@ msgstr ""
 
 #. translators: %s: The count of comments
 #: comments.php:46
+#, php-format
 msgid "%s Comments"
 msgstr ""
 
@@ -624,6 +625,7 @@ msgid "Customize Sidebar"
 msgstr ""
 
 #: inc/customizer/class-archive-section.php:89
+#, php-format
 msgid "%sRead documentation for archive customize%s"
 msgstr ""
 
@@ -680,10 +682,12 @@ msgid "Description Color"
 msgstr ""
 
 #: inc/customizer/class-archive-section.php:302
+#, php-format
 msgid "%sRead documentation for post card options%s"
 msgstr ""
 
 #: inc/customizer/class-archive-section.php:324
+#, php-format
 msgid "%sRead documentation for posts pagination%s"
 msgstr ""
 
@@ -822,6 +826,7 @@ msgid "Site Box Shadow"
 msgstr ""
 
 #: inc/customizer/class-background-section.php:83
+#, php-format
 msgid "%sLearn how to use site wrap & site background%s"
 msgstr ""
 
@@ -830,6 +835,7 @@ msgid "Site Css Filters"
 msgstr ""
 
 #: inc/customizer/class-background-section.php:92
+#, php-format
 msgid "%sLearn how to use site filters"
 msgstr ""
 
@@ -846,6 +852,7 @@ msgid "Dark"
 msgstr ""
 
 #: inc/customizer/class-colors-section.php:35
+#, php-format
 msgid "%sRead Colors Documentation%s"
 msgstr ""
 
@@ -1011,6 +1018,7 @@ msgstr ""
 #: inc/customizer/class-placeholders.php:174
 #: inc/customizer/class-placeholders.php:193
 #: inc/customizer/class-placeholders.php:409
+#, php-format
 msgid "More options in %sPro Version%s"
 msgstr ""
 
@@ -1023,6 +1031,7 @@ msgstr ""
 #: inc/customizer/class-header-section.php:60
 #: inc/extensions/class-socials-extension.php:175
 #: inc/traits/trait-global-color-controls.php:36
+#, php-format
 msgid "%sRead Documentation%s"
 msgstr ""
 
@@ -1047,6 +1056,7 @@ msgid "Controls Color"
 msgstr ""
 
 #: inc/customizer/class-footer-section.php:27
+#, php-format
 msgid "%sLearn how to use footer builder%s"
 msgstr ""
 
@@ -1061,6 +1071,7 @@ msgid "Performance"
 msgstr ""
 
 #: inc/customizer/class-global-section.php:53
+#, php-format
 msgid "%sLearn More%s"
 msgstr ""
 
@@ -1105,6 +1116,7 @@ msgid "Complying with GDPR by using local google fonts."
 msgstr ""
 
 #: inc/customizer/class-header-section.php:38
+#, php-format
 msgid "%sLearn how to use header builder%s"
 msgstr ""
 
@@ -1218,14 +1230,17 @@ msgstr ""
 
 #: inc/customizer/class-placeholders.php:41
 #: inc/customizer/class-placeholders.php:47
+#, php-format
 msgid "More builder elements in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:53
+#, php-format
 msgid "Header row overlay is available in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:89
+#, php-format
 msgid "Fully customize your button style in %sPro Version%s"
 msgstr ""
 
@@ -1234,50 +1249,62 @@ msgid "Search Results for: "
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:123
+#, php-format
 msgid "Fully customize your archive header in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:233
+#, php-format
 msgid "Fully customize your sidebar in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:301
+#, php-format
 msgid "Fully customize your menu's top level items in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:307
+#, php-format
 msgid "Customize your copyright text in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:313
+#, php-format
 msgid "More breadcrumb options in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:335
+#, php-format
 msgid "More breadcrumb style options in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:349
+#, php-format
 msgid "More social icon options in our %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:368
+#, php-format
 msgid "Fully customize your social icons in our %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:376
+#, php-format
 msgid "More layout available in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:382
+#, php-format
 msgid "Fully customize your posts card style in %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:391
+#, php-format
 msgid "Load More & Infinite Scroll is available in our %sPro Version%s"
 msgstr ""
 
 #: inc/customizer/class-placeholders.php:401
+#, php-format
 msgid "Fully customize your product card style in %sPro Version%s"
 msgstr ""
 
@@ -1744,6 +1771,7 @@ msgid "Duration"
 msgstr ""
 
 #: inc/extensions/class-scroll-reveal-extension.php:86
+#, php-format
 msgid "More scroll reveal options in %sPro Version%s"
 msgstr ""
 
@@ -1769,6 +1797,7 @@ msgid "Position"
 msgstr ""
 
 #: inc/extensions/class-scroll-top-extension.php:231
+#, php-format
 msgid "Fully customize to top button in %sPro Version%s"
 msgstr ""
 
@@ -1791,6 +1820,7 @@ msgstr ""
 
 #. translators: placeholder here means the actual URL.
 #: inc/extensions/class-socials-extension.php:90
+#, php-format
 msgid "Social media sharing link formats, you can use {url} instead of the url of the current post and {text} instead of the title of the current post. %s Learn more %s"
 msgstr ""
 
@@ -1804,6 +1834,7 @@ msgid "Official"
 msgstr ""
 
 #: inc/extensions/class-socials-extension.php:169
+#, php-format
 msgid "Add more social networks in %sPro Version%s"
 msgstr ""
 
@@ -1844,22 +1875,27 @@ msgid "The installation process is starting. This process may take a while on so
 msgstr ""
 
 #: inc/helpers.php:173
+#, php-format
 msgid "Upgrading %s ..."
 msgstr ""
 
 #: inc/helpers.php:179
+#, php-format
 msgid "Installing %s ..."
 msgstr ""
 
 #: inc/helpers.php:186
+#, php-format
 msgid "Activating %s ..."
 msgstr ""
 
 #: inc/helpers.php:190
+#, php-format
 msgid "%s installed successfully"
 msgstr ""
 
 #: inc/helpers.php:194
+#, php-format
 msgid "Could not install the %s plugin."
 msgstr ""
 
@@ -1952,6 +1988,7 @@ msgstr ""
 #: inc/traits/trait-article-controls.php:52
 #: inc/traits/trait-article-controls.php:136
 #: inc/traits/trait-article-controls.php:292
+#, php-format
 msgid "%sLearn how it works%s"
 msgstr ""
 
@@ -2154,6 +2191,7 @@ msgid "Nyan Cat"
 msgstr ""
 
 #: inc/traits/trait-particles-effect.php:182
+#, php-format
 msgid "You can customize your particles effect using the online editor in %sPro Version%s"
 msgstr ""
 
@@ -2179,6 +2217,7 @@ msgid "Line Color"
 msgstr ""
 
 #: inc/traits/trait-particles-effect.php:207
+#, php-format
 msgid "More particle options available in %sPro Version%s"
 msgstr ""
 
@@ -2288,6 +2327,7 @@ msgstr ""
 
 #. translators: placeholder here means the actual URL.
 #: inc/traits/trait-post-structure.php:342
+#, php-format
 msgid "Date format %s instructions %s."
 msgstr ""
 
@@ -2367,6 +2407,7 @@ msgid "The Kenta Companion Plugin you are using is not compatible with the curre
 msgstr ""
 
 #: template-parts/admin-cmp-upgrade.php:49
+#, php-format
 msgid "You can update it on the %s."
 msgstr ""
 
@@ -2548,6 +2589,7 @@ msgstr ""
 
 #. translators: %1$s: the url of 'post-new.php'
 #: template-parts/content-none.php:30
+#, php-format
 msgid "Ready to publish your first post? <a class=\"link\" href=\"%1$s\">Get started here</a>."
 msgstr ""
 

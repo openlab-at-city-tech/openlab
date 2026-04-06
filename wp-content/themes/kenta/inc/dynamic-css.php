@@ -1106,11 +1106,13 @@ function kenta_dynamic_css() {
 function kenta_block_editor_dynamic_css( $root = ':root' ) {
 	$css = [];
 
-	$css[ $root ] = array_merge(
+	$css[ "{$root}" ] = array_merge(
 		Css::background( CZ::get( 'kenta_site_background' ) ),
 		Css::typography( CZ::get( 'kenta_site_global_typography' ) ),
 		Css::filters( CZ::get( 'kenta_site_filters' ) )
 	);
+
+	$css[ "{$root}, {$root} p" ] = Css::typography( CZ::get( 'kenta_site_global_typography' ) );
 
 	$css["{$root} .wp-block-button"] = kenta_content_buttons_css();
 

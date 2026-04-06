@@ -94,6 +94,10 @@ body {
   display: none;
 }
 
+.has-negative-margin {
+  z-index: 9;
+}
+
 #accordion-section-kenta_header,
 #accordion-section-kenta_archive,
 #accordion-section-custom_css,
