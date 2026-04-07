@@ -32,7 +32,7 @@
 				return /^([a-zA-Z\-\._]+)*[0-9]{2}@stu-mail\.citytech\.cuny\.edu$/.test( value );
 			},
 			messages: {
-				en: 'Please enter a valid BMCC student email address.'
+				en: 'Please enter a valid City Tech student email address.'
 			}
 		});
 
@@ -41,7 +41,7 @@
 				return /^([a-zA-Z0-9\-\._]+)@citytech\.cuny\.edu$/.test( value );
 			},
 			messages: {
-				en: 'Please enter a valid BMCC faculty/staff email address.'
+				en: 'Please enter a valid City Tech faculty/staff email address.'
 			}
 		});
 
