@@ -8,53 +8,48 @@
 
 		$account_type_field = $('#openlab-account-type');
 
-		var registrationFormValidation = $signup_form.parsley({
+		var registrationFormValidation = $signup_form.parsley( {
 			errorsWrapper: '<ul class="parsley-errors-list"></ul>',
 			errorTemplate: '<li></li>'
-		}).on('field:error', function (formInstance) {
+		} ).on( 'field:error', function() {
 			var self = this;
 
-			this.$element.closest('.form-group')
-					.find('.other-errors').remove();
+			this.$element.closest( '.form-group' )
+				.find( '.other-errors' ).remove();
 
-			this.$element.closest('.form-group')
-					.addClass('has-error')
-					.find('.error-container').addClass('error');
+			// Update group-level state based on all fields in the group.
+			updateFormGroupErrorState( this );
 
-			// Set aria-invalid for accessibility
-			this.$element.attr('aria-invalid', 'true');
+			// Set aria-invalid for accessibility.
+			this.$element.attr( 'aria-invalid', 'true' );
 
-			// Small delay to ensure Parsley has rendered the error message
-			setTimeout(function() {
-				// Get the error container ID from the parsley data attribute
-				var errorContainerId = self.$element.data('parsley-errors-container');
+			setTimeout( function() {
+				var errorContainerId = self.$element.data( 'parsley-errors-container' );
 
-				// Clean up the ID (remove the # if present)
-				if (errorContainerId && errorContainerId.charAt(0) === '#') {
-					errorContainerId = errorContainerId.substring(1);
+				if ( errorContainerId && errorContainerId.charAt( 0 ) === '#' ) {
+					errorContainerId = errorContainerId.substring( 1 );
 				}
 
-				// Find the actual error <li> element and give it an ID for aria-describedby
-				var fieldId = self.$element.attr('id');
+				var fieldId = self.$element.attr( 'id' );
 				var errorMsgId = fieldId + '-error-msg';
-				var $errorContainer = $('#' + errorContainerId);
-				var $errorLi = $errorContainer.find('li:first');
+				var $errorContainer = $( '#' + errorContainerId );
+				var $errorLi = $errorContainer.find( 'li:first' );
 
-				if ($errorLi.length > 0) {
-					$errorLi.attr('id', errorMsgId);
-					self.$element.attr('aria-describedby', errorMsgId);
+				if ( $errorLi.length > 0 ) {
+					$errorLi.attr( 'id', errorMsgId );
+					self.$element.attr( 'aria-describedby', errorMsgId );
 				}
-			}, 50);
-		}).on('field:success', function (formInstance) {
+			}, 50 );
+		} ).on( 'field:success', function() {
+			this.$element.closest( '.form-group' )
+				.find( '.other-errors' ).remove();
 
-			this.$element.closest('.form-group')
-					.removeClass('has-error')
-					.find('.error-container').removeClass('error');
+			this.$element.removeAttr( 'aria-invalid' );
+			this.$element.removeAttr( 'aria-describedby' );
 
-			// Clear aria attributes when field becomes valid
-			this.$element.attr('aria-invalid', 'false');
-			this.$element.removeAttr('aria-describedby');
-		});
+			// Only clear group-level error state if every field in the group is valid.
+			updateFormGroupErrorState( this );
+		} );
 
 		var inputBlacklist = [
 			'signup_username',
@@ -395,6 +390,39 @@
 					}
 				}
 			}, 3000 );
+		}
+
+		function updateFormGroupErrorState( parsleyField ) {
+			var $group = parsleyField.$element.closest( '.form-group' );
+
+			if ( ! $group.length ) {
+				return;
+			}
+
+			var allValid = true;
+
+			$group.find( 'input, select, textarea' ).each( function() {
+				var instance = $( this ).data( 'Parsley' );
+
+				// Skip elements not managed by Parsley.
+				if ( ! instance ) {
+					return;
+				}
+
+				// If any field is invalid, the group should stay in error state.
+				if ( instance.isValid() !== true ) {
+					allValid = false;
+					return false;
+				}
+			} );
+
+			if ( allValid ) {
+				$group.removeClass( 'has-error' )
+					.find( '.error-container' ).removeClass( 'error' );
+			} else {
+				$group.addClass( 'has-error' )
+					.find( '.error-container' ).addClass( 'error' );
+			}
 		}
 
 		function containsLastName( text ) {
