@@ -211,9 +211,11 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			const isCityTechEmail = 0 <= email.indexOf('@stu-mail.citytech.cuny.edu') || 0 <= email.indexOf('@citytech.cuny.edu');
+			const isCityTechStuEmail = 0 <= email.indexOf('@stu-mail.citytech.cuny.edu');
+			const isCityTechFacStaffEmail = 0 <= email.indexOf('@citytech.cuny.edu');
 
-			if ( isCityTechEmail ) {
+			// Don't ever run for CT emails.
+			if ( isCityTechStuEmail || isCityTechFacStaffEmail ) {
 				return;
 			}
 
