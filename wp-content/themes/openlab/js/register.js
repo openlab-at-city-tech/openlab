@@ -214,8 +214,13 @@
 			const isCityTechStuEmail = 0 <= email.indexOf('@stu-mail.citytech.cuny.edu');
 			const isCityTechFacStaffEmail = 0 <= email.indexOf('@citytech.cuny.edu');
 
-			// Don't ever run for CT emails.
+			// Don't ever run for valid CT emails.
 			if ( isCityTechStuEmail || isCityTechFacStaffEmail ) {
+				return;
+			}
+
+			// Allow old-style student emails to be handled by Parsley validation.
+			if ( 0 <= email.indexOf( '@mail.citytech.cuny.edu' ) ) {
 				return;
 			}
 
