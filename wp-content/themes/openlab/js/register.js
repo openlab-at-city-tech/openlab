@@ -337,6 +337,9 @@
 					});
 
 					set_account_type_fields(response.accountType);
+
+					// Remove CT-specific validation from signup_email.
+					set_validation_rules( null );
 				} else {
 					$(vcodespan).fadeOut(function () {
 						$(vcodespan).html('&mdash; Required for non-CUNY addresses');
