@@ -1,0 +1,306 @@
+# Copyright (C) 2022 Ninja Team
+# This file is distributed under the same license as the FileBird Document Library (Lite) plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: FileBird Document Library (Lite) 1.3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/FileBird-Addons\n"
+"POT-Creation-Date: 2026-01-14T04:17:55+00:00\n"
+"PO-Revision-Date: 2022-11-18 16:23+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.2\n"
+"X-Domain: filebird-dl\n"
+
+#. Plugin Name of the plugin
+#: filebird-document-library.php
+msgid "FileBird Document Library (Lite)"
+msgstr "FileBird Document Library (Lite)"
+
+#. Plugin URI of the plugin
+#: filebird-document-library.php
+msgid "https://ninjateam.org/wordpress-media-library-folders/"
+msgstr "https://ninjateam.org/wordpress-media-library-folders/"
+
+#. Description of the plugin
+#: filebird-document-library.php
+msgid "Display your documents and files in customizable list and grid gallery."
+msgstr ""
+"Hiển thị tài liệu và tệp của bạn trong danh sách có thể tùy chỉnh và bộ sưu "
+"tập lưới."
+
+#. Author of the plugin
+#: filebird-document-library.php
+msgid "Ninja Team"
+msgstr "Ninja Team"
+
+#. Author URI of the plugin
+#: filebird-document-library.php
+msgid "https://ninjateam.org"
+msgstr "https://ninjateam.org"
+
+#: filebird-document-library.php:51
+#, fuzzy
+msgid ""
+"FileBird Document Library (Lite) requires FileBird plugin to be installed "
+"and active. Please download %1$s or %2$s."
+msgstr ""
+"Thư viện tài liệu FileBird (Pro) yêu cầu plugin FileBird phải được cài đặt "
+"và hoạt động. Vui lòng tải xuống %1$s hoặc %2$s."
+
+#: filebird-document-library.php:55
+#, fuzzy
+msgid ""
+"FileBird Document Library (Lite) requires %1$s or %2$s %3$s or greater to be "
+"installed and active."
+msgstr ""
+"Thư viện tài liệu FileBird (Pro) yêu cầu %1$s hoặc %2$s %3$s trở lên để được "
+"cài đặt và hoạt động."
+
+#: includes/DocumentLibrary.php:27
+msgid "Documentation"
+msgstr "Tài liệu"
+
+#: includes/DocumentLibrary.php:28
+msgid "Support"
+msgstr "Hỗ trợ"
+
+#: includes/DocumentLibraryShortcode.php:17
+#: includes/DocumentLibraryShortcode.php:18 blocks/dist/index.js:1
+#: blocks/src/Edit.js:123
+msgid "Document Library"
+msgstr "Thư viện Tài liệu"
+
+#: includes/DocumentSettings.php:41 includes/DocumentSettings.php:42
+msgid "Settings"
+msgstr ""
+
+#: includes/DocumentSettings.php:57
+msgid "Settings Saved"
+msgstr ""
+
+#: includes/DocumentSettings.php:68 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/Edit.js:141
+#: blocks/src/shortcode/App.js:90
+msgid "Document Library Settings"
+msgstr "Thiết đặt thư viện tài liệu"
+
+#: includes/DocumentSettings.php:81
+msgid "Cache Optimization"
+msgstr ""
+
+#: includes/DocumentSettings.php:84
+msgid "Optimize performance when using cache plugins"
+msgstr ""
+
+#: includes/DocumentSettings.php:98
+msgid "Enable cache optimization"
+msgstr ""
+
+#: includes/DocumentSettings.php:102
+msgid ""
+"Enable this option if you are using a cache plugin or want to force cache "
+"optimization for document library."
+msgstr ""
+
+#: includes/DocumentSettings.php:108
+msgid "Save Settings"
+msgstr ""
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/LayoutControl.js:31
+msgid "Items per page"
+msgstr ""
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:57
+msgid "Showing"
+msgstr "Hiển thị"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:59
+msgid "to"
+msgstr "đến"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:61
+msgid "of"
+msgstr "của"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:63
+msgid "files"
+msgstr "tập tin"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:75
+msgid "Previous"
+msgstr "Trước"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:107
+msgid "Next"
+msgstr "Tiếp"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/Grid.js:27
+#: blocks/src/components/Layout/List.js:40
+#: blocks/src/components/Layout/List.js:88
+msgid "Download"
+msgstr "Tải xuống"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:18
+msgid "File"
+msgstr "Tập tin"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:24
+#: blocks/src/Edit.js:17 blocks/src/shortcode/components/Setting/Setting.js:15
+msgid "Size"
+msgstr "Kích thước"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:30
+msgid "Type"
+msgstr "Loại"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:35
+msgid "Last Modified"
+msgstr "Sửa đổi lần cuối"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Empty.js:11
+msgid "No attachments found."
+msgstr "Không tìm thấy tệp đính kèm nào."
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/services/services.js:22
+#: blocks/src/Edit.js:40 blocks/src/shortcode/components/Setting/Setting.js:38
+msgid "Network response was not ok."
+msgstr "Phản hồi mạng không ổn."
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:10 blocks/src/shortcode/components/Setting/Setting.js:8
+msgid "Grid"
+msgstr "Lưới"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:11 blocks/src/shortcode/components/Setting/Setting.js:9
+msgid "List"
+msgstr "Danh sách"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:15 blocks/src/shortcode/components/Setting/Setting.js:13
+msgid "Name"
+msgstr "Tên"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:16 blocks/src/shortcode/components/Setting/Setting.js:14
+msgid "Modified date"
+msgstr "Ngày sửa đổi"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:21 blocks/src/shortcode/components/Setting/Setting.js:19
+msgid "Ascending"
+msgstr "Tăng dần"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:22 blocks/src/shortcode/components/Setting/Setting.js:20
+msgid "Descending"
+msgstr "Giảm dần"
+
+#: blocks/dist/index.js:1 blocks/src/index.js:9
+msgid "FileBird Document Library"
+msgstr "Thư viện tài liệu FileBird"
+
+#: blocks/dist/index.js:1 blocks/src/index.js:10
+msgid "Display folder item in a document library."
+msgstr "Hiển thị mục thư mục trong thư viện tài liệu."
+
+#: blocks/dist/index.js:1 blocks/src/Edit.js:124
+msgid "Select an image to remove this placeholder"
+msgstr "Chọn một hình ảnh để xóa chỗ dành sẵn này"
+
+#: blocks/dist/index.js:1 blocks/src/Edit.js:135
+msgid "Please select a folder"
+msgstr "Vui lòng chọn một thư mục"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:144
+#: blocks/src/shortcode/components/Setting/Setting.js:137
+msgid "Folder"
+msgstr "Thư mục"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:155
+#: blocks/src/shortcode/components/Setting/Setting.js:147
+msgid "Column"
+msgstr "Cột"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:166
+#: blocks/src/shortcode/components/Setting/Setting.js:156
+msgid "Limit items"
+msgstr "Giới hạn mục"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:176
+#: blocks/src/shortcode/components/Setting/Setting.js:166
+msgid "Layout display"
+msgstr "Hiển thị bố cục"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:182
+#: blocks/src/shortcode/components/Setting/Setting.js:172
+msgid "Sort By"
+msgstr "Sắp xếp theo"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:188
+#: blocks/src/shortcode/components/Setting/Setting.js:178
+msgid "Sort Type"
+msgstr "Kiểu sắp xếp"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
+msgid "Copied!"
+msgstr "Đã sao chép!"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
+msgid "Copy"
+msgstr "Sao chép"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:83
+msgid "FileBird Document Library Shortcode Generator"
+msgstr "FileBird Thư viện tài liệu Trình tạo shortcode"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:97
+msgid "Generate"
+msgstr "Tạo"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:104
+msgid "Love FileBird Document Library"
+msgstr "Love FileBird Thư viện tài liệu"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:110
+#, fuzzy
+msgid "Please write us a glowing review here."
+msgstr "Xin vui lòng viết cho chúng tôi một đánh giá phát sáng ở đây."
+
+#~ msgid "Show"
+#~ msgstr "Hiển thị"
+
+#~ msgid "Library title"
+#~ msgstr "Tiêu đề thư viện"
