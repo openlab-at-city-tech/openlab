@@ -77,6 +77,7 @@ function openlab_get_hidden_plugins() {
 		'h5p-postmessage/h5p-postmessage.php', // #3483
 		'highlighter-pro/highlighter.php', // #3438
 		'import-html-pages/html-import.php',
+		'instagram-feed/instagram-feed.php', // #3660
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
