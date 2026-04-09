@@ -29,7 +29,7 @@
 
 		window.Parsley.addValidator('studentemail', {
 			validateString: function (value) {
-				return /^([a-zA-Z\-\._]+)*[0-9]{2}@stu-mail\.citytech\.cuny\.edu$/.test( value );
+				return /^([a-zA-Z\-\._]+)*[0-9]{1,4}@stu-mail\.citytech\.cuny\.edu$/.test( value );
 			},
 			messages: {
 				en: 'Please enter a valid City Tech student email address. Example: first.lastname##@stu-mail.citytech.cuny.edu'
