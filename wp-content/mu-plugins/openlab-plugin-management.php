@@ -412,3 +412,17 @@ add_action(
  */
 define( 'WP_QUICKLATEX_CACHE_DIR', WP_CONTENT_DIR . '/uploads/ql-cache' );
 define( 'WP_QUICKLATEX_CACHE_URL', content_url() . '/uploads/ql-cache' );
+
+/**
+ * Load JS for filebird-document-library accessibility fixes.
+ */
+add_action(
+	'init',
+	function() {
+		if ( ! is_plugin_active( 'filebird-document-library/filebird-document-library.php' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-filebird-a11y', content_url( 'mu-plugins/js/openlab-filebird.js' ), [ 'jquery' ] );
+	}
+);
