@@ -1,0 +1,389 @@
+/**
+ * Smash Balloon Deactivation Survey Modal
+ *
+ * Shadow DOM scoped — complete CSS isolation from WP admin.
+ * Base unit: 4px, Font: Inter Variable, Transitions: 200ms ease-in-out.
+ */
+
+/* ── Base reset (shadow-scoped) ─────────────────────────────────── */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	font-family: 'Inter Variable', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Overlay ────────────────────────────────────────────────────── */
+.sb-deactivation-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 99999;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.sb-deactivation-overlay.sb-visible {
+	opacity: 1;
+}
+
+/* ── Modal ──────────────────────────────────────────────────────── */
+.sb-deactivation-modal {
+	background: #FFFFFF;
+	border-radius: 4px;
+	width: 576px;
+	max-width: calc(100vw - 40px);
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow:
+		0px 26.74px 77.29px rgba(0, 0, 0, 0.11),
+		0px 14.30px 41.32px rgba(0, 0, 0, 0.09),
+		0px 8.01px 23.16px rgba(0, 0, 0, 0.08),
+		0px 4.26px 12.30px rgba(0, 0, 0, 0.06),
+		0px 1.77px 5.12px rgba(0, 0, 0, 0.04);
+	transform: scale(0.95);
+	transition: transform 0.2s ease-out;
+	line-height: 1.6;
+}
+
+.sb-deactivation-overlay.sb-visible .sb-deactivation-modal {
+	transform: scale(1);
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.sb-deactivation-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 24px 24px 16px;
+	border-bottom: 1px solid #E6E6EB;
+}
+
+.sb-deactivation-heading {
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.6;
+	color: #141B38;
+	margin: 0 0 4px;
+	padding: 0;
+	border: none;
+	letter-spacing: 0;
+}
+
+.sb-deactivation-subtitle {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.6;
+	color: #434960;
+	margin: 0;
+	padding: 0;
+}
+
+/* ── Close button ───────────────────────────────────────────────── */
+.sb-deactivation-close {
+	background: none;
+	border: none;
+	padding: 4px;
+	margin: 0;
+	cursor: pointer;
+	color: #141B38;
+	line-height: 0;
+	transition: all 0.2s ease-in-out;
+	flex-shrink: 0;
+	min-width: auto;
+	min-height: auto;
+	box-shadow: none;
+	outline: none;
+	border-radius: 2px;
+}
+
+.sb-deactivation-close:hover {
+	color: #696D80;
+}
+
+.sb-deactivation-close:focus {
+	outline: none;
+	box-shadow: 0 0 0 4px rgba(0, 150, 204, 0.2);
+}
+
+.sb-deactivation-close svg {
+	width: 14px;
+	height: 14px;
+	display: block;
+}
+
+/* ── Reasons list ───────────────────────────────────────────────── */
+.sb-deactivation-reasons {
+	padding: 8px 24px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.sb-deactivation-reason {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px 0;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	margin: 0;
+}
+
+.sb-deactivation-reason:hover {
+	opacity: 0.85;
+}
+
+/* ── Radio button ───────────────────────────────────────────────── */
+.sb-deactivation-radio {
+	position: relative;
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+.sb-deactivation-radio input[type="radio"] {
+	position: absolute;
+	opacity: 0;
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+	top: 0;
+	left: 0;
+}
+
+.sb-deactivation-radio-circle {
+	display: block;
+	width: 16px;
+	height: 16px;
+	border: 2px solid #9295A6;
+	border-radius: 50%;
+	background: #FFFFFF;
+	transition: all 0.2s ease-in-out;
+	box-sizing: border-box;
+}
+
+.sb-deactivation-radio input[type="radio"]:checked + .sb-deactivation-radio-circle {
+	border: 5px solid #0096CC;
+}
+
+.sb-deactivation-radio input[type="radio"]:focus + .sb-deactivation-radio-circle {
+	box-shadow: 0 0 0 4px rgba(0, 150, 204, 0.2);
+}
+
+/* ── Reason label ───────────────────────────────────────────────── */
+.sb-deactivation-reason-label {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.6;
+	color: #141B38;
+	cursor: pointer;
+}
+
+/* ── Context section ────────────────────────────────────────────── */
+.sb-deactivation-context {
+	background: #F9F9FA;
+	border-top: 1px solid #E6E6EB;
+	padding: 20px 24px;
+}
+
+.sb-deactivation-context-heading {
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.6;
+	color: #141B38;
+	margin: 0 0 4px;
+	padding: 0;
+	border: none;
+	letter-spacing: 0;
+}
+
+.sb-deactivation-context-description {
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.6;
+	color: #696D80;
+	margin: 0 0 12px;
+	padding: 0;
+}
+
+/* ── Textarea ───────────────────────────────────────────────────── */
+.sb-deactivation-textarea {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #E6E6EB;
+	border-radius: 4px;
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 1.6;
+	color: #141B38;
+	background: #FFFFFF;
+	resize: vertical;
+	min-height: 80px;
+	transition: all 0.2s ease-in-out;
+	box-sizing: border-box;
+	box-shadow: none;
+	outline: none;
+}
+
+.sb-deactivation-textarea::placeholder {
+	color: #9295A6;
+}
+
+.sb-deactivation-textarea:hover {
+	border-color: #CED0D9;
+	box-shadow: 0px 1px 2px rgba(60, 66, 87, 0.07);
+}
+
+.sb-deactivation-textarea:focus {
+	outline: none;
+	border-color: #0096CC;
+	box-shadow: 0 0 0 4px rgba(0, 150, 204, 0.2);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+.sb-deactivation-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px 24px;
+	border-top: 1px solid #E6E6EB;
+}
+
+.sb-deactivation-footer-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.sb-deactivation-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.6;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+	text-decoration: none;
+	white-space: nowrap;
+	min-height: auto;
+	box-shadow: none;
+	outline: none;
+	margin: 0;
+}
+
+.sb-deactivation-btn:focus {
+	outline: none;
+	box-shadow: 0 0 0 4px rgba(0, 150, 204, 0.2);
+}
+
+.sb-deactivation-btn:active {
+	transform: scale(0.98);
+}
+
+/* Support button (secondary with border) */
+.sb-deactivation-btn--support {
+	background: #F9F9FA;
+	color: #141B38;
+	border: 1px solid #D0D1D7;
+	box-shadow:
+		0px 1px 1px 0px rgba(0, 0, 0, 0.03),
+		0px 2px 5px 0px rgba(60, 66, 87, 0.03),
+		0px -1px 1px 0px rgba(0, 0, 0, 0.08) inset;
+}
+
+.sb-deactivation-btn--support:hover {
+	background: #F9F9FA;
+	color: #141B38;
+	text-decoration: none;
+	border-color: #D0D1D7;
+}
+
+.sb-deactivation-btn--support svg {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+/* Cancel button (secondary) - matches support button */
+.sb-deactivation-btn--cancel {
+	background: #F9F9FA;
+	color: #141B38;
+	border: 1px solid #D0D1D7;
+	box-shadow:
+		0px 1px 1px 0px rgba(0, 0, 0, 0.03),
+		0px 2px 5px 0px rgba(60, 66, 87, 0.03),
+		0px -1px 1px 0px rgba(0, 0, 0, 0.08) inset;
+}
+
+.sb-deactivation-btn--cancel:hover {
+	background: #F9F9FA;
+}
+
+/* Submit/Deactivate button (primary) */
+.sb-deactivation-btn--submit {
+	background: #005B8C;
+	color: #FFFFFF;
+	border: none;
+	box-shadow:
+		0px 1px 1px 0px rgba(0, 0, 0, 0.05),
+		0px 2px 5px 0px rgba(60, 66, 87, 0.08),
+		0px -1px 1px 0px rgba(0, 0, 0, 0.10) inset;
+}
+
+.sb-deactivation-btn--submit:hover {
+	background: #0096CC;
+	color: #FFFFFF;
+}
+
+.sb-deactivation-btn--submit svg {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+}
+
+.sb-deactivation-btn--submit:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.sb-deactivation-btn--submit:disabled:active {
+	transform: none;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+	.sb-deactivation-modal {
+		width: 100%;
+		max-height: 90vh;
+		border-radius: 0;
+	}
+
+	.sb-deactivation-footer {
+		flex-direction: column;
+		gap: 12px;
+	}
+
+	.sb-deactivation-footer-right {
+		width: 100%;
+		justify-content: flex-end;
+	}
+
+	.sb-deactivation-btn--support {
+		align-self: flex-start;
+	}
+}

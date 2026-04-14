@@ -163,6 +163,7 @@ label[for="wpt_license_key"] {
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 12px;
+	justify-content: space-between;
 }
 
 #wpt_settings_page .tabs {
@@ -389,7 +390,7 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 }
 
 .wpt-sidebar .postbox a:hover, .wpt-sidebar .postbox a:focus {
-	text-decoration: none; 
+	text-decoration: none;
 }
 
 .inside.resources > div {
@@ -425,7 +426,7 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 }
 
 .toplevel_page_wp-tweets-pro #fs_connect .fs-terms a {
-	color: #555; 
+	color: #555;
 }
 
 @media (max-width: 782px) {

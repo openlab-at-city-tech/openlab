@@ -192,10 +192,10 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		// Intercepting callback requests.
 		add_action( 'parse_request', array( $this, 'maybe_process_callback' ) );
 
+        // Setting up check_status cron if this payment add-on supports it.
 		if ( $this->payment_method_is_overridden( 'check_status' ) ) {
 			$this->setup_cron();
 		}
-
 	}
 
 	/**
@@ -226,7 +226,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 			add_filter( 'gform_form_args', array( $this, 'force_ajax_for_creditcard_tokens' ), 10, 1 );
 		}
 
-		add_filter( 'gform_is_delayed_pre_process_feed', array( $this, 'maybe_delay_feed_processing' ), 20, 4 );
+		add_filter( 'gform_is_delayed_pre_process_feed', array( $this, 'maybe_delay_feed_processing' ), 1, 4 );
 
 		// Maybe support payment status in Confirmation conditional logic.
 		add_filter( 'gform_entry_meta_conditional_logic_confirmations', function( $entry_meta, $form ) {
@@ -474,6 +474,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
      * @param int    $entry_id        The entry ID whose payment status has changed.
      * @param string $previous_status The previous payment status.
      *
+     * return void
      */
     public function payment_status_changed( $entry_id, $previous_status ) {
 
@@ -495,10 +496,12 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
              * Fired every time the entry payment status changes.
              *
              * @since 2.9.20
+             * @since 2.9.29 Added the $previous_status parameter.
              *
-             * @param array $entry The entry whose payment status has changed.
+             * @param array  $entry           The entry whose payment status has changed.
+             * @param string $previous_status The previous status of the entry before the change.
              */
-            do_action( 'gform_post_payment_status_change', $entry );
+            do_action( 'gform_post_payment_status_change', $entry, $previous_status );
         }
     }
 
@@ -566,6 +569,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 				$frontend_feeds[ $key ]['billingCycle_length']                = rgar( $feed_meta, 'billingCycle_length' );
 				$frontend_feeds[ $key ]['billingCycle_unit']                  = rgar( $feed_meta, 'billingCycle_unit' );
 				$frontend_feeds[ $key ]['setupFee_enabled']                   = rgar( $feed_meta, 'setupFee_enabled' );
+				$frontend_feeds[ $key ]['setupFee_product']                   = rgar( $feed_meta, 'setupFee_product' );
 				$frontend_feeds[ $key ]['trial_enabled']                      = rgar( $feed_meta, 'trial_enabled' );
 				$frontend_feeds[ $key ]['trialPeriod']                        = rgar( $feed_meta, 'trialPeriod' );
 				$frontend_feeds[ $key ]['paymentAmount']                      = rgar( $feed_meta, 'paymentAmount' );
@@ -1959,13 +1963,13 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		global $wpdb;
 
 		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-			"{$wpdb->prefix}gf_addon_payment_callback", 
+			"{$wpdb->prefix}gf_addon_payment_callback",
 			array(
 				'addon_slug'   => $this->get_slug(),
 				'callback_id'  => $callback_id,
 				'lead_id'      => $entry_id,
 				'date_created' => gmdate( 'Y-m-d H:i:s' )
-			) 
+			)
 		);
 	}
 
@@ -2366,7 +2370,7 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		 */
 		do_action( 'gform_subscription_payment_failed', $entry, $action['subscription_id'] );
 		if ( has_filter( 'gform_subscription_payment_failed' ) ) {
-			trigger_error( 'gform_subscription_payment_failed is deprecated and will be removed in version 3.0. Use gform_post_fail_subscription_payment.', E_USER_DEPRECATED );
+			trigger_error( 'gform_subscription_payment_failed is deprecated and will be removed in version 3.0. Use gform_post_fail_subscription_payment.', E_USER_DEPRECATED ); // phpcs:ignore QITStandard.PHP.DebugCode.DebugFunctionFound
 			$this->log_debug( __METHOD__ . '(): Executing functions hooked to gform_subscription_payment_failed.' );
 		}
 		/**
@@ -2525,7 +2529,6 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		}
 	}
 
-
     /**
      * Reprocesses feeds that are configured with Payment Status conditional logic.
      *
@@ -2596,13 +2599,9 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		if ( ! wp_next_scheduled( $cron_name ) ) {
 			wp_schedule_event( time(), 'hourly', $cron_name );
 		}
-
-
 	}
 
-	public function check_status() {
-
-	}
+	public function check_status() {}
 
 	//--------- List Columns ------------
 	public function feed_list_columns() {
@@ -3369,10 +3368,10 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
                                 ", $form_id, $form_id
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		
+
 		GFCommon::log_debug( "sales sql: {$sql}" );
 
-		$results = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching 
+		$results = $wpdb->get_results( $sql, ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 
 		if ( isset( $search['start_date'] ) || isset( $search['end_date'] ) ) {

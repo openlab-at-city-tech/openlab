@@ -4,11 +4,12 @@ namespace TablePress\PhpOffice\PhpSpreadsheet\Cell;
 
 use TablePress\Composer\Pcre\Preg;
 use DateTimeInterface;
-use TablePress\PhpOffice\PhpSpreadsheet\Calculation\Calculation;
+use TablePress\PhpOffice\PhpSpreadsheet\Calculation\CalculationParserOnly;
 use TablePress\PhpOffice\PhpSpreadsheet\Calculation\Exception as CalculationException;
 use TablePress\PhpOffice\PhpSpreadsheet\Exception as SpreadsheetException;
 use TablePress\PhpOffice\PhpSpreadsheet\RichText\RichText;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\StringHelper;
+use TablePress\PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use Stringable;
 
 class DefaultValueBinder implements IValueBinder
@@ -33,6 +34,11 @@ class DefaultValueBinder implements IValueBinder
 			$value = $value->format('Y-m-d H:i:s');
 		} elseif (is_object($value) && method_exists($value, '__toString')) {
 			$value = (string) $value;
+		} elseif ($value instanceof BaseDrawing) {
+			$value->setCoordinates($cell->getCoordinate());
+			$value->setResizeProportional(false);
+			$value->setInCell(true);
+			$value->setWorksheet($cell->getWorksheet(), true);
 		} else {
 			throw new SpreadsheetException('Unable to bind unstringable ' . gettype($value));
 		}
@@ -69,6 +75,9 @@ class DefaultValueBinder implements IValueBinder
 		if ($value instanceof RichText) {
 			return DataType::TYPE_INLINE;
 		}
+		if ($value instanceof BaseDrawing) {
+			return DataType::TYPE_DRAWING_IN_CELL;
+		}
 		if (is_object($value) && method_exists($value, '__toString')) {
 			$value = (string) $value;
 		}
@@ -78,8 +87,7 @@ class DefaultValueBinder implements IValueBinder
 			throw new SpreadsheetException("unusable type $gettype");
 		}
 		if (strlen($value) > 1 && $value[0] === '=') {
-			$calculation = new Calculation();
-			$calculation->disableBranchPruning();
+			$calculation = CalculationParserOnly::getParserInstance();
 
 			try {
 				if (empty($calculation->parseFormula($value))) {
@@ -108,7 +116,7 @@ class DefaultValueBinder implements IValueBinder
 					return DataType::TYPE_STRING;
 				}
 			}
-			if (!is_numeric($value)) {
+			if (!is_numeric($value) || !is_finite((float) $value)) {
 				return DataType::TYPE_STRING;
 			}
 

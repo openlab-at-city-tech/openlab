@@ -54,6 +54,7 @@ add_action(
 		$t = get_stylesheet();
 
 		switch ( $t ) {
+			case 'astra':
 			case 'education-pro' :
 			case 'hamilton':
 			case 'hemingway':

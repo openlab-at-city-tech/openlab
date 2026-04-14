@@ -54,7 +54,7 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            id="contact_form_sender_name"
                            class="regular-text"
                            value="<?php
-                            esc_attr_e($contact_form_sender_name) ?>"
+                            echo esc_attr($contact_form_sender_name) ?>"
                     />
                 </label>
             </td>
@@ -88,7 +88,7 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            id="contact_form_email_title"
                            class="regular-text"
                            value="<?php
-                            esc_attr_e($contact_form_email_title) ?>"
+                            echo esc_attr($contact_form_email_title) ?>"
                     />
                 </label>
             </td>
@@ -105,7 +105,7 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            id="contact_form_email_receiver"
                            class="regular-text"
                            value="<?php
-                            esc_attr_e($contact_form_email_receiver) ?>"
+                            echo esc_attr($contact_form_email_receiver) ?>"
                     />
                 </label>
             </td>

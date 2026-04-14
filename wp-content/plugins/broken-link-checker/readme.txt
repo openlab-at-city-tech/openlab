@@ -2,8 +2,8 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images
 Requires at least: 5.2
-Tested up to: 6.8
-Stable tag: 2.4.7
+Tested up to: 6.9
+Stable tag: 2.4.8
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -207,6 +207,9 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 6. Local Broken Link Checker engine settings
 
 == Changelog ==
+
+= 2.4.8 =
+* Fix: Patched a vulnerability issue.
 
 = 2.4.7 =
 * Fix: Removed Edit and Unlink Banner actions from the Local Scanner page.

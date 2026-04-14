@@ -181,6 +181,8 @@ class GFLogging extends GFAddOn {
 		remove_filter( 'ure_capabilities_groups_tree', array( $this, 'filter_ure_capabilities_groups_tree' ), 11 );
 		remove_filter( 'ure_custom_capability_groups', array( $this, 'filter_ure_custom_capability_groups' ), 10 );
 
+        // Registering config for client side logger
+        $this->register_config();
 	}
 
 	/**
@@ -546,6 +548,21 @@ class GFLogging extends GFAddOn {
 	 */
 	public static function log_message( $plugin, $message = null, $message_type = KLogger::DEBUG ) {
 
+		$enabled = self::is_enabled( $plugin );
+
+		/**
+		 * Fires before a logging message is recorded regardless of whether logging is enabled. Useful for sending
+		 * logs to other systems outside the file system.
+		 *
+		 * @since 2.9.26
+		 *
+		 * @param string $plugin       Plugin name.
+		 * @param string $message      The logging message.
+		 * @param int    $message_type The logging message type.
+		 * @param bool   $enabled      Whether logging to file is enabled for this plugin.
+		 */
+		do_action( 'gform_pre_log_message', $plugin, $message, $message_type, $enabled );
+
 		// If message is empty, exit.
 		if ( rgblank( $message ) || ! class_exists( 'GFForms' ) || ! get_option( 'gform_enable_logging' ) ) {
 			return;
@@ -583,6 +600,33 @@ class GFLogging extends GFAddOn {
 			$log->Log( $message, $message_type );
 		}
 
+	}
+
+	/**
+	 * Determines if logging is enabled for a plugin.
+	 *
+	 * @since 2.9.26
+	 *
+	 * @param string $plugin The plugin slug.
+	 *
+	 * @return bool
+	 */
+	public static function is_enabled( $plugin = 'gravityforms' ) {
+		static $results = array();
+
+		if ( isset( $results[ $plugin ] ) ) {
+			return $results[ $plugin ];
+		}
+
+		if ( ! get_option( 'gform_enable_logging' ) ) {
+			$results[ $plugin ] = false;
+
+			return false;
+		}
+
+		$results[ $plugin ] = (bool) rgar( self::get_instance()->get_plugin_setting( $plugin ), 'enable' );
+
+		return $results[ $plugin ];
 	}
 
 	/**
@@ -747,6 +791,17 @@ class GFLogging extends GFAddOn {
 
 		return $size;
 
+	}
+    /**
+     * Register config for client side logger
+     *
+     * @since 2.9.26
+     */
+	protected static function register_config() {
+        require_once 'config/class-gf-logging-config.php';
+		$container = GFForms::get_service_container();
+        $config_collection = $container->get( Gravity_Forms\Gravity_Forms\Config\GF_Config_Service_Provider::CONFIG_COLLECTION );
+        $config_collection->add_config( new Gravity_Forms\Gravity_Forms\Logging\Config\GF_Logging_Config( $container->get( Gravity_Forms\Gravity_Forms\Config\GF_Config_Service_Provider::DATA_PARSER ) ) );
 	}
 
 	/**

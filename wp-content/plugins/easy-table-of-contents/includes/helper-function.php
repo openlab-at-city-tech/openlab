@@ -61,7 +61,7 @@ function eztoc_send_feedback() {
 //phpcs:ignore WordPress.Security.NonceVerification.Missing -- Reason : Since form is serialised nonce is verified after parsing the recieved data.
     if( isset( $_POST['data'] ) ) {
         //phpcs:ignore WordPress.Security.NonceVerification.Missing -- Reason : Since form is serialised nonce is verified after parsing the recieved data.
-        parse_str( $_POST['data'], $form );
+        parse_str( wp_unslash( $_POST['data'] ), $form ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Data is sanitized below.
     }
     
     if( !isset( $form['eztoc_security_nonce'] ) || isset( $form['eztoc_security_nonce'] ) && !wp_verify_nonce( sanitize_text_field( $form['eztoc_security_nonce'] ), 'eztoc_ajax_check_nonce' ) ) {
@@ -73,7 +73,7 @@ function eztoc_send_feedback() {
     }
     
     $text = '';
-    if( isset( $form['eztoc_disable_text'] ) && !is_array($form['eztoc_disable_text']) ) {
+    if( isset( $form['eztoc_disable_text'] ) && is_array($form['eztoc_disable_text']) ) {
         $text = implode( "\n\r", $form['eztoc_disable_text'] );
     }
 
@@ -81,8 +81,8 @@ function eztoc_send_feedback() {
 
     $from = isset( $form['eztoc_disable_from'] ) ? $form['eztoc_disable_from'] : '';
     if( $from ) {
-        $headers[] = "From: $from";
-        $headers[] = "Reply-To: $from";
+        $headers[] = "From: " . sanitize_email( $from );
+        $headers[] = "Reply-To: " . sanitize_email( $from );
     }
 
     $subject = isset( $form['eztoc_disable_reason'] ) ? $form['eztoc_disable_reason'] : '(no reason given)';
@@ -128,9 +128,9 @@ add_action( 'admin_enqueue_scripts', 'eztoc_enqueue_makebetter_email_js' );
 /* * BFCM Banner Integration
  * Loads assets from assets/css and assets/js
  */
-add_action('admin_enqueue_scripts', 'etoc_enqueue_bfcm_assets');
+add_action('admin_enqueue_scripts', 'eztoc_enqueue_bfcm_assets');
 
-function etoc_enqueue_bfcm_assets($hook) { 
+function eztoc_enqueue_bfcm_assets($hook) { 
  
     
     if ( $hook !== 'settings_page_table-of-contents') {
@@ -148,7 +148,7 @@ function etoc_enqueue_bfcm_assets($hook) {
 
     // 4. Register & Enqueue CSS    
     wp_enqueue_style(
-        'etoc-bfcm-style', 
+        'eztoc-bfcm-style', 
         EZ_TOC_URL. 'assets/css/bfcm-style.css', 
         array(), 
         '1.0'
@@ -156,7 +156,7 @@ function etoc_enqueue_bfcm_assets($hook) {
 
     // 5. Register & Enqueue JS
     wp_enqueue_script(
-        'etoc-bfcm-script', 
+        'eztoc-bfcm-script', 
         EZ_TOC_URL. 'assets/js/bfcm-script.js', 
         array('jquery'), // jQuery dependency
         '1.0', 
@@ -164,7 +164,7 @@ function etoc_enqueue_bfcm_assets($hook) {
     );
 
     // 6. Data Pass (PHP to JS)
-    wp_localize_script('etoc-bfcm-script', 'bfcmData', array(
+    wp_localize_script('eztoc-bfcm-script', 'bfcmData', array(
         'targetDate' => $expiry_date_str,
         'offerLink'  => $offer_link
     ));

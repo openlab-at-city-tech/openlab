@@ -47,10 +47,16 @@
                                         }    
                                     
                                     global $wpdb;
-                                                        
-                                    $results = $wpdb->query (  $wpdb->prepare ("UPDATE `". $wpdb->posts ."`
-                                                                SET menu_order = 0
-                                                                WHERE `post_type`    =  %s ", $post_type ) );
+                                                                       
+                                    $results = $wpdb->query(
+                                                                $wpdb->prepare(
+                                                                    "UPDATE {$wpdb->posts}
+                                                                    SET menu_order = %d
+                                                                    WHERE post_type = %s",
+                                                                    0,
+                                                                    $post_type
+                                                                )
+                                                            );
                                                                             
                                     apply_filters('pto/order_reset', $post_type );
                                     
@@ -125,7 +131,7 @@
                             <div id="nav-menu-footer">
                                 <div class="major-publishing-actions">
                                         
-                                        <a class="button-primary" href="javascript: void(0)" onclick="confirmSubmit()"><?php esc_html_e( "Reset Order", 'post-types-order' ) ?></a>
+                                        <a class="button-primary warning" href="javascript: void(0)" onclick="confirmSubmit()"><?php esc_html_e( "Reset Order", 'post-types-order' ) ?></a>
                                 
                                         <div class="alignright actions">
                                             <img alt="" src="<?php echo esc_url ( CPTURL . "/images/wpspin_light.gif" ) ?>" class="waiting pto_ajax_loading" style="display: none;">

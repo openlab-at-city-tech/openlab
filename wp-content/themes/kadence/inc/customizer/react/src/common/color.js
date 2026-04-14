@@ -150,7 +150,7 @@ class ColorControl extends Component {
 				</div>
 			);
 		};
-		const paletteIndexRegex = this.state.color.match(/\d+$/)?.[0] - 1;
+		const paletteIndexRegex = this.state.color?.match(/\d+$/)?.[0] - 1;
 		const paletteIndex = this.state.isPalette
 			? paletteIndexRegex
 			: undefined;

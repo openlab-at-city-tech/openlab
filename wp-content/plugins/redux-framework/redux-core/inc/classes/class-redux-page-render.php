@@ -859,7 +859,7 @@ if ( ! class_exists( 'Redux_Page_Render', false ) ) {
 						// Set hand cursor for clickable hints.
 						$pointer = '';
 						if ( isset( $core->args['hints']['tip_effect']['show']['event'] ) && 'click' === $core->args['hints']['tip_effect']['show']['event'] ) {
-							$pointer = 'pointer';
+							$pointer = 'cursor: pointer;';
 						}
 
 						$size = '16px';
@@ -874,7 +874,7 @@ if ( ! class_exists( 'Redux_Page_Render', false ) ) {
 						$hint_color = $core->args['hints']['icon_color'] ?? '#d3d3d3';
 
 						// Set hint html with appropriate position css.
-						$hint = '<div class="redux-hint-qtip" style="float:' . esc_attr( $core->args['hints']['icon_position'] ) . '; font-size: ' . esc_attr( $size ) . '; color:' . esc_attr( $hint_color ) . '; cursor: ' . $pointer . ';" qtip-title="' . esc_attr( $title_param ) . '" qtip-content="' . wp_kses_post( $content_param ) . '">&nbsp;<i class="' . ( isset( $core->args['hints']['icon'] ) ? esc_attr( $core->args['hints']['icon'] ) : '' ) . '"></i></div>';
+						$hint = '<div class="redux-hint-qtip" style="float:' . esc_attr( $core->args['hints']['icon_position'] ) . '; font-size: ' . esc_attr( $size ) . '; color:' . esc_attr( $hint_color ) . ';' . $pointer . '" qtip-title="' . esc_attr( $title_param ) . '" qtip-content="' . wp_kses_post( $content_param ) . '">&nbsp;<i class="' . ( isset( $core->args['hints']['icon'] ) ? esc_attr( $core->args['hints']['icon'] ) : '' ) . '"></i></div>';
 					}
 				}
 

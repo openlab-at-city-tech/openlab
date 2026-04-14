@@ -126,10 +126,12 @@ class DLM_Log_Item {
 	public function set_current_url( $current_url ) {
 
 		if ( get_option( 'permalink_structure' ) ) {
-			$query_url = wp_parse_url( $current_url );
-			$current_url = wp_parse_url( $current_url )['path'] . ( isset( $query_url['query'] ) ? '?' . $query_url['query'] : '' );
+			$query_url   = wp_parse_url( $current_url );
+			$path        = isset( $query_url['path'] ) ? $query_url['path'] : '/';
+			$current_url = $path . ( isset( $query_url['query'] ) ? '?' . $query_url['query'] : '' );
 		} else {
-			$current_url = '/' . wp_parse_url( $current_url )['query'];
+			$query_url   = wp_parse_url( $current_url );
+			$current_url = '/' . ( isset( $query_url['query'] ) ? $query_url['query'] : '' );
 		}
 
 		$this->current_url = $current_url;

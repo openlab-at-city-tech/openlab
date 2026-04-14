@@ -390,11 +390,11 @@ a.download-button > * {
   z-index: 2;
   position: relative;
 }
-html body a.download-link {
+html body .download-link {
   position: relative;
 }
-html body a.download-link::before,
-html body a.download-link::after {
+html body .download-link::before,
+html body .download-link::after {
   content: '';
   position: absolute;
   right: -40px;
@@ -403,15 +403,15 @@ html body a.download-link::after {
   opacity: 0;
   z-index: -1;
 }
-html body a.download-link.dlm-download-started {
+html body .download-link.dlm-download-started {
   text-decoration: none;
 }
-html body a.download-link.dlm-download-started::before,
-html body a.download-link.dlm-download-started::after {
+html body .download-link.dlm-download-started::before,
+html body .download-link.dlm-download-started::after {
   opacity: 1;
   z-index: 99;
 }
-html body a.download-link.dlm-download-complete::after {
+html body .download-link.dlm-download-complete::after {
   content: '✓';
   opacity: 1;
   z-index: 99;
@@ -421,7 +421,7 @@ html body a.download-link.dlm-download-complete::after {
   top: calc(50% - 5px);
   line-height: initial;
 }
-html body a.download-link.dlm-download-complete::before {
+html body .download-link.dlm-download-complete::before {
   opacity: 0;
   z-index: -1;
 }

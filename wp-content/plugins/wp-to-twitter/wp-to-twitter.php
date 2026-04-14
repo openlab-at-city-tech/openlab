@@ -4,7 +4,7 @@
  *
  * @package     XPoster
  * @author      Joe Dolson
- * @copyright   2008-2025 Joe Dolson
+ * @copyright   2008-2026 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -16,11 +16,11 @@
  * Text Domain: wp-to-twitter
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version:     5.0.4
+ * Version:     5.0.7
  */
 
 /*
-	Copyright 2008-2025  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2008-2026  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -49,11 +49,16 @@ define( 'WPT_DEBUG_BY_EMAIL', false ); // Email debugging no longer default as o
 define( 'WPT_DEBUG_ADDRESS', get_option( 'admin_email' ) );
 define( 'WPT_FROM', 'From: \"' . get_option( 'blogname' ) . '\" <' . get_option( 'admin_email' ) . '>' );
 
+$staging = get_option( 'wpt_staging_mode', false );
 // If current environment tests as staging, enable staging mode.
 if ( function_exists( 'wp_get_environment_type' ) ) {
-	if ( 'staging' === wp_get_environment_type() && ! defined( 'WPT_STAGING_MODE' ) ) {
-		define( 'WPT_STAGING_MODE', true );
+	if ( 'staging' === wp_get_environment_type() ) {
+		$staging = true;
 	}
+}
+// Because WPT_STAGING_MODE has previously supported external declaration, need to keep that support.
+if ( ! defined( 'WPT_STAGING_MODE' ) ) {
+	define( 'WPT_STAGING_MODE', $staging );
 }
 
 require_once plugin_dir_path( __FILE__ ) . 'vendor_prefixed/vendor/scoper-autoload.php';
@@ -78,7 +83,7 @@ require_once plugin_dir_path( __FILE__ ) . 'wp-to-twitter-manager.php';
 require_once plugin_dir_path( __FILE__ ) . 'wpt-truncate.php';
 require_once plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php';
 
-define( 'XPOSTER_VERSION', '5.0.4' );
+define( 'XPOSTER_VERSION', '5.0.7' );
 
 register_activation_hook( __FILE__, 'wpt_check_version' );
 /**
@@ -866,7 +871,7 @@ function wpt_post_update( $post_ID, $type = 'instant', $post = null, $updated = 
 			if ( isset( $_POST['_jd_twitter'] ) && ! empty( $_POST['_jd_twitter'] ) ) {
 				$ct = sanitize_textarea_field( wp_unslash( $_POST['_jd_twitter'] ) );
 			}
-			$custom_tweet = ( '' !== $ct ) ? stripcslashes( trim( $ct ) ) : '';
+			$custom_tweet = ( '' !== $ct ) ? wp_unslash( trim( $ct ) ) : '';
 			// if ops is set and equals 'publish', this is being edited. Otherwise, it's a new post.
 			if ( 0 === $new ) {
 				// if this is an old post and editing updates are enabled.
@@ -889,7 +894,7 @@ function wpt_post_update( $post_ID, $type = 'instant', $post = null, $updated = 
 				}
 				wpt_mail( '4b: Post action is edit', 'This event was a post edit action.' . "\n" . 'Modified Date: ' . $post_info['_postModified'] . "\n\n" . 'Publication date:' . $post_info['_postDate'], $post_ID ); // DEBUG.
 				if ( '1' === (string) $post_type_settings[ $post_type ]['post-edited-update'] || $post_this ) {
-					$nptext = stripcslashes( $post_type_settings[ $post_type ]['post-edited-text'] );
+					$nptext = wp_unslash( $post_type_settings[ $post_type ]['post-edited-text'] );
 					if ( ! $nptext ) {
 						wpt_mail( '4b: Edited post template is empty.', 'Post Type: ' . $post_type, $post_ID ); // DEBUG.
 					}
@@ -899,7 +904,7 @@ function wpt_post_update( $post_ID, $type = 'instant', $post = null, $updated = 
 			} else {
 				wpt_mail( '4c: Post action is publish', 'This event was a post publish action.' . "\n" . 'Modified Date: ' . $post_info['_postModified'] . "\n\n" . 'Publication date:' . $post_info['_postDate'], $post_ID ); // DEBUG.
 				if ( '1' === (string) $post_type_settings[ $post_type ]['post-published-update'] || $post_this ) {
-					$nptext = stripcslashes( $post_type_settings[ $post_type ]['post-published-text'] );
+					$nptext = wp_unslash( $post_type_settings[ $post_type ]['post-published-text'] );
 					if ( ! $nptext ) {
 						wpt_mail( '4c: Published post template is empty.', 'Post Type: ' . $post_type, $post_ID ); // DEBUG.
 					}
@@ -944,7 +949,7 @@ function wpt_post_update_link( $link_id ) {
 		$thislinkname        = $bookmark->link_name;
 		$thispostlink        = $bookmark->link_url;
 		$thislinkdescription = $bookmark->link_description;
-		$sentence            = stripcslashes( get_option( 'newlink-published-text' ) );
+		$sentence            = wp_unslash( get_option( 'newlink-published-text' ) );
 		$sentence            = str_ireplace( '#title#', $thislinkname, $sentence );
 		$sentence            = str_ireplace( '#description#', $thislinkdescription, $sentence );
 
@@ -1425,7 +1430,7 @@ function wpt_post_update_xmlrpc( $id ) {
 
 add_action( 'admin_notices', 'wpt_debugging_enabled', 10 );
 /**
- * Show notice if X.com debugging is enabled.
+ * Show notice if XPoster debugging is enabled.
  */
 function wpt_debugging_enabled() {
 	if ( current_user_can( 'manage_options' ) && WPT_DEBUG ) {
@@ -1434,6 +1439,22 @@ function wpt_debugging_enabled() {
 			$message,
 			array(
 				'type' => 'error',
+			)
+		);
+	}
+}
+
+add_action( 'admin_notices', 'wpt_staging_enabled', 10 );
+/**
+ * Show notice if XPoster staging mode is enabled.
+ */
+function wpt_staging_enabled() {
+	if ( current_user_can( 'manage_options' ) && WPT_STAGING_MODE ) {
+		$message = __( '<strong>XPoster</strong> staging mode is enabled. Updates will report as sent, but will not be sent.', 'wp-to-twitter' );
+		wp_admin_notice(
+			$message,
+			array(
+				'type' => 'info',
 			)
 		);
 	}
@@ -1508,14 +1529,15 @@ function wpt_dismiss_connection() {
 	global $current_screen;
 	if ( $current_screen && 'toplevel_page_wp-tweets-pro' === $current_screen->id ) {
 		$nonce   = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : false;
-		$verify  = wp_verify_nonce( $nonce, 'wpt-dismiss' );
+		$verify  = wp_verify_nonce( $nonce, 'wpt_dismiss' );
 		$dismiss = isset( $_GET['dismiss'] ) && 'connection' === $_GET['dismiss'] ? true : false;
+
 		if ( $verify && $dismiss ) {
 			update_option( 'wpt_ignore_connection', 'true' );
 		}
 	}
 }
-add_action( 'admin_init', 'wpt_dismiss_connection' );
+add_action( 'current_screen', 'wpt_dismiss_connection' );
 
 /**
  * Display notices if update services are not connected.
@@ -1555,7 +1577,7 @@ function wpt_needs_connection() {
 				'_wpnonce' => wp_create_nonce( 'wpt_dismiss' ),
 			);
 			$dismiss_url    = add_query_arg( $args, admin_url( 'admin.php?page=wp-tweets-pro' ) );
-			$is_dismissible = ' <a href="' . esc_url( $dismiss_url ) . '" class="button button-secondary">' . __( 'Ignore', 'wp-to-twitter' ) . '</a>';
+			$is_dismissible = ' <a href="' . esc_url( $dismiss_url ) . '" class="button button-primary">' . __( 'Ignore', 'wp-to-twitter' ) . '</a>';
 		}
 		if ( $message ) {
 			wp_admin_notice(
@@ -1563,6 +1585,7 @@ function wpt_needs_connection() {
 				array(
 					'type'               => 'error',
 					'additional_classes' => array( $class ),
+					'paragraph_wrap'     => false,
 				)
 			);
 		}

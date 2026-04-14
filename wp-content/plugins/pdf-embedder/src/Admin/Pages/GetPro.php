@@ -59,7 +59,7 @@ class GetPro extends Page {
 				</a>
 
 				<p class="discount">
-					<img src="<?php echo esc_url( Assets::url( 'img/admin/discount.svg' ) ); ?>" alt="" /> <span>50% OFF</span> for PDF Embedder users, applied at checkout.
+					<img src="<?php echo esc_url( Assets::url( 'img/admin/discount.svg', false ) ); ?>" alt="" /> <span>50% OFF</span> for PDF Embedder users, applied at checkout.
 				</p>
 			</div>
 		</div>

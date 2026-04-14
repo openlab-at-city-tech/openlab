@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
- * Version: 1.6.5
+ * Version: 1.6.6
  * Requires at least: 3.0.0
  * Requires PHP: 5.2.7
  * Author: vivwebs
@@ -85,7 +85,7 @@
 	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
 	define('DW_TIME_LIMIT', 86400);				// 1 day
 	define('DW_URL_AUTHOR', 'https://profiles.wordpress.org/vivwebs/');
-	define('DW_VERSION', '1.6.5');
+	define('DW_VERSION', '1.6.6');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 

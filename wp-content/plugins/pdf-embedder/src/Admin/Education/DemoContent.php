@@ -3,6 +3,7 @@
 namespace PDFEmbedder\Admin\Education;
 
 use PDFEmbedder\Helpers\Links;
+use PDFEmbedder\Admin\MediaLibrary;
 
 /**
  * Demo pages.
@@ -107,7 +108,7 @@ class DemoContent {
 									],
 								]
 							),
-							esc_url( add_query_arg( 'attachment-filter', 'post_mime_type:application/pdf', admin_url( 'upload.php' ) ) )
+							esc_url( add_query_arg( 'attachment-filter', 'post_mime_type:' . MediaLibrary::MIME_TYPE, admin_url( 'upload.php' ) ) )
 						);
 						?>
 					</p>

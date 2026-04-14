@@ -15,6 +15,7 @@ function cac_ncs_validate_code( $code = false ) {
  */
 function cac_ncs_email_domain_is_in_whitelist( $email ) {
 	$domains = array(
+		'stu-mail.citytech.cuny.edu',
 		'mail.citytech.cuny.edu',
 		'citytech.cuny.edu',
 	);

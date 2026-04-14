@@ -85,6 +85,7 @@ $social_fields = openlab_social_media_fields();
                         <select
                             name="departments-dropdown"
                             class="form-control"
+							id="ol-offices"
                             data-parsley-required
                             data-parsley-errors-container=".error-container"
                             data-parsley-error-message="You must select at least one Department."

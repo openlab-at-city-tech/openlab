@@ -73,10 +73,12 @@ class GF_Telemetry_Service_Provider extends GF_Service_Provider {
 		$processor->push_to_queue( $snapshot );
 		$processor->save()->dispatch();
 
-		$full_telemetry_data = array_chunk( $full_telemetry_data['events'], self::BATCH_SIZE, true );
-		foreach ( $full_telemetry_data as $batch ) {
-			$processor->push_to_queue( $batch );
-			$processor->save()->dispatch();
+		if ( ! empty( $full_telemetry_data['events'] ) && is_array( $full_telemetry_data['events'] ) ) {
+			$batches = array_chunk( $full_telemetry_data['events'], self::BATCH_SIZE, true );
+			foreach ( $batches as $batch ) {
+				$processor->push_to_queue( $batch );
+				$processor->save()->dispatch();
+			}
 		}
 
 		// Clear saved telemetry data except the snapshot.

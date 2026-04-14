@@ -12,27 +12,24 @@ class eztoc_pointers {
 
 	public function eztoc_subscribe_for_newsletter() {
 
-		if ( ! wp_verify_nonce( $_POST['eztoc_security_nonce'] , 'eztoc_ajax_check_nonce' ) ) {
-
-			echo esc_html__( 'security_nonce_not_verified', 'easy-table-of-contents' );
-			wp_die();
-
+		if ( ! isset( $_POST['eztoc_security_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['eztoc_security_nonce'] ) ), 'eztoc_ajax_check_nonce' ) ) {
+			wp_send_json_error( esc_html__( 'Security check failed.', 'easy-table-of-contents' ) );
 		}
 
-		if ( !current_user_can( 'manage_options' ) ) {
-			wp_die();
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( esc_html__( 'Insufficient permissions.', 'easy-table-of-contents' ) );
 		}
 
-		$api_url = 'http://magazine3.company/wp-json/api/central/email/subscribe';
+		$api_url = 'https://magazine3.company/wp-json/api/central/email/subscribe';
 
 		$api_params = array(
-			'name' 		=> sanitize_text_field($_POST['name']),
-			'email'		=> sanitize_email($_POST['email']),
-			'website'	=> sanitize_text_field($_POST['website']),
+			'name' 		=> isset($_POST['name'] ) ? sanitize_text_field(wp_unslash( $_POST['name'])): '',
+			'email'		=> isset($_POST['email'] ) ? sanitize_email(wp_unslash($_POST['email'])) : '',
+			'website'	=> isset($_POST['website']) ? sanitize_text_field(wp_unslash( $_POST['website'])):'',
 			'type'		=> 'etoc'
 		);
 
-		$response = wp_remote_post( $api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+		$response = wp_remote_post( $api_url, array( 'timeout' => 15, 'sslverify' => true, 'body' => $api_params ) );
 		$response = wp_remote_retrieve_body( $response );
 		$response = json_decode( $response, true );
 		echo wp_json_encode( array( 'response' => $response['response'] ) );
@@ -48,7 +45,7 @@ class eztoc_pointers {
                 global $current_user;                
 				$tour     = array();
                 // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: We are not processing form information but only loading it inside the admin_enqueue_scripts.
-                $tab      = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+                $tab      = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
                 
                 if ( ! array_key_exists( $tab, $tour ) ) {
 			                                           			            	

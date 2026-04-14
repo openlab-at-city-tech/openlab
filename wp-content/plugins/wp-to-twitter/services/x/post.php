@@ -5,7 +5,7 @@
  * @category Post from WordPress.
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.xposter.com
  */
 
@@ -118,10 +118,9 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 				$tweet_id   = $return->data->id;
 				$headers    = $return->headers;
 				$rate_limit = array(
-					'rate-limit'    => $headers['x-rate-limit-remaining'],
-					'rate-reset'    => $headers['x-rate-limit-reset'],
-					'rate-24'       => $headers['x-app-limit-24hour-limit'],
-					'rate-24-reset' => $headers['x-app-limit-24hour-reset'],
+					'rate-limit'     => ( $headers['x-rate-limit-limit'] ) ?? false,
+					'rate-reset'     => ( $headers['x-rate-limit-reset'] ) ?? false,
+					'rate-remaining' => ( $headers['x-rate-limit-remaining'] ) ?? false,
 				);
 				$notice     = __( 'Sent to X.com', 'wp-to-twitter' );
 				update_option( 'wpt_app_limit', $rate_limit );
@@ -131,10 +130,9 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 					$response   = $e->getResponse();
 					$headers    = $response->getHeaders();
 					$rate_limit = array(
-						'rate-limit'    => $headers['x-rate-limit-remaining'],
-						'rate-reset'    => $headers['x-rate-limit-reset'],
-						'rate-24'       => $headers['x-app-limit-24hour-limit'],
-						'rate-24-reset' => $headers['x-app-limit-24hour-reset'],
+						'rate-limit'     => ( $headers['x-rate-limit-limit'] ) ?? false,
+						'rate-reset'     => ( $headers['x-rate-limit-reset'] ) ?? false,
+						'rate-remaining' => ( $headers['x-rate-limit-remaining'] ) ?? false,
 					);
 					update_option( 'wpt_app_limit', $rate_limit );
 					$http_code = $response->getStatusCode();

@@ -2,9 +2,9 @@
 Contributors: britner
 Tags: translation-ready, accessibility-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
 Requires at least: 6.3
-Tested up to: 6.8.3
+Tested up to: 6.9.1
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.5
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,22 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+= 1.4.5 | 25th February 2026
+* Fix: Archive Title color reset not working in Customizer
+
+= 1.4.4 | 11th February 2026
+* Add: Setting to select the default layout for product archive when Grid/List toggle is disabled
+* Fix: Yelp Social Icon for the Theme Header does not have URL field
+* Fix: Uncaught error on some woocommerce installs
+* Update: Related Posts slider aria role for the slide item
+* Fix: Related Posts Carousel triggers PSI "elements contain focusable descendents" warning.
+* Fix: Menu Item aria attribute issue
+* Fix: Table of Contents link styles when inside a group
+
+= 1.4.3 | 8th January 2026
+* Fix: Customizer Color Picker not working when on Tablet or Mobile settings
+* Fix: Theme archive layout issues with featured image disabled
 
 = 1.4.2 | 18th November 2025
 * Fix: Optimized group block removed the wide-width and full width layout options

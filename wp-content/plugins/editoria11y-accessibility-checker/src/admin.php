@@ -280,13 +280,13 @@ function ed11y_alert_mode_field() {
 	?>
 
 	<select name="ed11y_plugin_settings[ed11y_alert_mode]" id="ed11y-alert_mode" name="ed11y_alert_mode" class="form-select" aria-describedby="alert_mode_description">
-		<option <?php echo 'polite' === $settings ? 'selected="true"' : ''; ?>value="polite">Start open if there are alerts (recommended)</option>
+		<option <?php echo 'polite' === $settings ? 'selected="true"' : ''; ?>value="polite">Start open if there are any alerts</option>
 		<option <?php echo 'assertive' === $settings ? 'selected="true"' : ''; ?>value="assertive">Start open if there are new alerts</option>
 		<option <?php echo 'active' === $settings ? 'selected="true"' : ''; ?>value="active">Always start open</option>
 		<option <?php echo 'minimized' === $settings ? 'selected="true"' : ''; ?>value="minimized">Start minimized</option>
 	</select>
 	<p id="alert_mode_description">
-		Automatically open the control panel while viewing posts and pages.
+		Choose when the control panel should open and show inline tips. "Start open if there are any alerts" is recommended, as it helps tips get noticed over time.
 	</p>
 	<?php
 }
@@ -299,13 +299,13 @@ function ed11y_livecheck_field() {
 	?>
 
 	<select name="ed11y_plugin_settings[ed11y_livecheck]" id="ed11y-livecheck" name="ed11y_livecheck" class="form-select" aria-describedby="livecheck_description">
-		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">Start open (recommended)</option>
-		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Remember user preference</option>
-		<option <?php echo 'minimized' === $settings ? 'selected="true"' : ''; ?>value="minimized">Start minimized</option>
-		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">Do not show checker while editing</option>
+		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">Always start open</option>
+		<option <?php echo 'minimized' === $settings ? 'selected="true"' : ''; ?>value="minimized">Always start minimized</option>
+		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Remember my preference</option>
+		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">Hide checker while editing</option>
 	</select>
 	<p id="livecheck_description">
-		Shows tips while editing post and page content (not templates or layouts).
+		Choose whether to show inline tips <strong><em>while editing</em></strong> post and page content. The checker always hides while editing templates and layouts.
 	</p>
 	<?php
 }
@@ -725,15 +725,33 @@ function editoria11y_dashboard() {
 		return false;
 	}
 
-	wp_enqueue_script( 'editoria11y-js', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js', array( 'wp-api' ), true, Editoria11y::ED11Y_VERSION, false );
-	wp_enqueue_script( 'editoria11y-js-dash', trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-dashboard.js', array( 'wp-api' ), true, Editoria11y::ED11Y_VERSION, false );
+	wp_enqueue_script( 'editoria11y-js', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js', array( 'wp-api' ), Editoria11y::ED11Y_VERSION, array( 'in_footer' => true ) );
+	wp_enqueue_script( 'editoria11y-js-dash', trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-dashboard.js', array( 'wp-api' ), Editoria11y::ED11Y_VERSION, array( 'in_footer' => true ) );
 	wp_enqueue_style( 'editoria11y-lib-css', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css', null, Editoria11y::ED11Y_VERSION );
 	wp_enqueue_style( 'editoria11y-css', trailingslashit( ED11Y_ASSETS ) . 'css/editoria11y-dashboard.css', null, Editoria11y::ED11Y_VERSION );
 	$nonce = wp_create_nonce( 'ed1ref' );
+	/**
+	 * Filter the dashboard page title.
+	 *
+	 * @since 2.2.0
+	 *
+	 * @param string $title The page title. Default 'Editoria11y accessibility checker'.
+	 */
+	$page_title = apply_filters( 'editoria11y_dashboard_title', __( 'Editoria11y Content Accessibility Report', 'editoria11y' ) );
 
 	echo '<div id="ed1">
-			<h1>Editoria11y accessibility checker</h1>
-			<div id="ed1-recent-wrapper"></div>
+			<h1>' . esc_html( $page_title ) . '</h1>';
+
+	/**
+	 * Fires at the top of the Editoria11y dashboard page, after the title.
+	 *
+	 * Use this hook to inject custom content, forms, or UI elements at the top of the dashboard.
+	 *
+	 * @since 2.2.0
+	 */
+	do_action( 'editoria11y_dashboard_top' );
+
+	echo '<div id="ed1-recent-wrapper"></div>
 			<div id="ed1-page-wrapper"></div>
 			<div id="ed1-results-wrapper"></div>
 			<div id="ed1-dismissals-wrapper"></div>
@@ -750,7 +768,7 @@ add_action( 'admin_menu', 'ed11y_dashboard_menu' );
 function ed11y_dashboard_menu() {
 	$setting    = ed11y_get_plugin_settings( 'ed11y_report_restrict' );
 	$capability = '1' === $setting ? 'manage_options' : 'edit_others_posts';
-	add_menu_page( esc_html__( 'Editoria11y', 'editoria11y' ), esc_html__( 'Editoria11y', 'editoria11y' ), $capability, 'editoria11y', 'editoria11y_dashboard', 'dashicons-chart-bar', 90 );
+	add_menu_page( esc_html__( 'Editoria11y Content Accessibility Report', 'editoria11y' ), esc_html__( 'Editoria11y', 'editoria11y' ), $capability, 'editoria11y', 'editoria11y_dashboard', 'dashicons-chart-bar', 90 );
 }
 
 /**

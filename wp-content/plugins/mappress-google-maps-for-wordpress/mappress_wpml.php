@@ -1,17 +1,61 @@
 <?php
 class Mappress_WPML {
 	static function register() {
+		if (class_exists('Sitepress')) {
+			add_action('mappress_map_save', array(__CLASS__, 'register_pois'), 1, 1);
+			add_action('mappress_map_display', array(__CLASS__, 'translate_pois'), 1, 1);
+		}
+		
 		if (Mappress::$options->wpml)
 			add_action('wpml_pro_translation_completed', array(__CLASS__, 'copy_maps'), 1, 3);
+	}
+	
+	// WPML register POIs on save
+	static function register_pois($map) {
+		$fields = array('address','title','name','body');
+		if (!$map || empty($map->mapid) || empty($map->pois) || !is_array($map->pois))
+			return;
+ 
+		foreach ($map->pois as $i => $poi) {
+			foreach ($fields as $field) {
+				if (isset($poi->$field) && $poi->$field !== '') {
+					$key = "map_{$map->mapid}_poi_{$i}_{$field}";
+					do_action( 'wpml_register_single_string','mappress', $key, $poi->$field );
+				}
+			}
+		}        
+	}
+	
+	static function translate_pois($map) {
+		$fields = array('address','title','name','body');
+		if (!$map || empty($map->mapid) || empty($map->pois) || !is_array($map->pois))
+			return;
+ 
+		foreach ($map->pois as $i => $poi) {
+			foreach ($fields as $field) {
+				if (isset($poi->$field) && $poi->$field !== '') {
+					$key = "map_{$map->mapid}_poi_{$i}_{$field}";
+					$translated = apply_filters('wpml_translate_single_string', $poi->$field, 'mappress', $key);
+					$map->pois[$i]->$field = $translated;
+				}
+			}
+		}	
 	}
 
 	// WPML Duplicate
 	static function copy_maps($new_post_id, $fields, $job) {
-
+										  
 		$src_postid = $job->original_doc_id;
 		$postid = $new_post_id;
 
 		$lang =  apply_filters( 'wpml_post_language_details', NULL, $postid);
+		
+		// One user reported a mysterious error here
+		if (is_wp_error($lang)) {
+			print_r($lang);
+			return;
+		}
+		
 		$lang = $lang['language_code'];
 
 		$post = get_post($postid);

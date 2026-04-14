@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2024  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2026  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -122,7 +122,17 @@
     
     // CVE-2024-3604
     $tagged_type = sanitize_text_field($tagged_type);
-    $tagged_filter = sanitize_text_field($tagged_filter);
+    if (!preg_match('/^[a-zA-Z0-9_\-]+$/', $tagged_type)) {
+        Osm::traceText(DEBUG_ERROR, "tagged_type Error");
+        $tagged_type = 'category'; // Standardwert setzen
+    } 
+    
+    $tagged_filter = wp_strip_all_tags(wp_unslash( $tagged_filter ) );
+    if (!preg_match( '/^[\p{L}0-9 _\-]+$/u', $tagged_filter ) ) {
+      Osm::traceText(DEBUG_ERROR, "tagged_filter Error");
+      $tagged_filter = 'osm_all';
+    }
+        
     
     $bckgrndimg = sanitize_text_field($bckgrndimg);
     $semicolon_position = strpos($bckgrndimg, ';');
@@ -142,16 +152,16 @@
 
 	global $post;
 
-    /** if not all 5 parameters are correctly set, a map instead of the text link will be shown */
-   if (($setup_zoom != 'undefined') &&
-    	($setup_layer != 'undefined') &&
-    	($setup_center != 'undefined') &&
-    	($setup_trigger != 'undefined') &&
-    	($setup_map_name != 'undefined')) {
+	 
+     /** if not all 5 parameters are correctly set, a map instead of the text link will be shown */
+     if (($setup_zoom !== 'undefined') &&
+       ($setup_layer !== 'undefined') &&
+       ($setup_center !== 'undefined') &&
+       ($setup_trigger !== 'undefined') &&
+       ($setup_map_name !== 'undefined')) {
 
-    	$output = '<a class="setupChange" data-zoom="' . $setup_zoom .'"  data-center="' . $setup_center .'"  data-layer="' . $setup_layer .'"  data-map_name="' . $setup_map_name .'" title="' .  __('Klick auf diesen Text um die Karte zu beeinflussen', 'OSM_Plugin') .'">' . $setup_trigger . '</a>';
-
-	 } else {
+         $output = '<a class="setupChange" data-zoom="' . esc_attr( $setup_zoom ) . '" data-center="' . esc_attr( $setup_center ) . '" data-layer="' . esc_attr( $setup_layer ) . '" data-map_name="' . esc_attr( $setup_map_name ) . '" title="' . esc_attr__( 'Klick auf diesen Text um die Karte zu beeinflussen', 'OSM_Plugin' ) . '">' . esc_html( $setup_trigger ) . '</a>';
+     } else {
 
 		if (($mwz != "true") && ($mwz != "false")){
 				$mwz = "false";
@@ -183,27 +193,46 @@
            $vis_str = esc_attr($map_div_vis);
 	   
 		
-if ($bckgrndimg != 'no'){
-		$output = '
-
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $sc_args->getMapWidth_str() . '; max-width:100%; height:' . $sc_args->getMapHeight_str() . '; display:' . $vis_str . '; overflow:hidden;border:' .  $sc_args->getMapBorder() . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
-				  <div id="' . $MapName . '_popup" class="ol-popup" >
-					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
-					<div id="' . $MapName . '_popup-content" ></div>
-				  </div>
-				</div>
-			';
-}
-else{
-		$output = '
-
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $sc_args->getMapWidth_str() . '; max-width:100%; height:' . $sc_args->getMapHeight_str() . '; display:' . $vis_str . '; overflow:hidden;border:' .  $sc_args->getMapBorder() . ';" >
-				  <div id="' . $MapName . '_popup" class="ol-popup" >
-					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
-					<div id="' . $MapName . '_popup-content" ></div>
-				  </div>
-				</div>
-			';
+if ($bckgrndimg !== 'no') {
+    $output = '
+        <div id="' . esc_attr($MapName) . '"
+             class="map ' . esc_attr($setup_map_name) . '"
+             data-map_name="' . esc_attr($setup_map_name) . '"
+             data-map="' . esc_attr($MapName) . '"
+             style="width:' . esc_attr($sc_args->getMapWidth_str()) . ';
+                    max-width:100%;
+                    height:' . esc_attr($sc_args->getMapHeight_str()) . ';
+                    display:' . esc_attr($vis_str) . ';
+                    overflow:hidden;
+                    border:' . esc_attr($sc_args->getMapBorder()) . ';
+                    background-image: url(' . esc_url(OSM_PLUGIN_URL . $bckgrndimg) . ');
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    position: relative;">
+          <div id="' . esc_attr($MapName) . '_popup" class="ol-popup">
+            <a href="#" id="' . esc_attr($MapName) . '_popup-closer" class="ol-popup-closer"></a>
+            <div id="' . esc_attr($MapName) . '_popup-content"></div>
+          </div>
+        </div>
+    ';
+} else {
+    $output = '
+        <div id="' . esc_attr($MapName) . '"
+             class="map ' . esc_attr($setup_map_name) . '"
+             data-map_name="' . esc_attr($setup_map_name) . '"
+             data-map="' . esc_attr($MapName) . '"
+             style="width:' . esc_attr($sc_args->getMapWidth_str()) . ';
+                    max-width:100%;
+                    height:' . esc_attr($sc_args->getMapHeight_str()) . ';
+                    display:' . esc_attr($vis_str) . ';
+                    overflow:hidden;
+                    border:' . esc_attr($sc_args->getMapBorder()) . ';">
+          <div id="' . esc_attr($MapName) . '_popup" class="ol-popup">
+            <a href="#" id="' . esc_attr($MapName) . '_popup-closer" class="ol-popup-closer"></a>
+            <div id="' . esc_attr($MapName) . '_popup-content"></div>
+          </div>
+        </div>
+    ';
 }
 			  
 			  $output .= '
@@ -229,7 +258,19 @@ else{
 			$NumOfGpxKmlFiles = 0;
 			
 			if ($file_color_list != 'NoColor') {
-				$FileColorListArray = explode(',', $file_color_list);
+				$colors = explode(',', (string) wp_unslash($file_color_list));
+                                foreach ($colors as $color) {
+                                  $color = sanitize_text_field($color);
+                                  $color = trim(strtolower($color));
+
+                                  if (preg_match('/^#([a-f0-9]{3}|[a-f0-9]{6})$/', $color) ||  preg_match('/^[a-z]+$/', $color) ) {
+                                        $FileColorListArray[] = $color;
+                                      } else {
+                                         Osm::traceText(DEBUG_ERROR, "file_color_list invalid: " . $color);
+                                         $FileColorListArray[0] = 'NoColor'; 
+                                      }
+                                 }
+
 			} else {
 				$FileColorListArray[0] = 'NoColor';
 			}
@@ -262,7 +303,7 @@ else{
 
 
 					if (!empty($FileColorListArray[$key])) {
-						$output .= '<span class="layerColor layerColorHidden" style="background-color:'  . $FileColorListArray[$key] . '"></span>';
+						$output .= '<span class="layerColor layerColorHidden" style="background-color:'  . esc_attr($FileColorListArray[$key]) . '"></span>';
 					}
 
 					$output .= '<span class="padding1em">' . trim($val) . '</span></span>';
@@ -275,14 +316,13 @@ else{
 						<br />' . PHP_EOL;
 				}
 
-
-				/** if setup_map_name is set, set setup_map_name otherwise map */
-				if ($setup_map_name != 'undefined') {
-				  $map_link_name  = $setup_map_name;
-                                  echo "ERROR";
+				if ($setup_map_name !== 'undefined') {
+				    $map_link_name = sanitize_html_class($setup_map_name);
 				} else {
-					$map_link_name  = $MapName;
+				    $map_link_name = sanitize_html_class($MapName);
 				}
+
+				/** if setup_map_name is s
 
 				$output .= '
 				    <!--

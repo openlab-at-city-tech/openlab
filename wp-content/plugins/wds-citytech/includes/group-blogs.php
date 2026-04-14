@@ -741,6 +741,7 @@ function wds_bp_group_meta() {
 												<?php echo esc_html( $current_site->domain . $current_site->path ); ?>
 											</div>
 											<div class="col-sm-13">
+												<label class="sr-only" for="clone-destination-path">Site clone destination path</label>
 												<input
 													class="form-control domain-validate"
 													size="40"
@@ -856,6 +857,7 @@ function wds_bp_group_meta() {
 										</div>
 
 										<div class="col-sm-13">
+											<label class="sr-only" for="new-site-domain">New site path</label>
 											<input
 												id="new-site-domain"
 												class="form-control domain-validate"
@@ -1012,7 +1014,7 @@ function openlab_group_member_role_settings( $group_type ) {
 					<ul class="member-role-selectors">
 						<li>
 							<label for="member_role_member"><?php echo esc_html( $group_type_name_uc ); ?> members have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
-							<select class="form-control" name="member_role_member">
+							<select class="form-control" name="member_role_member" id="member_role_member">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['member'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
 								<?php endforeach; ?>
@@ -1020,8 +1022,8 @@ function openlab_group_member_role_settings( $group_type ) {
 						</li>
 
 						<li>
-							<label for="member_role_admin"><?php echo esc_html( $group_type_name_uc ); ?> moderators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
-							<select class="form-control" name="member_role_mod">
+							<label for="member_role_mod"><?php echo esc_html( $group_type_name_uc ); ?> moderators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
+							<select class="form-control" name="member_role_mod" id="member_role_mod">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['mod'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
 								<?php endforeach; ?>
@@ -1030,7 +1032,7 @@ function openlab_group_member_role_settings( $group_type ) {
 
 						<li>
 							<label for="member_role_admin"><?php echo esc_html( $group_type_name_uc ); ?> administrators have the following role on the <?php echo esc_html( $group_type_name_uc ); ?> site:</label>
-							<select class="form-control" name="member_role_admin">
+							<select class="form-control" name="member_role_admin" id="member_role_admin">
 								<?php foreach ( $site_roles as $site_role => $site_role_label ) : ?>
 									<option value="<?php echo esc_attr( $site_role ); ?>" <?php selected( $site_role, $settings['admin'] ); ?>><?php echo esc_html( $site_role_label ); ?></option>
 								<?php endforeach; ?>

@@ -124,6 +124,8 @@ class blcLinkQuery {
 			foreach ( $filter_data as $data ) {
 				wp_parse_str( $data['params'], $params );
 
+				$params = array_intersect_key( $params, array_flip( $this->valid_url_params ) );
+
 				$filters[ 'f' . $data['id'] ] = array(
 					'name'         => $data['name'],
 					'params'       => $params,

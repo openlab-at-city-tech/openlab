@@ -37,7 +37,7 @@ class DLM_XHR_Download {
 
 		jQuery('html, body').on('click', 'a', function (e) {
 
-			const url = jQuery(this).attr('href');
+			let url = jQuery(this).attr('href');
 			// Let's see if we need to do XHR download on this link.
 			let noXHR = false;
 			if (jQuery(this).hasClass('dlm-no-xhr-download')) {
@@ -57,6 +57,12 @@ class DLM_XHR_Download {
 			if (noXHR) { // No XHR so return;
 				jQuery('#dlm-no-access-modal').remove(); // Close the modal also in case we opened it before.
 				return;
+			}
+
+			if (typeof url === 'string') {
+				try {
+					url = new URL(url, window.location.origin).href;
+				} catch (e) {}
 			}
 
 			jQuery(document).trigger('dlm-xhr-download-button-click', [url, this, dlmXHRGlobalLinks]);
@@ -437,20 +443,19 @@ class DLM_XHR_Download {
 		request.send();
 	}
 
-	dlmLogDownload(headers, status, cookie, redirect_path = null, no_access = null, target = '_blank') {
+	dlmLogDownload(headers, status, cookie, redirect_path = null, no_access = null, target = '_self') {
 		const currentURL  = window.location.href;
 		const download_id = headers['x-dlm-download-id'] ?? headers['dlm-download-id'];
 		const version_id  = headers['x-dlm-version-id'] ?? headers['dlm-version-id'];
 
 		const ua = navigator.userAgent || '';
-		const isIOS = /iP(hone|ad|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 		const isSafari = /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
-		const isIOSSafari = isIOS && isSafari;
+		const isAppleSafari = isSafari && !/CriOS|FxiOS|EdgiOS/i.test(ua);
 
 		// Early redirect — skip logging if no_access = true
 		if (no_access && redirect_path) {
-			if (isIOSSafari) {
-				window.location.replace(redirect_path);
+			if (isAppleSafari) {
+				window.location.href = redirect_path;
 			} else {
 				const tgt = target || '_self';
 				const downloadTab = window.open(redirect_path, tgt, 'noopener');
@@ -486,8 +491,8 @@ class DLM_XHR_Download {
 
 		if (!redirect_path) return;
 
-		if (isIOSSafari) {
-			window.location.replace(redirect_path);
+		if (isAppleSafari) {
+			window.location.href(redirect_path);
 			return;
 		}
 

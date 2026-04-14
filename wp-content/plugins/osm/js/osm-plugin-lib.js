@@ -198,12 +198,10 @@ function osm_getRadioValue(a_Form){
   return "not implemented";
 }
 
-function osm_saveGeotag(){
-  if ((osm_ajax_object.lat == '') || (osm_ajax_object.lon == '')){
+function osm_saveGeotag() {
+  if ((osm_ajax_object.lat == '') || (osm_ajax_object.lon == '')) {
     alert('Place geotag in the map before save');
-  }
-  else
-  {
+  } else {
     var data = {
       action: 'act_saveGeotag',
       lat: osm_ajax_object.lat,
@@ -212,36 +210,54 @@ function osm_saveGeotag(){
       post_id: osm_ajax_object.post_id,
       geotag_nonce: osm_ajax_object.geotag_nonce
     };
+
     jQuery.post(osm_ajax_object.ajax_url, data, function(response) {
-      div = document.getElementById("Geotag_Div");
-      div.innerHTML = response;
+      var div = document.getElementById("Geotag_Div");
+
+      if (response.success) {
+        div.innerHTML = '<span style="color:green;">' + response.data + '</span>';
+      } else {
+        div.innerHTML = '<span style="color:red;">Error: ' + response.data + '</span>';
+      }
     });
   }
 }
 
-function osm_savePostMarker(){
-  if ((osm_ajax_object.MarkerLat == '') || (osm_ajax_object.MarkerLon == '')){
+
+function osm_savePostMarker() {
+  if ((osm_ajax_object.MarkerLat === '') || (osm_ajax_object.MarkerLon === '')) {
     alert('Place marker in the map before save');
+    return;
   }
-  else
-  {
-    var data = {
-      action: 'act_saveMarker',
-      MarkerId: osm_ajax_object.MarkerId,
-      MarkerLat: osm_ajax_object.MarkerLat,
-      MarkerLon: osm_ajax_object.MarkerLon,
-      MarkerIcon: osm_ajax_object.MarkerIcon,
-      MarkerText: osm_ajax_object.MarkerText,
-      MarkerName: osm_ajax_object.MarkerName,
-      post_id: osm_ajax_object.post_id,
-      marker_nonce: osm_ajax_object.marker_nonce,
-    };
-    jQuery.post(osm_ajax_object.ajax_url, data, function(response) {
-      div = document.getElementById("Marker_Div");
-      div.innerHTML = response;
-    });
-  }
+
+  var data = {
+    action: 'act_saveMarker',
+    MarkerId: osm_ajax_object.MarkerId,
+    MarkerLat: osm_ajax_object.MarkerLat,
+    MarkerLon: osm_ajax_object.MarkerLon,
+    MarkerIcon: osm_ajax_object.MarkerIcon,
+    MarkerText: osm_ajax_object.MarkerText,
+    MarkerName: osm_ajax_object.MarkerName,
+    post_id: osm_ajax_object.post_id,
+    marker_nonce: osm_ajax_object.marker_nonce,
+  };
+
+  jQuery.post(osm_ajax_object.ajax_url, data, function(response) {
+    var div = document.getElementById("Marker_Div");
+
+    if (!response || typeof response.success === 'undefined') {
+      div.innerHTML = '<span style="color:red;">Unexpected server response.</span>';
+      return;
+    }
+
+    if (response.success) {
+      div.innerHTML = '<span style="color:green;">' + response.data + '</span>';
+    } else {
+      div.innerHTML = '<span style="color:red;">Error: ' + response.data + '</span>';
+    }
+  }, 'json'); // <-- explizit als JSON erwarten
 }
+
 
 
 function getTileURL(bounds) {

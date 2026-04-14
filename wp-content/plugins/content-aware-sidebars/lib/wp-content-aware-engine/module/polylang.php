@@ -78,14 +78,20 @@ class WPCAModule_polylang extends WPCAModule_Base
      */
     protected function _get_content($args = [])
     {
-        global $polylang;
+        $language_list = [];
+        if(function_exists('pll_languages_list')) {
+            $language_list = pll_languages_list(['fields' => false]);
+        } else {
+            //legacy
+            global $polylang;
+            if(isset($polylang->model) && method_exists($polylang->model, 'get_languages_list')) {
+                $language_list = $polylang->model->get_languages_list(['fields' => false]);
+            }
+        }
 
         $langs = [];
-
-        if (isset($polylang->model) && method_exists($polylang->model, 'get_languages_list')) {
-            foreach ($polylang->model->get_languages_list(['fields' => false]) as $lng) {
-                $langs[$lng->slug] = $lng->name;
-            }
+        foreach ($language_list as $lng) {
+            $langs[$lng->slug] = $lng->name;
         }
 
         if ($args['include']) {

@@ -69,7 +69,7 @@ interface AttributeRules {
 	 *
 	 * @return array - Attribute is a standard array format.
 	 */
-	public function to_php_attribute(): array;
+	public function to_array(): array;
 
 
 	/**

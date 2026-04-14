@@ -1,3 +1,11 @@
+##### [Version 3.3.50](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.49...v3.3.50) (2025-11-25)
+
+> Things are getting better every day. 🚀
+
+##### [Version 3.3.49](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.48...v3.3.49) (2025-09-18)
+
+> Things are getting better every day. 🚀
+
 ##### [Version 3.3.48](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.47...v3.3.48) (2025-08-11)
 
 Development

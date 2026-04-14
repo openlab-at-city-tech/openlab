@@ -614,22 +614,25 @@ class GF_Field_Checkbox extends GF_Field {
 	 * Return a value that's safe to display for the context of the given $format.
 	 *
 	 * @since  Unknown
-	 * @access public
+	 * @since  2.9.29 Changed the second parameter $currency (string) to $entry (array).
 	 *
 	 * @param string|array $value    The field value.
-	 * @param string       $currency The entry currency code.
+	 * @param array        $entry    The entry.
 	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
 	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
 	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
 	 *
-	 * @uses GFCommon::selection_display()
-	 *
 	 * @return string
 	 */
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
+		if ( $this->type === 'post_category' ) {
+			$value = GFCommon::prepare_post_category_value( $value, $this, 'entry_detail' );
+		}
+
 		if ( is_array( $value ) ) {
 
-			$items = '';
+			$items    = '';
+			$currency = rgar( $entry, 'currency' );
 
 			foreach ( $value as $key => $item ) {
 				if ( ! rgblank( $item ) ) {
@@ -717,12 +720,12 @@ class GF_Field_Checkbox extends GF_Field {
 			switch (true) {
 				// If the 'value' modifier was passed.
 				case $use_value:
-					list( $val, $price ) = rgexplode( '|', $item, 2 );
+					list( $val, $price ) = rgexplode( '|', $item, 2, true );
 					break;
 
 				// If the 'price' or 'currency' modifiers were passed.
 				case $use_price:
-					list( $name, $val ) = rgexplode( '|', $item, 2 );
+					list( $name, $val ) = rgexplode( '|', $item, 2, true );
 					if ( $format_currency ) {
 						$val = GFCommon::to_money( $val, rgar( $entry, 'currency' ) );
 					}

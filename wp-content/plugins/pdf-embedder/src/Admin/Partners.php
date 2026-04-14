@@ -7,7 +7,7 @@ use Plugin_Upgrader;
 use PDFEmbedder\Helpers\Assets;
 
 /**
- * Partners class handles plugins list rendering and installation.
+ * This class handles plugins' list rendering and installation.
  *
  * @since 4.7.0
  */

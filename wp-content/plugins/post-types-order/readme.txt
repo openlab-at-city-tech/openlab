@@ -3,7 +3,7 @@ Contributors: nsp-code, tdgu
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
 Tested up to: 6.9
-Stable tag: 2.4.1
+Stable tag: 2.4.6
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -116,6 +116,17 @@ Consider upgrading to our advanced version of this plugin, which offers these fe
 
 == Changelog ==
 
+= 2.4.6 = 
+ - Add a Settings link for the plugin in the Plugins area to make it easier for users to access and get started.
+ - Highlight the Reset button in red to make it more noticeable.
+ - Implement minor code improvements.
+
+= 2.4.3 = 
+ - Fix: Incorrect comparison logic used to determine whether drag & drop should be enabled for the current post type in the default interface.
+
+= 2.4.2 = 
+ - Fix: As default, the "Archive Drag&Drop" option for a custom defined post type is set to Yes. Yet the drag & drop functionality do not load unless save the plugin settings after custom post type activation. 
+
 = 2.4.1 = 
  - Added a reset button that restores the list to its default order.
  - Added PHPCS ignore rules to prevent unnecessary scanning in reports.
@@ -130,7 +141,6 @@ Consider upgrading to our advanced version of this plugin, which offers these fe
  - Compatibility class file changes. 
  - Compatibility file for Advanced Custom Fields PRO
  
-
 = 2.3.7 = 
  - Code improvements.
  - Reduce the outputted HTML for the ReOrder interface to avoid memory limitation on very long lists. 

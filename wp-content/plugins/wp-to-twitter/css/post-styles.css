@@ -206,6 +206,10 @@ legend.variant-selector {
 	padding: 11px 11px 21px;
 }
 
+.wp-to-twitter.pro + .wpt-support {
+	padding: 11px;
+}
+
 .wpt-support ul {
 	list-style-type: square;
 	margin-left: 1rem;
@@ -292,7 +296,7 @@ legend.variant-selector {
     cursor: pointer;
     background-color: #f3f3f3;
 	width: 50%;
-    text-decoration: underline;	
+    text-decoration: underline;
 	color: #6e6e6e;
 }
 

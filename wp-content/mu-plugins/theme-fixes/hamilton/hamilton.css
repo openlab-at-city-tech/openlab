@@ -50,6 +50,12 @@
 	display: none !important;
 }
 
+/* Fix submenus when using keyboard nav */
+.alt-nav li:focus-within > ul {
+	left: 0;
+	opacity: 1;
+}
+
 ul:not(.alt-nav) button.menu-toggle:hover {
 	background: #000;
 }

@@ -25,8 +25,6 @@ class DLM_Upsells {
 
 	private $upsell_tabs = array();
 
-	private $offer = array();
-
 	/**
 	 * Holds the active license status.
 	 *
@@ -82,45 +80,11 @@ class DLM_Upsells {
 	}
 
 	public function upsells_init() {
-		$this->set_offer();
-
 		$this->set_hooks();
 
 		$this->set_tabs();
 
 		$this->set_upsell_actions();
-	}
-
-	private function set_offer() {
-		$this->offer = array(
-			'class'  => '',
-			'column' => '',
-			'label'  => __( 'Get Premium', 'download-monitor' ),
-		);
-
-		$timezone_string = get_option( 'timezone_string' );
-		$timezone        = $timezone_string ? new DateTimeZone( $timezone_string ) : new DateTimeZone( 'UTC' );
-
-		$now = new DateTime( 'now', $timezone );
-
-		$bf_start = new DateTime( '2025-11-03 00:00:00', $timezone );
-		$bf_end   = new DateTime( '2025-12-03 10:00:00', $timezone );
-
-		if ( $now >= $bf_start && $now <= $bf_end ) {
-			$this->offer = array(
-				'class'       => 'wpchill-bf-upsell',
-				'column'      => 'bf-upsell-columns',
-				'label'       => __( '65% OFF for Black Friday', 'download-monitor' ),
-				'description' => __( '65% OFF on new purchases, early renewals or upgrades.', 'download-monitor' ),
-			);
-		}
-		// if ( 12 == $month ) {
-		//  $this->offer = array(
-		//      'class'  => 'wpchill-xmas-upsell',
-		//      'column' => 'xmas-upsell-columns',
-		//      'label'  => __( '25% OFF for Christmas', 'download-monitor' ),
-		//  );
-		// }
 	}
 
 	/**
@@ -129,8 +93,6 @@ class DLM_Upsells {
 	 * @since 4.4.5
 	 */
 	public function set_hooks() {
-
-		add_action( 'dlm_tab_upsell_content_general', array( $this, 'general_tab_upsell' ), 15 );
 
 		add_action( 'dlm_tab_upsell_content_access', array( $this, 'access_tab_upsell' ), 15 );
 
@@ -151,6 +113,8 @@ class DLM_Upsells {
 		add_action( 'dlm_reports_page_end', array( $this, 'insights_upsell' ), 99 );
 
 		add_action( 'dlm_tab_upsell_content_pages', array( $this, 'pages_tab_upsell' ), 15 );
+
+		add_action( 'dlm_tab_section_content_access', array( $this, 'pro_blacklist_upsell' ), 15 );
 	}
 
 
@@ -172,7 +136,7 @@ class DLM_Upsells {
 	 */
 	public function generate_upsell_box( $title, $description, $tab, $extension, $features = array(), $utm_source = null, $icon = false ) {
 
-		echo '<div class="wpchill-upsell ' . esc_attr( $this->offer['class'] ) . '">';
+		echo '<div class="wpchill-upsell">';
 		if ( $icon ) {
 			echo '<img src="' . esc_url( DLM_URL . 'assets/images/upsells/' . $icon ) . '">';
 		}
@@ -204,9 +168,13 @@ class DLM_Upsells {
 		}
 
 		echo '<a target="_blank" href="https://www.download-monitor.com/pricing/?utm_source=' . ( ! empty( $extension ) ? esc_html( $extension ) . '_metabox' : '' ) . '&utm_medium=lite-vs-pro&utm_campaign=' . ( ! empty( $extension ) ? esc_html( str_replace( ' ', '_', $extension ) ) : '' ) . '"><div class="dlm-available-with-pro"><span class="dashicons dashicons-lock"></span><span>' . esc_html__( 'AVAILABLE WITH PREMIUM', 'download-monitor' ) . '</span></div></a>';
+		$buttons  = '<a target="_blank" href="https://download-monitor.com/free-vs-pro/?utm_source=dlm-lite&utm_medium=link&utm_campaign=upsell&utm_term=lite-vs-pro" class="button">' . esc_html__( 'Free vs Premium', 'download-monitor' ) . '</a>';
+		$buttons .= '<a target="_blank" href="https://www.download-monitor.com/pricing/?utm_source=' . ( ! empty( $extension ) ? esc_html( $extension ) . '_metabox' : '' ) . '&utm_medium=lite-vs-pro&utm_campaign=' . ( ! empty( $extension ) ? esc_html( str_replace( ' ', '_', $extension ) ) : '' ) . '" class="button-primary button">' . esc_html__( 'Get Premium', 'download-monitor' ) . '</a>';
+
+		$buttons = apply_filters( 'dlm_upsell_buttons', $buttons, $extension );
+
 		echo '<div class="wpchill-upsell-buttons-wrap">';
-		echo '<a target="_blank" href="https://download-monitor.com/free-vs-pro/?utm_source=dlm-lite&utm_medium=link&utm_campaign=upsell&utm_term=lite-vs-pro" class="button">' . esc_html__( 'Free vs Premium', 'download-monitor' ) . '</a> ';
-		echo '<a target="_blank" href="https://www.download-monitor.com/pricing/?utm_source=' . ( ! empty( $extension ) ? esc_html( $extension ) . '_metabox' : '' ) . '&utm_medium=lite-vs-pro&utm_campaign=' . ( ! empty( $extension ) ? esc_html( str_replace( ' ', '_', $extension ) ) : '' ) . '" class="button-primary button">' . esc_html( $this->offer['label'] ) . '</a>';
+		echo $buttons; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Filtered HTML, escaped in the default output above.
 		echo '</div>';
 		echo '</div>';
 	}
@@ -440,27 +408,6 @@ class DLM_Upsells {
 					add_action( 'dlm_tab_upsell_section_content_' . $sub_key, array( $this, 'upsell_tab_section_content_' . $sub_key ), 30, 1 );
 				}
 			}
-		}
-	}
-
-	/**
-	 * Settings General tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function general_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-email-notification' ) ) {
-			$this->generate_upsell_box(
-				__( 'Email notifications', 'download-monitor' ),
-				__( 'Create an email alert to be notified each time one of your files has been downloaded.', 'download-monitor' ),
-				'general',
-				'email-notification',
-				false,
-				false,
-				'email_notification.png'
-			);
 		}
 	}
 
@@ -737,32 +684,6 @@ class DLM_Upsells {
 		}
 	}
 
-
-	/**
-	 * Upsell for Page Addon setting tab
-	 *
-	 * @since 4.4.5
-	 */
-	public function upsell_tab_content_advanced() {
-		if ( ! $this->check_extension( 'dlm-page-addon' ) ) {
-			$this->generate_upsell_box(
-				__( 'Document Library Manager (Page Addon) extension', 'download-monitor' ),
-				__( 'Easily show off your downloads in a clean table or a stylish grid. This add-on gives you a simple, modern tool to organize your files and help your visitors find exactly what they need — fast.', 'download-monitor' ),
-				'page_addon',
-				'page-addon'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-downloading-page' ) ) {
-			$this->generate_upsell_box(
-				__( 'Downloading page extension', 'download-monitor' ),
-				__( 'The Downloading Page extension for Download Monitor forces your downloads to be served from a separate page.', 'download-monitor' ),
-				'downloading_page',
-				'downloading-page'
-			);
-		}
-	}
-
 	/**
 	 * Upsell for Captcha setting tab
 	 *
@@ -788,7 +709,7 @@ class DLM_Upsells {
 	 * @since 4.4.5
 	 */
 	public function output_external_hosting_upsell() {
-		echo '<div class="upsells-columns ' . esc_attr( $this->offer['column'] ) . '">';
+		echo '<div class="upsells-columns">';
 
 		if ( ! $this->check_extension( 'dlm-amazon-s3' ) ) {
 			echo '<div class="upsells-column"><span class="dashicons dashicons-amazon"></span>';
@@ -1144,5 +1065,23 @@ class DLM_Upsells {
 			array(),
 			$upsells_enqueue['version']
 		);
+	}
+
+	/**
+	 * Upsell for DLM Pro Remote bad bots blacklist & IP banlist.
+	 *
+	 * @since 5.0.13
+	 */
+	public function pro_blacklist_upsell() {
+		if ( ! $this->check_extension( 'dlm-pro' ) ) {
+			echo '<div class="wpchill-upsells-wrapper">';
+			$this->generate_upsell_box(
+				__( 'Blacklist protection', 'download-monitor' ),
+				__( 'Once enabled, known bots will no longer be able to trigger downloads for your files (GoogleBot, BingBot…). The blocklist updates automatically every week, so you don\'t need to do anything. You can also block specific IP addresses if needed.', 'download-monitor' ),
+				'dlm_pro',
+				'dlm_pro'
+			);
+			echo '</div>';
+		}
 	}
 }

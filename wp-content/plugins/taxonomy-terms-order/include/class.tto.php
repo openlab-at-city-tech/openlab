@@ -20,6 +20,9 @@
                     
                     add_action( 'wp_ajax_update-taxonomy-order',    array ( $this, 'saveAjaxOrder' ) );
                     
+                    add_filter( 'plugin_action_links_taxonomy-terms-order/taxonomy-terms-order.php',                  array ( $this,  'add_plugin_action_links') );
+                    add_filter( 'network_admin_plugin_action_links_taxonomy-terms-order/taxonomy-terms-order.php' ,   array ( $this,  'add_plugin_action_links')  );
+                    
                     if ( is_admin() )
                         TTO_functions::check_table_column();                    
                 }
@@ -33,7 +36,7 @@
                 {
                     wp_enqueue_script('jquery');                    
                     wp_enqueue_script('jquery-ui-sortable');
-                    wp_register_script('to-javascript', TOURL . '/js/to-javascript.js', array(), TTO_VERSION );
+                    wp_register_script('to-javascript', TOURL . '/js/to-javascript.js', array(), TTO_VERSION, FALSE );
                     wp_enqueue_script( 'to-javascript');
                 }
                 
@@ -128,7 +131,8 @@
                         {
                             
                             //return if use orderby columns
-                            if (isset($_GET['orderby']) && $_GET['orderby'] !=  'term_order')
+                            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                            if (isset($_GET['orderby']) && sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) !==  'term_order')
                                 return $clauses;
                             
                             if ( $options['adminsort'] == "1" &&  (!isset($args['ignore_term_order']) ||  (isset($args['ignore_term_order'])  &&  $args['ignore_term_order']  !== TRUE) ) )
@@ -148,6 +152,11 @@
                         {
                             $clauses['orderby'] =   'ORDER BY t.term_order';
                         }
+                        
+                    if ( $options['adminsort'] == "1"   &&  defined( 'REST_REQUEST' ) && REST_REQUEST )
+                        {
+                            $clauses['orderby'] =   'ORDER BY t.term_order'; 
+                        } 
                         
                     return $clauses; 
                 }
@@ -180,10 +189,10 @@
                 {
                     global $wpdb;
                     
-                    if  ( ! isset ( $_POST['nonce'] ) ||  ! wp_verify_nonce( $_POST['nonce'], 'update-taxonomy-order' ) )
+                    if  ( ! isset ( $_POST['nonce'] ) ||  ! wp_verify_nonce( sanitize_text_field ( wp_unslash ( $_POST['nonce'] ) ), 'update-taxonomy-order' ) )
                         die();
                      
-                    $data               = isset ( $_POST['order'] )  ?   stripslashes($_POST['order'])   :   "";
+                    $data               = isset ( $_POST['order'] )  ?   stripslashes( sanitize_text_field ( wp_unslash ( $_POST['order'] ) ) )   :   "";
                     $unserialised_data  = json_decode($data, TRUE);
                             
                     if (is_array($unserialised_data))
@@ -201,6 +210,7 @@
                                 {
                                     foreach( $items as $item_key => $term_id ) 
                                         {
+                                            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery 
                                             $wpdb->update( $wpdb->terms, array('term_order' => ($item_key + 1)), array('term_id' => $term_id) );
                                         }
                                     clean_term_cache($items);
@@ -212,6 +222,17 @@
                     wp_cache_flush();
                         
                     die();
+                }
+                
+                
+                
+            function add_plugin_action_links( $plugin_actions )
+                {
+                    $new_actions = array();
+
+                    $new_actions['to_settings'] = sprintf( __( '<a href="%s">Settings</a>', 'taxonomy-terms-order' ), esc_url( admin_url( 'options-general.php?page=to-options' ) ) );
+
+                    return array_merge( $new_actions, $plugin_actions );    
                 }
            
         }

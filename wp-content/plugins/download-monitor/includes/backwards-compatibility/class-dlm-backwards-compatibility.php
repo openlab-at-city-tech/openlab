@@ -285,7 +285,9 @@ class DLM_Backwards_Compatibility {
 
 		if ( isset( $this->filters['order'] ) ) {
 
-			$order = $this->filters['order'];
+			$order = in_array( strtoupper( $this->filters['order'] ), array( 'ASC', 'DESC' ), true )
+				? strtoupper( $this->filters['order'] )
+				: 'DESC';
 		}
 
 		if ( apply_filters( 'dlm_count_meta_downloads', true ) ) {

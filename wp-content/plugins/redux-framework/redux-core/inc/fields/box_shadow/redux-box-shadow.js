@@ -108,7 +108,6 @@
 				const maxVal = $( this ).data( 'max' );
 				const step   = $( this ).data( 'step' );
 				const def    = $( this ).data( 'default' );
-				const label  = $( this ).data( 'label' );
 				const rtl    = Boolean( $( this ).data( 'rtl' ) );
 				const range  = [minVal, maxVal];
 
@@ -129,8 +128,8 @@
 
 							$( this ).next( '#redux-slider-value-' + mainID ).attr( 'value', val );
 
-							$( this ).prev( 'label' ).html(
-								label + ':  <strong>' + val + 'px</strong>'
+							$( this ).prev( 'strong' ).html(
+								val + 'px'
 							);
 
 							redux.field_objects.box_shadow.changeValue( $( this ), true );

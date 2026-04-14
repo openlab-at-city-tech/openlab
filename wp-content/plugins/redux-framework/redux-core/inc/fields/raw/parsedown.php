@@ -13,7 +13,7 @@
 //
 //
 
-class Parsedown {
+class Redux_Parsedown {
 
 	// ~
 

@@ -108,8 +108,8 @@ function wds_email_validate() {
 	switch ( $account_type ) {
 		case 'student':
 		case 'alumni':
-			if ( 'mail.citytech.cuny.edu' !== $domain ) {
-				$bp->signup->errors['signup_email'] = 'Students must register with an @mail.citytech.cuny.edu e-mail address!';
+			if ( 'stu-mail.citytech.cuny.edu' !== $domain && 'mail.citytech.cuny.edu' !== $domain ) {
+				$bp->signup->errors['signup_email'] = 'Students must register with an @stu-mail.citytech.cuny.edu e-mail address!';
 			}
 			break;
 
@@ -191,11 +191,12 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			}
 			?>
 			<div class="form-group editfield field_name alt">
-				<div class="error-container" id="academic-unit-selector-error"></div>
-				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
+				<div class="error-container" role="alert" id="academic-unit-selector-error"></div>
+				<label for="ol-departments"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"
 				  class="form-control"
+				  id="ol-departments"
 				  data-parsley-required
 				  data-parsley-required-message="You must provide a Major Program of Study"
 				  data-parsley-errors-container="#academic-unit-selector-error">
@@ -261,7 +262,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				if ( bp_get_the_profile_field_is_required() ) {
 
 					$this_field = bp_get_the_profile_field_input_name();
-					$return    .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+					$return    .= "<div id='{$this_field}_confirm_error' class='error-container' role='alert'></div>";
 
 				}
 
@@ -303,7 +304,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				if ( bp_get_the_profile_field_is_required() ) {
 
 					$this_field = bp_get_the_profile_field_input_name();
-					$return    .= "<div id='{$this_field}_confirm_error' class='error-container'></div>";
+					$return    .= "<div id='{$this_field}_confirm_error' class='error-container' role='alert'></div>";
 
 				}
 

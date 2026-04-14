@@ -638,8 +638,21 @@ class GF_Field_Date extends GF_Field {
 		return GFCommon::date_display( $value, $this->dateFormat );
 	}
 
-
-	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+	/**
+	 * Format the entry value for display on the entry detail page and for the {all_fields} merge tag.
+	 *
+	 * @since 1.9
+	 * @since 2.9.29 Changed the second parameter $currency (string) to $entry (array).
+	 *
+	 * @param string|array $value    The field value.
+	 * @param array        $entry    The entry.
+	 * @param bool|false   $use_text When processing choice based fields should the choice text be returned instead of the value.
+	 * @param string       $format   The format requested for the location the merge is being used. Possible values: html, text or url.
+	 * @param string       $media    The location where the value will be displayed. Possible values: screen or email.
+	 *
+	 * @return string
+	 */
+	public function get_value_entry_detail( $value, $entry = array(), $use_text = false, $format = 'html', $media = 'screen' ) {
 
 		return GFCommon::date_display( $value, $this->dateFormat, $this->get_output_date_format() );
 	}
@@ -1160,6 +1173,30 @@ class GF_Field_Date extends GF_Field {
 		);
 
 		$this->inputs = $inputs;
+	}
+
+	/**
+	 * Gets a property value from an input.
+	 *
+	 * @since  next
+	 * @access public
+	 *
+	 * @used-by GF_Field::complex_validation_message()
+	 * @uses    GFFormsModel::get_input()
+	 *
+	 * @param int    $input_id      The input ID to obtain the property from.
+	 * @param string $property_name The property name to search for.
+	 *
+	 * @return null|string The property value if found. Otherwise, null.
+	 */
+	public function get_input_property( $input_id, $property_name ) {
+		$input = GFFormsModel::get_input( $this, $this->id . '.' . (string) $input_id );
+
+		if ( 'customLabel' === $property_name || 'label' === $property_name ){
+			return $this->get_input_placeholder_value( $input );
+		}
+
+		return rgar( $input, $property_name );
 	}
 }
 

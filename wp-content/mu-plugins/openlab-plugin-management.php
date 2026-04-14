@@ -77,6 +77,7 @@ function openlab_get_hidden_plugins() {
 		'h5p-postmessage/h5p-postmessage.php', // #3483
 		'highlighter-pro/highlighter.php', // #3438
 		'import-html-pages/html-import.php',
+		'instagram-feed/instagram-feed.php', // #3660
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
@@ -411,3 +412,17 @@ add_action(
  */
 define( 'WP_QUICKLATEX_CACHE_DIR', WP_CONTENT_DIR . '/uploads/ql-cache' );
 define( 'WP_QUICKLATEX_CACHE_URL', content_url() . '/uploads/ql-cache' );
+
+/**
+ * Load JS for filebird-document-library accessibility fixes.
+ */
+add_action(
+	'init',
+	function() {
+		if ( ! is_plugin_active( 'filebird-document-library/filebird-document-library.php' ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'openlab-filebird-a11y', content_url( 'mu-plugins/js/openlab-filebird.js' ), [ 'jquery' ] );
+	}
+);

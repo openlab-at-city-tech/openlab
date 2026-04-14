@@ -36,7 +36,7 @@ class link_library_plugin_admin {
 
 		add_filter( 'plugin_row_meta', array( $this, 'set_plugin_row_meta' ), 1, 2 );
 
-		add_action( 'wpmu_new_blog', array( $this, 'new_network_site' ), 10, 6 );
+		add_action( 'wpmu_new_blog', 'new_network_site', 10, 6 );
 
 		add_action( 'admin_head', array( $this, 'admin_header' ) );
 
@@ -8235,6 +8235,10 @@ function wp_dropdown_cats_multiple( $output, $r ) {
 }
 
 function link_library_reciprocal_link_checker() {
+
+	if ( !wp_verify_nonce( '_ajax_nonce' ) || !current_user_can( 'manage_options' ) ) {
+		die();
+	}
 
 	$genoptions = get_option( 'LinkLibraryGeneral' );
 	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );

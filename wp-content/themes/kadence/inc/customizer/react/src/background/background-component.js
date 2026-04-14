@@ -353,8 +353,9 @@ class BackgroundComponent extends Component {
 		};
 		const getColorValue = (device) => {
 			let color = "";
+
 			const devicePaletteIndex =
-				this.state.value[device].color.match(/\d+$/)?.[0] - 1;
+				this.state.value[device]?.color?.match(/\d+$/)?.[0] - 1;
 			if (undefined === this.state.value[device]) {
 				let largerDevice = device === "mobile" ? "tablet" : "desktop";
 				if (
@@ -378,7 +379,7 @@ class BackgroundComponent extends Component {
 					}
 				} else if ("tablet" === largerDevice) {
 					const paletteIndex =
-						this.state.value["desktop"].color.match(/\d+$/)?.[0] -
+						this.state.value["desktop"]?.color?.match(/\d+$/)?.[0] -
 						1;
 					if (
 						this.state.value["desktop"].color &&

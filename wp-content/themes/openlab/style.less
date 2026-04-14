@@ -1728,6 +1728,10 @@ a.disabled-link {
 	}
 }
 
+.drag-drop .drag-drop-inside p {
+	color: #333;
+}
+
 /**page**/
 h1.entry-title{
     border-bottom: 1px solid @30gray;
@@ -1749,12 +1753,13 @@ h1.entry-title{
         }
     }
     .direct-toggle{
-        background: darken(@10gray,4.7%);
-        height: 47px;
+		background: transparent;
+		width: 26px;
+        height: 26px;
         border: none;
-        color: @magenta;
         position: absolute;
-        top: -21px;
+		padding: 0;
+		top: -5px;
         right: 0;
         z-index: 11; // Higher than mobile-dropdown (z-index: 10) to remain accessible
         .icon-bar{
@@ -1765,6 +1770,33 @@ h1.entry-title{
             margin: 4px auto;
             width: 22px;
         }
+
+		.toggle-icon {
+			background: url('images/filters.svg') no-repeat left center;
+			background-size: contain;
+			display: block;
+			height: 22px;
+			width: 20px;
+		}
+
+		&.navigation-toggle {
+			width: 32px;
+			.toggle-icon {
+				width: 32px;
+				background: url('images/dots.svg') no-repeat left center;
+			}
+		}
+
+		&.active {
+			top: -4px;
+			right: 2px;
+			width: 26px !important;
+			.toggle-icon {
+				background-image: url('images/close.svg');
+				height: 26px;
+				width: 26px !important;
+			}
+		}
     }
     @media (max-width: @screen-xs-max){
         margin-top: 12px;
@@ -1850,8 +1882,8 @@ body{
         }
     }
     .btn-disabled{
-        opacity: 0.65;
-        filter: alpha(opacity=65);
+        opacity: 0.75;
+        filter: alpha(opacity=75);
         box-shadow: none;
     }
     .font-size{
@@ -2969,6 +3001,11 @@ body form{
                 @media (max-width: @screen-sm-max){
                     margin-bottom: 21px;
                 }
+				a:focus, a:hover {
+					display: inline-block;
+					outline: 1px solid #999;
+					outline-offset: -1px;
+				}
             }
             p{
                 font-weight: @normal;
@@ -3305,12 +3342,12 @@ ul.sidebar-nav{
 			font-weight: @semibold;
 			padding: 6px 15px;
 		}
-		&:hover,
-			&:focus{
-			> a{
-				background: @cyan;
-				color: @black;
-			}
+		&:hover > a,
+		a:focus,
+		&:focus-within > a,
+		a:active {
+			background: @cyan !important;
+			color: @black;
 		}
 		&.current-menu-item,
 		&.selected-page{
@@ -6421,4 +6458,11 @@ p.private-membership-indicator {
 			display: block !important;
 		}
 	}
+}
+
+.sr-only.sr-live-region {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }

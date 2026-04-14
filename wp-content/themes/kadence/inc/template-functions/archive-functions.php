@@ -113,6 +113,10 @@ function get_archive_container_classes() {
 			$placement = kadence()->option( 'post_archive_item_image_placement' );
 			if ( 'beside' === $placement ) {
 				$classes[] = 'item-content-vertical-align-' . kadence()->option( 'post_archive_item_vertical_alignment', 'top' );
+				$feature_element = kadence()->option( 'post_archive_element_feature' );
+				if ( empty( $feature_element['enabled'] ) || false === $feature_element['enabled'] ) {
+					return apply_filters( 'kadence_archive_container_classes', $classes );
+				}
 			}
 			$classes[] = 'grid-sm-col-1';
 			$classes[] = 'grid-lg-col-1';

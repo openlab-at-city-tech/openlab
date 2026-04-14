@@ -7,7 +7,7 @@ get_header();
 	<div <?php post_class('col-sm-18 col-xs-24'); ?>>
 		<div id="openlab-main-content" class="content-wrapper">
 			<h1 class="entry-title">Resources on the OpenLab
-			<button id="toggle-sidebar" data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="sidebar"><span class="fa fa-binoculars"></span><span class="sr-only">Search</span></button>
+			<button id="toggle-sidebar" data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="sidebar"><span class="toggle-icon"></span><span class="sr-only">Search</span></button>
 			</h1>
 
 			<div class="entry-content">

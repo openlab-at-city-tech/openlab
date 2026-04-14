@@ -294,42 +294,7 @@ function breadcrumb_settings_tabs_content_builder()
 
         ob_start();
         ?>
-        <script>
-            jQuery(document).ready(function($) {
-                breadcrumb_tag_options = <?php echo wp_json_encode($breadcrumb_tag_options); ?>;
-
-                $(document).on('click', '.breadcrumb-tags span', function() {
-                    tag_id = $(this).attr('tag_id');
-                    input_name = $(this).attr('input_name');
-                    isPro = $(this).attr('is-pro');
-
-                    console.log(isPro);
-
-                    if (isPro == 1) {
-
-                        alert('Sorry this element only avilable in pro version')
-
-                    } else {
-                        tag_options_html = breadcrumb_tag_options[tag_id];
-                        var res = tag_options_html.replaceAll("{input_name}", input_name);
-                        var res2 = res.replaceAll("[0]", "[" + Date.now() + "]");
-
-                        console.log(res2);
-
-
-                        $(this).parent().parent().children('.elements').append(res2);
-                    }
-
-
-
-
-
-
-
-                })
-            })
-        </script>
-
+        
 
 
         <div class="output_posttypes">
@@ -339,7 +304,7 @@ function breadcrumb_settings_tabs_content_builder()
             foreach ($page_views as $view_type => $view) {
 
             ?>
-                <h2 style="margin: 50px 0 10px 0;font-size:25px"><?php echo ucfirst(str_replace('_', ' ', esc_html($view_type))); ?></h2>
+                <h2 style="margin: 50px 0 10px 0;font-size:25px"><?php echo esc_html(ucfirst(str_replace('_', ' ', esc_html($view_type)))); ?></h2>
                 <hr>
                 <?php
 
@@ -364,7 +329,7 @@ function breadcrumb_settings_tabs_content_builder()
                                     $input_name = 'breadcrumb_options[permalinks]' . '[' . $postType . ']';
 
                             ?>
-                                <span <?php echo ($tag_is_pro) ? 'is-pro="1"' : ''; ?> input_name="<?php echo esc_attr($input_name); ?>" tag_id="<?php echo esc_attr($tag_id); ?>"><?php echo esc_html($tag_name); ?></span>
+                                <span <?php echo ($tag_is_pro) ? 'is-pro="1"' : ''; ?> data-input_name="<?php echo esc_attr($input_name); ?>" data-tag_id="<?php echo esc_attr($tag_id); ?>"><?php echo esc_html($tag_name); ?></span>
                             <?php
                                 endforeach;
                             ?>
@@ -396,7 +361,7 @@ function breadcrumb_settings_tabs_content_builder()
                                     <?php
                                     /* translators: %s: Icon HTML */
 
-                                    echo sprintf(__('%s Click to add tags.', 'breadcrumb'), '<i class="far fa-hand-point-up"></i>') ?>
+                                    echo wp_kses_post(sprintf(__('%s Click to add tags.', 'breadcrumb'), '<i class="far fa-hand-point-up"></i>')); ?>
                                 </div>
                             <?php
                             endif;
@@ -414,6 +379,70 @@ function breadcrumb_settings_tabs_content_builder()
             ?>
 
         </div>
+
+        <?php
+
+        $html = ob_get_clean();
+
+        $args = array(
+            'id'        => 'output_posttypes_args',
+            //            'parent'		=> 'related_post_settings',
+            'title'        => __('Page objects', 'breadcrumb'),
+            'details'    => '',
+            'type'        => 'custom_html',
+            'html'        => $html,
+
+        );
+
+        $settings_tabs_field->generate_field($args);
+
+
+        ?>
+
+
+<script>
+            jQuery(document).ready(function($) {
+               var breadcrumb_tag_options = <?php echo wp_json_encode($breadcrumb_tag_options); ?>;
+breadcrumb_tag_options = JSON.parse(breadcrumb_tag_options);
+
+
+
+                $(document).on('click', '.breadcrumb-tags span', function() {
+                    tag_id = $(this).attr('data-tag_id');
+                    input_name = $(this).attr('data-input_name');
+                    isPro = $(this).attr('is-pro');
+
+                    //console.log(isPro);
+
+                    if (isPro == 1) {
+
+                        alert('Sorry this element only avilable in pro version')
+
+                    } else {
+                        tag_options_html = breadcrumb_tag_options[tag_id];
+
+console.log(input_name);
+console.log(tag_options_html);
+
+
+                        var res = tag_options_html.replaceAll("{input_name}", input_name);
+                        var res2 = res.replaceAll("[0]", "[" + Date.now() + "]");
+
+                        //console.log(res2);
+
+
+                        $(this).parent().parent().children('.elements').append(res2);
+                    }
+
+
+
+
+
+
+
+                })
+            })
+        </script>
 
         <style type="text/css">
             .output_posttypes {}
@@ -447,26 +476,6 @@ function breadcrumb_settings_tabs_content_builder()
                 margin-top: 15px;
             }
         </style>
-
-        <?php
-
-        $html = ob_get_clean();
-
-        $args = array(
-            'id'        => 'output_posttypes_args',
-            //            'parent'		=> 'related_post_settings',
-            'title'        => __('Page objects', 'breadcrumb'),
-            'details'    => '',
-            'type'        => 'custom_html',
-            'html'        => $html,
-
-        );
-
-        $settings_tabs_field->generate_field($args);
-
-
-        ?>
-
 
 
     </div>
@@ -769,35 +778,16 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
 
 
             <div class="copy-to-clipboard">
-                <textarea cols="50" rows="2" style="background:#bfefff" onClick="this.select();"><?php echo '<?php echo do_shortcode("[breadcrumb';
-                                                                                                    echo "]";
-                                                                                                    echo '"); ?>'; ?></textarea> <span class="copied"><span class="copied"><?php esc_html_e('Copied', 'breadcrumb'); ?></span>
+
+
+                <textarea cols="50" rows="2" style="background:#bfefff" onClick="this.select();">
+ &lt;?php echo do_shortcode('[breadcrumb]'); ?&gt;
+</textarea> <span class="copied"><?php esc_html_e('Copied', 'breadcrumb'); ?></span>
                     <p class="description"><?php esc_html_e('PHP Code, you can use under theme .php files.', 'breadcrumb'); ?></p>
             </div>
 
 
 
-            <style type="text/css">
-                .copy-to-clipboard {}
-
-                .copy-to-clipboard .copied {
-                    display: none;
-                    background: #e5e5e5;
-                    padding: 4px 10px;
-                    line-height: normal;
-                }
-            </style>
-
-            <script>
-                jQuery(document).ready(function($) {
-                    $(document).on('click', '.copy-to-clipboard input, .copy-to-clipboard textarea', function() {
-                        $(this).focus();
-                        $(this).select();
-                        document.execCommand('copy');
-                        $(this).parent().children('.copied').fadeIn().fadeOut(2000);
-                    })
-                })
-            </script>
             <?php
             $html = ob_get_clean();
             $args = array(
@@ -883,6 +873,27 @@ if (!function_exists('breadcrumb_settings_tabs_content_help_support')) {
             ?>
 
 
+            <style type="text/css">
+                .copy-to-clipboard {}
+
+                .copy-to-clipboard .copied {
+                    display: none;
+                    background: #e5e5e5;
+                    padding: 4px 10px;
+                    line-height: normal;
+                }
+            </style>
+
+            <script>
+                jQuery(document).ready(function($) {
+                    $(document).on('click', '.copy-to-clipboard input, .copy-to-clipboard textarea', function() {
+                        $(this).focus();
+                        $(this).select();
+                        document.execCommand('copy');
+                        $(this).parent().children('.copied').fadeIn().fadeOut(2000);
+                    })
+                })
+            </script>
         </div>
     <?php
 
@@ -1241,10 +1252,10 @@ if (!function_exists('breadcrumb_settings_save')) {
         update_option('breadcrumb_hide_wc_breadcrumb', $breadcrumb_hide_wc_breadcrumb);
 
 
-        $breadcrumb_custom_css = wp_filter_nohtml_kses($_POST['breadcrumb_custom_css']);
+        $breadcrumb_custom_css = wp_filter_nohtml_kses(sanitize_text_field($_POST['breadcrumb_custom_css']));
         update_option('breadcrumb_custom_css', $breadcrumb_custom_css);
 
-        $breadcrumb_custom_js = wp_filter_nohtml_kses($_POST['breadcrumb_custom_js']);
+        $breadcrumb_custom_js = wp_filter_nohtml_kses(sanitize_text_field($_POST['breadcrumb_custom_js']));
         update_option('breadcrumb_custom_js', $breadcrumb_custom_js);
     }
 }

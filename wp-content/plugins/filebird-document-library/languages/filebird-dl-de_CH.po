@@ -1,0 +1,306 @@
+# Copyright (C) 2022 Ninja Team
+# This file is distributed under the same license as the FileBird Document Library (Lite) plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: FileBird Document Library (Lite) 1.3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/FileBird-Addons\n"
+"POT-Creation-Date: 2026-01-14T04:17:55+00:00\n"
+"PO-Revision-Date: 2023-10-06 17:38+0700\n"
+"Last-Translator: \n"
+"Language-Team: Deutsch (Schweiz)\n"
+"Language: de_CH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Domain: filebird-dl\n"
+"X-Loco-Version: 2.6.6; wp-6.3.1\n"
+
+#. Plugin Name of the plugin
+#: filebird-document-library.php
+msgid "FileBird Document Library (Lite)"
+msgstr "FileBird Document Library (Lite)"
+
+#. Plugin URI of the plugin
+#: filebird-document-library.php
+msgid "https://ninjateam.org/wordpress-media-library-folders/"
+msgstr "https://ninjateam.org/wordpress-media-library-folders/"
+
+#. Description of the plugin
+#: filebird-document-library.php
+msgid "Display your documents and files in customizable list and grid gallery."
+msgstr ""
+"Zeigen Sie Ihre Dokumente und Dateien in einer anpassbaren Listen- und "
+"Gittergalerie an."
+
+#. Author of the plugin
+#: filebird-document-library.php
+msgid "Ninja Team"
+msgstr "Ninja Team"
+
+#. Author URI of the plugin
+#: filebird-document-library.php
+msgid "https://ninjateam.org"
+msgstr "https://ninjateam.org"
+
+#: filebird-document-library.php:51
+#, fuzzy
+msgid ""
+"FileBird Document Library (Lite) requires FileBird plugin to be installed "
+"and active. Please download %1$s or %2$s."
+msgstr ""
+"FileBird Document Library (Pro) erfordert, dass das FileBird Plugin "
+"installiert und aktiv ist. Bitte %1$s oder %2$s herunterladen."
+
+#: filebird-document-library.php:55
+#, fuzzy
+msgid ""
+"FileBird Document Library (Lite) requires %1$s or %2$s %3$s or greater to be "
+"installed and active."
+msgstr ""
+"FileBird Document Library (Pro) benötigt %1$s oder %2$s %3$s oder höher "
+"installiert und aktiv."
+
+#: includes/DocumentLibrary.php:27
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#: includes/DocumentLibrary.php:28
+msgid "Support"
+msgstr "Support"
+
+#: includes/DocumentLibraryShortcode.php:17
+#: includes/DocumentLibraryShortcode.php:18 blocks/dist/index.js:1
+#: blocks/src/Edit.js:123
+msgid "Document Library"
+msgstr "Dokumentenbibliothek"
+
+#: includes/DocumentSettings.php:41 includes/DocumentSettings.php:42
+msgid "Settings"
+msgstr ""
+
+#: includes/DocumentSettings.php:57
+msgid "Settings Saved"
+msgstr ""
+
+#: includes/DocumentSettings.php:68 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/Edit.js:141
+#: blocks/src/shortcode/App.js:90
+msgid "Document Library Settings"
+msgstr "Einstellungen der Dokumentenbibliothek"
+
+#: includes/DocumentSettings.php:81
+msgid "Cache Optimization"
+msgstr ""
+
+#: includes/DocumentSettings.php:84
+msgid "Optimize performance when using cache plugins"
+msgstr ""
+
+#: includes/DocumentSettings.php:98
+msgid "Enable cache optimization"
+msgstr ""
+
+#: includes/DocumentSettings.php:102
+msgid ""
+"Enable this option if you are using a cache plugin or want to force cache "
+"optimization for document library."
+msgstr ""
+
+#: includes/DocumentSettings.php:108
+msgid "Save Settings"
+msgstr ""
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/LayoutControl.js:31
+msgid "Items per page"
+msgstr ""
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:57
+msgid "Showing"
+msgstr "Anzeigen"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:59
+msgid "to"
+msgstr "zu"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:61
+msgid "of"
+msgstr "von"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:63
+msgid "files"
+msgstr "Dateien"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:75
+msgid "Previous"
+msgstr "Vorherige"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/components/PaginationControl.js:107
+msgid "Next"
+msgstr "Nächste"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/Grid.js:27
+#: blocks/src/components/Layout/List.js:40
+#: blocks/src/components/Layout/List.js:88
+msgid "Download"
+msgstr "Herunterladen"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:18
+msgid "File"
+msgstr "Datei"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:24
+#: blocks/src/Edit.js:17 blocks/src/shortcode/components/Setting/Setting.js:15
+msgid "Size"
+msgstr "Grösse"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:30
+msgid "Type"
+msgstr "Typ"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:35
+msgid "Last Modified"
+msgstr "Zuletzt modifiziert"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Empty.js:11
+msgid "No attachments found."
+msgstr "Keine Anhänge gefunden."
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+#: blocks/dist/shortcode/shortcode.js:1 blocks/services/services.js:22
+#: blocks/src/Edit.js:40 blocks/src/shortcode/components/Setting/Setting.js:38
+msgid "Network response was not ok."
+msgstr "Die Netzwerkantwort war nicht in Ordnung."
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:10 blocks/src/shortcode/components/Setting/Setting.js:8
+msgid "Grid"
+msgstr "Gitter"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:11 blocks/src/shortcode/components/Setting/Setting.js:9
+msgid "List"
+msgstr "Liste"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:15 blocks/src/shortcode/components/Setting/Setting.js:13
+msgid "Name"
+msgstr "Name"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:16 blocks/src/shortcode/components/Setting/Setting.js:14
+msgid "Modified date"
+msgstr "Datum geändert"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:21 blocks/src/shortcode/components/Setting/Setting.js:19
+msgid "Ascending"
+msgstr "Aufsteigend"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:22 blocks/src/shortcode/components/Setting/Setting.js:20
+msgid "Descending"
+msgstr "Absteigend"
+
+#: blocks/dist/index.js:1 blocks/src/index.js:9
+msgid "FileBird Document Library"
+msgstr "FileBird Document Library"
+
+#: blocks/dist/index.js:1 blocks/src/index.js:10
+msgid "Display folder item in a document library."
+msgstr "Anzeige von Ordnerelementen in einer Dokumentenbibliothek."
+
+#: blocks/dist/index.js:1 blocks/src/Edit.js:124
+msgid "Select an image to remove this placeholder"
+msgstr "Wählen Sie ein Bild aus, um diesen Platzhalter zu entfernen"
+
+#: blocks/dist/index.js:1 blocks/src/Edit.js:135
+msgid "Please select a folder"
+msgstr "Bitte wählen Sie einen Ordner"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:144
+#: blocks/src/shortcode/components/Setting/Setting.js:137
+msgid "Folder"
+msgstr "Ordner"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:155
+#: blocks/src/shortcode/components/Setting/Setting.js:147
+msgid "Column"
+msgstr "Spalte"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:166
+#: blocks/src/shortcode/components/Setting/Setting.js:156
+msgid "Limit items"
+msgstr "Elemente begrenzen"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:176
+#: blocks/src/shortcode/components/Setting/Setting.js:166
+msgid "Layout display"
+msgstr "Layout-Anzeige"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:182
+#: blocks/src/shortcode/components/Setting/Setting.js:172
+msgid "Sort By"
+msgstr "Sortieren nach"
+
+#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
+#: blocks/src/Edit.js:188
+#: blocks/src/shortcode/components/Setting/Setting.js:178
+msgid "Sort Type"
+msgstr "Sortieren nach Typ"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
+msgid "Copied!"
+msgstr "Kopiert!"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
+msgid "Copy"
+msgstr "Kopieren"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:83
+msgid "FileBird Document Library Shortcode Generator"
+msgstr "FileBird Document Library Shortcode Generator"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:97
+msgid "Generate"
+msgstr "Erzeugen"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:104
+msgid "Love FileBird Document Library"
+msgstr "Liebe FileBird Document Library"
+
+#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:110
+msgid "Please write us a glowing review here."
+msgstr "Bitte schreiben Sie uns hier eine positive Bewertung."
+
+#~ msgid "Show"
+#~ msgstr "Zeigen"
+
+#~ msgid "Library title"
+#~ msgstr "Titel der Bibliothek"

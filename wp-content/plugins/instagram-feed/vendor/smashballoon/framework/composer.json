@@ -1,0 +1,43 @@
+{
+    "name": "smashballoon\/framework",
+    "description": "WordPress plugin framework. Developed by SmashBalloon Team.",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Smashballoon",
+            "email": "support@smashballoon.com"
+        }
+    ],
+    "scripts": {
+        "post-package-install": "phpcs --config-set installed_paths vendor\/phpcompatibility\/php-compatibility"
+    },
+    "autoload": {
+        "psr-4": {
+            "InstagramFeed\\Vendor\\Smashballoon\\Framework\\": "",
+            "InstagramFeed\\Vendor\\DI\\": "Packages\/php-di\/src\/"
+        },
+        "files": [
+            "Utilities\/functions.php",
+            "Packages\/php-di\/src\/functions.php"
+        ],
+        "exclude-from-classmap": [
+            "Packages\/Blocks\/blocks\/*"
+        ]
+    },
+    "replace": {
+        "php-di\/php-di": "6.4.0"
+    },
+    "require": {
+        "php": ">=7.4",
+        "psr\/container": "^1.0",
+        "php-di\/invoker": "^2.0",
+        "php-di\/phpdoc-reader": "^2.0.1",
+        "laravel\/serializable-closure": "^1.0"
+    },
+    "require-dev": {
+        "squizlabs\/php_codesniffer": "^3.7",
+        "phpcompatibility\/php-compatibility": "^9.3"
+    }
+}

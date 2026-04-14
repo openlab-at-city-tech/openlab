@@ -1,0 +1,40 @@
+<svg width="207" height="129" viewBox="0 0 207 129" fill="none">
+    <g filter="url(#filter0_ddd_ftpst)">
+        <rect x="21.4282" y="34.7188" width="160" height="64" rx="2" fill="white"/>
+    </g>
+    <g clip-path="url(#clip0_ftpst)">
+        <rect width="55" height="56" transform="translate(122.228 38.7188)" fill="#43A6DB"/>
+        <circle cx="197.728" cy="101.219" r="55.5" fill="#86D0F9"/>
+    </g>
+    <rect x="32.4282" y="63.7188" width="69" height="9" fill="#D8DADD"/>
+    <rect x="32.4282" y="78.7188" width="43" height="9" fill="#D8DADD"/>
+    <circle cx="38.9282" cy="49.2188" r="6.5" fill="#D8DADD"/>
+    <circle cx="171.072" cy="44.7812" r="15.5" fill="#EC352F" stroke="#FEF4EF" stroke-width="2"/>
+    <path d="M173.587 44.7578L173.283 41.9688H174.291C174.595 41.9688 174.853 41.7344 174.853 41.4062V40.2812C174.853 39.9766 174.595 39.7188 174.291 39.7188H167.916C167.587 39.7188 167.353 39.9766 167.353 40.2812V41.4062C167.353 41.7344 167.587 41.9688 167.916 41.9688H168.9L168.595 44.7578C167.47 45.2734 166.603 46.2344 166.603 47.4062C166.603 47.7344 166.837 47.9688 167.166 47.9688H170.353V50.4297C170.353 50.4531 170.353 50.4766 170.353 50.5L170.916 51.625C170.986 51.7656 171.197 51.7656 171.267 51.625L171.83 50.5C171.83 50.4766 171.853 50.4531 171.853 50.4297V47.9688H175.041C175.345 47.9688 175.603 47.7344 175.603 47.4062C175.603 46.2109 174.712 45.2734 173.587 44.7578Z"
+          fill="white"/>
+    <defs>
+        <filter id="filter0_ddd_ftpst" x="8.42822" y="27.7188" width="186" height="90" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+            <feOffset dy="6"/>
+            <feGaussianBlur stdDeviation="6.5"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.03 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+            <feOffset dy="1"/>
+            <feGaussianBlur stdDeviation="1"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.11 0"/>
+            <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+            <feOffset dy="3"/>
+            <feGaussianBlur stdDeviation="3"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0"/>
+            <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect3_dropShadow" result="shape"/>
+        </filter>
+        <clipPath id="clip0_ftpst">
+            <rect width="55" height="56" fill="white" transform="translate(122.228 38.7188)"/>
+        </clipPath>
+    </defs>
+</svg>

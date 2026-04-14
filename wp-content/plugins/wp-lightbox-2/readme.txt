@@ -5,9 +5,9 @@ Donate link:       https://www.wpbeginner.com/
 Tags:              lightbox, image, gallery, photo gallery, lightbox popup
 Requires at least: 3.0
 Tested up to:      6.9
-Stable tag:        3.0.6.8
+Stable tag:        3.0.7
 License:           GPLv2 or later
-License URI:       http://www.gnu.org/licenses/gpl-3.0.html
+License URI:       https://www.gnu.org/licenses/gpl-3.0.html
 
 WP Lightbox 2 adds stunning lightbox effects to images and galleries on your WordPress site.
 
@@ -83,7 +83,7 @@ Check the following reasons:
 Yes, it does. The problem is in your WordPress theme, mangling image display properties.
 Use another theme, or change your theme Cascading Style Sheets (CSS).
 
-This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="https://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="https://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="https://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
 
 == Screenshots ==
 
@@ -94,6 +94,18 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 5.  [WordPress Lightbox](https://wordpress.org/plugins/wp-lightbox-2) Front-end
 
 == Changelog ==
+
+= 3.0.7 =
+* Fix: Improved sanitization of plugin settings.
+* Fix: Improve escaping of JavaScript output.
+* Fix: Add capability check to AJAX settings save.
+* Fix: Remove variable variable usage.
+* Fix: Remove unused class variables, methods, and hooks.
+* Fix: Remove error control operators.
+* Fix: Prefer late-escaping variable output.
+* Fix: Prefer wp_rand() over rand().
+* Fix: Prefer strict comparisons.
+* Fix: Prefer https over http in URLs.
 
 = 3.0.6.8 =
 * Fix: Improved sanitization of plugin settings.
@@ -219,7 +231,7 @@ Fixed PHP 5 comment bug that got reintroduced into plugin.
 
 = 2.28 =
 
-*Use wp_enqueue_scripts instead.  [Check support thread](http://wordpress.org/support/topic/please-stop-using-the-wp_print_scripts-action-hook-to-load-your-javascript).
+*Use wp_enqueue_scripts instead.  [Check support thread](https://wordpress.org/support/topic/please-stop-using-the-wp_print_scripts-action-hook-to-load-your-javascript).
 
 = 2.27 =
 
@@ -253,7 +265,7 @@ Fixed PHP 5 comment bug that got reintroduced into plugin.
 
 = 2.2 =
 
-* Bug Fixed [Can't install update](http://wordpress.org/support/topic/plugin-wp-lightbox-2-cant-installa-update).
+* Bug Fixed [Can't install update](https://wordpress.org/support/topic/plugin-wp-lightbox-2-cant-installa-update).
 
 = 2.1 =
 
@@ -307,4 +319,4 @@ Fixed PHP 5 comment bug that got reintroduced into plugin.
 *  Keyboard navigation - With this feature users also can change images with keyboard.
 *  Fix position for lightbox - That's mean your lightbox shouldn't change position when users scroll up or down.
 
-This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="http://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="http://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="http://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.
+This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="Syed Balkhi">Syed Balkhi</a> and <a href="https://thomasgriffin.io" rel="me" title="WordPress Developer - Thomas Griffin">Thomas Griffin</a>. Check out some of our other products, including <a href="https://soliloquywp.com/" rel="friend" title="Soliloquy - the best responsive WordPress slider plugin">Soliloquy - the best responsive WordPress slider plugin</a>, <a href="https://enviragallery.com/" rel="friend" title="Envira Gallery - the best responsive WordPress gallery plugin">Envira Gallery - the best responsive WordPress gallery plugin</a> and <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a>.

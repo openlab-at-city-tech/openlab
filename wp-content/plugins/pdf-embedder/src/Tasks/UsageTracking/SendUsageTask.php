@@ -7,6 +7,7 @@ use PDFEmbedder\Tasks\Task;
 use PDFEmbedder\Helpers\Check;
 use PDFEmbedder\Admin\License;
 use PDFEmbedder\Helpers\Multisite;
+use PDFEmbedder\Admin\MediaLibrary;
 
 /**
  * Class SendUsageTask.
@@ -20,21 +21,21 @@ class SendUsageTask extends Task {
 	 *
 	 * @since 4.7.0
 	 */
-	const ACTION = 'pdfemb_send_usage_data';
+	public const ACTION = 'pdfemb_send_usage_data';
 
 	/**
 	 * Server URL to send requests to.
 	 *
 	 * @since 4.7.0
 	 */
-	const TRACK_URL = 'https://wpauthusagetracking.com/v1/pdf';
+	public const TRACK_URL = 'https://wpauthusagetracking.com/v1/pdf';
 
 	/**
 	 * Option name to store the timestamp of the last run.
 	 *
 	 * @since 4.7.0
 	 */
-	const LAST_RUN = 'pdfemb_send_usage_last_run';
+	public const LAST_RUN = 'pdfemb_send_usage_last_run';
 
 	/**
 	 * Class constructor.
@@ -185,7 +186,7 @@ class SendUsageTask extends Task {
 	/**
 	 * Get data for sending to the server.
 	 *
-	 * @since        4.7.0
+	 * @since 4.7.0
 	 *
 	 * @noinspection PhpUndefinedConstantInspection
 	 * @noinspection PhpUndefinedFunctionInspection
@@ -356,7 +357,7 @@ class SendUsageTask extends Task {
 				'fields'         => 'ids',
 				'no_found_rows'  => true,
 				'post_type'      => 'attachment',
-				'post_mime_type' => 'application/pdf',
+				'post_mime_type' => MediaLibrary::MIME_TYPE,
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
 			]

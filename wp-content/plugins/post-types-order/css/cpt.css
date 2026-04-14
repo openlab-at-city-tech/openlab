@@ -25,6 +25,9 @@
 #order-objects .ui-sortable-placeholder{border-color:#bbb;background-color:#FCFCFC; height:32px; background-image: none; -moz-border-radius: 6px 6px 6px 6px; border: 3px dashed #E6E6E6; -webkit-border-radius: 4px;-moz-border-radius: 4px;border-radius: 4px; box-sizing: border-box;}
 #order-objects .ui-sortable-helper{filter:alpha(opacity=75); /* for internet explorer */opacity: 0.75; /* CSS3 standard */-moz-opacity:0.75; /* for older gecko browsers */-khtml-opacity: 0.75; /* for older webkit browsers */}
 
+#order-objects .button-primary.warning {  background: #cc1818;  border-color: #b01515;  color: #fff;  text-decoration: none;  text-shadow: none;}
+#order-objects .button-primary.warning:hover {background: #a81010}
+
 #order-objects #post-body {background: none repeat scroll 0 0 #FFFFFF;border-width: 0 1px 0 1px;border-color: #CCCCCC;border-style: solid; padding: 10px;}
 
 

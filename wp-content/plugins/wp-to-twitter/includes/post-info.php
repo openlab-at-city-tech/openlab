@@ -5,7 +5,7 @@
  * @category Status Updates
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -84,7 +84,7 @@ function wpt_post_info( $post_ID ) {
 	if ( '' === $thisposttitle && isset( $_POST['title'] ) ) {
 		$thisposttitle = wp_kses_post( wp_unslash( $_POST['title'] ) );
 	}
-	$thisposttitle = wp_strip_all_tags( apply_filters( 'the_title', stripcslashes( $thisposttitle ), $post_ID ) );
+	$thisposttitle = wp_strip_all_tags( apply_filters( 'the_title', wp_unslash( $thisposttitle ), $post_ID ) );
 	// These are common sequences that may not be fixed by html_entity_decode due to double encoding.
 	$search               = array( '&apos;', '&#039;', '&quot;', '&#034;', '&amp;', '&#038;' );
 	$replace              = array( "'", "'", '"', '"', '&', '&' );

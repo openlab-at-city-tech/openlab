@@ -213,7 +213,15 @@ final class Plugin {
 			$processed[ str_replace( 'pdfemb_', '', $key ) ] = $value;
 		}
 
-		$data = 'const pdfembPluginOptions=' . wp_json_encode( $processed ) . ';';
+		// Add current plan information for frontend use.
+		$processed['plan'] = 'lite';
+
+		/**
+		 * Data to be made available to block editor script.
+		 *
+		 * @since 4.9.3
+		 */
+		$data = 'const pdfembPluginOptions=' . wp_json_encode( apply_filters( 'pdfemb_enqueue_block_assets_data', $processed ) ) . ';';
 
 		wp_add_inline_script( 'pdfemb-pdf-embedder-viewer-editor-script', $data, 'before' );
 	}

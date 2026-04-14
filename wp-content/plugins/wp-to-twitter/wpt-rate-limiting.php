@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -234,7 +234,7 @@ function wpt_view_rate_limits() {
 					$dashicon      = ( $count >= $limit ) ? "<span class='dashicons dashicons-no' aria-hidden='true'></span>" : "<span class='dashicons dashicons-yes' aria-hidden='true'></span>";
 					?>
 					<li class='<?php echo esc_attr( $rate_limiting ); ?>'>
-						<?php wp_kses_post( $dashicon . $term_label ); ?>:
+						<?php echo wp_kses_post( $dashicon . $term_label ); ?>:
 					<?php
 					// Translators: Number of tweets sent, number allowed.
 					echo wp_kses_post( sprintf( _n( '%1$s update sent, %2$s allowed.', '%1$s updates sent, %2$s allowed.', $count, 'wp-to-twitter' ), "<strong>$count</strong>", "<strong>$limit</strong>" ) );

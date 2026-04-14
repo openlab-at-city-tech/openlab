@@ -3,11 +3,11 @@ Contributors: joedolson
 Donate link: https://xposterpro.com
 Tags: bluesky, post, social, sharing, mastodon
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-License: GPLv2 or later
+License: GPLv3
 Text Domain: wp-to-twitter
-Stable tag: 5.0.4
+Stable tag: 5.0.7
 
 Posts to Bluesky, Mastodon or X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -20,7 +20,7 @@ Posts to Bluesky, Mastodon or X when you update your WordPress blog or add a lin
 
 XPoster is a time-saving tool for keeping your social media accounts up to date with news and posts from your site.
 
-XPoster uses customizable status templates for updates sent when updating or editing posts, pages, or custom post types. You can customize your messages for each post, using custom template tags to generate the status update. 
+XPoster uses customizable status templates for updates sent when updating or editing posts, pages, or custom post types. You can customize your messages for each post, using custom template tags to generate the status update.
 
 = Free Features =
 
@@ -30,7 +30,7 @@ XPoster uses customizable status templates for updates sent when updating or edi
 * Support for Google Analytics
 * Support for XMLRPC remote clients
 * Use [YOURLS](https://yourls.org), [Bit.ly](https://wordpress.org/plugins/codehaveli-bitly-url-shortener/), [jotURL](https://joturl.com), or [Hum](https://wordpress.org/plugins/hum/) as external URL shorteners.
-* Rate limiting: make sure you don't exceed X.com's API rate limits. 
+* Rate limiting: make sure you don't exceed X.com's API rate limits.
 
 = Premium Features in [XPoster Pro](https://xposterpro.com) =
 
@@ -59,6 +59,27 @@ Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master
 
 == Changelog ==
 
+= 5.0.7 =
+
+* Add: One-time clean up action to wipe excess transient status messages in logs.
+* Bug fix: Fix missing transient expiration in status messages logging.
+* Bug fix: Update rate limit keys in headers from X.com.
+* Bug fix: Remove '@' sign in Bluesky account link.
+* Feature: Add setting to enable staging mode for debugging and testing.
+
+= 5.0.6 =
+
+* Bug fix: Connection admin notice could not be dismissed. Props @ipstenu.
+* Bug fix: `code` tags were being escaped in Mastodon instructions. Props @ipstenu.
+* Change: Replace `stripcslashes` with `wp_unslash`.
+
+= 5.0.5 =
+
+* Docs: Apparently, you can't use the letter "X" in your app name on Twitter. Who knows whether that's temporary or not.
+* Style fixes: Misaligned styles in support links.
+* Bug fix: Missing echo in rate limiting. Props @DAnn2012.
+* Update compatibility for WordPress 6.9.
+
 = 5.0.4 =
 
 * Support change for Bluesky images (XPoster Pro).
@@ -78,7 +99,7 @@ Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master
 
 * Bug fix: X user connection include an extra nonce, breaking user settings.
 * Bug fix: User styles not enqueued on user edit profile screen.
-* Bug fix: Simplify HTML and fix mis-nested `div`. 
+* Bug fix: Simplify HTML and fix mis-nested `div`.
 * Bug fix: Fix duplicate IDs on disconnect checkboxes.
 
 = 5.0.1 =
@@ -238,14 +259,14 @@ Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master
 1. Upload the `wp-to-twitter` folder to your `/wp-content/plugins/` directory
 2. Activate the plugin using the `Plugins` menu in WordPress
 3. Go to Settings > XPoster
-4. Adjust the XPoster Options as you prefer them. 
+4. Adjust the XPoster Options as you prefer them.
 5. Create a Bluesky, Mastodon, or X application and configure your application with XPoster.
 
 == Frequently Asked Questions ==
 
 = Why are you still calling things Tweets? =
 
-As of version 5.0.0, I'm not. But if you see something still referencing a Tweet, let me know it! 
+As of version 5.0.0, I'm not. But if you see something still referencing a Tweet, let me know it!
 
 = Do I need to pay for an API plan at X.com? =
 
@@ -253,7 +274,7 @@ If you're publishing more than about 50 Tweets a day, you'll need to pay for a p
 
 = X.com's Application creation process is very difficult. Why do I have to do this? =
 
-XPoster has always followed the principle that you are the owner of your own application. Many other applications require you to pass your data through a 3rd party that you authenticate to post to Twitter. With the new API policies at X.com, this is a significant benefit to most users. X.com allows up to 1500 Tweets per month on their free API plan, which is practical for most independent sites. 
+XPoster has always followed the principle that you are the owner of your own application. Many other applications require you to pass your data through a 3rd party that you authenticate to post to Twitter. With the new API policies at X.com, this is a significant benefit to most users. X.com allows up to 1500 Tweets per month on their free API plan, which is practical for most independent sites.
 
 == Screenshots ==
 

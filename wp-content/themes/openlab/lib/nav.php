@@ -132,7 +132,7 @@ add_filter('bp_has_members', 'openlab_loop_pagination_links_filter');
 
 function openlab_toggle_button($target = '#menu', $backgroundonly = false){
     $button_out = '';
-    
+
     // Generate a unique ID for the button based on the target
     $button_id = 'toggle-' . sanitize_html_class( ltrim( $target, '#' ) );
     // Remove the # from target for aria-controls
@@ -140,10 +140,8 @@ function openlab_toggle_button($target = '#menu', $backgroundonly = false){
 
     $button = <<<HTML
             <button id="{$button_id}" data-target="{$target}" data-backgroundonly="{$backgroundonly}" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="{$aria_controls}">
+				<span class="toggle-icon"></span>
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
             </button>
 HTML;
 

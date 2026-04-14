@@ -1,4 +1,38 @@
 == Changelog ==
+= 2.0.82.2 26/03/2026 =
+* Fixed: Missing null check for global $post causing PHP warnings in REST API post creation #951
+* Fixed: cn_toc_admin_data is not defined ReferenceError: #950
+
+= 2.0.82.1 21/03/2026 =
+* Fixed: Sticky TOC does not open after the latest update (version 2.0.82). #949
+* Fixed: Table Numbers and Sticky TOC Not Rendering (Counter & Sticky Function Failure) #948
+
+= 2.0.82 20/03/2026 =
+* Fixed: Underlined Header Issue in elementor text editor #944
+* Fixed: 'Disable Sticky TOC' setting ignored (Pro filter result overwritten by free plugin) #940
+* Fixed: Authenticated (Contributor+) CSS Injection in <= 2.0.80  reported by Wordfence (type5afe)
+
+= 2.0.81 18/02/2026 =
+* Fixed: Make "Exclude Headings by Class" work if class is contained inside the heading #941
+* Fixed: CSRF vulnerabilty in <= 2.0.80  reported by Patchstack (Mike Montoya)
+* Fixed: Import not working #938
+* Compatibility: Compatibility with hubbub pro #939
+
+= 2.0.80 31/12/2025 =
+* Fixed: Alternate heading option is not working #932
+* Fixed: View more is not working properly #933
+* Fixed: Headings not showing in TOC when using captial H2 #916
+* Fixed: Title is not redirecting correctly (user-specific issue) #934
+* Fixed: Read Time option is not working properly #935
+* Fixed: Export Setting option is not working as expected. #936
+
+= 2.0.79.2 09/12/2025 =
+* Fixed: Pro settings are not visible #931
+
+= 2.0.79 08/12/2025 =
+* Fixed: Vulnerability Authenticated (Contributor+) Stored Cross-Site Scripting reported by Wordfence (Jack Taylor)
+* Improvement: Code Improvement #928
+* Test: Tested upto WordPress 6.9
 
 = 2.0.78 27/11/2025 =
 * Added: Promotion Banner BFCM #926

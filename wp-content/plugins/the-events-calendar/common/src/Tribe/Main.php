@@ -24,7 +24,7 @@ class Tribe__Main {
 	const OPTIONNAME        = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK = 'tribe_events_calendar_network_options';
 	const FEED_URL          = 'https://theeventscalendar.com/feed/';
-	const VERSION           = '6.10.0';
+	const VERSION           = '6.10.3';
 
 	protected $plugin_context;
 	protected $plugin_context_class;
@@ -96,8 +96,6 @@ class Tribe__Main {
 		$this->plugin_dir  = trailingslashit( basename( $this->plugin_path ) );
 		$this->parent_plugin_dir = trailingslashit( plugin_basename( $this->plugin_path ) );
 		$this->plugin_url  = plugins_url( $this->parent_plugin_dir === $this->plugin_dir ? $this->plugin_dir : $this->parent_plugin_dir );
-
-		$this->promoter_connector();
 
 		add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ], -1 );
 		add_action( 'tribe_common_loaded', [ $this, 'tribe_common_app_store' ], 10 );
@@ -640,7 +638,29 @@ class Tribe__Main {
 
 		// Load textdomain from a custom folder or the plugin's language folder.
 		if ( file_exists( $file ) ) {
-			return load_plugin_textdomain( $domain, false, $plugin_rel_path );
+			/**
+			 * Starting from WordPress 6.7.1, the `load_plugin_textdomain` will reset the `$l10n` global variable.
+			 * WorPress 6.7.0 will not, though. Here we reset that var for back-compatibility with WordPress 6.7.0.
+			 */
+			if ( isset( $GLOBALS['l10n'][ $domain ] ) && $GLOBALS['l10n'][ $domain ] instanceof NOOP_Translations ) {
+				unset( $GLOBALS['l10n'][ $domain ] );
+			}
+
+			$loaded = load_plugin_textdomain( $domain, false, $plugin_rel_path );
+
+			/**
+			 * If an earlier call to get a translation for a string in this domain was fired (e.g., a call to `__()`),
+			 * then the text domain registry has cached a falsy value for this domain and locale to indicate no
+			 * translation file is available. Here we overwrite the value if it had been set, or set it if it had not.
+			 *
+			 * The `load_plugin_textdomain()` function will add the custom path to the registry, but will not invalidate
+			 * a previously set value.
+			 */
+			/** @var WP_Textdomain_Registry $wp_textdomain_registry */
+			global $wp_textdomain_registry;
+			$wp_textdomain_registry->set( $domain, $locale, dirname( $file ) );
+
+			return $loaded;
 		}
 
 		// If translation files are not found in the custom folder, then load textdomain from the plugin's language folder.
@@ -848,15 +868,12 @@ class Tribe__Main {
 	 *
 	 * @since 4.9.20
 	 *
+	 * @deprecated 6.10.1
+	 *
 	 * @return void  Internal method without any return.
 	 */
 	public function promoter_connector() {
-		tribe_singleton( 'promoter.connector', 'Tribe__Promoter__Connector' );
-
-		add_filter(
-			'determine_current_user',
-			tribe_callback( 'promoter.connector', 'authenticate_user_with_connector' )
-		);
+		_deprecated_function( __METHOD__, '6.10.1' );
 	}
 
 	/**

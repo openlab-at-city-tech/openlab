@@ -8,55 +8,48 @@
 
 		$account_type_field = $('#openlab-account-type');
 
-		var registrationFormValidation = $signup_form.parsley({
-			errorsWrapper: '<ul class="parsley-errors-list"></ul>'
-		}).on('field:error', function (formInstance) {
+		var registrationFormValidation = $signup_form.parsley( {
+			errorsWrapper: '<ul class="parsley-errors-list"></ul>',
+			errorTemplate: '<li></li>'
+		} ).on( 'field:error', function() {
+			var self = this;
 
-			this.$element.closest('.form-group')
-					.find('.other-errors').remove();
+			this.$element.closest( '.form-group' )
+				.find( '.other-errors' ).remove();
 
-			this.$element.closest('.form-group')
-					.addClass('has-error')
-					.find('.error-container').addClass('error');
+			// Update group-level state based on all fields in the group.
+			updateFormGroupErrorState( this );
 
-			var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
+			// Set aria-invalid for accessibility.
+			this.$element.attr( 'aria-invalid', 'true' );
 
-			//in some cases errorMsg is further up the chain
-			if (errorMsg.length === 0) {
-				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
-			}
+			setTimeout( function() {
+				var errorContainerId = self.$element.data( 'parsley-errors-container' );
 
-			if ( errorMsg.length === 0 ) {
-				errorMsg = $(this.$element.data('parsley-errors-container')).find('li:first');
-			}
+				if ( errorContainerId && errorContainerId.charAt( 0 ) === '#' ) {
+					errorContainerId = errorContainerId.substring( 1 );
+				}
 
-			var jsElem = errorMsg[0];
-						if ( 'undefined' !== typeof jsElem ) {
-							jsElem.style.clip = 'auto';
-							var alertText = document.createTextNode(" ");
-							jsElem.appendChild(alertText);
-							jsElem.style.display = 'none';
-							jsElem.style.display = 'inline';
-						}
+				var fieldId = self.$element.attr( 'id' );
+				var errorMsgId = fieldId + '-error-msg';
+				var $errorContainer = $( '#' + errorContainerId );
+				var $errorLi = $errorContainer.find( 'li:first' );
 
-			if (errorMsg.attr('role') !== 'alert') {
-				errorMsg.attr('role', 'alert');
-			}
-		}).on('field:success', function (formInstance) {
+				if ( $errorLi.length > 0 ) {
+					$errorLi.attr( 'id', errorMsgId );
+					self.$element.attr( 'aria-describedby', errorMsgId );
+				}
+			}, 50 );
+		} ).on( 'field:success', function() {
+			this.$element.closest( '.form-group' )
+				.find( '.other-errors' ).remove();
 
-			this.$element.closest('.form-group')
-					.removeClass('has-error')
-					.find('.error-container').removeClass('error');
+			this.$element.removeAttr( 'aria-invalid' );
+			this.$element.removeAttr( 'aria-describedby' );
 
-			var errorMsg = this.$element.prevAll("div.error-container:first").find('li:first');
-
-			//in some cases errorMsg is further up the chain
-			if (errorMsg.length === 0) {
-				errorMsg = this.$element.parent().prevAll("div.error-container:first").find('li:first');
-			}
-
-			errorMsg.attr('role', '');
-		});
+			// Only clear group-level error state if every field in the group is valid.
+			updateFormGroupErrorState( this );
+		} );
 
 		var inputBlacklist = [
 			'signup_username',
@@ -106,6 +99,51 @@
 		var asyncLoaded = false;
 		formValidation($signup_form);
 
+		/**
+		 * Validate all visible form fields that appear before the focused element in the DOM.
+		 * This ensures users who skip fields with the mouse see error messages when they
+		 * move focus forward, rather than reaching the submit button with no explanation.
+		 */
+		function validatePrecedingFields( $focusedElement ) {
+			var $focusedGroup = $focusedElement.closest( '.form-group' );
+			var $allVisibleGroups = $signup_form.find( '.form-group:visible' );
+			var focusedIndex;
+
+			if ( $focusedGroup.length ) {
+				focusedIndex = $allVisibleGroups.index( $focusedGroup );
+				// Fall back to validating all groups if the focused group isn't found.
+				if ( focusedIndex === -1 ) {
+					focusedIndex = $allVisibleGroups.length;
+				}
+			} else {
+				// Element not in a .form-group (e.g. the submit button): validate all.
+				focusedIndex = $allVisibleGroups.length;
+			}
+
+			if ( focusedIndex <= 0 ) {
+				return;
+			}
+
+			$allVisibleGroups.slice( 0, focusedIndex ).each( function() {
+				$( this ).find( 'input, select, textarea' ).each( function() {
+					try {
+						$( this ).parsley().validate();
+					} catch ( e ) {}
+				} );
+			} );
+		}
+
+		// On focus of any form field, validate all visible preceding fields.
+		$signup_form.on( 'focus', 'input, select, textarea', function() {
+			validatePrecedingFields( $( this ) );
+		} );
+
+		// Also trigger on submit button hover, since the button itself is the "destination"
+		// when a user mouses straight to it.
+		$signup_form.on( 'mouseenter', '#signup_submit', function() {
+			validatePrecedingFields( $( this ) );
+		} );
+
 				$('.email-autocomplete').each(function(){
 					var emailInput = $(this);
 					var inputHasAutocomplete = false;
@@ -135,7 +173,7 @@
 
 							var emailDomain = 'citytech.cuny.edu';
 							if ( 'student' === selectedAccountType || 'alumni' === selectedAccountType ) {
-								emailDomain = 'mail.citytech.cuny.edu';
+								emailDomain = 'stu-mail.citytech.cuny.edu';
 							}
 
 							// Show nothing if user has selected Student but account format doesn't match.
@@ -173,106 +211,103 @@
 			var $validationdiv = $('#validation-code');
 			var $emailconfirm = $('#signup_email_confirm');
 
-			if (0 <= email.indexOf('@mail.citytech.cuny.edu')) {
-				emailtype = 'student';
-			} else if (0 <= email.indexOf('@citytech.cuny.edu')) {
-				emailtype = 'fs';
-			} else {
-				emailtype = 'nonct';
+			const isCityTechStuEmail = 0 <= email.indexOf('@stu-mail.citytech.cuny.edu');
+			const isCityTechFacStaffEmail = 0 <= email.indexOf('@citytech.cuny.edu');
+
+			// Don't ever run for valid CT emails.
+			if ( isCityTechStuEmail || isCityTechFacStaffEmail ) {
+				return;
 			}
 
-			if ('nonct' == emailtype) {
-				// Fade out and show a 'Checking' message.
-				$emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
-				$emaillabel.css('color', '#000');
-				$emaillabel.fadeIn();
-				$emaillabel.addClass('error');
-
-				// Non-City Tech requires an AJAX request for verification.
-				$.post(ajaxurl, {
-					action: 'cac_ajax_email_check',
-					'email': email,
-					'code': $('#signup_validation_code').val(),
-				},
-				function (response) {
-					var message = '';
-					var show_validation = false;
-					var emailCode = response.emailCode;
-
-					switch (emailCode) {
-						/*
-							* Return values:
-							*   1: success
-							*   2: no email provided
-							*   3: not a valid email address
-							*   4: unsafe
-							*   5: not in domain whitelist
-							*   6: email exists
-							*   7: Is a student email
-							*/
-						case "6" :
-							message = 'An account already exists using that email address.';
-							break;
-						case "5" :
-						case "4" :
-							message = 'Must be a City Tech email address.';
-							show_validation = true;
-							break;
-						case "3" :
-							message = 'Not a well-formed email address. Please try again.';
-							break;
-						case "2" :
-							message = 'The Email Address field is required.';
-							break;
-
-						case '1' :
-							message = '&mdash; OK!';
-							break;
-						default :
-							message = '';
-							break;
-					}
-
-					message = '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + message + '</li></ul>';
-
-					if (emailCode != '1' && emailCode != '5' && emailCode != '4') {
-						$emaillabel.fadeOut(function () {
-							$emaillabel.html(message);
-							$emaillabel.fadeIn();
-						});
-					} else if (emailCode == '1') {
-						$emaillabel.fadeOut(function () {
-							$emaillabel.html(message);
-							$emaillabel.fadeIn();
-						});
-						$( '#register-avatar-upload' ).show();
-					} else {
-						$emaillabel.fadeOut();
-
-						// Don't add more than one
-						if (!$validationdiv.length) {
-							var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code" role="alert">Signup code <em aria-hidden="true">(required)</em> <span>Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
-							$('input#signup_email').before(valbox);
-							$validationdiv = $('#validation-code');
-						}
-					}
-
-					if (show_validation) {
-						$validationdiv.show();
-					} else {
-						$validationdiv.hide();
-						//$emailconfirm.focus();
-					}
-
-					set_account_type_fields(response.accountType);
-				});
-
-			} else {
-				$validationdiv.hide();
-				$emaillabel.fadeOut();
-				//$emailconfirm.focus();
-				set_account_type_fields();
+			// Allow old-style student emails to be handled by Parsley validation.
+			if ( 0 <= email.indexOf( '@mail.citytech.cuny.edu' ) ) {
+				return;
 			}
+
+			// Fade out and show a 'Checking' message.
+			$emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
+			$emaillabel.css('color', '#000');
+			$emaillabel.fadeIn();
+			$emaillabel.addClass('error');
+
+			// Non-City Tech requires an AJAX request for verification.
+			$.post(ajaxurl, {
+				action: 'cac_ajax_email_check',
+				'email': email,
+				'code': $('#signup_validation_code').val(),
+			},
+			function (response) {
+				var message = '';
+				var show_validation = false;
+				var emailCode = response.emailCode;
+
+				switch (emailCode) {
+					/*
+						* Return values:
+						*   1: success
+						*   2: no email provided
+						*   3: not a valid email address
+						*   4: unsafe
+						*   5: not in domain whitelist
+						*   6: email exists
+						*   7: Is a student email
+						*/
+					case "6" :
+						message = 'An account already exists using that email address.';
+						break;
+					case "5" :
+					case "4" :
+						message = 'Must be a City Tech email address.';
+						show_validation = true;
+						break;
+					case "3" :
+						message = 'Not a well-formed email address. Please try again.';
+						break;
+					case "2" :
+						message = 'The Email Address field is required.';
+						break;
+
+					case '1' :
+						message = '&mdash; OK!';
+						break;
+					default :
+						message = '';
+						break;
+				}
+
+				message = '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + message + '</li></ul>';
+
+				if (emailCode != '1' && emailCode != '5' && emailCode != '4') {
+					$emaillabel.fadeOut(function () {
+						$emaillabel.html(message);
+						$emaillabel.fadeIn();
+					});
+				} else if (emailCode == '1') {
+					$emaillabel.fadeOut(function () {
+						$emaillabel.html(message);
+						$emaillabel.fadeIn();
+					});
+					$( '#register-avatar-upload' ).show();
+				} else {
+					$emaillabel.fadeOut();
+
+					// Don't add more than one
+					if (!$validationdiv.length) {
+						var valbox = '<div id="validation-code" style="display:none"><label for="signup_validation_code" role="alert">Signup code <em aria-hidden="true">(required)</em> <span>Required for non-City Tech addresses</span></label><input name="signup_validation_code" id="signup_validation_code" type="text" val="" /></div>';
+						$('input#signup_email').before(valbox);
+						$validationdiv = $('#validation-code');
+					}
+				}
+
+				if (show_validation) {
+					$validationdiv.show();
+				} else {
+					$validationdiv.hide();
+					//$emailconfirm.focus();
+				}
+
+				set_account_type_fields(response.accountType);
+			});
 		});
 
 		$(document).on('blur', '#signup_validation_code', function() {
@@ -302,6 +337,9 @@
 					});
 
 					set_account_type_fields(response.accountType);
+
+					// Remove CT-specific validation from signup_email.
+					set_validation_rules( null );
 				} else {
 					$(vcodespan).fadeOut(function () {
 						$(vcodespan).html('&mdash; Required for non-CUNY addresses');
@@ -326,6 +364,7 @@
 		$account_type_field.on('change', function () {
 			set_email_label( this.value );
 			set_email_helper( this.value );
+			set_validation_rules( this.value );
 			load_account_type_description( this.value );
 			load_account_type_fields();
 			init_visible_metaboxes();
@@ -361,6 +400,39 @@
 					}
 				}
 			}, 3000 );
+		}
+
+		function updateFormGroupErrorState( parsleyField ) {
+			var $group = parsleyField.$element.closest( '.form-group' );
+
+			if ( ! $group.length ) {
+				return;
+			}
+
+			var allValid = true;
+
+			$group.find( 'input, select, textarea' ).each( function() {
+				var instance = $( this ).data( 'Parsley' );
+
+				// Skip elements not managed by Parsley.
+				if ( ! instance ) {
+					return;
+				}
+
+				// If any field is invalid, the group should stay in error state.
+				if ( instance.isValid() !== true ) {
+					allValid = false;
+					return false;
+				}
+			} );
+
+			if ( allValid ) {
+				$group.removeClass( 'has-error' )
+					.find( '.error-container' ).removeClass( 'error' );
+			} else {
+				$group.addClass( 'has-error' )
+					.find( '.error-container' ).addClass( 'error' );
+			}
 		}
 
 		function containsLastName( text ) {
@@ -404,7 +476,7 @@
 			$( '.username-contains-last-name-error' ).remove();
 
 			if ( show ) {
-				$( '#signup_username' ).after( '<div class="username-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your username. Are you sure?</div>' );
+				$( '#signup_username' ).after( '<div class="username-contains-last-name-error field-contains-last-name-error error" role="alert">It looks like you’re using your last name in your username. Are you sure?</div>' );
 			}
 		}
 
@@ -429,7 +501,7 @@
 			$( '.display-name-contains-last-name-error' ).remove();
 
 			if ( show ) {
-				$( '#field_1' ).after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
+				$( '#field_1' ).after( '<div class="display-name-contains-last-name-error field-contains-last-name-error error" role="alert">It looks like you’re using your last name in your Display Name. Are you sure?</div>' );
 			}
 		}
 
@@ -459,7 +531,7 @@
 			var helper = '';
 
 			if ( 'student' === accountType ) {
-				helper = 'Example: first.lastname@mail.citytech.cuny.edu or first.lastname1@mail.citytech.cuny.edu.';
+				helper = 'Example: first.lastname##@stu-mail.citytech.cuny.edu.';
 			} else if ( 'faculty' === accountType ) {
 				helper = 'Example: first.lastname12@citytech.cuny.edu.';
 			}
@@ -467,6 +539,30 @@
 			$('.email-requirements').fadeOut( function() {
 				$(this).html( helper ).fadeIn();
 			} );
+		}
+
+		function set_validation_rules( accountType ) {
+			const $emailField = $('#signup_email');
+
+			const removedValidators = [ 'data-parsley-studentemail', 'data-parsley-facultystaffemail' ];
+			for ( const validator of removedValidators ) {
+				$emailField.removeAttr( validator );
+			}
+
+			switch ( accountType ) {
+				case 'student' :
+					$emailField.attr( 'data-parsley-studentemail', '' );
+				break;
+
+				case 'faculty' :
+				case 'staff' :
+					$emailField.attr( 'data-parsley-facultystaffemail', '' );
+				break;
+
+				default :
+					$emailField.removeAttr( 'data-parsley-studentemail' );
+				break;
+			}
 		}
 
 		function get_account_type_option_markup( value, text, typeSelected ) {
@@ -724,7 +820,7 @@
 		var email = $('#signup_email').val();
 		var emailtype;
 
-		if (0 <= email.indexOf('mail.citytech.cuny.edu')) {
+		if (0 <= email.indexOf('mail.citytech.cuny.edu') || 0 <= email.indexOf('stu-mail.citytech.cuny.edu')) {
 			emailtype = 'student';
 		} else if (0 <= email.indexOf('citytech.cuny.edu')) {
 			emailtype = 'fs';

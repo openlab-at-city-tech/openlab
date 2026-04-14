@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
 {
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WPChill\\DownloadMonitor\\' => 24,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'WPChill\\DownloadMonitor\\' => 
+        'WPChill\\DownloadMonitor\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
@@ -305,6 +305,7 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'WPChill\\DownloadMonitor\\Util\\PageCreator' => __DIR__ . '/../..' . '/src/Util/PageCreator.php',
         'WPChill_About_Us' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-about-us.php',
         'WPChill_Notifications' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-notifications.php',
+        'WPChill_Remote_Upsells' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-upsells.php',
         'WPChill_Rest_Api' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-rest-api.php',
         'WPChill_Welcome' => __DIR__ . '/../..' . '/includes/submodules/banner/class-wpchill-welcome.php',
         'WP_DLM' => __DIR__ . '/../..' . '/src/DLM.php',

@@ -2,9 +2,9 @@
   'root' => 
   array (
     'name' => 'the-events-calendar/tribe-common',
-    'pretty_version' => '6.10.0',
-    'version' => '6.10.0.0',
-    'reference' => 'f0a661d78829786a693f3f7f6802b9ca20050264',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
+    'reference' => 'f427e84d981e33805af101b9598a7414cb5b2fc4',
     'type' => 'wordpress-plugin',
     'install_path' => __DIR__ . '/../',
     'aliases' => 
@@ -124,9 +124,9 @@
     ),
     'stellarwp/db' => 
     array (
-      'pretty_version' => '1.1.1',
-      'version' => '1.1.1.0',
-      'reference' => 'cbaed00b77f212b791263689cb8a24cbdfdf2100',
+      'pretty_version' => '1.2.0',
+      'version' => '1.2.0.0',
+      'reference' => 'f92d6ae0bcd74a3f526b023bb2d6ecd13227ef96',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/db',
       'aliases' => 
@@ -160,9 +160,9 @@
     ),
     'stellarwp/schema' => 
     array (
-      'pretty_version' => '3.1.4',
-      'version' => '3.1.4.0',
-      'reference' => '6255ec18151ada45e30dd508671523684b2c6107',
+      'pretty_version' => '3.2.0',
+      'version' => '3.2.0.0',
+      'reference' => 'af60b60c2e532d04ba884f7f4f545569f4b7a467',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/schema',
       'aliases' => 
@@ -172,9 +172,9 @@
     ),
     'stellarwp/schema-models' => 
     array (
-      'pretty_version' => '0.1.0',
-      'version' => '0.1.0.0',
-      'reference' => '1f8ff095d5442455123798824c8f2456d95b3118',
+      'pretty_version' => '0.2.0',
+      'version' => '0.2.0.0',
+      'reference' => '2ecd9d386a23a9451d0829c515a7c8ad9f10f4a2',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/schema-models',
       'aliases' => 
@@ -184,9 +184,9 @@
     ),
     'stellarwp/shepherd' => 
     array (
-      'pretty_version' => '0.0.9',
-      'version' => '0.0.9.0',
-      'reference' => '0af4cfc2a1242e795484dd311b74e4364caf4e24',
+      'pretty_version' => '0.2.0',
+      'version' => '0.2.0.0',
+      'reference' => '63c02ff7d978452c2fd879eed910a756e7abd185',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/shepherd',
       'aliases' => 

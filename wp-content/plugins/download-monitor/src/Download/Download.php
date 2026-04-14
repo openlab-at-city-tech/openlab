@@ -504,7 +504,10 @@ class DLM_Download {
 		}
 
 		if ( $current_lang && $default_lang && $current_lang !== $default_lang ) {
-			return untrailingslashit( $url ) . '/' . $current_lang . '/';
+			$lang_segment = '/' . $current_lang . '/';
+			if ( strpos( $url, $lang_segment ) === false ) {
+				return untrailingslashit( $url ) . $lang_segment;
+			}
 		}
 
 		return $url;

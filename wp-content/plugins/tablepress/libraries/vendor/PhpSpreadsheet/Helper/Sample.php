@@ -131,14 +131,19 @@ class Sample
 			$callStartTime = microtime(true);
 			$writer->save($path);
 			$this->logWrite($writer, $path, $callStartTime);
-			if ($this->isCli() === false) {
-				// @codeCoverageIgnoreStart
-				echo '<a href="/download.php?type=' . pathinfo($path, PATHINFO_EXTENSION) . '&name=' . basename($path) . '">Download ' . basename($path) . '</a><br />';
-				// @codeCoverageIgnoreEnd
-			}
+			$this->addDownloadLink($path);
 		}
 
 		$this->logEndingNotes();
+	}
+
+	public function addDownloadLink(string $path): void
+	{
+		if ($this->isCli() === false) {
+			// @codeCoverageIgnoreStart
+			echo '<a href="/download.php?type=' . pathinfo($path, PATHINFO_EXTENSION) . '&name=' . basename($path) . '">Download ' . basename($path) . '</a><br />';
+			// @codeCoverageIgnoreEnd
+		}
 	}
 
 	protected function isDirOrMkdir(string $folder): bool
@@ -244,10 +249,17 @@ class Sample
 			: $this->log(sprintf('Function: %s() - %s.', rtrim($functionName, '()'), rtrim($description, '.')));
 	}
 
-	/** @param mixed[][] $matrix */
-	public function displayGrid(array $matrix): void
+	/** @param mixed[][] $matrix
+				 * @param null|bool|\TablePress\PhpOffice\PhpSpreadsheet\Helper\TextGridRightAlign $numbersRight */
+				public function displayGrid(array $matrix, $numbersRight = null): void
 	{
 		$renderer = new TextGrid($matrix, $this->isCli());
+		if (is_bool($numbersRight)) {
+			$numbersRight = $numbersRight ? TextGridRightAlign::numeric : TextGridRightAlign::none;
+		}
+		if ($numbersRight !== null) {
+			$renderer->setNumbersRight($numbersRight);
+		}
 		echo $renderer->render();
 	}
 

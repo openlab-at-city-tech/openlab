@@ -417,73 +417,69 @@ class DLM_Downloads_Path {
 			return;
 		}
 
-		// Check if the user has permission to update the path.
-		if ( ! $this->check_access() ) {
+		$change = false;
+		if ( ! isset( $_GET['page'] ) || 'download-monitor-settings' !== $_GET['page'] ) {
 			return;
 		}
 
-		$change = false;
-		$check  = false;
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		// The check is different for multisite, as the page is different.
-		$check = isset( $_GET['page'] ) && 'download-monitor-settings' === $_GET['page'];
-		if ( $check ) {
-			$paths = DLM_Downloads_Path_Helper::get_all_paths();
-			if ( ! empty( $_GET['action'] ) ) {
-				$action = sanitize_text_field( wp_unslash( $_GET['action'] ) );
-				switch ( $action ) {
-					case 'enable':
-						foreach ( $paths as $key => $path ) {
-							if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
-								$paths[ $key ]['enabled'] = true;
-								$change                   = true;
-								break;
-							}
-						}
-						break;
-					case 'disable':
-						foreach ( $paths as $key => $path ) {
-							if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
-								$paths[ $key ]['enabled'] = false;
-								$change                   = true;
-								break;
-							}
-						}
-						break;
-					case 'delete':
-						foreach ( $paths as $key => $path ) {
-							if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
-								unset( $paths[ $key ] );
-								$change = true;
-								break;
-							}
-						}
-						break;
-					case 'enable-all':
-						foreach ( $paths as $key => $path ) {
+		if ( ! $this->check_access( 'path_get_action' ) ) {
+			return;
+		}
+
+		$paths = DLM_Downloads_Path_Helper::get_all_paths();
+		if ( ! empty( $_GET['action'] ) ) {
+			$action = sanitize_text_field( wp_unslash( $_GET['action'] ) );
+			switch ( $action ) {
+				case 'enable':
+					foreach ( $paths as $key => $path ) {
+						if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
 							$paths[ $key ]['enabled'] = true;
 							$change                   = true;
+							break;
 						}
-						break;
-					case 'disable-all':
-						foreach ( $paths as $key => $path ) {
+					}
+					break;
+				case 'disable':
+					foreach ( $paths as $key => $path ) {
+						if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
 							$paths[ $key ]['enabled'] = false;
 							$change                   = true;
+							break;
 						}
-						break;
-					default:
-						$paths  = apply_filters( 'dlm_download_paths_action_' . $action, $paths );
-						$change = apply_filters( 'dlm_download_paths_change_' . $action, false, $paths );
-						break;
-				}
+					}
+					break;
+				case 'delete':
+					foreach ( $paths as $key => $path ) {
+						if ( absint( $path['id'] ) === absint( $_GET['url'] ) ) {
+							unset( $paths[ $key ] );
+							$change = true;
+							break;
+						}
+					}
+					break;
+				case 'enable-all':
+					foreach ( $paths as $key => $path ) {
+						$paths[ $key ]['enabled'] = true;
+						$change                   = true;
+					}
+					break;
+				case 'disable-all':
+					foreach ( $paths as $key => $path ) {
+						$paths[ $key ]['enabled'] = false;
+						$change                   = true;
+					}
+					break;
+				default:
+					$paths  = apply_filters( 'dlm_download_paths_action_' . $action, $paths );
+					$change = apply_filters( 'dlm_download_paths_change_' . $action, false, $paths );
+					break;
 			}
-			// phpcs:enable
+		}
 
-			if ( $change ) {
-				DLM_Downloads_Path_Helper::save_paths( $paths );
-				wp_safe_redirect( DLM_Downloads_Path_Helper::get_base_url() );
-				exit;
-			}
+		if ( $change ) {
+			DLM_Downloads_Path_Helper::save_paths( $paths );
+			wp_safe_redirect( DLM_Downloads_Path_Helper::get_base_url() );
+			exit;
 		}
 	}
 
@@ -493,12 +489,11 @@ class DLM_Downloads_Path {
 	 * @since 5.0.0
 	 */
 	public function bulk_actions_handler() {
-		// Check if the user has permission to update the path.
-		if ( ! $this->check_access() ) {
-			return;
-		}
-		// Check for the bulk action.
-		if ( ( ! empty( $_POST['bulk-action'] ) || ! empty( $_POST['bulk-action2'] ) ) && isset( $_POST['approveddownloadpaths'] ) ) {// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		// Check for the bulk action; capability + nonce (from settings_fields( 'dlm_advanced_download_path' )) via check_access.
+		if ( ( ! empty( $_POST['bulk-action'] ) || ! empty( $_POST['bulk-action2'] ) ) && isset( $_POST['approveddownloadpaths'] ) ) {
+			if ( ! $this->check_access( 'path_bulk' ) ) {
+				return;
+			}
 			$changes = false;
 			$paths   = DLM_Downloads_Path_Helper::get_all_paths();
 			// Get the action. It's one or the other, so we can just check one.
@@ -544,7 +539,6 @@ class DLM_Downloads_Path {
 						break;
 				}
 			}
-			// phpcs:enable
 			if ( $changes ) {
 				DLM_Downloads_Path_Helper::save_paths( $paths );
 			}
@@ -618,19 +612,37 @@ class DLM_Downloads_Path {
 
 	/**
 	 * Check if current user has access to the download paths.
-	 *
 	 * @return bool
 	 * @since 5.0.10
 	 */
-	private function check_access() {
+	private function check_access( $verify_request = null ) {
 		// Load the load.php file to get the is_multisite() function.
 		require_once ABSPATH . 'wp-includes/load.php';
 		// Check if it's a multisite installation.
 		if ( ! is_multisite() ) {
-			// Check if the user has the manage_options capability.
-			return current_user_can( 'manage_options' );
+			$can = current_user_can( 'manage_options' );
+		} else {
+			$can = current_user_can( 'manage_network' );
 		}
-		// Check if the user has the manage_network capability.
-		return current_user_can( 'manage_network' );
+
+		if ( ! $can ) {
+			return false;
+		}
+
+		if ( null === $verify_request ) {
+			return true;
+		}
+
+		if ( 'path_get_action' === $verify_request ) {
+			return isset( $_GET['check'] )
+				&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['check'] ) ), 'modify_approved_directories' );
+		}
+
+		if ( 'path_bulk' === $verify_request ) {
+			return isset( $_POST['_wpnonce'] )
+				&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'dlm_advanced_download_path-options' );
+		}
+
+		return false;
 	}
 }

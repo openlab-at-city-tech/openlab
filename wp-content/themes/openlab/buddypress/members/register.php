@@ -49,7 +49,7 @@ $account_type_options = array_map(
 						<div class="form-group">
 							<p>To get started, please select your <strong>Account Type</strong>: (required)</p>
 							<label class="screen-reader-text control-label" for="openlab-account-type">Account Type <span class="label-gloss">(required)</span></label>
-							<div id="openlab-account-type-error" class="error-container"></div>
+							<div id="openlab-account-type-error" class="error-container" role="alert"></div>
 							<?php do_action( 'bp_field_account_type_errors' ); ?>
 							<select
 								class="form-control"
@@ -132,7 +132,7 @@ $account_type_options = array_map(
 
 							<div class="form-group">
 								<label class="control-label" id="signup-email-label" for="signup_email"><span class="label-text">City Tech Email Address</span> <span class="label-gloss">(required, but not displayed on Public Profile) <div class="email-requirements"></div></span></label>
-								<div id="signup_email_error" class="error-container"></div>
+								<div id="signup_email_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_signup_email_errors' ); ?>
 								<input
 									class="form-control email-autocomplete"
@@ -149,7 +149,7 @@ $account_type_options = array_map(
 									/>
 
 								<label class="control-label" for="signup_email_confirm"><span class="label-text">Confirm Email Address</span> <span class="label-gloss">(required)</span></label>
-								<div id="signup_email_confirm_error" class="error-container"></div>
+								<div id="signup_email_confirm_error" class="error-container" role="alert"></div>
 								<input
 									class="form-control email-autocomplete"
 									type="text"
@@ -169,7 +169,7 @@ $account_type_options = array_map(
 
 							<div class="form-group">
 								<label class="control-label" for="field_<?php echo intval( $first_name_field_id ); ?>"><span class="label-text">First Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
-								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container"></div>
+								<div id="field_<?php echo esc_attr( $first_name_field_id ); ?>_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_field_' . $first_name_field_id . '_errors' ); ?>
 								<input
 									class="form-control"
@@ -185,7 +185,7 @@ $account_type_options = array_map(
 
 							<div class="form-group">
 								<label class="control-label" for="field_<?php echo intval( $last_name_field_id ); ?>"><span class="label-text">Last Name</span> <span class="label-gloss">(required, but not displayed on Public Profile)</span></label>
-								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container"></div>
+								<div id="field_<?php echo esc_attr( $last_name_field_id ); ?>_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_field_' . $last_name_field_id . '_errors' ); ?>
 								<input
 									class="form-control last-name-field"
@@ -203,7 +203,7 @@ $account_type_options = array_map(
 
 							<div class="form-group">
 								<label class="control-label" for="signup_username"><span class="label-text">Username</span> <span class="label-gloss">(required) (lowercase & no special characters)</span></label>
-								<div id="signup_username_error" class="error-container"></div>
+								<div id="signup_username_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_signup_username_errors' ); ?>
 								<?php
 								$remote_attr = add_query_arg(
@@ -234,7 +234,7 @@ $account_type_options = array_map(
 
 							<div data-parsley-children-should-match class="form-group">
 								<label class="control-label" for="signup_password"><span class="label-text">Choose a Password</span> <span class="label-gloss">(required)</span></label>
-								<div id="signup_password_error" class="error-container"></div>
+								<div id="signup_password_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_signup_password_errors' ); ?>
 								<div class="password-field">
 									<input
@@ -258,7 +258,7 @@ $account_type_options = array_map(
 
 
 								<label class="control-label" for="signup_password_confirm"><span class="label-text">Confirm Password</span> <span class="label-gloss">(required)</span></label>
-								<div id="signup_password_confirm_error" class="error-container"></div>
+								<div id="signup_password_confirm_error" class="error-container" role="alert"></div>
 								<?php do_action( 'bp_signup_password_confirm_errors' ); ?>
 								<input
 									class="form-control password-field"

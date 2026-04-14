@@ -11,14 +11,14 @@ class ComposerStaticInitd80bb35ac90f5faec37e983923e95cfb
     );
 
     public static $prefixLengthsPsr4 = array (
-        'H' => 
+        'H' =>
         array (
             'HFG\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'HFG\\' => 
+        'HFG\\' =>
         array (
             0 => __DIR__ . '/../..' . '/header-footer-grid',
         ),

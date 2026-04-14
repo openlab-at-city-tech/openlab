@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit77859a16ec599404820631ac421b3057
 {
     public static $prefixLengthsPsr4 = array (
-        'T' => 
+        'T' =>
         array (
             'Tribe\\Events\\' => 13,
             'TEC\\Events\\' => 11,
@@ -15,11 +15,11 @@ class ComposerStaticInit77859a16ec599404820631ac421b3057
     );
 
     public static $prefixDirsPsr4 = array (
-        'Tribe\\Events\\' => 
+        'Tribe\\Events\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Tribe',
         ),
-        'TEC\\Events\\' => 
+        'TEC\\Events\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src/Events',
         ),

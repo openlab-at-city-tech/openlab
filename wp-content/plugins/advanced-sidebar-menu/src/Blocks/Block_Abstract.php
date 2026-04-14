@@ -218,7 +218,7 @@ abstract class Block_Abstract {
 
 		$args = apply_filters( 'advanced-sidebar-menu/block-register/' . static::NAME, [
 			'api_version'           => 3,
-			'attributes'            => Register_Utils::instance()->translate_attributes_to_php( $attributes ),
+			'attributes'            => Register_Utils::instance()->translate_attributes_to_array( $attributes ),
 			'description'           => $this->get_description(),
 			'editor_script_handles' => [ Scripts::GUTENBERG_HANDLE ],
 			'editor_style_handles'  => [ Scripts::GUTENBERG_CSS_HANDLE ],
@@ -242,7 +242,7 @@ abstract class Block_Abstract {
 			Common::instance()->get_server_side_render_attributes(),
 			$this->get_attributes()
 		);
-		return Register_Utils::instance()->translate_attributes_to_php( $all );
+		return Register_Utils::instance()->translate_attributes_to_array( $all );
 	}
 
 
@@ -264,7 +264,7 @@ abstract class Block_Abstract {
 
 		$config['blocks'][ \explode( '/', $name )[1] ] = [
 			'id'         => $name,
-			'attributes' => Register_Utils::instance()->translate_attributes_to_php( $this->get_attributes() ),
+			'attributes' => $this->get_attributes(),
 		];
 
 		return $config;

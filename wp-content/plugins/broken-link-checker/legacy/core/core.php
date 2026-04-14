@@ -2046,6 +2046,19 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 				//Save the new filter
 				$name           = strip_tags( strval( $_POST['name'] ) );
 				$blc_link_query = blcLinkQuery::getInstance();
+				
+				$params = array();
+				wp_parse_str( $_POST['params'], $params );
+				
+				$allowed_keys   = blcLinkQuery::getInstance()->valid_url_params;
+				$forbidden_keys = array_diff( array_keys( $params ), $allowed_keys );
+
+				if ( count( $forbidden_keys ) > 0 ) {
+					$message   = __( 'Invalid search query: contains forbidden parameters.', 'broken-link-checker' );
+					$msg_class = 'error';
+					return array( $message, $msg_class );
+				}
+				
 				$filter_id      = $blc_link_query->create_custom_filter( $name, $_POST['params'] );
 
 				if ( $filter_id ) {

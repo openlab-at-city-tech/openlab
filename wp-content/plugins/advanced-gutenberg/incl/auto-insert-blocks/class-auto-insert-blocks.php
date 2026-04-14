@@ -198,7 +198,6 @@ class AdvancedGutenbergAutoInsertBlocks
         $new_columns['block'] = __('Reusable Block', 'advanced-gutenberg');
         $new_columns['position'] = __('Position', 'advanced-gutenberg');
         $new_columns['targeting'] = __('Targeting', 'advanced-gutenberg');
-        $new_columns['priority'] = __('Priority', 'advanced-gutenberg');
         $new_columns['date'] = $columns['date'];
 
         return $new_columns;
@@ -383,11 +382,6 @@ class AdvancedGutenbergAutoInsertBlocks
                 }
 
                 echo !empty($targeting_info) ? implode('<br>', $targeting_info) : __('None', 'advanced-gutenberg');
-                break;
-
-            case 'priority':
-                $priority = get_post_meta($post_id, '_advgb_priority', true);
-                echo $priority ? esc_html($priority) : '10';
                 break;
         }
     }

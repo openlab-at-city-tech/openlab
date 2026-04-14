@@ -65,8 +65,17 @@
 
 }
 
-.redux-container-color_scheme {
+.redux-wp-7 {
+    .redux-container-color_scheme {
+        .redux-color-scheme-container {
+            .redux-action-links {
+                height: 72px;
+            }
+        }
+    }
+}
 
+.redux-container-color_scheme {
     .redux-color-scheme-select-close-hr {
         margin-left: 15px;
     }
@@ -185,7 +194,7 @@
         }
     }
 
-    .redux-color-scheme-container{
+    .redux-color-scheme-container {
         hr {
             margin-bottom: 10px;
         }
@@ -241,6 +250,7 @@
 
             input#redux-scheme-input {
                 width: 100%;
+                min-height: 30px;
             }
         }
 

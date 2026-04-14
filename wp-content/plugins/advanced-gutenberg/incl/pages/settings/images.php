@@ -30,7 +30,7 @@ $gallery_lightbox_checked = $this->getOptionSetting('advgb_settings', 'gallery_l
                            id="gallery_lightbox"
                            value="1"
                         <?php
-                        esc_attr_e($gallery_lightbox_checked) ?>
+                        echo esc_attr($gallery_lightbox_checked) ?>
                     />
                     <?php
                     _e(

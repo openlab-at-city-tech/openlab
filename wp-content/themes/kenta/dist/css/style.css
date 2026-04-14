@@ -94,6 +94,10 @@ body {
   display: none;
 }
 
+.has-negative-margin {
+  z-index: 9;
+}
+
 .kenta-max-w-wide {
   max-width: min(var(--wp--style--global--wide-size), 100%);
 }

@@ -28,6 +28,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initAvatarUploadCustomizations();
 			OpenLab.utility.setUpNav();
 			OpenLab.utility.setUpDirectoryToggle();
+			OpenLab.utility.accessibilityFixes();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -861,6 +862,15 @@ OpenLab.utility = (function ($) {
 			// This prevents handleFocusLeave from interfering with the toggle's click handler
 			let isTogglingDrawer = false;
 
+			// Flag to track whether a mouse button is held down inside the drawer.
+			// Safari does not focus <a> elements on click, so a mousedown on a drawer link
+			// causes focusout to fire with document.activeElement === body. Without this
+			// guard, handleFocusLeave would call closeAllDrawers() (setting drawer.inert=true)
+			// before the click event fires, preventing navigation.
+			let isMouseDownInDrawer = false;
+			drawer.addEventListener('mousedown', () => { isMouseDownInDrawer = true; });
+			document.addEventListener('mouseup', () => { isMouseDownInDrawer = false; });
+
 			// Track which toggle opened the current flyout
 			// Used to return focus to the correct toggle when closing via backward navigation
 			let currentOpenToggle = null;
@@ -1180,6 +1190,13 @@ OpenLab.utility = (function ($) {
 						return;
 					}
 
+					// Don't close if a mousedown is active inside the drawer (Safari fix).
+					// Safari doesn't focus <a> elements on click, so without this guard the
+					// focusout handler would close the drawer before the click event fires.
+					if (isMouseDownInDrawer) {
+						return;
+					}
+
 					// Check if the new focused element is outside the drawer
 					const newFocus = document.activeElement;
 					const nav = document.querySelector('.openlab-navbar');
@@ -1292,6 +1309,22 @@ OpenLab.utility = (function ($) {
 				});
 			});
 		},
+
+		/**
+		 * Misc accessibility functions that have to happen when content is loaded.
+		 */
+		accessibilityFixes: function() {
+			// Shimming the plupload file input for BP avatar upload.
+			var shimInput = document.querySelector( '.moxie-shim input[type="file"]' );
+
+			if ( shimInput ) {
+				shimInput.setAttribute(
+					'aria-label',
+					'Upload photo. You can also drag and drop an image file here.'
+				);
+			}
+		},
+
 		runAfterTransition: function(el, callback, fallbackDuration = 50) {
 			const style = window.getComputedStyle(el);
 			const duration = parseFloat(style.transitionDuration || '0') || 0;

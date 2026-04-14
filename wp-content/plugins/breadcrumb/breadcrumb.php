@@ -3,7 +3,7 @@
 Plugin Name: Breadcrumb
 Plugin URI: https://pickplugins.com/breadcrumb/
 Description: Awesome Breadcrumb for wordpress.
-Version: 1.5.51
+Version: 1.5.54
 Author: PickPlugins
 Author URI: http://pickplugins.com
 Text Domain: breadcrumb
@@ -23,8 +23,9 @@ class BreadcrumbMain
 		define('breadcrumb_plugin_url', plugins_url('/', __FILE__));
 		define('breadcrumb_plugin_dir', plugin_dir_path(__FILE__));
 		define('breadcrumb_plugin_name', 'Breadcrumb');
-		define('breadcrumb_plugin_version', '1.5.51');
-
+		define('breadcrumb_plugin_version', '1.5.54');
+$breadcrumbCss = '';
+global $breadcrumbCss;
 
 		require_once(breadcrumb_plugin_dir . 'includes/class-settings-tabs.php');
 		require_once(breadcrumb_plugin_dir . 'includes/class-admin-notices.php');
@@ -37,7 +38,6 @@ class BreadcrumbMain
 		require_once(breadcrumb_plugin_dir . 'includes/class-shortcodes.php');
 		require_once(breadcrumb_plugin_dir . 'includes/class-settings.php');
 		require_once(breadcrumb_plugin_dir . 'includes/functions-hooks.php');
-
 
 
 		add_action('wp_enqueue_scripts', array($this, '_front_scripts'));
@@ -62,6 +62,10 @@ class BreadcrumbMain
 
 		load_plugin_textdomain('breadcrumb', false, plugin_basename(dirname(__FILE__)) . '/languages/');
 	}
+
+
+
+
 
 
 	public function _front_scripts()

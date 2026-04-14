@@ -1,6 +1,16 @@
 @import "color-picker";
 @import "media";
 
+.redux-wp-7 {
+    .redux-hint-qtip {
+        margin-top: 9px;
+    }
+}
+
+.redux-hint-qtip {
+    margin-top: 5px;
+}
+
 .redux-warning-primary{
     color: #fff !important;
     border-color: #dc3545 !important;
@@ -82,7 +92,6 @@
     border: 1px solid #dedede;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
     margin-top: 5px;
     overflow: hidden;
 
@@ -247,7 +256,6 @@
         border-bottom: 1px solid #dedede;
         padding: 6px 10px 6px 6px;
         text-align: right;
-        -moz-box-shadow: inset 0 1px 0 #fcfcfc;
         -webkit-box-shadow: inset 0 1px 0 #fcfcfc;
         box-shadow: inset 0 1px 0 #fcfcfc;
     }
@@ -317,7 +325,6 @@
         margin: 1px 0 0 5px;
         border: 1px solid #bbb;
         -webkit-border-radius: 2px;
-        -moz-border-radius: 2px;
         border-radius: 2px;
         background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAyCAIAAAAm4OfBAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQhJREFUeNrslT0KhDAQhTeLR7ATT6IXSKGFYO0lciFrO1N4AU8TLNXKv0CaJbLJRAZxl1hYyJuXN+PoR/Z9fyFdBNNr27Zf8Oq6bhgGSGUYhpTSzyeBNi8hRFVVEK+6rrXaQFOs6yrvTdOYjcqyVEpTLqXI89yaSypBudq2xckF2TipOSvfmmhZFuAGnJV6Licvey5gj7fnwpwXvEfLfqnT0jQ1OBJCQLnUBvZ9b85VFAV076UU8g1ZckVRxBiDzD6OY62WzPOM9i+cpunvvcZxfCQfPWs9a91Ym2UZ5xyHtd/e8hXWng+/zlrD9jmz1tDj7bkw5wXv0Y210itJEs9az9oHsPYQYACveK0/IuB51AAAAABJRU5ErkJggg==) no-repeat -2px -26px;
 
@@ -333,7 +340,6 @@
     .sticky-footer-fixed {
         background: #f3f3f3;
         border-top: 1px solid #dedede !important;
-        -moz-box-shadow: inset 0 1px 0 #fcfcfc;
         -webkit-box-shadow: inset 0 1px 0 #fcfcfc;
         box-shadow: inset 0 1px 0 #fcfcfc;
     }
@@ -348,7 +354,6 @@
         margin-left: 201px;
         border-left: 1px solid #d8d8d8;
         padding: 10px 20px;
-        -moz-box-shadow: inset 0 1px 0 #fff;
         -webkit-box-shadow: inset 0 1px 0 #fff;
         box-shadow: inset 0 1px 0 #fff;
         position: relative;
@@ -399,9 +404,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            -moz-opacity: 0.1;
             opacity: 0.1;
-            //filter: progid:DXImageTransform.Microsoft.Alpha(opacity=10);
             filter: alpha(opacity=10);
             background: #000;
             z-index: 200;
@@ -475,6 +478,7 @@
         input[type="text"].mini {
             width: 60px;
             text-align: center;
+            min-height: 30px;
         }
 
         img {
@@ -622,9 +626,6 @@
 
         pre {
             white-space: pre-wrap; /* css-3 */
-            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-            white-space: pre-wrap; /* Opera 4-6 */
-            white-space: -o-pre-wrap; /* Opera 7 */
             word-wrap: break-word; /* Internet Explorer 5.5+ */
         }
     }
@@ -652,8 +653,6 @@
             &:hover {
                 .el-rotate {
                     -webkit-transition: 0.1s ease-in-out;
-                    -moz-transition: 0.1s ease-in-out;
-                    -o-transition: 0.1s ease-in-out;
                     transition: 0.1s ease-in-out;
 
                     -ms-transform: rotate(270deg);
@@ -746,7 +745,6 @@
         font-weight: 600;
         line-height: 9px;
         border-radius: 10px;
-        -moz-border-radius: 10px;
         -webkit-border-radius: 10px;
         border: 0 solid transparent;
 
@@ -856,8 +854,6 @@
 
             .el-rotate {
                 -webkit-transition: 0.1s ease-in-out;
-                -moz-transition: 0.1s ease-in-out;
-                -o-transition: 0.1s ease-in-out;
                 transition: 0.1s ease-in-out;
             }
         }
@@ -941,11 +937,9 @@
                 padding: 12px;
                 width: 200px;
                 background: #eee;
-                border: 1px solid #ccc;
                 -webkit-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-                -moz-box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
                 box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-                border-width: 1px 1px 1px 0px;
+                border-width: 1px 1px 1px 0;
                 z-index: 3;
             }
 
@@ -1058,6 +1052,47 @@ pre {
     position: relative;
 }
 
+.redux-wp-7 {
+    .redux-container {
+        #redux-footer {
+            font-size: 18px;
+            margin-top: 8px;
+        }
+
+        .redux_action_bar {
+            .spinner {
+                margin-top: 12px;
+            }
+
+            #redux-defaults-top,
+            #redux-defaults-bottom {
+                margin-left:6px;
+            }
+
+            #redux-defaults-section-top,
+            #redux-defaults-section-bottom {
+                margin-left:6px;
+            }
+        }
+    }
+
+    .redux-main {
+        #redux-sticky {
+            #info_bar {
+                height: 42px;
+
+                .expand_options {
+                    margin-top: 10px;
+                }
+            }
+        }
+
+        .redux_field_search {
+            right: 340px;
+        }
+    }
+}
+
 // Modern Theme
 .redux-main {
     position: relative;
@@ -1137,7 +1172,6 @@ pre {
 
                 a {
                     -webkit-transition: all 0.2s;
-                    -moz-transition: all 0.2s;
                     transition: all 0.2s;
                     color: #fff;
                     width: auto;
@@ -1157,9 +1191,6 @@ pre {
                         color: #fff;
                         padding: 7px 7px 7px 15px;
                         -webkit-transition: all 0.2s;
-                        -moz-transition: all 0.2s;
-                        -ms-transition: all 0.2s;
-                        -o-transition: all 0.2s;
                         transition: all 0.2s;
 
                         span.group_title {
@@ -1197,7 +1228,6 @@ pre {
 
                 .extraIconSubsections {
                     border-radius: 10px;
-                    -moz-border-radius: 10px;
                     -webkit-border-radius: 10px;
                     border: 0 solid transparent;
                     font-size: 9px;
@@ -1340,7 +1370,6 @@ div.redux-star {
             padding: 11px 12px;
             color: #555;
             -webkit-transition: all 0.3s;
-            -moz-transition: all 0.3s;
             transition: all 0.3s;
             &:hover {
                 background: #e5e5e5;
@@ -1493,6 +1522,23 @@ div.redux-star {
         right: 10px;
     }
 }
+
+.select2-container--default {
+    .select2-search--dropdown {
+        .select2-search__field {
+            min-height: 30px;
+            height: 30px;
+        }
+    }
+}
+
+.select2-container {
+    .select2-selection--single {
+        height: 30px !important;
+    }
+}
+
+
 .redux-main.redux-search {
     .redux-section-field,
     .redux-info-field,

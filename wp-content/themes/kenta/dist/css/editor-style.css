@@ -102,6 +102,9 @@ pre {
 :root [data-kenta-theme=dark] .kenta-theme-switch .dark-mode {
   display: none;
 }
+:root .has-negative-margin {
+  z-index: 9;
+}
 :root .kenta-widget {
   position: relative;
   margin-bottom: var(--kenta-widgets-spacing, 0);
@@ -646,4 +649,46 @@ pre {
 }
 :root .components-button.is-primary {
   background: var(--wp-admin-theme-color) !important;
+}
+:root .wp-block-details summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  border-radius: inherit;
+}
+:root .wp-block-details summary::-webkit-details-marker {
+  display: none;
+}
+:root .wp-block-details summary::marker {
+  display: none;
+  content: "";
+}
+:root .wp-block-details summary::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  inset: 0 0 0 auto;
+  opacity: 1;
+  transition: transform 0.1s ease-in;
+  height: 1.5em;
+  width: 1.5em;
+  margin-right: -0.333em;
+  transform: rotate(0deg);
+  mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+  background: currentcolor;
+}
+:root .wp-block-details[open]:not(.closing) summary::after {
+  transform: rotate(180deg);
+}
+:root .wp-block-details section:not([hidden]) {
+  display: block;
 }

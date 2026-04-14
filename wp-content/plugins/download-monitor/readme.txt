@@ -2,10 +2,10 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley  
 Tags: download manager, file manager, digital store, ecommerce, password protection  
 Requires at least: 5.5  
-Tested up to: 6.8
-Stable tag: 5.1.6
+Tested up to: 6.9
+Stable tag: 5.1.12
 License: GPLv3  
-Requires PHP: 7.6  
+Requires PHP: 7.4
 
 == Description ==
 ## Powerful Download Manager Plugin for WordPress
@@ -114,7 +114,31 @@ Admin hits are not counted, log out and try again!
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
-= 5.1.6 - 05.11.2025 -
+= 5.1.12 - 25.03.2026 =
+Removed: Settings page sidebar upsells.
+Added: Blacklist protection upsell in settings page.
+
+= 5.1.11 - 20.03.2026 =
+Fixed: Security update.
+Fixed: WPML double language prefix in download URL.
+
+= 5.1.10 - 05.03.2026 =
+Fixed: Security update.
+
+= 5.1.9 - 04.03.2026 =
+Fixed: Security update
+
+= 5.1.8 - 26.02.2026 =
+Fixed: Security - PayPal payment gateway IDOR and financial logic vulnerability. Validates order hash (timing-safe), binds PayPal token to the order, and only completes the order when the transaction matches. Handles capture failures safely.
+
+= 5.1.7 - 27.01.2026 =
+Update: Removed unused images.
+Fixed: Textdomain for some translations.
+Fixed: Removed upsells from REST API settings tab.
+Fixed: Safari compatibility with XHR redirect.
+Fixed: XHR compatibility with plugins that remove domains from links.
+
+= 5.1.6 - 05.11.2025 =
 Added: Black Friday upsells & notifications updates.
 Fixed: Logging no access page redrection
 

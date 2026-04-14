@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'codeinwp/neve',
-        'pretty_version' => 'v4.2.1',
-        'version' => '4.2.1.0',
-        'reference' => '2ffa75a4c5da5b9504a238b3ea97ab835b0eac3f',
+        'pretty_version' => 'v4.2.3',
+        'version' => '4.2.3.0',
+        'reference' => '4830a361f3b47f8ea1a93887796eb30ee8d31bfa',
         'type' => 'wordpress-theme',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'codeinwp/neve' => array(
-            'pretty_version' => 'v4.2.1',
-            'version' => '4.2.1.0',
-            'reference' => '2ffa75a4c5da5b9504a238b3ea97ab835b0eac3f',
+            'pretty_version' => 'v4.2.3',
+            'version' => '4.2.3.0',
+            'reference' => '4830a361f3b47f8ea1a93887796eb30ee8d31bfa',
             'type' => 'wordpress-theme',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -13,7 +13,7 @@ use Advanced_Sidebar_Menu\Blocks\Block_Abstract;
  * @phpstan-import-type ATTR_SHAPE from Block_Abstract
  *
  */
-class Attribute implements AttributeRules {
+class Attribute implements AttributeRules, \JsonSerializable {
 	/**
 	 * Data type of the property.
 	 *
@@ -130,7 +130,7 @@ class Attribute implements AttributeRules {
 	 *
 	 * @return array - Attribute is a standard array format.
 	 */
-	public function to_php_attribute(): array {
+	public function to_array(): array {
 		$attribute = [
 			'type' => $this->type,
 		];
@@ -168,6 +168,18 @@ class Attribute implements AttributeRules {
 			default:
 				return false;
 		}
+	}
+
+
+	/**
+	 * Convert the attribute to JSON format.
+	 *
+	 * @phpstan-return ATTR_SHAPE
+	 *
+	 * @return array - Attribute is a standard array format.
+	 */
+	public function jsonSerialize(): array {
+		return $this->to_array();
 	}
 
 

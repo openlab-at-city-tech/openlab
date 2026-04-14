@@ -258,7 +258,7 @@ class DLM_Cookie_Manager {
 				self::$key,
 				$hash,
 				$cookie_data['expires'],
-				COOKIEPATH,
+				apply_filters( 'dlm_cookie_path', COOKIEPATH ),
 				COOKIE_DOMAIN,
 				$cookie_data['secure'],
 				$cookie_data['httponly']

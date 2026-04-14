@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv2 or later
+ * @license  GPLv3
  * @link     https://www.xposterpro.com
  */
 
@@ -354,7 +354,7 @@ function wtt_connect_oauth( $auth = false ) {
 				</ul></li>
 				<li><?php echo wp_kses_post( __( 'Add a new application in <a href="https://developer.twitter.com/en/portal/apps/new">X.com\'s project and app portal</a>', 'wp-to-twitter' ) ); ?>
 					<ul>
-						<li><?php esc_html_e( 'Name your application.', 'wp-to-twitter' ); ?> (<?php esc_html_e( 'Your app name cannot include the word "Twitter."', 'wp-to-twitter' ); ?>)</li>
+						<li><?php esc_html_e( 'Name your application.', 'wp-to-twitter' ); ?> (<?php esc_html_e( 'Your app name cannot include the word "Twitter" or, possibly, the letter "X".', 'wp-to-twitter' ); ?>)</li>
 						<li><?php esc_html_e( 'Click "Next" to move to the Keys & Tokens step.', 'wp-to-twitter' ); ?></li>
 					</ul>
 				</li>

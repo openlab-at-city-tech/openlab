@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.95.3
+Version: 2.95.12
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -29,7 +29,7 @@ include_once dirname( __FILE__ ) . '/mappress_wpml.php';
 
 if (is_dir(dirname( __FILE__ ) . '/pro')) {
 	include_once dirname( __FILE__ ) . '/pro/mappress_filter.php';
-	include_once dirname( __FILE__ ) . '/pro/mappress_frontend.php';
+	include_once dirname( __FILE__ ) . '/pro/mappress_acf.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_geocoder.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_icons.php';
 	include_once dirname( __FILE__ ) . '/pro/mappress_import.php';
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.95.3';
+	const VERSION = '2.95.12';
 
 	static
 		$api,
@@ -459,6 +459,16 @@ class Mappress {
 		return $mashup->display();
 	}
 
+	static function get_tile_service() {
+		if (self::$options->engine != 'leaflet')
+			return null;
+		// Special case: use OFM is mapbox was specified but no mapbox key entered
+		if (self::$options->tileService == 'mapbox' && !Mappress::get_api_keys()->mapbox)
+			return 'ofm';
+		else 
+			return self::$options->tileService;
+	}
+
 	static function heartbeat_settings( $settings ) {
 		$settings['minimalInterval'] = 600;
 		return $settings;
@@ -480,7 +490,7 @@ class Mappress {
 
 		if (self::$pro) {
 			Mappress_Filter::register();
-			Mappress_Frontend::register();
+			Mappress_ACF::register();
 			Mappress_Icons::register();
 			Mappress_Import::register();
 			Mappress_Meta::register();
@@ -772,7 +782,7 @@ class Mappress {
 
 		// Global settings
 		$options = array('alignment', 'clustering', 'clusteringOptions', 'country', 'defaultIcon', 'directions', 'directionsList',
-		'directionsPopup', 'directionsServer', 'engine', 'filter', 'filterMaps', 'filtersOpen', 'filtersPos', 'geocoder', 'geolocate',
+		'directionsPopup', 'directionsServer', 'directionsText', 'engine', 'filter', 'filterMaps', 'filtersOpen', 'filtersPos', 'geocoder', 'geolocate',
 		'highlight', 'highlightIcon', 'iconScale', 'initialOpenInfo', 'layout', 'lines', 'lineOpts',
 		'mashupClick', 'menuControl', 'mini', 'poiList', 'poiListKml', 'poiListOpen', 'poiListPageSize', 'poiListViewport', 'poiZoom', 'radius', 'scrollWheel', 'search', 'searchMaps',
 		'searchBox', 'searchParam', 'searchPlaceholder', 'size', 'sizes', 'sort', 'streetViewControl', 'style', 'thumbHeight', 'thumbWidth', 'thumbs', 'thumbsList', 'thumbsPopup', 
@@ -954,7 +964,7 @@ class Mappress {
 			$atts['center'] = ($map && $map->pois) ? $map->pois[0]->point['lat'] . ',' . $map->pois[0]->point['lng'] : null;
 		}
 
-		// Conver GT 'align' to 'alignment'
+		// Convert GT 'align' to 'alignment'
 		if (isset($atts['align']))
 			$atts['alignment'] = $atts['align'];
 

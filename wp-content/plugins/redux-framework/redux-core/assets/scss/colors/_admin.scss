@@ -113,9 +113,6 @@
                     opacity: 0.9 !important;
                     border-style: hidden !important;
                     -webkit-transition: all 0.2s ease-in-out !important;
-                    -moz-transition: all 0.2s ease-in-out !important;
-                    -ms-transition: all 0.2s ease-in-out !important;
-                    -o-transition: all 0.2s ease-in-out !important;
                     transition: all 0.2s ease-in-out !important;
 
                     // Inactive menu item, no subsection hover
@@ -175,9 +172,6 @@
                             // flyout subsection inactive
                             .redux-group-tab-link-a {
                                 -webkit-transition: all 0.2s ease-in-out;
-                                -moz-transition: all 0.2s ease-in-out;
-                                -ms-transition: all 0.2s ease-in-out;
-                                -o-transition: all 0.2s ease-in-out;
                                 transition: all 0.2s ease-in-out;
 
                                 // flyout subsection inactive hover

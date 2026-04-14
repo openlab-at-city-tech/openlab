@@ -2,8 +2,8 @@
 
 namespace Advanced_Sidebar_Menu\Blocks;
 
+use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
 use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
-use Advanced_Sidebar_Menu\Notice;
 use Advanced_Sidebar_Menu\Traits\Singleton;
 
 /**
@@ -13,8 +13,6 @@ use Advanced_Sidebar_Menu\Traits\Singleton;
  *
  * @author OnPoint Plugins
  * @since  9.7.0
- *
- * @phpstan-import-type ATTR_SHAPE from Block_Abstract
  */
 class Common {
 	use Singleton;
@@ -22,17 +20,17 @@ class Common {
 	/**
 	 * Get all attributes shared by all blocks.
 	 *
-	 * @phpstan-return array<'style'|'title', ATTR_SHAPE>
+	 * @phpstan-return array<'style'|'title', Attribute>
 	 * @return array
 	 */
 	public function get_common_attributes(): array {
 		return (array) apply_filters( 'advanced-sidebar-menu/blocks/common-attributes/attributes', [
-			'style'              => [
+			'style'              => Attribute::factory( [
 				'type' => 'object',
-			],
-			Menu_Abstract::TITLE => [
+			] ),
+			Menu_Abstract::TITLE => Attribute::factory( [
 				'type' => 'string',
-			],
+			] ),
 		], $this );
 	}
 
@@ -50,50 +48,27 @@ class Common {
 			'html'   => false,
 		];
 
-		$filtered = (array) apply_filters( 'advanced-sidebar-menu/blocks/common-attributes/supports', $basic_support, $this );
-
-		if ( ! $this->_temp_pro_supports_common() && null !== Notice::instance()->get_pro_version() ) {
-			// Temporary shim to bring in common supports for all blocks for PRO < 9.9.0.
-			// @todo Remove this filter once the required PRO version is 9.9.0+.
-			return (array) apply_filters( 'advanced-sidebar-menu/blocks/pages/supports', $basic_support, $this );
-		}
-		return $filtered;
+		return (array) apply_filters( 'advanced-sidebar-menu/blocks/common-attributes/supports', $basic_support, $this );
 	}
 
 
 	/**
 	 * Get all attributes used for previewing the block.
 	 *
-	 * @phpstan-return array<'clientId'|'isServerSideRenderRequest'|'sidebarId', ATTR_SHAPE>
+	 * @phpstan-return array<'clientId'|'isServerSideRenderRequest'|'sidebarId', Attribute>
 	 * @return array
 	 */
 	public function get_server_side_render_attributes(): array {
 		return [
-			Block_Abstract::BLOCK_ID       => [
+			Block_Abstract::BLOCK_ID       => Attribute::factory( [
 				'type' => 'string',
-			],
-			Block_Abstract::RENDER_REQUEST => [
+			] ),
+			Block_Abstract::RENDER_REQUEST => Attribute::factory( [
 				'type' => 'boolean',
-			],
-			Block_Abstract::SIDEBAR_ID     => [
+			] ),
+			Block_Abstract::SIDEBAR_ID     => Attribute::factory( [
 				'type' => 'string',
-			],
+			] ),
 		];
-	}
-
-
-	/**
-	 * Check if the basic version supports common attributes.
-	 *
-	 * @todo Remove once the minimum PRO version is 9.9.0.
-	 *
-	 * @internal
-	 *
-	 * @return bool
-	 */
-	public function _temp_pro_supports_common(): bool { //phpcs:ignore
-		// @phpstan-ignore function.impossibleType
-		$supported = \class_exists( Pro_Common::class ) && \method_exists( Pro_Common::class, 'get_common_attributes' );
-		return apply_filters_deprecated( 'advanced-sidebar-menu/blocks/common-attributes/pro-supports-common', [ $supported, $this ], '9.7.0' );
 	}
 }

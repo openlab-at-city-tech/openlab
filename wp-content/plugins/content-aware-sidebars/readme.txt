@@ -2,10 +2,10 @@
 Contributors: intoxstudio, devinstitute, freemius
 Donate link: #
 Tags: custom sidebars, sidebar, classic widgets, widget, bbpress
-Requires at least: 5.5
+Requires at least: 5.6
 Requires PHP: 7.1
-Tested up to: 6.8
-Stable tag: 3.21.2
+Tested up to: 6.9
+Stable tag: 3.21.3
 License: GPLv3
 
 Display new sidebars on any post, page, category etc. Works with Classic Widgets, Block Widgets, and all themes!
@@ -193,7 +193,13 @@ Of course! Check out the links below:
 
 ####Highlights
 
+= 3.21.3 =
 
+* [new] wordpress 6.9 support
+* [new] minimum wordpress version 5.6
+* [fixed] language options missing from polylang condition
+* [updated] wp-content-aware-engine library
+* [updated] freemius sdk
 
 = 3.21.2 =
 
