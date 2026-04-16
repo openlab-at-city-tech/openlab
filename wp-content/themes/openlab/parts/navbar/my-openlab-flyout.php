@@ -44,15 +44,15 @@ if ( openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 $root_panel += [
 	'my-courses' => [
 		'text' => 'My Courses',
-		'href' => home_url( '/courses/my-courses' ),
+		'href' => home_url( '/my-courses' ),
 	],
 	'my-projects' => [
 		'text' => 'My Projects',
-		'href' => home_url( '/projects/my-projects' ),
+		'href' => home_url( '/my-projects' ),
 	],
 	'my-clubs' => [
 		'text' => 'My Clubs',
-		'href' => home_url( '/clubs/my-clubs' ),
+		'href' => home_url( '/my-clubs' ),
 	],
 	'my-friends' => [
 		'text'   => 'My Friends',
