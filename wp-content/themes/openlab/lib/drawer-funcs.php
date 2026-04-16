@@ -346,23 +346,15 @@ function openlab_output_registered_drawers_in_footer() {
 	</div>
 	<script>
 	(function() {
-		console.log('[Drawer Debug] Footer script running - moving drawers');
 		var output = document.getElementById('openlab-registered-drawers-output');
 		var container = document.querySelector('.openlab-drawer-container');
-		console.log('[Drawer Debug] Output element:', output);
-		console.log('[Drawer Debug] Container element:', container);
 		if (output && container) {
-			console.log('[Drawer Debug] Output children count:', output.children.length);
-			console.log('[Drawer Debug] Output children IDs:', Array.from(output.children).map(function(c) { return c.id; }));
 			// Move all drawer children to the container.
 			while (output.firstChild) {
 				container.appendChild(output.firstChild);
 			}
-			console.log('[Drawer Debug] After move, container children IDs:', Array.from(container.children).map(function(c) { return c.id; }));
 			// Remove the empty output container.
 			output.parentNode.removeChild(output);
-		} else {
-			console.log('[Drawer Debug] Missing output or container!');
 		}
 	})();
 	</script>

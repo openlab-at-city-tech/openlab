@@ -811,10 +811,29 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
 }
 
 /**
- * bp_get_options_nav filtering
+ * DEPRECATED: bp_get_options_nav filtering for group sidebar.
  *
+ * These filters are no longer used for the main group sidebar nav, which now uses
+ * openlab_render_group_desktop_nav() from sidebar-funcs.php. This provides a unified
+ * navigation data source for both desktop and mobile views.
+ *
+ * The filters below are retained for backward compatibility with any remaining uses
+ * of bp_get_options_nav() (such as the events subnav) but the main group nav filters
+ * (home, admin, members, docs, files, forum, connections, announcements) are now
+ * handled by the unified system.
+ *
+ * @since 1.8.0
  */
-//submenu nav renaming
+
+/*
+ * LEGACY FILTERS - No longer needed for main group nav.
+ * Kept for reference and potential edge cases.
+ *
+ * Note: The main group sidebar now uses openlab_render_group_desktop_nav() which
+ * pulls from openlab_get_group_nav_items() - the same data source as mobile drawers.
+ */
+
+// Legacy filter - kept for any remaining uses but primary nav no longer calls this.
 add_filter('bp_get_options_nav_home', 'openlab_filter_subnav_home');
 
 function openlab_filter_subnav_home($subnav_item) {
