@@ -10,8 +10,11 @@
     $about_page_obj = get_page_by_path('about');
     $calendar_page_obj = get_page_by_path('about/calendar');
 
-    if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID) {
-        openlab_bp_mobile_sidebar('about');
+    $is_about_page = ( $postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID );
+
+    // Register the About mobile drawer.
+    if ( $is_about_page ) {
+        openlab_register_about_mobile_drawer();
     }
     ?>
 
@@ -22,8 +25,8 @@
                 <div <?php post_class('col-sm-18 col-xs-24'); ?>>
                     <div id="openlab-main-content"  class="content-wrapper">
                         <h1 class="entry-title"><span class="profile-name"><?php the_title(); ?></span>
-                            <?php if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID): ?>
-                                <button id="toggle-sidebar-mobile" data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="sidebar-mobile">
+                            <?php if ( $is_about_page ): ?>
+                                <button id="toggle-sidebar-mobile" class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="about-mobile-drawer" data-drawer-toggle="about-mobile-drawer">
 									<span class="toggle-icon"></span>
                                     <span class="sr-only">Toggle navigation</span>
                                 </button>
@@ -44,7 +47,7 @@
 
     <?php
 //add the about-page sidebar to just the about page and any child about page
-    if ($postID == $about_page_obj->ID || $parent == $about_page_obj->ID || $parent == $calendar_page_obj->ID) {
+    if ( $is_about_page ) {
         openlab_bp_sidebar('about');
     }
     ?>

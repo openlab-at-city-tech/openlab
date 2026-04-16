@@ -43,6 +43,7 @@ require_once( $stylesheet_path . '/lib/help-funcs.php' );
 require_once( $stylesheet_path . '/lib/member-funcs.php' );
 require_once( $stylesheet_path . '/lib/page-funcs.php' );
 require_once( $stylesheet_path . '/lib/sidebar-funcs.php' );
+require_once( $stylesheet_path . '/lib/drawer-funcs.php' );
 require_once( $stylesheet_path . '/lib/plugin-hooks.php' );
 require_once( $stylesheet_path . '/lib/theme-hooks.php' );
 require_once( $stylesheet_path . '/lib/group-announcements.php' );

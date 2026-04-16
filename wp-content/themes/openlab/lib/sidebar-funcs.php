@@ -3,6 +3,573 @@
 /**
  * Sidebar based functionality
  */
+
+/**
+ * Register the About pages mobile drawer.
+ *
+ * This registers a drawer that will be rendered in the unified drawer container
+ * for About pages on mobile.
+ */
+function openlab_register_about_mobile_drawer() {
+	openlab_register_drawer( 'about-mobile-drawer', 'openlab_render_about_mobile_drawer' );
+}
+
+/**
+ * Render the About pages mobile drawer content.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_about_mobile_drawer() {
+	// Get the About menu items.
+	$menu_items = [];
+	$menu_locations = get_nav_menu_locations();
+
+	if ( isset( $menu_locations['aboutmenu'] ) ) {
+		$menu = wp_get_nav_menu_object( $menu_locations['aboutmenu'] );
+		if ( $menu ) {
+			$nav_items = wp_get_nav_menu_items( $menu->term_id );
+			if ( $nav_items ) {
+				foreach ( $nav_items as $item ) {
+					// Only include top-level items for now.
+					if ( 0 === (int) $item->menu_item_parent ) {
+						$menu_items[] = [
+							'text' => $item->title,
+							'href' => $item->url,
+						];
+					}
+				}
+			}
+		}
+	}
+
+	if ( empty( $menu_items ) ) {
+		return '';
+	}
+
+	return openlab_render_drawer( [
+		'id'            => 'about-mobile-drawer',
+		'default_panel' => 'about-mobile-panel',
+		'panels'        => [
+			[
+				'id'      => 'about-mobile-panel',
+				'heading' => 'About',
+				'items'   => $menu_items,
+				'is_root'    => true,
+				'show_close' => true,
+			],
+		],
+	] );
+}
+
+/**
+ * Register the Member pages mobile drawer.
+ *
+ * This registers a drawer that will be rendered in the unified drawer container
+ * for Member single pages on mobile.
+ */
+function openlab_register_member_mobile_drawer() {
+	openlab_register_drawer( 'member-mobile-drawer', 'openlab_render_member_mobile_drawer' );
+}
+
+/**
+ * Register the Group pages mobile drawer.
+ *
+ * This registers a drawer that will be rendered in the unified drawer container
+ * for Group single pages on mobile.
+ */
+function openlab_register_group_mobile_drawer() {
+	openlab_register_drawer( 'group-mobile-drawer', 'openlab_render_group_mobile_drawer' );
+}
+
+/**
+ * Render the Group pages mobile drawer content.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_group_mobile_drawer() {
+	global $bp;
+
+	if ( ! bp_is_group() ) {
+		return '';
+	}
+
+	$group_id = bp_get_current_group_id();
+	$group_name = bp_get_group_name();
+	$root_items = [];
+
+	// Get the group site settings for site links.
+	$group_site_settings = openlab_get_group_site_settings( $group_id );
+	$group_type = openlab_get_group_type( $group_id );
+
+	// Add site link if available.
+	if ( ! empty( $group_site_settings['site_url'] ) && $group_site_settings['is_visible'] ) {
+		$site_label = openlab_is_portfolio()
+			? openlab_get_group_type_label( 'group_id=' . $group_id . '&case=upper' )
+			: ucwords( groups_get_groupmeta( $group_id, 'wds_group_type' ) );
+
+		$root_items[] = [
+			'text'   => 'Visit ' . $site_label . ' Site <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>',
+			'href'   => trailingslashit( $group_site_settings['site_url'] ),
+			'is_raw' => true,
+		];
+
+		// Add dashboard link if user has access.
+		if ( $group_site_settings['is_local'] && ( $bp->is_item_admin || is_super_admin() || ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) && current_user_can_for_blog( $group_site_settings['site_id'], 'edit_posts' ) ) ) ) {
+			$root_items[] = [
+				'text' => 'Site Dashboard',
+				'href' => trailingslashit( $group_site_settings['site_url'] ) . 'wp-admin/',
+			];
+		}
+	}
+
+	// Get the BP options nav items.
+	$nav_items = openlab_get_group_nav_items();
+	foreach ( $nav_items as $nav_item ) {
+		$root_items[] = $nav_item;
+	}
+
+	// Add mobile anchor links for Related Sites and Portfolios.
+	$anchor_items = openlab_get_group_mobile_anchor_items();
+	foreach ( $anchor_items as $anchor_item ) {
+		$root_items[] = $anchor_item;
+	}
+
+	if ( empty( $root_items ) ) {
+		return '';
+	}
+
+	return openlab_render_drawer( [
+		'id'            => 'group-mobile-drawer',
+		'default_panel' => 'group-mobile-root-panel',
+		'panels'        => [
+			[
+				'id'         => 'group-mobile-root-panel',
+				'heading'    => $group_name,
+				'items'      => $root_items,
+				'is_root'    => true,
+				'show_close' => true,
+			],
+		],
+	] );
+}
+
+/**
+ * Get the BuddyPress group options nav items as an array.
+ *
+ * @return array Array of nav items suitable for drawer rendering.
+ */
+function openlab_get_group_nav_items() {
+	$items = [];
+
+	$bp = buddypress();
+
+	if ( ! bp_is_group() || empty( $bp->groups->current_group ) ) {
+		return $items;
+	}
+
+	$group_id = bp_get_current_group_id();
+	$group = groups_get_current_group();
+	$current_component = bp_current_component();
+	$current_action = bp_current_action();
+
+	// Get the group nav items from BuddyPress.
+	$nav = $bp->groups->nav;
+
+	if ( empty( $nav ) ) {
+		return $items;
+	}
+
+	// Get secondary nav items for the group.
+	$secondary_nav = $nav->get_secondary( [
+		'parent_slug' => bp_get_current_group_slug(),
+	] );
+
+	if ( empty( $secondary_nav ) ) {
+		return $items;
+	}
+
+	foreach ( $secondary_nav as $nav_item ) {
+		// Skip items that shouldn't be shown (filtered out by theme).
+		// Check if this item is typically hidden.
+		$skip_slugs = [ 'invite-anyone', 'notifications', 'request-membership' ];
+		if ( in_array( $nav_item->slug, $skip_slugs, true ) ) {
+			continue;
+		}
+
+		// Determine if this is the current item.
+		$is_current = ( $current_action === $nav_item->slug );
+
+		$items[] = [
+			'text'       => $nav_item->name,
+			'href'       => $nav_item->link,
+			'is_current' => $is_current,
+		];
+	}
+
+	return $items;
+}
+
+/**
+ * Get the group mobile anchor link items as an array.
+ *
+ * @return array Array of anchor link items suitable for drawer rendering.
+ */
+function openlab_get_group_mobile_anchor_items() {
+	$items = [];
+
+	$group_id = bp_get_current_group_id();
+
+	// Non-public groups shouldn't show this to non-members.
+	$group = groups_get_current_group();
+	if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
+		return $items;
+	}
+
+	// Related Sites link.
+	if ( groups_get_groupmeta( $group_id, 'openlab_related_links_list_enable' ) ) {
+		$related_links = openlab_get_group_related_links( $group_id );
+		if ( ! empty( $related_links ) ) {
+			$items[] = [
+				'text' => 'Related Sites',
+				'href' => '#group-related-links-sidebar-widget',
+			];
+		}
+	}
+
+	// Portfolios link.
+	if ( openlab_portfolio_list_enabled_for_group() ) {
+		$portfolio_data = openlab_get_group_member_portfolios( $group_id );
+		if ( ! empty( $portfolio_data ) ) {
+			$items[] = [
+				'text' => 'Portfolios',
+				'href' => '#group-member-portfolio-sidebar-widget',
+			];
+		}
+	}
+
+	return $items;
+}
+
+/**
+ * Register the Archive pages mobile drawer.
+ *
+ * This registers a drawer that will be rendered in the unified drawer container
+ * for archive pages (groups, people, search, resources) on mobile.
+ *
+ * @param string $drawer_id Unique ID for the drawer.
+ * @param string $title     Title for the drawer panel.
+ */
+function openlab_register_archive_mobile_drawer( $drawer_id, $title ) {
+	// Store title in a static variable for the render callback.
+	static $drawer_titles = [];
+	$drawer_titles[ $drawer_id ] = $title;
+
+	openlab_register_drawer( $drawer_id, function() use ( $drawer_id, $title ) {
+		return openlab_render_archive_mobile_drawer( $drawer_id, $title );
+	} );
+}
+
+/**
+ * Render the Archive pages mobile drawer content.
+ *
+ * @param string $drawer_id Unique ID for the drawer.
+ * @param string $title     Title for the drawer panel.
+ * @return string Drawer HTML.
+ */
+function openlab_render_archive_mobile_drawer( $drawer_id, $title ) {
+	// Capture the sidebar content.
+	ob_start();
+	get_sidebar( 'group-archive' );
+	$sidebar_content = ob_get_clean();
+
+	if ( empty( $sidebar_content ) ) {
+		return '';
+	}
+
+	return openlab_render_drawer( [
+		'id'            => $drawer_id,
+		'default_panel' => $drawer_id . '-panel',
+		'panels'        => [
+			[
+				'id'         => $drawer_id . '-panel',
+				'heading'    => $title,
+				'content'    => $sidebar_content,
+				'is_root'    => true,
+				'show_close' => true,
+			],
+		],
+	] );
+}
+
+/**
+ * Render the Member pages mobile drawer content.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_member_mobile_drawer() {
+	if ( ! $dud = bp_displayed_user_domain() ) {
+		$dud = bp_loggedin_user_domain();
+	}
+
+	$panels = [];
+	$root_items = [];
+
+	$portfolio_label = openlab_get_portfolio_label(
+		[
+			'user_id' => bp_displayed_user_id(),
+			'case'    => 'upper',
+		]
+	);
+
+	$is_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
+	$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
+	$is_friends  = bp_is_my_profile() && bp_is_friends_component();
+	$is_messages = bp_is_my_profile() && bp_is_messages_component();
+	$is_invites  = bp_is_my_profile() && ( bp_is_current_component( 'invite-anyone' ) || bp_is_groups_component() && ( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ) );
+
+	if ( is_user_logged_in() && openlab_is_my_profile() ) {
+		// My Profile
+		$root_items[] = [
+			'text'       => 'My Profile',
+			'href'       => $dud,
+			'is_current' => bp_is_user_activity(),
+		];
+
+		// My Activity (with submenu)
+		$root_items[] = [
+			'text'         => 'My Activity',
+			'href'         => $dud . 'my-activity',
+			'is_current'   => bp_is_current_component( 'my-activity' ),
+			'submenu'      => 'member-activity-panel',
+		];
+
+		// Activity submenu panel
+		$activity_items = [];
+		foreach ( openlab_my_activity_submenu_items() as $item ) {
+			$activity_items[] = [
+				'text'       => $item['text'],
+				'href'       => $item['href'],
+				'is_current' => $item['is_current'],
+			];
+		}
+		$panels[] = [
+			'id'          => 'member-activity-panel',
+			'heading'     => 'My Activity',
+			'items'       => $activity_items,
+			'back_target' => 'member-mobile-root-panel',
+		];
+
+		// My Settings (with submenu)
+		$root_items[] = [
+			'text'       => 'My Settings',
+			'href'       => $dud . bp_get_settings_slug() . '/',
+			'is_current' => $is_settings,
+			'submenu'    => 'member-settings-panel',
+		];
+
+		// Settings submenu panel
+		$settings_items = [];
+		foreach ( openlab_my_settings_submenu_items() as $item ) {
+			$settings_items[] = [
+				'text'       => $item['text'],
+				'href'       => $item['href'],
+				'is_current' => $item['is_current'],
+			];
+		}
+		$panels[] = [
+			'id'          => 'member-settings-panel',
+			'heading'     => 'My Settings',
+			'items'       => $settings_items,
+			'back_target' => 'member-mobile-root-panel',
+		];
+
+		// Portfolio anchor link
+		if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) {
+			$root_items[] = [
+				'text' => 'My ' . $portfolio_label,
+				'href' => '#portfolio-sidebar-inline-widget',
+			];
+		} else {
+			$root_items[] = [
+				'text' => 'Create ' . $portfolio_label,
+				'href' => '#portfolio-sidebar-inline-widget',
+			];
+		}
+
+		// My Courses, Projects, Clubs
+		$root_items[] = [
+			'text'       => 'My Courses',
+			'href'       => bp_get_root_domain() . '/my-courses/',
+			'is_current' => is_page( 'my-courses' ) || openlab_is_create_group( 'course' ),
+		];
+
+		$root_items[] = [
+			'text'       => 'My Projects',
+			'href'       => bp_get_root_domain() . '/my-projects/',
+			'is_current' => is_page( 'my-projects' ) || openlab_is_create_group( 'project' ),
+		];
+
+		$root_items[] = [
+			'text'       => 'My Clubs',
+			'href'       => bp_get_root_domain() . '/my-clubs/',
+			'is_current' => is_page( 'my-clubs' ) || openlab_is_create_group( 'club' ),
+		];
+
+		// My Friends (with submenu)
+		if ( bp_is_active( 'friends' ) ) {
+			$request_ids   = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+			$request_count = intval( count( (array) $request_ids ) );
+
+			$root_items[] = [
+				'text'       => 'My Friends' . openlab_get_menu_count_mup( $request_count ),
+				'href'       => $dud . bp_get_friends_slug() . '/',
+				'is_current' => bp_is_user_friends(),
+				'submenu'    => 'member-friends-panel',
+			];
+
+			$friends_items = [];
+			foreach ( openlab_my_friends_submenu_items() as $item ) {
+				$friends_items[] = [
+					'text'       => $item['text'],
+					'href'       => $item['href'],
+					'is_current' => $item['is_current'],
+				];
+			}
+			$panels[] = [
+				'id'          => 'member-friends-panel',
+				'heading'     => 'My Friends',
+				'items'       => $friends_items,
+				'back_target' => 'member-mobile-root-panel',
+			];
+		}
+
+		// My Messages (with submenu)
+		if ( bp_is_active( 'messages' ) ) {
+			$message_count = bp_get_total_unread_messages_count();
+
+			$root_items[] = [
+				'text'       => 'My Messages' . openlab_get_menu_count_mup( $message_count ),
+				'href'       => $dud . bp_get_messages_slug() . '/inbox/',
+				'is_current' => bp_is_user_messages(),
+				'submenu'    => 'member-messages-panel',
+			];
+
+			$messages_items = [];
+			foreach ( openlab_my_messages_submenu_items() as $item ) {
+				$messages_items[] = [
+					'text'       => $item['text'],
+					'href'       => $item['href'],
+					'is_current' => $item['is_current'],
+				];
+			}
+			$panels[] = [
+				'id'          => 'member-messages-panel',
+				'heading'     => 'My Messages',
+				'items'       => $messages_items,
+				'back_target' => 'member-mobile-root-panel',
+			];
+		}
+
+		// My Invitations (with submenu)
+		if ( bp_is_active( 'groups' ) ) {
+			$invites      = groups_get_invites_for_user();
+			$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+
+			$root_items[] = [
+				'text'       => 'My Invitations' . openlab_get_menu_count_mup( $invite_count ),
+				'href'       => $dud . bp_get_groups_slug() . '/invites/',
+				'is_current' => bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ),
+				'submenu'    => 'member-invitations-panel',
+			];
+
+			$invitations_items = [];
+			foreach ( openlab_my_invitations_submenu_items() as $item ) {
+				$invitations_items[] = [
+					'text'       => $item['text'],
+					'href'       => $item['href'],
+					'is_current' => $item['is_current'],
+				];
+			}
+			$panels[] = [
+				'id'          => 'member-invitations-panel',
+				'heading'     => 'My Invitations',
+				'items'       => $invitations_items,
+				'back_target' => 'member-mobile-root-panel',
+			];
+		}
+
+		// My Dashboard
+		$root_items[] = [
+			'text'   => 'My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>',
+			'href'   => openlab_get_my_dashboard_url( bp_loggedin_user_id() ),
+			'is_raw' => true,
+		];
+	} else {
+		// Viewing someone else's profile
+		$root_items[] = [
+			'text'       => 'Profile',
+			'href'       => $dud . '/',
+			'is_current' => bp_is_user_activity(),
+		];
+
+		// Portfolio link
+		if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) {
+			$root_items[] = [
+				'text' => $portfolio_label,
+				'href' => '#portfolio-sidebar-inline-widget',
+			];
+		}
+
+		$current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
+
+		$root_items[] = [
+			'text'       => 'Courses',
+			'href'       => $dud . bp_get_groups_slug() . '/?type=course',
+			'is_current' => bp_is_user_groups() && 'course' === $current_group_view,
+		];
+
+		$root_items[] = [
+			'text'       => 'Projects',
+			'href'       => $dud . bp_get_groups_slug() . '/?type=project',
+			'is_current' => bp_is_user_groups() && 'project' === $current_group_view,
+		];
+
+		$root_items[] = [
+			'text'       => 'Clubs',
+			'href'       => $dud . bp_get_groups_slug() . '/?type=club',
+			'is_current' => bp_is_user_groups() && 'club' === $current_group_view,
+		];
+
+		$root_items[] = [
+			'text'       => 'Friends',
+			'href'       => $dud . bp_get_friends_slug() . '/',
+			'is_current' => bp_is_user_friends(),
+		];
+	}
+
+	if ( empty( $root_items ) ) {
+		return '';
+	}
+
+	// Build the root panel
+	$root_panel = [
+		'id'         => 'member-mobile-root-panel',
+		'heading'    => openlab_is_my_profile() ? 'Menu' : bp_get_displayed_user_fullname(),
+		'items'      => $root_items,
+		'is_root'    => true,
+		'show_close' => true,
+	];
+
+	// Prepend root panel to the list
+	array_unshift( $panels, $root_panel );
+
+	return openlab_render_drawer( [
+		'id'            => 'member-mobile-drawer',
+		'default_panel' => 'member-mobile-root-panel',
+		'panels'        => $panels,
+	] );
+}
+
 function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = '') {
 	$classes = [
 		'sidebar',
