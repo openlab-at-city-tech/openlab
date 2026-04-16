@@ -915,9 +915,8 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
-  outline: thin dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
+  outline: 2px solid #005fcc;
+  outline-offset: 0;
 }
 figure {
   margin: 0;
@@ -3096,9 +3095,8 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
+  outline: 2px solid #005fcc;
+  outline-offset: 0;
 }
 output {
   display: block;
@@ -3120,17 +3118,10 @@ output {
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .form-control:focus {
-  border-color: #66afe9;
-  outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  border-radius: 0;
+  outline: 2px solid #005fcc;
 }
 .form-control::-moz-placeholder {
   color: #777777;
@@ -3498,13 +3489,22 @@ select[multiple].input-lg {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  position: relative;
+}
+.btn:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 2px solid #005fcc;
+  border-radius: 0;
+  pointer-events: none;
 }
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus {
-  outline: thin dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
+  outline: 2px solid #005fcc;
+  outline-offset: 0;
+  outline-offset: 2px;
 }
 .btn:hover,
 .btn:focus {
@@ -4899,11 +4899,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-nav {
   margin: 15px -7px;
+  padding-left: 28px;
 }
 .navbar-nav > li > a {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  line-height: 20px;
+  padding: 0px 4px;
 }
 @media (max-width: 767px) {
   .navbar-nav .open .dropdown-menu {
@@ -4931,13 +4930,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-nav {
     float: left;
     margin: 0;
-  }
-  .navbar-nav > li {
-    float: left;
-  }
-  .navbar-nav > li > a {
-    padding-top: 30px;
-    padding-bottom: 30px;
   }
   .navbar-nav.navbar-right:last-child {
     margin-right: -7px;
@@ -7255,9 +7247,8 @@ a:focus {
   text-decoration: none;
 }
 a:focus {
-  outline: solid;
-  outline-offset: -2px;
-  outline-width: 2px;
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 a.no-deco {
   text-decoration: none;
@@ -7435,7 +7426,7 @@ blockquote .h6 {
   margin-bottom: 48px;
   overflow: visible;
   z-index: 1000;
-  padding: 0 42px 0 32px;
+  padding: 0 42px 0 24px;
   width: 100%;
 }
 @media (max-width: 767px) {
@@ -7461,13 +7452,18 @@ blockquote .h6 {
   right: -10px;
 }
 .openlab-navbar header {
+  display: flex;
+  flex-direction: column;
   height: 100px;
+  justify-content: center;
   margin: 0;
 }
 .openlab-navbar header a {
   align-items: center;
-  display: flex;
-  height: 100%;
+  display: inline-block;
+  flex: 0;
+  padding: 0 8px;
+  /* For focus styling */
 }
 .openlab-navbar .navbar-logo svg {
   height: 57px;
@@ -7485,7 +7481,8 @@ blockquote .h6 {
 .openlab-navbar .navbar-nav-menu ul {
   display: flex;
   flex: 1;
-  gap: 30px;
+  gap: 22px;
+  /* 30px gap minus 4px+4px padding on links */
   justify-content: flex-start;
   list-style-type: none;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
@@ -7527,6 +7524,10 @@ blockquote .h6 {
   border: none;
   color: #000000;
   padding: 0;
+}
+.openlab-navbar button.navbar-flyout-toggle:focus {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 .openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login {
   align-items: center;
@@ -7776,7 +7777,7 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   gap: 6px;
   line-height: var(--flyout-menu-item-height);
   font-weight: 600;
-  padding: 0 var(--flyout-h-padding);
+  padding: 0;
 }
 @media (max-width: 767px) {
   .openlab-navbar-drawer .flyout-heading {
@@ -7793,7 +7794,11 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   gap: 6px;
   height: 100%;
   width: 100%;
+  padding: 0 var(--flyout-h-padding);
   text-decoration: none;
+}
+.openlab-navbar-drawer .flyout-heading a:focus {
+  outline-offset: -2px;
 }
 .openlab-navbar-drawer .flyout-heading a:hover {
   text-decoration: underline;
@@ -8728,6 +8733,9 @@ h1.entry-title .directory-title-meta a {
 h1.entry-title .directory-title-meta a:hover {
   text-decoration: underline;
 }
+h1.entry-title .directory-title-meta i {
+  margin-left: 0;
+}
 h1.entry-title .direct-toggle {
   background: transparent;
   width: 26px;
@@ -9487,6 +9495,8 @@ body form .checkbox-list-container {
   position: relative;
   width: 100%;
   margin-bottom: 10px;
+  /* Right-side arrow box */
+  /* Arrow glyph */
 }
 .styled-select select {
   -webkit-appearance: none;
@@ -9507,7 +9517,15 @@ body form .checkbox-list-container {
   color: #333333;
   background-image: none;
 }
-/* Right-side arrow box */
+.styled-select select:focus {
+  border-radius: 0;
+  outline: 2px solid #005fcc;
+}
+.styled-select select:disabled {
+  background: #f0f0f0;
+  color: #999999;
+  cursor: not-allowed;
+}
 .styled-select::before {
   content: "";
   position: absolute;
@@ -9521,7 +9539,6 @@ body form .checkbox-list-container {
   border-bottom-right-radius: 2px;
   pointer-events: none;
 }
-/* Arrow glyph */
 .styled-select::after {
   content: "";
   position: absolute;
@@ -9534,15 +9551,6 @@ body form .checkbox-list-container {
   border-right: 5px solid transparent;
   border-top: 6px solid #999999;
   pointer-events: none;
-}
-.styled-select select:focus {
-  outline: 2px solid #000000;
-  outline-offset: 2px;
-}
-.styled-select select:disabled {
-  background: #f0f0f0;
-  color: #999999;
-  cursor: not-allowed;
 }
 .styled-select option {
   font-weight: 600;
@@ -9947,8 +9955,15 @@ body form .checkbox-list-container {
 .home-page .whats-happening-content strong {
   font-weight: normal;
 }
+.home-page .whats-happening-content.news-item-content {
+  padding: 4px;
+}
 .home-page .whats-happening-content.news-item-content a {
   font-weight: bold;
+}
+.home-page .whats-happening-content.news-item-content p {
+  margin-left: -2px;
+  margin-top: -2px;
 }
 .home-page #stay-up-to-date {
   padding: 12px 4%;
