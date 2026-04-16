@@ -39,7 +39,7 @@ if ( comments_open() ) {
 	comment_form(
 		[
 			'comment_field'             => sprintf(
-				'<div class="comment-form-comment">%s</div>',
+				'<div class="comment-form-comment"><label for="comment" class="screen-reader-text">Comment Text</label>%s</div>',
 				'<textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525"' . $required_attribute . '></textarea>'
 			),
             'title_reply'               => sprintf(
