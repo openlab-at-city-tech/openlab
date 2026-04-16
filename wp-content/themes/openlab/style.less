@@ -671,7 +671,7 @@ button.navbar-flyout-toggle:hover,
 		gap: 6px;
 		line-height: var(--flyout-menu-item-height);
 		font-weight: @semibold;
-		padding: 0 var(--flyout-h-padding);
+		padding: 0;
 
 		@media (max-width: @screen-xs-max) {
 			padding-left: var(--flyout-h-padding-mobile);
@@ -688,7 +688,12 @@ button.navbar-flyout-toggle:hover,
 			gap: 6px;
 			height: 100%;
 			width: 100%;
+			padding: 0 var(--flyout-h-padding);
 			text-decoration: none;
+
+			&:focus {
+				outline-offset: -2px;
+			}
 
 			&:hover {
 				text-decoration: underline;
