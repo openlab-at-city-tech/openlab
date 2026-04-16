@@ -1256,7 +1256,7 @@ function openlab_render_member_mobile_drawer() {
 				'heading'     => $item['text'],
 				'items'       => $submenu_items,
 				'back_target' => 'member-mobile-root-panel',
-				'back_text'   => sprintf( 'Back to Profile', $group_type_label ),
+				'back_text'   => 'Back to Profile',
 			];
 		}
 
