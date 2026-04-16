@@ -49,9 +49,8 @@ a {
         text-decoration: none;
     }
     &:focus{
-        outline: solid;
-        outline-offset: -2px;
-        outline-width: 2px;
+        outline: @focusOutline;
+		outline-offset: 2px;
     }
     &.no-deco{
         text-decoration: none;
@@ -1751,6 +1750,9 @@ h1.entry-title{
                 text-decoration: underline;
             }
         }
+		i {
+			margin-left: 0;
+		}
     }
     .direct-toggle{
 		background: transparent;

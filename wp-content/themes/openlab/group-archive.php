@@ -21,8 +21,7 @@ if ( $group_type === 'course' ) {
 
 			<?php if ( $can_create ) : ?>
 				<span class="directory-title-meta pull-right hidden-xs">
-					<i aria-hidden="true" class="fa fa-plus-circle"></i>
-					<a href="<?php echo esc_attr( $create_link ); ?>">Create / Clone</a>
+					<a href="<?php echo esc_attr( $create_link ); ?>"><i aria-hidden="true" class="fa fa-plus-circle"></i> Create / Clone</a>
 				</span>
 			<?php endif; ?>
 

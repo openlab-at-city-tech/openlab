@@ -19,11 +19,22 @@
   .button-size(@padding-base-vertical; @padding-base-horizontal; @font-size-base; @line-height-base; @border-radius-base);
   .user-select(none);
 
+  position: relative;
+  &:focus-visible::after {
+	content: "";
+	position: absolute;
+	inset: -4px;
+	border: 2px solid #005fcc;
+	border-radius: 0;
+	pointer-events: none;
+  }
+
   &,
   &:active,
   &.active {
     &:focus {
       .tab-focus();
+	  outline-offset: 2px;
     }
   }
 
