@@ -2634,14 +2634,14 @@ body form{
 		background-image: none;
 
 		&:focus {
-		  outline: 2px solid @black;
-		  outline-offset: 2px;
+			border-radius: 0;
+			outline: @focusOutline;
 		}
 
 		&:disabled {
-		  background: @5gray;
-		  color: @40gray;
-		  cursor: not-allowed;
+			background: @5gray;
+			color: @40gray;
+			cursor: not-allowed;
 		}
 	}
 
