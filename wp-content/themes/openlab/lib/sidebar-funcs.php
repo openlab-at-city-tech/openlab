@@ -94,7 +94,7 @@ function openlab_render_group_mobile_drawer() {
 	}
 
 	$group_id = bp_get_current_group_id();
-	$group_name = bp_get_group_name();
+	$group_type_label = openlab_get_group_type_label( 'group_id=' . $group_id . '&case=upper' );
 	$root_items = [];
 
 	// Get the group site settings for site links.
@@ -144,7 +144,7 @@ function openlab_render_group_mobile_drawer() {
 		'panels'        => [
 			[
 				'id'         => 'group-mobile-root-panel',
-				'heading'    => $group_name,
+				'heading'    => $group_type_label . ' Profile',
 				'items'      => $root_items,
 				'is_root'    => true,
 				'show_close' => true,
