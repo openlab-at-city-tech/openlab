@@ -7801,12 +7801,6 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   padding: 0;
   position: relative;
 }
-@media (max-width: 767px) {
-  .openlab-navbar-drawer .flyout-heading,
-  .openlab-drawer-container .flyout-heading {
-    padding-left: var(--flyout-h-padding-mobile);
-  }
-}
 .openlab-navbar-drawer .flyout-heading.has-close-button,
 .openlab-drawer-container .flyout-heading.has-close-button {
   padding-right: 50px;
@@ -7817,6 +7811,14 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-drawer-container .flyout-heading a:focus {
   text-decoration: underline;
 }
+@media (max-width: 767px) {
+  .openlab-navbar-drawer .flyout-heading > button.flyout-subnav-back,
+  .openlab-drawer-container .flyout-heading > button.flyout-subnav-back,
+  .openlab-navbar-drawer .flyout-heading > span,
+  .openlab-drawer-container .flyout-heading > span {
+    padding-left: 24px !important;
+  }
+}
 .openlab-navbar-drawer .flyout-heading a,
 .openlab-drawer-container .flyout-heading a {
   align-items: center;
@@ -7826,6 +7828,12 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   width: 100%;
   padding: 0 var(--flyout-h-padding);
   text-decoration: none;
+}
+@media (max-width: 767px) {
+  .openlab-navbar-drawer .flyout-heading a,
+  .openlab-drawer-container .flyout-heading a {
+    padding-left: 24px;
+  }
 }
 .openlab-navbar-drawer .flyout-heading a:focus,
 .openlab-drawer-container .flyout-heading a:focus {
@@ -7862,7 +7870,7 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 }
 .openlab-navbar-drawer .flyout-heading .drawer-close-button .navbar-icon-close path,
 .openlab-drawer-container .flyout-heading .drawer-close-button .navbar-icon-close path {
-  stroke: #3ba49b;
+  stroke: #333;
   stroke-width: 2;
   fill: none;
 }

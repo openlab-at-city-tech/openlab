@@ -136,7 +136,7 @@ function openlab_render_group_mobile_drawer() {
 				'items'       => $nav_item['submenu_items'],
 				'is_root'     => false,
 				'back_target' => 'group-mobile-root-panel',
-				'back_text'   => 'Back',
+				'back_text'   => sprintf( 'Back to %s Profile', $group_type_label ),
 			];
 
 			// Root item becomes a submenu toggle
@@ -1256,6 +1256,7 @@ function openlab_render_member_mobile_drawer() {
 				'heading'     => $item['text'],
 				'items'       => $submenu_items,
 				'back_target' => 'member-mobile-root-panel',
+				'back_text'   => sprintf( 'Back to Profile', $group_type_label ),
 			];
 		}
 
@@ -1265,7 +1266,7 @@ function openlab_render_member_mobile_drawer() {
 	// Build the root panel
 	$root_panel = [
 		'id'         => 'member-mobile-root-panel',
-		'heading'    => openlab_is_my_profile() ? 'Menu' : bp_get_displayed_user_fullname(),
+		'heading'    => openlab_is_my_profile() ? 'My Profile' : bp_get_displayed_user_fullname(),
 		'items'      => $root_items,
 		'is_root'    => true,
 		'show_close' => true,

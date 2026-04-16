@@ -677,10 +677,6 @@ button.navbar-flyout-toggle:hover,
 		padding: 0;
 		position: relative;
 
-		@media (max-width: @screen-xs-max) {
-			padding-left: var(--flyout-h-padding-mobile);
-		}
-
 		&.has-close-button {
 			padding-right: 50px; // Make room for the close button.
 		}
@@ -688,6 +684,13 @@ button.navbar-flyout-toggle:hover,
 		button:focus,
 		a:focus {
 			text-decoration: underline;
+		}
+
+		> button.flyout-subnav-back,
+		> span {
+			@media (max-width: @screen-xs-max) {
+				padding-left: 24px !important;
+			}
 		}
 
 		a {
@@ -698,6 +701,10 @@ button.navbar-flyout-toggle:hover,
 			width: 100%;
 			padding: 0 var(--flyout-h-padding);
 			text-decoration: none;
+
+			@media (max-width: @screen-xs-max) {
+				padding-left: 24px;
+			}
 
 			&:focus {
 				outline-offset: -2px;
@@ -732,7 +739,7 @@ button.navbar-flyout-toggle:hover,
 				width: 20px;
 
 				path {
-					stroke: @darkTeal;
+					stroke: #333;
 					stroke-width: 2;
 					fill: none;
 				}
