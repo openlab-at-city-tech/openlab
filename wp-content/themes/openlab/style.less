@@ -2606,85 +2606,86 @@ body form{
 
 /* Styled select - native select with CSS styling */
 .styled-select {
-  position: relative;
-  width: 100%;
-  margin-bottom: 10px;
+	position: relative;
+	width: 100%;
+	margin-bottom: 10px;
+
+	select {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		display: block;
+		width: 100%;
+		max-width: 100%;
+
+		background: @white;
+		border: 1px solid @10gray;
+		border-radius: 2px;
+
+		height: 34px;
+		line-height: 34px;
+		padding: 0 44px 0 12px; /* room for arrow box */
+
+		font-size: 14px;
+		font-weight: @semibold;
+		color: @80gray;
+
+		background-image: none;
+
+		&:focus {
+		  outline: 2px solid @black;
+		  outline-offset: 2px;
+		}
+
+		&:disabled {
+		  background: @5gray;
+		  color: @40gray;
+		  cursor: not-allowed;
+		}
+	}
+
+	/* Right-side arrow box */
+	&::before {
+		content: "";
+		position: absolute;
+		top: 1px;
+		right: 1px;
+		bottom: 1px;
+		width: 34px;
+
+		background: @5gray;
+		border-left: 1px solid @10gray;
+
+		border-top-right-radius: 2px;
+		border-bottom-right-radius: 2px;
+
+		pointer-events: none;
+	}
+
+	/* Arrow glyph */
+	&::after {
+		content: "";
+		position: absolute;
+		right: 13px;
+		top: 50%;
+		margin-top: -2px;
+
+		width: 0;
+		height: 0;
+
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-top: 6px solid @40gray;
+
+		pointer-events: none;
+	}
+
+	option {
+		font-weight: @semibold;
+	}
 }
 
-.styled-select select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-
-  display: block;
-  width: 100%;
-  max-width: 100%;
-
-  background: @white;
-  border: 1px solid @10gray;
-  border-radius: 2px;
-
-  height: 34px;
-  line-height: 34px;
-  padding: 0 44px 0 12px; /* room for arrow box */
-
-  font-size: 14px;
-  font-weight: @semibold;
-  color: @80gray;
-
-  background-image: none;
-}
-
-/* Right-side arrow box */
-.styled-select::before {
-  content: "";
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  bottom: 1px;
-  width: 34px;
-
-  background: @5gray;
-  border-left: 1px solid @10gray;
-
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-
-  pointer-events: none;
-}
-
-/* Arrow glyph */
-.styled-select::after {
-  content: "";
-  position: absolute;
-  right: 13px;
-  top: 50%;
-  margin-top: -2px;
-
-  width: 0;
-  height: 0;
-
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 6px solid @40gray;
-
-  pointer-events: none;
-}
-
-.styled-select select:focus {
-  outline: 2px solid @black;
-  outline-offset: 2px;
-}
-
-.styled-select select:disabled {
-  background: @5gray;
-  color: @40gray;
-  cursor: not-allowed;
-}
-
-.styled-select option {
-    font-weight: @semibold;
-}
 
 /* Legacy support for hidden-custom-select */
 .hidden-custom-select {
