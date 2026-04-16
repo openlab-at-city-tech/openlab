@@ -26,6 +26,7 @@ $filter_options = [
 			<?php if( ! empty( $type ) ) { ?>
 			<input type="hidden" name="type" value="<?php echo $type; ?>" />
 			<?php } ?>
+			<label for="activity-filter-by" class="screen-reader-text">Filter By:</label>
 			<select id="activity-filter-by" name="filter" class="form-control">
 				<?php foreach( $filter_options as $key => $label ) { ?>
 					<option value="<?php echo $key; ?>" <?php echo ( $filter === $key ) ? 'selected' : ''; ?>><?php echo $label; ?></option>
