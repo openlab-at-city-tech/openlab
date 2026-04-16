@@ -43,3 +43,6 @@
 [submodule "wp-content/plugins/demo-publication-checklist"]
 	path = wp-content/plugins/demo-publication-checklist
 	url = https://github.com/humanmade/demo-publication-checklist/
+[submodule "wp-content/plugins/openlab-attributions"]
+	path = wp-content/plugins/openlab-attributions
+	url = git@github.com:openlab-at-city-tech/openlab-attributions
