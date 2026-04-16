@@ -15,15 +15,9 @@ global $bp, $wp_query;
                         <?php openlab_group_membership_tabs(); ?>
                     </ul>
                 <?php elseif ($bp->current_action == 'docs'): ?>
-
-                    <ul class="nav nav-inline">
-                        <?php echo openlab_submenu_markup( 'group-docs' ); ?>
-                    </ul>
-
+					<?php echo openlab_submenu_markup( 'group-docs' ); ?>
                 <?php elseif ($bp->current_action == 'files'): ?>
-
                     <?php echo openlab_submenu_markup( 'group-files' ); ?>
-
                 <?php elseif ($bp->current_component === 'events' || $bp->current_action === 'events'): ?>
 
                     <?php //do nothing - event sub nav is handled via template override in buddypress/groups/single/subnav-events.php ?>
