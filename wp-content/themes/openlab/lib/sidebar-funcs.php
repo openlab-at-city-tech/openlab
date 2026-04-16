@@ -857,17 +857,28 @@ function openlab_render_archive_mobile_drawer( $drawer_id, $title ) {
 }
 
 /**
- * Render the Member pages mobile drawer content.
+ * Get member navigation items.
  *
- * @return string Drawer HTML.
+ * Single source of truth for member nav, used by both desktop and mobile renderers.
+ *
+ * @return array Nav items array with structure:
+ *               [
+ *                   'text'          => string,
+ *                   'href'          => string,
+ *                   'is_current'    => bool,
+ *                   'count'         => int (optional),
+ *                   'submenu_items' => array (optional),
+ *                   'is_anchor'     => bool (optional, for in-page links),
+ *                   'icon'          => string (optional, e.g., 'fa fa-chevron-circle-right'),
+ *               ]
  */
-function openlab_render_member_mobile_drawer() {
-	if ( ! $dud = bp_displayed_user_domain() ) {
+function openlab_get_member_nav_items() {
+	$dud = bp_displayed_user_domain();
+	if ( ! $dud ) {
 		$dud = bp_loggedin_user_domain();
 	}
 
-	$panels = [];
-	$root_items = [];
+	$items = [];
 
 	$portfolio_label = openlab_get_portfolio_label(
 		[
@@ -876,234 +887,379 @@ function openlab_render_member_mobile_drawer() {
 		]
 	);
 
-	$is_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
-	$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
-	$is_friends  = bp_is_my_profile() && bp_is_friends_component();
-	$is_messages = bp_is_my_profile() && bp_is_messages_component();
-	$is_invites  = bp_is_my_profile() && ( bp_is_current_component( 'invite-anyone' ) || bp_is_groups_component() && ( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ) );
+	$is_own_profile = is_user_logged_in() && openlab_is_my_profile();
 
-	if ( is_user_logged_in() && openlab_is_my_profile() ) {
-		// My Profile
-		$root_items[] = [
-			'text'       => 'My Profile',
-			'href'       => $dud,
-			'is_current' => bp_is_user_activity(),
+	// Get unread counts for visual indicators (no count badges in labels).
+	$user_unread_counts = is_user_logged_in() ? openlab_get_user_unread_counts( bp_loggedin_user_id() ) : [];
+
+	if ( $is_own_profile ) {
+		// === OWN PROFILE NAV ===
+		// Matches My OpenLab flyout structure exactly (minus Sign Out).
+
+		// My Settings (with submenu) - first, per flyout
+		$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
+		$items[] = [
+			'slug'          => 'my-settings',
+			'text'          => 'My Settings',
+			'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings' ] ) ),
+			'is_current'    => $is_settings,
+			'submenu_items' => array_values( openlab_my_settings_submenu_items() ),
 		];
 
 		// My Activity (with submenu)
-		$root_items[] = [
-			'text'         => 'My Activity',
-			'href'         => $dud . 'my-activity',
-			'is_current'   => bp_is_current_component( 'my-activity' ),
-			'submenu'      => 'member-activity-panel',
+		$items[] = [
+			'slug'          => 'my-activity',
+			'text'          => 'My Activity',
+			'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) ),
+			'is_current'    => bp_is_current_component( 'my-activity' ),
+			'submenu_items' => array_values( openlab_my_activity_submenu_items() ),
 		];
 
-		// Activity submenu panel
-		$activity_items = [];
-		foreach ( openlab_my_activity_submenu_items() as $item ) {
-			$activity_items[] = [
-				'text'       => $item['text'],
-				'href'       => $item['href'],
-				'is_current' => $item['is_current'],
-			];
-		}
-		$panels[] = [
-			'id'          => 'member-activity-panel',
-			'heading'     => 'My Activity',
-			'items'       => $activity_items,
-			'back_target' => 'member-mobile-root-panel',
-		];
-
-		// My Settings (with submenu)
-		$root_items[] = [
-			'text'       => 'My Settings',
-			'href'       => $dud . bp_get_settings_slug() . '/',
-			'is_current' => $is_settings,
-			'submenu'    => 'member-settings-panel',
-		];
-
-		// Settings submenu panel
-		$settings_items = [];
-		foreach ( openlab_my_settings_submenu_items() as $item ) {
-			$settings_items[] = [
-				'text'       => $item['text'],
-				'href'       => $item['href'],
-				'is_current' => $item['is_current'],
-			];
-		}
-		$panels[] = [
-			'id'          => 'member-settings-panel',
-			'heading'     => 'My Settings',
-			'items'       => $settings_items,
-			'back_target' => 'member-mobile-root-panel',
-		];
-
-		// Portfolio anchor link
-		if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) {
-			$root_items[] = [
-				'text' => 'My ' . $portfolio_label,
-				'href' => '#portfolio-sidebar-inline-widget',
+		// My Portfolio - links to actual portfolio, not anchor
+		if ( openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
+			$items[] = [
+				'slug' => 'my-portfolio',
+				'text' => 'My Portfolio',
+				'href' => openlab_get_user_portfolio_profile_url( bp_loggedin_user_id() ),
 			];
 		} else {
-			$root_items[] = [
-				'text' => 'Create ' . $portfolio_label,
-				'href' => '#portfolio-sidebar-inline-widget',
+			$items[] = [
+				'slug' => 'my-portfolio',
+				'text' => 'Create a Portfolio',
+				'href' => openlab_get_portfolio_creation_url(),
 			];
 		}
 
-		// My Courses, Projects, Clubs
-		$root_items[] = [
+		// My Courses
+		$items[] = [
+			'slug'       => 'my-courses',
 			'text'       => 'My Courses',
-			'href'       => bp_get_root_domain() . '/my-courses/',
+			'href'       => home_url( '/my-courses' ),
 			'is_current' => is_page( 'my-courses' ) || openlab_is_create_group( 'course' ),
 		];
 
-		$root_items[] = [
+		// My Projects
+		$items[] = [
+			'slug'       => 'my-projects',
 			'text'       => 'My Projects',
-			'href'       => bp_get_root_domain() . '/my-projects/',
+			'href'       => home_url( '/my-projects' ),
 			'is_current' => is_page( 'my-projects' ) || openlab_is_create_group( 'project' ),
 		];
 
-		$root_items[] = [
+		// My Clubs
+		$items[] = [
+			'slug'       => 'my-clubs',
 			'text'       => 'My Clubs',
-			'href'       => bp_get_root_domain() . '/my-clubs/',
+			'href'       => home_url( '/my-clubs' ),
 			'is_current' => is_page( 'my-clubs' ) || openlab_is_create_group( 'club' ),
 		];
 
-		// My Friends (with submenu)
+		// My Friends (with submenu, has-unread class instead of count)
 		if ( bp_is_active( 'friends' ) ) {
-			$request_ids   = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-			$request_count = intval( count( (array) $request_ids ) );
-
-			$root_items[] = [
-				'text'       => 'My Friends' . openlab_get_menu_count_mup( $request_count ),
-				'href'       => $dud . bp_get_friends_slug() . '/',
-				'is_current' => bp_is_user_friends(),
-				'submenu'    => 'member-friends-panel',
-			];
-
-			$friends_items = [];
-			foreach ( openlab_my_friends_submenu_items() as $item ) {
-				$friends_items[] = [
-					'text'       => $item['text'],
-					'href'       => $item['href'],
-					'is_current' => $item['is_current'],
-				];
-			}
-			$panels[] = [
-				'id'          => 'member-friends-panel',
-				'heading'     => 'My Friends',
-				'items'       => $friends_items,
-				'back_target' => 'member-mobile-root-panel',
+			$items[] = [
+				'slug'          => 'my-friends',
+				'text'          => 'My Friends',
+				'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
+				'is_current'    => bp_is_user_friends(),
+				'class'         => ! empty( $user_unread_counts['friend_requests'] ) ? 'has-unread' : '',
+				'submenu_items' => array_values( openlab_my_friends_submenu_items() ),
 			];
 		}
 
-		// My Messages (with submenu)
+		// My Messages (with submenu, has-unread class instead of count)
 		if ( bp_is_active( 'messages' ) ) {
-			$message_count = bp_get_total_unread_messages_count();
-
-			$root_items[] = [
-				'text'       => 'My Messages' . openlab_get_menu_count_mup( $message_count ),
-				'href'       => $dud . bp_get_messages_slug() . '/inbox/',
-				'is_current' => bp_is_user_messages(),
-				'submenu'    => 'member-messages-panel',
-			];
-
-			$messages_items = [];
-			foreach ( openlab_my_messages_submenu_items() as $item ) {
-				$messages_items[] = [
-					'text'       => $item['text'],
-					'href'       => $item['href'],
-					'is_current' => $item['is_current'],
-				];
-			}
-			$panels[] = [
-				'id'          => 'member-messages-panel',
-				'heading'     => 'My Messages',
-				'items'       => $messages_items,
-				'back_target' => 'member-mobile-root-panel',
+			$items[] = [
+				'slug'          => 'my-messages',
+				'text'          => 'My Messages',
+				'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+				'is_current'    => bp_is_user_messages(),
+				'class'         => ! empty( $user_unread_counts['messages'] ) ? 'has-unread' : '',
+				'submenu_items' => array_values( openlab_my_messages_submenu_items() ),
 			];
 		}
 
-		// My Invitations (with submenu)
+		// My Invitations (with submenu, has-unread class instead of count)
 		if ( bp_is_active( 'groups' ) ) {
-			$invites      = groups_get_invites_for_user();
-			$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
-
-			$root_items[] = [
-				'text'       => 'My Invitations' . openlab_get_menu_count_mup( $invite_count ),
-				'href'       => $dud . bp_get_groups_slug() . '/invites/',
-				'is_current' => bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ),
-				'submenu'    => 'member-invitations-panel',
-			];
-
-			$invitations_items = [];
-			foreach ( openlab_my_invitations_submenu_items() as $item ) {
-				$invitations_items[] = [
-					'text'       => $item['text'],
-					'href'       => $item['href'],
-					'is_current' => $item['is_current'],
-				];
-			}
-			$panels[] = [
-				'id'          => 'member-invitations-panel',
-				'heading'     => 'My Invitations',
-				'items'       => $invitations_items,
-				'back_target' => 'member-mobile-root-panel',
+			$items[] = [
+				'slug'          => 'my-invitations',
+				'text'          => 'My Invitations',
+				'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
+				'is_current'    => bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_component( 'invite-anyone' ),
+				'class'         => ! empty( $user_unread_counts['group_invites'] ) ? 'has-unread' : '',
+				'submenu_items' => array_values( openlab_my_invitations_submenu_items() ),
 			];
 		}
 
-		// My Dashboard
-		$root_items[] = [
-			'text'   => 'My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>',
-			'href'   => openlab_get_my_dashboard_url( bp_loggedin_user_id() ),
-			'is_raw' => true,
+		// My Dashboard - no chevron icon
+		$items[] = [
+			'slug' => 'my-dashboard',
+			'text' => 'My Dashboard',
+			'href' => openlab_get_my_dashboard_url( bp_loggedin_user_id() ),
 		];
 	} else {
-		// Viewing someone else's profile
-		$root_items[] = [
+		// === OTHER USER'S PROFILE NAV ===
+
+		// Profile
+		$items[] = [
+			'slug'       => 'profile',
 			'text'       => 'Profile',
 			'href'       => $dud . '/',
 			'is_current' => bp_is_user_activity(),
 		];
 
-		// Portfolio link
-		if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) {
-			$root_items[] = [
-				'text' => $portfolio_label,
-				'href' => '#portfolio-sidebar-inline-widget',
+		// Portfolio link (if visible)
+		$has_portfolio = openlab_user_has_portfolio( bp_displayed_user_id() );
+		$portfolio_visible = $has_portfolio && (
+			! openlab_group_is_hidden( openlab_get_user_portfolio_id() )
+			|| groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() )
+		);
+
+		if ( $portfolio_visible ) {
+			$items[] = [
+				'slug'      => 'portfolio',
+				'text'      => $portfolio_label,
+				'href'      => '#portfolio-sidebar-inline-widget',
+				'is_anchor' => true,
 			];
 		}
 
 		$current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
 
-		$root_items[] = [
+		// Courses
+		$items[] = [
+			'slug'       => 'courses',
 			'text'       => 'Courses',
 			'href'       => $dud . bp_get_groups_slug() . '/?type=course',
 			'is_current' => bp_is_user_groups() && 'course' === $current_group_view,
 		];
 
-		$root_items[] = [
+		// Projects
+		$items[] = [
+			'slug'       => 'projects',
 			'text'       => 'Projects',
 			'href'       => $dud . bp_get_groups_slug() . '/?type=project',
 			'is_current' => bp_is_user_groups() && 'project' === $current_group_view,
 		];
 
-		$root_items[] = [
+		// Clubs
+		$items[] = [
+			'slug'       => 'clubs',
 			'text'       => 'Clubs',
 			'href'       => $dud . bp_get_groups_slug() . '/?type=club',
 			'is_current' => bp_is_user_groups() && 'club' === $current_group_view,
 		];
 
-		$root_items[] = [
+		// Friends
+		$items[] = [
+			'slug'       => 'friends',
 			'text'       => 'Friends',
 			'href'       => $dud . bp_get_friends_slug() . '/',
 			'is_current' => bp_is_user_friends(),
 		];
 	}
 
-	if ( empty( $root_items ) ) {
+	return $items;
+}
+
+/**
+ * Render the Member pages desktop navigation.
+ *
+ * Uses openlab_get_member_nav_items() as data source, with desktop-specific adjustments:
+ * - Prepends 'My Profile' link (own profile only)
+ * - Skips 'My Portfolio' (desktop has separate widget)
+ * - Shows count badges for Friends/Messages/Invitations
+ * - Shows chevron icon on Dashboard
+ *
+ * @param bool $show_submenus Whether to show submenu items for current section. Default true.
+ */
+function openlab_render_member_desktop_nav( $show_submenus = true ) {
+	$nav_items = openlab_get_member_nav_items();
+
+	if ( empty( $nav_items ) ) {
+		return;
+	}
+
+	$output = '';
+	$is_own_profile = is_user_logged_in() && openlab_is_my_profile();
+
+	// Desktop-only: Prepend 'My Profile' link for own profile
+	if ( $is_own_profile ) {
+		$dud = bp_displayed_user_domain() ? bp_displayed_user_domain() : bp_loggedin_user_domain();
+		$is_profile_current = bp_is_user_activity() && ! bp_is_current_component( 'my-activity' );
+		$profile_classes = [ 'sq-bullet', 'mol-profile', 'my-profile' ];
+		if ( $is_profile_current ) {
+			$profile_classes[] = 'selected-page';
+		}
+
+		$output .= sprintf(
+			'<li class="%s"><a href="%s">My Profile</a></li>',
+			esc_attr( implode( ' ', $profile_classes ) ),
+			esc_url( $dud )
+		);
+	}
+
+	// Desktop-only: Get counts for badges
+	$desktop_counts = [];
+	if ( $is_own_profile ) {
+		if ( bp_is_active( 'friends' ) ) {
+			$request_ids = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+			$desktop_counts['my-friends'] = intval( count( (array) $request_ids ) );
+		}
+		if ( bp_is_active( 'messages' ) ) {
+			$desktop_counts['my-messages'] = bp_get_total_unread_messages_count();
+		}
+		if ( bp_is_active( 'groups' ) ) {
+			$invites = groups_get_invites_for_user();
+			$desktop_counts['my-invitations'] = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
+		}
+	}
+
+	foreach ( $nav_items as $item ) {
+		$slug = isset( $item['slug'] ) ? $item['slug'] : sanitize_title( $item['text'] );
+
+		// Desktop-only: Skip 'My Portfolio' (has separate widget on desktop)
+		if ( $slug === 'my-portfolio' && $is_own_profile ) {
+			continue;
+		}
+
+		// Build classes
+		$classes = [ 'sq-bullet', 'mol-' . str_replace( 'my-', '', $slug ) ];
+
+		// Add slug-based class
+		$classes[] = $slug;
+
+		// Add current state
+		if ( ! empty( $item['is_current'] ) ) {
+			$classes[] = 'selected-page';
+		}
+
+		// Special handling for anchor links (portfolio widget links)
+		if ( ! empty( $item['is_anchor'] ) ) {
+			$classes[] = 'visible-xs';
+			$classes[] = 'mobile-anchor-link';
+		}
+
+		// Add custom class if present (e.g., 'has-unread')
+		if ( ! empty( $item['class'] ) ) {
+			$classes[] = $item['class'];
+		}
+
+		$class_attr = implode( ' ', array_filter( $classes ) );
+		$href = esc_url( $item['href'] );
+		$text = esc_html( $item['text'] );
+
+		// Desktop-only: Add count badge for specific items
+		$count_badge = '';
+		if ( isset( $desktop_counts[ $slug ] ) && $desktop_counts[ $slug ] > 0 ) {
+			$count_badge = openlab_get_menu_count_mup( $desktop_counts[ $slug ] );
+		}
+
+		// Desktop-only: Add chevron icon for Dashboard
+		$icon = '';
+		if ( $slug === 'my-dashboard' ) {
+			$icon = ' <span class="fa fa-chevron-circle-right" aria-hidden="true"></span>';
+		}
+
+		// Start li element
+		$output .= sprintf(
+			'<li class="%s"><a href="%s">%s%s%s</a>',
+			esc_attr( $class_attr ),
+			$href,
+			$text,
+			$count_badge,
+			$icon
+		);
+
+		// Add submenu if present and item is current section and show_submenus is true
+		if ( $show_submenus && ! empty( $item['submenu_items'] ) && ! empty( $item['is_current'] ) ) {
+			$output .= '<ul class="sidebar-submenu">';
+			foreach ( $item['submenu_items'] as $sub ) {
+				$sub_classes = [];
+				if ( ! empty( $sub['is_current'] ) ) {
+					$sub_classes[] = 'selected-page';
+				}
+				if ( ! empty( $sub['class'] ) ) {
+					$sub_classes[] = $sub['class'];
+				}
+				$sub_class_attr = ! empty( $sub_classes ) ? ' class="' . esc_attr( implode( ' ', $sub_classes ) ) . '"' : '';
+
+				$output .= sprintf(
+					'<li%s><a href="%s">%s</a></li>',
+					$sub_class_attr,
+					esc_url( $sub['href'] ),
+					esc_html( $sub['text'] )
+				);
+			}
+			$output .= '</ul>';
+		}
+
+		$output .= '</li>';
+	}
+
+	echo $output;
+}
+
+/**
+ * Render the Member pages mobile drawer content.
+ *
+ * Uses openlab_get_member_nav_items() as the single source of truth.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_member_mobile_drawer() {
+	$nav_items = openlab_get_member_nav_items();
+
+	if ( empty( $nav_items ) ) {
 		return '';
+	}
+
+	$panels = [];
+	$root_items = [];
+
+	// Process each nav item from the unified data source
+	foreach ( $nav_items as $item ) {
+		$slug = isset( $item['slug'] ) ? $item['slug'] : sanitize_title( $item['text'] );
+		$panel_id = 'member-' . $slug . '-panel';
+
+		// Build root item
+		$root_item = [
+			'text'       => $item['text'],
+			'href'       => $item['href'],
+			'is_current' => isset( $item['is_current'] ) ? $item['is_current'] : false,
+		];
+
+		// Add class if present (e.g., 'has-unread')
+		if ( ! empty( $item['class'] ) ) {
+			$root_item['class'] = $item['class'];
+		}
+
+		// If item has submenu, link to panel
+		if ( ! empty( $item['submenu_items'] ) ) {
+			$root_item['submenu'] = $panel_id;
+
+			// Build submenu panel
+			$submenu_items = [];
+			foreach ( $item['submenu_items'] as $sub ) {
+				$sub_item = [
+					'text'       => $sub['text'],
+					'href'       => $sub['href'],
+					'is_current' => isset( $sub['is_current'] ) ? $sub['is_current'] : false,
+				];
+				if ( ! empty( $sub['class'] ) ) {
+					$sub_item['class'] = $sub['class'];
+				}
+				$submenu_items[] = $sub_item;
+			}
+
+			$panels[] = [
+				'id'          => $panel_id,
+				'heading'     => $item['text'],
+				'items'       => $submenu_items,
+				'back_target' => 'member-mobile-root-panel',
+			];
+		}
+
+		$root_items[] = $root_item;
 	}
 
 	// Build the root panel
@@ -1255,191 +1411,22 @@ function openlab_learnmore_sidebar() {
 /**
  * Member pages sidebar - modularized for easier parsing of mobile menus.
  *
- * @param bool $mobile Whether to render the mobile menu. Default fals.
+ * Uses openlab_get_member_nav_items() as the single source of truth.
+ *
+ * @param bool $mobile Whether to render the mobile menu. Default false.
  */
 function openlab_member_sidebar_menu( $mobile = false ) {
-
-	if ( ! $dud = bp_displayed_user_domain() ) {
-		$dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
-	}
-
 	$classes = $mobile ? 'visible-xs' : 'hidden-xs';
+	$is_own_profile = is_user_logged_in() && openlab_is_my_profile();
+	$id_suffix = $mobile ? '-mobile' : '';
 
-	$portfolio_label = openlab_get_portfolio_label(
-		[
-			'user_id' => bp_displayed_user_id(),
-			'case'    => 'upper',
-		]
-	);
-
-	$is_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
-	$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
-	$is_friends  = bp_is_my_profile() && bp_is_friends_component();
-	$is_messages = bp_is_my_profile() && bp_is_messages_component();
-	$is_invites  = bp_is_my_profile() && ( bp_is_current_component( 'invite-anyone' ) || bp_is_groups_component() && ( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ) );
-
-	if ( is_user_logged_in() && openlab_is_my_profile() ) :
-		?>
-
-		<div id="item-buttons<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
-
-			<ul class="sidebar-nav clearfix">
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile my-profile">
-					<a href="<?php echo $dud ?>">My Profile</a>
-				</li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_component( 'my-activity' ) ); ?> mol-profile my-activity">
-					<a href="<?php echo $dud ?>my-activity">My Activity</a>
-
-					<?php if ( $is_activity ) : ?>
-						<ul class="sidebar-submenu">
-							<?php $activity_submenu_items = openlab_my_activity_submenu_items(); ?>
-							<?php foreach ( $activity_submenu_items as $item ) : ?>
-								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
-									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					<?php endif; ?>
-				</li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( $is_settings ); ?> mol-settings my-settings">
-					<a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a>
-
-					<?php if ( $is_settings ) : ?>
-						<ul class="sidebar-submenu">
-							<?php $settings_submenu_items = openlab_my_settings_submenu_items(); ?>
-							<?php foreach ( $settings_submenu_items as $item ) : ?>
-								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
-									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
-								</li>
-							<?php endforeach; ?>
-						</ul>
-					<?php endif; ?>
-				</li>
-
-				<?php if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) : ?>
-					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
-						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>">My <?php echo esc_html( $portfolio_label ); ?></a>
-					</li>
-				<?php else : ?>
-					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
-						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>">Create <?php echo esc_html( $portfolio_label ); ?></a>
-					</li>
-				<?php endif; ?>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-courses' ) || openlab_is_create_group( 'course' ) ); ?> mol-courses my-courses"><a href="<?php echo bp_get_root_domain() ?>/my-courses/">My Courses</a></li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-projects' ) || openlab_is_create_group( 'project' ) ); ?> mol-projects my-projects"><a href="<?php echo bp_get_root_domain() ?>/my-projects/">My Projects</a></li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( is_page( 'my-clubs' ) || openlab_is_create_group( 'club' ) ); ?> mol-clubs my-clubs"><a href="<?php echo bp_get_root_domain() ?>/my-clubs/">My Clubs</a></li>
-
-				<?php if ( bp_is_active( 'friends' ) ) : ?>
-					<?php
-					$request_ids   = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
-					$request_count = intval( count( (array) $request_ids ) );
-					?>
-					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_friends() ); ?> mol-friends my-friends">
-						<a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup( $request_count ); ?></a>
-
-						<?php if ( $is_friends ) : ?>
-							<ul class="sidebar-submenu">
-								<?php $friends_submenu_items = openlab_my_friends_submenu_items(); ?>
-								<?php foreach ( $friends_submenu_items as $item ) : ?>
-									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
-										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-					</li>
-				<?php endif; ?>
-
-				<?php if ( bp_is_active( 'messages' ) ) : ?>
-					<?php $message_count = bp_get_total_unread_messages_count(); ?>
-					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_messages() ); ?> mol-messages my-messages">
-						<a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup( $message_count ); ?></a>
-
-						<?php if ( $is_messages ) : ?>
-							<ul class="sidebar-submenu">
-								<?php $messages_submenu_items = openlab_my_messages_submenu_items(); ?>
-								<?php foreach ( $messages_submenu_items as $item ) : ?>
-									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
-										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-					</li>
-				<?php endif; ?>
-
-				<?php if ( bp_is_active( 'groups' ) ) : ?>
-					<?php
-					$invites      = groups_get_invites_for_user();
-					$invite_count = isset( $invites['total'] ) ? (int) $invites['total'] : 0;
-					?>
-					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ); ?> mol-invites my-invites">
-						<a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup( $invite_count ); ?></a>
-
-						<?php if ( $is_invites ) : ?>
-							<ul class="sidebar-submenu">
-								<?php $invitations_submenu_items = openlab_my_invitations_submenu_items(); ?>
-								<?php foreach ( $invitations_submenu_items as $item ) : ?>
-									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
-										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
-									</li>
-								<?php endforeach; ?>
-							</ul>
-						<?php endif; ?>
-					</li>
-				<?php endif; ?>
-
-				<li class="sq-bullet mol-dashboard my-dashboard">
-					<a href="<?php echo esc_url( openlab_get_my_dashboard_url( bp_loggedin_user_id() ) ); ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a>
-				</li>
-
-			</ul>
-
-		</div>
-
-	<?php else : ?>
-
-		<div id="item-buttons<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="mol-menu sidebar-block <?php echo $classes; ?>">
-
-			<ul class="sidebar-nav clearfix">
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile"><a href="<?php echo $dud ?>/">Profile</a></li>
-
-				<?php if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) || openlab_is_my_profile() || groups_is_user_member( bp_loggedin_user_id(), openlab_get_user_portfolio_id() ) ) ) : ?>
-					<li id="portfolios-groups-li<?php echo ( $mobile ? '-mobile' : '' ) ?>" class="visible-xs mobile-anchor-link">
-						<a href="#portfolio-sidebar-inline-widget" id="portfolios<?php echo ( $mobile ? '-mobile' : '' ) ?>"><?php echo esc_html( $portfolio_label ); ?></a>
-					</li>
-				<?php endif; ?>
-
-				<?php $current_group_view = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : ''; ?>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'course' === $current_group_view ); ?> mol-courses">
-					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=course">Courses</a>
-				</li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'project' === $current_group_view ); ?> mol-projects">
-					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=project">Projects</a>
-				</li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_groups() && 'club' === $current_group_view ); ?> mol-club">
-					<a href="<?php echo $dud . bp_get_groups_slug() ?>/?type=club">Clubs</a>
-				</li>
-
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_friends() ); ?> mol-friends">
-					<a href="<?php echo $dud . bp_get_friends_slug() ?>/">Friends</a>
-				</li>
-
-			</ul>
-
-		</div>
-
-	<?php endif;
+	?>
+	<div id="item-buttons<?php echo esc_attr( $id_suffix ); ?>" class="mol-menu sidebar-block <?php echo esc_attr( $classes ); ?>">
+		<ul class="sidebar-nav clearfix">
+			<?php openlab_render_member_desktop_nav( true ); ?>
+		</ul>
+	</div>
+	<?php
 }
 /**
  * Echoes 'selected-page' class if the current page is the one passed in.
