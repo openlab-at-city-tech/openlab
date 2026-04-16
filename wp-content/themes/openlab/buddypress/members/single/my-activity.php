@@ -46,25 +46,25 @@ if( isset( $_GET['type'] ) && $_GET['type'] == 'mentions' ) {
 		<?php if ( empty( $_POST['page'] ) ) : ?>
 			<div id="activity-stream" class="activity-list item-list group-list">
 		<?php endif; ?>
-	
+
 		<?php while ( bp_activities() ) : bp_the_activity(); ?>
 			<?php bp_get_template_part( 'activity/entry' ); ?>
 		<?php endwhile; ?>
-	
+
 		<?php echo openlab_activities_pagination_links(); ?>
-	
+
 		<?php if ( empty( $_POST['page'] ) ) : ?>
-			</div>	
+			</div>
 		<?php endif; ?>
-	
+
 	<?php else : ?>
 		<div id="message" class="info">
 			<p><?php _e( 'Sorry, there was no activity found. Please try a different filter.', 'buddypress' ); ?></p>
 		</div>
 	<?php endif; ?>
-	
+
 	<?php do_action( 'bp_after_activity_loop' ); ?>
-	
+
 	<?php if ( empty( $_POST['page'] ) ) : ?>
 		<form action="" name="activity-loop-form" id="activity-loop-form" method="post">
 			<?php wp_nonce_field( 'activity_filter', '_wpnonce_activity_filter' ); ?>
