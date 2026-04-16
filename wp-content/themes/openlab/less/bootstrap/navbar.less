@@ -228,11 +228,10 @@
 
 .navbar-nav {
   margin: (@navbar-padding-vertical / 2) -@navbar-padding-horizontal;
+  padding-left: 28px;
 
   > li > a {
-    padding-top:    10px;
-    padding-bottom: 10px;
-    line-height: @line-height-computed;
+    padding: 0px 4px;
   }
 
   @media (max-width: @grid-float-breakpoint-max) {
@@ -263,14 +262,6 @@
   @media (min-width: @grid-float-breakpoint) {
     float: left;
     margin: 0;
-
-    > li {
-      float: left;
-      > a {
-        padding-top:    @navbar-padding-vertical;
-        padding-bottom: @navbar-padding-vertical;
-      }
-    }
 
     &.navbar-right:last-child {
       margin-right: -@navbar-padding-horizontal;

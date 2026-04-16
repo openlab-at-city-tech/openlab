@@ -256,7 +256,7 @@ blockquote {
 	margin-bottom: 48px;
 	overflow: visible;
 	z-index: 1000;
-	padding: 0 42px 0 32px;
+	padding: 0 42px 0 24px;
 	width: 100%;
 
 	@media (max-width: @screen-xs-max){
@@ -284,13 +284,17 @@ blockquote {
 	}
 
 	header {
+		display: flex;
+		flex-direction: column;
 		height: 100px;
+		justify-content: center;
 		margin: 0;
 
 		a {
 			align-items: center;
-			display: flex;
-			height: 100%;
+			display: inline-block;
+			flex: 0;
+			padding: 0 8px; /* For focus styling */
 		}
 	}
 
@@ -312,7 +316,7 @@ blockquote {
 		ul {
 			display: flex;
 			flex: 1;
-			gap: 30px;
+			gap: 22px; /* 30px gap minus 4px+4px padding on links */
 			justify-content: flex-start;
 			list-style-type: none;
 
@@ -365,6 +369,11 @@ blockquote {
 		border: none;
 		color: @black;
 		padding: 0;
+
+		&:focus {
+			outline: @focusOutline;
+			outline-offset: 2px;
+		}
 
 		&.navbar-flyout-toggle-login {
 			align-items: center;
