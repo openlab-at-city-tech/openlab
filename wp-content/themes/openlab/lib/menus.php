@@ -322,7 +322,7 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
 
             break;
         case 'group-activity':
-            $submenu_text = 'Activity<span aria-hideen="true">:</span> ';
+            $submenu_text = 'Activity<span aria-hidden="true">:</span> ';
             $menu = openlab_group_activity_submenu();
             break;
         case 'group-files':
