@@ -3927,3 +3927,34 @@ function openlab_remove_two_factor_column_from_users_admin_table( $columns ) {
 }
 add_filter( 'manage_users_columns', 'openlab_remove_two_factor_column_from_users_admin_table', 100 );
 add_filter( 'wpmu_users_columns', 'openlab_remove_two_factor_column_from_users_admin_table', 100 );
+
+/**
+ * Checks whether a blog slug is valid.
+ *
+ * @param string $blogname The blog slug to check.
+ * @return bool
+ */
+function openlab_blog_slug_is_valid( $blogname ) {
+    $blacklisted_slugs = [
+        'about',
+		'my-clubs',
+		'my-courses',
+		'my-projects',
+    ];
+
+	$blacklisted_slugs[] = bp_get_members_slug();
+
+	if ( bp_is_active( 'activity' ) ) {
+		$blacklisted_slugs[] = bp_get_activity_slug();
+	}
+
+	if ( bp_is_active( 'blogs' ) ) {
+		$blacklisted_slugs[] = bp_get_blogs_slug();
+	}
+
+	if ( bp_is_active( 'groups' ) ) {
+		$blacklisted_slugs[] = bp_get_groups_slug();
+	}
+
+	return ! in_array( $blogname, $blacklisted_slugs, true );
+}

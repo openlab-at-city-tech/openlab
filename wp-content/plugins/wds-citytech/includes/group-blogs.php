@@ -1139,6 +1139,11 @@ function openlab_validate_groupblog_url() {
 			bp_core_add_message( 'That site URL is already taken. Please try another.', 'error' );
 			bp_core_redirect( wp_guess_url() );
 		}
+
+		if ( ! openlab_blog_slug_is_valid( $path ) ) {
+			bp_core_add_message( 'That site URL is not valid. Please try another.', 'error' );
+			bp_core_redirect( wp_guess_url() );
+		}
 	}
 }
 
@@ -1179,22 +1184,18 @@ function openlab_validate_groupblog_url_handler() {
 	global $current_blog;
 
 	$path = '';
-	/*
-	if ( ! empty( $_GET['blog']['domain'] ) ) {
-		$path = sanitize_text_field( wp_unslash( $_GET['blog']['domain'] ) );
-	} elseif ( ! empty( $_GET['clone-destination-path'] ) ) {
-		$path = sanitize_text_field( wp_unslash( $_GET['clone-destination-path'] ) );
-	}
-	*/
 
 	$path = sanitize_text_field( $_GET['path'] );
 
 	if ( domain_exists( $current_blog->domain, '/' . $path . '/', 1 ) ) {
 		wp_send_json_error( 'Sorry, that URL is already taken.' );
-	} else {
-		wp_send_json_success();
 	}
 
+	if ( ! openlab_blog_slug_is_valid( $path ) ) {
+		wp_send_json_error( 'Sorry, that URL is not valid.' );
+	}
+
+	wp_send_json_success();
 	die;
 }
 
