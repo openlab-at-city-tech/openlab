@@ -61,6 +61,7 @@ add_filter(
  */
 function openlab_load_custom_bp_functions() {
 	require( dirname( __FILE__ ) . '/wds-citytech-bp.php' );
+	require( dirname( __FILE__ ) . '/includes/avatar-privacy.php' );
 	require( dirname( __FILE__ ) . '/includes/email.php' );
 	require( dirname( __FILE__ ) . '/includes/group-blogs.php' );
 	require( dirname( __FILE__ ) . '/includes/group-types.php' );

@@ -71,6 +71,34 @@
 		<?php endif; ?>
                 </div><!--.panel-->
 
+		<?php if ( 'upload-image' === bp_get_avatar_admin_step() ) : ?>
+			<?php wp_enqueue_script( 'openlab-avatar-privacy' ); ?>
+
+			<div class="panel panel-default panel-avatar-privacy" id="panel-avatar-privacy">
+				<div class="panel-heading"><?php esc_html_e( 'Avatar Privacy', 'flavor-flavor' ); ?></div>
+
+				<div class="panel-body">
+					<fieldset>
+						<legend><?php esc_html_e( 'Who can see your avatar?', 'flavor-flavor' ); ?></legend>
+
+						<div class="radio">
+							<?php foreach ( openlab_get_xprofile_visibility_levels() as $level ) : ?>
+								<label for="avatar-visibility-level-<?php echo esc_attr( $level['id'] ); ?>">
+									<input type="radio" class="avatar-visibility-radio" name="avatar-privacy" id="avatar-visibility-level-<?php echo esc_attr( $level['id'] ); ?>" value="<?php echo esc_attr( $level['id'] ); ?>"<?php checked( openlab_get_user_avatar_visibility() === $level['id'] ); ?> />
+									<?php echo esc_html( $level['label'] ); ?>
+								</label>
+
+							<?php endforeach; ?>
+						</div>
+					</fieldset>
+
+					<input type="hidden" id="avatar-privacy-user-id" value="<?php echo esc_attr( bp_displayed_user_id() ); ?>" />
+
+					<?php wp_nonce_field( 'openlab_avatar_privacy', 'openlab-avatar-privacy-nonce' ); ?>
+				</div>
+			</div>
+		<?php endif; ?>
+
 	</form>
 
 <?php else : ?>

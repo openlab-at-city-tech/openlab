@@ -6489,3 +6489,18 @@ p.private-membership-indicator {
   left: 0;
   z-index: 9999;
 }
+
+// Avatar Privacy Panel
+.panel-avatar-privacy {
+	&.loading {
+		.radio {
+			opacity: .5;
+			pointer-events: none;
+		}
+	}
+
+	.radio {
+		display: flex;
+		gap: 24px;
+	}
+}

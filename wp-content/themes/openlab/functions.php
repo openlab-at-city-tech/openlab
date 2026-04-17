@@ -156,6 +156,14 @@ function openlab_load_scripts() {
 		OL_VERSION,
 		true
 	);
+
+	wp_register_script(
+		'openlab-avatar-privacy',
+		$stylesheet_dir_uri . '/js/avatar-privacy.js',
+		[],
+		OL_VERSION,
+		true
+	);
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');

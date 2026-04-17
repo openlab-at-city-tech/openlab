@@ -12993,3 +12993,11 @@ p.private-membership-indicator {
   left: 0;
   z-index: 9999;
 }
+.panel-avatar-privacy.loading .radio {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.panel-avatar-privacy .radio {
+  display: flex;
+  gap: 24px;
+}
