@@ -20,6 +20,7 @@
 
 			<ul>
 				<li>Your OpenLab profile and account information</li>
+				<li>Your Portfolio and all associated content</li>
 				<li>Pages on OpenLab sites created by you</li>
 				<li>Discussion topics and replies created by you</li>
 				<li>Docs created by you</li>
@@ -28,7 +29,7 @@
 
 			<p><strong>Site posts and comments written by you will not be deleted, but the author will be changed to "Account Deleted."</strong> This is because posts and comments may be part of a conversation with other OpenLab members. If you want to delete these items, you should first delete them and then delete your account.</p>
 
-			<p><strong>Courses, projects, clubs, and portfolios created by you will not be deleted.</strong> This is because they may include important work created by you and others. If you want to delete these items, you should first delete them and then delete your account.</p>
+			<p><strong>Courses, projects, and clubs created by you will not be deleted.</strong> This is because they may include important work created by you and others. If you want to delete these items, you should first delete them and then delete your account.</p>
 
 			<p><strong>Please consider other OpenLab members.</strong> For instance, if you created a group project, others may still need the work they did there. Instead of deleting the whole project, you could just delete your own work.</p>
 
