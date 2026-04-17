@@ -7701,6 +7701,7 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   position: relative;
   visibility: hidden;
   height: 100%;
+  /* Special styling for the search/filter flyout.*/
 }
 .openlab-navbar-drawer .flyout-menu.is-open,
 .openlab-drawer-container .flyout-menu.is-open {
@@ -7789,6 +7790,24 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-drawer-container .flyout-menu.flyout-menu-login .flyout-menu-login-register {
   background: #f0f0f0;
   text-align: center;
+}
+.openlab-navbar-drawer .flyout-menu.archive-mobile-drawer .sidebar-title,
+.openlab-drawer-container .flyout-menu.archive-mobile-drawer .sidebar-title {
+  display: none;
+  visibility: hidden;
+}
+.openlab-navbar-drawer .flyout-menu.archive-mobile-drawer .flyout-heading,
+.openlab-drawer-container .flyout-menu.archive-mobile-drawer .flyout-heading {
+  background: transparent;
+  margin-top: 30px;
+  line-height: 1em;
+  padding: 20px 0;
+}
+.openlab-navbar-drawer .flyout-menu.archive-mobile-drawer .drawer-content,
+.openlab-drawer-container .flyout-menu.archive-mobile-drawer .drawer-content {
+  background: #f0f0f0;
+  padding: 12px 0;
+  margin: 0 24px;
 }
 .openlab-navbar-drawer .flyout-heading,
 .openlab-drawer-container .flyout-heading {

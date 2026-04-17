@@ -815,35 +815,34 @@ function openlab_get_group_mobile_anchor_items() {
  * @param string $title     Title for the drawer panel.
  */
 function openlab_register_archive_mobile_drawer( $drawer_id, $title ) {
-	// Store title in a static variable for the render callback.
-	static $drawer_titles = [];
-	$drawer_titles[ $drawer_id ] = $title;
+	// Capture the sidebar content NOW (at registration time) while we're
+	// still in the correct template context with proper query vars.
+	ob_start();
+	get_sidebar( 'group-archive' );
+	$sidebar_content = ob_get_clean();
 
-	openlab_register_drawer( $drawer_id, function() use ( $drawer_id, $title ) {
-		return openlab_render_archive_mobile_drawer( $drawer_id, $title );
+	if ( empty( trim( $sidebar_content ) ) ) {
+		return;
+	}
+
+	openlab_register_drawer( $drawer_id, function() use ( $drawer_id, $title, $sidebar_content ) {
+		return openlab_render_archive_mobile_drawer( $drawer_id, $title, $sidebar_content );
 	} );
 }
 
 /**
  * Render the Archive pages mobile drawer content.
  *
- * @param string $drawer_id Unique ID for the drawer.
- * @param string $title     Title for the drawer panel.
+ * @param string $drawer_id       Unique ID for the drawer.
+ * @param string $title           Title for the drawer panel.
+ * @param string $sidebar_content Pre-captured sidebar HTML content.
  * @return string Drawer HTML.
  */
-function openlab_render_archive_mobile_drawer( $drawer_id, $title ) {
-	// Capture the sidebar content.
-	ob_start();
-	get_sidebar( 'group-archive' );
-	$sidebar_content = ob_get_clean();
-
-	if ( empty( $sidebar_content ) ) {
-		return '';
-	}
-
+function openlab_render_archive_mobile_drawer( $drawer_id, $title, $sidebar_content ) {
 	return openlab_render_drawer( [
 		'id'            => $drawer_id,
 		'default_panel' => $drawer_id . '-panel',
+		'class'         => 'archive-mobile-drawer',
 		'panels'        => [
 			[
 				'id'         => $drawer_id . '-panel',
