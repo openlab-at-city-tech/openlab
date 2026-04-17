@@ -238,6 +238,21 @@ blockquote {
     }
 }
 
+body.single-item.groups,
+body.bp-user,
+body.page {
+	// Superceded by the drawer interface.
+	@media (max-width: @screen-xs-max) {
+		.submenu h2 > span {
+			display: none;
+		}
+
+		.nav.nav-inline {
+			display: none;
+		}
+	}
+}
+
 // Main navbar.
 @navbar-height: 80px;
 @navbar-height-mobile: 64px;
