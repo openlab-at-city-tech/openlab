@@ -33,7 +33,7 @@ const PostSharingOptions = () => {
   const visibilityOptions = [
     {
       value: 'group-members-only',
-      label: 'Site Members',
+      label: 'Site members only',
       info: shareOnlyWithGroup + ' ' + publicOverrideString,
     },
     {
