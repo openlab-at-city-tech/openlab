@@ -817,8 +817,10 @@ function openlab_get_group_mobile_anchor_items() {
 function openlab_register_archive_mobile_drawer( $drawer_id, $title ) {
 	// Capture the sidebar content NOW (at registration time) while we're
 	// still in the correct template context with proper query vars.
+	// Note: We use locate_template with $load_once=false because get_sidebar()
+	// defaults to require_once, which would prevent the desktop sidebar from rendering.
 	ob_start();
-	get_sidebar( 'group-archive' );
+	locate_template( 'sidebar-group-archive.php', true, false );
 	$sidebar_content = ob_get_clean();
 
 	if ( empty( trim( $sidebar_content ) ) ) {
@@ -1303,7 +1305,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
             bp_get_template_part('members/single/sidebar');
             break;
         case 'groups':
-            get_sidebar('group-archive');
+			locate_template( 'sidebar-group-archive.php', true, false );
             break;
         case 'about':
             $args = array(
