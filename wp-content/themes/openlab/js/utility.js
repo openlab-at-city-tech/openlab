@@ -1323,6 +1323,25 @@ OpenLab.utility = (function ($) {
 					'Upload photo. You can also drag and drop an image file here.'
 				);
 			}
+
+			// Add text to calendar buttons.
+			setTimeout( () => {
+				const fcPrevButton = document.querySelector( 'button.fc-prev-button' );
+				if ( fcPrevButton ) {
+					const prevButtonTextEl = document.createElement( 'span' );
+					prevButtonTextEl.className = 'screen-reader-text';
+					prevButtonTextEl.innerHTML = 'Previous';
+					fcPrevButton.appendChild( prevButtonTextEl );
+				}
+
+				const fcNextButton = document.querySelector( 'button.fc-next-button' );
+				if ( fcNextButton ) {
+					const nextButtonTextEl = document.createElement( 'span' );
+					nextButtonTextEl.className = 'screen-reader-text';
+					nextButtonTextEl.innerHTML = 'Next';
+					fcNextButton.appendChild( nextButtonTextEl );
+				}
+			}, 3000 );
 		},
 
 		runAfterTransition: function(el, callback, fallbackDuration = 50) {
