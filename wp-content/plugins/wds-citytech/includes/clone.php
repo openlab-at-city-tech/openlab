@@ -438,9 +438,14 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		$group_type_label = openlab_get_group_type_label( [ 'group_id' => $group_id ] );
 
-		$credits = openlab_get_credits( $group_id, false );
+		$acknowledgements = openlab_get_acknowledgements( $group_id );
 
-		if ( ! $credits['show_acknowledgements'] ) {
+		// Remove the '.acknowledgements-intro' paragraph if it exists, to avoid duplicates.
+		if ( ! empty( $acknowledgements ) ) {
+			$acknowledgements = preg_replace( '/<p class="acknowledgements-intro">.*?<\/p>/i', '', $acknowledgements );
+		}
+
+		if ( ! $acknowledgements ) {
 			return;
 		}
 
@@ -448,21 +453,7 @@ class OpenLab_Clone_Credits_Widget extends WP_Widget {
 
 		echo $args['before_title'] . 'Acknowledgments' . $args['after_title'];
 
-		foreach ( $credits['credits_chunks'] as $credits_chunk ) {
-			if ( ! empty( $credits_chunk['intro'] ) ) {
-				echo '<p>' . $credits_chunk['intro'] . '</p>';
-			}
-
-			if ( ! empty( $credits_chunk['items'] ) ) {
-				echo '<ul class="clone-credits">';
-				echo $credits_chunk['items'];
-				echo '</ul>';
-			}
-		}
-
-		if ( ! empty( $credits['post_credits_markup'] ) ) {
-			echo $credits['post_credits_markup'];
-		}
+		echo $acknowledgements;
 
 		echo $args['after_widget'];
 	}
