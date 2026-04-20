@@ -1,0 +1,57 @@
+.editor-post-publish-panel__prepublish,
+.post-publish-panel__postpublish {
+	display: flex;
+	flex-direction: column;
+	padding-top: 1px !important;
+
+	.components-panel__body {
+		margin-top: -1px;
+		order: 4;
+
+		&.openlab-hide-visibility {
+			order: 2;
+		}
+	}
+
+	.components-panel__body.openlab-pre-publication-visibility-panel {
+		order: 3;
+	}
+
+	.components-panel__body.openlab-pre-publication-privacy-panel {
+		order: 1;
+		border-top: none;
+
+		.editor-post-publish-panel__header-publish-button {
+			justify-content: flex-start;
+			text-align: left;
+		}
+
+		.components-panel__body-title .components-button {
+			align-items: center;
+		}
+
+		.components-panel__body-title .components-button svg {
+			fill: #f97a14;
+			height: 24px;
+			margin-left: auto;
+			width: 24px;
+		}
+
+		.components-panel__body-title {
+			padding-left: 30px;
+			position: relative;
+
+			&:before {
+				background: #f97a14;
+				border-radius: 100%;
+				content: '';
+				height: 20px;
+				left: 20px;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 20px;
+			}
+		}
+	}
+}

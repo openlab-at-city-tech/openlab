@@ -2367,14 +2367,16 @@ function openlab_add_post_visibility_script_data() {
 
 	wp_add_inline_script(
 		'openlab-blocks',
-		'const openlabBlocksPostVisibility = ' . wp_json_encode(
+		'window.openlabBlocksPostVisibility = ' . wp_json_encode(
 			[
 				'blogPublic'                => $blog_public,
 				'currentGroupTypeLabel'     => $group_type_label,
 				'currentGroupTypeSiteLabel' => sprintf( '%s Site', $group_type_label ),
+				'prePubShareOnlyWithGroup'  => sprintf( 'Only logged-in members of this %s can see this post. This will override the Public visibility setting above. You can change the post visibility settings below.', $group_type_label ),
 				'shareOnlyWithGroup'        => sprintf( 'Only logged-in members of this %s can see this post.', $group_type_label ),
 			]
 		) . ';',
+		'before'
 	);
 }
 add_action( 'enqueue_block_editor_assets', 'openlab_add_post_visibility_script_data', 20 );
