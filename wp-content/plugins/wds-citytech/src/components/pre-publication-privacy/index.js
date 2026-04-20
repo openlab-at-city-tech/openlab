@@ -1,9 +1,12 @@
 /* global openlabBlocksPostVisibility */
 
+import { Fragment } from '@wordpress/element';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginPrePublishPanel } from '@wordpress/editor';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+
+import PostSharingOptionsContent from '../post-sharing-options/PostSharingOptionsContent';
 
 import './style.scss';
 
@@ -60,15 +63,24 @@ const PrePublicationPrivacy = () => {
 	}
 
 	return (
-		<PluginPrePublishPanel
-			className="openlab-pre-publication-privacy-panel"
-			icon={ <WarningIcon /> }
-			initialOpen
-			title={ __( 'Visibility Status Alert', 'wds-citytech' ) }
-		>
-			<p><strong>Site:</strong> { getBlogPublicMessage() }</p>
-			<p><strong>Post:</strong> { getPostVisibilityMessage() }</p>
-		</PluginPrePublishPanel>
+		<Fragment>
+			<PluginPrePublishPanel
+				className="openlab-pre-publication-privacy-panel"
+				icon={ <WarningIcon /> }
+				initialOpen
+				title={ __( 'Visibility Status Alert', 'wds-citytech' ) }
+			>
+				<p><strong>Site:</strong> { getBlogPublicMessage() }</p>
+				<p><strong>Post:</strong> { getPostVisibilityMessage() }</p>
+			</PluginPrePublishPanel>
+			<PluginPrePublishPanel
+				className="openlab-pre-publication-visibility-panel"
+				initialOpen
+				title={ __( 'More visibility options', 'wds-citytech' ) }
+			>
+				<PostSharingOptionsContent instanceId="pre-publish-sharing-options" />
+			</PluginPrePublishPanel>
+		</Fragment>
 	);
 };
 

@@ -6,6 +6,14 @@
 
 	.components-panel__body {
 		margin-top: -1px;
+		order: 4;
+
+		&.openlab-hide-visibility {
+			order: 2;
+		}
+	}
+
+	.components-panel__body.openlab-pre-publication-visibility-panel {
 		order: 3;
 	}
 
@@ -44,49 +52,6 @@
 				transform: translateY(-50%);
 				width: 20px;
 			}
-		}
-	}
-
-	.altis-publication-checklist__panel {
-		order: 2;
-		border-top: none;
-
-		&--to-complete .components-panel__body-title .components-button {
-			--indicator-size: 0.8em;
-
-			align-items: center;
-			position: relative;
-
-			svg {
-				fill: #f97a14;
-				height: 30px;
-				margin-left: auto;
-				width: 30px;
-			}
-
-			&::before {
-				content: '';
-				width: calc( var( --indicator-size ) + 0.5em );
-			}
-
-			&::after {
-				background: #f97a14;
-				border-radius: 100%;
-				content: '';
-				height: var( --indicator-size );
-				margin-top: calc( -1 * var( --indicator-size ) / 2 );
-				position: absolute;
-				top: 50%;
-				width: var( --indicator-size );
-			}
-		}
-
-		&--completed .components-panel__body-title .components-button::after {
-			background: #3fcf8e;
-		}
-
-		&--completed .components-panel__body-title .components-button svg {
-			fill: #3fcf8e;
 		}
 	}
 }
