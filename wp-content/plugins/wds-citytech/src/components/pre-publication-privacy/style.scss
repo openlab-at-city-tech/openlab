@@ -4,6 +4,10 @@
 	flex-direction: column;
 	padding-top: 1px !important;
 
+	.components-site-card {
+		display: none;
+	}
+
 	.components-panel__body {
 		margin-top: -1px;
 		order: 4;
