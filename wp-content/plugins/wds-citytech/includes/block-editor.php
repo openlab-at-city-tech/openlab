@@ -51,6 +51,13 @@ function openlab_enqueue_block_assets() {
 		$blocks_asset_file['version'],
 		true
 	);
+
+	wp_enqueue_style(
+		'openlab-blocks',
+		WDS_CITYTECH_URL . 'build/style-index.css',
+		[],
+		$blocks_asset_file['version']
+	);
 }
 add_action( 'enqueue_block_editor_assets', 'openlab_enqueue_block_assets' );
 
