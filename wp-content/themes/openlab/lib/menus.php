@@ -1,16 +1,13 @@
 <?php
 /* menu functions - current includes
   -register_nav_menus for custom menu locations
-  -help pages menu - adding categories
   -profile pages sub menus
  */
 
 //custom menu locations for OpenLab
 register_nav_menus(array(
-    'main' => __('Main Menu', 'cuny'),
+    'main'      => __('Main Menu', 'cuny'),
     'aboutmenu' => __('About Menu', 'cuny'),
-    'helpmenu' => __('Help Menu', 'cuny'),
-    'helpmenusec' => __('Help Menu Secondary', 'cuny')
 ));
 
 /**
@@ -129,140 +126,6 @@ function openlab_modify_options_nav() {
 
 add_action('bp_screens', 'openlab_modify_options_nav', 1);
 
-/**
- * Help Sidebar menu: includes categories and sub-categories.
- *
- * @global type $post
- * @param string $items
- * @param type $args
- * @return string
- */
-function openlab_help_categories_menu($items, $args) {
-    global $post;
-
-    if ($args->theme_location == 'helpmenu') {
-        $term = get_query_var('term');
-        $parent_term = get_term_by('slug', $term, 'help_category');
-        $current_term = false;
-
-        if ($parent_term == false) {
-            $child_terms = get_the_terms($post->ID, 'help_category');
-            $term = array();
-
-            if (!empty($child_terms)) {
-                foreach ($child_terms as $child_term) {
-                    $term[] = $child_term;
-                }
-
-                $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
-                $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-            }
-        }
-
-        //for child term archive pages
-        if ($parent_term !== false && $parent_term->parent != 0) {
-            $current_term = $parent_term;
-            $parent_term = get_term_by('id', $current_term->parent, 'help_category');
-        }
-
-        $help_args = array(
-            'orderby'    => 'term_order',
-            'hide_empty' => false
-        );
-        $help_cats = get_terms('help_category', $help_args);
-
-        // for post level identifying of current menu item
-        $post_cats_array = array();
-
-        if ($post->post_type == 'help') {
-            $post_cats = get_the_terms($post->id, 'help_category');
-
-            if ($post_cats) {
-                foreach ($post_cats as $post_cat) {
-                    // no children cats in menu
-                    if ($post_cat->parent == 0) {
-                        $post_cats_array[] = $post_cat->term_id;
-                    }
-                }
-            }
-        }
-
-        $help_cat_list = "";
-        foreach ($help_cats as $help_cat) {
-            // eliminate children cats from the menu list
-            if ($help_cat->parent == 0) {
-                $help_classes = "help-cat menu-item";
-
-                $highlight_active_state = get_query_var('taxonomy') != 'help_tags' && empty($_GET['help-search']);
-
-                // see if this is the current menu item; if not, this could be a post,
-                // so we'll check against an array of cat ids for this post
-				$is_current = false;
-                if ($highlight_active_state) {
-                    if ($parent_term !== false && $help_cat->term_id == $parent_term->term_id) {
-                        $help_classes .= " current-menu-item";
-						$is_current    = true;
-                    } else if ($post->post_type == 'help') {
-                        if (in_array($help_cat->term_id, $post_cats_array)) {
-                            $help_classes .= " current-menu-item";
-							$is_current    = true;
-                        }
-                    }
-                }
-
-                // a special case just for the glossary page
-                if ($help_cat->name == "Help Glossary") {
-                    $help_cat->name = "Glossary";
-                }
-
-                $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a>';
-
-				// Child terms only show for the currently-selected top-level category.
-				if ( $is_current && $highlight_active_state ) {
-					// check for child terms
-					$child_cat_check = get_term_children($help_cat->term_id, 'help_category');
-
-					// list child terms, if any
-					if (count($child_cat_check) > 0) {
-						$help_cat_list .= '<ul>';
-
-						$child_args = array(
-							'orderby'    => 'term_order',
-							'hide_empty' => false,
-							'parent'     => $help_cat->term_id
-						);
-						$child_cats = get_terms('help_category', $child_args);
-						foreach ($child_cats as $child_cat) {
-
-							$child_classes = "help-cat menu-item";
-							if ($highlight_active_state) {
-								if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
-									$child_classes .= " current-menu-item";
-								} else if ($post->post_type == 'help') {
-									if (in_array($child_cat->term_id, $post_cats_array)) {
-										$child_classes .= " current-menu-item";
-									}
-								}
-							}
-
-							$help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
-						}
-
-						$help_cat_list .= '</ul>';
-					}
-				}
-
-                $help_cat_list .= '</li>';
-            }
-        }
-
-        $items = $items . $help_cat_list;
-    }
-
-    return $items;
-}
-
-add_filter('wp_nav_menu_items', 'openlab_help_categories_menu', 10, 2);
 
 /**
  * For a single help post: get the primary term for that post

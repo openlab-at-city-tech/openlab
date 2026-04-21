@@ -6,15 +6,11 @@
 <h2 class="sidebar-title hidden-xs">Help</h2>
 <div id="sidebar-menu-wrapper" class="sidebar-menu-wrapper">
 <div class="sidebar-block clearfix">
-<?php
-$args = array(
-    'theme_location' => 'helpmenu',
-    'container' => 'div',
-    'container_id' => 'help-menu',
-    'menu_class' => 'sidebar-nav',
-);
-wp_nav_menu($args);
-?>
+<div id="help-menu">
+<ul class="sidebar-nav">
+<?php openlab_render_help_desktop_nav(); ?>
+</ul>
+</div>
 </div>
 </div>
 <div class="sidebar-widget-wrapper">

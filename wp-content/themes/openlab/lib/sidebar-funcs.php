@@ -1233,6 +1233,7 @@ function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = ''
 
             break;
         case 'help':
+            openlab_register_help_mobile_drawer();
             get_sidebar('help');
             break;
         default:
@@ -1267,6 +1268,9 @@ function openlab_bp_mobile_sidebar($type) {
             wp_nav_menu($args);
             echo '</div>';
             echo '</div>';
+            break;
+        case 'help':
+            // Drawer registered in openlab_bp_sidebar('help'); toggle is rendered in help-funcs.php
             break;
     }
 }
@@ -1440,6 +1444,315 @@ function openlab_members_sidebar_blocks($mobile_hide = false) {
 
         <?php
     endif;
+}
+
+/**
+ * Get the help navigation items as a complete tree.
+ *
+ * Single source of truth for help navigation, used by both the desktop sidebar
+ * renderer and the mobile drawer. Builds the full help_category tree with
+ * current-page detection, so callers don't need to know page context.
+ *
+ * Performance notes:
+ * - Term queries (1 top-level + up to N child queries) are wrapped in the WP
+ *   object cache. With a persistent cache (Memcached / Redis) this is
+ *   effectively free after the first warm request. Without one it runs on every
+ *   page load; all queries are small indexed lookups, but for broader packaged
+ *   use consider adding explicit transients + invalidation hooks.
+ * - Cache is invalidated automatically whenever a help_category term is
+ *   created, edited, or deleted via the openlab_help_nav_invalidate_cache()
+ *   hooks registered below.
+ * - The landing-page URL is fetched via get_posts() (post_name lookup) and
+ *   cached separately in the same group.
+ *
+ * @return array Array of nav items, each with keys:
+ *               text, href, is_current, term_id, children (array, may be empty)
+ */
+function openlab_get_help_nav_items() {
+	$cache_group = 'openlab_help_nav';
+	$items_key   = 'help_nav_items';
+
+	$cached = wp_cache_get( $items_key, $cache_group );
+
+	// Determine current-page context before using any cached data, so
+	// is_current flags reflect the live request rather than a cached state.
+	$current_top_term_id   = 0;
+	$current_child_term_id = 0;
+	$is_landing_current    = false;
+
+	if ( is_singular( 'help' ) ) {
+		$post = get_post();
+		if ( $post && 'openlab-help' === $post->post_name ) {
+			$is_landing_current = true;
+		} else {
+			$post_cats = get_the_terms( get_the_ID(), 'help_category' );
+			if ( $post_cats && ! is_wp_error( $post_cats ) ) {
+				foreach ( $post_cats as $cat ) {
+					if ( 0 === (int) $cat->parent ) {
+						$current_top_term_id = (int) $cat->term_id;
+					} else {
+						$current_child_term_id = (int) $cat->term_id;
+						if ( ! $current_top_term_id ) {
+							$current_top_term_id = (int) $cat->parent;
+						}
+					}
+				}
+			}
+		}
+	} elseif ( is_tax( 'help_category' ) ) {
+		$queried = get_queried_object();
+		if ( $queried instanceof WP_Term ) {
+			if ( 0 === (int) $queried->parent ) {
+				$current_top_term_id = (int) $queried->term_id;
+			} else {
+				$current_child_term_id = (int) $queried->term_id;
+				$current_top_term_id   = (int) $queried->parent;
+			}
+		}
+	}
+
+	if ( false !== $cached ) {
+		// Apply current-page state to cached structure (structure is static;
+		// is_current is request-specific and must not be stored in cache).
+		$cached['landing']['is_current'] = $is_landing_current;
+		foreach ( $cached['terms'] as &$term_item ) {
+			$term_item['is_current'] = ( (int) $term_item['term_id'] === $current_top_term_id );
+			foreach ( $term_item['children'] as &$child ) {
+				$child['is_current'] = ( (int) $child['term_id'] === $current_child_term_id );
+			}
+			unset( $child );
+		}
+		unset( $term_item );
+
+		return openlab_help_nav_assemble( $cached['landing'], $cached['terms'] );
+	}
+
+	// --- Cache miss: build from DB ---
+
+	// Fetch the landing page by post_name so the URL is correct across
+	// installations with arbitrary URL prefixes (e.g. /blog/help/).
+	$landing_item = null;
+	$landing_posts = get_posts( [
+		'name'           => 'openlab-help',
+		'post_type'      => 'help',
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'no_found_rows'  => true,
+	] );
+	if ( ! empty( $landing_posts ) ) {
+		$landing_item = [
+			'text'       => 'OpenLab Help',
+			'href'       => get_permalink( $landing_posts[0] ),
+			'is_current' => false, // set per-request above
+			'term_id'    => 0,
+			'children'   => [],
+			'is_landing' => true,
+		];
+	}
+
+	$top_terms = get_terms( [
+		'taxonomy'   => 'help_category',
+		'parent'     => 0,
+		'orderby'    => 'term_order',
+		'hide_empty' => false,
+	] );
+
+	$term_items = [];
+
+	if ( ! is_wp_error( $top_terms ) && ! empty( $top_terms ) ) {
+		foreach ( $top_terms as $term ) {
+			$term_name   = ( 'Help Glossary' === $term->name ) ? 'Glossary' : $term->name;
+			$child_terms = get_terms( [
+				'taxonomy'   => 'help_category',
+				'parent'     => $term->term_id,
+				'orderby'    => 'term_order',
+				'hide_empty' => false,
+			] );
+
+			$children = [];
+			if ( ! is_wp_error( $child_terms ) && ! empty( $child_terms ) ) {
+				foreach ( $child_terms as $child ) {
+					$child_name = ( 'Help Glossary' === $child->name ) ? 'Glossary' : $child->name;
+					$children[] = [
+						'text'       => $child_name,
+						'href'       => get_term_link( $child ),
+						'is_current' => false,
+						'term_id'    => (int) $child->term_id,
+					];
+				}
+			}
+
+			$term_items[] = [
+				'text'       => $term_name,
+				'href'       => get_term_link( $term ),
+				'is_current' => false,
+				'term_id'    => (int) $term->term_id,
+				'children'   => $children,
+			];
+		}
+	}
+
+	wp_cache_set( $items_key, [ 'landing' => $landing_item, 'terms' => $term_items ], $cache_group );
+
+	// Apply current-page state before returning.
+	if ( $landing_item ) {
+		$landing_item['is_current'] = $is_landing_current;
+	}
+	foreach ( $term_items as &$term_item ) {
+		$term_item['is_current'] = ( (int) $term_item['term_id'] === $current_top_term_id );
+		foreach ( $term_item['children'] as &$child ) {
+			$child['is_current'] = ( (int) $child['term_id'] === $current_child_term_id );
+		}
+		unset( $child );
+	}
+	unset( $term_item );
+
+	return openlab_help_nav_assemble( $landing_item, $term_items );
+}
+
+/**
+ * Assemble a flat nav-items array from a landing item + term items.
+ *
+ * Extracted so the cache-hit and cache-miss paths share identical output.
+ *
+ * @param array|null $landing_item Landing page item, or null if not found.
+ * @param array      $term_items   Array of top-level term items (with children).
+ * @return array
+ */
+function openlab_help_nav_assemble( $landing_item, array $term_items ) {
+	$items = [];
+	if ( $landing_item ) {
+		$items[] = $landing_item;
+	}
+	return array_merge( $items, $term_items );
+}
+
+/**
+ * Invalidate the help nav object cache when help_category terms change.
+ */
+function openlab_help_nav_invalidate_cache() {
+	wp_cache_delete( 'help_nav_items', 'openlab_help_nav' );
+}
+add_action( 'created_help_category', 'openlab_help_nav_invalidate_cache' );
+add_action( 'edited_help_category',  'openlab_help_nav_invalidate_cache' );
+add_action( 'delete_help_category',  'openlab_help_nav_invalidate_cache' );
+
+/**
+ * Render the help category navigation for the desktop sidebar.
+ *
+ * Outputs <li> elements for use inside a <ul class="sidebar-nav">.
+ * Child terms are shown only when the parent is the current item.
+ */
+function openlab_render_help_desktop_nav() {
+	$nav_items = openlab_get_help_nav_items();
+
+	if ( empty( $nav_items ) ) {
+		return;
+	}
+
+	foreach ( $nav_items as $item ) {
+		$classes = [ 'help-cat', 'menu-item' ];
+		if ( $item['is_current'] ) {
+			$classes[] = 'current-menu-item';
+		}
+
+		$children_html = '';
+		if ( ! empty( $item['children'] ) && $item['is_current'] ) {
+			$children_html = '<ul>';
+			foreach ( $item['children'] as $child ) {
+				$child_classes = [ 'help-cat', 'menu-item' ];
+				if ( $child['is_current'] ) {
+					$child_classes[] = 'current-menu-item';
+				}
+				$children_html .= sprintf(
+					'<li class="%s"><a href="%s">%s</a></li>',
+					esc_attr( implode( ' ', $child_classes ) ),
+					esc_url( $child['href'] ),
+					esc_html( $child['text'] )
+				);
+			}
+			$children_html .= '</ul>';
+		}
+
+		printf(
+			'<li class="%s"><a href="%s">%s</a>%s</li>',
+			esc_attr( implode( ' ', $classes ) ),
+			esc_url( $item['href'] ),
+			esc_html( $item['text'] ),
+			$children_html
+		);
+	}
+}
+
+/**
+ * Register the Help pages mobile drawer.
+ */
+function openlab_register_help_mobile_drawer() {
+	openlab_register_drawer( 'help-mobile-drawer', 'openlab_render_help_mobile_drawer' );
+}
+
+/**
+ * Render the Help pages mobile drawer content.
+ *
+ * Builds a two-level panel tree: root panel shows top-level help_category terms;
+ * terms that have children get a nested subpanel whose items link directly to
+ * the child term archive page. Leaf terms (no children) link directly from the
+ * root panel.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_help_mobile_drawer() {
+	$nav_items = openlab_get_help_nav_items();
+
+	if ( empty( $nav_items ) ) {
+		return '';
+	}
+
+	$root_items = [];
+	$panels     = [];
+
+	foreach ( $nav_items as $item ) {
+		if ( ! empty( $item['children'] ) ) {
+			$submenu_id = 'help-mobile-' . sanitize_title( $item['text'] ) . '-panel';
+
+			$panels[] = [
+				'id'          => $submenu_id,
+				'heading'     => $item['text'],
+				'items'       => $item['children'],
+				'is_root'     => false,
+				'back_target' => 'help-mobile-root-panel',
+				'back_text'   => 'Back to Help',
+			];
+
+			$root_items[] = [
+				'text'       => $item['text'],
+				'submenu'    => $submenu_id,
+				'is_current' => $item['is_current'],
+			];
+		} else {
+			$root_items[] = [
+				'text'       => $item['text'],
+				'href'       => $item['href'],
+				'is_current' => $item['is_current'],
+			];
+		}
+	}
+
+	$root_panel = [
+		'id'         => 'help-mobile-root-panel',
+		'heading'    => 'Help',
+		'items'      => $root_items,
+		'is_root'    => true,
+		'show_close' => true,
+	];
+
+	array_unshift( $panels, $root_panel );
+
+	return openlab_render_drawer( [
+		'id'            => 'help-mobile-drawer',
+		'default_panel' => 'help-mobile-root-panel',
+		'panels'        => $panels,
+	] );
 }
 
 /**
