@@ -112,7 +112,12 @@
 
 		// Get the 'action' param from the data property.
 		var action = null;
-		var dataEntries = settings.data.split('&');
+		var settingsData = settings.data || '';
+		if ( typeof settingsData !== 'string' ) {
+			return;
+		}
+
+		var dataEntries = settingsData.split('&');
 		if ( dataEntries.length == 0 ) {
 			return;
 		}
