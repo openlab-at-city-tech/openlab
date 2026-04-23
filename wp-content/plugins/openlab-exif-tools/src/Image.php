@@ -40,6 +40,10 @@ class Image {
 
 		$image_info = getimagesize( $this->path );
 
+		if ( ! $image_info || ! isset( $image_info['mime'] ) ) {
+			return '';
+		}
+
 		return $image_info['mime'];
 	}
 
