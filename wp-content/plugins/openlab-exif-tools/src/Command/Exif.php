@@ -41,9 +41,13 @@ class Exif {
 					$deleted = $image->delete_gps_data();
 					if ( $deleted ) {
 						WP_CLI::log( "Deleted GPS data from {$path}" );
+					} elseif ( $image->get_last_error() ) {
+						WP_CLI::warning( "Could not delete GPS data from {$path}: {$image->get_last_error()}" );
 					} else {
 						WP_CLI::log( "Failed to delete GPS data from {$path}" );
 					}
+				} elseif ( $image->get_last_error() ) {
+					WP_CLI::warning( "Could not read EXIF data from {$path}: {$image->get_last_error()}" );
 				} else {
 					WP_CLI::log( "No GPS data found in {$path}" );
 				}
