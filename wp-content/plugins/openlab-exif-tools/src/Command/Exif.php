@@ -21,16 +21,28 @@ class Exif {
 		$path = isset( $args[0] ) ? $args[0] : null;
 
 		if ( null !== $path ) {
+			if ( ! is_readable( $path ) ) {
+				WP_CLI::warning( "Skipping unreadable path {$path}" );
+
+				return;
+			}
 
 			// If this is a directory, recurse.
 			if ( is_dir( $path ) ) {
 				$files = new \RecursiveIteratorIterator(
-					new \RecursiveDirectoryIterator( $path )
+					new \RecursiveDirectoryIterator(
+						$path,
+						\FilesystemIterator::SKIP_DOTS
+					),
+					\RecursiveIteratorIterator::LEAVES_ONLY,
+					\RecursiveIteratorIterator::CATCH_GET_CHILD
 				);
 
 				foreach ( $files as $file ) {
-					if ( $file->isFile() ) {
+					if ( $file->isFile() && $file->isReadable() ) {
 						$this->delete_gps_data( [ $file->getPathname() ], $assoc_args );
+					} elseif ( $file->isFile() ) {
+						WP_CLI::warning( "Skipping unreadable path {$file->getPathname()}" );
 					}
 				}
 			} else {
