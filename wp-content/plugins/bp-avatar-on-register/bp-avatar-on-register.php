@@ -29,12 +29,14 @@ function bpar_init_plugin() {
 add_action( 'bp_include', 'bpar_init_plugin' );
 
 function bpar_avatar_upload() {
+	$avatar_visibility_levels = function_exists( 'openlab_get_avatar_visibility_levels' ) ? openlab_get_avatar_visibility_levels() : bp_xprofile_get_visibility_levels();
+	$avatar_visibility_value  = function_exists( 'openlab_get_signup_avatar_visibility_value' ) ? openlab_get_signup_avatar_visibility_value() : 'public';
 	?>
 
 	<div class="editfield avatar-upload register-avatar-upload" id="register-avatar-upload" style="display:none;">
 
 		<fieldset>
-			<legend>Profile Picture <span class="label-gloss">(optional; public)</span></legend>
+			<legend>Profile Picture <span class="label-gloss">(optional)</span></legend>
 
 			<?php do_action( 'bp_before_profile_avatar_upload_content' ) ?>
 
@@ -51,9 +53,18 @@ function bpar_avatar_upload() {
 				</div>
 
 				<div class="avatar-upload-actions">
-					<div>Upload an avatar (picture) to be used on your profile and throughout the site. Your avatar is displayed publicly. Because your avatar is public, you don't have to use a picture of yourself. You can use something that represents you or your interests, or just use the avatar shown here instead. You can change your avatar at any time by going to your profile settings.</div>
+					<div>Upload an avatar (picture) to be used on your profile and throughout the site. You can choose who can see it below. You do not have to use a picture of yourself. You can use something that represents you or your interests, or just use the avatar shown here instead. You can change your avatar at any time by going to your profile settings.</div>
 
 					<?php bp_attachments_get_template_part( 'avatars/index' ); ?>
+
+					<div class="field-visibility-settings register-avatar-visibility">
+						<label for="avatar-visibility"><?php esc_html_e( 'Who can see this?', 'openlab' ); ?></label>
+						<select name="avatar_visibility" id="avatar-visibility">
+							<?php foreach ( $avatar_visibility_levels as $level ) : ?>
+								<option value="<?php echo esc_attr( $level['id'] ); ?>"<?php selected( $avatar_visibility_value, $level['id'] ); ?>><?php echo esc_html( $level['label'] ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
 				</div>
 			</div>
 		</fieldset>

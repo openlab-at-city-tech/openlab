@@ -25,6 +25,58 @@ function openlab_get_user_avatar_visibility( $user_id = 0 ) {
 }
 
 /**
+ * Gets avatar visibility levels for OpenLab.
+ *
+ * @return array
+ */
+function openlab_get_avatar_visibility_levels() {
+	if ( function_exists( 'openlab_get_xprofile_visibility_levels' ) ) {
+		return openlab_get_xprofile_visibility_levels();
+	}
+
+	$visibility_levels = bp_xprofile_get_visibility_levels();
+
+	if ( isset( $visibility_levels['loggedin'] ) ) {
+		$visibility_levels['loggedin']['label'] = 'OpenLab Members';
+	}
+
+	if ( isset( $visibility_levels['friends'] ) ) {
+		$visibility_levels['friends']['label'] = 'Friends';
+	}
+
+	return $visibility_levels;
+}
+
+/**
+ * Sanitizes avatar visibility.
+ *
+ * @param string $visibility Avatar visibility level.
+ * @return string
+ */
+function openlab_sanitize_avatar_visibility( $visibility ) {
+	$visibility_levels = openlab_get_avatar_visibility_levels();
+
+	if ( ! isset( $visibility_levels[ $visibility ] ) ) {
+		return 'public';
+	}
+
+	return $visibility;
+}
+
+/**
+ * Gets the avatar visibility currently submitted on the registration form.
+ *
+ * @return string
+ */
+function openlab_get_signup_avatar_visibility_value() {
+	if ( empty( $_POST['avatar_visibility'] ) ) {
+		return 'public';
+	}
+
+	return openlab_sanitize_avatar_visibility( sanitize_text_field( wp_unslash( $_POST['avatar_visibility'] ) ) );
+}
+
+/**
  * AJAX callback for updating avatar privacy.
  *
  * @return void
@@ -33,20 +85,20 @@ function openlab_ajax_update_avatar_privacy() {
 	check_ajax_referer( 'openlab_avatar_privacy', 'nonce' );
 
 	if ( ! isset( $_POST['user_id'] ) || ! isset( $_POST['visibility'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid request.', 'flavor-flavor' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid request.', 'openlab' ) ) );
 	}
 
 	$user_id    = (int) $_POST['user_id'];
-	$visibility = sanitize_text_field( $_POST['visibility'] );
+	$visibility = sanitize_text_field( wp_unslash( $_POST['visibility'] ) );
 
-	$visibility_levels = bp_xprofile_get_visibility_levels();
+	$visibility_levels = openlab_get_avatar_visibility_levels();
 	if ( ! isset( $visibility_levels[ $visibility ] ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid visibility level.', 'flavor-flavor' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid visibility level.', 'openlab' ) ) );
 	}
 
 	$is_my_profile = bp_loggedin_user_id() === $user_id;
 	if ( ! $is_my_profile && ! current_user_can( 'bp_moderate' ) ) {
-		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'flavor-flavor' ) ) );
+		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'openlab' ) ) );
 	}
 
 	bp_update_user_meta( $user_id, 'avatar_visibility', $visibility );
@@ -54,6 +106,44 @@ function openlab_ajax_update_avatar_privacy() {
 	wp_send_json_success();
 }
 add_action( 'wp_ajax_openlab_avatar_privacy', 'openlab_ajax_update_avatar_privacy' );
+
+/**
+ * Saves avatar visibility at registration.
+ *
+ * @param array $usermeta Signup metadata.
+ * @return array
+ */
+function openlab_save_avatar_visibility_at_registration( $usermeta ) {
+	if ( ! isset( $_POST['avatar_visibility'] ) ) {
+		return $usermeta;
+	}
+
+	$usermeta['avatar_visibility'] = openlab_get_signup_avatar_visibility_value();
+
+	return $usermeta;
+}
+add_filter( 'bp_signup_usermeta', 'openlab_save_avatar_visibility_at_registration' );
+
+/**
+ * Processes avatar visibility on account activation.
+ *
+ * @param int    $user_id User ID.
+ * @param string $key     Activation key.
+ * @param array  $data    Signup data.
+ * @return void
+ */
+function openlab_process_avatar_visibility_at_activation( $user_id, $key, $data ) {
+	if ( empty( $data['meta']['avatar_visibility'] ) ) {
+		return;
+	}
+
+	bp_update_user_meta(
+		$user_id,
+		'avatar_visibility',
+		openlab_sanitize_avatar_visibility( $data['meta']['avatar_visibility'] )
+	);
+}
+add_action( 'bp_core_activated_user', 'openlab_process_avatar_visibility_at_activation', 10, 3 );
 
 /**
  * Enforces avatar privacy settings.
