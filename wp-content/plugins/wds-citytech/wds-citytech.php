@@ -3941,6 +3941,7 @@ function openlab_blog_slug_is_valid( $blogname ) {
 		'my-clubs',
 		'my-courses',
 		'my-projects',
+		'people',
     ];
 
 	$blacklisted_slugs[] = bp_get_members_slug();
