@@ -3938,10 +3938,16 @@ add_filter( 'wpmu_users_columns', 'openlab_remove_two_factor_column_from_users_a
 function openlab_blog_slug_is_valid( $blogname ) {
     $blacklisted_slugs = [
         'about',
+		'clubs',
+		'courses',
 		'my-clubs',
 		'my-courses',
 		'my-projects',
 		'people',
+		'portfolios',
+		'projects',
+		'resources',
+		'search',
     ];
 
 	$blacklisted_slugs[] = bp_get_members_slug();
