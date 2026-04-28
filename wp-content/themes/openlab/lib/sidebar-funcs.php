@@ -72,6 +72,36 @@ function openlab_register_group_mobile_drawer() {
 }
 
 /**
+ * Filter nav items for use in a drawer panel, removing any item whose href
+ * matches the panel's heading URL.
+ *
+ * When a drawer panel heading is itself a link, the first nav item is often a
+ * duplicate of that link (e.g. "Group Profile" in the heading and in the list).
+ * This helper removes that duplicate so callers don't have to strip it from the
+ * data source — which would also remove it from the desktop nav.
+ *
+ * @param array  $items       Nav items from a get-nav-items function.
+ * @param string $heading_url The URL used as the panel heading link.
+ * @return array Filtered nav items.
+ */
+function openlab_filter_drawer_nav_items( $items, $heading_url ) {
+	if ( empty( $heading_url ) ) {
+		return $items;
+	}
+
+	$heading_url = trailingslashit( $heading_url );
+
+	return array_values(
+		array_filter(
+			$items,
+			function( $item ) use ( $heading_url ) {
+				return empty( $item['href'] ) || trailingslashit( $item['href'] ) !== $heading_url;
+			}
+		)
+	);
+}
+
+/**
  * Render the Group pages mobile drawer content.
  *
  * @return string Drawer HTML.
@@ -112,8 +142,10 @@ function openlab_render_group_mobile_drawer() {
 		}
 	}
 
-	// Get the BP options nav items (with submenus).
-	$nav_items = openlab_get_group_nav_items();
+	// Get the BP options nav items (with submenus), filtering out any item whose
+	// href duplicates the panel heading link.
+	$heading_url = bp_get_group_url( groups_get_current_group() );
+	$nav_items   = openlab_filter_drawer_nav_items( openlab_get_group_nav_items(), $heading_url );
 	foreach ( $nav_items as $nav_item ) {
 		// If the item has submenu_items, create a submenu panel and make the root item a toggle
 		if ( ! empty( $nav_item['submenu_items'] ) ) {
@@ -153,11 +185,12 @@ function openlab_render_group_mobile_drawer() {
 
 	// Build root panel
 	$root_panel = [
-		'id'         => 'group-mobile-root-panel',
-		'heading'    => $group_type_label . ' Profile',
-		'items'      => $root_items,
-		'is_root'    => true,
-		'show_close' => true,
+		'id'          => 'group-mobile-root-panel',
+		'heading'     => $group_type_label . ' Profile',
+		'heading_url' => bp_get_group_url( groups_get_current_group() ),
+		'items'       => $root_items,
+		'is_root'     => true,
+		'show_close'  => true,
 	];
 
 	// Prepend root panel to the list of panels
