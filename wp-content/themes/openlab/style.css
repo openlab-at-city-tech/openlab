@@ -7987,9 +7987,6 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
 .openlab-navbar-drawer button.flyout-submenu-toggle:hover,
 .openlab-drawer-container button.flyout-submenu-toggle:hover {
   background-color: #f0f0f0;
-  outline: solid;
-  outline-offset: -2px;
-  outline-width: 2px;
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle .right-chevron svg,
 .openlab-drawer-container button.flyout-submenu-toggle .right-chevron svg {
