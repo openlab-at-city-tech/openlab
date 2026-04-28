@@ -341,9 +341,10 @@ function openlab_get_group_nav_items() {
 		$settings_current = ( $current_action === 'admin' && ! in_array( $action_var, [ 'manage-members', 'notifications', 'membership-requests' ], true ) );
 
 		$items[] = [
-			'text'       => __( 'Settings', 'flavor' ),
-			'href'       => $group_url . 'admin/edit-details/',
-			'is_current' => $settings_current,
+			'text'          => __( 'Settings', 'flavor' ),
+			'href'          => $group_url . 'admin/edit-details/',
+			'is_current'    => $settings_current,
+			'submenu_items' => openlab_get_group_settings_submenu_items( $group ),
 		];
 	}
 
@@ -589,6 +590,81 @@ function openlab_get_group_membership_submenu_items( $group = null ) {
 			'is_current' => ( $current_action === 'notifications' ),
 		];
 	}
+
+	return $items;
+}
+
+/**
+ * Get the Settings submenu items for a group.
+ *
+ * This is the single source of truth for group settings tabs, used by both
+ * the mobile drawer subpanel and openlab_group_admin_tabs() for the desktop.
+ * Items may carry optional 'css_classes' and 'icon' keys used only by the
+ * desktop renderer; the mobile drawer renderer ignores them.
+ *
+ * @param  Groups_Group|null $group
+ * @return array Array of submenu items.
+ */
+function openlab_get_group_settings_submenu_items( $group = null ) {
+	global $bp;
+
+	if ( ! $group ) {
+		$group = groups_get_current_group();
+	}
+
+	if ( ! $group || ! $bp->is_item_admin ) {
+		return [];
+	}
+
+	$items          = [];
+	$current_action = bp_current_action();
+	$action_var     = bp_action_variable( 0 );
+	$group_url      = bp_get_group_url( $group );
+	$group_type     = groups_get_groupmeta( $group->id, 'wds_group_type' );
+
+	$items[] = [
+		'text'       => __( 'Edit Profile', 'flavor' ),
+		'href'       => $group_url . 'admin/edit-details',
+		'is_current' => ( $current_action === 'admin' && ( $action_var === 'edit-details' || empty( $action_var ) ) ),
+	];
+
+	// For portfolio groups, Change Avatar is conditional on the BP avatar-uploads setting.
+	if ( ! openlab_is_portfolio() || ! (int) bp_get_option( 'bp-disable-avatar-uploads' ) ) {
+		$items[] = [
+			'text'       => __( 'Change Avatar', 'flavor' ),
+			'href'       => $group_url . 'admin/group-avatar',
+			'is_current' => ( $current_action === 'admin' && $action_var === 'group-avatar' ),
+		];
+	}
+
+	$items[] = [
+		'text'       => __( 'Settings', 'flavor' ),
+		'href'       => $group_url . 'admin/group-settings',
+		'is_current' => ( $current_action === 'admin' && $action_var === 'group-settings' ),
+	];
+
+	if ( ! openlab_is_portfolio() ) {
+		$clone_url = bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . $group->id;
+		$items[]   = [
+			'text'        => sprintf( __( 'Clone %s', 'flavor' ), ucfirst( $group_type ) ),
+			'href'        => $clone_url,
+			'is_current'  => false,
+			'css_classes' => [ 'clone-button' ],
+			'icon'        => 'fa-plus-circle',
+		];
+	}
+
+	$delete_label = openlab_is_portfolio()
+		? openlab_get_portfolio_label( [ 'user_id' => bp_loggedin_user_id() ] )
+		: ucfirst( $group_type );
+
+	$items[] = [
+		'text'        => sprintf( __( 'Delete %s', 'flavor' ), $delete_label ),
+		'href'        => $group_url . 'admin/delete-group',
+		'is_current'  => ( $current_action === 'admin' && $action_var === 'delete-group' ),
+		'css_classes' => [ 'delete-button' ],
+		'icon'        => 'fa-minus-circle',
+	];
 
 	return $items;
 }
