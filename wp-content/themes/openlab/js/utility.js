@@ -956,6 +956,12 @@ OpenLab.utility = (function ($) {
 				drawer.inert = true;
 				drawer.classList.remove('is-open');
 
+				// Restore page content to the accessibility tree.
+				const pageTable = document.querySelector('.page-table');
+				if (pageTable) {
+					pageTable.inert = false;
+				}
+
 				// Set all panels as inert and reset their state
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
 					panel.inert = true;
@@ -1015,6 +1021,13 @@ OpenLab.utility = (function ($) {
 					actualDrawer.inert = false;
 					actualDrawer.classList.add('is-open');
 					actualDrawer.scrollTop = 0;
+
+					// Hide page content from the accessibility tree while the drawer is open.
+					// This prevents VoiceOver "explore by touch" from reaching elements underneath.
+					const pageTable = document.querySelector('.page-table');
+					if (pageTable) {
+						pageTable.inert = true;
+					}
 
 					toggle.setAttribute('aria-expanded', 'true');
 
