@@ -46,16 +46,20 @@ function openlab_render_about_mobile_drawer() {
 		return '';
 	}
 
+	$heading_url = home_url( '/about/' );
+	$menu_items  = openlab_filter_drawer_nav_items( $menu_items, $heading_url );
+
 	return openlab_render_drawer( [
 		'id'            => 'about-mobile-drawer',
 		'default_panel' => 'about-mobile-panel',
 		'panels'        => [
 			[
-				'id'      => 'about-mobile-panel',
-				'heading' => 'About',
-				'items'   => $menu_items,
-				'is_root'    => true,
-				'show_close' => true,
+				'id'          => 'about-mobile-panel',
+				'heading'     => 'About the OpenLab',
+				'heading_url' => $heading_url,
+				'items'       => $menu_items,
+				'is_root'     => true,
+				'show_close'  => true,
 			],
 		],
 	] );
@@ -1741,6 +1745,17 @@ function openlab_render_help_mobile_drawer() {
 		return '';
 	}
 
+	// The landing item (is_landing => true) is represented by the panel heading link,
+	// so extract its URL and filter it from the list to avoid duplication.
+	$heading_url = '';
+	foreach ( $nav_items as $item ) {
+		if ( ! empty( $item['is_landing'] ) ) {
+			$heading_url = $item['href'];
+			break;
+		}
+	}
+	$nav_items = openlab_filter_drawer_nav_items( $nav_items, $heading_url );
+
 	$root_items = [];
 	$panels     = [];
 
@@ -1754,7 +1769,7 @@ function openlab_render_help_mobile_drawer() {
 				'items'       => $item['children'],
 				'is_root'     => false,
 				'back_target' => 'help-mobile-root-panel',
-				'back_text'   => 'Back to Help',
+				'back_text'   => 'Back to OpenLab Help',
 			];
 
 			$root_items[] = [
@@ -1772,11 +1787,12 @@ function openlab_render_help_mobile_drawer() {
 	}
 
 	$root_panel = [
-		'id'         => 'help-mobile-root-panel',
-		'heading'    => 'Help',
-		'items'      => $root_items,
-		'is_root'    => true,
-		'show_close' => true,
+		'id'          => 'help-mobile-root-panel',
+		'heading'     => 'OpenLab Help',
+		'heading_url' => $heading_url,
+		'items'       => $root_items,
+		'is_root'     => true,
+		'show_close'  => true,
 	];
 
 	array_unshift( $panels, $root_panel );
