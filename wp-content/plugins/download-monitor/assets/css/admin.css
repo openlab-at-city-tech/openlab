@@ -1171,6 +1171,9 @@ table.wp-list-table .column-thumb img {
   flex-grow: 1;
   width: calc(100% - 45px);
 }
+#download-monitor-information .dlm_information_panel .copy-dlm-button {
+  padding: 0;
+}
 #download-monitor-product-information .dlm_information_panel div p {
   overflow: hidden;
   width: 100%;
@@ -2485,6 +2488,9 @@ table.wp-list-table .column-thumb img {
   top: -1px;
 }
 .wpchill-upsell a.button {
+  padding: 0 12px;
+}
+.wpchill-upsell a.button:not(:last-child) {
   margin-right: 10px;
 }
 .wpchill-upsells-wrapper {
@@ -3435,11 +3441,14 @@ div#dlm-export-settings-upsell span {
 .xmas-upsell-columns .wpchill-xmas-upsell * {
   z-index: 2;
 }
-.wpchill-tooltip-button.copy-dlm-shortcode {
+.post-type-dlm_download .wpchill-tooltip-button.copy-dlm-shortcode {
   line-height: 13px;
 }
-.wpchill-tooltip-button.copy-dlm-shortcode .dashicons {
+.post-type-dlm_download .wpchill-tooltip-button.copy-dlm-shortcode .dashicons {
   font-size: 17px;
+  width: 17px;
+  height: 17px;
+  line-height: 20px;
 }
 .file {
   background-repeat: no-repeat;
