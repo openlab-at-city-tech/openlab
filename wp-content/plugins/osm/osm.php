@@ -2,11 +2,16 @@
 /*
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
-Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
-Version: 6.1.16
+Description: Embed OpenStreetMap-based maps in posts, pages, and widgets, including marker, GPX, and KML support.
+Version: 6.2.5
 Author: MiKa
-Author URI: http://www.hyumika.com
-Minimum WordPress Version Required: 3.0
+Author URI: https://www.hyumika.com
+Requires at least: 5.0
+Requires PHP: 5.3
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: osm
+Domain Path: /languages
 */
 
 /*  (c) Copyright 2026  MiKa (www.hyumika.com)
@@ -26,7 +31,7 @@ Minimum WordPress Version Required: 3.0
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-define ("PLUGIN_VER", "V6.1.16");
+define ("PLUGIN_VER", "V6.2.5");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -167,6 +172,12 @@ if ( ! function_exists( 'osm_restrict_mime_types' ) ) {
     add_filter( 'wp_check_filetype_and_ext', 'allow_osm_upload', 10, 4 );
 }
 
+/**
+ * AJAX handler to save a post geotag (lat/lon) and optional marker icon.
+ *
+ * Validates required request fields, checks nonce and permissions, sanitizes
+ * input, updates post meta, and returns a JSON success/error response.
+ */
 function saveGeotagAndPic() {
 
     if (
@@ -221,7 +232,7 @@ function saveGeotagAndPic() {
     if ( $icon !== '' ) {
         add_post_meta( $post_id, 'OSM_geo_icon', $icon, true );
     }
-    wp_send_json_success( esc_html__('Location (geotag) saved successfully. You can use it at [Map & Locations].', 'OSM'));
+    wp_send_json_success( esc_html__('Location (geotag) saved successfully. You can use it at [Map & Locations].', 'osm'));
 }
 
 
@@ -307,14 +318,14 @@ function savePostMarker() {
     add_post_meta( $post_id, $prefix . 'Icon', $MarkerIcon, true );
     add_post_meta( $post_id, $prefix . 'Text', $MarkerText, true );
 
-    wp_send_json_success( esc_html__( 'Marker saved successfully.', 'OSM' ) );
+    wp_send_json_success( esc_html__( 'Marker saved successfully.', 'osm' ) );
 }
 
 
 
 
 function osm_load_plugin_textdomain() {
-    load_plugin_textdomain('OSM', false, dirname(plugin_basename(__FILE__)) . '/languages/'  );
+    load_plugin_textdomain('osm', false, dirname(plugin_basename(__FILE__)) . '/languages/'  );
 }
 
 // If the function exists this file is called as post-upload-ui.
@@ -329,7 +340,7 @@ if ( ! function_exists( 'osm_restrict_mime_types_hint' ) ) {
 	 */
 	function osm_restrict_mime_types_hint() {
 	  echo '<br />';
-          _e('OSM plugin added: GPX / KML','OSM');
+          _e('OSM plugin added: GPX / KML','osm');
 	}
 }
 
@@ -347,21 +358,65 @@ include('osm_map/osm-icon.php');
 include('osm-icon-class.php');
 
 
+function osm_enqueue_map_v3_assets() {
+  $asset_handles = array(
+    'styles'  => array('osm-ol3-css', 'osm-ol3-ext-css', 'osm-map-css'),
+    'scripts' => array('wp-polyfill', 'osm-ol3-library', 'osm-ol3-ext-library', 'osm-ol3-metabox-events', 'jquery', 'osm-map-startup'),
+  );
+
+  wp_enqueue_style('osm-ol3-css', Osm_OL_3_CSS);
+  wp_enqueue_style('osm-ol3-ext-css', Osm_OL_3_Ext_CSS);
+  wp_enqueue_style('osm-map-css', Osm_map_CSS);
+  wp_enqueue_script('wp-polyfill'); // use WordPress built-in polyfill instead
+  wp_enqueue_script('osm-ol3-library', Osm_OL_3_LibraryLocation, array(), null, false);
+  wp_enqueue_script('osm-ol3-ext-library', Osm_OL_3_Ext_LibraryLocation, array('osm-ol3-library'), null, false);
+  wp_enqueue_script('osm-ol3-metabox-events', Osm_OL_3_MetaboxEvents_LibraryLocation, array('osm-ol3-library'), null, false);
+  wp_enqueue_script('osm-map-startup', Osm_map_startup_LibraryLocation, array('jquery', 'osm-ol3-library', 'osm-ol3-ext-library'), PLUGIN_VER, false);
+  wp_localize_script('osm-map-startup', 'translations', array(
+    'openlayer'          => __('open layer', 'osm'),
+    'openlayerAtStartup' => __('open layer at startup', 'osm'),
+    'generateLink'       => __('link to this map with opened layers', 'osm'),
+    'shortDescription'   => __('short description', 'osm'),
+    'generatedShortCode' => __('to get a text control link paste this code in your wordpress editor', 'osm'),
+    'closeLayer'         => __('close layer', 'osm'),
+    'cantGenerateLink'   => __('put this string in the existing map short code to control this map', 'osm'),
+  ));
+
+  return $asset_handles;
+}
+
+
 
 function load_osm_map_v3_scripts($hook) {
+    global $post, $wp_query;
+
+    // Check all posts in the current query so that archive/multi-post pages
+    // also load the scripts when *any* displayed post contains the shortcode.
+    $needs_scripts = false;
+    if ( ! empty( $wp_query->posts ) ) {
+        foreach ( $wp_query->posts as $queried_post ) {
+            if ( is_a( $queried_post, 'WP_Post' ) && has_shortcode( $queried_post->post_content, 'osm_map_v3' ) ) {
+                $needs_scripts = true;
+                break;
+            }
+        }
+    } elseif ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'osm_map_v3' ) ) {
+        $needs_scripts = true;
+    }
+
+    if ( ! $needs_scripts ) {
+        return;
+    }
+
     //for osm_map_v3
-    wp_enqueue_style('osm-ol3-css', Osm_OL_3_CSS);
-    wp_enqueue_style('osm-ol3-ext-css', Osm_OL_3_Ext_CSS);
-    wp_enqueue_style('osm-map-css', Osm_map_CSS);
-    wp_enqueue_script('osm-polyfill', OSM_PLUGIN_URL . 'js/polyfill/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL');
-    wp_enqueue_script('osm-ol3-library', Osm_OL_3_LibraryLocation);
-    wp_enqueue_script('osm-ol3-ext-library', Osm_OL_3_Ext_LibraryLocation);
-    wp_enqueue_script('osm-ol3-metabox-events', Osm_OL_3_MetaboxEvents_LibraryLocation);
-    wp_enqueue_script('osm-map-startup', Osm_map_startup_LibraryLocation);
-    
+    osm_enqueue_map_v3_assets();
 }
 
 function load_osm_map_scripts($hook) {
+    global $post;
+    if ( ! is_a( $post, 'WP_Post' ) || ! has_shortcode( $post->post_content, 'osm_map' ) ) {
+        return;
+    }
     wp_enqueue_script(array ('jquery'));
     
     //for osm_map
@@ -536,10 +591,6 @@ echo '<script type="text/javascript">
 /**  all layers have to be in this global array - in further process each map will have something like vectorM[map_ol3js_n][layer_n] */
 var vectorM = [[]];
 
-
-/** put translations from PHP/mo to JavaScript */
-var translations = [];
-
 /** global GET-Parameters */
 var HTTP_GET_VARS = [];
 
@@ -574,10 +625,6 @@ echo '<script type="text/javascript">
 /**  all layers have to be in this global array - in further process each map will have something like vectorM[map_ol3js_n][layer_n] */
 var vectorM = [[]];
 
-
-/** put translations from PHP/mo to JavaScript */
-var translations = [];
-
 /** global GET-Parameters */
 var HTTP_GET_VARS = [];
 
@@ -586,14 +633,21 @@ var HTTP_GET_VARS = [];
   }
 
   function gps2Num($coordPart) {
-    $parts = explode('/', $coordPart);
-    if (count($parts) <= 0){
+    if ($coordPart === null || $coordPart === '') {
         return 0;
     }
-    if (count($parts) == 1){
-        return $parts[0];
+
+    $parts = explode('/', (string) $coordPart, 2);
+    if (!isset($parts[1]) || $parts[1] === '') {
+      return floatval($parts[0]);
     }
-    return floatval($parts[0]) / floatval($parts[1]);
+
+    $denominator = floatval($parts[1]);
+    if ($denominator == 0.0) {
+      return floatval($parts[0]);
+    }
+
+    return floatval($parts[0]) / $denominator;
   }
 
   function getGps($exifCoord, $hemi) {
@@ -681,7 +735,12 @@ static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name, $a_
                 // Remove spaces before and after commas
                 $Data = preg_replace('/\s*,\s*/', ',', $Data);
                 $GeoData_Array = explode(' ', $Data);
-                list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
+                $LatLon = explode(',', $GeoData_Array[0]);
+                if (count($LatLon) < 2) {
+                    Osm::traceText(DEBUG_ERROR, '[OL3_createMarkerList]: Invalid geo data for post ID ' . $post->ID . ' (value: "' . $GeoData_Array[0] . '"). Please either correct or delete the geotag in the custom field "' . $CustomFieldName . '" of this post.');
+                    continue;
+                }
+                list($temp_lat, $temp_lon) = $LatLon;
                 $PostMarker = get_post_meta($post->ID, 'OSM_geo_icon', true);
                 $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
 
@@ -1096,7 +1155,24 @@ static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name, $a_
   // shortcode for map with OpenLayers 3
   public static function sc_OL3JS($atts) {
     static  $MapCounter = 0;
+
+    // Fallback for maps rendered from secondary queries/theme sections.
+    // If normal enqueue detection missed this request, print required assets here.
+    // This keeps the map functional without forcing global script loading.
+    $assets_html = '';
+    if ( ! wp_script_is('osm-ol3-ext-library', 'done') ) {
+      $asset_handles = osm_enqueue_map_v3_assets();
+
+      ob_start();
+      wp_print_styles($asset_handles['styles']);
+      wp_print_scripts($asset_handles['scripts']);
+      $assets_html = ob_get_clean();
+    }
+
     include('osm_map_v3/osm-sc-osm_map_v3.php');
+    if ($assets_html !== '') {
+      $output = $assets_html . $output;
+    }
     return $output;
   }
   // shortcode for map with OpenLayers 2
@@ -1116,7 +1192,7 @@ static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name, $a_
  // add OSM-config page to Settings
   function admin_menu($not_used){
   // place the info in the plugin settings page
-    add_options_page(__('OpenStreetMap Manager', 'Osm'), __('OSM', 'Osm'), 'manage_options', basename(__FILE__), array('Osm', 'options_page_osm'));
+    add_options_page(__('OpenStreetMap Manager', 'osm'), __('OSM', 'osm'), 'manage_options', basename(__FILE__), array('Osm', 'options_page_osm'));
   }
 
 }	// End class Osm

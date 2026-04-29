@@ -7,8 +7,8 @@ class OSM_Tagged_Widget extends WP_Widget {
   function __construct() {
     parent::__construct(
       'osm_widget', // Base ID
-       __('OSM Widget', 'OSM-plugin'), // Name
-       array( 'description' => __( 'WP OSM Geotag Widget', 'OSM-plugin' ), ) // Args
+      __('OSM Widget', 'osm'), // Name
+      array( 'description' => __( 'WP OSM Geotag Widget', 'osm' ), ) // Args
     );
    }
 
@@ -36,7 +36,7 @@ class OSM_Tagged_Widget extends WP_Widget {
       $title = $instance[ 'title' ];
     }
     else {
-      $title = __( 'New title', 'OSM-plugin' );
+      $title = __( 'New title', 'osm' );
     }
     if ( isset( $instance[ 'marker' ] ) ) {
       $marker = $instance[ 'marker' ];
@@ -52,19 +52,19 @@ class OSM_Tagged_Widget extends WP_Widget {
     }
     ?>
     <p>
-    <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'OSM'); ?></label>
+    <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'osm'); ?></label>
     <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
     </p>
     <p>        
-    <label for="<?php echo esc_attr($this->get_field_id('height')); ?>"><?php esc_html_e('Height:', 'OSM'); ?></label>
+    <label for="<?php echo esc_attr($this->get_field_id('height')); ?>"><?php esc_html_e('Height:', 'osm'); ?></label>
     <input class="widefat" id="<?php echo esc_attr($this->get_field_id('height')); ?>" name="<?php echo esc_attr($this->get_field_name('height')); ?>" type="text" value="<?php echo esc_attr($height); ?>">
      
-    <label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e('Height of map:', 'OSM-plugin'); ?></label>
-    <input id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" value="<?php echo $instance['height']; ?>" style="width:100%;" />
+    <label for="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>"><?php esc_html_e( 'Height of map:', 'osm' ); ?></label>
+    <input id="<?php echo esc_attr( $this->get_field_id( 'height' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'height' ) ); ?>" value="<?php echo esc_attr( $instance['height'] ); ?>" style="width:100%;" />
     </p>
     <p>
-    <label for="<?php echo $this->get_field_id( 'zoom' ); ?>"><?php _e('Zoom', 'OSM-plugin'); ?></label> 
-    <select id="<?php echo $this->get_field_id( 'zoom' ); ?>" name="<?php echo $this->get_field_name( 'zoom' ); ?>" class="widefat" style="width:100%;">
+    <label for="<?php echo esc_attr( $this->get_field_id( 'zoom' ) ); ?>"><?php esc_html_e( 'Zoom', 'osm' ); ?></label> 
+    <select id="<?php echo esc_attr( $this->get_field_id( 'zoom' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'zoom' ) ); ?>" class="widefat" style="width:100%;">
       <option <?php if ( '1' == $instance['zoom'] ) echo 'selected="selected"'; ?>>1</option>
       <option <?php if ( '2' == $instance['zoom'] ) echo 'selected="selected"'; ?>>2</option>
       <option <?php if ( '3' == $instance['zoom'] ) echo 'selected="selected"'; ?>>3</option>
@@ -86,11 +86,11 @@ class OSM_Tagged_Widget extends WP_Widget {
     </select>
     </p>
     <p>
-    <label for="<?php echo $this->get_field_id( 'ctrl_theme' ); ?>"><?php _e('Control Theme', 'OSM-plugin'); ?></label> 
-    <select id="<?php echo $this->get_field_id( 'ctrl_theme' ); ?>" name="<?php echo $this->get_field_name( 'ctrl_theme' ); ?>" class="widefat" style="width:100%;">
-        <option <?php selected( $instance['ctrl_theme'], 'dark'); ?> value="dark"><?php _e('dark','OSM-plugin') ?></option>
-        <option <?php selected( $instance['ctrl_theme'], 'ol_orange'); ?> value="ol_orange"><?php _e('orange','OSM-plugin') ?></option>
-        <option <?php selected( $instance['ctrl_theme'], 'ol'); ?> value="ol"><?php _e('blue','OSM-plugin') ?></option>
+    <label for="<?php echo esc_attr( $this->get_field_id( 'ctrl_theme' ) ); ?>"><?php esc_html_e( 'Control Theme', 'osm' ); ?></label> 
+    <select id="<?php echo esc_attr( $this->get_field_id( 'ctrl_theme' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'ctrl_theme' ) ); ?>" class="widefat" style="width:100%;">
+        <option <?php selected( $instance['ctrl_theme'], 'dark'); ?> value="dark"><?php esc_html_e( 'dark', 'osm' ); ?></option>
+        <option <?php selected( $instance['ctrl_theme'], 'ol_orange'); ?> value="ol_orange"><?php esc_html_e( 'orange', 'osm' ); ?></option>
+        <option <?php selected( $instance['ctrl_theme'], 'ol'); ?> value="ol"><?php esc_html_e( 'blue', 'osm' ); ?></option>
 
   <!--<option <?php if ( 'blue' == $instance['ctrl_theme'] ) echo 'selected="selected"'; ?>>blue</option>
       <option <?php if ( 'orange' == $instance['ctrl_theme'] ) echo 'selected="selected"'; ?>>orange</option>
@@ -98,37 +98,37 @@ class OSM_Tagged_Widget extends WP_Widget {
     </select>
     </p>
     <p>
-    <label for="<?php echo $this->get_field_id( 'marker' ); ?>"><?php _e('marker', 'OSM-plugin'); ?></label> 
-    <select id="<?php echo $this->get_field_id( 'marker' ); ?>" name="<?php echo $this->get_field_name( 'marker' ); ?>" class="widefat" style="width:100%;">
-        <option <?php selected( $instance['marker'], 'wpttemp-green.png'); ?> value="wpttemp-green.png"><?php _e('Waypoint','OSM-plugin');echo ' ';_e('green','OSM-plugin') ?></option> 
-        <option <?php selected( $instance['marker'], 'wpttemp-red.png'); ?> value="wpttemp-red.png"><?php _e('Waypoint','OSM-plugin');echo ' ';_e('red','OSM-plugin') ?></option> 
-        <option <?php selected( $instance['marker'], 'wpttemp-yellow.png'); ?> value="wpttemp-yellow.png"><?php _e('Waypoint','OSM-plugin');echo ' ';_e('yellow','OSM-plugin') ?></option> 
-        <option <?php selected( $instance['marker'], 'mic_photo_icon.png'); ?> value="mic_photo_icon.png"><?php _e('Camera','OSM-plugin');echo ' ';_e('black','OSM-plugin') ?></option> 
-        <option <?php selected( $instance['marker'], 'mic_blue_bridge_old_01.png'); ?> value="mic_blue_bridge_old_01.png"><?php _e('Bridge','OSM-plugin');echo ' ';_e('blue','OSM-plugin') ?></option> 
-        <option <?php selected( $instance['marker'], 'mic_orange_hiking_01.png'); ?> value="mic_orange_hiking_01.png"><?php _e('Hiking','OSM-plugin');echo ' ';_e('orange','OSM-plugin') ?></option> 
+    <label for="<?php echo esc_attr( $this->get_field_id( 'marker' ) ); ?>"><?php esc_html_e( 'marker', 'osm' ); ?></label> 
+    <select id="<?php echo esc_attr( $this->get_field_id( 'marker' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'marker' ) ); ?>" class="widefat" style="width:100%;">
+        <option <?php selected( $instance['marker'], 'wpttemp-green.png'); ?> value="wpttemp-green.png"><?php esc_html_e( 'Waypoint', 'osm' ); echo ' '; esc_html_e( 'green', 'osm' ); ?></option> 
+        <option <?php selected( $instance['marker'], 'wpttemp-red.png'); ?> value="wpttemp-red.png"><?php esc_html_e( 'Waypoint', 'osm' ); echo ' '; esc_html_e( 'red', 'osm' ); ?></option> 
+        <option <?php selected( $instance['marker'], 'wpttemp-yellow.png'); ?> value="wpttemp-yellow.png"><?php esc_html_e( 'Waypoint', 'osm' ); echo ' '; esc_html_e( 'yellow', 'osm' ); ?></option> 
+        <option <?php selected( $instance['marker'], 'mic_photo_icon.png'); ?> value="mic_photo_icon.png"><?php esc_html_e( 'Camera', 'osm' ); echo ' '; esc_html_e( 'black', 'osm' ); ?></option> 
+        <option <?php selected( $instance['marker'], 'mic_blue_bridge_old_01.png'); ?> value="mic_blue_bridge_old_01.png"><?php esc_html_e( 'Bridge', 'osm' ); echo ' '; esc_html_e( 'blue', 'osm' ); ?></option> 
+        <option <?php selected( $instance['marker'], 'mic_orange_hiking_01.png'); ?> value="mic_orange_hiking_01.png"><?php esc_html_e( 'Hiking', 'osm' ); echo ' '; esc_html_e( 'orange', 'osm' ); ?></option> 
     </select>
     </p>
     <p>
-    <label for="<?php echo $this->get_field_id( 'border_col' ); ?>"><?php _e('border', 'OSM-plugin'); ?></label> 
-    <select id="<?php echo $this->get_field_id( 'border_col' ); ?>" name="<?php echo $this->get_field_name( 'border_col' ); ?>" class="widefat" style="width:100%;">
-      <option <?php selected( $instance['border_col'], 'none'); ?> value="no"><?php _e('none','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['border_col'], 'green'); ?> value="green"><?php _e('green','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['border_col'], 'red'); ?> value="red"><?php _e('red','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['border_col'], 'blue'); ?> value="blue"><?php _e('blue','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['border_col'], 'orange'); ?> value="orange"><?php _e('orange','OSM-plugin') ?></option>
-      <option <?php selected( $instance['border_col'], 'black'); ?> value="black"><?php _e('black','OSM-plugin') ?></option>
-      <option <?php selected( $instance['border_col'], 'grey'); ?> value="grey"><?php _e('grey','OSM-plugin') ?></option>    
+    <label for="<?php echo esc_attr( $this->get_field_id( 'border_col' ) ); ?>"><?php esc_html_e( 'border', 'osm' ); ?></label> 
+    <select id="<?php echo esc_attr( $this->get_field_id( 'border_col' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'border_col' ) ); ?>" class="widefat" style="width:100%;">
+      <option <?php selected( $instance['border_col'], 'none'); ?> value="no"><?php esc_html_e( 'none', 'osm' ); ?></option> 
+      <option <?php selected( $instance['border_col'], 'green'); ?> value="green"><?php esc_html_e( 'green', 'osm' ); ?></option> 
+      <option <?php selected( $instance['border_col'], 'red'); ?> value="red"><?php esc_html_e( 'red', 'osm' ); ?></option> 
+      <option <?php selected( $instance['border_col'], 'blue'); ?> value="blue"><?php esc_html_e( 'blue', 'osm' ); ?></option> 
+      <option <?php selected( $instance['border_col'], 'orange'); ?> value="orange"><?php esc_html_e( 'orange', 'osm' ); ?></option>
+      <option <?php selected( $instance['border_col'], 'black'); ?> value="black"><?php esc_html_e( 'black', 'osm' ); ?></option>
+      <option <?php selected( $instance['border_col'], 'grey'); ?> value="grey"><?php esc_html_e( 'grey', 'osm' ); ?></option>    
     </select>
     </p>
     <p>
-    <label for="<?php echo $this->get_field_id( 'map_type' ); ?>"><?php _e('Map type', 'OSM-plugin'); ?></label> 
-    <select id="<?php echo $this->get_field_id( 'map_type' ); ?>" name="<?php echo $this->get_field_name( 'map_type' ); ?>" class="widefat" style="width:100%;">
-      <option <?php selected( $instance['map_type'], 'Mapnik'); ?> value="Mapnik"><?php _e('OpenStreetMap','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['map_type'], 'CycleMap'); ?> value="CycleMap"><?php _e('CycleMap','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['map_type'], 'OpenSeaMap'); ?> value="OpenSeaMap"><?php _e('OpenSeaMap','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['map_type'], 'basemap_at'); ?> value="basemap_at"><?php _e('BaseMap','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['map_type'], 'stamen_watercolor'); ?> value="stamen_watercolor"><?php _e('Stamen Watercolor','OSM-plugin') ?></option> 
-      <option <?php selected( $instance['map_type'], 'stamen_toner'); ?> value="stamen_toner"><?php _e('Stamen Toner','OSM-plugin') ?></option>
+    <label for="<?php echo esc_attr( $this->get_field_id( 'map_type' ) ); ?>"><?php esc_html_e( 'Map type', 'osm' ); ?></label> 
+    <select id="<?php echo esc_attr( $this->get_field_id( 'map_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'map_type' ) ); ?>" class="widefat" style="width:100%;">
+      <option <?php selected( $instance['map_type'], 'Mapnik'); ?> value="Mapnik"><?php esc_html_e( 'OpenStreetMap', 'osm' ); ?></option> 
+      <option <?php selected( $instance['map_type'], 'CycleMap'); ?> value="CycleMap"><?php esc_html_e( 'CycleMap', 'osm' ); ?></option> 
+      <option <?php selected( $instance['map_type'], 'OpenSeaMap'); ?> value="OpenSeaMap"><?php esc_html_e( 'OpenSeaMap', 'osm' ); ?></option> 
+      <option <?php selected( $instance['map_type'], 'basemap_at'); ?> value="basemap_at"><?php esc_html_e( 'BaseMap', 'osm' ); ?></option> 
+      <option <?php selected( $instance['map_type'], 'stamen_watercolor'); ?> value="stamen_watercolor"><?php esc_html_e( 'Stamen Watercolor', 'osm' ); ?></option> 
+      <option <?php selected( $instance['map_type'], 'stamen_toner'); ?> value="stamen_toner"><?php esc_html_e( 'Stamen Toner', 'osm' ); ?></option>
     </select>
     </p>
     <?php 

@@ -160,7 +160,7 @@
        ($setup_trigger !== 'undefined') &&
        ($setup_map_name !== 'undefined')) {
 
-         $output = '<a class="setupChange" data-zoom="' . esc_attr( $setup_zoom ) . '" data-center="' . esc_attr( $setup_center ) . '" data-layer="' . esc_attr( $setup_layer ) . '" data-map_name="' . esc_attr( $setup_map_name ) . '" title="' . esc_attr__( 'Klick auf diesen Text um die Karte zu beeinflussen', 'OSM_Plugin' ) . '">' . esc_html( $setup_trigger ) . '</a>';
+         $output = '<a class="setupChange" data-zoom="' . esc_attr( $setup_zoom ) . '" data-center="' . esc_attr( $setup_center ) . '" data-layer="' . esc_attr( $setup_layer ) . '" data-map_name="' . esc_attr( $setup_map_name ) . '" title="' . esc_attr__( 'Klick auf diesen Text um die Karte zu beeinflussen', 'osm' ) . '">' . esc_html( $setup_trigger ) . '</a>';
      } else {
 
 		if (($mwz != "true") && ($mwz != "false")){
@@ -196,9 +196,10 @@
 if ($bckgrndimg !== 'no') {
     $output = '
         <div id="' . esc_attr($MapName) . '"
-             class="map ' . esc_attr($setup_map_name) . '"
+       class="osm-map-container ' . esc_attr($setup_map_name) . '"
              data-map_name="' . esc_attr($setup_map_name) . '"
              data-map="' . esc_attr($MapName) . '"
+             data-autoshow="' . esc_attr($file_select_box) . '"
              style="width:' . esc_attr($sc_args->getMapWidth_str()) . ';
                     max-width:100%;
                     height:' . esc_attr($sc_args->getMapHeight_str()) . ';
@@ -218,15 +219,17 @@ if ($bckgrndimg !== 'no') {
 } else {
     $output = '
         <div id="' . esc_attr($MapName) . '"
-             class="map ' . esc_attr($setup_map_name) . '"
+       class="osm-map-container ' . esc_attr($setup_map_name) . '"
              data-map_name="' . esc_attr($setup_map_name) . '"
              data-map="' . esc_attr($MapName) . '"
+             data-autoshow="' . esc_attr($file_select_box) . '"
              style="width:' . esc_attr($sc_args->getMapWidth_str()) . ';
                     max-width:100%;
                     height:' . esc_attr($sc_args->getMapHeight_str()) . ';
                     display:' . esc_attr($vis_str) . ';
                     overflow:hidden;
-                    border:' . esc_attr($sc_args->getMapBorder()) . ';">
+                    border:' . esc_attr($sc_args->getMapBorder()) . ';
+                    position: relative;">
           <div id="' . esc_attr($MapName) . '_popup" class="ol-popup">
             <a href="#" id="' . esc_attr($MapName) . '_popup-closer" class="ol-popup-closer"></a>
             <div id="' . esc_attr($MapName) . '_popup-content"></div>
@@ -234,30 +237,14 @@ if ($bckgrndimg !== 'no') {
         </div>
     ';
 }
-			  
-			  $output .= '
-
-				<script type="text/javascript">
-					translations[\'openlayer\'] = "' . __('open layer', 'OSM_Plugin') . '";
-					translations[\'openlayerAtStartup\'] = "' . __('open layer at startup', 'OSM_Plugin') . '";
-					translations[\'generateLink\'] = "' . __('link to this map with opened layers', 'OSM') . '";
-					translations[\'shortDescription\'] = "' . __('short description', 'OSM') . '";
-					translations[\'generatedShortCode\'] = "' . __('to get a text control link paste this code in your wordpress editor', 'OSM') . '";
-					translations[\'closeLayer\'] = "' . __('close layer', 'OSM_Plugin') . '";
-					translations[\'cantGenerateLink\'] = "' . __('put this string in the existing map short code to control this map', 'OSM_Plugin') . '";
-			  </script>
-
-
-			  ';
-			
-
+						
 			$FileColorListArray = array();
 			$FileLinkArray = array();
 			$FileTitleArray = array();
 			$showSelectbox = false;
 			$NumOfGpxKmlFiles = 0;
 			
-			if ($file_color_list != 'NoColor') {
+			if ($file_color_list != 'NoColor' && $file_color_list != '') {
 				$colors = explode(',', (string) wp_unslash($file_color_list));
                                 foreach ($colors as $color) {
                                   $color = sanitize_text_field($color);
@@ -292,9 +279,12 @@ if ($bckgrndimg !== 'no') {
 				if ($hide_kml_sel_box == 'no' ){
 				$output .= '
 					<div id="osmLayerSelect">
-					<h5>' . __('Click title to show track', 'OSM') . '</h5>' . PHP_EOL;
+          <h5>' . __('Click title to show track', 'osm') . '</h5>' . PHP_EOL;
 
 				$FileTitleArray = explode(',', $file_title);
+
+				$allLayerIndices = implode(',', array_keys($FileTitleArray));
+				$output .= '<span id="layerBoxAll' . $MapName . '" class="layerBoxesAll" data-map="' . $MapName . '" data-layer-indices="' . esc_attr($allLayerIndices) . '"><i class="fa fa-eye"></i><span class="layerColor layerColorAll"></span><span class="padding1em">' . __('Show / Hide all', 'osm') . '</span></span><br />' . PHP_EOL;
 
 				foreach ($FileTitleArray as $key => $val) {
 
@@ -326,7 +316,7 @@ if ($bckgrndimg !== 'no') {
 
 				$output .= '
 				    <!--
-						<a id="generatedLink" class="generatedLink" data-map="' . $MapName . '" data-map_name="' . $map_link_name . '">' . __('get link to map with choosen layers', 'OSM') . '</a>
+            <a id="generatedLink" class="generatedLink" data-map="' . $MapName . '" data-map_name="' . $map_link_name . '">' . __('get link to map with choosen layers', 'osm') . '</a>
 						-->
 					</div>';
 
@@ -338,7 +328,7 @@ if ($bckgrndimg !== 'no') {
 
 				foreach ($FileTitleArray as $key => $val) {
 					$output .= '
-						<span id="layerBox' . $key . $MapName . '" class="layerBoxes layerOf' . $MapName . '" data-map="' . $MapName . '" data-layer="' . $key . '" data-active="false" data-layer_title="' . trim($val) . '">';
+						<span id="layerBox' . $key . $MapName . '" class="layerBoxes layerOf' . $MapName . '" data-map="' . $MapName . '" data-layer="' . $key . '" data-active="false" data-layer_title="' . trim($val) . '"></span>';
 
 				}
 				}
@@ -352,7 +342,7 @@ if ($bckgrndimg !== 'no') {
 
 				} else {
 
-					$output .= '<div class="generatedShortCode"><a class="shortCodeGeneration generatedShortCode" data-map="' . $MapName . '" data-map_name="' . $setup_map_name . '">' . __('get shotcut to this map with choosen layers', 'OSM') . '</a></div>';
+          $output .= '<div class="generatedShortCode"><a class="shortCodeGeneration generatedShortCode" data-map="' . $MapName . '" data-map_name="' . $setup_map_name . '">' . __('get shotcut to this map with choosen layers', 'osm') . '</a></div>';
 				}
 			}
 			*/

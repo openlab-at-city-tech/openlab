@@ -53,6 +53,7 @@ class cOsm_arguments
     private $tagged_cluster = "false";
     private $tagged_border_color = "[0, 0, 255, 0.5]";
     private $tagged_inner_color = "[0, 0, 255, 0.5]";
+    private $setup_map_name = 'osm_map';
     private $map_event = 'no';
     private $attribution = 'true';
     
@@ -100,7 +101,7 @@ class cOsm_arguments
     if ($pos == false) {
       if ($width < 1){
        /* translators: %s: width in pixel */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!'), $width)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!', 'osm'), $width)));
         $width = 450;
       }
       $this->width_str = $width."px"; // make it 30px
@@ -108,7 +109,7 @@ class cOsm_arguments
       $width_perc = substr($width, 0, $pos ); // make it 30% 
       if (($width_perc < 1) || ($width_perc >100)){
        /* translators: %s: width in percentage */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__('width =  %s is out of range [perc]!'), $width)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__('width =  %s is out of range [perc]!', 'osm'), $width)));
         $width = "100%";
       }
       $this->width_str = substr($width, 0, $pos+1 ); // make it 30% 
@@ -118,7 +119,7 @@ class cOsm_arguments
     if ($pos == false) {
       if ($height < 1){
         /* translators: %s: height in pixel */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__('height =  %s is out of range [pix]!'), $height)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__('height =  %s is out of range [pix]!', 'osm'), $height)));
         $height = 300;
       }
       $this->height_str = $height."px"; // make it 30px
@@ -126,7 +127,7 @@ class cOsm_arguments
       $height_perc = substr($height, 0, $pos ); // make it 30 
       if (($height_perc < 1) || ($height_perc >100)){
         /* translators: %s: height in pixel */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__('height =  %s is out of range [perc]!'), $height)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__('height =  %s is out of range [perc]!', 'osm'), $height)));
         $height = "100%";
       }
       $this->height_str = substr($height, 0, $pos+1 ); // make it 30% 

@@ -1,5 +1,5 @@
 <?php
-// replace >True< with >False< if you want to disable it
+// replace >True< with >False< if you want to disable  it
 define ("OSM_enable_Ajax", True);
 
 // change them for shortcode generatgor & geotagger
@@ -13,9 +13,6 @@ define('DEFAULT_MAP_V3_HEIGHT', '300');
 define('DEFAULT_MAP_V3_ZOOM', '4');
 define('DEFAULT_MAP_V3_CENTER', OSM_default_lat . ',' . OSM_default_lon);
 
-// SERVER_EMBEDDED   ... loaded by the plugin for each map (default)
-// SERVER_WP_ENQUEUE ... registered and loaded by WordPress
-define ("Osm_LoadLibraryMode", SERVER_WP_ENQUEUE); 
 // OpenStreetMap scripts and tiles
 //define ("Osm_OSM_LibraryLocation", 'http://www.openstreetmap.org/openlayers/OpenStreetMap.js');
 define ("Osm_OSM_LibraryLocation", OSM_PLUGIN_URL.'js/OSM/openlayers/OpenStreetMap.js');
@@ -29,7 +26,7 @@ define ("Osm_OSM_LibraryLocation", OSM_PLUGIN_URL.'js/OSM/openlayers/OpenStreetM
  define ("Osm_OCM_Tiles_c", 'https://c.tile.opencyclemap.org/cycle');
 
 // BaseMap (Austria)
- define ("Osm_BaseMap_Tiles", 'https://maps.wien.gv.at/basemap/geolandbasemap/');
+ define ("Osm_BaseMap_Tiles", 'https://mapsneu.wien.gv.at/basemap/geolandbasemap/');
  
 //  thunderforest maps
 define ("Osm_thunderforest_Landscape_Tiles", 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png');
@@ -54,8 +51,8 @@ define ("Osm_OpenTopoMap_Tiles", 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}
 define ("Osm_OL_LibraryPath", OSM_PLUGIN_URL.'js/OL/2.13.1/');
 define ("Osm_OL_LibraryLocation", OSM_PLUGIN_URL."js/OL/2.13.1/OpenLayers.js?ver=2.13.1");
 
-define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/10.4.0/ol.js?ver=10.4.0");
-define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/10.4.0/ol.css?ver=10.4.0");
+define ("Osm_OL_3_LibraryLocation", OSM_PLUGIN_URL."js/OL/10.9.0/ol.js?ver=10.9.0");
+define ("Osm_OL_3_CSS", OSM_PLUGIN_URL."js/OL/10.9.0/ol.css?ver=10.9.0");
 define ("Osm_map_CSS", OSM_PLUGIN_URL."css/osm_map.css?ver=1.0.0");
 define ("Osm_OL_3_Ext_LibraryLocation", OSM_PLUGIN_URL."js/osm-v3-plugin-lib.js?ver=1.0.0");
 define ("Osm_OL_3_MetaboxEvents_LibraryLocation", OSM_PLUGIN_URL."js/osm-metabox-events.js?ver=1.0.0");

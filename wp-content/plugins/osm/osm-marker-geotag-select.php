@@ -1,9 +1,9 @@
 <div class="osm-geo-marker-tab-container">
     <ul class="osm-geo-marker-tabs">
-        <li class="marker-tab-link current" geo-marker-tab="geo-tab_sport"><?php esc_html_e('Sport', 'OSM'); ?></li>
-        <li class="marker-tab-link" geo-marker-tab="geo-tab_urban"><?php esc_html_e('Urban', 'OSM'); ?></li>
-        <li class="marker-tab-link" geo-marker-tab="geo-tab_camping"><?php esc_html_e('Camping', 'OSM'); ?></li>
-        <li class="marker-tab-link" geo-marker-tab="geo-tab_misc"><?php esc_html_e('Misc', 'OSM'); ?></li>
+        <li class="marker-tab-link current" geo-marker-tab="geo-tab_sport"><?php esc_html_e('Sport', 'osm'); ?></li>
+        <li class="marker-tab-link" geo-marker-tab="geo-tab_urban"><?php esc_html_e('Urban', 'osm'); ?></li>
+        <li class="marker-tab-link" geo-marker-tab="geo-tab_camping"><?php esc_html_e('Camping', 'osm'); ?></li>
+        <li class="marker-tab-link" geo-marker-tab="geo-tab_misc"><?php esc_html_e('Misc', 'osm'); ?></li>
     </ul>
 
     <!-- id="geo-tab_sport" -->

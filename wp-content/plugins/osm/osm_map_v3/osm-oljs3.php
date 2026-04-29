@@ -23,7 +23,7 @@ class Osm_OLJS3
     Osm::traceText(DEBUG_INFO, "addVectorLayer V3(".$a_MapName.",".$a_Type.",".$a_FileName.")");
     $VectorLayer = '';
     $VectorLayer .= '
-    var style'.$a_Counter.' = {
+    var style_'.$a_MapName.'_'.$a_Counter.' = {
       "Point": [new ol.style.Style({
 
           image: new ol.style.Icon({
@@ -168,7 +168,7 @@ vectorL'.$a_Counter.' = new ol.layer.Vector({
 				})
 			}),
 			zIndex: 92,
-			style: function(feature, resolution) {return style'.$a_Counter.'[feature.getGeometry().getType()];}
+			style: function(feature, resolution) {return style_'.$a_MapName.'_'.$a_Counter.'[feature.getGeometry().getType()];}
 		  });
 		  ';
 		}
@@ -205,7 +205,7 @@ vectorL'.$a_Counter.' = new ol.layer.Vector({
 						})
 					}),
 					zIndex: 92,
-					style: function(feature, resolution) {return style' . $a_Counter . '[feature.getGeometry().getType()];}
+					style: function(feature, resolution) {return style_' . $a_MapName . '_' . $a_Counter . '[feature.getGeometry().getType()];}
 				 });'
 				;
 			}

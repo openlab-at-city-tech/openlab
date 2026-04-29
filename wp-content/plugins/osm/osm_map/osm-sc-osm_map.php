@@ -110,7 +110,7 @@
     }
     if (($zoom < ZOOM_LEVEL_MIN || $zoom > $map_spec_zoom_level_max) && ($zoom != 'auto')){
       /* translators: %s: zoom level */ 
-      Osm::traceText(DEBUG_ERROR, (sprintf(__(' zoom =  %s is out of range!'), $zoom)));
+      Osm::traceText(DEBUG_ERROR, (sprintf(__(' zoom =  %s is out of range!', 'osm'), $zoom)));
       $zoom = 0;   
     }
 
@@ -118,7 +118,7 @@
     if ($pos == false) {
       if ($width < 1){
         /* translators: %s: width in pixel */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!'), $width)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!', 'osm'), $width)));
         $width = 450;
       }
       $width_str = $width."px"; // make it 30px
@@ -127,7 +127,7 @@
       $width_perc = substr($width, 0, $pos ); // make it 30 
       if (($width_perc < 1) || ($width_perc >100)){
         /* translators: %s: width in percentage */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [perc]!'), $width)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [perc]!', 'osm'), $width)));
         $width = "100%";
       }
       $width_str = substr($width, 0, $pos+1 ); // make it 30% 
@@ -137,7 +137,7 @@
     if ($pos == false) {
       if ($height < 1){
         /* translators: %s: height in pixel */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [pix]!'), $height)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [pix]!', 'osm'), $height)));
         $height = 300;
       }
       $height_str = $height."px"; // make it 30px
@@ -145,7 +145,7 @@
       $height_perc = substr($height, 0, $pos ); // make it 30 
       if (($height_perc < 1) || ($height_perc >100)){
        /* translators: %s: height in percentage */ 
-        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [perc]!'), $height)));
+        Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [perc]!', 'osm'), $height)));
         $height = "100%";
       }
       $height_str = substr($height, 0, $pos+1 ); // make it 30% 
@@ -294,7 +294,7 @@ box-shadow: none;}';
         }
       }
       else {
-         Osm::traceText(DEBUG_ERROR, __('gpx_colour_list does not match to gpx_file_list!','OSM'));
+         Osm::traceText(DEBUG_ERROR, __('gpx_colour_list does not match to gpx_file_list!','osm'));
       }
     }
     
@@ -465,10 +465,10 @@ box-shadow: none;}';
          $temp_popup .= 'http://www.openrouteservice.org/?pos=' . $temp_lon . ',' . $temp_lat . '&zoom=12&routeOpt=Car&wp=' . $temp_lon . ',' . $temp_lat . '&lang=en&routeLang=en&distUnit=m&routeWeight=Fastest';
        }
        else {
-         $temp_popup .= __("Missing routing service!", "OSM-plugin").$marker_routing;
+         $temp_popup .= __("Missing routing service!", "osm").$marker_routing;
          Osm::traceText(DEBUG_ERROR, "e_missing_rs_error");
        }
-       $temp_popup .= '">' . __("Route from your location to this place", "OSM-plugin") . '</a></div>';
+      $temp_popup .= '">' . __("Route from your location to this place", "osm") . '</a></div>';
      }
      if (($temp_popup_custom_field == 'osm_dummy') && ($m_txt_01 == 'none') && ($marker_routing == 'no')){
        $DoPopUp = 'false';

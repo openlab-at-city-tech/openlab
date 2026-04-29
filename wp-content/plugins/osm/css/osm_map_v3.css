@@ -117,6 +117,11 @@ background: transparent;
   border: 1px dotted #c0c0c0;
 }
 
+.layerColorAll {
+  background-color: transparent;
+  border: 2px solid #555;
+}
+
 .setupChange:before {
   content:"\f279";
   text-decoration:none;

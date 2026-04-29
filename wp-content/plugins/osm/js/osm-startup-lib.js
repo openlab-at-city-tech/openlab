@@ -1,4 +1,4 @@
-/*  Copyright (C) 2020  Matthias Greiling (https://westrad.de)
+/*  Copyright (C) 2026  Matthias Greiling (https://westrad.de)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,8 +80,10 @@ function activateLayers(_map, _layers, _startUp) {
 		jQuery('#layerBox' + e + _map).css({'background-color':'rgb(250,255,255)' });
 		jQuery('#layerBox' + e + _map).data('active', true);
 		
-		/** real action */
-		window[_map].addLayer(window.vectorM[_map][e]);
+		/** real action - OL 10.x throws on duplicates, so guard first */
+		if (window[_map].getLayers().getArray().indexOf(window.vectorM[_map][e]) === -1) {
+			window[_map].addLayer(window.vectorM[_map][e]);
+		}
 
 		/** tracking stuff */
 		if (typeof _paq !== "undefined") {
@@ -150,8 +152,12 @@ function switchLayerOn(_e) {
 	_e.children('span.layerColor').removeClass('layerColorHidden'); 
 	
 	
-	/** window and vectorM are both global */
-	window[_e.data('map')].addLayer(window.vectorM[_e.data('map')][_e.data('layer')]);
+	/** window and vectorM are both global - OL 10.x throws on duplicates, so guard first */
+	var _mapName = _e.data('map');
+	var _layer = window.vectorM[_mapName][_e.data('layer')];
+	if (window[_mapName].getLayers().getArray().indexOf(_layer) === -1) {
+		window[_mapName].addLayer(_layer);
+	}
 	
 	/** tracking stuff */
 	if (typeof _paq !== "undefined") {
@@ -239,6 +245,41 @@ jQuery(document).ready(function() {
 		}	
 	});
 
+	/**
+	 * event handler for 'show all' button
+	 */
+	jQuery(document).on('click', '.layerBoxesAll', function() {
+		var _map = jQuery(this).attr('data-map');
+		var layerIndices = jQuery(this).attr('data-layer-indices').toString().split(',');
+		// check if all layers are currently active
+		var allActive = true;
+		jQuery.each(layerIndices, function(i, idx) {
+			var e = parseInt(idx, 10);
+			if (jQuery('#layerBox' + e + _map).data('active') !== true) {
+				allActive = false;
+				return false; // break
+			}
+		});
+		// toggle: hide all if all active, show all otherwise
+		jQuery.each(layerIndices, function(i, idx) {
+			var e = parseInt(idx, 10);
+			var layerBox = jQuery('#layerBox' + e + _map);
+			if (layerBox.length > 0) {
+				if (allActive) {
+					switchLayerOff(layerBox);
+				} else if (layerBox.data('active') !== true) {
+					switchLayerOn(layerBox);
+				}
+			}
+		});
+		// update icon on the "Show all" button
+		if (allActive) {
+			jQuery(this).children('i').removeClass('fa-eye').addClass('fa-eye-slash');
+		} else {
+			jQuery(this).children('i').removeClass('fa-eye-slash').addClass('fa-eye');
+		}
+	});
+
 	/** 
 	 * event handler for text link to control map
 	 * decide which function to call by looking at active status of tag
@@ -320,11 +361,16 @@ jQuery(document).ready(function() {
 	}  else {
 		
 		/** no map control is given via GET - make first layer visible - if there is any to choose from */
-		jQuery('.map').each(function() {
+		jQuery('.osm-map-container').each(function() {
 			if (jQuery('.layerOf' + jQuery(this).data('map')).length > 0) {
 			        mapStr = jQuery(this).data('map');
-				activateLayers(mapStr, '0', 1);
-				
+			        if (jQuery(this).attr('data-autoshow') === 'all') {
+		        	jQuery('.layerOf' + mapStr).each(function() {
+		        		switchLayerOn(jQuery(this));
+		        	});
+			        } else {
+					activateLayers(mapStr, '0', 1);
+				}
 			}
 		});	
 	}	

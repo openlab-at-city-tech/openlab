@@ -1,9 +1,9 @@
 <div class="osm-marker-tab-container">
    <ul class="osm-marker-tabs">
-        <li class="marker-tab-link current" marker-tab="tab_sport"><?php esc_html_e('Sport', 'OSM'); ?></li>
-        <li class="marker-tab-link" marker-tab="tab_urban"><?php esc_html_e('Urban', 'OSM'); ?></li>
-        <li class="marker-tab-link" marker-tab="tab_camping"><?php esc_html_e('Camping', 'OSM'); ?></li>
-        <li class="marker-tab-link" marker-tab="tab_misc"><?php esc_html_e('Misc', 'OSM'); ?></li>
+        <li class="marker-tab-link current" marker-tab="tab_sport"><?php esc_html_e('Sport', 'osm'); ?></li>
+        <li class="marker-tab-link" marker-tab="tab_urban"><?php esc_html_e('Urban', 'osm'); ?></li>
+        <li class="marker-tab-link" marker-tab="tab_camping"><?php esc_html_e('Camping', 'osm'); ?></li>
+        <li class="marker-tab-link" marker-tab="tab_misc"><?php esc_html_e('Misc', 'osm'); ?></li>
     </ul>
 <!-- id="tab_sport" -->
 <div id="tab_sport" class="marker-tab-content current">
@@ -170,7 +170,7 @@
 
 <!-- id="tab_camping" -->
 <div id="tab_camping" class="marker-tab-content">
-    <?php esc_html_e('Camping', 'OSM'); ?><br/><br/>
+    <?php esc_html_e('Camping', 'osm'); ?><br/><br/>
     <?php
     $icons = [
         'mic_green_caravan_01.png',
