@@ -1,6 +1,46 @@
 Changelog
 =========
 
+#### 4.12.2 - Apr 20, 2026
+
+- Add Mailchimp Campaign Archive block and [mc4wp_campaigns] shortcode to show an archive Mailchimp email campaigns. Thanks to [Faisal Ahammad](https://faisalahammad.com/)!
+- WooCommerce: Allow "after email" position for sign-up checkbox when using Checkout Block.
+- WooCommerce: Detect use of Checkout Block and only show available positions.
+- Show warning when cron is behind schedule. Thanks to [Faisal Ahammad](https://faisalahammad.com/)!
+- Add preliminary support for [Mailchimp Site Tracking Pixel](https://mailchimp.com/help/about-mailchimp-site-tracking-pixel/). Thanks to [Faisal Ahammad](https://faisalahammad.com/)!
+
+
+#### 4.12.1 - Mar 26, 2026
+
+- Supply a custom capability type to `register_post_type` for the `mc4wp-form` post type.
+- Limit allowed HTML in the various form messages to a safe subset on load (versus only on update).
+
+
+#### 4.12.0 - Mar 9, 2026
+
+- Remove the ability to unsubscribe through a form. You should migrate to the Mailchimp hosted form for this, which does email verification.
+- Add block properties so the form block can be reordered inside the Gutenberg editor.
+- Fix redirect not occuring after running MC4WP actions.
+- Various type fixes, PHPDoc improvements and removal of unused code.
+
+The following fixes and improvements were contributed by [Faisal Ahammad](https://faisalahammad.com/):
+
+- Add WP Forms field setting for configuring double opt-in.
+- Add PeepSo registration form integration. 
+- Fix required validation for Ninja Forms integration. 
+- Add autocomplete attribute to form fields.
+- Enable live updates in Gravity Forms editor.
+
+
+#### 4.11.0 - Jan 20, 2026
+
+- Add form setting to remove tags from existing subscribers.
+- Add form setting to check for common email typos.
+- In Prosopo integration, link directly to API key screen instead of user profile.
+- Automatically convert string fields to a comma-separated string if an array value is received.
+- Fix undefined key warning for new setting that emails to site administrator on errors.
+
+
 #### 4.10.9 - Nov 28, 2025
 
 - Specify `apiVersion` in call to `registerBlockType` so that WordPress 6.9 knows it can use the new iframe based editor.

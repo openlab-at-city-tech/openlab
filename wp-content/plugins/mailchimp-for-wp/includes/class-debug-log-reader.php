@@ -115,7 +115,7 @@ class MC4WP_Debug_Log_Reader
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function read_as_html()
     {
@@ -133,28 +133,5 @@ class MC4WP_Debug_Log_Reader
 
         $line = preg_replace(self::$regex, self::$html_template, $line);
         return $line;
-    }
-
-    /**
-     * Reads X number of lines.
-     *
-     * If $start is negative, reads from end of log file.
-     *
-     * @param int $start
-     * @param int $number
-     * @return string
-     */
-    public function lines($start, $number)
-    {
-        $handle = fopen($start, 'r');
-        $lines  = '';
-
-        $current_line = 0;
-        while ($current_line < $number) {
-            $lines .= fgets($handle);
-        }
-
-        fclose($handle);
-        return $lines;
     }
 }

@@ -1,13 +1,23 @@
 <?php
 
-$position_options = [
-    'after_email_field'               => __('After email field', 'mailchimp-for-wp'),
-    'checkout_billing'                => __('After billing details', 'mailchimp-for-wp'),
-    'checkout_shipping'               => __('After shipping details', 'mailchimp-for-wp'),
-    'checkout_after_customer_details' => __('After customer details', 'mailchimp-for-wp'),
-    'review_order_before_submit'      => __('Before submit button', 'mailchimp-for-wp'),
-    'after_order_notes'               => __('After order notes', 'mailchimp-for-wp'),
-];
+use Automattic\WooCommerce\Blocks\Utils\CartCheckoutUtils;
+
+// if Checkout Block is used, we have less available options for where to show the sign-up checkbox
+if (class_exists(CartCheckoutUtils::class) && method_exists(CartCheckoutUtils::class, 'is_checkout_block_default') && CartCheckoutUtils::is_checkout_block_default()) {
+    $position_options = [
+        'after_email_field'               => __('After email field', 'mailchimp-for-wp'),
+        'after_order_notes'               => __('After order notes', 'mailchimp-for-wp'),
+    ];
+} else {
+    $position_options = [
+        'after_email_field'               => __('After email field', 'mailchimp-for-wp'),
+        'checkout_billing'                => __('After billing details', 'mailchimp-for-wp'),
+        'checkout_shipping'               => __('After shipping details', 'mailchimp-for-wp'),
+        'checkout_after_customer_details' => __('After customer details', 'mailchimp-for-wp'),
+        'review_order_before_submit'      => __('Before submit button', 'mailchimp-for-wp'),
+        'after_order_notes'               => __('After order notes', 'mailchimp-for-wp'),
+    ];
+}
 
 if (defined('CFW_NAME')) {
     $position_options['cfw_checkout_before_payment_method_tab_nav'] = __('Checkout for WooCommerce: Before complete order button', 'mailchimp-for-wp');
@@ -45,7 +55,7 @@ $config = [
                     ?>
 
                 </select>
-                <p class="description"><?php esc_html_e('Select the location where you would like to show the sign-up checkbox. Note that only works if not using WooCommerce Checkout Block.', 'mailchimp-for-wp'); ?></p>
+                <p class="description"><?php esc_html_e('Select the location where you would like to show the sign-up checkbox.', 'mailchimp-for-wp'); ?></p>
             </td>
         </tr>
     </tbody>

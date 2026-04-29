@@ -21,27 +21,29 @@ class MC4WP_Forms_Admin
         $this->messages = $messages;
     }
 
-    /**
-     * Add hooks
-     */
-    public function add_hooks()
+    public function add_hooks(): void
     {
-        add_action('register_shortcode_ui', [ $this, 'register_shortcake_ui' ]);
-        add_action('mc4wp_save_form', [ $this, 'update_form_stylesheets' ]);
-        add_action('mc4wp_admin_edit_form', [ $this, 'process_save_form' ]);
-        add_action('mc4wp_admin_add_form', [ $this, 'process_add_form' ]);
-        add_filter('mc4wp_admin_menu_items', [ $this, 'add_menu_item' ], 5);
-        add_action('mc4wp_admin_show_forms_page-edit-form', [ $this, 'show_edit_page' ]);
-        add_action('mc4wp_admin_show_forms_page-add-form', [ $this, 'show_add_page' ]);
-        add_action('mc4wp_admin_enqueue_assets', [ $this, 'enqueue_assets' ], 10, 2);
+        add_action('mc4wp_save_form', [$this, 'update_form_stylesheets']);
+        add_action('mc4wp_admin_edit_form', [$this, 'process_save_form']);
+        add_action('mc4wp_admin_add_form', [$this, 'process_add_form']);
+        add_filter('mc4wp_admin_menu_items', [$this, 'add_menu_item'], 5);
+        add_action('mc4wp_admin_show_forms_page-edit-form', [$this, 'show_edit_page']);
+        add_action('mc4wp_admin_show_forms_page-add-form', [$this, 'show_add_page']);
+        add_action('mc4wp_admin_enqueue_assets', [$this, 'enqueue_assets'], 10, 2);
 
-        add_action('enqueue_block_editor_assets', [ $this, 'enqueue_gutenberg_assets' ]);
+        add_action('enqueue_block_editor_assets', [$this, 'enqueue_gutenberg_assets']);
     }
 
 
     public function enqueue_gutenberg_assets()
     {
-        wp_enqueue_script('mc4wp-form-block', mc4wp_plugin_url('assets/js/forms-block.js'), [ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components' ]);
+        wp_enqueue_script('mc4wp-form-block', mc4wp_plugin_url('assets/js/forms-block.js'), [
+            'wp-blocks',
+            'wp-i18n',
+            'wp-element',
+            'wp-components',
+            'wp-block-editor',
+        ]);
 
         $forms = mc4wp_get_forms();
         $data  = [];
@@ -64,7 +66,7 @@ class MC4WP_Forms_Admin
             return;
         }
 
-        wp_register_script('mc4wp-forms-admin', mc4wp_plugin_url('assets/js/forms-admin.js'), [ 'mc4wp-admin' ], MC4WP_VERSION, true);
+        wp_register_script('mc4wp-forms-admin', mc4wp_plugin_url('assets/js/forms-admin.js'), ['mc4wp-admin'], MC4WP_VERSION, true);
         wp_enqueue_script('mc4wp-forms-admin');
         wp_localize_script(
             'mc4wp-forms-admin',
@@ -127,8 +129,8 @@ class MC4WP_Forms_Admin
             'title'         => esc_html__('Forms', 'mailchimp-for-wp'),
             'text'          => esc_html__('Form', 'mailchimp-for-wp'),
             'slug'          => 'forms',
-            'callback'      => [ $this, 'show_forms_page' ],
-            'load_callback' => [ $this, 'redirect_to_form_action' ],
+            'callback'      => [$this, 'show_forms_page'],
+            'load_callback' => [$this, 'redirect_to_form_action'],
             'position'      => 10,
         ];
 
@@ -241,7 +243,7 @@ class MC4WP_Forms_Admin
 
         // strip tags from messages
         foreach ($data['messages'] as $key => $message) {
-            $data['messages'][ $key ] = strip_tags($message, '<strong><b><br><a><script><u><em><i><span><img>');
+            $data['messages'][$key] = strip_tags($message, '<strong><b><br><a><script><u><em><i><span><img>');
         }
 
         // make sure lists is an array
@@ -255,7 +257,7 @@ class MC4WP_Forms_Admin
         if (! current_user_can('unfiltered_html')) {
             $data['content'] = mc4wp_kses($data['content']);
             foreach ($data['messages'] as $key => $message) {
-                $data['messages'][ $key ] = mc4wp_kses($data['messages'][ $key ]);
+                $data['messages'][$key] = mc4wp_kses($data['messages'][$key]);
             }
         }
 
@@ -283,7 +285,7 @@ class MC4WP_Forms_Admin
             $options = get_option('mc4wp', []);
             $posted  = $_POST['mc4wp'];
             foreach ($posted as $key => $value) {
-                $options[ $key ] = trim($value);
+                $options[$key] = trim($value);
             }
             update_option('mc4wp', $options);
         }
@@ -349,9 +351,9 @@ class MC4WP_Forms_Admin
             // no default form, query first available form and go there
             $forms = mc4wp_get_forms(
                 [
-                'posts_per_page' => 1,
-                'orderby' => 'ID',
-                'order' => 'ASC',
+                    'posts_per_page' => 1,
+                    'orderby' => 'ID',
+                    'order' => 'ASC',
                 ]
             );
 
@@ -450,43 +452,6 @@ class MC4WP_Forms_Admin
      */
     public function tab_url($tab)
     {
-        return add_query_arg([ 'tab' => $tab ], remove_query_arg('tab'));
-    }
-
-    /**
-     * Registers UI for when shortcake is activated
-     */
-    public function register_shortcake_ui()
-    {
-        $assets = new MC4WP_Form_Asset_Manager();
-        $assets->load_stylesheets();
-
-        $forms   = mc4wp_get_forms();
-        $options = [];
-        foreach ($forms as $form) {
-            $options[ $form->ID ] = $form->name;
-        }
-
-        /**
-         * Register UI for your shortcode
-         *
-         * @param string $shortcode_tag
-         * @param array $ui_args
-         */
-        shortcode_ui_register_for_shortcode(
-            'mc4wp_form',
-            [
-                'label'         => esc_html__('Mailchimp Sign-Up Form', 'mailchimp-for-wp'),
-                'listItemImage' => 'dashicons-feedback',
-                'attrs'         => [
-                    [
-                        'label'   => esc_html__('Select the form to show', 'mailchimp-for-wp'),
-                        'attr'    => 'id',
-                        'type'    => 'select',
-                        'options' => $options,
-                    ],
-                ],
-            ]
-        );
+        return add_query_arg(['tab' => $tab], remove_query_arg('tab'));
     }
 }

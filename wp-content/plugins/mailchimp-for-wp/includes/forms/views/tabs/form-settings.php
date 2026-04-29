@@ -95,11 +95,23 @@
     </tr>
 
     <tr valign="top">
-        <th scope="row"><label for="mc4wp_form_subscriber_tags"><?php echo esc_html__('Subscriber tags', 'mailchimp-for-wp'); ?></label></th>
+        <th scope="row"><label for="mc4wp_form_add_tags"><?php echo esc_html__('Add tags', 'mailchimp-for-wp'); ?></label></th>
         <td>
-            <input type="text" class="widefat" name="mc4wp_form[settings][subscriber_tags]" id="mc4wp_form_subscriber_tags" placeholder="<?php echo esc_attr__('Example: My tag, another tag', 'mailchimp-for-wp'); ?>" value="<?php echo esc_attr($opts['subscriber_tags']); ?>" />
+            <input type="text" class="widefat" name="mc4wp_form[settings][subscriber_tags]" id="mc4wp_form_add_tags" placeholder="<?php echo esc_attr__('Example: My tag, another tag', 'mailchimp-for-wp'); ?>" value="<?php echo esc_attr($opts['subscriber_tags']); ?>" />
             <p class="description">
                 <?php echo esc_html__('The listed tags will be applied to all subscribers added or updated by this form.', 'mailchimp-for-wp'); ?>
+                <?php echo esc_html__('Separate multiple values with a comma.', 'mailchimp-for-wp'); ?>
+            </p>
+
+        </td>
+    </tr>
+
+    <tr valign="top">
+        <th scope="row"><label for="mc4wp_form_remove_tags"><?php echo esc_html__('Remove tags', 'mailchimp-for-wp'); ?></label></th>
+        <td>
+            <input type="text" class="widefat" name="mc4wp_form[settings][remove_subscriber_tags]" id="mc4wp_form_remove_tags" placeholder="<?php echo esc_attr__('Example: My tag, another tag', 'mailchimp-for-wp'); ?>" value="<?php echo esc_attr($opts['remove_subscriber_tags']); ?>" />
+            <p class="description">
+                <?php echo esc_html__('The listed tags will be removed from all subscribers updated by this form.', 'mailchimp-for-wp'); ?>
                 <?php echo esc_html__('Separate multiple values with a comma.', 'mailchimp-for-wp'); ?>
             </p>
 
@@ -130,6 +142,22 @@
             </label>
             <p class="description">
                 <?php echo esc_html__('Select "yes" to hide the form fields after a successful sign-up.', 'mailchimp-for-wp'); ?>
+            </p>
+        </td>
+    </tr>
+    <tr valign="top">
+        <th scope="row"><?php echo esc_html__('Enable email domain typo checker?', 'mailchimp-for-wp'); ?></th>
+        <td class="nowrap">
+            <label>
+                <input type="radio" name="mc4wp_form[settings][email_typo_check]" value="1" <?php checked($opts['email_typo_check'], 1); ?> />&rlm;
+                <?php echo esc_html__('Yes', 'mailchimp-for-wp'); ?>
+            </label> &nbsp;
+            <label>
+                <input type="radio" name="mc4wp_form[settings][email_typo_check]" value="0" <?php checked($opts['email_typo_check'], 0); ?> />&rlm;
+                <?php echo esc_html__('No', 'mailchimp-for-wp'); ?>
+            </label>
+            <p class="description">
+                <?php echo esc_html__('When enabled, the form will suggest corrections for common email domain typos (e.g., "gmial.com" → "gmail.com").', 'mailchimp-for-wp'); ?>
             </p>
         </td>
     </tr>
