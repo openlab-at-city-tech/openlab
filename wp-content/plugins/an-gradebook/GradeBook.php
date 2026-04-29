@@ -1,120 +1,121 @@
 <?php
 /*
 Plugin Name: GradeBook
-Plugin URI: http://www.aorinevo.com/
-Description: A simple GradeBook plugin
-Version: 5.0.1
+Plugin URI: https://wordpress.org/plugins/an-gradebook/
+Description: A gradebook plugin for educators to create, maintain, and share grades.
+Version: 6.5.3
 Author: Aori Nevo
 Author URI: http://www.aorinevo.com
-License: GPL
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: an-gradebook
+Domain Path: /languages
+Requires at least: 6.0
+Tested up to: 6.9
+Requires PHP: 7.4
 */
 
-define( "AN_GRADEBOOK_VERSION", "4.0.11");
-
-$database_file_list = glob(dirname( __FILE__ ).'/database/*.php');
-foreach($database_file_list as $database_file){
-	include($database_file);
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-$angb_database = new ANGB_DATABASE();
-$an_gradebook_api = new an_gradebook_api();
-$an_gradebook_course_api = new gradebook_course_API();
-$an_gradebook_assignment_api = new gradebook_assignment_API();
-$an_gradebook_cell_api = new gradebook_cell_API();
-$an_gradebookapi = new AN_GradeBookAPI();
-$angb_course_list = new ANGB_COURSE_LIST();
-$angb_gradebook = new ANGB_GRADEBOOK();
-$angb_user = new ANGB_USER();
-$angb_user_list = new ANGB_USER_LIST();
-$angb_statistics = new ANGB_STATISTICS();
+define( 'AN_GRADEBOOK_VERSION', '6.5.3' );
 
-function register_an_gradebook_menu_page(){
-		$roles = wp_get_current_user()->roles;
-		$my_admin_page = add_menu_page( 'GradeBook', 'GradeBook', $roles[0], 'an_gradebook', 'init_an_gradebook', 'dashicons-book-alt', '6.12' );
-		$add_submenu_page_settings = in_array($roles[0], array_keys(get_option('an_gradebook_settings')));
-		if ($add_submenu_page_settings) {
- 			add_submenu_page( 'an_gradebook', 'Settings', 'Settings', 'administrator', 'an_gradebook_settings', 'init_an_gradebook_settings' );
- 		}
+require_once plugin_dir_path( __FILE__ ) . 'functions.php';
+require_once plugin_dir_path( __FILE__ ) . 'Gradebook-Database.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-courses.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-assignments.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-students.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-cells.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-stats.php';
+require_once plugin_dir_path( __FILE__ ) . 'rest-api/class-rest-student-view.php';
+
+register_activation_hook( __FILE__, array( 'AN_GradeBook_Database', 'setup' ) );
+add_action( 'plugins_loaded', array( 'AN_GradeBook_Database', 'maybe_setup' ) );
+
+function an_gradebook_register_rest_routes() {
+	$controllers = array(
+		new AN_GradeBook_REST_Courses(),
+		new AN_GradeBook_REST_Assignments(),
+		new AN_GradeBook_REST_Students(),
+		new AN_GradeBook_REST_Cells(),
+		new AN_GradeBook_REST_Stats(),
+		new AN_GradeBook_REST_Student_View(),
+	);
+	foreach ( $controllers as $controller ) {
+		$controller->register_routes();
+	}
+}
+add_action( 'rest_api_init', 'an_gradebook_register_rest_routes' );
+
+function an_gradebook_load_textdomain() {
+	load_plugin_textdomain( 'an-gradebook', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'plugins_loaded', 'an_gradebook_load_textdomain' );
+
+function register_an_gradebook_menu_page() {
+	add_menu_page(
+		__( 'GradeBook', 'an-gradebook' ),
+		__( 'GradeBook', 'an-gradebook' ),
+		'read',
+		'an_gradebook',
+		'init_an_gradebook',
+		'dashicons-book-alt',
+		'6.12'
+	);
 }
 add_action( 'admin_menu', 'register_an_gradebook_menu_page' );
 
-
-function enqueue_an_gradebook_scripts($hook){
-	$app_base = plugins_url('js',__FILE__);
-	wp_register_script( 'init_gradebookjs', $app_base.'/init_gradebook.js', array('jquery'), null, true);
-	wp_enqueue_script('init_gradebookjs');
-	if( $hook == "toplevel_page_an_gradebook" || $hook=='gradebook_page_an_gradebook_settings'){
-		$an_gradebook_develop = false;
-		wp_register_style( 'jquery_ui_css', $app_base.'/lib/jquery-ui/jquery-ui.css', array(), null, false );
-		wp_register_style( 'GradeBook_css', plugins_url('GradeBook.css',__File__), array('bootstrap_css','jquery_ui_css'), null, false );
-		wp_register_style( 'bootstrap_css', $app_base.'/lib/bootstrap/css/bootstrap.css', array(), null, false);
-		wp_register_script( 'requirejs', $app_base.'/require.js', array(), null, true);
-		wp_enqueue_style('GradeBook_css');
-		wp_enqueue_script('requirejs');
-		wp_localize_script( 'requirejs', 'require', array(
-			'baseUrl' => $app_base,
-			'deps'    => array( $app_base . ($an_gradebook_develop ? '/an-gradebook-app.js' : '/an-gradebook-app-min.js')
-		)));
-	} else {
+function enqueue_an_gradebook_scripts( $hook ) {
+	if ( 'toplevel_page_an_gradebook' !== $hook ) {
 		return;
 	}
 
+	$asset_path = plugin_dir_path( __FILE__ ) . 'build/index.asset.php';
+	if ( ! file_exists( $asset_path ) ) {
+		return;
+	}
+
+	$asset = include $asset_path;
+
+	wp_enqueue_script(
+		'an-gradebook-react',
+		plugins_url( 'build/index.js', __FILE__ ),
+		$asset['dependencies'],
+		$asset['version'],
+		true
+	);
+
+	if ( file_exists( plugin_dir_path( __FILE__ ) . 'build/index.css' ) ) {
+		wp_enqueue_style(
+			'an-gradebook-react-style',
+			plugins_url( 'build/index.css', __FILE__ ),
+			array(),
+			$asset['version']
+		);
+	}
+
+	wp_localize_script( 'an-gradebook-react', 'anGradebookSettings', array(
+		'restNonce' => esc_attr( wp_create_nonce( 'wp_rest' ) ),
+		'restUrl'   => esc_url( rest_url( 'an-gradebook/v1/' ) ),
+		'userRole'  => esc_attr(current_user_can( 'manage_options' )) ? 'instructor' : 'student',
+	) );
 }
-add_action( 'admin_enqueue_scripts', 'enqueue_an_gradebook_scripts');
+add_action( 'admin_enqueue_scripts', 'enqueue_an_gradebook_scripts' );
 
-function init_an_gradebook(){
-		$template_list = glob(dirname( __FILE__ ).'/js/app/templates/*.php');
-
-		foreach($template_list as $template){
-			include($template);
-		}
-}
-
-function init_an_gradebook_settings(){
-	ob_start();
-	include( dirname( __FILE__ ) . '/js/app/templates/settings-template.php' );
-	include( dirname( __FILE__ ) . '/js/app/templates/ajax-template.php' );
-	echo ob_get_clean();
+function init_an_gradebook() {
+	if ( ! current_user_can( 'read' ) ) {
+		echo esc_html__( 'You do not have permissions to view this GradeBook.', 'an-gradebook' );
+		return;
+	}
+	echo '<div id="an-gradebook-react-root"></div>';
 }
 
 function an_gradebook_my_delete_user( $user_id ) {
 	global $wpdb;
-	$results1 = $wpdb->delete('an_gradebook_users',array('uid'=>$user_id));
-	$results2 = $wpdb->delete('an_gradebook_cells',array('uid'=>$user_id));
+	$table_gradebook  = an_gradebook_table( 'an_gradebook' );
+	$table_assignment = an_gradebook_table( 'an_assignment' );
+	$wpdb->delete( $table_gradebook, array( 'uid' => $user_id ) );
+	$wpdb->delete( $table_assignment, array( 'uid' => $user_id ) );
 }
 add_action( 'delete_user', 'an_gradebook_my_delete_user' );
-
-function an_gradebook_ajaxurl() {
-?>
-<script type="text/javascript">
-var ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
-</script>
-<?php
-}
-add_action('wp_head','an_gradebook_ajaxurl');
-
-function an_gradebook_shortcode (){
-	init_an_gradebook();
-	$an_gradebook_develop = false;
-	$app_base = plugins_url('js',__FILE__);
-	wp_register_script( 'init_front_end_gradebookjs', $app_base.'/init_front_end_gradebook.js', array('jquery'), null, true);
-	wp_enqueue_script('init_front_end_gradebookjs');
-	if( 1==1){
-		wp_register_style( 'jquery_ui_css', $app_base.'/lib/jquery-ui/jquery-ui.css', array(), null, false );
-		wp_register_style( 'GradeBook_css', plugins_url('GradeBook.css',__File__), array('bootstrap_css','jquery_ui_css'), null, false );
-		wp_register_style( 'bootstrap_css', $app_base.'/lib/bootstrap/css/bootstrap.css', array(), null, false);
-		wp_register_script( 'requirejs', $app_base.'/require.js', array(), null, true);
-		wp_enqueue_style('GradeBook_css');
-		wp_enqueue_script('requirejs');
-		wp_localize_script( 'requirejs', 'require', array(
-			'baseUrl' => $app_base,
-			'deps'    => array( $app_base . ($an_gradebook_develop ? '/an-gradebook-app.js' : '/an-gradebook-app-min.js')
-		)));
-	} else {
-		return;
-	}
-	return '<div id="wpbody-content"></div>';
-}
-add_shortcode('an_gradebook', 'an_gradebook_shortcode');
-
-?>
