@@ -108,6 +108,21 @@ class Akismet_Admin {
 				__( 'We collect information about visitors who comment on Sites that use our Akismet Anti-spam service. The information we collect depends on how the User sets up Akismet for the Site, but typically includes the commenter\'s IP address, user agent, referrer, and Site URL (along with other information directly provided by the commenter such as their name, username, email address, and the comment itself).', 'akismet' )
 			);
 		}
+
+		if ( ! Akismet::predefined_api_key() ) {
+			register_setting(
+				'connectors',
+				'wordpress_api_key',
+				array(
+					'type' => 'string',
+					'label' => __( 'Akismet API Key', 'akismet' ),
+					'description' => __( 'API key for Akismet.', 'akismet' ),
+					'default' => '',
+					'show_in_rest' => true,
+					'sanitize_callback' => 'sanitize_text_field',
+				)
+			);
+		}
 	}
 
 	public static function admin_menu() {
@@ -192,15 +207,16 @@ class Akismet_Admin {
 			$inline_js = array(
 				'comment_author_url_nonce' => wp_create_nonce( 'comment_author_url_nonce' ),
 				'strings'                  => array(
-					'Remove this URL' => __( 'Remove this URL', 'akismet' ),
-					'Removing...'     => __( 'Removing...', 'akismet' ),
-					'URL removed'     => __( 'URL removed', 'akismet' ),
-					'(undo)'          => __( '(undo)', 'akismet' ),
-					'Re-adding...'    => __( 'Re-adding...', 'akismet' ),
+					'Remove this URL'      => __( 'Remove this URL', 'akismet' ),
+					'Removing...'          => __( 'Removing...', 'akismet' ),
+					'URL removed'          => __( 'URL removed', 'akismet' ),
+					'(undo)'               => __( '(undo)', 'akismet' ),
+					'Re-adding...'         => __( 'Re-adding...', 'akismet' ),
 				),
+				'manage_akismet_url'       => admin_url( 'admin.php?page=akismet-key-config' ),
 			);
 
-			if ( isset( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {
+			if ( isset( $_GET['akismet_recheck'] ) && is_string( $_GET['akismet_recheck'] ) && wp_verify_nonce( $_GET['akismet_recheck'], 'akismet_recheck' ) ) {
 				$inline_js['start_recheck'] = true;
 			}
 
@@ -326,11 +342,11 @@ class Akismet_Admin {
 			die( __( 'Cheatin&#8217; uh?', 'akismet' ) );
 		}
 
-		if ( ! wp_verify_nonce( $_POST['_wpnonce'], self::NONCE ) ) {
+		if ( empty( $_POST['_wpnonce'] ) || ! is_string( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], self::NONCE ) ) {
 			return false;
 		}
 
-		foreach ( array( 'akismet_strictness', 'akismet_show_user_comments_approved' ) as $option ) {
+		foreach ( array( 'akismet_strictness', 'akismet_show_user_comments_approved', 'akismet_enable_mcp_access' ) as $option ) {
 			update_option( $option, isset( $_POST[ $option ] ) && (int) $_POST[ $option ] == 1 ? '1' : '0' );
 		}
 
@@ -366,7 +382,7 @@ class Akismet_Admin {
 			$akismet_user = self::get_akismet_user( $api_key );
 
 			if ( $akismet_user ) {
-				if ( in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning' ) ) ) {
+				if ( $akismet_user->status === Akismet::USER_STATUS_ACTIVE ) {
 					update_option( 'wordpress_api_key', $api_key );
 				}
 
@@ -470,6 +486,10 @@ class Akismet_Admin {
 			return;
 		}
 
+		if ( ! current_user_can( 'moderate_comments' ) ) {
+			return;
+		}
+
 		$link = '';
 
 		$comments_count = wp_count_comments();
@@ -478,6 +498,7 @@ class Akismet_Admin {
 		echo '<div class="alignleft actions">';
 
 		$classes = array(
+			'button',
 			'button-secondary',
 			'checkforspam',
 			'button-disabled',   // Disable button until the page is loaded
@@ -526,7 +547,7 @@ class Akismet_Admin {
 			return;
 		}
 
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) ) {
+		if ( empty( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'akismet_check_for_spam' ) || ! current_user_can( 'moderate_comments' ) ) {
 			wp_send_json(
 				array(
 					'error' => __( 'You don&#8217;t have permission to do that.', 'akismet' ),
@@ -793,7 +814,7 @@ class Akismet_Admin {
 
 								if ( isset( $row['user'] ) ) {
 									/* translators: %1$s is a username; %2$s is a short string (like 'spam' or 'approved') denoting the new comment status. */
-									$message = sprintf( esc_html( __( '%1$s changed the comment status to %2$s.', 'akismet' ) ), $row['user'], '<code>' . esc_html( $new_status ) . '</code>' );
+									$message = sprintf( esc_html( __( '%1$s changed the comment status to %2$s.', 'akismet' ) ), esc_html( $row['user'] ), '<code>' . esc_html( $new_status ) . '</code>' );
 								}
 							}
 							break;
@@ -985,7 +1006,7 @@ class Akismet_Admin {
 	 *
 	 * The returned object contains these properties:
 	 * - account_id (int|false): WordPress.com user ID, or false if unavailable.
-	 * - status (string): Account status - 'active', 'active-dunning', 'no-sub', 'cancelled', 'suspended', 'missing', or 'notice'.
+	 * - status (string): Account status - 'active', 'no-sub', 'cancelled', 'suspended', 'missing', or 'notice'.
 	 * - account_name (string): Subscription plan display name.
 	 * - account_type (string): Account type slug.
 	 * - next_billing_date (int|false): Unix timestamp of next billing date, or false if none.
@@ -1075,7 +1096,7 @@ class Akismet_Admin {
 
 				if ( is_object( $akismet_user ) ) {
 					self::save_key( $akismet_user->api_key );
-					return in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, 'active-dunning', Akismet::USER_STATUS_NO_SUB ) );
+					return in_array( $akismet_user->status, array( Akismet::USER_STATUS_ACTIVE, Akismet::USER_STATUS_NO_SUB ) );
 				}
 			}
 		}
@@ -1153,7 +1174,7 @@ class Akismet_Admin {
 	public static function display_start_page() {
 		if ( isset( $_GET['action'] ) ) {
 			if ( $_GET['action'] == 'delete-key' ) {
-				if ( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], self::NONCE ) ) {
+				if ( isset( $_GET['_wpnonce'] ) && is_string( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'], self::NONCE ) ) {
 					delete_option( 'wordpress_api_key' );
 				}
 			}
@@ -1299,7 +1320,6 @@ class Akismet_Admin {
 		// $notices[] = array( 'type' => 'notice', 'notice_header' => 'This is the notice header.', 'notice_text' => 'This is the notice text.' );
 		// $notices[] = array( 'type' => 'missing-functions' );
 		// $notices[] = array( 'type' => 'servers-be-down' );
-		// $notices[] = array( 'type' => 'active-dunning' );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_CANCELLED );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_SUSPENDED );
 		// $notices[] = array( 'type' => Akismet::USER_STATUS_MISSING );

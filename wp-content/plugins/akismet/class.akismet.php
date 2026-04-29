@@ -19,6 +19,11 @@ class Akismet {
 	const USER_STATUS_CANCELLED = 'cancelled';
 	const USER_STATUS_SUSPENDED = 'suspended';
 
+	// Key verification status constants
+	const KEY_STATUS_VALID   = 'valid';
+	const KEY_STATUS_INVALID = 'invalid';
+	const KEY_STATUS_FAILED  = 'failed';
+
 	public static $limit_notices = array(
 		10501 => 'FIRST_MONTH_OVER_LIMIT',
 		10502 => 'SECOND_MONTH_OVER_LIMIT',
@@ -210,6 +215,148 @@ class Akismet {
 	}
 
 	/**
+	 * Get spam protection statistics from Akismet API.
+	 *
+	 * @param string $interval Time interval for stats: '6-months', 'all', or '60-days'.
+	 * @param string $api_key  Optional. API key to use. Defaults to stored key.
+	 * @return object|false Stats data object on success, false on failure.
+	 */
+	public static function get_stats( $interval = '6-months', $api_key = null ) {
+		if ( is_null( $api_key ) ) {
+			$api_key = self::get_api_key();
+		}
+
+		if ( ! $api_key ) {
+			return false;
+		}
+
+		$request_args = array(
+			'blog' => get_option( 'home' ),
+			'key'  => $api_key,
+			'from' => $interval,
+		);
+
+		$request_args = apply_filters( 'akismet_request_args', $request_args, 'get-stats' );
+
+		$response = self::http_post( self::build_query( $request_args ), 'get-stats' );
+
+		if ( empty( $response[1] ) ) {
+			return false;
+		}
+
+		$data = json_decode( $response[1] );
+
+		if ( ! is_object( $data ) ) {
+			return false;
+		}
+
+		// Ensure proper types for numeric fields.
+		if ( isset( $data->spam ) ) {
+			$data->spam = (int) $data->spam;
+		}
+		if ( isset( $data->ham ) ) {
+			$data->ham = (int) $data->ham;
+		}
+		if ( isset( $data->missed_spam ) ) {
+			$data->missed_spam = (int) $data->missed_spam;
+		}
+		if ( isset( $data->false_positives ) ) {
+			$data->false_positives = (int) $data->false_positives;
+		}
+		if ( isset( $data->accuracy ) ) {
+			$data->accuracy = (float) $data->accuracy;
+		}
+		if ( isset( $data->time_saved ) ) {
+			$data->time_saved = (int) $data->time_saved;
+		}
+
+		// Ensure proper types for breakdown data.
+		if ( isset( $data->breakdown ) && is_object( $data->breakdown ) ) {
+			foreach ( $data->breakdown as $period => $stats ) {
+				if ( ! is_object( $stats ) ) {
+					continue;
+				}
+
+				if ( isset( $stats->spam ) ) {
+					$stats->spam = (int) $stats->spam;
+				}
+				if ( isset( $stats->ham ) ) {
+					$stats->ham = (int) $stats->ham;
+				}
+				if ( isset( $stats->missed_spam ) ) {
+					$stats->missed_spam = (int) $stats->missed_spam;
+				}
+				if ( isset( $stats->false_positives ) ) {
+					$stats->false_positives = (int) $stats->false_positives;
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Check comment data for spam via Akismet API.
+	 *
+	 * @param array  $comment_data Array of comment data to check.
+	 * @param string $api_key      Optional. API key to use. Defaults to stored key.
+	 * @return object|false Result object on success, false on failure.
+	 */
+	public static function comment_check( $comment_data, $api_key = null ) {
+		if ( is_null( $api_key ) ) {
+			$api_key = self::get_api_key();
+		}
+
+		if ( ! $api_key ) {
+			return false;
+		}
+
+		// Build the request array with required and optional fields.
+		$request = array_merge(
+			array(
+				'blog'         => get_option( 'home' ),
+				'blog_lang'    => get_locale(),
+				'blog_charset' => get_option( 'blog_charset' ),
+				'user_ip'      => self::get_ip_address(),
+				'user_agent'   => self::get_user_agent(),
+			),
+			$comment_data
+		);
+
+		$request = apply_filters( 'akismet_request_args', $request, 'comment-check' );
+
+		$response = self::http_post( self::build_query( $request ), 'comment-check' );
+
+		if ( empty( $response[1] ) ) {
+			return false;
+		}
+
+		// Build result object.
+		$result = (object) array(
+			'is_spam' => ( 'true' === $response[1] ),
+		);
+
+		// Include additional response headers if present.
+		if ( isset( $response[0]['x-akismet-pro-tip'] ) ) {
+			$result->pro_tip = $response[0]['x-akismet-pro-tip'];
+		}
+
+		if ( isset( $response[0]['x-akismet-guid'] ) ) {
+			$result->guid = $response[0]['x-akismet-guid'];
+		}
+
+		if ( isset( $response[0]['x-akismet-error'] ) ) {
+			$result->error = $response[0]['x-akismet-error'];
+		}
+
+		if ( isset( $response[0]['x-akismet-debug-help'] ) ) {
+			$result->debug_help = $response[0]['x-akismet-debug-help'];
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Add the akismet option to the Jetpack options management whitelist.
 	 *
 	 * @param array $options The list of whitelisted option names.
@@ -317,7 +464,7 @@ class Akismet {
 		$comment['akismet_comment_nonce'] = 'inactive';
 		if ( $akismet_nonce_option == 'true' || $akismet_nonce_option == '' ) {
 			$comment['akismet_comment_nonce'] = 'failed';
-			if ( isset( $_POST['akismet_comment_nonce'] ) && wp_verify_nonce( $_POST['akismet_comment_nonce'], 'akismet_comment_nonce_' . $comment['comment_post_ID'] ) ) {
+			if ( isset( $_POST['akismet_comment_nonce'] ) && is_string( $_POST['akismet_comment_nonce'] ) && wp_verify_nonce( $_POST['akismet_comment_nonce'], 'akismet_comment_nonce_' . $comment['comment_post_ID'] ) ) {
 				$comment['akismet_comment_nonce'] = 'passed';
 			}
 
@@ -1589,8 +1736,38 @@ class Akismet {
 		return $maybe_notify;
 	}
 
+	/**
+	 * Comparison function for sorting activity history entries by time.
+	 *
+	 * Used as a callback for usort() to sort activity entries in descending
+	 * chronological order. Includes defensive validation to handle malformed
+	 * data.
+	 *
+	 * @param mixed $a First comparison value (expected: array with 'time' key).
+	 * @param mixed $b Second comparison value (expected: array with 'time' key).
+	 * @return int Returns -1 if $a > $b, 1 if $a < $b, 0 if equal or both invalid.
+	 */
 	public static function _cmp_time( $a, $b ) {
-		return $a['time'] > $b['time'] ? -1 : 1;
+		// Validate entries to guard against malformed data.
+		// Third-party integrations may pass invalid data types.
+		$a_valid = is_array( $a ) && isset( $a['time'] ) && is_numeric( $a['time'] );
+		$b_valid = is_array( $b ) && isset( $b['time'] ) && is_numeric( $b['time'] );
+
+		if ( $a_valid && $b_valid ) {
+			return (float) $b['time'] <=> (float) $a['time'];
+		}
+
+		// Push invalid entries to the end of the sorted array.
+		if ( $a_valid && ! $b_valid ) {
+			return -1;
+		}
+
+		if ( ! $a_valid && $b_valid ) {
+			return 1;
+		}
+
+		// Both invalid; maintain relative order.
+		return 0;
 	}
 
 	public static function _get_microtime() {
@@ -1783,7 +1960,7 @@ class Akismet {
 			++$field_count;
 
 			$fields .= '<input type="hidden" id="ak_js_' . $field_count . '" name="' . $prefix . 'js" value="' . mt_rand( 0, 250 ) . '"/>';
-			$fields .= '<script>document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );</script>';
+			$fields .= wp_get_inline_script_tag( 'document.getElementById( "ak_js_' . $field_count . '" ).setAttribute( "value", ( new Date() ).getTime() );' );
 		}
 
 		$fields .= '</p>';

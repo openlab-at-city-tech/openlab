@@ -64,6 +64,11 @@ class Akismet_REST_API {
 							'type'        => 'boolean',
 							'description' => __( 'If true, show the number of approved comments beside each comment author in the comments list page.', 'akismet' ),
 						),
+						'akismet_enable_mcp_access' => array(
+							'required'    => false,
+							'type'        => 'boolean',
+							'description' => __( 'If true, allow MCP clients to access Akismet data and functionality.', 'akismet' ),
+						),
 					),
 				),
 			)
@@ -222,6 +227,7 @@ class Akismet_REST_API {
 			array(
 				'akismet_strictness'                  => ( get_option( 'akismet_strictness', '1' ) === '1' ),
 				'akismet_show_user_comments_approved' => ( get_option( 'akismet_show_user_comments_approved', '1' ) === '1' ),
+				'akismet_enable_mcp_access'           => ( get_option( 'akismet_enable_mcp_access', '0' ) === '1' ),
 			)
 		);
 	}
@@ -236,6 +242,7 @@ class Akismet_REST_API {
 		foreach ( array(
 			'akismet_strictness',
 			'akismet_show_user_comments_approved',
+			'akismet_enable_mcp_access',
 		) as $setting_key ) {
 
 			$setting_value = $request->get_param( $setting_key );

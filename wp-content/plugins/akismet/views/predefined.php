@@ -1,5 +1,5 @@
 <div class="akismet-box">
-	<h2><?php esc_html_e( 'Manual Configuration', 'akismet' ); ?></h2>
+	<h2><?php esc_html_e( 'Manual configuration', 'akismet' ); ?></h2>
 	<p>
 		<?php
 

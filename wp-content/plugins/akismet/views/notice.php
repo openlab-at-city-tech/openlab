@@ -134,17 +134,6 @@ if ( ! isset( $type ) ) {
 	</p>
 </div>
 
-<?php elseif ( $type === 'active-dunning' ) : ?>
-<div class="akismet-alert is-bad">
-	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Please update your payment information.', 'akismet' ); ?></h3>
-	<p>
-		<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'We cannot process your payment. Please <a class="akismet-external-link" href="%s" target="_blank">update your payment details</a>', 'akismet' ), esc_url( 'https://wordpress.com/me/purchases/payment-methods?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=payment_update' ) ), $kses_allow_link );
-		?>
-	</p>
-</div>
-
 <?php elseif ( $type === 'cancelled' ) : ?>
 <div class="akismet-alert is-bad">
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your Akismet plan has been cancelled.', 'akismet' ); ?></h3>
@@ -221,7 +210,7 @@ if ( ! isset( $type ) ) {
 				echo wp_kses(
 					sprintf(
 						/* translators: The placeholder is a URL for checking pending comments. */
-						__( 'Would you like to <a href="%s">check pending comments</a>?', 'akismet' ),
+						__( 'Would you like to <a href="%s">scan pending comments for spam</a>?', 'akismet' ),
 						esc_url( $check_pending_link )
 					),
 					$kses_allow_link
@@ -345,7 +334,7 @@ if ( ! isset( $type ) ) {
 		</p>
 	</div>
 	<div class="akismet-usage-limit-cta">
-		<a href="<?php echo esc_attr( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank">
+		<a href="<?php echo esc_url( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank">
 			<?php
 			if ( isset( $upgrade_via_support ) && $upgrade_via_support ) {
 				// Direct user to contact support.

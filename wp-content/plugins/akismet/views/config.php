@@ -9,11 +9,15 @@ $kses_allow_link_href = array(
 );
 ?>
 <div id="akismet-plugin-container">
-	<div class="akismet-masthead">
-		<div class="akismet-masthead__inside-container">
-			<?php Akismet::view( 'logo' ); ?>
+	<?php if ( has_action( 'akismet_header' ) ) : ?>
+		<?php do_action( 'akismet_header' ); ?>
+	<?php else : ?>
+		<div class="akismet-masthead">
+			<div class="akismet-masthead__inside-container">
+				<?php Akismet::view( 'logo' ); ?>
+			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 	<div class="akismet-lower">
 		<?php if ( Akismet::get_api_key() ) { ?>
 			<?php Akismet_Admin::display_status(); ?>
@@ -30,12 +34,6 @@ $kses_allow_link_href = array(
 					<h2 class="akismet-section-header__label">
 						<span><?php esc_html_e( 'Statistics', 'akismet' ); ?></span>
 					</h2>
-
-					<div class="akismet-section-header__actions">
-						<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>">
-							<?php esc_html_e( 'Detailed stats', 'akismet' ); ?>
-						</a>
-					</div>
 				</div> <!-- close akismet-section-header -->
 
 				<div class="akismet-new-snapshot">
@@ -69,6 +67,13 @@ $kses_allow_link_href = array(
 						</li>
 					</ul>
 				</div> <!-- close akismet-new-snapshot -->
+
+				<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>" class="akismet-stats-footer">
+					<?php esc_html_e( 'View detailed stats', 'akismet' ); ?>
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<polyline points="9 18 15 12 9 6"/>
+					</svg>
+				</a>
 			</div> <!-- close akismet-card -->
 		<?php endif; ?>
 
@@ -94,7 +99,12 @@ $kses_allow_link_href = array(
 										<label class="akismet-settings__row-label" for="key"><?php esc_html_e( 'API key', 'akismet' ); ?></label>
 									</h3>
 									<div class="akismet-settings__row-input">
-										<span class="api-key"><input id="key" name="key" type="text" size="15" value="<?php echo esc_attr( get_option( 'wordpress_api_key' ) ); ?>" class="<?php echo esc_attr( 'regular-text code ' . $akismet_user->status ); ?>"></span>
+										<div class="akismet-api-key-wrapper">
+											<input id="key" name="key" type="text" size="15" value="<?php echo esc_attr( get_option( 'wordpress_api_key' ) ); ?>" class="<?php echo esc_attr( 'regular-text code ' . $akismet_user->status ); ?>">
+											<button type="button" class="akismet-api-key-copy" aria-label="<?php esc_attr_e( 'Copy API key', 'akismet' ); ?>">
+												<?php include plugin_dir_path( __FILE__ ) . '../_inc/img/copy.svg'; ?>
+											</button>
+										</div>
 									</div>
 								</div>
 							<?php endif; ?>
@@ -233,6 +243,33 @@ $kses_allow_link_href = array(
 									</div>
 								</div>
 							</div>
+
+							<?php if ( apply_filters( 'akismet_show_mcp_setting', true ) ) : ?>
+								<div class="akismet-settings__row">
+									<div class="akismet-settings__row-text">
+										<h3 class="akismet-settings__row-title">
+											<?php esc_html_e( 'Tool access', 'akismet' ); ?>
+										</h3>
+									</div>
+									<div class="akismet-settings__row-input">
+										<label class="akismet-settings__row-input-label" for="akismet_enable_mcp_access">
+											<input
+												name="akismet_enable_mcp_access"
+												id="akismet_enable_mcp_access"
+												value="1"
+												type="checkbox"
+												<?php checked( '1', get_option( 'akismet_enable_mcp_access' ) ); ?>
+											/>
+											<span class="akismet-settings__row-label-text">
+												<?php esc_html_e( 'Allow ', 'akismet' ); ?><abbr title="<?php esc_attr_e( 'Model Context Protocol', 'akismet' ); ?>"><?php esc_html_e( 'MCP', 'akismet' ); ?></abbr><?php esc_html_e( ' clients to access Akismet data and functionality', 'akismet' ); ?>
+											</span>
+										</label>
+										<div class="akismet-settings__row-note">
+											<?php esc_html_e( 'MCP (Model Context Protocol) allows AI assistants to access Akismet statistics and spam checking features.', 'akismet' ); ?>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
 						</div>
 
 						<div class="akismet-card-actions">
@@ -262,42 +299,32 @@ $kses_allow_link_href = array(
 					</div>
 
 					<div class="inside">
-						<table class="akismet-account">
-							<tbody>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Subscription type', 'akismet' ); ?></th>
-									<td>
-										<?php echo esc_html( $akismet_user->account_name ); ?>
-									</td>
-								</tr>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Status', 'akismet' ); ?></th>
-									<td>
-										<?php
-										if ( Akismet::USER_STATUS_CANCELLED === $akismet_user->status ) :
-											esc_html_e( 'Cancelled', 'akismet' );
-										elseif ( Akismet::USER_STATUS_SUSPENDED === $akismet_user->status ) :
-											esc_html_e( 'Suspended', 'akismet' );
-										elseif ( Akismet::USER_STATUS_MISSING === $akismet_user->status ) :
-											esc_html_e( 'Missing', 'akismet' );
-										elseif ( Akismet::USER_STATUS_NO_SUB === $akismet_user->status ) :
-											esc_html_e( 'No subscription found', 'akismet' );
-										else :
-											esc_html_e( 'Active', 'akismet' );
-										endif;
-										?>
-									</td>
-								</tr>
-								<?php if ( $akismet_user->next_billing_date ) : ?>
-								<tr>
-									<th scope="row"><?php esc_html_e( 'Next billing date', 'akismet' ); ?></th>
-									<td>
-										<?php echo esc_html( gmdate( 'F j, Y', $akismet_user->next_billing_date ) ); ?>
-									</td>
-								</tr>
-								<?php endif; ?>
-							</tbody>
-						</table>
+						<dl class="akismet-account">
+							<dt class="akismet-account__label"><?php esc_html_e( 'Subscription type', 'akismet' ); ?></dt>
+							<dd class="akismet-account__value"><?php echo esc_html( $akismet_user->account_name ); ?></dd>
+
+							<dt class="akismet-account__label"><?php esc_html_e( 'Status', 'akismet' ); ?></dt>
+							<dd class="akismet-account__value">
+								<?php
+								if ( Akismet::USER_STATUS_CANCELLED === $akismet_user->status ) :
+									esc_html_e( 'Cancelled', 'akismet' );
+								elseif ( Akismet::USER_STATUS_SUSPENDED === $akismet_user->status ) :
+									esc_html_e( 'Suspended', 'akismet' );
+								elseif ( Akismet::USER_STATUS_MISSING === $akismet_user->status ) :
+									esc_html_e( 'Missing', 'akismet' );
+								elseif ( Akismet::USER_STATUS_NO_SUB === $akismet_user->status ) :
+									esc_html_e( 'No subscription found', 'akismet' );
+								else :
+									esc_html_e( 'Active', 'akismet' );
+								endif;
+								?>
+							</dd>
+
+							<?php if ( $akismet_user->next_billing_date ) : ?>
+								<dt class="akismet-account__label"><?php esc_html_e( 'Next billing date', 'akismet' ); ?></dt>
+								<dd class="akismet-account__value"><?php echo esc_html( gmdate( 'F j, Y', $akismet_user->next_billing_date ) ); ?></dd>
+							<?php endif; ?>
+						</dl>
 						<div class="akismet-card-actions">
 							<?php if ( $akismet_user->status === Akismet::USER_STATUS_ACTIVE ) : ?>
 								<div class="akismet-card-actions__secondary-action">
@@ -322,4 +349,5 @@ $kses_allow_link_href = array(
 			<?php endif; ?>
 		<?php endif; ?>
 	</div>
+	<?php Akismet::view( 'footer' ); ?>
 </div>

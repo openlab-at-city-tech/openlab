@@ -389,7 +389,7 @@ jQuery( function ( $ ) {
 		e.preventDefault();
 
 		var div = $( '.akismet-enter-api-key-box__form-wrapper' );
-		div.show( 500 );
+		div.show();
 		div.find( 'input[name=key]' ).focus();
 
 		$( this ).hide();

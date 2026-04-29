@@ -6,7 +6,7 @@
 Plugin Name: Akismet Anti-spam: Spam Protection
 Plugin URI: https://akismet.com/
 Description: Used by millions, Akismet is quite possibly the best way in the world to <strong>protect your blog from spam</strong>. Akismet Anti-spam keeps your site protected even while you sleep. To get started: activate the Akismet plugin and then go to your Akismet Settings page to set up your API key.
-Version: 5.6
+Version: 5.7
 Requires at least: 5.8
 Requires PHP: 7.2
 Author: Automattic - Anti-spam Team
@@ -39,7 +39,7 @@ if ( ! function_exists( 'add_action' ) ) {
 	exit;
 }
 
-define( 'AKISMET_VERSION', '5.6' );
+define( 'AKISMET_VERSION', '5.7' );
 define( 'AKISMET__MINIMUM_WP_VERSION', '5.8' );
 define( 'AKISMET__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AKISMET_DELETE_LIMIT', 10000 );
@@ -57,6 +57,28 @@ add_action( 'init', array( 'Akismet', 'init' ) );
 add_action( 'rest_api_init', array( 'Akismet_REST_API', 'init' ) );
 
 add_action( 'init', array( 'Akismet_Compatible_Plugins', 'init' ) );
+
+if ( function_exists( 'wp_get_connectors' ) ) {
+	require_once AKISMET__PLUGIN_DIR . 'class-akismet-connector.php';
+	add_action( 'init', array( 'Akismet_Connector', 'init' ) );
+}
+
+/**
+ * Conditionally loads for a WordPress 6.9+ installation, which has
+ * access to the core Abilities API. Only register abilities if Akismet
+ * is set up with an API key (either predefined or configured).
+ */
+if ( function_exists( 'wp_register_ability' ) ) {
+	require_once AKISMET__PLUGIN_DIR . 'class-akismet-abilities.php';
+	add_action(
+		'init',
+		function () {
+			if ( Akismet::get_api_key() ) {
+				Akismet_Abilities::init();
+			}
+		}
+	);
+}
 
 if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 	require_once AKISMET__PLUGIN_DIR . 'class.akismet-admin.php';

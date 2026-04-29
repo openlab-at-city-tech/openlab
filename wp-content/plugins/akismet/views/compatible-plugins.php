@@ -9,9 +9,8 @@ if ( is_array( $compatible_plugins ) ) :
 	?>
 	<div class="akismet-card akismet-compatible-plugins">
 		<div class="akismet-section-header">
-			<h2 class="akismet-section-header__label  akismet-compatible-plugins__section-header-label" aria-label="<?php esc_attr_e( 'Compatible plugins (new feature)', 'akismet' ); ?>">
-				<span class="akismet-compatible-plugins__section-header-label-text"><?php esc_html_e( 'Compatible plugins', 'akismet' ); ?></span>
-				<span class="akismet-new-feature"><?php esc_html_e( 'New', 'akismet' ); ?></span>
+			<h2 class="akismet-section-header__label  akismet-compatible-plugins__section-header-label">
+				<?php esc_html_e( 'Compatible plugins', 'akismet' ); ?>
 			</h2>
 		</div>
 
@@ -68,8 +67,8 @@ if ( is_array( $compatible_plugins ) ) :
 									src="<?php echo esc_url( $compatible_plugin['logo'] ); ?>"
 									alt="<?php echo esc_attr( $logo_alt ); ?>"
 									class="akismet-compatible-plugins__card-logo"
-									width="55"
-									height="55"
+									width="36"
+									height="36"
 								/>
 							<?php endif ?>
 							<div class="akismet-compatible-plugins__card-detail">
