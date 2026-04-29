@@ -93,7 +93,7 @@ function add_group_menu_item_classic( $group_id = 0, $menu_id = null ) {
 		0,
 		[
 			'menu-item-title'    => sprintf( '%s Profile', $group_type ),
-			'menu-item-url'      => bp_get_group_permalink( $group ),
+			'menu-item-url'      => bp_get_group_url( $group_id ),
 			'menu-item-status'   => 'publish',
 			'menu-item-type'     => 'custom',
 			'menu-item-position' => -2,
@@ -150,13 +150,12 @@ function add_group_menu_item_block( $group_id = 0 ) {
 
 	$blocks = parse_blocks( $navigation_post->post_content );
 
-	$group      = groups_get_group( $group_id );
 	$group_type = ucfirst( groups_get_groupmeta( $group_id, 'wds_group_type' ) );
 
 	$group_profile_block = [
 		'blockName' => 'core/navigation-link',
 		'attrs'     => [
-			'url'       => bp_get_group_permalink( $group ),
+			'url'       => bp_get_group_url( $group_id ),
 			'label'     => sprintf( '%s Profile', $group_type ),
 			'id'        => 'group-profile-link',
 			'kind'      => 'custom',
