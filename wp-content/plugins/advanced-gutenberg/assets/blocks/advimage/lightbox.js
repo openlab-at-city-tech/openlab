@@ -8,7 +8,10 @@ jQuery(document).ready(function ( $ ) {
         fixed: true,
         className: 'advgb_lightbox',
         href: function () {
-            return $(this).data('image');
+            const $block = $(this);
+            const $img = $block.find('img.advgb-image').first();
+
+            return $block.data('image') || $img.data('image') || $img.attr('src');
         }
     })
 });

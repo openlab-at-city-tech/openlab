@@ -58,6 +58,7 @@ if (! class_exists('AdvancedGutenbergMain')) {
             add_action('wp_login_failed', array( $this, 'handleLoginFailed' ));
             add_filter('safe_style_css', array( $this, 'addAllowedInlineStyles' ), 10, 1);
             add_filter('wp_kses_allowed_html', array( $this, 'addAllowedTags' ), 1);
+            add_filter('all_plugins', array( $this, 'addFreeLabel' ));
 
             // Front-end ajax
             add_action('wp_ajax_advgb_contact_form_save', array( $this, 'saveContactFormData' ));
@@ -226,6 +227,30 @@ if (! class_exists('AdvancedGutenbergMain')) {
             );
 
             return $tags;
+        }
+
+        /**
+         * Add "Free" label to plugin name in the Plugins list page only
+         *
+         * @param array $plugins List of plugins
+         *
+         * @return array
+         */
+        public function addFreeLabel($plugins)
+        {
+            global $pagenow;
+
+            if (!is_admin() || 'plugins.php' !== $pagenow) {
+                return $plugins;
+            }
+
+            $plugin_file = plugin_basename(ADVANCED_GUTENBERG_PLUGIN);
+
+            if (isset($plugins[$plugin_file]['Name'])) {
+                $plugins[$plugin_file]['Name'] = 'PublishPress Blocks Free';
+            }
+
+            return $plugins;
         }
 
         /**
@@ -1947,8 +1972,8 @@ if (! class_exists('AdvancedGutenbergMain')) {
 
             if (empty($GLOBALS['admin_page_hooks']['advgb_main'])) {
                 add_menu_page(
-                    'Blocks',
-                    'Blocks',
+                    esc_html__('Blocks', 'advanced-gutenberg'),
+                    esc_html__('Blocks', 'advanced-gutenberg'),
                     'manage_options',
                     'advgb_main',
                     [ $this, 'loadMainPage' ],
@@ -3346,7 +3371,7 @@ if (! class_exists('AdvancedGutenbergMain')) {
 
             wp_enqueue_script(
                 'advgb_block_usage',
-                ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/blocks/block-usage.js',
+                ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/pages/block-usage.js',
                 ['wp-element', 'wp-components', 'wp-api-fetch', 'wp-i18n'],
                 ADVANCED_GUTENBERG_VERSION,
                 true
@@ -3380,7 +3405,11 @@ if (! class_exists('AdvancedGutenbergMain')) {
                 $localize_data
             );
 
-			wp_set_script_translations( 'advgb_block_usage', 'advanced-gutenberg' );
+            wp_set_script_translations(
+                'advgb_block_usage',
+                'advanced-gutenberg',
+                plugin_dir_path(ADVANCED_GUTENBERG_PLUGIN) . 'languages'
+            );
         }
 
         public function get_editor_post_types()

@@ -401,6 +401,10 @@ class AdvancedGutenbergAutoInsertBlocks
             return $content;
         }
 
+        if (post_password_required($post)) {
+            return $content;
+        }
+
         $rules = $this->getActiveInsertionRules($post);
         if (empty($rules)) {
             return $content;

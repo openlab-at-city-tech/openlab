@@ -11,7 +11,7 @@
         }
     ],
     "config": {
-        "process-timeout": 600,
+        "process-timeout": 0,
         "preferred-install": {
             "*": "dist"
         },
@@ -27,17 +27,16 @@
     "require-dev": {
         "automattic/vipwpcs": "^2.3",
         "publishpress/publishpress-phpcs-standards": "dev-main",
+        "publishpress/translations": "^1.0.0",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "squizlabs/php_codesniffer": "^3.6",
         "wp-cli/i18n-command": "^2.4",
         "overtrue/phplint": "^9.6"
     },
     "scripts": {
-        "build": "pbuild build",
-        "build:dir": "pbuild build-dir",
-        "build:clean": "pbuild clean",
-        "build:make-pot": "wp i18n make-pot --exclude=/dev-workspace --exclude=/.wordpress-org --exclude=/.github --exclude=/dist --exclude=/vendor --exclude=/lib . ./languages/advanced-gutenberg.pot --allow-root",
-        "build:js-translations": "bash /project/dev-workspace/docker/scripts/json_translations.sh",
+        "build": "build zip",
+        "build:dir": "build dir",
+        "build:clean": "build clean",
         "build:css": "sass assets/scss/:assets/css/ --style=compressed --no-source-map",
         "build:css-dev": "sass assets/scss/:assets/css/ -w",
         "build:js-dev": "webpack --mode development --watch",
@@ -54,6 +53,23 @@
             "@fix:cs"
         ],
         "config:phpcs": "phpcs --config-set installed_paths \"../../phpcsstandards/phpcsutils,../../phpcsstandards/phpcsextra,../../automattic/vipwpcs,../../phpcompatibility/php-compatibility,../../sirbrillig/phpcs-variable-analysis,../../publishpress/publishpress-phpcs-standards/standards,../../wp-coding-standards/wpcs\"",
+        "translate": "vendor/bin/publishpress-translate --languages=de_DE,fi,fil,id_ID,ja,ko_KR,nl_NL,ru_RU,yor",
+        "translate:dry-run": "vendor/bin/publishpress-translate --dry-run",
+        "translate:download": "vendor/bin/publishpress-translate --download",
+        "translate:upload": "vendor/bin/publishpress-translate --upload",
+        "translate:custom": "vendor/bin/publishpress-translate --languages",
+        "translate:force": "vendor/bin/publishpress-translate --force",
+        "translate:force-custom": "vendor/bin/publishpress-translate --force --languages",
+        "translate:repair-plurals": "php vendor/bin/publishpress-translate --repair-plurals",
+        "translate:compile": [
+            "@translate:mo",
+            "@translate:json",
+            "@translate:php"
+        ],
+        "translate:pot": "wp i18n make-pot . ./languages/advanced-gutenberg.pot --domain=advanced-gutenberg --exclude=dev-workspace,.wordpress-org,.github,dist,tests,lib,tmp,doc,*.js.map --allow-root",
+        "translate:mo": "wp i18n make-mo ./languages ./languages --allow-root",
+        "translate:json": "bash ./dev-workspace/scripts/lang-make-json.sh",
+        "translate:php": "bash ./dev-workspace/scripts/lang-make-php.sh",
         "pre-autoload-dump": "composer dumpautoload --working-dir=./lib",
         "pre-update-cmd": "composer update --working-dir=./lib",
         "pre-install-cmd": "composer install --working-dir=./lib"

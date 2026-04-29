@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => '__root__',
-        'pretty_version' => 'v3.6.2',
-        'version' => '3.6.2.0',
-        'reference' => 'a492d1f0da88fb8051d68fe7429c149aeedb1250',
+        'pretty_version' => 'v3.7.0',
+        'version' => '3.7.0.0',
+        'reference' => '62cd56c71196af5cad9c28d7e6e622c4638e143b',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,18 +11,18 @@
     ),
     'versions' => array(
         '__root__' => array(
-            'pretty_version' => 'v3.6.2',
-            'version' => '3.6.2.0',
-            'reference' => 'a492d1f0da88fb8051d68fe7429c149aeedb1250',
+            'pretty_version' => 'v3.7.0',
+            'version' => '3.7.0.0',
+            'reference' => '62cd56c71196af5cad9c28d7e6e622c4638e143b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'matomo/device-detector' => array(
-            'pretty_version' => '6.4.8',
-            'version' => '6.4.8.0',
-            'reference' => '56baf981af4f192e15a4f369d4975af847a81ccb',
+            'pretty_version' => '6.5.0',
+            'version' => '6.5.0.0',
+            'reference' => 'e0fff2309dad83eb3cfb2564e524be715cfcf3cf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../matomo/device-detector',
             'aliases' => array(),
@@ -40,7 +40,7 @@
         'piwik/device-detector' => array(
             'dev_requirement' => false,
             'replaced' => array(
-                0 => '6.4.8',
+                0 => '6.5.0',
             ),
         ),
         'publishpress/instance-protection' => array(
@@ -80,18 +80,18 @@
             'dev_requirement' => false,
         ),
         'publishpress/wordpress-reviews' => array(
-            'pretty_version' => 'v1.1.20',
-            'version' => '1.1.20.0',
-            'reference' => '6d0b687a66439721b0432ef1320fd818cd56309f',
+            'pretty_version' => '1.2.0',
+            'version' => '1.2.0.0',
+            'reference' => '6d1cf428aef5fc5f72c9368fbd7ce1f14d956503',
             'type' => 'library',
             'install_path' => __DIR__ . '/../publishpress/wordpress-reviews',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
         'publishpress/wordpress-version-notices' => array(
-            'pretty_version' => '2.1.5',
-            'version' => '2.1.5.0',
-            'reference' => 'caf37ca4705f89b882c1e53d9e592939568df944',
+            'pretty_version' => '2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => '174b2a35e40dfb7ff0426cc16dc8ed0888be2169',
             'type' => 'library',
             'install_path' => __DIR__ . '/../publishpress/wordpress-version-notices',
             'aliases' => array(),

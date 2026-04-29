@@ -16,16 +16,18 @@ if (! function_exists('advg_language_domain_init')) {
      */
     function advg_language_domain_init()
     {
-        load_plugin_textdomain('advanced-gutenberg', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        $domain = 'advanced-gutenberg';
+
+        load_plugin_textdomain($domain, false, dirname(plugin_basename(__FILE__)) . '/languages');
 
         wp_set_script_translations(
             'editor',
-            'advanced-gutenberg',
+            $domain,
             plugin_dir_path(__FILE__) . 'languages'
         );
     }
 }
-add_action('init', 'advg_language_domain_init');
+add_action('init', 'advg_language_domain_init', 0);
 
 if (! function_exists('advg_check_legacy_widget_block_init')) {
     /**

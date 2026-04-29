@@ -1507,7 +1507,7 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
 
                 wp_enqueue_script(
                     'advgb_preset_data_manager',
-                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/blocks/preset-data-manager.js',
+                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/pages/preset-data-manager.js',
                     [
                         'wp-blocks',
                         'wp-i18n',
@@ -1522,7 +1522,7 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
 
                 wp_enqueue_script(
                     'advgb_block_controls',
-                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/blocks/block-controls.js',
+                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/pages/block-controls.js',
                     [
                         'advgb_preset_data_manager',
                         'ppb-tooltips-js',
@@ -1540,13 +1540,27 @@ if (!class_exists('\\PublishPress\\Blocks\\Controls')) {
 
                 wp_enqueue_script(
                     'advgb-preset-manager',
-                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/blocks/preset-manager.js',
+                    ADVANCED_GUTENBERG_PLUGIN_DIR_URL . 'assets/pages/preset-manager.js',
                     ['advgb_preset_data_manager', 'wp-components', 'wp-element', 'wp-i18n', 'wp-api-fetch'],
                     ADVANCED_GUTENBERG_VERSION,
                     true
                 );
 
-                wp_set_script_translations( 'advgb_block_controls', 'advanced-gutenberg' );
+                wp_set_script_translations(
+                    'advgb_preset_data_manager',
+                    'advanced-gutenberg',
+                    plugin_dir_path(ADVANCED_GUTENBERG_PLUGIN) . 'languages'
+                );
+                wp_set_script_translations(
+                    'advgb-preset-manager',
+                    'advanced-gutenberg',
+                    plugin_dir_path(ADVANCED_GUTENBERG_PLUGIN) . 'languages'
+                );
+                wp_set_script_translations(
+                    'advgb_block_controls',
+                    'advanced-gutenberg',
+                    plugin_dir_path(ADVANCED_GUTENBERG_PLUGIN) . 'languages'
+                );
             }
         }
 

@@ -1,196 +1,318 @@
-# Copyright (C) 2025 PublishPress
+# Copyright (C) 2026 PublishPress
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: PublishPress Blocks 3.6.0\n"
+"Project-Id-Version: PublishPress Blocks 3.7.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-12-15T13:55:51+00:00\n"
+"POT-Creation-Date: 2026-04-05T00:32:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: advanced-gutenberg\n"
 
 #. Plugin Name of the plugin
-#: advanced-gutenberg.php
-#: incl/advanced-gutenberg-main.php:175
+#: advanced-gutenberg.php:7
+#: incl/advanced-gutenberg-main.php:176
 #: incl/pages/block-settings.php:95
 #: incl/pages/main.php:8
 msgid "PublishPress Blocks"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: advanced-gutenberg.php
+#: advanced-gutenberg.php:9
 msgid "https://publishpress.com/blocks/"
 msgstr ""
 
 #. Description of the plugin
-#: advanced-gutenberg.php
+#: advanced-gutenberg.php:11
 msgid "PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor."
 msgstr ""
 
 #. Author of the plugin
-#: advanced-gutenberg.php
+#: advanced-gutenberg.php:15
+#: assets/blocks/pro-ad/shared/index.jsx:130
 msgid "PublishPress"
 msgstr ""
 
 #. Author URI of the plugin
-#: advanced-gutenberg.php
+#: advanced-gutenberg.php:17
 msgid "https://publishpress.com/"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:446
-#: incl/advanced-gutenberg-main.php:915
-#: incl/advanced-gutenberg-main.php:2098
-#: incl/advanced-gutenberg-main.php:3364
-#: incl/advanced-gutenberg-main.php:5969
+#: assets/blocks/recent-posts/block.php:280
+#: assets/blocks/recent-posts/block.php:567
+#: assets/blocks/recent-posts/block.php:1143
+#: assets/blocks/recent-posts/block.php:1157
+#: assets/blocks/recent-posts/block.jsx:1116
+#: assets/blocks/recent-posts/block.jsx:1182
+#: assets/blocks/recent-posts/block.jsx:2392
+#: assets/blocks/recent-posts/block.jsx:2406
+#: assets/blocks/recent-posts/block.jsx:2407
+#: assets/blocks/recent-posts/block.jsx:2410
+msgid "Posted on"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.php:283
+#: assets/blocks/recent-posts/block.php:571
+#: assets/blocks/recent-posts/block.php:1144
+#: assets/blocks/recent-posts/block.php:1158
+#: assets/blocks/recent-posts/block.jsx:1124
+#: assets/blocks/recent-posts/block.jsx:1189
+#: assets/blocks/recent-posts/block.jsx:2392
+#: assets/blocks/recent-posts/block.jsx:2406
+#: assets/blocks/recent-posts/block.jsx:2407
+#: assets/blocks/recent-posts/block.jsx:2411
+msgid "Updated on"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.php:289
+#: assets/blocks/recent-posts/block.php:575
+#: assets/blocks/recent-posts/block.php:1129
+#: assets/blocks/recent-posts/block.jsx:1136
+#: assets/blocks/recent-posts/block.jsx:1200
+#: assets/blocks/recent-posts/block.jsx:2423
+#: assets/blocks/recent-posts/block.jsx:2424
+#: assets/blocks/recent-posts/block.jsx:2427
+msgid "Posted"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.php:290
+#: assets/blocks/recent-posts/block.php:293
+#: assets/blocks/recent-posts/block.php:1129
+#: assets/blocks/recent-posts/block.php:1130
+msgid "ago"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.php:292
+#: assets/blocks/recent-posts/block.php:579
+#: assets/blocks/recent-posts/block.php:1130
+#: assets/blocks/recent-posts/block.jsx:1144
+#: assets/blocks/recent-posts/block.jsx:1207
+#: assets/blocks/recent-posts/block.jsx:2423
+#: assets/blocks/recent-posts/block.jsx:2424
+#: assets/blocks/recent-posts/block.jsx:2428
+msgid "Updated"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.php:398
+#: assets/blocks/recent-posts/block.jsx:1775
+msgid "Read More"
+msgstr ""
+
+#: incl/advanced-gutenberg-main.php:471
+#: incl/advanced-gutenberg-main.php:940
+#: incl/advanced-gutenberg-main.php:2123
+#: incl/advanced-gutenberg-main.php:3389
+#: incl/advanced-gutenberg-main.php:5994
+#: assets/blocks/0-adv-components/datetime.jsx:450
+#: assets/blocks/advbutton/block.jsx:598
+#: assets/blocks/pro-ad/accordion-promo.jsx:51
+#: assets/blocks/pro-ad/accordion-promo.jsx:100
+#: assets/blocks/pro-ad/button-promo.jsx:37
+#: assets/blocks/pro-ad/button-promo.jsx:69
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:63
+#: assets/blocks/pro-ad/count-up-promo.jsx:39
+#: assets/blocks/pro-ad/count-up-promo.jsx:80
+#: assets/blocks/pro-ad/general-promo.jsx:24
+#: assets/blocks/pro-ad/image-promo.jsx:63
+#: assets/blocks/pro-ad/image-slider-promo.jsx:49
+#: assets/blocks/pro-ad/image-slider-promo.jsx:94
+#: assets/blocks/pro-ad/image-slider-promo.jsx:135
+#: assets/blocks/pro-ad/list-promo.jsx:39
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:50
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:91
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:177
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:208
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:260
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:291
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:351
+#: assets/blocks/pro-ad/tabs-promo.jsx:53
+#: assets/blocks/pro-ad/tabs-promo.jsx:119
+#: assets/blocks/pro-ad/testimonial-promo.jsx:39
+#: assets/blocks/pro-ad/testimonial-promo.jsx:88
+#: assets/blocks/recent-posts/block.jsx:929
+#: assets/blocks/recent-posts/block.jsx:1229
+#: assets/blocks/recent-posts/block.jsx:1474
+#: assets/blocks/recent-posts/block.jsx:1523
 msgid "Upgrade to Pro"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:447
-#: incl/advanced-gutenberg-main.php:2099
-#: incl/advanced-gutenberg-main.php:3365
+#: incl/advanced-gutenberg-main.php:472
+#: incl/advanced-gutenberg-main.php:2124
+#: incl/advanced-gutenberg-main.php:3390
 #: incl/pages/block-settings.php:133
+#: assets/blocks/advbutton/block.jsx:590
+#: assets/blocks/pro-ad/accordion-promo.jsx:43
+#: assets/blocks/pro-ad/accordion-promo.jsx:92
+#: assets/blocks/pro-ad/button-promo.jsx:29
+#: assets/blocks/pro-ad/button-promo.jsx:61
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:55
+#: assets/blocks/pro-ad/count-up-promo.jsx:31
+#: assets/blocks/pro-ad/count-up-promo.jsx:72
+#: assets/blocks/pro-ad/image-promo.jsx:55
+#: assets/blocks/pro-ad/image-slider-promo.jsx:41
+#: assets/blocks/pro-ad/image-slider-promo.jsx:86
+#: assets/blocks/pro-ad/image-slider-promo.jsx:127
+#: assets/blocks/pro-ad/list-promo.jsx:31
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:42
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:83
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:169
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:200
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:252
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:283
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:343
+#: assets/blocks/pro-ad/tabs-promo.jsx:45
+#: assets/blocks/pro-ad/tabs-promo.jsx:111
+#: assets/blocks/pro-ad/testimonial-promo.jsx:31
+#: assets/blocks/pro-ad/testimonial-promo.jsx:80
+#: assets/blocks/recent-posts/block.jsx:921
+#: assets/blocks/recent-posts/block.jsx:1221
+#: assets/blocks/recent-posts/block.jsx:1466
+#: assets/blocks/recent-posts/block.jsx:1515
 msgid "Pro"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:889
+#: incl/advanced-gutenberg-main.php:914
 #, php-format
 msgid "You're using PublishPress Blocks Free. The Pro version has more features and support. %sUpgrade to Pro%s"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1124
-#: incl/advanced-gutenberg-main.php:1250
-#: incl/advanced-gutenberg-main.php:1311
+#: incl/advanced-gutenberg-main.php:1149
+#: incl/advanced-gutenberg-main.php:1275
+#: incl/advanced-gutenberg-main.php:1336
 #: incl/block-styles/block-styles.php:234
 msgid "No permission!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1261
-#: incl/advanced-gutenberg-main.php:1317
-#: incl/advanced-gutenberg-main.php:1377
-#: incl/advanced-gutenberg-main.php:1469
+#: incl/advanced-gutenberg-main.php:1286
+#: incl/advanced-gutenberg-main.php:1342
+#: incl/advanced-gutenberg-main.php:1402
+#: incl/advanced-gutenberg-main.php:1494
 #: incl/block-styles/block-styles.php:241
 msgid "Invalid nonce token!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1265
+#: incl/advanced-gutenberg-main.php:1290
 msgid "Error: wrong data"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1296
+#: incl/advanced-gutenberg-main.php:1321
 msgid "Error: can't edit this feature"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1382
-#: incl/advanced-gutenberg-main.php:1474
-#: incl/advanced-gutenberg-main.php:1527
+#: incl/advanced-gutenberg-main.php:1407
+#: incl/advanced-gutenberg-main.php:1499
+#: incl/advanced-gutenberg-main.php:1552
 msgid "Bad Request!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1390
-#: incl/advanced-gutenberg-main.php:1482
-#: incl/advanced-gutenberg-main.php:1535
+#: incl/advanced-gutenberg-main.php:1415
+#: incl/advanced-gutenberg-main.php:1507
+#: incl/advanced-gutenberg-main.php:1560
 msgid "Server error. Try again later!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1398
-#: incl/advanced-gutenberg-main.php:1490
-#: incl/advanced-gutenberg-main.php:1543
+#: incl/advanced-gutenberg-main.php:1423
+#: incl/advanced-gutenberg-main.php:1515
+#: incl/advanced-gutenberg-main.php:1568
 msgid "Cannot validate captcha"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1403
-#: incl/advanced-gutenberg-main.php:1495
-#: incl/advanced-gutenberg-main.php:1548
+#: incl/advanced-gutenberg-main.php:1428
+#: incl/advanced-gutenberg-main.php:1520
+#: incl/advanced-gutenberg-main.php:1573
 msgid "Captcha validation error"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1428
+#: incl/advanced-gutenberg-main.php:1453
 #: incl/pages/settings/forms.php:24
 msgid "Website Contact"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1434
+#: incl/advanced-gutenberg-main.php:1459
 msgid "You have received a contact from your website."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1437
+#: incl/advanced-gutenberg-main.php:1462
 msgid "Name"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1439
+#: incl/advanced-gutenberg-main.php:1464
 #: incl/block-settings-main.php:808
 #: incl/block-settings-main.php:849
 #: incl/block-settings-main.php:890
+#: assets/blocks/login-form/block.jsx:862
 msgid "Email"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1441
+#: incl/advanced-gutenberg-main.php:1466
 msgid "Date"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1443
+#: incl/advanced-gutenberg-main.php:1468
 msgid "Message"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1451
+#: incl/advanced-gutenberg-main.php:1476
 msgid "Error while sending the form. Please try again."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1551
+#: incl/advanced-gutenberg-main.php:1576
 msgid "Captcha validated"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1554
+#: incl/advanced-gutenberg-main.php:1579
 msgid "Captcha is empty"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1869
-#: incl/advanced-gutenberg-main.php:5956
+#: incl/advanced-gutenberg-main.php:1894
+#: incl/advanced-gutenberg-main.php:5981
+#: assets/blocks/login-form/block.jsx:512
 msgid "Dashboard"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1876
-#: incl/advanced-gutenberg-main.php:2189
+#: incl/advanced-gutenberg-main.php:1901
+#: incl/advanced-gutenberg-main.php:2214
 #: incl/pages/main.php:21
 msgid "Block Permissions"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1883
+#: incl/advanced-gutenberg-main.php:1908
 #: incl/pages/main.php:31
 msgid "Extra Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1890
+#: incl/advanced-gutenberg-main.php:1915
 #: incl/pages/custom-styles.php:9
 #: incl/pages/main.php:41
 msgid "Block Styles"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1897
+#: incl/advanced-gutenberg-main.php:1922
 #: incl/pages/block-controls.php:30
 #: incl/pages/main.php:51
+#: assets/pages/block-controls/block-controls.jsx:2271
 msgid "Block Controls"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1904
-#: incl/advanced-gutenberg-main.php:3675
+#: incl/advanced-gutenberg-main.php:1929
+#: incl/advanced-gutenberg-main.php:3700
 #: incl/pages/main.php:61
 msgid "Block Usage"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1911
-#: incl/advanced-gutenberg-main.php:5988
-#: incl/advanced-gutenberg-main.php:5990
+#: incl/advanced-gutenberg-main.php:1936
+#: incl/advanced-gutenberg-main.php:6013
+#: incl/advanced-gutenberg-main.php:6015
 #: incl/pages/main.php:71
 msgid "Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1918
+#: incl/advanced-gutenberg-main.php:1943
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:117
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:155
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:156
@@ -198,113 +320,115 @@ msgstr ""
 msgid "Auto Insert Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:1925
-#: incl/advanced-gutenberg-main.php:5962
+#: incl/advanced-gutenberg-main.php:1950
+#: incl/advanced-gutenberg-main.php:5987
 #: incl/pages/settings.php:26
 msgid "Settings"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2164
-#: incl/advanced-gutenberg-main.php:2210
-#: incl/advanced-gutenberg-main.php:2254
-#: incl/advanced-gutenberg-main.php:2290
-#: incl/advanced-gutenberg-main.php:2336
+#: incl/advanced-gutenberg-main.php:2189
+#: incl/advanced-gutenberg-main.php:2235
+#: incl/advanced-gutenberg-main.php:2279
+#: incl/advanced-gutenberg-main.php:2315
+#: incl/advanced-gutenberg-main.php:2361
 #, php-format
 msgid "This feature is disabled. In order to use, please enable back through %sDashboard%s."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2409
+#: incl/advanced-gutenberg-main.php:2434
 #, php-format
 msgid "If you like %sPublishPress Blocks%s please leave us a %s rating. Thank you!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2426
+#: incl/advanced-gutenberg-main.php:2451
 msgid "About PublishPress Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2429
+#: incl/advanced-gutenberg-main.php:2454
 msgid "About"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2436
-#: incl/advanced-gutenberg-main.php:2439
+#: incl/advanced-gutenberg-main.php:2461
+#: incl/advanced-gutenberg-main.php:2464
 msgid "Documentation"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2447
+#: incl/advanced-gutenberg-main.php:2472
 msgid "Contact the PublishPress team"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2450
+#: incl/advanced-gutenberg-main.php:2475
 msgid "Contact"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:2458
+#: incl/advanced-gutenberg-main.php:2483
 msgid "PublishPress Blocks logo"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3521
+#: incl/advanced-gutenberg-main.php:3546
 #, php-format
 msgid "%s saved successfully!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3531
+#: incl/advanced-gutenberg-main.php:3556
 #, php-format
 msgid "%s can't be saved. Please try again."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3587
+#: incl/advanced-gutenberg-main.php:3612
 #: incl/pages/block-controls/blocks.php:13
 #: incl/pages/block-settings.php:102
 msgid "Search blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3592
+#: incl/advanced-gutenberg-main.php:3617
 msgid "Enable or disable all blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3605
-#: incl/advanced-gutenberg-main.php:3651
+#: incl/advanced-gutenberg-main.php:3630
+#: incl/advanced-gutenberg-main.php:3676
 #: incl/pages/block-controls/blocks.php:31
 #: incl/pages/block-controls/blocks.php:79
 msgid "To save this configuration, enable at least one block."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3616
-#: incl/advanced-gutenberg-main.php:3640
+#: incl/advanced-gutenberg-main.php:3641
+#: incl/advanced-gutenberg-main.php:3665
 msgid "Save Role Block Permissions"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3620
-#: incl/advanced-gutenberg-main.php:3644
+#: incl/advanced-gutenberg-main.php:3645
+#: incl/advanced-gutenberg-main.php:3669
 msgid "Save Permission for all Roles"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3629
-#: incl/advanced-gutenberg-main.php:3685
+#: incl/advanced-gutenberg-main.php:3654
+#: incl/advanced-gutenberg-main.php:3710
 #: incl/pages/block-controls/blocks.php:56
+#: assets/pages/block-usage/block-usage.jsx:886
 msgid "Loading..."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:3678
+#: incl/advanced-gutenberg-main.php:3703
+#: assets/pages/block-usage/block-usage.jsx:295
 msgid "Scan Block Usage"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4021
-#: incl/advanced-gutenberg-main.php:4022
+#: incl/advanced-gutenberg-main.php:4046
+#: incl/advanced-gutenberg-main.php:4047
 msgid "Block Config"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4081
+#: incl/advanced-gutenberg-main.php:4106
 msgid "Default configuration for this block is not available."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4147
+#: incl/advanced-gutenberg-main.php:4172
 #, php-format
 msgid "Page not found. Go to %sDashboard%s"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4560
+#: incl/advanced-gutenberg-main.php:4585
 #: incl/block-styles/block-styles.php:977
 #: incl/block-styles/block-styles.php:996
 #: incl/block-styles/block-styles.php:1166
@@ -321,144 +445,156 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1532
 #: incl/block-styles/block-styles.php:1710
 #: incl/pages/settings/general.php:135
+#: assets/blocks/advbutton/block.jsx:824
+#: assets/blocks/advicon/block.jsx:232
+#: assets/blocks/advtable/block.jsx:1543
+#: assets/blocks/newsletter/block.jsx:86
+#: assets/blocks/pro-ad/accordion-promo.jsx:30
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:309
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:314
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:336
+#: assets/blocks/pro-ad/tabs-promo.jsx:31
+#: assets/blocks/recent-posts/block.jsx:561
+#: assets/blocks/recent-posts/block.jsx:668
+#: assets/blocks/search-bar/block.jsx:451
 msgid "Default"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4574
+#: incl/advanced-gutenberg-main.php:4599
 msgid "Type field not defined"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4849
+#: incl/advanced-gutenberg-main.php:4874
 msgid "User registration is currently not allowed."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4853
+#: incl/advanced-gutenberg-main.php:4878
 msgid "Captcha must be checked!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:4854
+#: incl/advanced-gutenberg-main.php:4879
 msgid "Username or password is incorrect!"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5989
+#: incl/advanced-gutenberg-main.php:6014
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:198
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:87
 msgid "Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5991
+#: incl/advanced-gutenberg-main.php:6016
 msgid "All Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5992
+#: incl/advanced-gutenberg-main.php:6017
 msgid "Add New"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5993
+#: incl/advanced-gutenberg-main.php:6018
 msgid "Add New Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5994
+#: incl/advanced-gutenberg-main.php:6019
 msgid "Edit Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5995
+#: incl/advanced-gutenberg-main.php:6020
 msgid "New Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5996
+#: incl/advanced-gutenberg-main.php:6021
 msgid "View Reusable Block"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5997
+#: incl/advanced-gutenberg-main.php:6022
 msgid "View Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5998
+#: incl/advanced-gutenberg-main.php:6023
 msgid "Search Reusable Blocks"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:5999
+#: incl/advanced-gutenberg-main.php:6024
 msgid "No reusable blocks found."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6000
+#: incl/advanced-gutenberg-main.php:6025
 msgid "No reusable blocks found in Trash."
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6001
+#: incl/advanced-gutenberg-main.php:6026
 msgid "Parent Reusable Block:"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6002
+#: incl/advanced-gutenberg-main.php:6027
 msgid "Reusable Block Archives"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6020
+#: incl/advanced-gutenberg-main.php:6045
 msgid "Reusable Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6021
+#: incl/advanced-gutenberg-main.php:6046
 msgid "Reusable Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6022
+#: incl/advanced-gutenberg-main.php:6047
 msgid "Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6023
+#: incl/advanced-gutenberg-main.php:6048
 msgid "All Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6024
+#: incl/advanced-gutenberg-main.php:6049
 msgid "Edit Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6025
+#: incl/advanced-gutenberg-main.php:6050
 msgid "View Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6026
+#: incl/advanced-gutenberg-main.php:6051
 msgid "Update Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6027
+#: incl/advanced-gutenberg-main.php:6052
 msgid "Add New Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6028
+#: incl/advanced-gutenberg-main.php:6053
 msgid "New Block Category Name"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6029
+#: incl/advanced-gutenberg-main.php:6054
 msgid "Parent Block Category"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6030
+#: incl/advanced-gutenberg-main.php:6055
 msgid "Parent Block Category:"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6031
+#: incl/advanced-gutenberg-main.php:6056
 msgid "Search Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6032
+#: incl/advanced-gutenberg-main.php:6057
 msgid "Popular Block Categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6033
+#: incl/advanced-gutenberg-main.php:6058
 msgid "Separate block categories with commas"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6034
+#: incl/advanced-gutenberg-main.php:6059
 msgid "Add or remove block categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6035
+#: incl/advanced-gutenberg-main.php:6060
 msgid "Choose from the most used block categories"
 msgstr ""
 
-#: incl/advanced-gutenberg-main.php:6036
+#: incl/advanced-gutenberg-main.php:6061
 msgid "No block categories found."
 msgstr ""
 
@@ -500,6 +636,7 @@ msgstr ""
 
 #: incl/auto-insert-blocks/class-auto-insert-blocks.php:199
 #: incl/block-styles/block-styles.php:1273
+#: assets/blocks/recent-posts/block.jsx:991
 msgid "Position"
 msgstr ""
 
@@ -614,39 +751,49 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1445
 #: incl/block-styles/block-styles.php:1473
 #: incl/block-styles/block-styles.php:2134
+#: assets/blocks/advbutton/block.jsx:132
+#: assets/blocks/advimage/block.jsx:112
+#: assets/blocks/advlist/block.jsx:205
+#: assets/blocks/advtable/block.jsx:1290
+#: assets/blocks/advtabs/block.jsx:499
+#: assets/blocks/advvideo/block.jsx:316
+#: assets/blocks/columns/block.jsx:48
+#: assets/blocks/columns/column.jsx:17
+#: assets/blocks/images-slider/block.jsx:257
+#: assets/blocks/recent-posts/block.jsx:67
 msgid "None"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:842
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:846
 msgid "Duplicate this auto insert rule"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:843
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:847
 msgid "Duplicate"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:860
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:864
 msgid "Invalid request"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:869
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:873
 msgid "Security check failed"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:875
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:879
 msgid "You do not have permission to duplicate this item"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:885
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:889
 #, php-format
 msgid "Auto insert block duplicated successfully. <a href=\"%s\">Edit the new rule</a>"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:891
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:895
 msgid "Error duplicating auto insert block"
 msgstr ""
 
-#: incl/auto-insert-blocks/class-auto-insert-blocks.php:923
+#: incl/auto-insert-blocks/class-auto-insert-blocks.php:927
 #: incl/pages/custom-styles.php:26
 msgid "Copy"
 msgstr ""
@@ -766,6 +913,7 @@ msgstr ""
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:509
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:644
 #: incl/block-styles/block-styles.php:961
+#: assets/blocks/0-adv-components/datetime.jsx:442
 msgid "Pro feature"
 msgstr ""
 
@@ -774,10 +922,13 @@ msgid "Exclude from counting"
 msgstr ""
 
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:219
+#: assets/blocks/images-slider/block.jsx:452
+#: assets/blocks/pro-ad/shared/index.jsx:126
 msgid "Image"
 msgstr ""
 
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:220
+#: assets/blocks/pro-ad/shared/index.jsx:114
 msgid "List"
 msgstr ""
 
@@ -814,6 +965,7 @@ msgid "Post Types"
 msgstr ""
 
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:347
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:234
 msgid "Taxonomies"
 msgstr ""
 
@@ -864,6 +1016,7 @@ msgstr ""
 
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:464
 #: incl/auto-insert-blocks/class-auto-insert-metaboxes.php:501
+#: assets/pages/block-controls/preset-manager.jsx:800
 msgid "OR"
 msgstr ""
 
@@ -896,6 +1049,7 @@ msgid "Search terms..."
 msgstr ""
 
 #: incl/block-controls-main.php:1727
+#: assets/blocks/login-form/block.jsx:511
 msgid "Home"
 msgstr ""
 
@@ -904,10 +1058,13 @@ msgid "Blog"
 msgstr ""
 
 #: incl/block-controls-main.php:1735
+#: assets/pages/block-controls/preset-manager.jsx:677
 msgid "Archive"
 msgstr ""
 
 #: incl/block-controls-main.php:1739
+#: assets/pages/block-controls/block-controls.jsx:1573
+#: assets/pages/block-controls/block-controls.jsx:2153
 msgid "Search"
 msgstr ""
 
@@ -916,18 +1073,31 @@ msgid "404"
 msgstr ""
 
 #: incl/block-settings-main.php:16
+#: assets/blocks/accordion/block.jsx:114
+#: assets/blocks/advaccordion/accordion.jsx:161
+#: assets/blocks/advaccordion/block.jsx:218
+#: assets/blocks/pro-ad/accordion-promo.jsx:61
 msgid "Accordion Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:19
+#: assets/blocks/accordion/block.jsx:116
+#: assets/blocks/advaccordion/accordion.jsx:163
+#: assets/blocks/advaccordion/block.jsx:220
 msgid "Bottom spacing"
 msgstr ""
 
 #: incl/block-settings-main.php:26
+#: assets/blocks/accordion/block.jsx:216
+#: assets/blocks/advaccordion/accordion.jsx:171
+#: assets/blocks/advaccordion/block.jsx:228
 msgid "Initial Collapsed"
 msgstr ""
 
 #: incl/block-settings-main.php:33
+#: assets/blocks/accordion/block.jsx:124
+#: assets/blocks/advaccordion/accordion.jsx:183
+#: assets/blocks/advaccordion/block.jsx:237
 msgid "Header Settings"
 msgstr ""
 
@@ -952,6 +1122,18 @@ msgstr ""
 #: incl/block-styles/block-styles.php:2232
 #: incl/block-styles/block-styles.php:2301
 #: incl/block-styles/block-styles.php:2388
+#: assets/blocks/accordion/block.jsx:144
+#: assets/blocks/accordion/block.jsx:166
+#: assets/blocks/advaccordion/accordion.jsx:206
+#: assets/blocks/advaccordion/accordion.jsx:228
+#: assets/blocks/advaccordion/block.jsx:260
+#: assets/blocks/advaccordion/block.jsx:282
+#: assets/blocks/advbutton/block.jsx:165
+#: assets/blocks/advbutton/block.jsx:321
+#: assets/blocks/advtable/block.jsx:1262
+#: assets/blocks/advtabs/block.jsx:457
+#: assets/blocks/advtabs/block.jsx:483
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:325
 #: assets/blocks/tabs/block.jsx:116
 #: assets/blocks/tabs/block.jsx:142
 #: assets/blocks/testimonial/block.jsx:368
@@ -980,6 +1162,20 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1891
 #: incl/block-styles/block-styles.php:2306
 #: incl/block-styles/block-styles.php:2393
+#: assets/blocks/accordion/block.jsx:149
+#: assets/blocks/accordion/block.jsx:171
+#: assets/blocks/advaccordion/accordion.jsx:211
+#: assets/blocks/advaccordion/accordion.jsx:233
+#: assets/blocks/advaccordion/block.jsx:265
+#: assets/blocks/advaccordion/block.jsx:287
+#: assets/blocks/advbutton/block.jsx:170
+#: assets/blocks/advbutton/block.jsx:327
+#: assets/blocks/advtable/block.jsx:1267
+#: assets/blocks/advtabs/block.jsx:462
+#: assets/blocks/advtabs/block.jsx:488
+#: assets/blocks/images-slider/block.jsx:316
+#: assets/blocks/pro-ad/list-promo.jsx:24
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:317
 #: assets/blocks/tabs/block.jsx:121
 #: assets/blocks/tabs/block.jsx:147
 msgid "Text Color"
@@ -991,6 +1187,7 @@ msgstr ""
 
 #: incl/block-settings-main.php:51
 #: incl/block-settings-main.php:502
+#: assets/blocks/advlist/block.jsx:215
 msgid "Plus"
 msgstr ""
 
@@ -1033,6 +1230,14 @@ msgstr ""
 #: incl/block-settings-main.php:1218
 #: incl/block-settings-main.php:1374
 #: incl/block-settings-main.php:1720
+#: assets/blocks/accordion/block.jsx:177
+#: assets/blocks/advaccordion/accordion.jsx:239
+#: assets/blocks/advaccordion/block.jsx:293
+#: assets/blocks/advtabs/block.jsx:494
+#: assets/blocks/columns/column.jsx:125
+#: assets/blocks/contact-form/block.jsx:133
+#: assets/blocks/login-form/block.jsx:615
+#: assets/blocks/newsletter/block.jsx:150
 #: assets/blocks/tabs/block.jsx:153
 msgid "Border Settings"
 msgstr ""
@@ -1042,6 +1247,14 @@ msgstr ""
 #: incl/block-settings-main.php:1044
 #: incl/block-settings-main.php:1226
 #: incl/block-settings-main.php:1382
+#: assets/blocks/accordion/block.jsx:179
+#: assets/blocks/advaccordion/accordion.jsx:241
+#: assets/blocks/advaccordion/block.jsx:295
+#: assets/blocks/advtable/block.jsx:1284
+#: assets/blocks/advtabs/block.jsx:496
+#: assets/blocks/contact-form/block.jsx:146
+#: assets/blocks/login-form/block.jsx:628
+#: assets/blocks/newsletter/block.jsx:163
 #: assets/blocks/tabs/block.jsx:155
 msgid "Border Style"
 msgstr ""
@@ -1056,6 +1269,16 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1418
 #: incl/block-styles/block-styles.php:1446
 #: incl/block-styles/block-styles.php:1474
+#: assets/blocks/accordion/block.jsx:182
+#: assets/blocks/advaccordion/accordion.jsx:244
+#: assets/blocks/advaccordion/block.jsx:298
+#: assets/blocks/advbutton/block.jsx:133
+#: assets/blocks/advtable/block.jsx:1287
+#: assets/blocks/advtabs/block.jsx:500
+#: assets/blocks/columns/column.jsx:18
+#: assets/blocks/contact-form/block.jsx:149
+#: assets/blocks/login-form/block.jsx:631
+#: assets/blocks/newsletter/block.jsx:166
 #: assets/blocks/tabs/block.jsx:158
 msgid "Solid"
 msgstr ""
@@ -1070,6 +1293,16 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1419
 #: incl/block-styles/block-styles.php:1447
 #: incl/block-styles/block-styles.php:1475
+#: assets/blocks/accordion/block.jsx:183
+#: assets/blocks/advaccordion/accordion.jsx:245
+#: assets/blocks/advaccordion/block.jsx:299
+#: assets/blocks/advbutton/block.jsx:135
+#: assets/blocks/advtable/block.jsx:1288
+#: assets/blocks/advtabs/block.jsx:501
+#: assets/blocks/columns/column.jsx:20
+#: assets/blocks/contact-form/block.jsx:150
+#: assets/blocks/login-form/block.jsx:632
+#: assets/blocks/newsletter/block.jsx:167
 #: assets/blocks/tabs/block.jsx:159
 msgid "Dashed"
 msgstr ""
@@ -1084,6 +1317,16 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1420
 #: incl/block-styles/block-styles.php:1448
 #: incl/block-styles/block-styles.php:1476
+#: assets/blocks/accordion/block.jsx:184
+#: assets/blocks/advaccordion/accordion.jsx:246
+#: assets/blocks/advaccordion/block.jsx:300
+#: assets/blocks/advbutton/block.jsx:134
+#: assets/blocks/advtable/block.jsx:1289
+#: assets/blocks/advtabs/block.jsx:502
+#: assets/blocks/columns/column.jsx:19
+#: assets/blocks/contact-form/block.jsx:151
+#: assets/blocks/login-form/block.jsx:633
+#: assets/blocks/newsletter/block.jsx:168
 #: assets/blocks/tabs/block.jsx:160
 msgid "Dotted"
 msgstr ""
@@ -1099,6 +1342,24 @@ msgstr ""
 #: incl/block-settings-main.php:1885
 #: incl/block-styles/block-styles.php:1596
 #: incl/block-styles/block-styles.php:2086
+#: assets/blocks/accordion/block.jsx:193
+#: assets/blocks/advaccordion/accordion.jsx:255
+#: assets/blocks/advaccordion/block.jsx:309
+#: assets/blocks/advbutton/block.jsx:351
+#: assets/blocks/advbutton/block.jsx:355
+#: assets/blocks/advicon/block.jsx:261
+#: assets/blocks/advtable/block.jsx:1302
+#: assets/blocks/advtable/block.jsx:1305
+#: assets/blocks/advtabs/block.jsx:507
+#: assets/blocks/advtabs/block.jsx:511
+#: assets/blocks/columns/column.jsx:135
+#: assets/blocks/columns/column.jsx:139
+#: assets/blocks/contact-form/block.jsx:135
+#: assets/blocks/infobox/block.jsx:243
+#: assets/blocks/infobox/block.jsx:329
+#: assets/blocks/login-form/block.jsx:617
+#: assets/blocks/newsletter/block.jsx:152
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:363
 #: assets/blocks/tabs/block.jsx:165
 #: assets/blocks/tabs/block.jsx:169
 #: assets/blocks/testimonial/block.jsx:373
@@ -1181,6 +1442,7 @@ msgstr ""
 #: incl/block-settings-main.php:1904
 #: incl/block-settings-main.php:2015
 #: incl/block-settings-main.php:2095
+#: assets/blocks/advtable/block.jsx:1314
 msgid "Padding Top"
 msgstr ""
 
@@ -1189,6 +1451,7 @@ msgstr ""
 #: incl/block-settings-main.php:1925
 #: incl/block-settings-main.php:2036
 #: incl/block-settings-main.php:2116
+#: assets/blocks/advtable/block.jsx:1321
 msgid "Padding Right"
 msgstr ""
 
@@ -1197,6 +1460,7 @@ msgstr ""
 #: incl/block-settings-main.php:1911
 #: incl/block-settings-main.php:2022
 #: incl/block-settings-main.php:2102
+#: assets/blocks/advtable/block.jsx:1328
 msgid "Padding Bottom"
 msgstr ""
 
@@ -1205,6 +1469,7 @@ msgstr ""
 #: incl/block-settings-main.php:1918
 #: incl/block-settings-main.php:2029
 #: incl/block-settings-main.php:2109
+#: assets/blocks/advtable/block.jsx:1335
 msgid "Padding Left"
 msgstr ""
 
@@ -1213,6 +1478,7 @@ msgid "Hover Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:292
+#: assets/blocks/advbutton/block.jsx:175
 msgid "Shadow Color"
 msgstr ""
 
@@ -1242,6 +1508,8 @@ msgstr ""
 
 #: incl/block-settings-main.php:339
 #: incl/block-settings-main.php:1437
+#: assets/blocks/advimage/block.jsx:109
+#: assets/blocks/images-slider/block.jsx:254
 msgid "Action on click"
 msgstr ""
 
@@ -1250,6 +1518,7 @@ msgid "Open image in a lightbox"
 msgstr ""
 
 #: incl/block-settings-main.php:352
+#: assets/blocks/advimage/block.jsx:114
 msgid "Open custom URL"
 msgstr ""
 
@@ -1258,6 +1527,7 @@ msgid "Open link in a new tab"
 msgstr ""
 
 #: incl/block-settings-main.php:365
+#: assets/blocks/advimage/block.jsx:138
 msgid "Image Size"
 msgstr ""
 
@@ -1265,52 +1535,82 @@ msgstr ""
 #: incl/block-settings-main.php:595
 #: incl/block-settings-main.php:1452
 #: incl/pages/settings/general.php:145
+#: assets/blocks/advimage/block.jsx:140
+#: assets/blocks/advvideo/block.jsx:324
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:23
+#: assets/blocks/images-slider/block.jsx:264
+#: assets/blocks/search-bar/block.jsx:144
 msgid "Full width"
 msgstr ""
 
 #: incl/block-settings-main.php:373
 #: incl/block-settings-main.php:756
 #: incl/block-settings-main.php:1469
+#: assets/blocks/advimage/block.jsx:145
+#: assets/blocks/images-slider/block.jsx:284
+#: assets/blocks/map/block.jsx:1291
 msgid "Height"
 msgstr ""
 
 #: incl/block-settings-main.php:380
 #: incl/block-settings-main.php:1462
+#: assets/blocks/advimage/block.jsx:153
+#: assets/blocks/images-slider/block.jsx:275
+#: assets/blocks/search-bar/block.jsx:150
 msgid "Width"
 msgstr ""
 
 #: incl/block-settings-main.php:389
 #: incl/block-settings-main.php:2076
+#: assets/blocks/infobox/block.jsx:415
+#: assets/blocks/infobox/block.jsx:542
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:71
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:193
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:241
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:276
 msgid "Color"
 msgstr ""
 
 #: incl/block-settings-main.php:392
 #: incl/block-settings-main.php:1491
 #: incl/block-settings-main.php:1965
+#: assets/blocks/advimage/block.jsx:187
+#: assets/blocks/images-slider/block.jsx:311
 msgid "Title Color"
 msgstr ""
 
 #: incl/block-settings-main.php:397
+#: assets/blocks/advimage/block.jsx:192
 msgid "Subtitle Color"
 msgstr ""
 
 #: incl/block-settings-main.php:402
+#: assets/blocks/advimage/block.jsx:197
+#: assets/blocks/advvideo/block.jsx:359
+#: assets/blocks/recent-posts/block.jsx:1015
 msgid "Overlay Color"
 msgstr ""
 
 #: incl/block-settings-main.php:409
 #: incl/block-settings-main.php:1503
+#: assets/blocks/advimage/block.jsx:203
+#: assets/blocks/advtable/block.jsx:1342
+#: assets/blocks/images-slider/block.jsx:322
 msgid "Text Alignment"
 msgstr ""
 
 #: incl/block-settings-main.php:412
 #: incl/block-settings-main.php:1506
+#: assets/blocks/advimage/block.jsx:205
+#: assets/blocks/images-slider/block.jsx:324
 msgid "Vertical Alignment"
 msgstr ""
 
 #: incl/block-settings-main.php:417
 #: incl/block-settings-main.php:1511
 #: incl/block-settings-main.php:1644
+#: assets/blocks/advimage/block.jsx:208
+#: assets/blocks/images-slider/block.jsx:327
 #: assets/blocks/testimonial/block.jsx:404
 msgid "Top"
 msgstr ""
@@ -1326,6 +1626,12 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1222
 #: incl/block-styles/block-styles.php:1534
 #: incl/block-styles/block-styles.php:1712
+#: assets/blocks/advimage/block.jsx:209
+#: assets/blocks/advimage/block.jsx:219
+#: assets/blocks/contact-form/block.jsx:191
+#: assets/blocks/images-slider/block.jsx:328
+#: assets/blocks/images-slider/block.jsx:338
+#: assets/blocks/login-form/block.jsx:667
 msgid "Center"
 msgstr ""
 
@@ -1333,12 +1639,16 @@ msgstr ""
 #: incl/block-settings-main.php:1519
 #: incl/block-settings-main.php:1652
 #: incl/pages/settings/images.php:60
+#: assets/blocks/advimage/block.jsx:210
+#: assets/blocks/images-slider/block.jsx:329
 #: assets/blocks/testimonial/block.jsx:405
 msgid "Bottom"
 msgstr ""
 
 #: incl/block-settings-main.php:431
 #: incl/block-settings-main.php:1525
+#: assets/blocks/advimage/block.jsx:215
+#: assets/blocks/images-slider/block.jsx:334
 msgid "Horizontal Alignment"
 msgstr ""
 
@@ -1353,6 +1663,13 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1347
 #: incl/block-styles/block-styles.php:1533
 #: incl/block-styles/block-styles.php:1711
+#: assets/blocks/advbutton/block.jsx:523
+#: assets/blocks/advbutton/block.jsx:575
+#: assets/blocks/advimage/block.jsx:218
+#: assets/blocks/contact-form/block.jsx:192
+#: assets/blocks/images-slider/block.jsx:337
+#: assets/blocks/login-form/block.jsx:668
+#: assets/blocks/recent-posts/block.jsx:994
 #: assets/blocks/testimonial/block.jsx:406
 msgid "Left"
 msgstr ""
@@ -1368,17 +1685,28 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1348
 #: incl/block-styles/block-styles.php:1535
 #: incl/block-styles/block-styles.php:1713
+#: assets/blocks/advbutton/block.jsx:524
+#: assets/blocks/advbutton/block.jsx:576
+#: assets/blocks/advimage/block.jsx:220
+#: assets/blocks/contact-form/block.jsx:193
+#: assets/blocks/images-slider/block.jsx:339
+#: assets/blocks/login-form/block.jsx:669
+#: assets/blocks/recent-posts/block.jsx:995
 msgid "Right"
 msgstr ""
 
 #: incl/block-settings-main.php:454
 #: incl/block-settings-main.php:1125
 #: incl/block-settings-main.php:2073
+#: assets/blocks/advlist/block.jsx:271
+#: assets/blocks/infobox/block.jsx:538
 msgid "Text Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:466
 #: incl/block-settings-main.php:1865
+#: assets/blocks/advlist/block.jsx:282
+#: assets/blocks/infobox/block.jsx:294
 msgid "Icon Settings"
 msgstr ""
 
@@ -1387,30 +1715,37 @@ msgid "Icon style"
 msgstr ""
 
 #: incl/block-settings-main.php:478
+#: assets/blocks/advlist/block.jsx:206
 msgid "Pushpin"
 msgstr ""
 
 #: incl/block-settings-main.php:482
+#: assets/blocks/advlist/block.jsx:207
 msgid "Configuration"
 msgstr ""
 
 #: incl/block-settings-main.php:486
+#: assets/blocks/advlist/block.jsx:208
 msgid "Flag"
 msgstr ""
 
 #: incl/block-settings-main.php:490
+#: assets/blocks/advlist/block.jsx:209
 msgid "Star"
 msgstr ""
 
 #: incl/block-settings-main.php:494
+#: assets/blocks/advlist/block.jsx:210
 msgid "Checkmark"
 msgstr ""
 
 #: incl/block-settings-main.php:498
+#: assets/blocks/advlist/block.jsx:213
 msgid "Minus"
 msgstr ""
 
 #: incl/block-settings-main.php:506
+#: assets/blocks/advlist/block.jsx:217
 msgid "Play"
 msgstr ""
 
@@ -1419,32 +1754,40 @@ msgid "Arrow Right"
 msgstr ""
 
 #: incl/block-settings-main.php:514
+#: assets/blocks/advlist/block.jsx:221
 msgid "X Cross"
 msgstr ""
 
 #: incl/block-settings-main.php:518
+#: assets/blocks/advlist/block.jsx:222
 msgid "Warning"
 msgstr ""
 
 #: incl/block-settings-main.php:522
+#: assets/blocks/advlist/block.jsx:223
 msgid "Help"
 msgstr ""
 
 #: incl/block-settings-main.php:526
+#: assets/blocks/advlist/block.jsx:224
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:188
 msgid "Info"
 msgstr ""
 
 #: incl/block-settings-main.php:530
+#: assets/blocks/advlist/block.jsx:226
 msgid "Circle"
 msgstr ""
 
 #: incl/block-settings-main.php:536
+#: assets/blocks/advlist/block.jsx:303
 msgid "Icon color"
 msgstr ""
 
 #: incl/block-settings-main.php:541
 #: incl/block-settings-main.php:931
 #: incl/block-settings-main.php:1873
+#: assets/blocks/advicon/block.jsx:238
 msgid "Icon Size"
 msgstr ""
 
@@ -1454,20 +1797,41 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1700
 #: incl/block-styles/block-styles.php:1754
 #: incl/block-styles/block-styles.php:1797
+#: assets/blocks/infobox/block.jsx:454
+#: assets/blocks/infobox/block.jsx:581
 msgid "Line Height"
 msgstr ""
 
 #: incl/block-settings-main.php:555
 #: incl/block-styles/block-styles.php:1069
+#: assets/blocks/advbutton/block.jsx:371
+#: assets/blocks/advicon/block.jsx:347
+#: assets/blocks/advlist/block.jsx:332
+#: assets/blocks/columns/block.jsx:563
+#: assets/blocks/columns/column.jsx:206
+#: assets/blocks/infobox/block.jsx:379
+#: assets/blocks/infobox/block.jsx:506
+#: assets/blocks/infobox/block.jsx:620
 msgid "Margin"
 msgstr ""
 
 #: incl/block-settings-main.php:562
 #: incl/block-styles/block-styles.php:1039
+#: assets/blocks/advbutton/block.jsx:401
+#: assets/blocks/advicon/block.jsx:313
+#: assets/blocks/advlist/block.jsx:340
+#: assets/blocks/advtable/block.jsx:1312
+#: assets/blocks/columns/block.jsx:537
+#: assets/blocks/columns/column.jsx:191
+#: assets/blocks/infobox/block.jsx:262
+#: assets/blocks/infobox/block.jsx:348
+#: assets/blocks/infobox/block.jsx:475
+#: assets/blocks/infobox/block.jsx:589
 msgid "Padding"
 msgstr ""
 
 #: incl/block-settings-main.php:573
+#: assets/blocks/advtable/block.jsx:1227
 msgid "Table Settings"
 msgstr ""
 
@@ -1476,6 +1840,7 @@ msgid "Max width"
 msgstr ""
 
 #: incl/block-settings-main.php:587
+#: assets/blocks/advvideo/block.jsx:270
 msgid "Video Settings"
 msgstr ""
 
@@ -1556,24 +1921,43 @@ msgstr ""
 
 #: incl/block-settings-main.php:688
 #: incl/block-settings-main.php:1483
+#: assets/blocks/accordion/block.jsx:140
+#: assets/blocks/accordion/block.jsx:189
+#: assets/blocks/advaccordion/accordion.jsx:202
+#: assets/blocks/advaccordion/accordion.jsx:251
+#: assets/blocks/advaccordion/block.jsx:256
+#: assets/blocks/advaccordion/block.jsx:305
+#: assets/blocks/advbutton/block.jsx:433
+#: assets/blocks/advimage/block.jsx:183
+#: assets/blocks/advtable/block.jsx:1259
+#: assets/blocks/advvideo/block.jsx:355
+#: assets/blocks/contact-form/block.jsx:165
+#: assets/blocks/count-up/block.jsx:93
+#: assets/blocks/images-slider/block.jsx:303
+#: assets/blocks/newsletter/block.jsx:182
 msgid "Color Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:691
+#: assets/blocks/count-up/block.jsx:97
+#: assets/blocks/login-form/block.jsx:558
 msgid "Header Color"
 msgstr ""
 
 #: incl/block-settings-main.php:696
+#: assets/blocks/count-up/block.jsx:102
 msgid "Count Up Color"
 msgstr ""
 
 #: incl/block-settings-main.php:701
 #: incl/block-settings-main.php:1138
+#: assets/blocks/count-up/block.jsx:107
 #: assets/blocks/testimonial/block.jsx:429
 msgid "Description Color"
 msgstr ""
 
 #: incl/block-settings-main.php:708
+#: assets/blocks/count-up/block.jsx:91
 msgid "Count Up Settings"
 msgstr ""
 
@@ -1586,10 +1970,12 @@ msgid "Location Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:730
+#: assets/blocks/map/block.jsx:1272
 msgid "Latitude"
 msgstr ""
 
 #: incl/block-settings-main.php:737
+#: assets/blocks/map/block.jsx:1278
 msgid "Longitude"
 msgstr ""
 
@@ -1627,6 +2013,8 @@ msgid "Aubergine"
 msgstr ""
 
 #: incl/block-settings-main.php:772
+#: assets/blocks/login-form/block.jsx:514
+#: assets/blocks/map/block.jsx:1360
 msgid "Custom"
 msgstr ""
 
@@ -1635,6 +2023,7 @@ msgid "Marker Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:781
+#: assets/blocks/map/block.jsx:1336
 msgid "Marker Title"
 msgstr ""
 
@@ -1649,6 +2038,8 @@ msgstr ""
 #: incl/block-settings-main.php:798
 #: incl/block-settings-main.php:839
 #: incl/block-settings-main.php:880
+#: assets/blocks/advbutton/block.jsx:484
+#: assets/blocks/advbutton/block.jsx:543
 msgid "Icon"
 msgstr ""
 
@@ -1746,6 +2137,13 @@ msgstr ""
 #: incl/block-settings-main.php:865
 #: incl/block-settings-main.php:906
 #: incl/block-settings-main.php:1868
+#: assets/blocks/accordion/block.jsx:154
+#: assets/blocks/advaccordion/accordion.jsx:216
+#: assets/blocks/advaccordion/block.jsx:270
+#: assets/blocks/advbutton/block.jsx:515
+#: assets/blocks/advbutton/block.jsx:568
+#: assets/blocks/advicon/block.jsx:245
+#: assets/blocks/infobox/block.jsx:312
 msgid "Icon Color"
 msgstr ""
 
@@ -1790,18 +2188,22 @@ msgid "Table of Contents Alignment"
 msgstr ""
 
 #: incl/block-settings-main.php:981
+#: assets/blocks/pro-ad/tabs-promo.jsx:62
 msgid "Tab Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:984
+#: assets/blocks/advtabs/block.jsx:397
 msgid "Tabs Style"
 msgstr ""
 
 #: incl/block-settings-main.php:989
+#: assets/blocks/advtabs/block.jsx:37
 msgid "Horizontal"
 msgstr ""
 
 #: incl/block-settings-main.php:993
+#: assets/blocks/advtabs/block.jsx:38
 msgid "Vertical"
 msgstr ""
 
@@ -1811,6 +2213,8 @@ msgstr ""
 
 #: incl/block-settings-main.php:1080
 #: incl/block-settings-main.php:1150
+#: assets/blocks/count-up/block.jsx:114
+#: assets/blocks/recent-posts/block.jsx:944
 #: assets/blocks/testimonial/block.jsx:241
 #: assets/blocks/woo-products/block.jsx:281
 msgid "Columns"
@@ -1852,6 +2256,8 @@ msgstr ""
 
 #: incl/block-settings-main.php:1168
 #: incl/block-settings-main.php:1324
+#: assets/blocks/contact-form/block.jsx:86
+#: assets/blocks/newsletter/block.jsx:99
 msgid "Text Label"
 msgstr ""
 
@@ -1885,11 +2291,17 @@ msgstr ""
 
 #: incl/block-settings-main.php:1203
 #: incl/block-settings-main.php:1359
+#: assets/blocks/contact-form/block.jsx:119
+#: assets/blocks/newsletter/block.jsx:136
+#: assets/blocks/search-bar/block.jsx:188
 msgid "Input Color"
 msgstr ""
 
 #: incl/block-settings-main.php:1254
 #: incl/block-settings-main.php:1410
+#: assets/blocks/contact-form/block.jsx:163
+#: assets/blocks/login-form/block.jsx:645
+#: assets/blocks/newsletter/block.jsx:180
 msgid "Submit Button Settings"
 msgstr ""
 
@@ -1903,14 +2315,18 @@ msgid "Button Position"
 msgstr ""
 
 #: incl/block-settings-main.php:1297
+#: assets/blocks/contact-form/block.jsx:71
+#: assets/blocks/newsletter/block.jsx:81
 msgid "Form Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:1300
+#: assets/blocks/newsletter/block.jsx:83
 msgid "Form style"
 msgstr ""
 
 #: incl/block-settings-main.php:1309
+#: assets/blocks/newsletter/block.jsx:87
 msgid "Alternative"
 msgstr ""
 
@@ -1931,10 +2347,13 @@ msgid "Images Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:1442
+#: assets/blocks/advimage/block.jsx:113
+#: assets/blocks/images-slider/block.jsx:258
 msgid "Open image in lightbox"
 msgstr ""
 
 #: incl/block-settings-main.php:1446
+#: assets/blocks/images-slider/block.jsx:259
 msgid "Open custom link"
 msgstr ""
 
@@ -1943,15 +2362,18 @@ msgid "Auto Height"
 msgstr ""
 
 #: incl/block-settings-main.php:1476
+#: assets/blocks/images-slider/block.jsx:292
 msgid "Always show overlay"
 msgstr ""
 
 #: incl/block-settings-main.php:1486
 #: incl/block-styles/block-styles.php:1992
+#: assets/blocks/images-slider/block.jsx:306
 msgid "Hover Color"
 msgstr ""
 
 #: incl/block-settings-main.php:1548
+#: assets/blocks/columns/block.jsx:444
 msgid "Columns Settings"
 msgstr ""
 
@@ -1995,6 +2417,7 @@ msgid "90px"
 msgstr ""
 
 #: incl/block-settings-main.php:1590
+#: assets/blocks/columns/block.jsx:525
 msgid "Vertical space when collapsed"
 msgstr ""
 
@@ -2003,10 +2426,12 @@ msgid "Collapsed order RTL"
 msgstr ""
 
 #: incl/block-settings-main.php:1636
+#: assets/blocks/columns/block.jsx:590
 msgid "Row Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:1639
+#: assets/blocks/advtable/block.jsx:1356
 msgid "Vertical Align"
 msgstr ""
 
@@ -2019,10 +2444,13 @@ msgid "Full Height"
 msgstr ""
 
 #: incl/block-settings-main.php:1662
+#: assets/blocks/columns/block.jsx:592
 msgid "Columns Wrapped"
 msgstr ""
 
 #: incl/block-settings-main.php:1667
+#: assets/blocks/columns/block.jsx:598
+#: assets/blocks/container/block.jsx:66
 msgid "Wrapper Tag"
 msgstr ""
 
@@ -2055,18 +2483,24 @@ msgid "Footer"
 msgstr ""
 
 #: incl/block-settings-main.php:1702
+#: assets/blocks/columns/block.jsx:613
 msgid "Content Max Width"
 msgstr ""
 
 #: incl/block-settings-main.php:1709
+#: assets/blocks/columns/block.jsx:631
 msgid "Content Min Height"
 msgstr ""
 
 #: incl/block-settings-main.php:1723
+#: assets/blocks/advbutton/block.jsx:343
+#: assets/blocks/columns/column.jsx:127
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:333
 msgid "Border style"
 msgstr ""
 
 #: incl/block-settings-main.php:1767
+#: assets/blocks/columns/column.jsx:113
 msgid "Column Settings"
 msgstr ""
 
@@ -2079,10 +2513,13 @@ msgid "Number of icons"
 msgstr ""
 
 #: incl/block-settings-main.php:1808
+#: assets/blocks/container/block.jsx:64
+#: assets/blocks/infobox/block.jsx:235
 msgid "Container Settings"
 msgstr ""
 
 #: incl/block-settings-main.php:1962
+#: assets/blocks/infobox/block.jsx:411
 msgid "Title Settings"
 msgstr ""
 
@@ -2108,30 +2545,37 @@ msgid "Line Height (px)"
 msgstr ""
 
 #: incl/block-settings-main.php:1984
+#: assets/blocks/infobox/block.jsx:462
 msgid "HTML Tag"
 msgstr ""
 
 #: incl/block-settings-main.php:1989
+#: assets/blocks/infobox/block.jsx:465
 msgid "H1"
 msgstr ""
 
 #: incl/block-settings-main.php:1993
+#: assets/blocks/infobox/block.jsx:466
 msgid "H2"
 msgstr ""
 
 #: incl/block-settings-main.php:1997
+#: assets/blocks/infobox/block.jsx:467
 msgid "H3"
 msgstr ""
 
 #: incl/block-settings-main.php:2001
+#: assets/blocks/infobox/block.jsx:468
 msgid "H4"
 msgstr ""
 
 #: incl/block-settings-main.php:2005
+#: assets/blocks/infobox/block.jsx:469
 msgid "H5"
 msgstr ""
 
 #: incl/block-settings-main.php:2009
+#: assets/blocks/infobox/block.jsx:470
 msgid "H6"
 msgstr ""
 
@@ -2145,6 +2589,7 @@ msgid "Style title"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:296
+#: assets/blocks/advtabs/block.jsx:248
 msgid "copy"
 msgstr ""
 
@@ -2190,6 +2635,7 @@ msgstr ""
 
 #: incl/block-styles/block-styles.php:1020
 #: incl/pages/custom-styles.php:149
+#: assets/blocks/pro-ad/list-promo.jsx:20
 msgid "Colors"
 msgstr ""
 
@@ -2275,10 +2721,15 @@ msgid "Typography"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1160
+#: assets/blocks/pro-ad/button-promo.jsx:21
 msgid "Font"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1163
+#: assets/blocks/pro-ad/accordion-promo.jsx:73
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:25
+#: assets/blocks/pro-ad/shared/index.jsx:48
+#: assets/blocks/pro-ad/tabs-promo.jsx:66
 msgid "Font Family"
 msgstr ""
 
@@ -2309,6 +2760,8 @@ msgstr ""
 
 #: incl/block-styles/block-styles.php:1202
 #: incl/pages/custom-styles.php:164
+#: assets/blocks/images-slider/block.jsx:419
+#: assets/blocks/pro-ad/image-slider-promo.jsx:105
 msgid "Text"
 msgstr ""
 
@@ -2329,10 +2782,15 @@ msgstr ""
 
 #: incl/block-styles/block-styles.php:1228
 #: incl/block-styles/block-styles.php:1961
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:307
 msgid "Text Decoration"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1233
+#: assets/blocks/pro-ad/accordion-promo.jsx:83
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:39
+#: assets/blocks/pro-ad/shared/index.jsx:58
+#: assets/blocks/pro-ad/tabs-promo.jsx:76
 msgid "Text Transform"
 msgstr ""
 
@@ -2362,6 +2820,7 @@ msgid "Display & Position"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1260
+#: assets/blocks/pro-ad/image-slider-promo.jsx:78
 msgid "Display"
 msgstr ""
 
@@ -2390,10 +2849,12 @@ msgid "Static"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1278
+#: assets/blocks/recent-posts/block.jsx:1074
 msgid "Relative"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1279
+#: assets/blocks/recent-posts/block.jsx:1073
 msgid "Absolute"
 msgstr ""
 
@@ -2411,6 +2872,7 @@ msgstr ""
 
 #: incl/block-styles/block-styles.php:1291
 #: incl/block-styles/block-styles.php:2157
+#: assets/blocks/columns/column.jsx:116
 msgid "Width (%)"
 msgstr ""
 
@@ -2467,6 +2929,7 @@ msgid "Scroll"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:1360
+#: assets/blocks/advvideo/block.jsx:314
 msgid "Auto"
 msgstr ""
 
@@ -2480,6 +2943,9 @@ msgstr ""
 #: incl/block-styles/block-styles.php:2329
 #: incl/block-styles/block-styles.php:2398
 #: incl/pages/custom-styles.php:161
+#: assets/blocks/advbutton/block.jsx:332
+#: assets/blocks/advicon/block.jsx:257
+#: assets/blocks/advtable/block.jsx:1273
 msgid "Border"
 msgstr ""
 
@@ -2499,6 +2965,8 @@ msgstr ""
 #: incl/block-styles/block-styles.php:1421
 #: incl/block-styles/block-styles.php:1449
 #: incl/block-styles/block-styles.php:1477
+#: assets/blocks/advbutton/block.jsx:136
+#: assets/blocks/columns/column.jsx:21
 msgid "Double"
 msgstr ""
 
@@ -2710,10 +3178,14 @@ msgstr ""
 #: incl/block-styles/block-styles.php:2201
 #: incl/block-styles/block-styles.php:2311
 #: incl/block-styles/block-styles.php:2408
+#: assets/blocks/infobox/block.jsx:255
+#: assets/blocks/infobox/block.jsx:341
 msgid "Border Radius (px)"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:2075
+#: assets/blocks/infobox/block.jsx:248
+#: assets/blocks/infobox/block.jsx:334
 msgid "Border Width (px)"
 msgstr ""
 
@@ -2817,6 +3289,7 @@ msgid "Hover Text Color"
 msgstr ""
 
 #: incl/block-styles/block-styles.php:2374
+#: assets/blocks/search-bar/block.jsx:256
 msgid "Hover Shadow"
 msgstr ""
 
@@ -2838,6 +3311,7 @@ msgid "Settings saved successfully!"
 msgstr ""
 
 #: incl/pages/block-controls.php:37
+#: assets/pages/block-controls/block-controls.jsx:2292
 msgid "Presets"
 msgstr ""
 
@@ -2859,6 +3333,8 @@ msgid "Save Blocks"
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:27
+#: assets/pages/block-controls/block-controls.jsx:1462
+#: assets/pages/block-controls/preset-manager.jsx:666
 msgid "Schedule"
 msgstr ""
 
@@ -2929,6 +3405,7 @@ msgid "Site Editor"
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:60
+#: assets/pages/block-controls/block-controls.jsx:1522
 msgid "User roles"
 msgstr ""
 
@@ -2937,6 +3414,8 @@ msgid "Choose which users can see your blocks."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:93
+#: assets/pages/block-controls/block-controls.jsx:1649
+#: assets/pages/block-controls/preset-manager.jsx:668
 msgid "Device Type"
 msgstr ""
 
@@ -2945,6 +3424,8 @@ msgid "Choose the device type to show your blocks on."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:126
+#: assets/pages/block-controls/block-controls.jsx:1617
+#: assets/pages/block-controls/preset-manager.jsx:669
 msgid "Device Width"
 msgstr ""
 
@@ -2953,14 +3434,17 @@ msgid "Choose the device width to show your blocks on."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:159
+#: assets/pages/block-controls/block-controls.jsx:2019
 msgid "Term archives"
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:170
+#: assets/pages/block-controls/block-controls.jsx:2021
 msgid "Choose on which taxonomies and terms archive pages your blocks can be displayed."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:190
+#: assets/pages/block-controls/block-controls.jsx:2119
 msgid "Pages"
 msgstr ""
 
@@ -2977,6 +3461,8 @@ msgid "Choose which browsers and devices can see your blocks."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:238
+#: assets/pages/block-controls/block-controls.jsx:1756
+#: assets/pages/block-controls/preset-manager.jsx:671
 msgid "Operating System"
 msgstr ""
 
@@ -2985,6 +3471,8 @@ msgid "Choose which operating systems can see your blocks."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:256
+#: assets/pages/block-controls/block-controls.jsx:1799
+#: assets/pages/block-controls/preset-manager.jsx:672
 msgid "Cookie"
 msgstr ""
 
@@ -2993,6 +3481,8 @@ msgid "Show or hide blocks based on cookie values."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:274
+#: assets/pages/block-controls/block-controls.jsx:1842
+#: assets/pages/block-controls/preset-manager.jsx:673
 msgid "User Meta"
 msgstr ""
 
@@ -3001,6 +3491,8 @@ msgid "Show or hide blocks based on user meta values."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:292
+#: assets/pages/block-controls/block-controls.jsx:1885
+#: assets/pages/block-controls/preset-manager.jsx:674
 msgid "Post Meta"
 msgstr ""
 
@@ -3009,6 +3501,8 @@ msgid "Show or hide blocks based on post meta values."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:310
+#: assets/pages/block-controls/block-controls.jsx:1928
+#: assets/pages/block-controls/preset-manager.jsx:675
 msgid "Query String"
 msgstr ""
 
@@ -3017,6 +3511,8 @@ msgid "Show or hide blocks based on URL query parameters."
 msgstr ""
 
 #: incl/pages/block-controls/controls.php:328
+#: assets/pages/block-controls/block-controls.jsx:1973
+#: assets/pages/block-controls/preset-manager.jsx:676
 msgid "Capabilities"
 msgstr ""
 
@@ -3029,74 +3525,92 @@ msgid "Save Controls"
 msgstr ""
 
 #: incl/pages/block-controls/presets-admin.php:12
+#: assets/pages/block-controls/preset-manager.jsx:1809
 msgid "Loading presets..."
 msgstr ""
 
 #: incl/pages/block-settings.php:57
+#: assets/blocks/advaccordion/block.jsx:418
 msgid "Accordion - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:58
+#: assets/blocks/advbutton/block.jsx:783
 msgid "Button - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:59
+#: assets/blocks/advicon/block.jsx:515
 msgid "Icon - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:60
+#: assets/blocks/advimage/block.jsx:408
 msgid "Image - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:61
+#: assets/blocks/advlist/block.jsx:443
 msgid "List - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:62
+#: assets/blocks/advtable/block.jsx:1393
 msgid "Table - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:63
+#: assets/blocks/advtabs/block.jsx:758
 msgid "Tabs - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:64
+#: assets/blocks/advvideo/block.jsx:615
 msgid "Video - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:65
+#: assets/blocks/columns/block.jsx:866
 msgid "Columns - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:66
+#: assets/blocks/columns/column.jsx:358
 msgid "Column - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:67
+#: assets/blocks/contact-form/block.jsx:318
 msgid "Contact Form - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:68
+#: assets/blocks/count-up/block.jsx:434
 msgid "Count Up - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:69
+#: assets/blocks/images-slider/block.jsx:606
 msgid "Images Slider - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:70
+#: assets/blocks/infobox/block.jsx:986
 msgid "Info Box - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:71
+#: assets/blocks/map/block.jsx:1470
 msgid "Map - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:72
+#: assets/blocks/newsletter/block.jsx:302
 msgid "Newsletter - PublishPress"
 msgstr ""
 
 #: incl/pages/block-settings.php:73
+#: assets/blocks/social-links/block.jsx:380
 msgid "Social Links - PublishPress"
 msgstr ""
 
@@ -3117,6 +3631,7 @@ msgstr ""
 
 #: incl/pages/block-settings.php:138
 #: incl/pages/settings/images.php:99
+#: assets/pages/block-controls/preset-manager.jsx:746
 msgid "Edit"
 msgstr ""
 
@@ -3130,6 +3645,7 @@ msgid "Save"
 msgstr ""
 
 #: incl/pages/block-settings/block-config.php:18
+#: assets/pages/block-usage/block-usage.jsx:1019
 msgid "block"
 msgstr ""
 
@@ -3142,6 +3658,8 @@ msgid "Delete"
 msgstr ""
 
 #: incl/pages/custom-styles.php:43
+#: assets/blocks/advbutton/block.jsx:291
+#: assets/blocks/advimage/block.jsx:124
 msgid "Preview"
 msgstr ""
 
@@ -3384,6 +3902,7 @@ msgid "Gutenberg editor width"
 msgstr ""
 
 #: incl/pages/settings/general.php:140
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:22
 msgid "Large"
 msgstr ""
 
@@ -3558,6 +4077,3297 @@ msgstr ""
 msgid "Please update Gutenberg then comeback later!"
 msgstr ""
 
+#: assets/blocks/0-adv-components/datetime.jsx:37
+msgid "Change date"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:88
+msgctxt "Sunday first letter"
+msgid "S"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:89
+msgid "M"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:90
+msgctxt "Tuesday first letter"
+msgid "T"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:91
+msgid "W"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:92
+msgctxt "Thursday first letter"
+msgid "T"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:93
+msgid "F"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:94
+msgctxt "Saturday first letter"
+msgid "S"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:367
+msgid "AM"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:380
+msgid "PM"
+msgstr ""
+
+#: assets/blocks/0-adv-components/datetime.jsx:446
+msgid "PublishPress Blocks Pro supports Timezone configuration."
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:48
+msgid "Icon List"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:81
+msgid "Search icons"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:86
+#: assets/blocks/recent-posts/block.jsx:558
+#: assets/blocks/recent-posts/block.jsx:665
+msgid "Style"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:90
+msgid "Filled"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:91
+#: assets/blocks/advbutton/block.jsx:825
+msgid "Outlined"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:92
+msgid "Rounded"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:93
+msgid "Two-Tone"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:94
+msgid "Sharp"
+msgstr ""
+
+#: assets/blocks/0-adv-components/icon-class.jsx:140
+msgid "Apply"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:106
+#: assets/blocks/contact-form/block.jsx:73
+#: assets/blocks/login-form/block.jsx:742
+#: assets/blocks/newsletter/block.jsx:74
+msgid "Notice"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:108
+msgid ""
+"This accordion block has been replaced by a new and better one.\n"
+"                                 This block will be removed in a future version.\n"
+"                                 Please transform this to an Accordion Item block\n"
+"                                 and drag them into new Adv. Accordion block as soon as possible."
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:118
+msgid "Define space to next block. This will override Block spacing option (Frontend view only)"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:125
+#: assets/blocks/advaccordion/accordion.jsx:184
+#: assets/blocks/advaccordion/block.jsx:238
+msgid "Header Icon Style"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:162
+#: assets/blocks/advaccordion/accordion.jsx:224
+#: assets/blocks/advaccordion/block.jsx:278
+msgid "Body Color Settings"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:200
+#: assets/blocks/advaccordion/accordion.jsx:262
+#: assets/blocks/advaccordion/block.jsx:316
+#: assets/blocks/advbutton/block.jsx:362
+#: assets/blocks/advtable/block.jsx:1295
+#: assets/blocks/advtabs/block.jsx:518
+#: assets/blocks/columns/column.jsx:146
+#: assets/blocks/login-form/block.jsx:638
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:371
+#: assets/blocks/tabs/block.jsx:176
+msgid "Border width"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:207
+#: assets/blocks/advaccordion/accordion.jsx:269
+#: assets/blocks/advaccordion/block.jsx:323
+#: assets/blocks/advbutton/block.jsx:335
+#: assets/blocks/advtabs/block.jsx:525
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:377
+#: assets/blocks/tabs/block.jsx:183
+msgid "Border radius"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:214
+msgid "Accordions State"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:217
+msgid "Make all accordions collapsed by default, enable this setting to apply to all accordions."
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:245
+#: assets/blocks/advaccordion/accordion.jsx:302
+#: assets/blocks/summary/block.jsx:333
+msgid "Enter header…"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:332
+msgid "Accordion (deprecated) - PublishPress"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:333
+#: assets/blocks/advaccordion/accordion.jsx:336
+#: assets/blocks/advaccordion/block.jsx:419
+msgid "Create a sliding accordion display for your content."
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:339
+#: assets/blocks/advaccordion/accordion.jsx:343
+#: assets/blocks/advaccordion/block.jsx:425
+#: assets/blocks/login-form/block.jsx:984
+#: assets/blocks/search-bar/block.jsx:439
+msgid "accordion"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:339
+#: assets/blocks/advaccordion/accordion.jsx:343
+#: assets/blocks/advaccordion/block.jsx:425
+#: assets/blocks/advlist/block.jsx:450
+#: assets/blocks/login-form/block.jsx:984
+#: assets/blocks/search-bar/block.jsx:439
+#: assets/blocks/summary/block.jsx:399
+msgid "list"
+msgstr ""
+
+#: assets/blocks/accordion/block.jsx:339
+#: assets/blocks/advaccordion/accordion.jsx:343
+#: assets/blocks/advaccordion/block.jsx:425
+#: assets/blocks/login-form/block.jsx:984
+#: assets/blocks/search-bar/block.jsx:439
+msgid "faq"
+msgstr ""
+
+#: assets/blocks/advaccordion/accordion.jsx:165
+#: assets/blocks/advaccordion/block.jsx:222
+msgid "Define space between each accordion (Frontend view only)"
+msgstr ""
+
+#: assets/blocks/advaccordion/accordion.jsx:172
+#: assets/blocks/advaccordion/block.jsx:229
+msgid "Make all accordions collapsed by default."
+msgstr ""
+
+#: assets/blocks/advaccordion/accordion.jsx:177
+msgid "Header Tag"
+msgstr ""
+
+#: assets/blocks/advaccordion/accordion.jsx:335
+msgid "Accordion Item - PublishPress"
+msgstr ""
+
+#: assets/blocks/advaccordion/accordion.jsx:347
+#: assets/blocks/advaccordion/accordion.jsx:499
+msgid "Header text"
+msgstr ""
+
+#: assets/blocks/advaccordion/block.jsx:205
+msgid "Advanced Accordion"
+msgstr ""
+
+#: assets/blocks/advaccordion/block.jsx:213
+#: assets/blocks/recent-posts/block.jsx:1633
+msgid "Refresh"
+msgstr ""
+
+#: assets/blocks/advaccordion/block.jsx:425
+msgid "advanced accordion"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:137
+#: assets/blocks/columns/column.jsx:22
+msgid "Groove"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:138
+#: assets/blocks/columns/column.jsx:23
+msgid "Ridge"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:139
+#: assets/blocks/columns/column.jsx:24
+msgid "Inset"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:140
+#: assets/blocks/columns/column.jsx:25
+msgid "Outset"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:200
+msgid "Advanced Button"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:214
+msgid "Add text…"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:286
+msgid "Button link"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:289
+#: assets/blocks/advimage/block.jsx:122
+msgid "Link URL"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:304
+msgid "Open in new tab"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:309
+msgid "Text/Color"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:311
+#: assets/blocks/advlist/block.jsx:273
+msgid "Text size"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:373
+msgid "Margin top"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:380
+msgid "Margin right"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:387
+msgid "Margin bottom"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:394
+msgid "Margin left"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:403
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:394
+msgid "Padding top"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:410
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:400
+msgid "Padding right"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:417
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:406
+msgid "Padding bottom"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:424
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:412
+msgid "Padding left"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:431
+msgid "Hover"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:437
+#: assets/blocks/login-form/block.jsx:696
+msgid "Shadow"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:439
+#: assets/blocks/login-form/block.jsx:698
+#: assets/blocks/search-bar/block.jsx:258
+msgid "Opacity (%)"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:446
+#: assets/blocks/login-form/block.jsx:705
+#: assets/blocks/search-bar/block.jsx:265
+#: assets/blocks/testimonial/block.jsx:295
+msgid "Transition speed (ms)"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:453
+#: assets/blocks/login-form/block.jsx:712
+#: assets/blocks/search-bar/block.jsx:272
+msgid "Shadow H offset"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:460
+#: assets/blocks/login-form/block.jsx:719
+#: assets/blocks/search-bar/block.jsx:279
+msgid "Shadow V offset"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:467
+#: assets/blocks/login-form/block.jsx:726
+#: assets/blocks/search-bar/block.jsx:286
+msgid "Shadow blur"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:474
+#: assets/blocks/login-form/block.jsx:733
+#: assets/blocks/search-bar/block.jsx:293
+msgid "Shadow spread"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:486
+#: assets/blocks/advbutton/block.jsx:548
+msgid "Display icon"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:494
+#: assets/blocks/advbutton/block.jsx:553
+#: assets/blocks/advicon/block.jsx:211
+#: assets/blocks/infobox/block.jsx:298
+msgid "Icon Library (Material Icon)"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:504
+#: assets/blocks/advbutton/block.jsx:558
+#: assets/blocks/advicon/block.jsx:224
+#: assets/blocks/infobox/block.jsx:308
+msgid "Icon Selection"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:508
+#: assets/blocks/advbutton/block.jsx:562
+#: assets/blocks/infobox/block.jsx:317
+msgid "Icon Size (px)"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:520
+#: assets/blocks/advbutton/block.jsx:572
+msgid "Icon Position"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:529
+#: assets/blocks/advbutton/block.jsx:580
+msgid "Icon Spacing (px)"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:533
+#: assets/blocks/advbutton/block.jsx:584
+msgid "Spacing between icon and text"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:594
+msgid "PublishPress Blocks Pro supports icons in buttons."
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:784
+msgid "Button block with more options and styles."
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:790
+msgid "button"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:790
+msgid "advanced button"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:790
+msgid "link"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:826
+msgid "Squared"
+msgstr ""
+
+#: assets/blocks/advbutton/block.jsx:827
+msgid "Squared Outline"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:181
+msgid "Advanced Icon"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:191
+msgid "Icon Count"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:193
+msgid "Number of Icons"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:229
+#: assets/blocks/advvideo/block.jsx:371
+msgid "Icon Style"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:233
+#: assets/blocks/advtabs/block.jsx:427
+#: assets/blocks/columns/block.jsx:45
+#: assets/blocks/recent-posts/block.jsx:40
+#: assets/blocks/recent-posts/block.jsx:53
+#: assets/blocks/recent-posts/block.jsx:62
+msgid "Stacked"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:250
+msgid "Icon Background"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:266
+msgid "Border Size(px)"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:273
+msgid "Border Radius(%)"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:282
+#: assets/blocks/advicon/block.jsx:286
+#: assets/blocks/images-slider/block.jsx:427
+msgid "Link"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:297
+msgid "Link Target"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:300
+msgid "Same Window"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:301
+msgid "New Window"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:306
+msgid "Title for Accessibility"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:317
+#: assets/blocks/advicon/block.jsx:351
+#: assets/blocks/columns/block.jsx:541
+#: assets/blocks/columns/block.jsx:567
+#: assets/blocks/infobox/block.jsx:266
+#: assets/blocks/infobox/block.jsx:352
+#: assets/blocks/infobox/block.jsx:383
+#: assets/blocks/infobox/block.jsx:479
+#: assets/blocks/infobox/block.jsx:510
+#: assets/blocks/infobox/block.jsx:593
+#: assets/blocks/infobox/block.jsx:624
+msgid "Unit"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:516
+#: assets/blocks/infobox/block.jsx:987
+msgid "Icon block with more options and styles."
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:522
+#: assets/blocks/advlist/block.jsx:450
+#: assets/blocks/infobox/block.jsx:993
+msgid "icon"
+msgstr ""
+
+#: assets/blocks/advicon/block.jsx:522
+msgid "advanced icon"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:80
+#: assets/blocks/advimage/block.jsx:107
+msgid "Advanced Image"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:92
+msgid "Change image"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:99
+#: assets/blocks/images-slider/block.jsx:472
+msgid "Remove image"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:128
+msgid "Enter URL…"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:132
+#: assets/blocks/recent-posts/block.jsx:1044
+msgid "Open link in new tab"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:161
+msgid "Focal Point Picker"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:168
+msgid "Overlay opacity default"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:175
+msgid "Overlay opacity hover"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:267
+msgid "Open media library"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:281
+msgid "Enter title…"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:293
+msgid "Enter subtitle…"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:409
+msgid "Image/photo block with more options and styles."
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:415
+msgid "image"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:415
+msgid "advanced image"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:415
+msgid "photo"
+msgstr ""
+
+#: assets/blocks/advimage/block.jsx:415
+#: assets/blocks/container/block.jsx:24
+#: assets/blocks/infobox/block.jsx:993
+msgid "box"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:211
+msgid "Checkmark 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:212
+msgid "Checkmark 3"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:214
+msgid "Minus 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:216
+msgid "Plus 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:218
+msgid "Arrow right"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:219
+msgid "Arrow right 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:220
+msgid "X Cross 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:225
+msgid "Info 2"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:258
+msgid "Advanced List"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:264
+msgid "Refresh this list when it conflict with other lists styles"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:283
+msgid "List icon"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:316
+#: assets/blocks/social-links/block.jsx:285
+msgid "Icon size"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:324
+msgid "Line height"
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:444
+msgid "List block with custom icons and styles."
+msgstr ""
+
+#: assets/blocks/advlist/block.jsx:450
+msgid "advanced list"
+msgstr ""
+
+#: assets/blocks/advlist/item.jsx:88
+msgid "List item"
+msgstr ""
+
+#: assets/blocks/advlist/item.jsx:98
+msgid "Type a list item"
+msgstr ""
+
+#: assets/blocks/advlist/item.jsx:132
+msgid "List item - PublishPress"
+msgstr ""
+
+#: assets/blocks/advlist/item.jsx:133
+msgid "Insert a list item inside List block."
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:241
+msgid "At least 1 row of current section must present."
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:826
+#: assets/blocks/advtable/block.jsx:845
+msgid "Cannot select multi cells from difference section!"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:936
+#: assets/blocks/advtable/block.jsx:1208
+msgid "Advanced Table"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:942
+msgid "Column Count"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:949
+msgid "Row Count"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:955
+msgid "Create"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:957
+msgid "Hint: Hold CTRL key for multi cells selection. Hold SHIFT key for range cells selection."
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:967
+msgid "Add Row Before"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:973
+msgid "Add Row After"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:979
+msgid "Delete Row"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:985
+msgid "Add Column Before"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:991
+msgid "Add Column After"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:997
+msgid "Delete Column"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1008
+msgid "Split Merged Cells"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1025
+msgid "Merge Cells"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1033
+msgid "Border Top"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1044
+msgid "Border Right"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1055
+msgid "Border Bottom"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1066
+msgid "Border Left"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1077
+msgid "Border All"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1087
+msgid "Border None"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1102
+msgid "Border Vertical"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1113
+msgid "Border Horizontal"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1124
+msgid "Border Inner"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1135
+msgid "Border Outer"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1153
+msgid "Align left"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1158
+msgid "Align center"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1163
+msgid "Align right"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1168
+msgid "Align justify"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1181
+msgid "Align top"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1191
+msgid "Align middle"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1201
+msgid "Align bottom"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1216
+msgid "Edit Table"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1221
+msgid "Refresh table (Use this after using undo or redo)"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1229
+msgid "Max width (px)"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1230
+msgid "Set this to 0 to make max-width is 100%"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1237
+msgid "Fixed width table cells"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1242
+msgid "Table header"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1247
+msgid "Table footer"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1252
+msgid "Border collapsed"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1257
+msgid "Cell Settings"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1343
+msgid "Horizontal Align"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1394
+msgid "Table block with more styles and functions."
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1400
+msgid "table"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1400
+msgid "advanced table"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1400
+msgid "cell"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1400
+msgid "data"
+msgstr ""
+
+#: assets/blocks/advtable/block.jsx:1544
+msgid "Stripes"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:99
+#: assets/blocks/advtabs/block.jsx:668
+#: assets/blocks/advtabs/tab.jsx:172
+#: assets/blocks/advtabs/tab.jsx:254
+#: assets/blocks/advtabs/tab.jsx:328
+#: assets/blocks/advtabs/tab.jsx:387
+#: assets/blocks/advtabs/tab.jsx:437
+#: assets/blocks/advtabs/tab.jsx:483
+#: assets/blocks/tabs/block.jsx:296
+msgid "Tab 1"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:100
+#: assets/blocks/advtabs/block.jsx:669
+#: assets/blocks/advtabs/tab.jsx:173
+#: assets/blocks/advtabs/tab.jsx:255
+#: assets/blocks/advtabs/tab.jsx:329
+#: assets/blocks/advtabs/tab.jsx:388
+#: assets/blocks/advtabs/tab.jsx:438
+#: assets/blocks/advtabs/tab.jsx:484
+#: assets/blocks/tabs/block.jsx:300
+msgid "Tab 2"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:101
+#: assets/blocks/advtabs/block.jsx:670
+#: assets/blocks/advtabs/tab.jsx:174
+#: assets/blocks/advtabs/tab.jsx:256
+#: assets/blocks/advtabs/tab.jsx:330
+#: assets/blocks/advtabs/tab.jsx:389
+#: assets/blocks/advtabs/tab.jsx:439
+#: assets/blocks/advtabs/tab.jsx:485
+#: assets/blocks/tabs/block.jsx:304
+msgid "Tab 3"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:267
+msgid "Tab Header"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:345
+#: assets/blocks/columns/block.jsx:138
+#: assets/blocks/recent-posts/block.jsx:378
+msgid "desktop"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:348
+#: assets/blocks/columns/block.jsx:141
+#: assets/blocks/recent-posts/block.jsx:381
+msgid "tablet"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:351
+#: assets/blocks/columns/block.jsx:144
+#: assets/blocks/recent-posts/block.jsx:384
+msgid "mobile"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:393
+msgid "Advanced Tabs"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:442
+msgid "Tabs Settings"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:444
+msgid "Initial Open Tab"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:453
+#: assets/blocks/tabs/block.jsx:112
+msgid "Tab Colors"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:467
+#: assets/blocks/tabs/block.jsx:126
+msgid "Active Tab Background Color"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:472
+#: assets/blocks/tabs/block.jsx:131
+msgid "Active Tab Text Color"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:479
+#: assets/blocks/tabs/block.jsx:138
+msgid "Body Colors"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:556
+#: assets/blocks/tabs/block.jsx:213
+msgid "Title…"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:562
+msgid "HTML Anchor"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:569
+msgid "Move back"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:579
+msgid "Move forward"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:588
+msgid "Duplicate tab"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:599
+#: assets/blocks/tabs/block.jsx:216
+msgid "Remove tab"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:616
+#: assets/blocks/tabs/block.jsx:234
+msgid "Add tab"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:759
+#: assets/blocks/tabs/block.jsx:355
+msgid "Create horizontal or vertical tabs to display your content."
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:765
+#: assets/blocks/tabs/block.jsx:361
+msgid "tabs"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:765
+msgid "advanced tabs"
+msgstr ""
+
+#: assets/blocks/advtabs/block.jsx:765
+#: assets/blocks/tabs/block.jsx:361
+msgid "cards"
+msgstr ""
+
+#: assets/blocks/advtabs/tab.jsx:140
+msgid "Tab Item - PublishPress"
+msgstr ""
+
+#: assets/blocks/advtabs/tab.jsx:193
+msgid "tab"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:241
+msgid "Advanced Video"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:254
+msgid "Change image preview"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:262
+msgid "Remove image preview"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:272
+msgid "Open video in light box"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:273
+msgid "Lightbox offers additional display options."
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:281
+#: assets/blocks/pro-ad/image-slider-promo.jsx:23
+#: assets/blocks/pro-ad/image-slider-promo.jsx:27
+#: assets/blocks/recent-posts/block.jsx:567
+msgid "Autoplay"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:287
+msgid "Loop"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:293
+msgid "Muted"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:299
+msgid "Playback Controls"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:305
+msgid "Play inline"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:311
+msgid "Video preloading"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:315
+msgid "Metadata"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:330
+msgid "Video width"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:339
+msgid "Video height"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:345
+msgid "Custom height"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:364
+msgid "Play Button Color"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:370
+msgid "Play Button"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:386
+msgid "Play Button Size"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:412
+msgid "Select image preview"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:459
+msgid "Youtube/Vimeo video URL/ID…"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:471
+msgid "Fetch video content"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:483
+msgid "Load local video"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:491
+msgid "Current Video"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:506
+msgid "Wrong video URL/ID. Please try another."
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:508
+msgid "Not selected yet."
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:616
+msgid "Add more options and styles for videos in your Media Library."
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:623
+msgid "video"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:624
+msgid "advanced video"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:625
+msgid "embed"
+msgstr ""
+
+#: assets/blocks/advvideo/block.jsx:626
+msgid "media"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:13
+msgid "One column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:13
+msgid "100"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:14
+msgid "Two columns; equal split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:14
+msgid "50 / 50"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:15
+msgid "Two columns; two-thirds, one-third split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:15
+msgid "66 / 33"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:16
+msgid "Two columns; one-third, two-thirds split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:16
+msgid "33 / 66"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:17
+msgid "Two columns; one-quarter, three-quarters split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:17
+msgid "25 / 75"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:18
+msgid "Two columns; three-quarters, one-quarter split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:18
+msgid "75 / 25"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:19
+msgid "Two columns; one-fifth, four-fifths split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:19
+msgid "20 / 80"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:20
+msgid "Two columns; four-fifths, one-fifth split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:20
+msgid "80 / 20"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:21
+msgid "Three columns; equal split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:21
+msgid "33 / 33 / 33"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:22
+msgid "Three columns; wider one-half left column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:22
+msgid "50 / 25 / 25"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:23
+msgid "Three columns; wider one-half right column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:23
+msgid "25 / 25 / 50"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:24
+msgid "Three columns; wider one-half center column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:24
+msgid "25 / 50 / 25"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:25
+msgid "Three columns; wider three-fifths center column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:25
+msgid "20 / 60 / 20"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:26
+msgid "Three columns; wider three-fifths left column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:26
+msgid "60 / 20 / 20"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:27
+msgid "Three columns; wider three-fifths right column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:27
+msgid "20 / 20 / 60"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:28
+msgid "Three columns; wider four-sixths center column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:28
+msgid "16.6 / 66.6 / 16.6"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:29
+msgid "Four columns; equal split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:29
+msgid "25 / 25 / 25 / 25"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:30
+msgid "Four columns; wider one-half left column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:30
+msgid "50 / 16.6 / 16.6 / 16.6"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:31
+msgid "Four columns; wider one-half right column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:31
+msgid "16.6 / 16.6 / 16.6 / 50"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:32
+msgid "Four columns; wider two-fifths right column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:32
+msgid "20 / 20 / 20 / 40"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:33
+msgid "Four columns; wider two-fifths left column"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:33
+msgid "40 / 20 / 20 / 20"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:34
+msgid "Five columns; equal split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:34
+msgid "20 / 20 / 20 / 20 / 20"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:35
+msgid "Six columns; equal split"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:35
+msgid "16.6 / 16.6 / 16.6 / 16.6 / 16.6 / 16.6"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:38
+msgid "Three: 100 - 1/2 - 1/2"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:39
+msgid "Three: 1/2 - 1/2 - 100"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:40
+msgid "Four: Two Columns"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:41
+msgid "Six: Two Columns"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:42
+msgid "Six: Three Columns"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:344
+msgid "Columns Manager"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:348
+msgid "Choose a columns layout"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:386
+msgid "Vertical Align Top"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:397
+msgid "Vertical Align Middle"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:408
+msgid "Vertical Align Bottom"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:419
+msgid "Inner Columns Full Height"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:437
+msgid "Columns Manager "
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:445
+msgid "Responsive Settings"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:516
+msgid "Space between columns"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:531
+msgid "Collapsed Order RTL"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:537
+#: assets/blocks/columns/column.jsx:191
+msgid " Padding"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:563
+#: assets/blocks/columns/column.jsx:206
+msgid " Margin"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:593
+msgid "If your columns overflow they available space, they will be placed on a new line."
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:649
+msgid "Content Max Height"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:867
+msgid "Create flexible layouts for your content with advanced options and styles."
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:873
+#: assets/blocks/columns/column.jsx:366
+msgid "columns"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:873
+msgid "columns manager"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:873
+#: assets/blocks/columns/column.jsx:366
+#: assets/blocks/container/block.jsx:24
+msgid "row"
+msgstr ""
+
+#: assets/blocks/columns/block.jsx:873
+#: assets/blocks/columns/column.jsx:366
+msgid "layout"
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:117
+msgid "Available: "
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:119
+msgid "Set to 0 = auto. This will override predefine layout styles. Recommend for experience users!"
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:153
+#: assets/blocks/contact-form/block.jsx:156
+#: assets/blocks/newsletter/block.jsx:173
+#: assets/blocks/search-bar/block.jsx:228
+msgid "Border radius (px)"
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:183
+msgid " text alignment"
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:194
+#: assets/blocks/columns/column.jsx:209
+msgid "Unit (px)"
+msgstr ""
+
+#: assets/blocks/columns/column.jsx:360
+msgid "Column in row."
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:67
+msgid "Contact Form"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:75
+#: assets/blocks/login-form/block.jsx:744
+#: assets/blocks/newsletter/block.jsx:76
+msgid "We strongly recommend to enable Google reCAPTCHA to avoid spam."
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:76
+#: assets/blocks/login-form/block.jsx:745
+#: assets/blocks/newsletter/block.jsx:77
+msgid "You can enable it in Settings"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:80
+msgid "Email sender"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:82
+msgid "An email will be sent to the admin email (by default) whenever a contact form is submitted. You can change it in "
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:83
+msgid "settings"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:88
+msgid "Name input placeholder"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:93
+#: assets/blocks/login-form/block.jsx:588
+#: assets/blocks/newsletter/block.jsx:115
+msgid "Email input placeholder"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:98
+msgid "Message input placeholder"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:103
+#: assets/blocks/newsletter/block.jsx:120
+msgid "Submit text"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:108
+#: assets/blocks/newsletter/block.jsx:125
+msgid "Empty field warning text"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:113
+#: assets/blocks/newsletter/block.jsx:130
+msgid "Submit success text"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:122
+#: assets/blocks/login-form/block.jsx:680
+#: assets/blocks/newsletter/block.jsx:139
+#: assets/blocks/search-bar/block.jsx:192
+#: assets/blocks/search-bar/block.jsx:218
+#: assets/blocks/search-bar/block.jsx:240
+msgid "Background color"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:127
+#: assets/blocks/login-form/block.jsx:609
+#: assets/blocks/login-form/block.jsx:685
+#: assets/blocks/newsletter/block.jsx:144
+#: assets/blocks/search-bar/block.jsx:197
+#: assets/blocks/search-bar/block.jsx:223
+#: assets/blocks/search-bar/block.jsx:245
+msgid "Text color"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:139
+#: assets/blocks/login-form/block.jsx:621
+#: assets/blocks/newsletter/block.jsx:156
+msgid "Border color"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:169
+#: assets/blocks/login-form/block.jsx:647
+#: assets/blocks/newsletter/block.jsx:186
+msgid "Border and Text"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:174
+#: assets/blocks/infobox/block.jsx:238
+#: assets/blocks/infobox/block.jsx:324
+#: assets/blocks/login-form/block.jsx:652
+#: assets/blocks/newsletter/block.jsx:191
+msgid "Background"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:181
+#: assets/blocks/login-form/block.jsx:657
+#: assets/blocks/newsletter/block.jsx:198
+msgid "Button border radius"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:188
+#: assets/blocks/login-form/block.jsx:664
+msgid "Button position"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:319
+msgid "Fastest way to create a contact form for your page."
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:325
+msgid "contact"
+msgstr ""
+
+#: assets/blocks/contact-form/block.jsx:325
+#: assets/blocks/newsletter/block.jsx:309
+msgid "form"
+msgstr ""
+
+#: assets/blocks/container/block.jsx:17
+msgid "Container - PublishPress"
+msgstr ""
+
+#: assets/blocks/container/block.jsx:18
+msgid "Block for containing other blocks."
+msgstr ""
+
+#: assets/blocks/container/block.jsx:24
+msgid "container"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:87
+#: assets/blocks/pro-ad/shared/index.jsx:118
+msgid "Count Up"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:121
+msgid "Counter Number Size"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:127
+msgid "Counter Up Symbol"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:137
+#: assets/blocks/count-up/block.jsx:150
+#: assets/blocks/count-up/block.jsx:163
+msgid "After"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:137
+#: assets/blocks/count-up/block.jsx:150
+#: assets/blocks/count-up/block.jsx:163
+msgid "Before"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:168
+msgid "Use toggle buttons above to define symbol placement before/after the number (toggle on is after)."
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:181
+#: assets/blocks/count-up/block.jsx:222
+#: assets/blocks/count-up/block.jsx:234
+#: assets/blocks/count-up/block.jsx:275
+#: assets/blocks/count-up/block.jsx:287
+#: assets/blocks/count-up/block.jsx:328
+#: assets/blocks/tabs/block.jsx:263
+msgid "Enter text…"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:435
+msgid "Create an animated display for important numbers."
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:441
+msgid "numbers"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:441
+msgid "count"
+msgstr ""
+
+#: assets/blocks/count-up/block.jsx:441
+msgid "increase"
+msgstr ""
+
+#: assets/blocks/customstyles/custom-styles.jsx:29
+msgid "Select a block style"
+msgstr ""
+
+#: assets/blocks/customstyles/custom-styles.jsx:44
+msgid "Block styles"
+msgstr ""
+
+#: assets/blocks/customstyles/custom-styles.jsx:58
+msgid "This option let you add custom styles for the current block."
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:12
+msgid "PublishPress Blocks Settings"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:15
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:20
+msgid "Inherit from global settings"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:16
+msgid "Enable"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:17
+msgid "Disable"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:21
+msgid "Original"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:79
+msgid "These settings will override the PublishPress Blocks global settings."
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:81
+msgid "Editor width"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:83
+msgid "Change your editor width"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:99
+msgid "Columns Visual Guide"
+msgstr ""
+
+#: assets/blocks/editor-sidebar/post-sidebar.jsx:101
+msgid "Border to materialize PublishPress Blocks Column block"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:204
+#: assets/blocks/images-slider/block.jsx:248
+#: assets/blocks/pro-ad/shared/index.jsx:106
+msgid "Images Slider"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:208
+msgid "Image Slider Block"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:209
+msgid "No images selected. Adding images to start using this block."
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:232
+msgid "Add images"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:252
+msgid "Image Settings"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:269
+msgid "Auto height"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:297
+msgid "Enable RTL"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:412
+#: assets/blocks/pro-ad/image-slider-promo.jsx:58
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:59
+msgid "Title"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:437
+msgid "Move Left"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:459
+msgid "Move Right"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:506
+msgid "Add image"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:607
+msgid "Display your images in a slider."
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:613
+msgid "slide"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:613
+msgid "gallery"
+msgstr ""
+
+#: assets/blocks/images-slider/block.jsx:613
+msgid "photos"
+msgstr ""
+
+#: assets/blocks/infobox/block.jsx:224
+msgid "Info Box"
+msgstr ""
+
+#: assets/blocks/infobox/block.jsx:433
+#: assets/blocks/infobox/block.jsx:560
+#: assets/blocks/pro-ad/accordion-promo.jsx:65
+#: assets/blocks/pro-ad/shared/index.jsx:161
+#: assets/blocks/pro-ad/shared/index.jsx:177
+#: assets/blocks/pro-ad/shared/index.jsx:193
+#: assets/blocks/pro-ad/tabs-promo.jsx:81
+msgid "Font Size"
+msgstr ""
+
+#: assets/blocks/infobox/block.jsx:993
+msgid "info"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:102
+#: assets/blocks/login-form/block.jsx:132
+msgid "Click to change logo"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:109
+#: assets/blocks/login-form/block.jsx:139
+#: assets/blocks/login-form/block.jsx:1012
+#: assets/blocks/login-form/block.jsx:1027
+msgid "Site logo"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:166
+#: assets/blocks/testimonial/block.jsx:486
+#: assets/blocks/testimonial/block.jsx:497
+#: assets/blocks/testimonial/block.jsx:508
+msgid "Text…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:178
+#: assets/blocks/login-form/block.jsx:372
+#: assets/blocks/login-form/block.jsx:467
+msgid "Register…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:193
+msgid "Welcome text…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:207
+#: assets/blocks/login-form/block.jsx:386
+msgid "Username label…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:244
+msgid "Password label…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:288
+msgid "Remember me…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:310
+msgid "Login…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:328
+msgid "Lost password…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:356
+msgid "Back…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:423
+msgid "Email label…"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:480
+msgid "Login/Register Form"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:484
+msgid "Options"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:487
+msgid "Switch View"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:493
+msgid "Form State"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:495
+msgid "Initial Form"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:496
+msgid "Form that show on load."
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:499
+#: assets/blocks/login-form/block.jsx:890
+msgid "Login"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:500
+msgid "Register"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:508
+msgid "Redirect After Login"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:513
+msgid "Current Page"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:520
+msgid "Custom redirect link"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:526
+msgid "Form Width (px)"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:533
+msgid "Show Logo"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:539
+msgid "Logo Width (px)"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:547
+msgid "Show input field icon"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:552
+msgid "Show register/header link"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:562
+msgid "Header color"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:570
+msgid "Show lost password link"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:575
+msgid "Input placeholder"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:577
+msgid "Login input placeholder"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:582
+msgid "Username input placeholder"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:583
+#: assets/blocks/login-form/block.jsx:589
+msgid "Use in register form"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:595
+msgid "Text/Input Color"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:599
+msgid "Input background color"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:604
+msgid "Input color"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:674
+msgid "Submit Button Hover"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:676
+#: assets/blocks/search-bar/block.jsx:236
+msgid "Hover Colors"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:690
+#: assets/blocks/search-bar/block.jsx:250
+msgid "Shadow color"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:757
+msgid "Registration Form"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:758
+msgid "Registration for your website is currently disabled, enable it in WordPress General settings to use registration form"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:837
+msgid "Welcome back"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:844
+msgid "Username or Email"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:848
+msgid "Password"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:855
+msgid "Username"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:866
+msgid "Remember me"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:870
+msgid "LOGIN"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:874
+msgid "REGISTER"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:878
+msgid "Don't have an account?"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:882
+msgid "Register now"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:886
+msgid "Register new account"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:894
+msgid "Lost your password?"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:977
+msgid "Login and Register - PublishPress"
+msgstr ""
+
+#: assets/blocks/login-form/block.jsx:978
+msgid "Create a login form for your post/page."
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1186
+msgid "No matching address found!"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1224
+msgid "Map"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1229
+msgid "Map settings"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1234
+msgid "Address"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1239
+msgid "Use Lat/Lng"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1243
+msgid "Enter address…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1248
+msgid "Fetch Location"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1252
+msgid "Current"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1262
+msgid "Location"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1267
+msgid "Use Address"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1271
+msgid "Enter latitude…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1277
+msgid "Enter longitude…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1284
+msgid "Zoom level"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1307
+msgid "Marker Icon (27x43 px)"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1316
+#: assets/pages/block-controls/block-controls.jsx:211
+#: assets/pages/block-controls/preset-manager.jsx:50
+msgid "Remove"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1324
+msgid "Choose icon"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1329
+msgid "Marker icon"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1338
+msgid "Enter custom title…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1342
+msgid "Marker description"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1344
+msgid "Enter custom description…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1348
+msgid "Open marker tooltip"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1353
+msgid "Map styles"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1354
+msgid "Custom map style is recommended for experienced users only."
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1358
+msgid "Standard"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1366
+msgid "Custom code"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1371
+msgid "Invalid JSON"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1376
+msgid "Paste your custom map styles in json format into the text field. You can create your own map styles by follow one of these links: "
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1382
+msgid "Enter your json code here…"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1396
+msgid "No API Key Provided!"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1405
+msgid "Add Google API Key in Settings"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1471
+msgid "Display a location using Google Maps."
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1477
+msgid "google map"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1477
+#: assets/pages/block-usage/block-usage.jsx:1019
+msgid "location"
+msgstr ""
+
+#: assets/blocks/map/block.jsx:1477
+msgid "address"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:68
+msgid "Newsletter"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:72
+msgid "Newsletter Settings"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:92
+msgid "Form width (px)"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:103
+msgid "First Name input placeholder"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:108
+msgid "Last Name input placeholder"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:243
+#: assets/blocks/newsletter/block.jsx:438
+msgid "First Name"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:256
+#: assets/blocks/newsletter/block.jsx:451
+msgid "Last Name"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:303
+msgid "Fastest way to create a newsletter form for your page."
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:309
+msgid "newsletter"
+msgstr ""
+
+#: assets/blocks/newsletter/block.jsx:309
+msgid "email"
+msgstr ""
+
+#: assets/blocks/newsletter/frontend.js:33
+msgid "You need to fill all fields!"
+msgstr ""
+
+#: assets/blocks/newsletter/frontend.js:39
+msgid "Email is valid."
+msgstr ""
+
+#: assets/blocks/newsletter/frontend.js:41
+msgid "Use a valid email address!"
+msgstr ""
+
+#: assets/blocks/newsletter/frontend.js:66
+msgid "Submitted with success!"
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:24
+#: assets/blocks/pro-ad/tabs-promo.jsx:24
+msgid "Theme Settings"
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:28
+#: assets/blocks/pro-ad/tabs-promo.jsx:28
+msgid "Preset"
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:37
+#: assets/blocks/pro-ad/tabs-promo.jsx:39
+msgid "Selecting or resetting a preset will override your current design configuration."
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:47
+msgid "PublishPress Blocks Pro supports several pre-built designs for accordions."
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:78
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:32
+#: assets/blocks/pro-ad/shared/index.jsx:53
+#: assets/blocks/pro-ad/tabs-promo.jsx:71
+msgid "Font Weight + Style"
+msgstr ""
+
+#: assets/blocks/pro-ad/accordion-promo.jsx:96
+msgid "PublishPress Blocks Pro supports Google Fonts in accordions."
+msgstr ""
+
+#: assets/blocks/pro-ad/button-promo.jsx:33
+msgid "PublishPress Blocks Pro supports Google Fonts in buttons."
+msgstr ""
+
+#: assets/blocks/pro-ad/button-promo.jsx:46
+msgid "Link rel"
+msgstr ""
+
+#: assets/blocks/pro-ad/button-promo.jsx:65
+msgid "PublishPress Blocks Pro includes nofollow and noreferrer support."
+msgstr ""
+
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:21
+msgid "Font Settings"
+msgstr ""
+
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:46
+msgid "Force styling"
+msgstr ""
+
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:47
+msgid "This adds !important to CSS in frontend to avoid your font being overridden"
+msgstr ""
+
+#: assets/blocks/pro-ad/core-blocks-promo.jsx:59
+msgid "PublishPress Blocks Pro supports Google Fonts for paragraphs and headings."
+msgstr ""
+
+#: assets/blocks/pro-ad/count-up-promo.jsx:35
+msgid "PublishPress Blocks Pro support Text alignment for Count Up block."
+msgstr ""
+
+#: assets/blocks/pro-ad/count-up-promo.jsx:49
+msgid "Header & Description"
+msgstr ""
+
+#: assets/blocks/pro-ad/count-up-promo.jsx:53
+msgid "Header size"
+msgstr ""
+
+#: assets/blocks/pro-ad/count-up-promo.jsx:61
+msgid "Description size"
+msgstr ""
+
+#: assets/blocks/pro-ad/count-up-promo.jsx:76
+msgid "PublishPress Blocks Pro supports Custom header and description size for Count Up block."
+msgstr ""
+
+#: assets/blocks/pro-ad/general-promo.jsx:19
+#, js-format
+msgid "Want more features in your %s blocks?"
+msgstr ""
+
+#: assets/blocks/pro-ad/image-promo.jsx:59
+msgid "PublishPress Blocks Pro supports different heading sizes for the image text."
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:31
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:32
+msgid "Autoplay Speed"
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:32
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:33
+msgid "Change interval between slides in miliseconds."
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:45
+msgid "PublishPress Blocks Pro supports AutoPlay and custom speed for slides."
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:63
+#: assets/blocks/pro-ad/image-slider-promo.jsx:109
+msgid "Tag"
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:79
+msgid "Disable this if you want to include the Title as alt attribute without displaying the title over the image."
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:90
+msgid "PublishPress Blocks Pro supports multiple style options for slide titles."
+msgstr ""
+
+#: assets/blocks/pro-ad/image-slider-promo.jsx:131
+msgid "PublishPress Blocks Pro supports multiple style options for slide text."
+msgstr ""
+
+#: assets/blocks/pro-ad/list-promo.jsx:35
+msgid "PublishPress Blocks Pro supports custom colors for the list text."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:28
+msgid "Slider View Autoplay"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:46
+msgid "PublishPress Blocks Pro supports autoplay speed control for the slider view."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:65
+msgid "Line height (em)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:75
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:245
+msgid "Color (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:87
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:287
+msgid "PublishPress Blocks Pro supports multiple style options for the content display."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:102
+msgid "Featured Image"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:106
+msgid "Custom image size"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:115
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:141
+msgid "auto"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:121
+msgid "Image width"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:138
+msgid "Uncheck \"auto\" to set a custom width"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:147
+msgid "Image height"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:158
+msgid "Uncheck \"auto\" to set a custom height"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:161
+msgid "Force custom size"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:162
+msgid "This adds !important to CSS in frontend to avoid custom size being overridden. Disable if breaks the layout."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:173
+msgid "PublishPress Blocks Pro supports custom image options."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:204
+msgid "PublishPress Blocks Pro supports multiple style options for the info display."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:220
+msgid "Color for links"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:224
+msgid "Color for links (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:234
+msgid "Tags and Categories"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:256
+msgid "PublishPress Blocks Pro supports multiple style options for the taxonomy display."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:271
+msgid "Content"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:302
+msgid "Read more link"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:312
+msgid "Text Decoration (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:321
+msgid "Text Color (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:329
+msgid "Background Color (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:347
+msgid "PublishPress Blocks Pro supports multiple style options for the read more display."
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:367
+msgid "Border Color (hover)"
+msgstr ""
+
+#: assets/blocks/pro-ad/recent-posts-promo.jsx:390
+msgid "Enable padding"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:93
+msgid "Accordion"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:98
+msgid "Tabs"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:102
+#: assets/blocks/recent-posts/block.jsx:1544
+#: assets/blocks/recent-posts/block.jsx:1624
+msgid "Content Display"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:110
+msgid "Button"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:122
+#: assets/blocks/testimonial/block.jsx:230
+msgid "Testimonial"
+msgstr ""
+
+#: assets/blocks/pro-ad/shared/index.jsx:169
+#: assets/blocks/pro-ad/shared/index.jsx:185
+#: assets/blocks/pro-ad/shared/index.jsx:201
+#: assets/blocks/recent-posts/block.jsx:1055
+#: assets/blocks/recent-posts/block.jsx:1264
+#: assets/blocks/recent-posts/block.jsx:1282
+msgid "Hide"
+msgstr ""
+
+#: assets/blocks/pro-ad/tabs-promo.jsx:49
+msgid "PublishPress Blocks Pro supports several pre-built designs for tabs."
+msgstr ""
+
+#: assets/blocks/pro-ad/tabs-promo.jsx:89
+msgid "Spacing below"
+msgstr ""
+
+#: assets/blocks/pro-ad/tabs-promo.jsx:91
+msgid "You can set a negative spacing below that depends on border width"
+msgstr ""
+
+#: assets/blocks/pro-ad/tabs-promo.jsx:100
+msgid "Spacing on the right"
+msgstr ""
+
+#: assets/blocks/pro-ad/tabs-promo.jsx:115
+msgid "PublishPress Blocks Pro supports Google Fonts in tabs."
+msgstr ""
+
+#: assets/blocks/pro-ad/testimonial-promo.jsx:35
+msgid "PublishPress Blocks Pro supports text alignment for testimonials."
+msgstr ""
+
+#: assets/blocks/pro-ad/testimonial-promo.jsx:84
+msgid "PublishPress Blocks Pro supports custom sizes for names, job positions, and descriptions."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:36
+#: assets/blocks/recent-posts/block.jsx:49
+#: assets/blocks/recent-posts/block.jsx:61
+msgid "The leading post on top, the rest in 2 columns below"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:37
+#: assets/blocks/recent-posts/block.jsx:50
+msgid "The leading post on top, the rest in 3 columns below"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:38
+#: assets/blocks/recent-posts/block.jsx:51
+msgid "The leading post on top, the rest in 4 columns below"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:39
+#: assets/blocks/recent-posts/block.jsx:52
+msgid "The leading post on top, the rest in 5 columns below"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:41
+#: assets/blocks/recent-posts/block.jsx:54
+#: assets/blocks/recent-posts/block.jsx:63
+msgid "All posts in 2 columns grid"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:42
+#: assets/blocks/recent-posts/block.jsx:55
+msgid "All posts in 3 columns grid"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:43
+#: assets/blocks/recent-posts/block.jsx:56
+msgid "All posts in 4 columns grid"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:44
+#: assets/blocks/recent-posts/block.jsx:57
+msgid "All posts in 5 columns grid"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:77
+msgid "The leading post in the left, 1 post in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:78
+msgid "The leading post in the left, 2 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:79
+msgid "The leading post in the left, 3 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:80
+msgid "The leading post in the left, 4 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:81
+msgid "The leading post in the left, 5 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:82
+msgid "The leading post in the right, 1 post in the left"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:83
+msgid "The leading post in the right, 2 posts in the left"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:84
+msgid "The leading post in the right, 3 posts in the left"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:85
+msgid "The leading post in the right, 4 posts in the left"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:86
+msgid "The leading post in the right, 5 posts in the left"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:87
+msgid "The leading post on top, the rest of posts below"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:88
+msgid "The leading post on top, below 2 columns with 1 post in the left and 1 post in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:89
+msgid "The leading post on top, below 2 columns with 1 post in the left and 2 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:90
+msgid "The leading post on top, below 2 columns with 1 post in the left and 3 posts in the right"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:104
+msgid "For all posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:105
+msgid "For the first post"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:106
+msgid "For the first 2 posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:107
+msgid "For the first 3 posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:108
+msgid "For the first 4 posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:109
+msgid "For the first 5 posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:556
+msgid "Slider View Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:562
+#: assets/blocks/recent-posts/block.jsx:669
+msgid "Headline"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:574
+msgid "Frontpage View Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:670
+msgid "Boxed"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:675
+#: assets/blocks/recent-posts/block.jsx:718
+msgid "Space between columns and rows"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:684
+msgid "Newspaper View Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:716
+msgid "Masonry View Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:725
+msgid "Post Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:727
+msgid "Post Type"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:740
+msgid "Filters"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:744
+msgid "To enable filters, clear Advanced Filters > Display these posts only"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:757
+msgid "Show content with these Categories"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:773
+msgid "Show content with these Tags"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:774
+msgid "Type a tag"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:791
+msgid "Show content with these "
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:800
+#: assets/blocks/recent-posts/query-controls.jsx:120
+#: assets/blocks/recent-posts/query-controls.jsx:124
+msgid "Author"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:801
+#: assets/blocks/recent-posts/query-controls.jsx:205
+#: assets/blocks/woo-products/block.jsx:245
+#: assets/blocks/woo-products/block.jsx:255
+msgid "All"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:807
+msgid "Only shows posts written by the user viewing the block"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:813
+msgid "Exclude current post"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:814
+msgid "If this post is listed in the block, you can exclude it."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:823
+msgid "Exclude these posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:824
+#: assets/blocks/recent-posts/block.jsx:870
+#: assets/blocks/recent-posts/block.jsx:913
+msgid "Search by title"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:828
+msgid "Offset the first posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:839
+#: assets/blocks/recent-posts/block.jsx:888
+msgid "Advanced Filters"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:841
+#: assets/blocks/recent-posts/block.jsx:892
+msgid "Display these posts only"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:850
+#: assets/blocks/recent-posts/block.jsx:900
+msgid "Search Posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:856
+#: assets/blocks/recent-posts/block.jsx:905
+msgid "Enter Post IDs"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:875
+msgid "Enter post IDs separated by commas (e.g., 123, 456, 789)"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:878
+msgid "123, 456, 789"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:925
+msgid "PublishPress Blocks Pro supports filters for content."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:941
+msgid "Display Settings"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:954
+msgid "Columns (Tablet)"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:961
+msgid "Columns (Mobile)"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:970
+msgid "Display Featured Image"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:983
+msgid "Enable Placeholder Image"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:987
+msgid "If a post doesn't have a featured image, the placeholder image will be displayed instead"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1005
+msgid "Image opacity"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1023
+msgid "Display Caption"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1031
+msgid "Display Post Author"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1052
+msgid "Display Post Date"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1056
+msgid "Created Date"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1057
+msgid "Updated Date"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1070
+msgid "Post Date Format"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1081
+msgid "Display Post Time"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1092
+#: assets/blocks/recent-posts/block.jsx:1161
+msgid "Custom Date Format"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1094
+#: assets/blocks/recent-posts/block.jsx:1163
+msgid "e.g., j F (for \"9 July\")"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1096
+#: assets/blocks/recent-posts/block.jsx:1164
+msgid "Use PHP date format. Leave empty for default."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1103
+#: assets/blocks/recent-posts/block.jsx:1171
+msgid "Show Date Prefix"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1113
+#: assets/blocks/recent-posts/block.jsx:1180
+msgid "Absolute Created Date Prefix"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1118
+#: assets/blocks/recent-posts/block.jsx:1184
+msgid "For absolute dates (e.g., \"Posted on 9 July\")"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1121
+#: assets/blocks/recent-posts/block.jsx:1187
+msgid "Absolute Updated Date Prefix"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1126
+#: assets/blocks/recent-posts/block.jsx:1191
+msgid "For absolute dates (e.g., \"Updated on 9 July\")"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1133
+#: assets/blocks/recent-posts/block.jsx:1198
+msgid "Relative Created Date Prefix"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1138
+#: assets/blocks/recent-posts/block.jsx:1202
+msgid "For relative dates (e.g., \"Posted 2 hours ago\")"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1141
+#: assets/blocks/recent-posts/block.jsx:1205
+msgid "Relative Updated Date Prefix"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1146
+#: assets/blocks/recent-posts/block.jsx:1209
+msgid "For relative dates (e.g., \"Updated 2 hours ago\")"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1225
+msgid "PublishPress Blocks Pro supports changing date prefix, and setting Custom Date Format."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1244
+msgid "Display Comment Counts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1261
+msgid "Display Category"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1265
+#: assets/blocks/recent-posts/block.jsx:1283
+msgid "Show"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1266
+#: assets/blocks/recent-posts/block.jsx:1284
+msgid "Show & Link"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1279
+msgid "Display Tags"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1304
+msgid "Display these taxonomies"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1316
+msgid "Link above taxonomies"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1327
+msgid "Display Read More Link"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1340
+msgid "Read more text"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1348
+msgid "Display Post Excerpt"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1361
+msgid "First Post text as Excerpt"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1362
+msgid "Display some part of first text found in post as excerpt."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1369
+msgid "Post Text Excerpt length"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1380
+msgid "Text after title"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1381
+msgid "Include text/HTML after title"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1386
+msgid "Text before read more"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1387
+msgid "Include text/HTML before read more"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1396
+msgid "Info Section Layout"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1401
+#: assets/blocks/recent-posts/block.jsx:1436
+msgid "Info Section Order"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1404
+#: assets/blocks/recent-posts/block.jsx:1439
+msgid "Author, Date, Comments"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1405
+#: assets/blocks/recent-posts/block.jsx:1440
+msgid "Date, Author, Comments"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1406
+#: assets/blocks/recent-posts/block.jsx:1441
+msgid "Author, Comments, Date"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1407
+#: assets/blocks/recent-posts/block.jsx:1442
+msgid "Date, Comments, Author"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1408
+#: assets/blocks/recent-posts/block.jsx:1443
+msgid "Comments, Author, Date"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1409
+#: assets/blocks/recent-posts/block.jsx:1444
+msgid "Comments, Date, Author"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1414
+#: assets/blocks/recent-posts/block.jsx:1448
+msgid "Info Separator"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1417
+#: assets/blocks/recent-posts/block.jsx:1450
+msgid "Space"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1418
+#: assets/blocks/recent-posts/block.jsx:1451
+msgid "Character(s) to separate info items"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1421
+#: assets/blocks/recent-posts/block.jsx:1454
+msgid "Hide Separators"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1426
+#: assets/blocks/recent-posts/block.jsx:1458
+msgid "Remove Date Separator"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1429
+#: assets/blocks/recent-posts/block.jsx:1460
+msgid "Removes the automatic dash before date when not first element"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1470
+msgid "PublishPress Blocks Pro supports reorder of Author, Date, Comments, changing or hidding their separators."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1489
+#: assets/blocks/recent-posts/block.jsx:1502
+msgid "Reorder Sections"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1491
+#: assets/blocks/recent-posts/block.jsx:1506
+msgid "Sections order"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1492
+#: assets/blocks/recent-posts/block.jsx:1507
+msgid "When the image in desktop floats next to the content, or is displayed as background, the image order is ignored. Also the image order in mobile can be ignored for some views."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1519
+msgid "PublishPress Blocks Pro supports reordering the items in the display."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1550
+msgid "Content Display Block"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1554
+msgid "No posts found! Try to change filters or publish posts."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1564
+msgid "Grid View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1570
+msgid "List View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1576
+#: assets/blocks/woo-products/block.jsx:215
+msgid "Slider View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1582
+msgid "Frontpage View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1588
+msgid "Newspaper View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1597
+msgid "Masonry View"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:1655
+#: assets/blocks/recent-posts/block.jsx:1691
+msgid "Post Image"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2444
+msgid "Content Display - PublishPress"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2445
+msgid "Displays your content in grid, list, slider, frontpage, newspaper, and masonry views with beautiful layouts and styles."
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2452
+msgid "recent posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2453
+msgid "latest posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2454
+msgid "posts slide"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2455
+msgid "posts grid"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2456
+msgid "posts"
+msgstr ""
+
+#: assets/blocks/recent-posts/block.jsx:2457
+msgid "pages"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:102
+msgid "Created: Newest to oldest"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:106
+msgid "Created: Oldest to newest"
+msgstr ""
+
+#. translators: label for ordering posts by title in ascending order
+#: assets/blocks/recent-posts/query-controls.jsx:111
+#: assets/blocks/recent-posts/query-controls.jsx:120
+msgid "A → Z"
+msgstr ""
+
+#. translators: label for ordering posts by title in descending order
+#: assets/blocks/recent-posts/query-controls.jsx:116
+#: assets/blocks/recent-posts/query-controls.jsx:124
+msgid "Z → A"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:128
+msgid "Modified: Newest to oldest"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:132
+msgid "Modified: Oldest to newest"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:136
+msgid "Post ID Descending"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:140
+msgid "Post ID Ascending"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:149
+msgid "Randomize"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:159
+msgid "Comments, decreasing order"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:163
+msgid "Comments, increasing order"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:176
+msgid "Series order"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:186
+msgid "Order by"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:204
+#: assets/blocks/woo-products/block.jsx:252
+msgid "Category"
+msgstr ""
+
+#: assets/blocks/recent-posts/query-controls.jsx:213
+#: assets/blocks/testimonial/block.jsx:241
+msgid "Number of items"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:138
+msgid "Search Bar"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:142
+msgid "Search Bar State"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:158
+msgid "Search Icon Settings"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:160
+msgid "Search icon on the right"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:166
+msgid "Search icon"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:181
+msgid "Search Input Settings"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:183
+msgid "Search placeholder"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:204
+msgid "Search Button Settings"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:206
+msgid "Show submit button"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:211
+msgid "Search button on the left"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:229
+msgid "Affect both input and button."
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:432
+msgid "Search Bar - PublishPress"
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:433
+msgid "Easy to create a search bar for your site."
+msgstr ""
+
+#: assets/blocks/search-bar/block.jsx:452
+msgid "Classic"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:166
+msgid "Social Links"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:174
+msgid "Add item"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:180
+msgid "Remove selected item"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:198
+msgid "Preset Icons"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:200
+msgid "Type here to search…"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:231
+msgid "Custom icon"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:254
+msgid "Upload/Choose"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:260
+#: assets/blocks/social-links/block.jsx:264
+msgid "Preset Icon Color"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:283
+msgid "Icons settings"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:292
+msgid "Icon space"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:317
+#: assets/blocks/social-links/block.jsx:421
+#: assets/blocks/social-links/block.jsx:464
+msgid "Social link icon"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:328
+msgid "Social link:"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:330
+msgid "Enter social link…"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:381
+msgid "Create a styling display of links to your social media profiles."
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:387
+msgid "social icons"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:387
+msgid "shares"
+msgstr ""
+
+#: assets/blocks/social-links/block.jsx:387
+msgid "icon link"
+msgstr ""
+
 #: assets/blocks/summary/block.jsx:43
 msgid "Insert Table of Contents"
 msgstr ""
@@ -3586,10 +7396,6 @@ msgstr ""
 msgid "Table of Contents settings"
 msgstr ""
 
-#: assets/blocks/summary/block.jsx:333
-msgid "Enter header…"
-msgstr ""
-
 #: assets/blocks/summary/block.jsx:338
 #: assets/blocks/summary/block.jsx:342
 msgid "Anchor Color"
@@ -3611,46 +7417,6 @@ msgstr ""
 msgid "table of contents"
 msgstr ""
 
-#: assets/blocks/summary/block.jsx:399
-msgid "list"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:112
-msgid "Tab Colors"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:126
-msgid "Active Tab Background Color"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:131
-msgid "Active Tab Text Color"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:138
-msgid "Body Colors"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:176
-msgid "Border width"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:183
-msgid "Border radius"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:213
-msgid "Title…"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:216
-msgid "Remove tab"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:234
-msgid "Add tab"
-msgstr ""
-
 #: assets/blocks/tabs/block.jsx:238
 msgid "New Tab"
 msgstr ""
@@ -3659,46 +7425,14 @@ msgstr ""
 msgid "Enter your content."
 msgstr ""
 
-#: assets/blocks/tabs/block.jsx:263
-msgid "Enter text…"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:296
-msgid "Tab 1"
-msgstr ""
-
 #: assets/blocks/tabs/block.jsx:297
 #: assets/blocks/tabs/block.jsx:301
 #: assets/blocks/tabs/block.jsx:305
 msgid "Filler text (also placeholder text or dummy text) is text that shares some characteristics of a real written text, but is random or otherwise generated."
 msgstr ""
 
-#: assets/blocks/tabs/block.jsx:300
-msgid "Tab 2"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:304
-msgid "Tab 3"
-msgstr ""
-
 #: assets/blocks/tabs/block.jsx:354
 msgid "Tabs (deprecated) - PublishPress"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:355
-msgid "Create horizontal or vertical tabs to display your content."
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:361
-msgid "tabs"
-msgstr ""
-
-#: assets/blocks/tabs/block.jsx:361
-msgid "cards"
-msgstr ""
-
-#: assets/blocks/testimonial/block.jsx:230
-msgid "Testimonial"
 msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:234
@@ -3707,10 +7441,6 @@ msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:236
 msgid "Slider view"
-msgstr ""
-
-#: assets/blocks/testimonial/block.jsx:241
-msgid "Number of items"
 msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:242
@@ -3747,10 +7477,6 @@ msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:290
 msgid "Infinite Loop"
-msgstr ""
-
-#: assets/blocks/testimonial/block.jsx:295
-msgid "Transition speed (ms)"
 msgstr ""
 
 #: assets/blocks/testimonial/block.jsx:302
@@ -3817,12 +7543,6 @@ msgstr ""
 msgid "Show default avatar"
 msgstr ""
 
-#: assets/blocks/testimonial/block.jsx:486
-#: assets/blocks/testimonial/block.jsx:497
-#: assets/blocks/testimonial/block.jsx:508
-msgid "Text…"
-msgstr ""
-
 #: assets/blocks/testimonial/block.jsx:673
 msgid "Block for creating personal or team/group information."
 msgstr ""
@@ -3843,10 +7563,6 @@ msgstr ""
 msgid "Normal View"
 msgstr ""
 
-#: assets/blocks/woo-products/block.jsx:215
-msgid "Slider View"
-msgstr ""
-
 #: assets/blocks/woo-products/block.jsx:233
 msgid "Woo Products"
 msgstr ""
@@ -3859,21 +7575,12 @@ msgstr ""
 msgid "Product Status"
 msgstr ""
 
-#: assets/blocks/woo-products/block.jsx:245
-#: assets/blocks/woo-products/block.jsx:255
-msgid "All"
-msgstr ""
-
 #: assets/blocks/woo-products/block.jsx:246
 msgid "Featured"
 msgstr ""
 
 #: assets/blocks/woo-products/block.jsx:247
 msgid "On Sale"
-msgstr ""
-
-#: assets/blocks/woo-products/block.jsx:252
-msgid "Category"
 msgstr ""
 
 #: assets/blocks/woo-products/block.jsx:256
@@ -3970,4 +7677,982 @@ msgstr ""
 
 #: assets/js/settings.js:110
 msgid "default config"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:204
+#: assets/pages/block-controls/preset-manager.jsx:43
+#, js-format
+msgid "Schedule #%d"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:217
+#: assets/pages/block-controls/preset-manager.jsx:56
+msgid "Now"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:218
+#: assets/pages/block-controls/preset-manager.jsx:57
+msgid "Start showing"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:225
+#: assets/pages/block-controls/preset-manager.jsx:64
+msgid "Never"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:226
+#: assets/pages/block-controls/preset-manager.jsx:65
+msgid "Stop showing"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:244
+#: assets/pages/block-controls/preset-manager.jsx:83
+msgid "Recurring"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:247
+#: assets/pages/block-controls/preset-manager.jsx:86
+msgid "If Recurring is enabled, this block will be displayed every year between the selected dates."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:252
+#: assets/pages/block-controls/preset-manager.jsx:91
+msgid "On these days (optional)"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:258
+#: assets/pages/block-controls/preset-manager.jsx:97
+msgid "Between these times (optional)"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:261
+#: assets/pages/block-controls/preset-manager.jsx:100
+msgid "From"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:267
+#: assets/pages/block-controls/preset-manager.jsx:106
+msgid "To"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:285
+#: assets/pages/block-controls/preset-manager.jsx:124
+msgid "\"To\" time should be after \"From\" time!"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:290
+#: assets/pages/block-controls/preset-manager.jsx:129
+msgid "Timezone"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1224
+#: assets/pages/block-controls/block-controls.jsx:1267
+#, js-format
+msgid "All %s terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1268
+#, js-format
+msgid "Selected %s terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1361
+#: assets/pages/block-controls/preset-manager.jsx:1182
+msgid "WordPress settings timezone"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1464
+msgid "Choose when to start showing and/or stop showing this block."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1512
+#: assets/pages/block-controls/preset-manager.jsx:1245
+msgid "Add Another Schedule"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1524
+msgid "Choose which users can see this block."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1540
+#: assets/pages/block-controls/preset-manager.jsx:1259
+msgid "Show to everyone"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1544
+#: assets/pages/block-controls/preset-manager.jsx:1260
+msgid "Hide from everyone"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1548
+#: assets/pages/block-controls/preset-manager.jsx:1261
+msgid "Show to logged in users"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1552
+#: assets/pages/block-controls/preset-manager.jsx:1262
+msgid "Show to logged out users"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1556
+msgid "Show to the selected user roles"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1560
+msgid "Hide from the selected user roles"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1572
+#: assets/pages/block-controls/preset-manager.jsx:1271
+msgid "Select user roles"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1600
+msgid "Please select at least one user role."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1619
+msgid "Set minimum and maximum screen widths for this block to display."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1629
+#: assets/pages/block-controls/preset-manager.jsx:1314
+msgid "Minimum width (px)"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1632
+#: assets/pages/block-controls/preset-manager.jsx:1317
+msgid "No minimum"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1636
+#: assets/pages/block-controls/preset-manager.jsx:1321
+msgid "Maximum width (px)"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1639
+#: assets/pages/block-controls/preset-manager.jsx:1324
+msgid "No maximum"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1651
+msgid "Choose which devices this block should be visible on."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1661
+msgid "Desktop"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1672
+msgid "Tablet"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1683
+msgid "Mobile"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1694
+msgid "Bot"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1713
+#: assets/pages/block-controls/preset-manager.jsx:670
+msgid "Browser"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1715
+msgid "Choose which browsers can see this block."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1725
+#: assets/pages/block-controls/preset-manager.jsx:1335
+msgid "Select Browsers"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1726
+#: assets/pages/block-controls/preset-manager.jsx:1336
+msgid "Search browsers"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1740
+#: assets/pages/block-controls/block-controls.jsx:1783
+#: assets/pages/block-controls/block-controls.jsx:1826
+#: assets/pages/block-controls/block-controls.jsx:1869
+#: assets/pages/block-controls/block-controls.jsx:1912
+#: assets/pages/block-controls/block-controls.jsx:1957
+#: assets/pages/block-controls/block-controls.jsx:2001
+#: assets/pages/block-controls/preset-manager.jsx:1256
+#: assets/pages/block-controls/preset-manager.jsx:1346
+#: assets/pages/block-controls/preset-manager.jsx:1374
+#: assets/pages/block-controls/preset-manager.jsx:1406
+#: assets/pages/block-controls/preset-manager.jsx:1438
+#: assets/pages/block-controls/preset-manager.jsx:1471
+#: assets/pages/block-controls/preset-manager.jsx:1508
+#: assets/pages/block-controls/preset-manager.jsx:1536
+#: assets/pages/block-controls/preset-manager.jsx:1564
+#: assets/pages/block-controls/preset-manager.jsx:1592
+msgid "Approach"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1743
+#: assets/pages/block-controls/preset-manager.jsx:1349
+msgid "Show to selected browsers"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1744
+#: assets/pages/block-controls/preset-manager.jsx:1350
+msgid "Hide from selected browsers"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1758
+msgid "Choose which operating systems can see this block."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1768
+#: assets/pages/block-controls/preset-manager.jsx:1363
+msgid "Select Operating Systems"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1769
+#: assets/pages/block-controls/preset-manager.jsx:1364
+msgid "Search operating systems"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1786
+#: assets/pages/block-controls/preset-manager.jsx:1377
+msgid "Show to selected OS"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1787
+#: assets/pages/block-controls/preset-manager.jsx:1378
+msgid "Hide from selected OS"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1801
+msgid "Show or hide block based on cookie values."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1810
+#: assets/pages/block-controls/preset-manager.jsx:1390
+msgid "Cookie Name"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1815
+#: assets/pages/block-controls/block-controls.jsx:1858
+#: assets/pages/block-controls/block-controls.jsx:1901
+#: assets/pages/block-controls/preset-manager.jsx:1395
+#: assets/pages/block-controls/preset-manager.jsx:1427
+#: assets/pages/block-controls/preset-manager.jsx:1460
+msgid "Condition"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1821
+#: assets/pages/block-controls/block-controls.jsx:1864
+#: assets/pages/block-controls/block-controls.jsx:1907
+#: assets/pages/block-controls/preset-manager.jsx:1401
+#: assets/pages/block-controls/preset-manager.jsx:1433
+#: assets/pages/block-controls/preset-manager.jsx:1466
+msgid "Value"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1829
+#: assets/pages/block-controls/block-controls.jsx:1872
+#: assets/pages/block-controls/block-controls.jsx:1915
+#: assets/pages/block-controls/block-controls.jsx:1960
+msgid "Show block when condition matches"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1830
+#: assets/pages/block-controls/block-controls.jsx:1873
+#: assets/pages/block-controls/block-controls.jsx:1916
+#: assets/pages/block-controls/block-controls.jsx:1961
+msgid "Hide block when condition matches"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1844
+msgid "Show or hide block based on user meta values."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1853
+#: assets/pages/block-controls/block-controls.jsx:1896
+#: assets/pages/block-controls/preset-manager.jsx:1422
+#: assets/pages/block-controls/preset-manager.jsx:1455
+msgid "Meta Key"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1887
+msgid "Show or hide block based on post meta values."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1930
+msgid "Show or hide block based on URL query parameters."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1939
+#: assets/pages/block-controls/preset-manager.jsx:1490
+msgid "Query Parameters"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1940
+#: assets/pages/block-controls/preset-manager.jsx:1491
+msgid "Enter query parameter names, one per line"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1945
+#: assets/pages/block-controls/preset-manager.jsx:1496
+msgid ""
+"utm_source\n"
+"utm_medium\n"
+"ref"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1948
+#: assets/pages/block-controls/preset-manager.jsx:1499
+msgid "Logic"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1951
+#: assets/pages/block-controls/preset-manager.jsx:1502
+msgid "All parameters must be present"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1952
+#: assets/pages/block-controls/preset-manager.jsx:1503
+msgid "Any parameter must be present"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1975
+msgid "Show or hide block based on user capabilities."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1985
+#: assets/pages/block-controls/preset-manager.jsx:1525
+msgid "Select Capabilities"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:1986
+#: assets/pages/block-controls/preset-manager.jsx:1526
+msgid "Search capabilities"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2004
+#: assets/pages/block-controls/preset-manager.jsx:1539
+msgid "Show to users with selected capabilities"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2005
+#: assets/pages/block-controls/preset-manager.jsx:1540
+msgid "Hide from users with selected capabilities"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2037
+msgid "Show for selected terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2041
+msgid "Hide for selected terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2049
+msgid "Select taxonomies"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2050
+msgid "Search taxonomies"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2071
+msgid "Filter terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2072
+msgid "Search terms"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2104
+msgid "Use this filter to apply only to some terms."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2121
+msgid "Choose in which pages this block can be displayed."
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2137
+msgid "Show on the selected pages"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2141
+msgid "Hide on the selected pages"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2152
+msgid "Select pages"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2190
+msgid "Manage Presets"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2195
+msgid "Select Presets"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2196
+msgid "Search presets"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2213
+msgid "Preset Logic"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2216
+msgid "Show if ANY preset matches"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2217
+msgid "Show if ALL presets match"
+msgstr ""
+
+#: assets/pages/block-controls/block-controls.jsx:2287
+msgid "Custom Rules"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:222
+msgid "Failed to create sample presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:244
+#: assets/pages/block-controls/preset-manager.jsx:311
+msgid "Failed to load presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:667
+msgid "User Roles"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:678
+msgid "Page"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:683
+msgid "Never modified"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:689
+#: assets/pages/block-controls/preset-manager.jsx:703
+msgid "Invalid date"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:721
+msgid "No presets yet"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:722
+msgid "You have not created any preset."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:770
+msgid "Preset Title"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:775
+msgid "Enter preset name"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:783
+msgid "Control Sets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:785
+msgid "Show the block if any control set applies. Each set can contain multiple rules."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:791
+msgid "Add Control Set"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:818
+msgid "Deleting..."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:821
+#: assets/pages/block-controls/preset-manager.jsx:832
+msgid "Delete Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:826
+msgid "Are you sure you want to delete preset?"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:838
+msgid "Yes, Delete Preset."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:845
+#: assets/pages/block-controls/preset-manager.jsx:937
+#: assets/pages/block-controls/preset-manager.jsx:1014
+msgid "No, Cancel"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:847
+#: assets/pages/block-controls/preset-manager.jsx:939
+#: assets/pages/block-controls/preset-manager.jsx:1016
+msgid "No, Cancel."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:861
+msgid "Saving..."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:864
+msgid "Save Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:871
+msgid "Cancel"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:891
+msgid "Control Set"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:892
+msgid "Show the block if any rule applies. Rules are evaluated with AND logic."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:900
+msgid "Add Rule"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:916
+#: assets/pages/block-controls/preset-manager.jsx:926
+msgid "Delete Set"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:920
+msgid "Are you sure you want to delete set?"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:930
+msgid "Yes, Delete Set."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:954
+msgid "AND"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:963
+msgid "No rules added yet. Add rules to define when this block should be visible."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:993
+#: assets/pages/block-controls/preset-manager.jsx:1003
+msgid "Remove Rule"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:997
+msgid "Are you sure you want to remove rule?"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1007
+msgid "Yes, Remove Rule."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1063
+msgid "Configuration for this rule type is missing."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1263
+msgid "Show to selected user roles"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1264
+msgid "Hide from selected user roles"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1272
+msgid "Search roles"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1409
+#: assets/pages/block-controls/preset-manager.jsx:1441
+#: assets/pages/block-controls/preset-manager.jsx:1474
+#: assets/pages/block-controls/preset-manager.jsx:1511
+msgid "Show when condition matches"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1410
+#: assets/pages/block-controls/preset-manager.jsx:1442
+#: assets/pages/block-controls/preset-manager.jsx:1475
+#: assets/pages/block-controls/preset-manager.jsx:1512
+msgid "Hide when condition matches"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1553
+msgid "Select Archive Types"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1554
+msgid "Search archive types"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1567
+msgid "Show on selected archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1568
+msgid "Hide from selected archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1581
+msgid "Select Pages"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1582
+msgid "Search pages"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1595
+msgid "Show on selected pages"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1596
+msgid "Hide from selected pages"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1625
+msgid "Category Archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1626
+msgid "Tag Archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1627
+msgid "Date Archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1628
+msgid "Author Archives"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1660
+msgid "Edit Cancelled"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1661
+msgid "Edit cancelled. Select another preset to edit or create a new one."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1666
+msgid "Preset Saved!"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1667
+msgid "Preset saved successfully! Choose another preset to edit or create a new one."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1672
+msgid "Preset Deleted"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1673
+msgid "Preset deleted. Select another preset to edit or create a new one."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1678
+msgid "Action Completed"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1679
+msgid "Operation completed. You can continue editing presets or create new ones."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1684
+msgid "Select a Preset to Edit"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1685
+msgid "Choose a preset from the list to edit its rules, or create a new preset to get started."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1690
+msgid "No Presets Yet"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1691
+msgid "Create your first preset to start managing block visibility rules."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1697
+msgid "Samples Created!"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1698
+msgid "Preset samples created successfully! Choose a preset to edit or create a new one."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1704
+msgid "Manage Your Presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1705
+msgid "Select a preset to edit or create a new one to control block visibility."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1728
+msgid "Create New Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1734
+msgid "Generate Samples"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1755
+msgid "Total Presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1759
+msgid "Rules Created"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1772
+msgid "Conditional Visibility"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1773
+msgid "Control when blocks appear based on user roles, devices, schedules, and more"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1780
+msgid "User Targeting"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1781
+msgid "Show or hide content to specific user roles, logged-in status, or capabilities"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1788
+msgid "Scheduling"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1789
+msgid "Set time-based rules to display content only during specific periods"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1828
+msgid "Add New Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1834
+msgid "Generate Sample Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1865
+msgid "Welcome to Block Control Presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1866
+msgid "This screen allows you to create powerful visibility rules for your blocks."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1867
+msgid "These preset rules are available when you're writing posts."
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1874
+msgid "Create Your First Preset"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1880
+msgid "Generate Sample Presets"
+msgstr ""
+
+#: assets/pages/block-controls/preset-manager.jsx:1903
+msgid "Block Control Presets"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:241
+msgid "Welcome to Block Usage"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:242
+msgid "This screen allows you to search for and find any usage of blocks on your site."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:248
+msgid "Blocks Found"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:252
+msgid "Posts Scanned"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:255
+msgid "Last Scan"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:268
+msgid "Scan Content"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:269
+msgid "Find all blocks used across your posts, pages, and custom post types"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:276
+msgid "Usage Analytics"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:277
+msgid "See detailed statistics about block usage and locations"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:284
+msgid "Quick Navigation"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:285
+msgid "Jump directly to posts containing specific blocks for editing"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:406
+#: assets/pages/block-usage/block-usage.jsx:1019
+msgid "locations"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:406
+#: assets/pages/block-usage/block-usage.jsx:1019
+msgid "instances"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:412
+msgid "Name:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:413
+msgid "Description:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:414
+msgid "Category:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:420
+#: assets/pages/block-usage/block-usage.jsx:1055
+msgid "Locations:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:421
+msgid "Total instances:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:460
+msgid "Edit Post"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:469
+msgid "View Post"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:473
+msgid "Blocks in this post:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:477
+msgid "No blocks found in this post."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:491
+msgid "This block was not found in any posts."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:492
+#: assets/pages/block-usage/block-usage.jsx:980
+msgid "Last scan:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:496
+msgid "No scan history available for this block."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:497
+msgid "Click the Scan button to check for usage."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:575
+msgid "Failed to load data from local storage. Please refresh the page."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:727
+msgid "Initializing scan..."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:749
+#, js-format
+msgid "Processing posts (%1$s/%2$s)"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:762
+msgid "Batch scan failed"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:815
+msgid "Scan completed successfully!"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:822
+msgid "Scan failed: "
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:858
+msgid "Failed to clear data. Please try again."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:925
+msgid "Limit Scan to Post Types:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:941
+msgid "Filter"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:949
+msgid "Show Empty Blocks"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:990
+msgid "Clear All Data"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:994
+msgid "Scan data is stored in your browser to improve performance and handle large datasets. This keeps your WordPress database clean. Click to permanently delete all stored data."
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1019
+msgid "blocks"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1019
+msgid "instance"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1056
+msgid "Instances:"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1062
+msgid "Not found in any posts"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1063
+msgid "No scan history"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1072
+msgid "Details"
+msgstr ""
+
+#: assets/pages/block-usage/block-usage.jsx:1106
+msgid "Error Loading blocks data..."
 msgstr ""

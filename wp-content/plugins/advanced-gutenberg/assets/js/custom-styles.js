@@ -8,6 +8,10 @@ class AdvGbCustomStyles {
         this.editor = null;
         this.styleId = null;
         this.isProActive = window.advgbCustomStyles?.isProActive || false;
+        // Track CSS properties that have no matching Style Builder field (residual)
+        // and !important flags so round-trips don't lose them.
+        this.residual = { base: {}, states: {}, nested: {} };
+        this.importantProperties = {};
 
         this.init();
     }
@@ -247,6 +251,11 @@ class AdvGbCustomStyles {
             value += $input.data('unit');
         }
 
+        // Restore !important flag if it was present in the original CSS.
+        if ($input.data('advgb-important')) {
+            value += ' !important';
+        }
+
         const propertyData = this.parseProperty(fullProperty, value, validElements, validStates);
 
         if (propertyData && propertyData.type && propertyData.property) {
@@ -435,6 +444,52 @@ class AdvGbCustomStyles {
         }
 
         const cssArray = this.buildStructuredDataFromUI();
+
+        // Merge residual properties (those with no Style Builder field) back in,
+        // but only where the UI didn't already generate a value for that property.
+        if (this.residual) {
+            if (!cssArray.base) cssArray.base = {};
+            for (const prop in this.residual.base) {
+                if (!(prop in cssArray.base)) {
+                    cssArray.base[prop] = this.residual.base[prop];
+                }
+            }
+            if (this.residual.states) {
+                if (!cssArray.states) cssArray.states = {};
+                for (const state in this.residual.states) {
+                    if (!cssArray.states[state]) cssArray.states[state] = {};
+                    for (const prop in this.residual.states[state]) {
+                        if (!(prop in cssArray.states[state])) {
+                            cssArray.states[state][prop] = this.residual.states[state][prop];
+                        }
+                    }
+                }
+            }
+            if (this.residual.nested) {
+                if (!cssArray.nested) cssArray.nested = {};
+                for (const selector in this.residual.nested) {
+                    if (!cssArray.nested[selector]) cssArray.nested[selector] = {};
+                    const resEl = this.residual.nested[selector];
+                    for (const prop in resEl) {
+                        if (prop !== 'states' && !(prop in cssArray.nested[selector])) {
+                            cssArray.nested[selector][prop] = resEl[prop];
+                        }
+                    }
+                    if (resEl.states) {
+                        if (!cssArray.nested[selector].states) cssArray.nested[selector].states = {};
+                        for (const state in resEl.states) {
+                            if (!cssArray.nested[selector].states[state]) cssArray.nested[selector].states[state] = {};
+                            for (const prop in resEl.states[state]) {
+                                if (!(prop in cssArray.nested[selector].states[state])) {
+                                    cssArray.nested[selector].states[state][prop] = resEl.states[state][prop];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         const scssString = this.arrayToSCSS(cssArray);
 
         if (this.editor) {
@@ -698,12 +753,28 @@ class AdvGbCustomStyles {
     }
 
     populateUIFieldsFromParsedData(parsedData) {
+        // Reset residual and !important tracking on each parse cycle.
+        this.residual = { base: {}, states: {}, nested: {} };
+        this.importantProperties = {};
 
         if (parsedData.base) {
             for (const prop in parsedData.base) {
+                let value = parsedData.base[prop];
+                if (!value) continue;
+
+                // Strip and track !important so it can be round-tripped.
+                const isImportant = /\s*!important\s*$/.test(value);
+                if (isImportant) {
+                    value = value.replace(/\s*!important\s*$/, '').trim();
+                }
+
                 const $input = this.$('[data-css-property="' + prop + '"]');
-                if ($input.length && parsedData.base[prop]) {
-                    this.setInputValue($input, parsedData.base[prop]);
+                if ($input.length) {
+                    this.setInputValue($input, value);
+                    if (isImportant) $input.data('advgb-important', true);
+                } else {
+                    // No matching field — preserve verbatim (with !important if present).
+                    this.residual.base[prop] = parsedData.base[prop];
                 }
             }
         }
@@ -712,10 +783,22 @@ class AdvGbCustomStyles {
             for (const state in parsedData.states) {
                 const stateName = state.replace(':', '');
                 for (const prop in parsedData.states[state]) {
+                    let value = parsedData.states[state][prop];
+                    if (!value) continue;
+
+                    const isImportant = /\s*!important\s*$/.test(value);
+                    if (isImportant) {
+                        value = value.replace(/\s*!important\s*$/, '').trim();
+                    }
+
                     const stateProperty = stateName + '-' + prop;
                     const $input = this.$('[data-css-property="' + stateProperty + '"]');
-                    if ($input.length && parsedData.states[state][prop]) {
-                        this.setInputValue($input, parsedData.states[state][prop]);
+                    if ($input.length) {
+                        this.setInputValue($input, value);
+                        if (isImportant) $input.data('advgb-important', true);
+                    } else {
+                        if (!this.residual.states[state]) this.residual.states[state] = {};
+                        this.residual.states[state][prop] = parsedData.states[state][prop];
                     }
                 }
             }
@@ -728,13 +811,23 @@ class AdvGbCustomStyles {
                 // Handle regular nested properties
                 for (const prop in elementRules) {
                     if (prop !== 'states' && elementRules[prop]) {
+                        let value = elementRules[prop];
+                        const isImportant = /\s*!important\s*$/.test(value);
+                        if (isImportant) {
+                            value = value.replace(/\s*!important\s*$/, '').trim();
+                        }
+
                         let elementProperty = selector + '-' + prop;
                         if (selector.includes(' ')) {
                             elementProperty = selector.replace(/ /g, '-') + '-' + prop;
                         }
                         const $input = this.$('[data-css-property="' + elementProperty + '"]');
                         if ($input.length) {
-                            this.setInputValue($input, elementRules[prop]);
+                            this.setInputValue($input, value);
+                            if (isImportant) $input.data('advgb-important', true);
+                        } else {
+                            if (!this.residual.nested[selector]) this.residual.nested[selector] = {};
+                            this.residual.nested[selector][prop] = elementRules[prop];
                         }
                     }
                 }
@@ -744,13 +837,27 @@ class AdvGbCustomStyles {
                     for (const state in elementRules.states) {
                         const stateName = state.replace(':', '');
                         for (const prop in elementRules.states[state]) {
+                            let value = elementRules.states[state][prop];
+                            if (!value) continue;
+
+                            const isImportant = /\s*!important\s*$/.test(value);
+                            if (isImportant) {
+                                value = value.replace(/\s*!important\s*$/, '').trim();
+                            }
+
                             let stateProperty = selector + '-' + stateName + '-' + prop;
                             if (selector.includes(' ')) {
                                 stateProperty = selector.replace(/ /g, '-') + '-' + stateName + '-' + prop;
                             }
                             const $input = this.$('[data-css-property="' + stateProperty + '"]');
-                            if ($input.length && elementRules.states[state][prop]) {
-                                this.setInputValue($input, elementRules.states[state][prop]);
+                            if ($input.length) {
+                                this.setInputValue($input, value);
+                                if (isImportant) $input.data('advgb-important', true);
+                            } else {
+                                if (!this.residual.nested[selector]) this.residual.nested[selector] = {};
+                                if (!this.residual.nested[selector].states) this.residual.nested[selector].states = {};
+                                if (!this.residual.nested[selector].states[state]) this.residual.nested[selector].states[state] = {};
+                                this.residual.nested[selector].states[state][prop] = elementRules.states[state][prop];
                             }
                         }
                     }
@@ -1258,6 +1365,10 @@ class AdvGbCustomStyles {
                 this.styleId = id_element;
                 let cssContent = res.css;
 
+                // Reset residual tracking whenever a fresh style is loaded.
+                this.residual = { base: {}, states: {}, nested: {} };
+                this.importantProperties = {};
+
                 if (res.css_array) {
                     this.populateUIFields(res.css_array);
                     cssContent = '{\n' + res.css + '\n}';
@@ -1530,7 +1641,7 @@ class AdvGbCustomStyles {
     }
 
     clearAllFields() {
-        this.$('.style-input').val('');
+        this.$('.style-input').val('').removeData('advgb-important');
 
         this.$('.minicolors').each((index, element) => {
             const $element = this.$(element);
