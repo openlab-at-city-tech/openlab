@@ -46,7 +46,7 @@ var wp;
     }
   });
 
-  // packages/primitives/build-module/index.js
+  // packages/primitives/build-module/index.mjs
   var index_exports = {};
   __export(index_exports, {
     BlockQuotation: () => BlockQuotation,
@@ -81,9 +81,9 @@ var wp;
   }
   var clsx_default = clsx;
 
-  // packages/primitives/build-module/svg/index.js
-  var import_element = __toESM(require_element());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  // packages/primitives/build-module/svg/index.mjs
+  var import_element = __toESM(require_element(), 1);
+  var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
   var Circle = (props) => (0, import_element.createElement)("circle", props);
   var G = (props) => (0, import_element.createElement)("g", props);
   var Line = (props) => (0, import_element.createElement)("line", props);
@@ -96,11 +96,11 @@ var wp;
   var Stop = (props) => (0, import_element.createElement)("stop", props);
   var SVG = (0, import_element.forwardRef)(
     /**
-     * @param {SVGProps}                                    props isPressed indicates whether the SVG should appear as pressed.
-     *                                                            Other props will be passed through to svg component.
-     * @param {import('react').ForwardedRef<SVGSVGElement>} ref   The forwarded ref to the SVG element.
+     * @param {SVGProps}                          props isPressed indicates whether the SVG should appear as pressed.
+     *                                                  Other props will be passed through to svg component.
+     * @param {React.ForwardedRef<SVGSVGElement>} ref   The forwarded ref to the SVG element.
      *
-     * @return {JSX.Element} Stop component
+     * @return {React.JSX.Element} Stop component
      */
     ({ className, isPressed, ...props }, ref) => {
       const appliedProps = {
@@ -114,13 +114,13 @@ var wp;
   );
   SVG.displayName = "SVG";
 
-  // packages/primitives/build-module/horizontal-rule/index.js
+  // packages/primitives/build-module/horizontal-rule/index.mjs
   var HorizontalRule = "hr";
 
-  // packages/primitives/build-module/block-quotation/index.js
+  // packages/primitives/build-module/block-quotation/index.mjs
   var BlockQuotation = "blockquote";
 
-  // packages/primitives/build-module/view/index.js
+  // packages/primitives/build-module/view/index.mjs
   var View = "div";
   return __toCommonJS(index_exports);
 })();

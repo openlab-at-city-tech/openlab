@@ -1,9 +1,7 @@
 // routes/post/route.ts
+import { redirect } from "@wordpress/route";
 var route = {
-  beforeLoad: ({
-    params,
-    redirect
-  }) => {
+  beforeLoad: ({ params }) => {
     throw redirect({
       throw: true,
       to: "/types/$type/list/$slug",

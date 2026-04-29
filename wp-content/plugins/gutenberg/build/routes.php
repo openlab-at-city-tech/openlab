@@ -8,14 +8,14 @@
  */
 
 // Load routes registry
-$routes_file = __DIR__ . '/routes/index.php';
+$routes_file = __DIR__ . '/routes/registry.php';
 if ( ! file_exists( $routes_file ) ) {
 	return;
 }
 
 $routes = require $routes_file;
 
-// Group routes by page
+// Group routes by page and store in globals for page-specific functions
 $routes_by_page = array();
 foreach ( $routes as $route ) {
 	$page_slug = $route['page'];
@@ -25,66 +25,146 @@ foreach ( $routes as $route ) {
 	$routes_by_page[ $page_slug ][] = $route;
 }
 
-// Helper function to register routes for a page
-$register_routes_callback = function ( $page_routes, $page_slug_underscore, $register_function_name ) {
-	return function () use ( $page_routes, $page_slug_underscore, $register_function_name ) {
-		foreach ( $page_routes as $route ) {
-			$content_handle = null;
-			$route_handle = null;
-
-			// Register content module if exists
-			if ( $route['has_content'] ) {
-				$content_asset_path = __DIR__ . "/routes/{$route['name']}/content.min.asset.php";
-				if ( file_exists( $content_asset_path ) ) {
-					$content_asset = require $content_asset_path;
-					$content_handle = 'wordpress/routes/' . $route['name'] . '/content';
-					$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
-					wp_register_script_module(
-						$content_handle,
-						plugins_url( 'build/routes/' . $route['name'] . '/content' . $extension, dirname( __FILE__ ) ),
-						$content_asset['module_dependencies'] ?? array(),
-						$content_asset['version'] ?? false
-					);
-				}
-			}
-
-			// Register route module if exists
-			if ( $route['has_route'] ) {
-				$route_asset_path = __DIR__ . "/routes/{$route['name']}/route.min.asset.php";
-				if ( file_exists( $route_asset_path ) ) {
-					$route_asset = require $route_asset_path;
-					$route_handle = 'wordpress/routes/' . $route['name'] . '/route';
-					$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
-					wp_register_script_module(
-						$route_handle,
-						plugins_url( 'build/routes/' . $route['name'] . '/route' . $extension, dirname( __FILE__ ) ),
-						$route_asset['module_dependencies'] ?? array(),
-						$route_asset['version'] ?? false
-					);
-				}
-			}
-
-			// Register route with page
-			if ( function_exists( $register_function_name ) ) {
-				call_user_func( $register_function_name, $route['path'], $content_handle, $route_handle );
-			}
-		}
-	};
-};
-
-// Register hooks for both full-page and wp-admin modes
+// Store routes data in globals for each page
 foreach ( $routes_by_page as $page_slug => $page_routes ) {
 	$page_slug_underscore = str_replace( '-', '_', $page_slug );
-
-	// Register all routes for full-page mode (page.php)
-	add_action(
-		"{$page_slug}_init",
-		$register_routes_callback( $page_routes, $page_slug_underscore, "register_{$page_slug_underscore}_route" )
-	);
-
-	// Register all routes for wp-admin mode (page-wp-admin.php)
-	add_action(
-		"{$page_slug}-wp-admin_init",
-		$register_routes_callback( $page_routes, $page_slug_underscore, "register_{$page_slug_underscore}_wp_admin_route" )
-	);
+	$global_name = 'gutenberg_' . $page_slug_underscore . '_routes_data';
+	$GLOBALS[ $global_name ] = $page_routes;
 }
+
+/**
+ * Generic helper function to register routes for a page.
+ *
+ * @param array  $page_routes           Array of route data for the page.
+ * @param string $register_function_name Name of the function to call for registering each route.
+ */
+function gutenberg_register_page_routes( $page_routes, $register_function_name ) {
+	// Load build constants
+	$build_constants = require __DIR__ . '/constants.php';
+
+	foreach ( $page_routes as $route ) {
+		$content_handle = null;
+		$route_handle = null;
+
+		// Register content module if exists
+		if ( $route['has_content'] ) {
+			$content_asset_path = __DIR__ . "/routes/{$route['name']}/content.min.asset.php";
+			if ( file_exists( $content_asset_path ) ) {
+				$content_asset = require $content_asset_path;
+				$content_handle = 'wp/routes/' . $route['name'] . '/content';
+				$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+				// Deregister first to override any previously registered version
+				// (e.g., Core's default modules when running as a plugin).
+				wp_deregister_script_module( $content_handle );
+				wp_register_script_module(
+					$content_handle,
+					$build_constants['build_url'] . 'routes/' . $route['name'] . '/content' . $extension,
+					$content_asset['module_dependencies'] ?? array(),
+					$content_asset['version'] ?? false
+				);
+			}
+		}
+
+		// Register route module if exists
+		if ( $route['has_route'] ) {
+			$route_asset_path = __DIR__ . "/routes/{$route['name']}/route.min.asset.php";
+			if ( file_exists( $route_asset_path ) ) {
+				$route_asset = require $route_asset_path;
+				$route_handle = 'wp/routes/' . $route['name'] . '/route';
+				$extension = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+				// Deregister first to override any previously registered version
+				// (e.g., Core's default modules when running as a plugin).
+				wp_deregister_script_module( $route_handle );
+				wp_register_script_module(
+					$route_handle,
+					$build_constants['build_url'] . 'routes/' . $route['name'] . '/route' . $extension,
+					$route_asset['module_dependencies'] ?? array(),
+					$route_asset['version'] ?? false
+				);
+			}
+		}
+
+		// Register route with page
+		if ( function_exists( $register_function_name ) ) {
+			call_user_func( $register_function_name, $route['path'], $content_handle, $route_handle );
+		}
+	}
+}
+
+// Page-specific route registration functions
+// Page-specific route registration functions for options-connectors
+/**
+ * Register routes for options-connectors page (full-page mode).
+ */
+function gutenberg_register_options_connectors_page_routes() {
+	global $gutenberg_options_connectors_routes_data;
+	gutenberg_register_page_routes( $gutenberg_options_connectors_routes_data, 'gutenberg_register_options_connectors_route' );
+}
+add_action( 'options-connectors_init', 'gutenberg_register_options_connectors_page_routes' );
+
+/**
+ * Register routes for options-connectors page (wp-admin mode).
+ */
+function gutenberg_register_options_connectors_wp_admin_page_routes() {
+	global $gutenberg_options_connectors_routes_data;
+	gutenberg_register_page_routes( $gutenberg_options_connectors_routes_data, 'gutenberg_register_options_connectors_wp_admin_route' );
+}
+add_action( 'options-connectors-wp-admin_init', 'gutenberg_register_options_connectors_wp_admin_page_routes' );
+
+// Page-specific route registration functions for font-library
+/**
+ * Register routes for font-library page (full-page mode).
+ */
+function gutenberg_register_font_library_page_routes() {
+	global $gutenberg_font_library_routes_data;
+	gutenberg_register_page_routes( $gutenberg_font_library_routes_data, 'gutenberg_register_font_library_route' );
+}
+add_action( 'font-library_init', 'gutenberg_register_font_library_page_routes' );
+
+/**
+ * Register routes for font-library page (wp-admin mode).
+ */
+function gutenberg_register_font_library_wp_admin_page_routes() {
+	global $gutenberg_font_library_routes_data;
+	gutenberg_register_page_routes( $gutenberg_font_library_routes_data, 'gutenberg_register_font_library_wp_admin_route' );
+}
+add_action( 'font-library-wp-admin_init', 'gutenberg_register_font_library_wp_admin_page_routes' );
+
+// Page-specific route registration functions for guidelines
+/**
+ * Register routes for guidelines page (full-page mode).
+ */
+function gutenberg_register_guidelines_page_routes() {
+	global $gutenberg_guidelines_routes_data;
+	gutenberg_register_page_routes( $gutenberg_guidelines_routes_data, 'gutenberg_register_guidelines_route' );
+}
+add_action( 'guidelines_init', 'gutenberg_register_guidelines_page_routes' );
+
+/**
+ * Register routes for guidelines page (wp-admin mode).
+ */
+function gutenberg_register_guidelines_wp_admin_page_routes() {
+	global $gutenberg_guidelines_routes_data;
+	gutenberg_register_page_routes( $gutenberg_guidelines_routes_data, 'gutenberg_register_guidelines_wp_admin_route' );
+}
+add_action( 'guidelines-wp-admin_init', 'gutenberg_register_guidelines_wp_admin_page_routes' );
+
+// Page-specific route registration functions for site-editor-v2
+/**
+ * Register routes for site-editor-v2 page (full-page mode).
+ */
+function gutenberg_register_site_editor_v2_page_routes() {
+	global $gutenberg_site_editor_v2_routes_data;
+	gutenberg_register_page_routes( $gutenberg_site_editor_v2_routes_data, 'gutenberg_register_site_editor_v2_route' );
+}
+add_action( 'site-editor-v2_init', 'gutenberg_register_site_editor_v2_page_routes' );
+
+/**
+ * Register routes for site-editor-v2 page (wp-admin mode).
+ */
+function gutenberg_register_site_editor_v2_wp_admin_page_routes() {
+	global $gutenberg_site_editor_v2_routes_data;
+	gutenberg_register_page_routes( $gutenberg_site_editor_v2_routes_data, 'gutenberg_register_site_editor_v2_wp_admin_route' );
+}
+add_action( 'site-editor-v2-wp-admin_init', 'gutenberg_register_site_editor_v2_wp_admin_page_routes' );
+

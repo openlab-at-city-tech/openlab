@@ -1,3 +1,4 @@
+"use strict";
 var wp;
 (wp ||= {}).viewport = (() => {
   var __create = Object.create;
@@ -45,14 +46,14 @@ var wp;
     }
   });
 
-  // vendor-external:react/jsx-runtime
-  var require_jsx_runtime = __commonJS({
-    "vendor-external:react/jsx-runtime"(exports, module) {
-      module.exports = window.ReactJSXRuntime;
+  // package-external:@wordpress/element
+  var require_element = __commonJS({
+    "package-external:@wordpress/element"(exports, module) {
+      module.exports = window.wp.element;
     }
   });
 
-  // packages/viewport/build-module/index.js
+  // packages/viewport/build-module/index.mjs
   var index_exports = {};
   __export(index_exports, {
     ifViewportMatches: () => if_viewport_matches_default,
@@ -60,14 +61,14 @@ var wp;
     withViewportMatch: () => with_viewport_match_default
   });
 
-  // packages/viewport/build-module/listener.js
-  var import_compose = __toESM(require_compose());
-  var import_data2 = __toESM(require_data());
+  // packages/viewport/build-module/listener.mjs
+  var import_compose = __toESM(require_compose(), 1);
+  var import_data2 = __toESM(require_data(), 1);
 
-  // packages/viewport/build-module/store/index.js
-  var import_data = __toESM(require_data());
+  // packages/viewport/build-module/store/index.mjs
+  var import_data = __toESM(require_data(), 1);
 
-  // packages/viewport/build-module/store/reducer.js
+  // packages/viewport/build-module/store/reducer.mjs
   function reducer(state = {}, action) {
     switch (action.type) {
       case "SET_IS_MATCHING":
@@ -77,7 +78,7 @@ var wp;
   }
   var reducer_default = reducer;
 
-  // packages/viewport/build-module/store/actions.js
+  // packages/viewport/build-module/store/actions.mjs
   var actions_exports = {};
   __export(actions_exports, {
     setIsMatching: () => setIsMatching
@@ -89,7 +90,7 @@ var wp;
     };
   }
 
-  // packages/viewport/build-module/store/selectors.js
+  // packages/viewport/build-module/store/selectors.mjs
   var selectors_exports = {};
   __export(selectors_exports, {
     isViewportMatch: () => isViewportMatch
@@ -101,7 +102,7 @@ var wp;
     return !!state[query];
   }
 
-  // packages/viewport/build-module/store/index.js
+  // packages/viewport/build-module/store/index.mjs
   var STORE_NAME = "core/viewport";
   var store = (0, import_data.createReduxStore)(STORE_NAME, {
     reducer: reducer_default,
@@ -110,7 +111,7 @@ var wp;
   });
   (0, import_data.register)(store);
 
-  // packages/viewport/build-module/listener.js
+  // packages/viewport/build-module/listener.mjs
   var addDimensionsEventListener = (breakpoints, operators) => {
     const setIsMatching2 = (0, import_compose.debounce)(
       () => {
@@ -125,13 +126,15 @@ var wp;
     const operatorEntries = Object.entries(operators);
     const queries = Object.entries(breakpoints).flatMap(
       ([name, width]) => {
-        return operatorEntries.map(([operator, condition]) => {
-          const list = window.matchMedia(
-            `(${condition}: ${width}px)`
-          );
-          list.addEventListener("change", setIsMatching2);
-          return [`${operator} ${name}`, list];
-        });
+        return operatorEntries.map(
+          ([operator, condition]) => {
+            const list = window.matchMedia(
+              `(${condition}: ${width}px)`
+            );
+            list.addEventListener("change", setIsMatching2);
+            return [`${operator} ${name}`, list];
+          }
+        );
       }
     );
     window.addEventListener("orientationchange", setIsMatching2);
@@ -140,12 +143,12 @@ var wp;
   };
   var listener_default = addDimensionsEventListener;
 
-  // packages/viewport/build-module/if-viewport-matches.js
-  var import_compose3 = __toESM(require_compose());
+  // packages/viewport/build-module/if-viewport-matches.mjs
+  var import_compose3 = __toESM(require_compose(), 1);
 
-  // packages/viewport/build-module/with-viewport-match.js
-  var import_compose2 = __toESM(require_compose());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  // packages/viewport/build-module/with-viewport-match.mjs
+  var import_element = __toESM(require_element(), 1);
+  var import_compose2 = __toESM(require_compose(), 1);
   var withViewportMatch = (queries) => {
     const queryEntries = Object.entries(queries);
     const useViewPortQueriesResult = () => Object.fromEntries(
@@ -155,31 +158,50 @@ var wp;
           breakpointName = operator;
           operator = ">=";
         }
-        return [key, (0, import_compose2.useViewportMatch)(breakpointName, operator)];
+        return [
+          key,
+          // Hooks should unconditionally execute in the same order,
+          // we are respecting that as from the static query of the HOC we generate
+          // a hook that calls other hooks always in the same order (because the query never changes).
+          // eslint-disable-next-line react-hooks/rules-of-hooks
+          (0, import_compose2.useViewportMatch)(
+            breakpointName,
+            operator
+          )
+        ];
       })
     );
-    return (0, import_compose2.createHigherOrderComponent)((WrappedComponent) => {
-      return (0, import_compose2.pure)((props) => {
-        const queriesResult = useViewPortQueriesResult();
-        return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WrappedComponent, { ...props, ...queriesResult });
-      });
-    }, "withViewportMatch");
+    return (0, import_compose2.createHigherOrderComponent)(
+      (WrappedComponent) => {
+        const WrappedWithViewport = (props) => {
+          const queriesResult = useViewPortQueriesResult();
+          return (0, import_element.createElement)(WrappedComponent, {
+            ...props,
+            ...queriesResult
+          });
+        };
+        return (0, import_compose2.pure)(WrappedWithViewport);
+      },
+      "withViewportMatch"
+    );
   };
   var with_viewport_match_default = withViewportMatch;
 
-  // packages/viewport/build-module/if-viewport-matches.js
+  // packages/viewport/build-module/if-viewport-matches.mjs
   var ifViewportMatches = (query) => (0, import_compose3.createHigherOrderComponent)(
     (0, import_compose3.compose)([
       with_viewport_match_default({
         isViewportMatch: query
       }),
-      (0, import_compose3.ifCondition)((props) => props.isViewportMatch)
+      (0, import_compose3.ifCondition)(
+        (props) => props.isViewportMatch
+      )
     ]),
     "ifViewportMatches"
   );
   var if_viewport_matches_default = ifViewportMatches;
 
-  // packages/viewport/build-module/index.js
+  // packages/viewport/build-module/index.mjs
   var BREAKPOINTS = {
     huge: 1440,
     wide: 1280,

@@ -1645,7 +1645,7 @@ var wp;
     }
   });
 
-  // packages/date/build-module/index.js
+  // packages/date/build-module/index.mjs
   var index_exports = {};
   __export(index_exports, {
     __experimentalGetSettings: () => __experimentalGetSettings,
@@ -1660,10 +1660,10 @@ var wp;
     isInTheFuture: () => isInTheFuture,
     setSettings: () => setSettings
   });
-  var import_moment = __toESM(require_moment());
-  var import_moment_timezone = __toESM(require_moment_timezone_with_data_1970_2030());
-  var import_moment_timezone_utils = __toESM(require_moment_timezone_utils());
-  var import_deprecated = __toESM(require_deprecated());
+  var import_moment = __toESM(require_moment(), 1);
+  var import_moment_timezone = __toESM(require_moment_timezone_with_data_1970_2030(), 1);
+  var import_moment_timezone_utils = __toESM(require_moment_timezone_utils(), 1);
+  var import_deprecated = __toESM(require_deprecated(), 1);
   var WP_ZONE = "WP";
   var VALID_UTC_OFFSET = /^[+-][0-1][0-9](:?[0-9][0-9])?$/;
   var settings = {
@@ -1727,12 +1727,12 @@ var wp;
       startOfWeek: 0
     },
     formats: {
-      time: "g: i a",
+      time: "g:i a",
       date: "F j, Y",
-      datetime: "F j, Y g: i a",
-      datetimeAbbreviated: "M j, Y g: i a"
+      datetime: "F j, Y g:i a",
+      datetimeAbbreviated: "M j, Y g:i a"
     },
-    timezone: { offset: "0", offsetFormatted: "0", string: "", abbr: "" }
+    timezone: { offset: 0, offsetFormatted: "0", string: "", abbr: "" }
   };
   function setSettings(dateSettings) {
     settings = dateSettings;
@@ -1783,27 +1783,36 @@ var wp;
     });
     return getSettings();
   }
+  var wpZonePacked;
+  function ensureWPTimezone() {
+    if (!import_moment.default.tz.zone(WP_ZONE)) {
+      if (wpZonePacked) {
+        import_moment.default.tz.add(wpZonePacked);
+      } else {
+        setupWPTimezone();
+      }
+    }
+  }
   function setupWPTimezone() {
     const currentTimezone = import_moment.default.tz.zone(settings.timezone.string);
+    let packed;
     if (currentTimezone) {
-      import_moment.default.tz.add(
-        import_moment.default.tz.pack({
-          name: WP_ZONE,
-          abbrs: currentTimezone.abbrs,
-          untils: currentTimezone.untils,
-          offsets: currentTimezone.offsets
-        })
-      );
+      packed = import_moment.default.tz.pack({
+        name: WP_ZONE,
+        abbrs: currentTimezone.abbrs,
+        untils: currentTimezone.untils,
+        offsets: currentTimezone.offsets
+      });
     } else {
-      import_moment.default.tz.add(
-        import_moment.default.tz.pack({
-          name: WP_ZONE,
-          abbrs: [WP_ZONE],
-          untils: [null],
-          offsets: [-settings.timezone.offset * 60 || 0]
-        })
-      );
+      packed = import_moment.default.tz.pack({
+        name: WP_ZONE,
+        abbrs: [WP_ZONE],
+        untils: [null],
+        offsets: [-settings.timezone.offset * 60 || 0]
+      });
     }
+    wpZonePacked = packed;
+    import_moment.default.tz.add(packed);
   }
   var MINUTE_IN_SECONDS = 60;
   var HOUR_IN_MINUTES = 60;
@@ -1987,28 +1996,31 @@ var wp;
     return format(dateFormat, dateMoment);
   }
   function isInTheFuture(dateValue) {
+    ensureWPTimezone();
     const now = import_moment.default.tz(WP_ZONE);
     const momentObject = import_moment.default.tz(dateValue, WP_ZONE);
     return momentObject.isAfter(now);
   }
   function getDate(dateString) {
+    ensureWPTimezone();
     if (!dateString) {
       return import_moment.default.tz(WP_ZONE).toDate();
     }
     return import_moment.default.tz(dateString, WP_ZONE).toDate();
   }
   function humanTimeDiff(from, to) {
+    ensureWPTimezone();
     const fromMoment = import_moment.default.tz(from, WP_ZONE);
     const toMoment = to ? import_moment.default.tz(to, WP_ZONE) : import_moment.default.tz(WP_ZONE);
     return fromMoment.from(toMoment);
   }
   function buildMoment(dateValue, timezone = "") {
     const dateMoment = (0, import_moment.default)(dateValue);
-    if (timezone && !isUTCOffset(timezone)) {
-      return dateMoment.tz(timezone);
-    }
-    if (timezone && isUTCOffset(timezone)) {
-      return dateMoment.utcOffset(timezone);
+    if (timezone !== "") {
+      return isUTCOffset(timezone) ? dateMoment.utcOffset(timezone) : (
+        // A false isUTCOffset() guarantees that timezone is a string.
+        dateMoment.tz(timezone)
+      );
     }
     if (settings.timezone.string) {
       return dateMoment.tz(settings.timezone.string);

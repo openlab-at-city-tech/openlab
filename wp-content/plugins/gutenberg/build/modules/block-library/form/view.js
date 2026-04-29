@@ -1,4 +1,4 @@
-// packages/block-library/build-module/form/view.js
+// packages/block-library/build-module/form/view.mjs
 var formSettings;
 try {
   formSettings = JSON.parse(
@@ -38,7 +38,7 @@ document.querySelectorAll("form.wp-block-form").forEach(function(form) {
       } else {
         redirectNotification("error");
       }
-    } catch (error) {
+    } catch {
       redirectNotification("error");
     }
   });

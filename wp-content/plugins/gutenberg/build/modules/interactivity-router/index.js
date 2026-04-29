@@ -1,7 +1,7 @@
-// packages/interactivity-router/build-module/index.js
+// packages/interactivity-router/build-module/index.mjs
 import { store, privateApis, getConfig } from "@wordpress/interactivity";
 
-// packages/interactivity-router/build-module/assets/scs.js
+// packages/interactivity-router/build-module/assets/scs.mjs
 function shortestCommonSupersequence(X, Y, isEqual = (a, b) => a === b) {
   const m = X.length;
   const n = Y.length;
@@ -29,7 +29,7 @@ function shortestCommonSupersequence(X, Y, isEqual = (a, b) => a === b) {
   return dp[m][n];
 }
 
-// packages/interactivity-router/build-module/assets/styles.js
+// packages/interactivity-router/build-module/assets/styles.mjs
 var areNodesEqual = (a, b) => a.isEqualNode(b);
 var normalizeMedia = (element) => {
   element = element.cloneNode(true);
@@ -121,24 +121,16 @@ var prepareStylePromise = (element) => {
   stylePromiseCache.set(element, promise);
   return promise;
 };
-var styleSheetCache = /* @__PURE__ */ new Map();
-var preloadStyles = (doc, url) => {
-  if (!styleSheetCache.has(url)) {
-    const currentStyleElements = Array.from(
-      window.document.querySelectorAll(
-        "style,link[rel=stylesheet]"
-      )
-    );
-    const newStyleElements = Array.from(
-      doc.querySelectorAll("style,link[rel=stylesheet]")
-    );
-    const stylePromises = updateStylesWithSCS(
-      currentStyleElements,
-      newStyleElements
-    );
-    styleSheetCache.set(url, stylePromises);
-  }
-  return styleSheetCache.get(url);
+var preloadStyles = (doc) => {
+  const currentStyleElements = Array.from(
+    window.document.querySelectorAll(
+      "style,link[rel=stylesheet]"
+    )
+  );
+  const newStyleElements = Array.from(
+    doc.querySelectorAll("style,link[rel=stylesheet]")
+  );
+  return updateStylesWithSCS(currentStyleElements, newStyleElements);
 };
 var applyStyles = (styles) => {
   window.document.querySelectorAll("style,link[rel=stylesheet]").forEach((el) => {
@@ -156,7 +148,7 @@ var applyStyles = (styles) => {
   });
 };
 
-// packages/interactivity-router/build-module/assets/dynamic-importmap/resolver.js
+// packages/interactivity-router/build-module/assets/dynamic-importmap/resolver.mjs
 var backslashRegEx = /\\/g;
 function isURL(url) {
   if (url.indexOf(":") === -1) {
@@ -165,7 +157,7 @@ function isURL(url) {
   try {
     new URL(url);
     return true;
-  } catch (_) {
+  } catch {
     return false;
   }
 }
@@ -385,7 +377,7 @@ var init = WebAssembly.compile((E = "AGFzbQEAAAABKwhgAX8Bf2AEf39/fwBgAAF/YAAAYAF
 }));
 var E;
 
-// packages/interactivity-router/build-module/assets/dynamic-importmap/fetch.js
+// packages/interactivity-router/build-module/assets/dynamic-importmap/fetch.mjs
 var fetching = (url, parent) => {
   return ` fetching ${url}${parent ? ` from ${parent}` : ""}`;
 };
@@ -394,7 +386,7 @@ async function fetchModule(url, fetchOpts, parent) {
   let res;
   try {
     res = await fetch(url, fetchOpts);
-  } catch (e) {
+  } catch {
     throw Error(`Network error${fetching(url, parent)}.`);
   }
   if (!res.ok) {
@@ -409,7 +401,7 @@ async function fetchModule(url, fetchOpts, parent) {
   return { responseUrl: res.url, source: await res.text() };
 }
 
-// packages/interactivity-router/build-module/assets/dynamic-importmap/loader.js
+// packages/interactivity-router/build-module/assets/dynamic-importmap/loader.mjs
 var initPromise = init;
 var initialImportMapElement = window.document.querySelector(
   "script#wp-importmap[type=importmap]"
@@ -614,7 +606,7 @@ async function topLevelLoad(url, fetchOpts) {
   return importPreloadedModule(load);
 }
 
-// packages/interactivity-router/build-module/assets/dynamic-importmap/index.js
+// packages/interactivity-router/build-module/assets/dynamic-importmap/index.mjs
 var baseUrl2 = document.baseURI;
 var pageBaseUrl2 = baseUrl2;
 Object.defineProperty(self, "wpInteractivityRouterImport", {
@@ -637,7 +629,7 @@ async function preloadWithMap(id, importMapIn) {
   });
 }
 
-// packages/interactivity-router/build-module/assets/script-modules.js
+// packages/interactivity-router/build-module/assets/script-modules.mjs
 var resolvedScriptModules = /* @__PURE__ */ new Set();
 var markScriptModuleAsResolved = (url) => {
   resolvedScriptModules.add(url);
@@ -668,18 +660,20 @@ var preloadScriptModules = (doc) => {
 };
 var importScriptModules = (modules) => Promise.all(modules.map((m) => importPreloadedModule(m)));
 
-// packages/interactivity-router/build-module/index.js
+// packages/interactivity-router/build-module/index.mjs
 var {
   getRegionRootFragment,
-  initialVdom,
+  initialVdomPromise,
   toVdom,
   render,
   parseServerData,
   populateServerData,
   batch,
   routerRegions,
-  cloneElement,
-  navigationSignal
+  h: createElement,
+  navigationSignal,
+  sessionId,
+  warn
 } = privateApis(
   "I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress."
 );
@@ -696,7 +690,7 @@ var parseRegionAttribute = (region) => {
   try {
     const { id, attachTo } = JSON.parse(value);
     return { id, attachTo };
-  } catch (e) {
+  } catch {
     return { id: value };
   }
 };
@@ -709,13 +703,14 @@ var cloneRouterRegionContent = (vdom) => {
     (level) => level.includes("router-region")
   );
   const priorityLevels = routerRegionLevel !== -1 ? allPriorityLevels.slice(routerRegionLevel + 1) : allPriorityLevels;
-  return priorityLevels.length > 0 ? cloneElement(vdom, {
+  return priorityLevels.length > 0 ? createElement(vdom.type, {
     ...vdom.props,
     priorityLevels
   }) : vdom.props.element;
 };
 var regionsToAttachByParent = /* @__PURE__ */ new WeakMap();
 var rootFragmentsByParent = /* @__PURE__ */ new WeakMap();
+var initialRegionsToAttach = /* @__PURE__ */ new Set();
 var fetchPage = async (url, { html }) => {
   try {
     if (!html) {
@@ -727,7 +722,7 @@ var fetchPage = async (url, { html }) => {
     }
     const dom = new window.DOMParser().parseFromString(html, "text/html");
     return await preparePage(url, dom);
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -742,14 +737,14 @@ var preparePage = async (url, dom, { vdom } = {}) => {
     } else {
       regions[id] = vdom?.has(region) ? vdom.get(region) : toVdom(region);
     }
-    if (attachTo) {
+    if (attachTo && !initialRegionsToAttach.has(id)) {
       regionsToAttach[id] = attachTo;
     }
   });
   const title = dom.querySelector("title")?.innerText;
   const initialData = parseServerData(dom);
   const [styles, scriptModules] = await Promise.all([
-    Promise.all(preloadStyles(dom, url)),
+    Promise.all(preloadStyles(dom)),
     Promise.all(preloadScriptModules(dom))
   ]);
   return {
@@ -830,27 +825,51 @@ window.addEventListener("popstate", async () => {
     window.location.reload();
   }
 });
+document.querySelectorAll(regionsSelector).forEach((region) => {
+  const { id, attachTo } = parseRegionAttribute(region);
+  if (attachTo) {
+    initialRegionsToAttach.add(id);
+  }
+});
 window.document.querySelectorAll("script[type=module][src]").forEach(({ src }) => markScriptModuleAsResolved(src));
-pages.set(
-  getPagePath(window.location.href),
-  Promise.resolve(
-    preparePage(getPagePath(window.location.href), document, {
-      vdom: initialVdom
-    })
-  )
-);
+(async () => {
+  const initialVdomMap = await initialVdomPromise;
+  pages.set(
+    getPagePath(window.location.href),
+    Promise.resolve(
+      preparePage(getPagePath(window.location.href), document, {
+        vdom: initialVdomMap
+      })
+    )
+  );
+})();
 var navigatingTo = "";
 var hasLoadedNavigationTextsData = false;
 var navigationTexts = {
   loading: "Loading page, please wait.",
   loaded: "Page Loaded."
 };
+var { state: privateState } = store(
+  "core/router/private",
+  {
+    state: {
+      navigation: {
+        hasStarted: false,
+        hasFinished: false
+      }
+    }
+  },
+  { lock: true }
+);
 var { state, actions } = store("core/router", {
   state: {
-    url: window.location.href,
-    navigation: {
-      hasStarted: false,
-      hasFinished: false
+    get navigation() {
+      if (true) {
+        warn(
+          `The usage of state.navigation.{hasStarted|hasFinished} from core/router is deprecated and will stop working in WordPress 7.1.`
+        );
+      }
+      return privateState.navigation;
     }
   },
   actions: {
@@ -878,7 +897,7 @@ var { state, actions } = store("core/router", {
         yield forcePageReload(href);
       }
       const pagePath = getPagePath(href);
-      const { navigation } = state;
+      const { navigation } = privateState;
       const {
         loadingAnimation = true,
         screenReaderAnnouncement = true,
@@ -919,7 +938,7 @@ var { state, actions } = store("core/router", {
           }
           renderPage(page);
         });
-        window.history[options.replace ? "replaceState" : "pushState"]({}, "", href);
+        window.history[options.replace ? "replaceState" : "pushState"]({ wpInteractivityId: sessionId }, "", href);
         if (screenReaderAnnouncement) {
           a11ySpeak("loaded");
         }
@@ -960,6 +979,7 @@ var { state, actions } = store("core/router", {
     }
   }
 });
+state.url = state.url || window.location.href;
 function a11ySpeak(messageKey) {
   if (!hasLoadedNavigationTextsData) {
     hasLoadedNavigationTextsData = true;

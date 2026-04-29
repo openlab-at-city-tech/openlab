@@ -42,6 +42,12 @@ var require_core_data = __commonJS({
 var import_data = __toESM(require_data());
 var import_core_data = __toESM(require_core_data());
 var route = {
+  title: async ({ params }) => {
+    const postType = await (0, import_data.resolveSelect)(import_core_data.store).getPostType(
+      params.type
+    );
+    return postType?.labels?.add_new_item || postType?.labels?.add_new;
+  },
   async canvas(context) {
     const { params } = context;
     const newPost = await (0, import_data.dispatch)(import_core_data.store).saveEntityRecord(

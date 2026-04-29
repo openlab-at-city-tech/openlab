@@ -66,6 +66,13 @@ var require_style_engine = __commonJS({
   }
 });
 
+// package-external:@wordpress/i18n
+var require_i18n = __commonJS({
+  "package-external:@wordpress/i18n"(exports, module) {
+    module.exports = window.wp.i18n;
+  }
+});
+
 // package-external:@wordpress/blocks
 var require_blocks = __commonJS({
   "package-external:@wordpress/blocks"(exports, module) {
@@ -87,17 +94,24 @@ var require_jsx_runtime = __commonJS({
   }
 });
 
-// packages/lazy-editor/build-module/component.js
-var import_editor = __toESM(require_editor());
-var import_core_data5 = __toESM(require_core_data());
-var import_data6 = __toESM(require_data());
-var import_components = __toESM(require_components());
-var import_element4 = __toESM(require_element());
+// package-external:@wordpress/block-editor
+var require_block_editor = __commonJS({
+  "package-external:@wordpress/block-editor"(exports, module) {
+    module.exports = window.wp.blockEditor;
+  }
+});
 
-// packages/lazy-editor/build-module/hooks/use-styles-id.js
-var import_core_data = __toESM(require_core_data());
-var import_data = __toESM(require_data());
-function useStylesId({ templateId }) {
+// packages/lazy-editor/build-module/components/editor/index.mjs
+var import_editor = __toESM(require_editor(), 1);
+var import_core_data5 = __toESM(require_core_data(), 1);
+var import_data6 = __toESM(require_data(), 1);
+var import_components = __toESM(require_components(), 1);
+var import_element4 = __toESM(require_element(), 1);
+
+// packages/lazy-editor/build-module/hooks/use-styles-id.mjs
+var import_core_data = __toESM(require_core_data(), 1);
+var import_data = __toESM(require_data(), 1);
+function useStylesId({ templateId } = {}) {
   const { globalStylesId, stylesId } = (0, import_data.useSelect)(
     (select2) => {
       const coreDataSelect = select2(import_core_data.store);
@@ -116,7 +130,7 @@ function useStylesId({ templateId }) {
   return stylesId || globalStylesId;
 }
 
-// packages/global-styles-engine/build-module/utils/object.js
+// packages/global-styles-engine/build-module/utils/object.mjs
 function setImmutably(object, path, value) {
   path = Array.isArray(path) ? [...path] : [path];
   object = Array.isArray(object) ? [...object] : { ...object };
@@ -138,7 +152,7 @@ var getValueFromObjectPath = (object, path, defaultValue) => {
   return value ?? defaultValue;
 };
 
-// packages/global-styles-engine/build-module/settings/get-setting.js
+// packages/global-styles-engine/build-module/settings/get-setting.mjs
 var VALID_SETTINGS = [
   "appearanceTools",
   "useRootPaddingAwareAlignments",
@@ -146,6 +160,7 @@ var VALID_SETTINGS = [
   "background.backgroundRepeat",
   "background.backgroundSize",
   "background.backgroundPosition",
+  "background.gradient",
   "border.color",
   "border.radius",
   "border.radiusSizes",
@@ -170,7 +185,10 @@ var VALID_SETTINGS = [
   "color.text",
   "custom",
   "dimensions.aspectRatio",
+  "dimensions.height",
   "dimensions.minHeight",
+  "dimensions.width",
+  "dimensions.dimensionSizes",
   "layout.contentSize",
   "layout.definitions",
   "layout.wideSize",
@@ -199,6 +217,7 @@ var VALID_SETTINGS = [
   "typography.textAlign",
   "typography.textColumns",
   "typography.textDecoration",
+  "typography.textIndent",
   "typography.textTransform",
   "typography.writingMode"
 ];
@@ -223,10 +242,10 @@ function getSetting(globalStyles, path, blockName) {
   return result;
 }
 
-// packages/global-styles-engine/build-module/utils/common.js
-var import_style_engine = __toESM(require_style_engine());
+// packages/global-styles-engine/build-module/utils/common.mjs
+var import_style_engine = __toESM(require_style_engine(), 1);
 
-// packages/global-styles-engine/build-module/utils/fluid.js
+// packages/global-styles-engine/build-module/utils/fluid.mjs
 var DEFAULT_MAXIMUM_VIEWPORT_WIDTH = "1600px";
 var DEFAULT_MINIMUM_VIEWPORT_WIDTH = "320px";
 var DEFAULT_SCALE_FACTOR = 1;
@@ -369,7 +388,7 @@ function roundToPrecision(value, digits = 3) {
   return Math.round(value * base) / base;
 }
 
-// packages/global-styles-engine/build-module/utils/typography.js
+// packages/global-styles-engine/build-module/utils/typography.mjs
 function isFluidTypographyEnabled(typographySettings) {
   const fluidSettings = typographySettings?.fluid;
   return true === fluidSettings || fluidSettings && typeof fluidSettings === "object" && Object.keys(fluidSettings).length > 0;
@@ -412,7 +431,7 @@ function getTypographyFontSizeValue(preset, settings) {
   return defaultSize;
 }
 
-// packages/global-styles-engine/build-module/utils/common.js
+// packages/global-styles-engine/build-module/utils/common.mjs
 var ROOT_BLOCK_SELECTOR = "body";
 var ROOT_CSS_PROPERTIES_SELECTOR = ":root";
 var PRESET_METADATA = [
@@ -482,6 +501,12 @@ var PRESET_METADATA = [
     path: ["border", "radiusSizes"],
     valueKey: "size",
     cssVarInfix: "border-radius",
+    classes: []
+  },
+  {
+    path: ["dimensions", "dimensionSizes"],
+    valueKey: "size",
+    cssVarInfix: "dimension",
     classes: []
   }
 ];
@@ -586,12 +611,12 @@ function getResolvedValue(ruleValue, tree) {
   return resolvedValue;
 }
 
-// packages/global-styles-engine/build-module/core/render.js
-var import_blocks = __toESM(require_blocks());
-var import_style_engine2 = __toESM(require_style_engine());
-var import_data2 = __toESM(require_data());
+// packages/global-styles-engine/build-module/core/render.mjs
+var import_blocks = __toESM(require_blocks(), 1);
+var import_style_engine2 = __toESM(require_style_engine(), 1);
+var import_data2 = __toESM(require_data(), 1);
 
-// packages/global-styles-engine/build-module/core/selectors.js
+// packages/global-styles-engine/build-module/core/selectors.mjs
 function getBlockSelector(blockType, target = "root", options = {}) {
   if (!target) {
     return null;
@@ -803,7 +828,7 @@ var w = function(r2) {
   return r2 instanceof j ? r2 : new j(r2);
 };
 
-// packages/global-styles-engine/build-module/utils/duotone.js
+// packages/global-styles-engine/build-module/utils/duotone.mjs
 function getValuesFromColors(colors = []) {
   const values = {
     r: [],
@@ -854,12 +879,12 @@ function getDuotoneFilter(id, colors) {
 </svg>`;
 }
 
-// packages/global-styles-engine/build-module/utils/string.js
+// packages/global-styles-engine/build-module/utils/string.mjs
 function kebabCase(str) {
   return str.replace(/([a-z])([A-Z])/g, "$1-$2").replace(/([0-9])([a-zA-Z])/g, "$1-$2").replace(/([a-zA-Z])([0-9])/g, "$1-$2").replace(/[\s_]+/g, "-").toLowerCase();
 }
 
-// packages/global-styles-engine/build-module/utils/spacing.js
+// packages/global-styles-engine/build-module/utils/spacing.mjs
 function getSpacingPresetCssVar(value) {
   if (!value) {
     return;
@@ -871,7 +896,7 @@ function getSpacingPresetCssVar(value) {
   return `var(--wp--preset--spacing--${slug[1]})`;
 }
 
-// packages/global-styles-engine/build-module/utils/gap.js
+// packages/global-styles-engine/build-module/utils/gap.mjs
 function getGapBoxControlValueFromStyle(blockGapValue) {
   if (!blockGapValue) {
     return null;
@@ -892,7 +917,7 @@ function getGapCSSValue(blockGapValue, defaultValue = "0") {
   return row === column ? row : `${row} ${column}`;
 }
 
-// packages/global-styles-engine/build-module/utils/background.js
+// packages/global-styles-engine/build-module/utils/background.mjs
 var BACKGROUND_BLOCK_DEFAULT_VALUES = {
   backgroundSize: "cover",
   backgroundPosition: "50% 50%"
@@ -917,7 +942,7 @@ function setBackgroundStyleDefaults(backgroundStyle) {
   return backgroundStylesWithDefaults;
 }
 
-// packages/global-styles-engine/build-module/utils/layout.js
+// packages/global-styles-engine/build-module/utils/layout.mjs
 var LAYOUT_DEFINITIONS = {
   default: {
     name: "default",
@@ -1090,7 +1115,7 @@ var LAYOUT_DEFINITIONS = {
   }
 };
 
-// packages/global-styles-engine/build-module/core/render.js
+// packages/global-styles-engine/build-module/core/render.mjs
 var ELEMENT_CLASS_NAMES = {
   button: "wp-element-button",
   caption: "wp-element-caption"
@@ -1098,41 +1123,10 @@ var ELEMENT_CLASS_NAMES = {
 var BLOCK_SUPPORT_FEATURE_LEVEL_SELECTORS = {
   __experimentalBorder: "border",
   color: "color",
+  dimensions: "dimensions",
   spacing: "spacing",
   typography: "typography"
 };
-function getPresetsDeclarations(blockPresets = {}, mergedSettings) {
-  return PRESET_METADATA.reduce(
-    (declarations, { path, valueKey, valueFunc, cssVarInfix }) => {
-      const presetByOrigin = getValueFromObjectPath(
-        blockPresets,
-        path,
-        []
-      );
-      ["default", "theme", "custom"].forEach((origin) => {
-        if (presetByOrigin[origin]) {
-          presetByOrigin[origin].forEach((value) => {
-            if (valueKey && !valueFunc) {
-              declarations.push(
-                `--wp--preset--${cssVarInfix}--${kebabCase(
-                  value.slug
-                )}: ${value[valueKey]}`
-              );
-            } else if (valueFunc && typeof valueFunc === "function") {
-              declarations.push(
-                `--wp--preset--${cssVarInfix}--${kebabCase(
-                  value.slug
-                )}: ${valueFunc(value, mergedSettings)}`
-              );
-            }
-          });
-        }
-      });
-      return declarations;
-    },
-    []
-  );
-}
 function getPresetsClasses(blockSelector = "*", blockPresets = {}) {
   return PRESET_METADATA.reduce(
     (declarations, { path, cssVarInfix, classes }) => {
@@ -1218,6 +1212,73 @@ function concatFeatureVariationSelectorString(featureSelector, styleVariationSel
   });
   return combinedSelectors.join(", ");
 }
+var updateParagraphTextIndentSelector = (featureDeclarations, settings, blockName) => {
+  if (blockName !== "core/paragraph") {
+    return featureDeclarations;
+  }
+  const blockSettings = settings?.blocks?.["core/paragraph"];
+  const textIndentSetting = blockSettings?.typography?.textIndent ?? settings?.typography?.textIndent ?? "subsequent";
+  if (textIndentSetting !== "all") {
+    return featureDeclarations;
+  }
+  const oldSelector = ".wp-block-paragraph + .wp-block-paragraph";
+  const newSelector = ".wp-block-paragraph";
+  if (oldSelector in featureDeclarations) {
+    const declarations = featureDeclarations[oldSelector];
+    const updated = { ...featureDeclarations };
+    delete updated[oldSelector];
+    updated[newSelector] = declarations;
+    return updated;
+  }
+  return featureDeclarations;
+};
+var updateButtonWidthDeclarations = (featureDeclarations, settings) => {
+  const buttonSelector = ".wp-block-button";
+  if (!(buttonSelector in featureDeclarations)) {
+    return featureDeclarations;
+  }
+  const updated = { ...featureDeclarations };
+  updated[buttonSelector] = updated[buttonSelector].map(
+    (declaration) => {
+      const match = declaration.match(/^width:\s*(.+)$/);
+      if (!match) {
+        return declaration;
+      }
+      const value = match[1];
+      let percentage = null;
+      if (value.endsWith("%")) {
+        percentage = parseFloat(value);
+      }
+      const presetPrefix = "var(--wp--preset--dimension--";
+      if (percentage === null && value.startsWith(presetPrefix) && value.endsWith(")")) {
+        const slug = value.slice(presetPrefix.length, -1);
+        const dimensionSizes = {
+          ...settings?.dimensions?.dimensionSizes ?? {},
+          ...settings?.blocks?.["core/button"]?.dimensions?.dimensionSizes ?? {}
+        };
+        for (const origin of Object.values(dimensionSizes)) {
+          if (!Array.isArray(origin)) {
+            continue;
+          }
+          for (const preset of origin) {
+            if (preset.slug === slug && typeof preset.size === "string" && preset.size.endsWith("%")) {
+              percentage = parseFloat(preset.size);
+              break;
+            }
+          }
+          if (percentage !== null) {
+            break;
+          }
+        }
+      }
+      if (percentage === null || isNaN(percentage)) {
+        return declaration;
+      }
+      return `width: calc(${percentage} * 1% - (var(--wp--style--block-gap, 0.5em) * (1 - ${percentage} / 100)))`;
+    }
+  );
+  return updated;
+};
 var getFeatureDeclarations = (selectors, styles) => {
   const declarations = {};
   Object.entries(selectors).forEach(([feature, selector]) => {
@@ -1481,6 +1542,7 @@ var getNodesWithStyles = (tree, blockSelectors) => {
     ([blockName, node]) => {
       const blockStyles = pickStyleKeys(node);
       const typedNode = node;
+      const variationNodesToAdd = [];
       if (typedNode?.variations) {
         const variations = {};
         Object.entries(typedNode.variations).forEach(
@@ -1495,7 +1557,7 @@ var getNodesWithStyles = (tree, blockSelectors) => {
               typedVariation?.elements ?? {}
             ).forEach(([element, elementStyles]) => {
               if (elementStyles && import_blocks.__EXPERIMENTAL_ELEMENTS[element]) {
-                nodes.push({
+                variationNodesToAdd.push({
                   styles: elementStyles,
                   selector: scopeSelector(
                     variationSelector,
@@ -1528,7 +1590,7 @@ var getNodesWithStyles = (tree, blockSelectors) => {
                 if (!variationBlockSelector || typeof blockSelectors === "string") {
                   return;
                 }
-                nodes.push({
+                variationNodesToAdd.push({
                   selector: variationBlockSelector,
                   duotoneSelector: variationDuotoneSelector,
                   featureSelectors: variationFeatureSelectors,
@@ -1544,7 +1606,7 @@ var getNodesWithStyles = (tree, blockSelectors) => {
                     variationBlockElementStyles
                   ]) => {
                     if (variationBlockElementStyles && import_blocks.__EXPERIMENTAL_ELEMENTS[variationBlockElement]) {
-                      nodes.push({
+                      variationNodesToAdd.push({
                         styles: variationBlockElementStyles,
                         selector: scopeSelector(
                           variationBlockSelector,
@@ -1568,7 +1630,8 @@ var getNodesWithStyles = (tree, blockSelectors) => {
           selector: blockSelectors[blockName].selector,
           styles: blockStyles,
           featureSelectors: blockSelectors[blockName].featureSelectors,
-          styleVariationSelectors: blockSelectors[blockName].styleVariationSelectors
+          styleVariationSelectors: blockSelectors[blockName].styleVariationSelectors,
+          name: blockName
         });
       }
       Object.entries(typedNode?.elements ?? {}).forEach(
@@ -1586,6 +1649,7 @@ var getNodesWithStyles = (tree, blockSelectors) => {
           }
         }
       );
+      nodes.push(...variationNodesToAdd);
     }
   );
   return nodes;
@@ -1625,26 +1689,97 @@ var getNodesWithSettings = (tree, blockSelectors) => {
         nodes.push({
           presets: blockPresets,
           custom: blockCustom,
-          selector: blockSelectors[blockName]?.selector
+          selector: blockSelectors[blockName]?.selector,
+          featureSelectors: blockSelectors[blockName]?.featureSelectors
         });
       }
     }
   );
   return nodes;
 };
+function resolveFeatureSelector(featureSelectors, featureKey, fallback) {
+  if (!featureSelectors || typeof featureSelectors === "string") {
+    return fallback;
+  }
+  const feature = featureSelectors[featureKey];
+  if (typeof feature === "string") {
+    return feature;
+  }
+  if (typeof feature === "object" && feature.root) {
+    return feature.root;
+  }
+  return fallback;
+}
+function getPresetVarDeclarations(presets, mergedSettings, { path, valueKey, valueFunc, cssVarInfix }) {
+  const presetByOrigin = getValueFromObjectPath(
+    presets,
+    path,
+    []
+  );
+  const declarations = [];
+  for (const origin of ["default", "theme", "custom"]) {
+    if (!presetByOrigin[origin]) {
+      continue;
+    }
+    for (const value of presetByOrigin[origin]) {
+      const slug = kebabCase(value.slug);
+      if (valueKey && !valueFunc) {
+        declarations.push(
+          `--wp--preset--${cssVarInfix}--${slug}: ${value[valueKey]}`
+        );
+      } else if (valueFunc && typeof valueFunc === "function") {
+        declarations.push(
+          `--wp--preset--${cssVarInfix}--${slug}: ${valueFunc(
+            value,
+            mergedSettings
+          )}`
+        );
+      }
+    }
+  }
+  return declarations;
+}
 var generateCustomProperties = (tree, blockSelectors) => {
-  const settings = getNodesWithSettings(tree, blockSelectors);
+  const nodes = getNodesWithSettings(tree, blockSelectors);
   let ruleset = "";
-  settings.forEach(({ presets, custom, selector }) => {
-    const declarations = tree?.settings ? getPresetsDeclarations(presets, tree?.settings) : [];
+  for (const { presets, custom, selector, featureSelectors } of nodes) {
+    const defaultSelector = selector;
+    const varsBySelector = {
+      [defaultSelector]: []
+    };
+    if (tree?.settings) {
+      for (const metadata of PRESET_METADATA) {
+        const declarations = getPresetVarDeclarations(
+          presets,
+          tree.settings,
+          metadata
+        );
+        if (declarations.length === 0) {
+          continue;
+        }
+        const target = resolveFeatureSelector(
+          featureSelectors,
+          metadata.path[0],
+          defaultSelector
+        );
+        if (!varsBySelector[target]) {
+          varsBySelector[target] = [];
+        }
+        varsBySelector[target].push(...declarations);
+      }
+    }
     const customProps = flattenTree(custom, "--wp--custom--", "--");
     if (customProps.length > 0) {
-      declarations.push(...customProps);
+      varsBySelector[defaultSelector].push(...customProps);
     }
-    if (declarations.length > 0) {
-      ruleset += `${selector}{${declarations.join(";")};}`;
+    for (const [ruleSelector, declarations] of Object.entries(
+      varsBySelector
+    )) {
+      if (declarations.length > 0) {
+        ruleset += `${ruleSelector}{${declarations.join(";")};}`;
+      }
     }
-  });
+  }
   return ruleset;
 };
 var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGapSupport, disableLayoutStyles = false, disableRootPadding = false, styleOptions = {}) => {
@@ -1692,12 +1827,22 @@ var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGa
         hasLayoutSupport,
         featureSelectors,
         styleVariationSelectors,
-        skipSelectorWrapper
+        skipSelectorWrapper,
+        name
       }) => {
         if (featureSelectors) {
-          const featureDeclarations = getFeatureDeclarations(
+          let featureDeclarations = getFeatureDeclarations(
             featureSelectors,
             styles
+          );
+          featureDeclarations = updateParagraphTextIndentSelector(
+            featureDeclarations,
+            tree.settings,
+            name
+          );
+          featureDeclarations = updateButtonWidthDeclarations(
+            featureDeclarations,
+            tree.settings
           );
           Object.entries(featureDeclarations).forEach(
             ([cssSelector, declarations]) => {
@@ -1755,9 +1900,18 @@ var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGa
               const styleVariations = styles?.variations?.[styleVariationName];
               if (styleVariations) {
                 if (featureSelectors) {
-                  const featureDeclarations = getFeatureDeclarations(
+                  let featureDeclarations = getFeatureDeclarations(
                     featureSelectors,
                     styleVariations
+                  );
+                  featureDeclarations = updateParagraphTextIndentSelector(
+                    featureDeclarations,
+                    tree.settings,
+                    name
+                  );
+                  featureDeclarations = updateButtonWidthDeclarations(
+                    featureDeclarations,
+                    tree.settings
                   );
                   Object.entries(
                     featureDeclarations
@@ -1790,6 +1944,16 @@ var transformToStyles = (tree, blockSelectors, hasBlockGapSupport, hasFallbackGa
                     styleVariations.css,
                     `:root :where(${styleVariationSelector})`
                   );
+                }
+                if (hasLayoutSupport && styleVariations?.spacing?.blockGap) {
+                  const variationSelectorWithBlock = styleVariationSelector + selector;
+                  ruleset += getLayoutStyles({
+                    style: styleVariations,
+                    selector: variationSelectorWithBlock,
+                    hasBlockGapSupport: true,
+                    hasFallbackGapSupport,
+                    fallbackGapValue
+                  });
                 }
               }
             }
@@ -1880,7 +2044,9 @@ var getBlockSelectors = (blockTypes, variationInstanceId) => {
         "color.__experimentalDuotone",
         false
       );
-      duotoneSelector = duotoneSupport && rootSelector && scopeSelector(rootSelector, duotoneSupport);
+      if (typeof duotoneSupport === "string" && rootSelector) {
+        duotoneSelector = scopeSelector(rootSelector, duotoneSupport);
+      }
     }
     const hasLayoutSupport = !!blockType?.supports?.layout || !!blockType?.supports?.__experimentalLayout;
     const fallbackGapValue = (
@@ -1973,7 +2139,8 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
     hasBlockGapSupport: hasBlockGapSupportOption,
     hasFallbackGapSupport: hasFallbackGapSupportOption,
     disableLayoutStyles = false,
-    disableRootPadding = false
+    disableRootPadding = false,
+    styleOptions = {}
   } = options;
   const blocks = blockTypes.length > 0 ? blockTypes : (0, import_blocks.getBlockTypes)();
   const blockGap = getSetting(config, "spacing.blockGap");
@@ -1994,7 +2161,8 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
     hasBlockGapSupport,
     hasFallbackGapSupport,
     disableLayoutStyles,
-    disableRootPadding
+    disableRootPadding,
+    styleOptions
   );
   const svgs = generateSvgFilters(updatedConfig, blockSelectors);
   const styles = [
@@ -2013,14 +2181,22 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
     },
     {
       assets: svgs,
-      __unstableType: "svg",
+      __unstableType: "svgs",
       isGlobalStyles: true
     }
   ];
   blocks.forEach((blockType) => {
     const blockStyles = updatedConfig?.styles?.blocks?.[blockType.name];
     if (blockStyles?.css) {
-      const selector = blockSelectors[blockType.name].selector;
+      const { featureSelectors } = blockSelectors[blockType.name];
+      const cssFeatureSelector = typeof featureSelectors === "object" ? featureSelectors?.css : void 0;
+      let resolvedCssSelector;
+      if (typeof cssFeatureSelector === "string") {
+        resolvedCssSelector = cssFeatureSelector;
+      } else if (typeof cssFeatureSelector === "object") {
+        resolvedCssSelector = cssFeatureSelector?.root;
+      }
+      const selector = resolvedCssSelector ?? blockSelectors[blockType.name].selector;
       styles.push({
         css: processCSSNesting(blockStyles.css, selector),
         isGlobalStyles: true
@@ -2030,15 +2206,15 @@ function generateGlobalStyles(config = {}, blockTypes = [], options = {}) {
   return [styles, updatedConfig.settings];
 }
 
-// packages/lazy-editor/build-module/hooks/use-editor-settings.js
-var import_core_data3 = __toESM(require_core_data());
-var import_element2 = __toESM(require_element());
-var import_data4 = __toESM(require_data());
+// packages/lazy-editor/build-module/hooks/use-editor-settings.mjs
+var import_core_data3 = __toESM(require_core_data(), 1);
+var import_element2 = __toESM(require_element(), 1);
+var import_data4 = __toESM(require_data(), 1);
 
-// packages/lazy-editor/build-module/hooks/use-global-styles.js
-var import_core_data2 = __toESM(require_core_data());
-var import_data3 = __toESM(require_data());
-var import_element = __toESM(require_element());
+// packages/lazy-editor/build-module/hooks/use-global-styles.mjs
+var import_core_data2 = __toESM(require_core_data(), 1);
+var import_data3 = __toESM(require_data(), 1);
+var import_element = __toESM(require_element(), 1);
 function useUserGlobalStyles(id) {
   const { userGlobalStyles } = (0, import_data3.useSelect)(
     (select2) => {
@@ -2088,14 +2264,14 @@ function useUserGlobalStyles(id) {
   }, [userGlobalStyles]);
 }
 
-// packages/lazy-editor/build-module/lock-unlock.js
-var import_private_apis = __toESM(require_private_apis());
+// packages/lazy-editor/build-module/lock-unlock.mjs
+var import_private_apis = __toESM(require_private_apis(), 1);
 var { unlock } = (0, import_private_apis.__dangerousOptInToUnstableAPIsOnlyForCoreModules)(
   "I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.",
   "@wordpress/lazy-editor"
 );
 
-// packages/lazy-editor/build-module/hooks/use-editor-settings.js
+// packages/lazy-editor/build-module/hooks/use-editor-settings.mjs
 function useEditorSettings({ stylesId }) {
   const { editorSettings } = (0, import_data4.useSelect)(
     (select2) => ({
@@ -2129,7 +2305,42 @@ function useEditorSettings({ stylesId }) {
   };
 }
 
-// packages/asset-loader/build-module/index.js
+// packages/asset-loader/build-module/index.mjs
+function injectImportMap(scriptModules) {
+  if (!scriptModules || Object.keys(scriptModules).length === 0) {
+    return;
+  }
+  const existingMapElement = document.querySelector(
+    "script#wp-importmap[type=importmap]"
+  );
+  if (existingMapElement) {
+    try {
+      const existingMap = JSON.parse(existingMapElement.text);
+      if (!existingMap.imports) {
+        existingMap.imports = {};
+      }
+      existingMap.imports = {
+        ...existingMap.imports,
+        ...scriptModules
+      };
+      existingMapElement.text = JSON.stringify(existingMap, null, 2);
+    } catch (error) {
+      console.error("Failed to parse or update import map:", error);
+    }
+  } else {
+    const script = document.createElement("script");
+    script.type = "importmap";
+    script.id = "wp-importmap";
+    script.text = JSON.stringify(
+      {
+        imports: scriptModules
+      },
+      null,
+      2
+    );
+    document.head.appendChild(script);
+  }
+}
 function loadStylesheet(handle, styleData) {
   return new Promise((resolve) => {
     if (!styleData.src) {
@@ -2248,7 +2459,10 @@ async function performScriptLoad(scriptElements, destination) {
   await Promise.all(parallel);
   parallel = [];
 }
-async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) {
+async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles, htmlTemplates, scriptModules) {
+  if (scriptModules) {
+    injectImportMap(scriptModules);
+  }
   const orderedStyles = buildDependencyOrderedList(stylesData);
   const orderedScripts = buildDependencyOrderedList(scriptsData);
   const stylePromises = [];
@@ -2263,11 +2477,8 @@ async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) 
       injectInlineStyle(handle, afterInline, "after");
     }
   }
-  const scriptElementsHead = [];
-  const scriptElementsBody = [];
+  const scriptElements = [];
   for (const handle of orderedScripts) {
-    const inFooter = scriptsData[handle].in_footer || false;
-    const scriptElements = inFooter ? scriptElementsBody : scriptElementsHead;
     const beforeInline = inlineScripts.before?.[handle];
     if (beforeInline) {
       scriptElements.push(
@@ -2282,18 +2493,37 @@ async function loadAssets(scriptsData, inlineScripts, stylesData, inlineStyles) 
       );
     }
   }
-  const scriptsPromise = (async () => {
-    await performScriptLoad(scriptElementsHead, document.head);
-    await performScriptLoad(scriptElementsBody, document.body);
-  })();
+  const scriptsPromise = performScriptLoad(scriptElements, document.body);
   await Promise.all([Promise.all(stylePromises), scriptsPromise]);
+  if (htmlTemplates && htmlTemplates.length > 0) {
+    htmlTemplates.forEach((templateHtml) => {
+      const scriptMatch = templateHtml.match(
+        /<script([^>]*)>(.*?)<\/script>/is
+      );
+      if (scriptMatch) {
+        const attributes = scriptMatch[1];
+        const content = scriptMatch[2];
+        const script = document.createElement("script");
+        const idMatch = attributes.match(/id=["']([^"']+)["']/);
+        if (idMatch) {
+          script.id = idMatch[1];
+        }
+        const typeMatch = attributes.match(/type=["']([^"']+)["']/);
+        if (typeMatch) {
+          script.type = typeMatch[1];
+        }
+        script.textContent = content;
+        document.body.appendChild(script);
+      }
+    });
+  }
 }
 var index_default = loadAssets;
 
-// packages/lazy-editor/build-module/hooks/use-editor-assets.js
-var import_core_data4 = __toESM(require_core_data());
-var import_element3 = __toESM(require_element());
-var import_data5 = __toESM(require_data());
+// packages/lazy-editor/build-module/hooks/use-editor-assets.mjs
+var import_core_data4 = __toESM(require_core_data(), 1);
+var import_element3 = __toESM(require_element(), 1);
+var import_data5 = __toESM(require_data(), 1);
 var loadAssetsPromise;
 async function loadEditorAssets() {
   const load = async () => {
@@ -2304,7 +2534,9 @@ async function loadEditorAssets() {
       editorAssets.scripts || {},
       editorAssets.inline_scripts || { before: {}, after: {} },
       editorAssets.styles || {},
-      editorAssets.inline_styles || { before: {}, after: {} }
+      editorAssets.inline_styles || { before: {}, after: {} },
+      editorAssets.html_templates || [],
+      editorAssets.script_modules || {}
     );
   };
   if (!loadAssetsPromise) {
@@ -2332,8 +2564,8 @@ function useEditorAssets() {
   };
 }
 
-// packages/lazy-editor/build-module/component.js
-var import_jsx_runtime = __toESM(require_jsx_runtime());
+// packages/lazy-editor/build-module/components/editor/index.mjs
+var import_jsx_runtime = __toESM(require_jsx_runtime(), 1);
 var { Editor: PrivateEditor, BackButton } = unlock(import_editor.privateApis);
 function Editor({
   postType,
@@ -2341,20 +2573,32 @@ function Editor({
   settings,
   backButton
 }) {
-  const templateId = (0, import_data6.useSelect)(
+  const homePage = (0, import_data6.useSelect)(
     (select2) => {
-      if (!postType || !postId) {
-        return void 0;
+      if (postType || postId) {
+        return null;
       }
-      if (postType === "wp_template") {
-        return postId;
-      }
-      return unlock(select2(import_core_data5.store)).getTemplateId(
-        postType,
-        postId
-      );
+      const { getHomePage } = unlock(select2(import_core_data5.store));
+      return getHomePage();
     },
     [postType, postId]
+  );
+  const resolvedPostType = postType || homePage?.postType;
+  const resolvedPostId = postId || homePage?.postId;
+  const templateId = (0, import_data6.useSelect)(
+    (select2) => {
+      if (!resolvedPostType || !resolvedPostId) {
+        return void 0;
+      }
+      if (resolvedPostType === "wp_template") {
+        return resolvedPostId;
+      }
+      return unlock(select2(import_core_data5.store)).getTemplateId(
+        resolvedPostType,
+        resolvedPostId
+      );
+    },
+    [resolvedPostType, resolvedPostId]
   );
   const stylesId = useStylesId({ templateId });
   const { isReady: settingsReady, editorSettings } = useEditorSettings({
@@ -2385,8 +2629,8 @@ function Editor({
   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
     PrivateEditor,
     {
-      postType,
-      postId,
+      postType: resolvedPostType,
+      postId: resolvedPostId,
       templateId,
       settings: finalSettings,
       styles: finalSettings.styles,
@@ -2394,7 +2638,82 @@ function Editor({
     }
   );
 }
+
+// packages/lazy-editor/build-module/components/preview/index.mjs
+var import_i18n = __toESM(require_i18n(), 1);
+var import_element5 = __toESM(require_element(), 1);
+var import_block_editor = __toESM(require_block_editor(), 1);
+var import_editor2 = __toESM(require_editor(), 1);
+var import_blocks2 = __toESM(require_blocks(), 1);
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
+if (typeof document !== "undefined" && true && !document.head.querySelector("style[data-wp-hash='95327475c1']")) {
+  const style = document.createElement("style");
+  style.setAttribute("data-wp-hash", "95327475c1");
+  style.appendChild(document.createTextNode(".lazy-editor-block-preview__container{align-items:center;border-radius:4px;display:flex;flex-direction:column;height:100%;justify-content:center}.dataviews-view-grid .lazy-editor-block-preview__container .block-editor-block-preview__container{height:100%}.dataviews-view-table .lazy-editor-block-preview__container{text-wrap:balance;text-wrap:pretty;flex-grow:0;width:96px}"));
+  document.head.appendChild(style);
+}
+var { useStyle } = unlock(import_editor2.privateApis);
+function PreviewContent({
+  blocks,
+  content,
+  description
+}) {
+  const descriptionId = (0, import_element5.useId)();
+  const backgroundColor = useStyle("color.background");
+  const actualBlocks = (0, import_element5.useMemo)(() => {
+    return blocks ?? (0, import_blocks2.parse)(content, {
+      __unstableSkipMigrationLogs: true
+    });
+  }, [content, blocks]);
+  const isEmpty = !actualBlocks?.length;
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+    "div",
+    {
+      className: "lazy-editor-block-preview__container",
+      style: { backgroundColor },
+      "aria-describedby": !!description ? descriptionId : void 0,
+      children: [
+        isEmpty && (0, import_i18n.__)("Empty."),
+        !isEmpty && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockPreview.Async, { children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockPreview, { blocks: actualBlocks }) }),
+        !!description && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { hidden: true, id: descriptionId, children: description })
+      ]
+    }
+  );
+}
+function Preview({
+  blocks,
+  content,
+  description
+}) {
+  const stylesId = useStylesId();
+  const { isReady: settingsReady, editorSettings } = useEditorSettings({
+    stylesId
+  });
+  const { isReady: assetsReady } = useEditorAssets();
+  const finalSettings = (0, import_element5.useMemo)(
+    () => ({
+      ...editorSettings,
+      isPreviewMode: true
+    }),
+    [editorSettings]
+  );
+  if (!settingsReady || !assetsReady) {
+    return null;
+  }
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_block_editor.BlockEditorProvider, { settings: finalSettings, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+    PreviewContent,
+    {
+      blocks,
+      content,
+      description
+    }
+  ) });
+}
 export {
-  Editor
+  Editor,
+  Preview,
+  loadEditorAssets,
+  useEditorAssets,
+  useEditorSettings
 };
 //# sourceMappingURL=index.js.map
