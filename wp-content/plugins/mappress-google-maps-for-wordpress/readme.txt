@@ -5,15 +5,15 @@ License: GPLv2
 Tags: maps, google maps, leaflet, store locator, map plugin
 Requires at least: 5.9.5
 Requires PHP: 7.0
-Tested up to: 6.8
-Stable tag: 2.95.12
+Tested up to: 6.9
+Stable tag: 2.96.3
 
 MapPress is the easiest way to add unlimited interactive Google and Leaflet maps to WordPress.
 
 == Description ==
-MapPress is the easiest way to add unlimited, beautiful interactive Google and Leaflet maps to WordPress.
+MapPress is the easiest way to add unlimited, beautiful interactive Google and Leaflet maps to WordPress, with Gutenberg map blocks and classic editor support.
 
-Create **unlimited maps and markers** using Gutenberg blocks or the classic editor.  The popup map editor makes creating and editing maps easy!
+Create **unlimited maps and markers**.  The popup map editor makes creating and editing maps easy!
 
 Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more features, including custom icons (with a built-in icon editor!), search and filter, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
 
@@ -93,6 +93,20 @@ Please see the plugin documentation pages:
 
 == Changelog ==
 
+= 2.96.3 =
+* Fixed: error with filter for empty taxonomy (with no terms)
+
+= 2.96.2 =
+* Fixed: version error
+
+= 2.96 = 
+* Added: OpenFreeMaps (OFM) GL maps, a better looking default instead of OpenStreetMaps (OSM) raster tiles
+* Added: for mashups, empty filters now default to only the 'include' terms or post types
+* Added: dropdown slug search for filters
+* Changed: new styled maps component, including support for OFM
+* Fixed: selecting specific post types was not possible in post types filter
+* Fixed: resetting post types filter uses only default post types
+
 = 2.95.12 =
 * Changed: save options when tileservice changes
 * Changed: allow 'lon' as synonym for 'lng' when importing
@@ -122,7 +136,7 @@ Please see the plugin documentation pages:
 
 = 2.95.6 = 
 * Added: new setting for 'directions' text for easier change/translation
-* Fixed: error when creating new MapBox style
+* Fixed: error when creating new Mapbox style
 * Fixed: Nominatim geocoder was not honoring lat, lng entry
 * Fixed: default google directions to https
 * Changed: removed google directions server URL setting 

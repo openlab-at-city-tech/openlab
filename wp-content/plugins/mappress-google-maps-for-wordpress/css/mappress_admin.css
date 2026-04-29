@@ -1242,15 +1242,14 @@ button.mapp-options-save {
 /* Token field control for filter include/exclude */
 #mapp-options-page .components-form-token-field {
 	flex: 1;
+	position: relative;
 }
 
+
 #mapp-options-page .components-form-token-field__suggestions-list {
+	position: absolute;
 	background-color: white;
 	border: 1px solid lightgray;
-	max-height: 15em;
-	position: absolute;
-	top: 100%;
-	z-index: 1;
 }
 
 #mapp-options-page .components-form-token-field__token .components-form-token-field__remove-token {
@@ -2168,7 +2167,7 @@ button.mapp-icons-edit-set-color {
 
 .mapp-style-modal {
 	max-height: 90vh;
-	min-height: 340px;
+	min-height: 450px;
 	width: 720px;
 }
 
@@ -2177,146 +2176,16 @@ button.mapp-icons-edit-set-color {
 	text-decoration: none;
 }
 
-.mapp-style-modal-snazzy {
-	height: 90vh;
+.mapp-style-modal .mapp-dialog-title {
+	border-bottom: 1px solid black;
 }
 
-.mapp-style-list-wrapper {
-	flex: 1;
-	margin-top: 10px;
-	overflow: auto;
-}
-
-.mapp-style-list {
-	display: flex;
-	flex-wrap: wrap;
-	margin-left: 2px;
-}
-
-.mapp-style-list-header {
-	font-weight: bold;
-	margin-bottom: 5px;
-}
-
-.mapp-style {
-	border: 1px solid lightgray;
-	border-radius: 3px;
-	cursor: pointer;
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 10px;
-	margin-right: 10px;
-	padding: 3px;
-	width: 90px;
-}
-
-.mapp-style.mapp-selected, .mapp-style:hover {
-	border: 1px solid black;
-}
-
-.mapp-style-image {
-	align-items: center;
-	display: flex;
-	height: 90px;
-	justify-content: center;
-	width: 100%;
-}
-
-.mapp-style-image img {
-	height: 100%;
-	object-fit: cover;
-	width: 100%;
-}
-
-.mapp-style-details {
-	display: flex;
-	flex-direction: column;
-	flex: 1;
-	margin-top: 5px;
-}
-
-.mapp-style.mapp-selected .mapp-style-details, .mapp-style:hover .mapp-style-details {
-	color: black;
-}
-
-.mapp-style-title {
-	flex: 1;
-	overflow: hidden;
-	text-align: center;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.mapp-style-actions {
-	border-top: 1px solid lightgray;
-	display: flex;
-	justify-content: space-between;
-	margin-top: 5px;
-	padding: 5px;
-}
-
-.mapp-style-mapbox-title {
-	font-size: 14px;
-	font-weight: 500;
-	margin-bottom: 20px;
-}
-
-.mapp-style-mapbox-form {
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	overflow: hidden;
-}
-
-.mapp-style-mapbox-form label {
-	display: block;
-	margin-bottom: 10px;
-}
-
-.mapp-style-mapbox-url, .mapp-style-mapbox-url input, .mapp-style-mapbox-name, .mapp-style-mapbox-name input {
-	width: 100%;
-}
-
-.mapp-style-mapbox-form  .mapp-help-link {
-	margin-left: 5px;
-}
-
-.mapp-style-mapbox-preview {
-	flex: 1;
-	overflow: hidden;
-}
-
-.mapp-style-mapbox-preview img {
-	height: 100%;
-	object-fit: cover;
-	width: 100%;
-}
-
-.mapp-style-mapbox .mapp-style-error {
-	align-items: center;
-	display: flex;
-	flex: 1;
-	font-weight: bold;
-	justify-content: center;
-	padding: 5px;
-}
-
-.mapp-style-snazzy-search {
-	align-items: center;
-	display: flex;
-}
-
-.mapp-style-snazzy-search input {
-	height: 100%;
-	padding: 0 10px;
-}
-
-.mapp-style-top-toolbar button {
-	margin-right: 10px;
+.mapp-style-modal .mapp-dialog-title .mapp-help-link {
+	margin-left: 10px;
 }
 
 .mapp-style-toolbar {
-	border-top: 1px solid lightgray;
+	border-top: 1px solid black;
 	display: flex;
 	justify-content: space-between;
 	padding-top: 10px;
@@ -2326,35 +2195,178 @@ button.mapp-icons-edit-set-color {
 	margin-right: 5px;
 }
 
-/*
-	-----------------------------------------------------------------------------------
-	JSON Style Editor
-	-----------------------------------------------------------------------------------
-*/
-
-.mapp-json-modal {
-	height: 90vh;
-}
-
-.mapp-json {
+.mapp-style-picker {
 	display: flex;
 	flex: 1;
+	flex-direction: column;
+	overflow: hidden;
 }
 
-.mapp-json textarea {
+.mapp-style-list {
+	display: flex;
 	flex: 1;
-	min-width: 300px;
+	flex-direction: column;
+	margin-top: 10px;
+	overflow: auto;	
 }
 
-.mapp-json.mapp-style-error textarea {
+.mapp-style-card {
 	align-items: center;
-	background-color: pink;
+	border: 1px solid lightgray;
+	cursor: pointer;
+	display: flex;
+	margin-bottom: 10px;
+	margin-right: 10px;
+	padding: 3px;
 }
 
-.mapp-json-error {
-	color: red;
-	padding: 10px;
+.mapp-style-card.mapp-selected, .mapp-style-card:hover {
+	background-color: #f8f8f8;
 }
+
+.mapp-style-card.mapp-selected {
+	border: 1px solid black;
+}
+
+.mapp-style-card-thumbnail {
+	align-items: center;
+	display: flex;
+	height: 64px;
+	justify-content: center;
+	width: 64px;
+}
+
+.mapp-style-card-thumbnail img {
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+.mapp-style-card-details {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	margin-left: 10px;
+}
+
+.mapp-style-card-name {
+	font-size: 14px;
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mapp-style-card-url {
+	color: gray;
+}
+
+.mapp-style-card-actions {
+	display: none;
+	margin-top: 5px;
+}
+
+.mapp-style-card:hover .mapp-style-card-actions {
+	display: flex;
+}
+
+.mapp-style-edit-form {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+}
+
+.mapp-style-edit-form label {
+	display: flex;
+	flex-direction: column;
+	margin: 5px 0;
+}
+
+.mapp-style-edit-label {
+	margin-bottom: 5px;
+}
+
+.mapp-style-edit-json {
+	flex: 1;
+}
+
+.mapp-style-edit-form input, .mapp-style-edit-form textarea { 
+	flex: 1;
+}
+
+.mapp-style-edit-form  .mapp-help-link {
+	margin-left: 5px;
+}
+
+.mapp-style-edit-error {
+	background-color: pink;
+	border: 1px solid red;
+	margin-top: 5px;
+	padding: 5px;
+}
+
+.mapp-style-snazzy-modal {
+	height: 90vh;
+	width: 720px;
+}
+
+.mapp-style-snazzy-search {
+	align-items: center;
+	display: flex;
+	margin-top: 5px;
+}
+
+.mapp-style-snazzy-search input {
+	align-self: stretch;
+	flex: 1;
+	padding: 0 10px;
+}
+
+.mapp-style-snazzy-msg {
+	margin: auto;
+	font-size: 16px;
+}
+
+.mapp-style-snazzy-list {
+	margin-top: 10px;
+	overflow: auto;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+}
+
+.mapp-style-snazzy-card {
+	border: 2px solid lightgray;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+}
+
+.mapp-style-snazzy-card:hover {
+	background-color: #f8f8f8;
+	border: 2px solid black;
+}
+
+.mapp-style-snazzy-card.mapp-selected {
+	background-color: #f8f8f8;
+	border: 2px solid black;
+}
+
+.mapp-style-snazzy-card-thumbnail img {
+	border-bottom: 1px solid lightgray;
+	display: block;
+	height: 200px;
+	object-fit: cover;
+	object-position: center center;
+	width: 100%;
+}
+
+.mapp-style-snazzy-card-title {
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+}
+
 
 /*
 	-----------------------------------------------------------------------------------

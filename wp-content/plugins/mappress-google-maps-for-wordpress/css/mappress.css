@@ -43,7 +43,7 @@ mappress-map.mapp-layout {
 }
 
 .mapp-canvas {
-	user-select: none;
+	user-select: none;      
 }
 
 .mapp-wrapper {

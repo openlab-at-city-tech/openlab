@@ -85,7 +85,7 @@ class Mappress_Options extends Mappress_Obj {
 		$thumbsList = null,
 		$thumbWidth,
 		$thumbHeight,
-		$tileService,
+		$tileService = 'ofm',          
 		$tooltips = false,
 		$units = 'metric',
 		$userLocation = false,
