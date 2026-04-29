@@ -30,10 +30,16 @@ class About extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
      * Gets information about the user, the user's Drive, and system capabilities.
-     * (about.get)
+     * For more information, see [Return user
+     * info](https://developers.google.com/workspace/drive/api/guides/user-info).
+     * Required: The `fields` parameter must be set. To return the exact fields you
+     * need, see [Return specific
+     * fields](https://developers.google.com/workspace/drive/api/guides/fields-
+     * parameter). (about.get)
      *
      * @param array $optParams Optional parameters.
      * @return AboutModel
+     * @throws \Google\Service\Exception
      */
     public function get($optParams = [])
     {

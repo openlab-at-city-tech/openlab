@@ -38,6 +38,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the currently logged in user, use the "primary" keyword.
      * @param string $ruleId ACL rule identifier.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($calendarId, $ruleId, $optParams = [])
     {
@@ -54,6 +55,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param string $ruleId ACL rule identifier.
      * @param array $optParams Optional parameters.
      * @return AclRule
+     * @throws \Google\Service\Exception
      */
     public function get($calendarId, $ruleId, $optParams = [])
     {
@@ -73,6 +75,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @opt_param bool sendNotifications Whether to send notifications about the
      * calendar sharing change. Optional. The default is True.
      * @return AclRule
+     * @throws \Google\Service\Exception
      */
     public function insert($calendarId, AclRule $postBody, $optParams = [])
     {
@@ -106,6 +109,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * without any syncToken. Learn more about incremental synchronization.
      * Optional. The default is to return all entries.
      * @return AclModel
+     * @throws \Google\Service\Exception
      */
     public function listAcl($calendarId, $optParams = [])
     {
@@ -128,6 +132,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * calendar sharing change. Note that there are no notifications on access
      * removal. Optional. The default is True.
      * @return AclRule
+     * @throws \Google\Service\Exception
      */
     public function patch($calendarId, $ruleId, AclRule $postBody, $optParams = [])
     {
@@ -149,6 +154,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * calendar sharing change. Note that there are no notifications on access
      * removal. Optional. The default is True.
      * @return AclRule
+     * @throws \Google\Service\Exception
      */
     public function update($calendarId, $ruleId, AclRule $postBody, $optParams = [])
     {
@@ -183,6 +189,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * without any syncToken. Learn more about incremental synchronization.
      * Optional. The default is to return all entries.
      * @return Channel
+     * @throws \Google\Service\Exception
      */
     public function watch($calendarId, Channel $postBody, $optParams = [])
     {

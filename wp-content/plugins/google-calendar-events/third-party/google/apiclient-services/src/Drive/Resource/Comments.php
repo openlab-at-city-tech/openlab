@@ -30,12 +30,18 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\CommentList;
 class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
-     * Creates a comment on a file. (comments.create)
+     * Creates a comment on a file. For more information, see [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
+     * comments). Required: The `fields` parameter must be set. To return the exact
+     * fields you need, see [Return specific
+     * fields](https://developers.google.com/workspace/drive/api/guides/fields-
+     * parameter). (comments.create)
      *
      * @param string $fileId The ID of the file.
      * @param Comment $postBody
      * @param array $optParams Optional parameters.
      * @return Comment
+     * @throws \Google\Service\Exception
      */
     public function create($fileId, Comment $postBody, $optParams = [])
     {
@@ -44,11 +50,14 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('create', [$params], Comment::class);
     }
     /**
-     * Deletes a comment. (comments.delete)
+     * Deletes a comment. For more information, see [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
+     * comments). (comments.delete)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($fileId, $commentId, $optParams = [])
     {
@@ -57,7 +66,12 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('delete', [$params]);
     }
     /**
-     * Gets a comment by ID. (comments.get)
+     * Gets a comment by ID. For more information, see [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
+     * comments). Required: The `fields` parameter must be set. To return the exact
+     * fields you need, see [Return specific
+     * fields](https://developers.google.com/workspace/drive/api/guides/fields-
+     * parameter). (comments.get)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
@@ -66,6 +80,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @opt_param bool includeDeleted Whether to return deleted comments. Deleted
      * comments will not include their original content.
      * @return Comment
+     * @throws \Google\Service\Exception
      */
     public function get($fileId, $commentId, $optParams = [])
     {
@@ -74,7 +89,12 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('get', [$params], Comment::class);
     }
     /**
-     * Lists a file's comments. (comments.listComments)
+     * Lists a file's comments. For more information, see [Manage comments and
+     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
+     * comments). Required: The `fields` parameter must be set. To return the exact
+     * fields you need, see [Return specific
+     * fields](https://developers.google.com/workspace/drive/api/guides/fields-
+     * parameter). (comments.listComments)
      *
      * @param string $fileId The ID of the file.
      * @param array $optParams Optional parameters.
@@ -88,6 +108,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @opt_param string startModifiedTime The minimum value of 'modifiedTime' for
      * the result comments (RFC 3339 date-time).
      * @return CommentList
+     * @throws \Google\Service\Exception
      */
     public function listComments($fileId, $optParams = [])
     {
@@ -96,13 +117,20 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('list', [$params], CommentList::class);
     }
     /**
-     * Updates a comment with patch semantics. (comments.update)
+     * Updates a comment with patch semantics. For more information, see [Manage
+     * comments and
+     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
+     * comments). Required: The `fields` parameter must be set. To return the exact
+     * fields you need, see [Return specific
+     * fields](https://developers.google.com/workspace/drive/api/guides/fields-
+     * parameter). (comments.update)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
      * @param Comment $postBody
      * @param array $optParams Optional parameters.
      * @return Comment
+     * @throws \Google\Service\Exception
      */
     public function update($fileId, $commentId, Comment $postBody, $optParams = [])
     {

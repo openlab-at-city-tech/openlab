@@ -20,27 +20,44 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventAttachment extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * ID of the attached file. Read-only. For Google Drive files, this is the ID
+     * of the corresponding Files resource entry in the Drive API.
+     *
      * @var string
      */
     public $fileId;
     /**
+     * URL link to the attachment. For adding Google Drive file attachments use
+     * the same format as in alternateLink property of the Files resource in the
+     * Drive API. Required when adding an attachment.
+     *
      * @var string
      */
     public $fileUrl;
     /**
+     * URL link to the attachment's icon. This field can only be modified for
+     * custom third-party attachments.
+     *
      * @var string
      */
     public $iconLink;
     /**
+     * Internet media type (MIME type) of the attachment.
+     *
      * @var string
      */
     public $mimeType;
     /**
+     * Attachment title.
+     *
      * @var string
      */
     public $title;
     /**
-     * @param string
+     * ID of the attached file. Read-only. For Google Drive files, this is the ID
+     * of the corresponding Files resource entry in the Drive API.
+     *
+     * @param string $fileId
      */
     public function setFileId($fileId)
     {
@@ -54,7 +71,11 @@ class EventAttachment extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->fileId;
     }
     /**
-     * @param string
+     * URL link to the attachment. For adding Google Drive file attachments use
+     * the same format as in alternateLink property of the Files resource in the
+     * Drive API. Required when adding an attachment.
+     *
+     * @param string $fileUrl
      */
     public function setFileUrl($fileUrl)
     {
@@ -68,7 +89,10 @@ class EventAttachment extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->fileUrl;
     }
     /**
-     * @param string
+     * URL link to the attachment's icon. This field can only be modified for
+     * custom third-party attachments.
+     *
+     * @param string $iconLink
      */
     public function setIconLink($iconLink)
     {
@@ -82,7 +106,9 @@ class EventAttachment extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->iconLink;
     }
     /**
-     * @param string
+     * Internet media type (MIME type) of the attachment.
+     *
+     * @param string $mimeType
      */
     public function setMimeType($mimeType)
     {
@@ -96,7 +122,9 @@ class EventAttachment extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->mimeType;
     }
     /**
-     * @param string
+     * Attachment title.
+     *
+     * @param string $title
      */
     public function setTitle($title)
     {

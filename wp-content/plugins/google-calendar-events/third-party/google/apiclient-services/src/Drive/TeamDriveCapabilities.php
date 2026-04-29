@@ -20,91 +20,154 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * Whether the current user can add children to folders in this Team Drive.
+     *
      * @var bool
      */
     public $canAddChildren;
     /**
+     * Whether the current user can change the `copyRequiresWriterPermission`
+     * restriction of this Team Drive.
+     *
      * @var bool
      */
     public $canChangeCopyRequiresWriterPermissionRestriction;
     /**
+     * Whether the current user can change the `domainUsersOnly` restriction of
+     * this Team Drive.
+     *
      * @var bool
      */
     public $canChangeDomainUsersOnlyRestriction;
     /**
+     * Whether the current user can change organizer-applied download restrictions
+     * of this shared drive.
+     *
+     * @var bool
+     */
+    public $canChangeDownloadRestriction;
+    /**
+     * Whether the current user can change the
+     * `sharingFoldersRequiresOrganizerPermission` restriction of this Team Drive.
+     *
      * @var bool
      */
     public $canChangeSharingFoldersRequiresOrganizerPermissionRestriction;
     /**
+     * Whether the current user can change the background of this Team Drive.
+     *
      * @var bool
      */
     public $canChangeTeamDriveBackground;
     /**
+     * Whether the current user can change the `teamMembersOnly` restriction of
+     * this Team Drive.
+     *
      * @var bool
      */
     public $canChangeTeamMembersOnlyRestriction;
     /**
+     * Whether the current user can comment on files in this Team Drive.
+     *
      * @var bool
      */
     public $canComment;
     /**
+     * Whether the current user can copy files in this Team Drive.
+     *
      * @var bool
      */
     public $canCopy;
     /**
+     * Whether the current user can delete children from folders in this Team
+     * Drive.
+     *
      * @var bool
      */
     public $canDeleteChildren;
     /**
+     * Whether the current user can delete this Team Drive. Attempting to delete
+     * the Team Drive may still fail if there are untrashed items inside the Team
+     * Drive.
+     *
      * @var bool
      */
     public $canDeleteTeamDrive;
     /**
+     * Whether the current user can download files in this Team Drive.
+     *
      * @var bool
      */
     public $canDownload;
     /**
+     * Whether the current user can edit files in this Team Drive
+     *
      * @var bool
      */
     public $canEdit;
     /**
+     * Whether the current user can list the children of folders in this Team
+     * Drive.
+     *
      * @var bool
      */
     public $canListChildren;
     /**
+     * Whether the current user can add members to this Team Drive or remove them
+     * or change their role.
+     *
      * @var bool
      */
     public $canManageMembers;
     /**
+     * Whether the current user can read the revisions resource of files in this
+     * Team Drive.
+     *
      * @var bool
      */
     public $canReadRevisions;
     /**
+     * Deprecated: Use `canDeleteChildren` or `canTrashChildren` instead.
+     *
+     * @deprecated
      * @var bool
      */
     public $canRemoveChildren;
     /**
+     * Whether the current user can rename files or folders in this Team Drive.
+     *
      * @var bool
      */
     public $canRename;
     /**
+     * Whether the current user can rename this Team Drive.
+     *
      * @var bool
      */
     public $canRenameTeamDrive;
     /**
+     * Whether the current user can reset the Team Drive restrictions to defaults.
+     *
      * @var bool
      */
     public $canResetTeamDriveRestrictions;
     /**
+     * Whether the current user can share files or folders in this Team Drive.
+     *
      * @var bool
      */
     public $canShare;
     /**
+     * Whether the current user can trash children from folders in this Team
+     * Drive.
+     *
      * @var bool
      */
     public $canTrashChildren;
     /**
-     * @param bool
+     * Whether the current user can add children to folders in this Team Drive.
+     *
+     * @param bool $canAddChildren
      */
     public function setCanAddChildren($canAddChildren)
     {
@@ -118,7 +181,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canAddChildren;
     }
     /**
-     * @param bool
+     * Whether the current user can change the `copyRequiresWriterPermission`
+     * restriction of this Team Drive.
+     *
+     * @param bool $canChangeCopyRequiresWriterPermissionRestriction
      */
     public function setCanChangeCopyRequiresWriterPermissionRestriction($canChangeCopyRequiresWriterPermissionRestriction)
     {
@@ -132,7 +198,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeCopyRequiresWriterPermissionRestriction;
     }
     /**
-     * @param bool
+     * Whether the current user can change the `domainUsersOnly` restriction of
+     * this Team Drive.
+     *
+     * @param bool $canChangeDomainUsersOnlyRestriction
      */
     public function setCanChangeDomainUsersOnlyRestriction($canChangeDomainUsersOnlyRestriction)
     {
@@ -146,7 +215,27 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeDomainUsersOnlyRestriction;
     }
     /**
-     * @param bool
+     * Whether the current user can change organizer-applied download restrictions
+     * of this shared drive.
+     *
+     * @param bool $canChangeDownloadRestriction
+     */
+    public function setCanChangeDownloadRestriction($canChangeDownloadRestriction)
+    {
+        $this->canChangeDownloadRestriction = $canChangeDownloadRestriction;
+    }
+    /**
+     * @return bool
+     */
+    public function getCanChangeDownloadRestriction()
+    {
+        return $this->canChangeDownloadRestriction;
+    }
+    /**
+     * Whether the current user can change the
+     * `sharingFoldersRequiresOrganizerPermission` restriction of this Team Drive.
+     *
+     * @param bool $canChangeSharingFoldersRequiresOrganizerPermissionRestriction
      */
     public function setCanChangeSharingFoldersRequiresOrganizerPermissionRestriction($canChangeSharingFoldersRequiresOrganizerPermissionRestriction)
     {
@@ -160,7 +249,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeSharingFoldersRequiresOrganizerPermissionRestriction;
     }
     /**
-     * @param bool
+     * Whether the current user can change the background of this Team Drive.
+     *
+     * @param bool $canChangeTeamDriveBackground
      */
     public function setCanChangeTeamDriveBackground($canChangeTeamDriveBackground)
     {
@@ -174,7 +265,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeTeamDriveBackground;
     }
     /**
-     * @param bool
+     * Whether the current user can change the `teamMembersOnly` restriction of
+     * this Team Drive.
+     *
+     * @param bool $canChangeTeamMembersOnlyRestriction
      */
     public function setCanChangeTeamMembersOnlyRestriction($canChangeTeamMembersOnlyRestriction)
     {
@@ -188,7 +282,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeTeamMembersOnlyRestriction;
     }
     /**
-     * @param bool
+     * Whether the current user can comment on files in this Team Drive.
+     *
+     * @param bool $canComment
      */
     public function setCanComment($canComment)
     {
@@ -202,7 +298,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canComment;
     }
     /**
-     * @param bool
+     * Whether the current user can copy files in this Team Drive.
+     *
+     * @param bool $canCopy
      */
     public function setCanCopy($canCopy)
     {
@@ -216,7 +314,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canCopy;
     }
     /**
-     * @param bool
+     * Whether the current user can delete children from folders in this Team
+     * Drive.
+     *
+     * @param bool $canDeleteChildren
      */
     public function setCanDeleteChildren($canDeleteChildren)
     {
@@ -230,7 +331,11 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDeleteChildren;
     }
     /**
-     * @param bool
+     * Whether the current user can delete this Team Drive. Attempting to delete
+     * the Team Drive may still fail if there are untrashed items inside the Team
+     * Drive.
+     *
+     * @param bool $canDeleteTeamDrive
      */
     public function setCanDeleteTeamDrive($canDeleteTeamDrive)
     {
@@ -244,7 +349,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDeleteTeamDrive;
     }
     /**
-     * @param bool
+     * Whether the current user can download files in this Team Drive.
+     *
+     * @param bool $canDownload
      */
     public function setCanDownload($canDownload)
     {
@@ -258,7 +365,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDownload;
     }
     /**
-     * @param bool
+     * Whether the current user can edit files in this Team Drive
+     *
+     * @param bool $canEdit
      */
     public function setCanEdit($canEdit)
     {
@@ -272,7 +381,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canEdit;
     }
     /**
-     * @param bool
+     * Whether the current user can list the children of folders in this Team
+     * Drive.
+     *
+     * @param bool $canListChildren
      */
     public function setCanListChildren($canListChildren)
     {
@@ -286,7 +398,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canListChildren;
     }
     /**
-     * @param bool
+     * Whether the current user can add members to this Team Drive or remove them
+     * or change their role.
+     *
+     * @param bool $canManageMembers
      */
     public function setCanManageMembers($canManageMembers)
     {
@@ -300,7 +415,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canManageMembers;
     }
     /**
-     * @param bool
+     * Whether the current user can read the revisions resource of files in this
+     * Team Drive.
+     *
+     * @param bool $canReadRevisions
      */
     public function setCanReadRevisions($canReadRevisions)
     {
@@ -314,13 +432,17 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canReadRevisions;
     }
     /**
-     * @param bool
+     * Deprecated: Use `canDeleteChildren` or `canTrashChildren` instead.
+     *
+     * @deprecated
+     * @param bool $canRemoveChildren
      */
     public function setCanRemoveChildren($canRemoveChildren)
     {
         $this->canRemoveChildren = $canRemoveChildren;
     }
     /**
+     * @deprecated
      * @return bool
      */
     public function getCanRemoveChildren()
@@ -328,7 +450,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRemoveChildren;
     }
     /**
-     * @param bool
+     * Whether the current user can rename files or folders in this Team Drive.
+     *
+     * @param bool $canRename
      */
     public function setCanRename($canRename)
     {
@@ -342,7 +466,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRename;
     }
     /**
-     * @param bool
+     * Whether the current user can rename this Team Drive.
+     *
+     * @param bool $canRenameTeamDrive
      */
     public function setCanRenameTeamDrive($canRenameTeamDrive)
     {
@@ -356,7 +482,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRenameTeamDrive;
     }
     /**
-     * @param bool
+     * Whether the current user can reset the Team Drive restrictions to defaults.
+     *
+     * @param bool $canResetTeamDriveRestrictions
      */
     public function setCanResetTeamDriveRestrictions($canResetTeamDriveRestrictions)
     {
@@ -370,7 +498,9 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canResetTeamDriveRestrictions;
     }
     /**
-     * @param bool
+     * Whether the current user can share files or folders in this Team Drive.
+     *
+     * @param bool $canShare
      */
     public function setCanShare($canShare)
     {
@@ -384,7 +514,10 @@ class TeamDriveCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canShare;
     }
     /**
-     * @param bool
+     * Whether the current user can trash children from folders in this Team
+     * Drive.
+     *
+     * @param bool $canTrashChildren
      */
     public function setCanTrashChildren($canTrashChildren)
     {

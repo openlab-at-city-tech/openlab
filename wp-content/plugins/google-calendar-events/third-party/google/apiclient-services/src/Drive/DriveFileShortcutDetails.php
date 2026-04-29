@@ -20,19 +20,31 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DriveFileShortcutDetails extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * The ID of the file that this shortcut points to. Can only be set on
+     * `files.create` requests.
+     *
      * @var string
      */
     public $targetId;
     /**
+     * Output only. The MIME type of the file that this shortcut points to. The
+     * value of this field is a snapshot of the target's MIME type, captured when
+     * the shortcut is created.
+     *
      * @var string
      */
     public $targetMimeType;
     /**
+     * Output only. The `resourceKey` for the target file.
+     *
      * @var string
      */
     public $targetResourceKey;
     /**
-     * @param string
+     * The ID of the file that this shortcut points to. Can only be set on
+     * `files.create` requests.
+     *
+     * @param string $targetId
      */
     public function setTargetId($targetId)
     {
@@ -46,7 +58,11 @@ class DriveFileShortcutDetails extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->targetId;
     }
     /**
-     * @param string
+     * Output only. The MIME type of the file that this shortcut points to. The
+     * value of this field is a snapshot of the target's MIME type, captured when
+     * the shortcut is created.
+     *
+     * @param string $targetMimeType
      */
     public function setTargetMimeType($targetMimeType)
     {
@@ -60,7 +76,9 @@ class DriveFileShortcutDetails extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->targetMimeType;
     }
     /**
-     * @param string
+     * Output only. The `resourceKey` for the target file.
+     *
+     * @param string $targetResourceKey
      */
     public function setTargetResourceKey($targetResourceKey)
     {

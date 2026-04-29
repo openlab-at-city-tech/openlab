@@ -11,33 +11,13 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog;
 
-use DateTimeZone;
-/**
- * Overrides default json encoding of date time objects
- *
- * @author Menno Holtkamp
- * @author Jordi Boggiano <j.boggiano@seld.be>
- */
-class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
-{
+class_alias(JsonSerializableDateTimeImmutable::class, 'SimpleCalendar\plugin_deps\Monolog\DateTimeImmutable');
+// @phpstan-ignore-next-line
+if (\false) {
     /**
-     * @var bool
+     * @deprecated Use \Monolog\JsonSerializableDateTimeImmutable instead.
      */
-    private $useMicroseconds;
-    public function __construct(bool $useMicroseconds, ?DateTimeZone $timezone = null)
+    class DateTimeImmutable extends JsonSerializableDateTimeImmutable
     {
-        $this->useMicroseconds = $useMicroseconds;
-        parent::__construct('now', $timezone);
-    }
-    public function jsonSerialize(): string
-    {
-        if ($this->useMicroseconds) {
-            return $this->format('Y-m-d\TH:i:s.uP');
-        }
-        return $this->format('Y-m-d\TH:i:sP');
-    }
-    public function __toString(): string
-    {
-        return $this->jsonSerialize();
     }
 }

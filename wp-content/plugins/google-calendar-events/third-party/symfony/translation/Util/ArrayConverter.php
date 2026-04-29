@@ -29,10 +29,8 @@ class ArrayConverter
      * For example this array('foo.bar' => 'value') will be converted to ['foo' => ['bar' => 'value']].
      *
      * @param array $messages Linear messages array
-     *
-     * @return array
      */
-    public static function expandToTree(array $messages)
+    public static function expandToTree(array $messages): array
     {
         $tree = [];
         foreach ($messages as $id => $value) {
@@ -42,7 +40,7 @@ class ArrayConverter
         }
         return $tree;
     }
-    private static function &getElementByPath(array &$tree, array $parts)
+    private static function &getElementByPath(array &$tree, array $parts): mixed
     {
         $elem =& $tree;
         $parentOfElem = null;
@@ -74,7 +72,7 @@ class ArrayConverter
         }
         return $elem;
     }
-    private static function cancelExpand(array &$tree, string $prefix, array $node)
+    private static function cancelExpand(array &$tree, string $prefix, array $node): void
     {
         $prefix .= '.';
         foreach ($node as $id => $value) {

@@ -25,7 +25,9 @@ class FreeBusyCalendar extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $errorsType = Error::class;
     protected $errorsDataType = 'array';
     /**
-     * @param TimePeriod[]
+     * List of time ranges during which this calendar should be regarded as busy.
+     *
+     * @param TimePeriod[] $busy
      */
     public function setBusy($busy)
     {
@@ -39,7 +41,9 @@ class FreeBusyCalendar extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->busy;
     }
     /**
-     * @param Error[]
+     * Optional error(s) (if computation for the calendar failed).
+     *
+     * @param Error[] $errors
      */
     public function setErrors($errors)
     {

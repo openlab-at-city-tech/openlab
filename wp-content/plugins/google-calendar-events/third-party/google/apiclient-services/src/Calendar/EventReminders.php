@@ -23,11 +23,17 @@ class EventReminders extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $overridesType = EventReminder::class;
     protected $overridesDataType = 'array';
     /**
+     * Whether the default reminders of the calendar apply to the event.
+     *
      * @var bool
      */
     public $useDefault;
     /**
-     * @param EventReminder[]
+     * If the event doesn't use the default reminders, this lists the reminders
+     * specific to the event, or, if not set, indicates that no reminders are set
+     * for this event. The maximum number of override reminders is 5.
+     *
+     * @param EventReminder[] $overrides
      */
     public function setOverrides($overrides)
     {
@@ -41,7 +47,9 @@ class EventReminders extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->overrides;
     }
     /**
-     * @param bool
+     * Whether the default reminders of the calendar apply to the event.
+     *
+     * @param bool $useDefault
      */
     public function setUseDefault($useDefault)
     {

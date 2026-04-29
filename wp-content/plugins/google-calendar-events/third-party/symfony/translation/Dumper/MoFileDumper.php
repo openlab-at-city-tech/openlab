@@ -19,10 +19,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  */
 class MoFileDumper extends FileDumper
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $sources = $targets = $sourceOffsets = $targetOffsets = '';
         $offsets = [];
@@ -40,17 +37,14 @@ class MoFileDumper extends FileDumper
             $sourceOffsets .= $this->writeLong($offset[1]) . $this->writeLong($offset[0] + $sourcesStart);
             $targetOffsets .= $this->writeLong($offset[3]) . $this->writeLong($offset[2] + $sourcesStart + $sourcesSize);
         }
-        $output = implode('', array_map([$this, 'writeLong'], $header)) . $sourceOffsets . $targetOffsets . $sources . $targets;
+        $output = implode('', array_map($this->writeLong(...), $header)) . $sourceOffsets . $targetOffsets . $sources . $targets;
         return $output;
     }
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtension()
+    protected function getExtension(): string
     {
         return 'mo';
     }
-    private function writeLong($str): string
+    private function writeLong(mixed $str): string
     {
         return pack('V*', $str);
     }

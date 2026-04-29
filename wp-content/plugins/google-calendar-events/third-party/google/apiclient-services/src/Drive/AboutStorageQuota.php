@@ -20,23 +20,41 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class AboutStorageQuota extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * The usage limit, if applicable. This will not be present if the user has
+     * unlimited storage. For users that are part of an organization with pooled
+     * storage, this is the limit for the organization, rather than the individual
+     * user.
+     *
      * @var string
      */
     public $limit;
     /**
+     * The total usage across all services. For users that are part of an
+     * organization with pooled storage, this is the usage across all services for
+     * the organization, rather than the individual user.
+     *
      * @var string
      */
     public $usage;
     /**
+     * The usage by all files in Google Drive.
+     *
      * @var string
      */
     public $usageInDrive;
     /**
+     * The usage by trashed files in Google Drive.
+     *
      * @var string
      */
     public $usageInDriveTrash;
     /**
-     * @param string
+     * The usage limit, if applicable. This will not be present if the user has
+     * unlimited storage. For users that are part of an organization with pooled
+     * storage, this is the limit for the organization, rather than the individual
+     * user.
+     *
+     * @param string $limit
      */
     public function setLimit($limit)
     {
@@ -50,7 +68,11 @@ class AboutStorageQuota extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->limit;
     }
     /**
-     * @param string
+     * The total usage across all services. For users that are part of an
+     * organization with pooled storage, this is the usage across all services for
+     * the organization, rather than the individual user.
+     *
+     * @param string $usage
      */
     public function setUsage($usage)
     {
@@ -64,7 +86,9 @@ class AboutStorageQuota extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->usage;
     }
     /**
-     * @param string
+     * The usage by all files in Google Drive.
+     *
+     * @param string $usageInDrive
      */
     public function setUsageInDrive($usageInDrive)
     {
@@ -78,7 +102,9 @@ class AboutStorageQuota extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->usageInDrive;
     }
     /**
-     * @param string
+     * The usage by trashed files in Google Drive.
+     *
+     * @param string $usageInDriveTrash
      */
     public function setUsageInDriveTrash($usageInDriveTrash)
     {

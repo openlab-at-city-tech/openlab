@@ -20,39 +20,63 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * The gadget's display mode. Deprecated. Possible values are: - "icon" - The
+     * gadget displays next to the event's title in the calendar view.  - "chip" -
+     * The gadget displays when the event is clicked.
+     *
      * @var string
      */
     public $display;
     /**
+     * The gadget's height in pixels. The height must be an integer greater than
+     * 0. Optional. Deprecated.
+     *
      * @var int
      */
     public $height;
     /**
+     * The gadget's icon URL. The URL scheme must be HTTPS. Deprecated.
+     *
      * @var string
      */
     public $iconLink;
     /**
+     * The gadget's URL. The URL scheme must be HTTPS. Deprecated.
+     *
      * @var string
      */
     public $link;
     /**
+     * Preferences.
+     *
      * @var string[]
      */
     public $preferences;
     /**
+     * The gadget's title. Deprecated.
+     *
      * @var string
      */
     public $title;
     /**
+     * The gadget's type. Deprecated.
+     *
      * @var string
      */
     public $type;
     /**
+     * The gadget's width in pixels. The width must be an integer greater than 0.
+     * Optional. Deprecated.
+     *
      * @var int
      */
     public $width;
     /**
-     * @param string
+     * The gadget's display mode. Deprecated. Possible values are: - "icon" - The
+     * gadget displays next to the event's title in the calendar view.  - "chip" -
+     * The gadget displays when the event is clicked.
+     *
+     * @param string $display
      */
     public function setDisplay($display)
     {
@@ -66,7 +90,10 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->display;
     }
     /**
-     * @param int
+     * The gadget's height in pixels. The height must be an integer greater than
+     * 0. Optional. Deprecated.
+     *
+     * @param int $height
      */
     public function setHeight($height)
     {
@@ -80,7 +107,9 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->height;
     }
     /**
-     * @param string
+     * The gadget's icon URL. The URL scheme must be HTTPS. Deprecated.
+     *
+     * @param string $iconLink
      */
     public function setIconLink($iconLink)
     {
@@ -94,7 +123,9 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->iconLink;
     }
     /**
-     * @param string
+     * The gadget's URL. The URL scheme must be HTTPS. Deprecated.
+     *
+     * @param string $link
      */
     public function setLink($link)
     {
@@ -108,7 +139,9 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->link;
     }
     /**
-     * @param string[]
+     * Preferences.
+     *
+     * @param string[] $preferences
      */
     public function setPreferences($preferences)
     {
@@ -122,7 +155,9 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->preferences;
     }
     /**
-     * @param string
+     * The gadget's title. Deprecated.
+     *
+     * @param string $title
      */
     public function setTitle($title)
     {
@@ -136,7 +171,9 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->title;
     }
     /**
-     * @param string
+     * The gadget's type. Deprecated.
+     *
+     * @param string $type
      */
     public function setType($type)
     {
@@ -150,7 +187,10 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->type;
     }
     /**
-     * @param int
+     * The gadget's width in pixels. The width must be an integer greater than 0.
+     * Optional. Deprecated.
+     *
+     * @param int $width
      */
     public function setWidth($width)
     {

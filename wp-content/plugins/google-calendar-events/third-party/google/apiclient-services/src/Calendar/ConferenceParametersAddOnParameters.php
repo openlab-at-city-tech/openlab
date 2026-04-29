@@ -24,7 +24,7 @@ class ConferenceParametersAddOnParameters extends \SimpleCalendar\plugin_deps\Go
      */
     public $parameters;
     /**
-     * @param string[]
+     * @param string[] $parameters
      */
     public function setParameters($parameters)
     {

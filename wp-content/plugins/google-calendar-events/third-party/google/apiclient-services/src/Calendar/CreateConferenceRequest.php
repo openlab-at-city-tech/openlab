@@ -22,13 +22,19 @@ class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
     protected $conferenceSolutionKeyType = ConferenceSolutionKey::class;
     protected $conferenceSolutionKeyDataType = '';
     /**
+     * The client-generated unique ID for this request. Clients should regenerate
+     * this ID for every new request. If an ID provided is the same as for the
+     * previous request, the request is ignored.
+     *
      * @var string
      */
     public $requestId;
     protected $statusType = ConferenceRequestStatus::class;
     protected $statusDataType = '';
     /**
-     * @param ConferenceSolutionKey
+     * The conference solution, such as Hangouts or Google Meet.
+     *
+     * @param ConferenceSolutionKey $conferenceSolutionKey
      */
     public function setConferenceSolutionKey(ConferenceSolutionKey $conferenceSolutionKey)
     {
@@ -42,7 +48,11 @@ class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->conferenceSolutionKey;
     }
     /**
-     * @param string
+     * The client-generated unique ID for this request. Clients should regenerate
+     * this ID for every new request. If an ID provided is the same as for the
+     * previous request, the request is ignored.
+     *
+     * @param string $requestId
      */
     public function setRequestId($requestId)
     {
@@ -56,7 +66,9 @@ class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->requestId;
     }
     /**
-     * @param ConferenceRequestStatus
+     * The status of the conference create request.
+     *
+     * @param ConferenceRequestStatus $status
      */
     public function setStatus(ConferenceRequestStatus $status)
     {

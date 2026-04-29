@@ -21,16 +21,16 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  *
  * @author Luís Cobucci <lcobucci@gmail.com>
  */
-final class GoogleCloudLoggingFormatter extends JsonFormatter
+class GoogleCloudLoggingFormatter extends JsonFormatter
 {
-    /** {@inheritdoc} **/
-    public function format(array $record): string
+    protected function normalizeRecord(LogRecord $record): array
     {
+        $normalized = parent::normalizeRecord($record);
         // Re-key level for GCP logging
-        $record['severity'] = $record['level_name'];
-        $record['time'] = $record['datetime']->format(DateTimeInterface::RFC3339_EXTENDED);
+        $normalized['severity'] = $normalized['level_name'];
+        $normalized['time'] = $record->datetime->format(DateTimeInterface::RFC3339_EXTENDED);
         // Remove keys that are not used by GCP
-        unset($record['level'], $record['level_name'], $record['datetime']);
-        return parent::format($record);
+        unset($normalized['level'], $normalized['level_name'], $normalized['datetime']);
+        return $normalized;
     }
 }

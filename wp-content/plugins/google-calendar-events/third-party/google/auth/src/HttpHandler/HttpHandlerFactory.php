@@ -17,21 +17,24 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Auth\HttpHandler;
 
+use SimpleCalendar\plugin_deps\Google\Auth\ApplicationDefaultCredentials;
 use SimpleCalendar\plugin_deps\GuzzleHttp\BodySummarizer;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Client;
 use SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface;
 use SimpleCalendar\plugin_deps\GuzzleHttp\HandlerStack;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Middleware;
+use SimpleCalendar\plugin_deps\Psr\Log\LoggerInterface;
 class HttpHandlerFactory
 {
     /**
      * Builds out a default http handler for the installed version of guzzle.
      *
-     * @param ClientInterface $client
-     * @return Guzzle5HttpHandler|Guzzle6HttpHandler|Guzzle7HttpHandler
+     * @param ClientInterface|null $client
+     * @param null|false|LoggerInterface $logger
+     * @return Guzzle6HttpHandler|Guzzle7HttpHandler
      * @throws \Exception
      */
-    public static function build(ClientInterface $client = null)
+    public static function build(?ClientInterface $client = null, null|false|LoggerInterface $logger = null)
     {
         if (is_null($client)) {
             $stack = null;
@@ -44,6 +47,7 @@ class HttpHandlerFactory
             }
             $client = new Client(['handler' => $stack]);
         }
+        $logger = $logger === \false ? null : $logger ?? ApplicationDefaultCredentials::getDefaultLogger();
         $version = null;
         if (defined('SimpleCalendar\plugin_deps\GuzzleHttp\ClientInterface::MAJOR_VERSION')) {
             $version = ClientInterface::MAJOR_VERSION;
@@ -51,12 +55,10 @@ class HttpHandlerFactory
             $version = (int) substr(ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
-            case 5:
-                return new Guzzle5HttpHandler($client);
             case 6:
-                return new Guzzle6HttpHandler($client);
+                return new Guzzle6HttpHandler($client, $logger);
             case 7:
-                return new Guzzle7HttpHandler($client);
+                return new Guzzle7HttpHandler($client, $logger);
             default:
                 throw new \Exception('Version not supported');
         }

@@ -15,7 +15,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Catalogue\TargetOpe
 final class TranslatorBag implements TranslatorBagInterface
 {
     /** @var MessageCatalogue[] */
-    private $catalogues = [];
+    private array $catalogues = [];
     public function addCatalogue(MessageCatalogue $catalogue): void
     {
         if (null !== $existingCatalogue = $this->getCatalogue($catalogue->getLocale())) {
@@ -29,9 +29,6 @@ final class TranslatorBag implements TranslatorBagInterface
             $this->addCatalogue($catalogue);
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getCatalogue(?string $locale = null): MessageCatalogueInterface
     {
         if (null === $locale || !isset($this->catalogues[$locale])) {
@@ -39,9 +36,6 @@ final class TranslatorBag implements TranslatorBagInterface
         }
         return $this->catalogues[$locale];
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getCatalogues(): array
     {
         return array_values($this->catalogues);

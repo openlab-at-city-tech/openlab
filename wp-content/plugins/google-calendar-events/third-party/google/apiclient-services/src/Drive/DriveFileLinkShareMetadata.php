@@ -20,15 +20,21 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DriveFileLinkShareMetadata extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * Output only. Whether the file is eligible for security update.
+     *
      * @var bool
      */
     public $securityUpdateEligible;
     /**
+     * Output only. Whether the security update is enabled for this file.
+     *
      * @var bool
      */
     public $securityUpdateEnabled;
     /**
-     * @param bool
+     * Output only. Whether the file is eligible for security update.
+     *
+     * @param bool $securityUpdateEligible
      */
     public function setSecurityUpdateEligible($securityUpdateEligible)
     {
@@ -42,7 +48,9 @@ class DriveFileLinkShareMetadata extends \SimpleCalendar\plugin_deps\Google\Mode
         return $this->securityUpdateEligible;
     }
     /**
-     * @param bool
+     * Output only. Whether the security update is enabled for this file.
+     *
+     * @param bool $securityUpdateEnabled
      */
     public function setSecurityUpdateEnabled($securityUpdateEnabled)
     {

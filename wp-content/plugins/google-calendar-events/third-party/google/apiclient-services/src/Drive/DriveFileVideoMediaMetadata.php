@@ -20,19 +20,27 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DriveFileVideoMediaMetadata extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
+     * Output only. The duration of the video in milliseconds.
+     *
      * @var string
      */
     public $durationMillis;
     /**
+     * Output only. The height of the video in pixels.
+     *
      * @var int
      */
     public $height;
     /**
+     * Output only. The width of the video in pixels.
+     *
      * @var int
      */
     public $width;
     /**
-     * @param string
+     * Output only. The duration of the video in milliseconds.
+     *
+     * @param string $durationMillis
      */
     public function setDurationMillis($durationMillis)
     {
@@ -46,7 +54,9 @@ class DriveFileVideoMediaMetadata extends \SimpleCalendar\plugin_deps\Google\Mod
         return $this->durationMillis;
     }
     /**
-     * @param int
+     * Output only. The height of the video in pixels.
+     *
+     * @param int $height
      */
     public function setHeight($height)
     {
@@ -60,7 +70,9 @@ class DriveFileVideoMediaMetadata extends \SimpleCalendar\plugin_deps\Google\Mod
         return $this->height;
     }
     /**
-     * @param int
+     * Output only. The width of the video in pixels.
+     *
+     * @param int $width
      */
     public function setWidth($width)
     {

@@ -22,7 +22,9 @@ class ConferenceParameters extends \SimpleCalendar\plugin_deps\Google\Model
     protected $addOnParametersType = ConferenceParametersAddOnParameters::class;
     protected $addOnParametersDataType = '';
     /**
-     * @param ConferenceParametersAddOnParameters
+     * Additional add-on specific data.
+     *
+     * @param ConferenceParametersAddOnParameters $addOnParameters
      */
     public function setAddOnParameters(ConferenceParametersAddOnParameters $addOnParameters)
     {
