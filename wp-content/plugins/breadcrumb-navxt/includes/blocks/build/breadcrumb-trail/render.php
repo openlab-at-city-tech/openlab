@@ -9,15 +9,14 @@
  *
  * @package breadcrumb-navxt
  */
-if($attributes['hideonHome'] === true && is_front_page() && (!is_paged() && $GLOBALS['breadcrumb_navxt']->show_paged()))
+if($attributes['hideonHome'] === true && is_front_page() && !(is_paged() && $GLOBALS['breadcrumb_navxt']->show_paged()))
 {
 	return;
 }
-//Handle previews
-if(isset($_REQUEST['post_id']))
+//Handle in-editor previews, function check to prevent requiring WP6.5
+if(function_exists('wp_is_serving_rest_request') && wp_is_serving_rest_request() && current_user_can('read_post', absint($block->context['postId'])))
 {
-	$post_id = $_REQUEST['post_id'];
-	$preview_post = get_post($post_id);
+	$preview_post = get_post(absint($block->context['postId']));
 	if($attributes['format'] === 'list')
 	{
 		$template = "<li%3\$s>%1\$s</li>\n";
@@ -28,22 +27,22 @@ if(isset($_REQUEST['post_id']))
 		$template = '%1$s%2$s';
 		$outer_template = '%1$s';
 	}
-	$trail_string = $GLOBALS['breadcrumb_navxt']->_display_post($preview_post, true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache'], $template, $outer_template);
+	$trail_string_safe = $GLOBALS['breadcrumb_navxt']->_display_post($preview_post, true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache'], $template, $outer_template);
 }
 else if($attributes['format'] === 'list')
 {
-	$trail_string = bcn_display_list(true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache']);
+	$trail_string_safe = bcn_display_list(true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache']);
 }
 else
 {
-	$trail_string = bcn_display(true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache']);
+	$trail_string_safe = bcn_display(true, $attributes['link'], $attributes['reverseOrder'], $attributes['ignoreCache']);
 }
 if($attributes['format'] === 'list')
 {
 ?>
 <span><?php echo wp_kses_post($attributes['pretext']);?></span>
 <ol <?php echo wp_kses_data( get_block_wrapper_attributes( array('class' => 'breadcrumbs') ) );?>>
-	<?php echo $trail_string; ?>
+	<?php echo $trail_string_safe; ?>
 </ol>
 <?php 
 }
@@ -59,7 +58,7 @@ else if($attributes['format'] === 'breadcrumblist_rdfa_wai_aria')
 	)
 );?>>
 	<span><?php echo wp_kses_post($attributes['pretext']);?></span>
-	<?php echo $trail_string;?>
+	<?php echo $trail_string_safe;?>
 </nav>
 <?php
 }
@@ -76,7 +75,7 @@ else
 	)
 );?>>
 	<span><?php echo wp_kses_post($attributes['pretext']);?></span>
-	<?php echo $trail_string;?>
+	<?php echo $trail_string_safe;?>
 </div>
 <?php
 	}
@@ -90,7 +89,7 @@ else
 	)
 );?>>
 	<span><?php echo wp_kses_post($attributes['pretext']);?></span>
-	<?php echo $trail_string; ?>
+	<?php echo $trail_string_safe; ?>
 </div>
 <?php
 	}
@@ -103,7 +102,7 @@ else
 	)
 );?>>
 	<span><?php echo wp_kses_post($attributes['pretext']);?></span>
-	<?php echo $trail_string; ?>
+	<?php echo $trail_string_safe; ?>
 </div>
 <?php
 	}

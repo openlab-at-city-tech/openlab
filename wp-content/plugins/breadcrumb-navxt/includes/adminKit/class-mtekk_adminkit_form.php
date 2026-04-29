@@ -1,6 +1,6 @@
 <?php
 /*
-	Copyright 2015-2023  John Havlik  (email : john.havlik@mtekk.us)
+	Copyright 2015-2025  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ class form
 	 */
 	public function label($opt_id, $label)
 	{
-		printf('<label for="%1$s">%2$s</label>', esc_attr($opt_id), $label);
+		printf('<label for="%1$s">%2$s</label>', esc_attr($opt_id), esc_html($label));
 	}
 	/**
 	 * This will output a well formed table row for a text input
@@ -85,7 +85,7 @@ class form
 	 * @param bool $disable (optional)
 	 * @param string $description (optional)
 	 * 
-	 * FIXME: Parameter list non-consistant with others
+	 * FIXME: Parameter list non-consistent with others
 	 */
 	public function input_text(setting $option, $class = 'regular-text', $disable = false, $description = '')
 	{
@@ -110,7 +110,7 @@ class form
 						disabled($disable, true, false));
 				if($description !== '')
 				{
-					printf('<p class="description">%s</p>', $description);
+					printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -127,24 +127,24 @@ class form
 	 * @param int|string $max (optional)
 	 * @param int|string $step (optional)
 	 * 
-	 * FIXME: Parameter list non-consistant with others
+	 * FIXME: Parameter list non-consistent with others
 	 */
 	public function input_number(setting $option, $class = 'small-text', $disable = false, $description = '', $min = '', $max = '', $step = '')
 	{
 		$opt_id = form::get_valid_id($option->get_name());
 		$opt_name = $this->unique_prefix . '_options[' . $option->get_opt_name(). ']';
-		$extras = '';
+		$extras_escaped = '';
 		if($min !== '')
 		{
-			$extras .= 'min="' . esc_attr($min) . '" ';
+			$extras_escaped.= 'min="' . esc_attr($min) . '" ';
 		}
 		if($max !== '')
 		{
-			$extras .= 'max="' . esc_attr($max) . '" ';
+			$extras_escaped.= 'max="' . esc_attr($max) . '" ';
 		}
 		if($step !== '')
 		{
-			$extras .= 'step="' . esc_attr($step) . '" ';
+			$extras_escaped.= 'step="' . esc_attr($step) . '" ';
 		}?>
 		<tr valign="top">
 			<th scope="row">
@@ -163,10 +163,10 @@ class form
 						esc_attr($option->get_value()),
 						esc_attr($class),
 						disabled($disable, true, false),
-						$extras);
+						$extras_escaped);
 				if($description !== '')
 				{
-							printf('<p class="description">%s</p>', $description);
+							printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -205,7 +205,7 @@ class form
 						esc_attr($height));
 				if($description !== '')
 				{
-					printf('<p class="description">%s</p>', $description);
+					printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -244,7 +244,7 @@ class form
 						esc_attr($height));
 				if($description !== '')
 				{
-					printf('<p class="description">%s</p>', $description);
+					printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -282,12 +282,12 @@ class form
 							esc_attr($class),
 							disabled($disable, true, false),
 							checked($option->get_value(), true, false));
-					echo $instruction;?>
+					echo esc_html($instruction);?>
 				</label><br />
 				<?php
 				if($description !== '')
 				{
-					printf('<p class="description">%s</p>', $description);
+					printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -321,7 +321,7 @@ class form
 					esc_attr($class),
 					disabled($disable, true, false),
 					checked($value, $option->get_value(), false));
-			echo $instruction; ?>
+			echo esc_html($instruction); ?>
 		</label><br/>
 	<?php
 	}
@@ -363,7 +363,7 @@ class form
 						disabled($disable, true, false));
 				if($description !== '')
 				{
-					printf('<p class="description">%s</p>', $description);
+					printf('<p class="description">%s</p>', esc_html($description));
 				}?>
 			</td>
 		</tr>
@@ -390,7 +390,7 @@ class form
 				$options_html .= sprintf('<option value="%1$s" %2$s>%3$s</option>',
 						esc_attr($values[$key]),
 						selected($current_value, $values[$key], false),
-						$option);
+						esc_html($option));
 			}
 		}
 		return $options_html;

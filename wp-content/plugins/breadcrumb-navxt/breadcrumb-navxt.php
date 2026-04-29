@@ -3,7 +3,7 @@
 Plugin Name: Breadcrumb NavXT
 Plugin URI: http://mtekk.us/code/breadcrumb-navxt/
 Description: Adds a breadcrumb navigation showing the visitor&#39;s path to their current location. For details on how to use this plugin visit <a href="http://mtekk.us/code/breadcrumb-navxt/">Breadcrumb NavXT</a>. 
-Version: 7.4.1
+Version: 7.5.1
 Author: John Havlik
 Author URI: http://mtekk.us/
 License: GPL2
@@ -33,7 +33,8 @@ if(version_compare(phpversion(), '5.6.0', '<'))
 	//Only purpose of this function is to echo out the PHP version error
 	function bcn_phpold()
 	{
-		printf('<div class="notice notice-error"><p>' . esc_html__('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.6.0');
+		/* translators: %1$s: User's version of PHP, %2$s: Breadcrmb NavXT minimuum PHP version */
+		printf('<div class="notice notice-error"><p>' . esc_html__('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', esc_html(phpversion()), '7.0.0');
 	}
 	//If we are in the admin, let's print a warning then return
 	if(is_admin())
@@ -63,7 +64,7 @@ $breadcrumb_navxt = null;
 //TODO change to extends \mtekk\plugKit
 class breadcrumb_navxt
 {
-	const version = '7.4.1';
+	const version = '7.5.1';
 	protected $name = 'Breadcrumb NavXT';
 	protected $identifier = 'breadcrumb-navxt';
 	protected $unique_prefix = 'bcn';
@@ -104,7 +105,11 @@ class breadcrumb_navxt
 			$this->rest_controller = new bcn_rest_controller($this->breadcrumb_trail, $this->unique_prefix);
 		}
 		breadcrumb_navxt::setup_setting_defaults($this->settings);
-		if(!is_admin() || (!isset($_POST[$this->unique_prefix . '_admin_reset']) && !isset($_POST[$this->unique_prefix . '_admin_options'])))
+		if(!is_admin() || (
+				!isset($_POST[$this->unique_prefix . '_admin_reset']) && 
+				!isset($_POST[$this->unique_prefix . '_admin_options']) && 
+				!isset($_POST[$this->unique_prefix . '_admin_settings_export']) &&
+				!isset($_POST[$this->unique_prefix . '_admin_settings_import'])))
 		{
 			$this->get_settings(); //This breaks the reset options script, so only do it if we're not trying to reset the settings
 		}
@@ -118,7 +123,7 @@ class breadcrumb_navxt
 			$this->admin = new bcn_network_admin($this->breadcrumb_trail->opt, $this->plugin_basename, $this->settings);
 		}
 		//Load our main admin if in the dashboard, but only if we're not in the network dashboard (prevents goofy bugs)
-		else if(is_admin() || defined('WP_UNINSTALL_PLUGIN'))
+		else if(is_admin())
 		{
 			require_once(dirname(__FILE__) . '/class.bcn_admin.php');
 			//Instantiate our new admin object
@@ -292,7 +297,14 @@ class breadcrumb_navxt
 	}
 	public function uninstall()
 	{
-		$this->admin->uninstall();
+		if(defined('WP_UNINSTALL_PLUGIN'))
+		{
+			$breadcrumb_trail = new bcn_breadcrumb_trail();
+			require_once(dirname(__FILE__) . '/class.bcn_admin.php');
+			//Instantiate our new admin object
+			$this->admin = new bcn_admin($breadcrumb_trail->opt, $this->plugin_basename, $this->settings);
+			$this->admin->uninstall();
+		}
 	}
 	static function setup_setting_defaults(array &$settings)
 	{
@@ -343,6 +355,7 @@ class breadcrumb_navxt
 				__('Link Current Item', 'breadcrumb-navxt'));
 		$settings['Hpaged_template'] = new setting\setting_html(
 				'paged_template',
+				/* translators: %htitle%: The page title which may contain HTML */
 				sprintf('<span class="%%type%%">%1$s</span>', esc_attr__('Page %htitle%', 'breadcrumb-navxt')),
 				_x('Paged Template', 'Paged as in when on an archive or post that is split into multiple pages', 'breadcrumb-navxt'));
 		$settings['bpaged_display'] = new setting\setting_bool(
@@ -360,10 +373,12 @@ class breadcrumb_navxt
 			$settings['Hpost_' . $post_type->name . '_template'] = new setting\setting_html(
 					'post_' . $post_type->name . '_template',
 					bcn_breadcrumb::get_default_template(),
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Template', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			$settings['Hpost_' . $post_type->name . '_template_no_anchor'] = new setting\setting_html(
 					'post_' . $post_type->name . '_template_no_anchor',
 					bcn_breadcrumb::default_template_no_anchor,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Template (Unlinked)', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			//Root default depends on post type
 			if($post_type->name === 'page')
@@ -381,6 +396,7 @@ class breadcrumb_navxt
 			$settings['apost_' . $post_type->name . '_root'] = new setting\setting_absint(
 					'post_' . $post_type->name . '_root',
 					$default_root,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Root Page', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			//Archive display default depends on post type
 			if($post_type->has_archive == true || is_string($post_type->has_archive))
@@ -394,10 +410,12 @@ class breadcrumb_navxt
 			$settings['bpost_' . $post_type->name . '_archive_display'] = new setting\setting_bool(
 					'post_' . $post_type->name . '_archive_display',
 					$default_archive_display,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Archive Display', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			$settings['bpost_' . $post_type->name . '_taxonomy_referer'] = new setting\setting_bool(
 					'post_' . $post_type->name . '_taxonomy_referer',
 					false,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Hierarchy Referer Influence', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			//Hierarchy use parent first depends on post type
 			if(in_array($post_type->name, array('page', 'post')))
@@ -415,6 +433,7 @@ class breadcrumb_navxt
 			$settings['bpost_' . $post_type->name . '_hierarchy_parent_first'] = new setting\setting_bool(
 					'post_' . $post_type->name . '_hierarchy_parent_first',
 					$default_parent_first,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Hierarchy Use Parent First', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			//Hierarchy depends on post type
 			if($post_type->name === 'page')
@@ -458,10 +477,12 @@ class breadcrumb_navxt
 			$settings['bpost_' . $post_type->name . '_hierarchy_display'] = new setting\setting_bool(
 					'post_' . $post_type->name . '_hierarchy_display',
 					$default_hierarchy_display,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Hierarchy Display', 'breadcrumb-navxt'), $post_type->labels->singular_name));
 			$settings['Epost_' . $post_type->name . '_hierarchy_type'] = new setting\setting_enum(
 					'post_' . $post_type->name . '_hierarchy_type',
 					$hierarchy_type_default,
+					/* translators: %s: The singular name of the post type */
 					sprintf(__('%s Hierarchy Referer Influence', 'breadcrumb-navxt'), $post_type->labels->singular_name),
 					false,
 					false,
@@ -472,11 +493,14 @@ class breadcrumb_navxt
 		{
 			$settings['Htax_' . $taxonomy->name. '_template'] = new setting\setting_html(
 					'tax_' . $taxonomy->name. '_template',
-					__(sprintf('<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the %%title%% %s archives." href="%%link%%" class="%%type%%" bcn-aria-current><span property="name">%%htitle%%</span></a><meta property="position" content="%%position%%"></span>', $taxonomy->labels->singular_name), 'breadcrumb-navxt'),
+					/* translators: %s: The singular name of the taxonomy */
+					sprintf('<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="%s" href="%%link%%" class="%%type%%" bcn-aria-current><span property="name">%%htitle%%</span></a><meta property="position" content="%%position%%"></span>', sprintf(esc_attr__('Go to the %%title%% %s archives.', 'breadcrumb-navxt'), $taxonomy->labels->singular_name)),
+					/* translators: %s: The singular name of the taxonomy */
 					sprintf(__('%s Template', 'breadcrumb-navxt'), $taxonomy->labels->singular_name));
 			$settings['Htax_' . $taxonomy->name. '_template_no_anchor'] = new setting\setting_html(
 					'tax_' . $taxonomy->name. '_template_no_anchor',
 					bcn_breadcrumb::default_template_no_anchor,
+					/* translators: %s: The singular name of the taxonomy */
 					sprintf(__('%s Template (Unlinked)', 'breadcrumb-navxt'), $taxonomy->labels->singular_name));
 		}
 		//Miscellaneous
@@ -491,12 +515,14 @@ class breadcrumb_navxt
 		$settings['Hsearch_template'] = new setting\setting_html(
 				'search_template',
 				sprintf('<span property="itemListElement" typeof="ListItem"><span property="name">%1$s</span><meta property="position" content="%%position%%"></span>',
+						/* translators: %s: The searched phrase */
 						sprintf(esc_attr__('Search results for &#39;%1$s&#39;', 'breadcrumb-navxt'),
 								sprintf('<a property="item" typeof="WebPage" title="%1$s" href="%%link%%" class="%%type%%" bcn-aria-current>%%htitle%%</a>', esc_attr__('Go to the first page of search results for %title%.', 'breadcrumb-navxt')))),
 				__('Search Template', 'breadcrumb-navxt'));
 		$settings['Hsearch_template_no_anchor'] = new setting\setting_html(
 				'search_template_no_anchor',
 				sprintf('<span class="%%type%%">%1$s</span>',
+						/* translators: %s: The searched phrase */
 						sprintf(esc_attr__('Search results for &#39;%1$s&#39;', 'breadcrumb-navxt'), '%htitle%')),
 				__('Search Template (Unlinked)', 'breadcrumb-navxt'));
 		$settings['Hdate_template'] = new setting\setting_html(
@@ -510,12 +536,14 @@ class breadcrumb_navxt
 		$settings['Hauthor_template'] = new setting\setting_html(
 				'author_template',
 				sprintf('<span property="itemListElement" typeof="ListItem"><span property="name">%1$s</span><meta property="position" content="%%position%%"></span>',
+						/* translators: %s: The post author name the current archive is for */
 						sprintf(esc_attr__('Articles by: %1$s', 'breadcrumb-navxt'),
 								sprintf('<a title="%1$s" href="%%link%%" class="%%type%%" bcn-aria-current>%%htitle%%</a>', esc_attr__('Go to the first page of posts by %title%.', 'breadcrumb-navxt')))),
 				__('Author Template', 'breadcrumb-navxt'));
 		$settings['Hauthor_template_no_anchor'] = new setting\setting_html(
 				'author_template_no_anchor',
 				sprintf('<span class="%%type%%">%1$s</span>',
+						/* translators: %s: The post author name the current archive is for */
 						sprintf(esc_attr__('Articles by: %1$s', 'breadcrumb-navxt'), '%htitle%')),
 				__('Author Template (Unlinked)', 'breadcrumb-navxt'));
 		$settings['aauthor_root'] = new setting\setting_absint(
@@ -582,21 +610,19 @@ class breadcrumb_navxt
 			}
 			//Generate the breadcrumb trail
 			$this->breadcrumb_trail->fill_REST($post);
-			$trail_string = $this->breadcrumb_trail->display($linked, $reverse, $template);
+			$trail_string_safe = $this->breadcrumb_trail->display($linked, $reverse, $template);
 			if($return)
 			{
-				return $trail_string;
+				return $trail_string_safe;
 			}
 			else
 			{
-				//Helps track issues, please don't remove it
-				$credits = "<!-- Breadcrumb NavXT " . $this::version . " -->\n";
-				echo $credits . $trail_string;
+				echo $trail_string_safe;
 			}
 		}
 	}
 	/**
-	 * Function updates the breadcrumb_trail options array from the database in a semi intellegent manner
+	 * Function updates the breadcrumb_trail options array from the database in a semi intelligent manner
 	 * 
 	 * @since  5.0.0
 	 */
@@ -604,7 +630,7 @@ class breadcrumb_navxt
 	{
 		//Convert our settings to opts
 		$opts = adminKit::settings_to_opts($this->settings);
-		//Run setup_options for compatibilty reasons
+		//Run setup_options for compatibility reasons
 		breadcrumb_navxt::setup_options($opts);
 		//TODO: Unit tests needed to ensure the expected behavior exists
 		//Grab the current settings for the current local site from the db
@@ -636,6 +662,8 @@ class breadcrumb_navxt
 		$this->breadcrumb_trail->opt['apost_page_root'] = get_option('page_on_front');
 		//This one isn't needed as it is performed in bcn_breadcrumb_trail::fill(), it's here for completeness only
 		$this->breadcrumb_trail->opt['apost_post_root'] = get_option('page_for_posts');
+		//Now load opts into settings
+		adminKit::load_opts_into_settings($this->breadcrumb_trail->opt, $this->settings);
 	}
 	/**
 	 * Outputs the breadcrumb trail
@@ -659,22 +687,20 @@ class breadcrumb_navxt
 		}
 		//Generate the breadcrumb trail
 		$this->breadcrumb_trail->fill($force);
-		$trail_string = $this->breadcrumb_trail->display($linked, $reverse, $template, $outer_template);
+		$trail_string_safe = $this->breadcrumb_trail->display($linked, $reverse, $template, $outer_template);
 		if($return)
 		{
-			return $trail_string;
+			return $trail_string_safe;
 		}
 		else
 		{
-			//Helps track issues, please don't remove it
-			$credits = "<!-- Breadcrumb NavXT " . $this::version . " -->\n";
-			echo $credits . $trail_string;
+			echo $trail_string_safe;
 		}
 	}
 	/**
 	 * Outputs the breadcrumb trail with each element encapsulated with li tags
 	 * 
-	 * @deprecated 6.0.0 No longer needed, superceeded by $template parameter in display
+	 * @deprecated 6.0.0 No longer needed, superseded by $template parameter in display
 	 * 
 	 * @param bool $return Whether to return or echo the trail.
 	 * @param bool $linked Whether to allow hyperlinks in the trail or not.
@@ -708,14 +734,14 @@ class breadcrumb_navxt
 		}
 		//Generate the breadcrumb trail
 		$this->breadcrumb_trail->fill($force);
-		$trail_string = json_encode($this->breadcrumb_trail->display_json_ld($reverse), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+		$trail_string_safe = wp_json_encode($this->breadcrumb_trail->display_json_ld($reverse), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 		if($return)
 		{
-			return $trail_string;
+			return $trail_string_safe;
 		}
 		else
 		{
-			echo $trail_string;
+			echo $trail_string_safe;
 		}
 	}
 }

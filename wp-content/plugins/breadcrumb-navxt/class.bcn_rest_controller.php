@@ -23,7 +23,8 @@ if(version_compare(phpversion(), '5.3.0', '<'))
 	//Only purpose of this function is to echo out the PHP version error
 	function bcn_phpold()
 	{
-		printf('<div class="notice notice-error"><p>' . __('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.3.0');
+		/* translators: %1$s: User's version of PHP, %2$s: Breadcrmb NavXT minimuum PHP version */
+		printf('<div class="notice notice-error"><p>' . esc_html__('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, Breadcrumb NavXT requires %2$s', 'breadcrumb-navxt') . '</p></div>', esc_html(phpversion()), '7.0.0');
 	}
 	//If we are in the admin, let's print a warning then return
 	if(is_admin())
@@ -125,7 +126,7 @@ class bcn_rest_controller
 	 * 
 	 * @param mixed $param The parameter to validate
 	 * @param WP_REST_Request $request REST API request data
-	 * @param string $key The paramter key
+	 * @param string $key The parameter key
 	 * @return bool Whether or not the ID is valid (or atleast looks valid)
 	 */
 	public function validate_id($param, $request, $key)
@@ -137,7 +138,7 @@ class bcn_rest_controller
 	 * 
 	 * @param mixed $param The parameter to validate
 	 * @param WP_REST_Request $request REST API request data
-	 * @param string $key The paramter key
+	 * @param string $key The parameter key
 	 * @return bool Whether or not the ID is valid (or atleast looks valid)
 	 */
 	public function validate_taxonomy($param, $request, $key)

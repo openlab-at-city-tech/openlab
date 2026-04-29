@@ -1,6 +1,6 @@
 <?php
 /*
-	Copyright 2015-2023  John Havlik  (email : john.havlik@mtekk.us)
+	Copyright 2015-2025  John Havlik  (email : john.havlik@mtekk.us)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ if(!class_exists('form'))
 }
 abstract class adminKit
 {
-	const version = '3.1.1';
+	const version = '3.1.2';
 	protected $full_name;
 	protected $short_name;
 	protected $plugin_basename;
@@ -102,7 +102,7 @@ abstract class adminKit
 	protected $allowed_html;
 	protected $settings = array();
 	protected $form;
-	function __construct()
+	public function __construct()
 	{
 		$this->message = array();
 		$this->messages = array();
@@ -112,14 +112,12 @@ abstract class adminKit
 		add_action('admin_menu', array($this, 'add_page'));
 		//Installation Script hook
 		add_action('activate_' . $this->plugin_basename, array($this, 'install'));
-		//Initilizes l10n domain
-		$this->local();
 		add_action('wp_loaded', array($this, 'wp_loaded'));
 		$this->form = new form($this->unique_prefix);
 		//Register Help Output
 		//add_action('add_screen_help_and_options', array($this, 'help'));
 	}
-	function wp_loaded()
+	public function wp_loaded()
 	{
 		//Filter our allowed html tags
 		$this->allowed_html = apply_filters($this->unique_prefix . '_allowed_html', wp_kses_allowed_html('post'));
@@ -127,14 +125,14 @@ abstract class adminKit
 	/**
 	 * Returns the internal mtekk_admin_class version
 	 */
-	function get_admin_class_version()
+	public function get_admin_class_version()
 	{
 		return adminKit::version;
 	}
 	/**
 	 * Checks if the administrator has the access capability, and adds it if they don't
 	 */
-	function add_cap()
+	public function add_cap()
 	{
 		$role = get_role('administrator');
 		if($role instanceof \WP_Role && !$role->has_cap($this->access_level))
@@ -145,7 +143,7 @@ abstract class adminKit
 	/**
 	 * Return the URL of the settings page for the plugin
 	 */
-	function admin_url()
+	public function admin_url()
 	{
 		return admin_url('options-general.php?page=' . $this->identifier);
 	}
@@ -157,7 +155,7 @@ abstract class adminKit
 	 * @param string $text (optional) The text that will be surrounded by the anchor tags
 	 * @return string the assembled anchor
 	 */
-	function admin_anchor($mode, $title = '', $text = '')
+	public function admin_anchor($mode, $title = '', $text = '')
 	{
 		return $this->nonced_anchor($this->admin_url(), 'admin_' . $mode, 'true', $title, $text);
 	}
@@ -169,37 +167,37 @@ abstract class adminKit
 	 * @param mixed $value (optional) The value to place in the query string 
 	 * @param string $title (optional) The text to use in the title portion of the anchor
 	 * @param string $text (optional) The text that will be surrounded by the anchor tags
-	 * @param string $anchor_extras (optional) This text is placed within the opening anchor tag, good for adding id, classe, rel field
+	 * @param string $anchor_extras (optional) This text is placed within the opening anchor tag, good for adding id, classes, rel field
 	 * @return string the assembled anchor
 	 */
-	function nonced_anchor($uri, $mode, $value = 'true', $title = '', $text = '', $anchor_extras = '')
+	public function nonced_anchor($uri, $mode, $value = 'true', $title = '', $text = '', $anchor_extras = '')
 	{
 		//Assemble our url, nonce and all
 		$url = wp_nonce_url(add_query_arg($this->unique_prefix . '_' . $mode, $value, $uri), $this->unique_prefix . '_' . $mode);
 		//Return a valid anchor
-		return ' <a title="' . esc_attr($title) . '" href="' . $url . '" '. $anchor_extras . '>' . esc_html($text) . '</a>';
+		return ' <a title="' . esc_attr($title) . '" href="' . esc_url($url) . '" '. $anchor_extras . '>' . esc_html($text) . '</a>';
 	}
 	/**
 	 * Abstracts the check_admin_referer so that all the end user has to supply is the mode
 	 * 
 	 * @param string $mode The specific nonce "mode" (see nonced_anchor) that is being checked
 	 */
-	function check_nonce($mode)
+	public function check_nonce($mode)
 	{
-		check_admin_referer($this->unique_prefix . '_' . $mode);
+		return check_admin_referer($this->unique_prefix . '_' . $mode);
 	}
 	/**
 	 * Makes sure the current user can manage options to proceed
 	 */
-	function security()
+	protected function security()
 	{
 		//If the user can not manage options we will die on them
 		if(!current_user_can($this->access_level))
 		{
-			wp_die(__('Insufficient privileges to proceed.', $this->identifier));
+			wp_die(esc_html__('Insufficient privileges to proceed.', $this->identifier));
 		}
 	}
-	function init()
+	public function init()
 	{
 		$this->add_cap();
 		//Admin Options reset hook
@@ -261,7 +259,7 @@ abstract class adminKit
 		//Register JS for tabs
 		wp_register_script('mtekk_adminkit_tabs', plugins_url('/mtekk_adminkit_tabs' . $suffix . '.js', dirname(__FILE__) . '/assets/mtekk_adminkit_tabs' . $suffix . '.js'), array('jquery-ui-tabs'), self::version, true);
 		//Register CSS for tabs
-		wp_register_style('mtekk_adminkit_tabs', plugins_url('/mtekk_adminkit_tabs' . $suffix . '.css', dirname(__FILE__) . '/assets/mtekk_adminkit_tabs' . $suffix . '.css'));
+		wp_register_style('mtekk_adminkit_tabs', plugins_url('/mtekk_adminkit_tabs' . $suffix . '.css', dirname(__FILE__) . '/assets/mtekk_adminkit_tabs' . $suffix . '.css'), array(), self::version);
 		//Register options
 		register_setting($this->unique_prefix . '_options', $this->unique_prefix . '_options', '');
 		//Synchronize up our settings with the database as we're done modifying them now
@@ -272,7 +270,7 @@ abstract class adminKit
 	 * Adds the adminpage the menu and the nice little settings link
 	 * TODO: make this more generic for easier extension
 	 */
-	function add_page()
+	public function add_page()
 	{
 		//Add the submenu page to "settings" menu
 		$hookname = add_submenu_page('options-general.php', $this->full_name, $this->short_name, $this->access_level, $this->identifier, array($this, 'admin_page'));
@@ -290,38 +288,19 @@ abstract class adminKit
 		}
 	}
 	/**
-	 * Initilizes localization textdomain for translations (if applicable)
-	 * 
-	 * Will conditionally load the textdomain for translations. This is here for
-	 * plugins that span multiple files and have localization in more than one file
-	 * 
-	 * @return void
-	 */
-	function local()
-	{
-		global $l10n;
-		// the global and the check might become obsolete in
-		// further wordpress versions
-		// @see https://core.trac.wordpress.org/ticket/10527		
-		if(!isset($l10n[$this->identifier]))
-		{
-			load_plugin_textdomain($this->identifier, false, $this->identifier . '/languages');
-		}
-	}
-	/**
 	 * Places in a link to the settings page in the plugins listing entry
 	 * 
 	 * @param  array  $links An array of links that are output in the listing
 	 * @param  string $file The file that is currently in processing
 	 * @return array  Array of links that are output in the listing.
 	 */
-	function filter_plugin_actions($links, $file)
+	public function filter_plugin_actions($links, $file)
 	{
 		//Make sure we are adding only for the current plugin
 		if($file == $this->plugin_basename)
 		{ 
 			//Add our link to the end of the array to better integrate into the WP 2.8 plugins page
-			$links[] = '<a href="' . $this->admin_url() . '">' . esc_html__('Settings') . '</a>';
+			$links[] = '<a href="' . esc_url($this->admin_url()) . '">' . esc_html__('Settings', $this->identifier) . '</a>';
 		}
 		return $links;
 	}
@@ -330,7 +309,7 @@ abstract class adminKit
 	 *
 	 * @return bool whether or not the plugin has been installed
 	 */
-	function is_installed()
+	public function is_installed()
 	{
 		$opts = $this->get_option($this->unique_prefix . '_options');
 		return is_array($opts);
@@ -340,7 +319,7 @@ abstract class adminKit
 	 * 
 	 * FIXME: seems there is a lot of very similar code in opts_upgrade_wrapper
 	 */
-	function install()
+	public function install()
 	{
 		//Call our little security function
 		$this->security();
@@ -373,7 +352,7 @@ abstract class adminKit
 	/**
 	 * This removes database settings upon deletion of the plugin from WordPress
 	 */
-	function uninstall()
+	public function uninstall()
 	{
 		//Remove the option array setting
 		$this->delete_option($this->unique_prefix . '_options');
@@ -383,10 +362,10 @@ abstract class adminKit
 		$this->delete_option($this->unique_prefix . '_version');
 	}
 	/**
-	 * Compares the supplided version with the internal version, places an upgrade warning if there is a missmatch
+	 * Compares the supplied version with the internal version, places an upgrade warning if there is a mismatch
 	 * TODO: change this to being auto called in admin_init action
 	 */
-	function version_check($version)
+	public function version_check($version)
 	{
 		//If we didn't get a version, setup
 		if($version === false)
@@ -440,7 +419,7 @@ abstract class adminKit
 	 * @param array $settings The settings array
 	 * @return boolean
 	 */
-	function settings_validate(array &$settings)
+	public function settings_validate(array &$settings)
 	{
 		foreach($settings as $setting)
 		{
@@ -451,17 +430,17 @@ abstract class adminKit
 					return false;
 				}
 			}
-			else if($setting instanceof setting && $setting->get_value() !== $setting->validate($setting->get_value()))
+			else if($setting instanceof setting && $setting->get_value() !== $setting->validate($setting->get_value())) //FIXME: not sure I like this
 			{
 				return false;
 			}
 		}
-		return true;
+		return true; //FIXME: Shouldn't the default to be false?
 	}
 	/**
 	 * Synchronizes the backup options entry with the current options entry
 	 */
-	function opts_backup()
+	protected function opts_backup()
 	{
 		//Set the backup options in the DB to the current options
 		$this->update_option($this->unique_prefix . '_options_bk', $this->get_option($this->unique_prefix . '_options'), false);
@@ -497,7 +476,7 @@ abstract class adminKit
 	 * @param mixed $defaults (optional) The default values to validate against
 	 * @return mixed
 	 */
-	static function parse_args($args, $defaults = '')
+	static public function parse_args($args, $defaults = '')
 	{
 		if(is_object($args))
 		{
@@ -509,7 +488,7 @@ abstract class adminKit
 		}
 		else
 		{
-			wp_parse_str($args, $r);	
+			wp_parse_str($args, $r);
 		}
 		if(is_array($defaults))
 		{
@@ -525,7 +504,7 @@ abstract class adminKit
 	 * @param array $arg2 second array to merge into $arg1
 	 * @return array
 	 */
-	static function array_merge_recursive($arg1, $arg2)
+	static public function array_merge_recursive($arg1, $arg2)
 	{
 		foreach($arg2 as $key => $value)
 		{
@@ -546,7 +525,7 @@ abstract class adminKit
 	 * @param array $settings The settings array
 	 * @return array
 	 */
-	static function settings_to_opts($settings)
+	static public function settings_to_opts($settings)
 	{
 		$opts = array();
 		foreach ($settings as $key => $setting)
@@ -567,21 +546,25 @@ abstract class adminKit
 	 * 
 	 * @param array $opts The opts array
 	 */
-	function load_opts_into_settings($opts)
+	static public function load_opts_into_settings($opts, array &$settings)
 	{
+		if(!is_array($opts))
+		{
+			return false;
+		}
 		foreach($opts as $key => $value)
 		{
-			if(isset($this->settings[$key]) && $this->settings[$key] instanceof setting)
+			if(isset($settings[$key]) && $settings[$key] instanceof setting)
 			{
-				$this->settings[$key]->set_value($this->settings[$key]->validate($value));
+				$settings[$key]->set_value($settings[$key]->validate($value));
 			}
-			else if(isset($this->settings[$key]) && is_array($this->settings[$key]) && is_array($value))
+			else if(isset($settings[$key]) && is_array($settings[$key]) && is_array($value))
 			{
 				foreach($value as $subkey => $subvalue)
 				{
-					if(isset($this->settings[$key][$subkey]) && $this->settings[$key][$subkey]instanceof setting)
+					if(isset($settings[$key][$subkey]) && $settings[$key][$subkey]instanceof setting)
 					{
-						$this->settings[$key][$subkey]->set_value($this->settings[$key][$subkey]->validate($subvalue));
+						$settings[$key][$subkey]->set_value($settings[$key][$subkey]->validate($subvalue));
 					}
 				}
 			}
@@ -594,7 +577,7 @@ abstract class adminKit
 	 * @param \mtekk\adminKit\setting\setting $b
 	 * @return number
 	 */
-	function setting_equal_check($a, $b)
+	public function setting_equal_check($a, $b)
 	{
 		if(is_array($a) || is_array($b))
 		{
@@ -624,7 +607,7 @@ abstract class adminKit
 		}
 		return -1;
 	}
-	static function setting_cloner($setting)
+	static public function setting_cloner($setting)
 	{
 		if(is_array($setting))
 		{
@@ -636,7 +619,7 @@ abstract class adminKit
 		}
 	}
 	/**
-	 * Generates array of the new non-default settings based off of form input
+	 * Generates array of the new non-default settings based off of form $input
 	 * 
 	 * @param array $input The form input array of setting values
 	 * @param bool $bool_ignore_missing Tell maybe_update_from_form_input to not treat missing bool setting entries as setting to false
@@ -663,9 +646,9 @@ abstract class adminKit
 	 * 3) Compute difference between defaults and results of #3
 	 * 4) Save to database the difference generated in #4
 	 */
-	function opts_update()
+	protected function opts_update()
 	{
-		//Do some security related thigns as we are not using the normal WP settings API
+		//Do some security related things as we are not using the normal WP settings API
 		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
 		check_admin_referer($this->unique_prefix . '_options-options');
@@ -675,9 +658,14 @@ abstract class adminKit
 		//Update our backup options
 		$this->update_option($this->unique_prefix . '_options_bk', $this->opt, false);
 		$opt_prev = $this->opt;
-		//Grab our incomming array (the data is dirty)
+		//While this should never happen, if the settings are missing, exit early
+		if(!isset($_POST[$this->unique_prefix . '_options']))
+		{
+			return;
+		}
+		//Grab our incoming array (the data is dirty)
 		$input = $_POST[$this->unique_prefix . '_options'];
-		//Run through the loop and get the diff from detauls
+		//Run through the loop and get the diff from defaults
 		$new_settings = $this->get_settings_diff($input);
 		//FIXME: Eventually we'll save the object array, but not today
 		//Convert to opts array for saving
@@ -709,242 +697,282 @@ abstract class adminKit
 			{
 				$temp .= '<br />' . $setting;
 			}
-			$this->messages[] = new message($temp . '<br />' . sprintf(esc_html__('Please include this message in your %sbug report%s.', $this->identifier), '<a title="' . sprintf(esc_attr__('Go to the %s support forum.', $this->identifier), $this->short_name) . '" href="' . $this->support_url . '">', '</a>'), 'info');
+			/* translators: %1$s: HTML opening tag for link to the support forums, %2$s: HTML closing tag for link to support forums */
+			$this->messages[] = new message($temp . '<br />' . sprintf(esc_html__('Please include this message in your %1$sbug report%2$s.', $this->identifier), '<a title="' . sprintf(esc_attr__('Go to the %s support forum.', $this->identifier), $this->short_name) . '" href="' . $this->support_url . '">', '</a>'), 'info');
 		}
 		add_action('admin_notices', array($this, 'messages'));
 	}
 	/**
 	 * Retrieves the settings from database and exports as JSON
 	 */
-	function settings_export()
+	public function settings_export()
 	{
+		//Check if the user has permissions to do this
+		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_import_export');
-		//Must clone the defaults since PHP normally shallow copies
-		$default_settings = array_map('mtekk\adminKit\adminKit::setting_cloner', $this->settings);
-		//Get the database options, and load
-		//FIXME: This changes once we save settings to the db instead of opts
-		$this->load_opts_into_settings($this->get_option($this->unique_prefix . '_options'));
-		//Get the unique settings
-		$export_settings = apply_filters($this->unique_prefix . '_settings_to_export', array_udiff_assoc($this->settings, $default_settings, array($this, 'setting_equal_check')));
-		//Change our headder to application/json for direct save
-		header('Cache-Control: public');
-		//The next two will cause good browsers to download instead of displaying the file
-		header('Content-Description: File Transfer');
-		header('Content-disposition: attachemnt; filename=' . $this->unique_prefix . '_settings.json');
-		header('Content-Type: application/json');
-		//JSON encode our settings array
-		$output = json_encode(
-				(object)array(
-						'plugin' => $this->short_name,
-						'version' => $this::version,
-						'settings' => $export_settings)
-				, JSON_UNESCAPED_SLASHES, 32);
-		//Let the browser know how long the file is
-		header('Content-Length: ' . strlen($output)); // binary length
-		//Output the file
-		echo $output;
-		//Prevent WordPress from continuing on
-		die();
+		if(check_admin_referer($this->unique_prefix . '_admin_import_export'))
+		{
+			//Must clone the defaults since PHP normally shallow copies
+			$default_settings = array_map('mtekk\adminKit\adminKit::setting_cloner', $this->settings);
+			//Get the database options, and load
+			//FIXME: This changes once we save settings to the db instead of opts
+			adminKit::load_opts_into_settings($this->get_option($this->unique_prefix . '_options'), $this->settings);
+			//Get the unique settings
+			$export_settings = apply_filters($this->unique_prefix . '_settings_to_export', array_udiff_assoc($this->settings, $default_settings, array($this, 'setting_equal_check')));
+			//Change our header to application/json for direct save
+			header('Cache-Control: public');
+			//The next two will cause good browsers to download instead of displaying the file
+			header('Content-Description: File Transfer');
+			header('Content-disposition: attachment; filename=' . $this->unique_prefix . '_settings.json');
+			header('Content-Type: application/json');
+			//JSON encode our settings array
+			$output_escaped= wp_json_encode(
+					(object)array(
+							'plugin' => $this->short_name,
+							'version' => $this::version,
+							'settings' => $export_settings)
+					, JSON_UNESCAPED_SLASHES, 32);
+			//Let the browser know how long the file is
+			header('Content-Length: ' . strlen($output_escaped)); // binary length
+			//Output the file
+			echo $output_escaped;
+			//Prevent WordPress from continuing on
+			die();
+		}
 	}
 	/**
 	 * Imports JSON settings into database
+	 * 
 	 */
-	function settings_import()
+	public function settings_import()
 	{
+		//Check if the user has permissions to do this
+		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_import_export');
-		//Set the backup options in the DB to the current options
-		$this->opts_backup();
-		//Load the user uploaded file, handle failure gracefully
-		if(is_uploaded_file($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']))
+		if(check_admin_referer($this->unique_prefix . '_admin_import_export'))
 		{
-			//Grab the json settings from the temp file, treat as associative array so we can just throw the settings subfield at the update loop
-			$settings_upload = json_decode(file_get_contents($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']), true);
-			//Only continue if we have a JSON object that is for this plugin (the the WP rest_is_object() function is handy here as the REST API passes JSON)
-			if(rest_is_object($settings_upload) && isset($settings_upload['plugin']) && $settings_upload['plugin'] === $this->short_name)
+			//Set the backup options in the DB to the current options
+			$this->opts_backup();
+			//Load the user uploaded file, handle failure gracefully
+			if(isset($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']) && is_uploaded_file($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']))
 			{
+				//Grab the json settings from the temp file, treat as associative array so we can just throw the settings subfield at the update loop
+				$settings_upload = json_decode(file_get_contents($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']), true);
+				//Only continue if we have a JSON object that is for this plugin (the the WP rest_is_object() function is handy here as the REST API passes JSON)
+				if(rest_is_object($settings_upload) && isset($settings_upload['plugin']) && $settings_upload['plugin'] === $this->short_name)
+				{
+					//Act as if the JSON file was just a bunch of POST entries for a settings save
+					//Run through the loop and get the diff from defaults
+					//this isn't obvious but calls adminkit::settings_update_loop() which calls setting::maybe_update_from_form_input which performs sanitization on a per setting basis
+					$new_settings = $this->get_settings_diff($settings_upload['settings'], true);
+					//FIXME: Eventually we'll save the object array, but not today
+					//Convert to opts array for saving
+					$this->opt = adminKit::settings_to_opts($new_settings);
+					//Run opts through update script
+					//Make sure we safely import and upgrade settings if needed
+					$this->opts_upgrade($this->opt, $settings_upload['version']);
+					//Commit the option changes
+					$updated = $this->update_option($this->unique_prefix . '_options', $this->opt, true);
+					//Check if known settings match attempted save
+					if($updated && count(array_diff_key($settings_upload['settings'], $this->settings)) == 0)
+					{
+						//Let the user know everything went ok
+						$this->messages[] = new message(esc_html__('Settings successfully imported from the uploaded file.', $this->identifier)
+								. $this->admin_anchor('undo', __('Undo the options import.', $this->identifier), __('Undo', $this->identifier)), 'success');
+					}
+					else
+					{
+						$this->messages[] = new message(esc_html__('No settings were imported. Settings from uploaded file matched existing settings.', $this->identifier), 'info');
+					}
+					//Output any messages that there may be
+					add_action('admin_notices', array($this, 'messages'));
+					//And return as we're successful
+					return;
+				}
+				//If it wasn't JSON, try XML
+				else
+				{
+					return $this->opts_import();
+				}
+			}
+			//Throw an error since we could not load the file for various reasons
+			$this->messages[] = new message(esc_html__('Importing settings from file failed.', $this->identifier), 'error');
+		}
+	}
+	/**
+	 * Exports a XML options document
+	 * @deprecated 7.5.0
+	 */
+	public function opts_export()
+	{
+		_deprecated_function( __FUNCTION__, '7.5.0', '\mtekk\adminKit::settings_export');
+		//Check if the user has permissions to do this
+		$this->security();
+		//Do a nonce check, prevent malicious link/form problems 
+		if(check_admin_referer($this->unique_prefix . '_admin_import_export'))
+		{
+			//Update our internal settings
+			$this->opt = $this->get_option($this->unique_prefix . '_options');
+			//Create a DOM document
+			$dom = new \DOMDocument('1.0', 'UTF-8');
+			//Adds in newlines and tabs to the output
+			$dom->formatOutput = true;
+			//We're not using a DTD therefore we need to specify it as a standalone document
+			$dom->xmlStandalone = true;
+			//Add an element called options
+			$node = $dom->createElement('options');
+			$parnode = $dom->appendChild($node);
+			//Add a child element named plugin
+			$node = $dom->createElement('plugin');
+			$plugnode = $parnode->appendChild($node);
+			//Add some attributes that identify the plugin and version for the options export
+			$plugnode->setAttribute('name', $this->short_name);
+			$plugnode->setAttribute('version', $this::version);
+			//Change our header to text/xml for direct save
+			header('Cache-Control: public');
+			//The next two will cause good browsers to download instead of displaying the file
+			header('Content-Description: File Transfer');
+			header('Content-disposition: attachment; filename=' . $this->unique_prefix . '_settings.xml');
+			header('Content-Type: text/xml');
+			//Loop through the options array
+			foreach($this->opt as $key=>$option)
+			{
+				if(is_array($option))
+				{
+					continue;
+				}
+				//Add a option tag under the options tag, store the option value
+				$node = $dom->createElement('option', htmlentities($option, ENT_COMPAT | ENT_XML1, 'UTF-8'));
+				$newnode = $plugnode->appendChild($node);
+				//Change the tag's name to that of the stored option
+				$newnode->setAttribute('name', $key);
+			}
+			//Prepare the XML for output
+			$output_escaped = $dom->saveXML();
+			//Let the browser know how long the file is
+			header('Content-Length: ' . strlen($output_escaped)); // binary length
+			//Output the file
+			echo $output_escaped;
+			//Prevent WordPress from continuing on
+			die();
+		}
+	}
+	/**
+	 * Imports a XML options document
+	 * 
+	 * FIXME: Where is the input sanitization/validation?
+	 */
+	public function opts_import()
+	{
+		//Check if the user has permissions to do this
+		$this->security();
+		//Our quick and dirty error suppressor
+		$error_handler = function($errno, $errstr, $eerfile, $errline, $errcontext)
+		{
+			return true;
+		};
+		//Do a nonce check, prevent malicious link/form problems
+		if(check_admin_referer($this->unique_prefix . '_admin_import_export'))
+		{
+			//Set the backup options in the DB to the current options
+			$this->opts_backup();
+			//Create a DOM document
+			$dom = new \DOMDocument('1.0', 'UTF-8');
+			//We want to catch errors ourselves
+			set_error_handler($error_handler);
+			//Load the user uploaded file, handle failure gracefully
+			if(isset($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']) && is_uploaded_file($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']) && $dom->load($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']))
+			{
+				$opts_temp = array();
+				$version = '';
+				//Have to use an xpath query otherwise we run into problems
+				$xpath = new \DOMXPath($dom);  
+				$option_sets = $xpath->query('plugin');
+				//Loop through all of the xpath query results
+				foreach($option_sets as $options)
+				{
+					//We only want to import options for only this plugin
+					if($options->getAttribute('name') === $this->short_name)
+					{
+						//Grab the file version
+						$version = $options->getAttribute('version');
+						//Loop around all of the options
+						foreach($options->getelementsByTagName('option') as $child)
+						{
+							//Place the option into the option array, DOMDocument decodes html entities for us
+							$opts_temp[$child->getAttribute('name')] = $child->nodeValue;
+						}
+					}
+				}
 				//Act as if the JSON file was just a bunch of POST entries for a settings save
-				//Run through the loop and get the diff from detauls
-				$new_settings = $this->get_settings_diff($settings_upload['settings'], true);
+				//Run through the loop and get the diff from defaults
+				//this isn't obvious but calls adminkit::settings_update_loop() which calls setting::maybe_update_from_form_input which performs sanitization on a per setting basis
+				$new_settings = $this->get_settings_diff($opts_temp, true);
 				//FIXME: Eventually we'll save the object array, but not today
 				//Convert to opts array for saving
 				$this->opt = adminKit::settings_to_opts($new_settings);
 				//Run opts through update script
 				//Make sure we safely import and upgrade settings if needed
 				$this->opts_upgrade($this->opt, $settings_upload['version']);
-				//Commit the option changes
-				$updated = $this->update_option($this->unique_prefix . '_options', $this->opt, true);
-				//Check if known settings match attempted save
-				if($updated && count(array_diff_key($settings_upload['settings'], $this->settings)) == 0)
-				{
-					//Let the user know everything went ok
-					$this->messages[] = new message(esc_html__('Settings successfully imported from the uploaded file.', $this->identifier)
-							. $this->admin_anchor('undo', __('Undo the options import.', $this->identifier), __('Undo', $this->identifier)), 'success');
-				}
-				else
-				{
-					$this->messages[] = new message(esc_html__('No settings were imported. Settings from uploaded file matched existing settings.', $this->identifier), 'info');
-				}
-				//Output any messages that there may be
-				add_action('admin_notices', array($this, 'messages'));
-				//And return as we're successful
-				return;
+				
+				//Commit the loaded options to the database
+				$this->update_option($this->unique_prefix . '_options', $this->opt, true);
+				//Everything was successful, let the user know
+				$this->messages[] = new message(esc_html__('Settings successfully imported from the uploaded file.', $this->identifier)
+					. $this->admin_anchor('undo', __('Undo the options import.', $this->identifier), __('Undo', $this->identifier)), 'success');
 			}
-			//If it wasn't JSON, try XML
 			else
 			{
-				return $this->opts_import();
+				//Throw an error since we could not load the file for various reasons
+				$this->messages[] = new message(esc_html__('Importing settings from file failed.', $this->identifier), 'error');
 			}
+			//Reset to the default error handler after we're done
+			restore_error_handler();
+			//Output any messages that there may be
+			add_action('admin_notices', array($this, 'messages'));
 		}
-		//Throw an error since we could not load the file for various reasons
-		$this->messages[] = new message(esc_html__('Importing settings from file failed.', $this->identifier), 'error');
-	}
-	/**
-	 * Exports a XML options document
-	 */
-	function opts_export()
-	{
-		//Do a nonce check, prevent malicious link/form problems 
-		check_admin_referer($this->unique_prefix . '_admin_import_export');
-		//Update our internal settings
-		$this->opt = $this->get_option($this->unique_prefix . '_options');
-		//Create a DOM document
-		$dom = new \DOMDocument('1.0', 'UTF-8');
-		//Adds in newlines and tabs to the output
-		$dom->formatOutput = true;
-		//We're not using a DTD therefore we need to specify it as a standalone document
-		$dom->xmlStandalone = true;
-		//Add an element called options
-		$node = $dom->createElement('options');
-		$parnode = $dom->appendChild($node);
-		//Add a child element named plugin
-		$node = $dom->createElement('plugin');
-		$plugnode = $parnode->appendChild($node);
-		//Add some attributes that identify the plugin and version for the options export
-		$plugnode->setAttribute('name', $this->short_name);
-		$plugnode->setAttribute('version', $this::version);
-		//Change our headder to text/xml for direct save
-		header('Cache-Control: public');
-		//The next two will cause good browsers to download instead of displaying the file
-		header('Content-Description: File Transfer');
-		header('Content-disposition: attachemnt; filename=' . $this->unique_prefix . '_settings.xml');
-		header('Content-Type: text/xml');
-		//Loop through the options array
-		foreach($this->opt as $key=>$option)
-		{
-			if(is_array($option))
-			{
-				continue;
-			}
-			//Add a option tag under the options tag, store the option value
-			$node = $dom->createElement('option', htmlentities($option, ENT_COMPAT | ENT_XML1, 'UTF-8'));
-			$newnode = $plugnode->appendChild($node);
-			//Change the tag's name to that of the stored option
-			$newnode->setAttribute('name', $key);
-		}
-		//Prepair the XML for output
-		$output = $dom->saveXML();
-		//Let the browser know how long the file is
-		header('Content-Length: ' . strlen($output)); // binary length
-		//Output the file
-		echo $output;
-		//Prevent WordPress from continuing on
-		die();
-	}
-	/**
-	 * Imports a XML options document
-	 */
-	function opts_import()
-	{
-		//Our quick and dirty error supressor
-		$error_handler = function($errno, $errstr, $eerfile, $errline, $errcontext)
-		{
-			return true;
-		};
-		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_import_export');
-		//Set the backup options in the DB to the current options
-		$this->opts_backup();
-		//Create a DOM document
-		$dom = new \DOMDocument('1.0', 'UTF-8');
-		//We want to catch errors ourselves
-		set_error_handler($error_handler);
-		//Load the user uploaded file, handle failure gracefully
-		if(is_uploaded_file($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']) && $dom->load($_FILES[$this->unique_prefix . '_admin_import_file']['tmp_name']))
-		{
-			$opts_temp = array();
-			$version = '';
-			//Have to use an xpath query otherwise we run into problems
-			$xpath = new \DOMXPath($dom);  
-			$option_sets = $xpath->query('plugin');
-			//Loop through all of the xpath query results
-			foreach($option_sets as $options)
-			{
-				//We only want to import options for only this plugin
-				if($options->getAttribute('name') === $this->short_name)
-				{
-					//Grab the file version
-					$version = $options->getAttribute('version');
-					//Loop around all of the options
-					foreach($options->getelementsByTagName('option') as $child)
-					{
-						//Place the option into the option array, DOMDocument decodes html entities for us
-						$opts_temp[$child->getAttribute('name')] = $child->nodeValue;
-					}
-				}
-			}
-			//Make sure we safely import and upgrade settings if needed
-			$this->opts_upgrade($opts_temp, $version);
-			//Commit the loaded options to the database
-			$this->update_option($this->unique_prefix . '_options', $this->opt, true);
-			//Everything was successful, let the user know
-			$this->messages[] = new message(esc_html__('Settings successfully imported from the uploaded file.', $this->identifier)
-				. $this->admin_anchor('undo', __('Undo the options import.', $this->identifier), __('Undo', $this->identifier)), 'success');
-		}
-		else
-		{
-			//Throw an error since we could not load the file for various reasons
-			$this->messages[] = new message(esc_html__('Importing settings from file failed.', $this->identifier), 'error');
-		}
-		//Reset to the default error handler after we're done
-		restore_error_handler();
-		//Output any messages that there may be
-		add_action('admin_notices', array($this, 'messages'));
 	}
 	/**
 	 * Resets the database settings array to the default set in opt
 	 */
-	function opts_reset()
+	public function opts_reset()
 	{
+		//Check if the user has permissions to do this
+		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_import_export');
-		//Set the backup options in the DB to the current options
-		$this->opts_backup();
-		//Load in the hard coded default option values
-		$this->update_option($this->unique_prefix . '_options', array(), true);
-		//Reset successful, let the user know
-		$this->messages[] = new message(esc_html__('Settings successfully reset to the default values.', $this->identifier)
-			. $this->admin_anchor('undo', __('Undo the options reset.', $this->identifier), __('Undo', $this->identifier)), 'success');
-		add_action('admin_notices', array($this, 'messages'));
+		if(check_admin_referer($this->unique_prefix . '_admin_import_export'))
+		{
+			//Set the backup options in the DB to the current options
+			$this->opts_backup();
+			//Load in the hard coded default option values
+			$this->update_option($this->unique_prefix . '_options', array(), true);
+			//Reset successful, let the user know
+			$this->messages[] = new message(esc_html__('Settings successfully reset to the default values.', $this->identifier)
+				. $this->admin_anchor('undo', __('Undo the options reset.', $this->identifier), __('Undo', $this->identifier)), 'success');
+			add_action('admin_notices', array($this, 'messages'));
+		}
 	}
 	/**
 	 * Undos the last settings save/reset/import
 	 */
-	function opts_undo()
+	public function opts_undo()
 	{
+		//Check if the user has permissions to do this
+		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_undo');
-		//Set the options array to the current options
-		$opt = $this->get_option($this->unique_prefix . '_options');
-		//Set the options in the DB to the backup options
-		$this->update_option($this->unique_prefix . '_options', $this->get_option($this->unique_prefix . '_options_bk'), true);
-		//Set the backup options to the undone options
-		$this->update_option($this->unique_prefix . '_options_bk', $opt, false);
-		//Send the success/undo message
-		$this->messages[] = new message(esc_html__('Settings successfully undid the last operation.', $this->identifier)
-			. $this->admin_anchor('undo', __('Undo the last undo operation.', $this->identifier), __('Undo', $this->identifier)), 'success');
-		add_action('admin_notices', array($this, 'messages'));
+		if(check_admin_referer($this->unique_prefix . '_admin_undo'))
+		{
+			//Set the options array to the current options
+			$opt = $this->get_option($this->unique_prefix . '_options');
+			//Set the options in the DB to the backup options
+			$this->update_option($this->unique_prefix . '_options', $this->get_option($this->unique_prefix . '_options_bk'), true);
+			//Set the backup options to the undone options
+			$this->update_option($this->unique_prefix . '_options_bk', $opt, false);
+			//Send the success/undo message
+			$this->messages[] = new message(esc_html__('Settings successfully undid the last operation.', $this->identifier)
+				. $this->admin_anchor('undo', __('Undo the last undo operation.', $this->identifier), __('Undo', $this->identifier)), 'success');
+			add_action('admin_notices', array($this, 'messages'));
+		}
 	}
 	/**
 	 * Upgrades input options array, sets to $this->opt, designed to be overwritten
@@ -952,7 +980,7 @@ abstract class adminKit
 	 * @param array $opts
 	 * @param string $version the version of the passed in options
 	 */
-	function opts_upgrade($opts, $version)
+	public function opts_upgrade($opts, $version)
 	{
 		//We don't support using newer versioned option files in older releases
 		if(version_compare($this::version, $version, '>='))
@@ -965,31 +993,35 @@ abstract class adminKit
 	 * 
 	 * FIXME: seems there is a lot of very similar code in install
 	 */
-	function opts_upgrade_wrapper()
+	public function opts_upgrade_wrapper()
 	{
+		//Check if the user has permissions to do this
+		$this->security();
 		//Do a nonce check, prevent malicious link/form problems
-		check_admin_referer($this->unique_prefix . '_admin_upgrade');
-		//Grab the database options
-		$opts = $this->get_option($this->unique_prefix . '_options');
-		if(is_array($opts))
+		if(check_admin_referer($this->unique_prefix . '_admin_upgrade'))
 		{
-			//Feed the just read options into the upgrade function
-			$this->opts_upgrade($opts, $this->get_option($this->unique_prefix . '_version'));
-			//Always have to update the version
-			$this->update_option($this->unique_prefix . '_version', $this::version, false);
-			//Store the options
-			$this->update_option($this->unique_prefix . '_options', $this->opt, true);
-			//Send the success message
-			$this->messages[] = new message(esc_html__('Settings successfully migrated.', $this->identifier), 'success');
+			//Grab the database options
+			$opts = $this->get_option($this->unique_prefix . '_options');
+			if(is_array($opts))
+			{
+				//Feed the just read options into the upgrade function
+				$this->opts_upgrade($opts, $this->get_option($this->unique_prefix . '_version'));
+				//Always have to update the version
+				$this->update_option($this->unique_prefix . '_version', $this::version, false);
+				//Store the options
+				$this->update_option($this->unique_prefix . '_options', $this->opt, true);
+				//Send the success message
+				$this->messages[] = new message(esc_html__('Settings successfully migrated.', $this->identifier), 'success');
+			}
+			else
+			{
+				//Run the install script
+				$this->install();
+				//Send the success message
+				$this->messages[] = new message(esc_html__('Default settings successfully installed.', $this->identifier), 'success');
+			}
+			add_action('admin_notices', array($this, 'messages'));
 		}
-		else
-		{
-			//Run the install script
-			$this->install();
-			//Send the success message
-			$this->messages[] = new message(esc_html__('Default settings successfully installed.', $this->identifier), 'success');
-		}
-		add_action('admin_notices', array($this, 'messages'));
 	}
 	/**
 	 * help action hook function
@@ -997,7 +1029,7 @@ abstract class adminKit
 	 * @return string
 	 *
 	 */
-	function help()
+	public function help()
 	{
 		$screen = get_current_screen();
 		//Exit early if the add_help_tab function doesn't exist
@@ -1011,14 +1043,16 @@ abstract class adminKit
 			$this->help_contents($screen);
 		}
 	}
-	function help_contents(\WP_Screen &$screen)
+	public function help_contents(\WP_Screen &$screen)
 	{
 		
 	}
-	function dismiss_message()
+	//FIXME: There just has to be a better way...
+	public function dismiss_message()
 	{
+		$this->security();
 		//Grab the submitted UID
-		$uid = esc_attr($_POST['uid']);
+		$uid = sanitize_html_class(wp_unslash($_POST['uid']));
 		//Create a dummy message, with the discovered UID
 		$message = new message('', '', true, $uid);
 		//Dismiss the message
@@ -1028,7 +1062,7 @@ abstract class adminKit
 	/**
 	 * Prints to screen all of the messages stored in the message member variable
 	 */
-	function messages()
+	public function messages()
 	{
 		foreach($this->messages as $message)
 		{
@@ -1037,14 +1071,14 @@ abstract class adminKit
 		//Old deprecated messages
 		if(is_array($this->message) && count($this->message))
 		{
-			_deprecated_function( __FUNCTION__, '2.0.0', __('adminKit::message is deprecated, use new adminkit_messages instead.', $this->identifier) );
+			_deprecated_function( __FUNCTION__, '2.0.0', esc_html__('adminKit::message is deprecated, use new adminkit_messages instead.', $this->identifier) );
 			//Loop through our message classes
 			foreach($this->message as $key => $class)
 			{
 				//Loop through the messages in the current class
 				foreach($class as $message)
 				{
-					printf('<div class="%s"><p>%s</p></div>', esc_attr($key), $message);	
+					printf('<div class="%s"><p>%s</p></div>', esc_attr($key), wp_kses($message, wp_kses_allowed_html('post')));	
 				}
 			}
 			$this->message = array();
@@ -1054,28 +1088,28 @@ abstract class adminKit
 	/**
 	 * Function prototype to prevent errors
 	 */
-	function admin_styles()
+	public function admin_styles()
 	{
 
 	}
 	/**
 	 * Function prototype to prevent errors
 	 */
-	function admin_scripts()
+	public function admin_scripts()
 	{
 
 	}
 	/**
 	 * Function prototype to prevent errors
 	 */
-	function admin_head()
+	public function admin_head()
 	{
 
 	}
 	/**
 	 * Function prototype to prevent errors
 	 */
-	function admin_page()
+	public function admin_page()
 	{
 
 	}
@@ -1105,7 +1139,7 @@ abstract class adminKit
 			return $option;
 		}
 	}
-	function import_form()
+	public function import_form()
 	{
 		$form = '<div id="mtekk_admin_import_export_relocate">';
 		$form .= sprintf('<form action="%s" method="post" enctype="multipart/form-data" id="%s_admin_upload">', esc_attr($this->admin_url()), esc_attr($this->unique_prefix));
@@ -1120,9 +1154,9 @@ abstract class adminKit
 		$form .= sprintf('<input type="file" name="%1$s_admin_import_file" id="%1$s_admin_import_file" size="32" /><p class="description">', esc_attr($this->unique_prefix));
 		$form .= esc_html__('Select a JSON or XML settings file to upload and import settings from.', $this->identifier);
 		$form .= '</p></td></tr></table><p class="submit">';
-		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_settings_import" value="%2$s"/>', $this->unique_prefix, esc_attr__('Import', $this->identifier));
-		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_settings_export" value="%2$s"/>', $this->unique_prefix, esc_attr__('Export', $this->identifier));
-		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_reset" value="%2$s"/>', $this->unique_prefix, esc_attr__('Reset', $this->identifier));
+		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_settings_import" value="%2$s"/>', esc_attr($this->unique_prefix), esc_attr__('Import', $this->identifier));
+		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_settings_export" value="%2$s"/>', esc_attr($this->unique_prefix), esc_attr__('Export', $this->identifier));
+		$form .= sprintf('<input type="submit" class="button" name="%1$s_admin_reset" value="%2$s"/>', esc_attr($this->unique_prefix), esc_attr__('Reset', $this->identifier));
 		$form .= '</p></fieldset></form></div>';
 		return $form;
 	}
@@ -1133,7 +1167,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_hidden($option)
+	public function input_hidden($option)
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_hidden');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1148,10 +1182,10 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function label($opt_id, $label)
+	public function label($opt_id, $label)
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::label');
-		printf('<label for="%1$s">%2$s</label>', esc_attr($opt_id), $label);
+		printf('<label for="%1$s">%2$s</label>', esc_attr($opt_id), esc_html($label));
 	}
 	/**
 	 * This will output a well formed table row for a text input
@@ -1164,7 +1198,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_text($label, $option, $class = 'regular-text', $disable = false, $description = '')
+	public function input_text($label, $option, $class = 'regular-text', $disable = false, $description = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_text');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1180,7 +1214,7 @@ abstract class adminKit
 			</th>
 			<td>
 				<?php printf('<input type="text" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %5$s/><br />', esc_attr($opt_name), esc_attr($opt_id), esc_attr($this->opt[$option]), esc_attr($class), disabled($disable, true, false));?>
-				<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+				<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 	<?php
@@ -1199,23 +1233,23 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_number($label, $option, $class = 'small-text', $disable = false, $description = '', $min = '', $max = '', $step = '')
+	public function input_number($label, $option, $class = 'small-text', $disable = false, $description = '', $min = '', $max = '', $step = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_number');
 		$opt_id = adminKit::get_valid_id($option);
 		$opt_name = $this->unique_prefix . '_options[' . $option . ']';
-		$extras = '';
+		$extras_escaped = '';
 		if($min !== '')
 		{
-			$extras .= 'min="' . esc_attr($min) . '" ';
+			$extras_escaped .= 'min="' . esc_attr($min) . '" ';
 		}
 		if($max !== '')
 		{
-			$extras .= 'max="' . esc_attr($max) . '" ';
+			$extras_escaped .= 'max="' . esc_attr($max) . '" ';
 		}
 		if($step !== '')
 		{
-			$extras .= 'step="' . esc_attr($step) . '" ';
+			$extras_escaped .= 'step="' . esc_attr($step) . '" ';
 		}
 		if($disable)
 		{
@@ -1227,8 +1261,8 @@ abstract class adminKit
 				<?php $this->label($opt_id, $label);?>
 			</th>
 			<td>
-				<?php printf('<input type="number" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %6$s%5$s/><br />', esc_attr($opt_name), esc_attr($opt_id), esc_attr($this->opt[$option]), esc_attr($class), disabled($disable, true, false), $extras);?>
-				<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+				<?php printf('<input type="number" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %6$s%5$s/><br />', esc_attr($opt_name), esc_attr($opt_id), esc_attr($this->opt[$option]), esc_attr($class), disabled($disable, true, false), $extras_escaped);?>
+				<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 	<?php
@@ -1244,7 +1278,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function textbox($label, $option, $height = '3', $disable = false, $description = '', $class = '')
+	public function textbox($label, $option, $height = '3', $disable = false, $description = '', $class = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::textbox');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1261,7 +1295,7 @@ abstract class adminKit
 			</th>
 			<td>
 				<?php printf('<textarea rows="%6$s" name="%1$s" id="%2$s" class="%4$s" %5$s/>%3$s</textarea><br />', esc_attr($opt_name), esc_attr($opt_id), esc_textarea($this->opt[$option]), esc_attr($class), disabled($disable, true, false), esc_attr($height));?>
-					<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+					<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 		<?php
@@ -1277,7 +1311,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function tinymce($label, $option, $height = '3', $disable = false, $description = '')
+	public function tinymce($label, $option, $height = '3', $disable = false, $description = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::tinymce');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1293,7 +1327,7 @@ abstract class adminKit
 			</th>
 			<td>
 				<?php printf('<textarea rows="%6$s" name="%1$s" id="%2$s" class="%4$s" %5$s/>%3$s</textarea><br />', esc_attr($opt_name), esc_attr($opt_id), esc_textarea($this->opt[$option]), esc_attr($class), disabled($disable, true, false), esc_attr($height));?>
-				<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+				<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 	<?php
@@ -1310,7 +1344,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_check($label, $option, $instruction, $disable = false, $description = '', $class = '')
+	public function input_check($label, $option, $instruction, $disable = false, $description = '', $class = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_check');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1327,9 +1361,9 @@ abstract class adminKit
 			<td>
 				<label for="<?php echo esc_attr( $opt_id ); ?>">
 					<?php printf('<input type="checkbox" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %5$s %6$s/>', esc_attr($opt_name), esc_attr($opt_id), esc_attr($this->opt[$option]), esc_attr($class), disabled($disable, true, false), checked($this->opt[$option], true, false));?>
-					<?php echo $instruction; ?>
+					<?php echo esc_html($instruction); ?>
 				</label><br />
-				<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+				<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 	<?php
@@ -1345,7 +1379,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_radio($option, $value, $instruction, $disable = false, $class = '')
+	public function input_radio($option, $value, $instruction, $disable = false, $class = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_radio');
 		$opt_id = adminKit::get_valid_id($option);
@@ -1358,7 +1392,7 @@ abstract class adminKit
 		}?>
 		<label>
 			<?php printf('<input type="radio" name="%1$s" id="%2$s" value="%3$s" class="%4$s" %5$s %6$s/>', esc_attr($opt_name), esc_attr($opt_id), esc_attr($value), esc_attr($class), disabled($disable, true, false), checked($value, $this->opt[$option], false));?>
-			<?php echo $instruction; ?>
+			<?php echo esc_html($instruction); ?>
 		</label><br/>
 	<?php
 	}
@@ -1375,7 +1409,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function input_select($label, $option, $values, $disable = false, $description = '', $titles = false, $class = '')
+	public function input_select($label, $option, $values, $disable = false, $description = '', $titles = false, $class = '')
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::input_select');
 		//If we don't have titles passed in, we'll use option names as values
@@ -1396,7 +1430,7 @@ abstract class adminKit
 			</th>
 			<td>
 				<?php printf('<select name="%1$s" id="%2$s" class="%4$s" %5$s>%3$s</select><br />', esc_attr($opt_name), esc_attr($opt_id), $this->select_options($option, $titles, $values), esc_attr($class), disabled($disable, true, false));?>
-				<?php if($description !== ''){?><p class="description"><?php echo $description;?></p><?php }?>
+				<?php if($description !== ''){?><p class="description"><?php echo esc_html($description);?></p><?php }?>
 			</td>
 		</tr>
 	<?php
@@ -1413,7 +1447,7 @@ abstract class adminKit
 	 * 
 	 * @deprecated 7.0.0
 	 */
-	function select_options($optionname, $options, $values, $exclude = array())
+	public function select_options($optionname, $options, $values, $exclude = array())
 	{
 		_deprecated_function( __FUNCTION__, '7.0', '\mtekk\adminKit\form::select_options');
 		$options_html = '';
@@ -1423,7 +1457,7 @@ abstract class adminKit
 		{
 			if(!in_array($option, $exclude))
 			{
-				$options_html .= sprintf('<option value="%1$s" %2$s>%3$s</option>', esc_attr($values[$key]), selected($value, $values[$key], false), $option);
+				$options_html .= sprintf('<option value="%1$s" %2$s>%3$s</option>', esc_attr($values[$key]), selected($value, $values[$key], false), esc_html($option));
 			}
 		}
 		return $options_html;
@@ -1434,7 +1468,7 @@ abstract class adminKit
 	 * @param string $option The name of the option to retrieve
 	 * @return mixed The value of the option
 	 */
-	function get_option($option)
+	public function get_option($option)
 	{
 		return get_option($option);
 	}
@@ -1444,7 +1478,7 @@ abstract class adminKit
 	 * @param string $option The name of the option to update
 	 * @param mixed $newvalue The new value to set the option to
 	 */
-	function update_option($option, $newvalue, $autoload = null)
+	public function update_option($option, $newvalue, $autoload = null)
 	{
 		return update_option($option, $newvalue, $autoload);
 	}
@@ -1456,17 +1490,31 @@ abstract class adminKit
 	 * @param null $deprecated Deprecated parameter
 	 * @param string $autoload Whether or not to autoload the option, it's a string because WP is special
 	 */
-	function add_option($option, $value = '', $deprecated = '', $autoload = 'yes')
+	public function add_option($option, $value = '', $deprecated = '', $autoload = 'yes')
 	{
-		return add_option($option, $value, null, $autoload);
+		return add_option($option, $value, '', $autoload);
 	}
 	/**
 	 * A local pass through for delete_option so that we can hook in and pick the correct method if needed
 	 *
 	 * @param string $option The name of the option to delete
 	 */
-	function delete_option($option)
+	public function delete_option($option)
 	{
 		return delete_option($option);
+	}
+	/**
+	 * Initializes localization textdomain for translations (if applicable)
+	 *
+	 * Will conditionally load the textdomain for translations. This is here for
+	 * plugins that span multiple files and have localization in more than one file
+	 *
+	 * @return void
+	 *
+	 * @deprecated 7.5.1
+	 */
+	public function local()
+	{
+		//Nothing to see here now that it's deprecated
 	}
 }

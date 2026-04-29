@@ -21,12 +21,12 @@ require_once(dirname(__FILE__) . '/includes/block_direct_access.php');
 class bcn_breadcrumb
 {
 	//Our member variables
-	const version = '7.4.1';
+	const version = breadcrumb_navxt::version;
 	//The main text that will be shown
 	protected $title;
-	//The breadcrumb's template, used durring assembly
+	//The breadcrumb's template, used during assembly
 	protected $template;
-	//The breadcrumb's no anchor template, used durring assembly when there won't be an anchor
+	//The breadcrumb's no anchor template, used during assembly when there won't be an anchor
 	protected $template_no_anchor;
 	//Boolean, is this element linked
 	protected $linked = false;
@@ -34,7 +34,6 @@ class bcn_breadcrumb
 	protected $url;
 	//The corresponding resource ID
 	protected $id = null;
-	private $_title = null;
 	//The type of this breadcrumb
 	protected $type;
 	const default_template_no_anchor = '<span property="itemListElement" typeof="ListItem"><span property="name" class="%type%">%htitle%</span><meta property="url" content="%link%"><meta property="position" content="%position%"></span>';
@@ -71,7 +70,7 @@ class bcn_breadcrumb
 			}
 			else
 			{
-				$this->template_no_anchor =  $this->run_template_kses(apply_filters('bcn_breadcrumb_template_no_anchor', $template, $this->type, $this->id));
+				$this->template_no_anchor =  $this->kses(apply_filters('bcn_breadcrumb_template_no_anchor', $template, $this->type, $this->id));
 				$this->set_template(bcn_breadcrumb::get_default_template());
 			}
 		}
@@ -96,7 +95,6 @@ class bcn_breadcrumb
 	{
 		//Set the title
 		$this->title = apply_filters('bcn_breadcrumb_title', $title, $this->type, $this->id);
-		$this->_title = $this->title;
 	}
 	/**
 	 * Function to get the protected title member
@@ -148,22 +146,22 @@ class bcn_breadcrumb
 	/**
 	 * A wrapper for wp_kses which handles getting the allowed html
 	 * 
-	 * @param string $template_str The tempalte string to run through kses
-	 * @return string The template string post cleaning
+	 * @param string $string The string to run through kses
+	 * @return string The string post cleaning
 	 */
-	protected function run_template_kses($template_str)
+	protected function kses($string)
 	{
-		return wp_kses($template_str, apply_filters('bcn_allowed_html', wp_kses_allowed_html('post')));
+		return wp_kses($string, apply_filters('bcn_allowed_html', wp_kses_allowed_html('post')));
 	}
 	/**
 	 * Function to set the internal breadcrumb template
 	 *
-	 * @param string $template the template to use durring assebly
+	 * @param string $template the template to use during assembly
 	 */
 	public function set_template($template)
 	{
 		//Assign the breadcrumb template
-		$this->template = $this->run_template_kses(apply_filters('bcn_breadcrumb_template', $template, $this->type, $this->id));
+		$this->template = $this->kses(apply_filters('bcn_breadcrumb_template', $template, $this->type, $this->id));
 	}
 	/**
 	 * Function to set the internal breadcrumb ID
@@ -202,38 +200,6 @@ class bcn_breadcrumb
 		return $this->type;
 	}
 	/**
-	 * This function will intelligently trim the title to the value passed in through $max_length. This function is deprecated, do not call.
-	 *
-	 * @param int $max_length of the title.
-	 * @deprecated since 5.2.0
-	 */
-	public function title_trim($max_length)
-	{
-		_deprecated_function(__FUNCTION__, '5.2.0');
-		//To preserve HTML entities, must decode before splitting
-		$this->title = html_entity_decode($this->title, ENT_COMPAT, 'UTF-8');
-		$title_length = mb_strlen($this->title);
-		//Make sure that we are not making it longer with that ellipse
-		if($title_length > $max_length && ($title_length + 2) > $max_length)
-		{
-			//Trim the title
-			$this->title = mb_substr($this->title, 0, $max_length - 1);
-			//Make sure we can split, but we want to limmit to cutting at max an additional 25%
-			if(mb_strpos($this->title, ' ', .75 * $max_length) > 0)
-			{
-				//Don't split mid word
-				while(mb_substr($this->title,-1) != ' ')
-				{
-					$this->title = mb_substr($this->title, 0, -1);
-				}
-			}
-			//Remove the whitespace at the end and add the hellip
-			$this->title = rtrim($this->title) . html_entity_decode('&hellip;', ENT_COMPAT, 'UTF-8');
-		}
-		//Return to the encoded version of all HTML entities (keep standards complance)
-		$this->title = force_balance_tags(htmlentities($this->title, ENT_COMPAT, 'UTF-8'));
-	}
-	/**
 	 * Assembles the parts of the breadcrumb into a html string
 	 *
 	 * @param bool $linked Allow the output to contain anchors?
@@ -254,13 +220,13 @@ class bcn_breadcrumb
 		}
 		//Build our replacements array
 		$replacements = array(
-			'%title%' => esc_attr(strip_tags($this->title)),
+			'%title%' => esc_attr(wp_strip_all_tags($this->title)),
 			'%link%' => esc_url($this->url),
-			'%htitle%' => $this->title,
+			'%htitle%' => $this->kses($this->title), /*TODO: verify if we want to restrict this more*/
 			'%type%' => apply_filters('bcn_breadcrumb_types', $this->type, $this->id),
-			'%ftitle%' => esc_attr(strip_tags($this->_title)),
-			'%fhtitle%' => $this->_title,
-			'%position%' => $position,
+			'%ftitle%' => esc_attr(wp_strip_all_tags($this->title)),
+			'%fhtitle%' => $this->kses($this->title), /*TODO: verify if we want to restrict this more*/
+			'%position%' => esc_attr($position),
 			'bcn-aria-current' => $aria_current_str
 			);
 		//The type may be an array, implode it if that is the case
@@ -271,7 +237,9 @@ class bcn_breadcrumb
 		}
 		else
 		{
-			_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, __('bcn_breadcrumb::type must be an array', 'breadcrumb-navxt'), '6.0.2');	
+			_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, esc_html__('bcn_breadcrumb::type must be an array', 'breadcrumb-navxt'), '6.0.2');
+			//Type wasn't an array, throw it through esc_attr
+			$replacements['%type%'] == esc_attr($replacements['%type%']);
 		}
 		$replacements = apply_filters('bcn_template_tags', $replacements, $this->type, $this->id);
 		//If we are linked we'll need to use the normal template
