@@ -20,9 +20,7 @@ class EMCS_Customizer
     {
         include_once(EMCS_EVENT_TYPES . 'event-types.php');
 
-        // hook sync button listener
-        EMCS_Event_Types::sync_event_types_button_listener();
-        $events = EMCS_Event_Types::get_event_types();
+        $emcs_events = EMCS_Event_Types::get_event_types();
 ?>
         <div class="emcs-title">
             <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="200px" />
@@ -30,20 +28,26 @@ class EMCS_Customizer
         <div class="emcs-subtitle">
             <?php esc_html_e('Widget Customizer', 'embed-calendly-scheduling'); ?>
             <div class="emcs-sync-event-types">
-                <form action="" method="POST">
-                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button"><span class="dashicons dashicons-update-alt emcs-dashicon"></span> <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?> </button>
+                <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+                    <input type="hidden" name="action" value="emcs_sync_event_types">
+                    <?php wp_nonce_field('emcs_sync_event_types_action', '_wpnonce', true, true); ?>
+                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button">
+                        <span class="dashicons dashicons-update-alt emcs-dashicon"></span>
+                        <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?>
+                    </button>
                 </form>
             </div>
         </div>
         <div class="emcs-container emcs-customizer">
             <?php
 
-            if (empty($events)) {
-                printf(esc_html__('%1$sCreate an event type in your Calendly account to begin customization.%1$s'), '<div class="emcs-text-center">', '</div>');
+            if (empty($emcs_events)) {
+                /* translators: %1$s opens a div tag, %2$s closes a div tag */
+                printf(wp_kses_post(__('%1$sCreate an event type in your Calendly account to begin customization.%1$s', 'embed-calendly-scheduling')), '<div class="emcs-text-center">', '</div>');
                 return;
             }
 
-            $owner = EMCS_Event_Types::extract_event_type_owner($events[0]->url);
+            $owner = EMCS_Event_Types::extract_event_type_owner($emcs_events[0]->url);
             ?>
             <div class="emcs-embed-title"><?php esc_html_e('Customize Widget', 'embed-calendly-scheduling'); ?></div>
             <?php

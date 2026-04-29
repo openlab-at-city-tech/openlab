@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Plugin Name: EMC Scheduling Manager
- * Description: Simplest way to manage & embed Calendly scheduling features in WordPress.
- * Author: Simpma Solutions, Shycoder
+ * Plugin Name: EMC - Easily Embed Calendly Scheduling
+ * Description: Embed Calendly scheduling pages in WordPress and optimize your booking flow with analytics, availability indicator, and conversion tools.
+ * Author: Simpma Solutions
  * Author URI: https://simpma.com/emc/
- * Version: 4.2
+ * Version: 5.5
  * License: GPLv2 or later
  * Text Domain: embed-calendly-scheduling
  */
@@ -30,18 +30,46 @@ add_action('admin_enqueue_scripts', 'emcs_admin_scripts');
 
 function emcs_admin_scripts()
 {
-    if (isset($_REQUEST['page'])) {
-        if (
-            $_REQUEST['page'] == 'emcs-customizer' || $_REQUEST['page'] == 'emcs-settings'
-            || $_REQUEST['page'] == 'emcs-event-types'
-        ) {
-            wp_enqueue_style('emcs_admin_css', EMCS_URL . 'assets/css/admin.css');
-            wp_enqueue_style('emcs_util_css', EMCS_URL . 'assets/css/util.css');
-            wp_enqueue_script('emcs_customizer_js',  EMCS_URL . 'assets/js/widget-customizer.js', [], false, true);
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only page check
+    if (isset($_GET['page'])) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only page check
+        $page = sanitize_text_field(wp_unslash($_GET['page']));
+
+        $allowed_pages = [
+            'emcs-customizer',
+            'emcs-settings',
+            'emcs-event-types'
+        ];
+
+        if (in_array($page, $allowed_pages, true)) {
+            wp_enqueue_style(
+                'emcs_admin_css',
+                EMCS_URL . 'assets/css/admin.css',
+                [],
+                filemtime(EMCS_DIR . 'assets/css/admin.css')
+            );
+            wp_enqueue_style(
+                'emcs_util_css',
+                EMCS_URL . 'assets/css/util.css',
+                [],
+                filemtime(EMCS_DIR . 'assets/css/util.css')
+            );
+            wp_enqueue_script(
+                'emcs_customizer_js',
+                EMCS_URL . 'assets/js/widget-customizer.js',
+                [],
+                filemtime(EMCS_DIR . 'assets/js/widget-customizer.js'),
+                true
+            );
         }
     }
 
-    wp_register_style('emcs_style', EMCS_URL . 'assets/css/style.css');
+    wp_register_style(
+        'emcs_style',
+        EMCS_URL . 'assets/css/style.css',
+        [],
+        filemtime(EMCS_DIR . 'assets/css/style.css')
+    );
 }
 
 add_action('wp_enqueue_scripts', 'emcs_calendly_scripts');
@@ -49,14 +77,16 @@ add_action('admin_enqueue_scripts', 'emcs_calendly_scripts');
 
 function emcs_calendly_scripts()
 {
-    wp_register_style('emcs_calendly_css', EMCS_URL . 'assets/css/widget.css');
-    wp_register_script('emcs_calendly_js',  EMCS_URL . 'assets/js/widget.js', [], false, true);
+    wp_register_style('emcs_calendly_css', EMCS_URL . 'assets/css/widget.css', [], filemtime(EMCS_DIR . 'assets/css/widget.css'));
+    wp_register_script('emcs_calendly_js',  EMCS_URL . 'assets/js/widget.js', [], filemtime(EMCS_DIR . 'assets/js/widget.js'), true);
 }
 
-add_shortcode('calendly', array('EMCS_Shortcode', 'register_shortcode'));
+add_shortcode('calendly', array('EMCS_Shortcode', 'basic_embedder'));
+add_shortcode('calendly_dynamic_embedder', array('EMCS_Shortcode', 'dynamic_embedder'));
 add_action('admin_menu', 'EMCS_Event_Types_Dashboard::init');
 add_action('admin_menu', 'EMCS_Customizer::init');
 include_once(EMCS_INCLUDES . 'settings.php');
 add_action('in_admin_header', 'EMCS_Admin::clear_unwanted_notices', 1000);
+add_action('admin_post_emcs_sync_event_types', 'EMCS_Admin::sync_event_types_button_listener');
 add_action('admin_init', 'EMCS_Promotions::init');
 add_action('admin_menu', 'EMCS_Promotions::init_menu');

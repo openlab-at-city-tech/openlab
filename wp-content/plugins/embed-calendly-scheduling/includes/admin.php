@@ -6,15 +6,26 @@ class EMCS_Admin
 {
     public static function clear_unwanted_notices()
     {
-        if (isset($_REQUEST['page'])) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only reading admin page slug.
+        if (!isset($_GET['page'])) {
+            return;
+        }
 
-            if (
-                $_REQUEST['page'] == 'emcs-customizer' || $_REQUEST['page'] == 'emcs-event-types' || $_REQUEST['page'] == 'emcs-settings'
-                || $_REQUEST['page'] == 'emcp-analytics' || $_REQUEST['page'] == 'emcp-events'
-            ) {
-                remove_all_actions('admin_notices');
-                remove_all_actions('all_admin_notices');
-            }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only reading admin page slug.
+        $page = sanitize_text_field(wp_unslash($_GET['page']));
+
+        $allowed_pages = [
+            'emcs-customizer',
+            'emcs-event-types',
+            'emcs-settings',
+            'emcp-analytics',
+            'emcp-events',
+            'emcs-licenses'
+        ];
+
+        if (in_array($page, $allowed_pages, true)) {
+            remove_all_actions('admin_notices');
+            remove_all_actions('all_admin_notices');
         }
     }
 
@@ -26,5 +37,28 @@ class EMCS_Admin
 
         require_once(EMCS_EVENT_TYPES . 'event-types.php');
         EMCS_Event_Types::create_emcs_event_types_table();
+    }
+
+    public static function sync_event_types_button_listener()
+    {
+        if (
+            !isset($_POST['_wpnonce']) ||
+            !wp_verify_nonce(
+                sanitize_text_field(wp_unslash($_POST['_wpnonce'])),
+                'emcs_sync_event_types_action'
+            )
+        ) {
+            wp_die('Invalid nonce');
+        }
+
+        include_once(EMCS_EVENT_TYPES . 'event-types.php');
+        EMCS_Event_Types::sync_event_types();
+
+        $redirect = isset($_POST['_wp_http_referer'])
+            ? sanitize_text_field(wp_unslash($_POST['_wp_http_referer']))
+            : admin_url('admin.php?page=emcs-event-types');
+
+        wp_safe_redirect($redirect);
+        exit;
     }
 }

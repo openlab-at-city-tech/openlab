@@ -7,48 +7,43 @@ class EMCS_Embed
 {
     private $atts;
     private $url;
+    private $redirection_url;
 
     public function __construct($atts)
     {
         $this->atts = $atts;
-        $this->url = $atts['url'];
+        $this->url = isset($atts['url']) ? esc_url_raw($atts['url']) : '';
+        $this->redirection_url = isset($atts['redirection_url']) ? esc_url_raw($atts['redirection_url']) : '';
+
+        // prefill user fields always
+        if (!empty($atts['prefill_fields'])) {
+            $this->url = $this->prefill_fields($this->url);
+        }
+
+        $this->url = $this->sanitize_calendar_url($this->url);
+
+        // handle GDPR & hide details
         $url_parts = [];
 
-        if (isset($atts['url'])) {
+        if (!empty($atts['cookie_banner'])) {
+            $url_parts[] = 'hide_gdpr_banner=1';
+        }
 
-
-            if (isset($atts['prefill_fields'])) {
-
-                if (!empty($atts['prefill_fields'])) {
-                    $this->url = $this->prefill_fields($this->url);
-                }
-            }
-
-            if (isset($atts['cookie_banner'])) {
-
-                if (!empty($atts['cookie_banner'])) {
-
-                    $url_parts[] = 'hide_gdpr_banner=1';
-                }
-            }
-
-            if (isset($atts['hide_details'])) {
-
-                if (!empty($atts['hide_details'])) {
-
-                    $url_parts[] = 'hide_event_type_details=1';
-                }
-            }
+        if (!empty($atts['hide_details'])) {
+            $url_parts[] = 'hide_event_type_details=1';
         }
 
         if (!empty($url_parts)) {
             $this->url = $this->prepare_embed_url($this->url, $url_parts);
         }
 
+        // allow Pro version to add extra params via hook
+        $this->url = apply_filters('emcs_embed_final_url', $this->url, $atts);
+
+        // define embed type constants if not defined
         if (!defined('EMCS_BUTTON_EMBED_TYPE')) {
             define('EMCS_BUTTON_EMBED_TYPE', 2);
         }
-
         if (!defined('EMCS_POPUP_TEXT_EMBED_TYPE')) {
             define('EMCS_POPUP_TEXT_EMBED_TYPE', 3);
         }
@@ -56,27 +51,20 @@ class EMCS_Embed
 
     public function embed_calendar()
     {
-
         if (!empty($this->atts)) {
 
-            do_action('emcp_before_calendar_embed', $this->url);
+            do_action('emcs_before_calendar_embed', $this->url);
 
-            $sanitized_atts = $this->clean_shortcode_atts($this->atts);
+            $sanitized_atts = $this->atts;
 
             if ($sanitized_atts) {
-
                 switch ($sanitized_atts['embed_type']) {
                     case EMCS_BUTTON_EMBED_TYPE:
-
-                        if ($sanitized_atts['button_style'] == 1) {
-                            return $this->embed_inline_button_widget($sanitized_atts);
-                        } else {
-                            return $this->embed_popup_button_widget($sanitized_atts);
-                        }
-
+                        return ($sanitized_atts['button_style'] == 1)
+                            ? $this->embed_inline_button_widget($sanitized_atts)
+                            : $this->embed_popup_button_widget($sanitized_atts);
                     case EMCS_POPUP_TEXT_EMBED_TYPE:
                         return $this->embed_popup_text_widget($sanitized_atts);
-
                     default:
                         return $this->embed_inline_widget($sanitized_atts);
                 }
@@ -84,145 +72,138 @@ class EMCS_Embed
         }
     }
 
-    /**
-     * Clean shortcode attributes and properly escape them
-     * 
-     * @param array atts Array of shortcode options
-     * @return array Cleaned attributes
-     */
-    private function clean_shortcode_atts($atts)
+    private function sanitize_calendar_url($url)
     {
-        $sanitized_atts = [];
+        if (empty($url)) return $url;
 
-        if ($atts) {
-            foreach ($atts as $att_key => $att_value) {
-                $sanitized_atts[$att_key] = esc_html($att_value);
-            }
-        }
+        $parsed = wp_parse_url($url);
 
-        return $sanitized_atts;
-    }
+        if (!empty($parsed['query'])) {
 
-    /**
-     * Autopopulate name and email fields when embedding booking form
-     * 
-     * @param string url URL to update with prefill parameters
-     */
-    private function prefill_fields($url)
-    {
+            parse_str($parsed['query'], $query_array);
 
-        if ($url) {
+            // keep only allowed query params
+            $allowed = ['name', 'email'];
+            $query_array = array_intersect_key($query_array, array_flip($allowed));
 
-            $current_user = wp_get_current_user();
+            $url = (isset($parsed['scheme']) ? $parsed['scheme'] . '://' : '') .
+                (isset($parsed['host']) ? $parsed['host'] : '') .
+                (isset($parsed['path']) ? $parsed['path'] : '');
 
-            if ($current_user) {
-
-                $updated_url = $url;
-                $name = '';
-
-                if (!empty($current_user->user_email)) {
-
-                    $email = urlencode($current_user->user_email);
-                    $updated_url .= "?email=$email";
-                }
-
-                if (!empty($current_user->first_name)) {
-                    $name .= urlencode($current_user->first_name);
-                }
-
-                if (!empty($current_user->last_name)) {
-                    $name .= '%20' . urlencode($current_user->last_name);
-                }
-
-                if (!empty($name)) {
-                    $updated_url .= "&name=$name";
-                }
-
-                return $updated_url;
+            if (!empty($query_array)) {
+                $url .= '?' . http_build_query($query_array);
             }
         }
 
         return $url;
     }
 
-    /**
-     * Embeds calendly inline widget
-     * 
-     * @param array atts Array of shortcode options
-     * @return string HTML code for inline embed widget
-     */
-    private function embed_inline_widget($atts = array())
+    private function prefill_fields($url)
     {
-        return '<div id="calendly-inline-widget" data-url="' . esc_attr($this->url) . '" class="calendly-inline-widget ' . esc_attr($atts['style_class']) . '" data-url="' . esc_url($this->url) . '"
-                     style="height:' . esc_attr($atts['form_height']) . '; min-width:' . esc_attr($atts['form_width']) . '"></div>';
-    }
+        $current_user = wp_get_current_user();
 
-    /**
-     * Embeds calendly popup text widget
-     * 
-     * @param array atts Array of shortcode options
-     * @return string HTML code for popup text embed widget
-     */
-    private function embed_popup_text_widget($atts = array())
-    {
-        return '<a id="calendly-popup-text-widget" data-url="' . esc_attr($this->url) . '" class="' . esc_attr($atts['style_class']) . '" href="" onclick="Calendly.initPopupWidget({url: \'' . esc_url($this->url) . '\'});return false;"
-                   style="font-size:' . esc_attr($atts['text_size']) . '; color:' . esc_attr($atts['text_color']) . '">' . esc_attr($atts['text']) . '</a>';
-    }
+        if (!$current_user || empty($url)) return $url;
 
-    /**
-     * Embeds calendly inline button widget
-     * 
-     * @param array atts Array of shortcode options
-     * @return string HTML code for inline button embed widget
-     */
-    private function embed_inline_button_widget($atts = array())
-    {
-        $button_padding = '';
+        $query = [];
 
-        switch ($atts['button_size']) {
-            case 1:
-                // small size inline button
-                $button_padding = apply_filters('emcs_small_inline_button', '10px');
-                break;
-            case 2:
-                // medium size inline button
-                $button_padding = apply_filters('emcs_medium_inline_button', '15px');
-                break;
-            default:
-                // large size inline button
-                $button_padding = apply_filters('emcs_large_inline_button', '20px');
+        if (!empty($current_user->user_email)) {
+            $query['email'] = $current_user->user_email;
         }
 
-        return '<a id="calendly-inline-button-widget" data-url="' . esc_attr($this->url) . '" class="' . esc_attr($atts['style_class']) . '" href="" onclick="Calendly.initPopupWidget({url: \'' . esc_url($this->url) . '\'});return false;"
-                   style="background-color: ' . $atts['button_color'] . '; padding: ' . $button_padding . '; font-size:' . esc_attr($atts['text_size']) . '; 
-                   color:' . esc_attr($atts['text_color']) . ';">' . esc_attr($atts['text']) . '</a>';
+        $name = !empty($current_user->first_name) || !empty($current_user->last_name)
+            ? trim($current_user->first_name . ' ' . $current_user->last_name)
+            : '';
+
+        if (!empty($name)) {
+            $query['name'] = $name;
+        }
+
+        if (!empty($query)) {
+            $url .= (parse_url($url, PHP_URL_QUERY) ? '&' : '?') . http_build_query($query);
+        }
+
+        return $url;
     }
 
-    /**
-     * Embeds calendly popup button widget
-     * 
-     * @param array atts Array of shortcode options
-     * @return string Script for popup button embed widget
-     */
-    private function embed_popup_button_widget($atts = array())
+    private function embed_inline_widget($atts = [])
     {
-        return $this->popup_script($atts);
+        return '<div id="calendly-inline-widget" class="calendly-inline-widget ' . esc_attr($atts['style_class']) . '" 
+                    data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" 
+                    style="height:' . esc_attr($atts['form_height']) . '; min-width:' . esc_attr($atts['form_width']) . '"></div>';
     }
 
-    private function popup_script($atts)
+    private function embed_popup_text_widget($atts = [])
     {
-        return '<div id="calendly-popup-button-widget" data-url="' . esc_attr($this->url) . '" style="display: none"><script>window.onload = function() { Calendly.initBadgeWidget({ url: \'' . $this->url . '\', text: \'' . $atts['text'] . '\', 
-                color: \'' . $atts['button_color'] . '\', textColor: \'' . $atts['text_color'] . '\', 
-                branding: ' . $atts['branding'] . ' });}</script></div>';
+        return '<a id="calendly-popup-text-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="' . esc_attr($atts['style_class']) . '" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
+                    style="font-size:' . esc_attr($atts['text_size']) . '; color:' . esc_attr($atts['text_color']) . '">' . esc_html($atts['text']) . '</a>';
+    }
+
+    private function embed_inline_button_widget($atts = [])
+    {
+        $button_size = isset($atts['button_size']) ? (int) $atts['button_size'] : 0;
+
+        switch ($button_size) {
+            case 1:
+                $padding = apply_filters('emcs_small_inline_button', '10px');
+                break;
+
+            case 2:
+                $padding = apply_filters('emcs_medium_inline_button', '15px');
+                break;
+
+            default:
+                $padding = apply_filters('emcs_large_inline_button', '20px');
+                break;
+        }
+
+        return '<a id="calendly-inline-button-widget" data-url="' . esc_url($this->url) . '" data-redirection="' . esc_url($this->redirection_url) . '" class="' . esc_attr($atts['style_class']) . '" href="#" onclick="Calendly.initPopupWidget({url:\'' . esc_js($this->url) . '\'});return false;"
+                    style="background-color:' . esc_attr($atts['button_color']) . '; padding:' . esc_attr($padding) . '; font-size:' . esc_attr($atts['text_size']) . ';
+                    color:' . esc_attr($atts['text_color']) . ';">' . esc_html($atts['text']) . '</a>';
+    }
+
+    private function embed_popup_button_widget($atts = [])
+    {
+        $prefill_js = '';
+
+        if (!empty($atts['prefill_fields'])) {
+
+            $current_user = wp_get_current_user();
+
+            $name = !empty($current_user->first_name) || !empty($current_user->last_name)
+                ? trim($current_user->first_name . ' ' . $current_user->last_name)
+                : '';
+
+            $email = !empty($current_user->user_email) ? $current_user->user_email : '';
+
+            $prefill_js = ",
+                prefill: {
+                    name: '" . esc_js($name) . "',
+                    email: '" . esc_js($email) . "'
+                }";
+        }
+
+        return "<div id='calendly-popup-button-widget' data-url='" . esc_url($this->url) . "' data-redirection='" . esc_url($this->redirection_url) . "' style='display:none'>
+            <script>
+                window.onload = function() {
+                    Calendly.initBadgeWidget({
+                        url: " . wp_json_encode($this->url, JSON_UNESCAPED_SLASHES) . ",
+                        text: '" . esc_js($atts['text']) . "',
+                        color: '" . esc_js($atts['button_color']) . "',
+                        textColor: '" . esc_js($atts['text_color']) . "',
+                        branding: " . (!empty($atts['branding']) ? 'true' : 'false') . "
+                        $prefill_js
+                    });
+                };
+            </script>
+        </div>";
     }
 
     private function prepare_embed_url($url, $url_parts = [])
     {
+        if (empty($url) || empty($url_parts)) return $url;
 
-        if (empty($url) || empty($url_parts)) return;
+        $delimiter = parse_url($url, PHP_URL_QUERY) ? '&' : '?';
 
-        $url .= '?' . implode('&', $url_parts);
-
-        return $url;
+        return $url . $delimiter . implode('&', $url_parts);
     }
 }

@@ -1,8 +1,50 @@
-=== EMC - Easily Embed Calendly Scheduling Features ===
-Authors: Simpma Solutions, Shycoder
+=== EMC - Easily Embed Calendly Scheduling ===
+Authors: Simpma Solutions
 Plugin Page: https://wordpress.org/plugins/embed-calendly-scheduling/
 
 == Changelog ==
+
+= 5.5 - 29-04-2026 =
+
+- Improved compatibility with older PHP versions
+
+= 5.4 - 06-04-2026 =
+
+- Prevent duplicates on event types sync
+- Redirect correcly when sync button is clicked
+- Performance improvement
+
+= 5.3 - 17-03-2026 =
+
+- Security improvement
+
+= 5.2 - 14-03-2026 =
+
+- Security improvement
+- Fixed dynamic embedder UX
+- Correctly hide cookie notice in popup button
+
+= 5.1 - 12-03-2026 =
+
+- Dynamic embedder lite
+
+= 5.0 - 11-03-2026 =
+
+- Added dynamic calendar embedder
+- Security and performance improvements
+
+= 4.5 - 21-02-2026 =
+
+- Security fixes
+
+= 4.4 - 05-02-2026 =
+
+- Support for passing UTM and GCLID parameters to Calendly
+- Tested & ensured compatibility with the latest WordPress version
+
+= 4.3 - 26-01-2026 =
+
+- Tested & ensured compatibility with the latest WordPress version
 
 = 4.2 - 17-01-2025 =
 

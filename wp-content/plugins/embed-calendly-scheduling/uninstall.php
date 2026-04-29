@@ -9,9 +9,10 @@ function emcs_uninstall()
     global $wpdb;
 
     $table_name = $wpdb->prefix . 'emcs_event_types';
-    $query = "DROP table $table_name";
 
-    $wpdb->query($query);
+    // Table name is plugin-controlled and cannot use prepare placeholders
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange, PluginCheck.Security.DirectDB.UnescapedDBParameter
+    $wpdb->query("DROP TABLE IF EXISTS `{$table_name}`");
 
     delete_option('emcs_settings');
     delete_option('emcs_activation_time');

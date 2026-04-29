@@ -14,9 +14,9 @@ defined('ABSPATH') || exit;
                     <select name="emcs-choose-customizer-select" class="emcs-choose-customizer-select">
                         <?php
 
-                        foreach ($events as $event) {
+                        foreach ($emcs_events as $emcs_event) {
                         ?>
-                            <option value="<?php echo esc_attr($event->slug); ?>" id="<?php echo esc_attr($event->slug); ?>"><?php echo esc_attr($event->name); ?></option>
+                            <option value="<?php echo esc_attr($emcs_event->slug); ?>" id="<?php echo esc_attr($emcs_event->slug); ?>"><?php echo esc_attr($emcs_event->name); ?></option>
                         <?php
                         }
                         ?>

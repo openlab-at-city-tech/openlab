@@ -1,70 +1,101 @@
 <?php
-
 // Exit if accessed directly
 defined('ABSPATH') || exit;
 
 include_once(EMCS_DIR . 'includes/embed.php');
+include_once(EMCS_DIR . 'includes/dynamic-embedder.php');
 
 class EMCS_Shortcode
 {
-    public static function register_shortcode($atts)
+    /**
+     * Renders basic embedder shortcode
+     */
+    public static function basic_embedder($atts)
     {
-        return self::load_view($atts);
-    }
-
-    public static function load_view($atts)
-    {
-
-        $atts = array_change_key_case((array) $atts, CASE_LOWER);
-
-        if (empty($atts) || empty($atts['url'])) {
-            return 'Error embedding calendar. Invalid URL';
+        if (!is_array($atts)) {
+            $atts = [];
         }
 
-        // enqueue style and script on demand
+        // Normalize keys to lowercase
+        $atts = array_change_key_case($atts, CASE_LOWER);
+
+        // Prepare and sanitize attributes, preserving extra keys (like tracking)
+        $atts = self::prepare_attributes($atts);
+
         wp_enqueue_style('emcs_calendly_css');
         wp_enqueue_script('emcs_calendly_js');
 
-        $atts = self::prepare_attributes($atts);
-        $emcs_embed = new EMCS_Embed($atts);
+        if (empty($atts['url'])) {
+            return esc_html__('Error embedding calendar. Invalid URL.', 'embed-calendly-scheduling');
+        }
 
+        $emcs_embed = new EMCS_Embed($atts);
         return $emcs_embed->embed_calendar();
     }
 
-    private static function prepare_attributes($atts)
+    /**
+     * Prepare and sanitize shortcode attributes
+     *
+     * @param array $atts
+     * @return array Sanitized attributes with defaults and extra keys preserved
+     */
+    private static function prepare_attributes(array $atts)
     {
-        $embed_type = (!empty($atts['type'])) ? sanitize_text_field($atts['type']) : '1';
-        $text = (!empty($atts['text'])) ? sanitize_text_field($atts['text']) : 'Schedule a call with me';
-        $text_color = (!empty($atts['text_color'])) ? sanitize_text_field($atts['text_color']) : '#000000';
-        $text_size = (!empty($atts['text_size'])) ? sanitize_text_field($atts['text_size']) . 'px' : '12px';
-        $form_height = (!empty($atts['form_height'])) ? sanitize_text_field($atts['form_height']) . 'px' : '400px';
-        $form_width = (!empty($atts['form_width'])) ? sanitize_text_field($atts['form_width']) . 'px' : '600px';
-        $button_color = (!empty($atts['button_color'])) ? sanitize_text_field($atts['button_color']) : '#00a2ff';
-        $button_style = (!empty($atts['button_style'])) ? sanitize_text_field($atts['button_style']) : '1';
-        $button_size = (!empty($atts['button_size'])) ? sanitize_text_field($atts['button_size']) : '1';
-        $class = (!empty($atts['style_class'])) ? sanitize_text_field($atts['style_class']) : '';
-        $branding = (!empty($atts['branding'])) ? sanitize_text_field($atts['branding']) : 'false';
-        $hide_details = (!empty($atts['hide_details'])) ? sanitize_text_field($atts['hide_details']) : '0';
-        $cookie_banner = (!empty($atts['hide_cookie_banner'])) ? sanitize_text_field($atts['hide_cookie_banner']) : '0';
-        $autopopulate_fields = (!empty($atts['prefill_fields'])) ? sanitize_text_field($atts['prefill_fields']) : '0';
-        $url = esc_url_raw($atts['url']);
-
-        return [
-            'url'           => $url,
-            'embed_type'    => $embed_type,
-            'text'          => $text,
-            'text_color'    => $text_color,
-            'text_size'     => $text_size,
-            'form_height'   => $form_height,
-            'form_width'    => $form_width,
-            'button_color'  => $button_color,
-            'button_style'  => $button_style,
-            'button_size'   => $button_size,
-            'style_class'   => $class,
-            'branding'      => $branding,
-            'hide_details'  => $hide_details,
-            'cookie_banner' => (int) $cookie_banner,
-            'prefill_fields' => (int) $autopopulate_fields
+        // Known default attributes
+        $defaults = [
+            'url'               => '',
+            'type'              => 1,
+            'text'              => 'Schedule a call with me',
+            'text_color'        => '#000000',
+            'text_size'         => '12px',
+            'form_height'       => '400px',
+            'form_width'        => '600px',
+            'button_color'      => '#001F3F',
+            'button_style'      => 1,
+            'button_size'       => 1,
+            'style_class'       => '',
+            'branding'          => 0,
+            'hide_details'      => 0,
+            'hide_cookie_banner' => 0,
+            'prefill_fields'    => 0,
         ];
+
+        // Merge defaults without stripping unknown keys
+        $atts = $atts + $defaults;
+
+        // Sanitize known keys
+        $atts['url']              = !empty($atts['url']) ? esc_url_raw($atts['url']) : '';
+        $atts['embed_type']       = intval($atts['type']);
+        $atts['text']             = sanitize_text_field($atts['text']);
+        $atts['text_color']       = preg_replace('/[^#a-zA-Z0-9]/', '', sanitize_text_field($atts['text_color']));
+        $atts['text_size']        = intval($atts['text_size']) . 'px';
+        $atts['form_height']      = intval($atts['form_height']) . 'px';
+        $atts['form_width']       = intval($atts['form_width']) . 'px';
+        $atts['button_color']     = preg_replace('/[^#a-zA-Z0-9]/', '', sanitize_text_field($atts['button_color']));
+        $atts['button_style']     = intval($atts['button_style']);
+        $atts['button_size']      = intval($atts['button_size']);
+        $atts['style_class']      = sanitize_text_field($atts['style_class']);
+        $atts['branding']         = intval($atts['branding']);
+        $atts['hide_details']     = intval($atts['hide_details']);
+        $atts['cookie_banner']    = intval($atts['hide_cookie_banner']);
+        $atts['prefill_fields']   = intval($atts['prefill_fields']);
+
+        // Preserve any extra keys (utm_*, custom tracking, etc.) without sanitizing too aggressively
+        foreach ($atts as $key => $value) {
+            if (!array_key_exists($key, $defaults)) {
+                $atts[$key] = is_scalar($value) ? sanitize_text_field($value) : $value;
+            }
+        }
+
+        return $atts;
+    }
+
+    /**
+     * Render dynamic embedder shortcode
+     */
+    public static function dynamic_embedder($atts)
+    {
+        $dynamic_embed = new EMCS_Dynamic_Embedder($atts);
+        return $dynamic_embed->render();
     }
 }

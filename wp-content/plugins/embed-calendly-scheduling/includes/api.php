@@ -15,9 +15,10 @@ class EMCS_API
         $this->api_key = $api_key;
     }
 
-    public function emcs_get_events() {
-        
-        if($this->api_version == 'v2') {
+    public function emcs_get_events()
+    {
+
+        if ($this->api_version == 'v2') {
             return $this->emcs_get_events_v2();
         } else {
             return $this->emcs_get_events_v1();
@@ -34,7 +35,7 @@ class EMCS_API
         }
 
         foreach ($calendly_events->data as $events) {
-        
+
             $event = new EMCS_Event_Type(
                 $events->attributes->name,
                 $events->attributes->description,
@@ -60,7 +61,7 @@ class EMCS_API
         }
 
         foreach ($calendly_events->collection as $events) {
-        
+
             $event = new EMCS_Event_Type(
                 $events->name,
                 $events->description_plain,
@@ -75,39 +76,46 @@ class EMCS_API
         return $events_data;
     }
 
-    protected function get_current_user() {
+    protected function get_current_user()
+    {
         $calendly  = EMCS_API::connect('/users/me', $this->api_key);
         return $calendly;
     }
 
     protected function connect($endpoint, $api_key, $user = '')
     {
-        $headers = array();
 
-        $ch = curl_init();
-
-        if($this->api_version == 'v2') {
-            $url = 'https://api.calendly.com' . $endpoint;
-            $headers[] = 'Authorization: Bearer ' . $api_key;
-
-            if(!empty($user)) {
-
-                curl_setopt($ch, CURLOPT_POSTFIELDS, ['user' => $user]);
-            }
-
+        if ($this->api_version === 'v2') {
+            $url     = 'https://api.calendly.com' . $endpoint;
+            $headers = array(
+                'Authorization' => 'Bearer ' . $api_key,
+            );
         } else {
-            $url = 'https://calendly.com/api/v1' . $endpoint;
-            $headers[] = 'X-Token: ' . $api_key;
+            $url     = 'https://calendly.com/api/v1' . $endpoint;
+            $headers = array(
+                'X-Token' => $api_key,
+            );
         }
 
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        $args = array(
+            'method'  => 'GET',
+            'headers' => $headers,
+            'timeout' => 20,
+        );
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        // If v2 and user is provided, append as query param
+        if ($this->api_version === 'v2' && ! empty($user)) {
+            $url = add_query_arg('user', rawurlencode($user), $url);
+        }
 
-        return json_decode($result);
+        $response = wp_remote_request($url, $args);
+
+        if (is_wp_error($response)) {
+            return false;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+
+        return json_decode($body);
     }
 }
