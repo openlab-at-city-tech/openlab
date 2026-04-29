@@ -2,8 +2,6 @@
  * External dependencies
  */
 import jetpackAnalytics from '@automattic/jetpack-analytics';
-import { Badge } from '@automattic/ui';
-import '@automattic/ui/style.css';
 /**
  * Internal dependencies
  */
@@ -16,13 +14,15 @@ import {
 	__experimentalHStack as HStack, // eslint-disable-line @wordpress/no-unsafe-wp-apis
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { chevronDown, chevronUp } from '@wordpress/icons';
+import { chevronDown, chevronUp, plugins } from '@wordpress/icons';
+import { Badge } from '@wordpress/ui';
 import clsx from 'clsx';
-import PluginActionButton from './plugin-action-button';
+import useConfigValue from '../../../../../hooks/use-config-value.ts';
+import PluginActionButton from './plugin-action-button.tsx';
 /**
  * Types
  */
-import type { IntegrationCardProps } from './index';
+import type { IntegrationCardProps } from './index.tsx';
 import type { MouseEvent } from 'react';
 
 const noop = () => {};
@@ -30,7 +30,6 @@ const noop = () => {};
 const IntegrationCardHeader = ( {
 	title,
 	description,
-	icon,
 	isExpanded,
 	onToggle,
 	cardData = {},
@@ -97,6 +96,7 @@ const IntegrationCardHeader = ( {
 
 	const isHeaderToggleEnabledFinal = isHeaderToggleEnabled && ! __isPartial; // wait for the full data to load before allwing things to be exanded;
 	const showHeaderToggleFinal = showHeaderToggle && ! __isPartial;
+	const showIntegrationIcons = useConfigValue( 'showIntegrationIcons' );
 
 	return (
 		<CardHeader
@@ -105,15 +105,33 @@ const IntegrationCardHeader = ( {
 		>
 			<div className="integration-card__header-content">
 				<div className="integration-card__header-main">
-					<div className="integration-card__service-icon-container">
-						<Icon
-							icon={ icon }
-							className={ `integration-card__service-icon ${
-								cardData.slug ? `integration-card__service-icon--${ cardData.slug }` : ''
-							}` }
-							size={ 30 }
-						/>
-					</div>
+					{ showIntegrationIcons !== false && (
+						<div className="integration-card__service-icon-container">
+							{ cardData?.iconUrl ? (
+								<img
+									src={ cardData.iconUrl as string }
+									alt=""
+									aria-hidden={ true }
+									width={ 30 }
+									height={ 30 }
+									className={ clsx(
+										'integration-card__service-icon',
+										cardData.slug && `integration-card__service-icon--${ cardData.slug }`
+									) }
+								/>
+							) : (
+								<Icon
+									icon={ plugins }
+									className={ clsx(
+										'integration-card__service-icon',
+										cardData.slug && `integration-card__service-icon--${ cardData.slug }`
+									) }
+									size={ 30 }
+									aria-hidden={ true }
+								/>
+							) }
+						</div>
+					) }
 					<div className="integration-card__title-section">
 						<h3 className="integration-card__title">{ title }</h3>
 						{ description && (
@@ -123,7 +141,10 @@ const IntegrationCardHeader = ( {
 						{ __isPartial && (
 							<Animate type="loading">
 								{ ( { className } ) => (
-									<Badge className={ clsx( 'integration-card__plugin-badge', className ) }>
+									<Badge
+										intent="draft"
+										className={ clsx( 'integration-card__plugin-badge', className ) }
+									>
 										{ ' ' /* intentionally left blank */ }
 									</Badge>
 								) }
@@ -131,20 +152,20 @@ const IntegrationCardHeader = ( {
 						) }
 						{ showPluginAction && (
 							<Badge
-								intent={ isInstalled && ! isActive ? 'warning' : 'default' }
+								intent={ isInstalled && ! isActive ? 'low' : 'draft' }
 								className="integration-card__plugin-badge"
 							>
 								{ pluginActionLabel }
 							</Badge>
 						) }
 						{ showConnectedBadge && (
-							<Badge intent="success" className="integration-card__connected-badge">
+							<Badge intent="stable" className="integration-card__connected-badge">
 								{ __( 'Enabled', 'jetpack-forms' ) }
 							</Badge>
 						) }
 						{ showPendingBadge &&
 							( setupBadge || (
-								<Badge intent="warning" className="integration-card__setup-badge">
+								<Badge intent="low" className="integration-card__setup-badge">
 									{ __( 'Needs connection', 'jetpack-forms' ) }
 								</Badge>
 							) ) }
@@ -176,6 +197,7 @@ const IntegrationCardHeader = ( {
 							}
 						>
 							<span className="integration-card__toggle-tooltip-wrapper">
+								{ /* @ts-expect-error label is missing here. May be use FormToggle then? */ }
 								<ToggleControl
 									checked={ headerToggleValue && ( isActive || isConnected ) }
 									onChange={ handleToggleChange }

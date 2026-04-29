@@ -12,16 +12,17 @@
 	},
 	"browserslist": "extends @wordpress/browserslist-config",
 	"dependencies": {
-		"@automattic/jetpack-script-data": "^0.5.4",
+		"@automattic/jetpack-script-data": "^0.6.2",
+		"@wordpress/i18n": "6.16.0",
 		"react": "18.3.1"
 	},
 	"devDependencies": {
 		"@automattic/jetpack-webpack-config": "workspace:*",
-		"@wordpress/browserslist-config": "6.31.0",
-		"concurrently": "7.6.0",
-		"jest": "30.0.4",
+		"@wordpress/browserslist-config": "6.43.0",
+		"concurrently": "9.2.1",
+		"jest": "30.3.0",
 		"md5-es": "1.8.2",
-		"webpack": "5.101.3",
+		"webpack": "5.105.2",
 		"webpack-cli": "6.0.1"
 	}
 }

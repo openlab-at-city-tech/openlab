@@ -49,7 +49,7 @@ class MailPoet_Integration {
 			try {
 				$lists = $mailpoet_api->getLists();
 				foreach ( $lists as $list ) {
-					if ( $list['id'] === $list_id && empty( $list['deleted_at'] ) ) {
+					if ( (string) $list['id'] === (string) $list_id && empty( $list['deleted_at'] ) ) {
 						return $list['id'];
 					}
 				}
@@ -104,13 +104,51 @@ class MailPoet_Integration {
 	 * @return array|null Subscriber data on success, or null on failure.
 	 */
 	protected static function add_subscriber_to_list( $mailpoet_api, $list_id, $subscriber_data ) {
+		$email = $subscriber_data['email'];
 		try {
-			$subscriber = $mailpoet_api->addSubscriber(
-				$subscriber_data,
-				array( $list_id )
-			);
-			return $subscriber;
+			$existing = $mailpoet_api->getSubscriber( $email );
+
+			// Normalize "subscribed" status using MailPoet constant when available.
+			$status_subscribed = class_exists( '\MailPoet\Entities\SubscriberEntity' )
+				// @phan-suppress-next-line PhanUndeclaredClassConstant
+				? \MailPoet\Entities\SubscriberEntity::STATUS_SUBSCRIBED
+				: 'subscribed';
+
+			// If already subscribed to list, do nothing.
+			if ( ! empty( $existing['subscriptions'] ) && is_array( $existing['subscriptions'] ) ) {
+				foreach ( $existing['subscriptions'] as $subscription ) {
+					if (
+						isset( $subscription['segment_id'] ) && isset( $subscription['status'] ) &&
+						(string) $subscription['segment_id'] === (string) $list_id &&
+						$status_subscribed === $subscription['status']
+					) {
+						return $existing;
+					}
+				}
+			}
+
+			// Subscriber exists but is not on the target list, so add to list.
+			// If subscriber already confirmed ('subscribed'), do not resend confirmation.
+			$options = array();
+			if ( isset( $existing['status'] ) && $existing['status'] === $status_subscribed ) {
+				$options['send_confirmation_email'] = false;
+			}
+
+			return $mailpoet_api->subscribeToLists( $email, array( $list_id ), $options );
 		} catch ( \Exception $e ) {
+			// MailPoet returns APIException code 4 if "subscriber does not exist".
+			// In that case, take no action and next try statement will add subscriber.
+			// For other exceptions, return null.
+			$not_found_code = 4;
+			if ( method_exists( $e, 'getCode' ) && (int) $e->getCode() !== $not_found_code ) {
+				return null;
+			}
+		}
+
+		// Subscriber does not exist, so add new subscriber to list and send confirmation email.
+		try {
+			return $mailpoet_api->addSubscriber( $subscriber_data, array( $list_id ) );
+		} catch ( \Exception $e ) { // phpcs:ignore Squiz.PHP.EmptyCatchComment
 			return null;
 		}
 	}
@@ -137,8 +175,9 @@ class MailPoet_Integration {
 
 		$subscriber_data = array();
 		foreach ( $form->fields as $field ) {
-			$id    = strtolower( str_replace( array( ' ', '_' ), '', $field->get_attribute( 'id' ) ) );
-			$label = strtolower( str_replace( array( ' ', '_' ), '', $field->get_attribute( 'label' ) ) );
+			$type  = strtolower( (string) $field->get_attribute( 'type' ) );
+			$id    = strtolower( str_replace( array( ' ', '_' ), '', (string) $field->get_attribute( 'id' ) ) );
+			$label = strtolower( str_replace( array( ' ', '_' ), '', (string) $field->get_attribute( 'label' ) ) );
 
 			// If value is not a string, we already know it's not a valid name or email.
 			if ( ! is_string( $field->value ) ) {
@@ -147,7 +186,7 @@ class MailPoet_Integration {
 
 			$value = trim( $field->value );
 
-			if ( ( $id === 'email' || $label === 'email' ) && ! empty( $value ) ) {
+			if ( ( $type === 'email' || $id === 'email' || $label === 'email' ) && ! empty( $value ) ) {
 				$subscriber_data['email'] = $value;
 			} elseif ( ( $id === 'firstname' || $label === 'firstname' ) && ! empty( $value ) ) {
 				$subscriber_data['first_name'] = $value;

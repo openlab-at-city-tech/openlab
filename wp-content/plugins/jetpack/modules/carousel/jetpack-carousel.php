@@ -419,7 +419,7 @@ class Jetpack_Carousel {
 			' ',
 			array_map(
 				function ( $data_key, $data_values ) {
-					return esc_attr( $data_key ) . "='" . wp_json_encode( $data_values ) . "'";
+					return esc_attr( $data_key ) . "='" . esc_attr( wp_json_encode( $data_values, JSON_UNESCAPED_SLASHES | JSON_HEX_AMP ) ) . "'";
 				},
 				array_keys( $extra_data ),
 				array_values( $extra_data )
@@ -963,9 +963,6 @@ class Jetpack_Carousel {
 		 * array(4) { [0]=> string(82) "http://vanillawpinstall.blah/wp-content/uploads/2012/06/IMG_3534-1024x764.jpg" [1]=> int(640) [2]=> int(477) [3]=> bool(true) }
 		 */
 
-		$medium_file_info = wp_get_attachment_image_src( $attachment_id, 'medium' );
-		$medium_file      = isset( $medium_file_info[0] ) ? $medium_file_info[0] : '';
-
 		$large_file_info = wp_get_attachment_image_src( $attachment_id, 'large' );
 		$large_file      = isset( $large_file_info[0] ) ? $large_file_info[0] : '';
 
@@ -978,7 +975,7 @@ class Jetpack_Carousel {
 			unset( $img_meta['keywords'] );
 		}
 
-		$img_meta = wp_json_encode( array_map( 'strval', array_filter( $img_meta, 'is_scalar' ) ) );
+		$img_meta = wp_json_encode( array_map( 'strval', array_filter( $img_meta, 'is_scalar' ) ), JSON_UNESCAPED_SLASHES | JSON_HEX_AMP );
 
 		$attr['data-attachment-id']   = $attachment_id;
 		$attr['data-permalink']       = esc_attr( get_permalink( $attachment_id ) );
@@ -990,7 +987,6 @@ class Jetpack_Carousel {
 		$attr['data-image-title']       = esc_attr( htmlspecialchars( $attachment_title, ENT_COMPAT ) );
 		$attr['data-image-description'] = esc_attr( htmlspecialchars( $attachment_desc, ENT_COMPAT ) );
 		$attr['data-image-caption']     = esc_attr( htmlspecialchars( $attachment_caption, ENT_COMPAT ) );
-		$attr['data-medium-file']       = esc_attr( $medium_file );
 		$attr['data-large-file']        = esc_attr( $large_file );
 		return $attr;
 	}
@@ -1032,10 +1028,10 @@ class Jetpack_Carousel {
 			 */
 			$extra_data = apply_filters( 'jp_carousel_add_data_to_container', $extra_data );
 			foreach ( (array) $extra_data as $data_key => $data_values ) {
-				$html = str_replace( '<div ', '<div ' . esc_attr( $data_key ) . "='" . wp_json_encode( $data_values ) . "' ", $html );
-				$html = str_replace( '<ul class="wp-block-gallery', '<ul ' . esc_attr( $data_key ) . "='" . wp_json_encode( $data_values ) . "' class=\"wp-block-gallery", $html );
-				$html = str_replace( '<ul class="blocks-gallery-grid', '<ul ' . esc_attr( $data_key ) . "='" . wp_json_encode( $data_values ) . "' class=\"blocks-gallery-grid", $html );
-				$html = preg_replace( '/\<figure([^>]*)class="(wp-block-gallery[^"]*?has-nested-images.*?)"/', '<figure ' . esc_attr( $data_key ) . "='" . wp_json_encode( $data_values ) . "' $1 class=\"$2\"", $html );
+				$html = str_replace( '<div ', '<div ' . esc_attr( $data_key ) . "='" . esc_attr( wp_json_encode( $data_values, JSON_HEX_AMP | JSON_UNESCAPED_SLASHES ) ) . "' ", $html );
+				$html = str_replace( '<ul class="wp-block-gallery', '<ul ' . esc_attr( $data_key ) . "='" . esc_attr( wp_json_encode( $data_values, JSON_HEX_AMP | JSON_UNESCAPED_SLASHES ) ) . "' class=\"wp-block-gallery", $html );
+				$html = str_replace( '<ul class="blocks-gallery-grid', '<ul ' . esc_attr( $data_key ) . "='" . esc_attr( wp_json_encode( $data_values, JSON_HEX_AMP | JSON_UNESCAPED_SLASHES ) ) . "' class=\"blocks-gallery-grid", $html );
+				$html = preg_replace( '/\<figure([^>]*)class="(wp-block-gallery[^"]*?has-nested-images.*?)"/', '<figure ' . esc_attr( $data_key ) . "='" . esc_attr( wp_json_encode( $data_values, JSON_HEX_AMP | JSON_UNESCAPED_SLASHES ) ) . "' $1 class=\"$2\"", $html );
 			}
 		}
 
@@ -1108,7 +1104,8 @@ class Jetpack_Carousel {
 		if ( ! $attachment_id ) {
 			wp_send_json_error(
 				__( 'Missing attachment ID.', 'jetpack' ),
-				403
+				403,
+				JSON_UNESCAPED_SLASHES
 			);
 			return;
 		}
@@ -1118,7 +1115,8 @@ class Jetpack_Carousel {
 		if ( ! ( $attachment_post instanceof WP_Post ) ) {
 			wp_send_json_error(
 				__( 'Missing attachment info.', 'jetpack' ),
-				403
+				403,
+				JSON_UNESCAPED_SLASHES
 			);
 			return;
 		}
@@ -1127,7 +1125,8 @@ class Jetpack_Carousel {
 		if ( 'attachment' !== $attachment_post->post_type ) {
 			wp_send_json_error(
 				__( 'You aren’t authorized to do that.', 'jetpack' ),
-				403
+				403,
+				JSON_UNESCAPED_SLASHES
 			);
 			return;
 		}
@@ -1149,7 +1148,8 @@ class Jetpack_Carousel {
 			if ( ! ( $current_user instanceof WP_User ) ) {
 				wp_send_json_error(
 					__( 'Missing user info.', 'jetpack' ),
-					403
+					403,
+					JSON_UNESCAPED_SLASHES
 				);
 				return;
 			}
@@ -1165,7 +1165,8 @@ class Jetpack_Carousel {
 			) {
 				wp_send_json_error(
 					__( 'You aren’t authorized to do that.', 'jetpack' ),
-					403
+					403,
+					JSON_UNESCAPED_SLASHES
 				);
 				return;
 			}
@@ -1203,7 +1204,7 @@ class Jetpack_Carousel {
 			);
 		}
 
-		die( wp_json_encode( $out ) );
+		wp_send_json( $out, null, JSON_UNESCAPED_SLASHES );
 	}
 
 	/**
@@ -1217,7 +1218,7 @@ class Jetpack_Carousel {
 		}
 
 		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'carousel_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- WP Core doesn't unslash or sanitize nonces either
-			die( wp_json_encode( array( 'error' => __( 'Nonce verification failed.', 'jetpack' ) ) ) );
+			die( wp_json_encode( array( 'error' => __( 'Nonce verification failed.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 		}
 
 		$_blog_id = isset( $_POST['blog_id'] ) ? (int) $_POST['blog_id'] : 0;
@@ -1225,15 +1226,15 @@ class Jetpack_Carousel {
 		$comment  = isset( $_POST['comment'] ) ? filter_var( wp_unslash( $_POST['comment'] ) ) : null;
 
 		if ( empty( $_blog_id ) ) {
-			die( wp_json_encode( array( 'error' => __( 'Missing target blog ID.', 'jetpack' ) ) ) );
+			die( wp_json_encode( array( 'error' => __( 'Missing target blog ID.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 		}
 
 		if ( empty( $_post_id ) ) {
-			die( wp_json_encode( array( 'error' => __( 'Missing target post ID.', 'jetpack' ) ) ) );
+			die( wp_json_encode( array( 'error' => __( 'Missing target post ID.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 		}
 
 		if ( empty( $comment ) ) {
-			die( wp_json_encode( array( 'error' => __( 'No comment text was submitted.', 'jetpack' ) ) ) );
+			die( wp_json_encode( array( 'error' => __( 'No comment text was submitted.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 		}
 
 		// Used in context like NewDash.
@@ -1250,7 +1251,7 @@ class Jetpack_Carousel {
 			if ( $switched ) {
 				restore_current_blog();
 			}
-			die( wp_json_encode( array( 'error' => __( 'Comments on this post are closed.', 'jetpack' ) ) ) );
+			die( wp_json_encode( array( 'error' => __( 'Comments on this post are closed.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 		}
 
 		if ( is_user_logged_in() ) {
@@ -1264,7 +1265,7 @@ class Jetpack_Carousel {
 				if ( $switched ) {
 					restore_current_blog();
 				}
-				die( wp_json_encode( array( 'error' => __( 'Sorry, but we could not authenticate your request.', 'jetpack' ) ) ) );
+				die( wp_json_encode( array( 'error' => __( 'Sorry, but we could not authenticate your request.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 			}
 		} else {
 			$user_id      = 0;
@@ -1280,21 +1281,21 @@ class Jetpack_Carousel {
 					if ( $switched ) {
 						restore_current_blog();
 					}
-					die( wp_json_encode( array( 'error' => __( 'Please provide your name.', 'jetpack' ) ) ) );
+					die( wp_json_encode( array( 'error' => __( 'Please provide your name.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 				}
 
 				if ( empty( $email ) ) {
 					if ( $switched ) {
 						restore_current_blog();
 					}
-					die( wp_json_encode( array( 'error' => __( 'Please provide an email address.', 'jetpack' ) ) ) );
+					die( wp_json_encode( array( 'error' => __( 'Please provide an email address.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 				}
 
 				if ( ! is_email( $email ) ) {
 					if ( $switched ) {
 						restore_current_blog();
 					}
-					die( wp_json_encode( array( 'error' => __( 'Please provide a valid email address.', 'jetpack' ) ) ) );
+					die( wp_json_encode( array( 'error' => __( 'Please provide a valid email address.', 'jetpack' ) ), JSON_UNESCAPED_SLASHES ) );
 				}
 			} else {
 				$email = $email !== null ? sanitize_email( $email ) : null;
@@ -1337,7 +1338,8 @@ class Jetpack_Carousel {
 				array(
 					'comment_id'     => $comment_id,
 					'comment_status' => $comment_status,
-				)
+				),
+				JSON_UNESCAPED_SLASHES
 			)
 		);
 	}

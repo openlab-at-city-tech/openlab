@@ -5,6 +5,164 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.3.0] - 2026-04-15
+### Added
+- Add hooks for external storage provider registration: `jetpack_external_storage_init` fires before the first storage read, and `jetpack_external_storage_provider_registered` fires after a provider is registered (invalidating cached connection status). [#48022]
+
+### Fixed
+- Ensure connector card modals and links are accessible. [#47969]
+
+## [8.2.2] - 2026-04-10
+### Changed
+- Update dependencies. [#46383]
+
+## [8.2.1] - 2026-04-09
+### Changed
+- Update package dependencies. [#47890] [#47998]
+
+## [8.2.0] - 2026-04-06
+### Added
+- Add SSO details to the Connection details card. [#47861]
+- Add WordPress.com connector card for the WP 7.0+ Settings > Connectors screen with connection details and disconnect support. [#47792]
+- Connection: Display inline error notices for site registration, authorization, and disconnect failures in the WordPress.com Connectors card. [#47865]
+
+### Changed
+- Connector card: Prevent site disconnection and owner account unlinking on Wordpress.com and VIP sites. [#47862]
+
+### Fixed
+- Connection Details: Fix layout of the connection details modal to properly handle varying URL lengths and screen sizes. [#47879]
+- Fix connection flow in connector card when using Gutenberg and ensure modals always show on disconnection. [#47902]
+- Update Woo logo on connector card. [#47884]
+
+## [8.1.0] - 2026-03-30
+### Changed
+- Replace transient-based SSO broker URL storage with a constant-based approach gated by a WordPress.com authorization signal, and fall back to WordPress.com SSO when the referrer is a WordPress.com domain. [#47630]
+- Update package dependencies. [#47818]
+
+### Fixed
+- Fixed SSO login conflict with Two-Factor plugin 0.15.0+ that caused a redundant local 2FA prompt after completing WordPress.com 2FA. [#47306]
+
+## [8.0.5] - 2026-03-23
+### Changed
+- Update package dependencies. [#47684]
+
+## [8.0.4] - 2026-03-16
+### Changed
+- Update dependencies. [#47472]
+
+## [8.0.3] - 2026-03-09
+### Changed
+- Update package dependencies. [#47496]
+
+## [8.0.2] - 2026-03-02
+### Changed
+- Update dependencies. [#46383]
+
+## [8.0.1] - 2026-02-26
+### Changed
+- Update package dependencies. [#47300]
+
+## [8.0.0] - 2026-02-23
+### Removed
+- Remove deprecated methods and attributes. [#47251]
+
+## [7.1.1] - 2026-02-18
+### Changed
+- Update package dependencies. [#47173]
+
+## [7.1.0] - 2026-02-16
+### Added
+- Add `maybe_add_origin_site_id` method to the `Urls` class. [#46783]
+
+### Changed
+- Update package dependencies. [#47099]
+
+## [7.0.3] - 2026-02-10
+### Changed
+- Move IDC stats from Jetpack plugin to connection package. [#46967]
+- Update package dependencies. [#47002]
+
+## [7.0.2] - 2026-02-04
+### Changed
+- Update package dependencies. [#46936]
+
+## [7.0.1] - 2026-02-03
+### Changed
+- Update dependencies. [#46383]
+
+## [7.0.0] - 2026-02-02
+### Changed
+- Remove error handling methods for external storage and add host agnostic error reporting. [#46646]
+- Update package dependencies. [#46854]
+
+## [6.20.5] - 2026-01-26
+### Changed
+- Update dependencies. [#46383]
+
+## [6.20.4] - 2026-01-23
+### Added
+- IDC: Preserve re-validation parameters when new idc error is created. [#46613]
+
+## [6.20.3] - 2026-01-19
+### Changed
+- Update package dependencies. [#46647]
+
+## [6.20.2] - 2026-01-14
+### Changed
+- Update package dependencies. [#46552]
+
+## [6.20.1] - 2026-01-12
+### Changed
+- Add transients to prevent excessive remote calls. [#46503]
+
+## [6.20.0] - 2026-01-07
+### Added
+- IDC: Add revalidation for IDCs. [#46268]
+
+### Changed
+- Update package dependencies. [#46456]
+
+## [6.19.13] - 2025-12-22
+### Changed
+- Update dependencies. [#46381]
+
+## [6.19.12] - 2025-12-15
+### Changed
+- Internal updates.
+
+## [6.19.11] - 2025-12-11
+### Removed
+- Development Mode: removed references to previously removed code [#46231]
+
+## [6.19.10] - 2025-12-08
+### Fixed
+- Ensure proper flags are used with `json_encode()`. [#46092]
+
+## [6.19.9] - 2025-12-01
+### Changed
+- SSO: Revised copy for flagging external collaborators. [#46108]
+- Update package dependencies. [#46143]
+
+## [6.19.8] - 2025-11-20
+### Fixed
+- Phan: Address PhanPossiblyUndeclaredVariable violations. [#45911]
+
+## [6.19.7] - 2025-11-18
+### Changed
+- Update package dependencies. [#45961]
+
+## [6.19.6] - 2025-11-17
+### Changed
+- Update package dependencies. [#45915]
+
+## [6.19.5] - 2025-11-12
+### Fixed
+- OAuth: fix the 'body-hash' error triggered during app authorization. [#45820]
+
+## [6.19.4] - 2025-11-10
+### Changed
+- Tests: Improve compatibility with PHP 8.5. [#45769] [#45771]
+
 ## [6.19.3] - 2025-11-03
 ### Changed
 - Update dependencies. [#45493]
@@ -1631,6 +1789,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Separate the connection library into its own package.
 
+[8.3.0]: https://github.com/Automattic/jetpack-connection/compare/v8.2.2...v8.3.0
+[8.2.2]: https://github.com/Automattic/jetpack-connection/compare/v8.2.1...v8.2.2
+[8.2.1]: https://github.com/Automattic/jetpack-connection/compare/v8.2.0...v8.2.1
+[8.2.0]: https://github.com/Automattic/jetpack-connection/compare/v8.1.0...v8.2.0
+[8.1.0]: https://github.com/Automattic/jetpack-connection/compare/v8.0.5...v8.1.0
+[8.0.5]: https://github.com/Automattic/jetpack-connection/compare/v8.0.4...v8.0.5
+[8.0.4]: https://github.com/Automattic/jetpack-connection/compare/v8.0.3...v8.0.4
+[8.0.3]: https://github.com/Automattic/jetpack-connection/compare/v8.0.2...v8.0.3
+[8.0.2]: https://github.com/Automattic/jetpack-connection/compare/v8.0.1...v8.0.2
+[8.0.1]: https://github.com/Automattic/jetpack-connection/compare/v8.0.0...v8.0.1
+[8.0.0]: https://github.com/Automattic/jetpack-connection/compare/v7.1.1...v8.0.0
+[7.1.1]: https://github.com/Automattic/jetpack-connection/compare/v7.1.0...v7.1.1
+[7.1.0]: https://github.com/Automattic/jetpack-connection/compare/v7.0.3...v7.1.0
+[7.0.3]: https://github.com/Automattic/jetpack-connection/compare/v7.0.2...v7.0.3
+[7.0.2]: https://github.com/Automattic/jetpack-connection/compare/v7.0.1...v7.0.2
+[7.0.1]: https://github.com/Automattic/jetpack-connection/compare/v7.0.0...v7.0.1
+[7.0.0]: https://github.com/Automattic/jetpack-connection/compare/v6.20.5...v7.0.0
+[6.20.5]: https://github.com/Automattic/jetpack-connection/compare/v6.20.4...v6.20.5
+[6.20.4]: https://github.com/Automattic/jetpack-connection/compare/v6.20.3...v6.20.4
+[6.20.3]: https://github.com/Automattic/jetpack-connection/compare/v6.20.2...v6.20.3
+[6.20.2]: https://github.com/Automattic/jetpack-connection/compare/v6.20.1...v6.20.2
+[6.20.1]: https://github.com/Automattic/jetpack-connection/compare/v6.20.0...v6.20.1
+[6.20.0]: https://github.com/Automattic/jetpack-connection/compare/v6.19.13...v6.20.0
+[6.19.13]: https://github.com/Automattic/jetpack-connection/compare/v6.19.12...v6.19.13
+[6.19.12]: https://github.com/Automattic/jetpack-connection/compare/v6.19.11...v6.19.12
+[6.19.11]: https://github.com/Automattic/jetpack-connection/compare/v6.19.10...v6.19.11
+[6.19.10]: https://github.com/Automattic/jetpack-connection/compare/v6.19.9...v6.19.10
+[6.19.9]: https://github.com/Automattic/jetpack-connection/compare/v6.19.8...v6.19.9
+[6.19.8]: https://github.com/Automattic/jetpack-connection/compare/v6.19.7...v6.19.8
+[6.19.7]: https://github.com/Automattic/jetpack-connection/compare/v6.19.6...v6.19.7
+[6.19.6]: https://github.com/Automattic/jetpack-connection/compare/v6.19.5...v6.19.6
+[6.19.5]: https://github.com/Automattic/jetpack-connection/compare/v6.19.4...v6.19.5
+[6.19.4]: https://github.com/Automattic/jetpack-connection/compare/v6.19.3...v6.19.4
 [6.19.3]: https://github.com/Automattic/jetpack-connection/compare/v6.19.2...v6.19.3
 [6.19.2]: https://github.com/Automattic/jetpack-connection/compare/v6.19.1...v6.19.2
 [6.19.1]: https://github.com/Automattic/jetpack-connection/compare/v6.19.0...v6.19.1

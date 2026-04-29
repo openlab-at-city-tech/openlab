@@ -15,17 +15,7 @@ module.exports = [
 		optimization: {
 			...jetpackWebpackConfig.optimization,
 		},
-		resolve: {
-			...jetpackWebpackConfig.resolve,
-			alias: {
-				...jetpackWebpackConfig.resolve.alias,
-				'@automattic/calypso-config': '@automattic/calypso-config/src/client.js',
-			},
-			fallback: {
-				...jetpackWebpackConfig.resolve.fallback,
-				events: require.resolve( 'events/' ),
-			},
-		},
+		resolve: jetpackWebpackConfig.resolve,
 		node: false,
 		plugins: [ ...jetpackWebpackConfig.StandardPlugins() ],
 		module: {
@@ -41,33 +31,8 @@ module.exports = [
 					includeNodeModules: [ '@automattic/' ],
 				} ),
 
-				// Add textdomains (but no other optimizations) for @wordpress/dataviews.
-				jetpackWebpackConfig.TranspileRule( {
-					includeNodeModules: [ '@wordpress/dataviews/' ],
-					babelOpts: {
-						configFile: false,
-						plugins: [
-							[
-								require.resolve( '@automattic/babel-plugin-replace-textdomain' ),
-								{ textdomain: 'jetpack-subscribers-dashboard' },
-							],
-						],
-					},
-				} ),
-
-				// Add textdomains (but no other optimizations) for @wordpress/dataviews.
-				jetpackWebpackConfig.TranspileRule( {
-					includeNodeModules: [ '@wordpress/dataviews/build-wp/' ],
-					babelOpts: {
-						configFile: false,
-						plugins: [
-							[
-								require.resolve( '@automattic/babel-plugin-replace-textdomain' ),
-								{ textdomain: 'jetpack-subscribers-dashboard' },
-							],
-						],
-					},
-				} ),
+				// Workarounds for non-extracted `@wordpress/*` packages.
+				...jetpackWebpackConfig.BundledWpPkgsTranspileRules(),
 
 				// Handle CSS.
 				jetpackWebpackConfig.CssRule( {

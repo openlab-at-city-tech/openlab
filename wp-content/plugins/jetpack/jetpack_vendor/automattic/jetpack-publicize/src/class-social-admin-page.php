@@ -10,6 +10,7 @@ namespace Automattic\Jetpack\Publicize;
 use Automattic\Jetpack\Admin_UI\Admin_Menu;
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
+use Automattic\Jetpack\Current_Plan;
 use Automattic\Jetpack\Publicize\Publicize_Utils as Utils;
 use Automattic\Jetpack\Status\Host;
 
@@ -17,6 +18,11 @@ use Automattic\Jetpack\Status\Host;
  * The class to handle the Social Admin Page.
  */
 class Social_Admin_Page {
+
+	/**
+	 * Nonce action used when refreshing plan data.
+	 */
+	public const REFRESH_PLAN_NONCE_ACTION = 'jetpack_social_refresh_plan_data';
 
 	/**
 	 * The instance of the class.
@@ -49,10 +55,6 @@ class Social_Admin_Page {
 	 * Add the admin menu.
 	 */
 	public function add_menu() {
-
-		if ( ! Publicize_Script_Data::has_feature_flag( 'admin-page' ) ) {
-			return;
-		}
 
 		// Remove the old Social menu item, if it exists.
 		Admin_Menu::remove_menu( 'jetpack-social' );
@@ -91,6 +93,15 @@ class Social_Admin_Page {
 	 * Initialize the admin resources.
 	 */
 	public function admin_init() {
+		// Refresh data if coming from purchase to ensure it is up to date
+		// without making API calls on every admin page load.
+		if ( isset( $_GET['refresh_plan_data'] ) ) {
+			check_admin_referer( self::REFRESH_PLAN_NONCE_ACTION );
+			if ( apply_filters( 'jetpack_social_should_refresh_plan_data', true ) ) {
+				Current_Plan::refresh_from_wpcom();
+			}
+		}
+
 		/**
 		 * Use priority 20 to ensure that we can dequeue the old Social assets.
 		 */

@@ -5,6 +5,97 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.20] - 2026-04-09
+### Changed
+- Update package dependencies. [#47890]
+
+## [0.4.19] - 2026-04-06
+### Changed
+- Launch Site: Implement direct site launch from the WP Admin masterbar button via an ExPlat experiment, with a shared mutation hook and celebration modal for use across launch entry points. [#47705]
+
+## [0.4.18] - 2026-03-30
+### Changed
+- Update package dependencies. [#47799]
+
+## [0.4.17] - 2026-03-23
+### Changed
+- Update package dependencies. [#47684]
+
+## [0.4.16] - 2026-03-16
+### Changed
+- Update dependencies. [#47472]
+
+## [0.4.15] - 2026-03-09
+### Changed
+- Switch to Native TypeScript compiler based on Go. [#47375]
+
+## [0.4.14] - 2026-02-26
+### Changed
+- Update package dependencies. [#47285] [#47300]
+
+## [0.4.13] - 2026-02-23
+### Changed
+- Update dependencies. [#46383]
+
+## [0.4.12] - 2026-02-18
+### Changed
+- Update package dependencies. [#47173]
+
+## [0.4.11] - 2026-02-16
+### Changed
+- Update package dependencies. [#47099]
+
+## [0.4.10] - 2026-02-10
+### Changed
+- Update package dependencies. [#47002]
+
+## [0.4.9] - 2026-02-02
+### Changed
+- Update package dependencies. [#46854]
+
+## [0.4.8] - 2026-01-26
+### Changed
+- Update dependencies. [#46383]
+
+## [0.4.7] - 2026-01-19
+### Changed
+- Update package dependencies. [#46647]
+
+## [0.4.6] - 2026-01-07
+### Changed
+- Update package dependencies. [#46456]
+
+## [0.4.5] - 2026-01-06
+### Changed
+- Update package dependencies. [#46427]
+
+## [0.4.4] - 2025-12-22
+### Changed
+- Update dependencies. [#46381]
+
+## [0.4.3] - 2025-12-11
+### Changed
+- Update package dependencies. [#46244]
+
+## [0.4.2] - 2025-12-08
+### Changed
+- Update dependencies. [#43068]
+
+## [0.4.1] - 2025-12-01
+### Changed
+- Update package dependencies. [#46143]
+
+## [0.4.0] - 2025-11-17
+### Added
+- Add the possibility of passing the platform to the explat assignment endpoint. [#45922]
+
+### Changed
+- Update package dependencies. [#45915] [#45958]
+
+## [0.3.14] - 2025-11-10
+### Changed
+- Update package dependencies. [#45756]
+
 ## [0.3.13] - 2025-10-28
 ### Changed
 - Update package dependencies. [#45652]
@@ -239,6 +330,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ExPlat: add condition to prevent fetching the experiment assignment if there's not anon id (meaning that Tracks is likely disabled) [#38327]
 - Updated package dependencies. [#38132]
 
+[0.4.20]: https://github.com/Automattic/jetpack-explat/compare/v0.4.19...v0.4.20
+[0.4.19]: https://github.com/Automattic/jetpack-explat/compare/v0.4.18...v0.4.19
+[0.4.18]: https://github.com/Automattic/jetpack-explat/compare/v0.4.17...v0.4.18
+[0.4.17]: https://github.com/Automattic/jetpack-explat/compare/v0.4.16...v0.4.17
+[0.4.16]: https://github.com/Automattic/jetpack-explat/compare/v0.4.15...v0.4.16
+[0.4.15]: https://github.com/Automattic/jetpack-explat/compare/v0.4.14...v0.4.15
+[0.4.14]: https://github.com/Automattic/jetpack-explat/compare/v0.4.13...v0.4.14
+[0.4.13]: https://github.com/Automattic/jetpack-explat/compare/v0.4.12...v0.4.13
+[0.4.12]: https://github.com/Automattic/jetpack-explat/compare/v0.4.11...v0.4.12
+[0.4.11]: https://github.com/Automattic/jetpack-explat/compare/v0.4.10...v0.4.11
+[0.4.10]: https://github.com/Automattic/jetpack-explat/compare/v0.4.9...v0.4.10
+[0.4.9]: https://github.com/Automattic/jetpack-explat/compare/v0.4.8...v0.4.9
+[0.4.8]: https://github.com/Automattic/jetpack-explat/compare/v0.4.7...v0.4.8
+[0.4.7]: https://github.com/Automattic/jetpack-explat/compare/v0.4.6...v0.4.7
+[0.4.6]: https://github.com/Automattic/jetpack-explat/compare/v0.4.5...v0.4.6
+[0.4.5]: https://github.com/Automattic/jetpack-explat/compare/v0.4.4...v0.4.5
+[0.4.4]: https://github.com/Automattic/jetpack-explat/compare/v0.4.3...v0.4.4
+[0.4.3]: https://github.com/Automattic/jetpack-explat/compare/v0.4.2...v0.4.3
+[0.4.2]: https://github.com/Automattic/jetpack-explat/compare/v0.4.1...v0.4.2
+[0.4.1]: https://github.com/Automattic/jetpack-explat/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/Automattic/jetpack-explat/compare/v0.3.14...v0.4.0
+[0.3.14]: https://github.com/Automattic/jetpack-explat/compare/v0.3.13...v0.3.14
 [0.3.13]: https://github.com/Automattic/jetpack-explat/compare/v0.3.12...v0.3.13
 [0.3.12]: https://github.com/Automattic/jetpack-explat/compare/v0.3.11...v0.3.12
 [0.3.11]: https://github.com/Automattic/jetpack-explat/compare/v0.3.10...v0.3.11

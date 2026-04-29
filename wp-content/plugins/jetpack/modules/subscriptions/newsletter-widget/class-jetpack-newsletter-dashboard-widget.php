@@ -53,6 +53,7 @@ class Jetpack_Newsletter_Dashboard_Widget {
 			'showHeader'             => false,
 			'showChart'              => false,
 			'isWidgetVisible'        => false,
+			'newsletterSettingsUrl'  => \Automattic\Jetpack\Newsletter\Urls::get_newsletter_settings_url( ( new \Automattic\Jetpack\Status() )->get_site_suffix() ),
 		);
 
 		if ( Jetpack::is_connection_ready() ) {
@@ -127,13 +128,10 @@ class Jetpack_Newsletter_Dashboard_Widget {
 				)
 			);
 
-			$widget_title = sprintf(
-				__( 'Newsletter', 'jetpack' )
-			);
-
 			wp_add_dashboard_widget(
 				self::$widget_id,
-				$widget_title,
+				/** "Newsletter" is a product name, do not translate. */
+				'Jetpack Newsletter',
 				array( static::class, 'render' ),
 				// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- Core should ideally document null for no-callback arg. https://core.trac.wordpress.org/ticket/52539.
 				null,
@@ -228,7 +226,7 @@ class Jetpack_Newsletter_Dashboard_Widget {
 		if ( ! empty( $options['config_data'] ) ) {
 			wp_add_inline_script(
 				$asset_handle,
-				"window.{$options['config_variable_name']} = " . wp_json_encode( $options['config_data'] ) . ';',
+				"window.{$options['config_variable_name']} = " . wp_json_encode( $options['config_data'], JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) . ';',
 				'before'
 			);
 		}

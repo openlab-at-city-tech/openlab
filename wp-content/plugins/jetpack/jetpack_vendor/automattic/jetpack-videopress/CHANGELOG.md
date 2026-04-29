@@ -5,6 +5,152 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.36.4] - 2026-04-16
+### Fixed
+- Fix block editor errors when used with Gutenberg 23.0.0+, where the SandBox component no longer defaults to same-origin. [#48117]
+
+## [0.36.3] - 2026-04-15
+### Security
+- Ensure only users who can upload media can request VideoPress upload tokens via AJAX. [#47683]
+
+### Changed
+- Clean up postMessage bridge code: use specific targetOrigin values, add origin checks to message listeners, remove unused legacy token bridge, and add unit tests. [#47436]
+- Update package dependencies. [#47907]
+
+### Fixed
+- Fix poster image not saving when selected during video upload. [#47725]
+- Fix stuck loading state on video card after deleting a video. [#48107]
+
+## [0.36.2] - 2026-04-10
+### Changed
+- Update package dependencies. [#47890]
+
+## [0.36.1] - 2026-04-06
+### Changed
+- Update admin page footer design. [#47840]
+- Update package dependencies. [#47870]
+
+## [0.36.0] - 2026-03-30
+### Changed
+- Unify admin dashboard page header with admin-ui components. [#47641]
+- Update package dependencies. [#47799]
+
+## [0.35.6] - 2026-03-23
+### Changed
+- Update package dependencies. [#47684] [#47719]
+
+### Fixed
+- Auto-complete upload when user hasn't edited title or poster, and self-heal failed oEmbed cache. [#47356]
+
+## [0.35.5] - 2026-03-16
+### Changed
+- Update dependencies. [#47472]
+
+## [0.35.4] - 2026-03-09
+### Changed
+- Clean up REST API endpoint schemas to use proper JSON Schema types and constraints. [#47017]
+- Migrate main admin page header to use unified AdminHeader component from jetpack-components. [#47313]
+- Switch to Native TypeScript compiler based on Go. [#47375]
+- Update package dependencies. [#47496] [#47499]
+
+### Fixed
+- Refresh VideoPress video thumbnails in the Media Library grid automatically after transcoding completes. [#47358]
+
+## [0.35.3] - 2026-03-02
+### Changed
+- Update dependencies. [#46758]
+
+## [0.35.2] - 2026-02-26
+### Changed
+- Update package dependencies. [#47285] [#47288] [#47300] [#47309]
+- Use `apiFetch` in GutenbergKit for token authentication middleware support. [#45254]
+
+## [0.35.1] - 2026-02-23
+### Changed
+- Update package dependencies. [#47165] [#47173]
+
+### Fixed
+- Pass current user ID when deleting VideoPress videos on wpcom to fix activity log attribution. [#47204]
+- Video block: Only intercept video file uploads when the VideoPress module is active. [#46894]
+
+## [0.35.0] - 2026-02-16
+### Added
+- Tracks: Accept SRT subtitle files for upload alongside VTT. [#46978]
+
+### Changed
+- Update package dependencies. [#47099]
+
+## [0.34.1] - 2026-02-10
+### Changed
+- Update package dependencies. [#47002]
+
+## [0.34.0] - 2026-02-04
+### Added
+- Add email rendering support for the videopress/video block. [#46798]
+
+### Changed
+- Update package dependencies. [#46905]
+
+### Fixed
+- Clarify error messages when video uploads fail due to plan limitations. [#46668]
+- Fix compatibility with Gutenberg 22.4 by removing invalid null timezone argument from dateI18n calls. [#46928]
+- Fix upgrade notice incorrectly showing for A4A (Automattic for Agencies) VideoPress customers by using dynamic features API instead of hardcoded plan slugs. [#46835]
+- Fix video query to only return VideoPress videos instead of all video types. [#46689]
+
+## [0.33.4] - 2026-02-02
+### Changed
+- Update package dependencies. [#46854]
+
+## [0.33.3] - 2026-01-26
+### Changed
+- Update dependencies. [#46741]
+
+## [0.33.2] - 2026-01-19
+### Changed
+- Update package dependencies. [#46552] [#46647]
+
+## [0.33.1] - 2026-01-12
+### Changed
+- Update package dependencies. [#46456] [#46512]
+
+## [0.33.0] - 2025-12-22
+### Changed
+- Update package dependencies. [#46362] [#46363]
+- Make Gutenberg block depend on Jetpack site connection instead of user connection. [#46274]
+
+## [0.32.19] - 2025-12-15
+### Changed
+- Replace use of confusing `esc_js` with `wp_json_encode`. [#46229]
+- Update package dependencies. [#46244]
+
+## [0.32.18] - 2025-12-08
+### Fixed
+- Ensure proper flags are used with `json_encode()`. [#46092]
+
+## [0.32.17] - 2025-12-01
+### Changed
+- Update package dependencies. [#46072] [#46143]
+
+## [0.32.16] - 2025-11-21
+### Changed
+- Update package dependencies. [#46022]
+
+### Fixed
+- Phan: Address PhanPossiblyUndeclaredVariable violations. [#45911]
+
+## [0.32.15] - 2025-11-18
+### Changed
+- Update dependencies. [#45553]
+
+## [0.32.14] - 2025-11-17
+### Changed
+- Update package dependencies. [#45915] [#45958]
+
+## [0.32.13] - 2025-11-10
+### Changed
+- Replace icons removed from @wordpress/icons with alternatives. [#45760]
+- Update package dependencies. [#45737] [#45756]
+
 ## [0.32.12] - 2025-11-03
 ### Changed
 - Update package dependencies. [#45652]
@@ -1174,7 +1320,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - VideoPress: add Cancel button to uploading file component when replacing file [#28188]
 - VideoPress: add Replace control to video block [#28162]
 - VideoPress: minor TS enhancement in the useSearchParams() hook [#28250]
-- VideoPress: re-implemnt useResumableUploader(). 
+- VideoPress: re-implemnt useResumableUploader().
   VideoPress: Iterate over resumable file uploader
     * Re implement useResumableUploader() hook with TS
     * Update VideoPress uploader to use this hook
@@ -1768,6 +1914,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Created empty package [#24952]
 
+[0.36.4]: https://github.com/Automattic/jetpack-videopress/compare/v0.36.3...v0.36.4
+[0.36.3]: https://github.com/Automattic/jetpack-videopress/compare/v0.36.2...v0.36.3
+[0.36.2]: https://github.com/Automattic/jetpack-videopress/compare/v0.36.1...v0.36.2
+[0.36.1]: https://github.com/Automattic/jetpack-videopress/compare/v0.36.0...v0.36.1
+[0.36.0]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.6...v0.36.0
+[0.35.6]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.5...v0.35.6
+[0.35.5]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.4...v0.35.5
+[0.35.4]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.3...v0.35.4
+[0.35.3]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.2...v0.35.3
+[0.35.2]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.1...v0.35.2
+[0.35.1]: https://github.com/Automattic/jetpack-videopress/compare/v0.35.0...v0.35.1
+[0.35.0]: https://github.com/Automattic/jetpack-videopress/compare/v0.34.1...v0.35.0
+[0.34.1]: https://github.com/Automattic/jetpack-videopress/compare/v0.34.0...v0.34.1
+[0.34.0]: https://github.com/Automattic/jetpack-videopress/compare/v0.33.4...v0.34.0
+[0.33.4]: https://github.com/Automattic/jetpack-videopress/compare/v0.33.3...v0.33.4
+[0.33.3]: https://github.com/Automattic/jetpack-videopress/compare/v0.33.2...v0.33.3
+[0.33.2]: https://github.com/Automattic/jetpack-videopress/compare/v0.33.1...v0.33.2
+[0.33.1]: https://github.com/Automattic/jetpack-videopress/compare/v0.33.0...v0.33.1
+[0.33.0]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.19...v0.33.0
+[0.32.19]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.18...v0.32.19
+[0.32.18]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.17...v0.32.18
+[0.32.17]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.16...v0.32.17
+[0.32.16]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.15...v0.32.16
+[0.32.15]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.14...v0.32.15
+[0.32.14]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.13...v0.32.14
+[0.32.13]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.12...v0.32.13
 [0.32.12]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.11...v0.32.12
 [0.32.11]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.10...v0.32.11
 [0.32.10]: https://github.com/Automattic/jetpack-videopress/compare/v0.32.9...v0.32.10

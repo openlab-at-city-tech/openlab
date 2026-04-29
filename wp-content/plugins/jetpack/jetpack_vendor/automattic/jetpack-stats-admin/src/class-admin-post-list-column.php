@@ -166,6 +166,17 @@ class Admin_Post_List_Column {
 	 * @return mixed
 	 */
 	public function add_stats_post_table( $columns ) {
+		// Skip stats column for non-public post types when screen info is available.
+		if ( function_exists( 'get_current_screen' ) ) {
+			$screen = get_current_screen();
+			if ( $screen && $screen->post_type ) {
+				$post_type_object = get_post_type_object( $screen->post_type );
+				if ( $post_type_object && ! $post_type_object->public ) {
+					return $columns;
+				}
+			}
+		}
+
 		/**
 		 * The manage_options capability is a fallback for Simple.
 		 * This should be updated with a proper fix. Implemented based on this PR: https://github.com/Automattic/jetpack/pull/41549.
@@ -221,11 +232,13 @@ class Admin_Post_List_Column {
 	public function get_post_page_views_for_current_list(): array {
 		global $wp_query;
 
-		if ( ! $wp_query->posts ) {
+		if ( $wp_query->posts ) {
+			$post_ids = wp_list_pluck( $wp_query->posts, 'ID' );
+		} elseif ( wp_doing_ajax() && ! empty( $_POST['action'] ) && 'inline-save' === $_POST['action'] && ! empty( $_POST['post_ID'] ) && check_ajax_referer( 'inlineeditnonce', '_inline_edit' ) ) {
+			$post_ids = array( sanitize_text_field( wp_unslash( $_POST['post_ID'] ) ) );
+		} else {
 			return array();
 		}
-
-		$post_ids = wp_list_pluck( $wp_query->posts, 'ID' );
 
 		$wpcom_stats = $this->get_stats();
 		$post_views  = $wpcom_stats->get_total_post_views(

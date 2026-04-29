@@ -7,6 +7,7 @@
 
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Blocks;
+use Automattic\Jetpack\Post_Media\Images;
 use Automattic\Jetpack\Status\Request;
 use Automattic\Jetpack\Sync\Settings;
 
@@ -692,7 +693,7 @@ EOT;
 	public function print_setting_html() {
 		$options = $this->get_options();
 
-		$ui_settings_template = <<<EOT
+		$ui_settings_template = <<<'EOT'
 <p class="description">%s</p>
 <ul id="settings-reading-relatedposts-customize">
 	<li>
@@ -728,7 +729,7 @@ EOT;
 		);
 
 		if ( ! $this->allow_feature_toggle() ) {
-			$template = <<<EOT
+			$template = <<<'EOT'
 <input type="hidden" name="jetpack_relatedposts[enabled]" value="1" />
 %s
 EOT;
@@ -737,7 +738,7 @@ EOT;
 				$ui_settings // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- data is escaped when variable is set.
 			);
 		} else {
-			$template = <<<EOT
+			$template = <<<'EOT'
 <ul id="settings-reading-relatedposts">
 	<li>
 		<label><input type="radio" name="jetpack_relatedposts[enabled]" value="0" class="tog" %s /> %s</label>
@@ -1317,7 +1318,8 @@ EOT;
 			$response['items'] = $related_posts;
 		}
 
-		wp_send_json( $response );
+		// @phan-suppress-next-line PhanTypeMismatchArgumentProbablyReal -- It takes null, but its phpdoc only says int.
+		wp_send_json( $response, null, JSON_UNESCAPED_SLASHES );
 	}
 
 	/**
@@ -1441,10 +1443,10 @@ EOT;
 
 	/**
 	 * Generates the thumbnail image to be used for the post. Uses the
-	 * image as returned by Jetpack_PostImages::get_image()
+	 * image as returned by Images::get_image()
 	 *
 	 * @param int $post_id - the post ID.
-	 * @uses self::get_options, apply_filters, Jetpack_PostImages::get_image, Jetpack_PostImages::fit_image_url
+	 * @uses self::get_options, apply_filters, Images::get_image, Images::fit_image_url
 	 * @return string
 	 */
 	protected function generate_related_post_image_params( $post_id ) {
@@ -1479,58 +1481,56 @@ EOT;
 		}
 
 		// Try to get post image.
-		if ( class_exists( 'Jetpack_PostImages' ) ) {
-			$img_url    = '';
-			$post_image = Jetpack_PostImages::get_image(
-				$post_id,
-				$thumbnail_size
-			);
+		$img_url    = '';
+		$post_image = Images::get_image(
+			$post_id,
+			$thumbnail_size
+		);
 
-			if ( is_array( $post_image ) ) {
-				$img_url = $post_image['src'];
-			} elseif ( class_exists( 'Jetpack_Media_Summary' ) ) {
-				$media = Jetpack_Media_Summary::get( $post_id );
+		if ( is_array( $post_image ) ) {
+			$img_url = $post_image['src'];
+		} elseif ( class_exists( 'Jetpack_Media_Summary' ) ) {
+			$media = Jetpack_Media_Summary::get( $post_id );
 
-				if ( is_array( $media ) && ! empty( $media['image'] ) ) {
-					$img_url = $media['image'];
-				}
+			if ( is_array( $media ) && ! empty( $media['image'] ) ) {
+				$img_url = $media['image'];
+			}
+		}
+
+		if ( ! empty( $img_url ) ) {
+			if ( ! empty( $post_image['alt_text'] ) ) {
+				$image_params['alt_text'] = $post_image['alt_text'];
+			} else {
+				$image_params['alt_text'] = '';
 			}
 
-			if ( ! empty( $img_url ) ) {
-				if ( ! empty( $post_image['alt_text'] ) ) {
-					$image_params['alt_text'] = $post_image['alt_text'];
-				} else {
-					$image_params['alt_text'] = '';
-				}
+			$thumbnail_width  = 0;
+			$thumbnail_height = 0;
 
-				$thumbnail_width  = 0;
-				$thumbnail_height = 0;
+			if ( ! empty( $thumbnail_size['width'] ) ) {
+				$thumbnail_width       = $thumbnail_size['width'];
+				$image_params['width'] = $thumbnail_width;
+			}
 
-				if ( ! empty( $thumbnail_size['width'] ) ) {
-					$thumbnail_width       = $thumbnail_size['width'];
-					$image_params['width'] = $thumbnail_width;
-				}
+			if ( ! empty( $thumbnail_size['height'] ) ) {
+				$thumbnail_height       = $thumbnail_size['height'];
+				$image_params['height'] = $thumbnail_height;
+			}
 
-				if ( ! empty( $thumbnail_size['height'] ) ) {
-					$thumbnail_height       = $thumbnail_size['height'];
-					$image_params['height'] = $thumbnail_height;
-				}
+			$image_params['src'] = Images::fit_image_url(
+				$img_url,
+				$thumbnail_width,
+				$thumbnail_height
+			);
 
-				$image_params['src'] = Jetpack_PostImages::fit_image_url(
-					$img_url,
-					$thumbnail_width,
-					$thumbnail_height
-				);
-
-				// Add a srcset to handle zoomed views and high-density screens.
-				$srcset = Jetpack_PostImages::generate_cropped_srcset(
-					$post_image,
-					$thumbnail_width,
-					$thumbnail_height
-				);
-				if ( ! empty( $srcset ) ) {
-					$image_params['srcset'] = $srcset;
-				}
+			// Add a srcset to handle zoomed views and high-density screens.
+			$srcset = Images::generate_cropped_srcset(
+				$post_image,
+				$thumbnail_width,
+				$thumbnail_height
+			);
+			if ( ! empty( $srcset ) ) {
+				$image_params['srcset'] = $srcset;
 			}
 		}
 
@@ -2033,6 +2033,16 @@ EOT;
 	public function rest_register_related_posts() {
 		/** This filter is already documented in class.json-api-endpoints.php */
 		$post_types = apply_filters( 'rest_api_allowed_post_types', array( 'post', 'page', 'revision' ) );
+
+		/**
+		 * Filter the post types that are allowed to have related posts.
+		 *
+		 * @since 15.3
+		 *
+		 * @param array $post_types The post types that are allowed to have related posts.
+		 */
+		$post_types = apply_filters( 'jetpack_related_posts_rest_api_allowed_post_types', $post_types );
+
 		foreach ( $post_types as $post_type ) {
 			register_rest_field(
 				$post_type,

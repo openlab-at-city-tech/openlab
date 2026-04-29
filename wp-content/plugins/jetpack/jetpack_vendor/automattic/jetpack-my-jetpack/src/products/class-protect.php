@@ -39,6 +39,13 @@ class Protect extends Hybrid_Product {
 	public static $slug = 'protect';
 
 	/**
+	 * The Jetpack module name
+	 *
+	 * @var string
+	 */
+	public static $module_name = 'protect';
+
+	/**
 	 * The filename (id) of the plugin associated with this product.
 	 *
 	 * @var string
@@ -386,11 +393,17 @@ class Protect extends Hybrid_Product {
 	 */
 	public static function get_manage_url() {
 		if ( static::is_standalone_plugin_active() ) {
-			// Protect admin dashboard
+			// Protect admin dashboard.
 			return admin_url( 'admin.php?page=jetpack-protect' );
 		}
-		// Jetpack Cloud Scan dashboard.
-		return Redirect::get_url( 'my-jetpack-manage-scan' );
+
+		if ( static::has_paid_plan_for_product() ) {
+			// Paid users without standalone plugin go to Jetpack Cloud Scan dashboard.
+			return Redirect::get_url( 'my-jetpack-manage-scan' );
+		}
+
+		// Free users without standalone plugin go to the Protect details page.
+		return admin_url( 'admin.php?page=my-jetpack#/protect-details' );
 	}
 
 	/**

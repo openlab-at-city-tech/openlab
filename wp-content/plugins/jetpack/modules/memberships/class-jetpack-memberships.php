@@ -46,13 +46,6 @@ class Jetpack_Memberships {
 	public static $post_type_coupon = 'memberships_coupon';
 
 	/**
-	 * Our CPT type for the product (plan).
-	 *
-	 * @var string
-	 */
-	public static $post_type_gift = 'memberships_gift';
-
-	/**
 	 * Tier type for plans
 	 *
 	 * @var string
@@ -321,25 +314,6 @@ class Jetpack_Memberships {
 			'show_in_rest'        => false,
 		);
 		register_post_type( self::$post_type_coupon, $coupon_args );
-		$gift_args = array(
-			'label'               => esc_html__( 'Gift', 'jetpack' ),
-			'description'         => esc_html__( 'Memberships gifts', 'jetpack' ),
-			'supports'            => array( 'title', 'custom-fields', 'content' ),
-			'hierarchical'        => false,
-			'public'              => false,
-			'show_ui'             => false,
-			'show_in_menu'        => false,
-			'show_in_admin_bar'   => false,
-			'show_in_nav_menus'   => false,
-			'can_export'          => true,
-			'has_archive'         => false,
-			'exclude_from_search' => true,
-			'publicly_queryable'  => false,
-			'rewrite'             => false,
-			'capabilities'        => $capabilities,
-			'show_in_rest'        => false,
-		);
-		register_post_type( self::$post_type_gift, $gift_args );
 	}
 
 	/**
@@ -353,7 +327,6 @@ class Jetpack_Memberships {
 	public function allow_rest_api_types( $post_types ) {
 		$post_types[] = self::$post_type_plan;
 		$post_types[] = self::$post_type_coupon;
-		$post_types[] = self::$post_type_gift;
 
 		return $post_types;
 	}
@@ -390,17 +363,10 @@ class Jetpack_Memberships {
 			$meta_coupons_prefix . 'is_sandboxed',
 		);
 
-		$meta_gifts_prefix = self::$post_type_gift . '_';
-		$meta_keys_gifts   = array(
-			$meta_gifts_prefix . 'user_id',
-			$meta_gifts_prefix . 'plan_id',
-			$meta_gifts_prefix . 'is_deleted',
-		);
 		return array_merge(
 			$post_meta,
 			array_values( $meta_keys_plans ),
-			$meta_keys_coupons,
-			$meta_keys_gifts
+			$meta_keys_coupons
 		);
 	}
 
@@ -546,6 +512,43 @@ class Jetpack_Memberships {
 		}
 
 		return $this->deprecated_render_button_v1( $attributes, $plan_id );
+	}
+
+	/**
+	 * Render email callback.
+	 *
+	 * @param string $block_content The block content.
+	 * @param array  $parsed_block  The parsed block data.
+	 * @param object $rendering_context The email rendering context.
+	 *
+	 * @return string
+	 */
+	public function render_button_email( $block_content, array $parsed_block, $rendering_context ) {
+		// Check for the required renderers.
+		if ( ! function_exists( '\Automattic\Jetpack\Extensions\Button\render_email' ) || ! class_exists( '\Automattic\WooCommerce\EmailEditor\Integrations\Core\Renderer\Blocks\Button' ) ) {
+			return '';
+		}
+
+		// Get the first inner block, which should be the button block.
+		$button_block = $parsed_block['innerBlocks'][0] ?? array();
+
+		// We should only accept button blocks.
+		if ( empty( $button_block['blockName'] ) || 'jetpack/button' !== $button_block['blockName'] ) {
+			return '';
+		}
+
+		// We need attributes.
+		if ( ! isset( $button_block['attrs'] ) || ! is_array( $button_block['attrs'] ) ) {
+			return '';
+		}
+
+		// If the button block is missing text or url, return empty string.
+		if ( empty( $button_block['attrs']['text'] ) || empty( $button_block['attrs']['url'] ) ) {
+			return '';
+		}
+
+		// Reuse the button block's email rendering method.
+		return \Automattic\Jetpack\Extensions\Button\render_email( $block_content, $button_block, $rendering_context );
 	}
 
 	/**
@@ -987,9 +990,10 @@ class Jetpack_Memberships {
 			Blocks::jetpack_register_block(
 				'jetpack/recurring-payments',
 				array(
-					'render_callback'  => array( $this, 'render_button' ),
-					'uses_context'     => array( 'isPremiumContentChild' ),
-					'provides_context' => array(
+					'render_callback'       => array( $this, 'render_button' ),
+					'render_email_callback' => array( $this, 'render_button_email' ),
+					'uses_context'          => array( 'isPremiumContentChild' ),
+					'provides_context'      => array(
 						'jetpack/parentBlockWidth' => 'width',
 					),
 				)
