@@ -11,10 +11,8 @@ function openlab_core_setup() {
 	add_theme_support( 'responsive-embeds' );
 
 	register_nav_menus( array(
-		'main'        => __( 'Main Menu', 'openlab' ),
-		'aboutmenu'   => __( 'About Menu', 'openlab' ),
-		'helpmenu'    => __( 'Help Menu', 'openlab' ),
-		'helpmenusec' => __( 'Help Menu Secondary', 'openlab' ),
+		'main'      => __( 'Main Menu', 'openlab' ),
+		'aboutmenu' => __( 'About Menu', 'openlab' ),
 	) );
 }
 add_action( 'after_setup_theme', 'openlab_core_setup' );
@@ -43,6 +41,7 @@ require_once( $stylesheet_path . '/lib/help-funcs.php' );
 require_once( $stylesheet_path . '/lib/member-funcs.php' );
 require_once( $stylesheet_path . '/lib/page-funcs.php' );
 require_once( $stylesheet_path . '/lib/sidebar-funcs.php' );
+require_once( $stylesheet_path . '/lib/drawer-funcs.php' );
 require_once( $stylesheet_path . '/lib/plugin-hooks.php' );
 require_once( $stylesheet_path . '/lib/theme-hooks.php' );
 require_once( $stylesheet_path . '/lib/group-announcements.php' );

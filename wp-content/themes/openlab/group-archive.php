@@ -11,6 +11,11 @@ if ( $group_type === 'course' ) {
 } elseif ( $group_type === 'portfolio' ) {
 	$can_create = false;
 }
+
+// Register the archive mobile drawer.
+$drawer_id = 'archive-' . $group_type . '-drawer';
+$drawer_title = 'Find a ' . ucfirst( $group_type );
+openlab_register_archive_mobile_drawer( $drawer_id, $drawer_title );
 ?>
 
 <div id="content" class="hfeed row">
@@ -25,7 +30,7 @@ if ( $group_type === 'course' ) {
 				</span>
 			<?php endif; ?>
 
-			<button id="toggle-sidebar" data-target="#sidebar" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="sidebar"><span class="toggle-icon"></span><span class="sr-only">Search</span></button>
+			<button class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="<?php echo esc_attr( $drawer_id ); ?>" data-drawer-toggle="<?php echo esc_attr( $drawer_id ); ?>"><span class="toggle-icon"></span><span class="sr-only">Search</span></button>
 			</h1>
 
 			<div class="entry-content">

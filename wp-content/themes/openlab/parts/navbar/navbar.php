@@ -84,10 +84,10 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 	<div class="shadow-mask-right"></div>
 </nav>
 
-<div class="openlab-navbar-drawer" inert>
+<div class="openlab-navbar-drawer openlab-drawer-container" inert>
 	<!-- ARIA live region for announcing flyout state changes -->
-	<div class="sr-only" aria-live="polite" aria-atomic="true" id="flyout-announcer"></div>
-	
+	<div class="sr-only" aria-live="polite" aria-atomic="true" id="drawer-announcer"></div>
+
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>
@@ -96,4 +96,9 @@ $my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current'
 	<?php endif; ?>
 
 	<?php get_template_part( 'parts/navbar/main-menu-flyout' ); ?>
+
+	<?php
+	// Note: Dynamically registered drawers (from page templates) are rendered
+	// via wp_footer hook in drawer-funcs.php since templates run after header.
+	?>
 </div>

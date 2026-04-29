@@ -851,8 +851,13 @@ OpenLab.utility = (function ($) {
 			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
 		setUpNav: function() {
-			const drawer = document.querySelector('.openlab-navbar-drawer');
-			const announcer = document.getElementById('flyout-announcer');
+			// Support both legacy class and new unified class for the drawer container.
+			const drawer = document.querySelector('.openlab-drawer-container') || document.querySelector('.openlab-navbar-drawer');
+			const announcer = document.getElementById('drawer-announcer') || document.getElementById('flyout-announcer');
+
+			if (!drawer) {
+				return;
+			}
 
 			// Flag to track when navigating between submenu panels
 			// This prevents handleFocusLeave from closing the drawer during submenu navigation
@@ -896,7 +901,9 @@ OpenLab.utility = (function ($) {
 				}, 1000);
 			};
 
-			// Helper function to get menu name from ID
+			// Helper function to get menu name from ID.
+			// For navbar drawers, uses a known map. For other drawers, tries to extract
+			// the name from the drawer's heading or falls back to a generic name.
 			const getMenuName = function(menuId) {
 				const nameMap = {
 					'favorites-flyout': 'Favorites',
@@ -904,7 +911,24 @@ OpenLab.utility = (function ($) {
 					'login-flyout': 'Sign In',
 					'main-menu-flyout': 'Main Menu'
 				};
-				return nameMap[menuId] || 'Menu';
+
+				if (nameMap[menuId]) {
+					return nameMap[menuId];
+				}
+
+				// Try to get the name from the drawer's heading.
+				const menu = document.getElementById(menuId);
+				if (menu) {
+					const heading = menu.querySelector('.flyout-heading');
+					if (heading) {
+						const headingText = heading.textContent.trim();
+						if (headingText) {
+							return headingText;
+						}
+					}
+				}
+
+				return 'Menu';
 			};
 
 			// Function to close all drawers
@@ -923,13 +947,20 @@ OpenLab.utility = (function ($) {
 					el.classList.remove('is-open')
 				);
 
-				document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
+				// Reset all drawer toggle buttons (both navbar and external).
+				document.querySelectorAll('.navbar-flyout-toggle, .drawer-toggle').forEach(el =>
 					el.setAttribute('aria-expanded', 'false')
 				);
 
 				document.body.classList.remove('drawer-open');
 				drawer.inert = true;
 				drawer.classList.remove('is-open');
+
+				// Restore page content to the accessibility tree.
+				const pageTable = document.querySelector('.page-table');
+				if (pageTable) {
+					pageTable.inert = false;
+				}
 
 				// Set all panels as inert and reset their state
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
@@ -967,8 +998,16 @@ OpenLab.utility = (function ($) {
 
 				// If was closed, open it
 				if ( ! isOpen ) {
-					const menuId = toggle.getAttribute('aria-controls');
+					const menuId = toggle.getAttribute('aria-controls') || toggle.getAttribute('data-drawer-toggle');
 					const menu = document.getElementById(menuId);
+
+					if (!menu) {
+						return;
+					}
+
+					// Re-query the drawer container to ensure we have the right one containing this menu
+					const actualDrawer = menu.closest('.openlab-drawer-container') || drawer;
+
 					menu.classList.add('is-open');
 
 					const defaultPanelId = menu.getAttribute('data-default-panel');
@@ -979,12 +1018,17 @@ OpenLab.utility = (function ($) {
 					}
 
 					document.body.classList.add( 'drawer-open' );
-					drawer.inert = false;
-					drawer.classList.add('is-open');
-					drawer.scrollTop = 0;
+					actualDrawer.inert = false;
+					actualDrawer.classList.add('is-open');
+					actualDrawer.scrollTop = 0;
 
 					toggle.setAttribute('aria-expanded', 'true');
-					toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+					// Add is-open class to navbar toggleable parent if it exists
+					const toggleableParent = toggle.closest( '.navbar-action-link-toggleable' );
+					if (toggleableParent) {
+						toggleableParent.classList.add( 'is-open' );
+					}
 
 					// Store the toggle that opened this flyout
 					// This allows us to return focus to the correct toggle when closing
@@ -1006,9 +1050,18 @@ OpenLab.utility = (function ($) {
 								firstFocusable = menu.querySelector('#navbar-user-login');
 							}
 
-							// For other flyouts, focus on first link or button in the drawer-list
+							// For other flyouts, focus on first link or button in the drawer-list,
+							// or first form element in drawer-content
 							if (!firstFocusable) {
-								firstFocusable = menu.querySelector('.flyout-heading a, .drawer-list a, .drawer-list button');
+								firstFocusable = menu.querySelector(
+									'.flyout-heading a, ' +
+									'.drawer-list a, ' +
+									'.drawer-list button, ' +
+									'.drawer-content input:not([type="hidden"]), ' +
+									'.drawer-content select, ' +
+									'.drawer-content textarea, ' +
+									'.drawer-content button'
+								);
 							}
 
 							// Fallback to close button if no menu items found
@@ -1019,13 +1072,21 @@ OpenLab.utility = (function ($) {
 							if (firstFocusable) {
 								firstFocusable.focus();
 							}
+
+							// Hide page content from the accessibility tree now that focus is
+							// secured inside the drawer. Deferring this prevents the browser
+							// from moving focus (and disrupting click dispatch) during mousedown.
+							const pageTable = document.querySelector('.page-table');
+							if (pageTable) {
+								pageTable.inert = true;
+							}
 						});
 					});
 				}
 			};
 
-			// Handling the drawer toggle button.
-			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+			// Helper function to attach drawer toggle handlers to a button.
+			const attachToggleHandlers = function(toggle) {
 				// Handle mouse interactions on mousedown (fires before focusout)
 				// This prevents the race condition with handleFocusLeave
 				toggle.addEventListener('mousedown', (e) => {
@@ -1051,7 +1112,14 @@ OpenLab.utility = (function ($) {
 						}, 0);
 					}
 				});
-			});
+			};
+
+			// Handling navbar drawer toggle buttons.
+			document.querySelectorAll('.navbar-flyout-toggle').forEach(attachToggleHandlers);
+
+			// Handling external drawer toggle buttons (mobile sidebars, etc.).
+			// These use the data-drawer-toggle attribute to specify which drawer to open.
+			document.querySelectorAll('.drawer-toggle[data-drawer-toggle]').forEach(attachToggleHandlers);
 
 			// Handling flyout submenus.
 			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
@@ -1127,15 +1195,22 @@ OpenLab.utility = (function ($) {
 			});
 
 			// Handling close buttons in flyouts.
-			const closeButtons = document.querySelectorAll('.flyout-close-button');
+			const closeButtons = document.querySelectorAll('.flyout-close-button, .drawer-close-button');
 			closeButtons.forEach(button => {
 				button.addEventListener('click', function (e) {
 					e.preventDefault();
 
 					const flyoutId = this.getAttribute('data-flyout-close');
 
-					// Find the toggle button associated with this flyout
-					const toggle = document.querySelector(`[aria-controls="${flyoutId}"]`);
+					// Find the toggle button associated with this flyout.
+					// For drawer-close-button without a specific flyout ID, find the open toggle.
+					let toggle;
+					if (flyoutId) {
+						toggle = document.querySelector(`[aria-controls="${flyoutId}"], [data-drawer-toggle="${flyoutId}"]`);
+					} else {
+						// Find any open drawer toggle
+						toggle = document.querySelector('.drawer-toggle[aria-expanded="true"], .navbar-flyout-toggle[aria-expanded="true"]');
+					}
 
 					// Close the drawer and return focus to the toggle
 					closeAllDrawers(toggle);
@@ -1145,10 +1220,11 @@ OpenLab.utility = (function ($) {
 			// Close flyout menus when clicking outside.
 			document.addEventListener('click', function (e) {
 				const nav = document.querySelector('.openlab-navbar');
-				const flyoutContainer = document.querySelector('.openlab-navbar-drawer');
+				const flyoutContainer = document.querySelector('.openlab-navbar-drawer, .openlab-drawer-container');
 				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
+				const isClickOnDrawerToggle = e.target.closest('.drawer-toggle[data-drawer-toggle]');
 
-				if (!isClickInsideNav) {
+				if (!isClickInsideNav && !isClickOnDrawerToggle) {
 					closeAllDrawers();
 				}
 			});

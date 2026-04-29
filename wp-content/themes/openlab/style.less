@@ -238,6 +238,21 @@ blockquote {
     }
 }
 
+body.single-item.groups,
+body.bp-user,
+body.page {
+	// Superceded by the drawer interface.
+	@media (max-width: @screen-xs-max) {
+		.submenu h2 > span {
+			display: none;
+		}
+
+		.nav.nav-inline {
+			display: none;
+		}
+	}
+}
+
 // Main navbar.
 @navbar-height: 80px;
 @navbar-height-mobile: 64px;
@@ -533,7 +548,10 @@ button.navbar-flyout-toggle:hover,
 	}
 }
 
-.openlab-navbar-drawer {
+// Unified drawer container. Supports both navbar drawers and mobile sidebar drawers.
+// Using both classes for backwards compatibility during migration.
+.openlab-navbar-drawer,
+.openlab-drawer-container {
 	--flyout-h-padding: 36px;
 	--flyout-h-padding-mobile: 28px;
 	--flyout-menu-item-height: 60px;
@@ -662,6 +680,27 @@ button.navbar-flyout-toggle:hover,
 				text-align: center;
 			}
 		}
+
+		/* Special styling for the search/filter flyout.*/
+		&.archive-mobile-drawer {
+			.sidebar-title {
+				display: none;
+				visibility: hidden;
+			}
+
+			.flyout-heading {
+				background: transparent;
+				margin-top: 30px;
+				line-height: 1em;
+				padding: 20px 0;
+			}
+
+			.drawer-content {
+				background: #f0f0f0;
+				padding: 12px 0;
+				margin: 0 24px;
+			}
+		}
 	}
 
 	.flyout-heading {
@@ -672,14 +711,22 @@ button.navbar-flyout-toggle:hover,
 		line-height: var(--flyout-menu-item-height);
 		font-weight: @semibold;
 		padding: 0;
+		position: relative;
 
-		@media (max-width: @screen-xs-max) {
-			padding-left: var(--flyout-h-padding-mobile);
+		&.has-close-button {
+			padding-right: 50px; // Make room for the close button.
 		}
 
 		button:focus,
 		a:focus {
 			text-decoration: underline;
+		}
+
+		> button.flyout-subnav-back,
+		> span {
+			@media (max-width: @screen-xs-max) {
+				padding-left: 24px !important;
+			}
 		}
 
 		a {
@@ -691,12 +738,47 @@ button.navbar-flyout-toggle:hover,
 			padding: 0 var(--flyout-h-padding);
 			text-decoration: none;
 
+			@media (max-width: @screen-xs-max) {
+				padding-left: 24px;
+			}
+
 			&:focus {
 				outline-offset: -2px;
 			}
 
 			&:hover {
 				text-decoration: underline;
+			}
+		}
+
+		.drawer-close-button {
+			align-items: center;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			display: flex;
+			height: var(--flyout-menu-item-height);
+			justify-content: center;
+			padding: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 50px;
+
+			&:focus {
+				outline: 2px solid @darkTeal;
+				outline-offset: -2px;
+			}
+
+			.navbar-icon-close {
+				height: 20px;
+				width: 20px;
+
+				path {
+					stroke: #333;
+					stroke-width: 2;
+					fill: none;
+				}
 			}
 		}
 	}
@@ -780,9 +862,6 @@ button.navbar-flyout-toggle:hover,
 		&:focus,
 		&:hover {
 			background-color: #f0f0f0;
-			outline: solid;
-			outline-offset: -2px;
-			outline-width: 2px;
 		}
 
 		.right-chevron svg {
@@ -862,6 +941,15 @@ button.navbar-flyout-toggle:hover,
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+		}
+	}
+
+	// Drawer content container for non-list content (e.g., filter forms).
+	.drawer-content {
+		padding: var(--flyout-h-padding);
+
+		@media (max-width: @screen-xs-max) {
+			padding: var(--flyout-h-padding-mobile);
 		}
 	}
 }
@@ -1772,6 +1860,13 @@ h1.entry-title{
 			margin-left: 0;
 		}
     }
+	/**
+	 * DEPRECATED: .direct-toggle styles
+	 * These styles are being phased out in favor of .drawer-toggle.
+	 * The .direct-toggle class is used with Bootstrap collapse-based sidebars.
+	 * New code should use .drawer-toggle with the unified drawer system.
+	 * @see lib/drawer-funcs.php for the new drawer API.
+	 */
     .direct-toggle{
 		background: transparent;
 		width: 26px;
@@ -1818,6 +1913,46 @@ h1.entry-title{
 			}
 		}
     }
+
+	// Drawer toggle button - extends direct-toggle with drawer-specific behavior.
+	// This button opens a drawer instead of a Bootstrap collapse.
+	.drawer-toggle {
+		background: transparent;
+		width: 26px;
+		height: 26px;
+		border: none;
+		position: absolute;
+		padding: 0;
+		top: -5px;
+		right: 0;
+		z-index: 11;
+
+		.icon-default {
+			display: block;
+		}
+
+		.icon-close {
+			display: none;
+		}
+
+		.toggle-icon {
+			background: url('images/filters.svg') no-repeat left center;
+			background-size: contain;
+			display: block;
+			height: 22px;
+			width: 20px;
+		}
+
+		&[aria-expanded="true"] {
+			.icon-default {
+				display: none;
+			}
+			.icon-close {
+				display: block;
+			}
+		}
+	}
+
     @media (max-width: @screen-xs-max){
         margin-top: 12px;
         padding-bottom: 2px;
@@ -3309,6 +3444,14 @@ body form{
 }
 
 /**sidebar**/
+/**
+ * DEPRECATED: .mobile-dropdown styles
+ * These styles are being phased out in favor of the unified drawer system.
+ * The drawer system uses .openlab-drawer-container and .drawer-toggle classes.
+ * These styles are kept for backwards compatibility with help pages and
+ * any remaining Bootstrap collapse-based sidebars.
+ * @see lib/drawer-funcs.php for the new drawer API.
+ */
 .mobile-dropdown{
     @media(max-width: @screen-xs-max){
         background: transparent;

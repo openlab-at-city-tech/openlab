@@ -100,9 +100,3 @@ if ( bp_is_members_directory() ) {
     </div><!--filter-->
 </div>
 <?php
-
-function slug_maker($full_string) {
-    $slug_val = str_replace(" ", "-", $full_string);
-    $slug_val = strtolower($slug_val);
-    return $slug_val;
-}

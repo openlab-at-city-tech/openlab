@@ -1,16 +1,13 @@
 <?php
 /* menu functions - current includes
   -register_nav_menus for custom menu locations
-  -help pages menu - adding categories
   -profile pages sub menus
  */
 
 //custom menu locations for OpenLab
 register_nav_menus(array(
-    'main' => __('Main Menu', 'cuny'),
+    'main'      => __('Main Menu', 'cuny'),
     'aboutmenu' => __('About Menu', 'cuny'),
-    'helpmenu' => __('Help Menu', 'cuny'),
-    'helpmenusec' => __('Help Menu Secondary', 'cuny')
 ));
 
 /**
@@ -129,140 +126,6 @@ function openlab_modify_options_nav() {
 
 add_action('bp_screens', 'openlab_modify_options_nav', 1);
 
-/**
- * Help Sidebar menu: includes categories and sub-categories.
- *
- * @global type $post
- * @param string $items
- * @param type $args
- * @return string
- */
-function openlab_help_categories_menu($items, $args) {
-    global $post;
-
-    if ($args->theme_location == 'helpmenu') {
-        $term = get_query_var('term');
-        $parent_term = get_term_by('slug', $term, 'help_category');
-        $current_term = false;
-
-        if ($parent_term == false) {
-            $child_terms = get_the_terms($post->ID, 'help_category');
-            $term = array();
-
-            if (!empty($child_terms)) {
-                foreach ($child_terms as $child_term) {
-                    $term[] = $child_term;
-                }
-
-                $parent_term = get_term_by('id', $term[0]->parent, 'help_category');
-                $current_term = get_term_by('id', $term[0]->term_id, 'help_category');
-            }
-        }
-
-        //for child term archive pages
-        if ($parent_term !== false && $parent_term->parent != 0) {
-            $current_term = $parent_term;
-            $parent_term = get_term_by('id', $current_term->parent, 'help_category');
-        }
-
-        $help_args = array(
-            'orderby'    => 'term_order',
-            'hide_empty' => false
-        );
-        $help_cats = get_terms('help_category', $help_args);
-
-        // for post level identifying of current menu item
-        $post_cats_array = array();
-
-        if ($post->post_type == 'help') {
-            $post_cats = get_the_terms($post->id, 'help_category');
-
-            if ($post_cats) {
-                foreach ($post_cats as $post_cat) {
-                    // no children cats in menu
-                    if ($post_cat->parent == 0) {
-                        $post_cats_array[] = $post_cat->term_id;
-                    }
-                }
-            }
-        }
-
-        $help_cat_list = "";
-        foreach ($help_cats as $help_cat) {
-            // eliminate children cats from the menu list
-            if ($help_cat->parent == 0) {
-                $help_classes = "help-cat menu-item";
-
-                $highlight_active_state = get_query_var('taxonomy') != 'help_tags' && empty($_GET['help-search']);
-
-                // see if this is the current menu item; if not, this could be a post,
-                // so we'll check against an array of cat ids for this post
-				$is_current = false;
-                if ($highlight_active_state) {
-                    if ($parent_term !== false && $help_cat->term_id == $parent_term->term_id) {
-                        $help_classes .= " current-menu-item";
-						$is_current    = true;
-                    } else if ($post->post_type == 'help') {
-                        if (in_array($help_cat->term_id, $post_cats_array)) {
-                            $help_classes .= " current-menu-item";
-							$is_current    = true;
-                        }
-                    }
-                }
-
-                // a special case just for the glossary page
-                if ($help_cat->name == "Help Glossary") {
-                    $help_cat->name = "Glossary";
-                }
-
-                $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a>';
-
-				// Child terms only show for the currently-selected top-level category.
-				if ( $is_current && $highlight_active_state ) {
-					// check for child terms
-					$child_cat_check = get_term_children($help_cat->term_id, 'help_category');
-
-					// list child terms, if any
-					if (count($child_cat_check) > 0) {
-						$help_cat_list .= '<ul>';
-
-						$child_args = array(
-							'orderby'    => 'term_order',
-							'hide_empty' => false,
-							'parent'     => $help_cat->term_id
-						);
-						$child_cats = get_terms('help_category', $child_args);
-						foreach ($child_cats as $child_cat) {
-
-							$child_classes = "help-cat menu-item";
-							if ($highlight_active_state) {
-								if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
-									$child_classes .= " current-menu-item";
-								} else if ($post->post_type == 'help') {
-									if (in_array($child_cat->term_id, $post_cats_array)) {
-										$child_classes .= " current-menu-item";
-									}
-								}
-							}
-
-							$help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
-						}
-
-						$help_cat_list .= '</ul>';
-					}
-				}
-
-                $help_cat_list .= '</li>';
-            }
-        }
-
-        $items = $items . $help_cat_list;
-    }
-
-    return $items;
-}
-
-add_filter('wp_nav_menu_items', 'openlab_help_categories_menu', 10, 2);
 
 /**
  * For a single help post: get the primary term for that post
@@ -811,10 +674,29 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
 }
 
 /**
- * bp_get_options_nav filtering
+ * DEPRECATED: bp_get_options_nav filtering for group sidebar.
  *
+ * These filters are no longer used for the main group sidebar nav, which now uses
+ * openlab_render_group_desktop_nav() from sidebar-funcs.php. This provides a unified
+ * navigation data source for both desktop and mobile views.
+ *
+ * The filters below are retained for backward compatibility with any remaining uses
+ * of bp_get_options_nav() (such as the events subnav) but the main group nav filters
+ * (home, admin, members, docs, files, forum, connections, announcements) are now
+ * handled by the unified system.
+ *
+ * @since 1.8.0
  */
-//submenu nav renaming
+
+/*
+ * LEGACY FILTERS - No longer needed for main group nav.
+ * Kept for reference and potential edge cases.
+ *
+ * Note: The main group sidebar now uses openlab_render_group_desktop_nav() which
+ * pulls from openlab_get_group_nav_items() - the same data source as mobile drawers.
+ */
+
+// Legacy filter - kept for any remaining uses but primary nav no longer calls this.
 add_filter('bp_get_options_nav_home', 'openlab_filter_subnav_home');
 
 function openlab_filter_subnav_home($subnav_item) {
@@ -1150,72 +1032,60 @@ add_action( 'bp_screens', 'openlab_group_submenu_nav', 1 );
 /**
  * Markup for group admin tabs
  */
-function openlab_group_admin_tabs($group = false) {
+function openlab_group_admin_tabs( $group = false ) {
 	global $bp, $groups_template;
 
-	if ( !$group ) {
+	if ( ! $group ) {
 		$group = ( $groups_template->group ) ? $groups_template->group : $bp->groups->current_group;
 	}
 
-	$current_tab = bp_action_variable(0);
+	$items = openlab_get_group_settings_submenu_items( $group );
 
-	$group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
+	if ( empty( $items ) ) {
+		return;
+	}
 
-	// Portfolio tabs look different from other groups
-	?>
+	$group_type = groups_get_groupmeta( $group->id, 'wds_group_type' );
+	$last_index = count( $items ) - 1;
 
-	<?php if (openlab_is_portfolio()) : ?>
-		<?php if ( $bp->is_item_admin ) { ?>
-			<li <?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details">Edit Profile</a></li>
-		<?php } ?>
+	foreach ( $items as $i => $item ) {
+		$classes = [];
 
-		<?php if (!(int) bp_get_option('bp-disable-avatar-uploads')) : ?>
-			<li <?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar">Change Avatar</a></li>
-		<?php endif; ?>
+		if ( ! empty( $item['is_current'] ) ) {
+			$classes[] = 'current-menu-item';
+		}
+		if ( ! empty( $item['css_classes'] ) ) {
+			$classes = array_merge( $classes, $item['css_classes'] );
+		}
+		// Preserve the last-item hook class on the final tab for non-portfolio groups.
+		if ( $i === $last_index && ! openlab_is_portfolio() ) {
+			$classes[] = 'last-item';
+		}
 
-		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings">Settings</a></li>
+		$class_attr = $classes ? ' class="' . esc_attr( implode( ' ', $classes ) ) . '"' : '';
+		$icon_html  = ! empty( $item['icon'] ) ? '<span class="fa ' . esc_attr( $item['icon'] ) . '"></span>' : '';
 
-		<?php
-		$profile = openlab_get_portfolio_label(
-			[
-				'user_id' => bp_loggedin_user_id(),
-			]
+		printf(
+			'<li%s>%s<a href="%s">%s</a></li>' . "\n",
+			$class_attr,
+			$icon_html,
+			esc_url( $item['href'] ),
+			esc_html( $item['text'] )
 		);
-		?>
+	}
 
-		<li class="delete-button <?php if ('delete-group' == $current_tab) : ?> current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group">Delete <?php echo $profile; ?></a></li>
-
-	<?php else : ?>
-
-		<?php if ( $bp->is_item_admin ) { ?>
-			<li <?php if ('edit-details' == $current_tab || empty($current_tab)) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/edit-details"><?php _e('Edit Profile', 'buddypress'); ?></a></li>
-		<?php } ?>
-
-		<?php
-			if ( !$bp->is_item_admin ) {
-				return false;
-			}
-		?>
-
-		<li <?php if ('group-avatar' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-avatar"><?php _e('Change Avatar', 'buddypress'); ?></a></li>
-
-		<li <?php if ('group-settings' == $current_tab) : ?> class="current-menu-item"<?php endif; ?>><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/group-settings"><?php _e('Settings', 'buddypress'); ?></a></li>
-
-		<?php //do_action( 'groups_admin_tabs', $current_tab, $group->slug ); ?>
-
-		<li class="clone-button <?php if ('clone-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-plus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/create/step/group-details?type=' . $group_type . '&clone=' . bp_get_current_group_id() ?>"><?php _e('Clone ' . ucfirst($group_type), 'buddypress'); ?></a></li>
-
-		<li class="delete-button last-item <?php if ('delete-group' == $current_tab) : ?>current-menu-item<?php endif; ?>" ><span class="fa fa-minus-circle"></span><a href="<?php echo bp_get_root_domain() . '/' . bp_get_groups_root_slug() . '/' . $group->slug ?>/admin/delete-group"><?php _e('Delete ' . ucfirst($group_type), 'buddypress'); ?></a></li>
-
-		<?php if ($group_type == "portfolio") : ?>
-			<li class="portfolio-displayname pull-right"><span class="highlight"><?php echo bp_core_get_userlink(openlab_get_user_id_from_portfolio_group_id(bp_get_group_id())); ?></span></li>
-		<?php else : ?>
-			<li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> <?php printf(__('active %s', 'buddypress'), bp_get_group_last_active()) ?></span></li>
-		<?php endif; ?>
-
-	<?php endif ?>
-
-	<?php
+	// Trailing info item (not a nav tab).
+	if ( $group_type === 'portfolio' ) {
+		printf(
+			'<li class="portfolio-displayname pull-right"><span class="highlight">%s</span></li>' . "\n",
+			bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) )
+		);
+	} else {
+		printf(
+			'<li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> %s</span></li>' . "\n",
+			sprintf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() )
+		);
+	}
 }
 
 /**

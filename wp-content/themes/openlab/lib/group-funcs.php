@@ -719,9 +719,12 @@ function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy =
 function openlab_group_profile_header() {
     global $bp;
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
+
+	// Register the group mobile drawer.
+	openlab_register_group_mobile_drawer();
     ?>
     <h1 class="entry-title group-title clearfix"><span class="profile-name hyphenate"><?php echo bp_group_name(); ?></span>
-        <button id="toggle-sidebar-menu-wrapper" data-target="#sidebar-menu-wrapper" data-backgroundonly="true" class="mobile-toggle direct-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="sidebar-menu-wrapper">
+        <button class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="group-mobile-drawer" data-drawer-toggle="group-mobile-drawer">
 			<span class="toggle-icon"></span>
             <span class="sr-only">Toggle navigation</span>
         </button></h1>
