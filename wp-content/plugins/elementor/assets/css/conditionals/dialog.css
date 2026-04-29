@@ -263,16 +263,16 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button:visited {
   color: initial;
 }
-.dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled],
-.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled] {
-  background-color: var(--e-a-btn-bg-disabled);
-  cursor: not-allowed;
-}
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:visited,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:hover,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:focus,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:visited {
   background-color: var(--e-a-btn-bg-disabled);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled],
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled] {
+  background-color: var(--e-a-btn-bg-disabled);
+  cursor: not-allowed;
 }
 
 /*# sourceMappingURL=dialog.css.map */

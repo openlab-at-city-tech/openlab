@@ -9,6 +9,7 @@ return [
 	'handle' => 'elementor-v2-editor-notifications',
 	'deps' => [
 		'elementor-v2-editor',
+		'elementor-v2-icons',
 		'elementor-v2-store',
 		'elementor-v2-ui',
 		'react',

@@ -26,8 +26,6 @@
 
 /*! ./utils/get-legacy-elements-panel-component */
 
-/*! ./utils/get-window */
-
 /*! @elementor/editor */
 
 /*! @elementor/editor-v1-adapters */

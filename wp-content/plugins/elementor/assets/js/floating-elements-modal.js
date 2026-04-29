@@ -115,6 +115,11 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
   }
   (0, _inherits2.default)(_default, _Marionette$LayoutVie);
   return (0, _createClass2.default)(_default, [{
+    key: "tagName",
+    value: function tagName() {
+      return 'header';
+    }
+  }, {
     key: "className",
     value: function className() {
       return 'elementor-templates-modal__header';
@@ -739,7 +744,7 @@ var NewFloatingElementsModule = elementorModules.ViewModule.extend({
   getDefaultSettings: function getDefaultSettings() {
     return {
       selectors: {
-        addButtonTopBar: '.page-title-action',
+        addButtonTopBar: 'a.page-title-action[href*="e-floating-buttons"]',
         addButtonAdminBar: '#wp-admin-bar-new-e-floating-buttons a',
         addButtonEmptyTemplate: '#elementor-template-library-add-new'
       }

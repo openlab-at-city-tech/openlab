@@ -1,0 +1,10 @@
+__( 'Close', 'elementor' );
+__( 'How do you want to start?', 'elementor' );
+__( 'AI Site Planner', 'elementor' );
+__( 'AI Site Planner', 'elementor' );
+__( 'Generate your wireframe with AI', 'elementor' );
+__( 'Website templates', 'elementor' );
+__( 'Website templates', 'elementor' );
+__( 'Start with a ready-made design', 'elementor' );
+__( 'Blank site', 'elementor' );
+__( 'Start from scratch', 'elementor' );

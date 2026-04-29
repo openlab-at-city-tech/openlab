@@ -1,6 +1,390 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "../assets/dev/js/editor/utils/editor-one-events.js":
+/*!**********************************************************!*\
+  !*** ../assets/dev/js/editor/utils/editor-one-events.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.createDebouncedWidgetPanelSearch = exports.createDebouncedFinderSearch = exports.EditorOneEventManager = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var EditorOneEventManager = exports.EditorOneEventManager = /*#__PURE__*/function () {
+  function EditorOneEventManager() {
+    (0, _classCallCheck2.default)(this, EditorOneEventManager);
+  }
+  return (0, _createClass2.default)(EditorOneEventManager, null, [{
+    key: "getEventsManager",
+    value: function getEventsManager() {
+      var _elementorCommon;
+      return (_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.eventsManager;
+    }
+  }, {
+    key: "getConfig",
+    value: function getConfig() {
+      var _this$getEventsManage;
+      return (_this$getEventsManage = this.getEventsManager()) === null || _this$getEventsManage === void 0 ? void 0 : _this$getEventsManage.config;
+    }
+  }, {
+    key: "canSendEvents",
+    value: function canSendEvents() {
+      var _elementorCommon2;
+      return ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.config) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.editor_events) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.can_send_events) || false;
+    }
+  }, {
+    key: "isEventsManagerAvailable",
+    value: function isEventsManagerAvailable() {
+      var eventsManager = this.getEventsManager();
+      return eventsManager && 'function' === typeof eventsManager.dispatchEvent;
+    }
+  }, {
+    key: "dispatchEvent",
+    value: function dispatchEvent(eventName, payload) {
+      if (!this.isEventsManagerAvailable() || !this.canSendEvents()) {
+        return false;
+      }
+      try {
+        return this.getEventsManager().dispatchEvent(eventName, payload);
+      } catch (error) {
+        return false;
+      }
+    }
+  }, {
+    key: "toLowerSnake",
+    value: function toLowerSnake(value) {
+      if (!value || 'string' !== typeof value) {
+        return value;
+      }
+      return value.replace(/\s+/g, '_').toLowerCase();
+    }
+  }, {
+    key: "decodeHtmlEntities",
+    value: function decodeHtmlEntities(text) {
+      if (!text || 'string' !== typeof text) {
+        return text;
+      }
+      var doc = new DOMParser().parseFromString(text, 'text/html');
+      return doc.body.textContent || text;
+    }
+  }, {
+    key: "isInEditorContext",
+    value: function isInEditorContext() {
+      var _window$elementor;
+      return 'undefined' !== typeof window.elementor && !!((_window$elementor = window.elementor) !== null && _window$elementor !== void 0 && _window$elementor.documents);
+    }
+  }, {
+    key: "getFinderContext",
+    value: function getFinderContext() {
+      var _config$appTypes, _config$appTypes2, _config$locations, _config$locations2;
+      var config = this.getConfig();
+      var isEditor = this.isInEditorContext();
+      return {
+        windowName: isEditor ? config === null || config === void 0 || (_config$appTypes = config.appTypes) === null || _config$appTypes === void 0 ? void 0 : _config$appTypes.editor : config === null || config === void 0 || (_config$appTypes2 = config.appTypes) === null || _config$appTypes2 === void 0 ? void 0 : _config$appTypes2.wpAdmin,
+        targetLocation: this.toLowerSnake(isEditor ? config === null || config === void 0 || (_config$locations = config.locations) === null || _config$locations === void 0 ? void 0 : _config$locations.topBar : config === null || config === void 0 || (_config$locations2 = config.locations) === null || _config$locations2 === void 0 ? void 0 : _config$locations2.sidebar)
+      };
+    }
+  }, {
+    key: "createBasePayload",
+    value: function createBasePayload() {
+      var _config$appTypes$edit, _config$appTypes3, _config$appTypes$edit2, _config$appTypes4;
+      var overrides = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var config = this.getConfig();
+      return _objectSpread({
+        app_type: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : 'editor',
+        window_name: (_config$appTypes$edit2 = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.editor) !== null && _config$appTypes$edit2 !== void 0 ? _config$appTypes$edit2 : 'editor'
+      }, overrides);
+    }
+  }, {
+    key: "sendTopBarPublishDropdown",
+    value: function sendTopBarPublishDropdown(targetName) {
+      var _config$names, _config$triggers, _config$targetTypes, _config$interactionRe, _config$locations3, _config$secondaryLoca, _config$targetTypes2;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names = config.names) === null || _config$names === void 0 || (_config$names = _config$names.editorOne) === null || _config$names === void 0 ? void 0 : _config$names.topBarPublishDropdown, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers = config.triggers) === null || _config$triggers === void 0 ? void 0 : _config$triggers.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes = config.targetTypes) === null || _config$targetTypes === void 0 ? void 0 : _config$targetTypes.dropdownItem,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe = config.interactionResults) === null || _config$interactionRe === void 0 ? void 0 : _config$interactionRe.actionSelected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations3 = config.locations) === null || _config$locations3 === void 0 ? void 0 : _config$locations3.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca = config.secondaryLocations) === null || _config$secondaryLoca === void 0 ? void 0 : _config$secondaryLoca.publishDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes2 = config.targetTypes) === null || _config$targetTypes2 === void 0 ? void 0 : _config$targetTypes2.dropdownItem,
+        interaction_description: 'User selected an action from the publish dropdown'
+      }));
+    }
+  }, {
+    key: "sendTopBarPageList",
+    value: function sendTopBarPageList(targetName) {
+      var _config$names2, _config$triggers2, _config$targetTypes3, _config$interactionRe2, _config$interactionRe3, _config$locations4, _config$secondaryLoca2, _config$targetTypes4;
+      var isCreate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names2 = config.names) === null || _config$names2 === void 0 || (_config$names2 = _config$names2.editorOne) === null || _config$names2 === void 0 ? void 0 : _config$names2.topBarPageList, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers2 = config.triggers) === null || _config$triggers2 === void 0 ? void 0 : _config$triggers2.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes3 = config.targetTypes) === null || _config$targetTypes3 === void 0 ? void 0 : _config$targetTypes3.dropdownItem,
+        target_name: targetName,
+        interaction_result: isCreate ? config === null || config === void 0 || (_config$interactionRe2 = config.interactionResults) === null || _config$interactionRe2 === void 0 ? void 0 : _config$interactionRe2.create : config === null || config === void 0 || (_config$interactionRe3 = config.interactionResults) === null || _config$interactionRe3 === void 0 ? void 0 : _config$interactionRe3.navigate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations4 = config.locations) === null || _config$locations4 === void 0 ? void 0 : _config$locations4.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca2 = config.secondaryLocations) === null || _config$secondaryLoca2 === void 0 ? void 0 : _config$secondaryLoca2.pageListDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes4 = config.targetTypes) === null || _config$targetTypes4 === void 0 ? void 0 : _config$targetTypes4.dropdownItem,
+        interaction_description: 'User selected an action from the page list dropdown'
+      }));
+    }
+  }, {
+    key: "sendSiteSettingsSession",
+    value: function sendSiteSettingsSession(_ref) {
+      var _config$names3, _config$triggers3, _config$interactionRe4, _config$locations5, _config$secondaryLoca3;
+      var targetType = _ref.targetType,
+        _ref$visitedItems = _ref.visitedItems,
+        visitedItems = _ref$visitedItems === void 0 ? [] : _ref$visitedItems,
+        _ref$savedItems = _ref.savedItems,
+        savedItems = _ref$savedItems === void 0 ? [] : _ref$savedItems,
+        state = _ref.state;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names3 = config.names) === null || _config$names3 === void 0 || (_config$names3 = _config$names3.editorOne) === null || _config$names3 === void 0 ? void 0 : _config$names3.siteSettingsSession, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers3 = config.triggers) === null || _config$triggers3 === void 0 ? void 0 : _config$triggers3.click),
+        target_type: targetType,
+        target_name: 'site_settings',
+        interaction_result: config === null || config === void 0 || (_config$interactionRe4 = config.interactionResults) === null || _config$interactionRe4 === void 0 ? void 0 : _config$interactionRe4.sessionEnd,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations5 = config.locations) === null || _config$locations5 === void 0 ? void 0 : _config$locations5.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca3 = config.secondaryLocations) === null || _config$secondaryLoca3 === void 0 ? void 0 : _config$secondaryLoca3.siteSettings),
+        interaction_description: 'Records areas visited as part of the site setting session',
+        metadata: {
+          visited_items: visitedItems,
+          saved_items: savedItems
+        },
+        state: state
+      }));
+    }
+  }, {
+    key: "sendELibraryNav",
+    value: function sendELibraryNav(tabName) {
+      var _config$names4, _config$triggers4, _config$targetTypes5, _config$interactionRe5, _config$locations6, _config$secondaryLoca4;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names4 = config.names) === null || _config$names4 === void 0 || (_config$names4 = _config$names4.editorOne) === null || _config$names4 === void 0 ? void 0 : _config$names4.eLibraryNav, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers4 = config.triggers) === null || _config$triggers4 === void 0 ? void 0 : _config$triggers4.tabSelect),
+        target_type: config === null || config === void 0 || (_config$targetTypes5 = config.targetTypes) === null || _config$targetTypes5 === void 0 ? void 0 : _config$targetTypes5.tab,
+        target_name: this.toLowerSnake(tabName),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe5 = config.interactionResults) === null || _config$interactionRe5 === void 0 ? void 0 : _config$interactionRe5.tabChanged,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations6 = config.locations) === null || _config$locations6 === void 0 ? void 0 : _config$locations6.elementorLibrary),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca4 = config.secondaryLocations) === null || _config$secondaryLoca4 === void 0 ? void 0 : _config$secondaryLoca4.libraryTabs),
+        interaction_description: 'User navigates within elementor library'
+      }));
+    }
+  }, {
+    key: "sendELibraryInsert",
+    value: function sendELibraryInsert(_ref2) {
+      var _config$triggers5, _config$targetTypes6, _config$interactionRe6, _config$locations7, _config$secondaryLoca5, _config$names5;
+      var assetId = _ref2.assetId,
+        assetName = _ref2.assetName,
+        libraryType = _ref2.libraryType,
+        _ref2$proRequired = _ref2.proRequired,
+        proRequired = _ref2$proRequired === void 0 ? false : _ref2$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers5 = config.triggers) === null || _config$triggers5 === void 0 ? void 0 : _config$triggers5.insert),
+        target_type: config === null || config === void 0 || (_config$targetTypes6 = config.targetTypes) === null || _config$targetTypes6 === void 0 ? void 0 : _config$targetTypes6.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe6 = config.interactionResults) === null || _config$interactionRe6 === void 0 ? void 0 : _config$interactionRe6.assetInserted,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations7 = config.locations) === null || _config$locations7 === void 0 ? void 0 : _config$locations7.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca5 = config.secondaryLocations) === null || _config$secondaryLoca5 === void 0 ? void 0 : _config$secondaryLoca5.assetCard),
+        interaction_description: 'User inserts block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names5 = config.names) === null || _config$names5 === void 0 || (_config$names5 = _config$names5.editorOne) === null || _config$names5 === void 0 ? void 0 : _config$names5.eLibraryInsert, payload);
+    }
+  }, {
+    key: "sendELibraryFavorite",
+    value: function sendELibraryFavorite(_ref3) {
+      var _config$triggers6, _config$targetTypes7, _config$interactionRe7, _config$locations8, _config$secondaryLoca6, _config$names6;
+      var assetId = _ref3.assetId,
+        assetName = _ref3.assetName,
+        libraryType = _ref3.libraryType,
+        isFavorite = _ref3.isFavorite,
+        _ref3$proRequired = _ref3.proRequired,
+        proRequired = _ref3$proRequired === void 0 ? false : _ref3$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers6 = config.triggers) === null || _config$triggers6 === void 0 ? void 0 : _config$triggers6.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes7 = config.targetTypes) === null || _config$targetTypes7 === void 0 ? void 0 : _config$targetTypes7.toggle,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe7 = config.interactionResults) === null || _config$interactionRe7 === void 0 ? void 0 : _config$interactionRe7.assetFavorite,
+        target_value: Boolean(isFavorite),
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations8 = config.locations) === null || _config$locations8 === void 0 ? void 0 : _config$locations8.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca6 = config.secondaryLocations) === null || _config$secondaryLoca6 === void 0 ? void 0 : _config$secondaryLoca6.assetCard),
+        interaction_description: 'User favorite block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names6 = config.names) === null || _config$names6 === void 0 || (_config$names6 = _config$names6.editorOne) === null || _config$names6 === void 0 ? void 0 : _config$names6.eLibraryFavorite, payload);
+    }
+  }, {
+    key: "sendELibraryGenerateAi",
+    value: function sendELibraryGenerateAi(_ref4) {
+      var _config$names7, _config$triggers7, _config$targetTypes8, _config$interactionRe8, _config$locations9, _config$secondaryLoca7;
+      var assetId = _ref4.assetId,
+        assetName = _ref4.assetName,
+        libraryType = _ref4.libraryType;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names7 = config.names) === null || _config$names7 === void 0 || (_config$names7 = _config$names7.editorOne) === null || _config$names7 === void 0 ? void 0 : _config$names7.eLibraryGenerateAi, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers7 = config.triggers) === null || _config$triggers7 === void 0 ? void 0 : _config$triggers7.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes8 = config.targetTypes) === null || _config$targetTypes8 === void 0 ? void 0 : _config$targetTypes8.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe8 = config.interactionResults) === null || _config$interactionRe8 === void 0 ? void 0 : _config$interactionRe8.aiGenerate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations9 = config.locations) === null || _config$locations9 === void 0 ? void 0 : _config$locations9.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca7 = config.secondaryLocations) === null || _config$secondaryLoca7 === void 0 ? void 0 : _config$secondaryLoca7.assetCard),
+        interaction_description: 'User generated block/page based on a library asset',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      }));
+    }
+  }, {
+    key: "sendFinderSearchInput",
+    value: function sendFinderSearchInput(_ref5) {
+      var _config$triggers8, _config$targetTypes9, _config$interactionRe9, _config$interactionRe0, _config$secondaryLoca8, _config$names8;
+      var resultsCount = _ref5.resultsCount,
+        _ref5$searchTerm = _ref5.searchTerm,
+        searchTerm = _ref5$searchTerm === void 0 ? null : _ref5$searchTerm;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var finderContext = this.getFinderContext();
+      var payload = this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers8 = config.triggers) === null || _config$triggers8 === void 0 ? void 0 : _config$triggers8.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes9 = config.targetTypes) === null || _config$targetTypes9 === void 0 ? void 0 : _config$targetTypes9.searchInput,
+        target_name: 'finder',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe9 = config.interactionResults) === null || _config$interactionRe9 === void 0 ? void 0 : _config$interactionRe9.resultsUpdated : config === null || config === void 0 || (_config$interactionRe0 = config.interactionResults) === null || _config$interactionRe0 === void 0 ? void 0 : _config$interactionRe0.noResults,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca8 = config.secondaryLocations) === null || _config$secondaryLoca8 === void 0 ? void 0 : _config$secondaryLoca8.finder),
+        interaction_description: 'Finder search input, follows debounce behavior',
+        metadata: {
+          results_count: resultsCount
+        }
+      });
+      if (!hasResults && searchTerm) {
+        payload.metadata.search_term = searchTerm;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names8 = config.names) === null || _config$names8 === void 0 || (_config$names8 = _config$names8.editorOne) === null || _config$names8 === void 0 ? void 0 : _config$names8.finderSearchInput, payload);
+    }
+  }, {
+    key: "sendFinderResultSelect",
+    value: function sendFinderResultSelect(choice) {
+      var _config$names9, _config$triggers9, _config$targetTypes0, _config$interactionRe1, _config$secondaryLoca9, _config$secondaryLoca0;
+      var config = this.getConfig();
+      var finderContext = this.getFinderContext();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names9 = config.names) === null || _config$names9 === void 0 || (_config$names9 = _config$names9.editorOne) === null || _config$names9 === void 0 ? void 0 : _config$names9.finderResultSelect, this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers9 = config.triggers) === null || _config$triggers9 === void 0 ? void 0 : _config$triggers9.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes0 = config.targetTypes) === null || _config$targetTypes0 === void 0 ? void 0 : _config$targetTypes0.searchResult,
+        target_name: choice,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe1 = config.interactionResults) === null || _config$interactionRe1 === void 0 ? void 0 : _config$interactionRe1.selected,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca9 = config.secondaryLocations) === null || _config$secondaryLoca9 === void 0 ? void 0 : _config$secondaryLoca9.finder),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca0 = config.secondaryLocations) === null || _config$secondaryLoca0 === void 0 ? void 0 : _config$secondaryLoca0.finderResults),
+        interaction_description: 'Finder search results was selected'
+      }));
+    }
+  }, {
+    key: "sendCanvasEmptyBoxAction",
+    value: function sendCanvasEmptyBoxAction(_ref6) {
+      var _config$triggers0, _config$targetTypes1, _config$interactionRe10, _config$locations0, _config$secondaryLoca1, _config$names0;
+      var targetName = _ref6.targetName,
+        _ref6$metadata = _ref6.metadata,
+        metadata = _ref6$metadata === void 0 ? {} : _ref6$metadata,
+        _ref6$containerCreate = _ref6.containerCreated,
+        containerCreated = _ref6$containerCreate === void 0 ? null : _ref6$containerCreate;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers0 = config.triggers) === null || _config$triggers0 === void 0 ? void 0 : _config$triggers0.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes1 = config.targetTypes) === null || _config$targetTypes1 === void 0 ? void 0 : _config$targetTypes1.buttons,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe10 = config.interactionResults) === null || _config$interactionRe10 === void 0 ? void 0 : _config$interactionRe10.selected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations0 = config.locations) === null || _config$locations0 === void 0 ? void 0 : _config$locations0.canvas),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca1 = config.secondaryLocations) === null || _config$secondaryLoca1 === void 0 ? void 0 : _config$secondaryLoca1.emptyBox),
+        interaction_description: 'Empty box on canvas actions'
+      });
+      if (Object.keys(metadata).length > 0) {
+        payload.metadata = metadata;
+      }
+      if (containerCreated !== null) {
+        payload.state = containerCreated;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names0 = config.names) === null || _config$names0 === void 0 || (_config$names0 = _config$names0.editorOne) === null || _config$names0 === void 0 ? void 0 : _config$names0.canvasEmptyBoxAction, payload);
+    }
+  }, {
+    key: "sendWidgetPanelSearch",
+    value: function sendWidgetPanelSearch(_ref7) {
+      var _config$triggers1, _config$targetTypes10, _config$interactionRe11, _config$interactionRe12, _config$locations1, _config$locations10, _config$secondaryLoca10, _config$names1;
+      var resultsCount = _ref7.resultsCount,
+        _ref7$userInput = _ref7.userInput,
+        userInput = _ref7$userInput === void 0 ? null : _ref7$userInput;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers1 = config.triggers) === null || _config$triggers1 === void 0 ? void 0 : _config$triggers1.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes10 = config.targetTypes) === null || _config$targetTypes10 === void 0 ? void 0 : _config$targetTypes10.searchWidget,
+        target_name: 'search_widget',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe11 = config.interactionResults) === null || _config$interactionRe11 === void 0 ? void 0 : _config$interactionRe11.resultsUpdated : config === null || config === void 0 || (_config$interactionRe12 = config.interactionResults) === null || _config$interactionRe12 === void 0 ? void 0 : _config$interactionRe12.noResults,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations1 = config.locations) === null || _config$locations1 === void 0 ? void 0 : _config$locations1.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$locations10 = config.locations) === null || _config$locations10 === void 0 ? void 0 : _config$locations10.widgetPanel),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca10 = config.secondaryLocations) === null || _config$secondaryLoca10 === void 0 ? void 0 : _config$secondaryLoca10.searchBar),
+        interaction_description: 'Widget search input, follows debounce behavior'
+      });
+      if (!hasResults && userInput) {
+        payload.metadata = {
+          user_input: userInput
+        };
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names1 = config.names) === null || _config$names1 === void 0 || (_config$names1 = _config$names1.editorOne) === null || _config$names1 === void 0 ? void 0 : _config$names1.widgetPanelSearch, payload);
+    }
+  }]);
+}();
+var createDebouncedFinderSearch = exports.createDebouncedFinderSearch = function createDebouncedFinderSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 300;
+  return _.debounce(function (resultsCount, searchTerm) {
+    EditorOneEventManager.sendFinderSearchInput({
+      resultsCount: resultsCount,
+      searchTerm: searchTerm
+    });
+  }, delay);
+};
+var createDebouncedWidgetPanelSearch = exports.createDebouncedWidgetPanelSearch = function createDebouncedWidgetPanelSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2000;
+  return _.debounce(function (resultsCount, userInput) {
+    EditorOneEventManager.sendWidgetPanelSearch({
+      resultsCount: resultsCount,
+      userInput: userInput
+    });
+  }, delay);
+};
+var _default = exports["default"] = EditorOneEventManager;
+
+/***/ }),
+
 /***/ "../assets/dev/js/editor/utils/files-upload-handler.js":
 /*!*************************************************************!*\
   !*** ../assets/dev/js/editor/utils/files-upload-handler.js ***!
@@ -130,8 +514,8 @@ var _default = exports["default"] = function _default(object, constructors) {
     _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _constructor = _step.value;
-      if (object.constructor.name === _constructor.prototype[Symbol.toStringTag]) {
+      var constructor = _step.value;
+      if (object.constructor.name === constructor.prototype[Symbol.toStringTag]) {
         return true;
       }
     }
@@ -590,8 +974,15 @@ module.exports = elementorModules.Module.extend({
         }
       },
       button: {
-        tag: 'div'
+        tag: 'button'
       }
+    });
+
+    // Add role="status" and aria-live for screen reader announcement
+    toast.getElements('widget').attr({
+      role: 'status',
+      'aria-live': 'polite',
+      'aria-atomic': 'true'
     });
     this.getToast = function () {
       return toast;
@@ -601,6 +992,8 @@ module.exports = elementorModules.Module.extend({
     var toast = this.getToast();
     toast.setMessage(options.message);
     toast.getElements('buttonsWrapper').empty();
+    toast.focusedButton = null;
+    toast.buttons = [];
     var isPositionValid = this.isPositionValid(options === null || options === void 0 ? void 0 : options.position);
     if (!isPositionValid) {
       this.positionToWindow();
@@ -1329,12 +1722,14 @@ var _default = exports["default"] = /*#__PURE__*/function (_elementorModules$Mod
       if (_.has(this.cache, cacheKey)) {
         deferred = jQuery.Deferred().done(request.success).resolve(this.cache[cacheKey]);
       } else {
+        var _request$error;
         deferred = this.addRequest(request.action, {
           data: request.data,
           unique_id: request.unique_id,
           success: function success(data) {
             return _this3.cache[cacheKey] = data;
-          }
+          },
+          error: (_request$error = request.error) !== null && _request$error !== void 0 ? _request$error : function () {}
         }, immediately).done(request.success);
       }
       return deferred;
@@ -1736,18 +2131,64 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var eventsConfig = {
+  appTypes: {
+    editor: 'editor',
+    wpAdmin: 'wpadmin'
+  },
+  targetTypes: {
+    dropdownItem: 'dropdown_item',
+    button: 'button',
+    tab: 'tab',
+    toggle: 'toggle',
+    searchInput: 'search_input',
+    searchResult: 'search_result',
+    buttons: 'buttons',
+    searchWidget: 'search_widget'
+  },
+  interactionResults: {
+    actionSelected: 'action_selected',
+    navigate: 'navigate',
+    create: 'create',
+    sessionEnd: 'session_end',
+    tabChanged: 'tab_changed',
+    assetInserted: 'asset_inserted',
+    assetFavorite: 'asset_favorite',
+    aiGenerate: 'ai_generate',
+    resultsUpdated: 'results_updated',
+    noResults: 'no_results',
+    selected: 'selected',
+    promotionViewed: 'promotion_viewed',
+    upgradeNow: 'upgrade_now'
+  },
+  targetNames: {
+    publishDropdown: {
+      saveDraft: 'save_draft',
+      saveAsTemplate: 'save_as_template',
+      viewPage: 'view_page',
+      copyAndShare: 'copy_and_share'
+    },
+    pageList: {
+      addNewPage: 'add_new_page'
+    }
+  },
   triggers: {
     click: 'Click',
+    rightClick: 'Right Click',
+    doubleClick: 'Double Click',
     accordionClick: 'Accordion Click',
     toggleClick: 'Toggle Click',
     dropdownClick: 'Click Dropdown',
     editorLoaded: 'Editor Loaded',
     visible: 'Visible',
-    pageLoaded: 'Page Loaded'
+    pageLoaded: 'Page Loaded',
+    typing: 'Typing',
+    tabSelect: 'Tab Select',
+    insert: 'Insert'
   },
   locations: {
     widgetPanel: 'Widget Panel',
     topBar: 'Top Bar',
+    sidebar: 'Sidebar',
     elementorEditor: 'Elementor Editor',
     templatesLibrary: {
       library: 'Templates Library'
@@ -1759,7 +2200,15 @@ var eventsConfig = {
       cloudKitLibrary: 'Cloud Kit Library'
     },
     variables: 'Variables Panel',
-    admin: 'WP admin'
+    variablesManager: 'Variables Manager',
+    admin: 'WP admin',
+    structurePanel: 'Structure Panel',
+    canvas: 'Canvas',
+    leftPanel: 'Left Panel',
+    elementorLibrary: 'Elementor Library',
+    components: {
+      instanceEditingPanel: 'Instance Editing Panel'
+    }
   },
   secondaryLocations: {
     layout: 'Layout Section',
@@ -1832,7 +2281,16 @@ var eventsConfig = {
     admin: {
       pluginToolsTab: 'plugin_tools_tab',
       pluginWebsiteTemplatesTab: 'plugin_website_templates_tab'
-    }
+    },
+    componentsTab: 'Components Tab',
+    canvasElement: 'Canvas Element',
+    publishDropdown: 'Publish Dropdown',
+    pageListDropdown: 'Page List Dropdown',
+    emptyBox: 'Empty Box',
+    searchBar: 'Search Bar',
+    finderResults: 'Finder Results',
+    libraryTabs: 'Library Tabs',
+    assetCard: 'Asset Card'
   },
   elements: {
     accordionSection: 'Accordion section',
@@ -1896,7 +2354,66 @@ var eventsConfig = {
       open: 'open_variables_popover',
       add: 'add_new_variable',
       connect: 'connect_variable',
-      save: 'save_new_variable'
+      save: 'save_new_variable',
+      openManager: 'open_variables_manager',
+      saveChanges: 'save_variables_changes',
+      delete: 'delete_variable',
+      variableSyncToV3: 'variable_sync_to_v3'
+    },
+    components: {
+      createClicked: 'component_create_clicked',
+      createCancelled: 'component_creation_cancelled',
+      created: 'component_created',
+      instanceAdded: 'component_instance_added',
+      edited: 'component_edited',
+      propertiesPanelOpened: 'component_properties_panel_opened',
+      propertiesGroupCreated: 'component_properties_group_created',
+      propertyExposed: 'component_property_exposed',
+      propertyRemoved: 'component_property_removed',
+      detached: 'component_detached'
+    },
+    global_classes: {
+      classApplied: 'class_applied',
+      classRemoved: 'class_removed',
+      classManagerFilterCleared: 'class_manager_filter_cleared',
+      classDeleted: 'class_deleted',
+      classPublishConflict: 'class_publish_conflict',
+      classRenamed: 'class_renamed',
+      classCreated: 'class_created',
+      classManagerSearched: 'class_manager_searched',
+      classManagerFiltersOpened: 'class_manager_filters_opened',
+      classManagerOpened: 'class_manager_opened',
+      classManagerReorder: 'class_manager_reorder',
+      classManagerFilterUsed: 'class_manager_filter_used',
+      classUsageLocate: 'class_usage_locate',
+      classUsageHovered: 'class_usage_hovered',
+      classStyled: 'class_styled',
+      classStateClicked: 'class_state_clicked',
+      classUsageClicked: 'class_usage_clicked',
+      classDuplicate: 'class_duplicate',
+      classSyncToV3PopupShown: 'class_sync_to_v3_popup_shown',
+      classSyncToV3: 'class_sync_to_v3',
+      classSyncToV3PopupClick: 'class_sync_to_v3_popup_click'
+    },
+    editorOne: {
+      topBarPublishDropdown: 'top_bar_publish_dropdown',
+      topBarPageList: 'top_bar_page_list',
+      siteSettingsSession: 'site_settings_session',
+      eLibraryNav: 'e_library_nav',
+      eLibraryInsert: 'e_library_insert',
+      eLibraryFavorite: 'e_library_favorite',
+      eLibraryGenerateAi: 'e_library_generate_ai',
+      finderSearchInput: 'finder_search_input',
+      finderResultSelect: 'finder_result_select',
+      canvasEmptyBoxAction: 'canvas_empty_box_action',
+      widgetPanelSearch: 'widget_panel_search'
+    },
+    interactions: {
+      created: 'interactions_created'
+    },
+    promotions: {
+      viewPromotion: 'view_promotion',
+      upgradePromotionClick: 'upgrade_promotion_click'
     }
   }
 };
@@ -1918,6 +2435,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
@@ -1940,29 +2459,46 @@ var _default = exports["default"] = /*#__PURE__*/function (_elementorModules$Mod
     }
     _this = _callSuper(this, _default, [].concat(args));
     (0, _defineProperty2.default)(_this, "trackingEnabled", false);
+    (0, _defineProperty2.default)(_this, "availableExperiments", []);
     return _this;
   }
   (0, _inherits2.default)(_default, _elementorModules$Mod);
   return (0, _createClass2.default)(_default, [{
     key: "onInit",
     value: function onInit() {
-      var _elementorCommon$conf, _elementorCommon$conf2;
+      var _this2 = this;
       this.config = _eventsConfig.default;
+      if (!this.canSendEvents()) {
+        return;
+      }
+      this.initializeMixpanel(function () {
+        return _this2.enableTracking();
+      });
+    }
+  }, {
+    key: "initializeMixpanel",
+    value: function initializeMixpanel(onLoaded) {
+      var _elementorCommon$conf;
       _mixpanelBrowser.default.init((_elementorCommon$conf = elementorCommon.config.editor_events) === null || _elementorCommon$conf === void 0 ? void 0 : _elementorCommon$conf.token, {
         persistence: 'localStorage',
-        autocapture: false
+        autocapture: false,
+        flags: true,
+        api_hosts: {
+          flags: 'https://api-eu.mixpanel.com'
+        },
+        loaded: onLoaded
       });
-      if ((_elementorCommon$conf2 = elementorCommon.config.editor_events) !== null && _elementorCommon$conf2 !== void 0 && _elementorCommon$conf2.can_send_events) {
-        this.enableTracking();
-      }
     }
   }, {
     key: "enableTracking",
     value: function enableTracking() {
-      var _elementorCommon$conf3;
-      var userId = (_elementorCommon$conf3 = elementorCommon.config.library_connect) === null || _elementorCommon$conf3 === void 0 ? void 0 : _elementorCommon$conf3.user_id;
+      var _elementorCommon$conf2;
+      if (!this.isMixpanelReady()) {
+        return;
+      }
+      var userId = (_elementorCommon$conf2 = elementorCommon.config.editor_events) === null || _elementorCommon$conf2 === void 0 ? void 0 : _elementorCommon$conf2.user_id;
       if (userId) {
-        var _elementorCommon$conf4;
+        var _elementorCommon$conf3;
         _mixpanelBrowser.default.identify(userId);
         _mixpanelBrowser.default.register({
           appType: 'Editor'
@@ -1970,33 +2506,178 @@ var _default = exports["default"] = /*#__PURE__*/function (_elementorModules$Mod
         _mixpanelBrowser.default.people.set_once({
           $user_id: userId,
           $last_login: new Date().toISOString(),
-          $plan_type: ((_elementorCommon$conf4 = elementorCommon.config.library_connect) === null || _elementorCommon$conf4 === void 0 ? void 0 : _elementorCommon$conf4.plan_type) || _tiers.TIERS.free
+          $plan_type: ((_elementorCommon$conf3 = elementorCommon.config.library_connect) === null || _elementorCommon$conf3 === void 0 ? void 0 : _elementorCommon$conf3.plan_type) || _tiers.TIERS.free
         });
       }
       this.trackingEnabled = true;
+      this.availableExperiments = Object.keys(elementorCommon.config.experimentalFeatures || {});
     }
   }, {
     key: "dispatchEvent",
     value: function dispatchEvent(name, data) {
-      var _elementorCommon$conf5, _elementorCommon$conf6, _elementorCommon$conf7, _elementorCommon$conf8, _elementorCommon$conf9, _elementorCommon$conf0, _elementorCommon$conf1, _elementorCommon$conf10, _elementorCommon$conf11;
+      var _elementorCommon$conf4, _elementorCommon$conf5, _elementorCommon$conf6, _elementorCommon$conf7, _elementorCommon$conf8, _elementorCommon$conf9, _elementorCommon$conf0, _elementorCommon$conf1, _elementorCommon$conf10;
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-      if (!((_elementorCommon$conf5 = elementorCommon.config.editor_events) !== null && _elementorCommon$conf5 !== void 0 && _elementorCommon$conf5.can_send_events)) {
+      if (!this.canSendEvents()) {
         return;
       }
       if (!this.trackingEnabled) {
         this.enableTracking();
       }
       var eventData = _objectSpread({
-        user_id: ((_elementorCommon$conf6 = elementorCommon.config.library_connect) === null || _elementorCommon$conf6 === void 0 ? void 0 : _elementorCommon$conf6.user_id) || null,
-        subscription_id: ((_elementorCommon$conf7 = elementorCommon.config.editor_events) === null || _elementorCommon$conf7 === void 0 ? void 0 : _elementorCommon$conf7.subscription_id) || null,
-        user_tier: ((_elementorCommon$conf8 = elementorCommon.config.library_connect) === null || _elementorCommon$conf8 === void 0 ? void 0 : _elementorCommon$conf8.current_access_tier) || null,
-        url: (_elementorCommon$conf9 = elementorCommon.config.editor_events) === null || _elementorCommon$conf9 === void 0 ? void 0 : _elementorCommon$conf9.site_url,
-        wp_version: (_elementorCommon$conf0 = elementorCommon.config.editor_events) === null || _elementorCommon$conf0 === void 0 ? void 0 : _elementorCommon$conf0.wp_version,
-        client_id: (_elementorCommon$conf1 = elementorCommon.config.editor_events) === null || _elementorCommon$conf1 === void 0 ? void 0 : _elementorCommon$conf1.site_key,
-        app_version: (_elementorCommon$conf10 = elementorCommon.config.editor_events) === null || _elementorCommon$conf10 === void 0 ? void 0 : _elementorCommon$conf10.elementor_version,
-        site_language: (_elementorCommon$conf11 = elementorCommon.config.editor_events) === null || _elementorCommon$conf11 === void 0 ? void 0 : _elementorCommon$conf11.site_language
+        user_id: ((_elementorCommon$conf4 = elementorCommon.config.editor_events) === null || _elementorCommon$conf4 === void 0 ? void 0 : _elementorCommon$conf4.user_id) || null,
+        user_roles: ((_elementorCommon$conf5 = elementorCommon.config.library_connect) === null || _elementorCommon$conf5 === void 0 ? void 0 : _elementorCommon$conf5.user_roles) || [],
+        subscription_id: ((_elementorCommon$conf6 = elementorCommon.config.editor_events) === null || _elementorCommon$conf6 === void 0 ? void 0 : _elementorCommon$conf6.subscription_id) || null,
+        user_tier: ((_elementorCommon$conf7 = elementorCommon.config.library_connect) === null || _elementorCommon$conf7 === void 0 ? void 0 : _elementorCommon$conf7.current_access_tier) || null,
+        url: (_elementorCommon$conf8 = elementorCommon.config.editor_events) === null || _elementorCommon$conf8 === void 0 ? void 0 : _elementorCommon$conf8.site_url,
+        wp_version: (_elementorCommon$conf9 = elementorCommon.config.editor_events) === null || _elementorCommon$conf9 === void 0 ? void 0 : _elementorCommon$conf9.wp_version,
+        client_id: (_elementorCommon$conf0 = elementorCommon.config.editor_events) === null || _elementorCommon$conf0 === void 0 ? void 0 : _elementorCommon$conf0.site_key,
+        app_version: (_elementorCommon$conf1 = elementorCommon.config.editor_events) === null || _elementorCommon$conf1 === void 0 ? void 0 : _elementorCommon$conf1.elementor_version,
+        site_language: (_elementorCommon$conf10 = elementorCommon.config.editor_events) === null || _elementorCommon$conf10 === void 0 ? void 0 : _elementorCommon$conf10.site_language,
+        experiments: this.availableExperiments
       }, data);
       _mixpanelBrowser.default.track(name, eventData, options);
+    }
+  }, {
+    key: "featureFlagIsActive",
+    value: function () {
+      var _featureFlagIsActive = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee(flagName) {
+        var _mixpanel$flags;
+        var isEnabled;
+        return _regenerator.default.wrap(function (_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!('function' !== typeof (_mixpanelBrowser.default === null || _mixpanelBrowser.default === void 0 || (_mixpanel$flags = _mixpanelBrowser.default.flags) === null || _mixpanel$flags === void 0 ? void 0 : _mixpanel$flags.is_enabled))) {
+                _context.next = 1;
+                break;
+              }
+              return _context.abrupt("return", false);
+            case 1:
+              _context.next = 2;
+              return _mixpanelBrowser.default.flags.is_enabled(flagName, false);
+            case 2:
+              isEnabled = _context.sent;
+              return _context.abrupt("return", true === isEnabled);
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      function featureFlagIsActive(_x) {
+        return _featureFlagIsActive.apply(this, arguments);
+      }
+      return featureFlagIsActive;
+    }()
+  }, {
+    key: "getExperimentVariant",
+    value: function () {
+      var _getExperimentVariant = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2(experimentName) {
+        var defaultValue,
+          _elementorCommon$conf11,
+          _elementorCommon$conf12,
+          isAbTestingEnabled,
+          variant,
+          _args2 = arguments,
+          _t;
+        return _regenerator.default.wrap(function (_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              defaultValue = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : 'control';
+              _context2.prev = 1;
+              if (this.canSendEvents()) {
+                _context2.next = 2;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 2:
+              isAbTestingEnabled = (_elementorCommon$conf11 = (_elementorCommon$conf12 = elementorCommon.config.editor_events) === null || _elementorCommon$conf12 === void 0 ? void 0 : _elementorCommon$conf12.flags_enabled) !== null && _elementorCommon$conf11 !== void 0 ? _elementorCommon$conf11 : false;
+              if (isAbTestingEnabled) {
+                _context2.next = 3;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 3:
+              if (_mixpanelBrowser.default) {
+                _context2.next = 4;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 4:
+              if (!this.trackingEnabled) {
+                this.enableTracking();
+              }
+              if (_mixpanelBrowser.default.flags) {
+                _context2.next = 5;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 5:
+              if (!('function' !== typeof _mixpanelBrowser.default.flags.get_variant_value)) {
+                _context2.next = 6;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 6:
+              _context2.next = 7;
+              return _mixpanelBrowser.default.flags.get_variant_value(experimentName, defaultValue);
+            case 7:
+              variant = _context2.sent;
+              if (!(undefined === variant || null === variant)) {
+                _context2.next = 8;
+                break;
+              }
+              return _context2.abrupt("return", defaultValue);
+            case 8:
+              return _context2.abrupt("return", variant);
+            case 9:
+              _context2.prev = 9;
+              _t = _context2["catch"](1);
+              return _context2.abrupt("return", defaultValue);
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, this, [[1, 9]]);
+      }));
+      function getExperimentVariant(_x2) {
+        return _getExperimentVariant.apply(this, arguments);
+      }
+      return getExperimentVariant;
+    }()
+  }, {
+    key: "startExperiment",
+    value: function startExperiment(experimentName, experimentVariant) {
+      if (!this.trackingEnabled) {
+        return;
+      }
+      _mixpanelBrowser.default.track('$experiment_started', {
+        'Experiment name': experimentName,
+        'Variant name': experimentVariant
+      });
+    }
+  }, {
+    key: "isMixpanelReady",
+    value: function isMixpanelReady() {
+      if ('undefined' === typeof _mixpanelBrowser.default || !_mixpanelBrowser.default) {
+        return false;
+      }
+      try {
+        var distinctId = _mixpanelBrowser.default.get_distinct_id();
+        return distinctId !== undefined && distinctId !== null;
+      } catch (error) {
+        return false;
+      }
+    }
+  }, {
+    key: "canSendEvents",
+    value: function canSendEvents() {
+      var _elementorCommon;
+      return !!((_elementorCommon = elementorCommon) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.config) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.editor_events) !== null && _elementorCommon !== void 0 && _elementorCommon.can_send_events);
+    }
+  }, {
+    key: "getMixpanelInstance",
+    value: function getMixpanelInstance() {
+      return this.isMixpanelReady() ? _mixpanelBrowser.default : undefined;
     }
   }]);
 }(elementorModules.Module);
@@ -2604,8 +3285,10 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _categories = _interopRequireDefault(__webpack_require__(/*! ./categories */ "../core/common/modules/finder/assets/js/modal/views/categories.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+var FINDER_SEARCH_DEBOUNCE_MS = 300;
 var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie) {
   function _default() {
     (0, _classCallCheck2.default)(this, _default);
@@ -2644,21 +3327,48 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
       };
     }
   }, {
+    key: "initialize",
+    value: function initialize() {
+      this.debouncedTrackSearch = (0, _editorOneEvents.createDebouncedFinderSearch)(FINDER_SEARCH_DEBOUNCE_MS);
+    }
+  }, {
     key: "showCategoriesView",
     value: function showCategoriesView() {
       this.content.show(new _categories.default());
     }
   }, {
+    key: "getResultsCount",
+    value: function getResultsCount() {
+      if (!this.content.currentView) {
+        return 0;
+      }
+      var $visibleItems = this.content.currentView.$el.find('.elementor-finder__results__item:visible');
+      return $visibleItems.length;
+    }
+  }, {
     key: "onSearchInputInput",
     value: function onSearchInputInput() {
+      var _this = this;
       var value = this.ui.searchInput.val();
       if (value) {
         elementorCommon.finder.channel.reply('filter:text', value).trigger('filter:change');
         if (!(this.content.currentView instanceof _categories.default)) {
           this.showCategoriesView();
         }
+        setTimeout(function () {
+          var resultsCount = _this.getResultsCount();
+          _this.debouncedTrackSearch(resultsCount, value);
+        }, 50);
       }
       this.content.currentView.$el.toggle(!!value);
+    }
+  }, {
+    key: "onDestroy",
+    value: function onDestroy() {
+      var _this$debouncedTrackS;
+      if ((_this$debouncedTrackS = this.debouncedTrackSearch) !== null && _this$debouncedTrackS !== void 0 && _this$debouncedTrackS.cancel) {
+        this.debouncedTrackSearch.cancel();
+      }
     }
   }]);
 }(Marionette.LayoutView);
@@ -2772,6 +3482,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var _default = exports["default"] = /*#__PURE__*/function (_Marionette$ItemView) {
@@ -2796,11 +3507,18 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$ItemView)
       this.$el[0].addEventListener('click', this.onClick.bind(this), true);
     }
   }, {
+    key: "trackResultSelect",
+    value: function trackResultSelect() {
+      var title = this.model.get('title');
+      _editorOneEvents.EditorOneEventManager.sendFinderResultSelect(title);
+    }
+  }, {
     key: "onClick",
     value: function onClick(e) {
       var _this = this;
       var lockOptions = this.model.get('lock');
       if (!(lockOptions !== null && lockOptions !== void 0 && lockOptions.is_locked)) {
+        this.trackResultSelect();
         return;
       }
       e.preventDefault();
@@ -2818,6 +3536,7 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$ItemView)
           cancel: __('Cancel', 'elementor')
         },
         onConfirm: function onConfirm() {
+          _this.trackResultSelect();
           var link = _this.replaceLockLinkPlaceholders(lockOptions.button.url);
           window.open(link, '_blank');
         }
@@ -5631,19 +6350,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -5978,14 +6695,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   MiddlewareArray: () => (/* binding */ MiddlewareArray),
 /* harmony export */   SHOULD_AUTOBATCH: () => (/* binding */ SHOULD_AUTOBATCH),
 /* harmony export */   TaskAbortError: () => (/* binding */ TaskAbortError),
-/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.__DO_NOT_USE__ActionTypes),
+/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.__DO_NOT_USE__ActionTypes),
 /* harmony export */   addListener: () => (/* binding */ addListener),
-/* harmony export */   applyMiddleware: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware),
+/* harmony export */   applyMiddleware: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.applyMiddleware),
 /* harmony export */   autoBatchEnhancer: () => (/* binding */ autoBatchEnhancer),
-/* harmony export */   bindActionCreators: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.bindActionCreators),
+/* harmony export */   bindActionCreators: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.bindActionCreators),
 /* harmony export */   clearAllListeners: () => (/* binding */ clearAllListeners),
-/* harmony export */   combineReducers: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers),
-/* harmony export */   compose: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.compose),
+/* harmony export */   combineReducers: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.combineReducers),
+/* harmony export */   compose: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.compose),
 /* harmony export */   configureStore: () => (/* binding */ configureStore),
 /* harmony export */   createAction: () => (/* binding */ createAction),
 /* harmony export */   createActionCreatorInvariantMiddleware: () => (/* binding */ createActionCreatorInvariantMiddleware),
@@ -5994,15 +6711,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createEntityAdapter: () => (/* binding */ createEntityAdapter),
 /* harmony export */   createImmutableStateInvariantMiddleware: () => (/* binding */ createImmutableStateInvariantMiddleware),
 /* harmony export */   createListenerMiddleware: () => (/* binding */ createListenerMiddleware),
-/* harmony export */   createNextState: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   createNextState: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__["default"]),
 /* harmony export */   createReducer: () => (/* binding */ createReducer),
-/* harmony export */   createSelector: () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector),
+/* harmony export */   createSelector: () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_2__.createSelector),
 /* harmony export */   createSerializableStateInvariantMiddleware: () => (/* binding */ createSerializableStateInvariantMiddleware),
 /* harmony export */   createSlice: () => (/* binding */ createSlice),
-/* harmony export */   createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.createStore),
-/* harmony export */   current: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.current),
+/* harmony export */   createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.createStore),
+/* harmony export */   current: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.current),
 /* harmony export */   findNonSerializableValue: () => (/* binding */ findNonSerializableValue),
-/* harmony export */   freeze: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.freeze),
+/* harmony export */   freeze: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.freeze),
 /* harmony export */   getDefaultMiddleware: () => (/* binding */ getDefaultMiddleware),
 /* harmony export */   getType: () => (/* binding */ getType),
 /* harmony export */   isAction: () => (/* binding */ isAction),
@@ -6010,7 +6727,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isAllOf: () => (/* binding */ isAllOf),
 /* harmony export */   isAnyOf: () => (/* binding */ isAnyOf),
 /* harmony export */   isAsyncThunkAction: () => (/* binding */ isAsyncThunkAction),
-/* harmony export */   isDraft: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.isDraft),
+/* harmony export */   isDraft: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.isDraft),
 /* harmony export */   isFluxStandardAction: () => (/* binding */ isFSA),
 /* harmony export */   isFulfilled: () => (/* binding */ isFulfilled),
 /* harmony export */   isImmutableDefault: () => (/* binding */ isImmutableDefault),
@@ -6019,17 +6736,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isPlainObject: () => (/* binding */ isPlainObject),
 /* harmony export */   isRejected: () => (/* binding */ isRejected),
 /* harmony export */   isRejectedWithValue: () => (/* binding */ isRejectedWithValue),
-/* harmony export */   legacy_createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.legacy_createStore),
+/* harmony export */   legacy_createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.legacy_createStore),
 /* harmony export */   miniSerializeError: () => (/* binding */ miniSerializeError),
 /* harmony export */   nanoid: () => (/* binding */ nanoid),
-/* harmony export */   original: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.original),
+/* harmony export */   original: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.original),
 /* harmony export */   prepareAutoBatched: () => (/* binding */ prepareAutoBatched),
 /* harmony export */   removeListener: () => (/* binding */ removeListener),
 /* harmony export */   unwrapResult: () => (/* binding */ unwrapResult)
 /* harmony export */ });
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! immer */ "../node_modules/immer/dist/immer.esm.mjs");
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
-/* harmony import */ var reselect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "../node_modules/immer/dist/immer.esm.mjs");
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
+/* harmony import */ var reselect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-thunk */ "../node_modules/redux-thunk/es/index.js");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -6133,13 +6850,13 @@ var createDraftSafeSelector = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    var selector = reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector.apply(void 0, args);
+    var selector = reselect__WEBPACK_IMPORTED_MODULE_2__.createSelector.apply(void 0, args);
     var wrappedSelector = function (value) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
-        return selector.apply(void 0, __spreadArray([(0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(value) ? (0,immer__WEBPACK_IMPORTED_MODULE_2__.current)(value) : value], rest));
+        return selector.apply(void 0, __spreadArray([(0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(value) ? (0,immer__WEBPACK_IMPORTED_MODULE_0__.current)(value) : value], rest));
     };
     return wrappedSelector;
 };
@@ -6151,8 +6868,8 @@ var composeWithDevTools = typeof window !== "undefined" && window.__REDUX_DEVTOO
     if (arguments.length === 0)
         return void 0;
     if (typeof arguments[0] === "object")
-        return redux__WEBPACK_IMPORTED_MODULE_0__.compose;
-    return redux__WEBPACK_IMPORTED_MODULE_0__.compose.apply(null, arguments);
+        return redux__WEBPACK_IMPORTED_MODULE_1__.compose;
+    return redux__WEBPACK_IMPORTED_MODULE_1__.compose.apply(null, arguments);
 };
 var devToolsEnhancer = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ : function () {
     return function (noop2) {
@@ -6332,7 +7049,7 @@ var EnhancerArray = /** @class */ (function (_super) {
     return EnhancerArray;
 }(Array));
 function freezeDraftable(val) {
-    return (0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraftable)(val) ? (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(val, function () {
+    return (0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraftable)(val) ? (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(val, function () {
     }) : val;
 }
 // src/immutableStateInvariantMiddleware.ts
@@ -6636,7 +7353,7 @@ function configureStore(options) {
         rootReducer = reducer;
     }
     else if (isPlainObject(reducer)) {
-        rootReducer = (0,redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers)(reducer);
+        rootReducer = (0,redux__WEBPACK_IMPORTED_MODULE_1__.combineReducers)(reducer);
     }
     else {
         throw new Error('"reducer" is a required argument, and must be a function or an object of functions that can be passed to combineReducers');
@@ -6651,8 +7368,8 @@ function configureStore(options) {
     if (!IS_PRODUCTION && finalMiddleware.some(function (item) { return typeof item !== "function"; })) {
         throw new Error("each middleware provided to configureStore must be a function");
     }
-    var middlewareEnhancer = redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware.apply(void 0, finalMiddleware);
-    var finalCompose = redux__WEBPACK_IMPORTED_MODULE_0__.compose;
+    var middlewareEnhancer = redux__WEBPACK_IMPORTED_MODULE_1__.applyMiddleware.apply(void 0, finalMiddleware);
+    var finalCompose = redux__WEBPACK_IMPORTED_MODULE_1__.compose;
     if (devTools) {
         finalCompose = composeWithDevTools(__spreadValues({
             trace: !IS_PRODUCTION
@@ -6667,7 +7384,7 @@ function configureStore(options) {
         storeEnhancers = enhancers(defaultEnhancers);
     }
     var composedEnhancer = finalCompose.apply(void 0, storeEnhancers);
-    return (0,redux__WEBPACK_IMPORTED_MODULE_0__.createStore)(rootReducer, preloadedState, composedEnhancer);
+    return (0,redux__WEBPACK_IMPORTED_MODULE_1__.createStore)(rootReducer, preloadedState, composedEnhancer);
 }
 // src/createReducer.ts
 
@@ -6758,7 +7475,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
         }
         return caseReducers.reduce(function (previousState, caseReducer) {
             if (caseReducer) {
-                if ((0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(previousState)) {
+                if ((0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(previousState)) {
                     var draft = previousState;
                     var result = caseReducer(draft, action);
                     if (result === void 0) {
@@ -6766,7 +7483,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
                     }
                     return result;
                 }
-                else if (!(0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraftable)(previousState)) {
+                else if (!(0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraftable)(previousState)) {
                     var result = caseReducer(previousState, action);
                     if (result === void 0) {
                         if (previousState === null) {
@@ -6777,7 +7494,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
                     return result;
                 }
                 else {
-                    return (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(previousState, function (draft) {
+                    return (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(previousState, function (draft) {
                         return caseReducer(draft, action);
                     });
                 }
@@ -6930,12 +7647,12 @@ function createStateOperator(mutator) {
                 mutator(arg, draft);
             }
         };
-        if ((0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(state)) {
+        if ((0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(state)) {
             runMutator(state);
             return state;
         }
         else {
-            return (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(state, runMutator);
+            return (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(state, runMutator);
         }
     };
 }
@@ -8044,7 +8761,7 @@ var autoBatchEnhancer = function (options) {
     }; };
 };
 // src/index.ts
-(0,immer__WEBPACK_IMPORTED_MODULE_2__.enableES5)();
+(0,immer__WEBPACK_IMPORTED_MODULE_0__.enableES5)();
 
 //# sourceMappingURL=redux-toolkit.esm.js.map
 
@@ -8083,7 +8800,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setUseProxies: () => (/* binding */ vn)
 /* harmony export */ });
 function n(n){for(var r=arguments.length,t=Array(r>1?r-1:0),e=1;e<r;e++)t[e-1]=arguments[e];if(true){var i=Y[n],o=i?"function"==typeof i?i.apply(null,t):i:"unknown error nr: "+n;throw Error("[Immer] "+o)}// removed by dead control flow
-{}}function r(n){return!!n&&!!n[Q]}function t(n){var r;return!!n&&(function(n){if(!n||"object"!=typeof n)return!1;var r=Object.getPrototypeOf(n);if(null===r)return!0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z}(n)||Array.isArray(n)||!!n[L]||!!(null===(r=n.constructor)||void 0===r?void 0:r[L])||s(n)||v(n))}function e(t){return r(t)||n(23,t),t[Q].t}function i(n,r,t){void 0===t&&(t=!1),0===o(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n)})):n.forEach((function(t,e){return r(e,t,n)}))}function o(n){var r=n[Q];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s(n)?2:v(n)?3:0}function u(n,r){return 2===o(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a(n,r){return 2===o(n)?n.get(r):n[r]}function f(n,r,t){var e=o(n);2===e?n.set(r,t):3===e?n.add(t):n[r]=t}function c(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s(n){return X&&n instanceof Map}function v(n){return q&&n instanceof Set}function p(n){return n.o||n.t}function l(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]})}return Object.create(Object.getPrototypeOf(n),r)}function d(n,e){return void 0===e&&(e=!1),y(n)||r(n)||!t(n)||(o(n)>1&&(n.set=n.add=n.clear=n.delete=h),Object.freeze(n),e&&i(n,(function(n,r){return d(r,!0)}),!0)),n}function h(){n(2)}function y(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b(r){var t=tn[r];return t||n(18,r),t}function m(n,r){tn[n]||(tn[n]=r)}function _(){return false||U||n(0),U}function j(n,r){r&&(b("Patches"),n.u=[],n.s=[],n.v=r)}function g(n){O(n),n.p.forEach(S),n.p=null}function O(n){n===U&&(U=n.l)}function w(n){return U={p:[],l:U,h:n,m:!0,_:0}}function S(n){var r=n[Q];0===r.i||1===r.i?r.j():r.g=!0}function P(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.O||b("ES5").S(e,r,o),o?(i[Q].P&&(g(e),n(4)),t(r)&&(r=M(e,r),e.l||x(e,r)),e.u&&b("Patches").M(i[Q].t,r,e.u,e.s)):r=M(e,i,[]),g(e),e.u&&e.v(e.u,e.s),r!==H?r:void 0}function M(n,r,t){if(y(r))return r;var e=r[Q];if(!e)return i(r,(function(i,o){return A(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l(e.k):e.o,u=o,a=!1;3===e.i&&(u=new Set(o),o.clear(),a=!0),i(u,(function(r,i){return A(n,e,o,r,i,t,a)})),x(n,o,!1),t&&n.u&&b("Patches").N(e,t,n.u,n.s)}return e.o}function A(e,i,o,a,c,s,v){if( true&&c===o&&n(5),r(c)){var p=M(e,c,s&&i&&3!==i.i&&!u(i.R,a)?s.concat(a):void 0);if(f(o,a,p),!r(p))return;e.m=!1}else v&&o.add(c);if(t(c)&&!y(c)){if(!e.h.D&&e._<1)return;M(e,c),i&&i.A.l||x(e,c)}}function x(n,r,t){void 0===t&&(t=!1),!n.l&&n.h.D&&n.m&&d(r,t)}function z(n,r){var t=n[Q];return(t?p(t):n)[r]}function I(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t)}}function k(n){n.P||(n.P=!0,n.l&&k(n.l))}function E(n){n.o||(n.o=l(n.t))}function N(n,r,t){var e=s(r)?b("MapSet").F(r,t):v(r)?b("MapSet").T(r,t):n.O?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b("ES5").J(r,t);return(t?t.A:_()).p.push(e),e}function R(e){return r(e)||n(22,e),function n(r){if(!t(r))return r;var e,u=r[Q],c=o(r);if(u){if(!u.P&&(u.i<4||!b("ES5").K(u)))return u.t;u.I=!0,e=D(r,c),u.I=!1}else e=D(r,c);return i(e,(function(r,t){u&&a(u.t,r)===t||f(e,r,n(t))})),3===c?new Set(e):e}(e)}function D(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l(n)}function F(){function t(n,r){var t=s[n];return t?t.enumerable=r:s[n]=t={configurable:!0,enumerable:r,get:function(){var r=this[Q];return true&&f(r),en.get(r,n)},set:function(r){var t=this[Q]; true&&f(t),en.set(t,n,r)}},t}function e(n){for(var r=n.length-1;r>=0;r--){var t=n[r][Q];if(!t.P)switch(t.i){case 5:a(t)&&k(t);break;case 4:o(t)&&k(t)}}}function o(n){for(var r=n.t,t=n.k,e=nn(t),i=e.length-1;i>=0;i--){var o=e[i];if(o!==Q){var a=r[o];if(void 0===a&&!u(r,o))return!0;var f=t[o],s=f&&f[Q];if(s?s.t!==a:!c(f,a))return!0}}var v=!!r[Q];return e.length!==nn(r).length+(v?0:1)}function a(n){var r=n.k;if(r.length!==n.t.length)return!0;var t=Object.getOwnPropertyDescriptor(r,r.length-1);if(t&&!t.get)return!0;for(var e=0;e<r.length;e++)if(!r.hasOwnProperty(e))return!0;return!1}function f(r){r.g&&n(3,JSON.stringify(p(r)))}var s={};m("ES5",{J:function(n,r){var e=Array.isArray(n),i=function(n,r){if(n){for(var e=Array(r.length),i=0;i<r.length;i++)Object.defineProperty(e,""+i,t(i,!0));return e}var o=rn(r);delete o[Q];for(var u=nn(o),a=0;a<u.length;a++){var f=u[a];o[f]=t(f,n||!!o[f].enumerable)}return Object.create(Object.getPrototypeOf(r),o)}(e,n),o={i:e?5:4,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:i,o:null,g:!1,C:!1};return Object.defineProperty(i,Q,{value:o,writable:!0}),i},S:function(n,t,o){o?r(t)&&t[Q].A===n&&e(n.p):(n.u&&function n(r){if(r&&"object"==typeof r){var t=r[Q];if(t){var e=t.t,o=t.k,f=t.R,c=t.i;if(4===c)i(o,(function(r){r!==Q&&(void 0!==e[r]||u(e,r)?f[r]||n(o[r]):(f[r]=!0,k(t)))})),i(e,(function(n){void 0!==o[n]||u(o,n)||(f[n]=!1,k(t))}));else if(5===c){if(a(t)&&(k(t),f.length=!0),o.length<e.length)for(var s=o.length;s<e.length;s++)f[s]=!1;else for(var v=e.length;v<o.length;v++)f[v]=!0;for(var p=Math.min(o.length,e.length),l=0;l<p;l++)o.hasOwnProperty(l)||(f[l]=!0),void 0===f[l]&&n(o[l])}}}}(n.p[0]),e(n.p))},K:function(n){return 4===n.i?o(n):a(n)}})}function T(){function e(n){if(!t(n))return n;if(Array.isArray(n))return n.map(e);if(s(n))return new Map(Array.from(n.entries()).map((function(n){return[n[0],e(n[1])]})));if(v(n))return new Set(Array.from(n).map(e));var r=Object.create(Object.getPrototypeOf(n));for(var i in n)r[i]=e(n[i]);return u(n,L)&&(r[L]=n[L]),r}function f(n){return r(n)?e(n):n}var c="add";m("Patches",{$:function(r,t){return t.forEach((function(t){for(var i=t.path,u=t.op,f=r,s=0;s<i.length-1;s++){var v=o(f),p=i[s];"string"!=typeof p&&"number"!=typeof p&&(p=""+p),0!==v&&1!==v||"__proto__"!==p&&"constructor"!==p||n(24),"function"==typeof f&&"prototype"===p&&n(24),"object"!=typeof(f=a(f,p))&&n(15,i.join("/"))}var l=o(f),d=e(t.value),h=i[i.length-1];switch(u){case"replace":switch(l){case 2:return f.set(h,d);case 3:n(16);default:return f[h]=d}case c:switch(l){case 1:return"-"===h?f.push(d):f.splice(h,0,d);case 2:return f.set(h,d);case 3:return f.add(d);default:return f[h]=d}case"remove":switch(l){case 1:return f.splice(h,1);case 2:return f.delete(h);case 3:return f.delete(t.value);default:return delete f[h]}default:n(17,u)}})),r},N:function(n,r,t,e){switch(n.i){case 0:case 4:case 2:return function(n,r,t,e){var o=n.t,s=n.o;i(n.R,(function(n,i){var v=a(o,n),p=a(s,n),l=i?u(o,n)?"replace":c:"remove";if(v!==p||"replace"!==l){var d=r.concat(n);t.push("remove"===l?{op:l,path:d}:{op:l,path:d,value:p}),e.push(l===c?{op:"remove",path:d}:"remove"===l?{op:c,path:d,value:f(v)}:{op:"replace",path:d,value:f(v)})}}))}(n,r,t,e);case 5:case 1:return function(n,r,t,e){var i=n.t,o=n.R,u=n.o;if(u.length<i.length){var a=[u,i];i=a[0],u=a[1];var s=[e,t];t=s[0],e=s[1]}for(var v=0;v<i.length;v++)if(o[v]&&u[v]!==i[v]){var p=r.concat([v]);t.push({op:"replace",path:p,value:f(u[v])}),e.push({op:"replace",path:p,value:f(i[v])})}for(var l=i.length;l<u.length;l++){var d=r.concat([l]);t.push({op:c,path:d,value:f(u[l])})}i.length<u.length&&e.push({op:"replace",path:r.concat(["length"]),value:i.length})}(n,r,t,e);case 3:return function(n,r,t,e){var i=n.t,o=n.o,u=0;i.forEach((function(n){if(!o.has(n)){var i=r.concat([u]);t.push({op:"remove",path:i,value:n}),e.unshift({op:c,path:i,value:n})}u++})),u=0,o.forEach((function(n){if(!i.has(n)){var o=r.concat([u]);t.push({op:c,path:o,value:n}),e.unshift({op:"remove",path:o,value:n})}u++}))}(n,r,t,e)}},M:function(n,r,t,e){t.push({op:"replace",path:[],value:r===H?void 0:r}),e.push({op:"replace",path:[],value:n})}})}function C(){function r(n,r){function t(){this.constructor=n}a(n,r),n.prototype=(t.prototype=r.prototype,new t)}function e(n){n.o||(n.R=new Map,n.o=new Map(n.t))}function o(n){n.o||(n.o=new Set,n.t.forEach((function(r){if(t(r)){var e=N(n.A.h,r,n);n.p.set(r,e),n.o.add(e)}else n.o.add(r)})))}function u(r){r.g&&n(3,JSON.stringify(p(r)))}var a=function(n,r){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,r){n.__proto__=r}||function(n,r){for(var t in r)r.hasOwnProperty(t)&&(n[t]=r[t])})(n,r)},f=function(){function n(n,r){return this[Q]={i:2,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,R:void 0,t:n,k:this,C:!1,g:!1},this}r(n,Map);var o=n.prototype;return Object.defineProperty(o,"size",{get:function(){return p(this[Q]).size}}),o.has=function(n){return p(this[Q]).has(n)},o.set=function(n,r){var t=this[Q];return u(t),p(t).has(n)&&p(t).get(n)===r||(e(t),k(t),t.R.set(n,!0),t.o.set(n,r),t.R.set(n,!0)),this},o.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),e(r),k(r),r.t.has(n)?r.R.set(n,!1):r.R.delete(n),r.o.delete(n),!0},o.clear=function(){var n=this[Q];u(n),p(n).size&&(e(n),k(n),n.R=new Map,i(n.t,(function(r){n.R.set(r,!1)})),n.o.clear())},o.forEach=function(n,r){var t=this;p(this[Q]).forEach((function(e,i){n.call(r,t.get(i),i,t)}))},o.get=function(n){var r=this[Q];u(r);var i=p(r).get(n);if(r.I||!t(i))return i;if(i!==r.t.get(n))return i;var o=N(r.A.h,i,r);return e(r),r.o.set(n,o),o},o.keys=function(){return p(this[Q]).keys()},o.values=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.values()},n.next=function(){var n=t.next();return n.done?n:{done:!1,value:r.get(n.value)}},n},o.entries=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.entries()},n.next=function(){var n=t.next();if(n.done)return n;var e=r.get(n.value);return{done:!1,value:[n.value,e]}},n},o[V]=function(){return this.entries()},n}(),c=function(){function n(n,r){return this[Q]={i:3,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,t:n,k:this,p:new Map,g:!1,C:!1},this}r(n,Set);var t=n.prototype;return Object.defineProperty(t,"size",{get:function(){return p(this[Q]).size}}),t.has=function(n){var r=this[Q];return u(r),r.o?!!r.o.has(n)||!(!r.p.has(n)||!r.o.has(r.p.get(n))):r.t.has(n)},t.add=function(n){var r=this[Q];return u(r),this.has(n)||(o(r),k(r),r.o.add(n)),this},t.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),o(r),k(r),r.o.delete(n)||!!r.p.has(n)&&r.o.delete(r.p.get(n))},t.clear=function(){var n=this[Q];u(n),p(n).size&&(o(n),k(n),n.o.clear())},t.values=function(){var n=this[Q];return u(n),o(n),n.o.values()},t.entries=function(){var n=this[Q];return u(n),o(n),n.o.entries()},t.keys=function(){return this.values()},t[V]=function(){return this.values()},t.forEach=function(n,r){for(var t=this.values(),e=t.next();!e.done;)n.call(r,e.value,e.value,this),e=t.next()},n}();m("MapSet",{F:function(n,r){return new f(n,r)},T:function(n,r){return new c(n,r)}})}function J(){F(),C(),T()}function K(n){return n}function $(n){return n}var G,U,W="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X="undefined"!=typeof Map,q="undefined"!=typeof Set,B="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H=W?Symbol.for("immer-nothing"):((G={})["immer-nothing"]=!0,G),L=W?Symbol.for("immer-draftable"):"__$immer_draftable",Q=W?Symbol.for("immer-state"):"__$immer_state",V="undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator",Y={0:"Illegal state",1:"Immer drafts cannot have computed properties",2:"This object has been frozen and should not be mutated",3:function(n){return"Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? "+n},4:"An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",5:"Immer forbids circular references",6:"The first or second argument to `produce` must be a function",7:"The third argument to `produce` must be a function or undefined",8:"First argument to `createDraft` must be a plain object, an array, or an immerable object",9:"First argument to `finishDraft` must be a draft returned by `createDraft`",10:"The given draft is already finalized",11:"Object.defineProperty() cannot be used on an Immer draft",12:"Object.setPrototypeOf() cannot be used on an Immer draft",13:"Immer only supports deleting array indices",14:"Immer only supports setting array indices and the 'length' property",15:function(n){return"Cannot apply patch, path doesn't resolve: "+n},16:'Sets cannot have "replace" patches.',17:function(n){return"Unsupported patch operation: "+n},18:function(n){return"The plugin for '"+n+"' has not been loaded into Immer. To enable the plugin, import and call `enable"+n+"()` when initializing your application."},20:"Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",21:function(n){return"produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '"+n+"'"},22:function(n){return"'current' expects a draft, got: "+n},23:function(n){return"'original' expects a draft, got: "+n},24:"Patching reserved attributes like __proto__, prototype and constructor is not allowed"},Z=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t)})),r},tn={},en={get:function(n,r){if(r===Q)return n;var e=p(n);if(!u(e,r))return function(n,r,t){var e,i=I(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t(i)?i:i===z(n.t,r)?(E(n),n.o[r]=N(n.A.h,i,n)):i},has:function(n,r){return r in p(n)},ownKeys:function(n){return Reflect.ownKeys(p(n))},set:function(n,r,t){var e=I(p(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z(p(n),r),o=null==i?void 0:i[Q];if(o&&o.t===t)return n.o[r]=t,n.R[r]=!1,!0;if(c(t,i)&&(void 0!==t||u(n.t,r)))return!0;E(n),k(n)}return n.o[r]===t&&(void 0!==t||r in n.o)||Number.isNaN(t)&&Number.isNaN(n.o[r])||(n.o[r]=t,n.R[r]=!0),!0},deleteProperty:function(n,r){return void 0!==z(n.t,r)||r in n.t?(n.R[r]=!1,E(n),k(n)):delete n.R[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n(11)},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n(12)}},on={};i(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)}})),on.deleteProperty=function(r,t){return true&&isNaN(parseInt(t))&&n(13),on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return true&&"length"!==t&&isNaN(parseInt(t))&&n(14),en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.O=B,this.D=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return(t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n(6),void 0!==o&&"function"!=typeof o&&n(7),t(r)){var c=w(e),s=N(e,r,void 0),v=!0;try{f=i(s),v=!1}finally{v?g(c):O(c)}return"undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j(c,o),P(n,c)}),(function(n){throw g(c),n})):(j(c,o),P(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H&&(f=void 0),e.D&&d(f,!0),o){var p=[],l=[];b("Patches").M(r,f,p,l),o(p,l)}return f}n(21,r)},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r}));return"undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return[n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze)}var i=e.prototype;return i.createDraft=function(e){t(e)||n(8),r(e)&&(e=R(e));var i=w(this),o=N(this,e,void 0);return o[Q].C=!0,O(i),o},i.finishDraft=function(r,t){var e=r&&r[Q]; true&&(e&&e.C||n(9),e.I&&n(10));var i=e.A;return j(i,t),P(void 0,i)},i.setAutoFreeze=function(n){this.D=n},i.setUseProxies=function(r){r&&!B&&n(20),this.O=r},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b("Patches").$;return r(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce,cn=an.produceWithPatches.bind(an),sn=an.setAutoFreeze.bind(an),vn=an.setUseProxies.bind(an),pn=an.applyPatches.bind(an),ln=an.createDraft.bind(an),dn=an.finishDraft.bind(an);/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fn);
+}function r(n){return!!n&&!!n[Q]}function t(n){var r;return!!n&&(function(n){if(!n||"object"!=typeof n)return!1;var r=Object.getPrototypeOf(n);if(null===r)return!0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z}(n)||Array.isArray(n)||!!n[L]||!!(null===(r=n.constructor)||void 0===r?void 0:r[L])||s(n)||v(n))}function e(t){return r(t)||n(23,t),t[Q].t}function i(n,r,t){void 0===t&&(t=!1),0===o(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n)})):n.forEach((function(t,e){return r(e,t,n)}))}function o(n){var r=n[Q];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s(n)?2:v(n)?3:0}function u(n,r){return 2===o(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a(n,r){return 2===o(n)?n.get(r):n[r]}function f(n,r,t){var e=o(n);2===e?n.set(r,t):3===e?n.add(t):n[r]=t}function c(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s(n){return X&&n instanceof Map}function v(n){return q&&n instanceof Set}function p(n){return n.o||n.t}function l(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]})}return Object.create(Object.getPrototypeOf(n),r)}function d(n,e){return void 0===e&&(e=!1),y(n)||r(n)||!t(n)||(o(n)>1&&(n.set=n.add=n.clear=n.delete=h),Object.freeze(n),e&&i(n,(function(n,r){return d(r,!0)}),!0)),n}function h(){n(2)}function y(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b(r){var t=tn[r];return t||n(18,r),t}function m(n,r){tn[n]||(tn[n]=r)}function _(){return false||U||n(0),U}function j(n,r){r&&(b("Patches"),n.u=[],n.s=[],n.v=r)}function g(n){O(n),n.p.forEach(S),n.p=null}function O(n){n===U&&(U=n.l)}function w(n){return U={p:[],l:U,h:n,m:!0,_:0}}function S(n){var r=n[Q];0===r.i||1===r.i?r.j():r.g=!0}function P(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.O||b("ES5").S(e,r,o),o?(i[Q].P&&(g(e),n(4)),t(r)&&(r=M(e,r),e.l||x(e,r)),e.u&&b("Patches").M(i[Q].t,r,e.u,e.s)):r=M(e,i,[]),g(e),e.u&&e.v(e.u,e.s),r!==H?r:void 0}function M(n,r,t){if(y(r))return r;var e=r[Q];if(!e)return i(r,(function(i,o){return A(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l(e.k):e.o,u=o,a=!1;3===e.i&&(u=new Set(o),o.clear(),a=!0),i(u,(function(r,i){return A(n,e,o,r,i,t,a)})),x(n,o,!1),t&&n.u&&b("Patches").N(e,t,n.u,n.s)}return e.o}function A(e,i,o,a,c,s,v){if( true&&c===o&&n(5),r(c)){var p=M(e,c,s&&i&&3!==i.i&&!u(i.R,a)?s.concat(a):void 0);if(f(o,a,p),!r(p))return;e.m=!1}else v&&o.add(c);if(t(c)&&!y(c)){if(!e.h.D&&e._<1)return;M(e,c),i&&i.A.l||x(e,c)}}function x(n,r,t){void 0===t&&(t=!1),!n.l&&n.h.D&&n.m&&d(r,t)}function z(n,r){var t=n[Q];return(t?p(t):n)[r]}function I(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t)}}function k(n){n.P||(n.P=!0,n.l&&k(n.l))}function E(n){n.o||(n.o=l(n.t))}function N(n,r,t){var e=s(r)?b("MapSet").F(r,t):v(r)?b("MapSet").T(r,t):n.O?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b("ES5").J(r,t);return(t?t.A:_()).p.push(e),e}function R(e){return r(e)||n(22,e),function n(r){if(!t(r))return r;var e,u=r[Q],c=o(r);if(u){if(!u.P&&(u.i<4||!b("ES5").K(u)))return u.t;u.I=!0,e=D(r,c),u.I=!1}else e=D(r,c);return i(e,(function(r,t){u&&a(u.t,r)===t||f(e,r,n(t))})),3===c?new Set(e):e}(e)}function D(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l(n)}function F(){function t(n,r){var t=s[n];return t?t.enumerable=r:s[n]=t={configurable:!0,enumerable:r,get:function(){var r=this[Q];return true&&f(r),en.get(r,n)},set:function(r){var t=this[Q]; true&&f(t),en.set(t,n,r)}},t}function e(n){for(var r=n.length-1;r>=0;r--){var t=n[r][Q];if(!t.P)switch(t.i){case 5:a(t)&&k(t);break;case 4:o(t)&&k(t)}}}function o(n){for(var r=n.t,t=n.k,e=nn(t),i=e.length-1;i>=0;i--){var o=e[i];if(o!==Q){var a=r[o];if(void 0===a&&!u(r,o))return!0;var f=t[o],s=f&&f[Q];if(s?s.t!==a:!c(f,a))return!0}}var v=!!r[Q];return e.length!==nn(r).length+(v?0:1)}function a(n){var r=n.k;if(r.length!==n.t.length)return!0;var t=Object.getOwnPropertyDescriptor(r,r.length-1);if(t&&!t.get)return!0;for(var e=0;e<r.length;e++)if(!r.hasOwnProperty(e))return!0;return!1}function f(r){r.g&&n(3,JSON.stringify(p(r)))}var s={};m("ES5",{J:function(n,r){var e=Array.isArray(n),i=function(n,r){if(n){for(var e=Array(r.length),i=0;i<r.length;i++)Object.defineProperty(e,""+i,t(i,!0));return e}var o=rn(r);delete o[Q];for(var u=nn(o),a=0;a<u.length;a++){var f=u[a];o[f]=t(f,n||!!o[f].enumerable)}return Object.create(Object.getPrototypeOf(r),o)}(e,n),o={i:e?5:4,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:i,o:null,g:!1,C:!1};return Object.defineProperty(i,Q,{value:o,writable:!0}),i},S:function(n,t,o){o?r(t)&&t[Q].A===n&&e(n.p):(n.u&&function n(r){if(r&&"object"==typeof r){var t=r[Q];if(t){var e=t.t,o=t.k,f=t.R,c=t.i;if(4===c)i(o,(function(r){r!==Q&&(void 0!==e[r]||u(e,r)?f[r]||n(o[r]):(f[r]=!0,k(t)))})),i(e,(function(n){void 0!==o[n]||u(o,n)||(f[n]=!1,k(t))}));else if(5===c){if(a(t)&&(k(t),f.length=!0),o.length<e.length)for(var s=o.length;s<e.length;s++)f[s]=!1;else for(var v=e.length;v<o.length;v++)f[v]=!0;for(var p=Math.min(o.length,e.length),l=0;l<p;l++)o.hasOwnProperty(l)||(f[l]=!0),void 0===f[l]&&n(o[l])}}}}(n.p[0]),e(n.p))},K:function(n){return 4===n.i?o(n):a(n)}})}function T(){function e(n){if(!t(n))return n;if(Array.isArray(n))return n.map(e);if(s(n))return new Map(Array.from(n.entries()).map((function(n){return[n[0],e(n[1])]})));if(v(n))return new Set(Array.from(n).map(e));var r=Object.create(Object.getPrototypeOf(n));for(var i in n)r[i]=e(n[i]);return u(n,L)&&(r[L]=n[L]),r}function f(n){return r(n)?e(n):n}var c="add";m("Patches",{$:function(r,t){return t.forEach((function(t){for(var i=t.path,u=t.op,f=r,s=0;s<i.length-1;s++){var v=o(f),p=i[s];"string"!=typeof p&&"number"!=typeof p&&(p=""+p),0!==v&&1!==v||"__proto__"!==p&&"constructor"!==p||n(24),"function"==typeof f&&"prototype"===p&&n(24),"object"!=typeof(f=a(f,p))&&n(15,i.join("/"))}var l=o(f),d=e(t.value),h=i[i.length-1];switch(u){case"replace":switch(l){case 2:return f.set(h,d);case 3:n(16);default:return f[h]=d}case c:switch(l){case 1:return"-"===h?f.push(d):f.splice(h,0,d);case 2:return f.set(h,d);case 3:return f.add(d);default:return f[h]=d}case"remove":switch(l){case 1:return f.splice(h,1);case 2:return f.delete(h);case 3:return f.delete(t.value);default:return delete f[h]}default:n(17,u)}})),r},N:function(n,r,t,e){switch(n.i){case 0:case 4:case 2:return function(n,r,t,e){var o=n.t,s=n.o;i(n.R,(function(n,i){var v=a(o,n),p=a(s,n),l=i?u(o,n)?"replace":c:"remove";if(v!==p||"replace"!==l){var d=r.concat(n);t.push("remove"===l?{op:l,path:d}:{op:l,path:d,value:p}),e.push(l===c?{op:"remove",path:d}:"remove"===l?{op:c,path:d,value:f(v)}:{op:"replace",path:d,value:f(v)})}}))}(n,r,t,e);case 5:case 1:return function(n,r,t,e){var i=n.t,o=n.R,u=n.o;if(u.length<i.length){var a=[u,i];i=a[0],u=a[1];var s=[e,t];t=s[0],e=s[1]}for(var v=0;v<i.length;v++)if(o[v]&&u[v]!==i[v]){var p=r.concat([v]);t.push({op:"replace",path:p,value:f(u[v])}),e.push({op:"replace",path:p,value:f(i[v])})}for(var l=i.length;l<u.length;l++){var d=r.concat([l]);t.push({op:c,path:d,value:f(u[l])})}i.length<u.length&&e.push({op:"replace",path:r.concat(["length"]),value:i.length})}(n,r,t,e);case 3:return function(n,r,t,e){var i=n.t,o=n.o,u=0;i.forEach((function(n){if(!o.has(n)){var i=r.concat([u]);t.push({op:"remove",path:i,value:n}),e.unshift({op:c,path:i,value:n})}u++})),u=0,o.forEach((function(n){if(!i.has(n)){var o=r.concat([u]);t.push({op:c,path:o,value:n}),e.unshift({op:"remove",path:o,value:n})}u++}))}(n,r,t,e)}},M:function(n,r,t,e){t.push({op:"replace",path:[],value:r===H?void 0:r}),e.push({op:"replace",path:[],value:n})}})}function C(){function r(n,r){function t(){this.constructor=n}a(n,r),n.prototype=(t.prototype=r.prototype,new t)}function e(n){n.o||(n.R=new Map,n.o=new Map(n.t))}function o(n){n.o||(n.o=new Set,n.t.forEach((function(r){if(t(r)){var e=N(n.A.h,r,n);n.p.set(r,e),n.o.add(e)}else n.o.add(r)})))}function u(r){r.g&&n(3,JSON.stringify(p(r)))}var a=function(n,r){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,r){n.__proto__=r}||function(n,r){for(var t in r)r.hasOwnProperty(t)&&(n[t]=r[t])})(n,r)},f=function(){function n(n,r){return this[Q]={i:2,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,R:void 0,t:n,k:this,C:!1,g:!1},this}r(n,Map);var o=n.prototype;return Object.defineProperty(o,"size",{get:function(){return p(this[Q]).size}}),o.has=function(n){return p(this[Q]).has(n)},o.set=function(n,r){var t=this[Q];return u(t),p(t).has(n)&&p(t).get(n)===r||(e(t),k(t),t.R.set(n,!0),t.o.set(n,r),t.R.set(n,!0)),this},o.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),e(r),k(r),r.t.has(n)?r.R.set(n,!1):r.R.delete(n),r.o.delete(n),!0},o.clear=function(){var n=this[Q];u(n),p(n).size&&(e(n),k(n),n.R=new Map,i(n.t,(function(r){n.R.set(r,!1)})),n.o.clear())},o.forEach=function(n,r){var t=this;p(this[Q]).forEach((function(e,i){n.call(r,t.get(i),i,t)}))},o.get=function(n){var r=this[Q];u(r);var i=p(r).get(n);if(r.I||!t(i))return i;if(i!==r.t.get(n))return i;var o=N(r.A.h,i,r);return e(r),r.o.set(n,o),o},o.keys=function(){return p(this[Q]).keys()},o.values=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.values()},n.next=function(){var n=t.next();return n.done?n:{done:!1,value:r.get(n.value)}},n},o.entries=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.entries()},n.next=function(){var n=t.next();if(n.done)return n;var e=r.get(n.value);return{done:!1,value:[n.value,e]}},n},o[V]=function(){return this.entries()},n}(),c=function(){function n(n,r){return this[Q]={i:3,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,t:n,k:this,p:new Map,g:!1,C:!1},this}r(n,Set);var t=n.prototype;return Object.defineProperty(t,"size",{get:function(){return p(this[Q]).size}}),t.has=function(n){var r=this[Q];return u(r),r.o?!!r.o.has(n)||!(!r.p.has(n)||!r.o.has(r.p.get(n))):r.t.has(n)},t.add=function(n){var r=this[Q];return u(r),this.has(n)||(o(r),k(r),r.o.add(n)),this},t.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),o(r),k(r),r.o.delete(n)||!!r.p.has(n)&&r.o.delete(r.p.get(n))},t.clear=function(){var n=this[Q];u(n),p(n).size&&(o(n),k(n),n.o.clear())},t.values=function(){var n=this[Q];return u(n),o(n),n.o.values()},t.entries=function(){var n=this[Q];return u(n),o(n),n.o.entries()},t.keys=function(){return this.values()},t[V]=function(){return this.values()},t.forEach=function(n,r){for(var t=this.values(),e=t.next();!e.done;)n.call(r,e.value,e.value,this),e=t.next()},n}();m("MapSet",{F:function(n,r){return new f(n,r)},T:function(n,r){return new c(n,r)}})}function J(){F(),C(),T()}function K(n){return n}function $(n){return n}var G,U,W="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X="undefined"!=typeof Map,q="undefined"!=typeof Set,B="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H=W?Symbol.for("immer-nothing"):((G={})["immer-nothing"]=!0,G),L=W?Symbol.for("immer-draftable"):"__$immer_draftable",Q=W?Symbol.for("immer-state"):"__$immer_state",V="undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator",Y={0:"Illegal state",1:"Immer drafts cannot have computed properties",2:"This object has been frozen and should not be mutated",3:function(n){return"Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? "+n},4:"An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",5:"Immer forbids circular references",6:"The first or second argument to `produce` must be a function",7:"The third argument to `produce` must be a function or undefined",8:"First argument to `createDraft` must be a plain object, an array, or an immerable object",9:"First argument to `finishDraft` must be a draft returned by `createDraft`",10:"The given draft is already finalized",11:"Object.defineProperty() cannot be used on an Immer draft",12:"Object.setPrototypeOf() cannot be used on an Immer draft",13:"Immer only supports deleting array indices",14:"Immer only supports setting array indices and the 'length' property",15:function(n){return"Cannot apply patch, path doesn't resolve: "+n},16:'Sets cannot have "replace" patches.',17:function(n){return"Unsupported patch operation: "+n},18:function(n){return"The plugin for '"+n+"' has not been loaded into Immer. To enable the plugin, import and call `enable"+n+"()` when initializing your application."},20:"Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",21:function(n){return"produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '"+n+"'"},22:function(n){return"'current' expects a draft, got: "+n},23:function(n){return"'original' expects a draft, got: "+n},24:"Patching reserved attributes like __proto__, prototype and constructor is not allowed"},Z=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t)})),r},tn={},en={get:function(n,r){if(r===Q)return n;var e=p(n);if(!u(e,r))return function(n,r,t){var e,i=I(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t(i)?i:i===z(n.t,r)?(E(n),n.o[r]=N(n.A.h,i,n)):i},has:function(n,r){return r in p(n)},ownKeys:function(n){return Reflect.ownKeys(p(n))},set:function(n,r,t){var e=I(p(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z(p(n),r),o=null==i?void 0:i[Q];if(o&&o.t===t)return n.o[r]=t,n.R[r]=!1,!0;if(c(t,i)&&(void 0!==t||u(n.t,r)))return!0;E(n),k(n)}return n.o[r]===t&&(void 0!==t||r in n.o)||Number.isNaN(t)&&Number.isNaN(n.o[r])||(n.o[r]=t,n.R[r]=!0),!0},deleteProperty:function(n,r){return void 0!==z(n.t,r)||r in n.t?(n.R[r]=!1,E(n),k(n)):delete n.R[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n(11)},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n(12)}},on={};i(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)}})),on.deleteProperty=function(r,t){return true&&isNaN(parseInt(t))&&n(13),on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return true&&"length"!==t&&isNaN(parseInt(t))&&n(14),en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.O=B,this.D=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return(t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n(6),void 0!==o&&"function"!=typeof o&&n(7),t(r)){var c=w(e),s=N(e,r,void 0),v=!0;try{f=i(s),v=!1}finally{v?g(c):O(c)}return"undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j(c,o),P(n,c)}),(function(n){throw g(c),n})):(j(c,o),P(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H&&(f=void 0),e.D&&d(f,!0),o){var p=[],l=[];b("Patches").M(r,f,p,l),o(p,l)}return f}n(21,r)},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r}));return"undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return[n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze)}var i=e.prototype;return i.createDraft=function(e){t(e)||n(8),r(e)&&(e=R(e));var i=w(this),o=N(this,e,void 0);return o[Q].C=!0,O(i),o},i.finishDraft=function(r,t){var e=r&&r[Q]; true&&(e&&e.C||n(9),e.I&&n(10));var i=e.A;return j(i,t),P(void 0,i)},i.setAutoFreeze=function(n){this.D=n},i.setUseProxies=function(r){r&&!B&&n(20),this.O=r},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b("Patches").$;return r(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce,cn=an.produceWithPatches.bind(an),sn=an.setAutoFreeze.bind(an),vn=an.setUseProxies.bind(an),pn=an.applyPatches.bind(an),ln=an.createDraft.bind(an),dn=an.finishDraft.bind(an);/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fn);
 //# sourceMappingURL=immer.esm.js.map
 
 
@@ -8585,6 +9302,30 @@ function querySelectorAll$1(n2, selectors) {
 function mutationObserverCtor$1() {
     return getUntaintedPrototype$1("MutationObserver").constructor;
 }
+function patch$1(source, name, replacement) {
+    try {
+        if (!(name in source)) {
+            return function() {};
+        }
+        var original = source[name];
+        var wrapped = replacement(original);
+        if (typeof wrapped === "function") {
+            wrapped.prototype = wrapped.prototype || {};
+            Object.defineProperties(wrapped, {
+                __rrweb_original__: {
+                    enumerable: false,
+                    value: original
+                }
+            });
+        }
+        source[name] = wrapped;
+        return function() {
+            source[name] = original;
+        };
+    } catch (e) {
+        return function() {};
+    }
+}
 var index$1 = {
     childNodes: childNodes$1,
     parentNode: parentNode$1,
@@ -8597,7 +9338,8 @@ var index$1 = {
     shadowRoot: shadowRoot$1,
     querySelector: querySelector$1,
     querySelectorAll: querySelectorAll$1,
-    mutationObserver: mutationObserverCtor$1
+    mutationObserver: mutationObserverCtor$1,
+    patch: patch$1
 };
 function isElement(n2) {
     return n2.nodeType === n2.ELEMENT_NODE;
@@ -8848,26 +9590,82 @@ function absolutifyURLs(cssText, href) {
         return "url(" + maybeQuote + stack.join("/") + maybeQuote + ")";
     });
 }
-function normalizeCssString(cssText) {
-    return cssText.replace(/(\/\*[^*]*\*\/)|[\s;]/g, "");
+function normalizeCssString(cssText, _testNoPxNorm) {
+    if (_testNoPxNorm === void 0) _testNoPxNorm = false;
+    if (_testNoPxNorm) {
+        return cssText.replace(/(\/\*[^*]*\*\/)|[\s;]/g, "");
+    } else {
+        return cssText.replace(/(\/\*[^*]*\*\/)|[\s;]/g, "").replace(/0px/g, "0");
+    }
 }
-function splitCssText(cssText, style) {
+function splitCssText(cssText, style, _testNoPxNorm) {
+    if (_testNoPxNorm === void 0) _testNoPxNorm = false;
     var childNodes2 = Array.from(style.childNodes);
     var splits = [];
+    var iterCount = 0;
     if (childNodes2.length > 1 && cssText && typeof cssText === "string") {
-        var cssTextNorm = normalizeCssString(cssText);
+        var cssTextNorm = normalizeCssString(cssText, _testNoPxNorm);
+        var normFactor = cssTextNorm.length / cssText.length;
         for(var i2 = 1; i2 < childNodes2.length; i2++){
             if (childNodes2[i2].textContent && typeof childNodes2[i2].textContent === "string") {
-                var textContentNorm = normalizeCssString(childNodes2[i2].textContent);
-                for(var j = 3; j < textContentNorm.length; j++){
-                    var bit = textContentNorm.substring(0, j);
-                    if (cssTextNorm.split(bit).length === 2) {
-                        var splitNorm = cssTextNorm.indexOf(bit);
-                        for(var k = splitNorm; k < cssText.length; k++){
-                            if (normalizeCssString(cssText.substring(0, k)).length === splitNorm) {
+                var textContentNorm = normalizeCssString(childNodes2[i2].textContent, _testNoPxNorm);
+                var jLimit = 100;
+                var j = 3;
+                for(; j < textContentNorm.length; j++){
+                    if (// keep consuming css identifiers (to get a decent chunk more quickly)
+                    textContentNorm[j].match(/[a-zA-Z0-9]/) || // substring needs to be unique to this section
+                    textContentNorm.indexOf(textContentNorm.substring(0, j), 1) !== -1) {
+                        continue;
+                    }
+                    break;
+                }
+                for(; j < textContentNorm.length; j++){
+                    var startSubstring = textContentNorm.substring(0, j);
+                    var cssNormSplits = cssTextNorm.split(startSubstring);
+                    var splitNorm = -1;
+                    if (cssNormSplits.length === 2) {
+                        splitNorm = cssNormSplits[0].length;
+                    } else if (cssNormSplits.length > 2 && cssNormSplits[0] === "" && childNodes2[i2 - 1].textContent !== "") {
+                        splitNorm = cssTextNorm.indexOf(startSubstring, 1);
+                    } else if (cssNormSplits.length === 1) {
+                        startSubstring = startSubstring.substring(0, startSubstring.length - 1);
+                        cssNormSplits = cssTextNorm.split(startSubstring);
+                        if (cssNormSplits.length <= 1) {
+                            splits.push(cssText);
+                            return splits;
+                        }
+                        j = jLimit + 1;
+                    } else if (j === textContentNorm.length - 1) {
+                        splitNorm = cssTextNorm.indexOf(startSubstring);
+                    }
+                    if (cssNormSplits.length >= 2 && j > jLimit) {
+                        var prevTextContent = childNodes2[i2 - 1].textContent;
+                        if (prevTextContent && typeof prevTextContent === "string") {
+                            var prevMinLength = normalizeCssString(prevTextContent).length;
+                            splitNorm = cssTextNorm.indexOf(startSubstring, prevMinLength);
+                        }
+                        if (splitNorm === -1) {
+                            splitNorm = cssNormSplits[0].length;
+                        }
+                    }
+                    if (splitNorm !== -1) {
+                        var k = Math.floor(splitNorm / normFactor);
+                        for(; k > 0 && k < cssText.length;){
+                            iterCount += 1;
+                            if (iterCount > 50 * childNodes2.length) {
+                                splits.push(cssText);
+                                return splits;
+                            }
+                            var normPart = normalizeCssString(cssText.substring(0, k), _testNoPxNorm);
+                            if (normPart.length === splitNorm) {
                                 splits.push(cssText.substring(0, k));
                                 cssText = cssText.substring(k);
+                                cssTextNorm = cssTextNorm.substring(splitNorm);
                                 break;
+                            } else if (normPart.length < splitNorm) {
+                                k += Math.max(1, Math.floor((splitNorm - normPart.length) / normFactor));
+                            } else {
+                                k -= Math.max(1, Math.floor((normPart.length - splitNorm) * normFactor));
                             }
                         }
                         break;
@@ -9384,7 +10182,7 @@ function slimDOMExcluded(sn, slimDOMOptions) {
     } else if (sn.type === NodeType$3.Element) {
         if (slimDOMOptions.script && // script tag
         (sn.tagName === "script" || // (module)preload link
-        sn.tagName === "link" && (sn.attributes.rel === "preload" || sn.attributes.rel === "modulepreload") && sn.attributes.as === "script" || // prefetch link
+        sn.tagName === "link" && (sn.attributes.rel === "preload" && sn.attributes.as === "script" || sn.attributes.rel === "modulepreload") || // prefetch link
         sn.tagName === "link" && sn.attributes.rel === "prefetch" && typeof sn.attributes.href === "string" && extractFileExtension(sn.attributes.href) === "js")) {
             return true;
         } else if (slimDOMOptions.headFavicon && (sn.tagName === "link" && sn.attributes.rel === "shortcut icon" || sn.tagName === "meta" && (lowerIfExists(sn.attributes.name).match(/^msapplication-tile(image|color)$/) || lowerIfExists(sn.attributes.name) === "application-name" || lowerIfExists(sn.attributes.rel) === "icon" || lowerIfExists(sn.attributes.rel) === "apple-touch-icon" || lowerIfExists(sn.attributes.rel) === "shortcut icon"))) {
@@ -9614,7 +10412,8 @@ function snapshot(n2, options) {
         week: true,
         textarea: true,
         select: true,
-        password: true
+        password: true,
+        hidden: true
     } : maskAllInputs === false ? {
         password: true
     } : maskAllInputs;
@@ -18135,6 +18934,30 @@ function querySelectorAll(n2, selectors) {
 function mutationObserverCtor() {
     return getUntaintedPrototype("MutationObserver").constructor;
 }
+function patch(source, name, replacement) {
+    try {
+        if (!(name in source)) {
+            return function() {};
+        }
+        var original = source[name];
+        var wrapped = replacement(original);
+        if (typeof wrapped === "function") {
+            wrapped.prototype = wrapped.prototype || {};
+            Object.defineProperties(wrapped, {
+                __rrweb_original__: {
+                    enumerable: false,
+                    value: original
+                }
+            });
+        }
+        source[name] = wrapped;
+        return function() {
+            source[name] = original;
+        };
+    } catch (e) {
+        return function() {};
+    }
+}
 var index = {
     childNodes: childNodes,
     parentNode: parentNode,
@@ -18147,7 +18970,8 @@ var index = {
     shadowRoot: shadowRoot,
     querySelector: querySelector,
     querySelectorAll: querySelectorAll,
-    mutationObserver: mutationObserverCtor
+    mutationObserver: mutationObserverCtor,
+    patch: patch
 };
 function on(type, fn, target) {
     if (target === void 0) target = document;
@@ -18239,30 +19063,6 @@ function hookSetter(target, key, d, isRevoked, win) {
     return function() {
         return hookSetter(target, key, original || {}, true);
     };
-}
-function patch(source, name, replacement) {
-    try {
-        if (!(name in source)) {
-            return function() {};
-        }
-        var original = source[name];
-        var wrapped = replacement(original);
-        if (typeof wrapped === "function") {
-            wrapped.prototype = wrapped.prototype || {};
-            Object.defineProperties(wrapped, {
-                __rrweb_original__: {
-                    enumerable: false,
-                    value: original
-                }
-            });
-        }
-        source[name] = wrapped;
-        return function() {
-            source[name] = original;
-        };
-    } catch (e) {
-        return function() {};
-    }
 }
 var nowTimestamp = Date.now;
 if (!/* @__PURE__ */ /[1-9][0-9]{12}/.test(Date.now().toString())) {
@@ -18854,9 +19654,17 @@ var MutationBuffer = /*#__PURE__*/ function() {
                 _this.attributes.push(item);
                 _this.attributeMap.set(textarea, item);
             }
-            item.attributes.value = Array.from(index.childNodes(textarea), function(cn) {
+            var value = Array.from(index.childNodes(textarea), function(cn) {
                 return index.textContent(cn) || "";
             }).join("");
+            item.attributes.value = maskInputValue({
+                element: textarea,
+                maskInputOptions: _this.maskInputOptions,
+                tagName: textarea.tagName,
+                type: getInputType(textarea),
+                value: value,
+                maskInputFn: _this.maskInputFn
+            });
         });
         __publicField(this, "processMutation", function(m) {
             if (isIgnored(m.target, _this.mirror, _this.slimDOMOptions)) {
@@ -21247,7 +22055,8 @@ function record(options) {
         week: true,
         textarea: true,
         select: true,
-        password: true
+        password: true,
+        hidden: true
     } : _maskInputOptions !== void 0 ? _maskInputOptions : {
         password: true
     };
@@ -21637,8 +22446,15 @@ function record(options) {
             }, window));
         }
         return function() {
-            handlers.forEach(function(h) {
-                return h();
+            handlers.forEach(function(handler) {
+                try {
+                    handler();
+                } catch (error) {
+                    var msg = String(error).toLowerCase();
+                    if (!msg.includes("cross-origin")) {
+                        console.warn(error);
+                    }
+                }
             });
             processedNodeManager.destroy();
             recording = false;
@@ -22044,7 +22860,7 @@ if (typeof Promise !== 'undefined' && Promise.toString().indexOf('[native code]'
 
 var Config = {
     DEBUG: false,
-    LIB_VERSION: '2.65.0'
+    LIB_VERSION: '2.71.1'
 };
 
 /* eslint camelcase: "off", eqeqeq: "off" */
@@ -23723,6 +24539,20 @@ var cheap_guid = function(maxlen) {
     return maxlen ? guid.substring(0, maxlen) : guid;
 };
 
+/**
+ * Generates a W3C traceparent header for easy interop with distributed tracing systems i.e Open Telemetry
+ * https://www.w3.org/TR/trace-context/#traceparent-header
+*/
+var generateTraceparent = function() {
+    var traceID = _.UUID().replace(/-/g, '');
+    var parentID = _.UUID().replace(/-/g, '').substring(0, 16);
+
+    // Sampled trace
+    var traceFlags = '01';
+
+    return '00-' + traceID + '-' + parentID + '-' + traceFlags;
+};
+
 // naive way to extract domain name (example.com) from full hostname (my.sub.example.com)
 var SIMPLE_DOMAIN_MATCH_REGEX = /[a-z0-9][a-z0-9-]*\.[a-z]+$/i;
 // this next one attempts to account for some ccSLDs, e.g. extracting oxford.ac.uk from www.oxford.ac.uk
@@ -23842,6 +24672,10 @@ IDBStorageWrapper.prototype.init = function () {
                 return PromisePolyfill.reject(dbOrError);
             }
         });
+};
+
+IDBStorageWrapper.prototype.isInitialized = function () {
+    return !!this.dbPromise;
 };
 
 /**
@@ -24368,6 +25202,10 @@ LocalStorageWrapper.prototype.init = function () {
     return PromisePolyfill.resolve();
 };
 
+LocalStorageWrapper.prototype.isInitialized = function () {
+    return true;
+};
+
 LocalStorageWrapper.prototype.setItem = function (key, value) {
     return new PromisePolyfill(_.bind(function (resolve, reject) {
         try {
@@ -24448,7 +25286,7 @@ var RequestQueue = function (storageKey, options) {
 };
 
 RequestQueue.prototype.ensureInit = function () {
-    if (this.initialized) {
+    if (this.initialized || !this.usePersistence) {
         return PromisePolyfill.resolve();
     }
 
@@ -25162,6 +26000,13 @@ function isUserEvent(ev) {
  * @property {string} replayStartUrl
  */
 
+/**
+ * @typedef {Object} UserIdInfo
+ * @property {string} distinct_id
+ * @property {string} user_id
+ * @property {string} device_id
+ */
+
 
 /**
  * This class encapsulates a single session recording and its lifecycle.
@@ -25193,10 +26038,9 @@ var SessionRecording = function(options) {
 
     // disable persistence if localStorage is not supported
     // request-queue will automatically disable persistence if indexedDB fails to initialize
-    var usePersistence = localStorageSupported(options.sharedLockStorage, true);
+    var usePersistence = localStorageSupported(options.sharedLockStorage, true) && !this.getConfig('disable_persistence');
 
     // each replay has its own batcher key to avoid conflicts between rrweb events of different recordings
-    // this will be important when persistence is introduced
     this.batcherKey = '__mprec_' + this.getConfig('name') + '_' + this.getConfig('token') + '_' + this.replayId;
     this.queueStorage = new IDBStorageWrapper(RECORDING_EVENTS_STORE_NAME);
     this.batcher = new RequestBatcher(this.batcherKey, {
@@ -25215,6 +26059,30 @@ var SessionRecording = function(options) {
         enqueueThrottleMs: RECORD_ENQUEUE_THROTTLE_MS,
         sharedLockTimeoutMS: 10 * 1000,
     });
+};
+
+/**
+ * @returns {UserIdInfo}
+ */
+SessionRecording.prototype.getUserIdInfo = function () {
+    if (this.finalFlushUserIdInfo) {
+        return this.finalFlushUserIdInfo;
+    }
+
+    var userIdInfo = {
+        'distinct_id': String(this._mixpanel.get_distinct_id()),
+    };
+
+    // send ID management props if they exist
+    var deviceId = this._mixpanel.get_property('$device_id');
+    if (deviceId) {
+        userIdInfo['$device_id'] = deviceId;
+    }
+    var userId = this._mixpanel.get_property('$user_id');
+    if (userId) {
+        userIdInfo['$user_id'] = userId;
+    }
+    return userIdInfo;
 };
 
 SessionRecording.prototype.unloadPersistedData = function () {
@@ -25341,6 +26209,9 @@ SessionRecording.prototype.startRecording = function (shouldStopBatcher) {
 };
 
 SessionRecording.prototype.stopRecording = function (skipFlush) {
+    // store the user ID info in case this is getting called in mixpanel.reset()
+    this.finalFlushUserIdInfo = this.getUserIdInfo();
+
     if (!this.isRrwebStopped()) {
         try {
             this._stopRecording();
@@ -25451,8 +26322,8 @@ SessionRecording.prototype._sendRequest = function(currentReplayId, reqParams, r
             retryAfter: response.headers.get('Retry-After')
         });
     }.bind(this);
-
-    win['fetch'](this.getConfig('api_host') + '/' + this.getConfig('api_routes')['record'] + '?' + new URLSearchParams(reqParams), {
+    var apiHost = (this._mixpanel.get_api_host && this._mixpanel.get_api_host('record')) || this.getConfig('api_host');
+    win['fetch'](apiHost + '/' + this.getConfig('api_routes')['record'] + '?' + new URLSearchParams(reqParams), {
         'method': 'POST',
         'headers': {
             'Authorization': 'Basic ' + btoa(this.getConfig('token') + ':'),
@@ -25506,7 +26377,6 @@ SessionRecording.prototype._flushEvents = addOptOutCheckMixpanelLib(function (da
             '$current_url': this.batchStartUrl,
             '$lib_version': Config.LIB_VERSION,
             'batch_start_time': batchStartTime / 1000,
-            'distinct_id': String(this._mixpanel.get_distinct_id()),
             'mp_lib': 'web',
             'replay_id': replayId,
             'replay_length_ms': replayLengthMs,
@@ -25515,16 +26385,7 @@ SessionRecording.prototype._flushEvents = addOptOutCheckMixpanelLib(function (da
             'seq': this.seqNo
         };
         var eventsJson = JSON.stringify(data);
-
-        // send ID management props if they exist
-        var deviceId = this._mixpanel.get_property('$device_id');
-        if (deviceId) {
-            reqParams['$device_id'] = deviceId;
-        }
-        var userId = this._mixpanel.get_property('$user_id');
-        if (userId) {
-            reqParams['$user_id'] = userId;
-        }
+        Object.assign(reqParams, this.getUserIdInfo());
 
         if (CompressionStream) {
             var jsonStream = new Blob([eventsJson], {type: 'application/json'}).stream();
@@ -25560,10 +26421,15 @@ SessionRecording.prototype.reportError = function(msg, err) {
  * Makes sure that only one tab can be recording at a time.
  */
 var RecordingRegistry = function (options) {
+    /** @type {IDBStorageWrapper} */
     this.idb = new IDBStorageWrapper(RECORDING_REGISTRY_STORE_NAME);
     this.errorReporter = options.errorReporter;
     this.mixpanelInstance = options.mixpanelInstance;
     this.sharedLockStorage = options.sharedLockStorage;
+};
+
+RecordingRegistry.prototype.isPersistenceEnabled = function() {
+    return !this.mixpanelInstance.get_config('disable_persistence');
 };
 
 RecordingRegistry.prototype.handleError = function (err) {
@@ -25574,6 +26440,10 @@ RecordingRegistry.prototype.handleError = function (err) {
  * @param {import('./session-recording').SerializedRecording} serializedRecording
  */
 RecordingRegistry.prototype.setActiveRecording = function (serializedRecording) {
+    if (!this.isPersistenceEnabled()) {
+        return PromisePolyfill.resolve();
+    }
+
     var tabId = serializedRecording['tabId'];
     if (!tabId) {
         console.warn('No tab ID is set, cannot persist recording metadata.');
@@ -25591,6 +26461,10 @@ RecordingRegistry.prototype.setActiveRecording = function (serializedRecording) 
  * @returns {Promise<import('./session-recording').SerializedRecording>}
  */
 RecordingRegistry.prototype.getActiveRecording = function () {
+    if (!this.isPersistenceEnabled()) {
+        return PromisePolyfill.resolve(null);
+    }
+
     return this.idb.init()
         .then(function () {
             return this.idb.getItem(this.mixpanelInstance.get_tab_id());
@@ -25602,8 +26476,16 @@ RecordingRegistry.prototype.getActiveRecording = function () {
 };
 
 RecordingRegistry.prototype.clearActiveRecording = function () {
-    // mark recording as expired instead of deleting it in case the page unloads mid-flush and doesn't make it to ingestion.
-    // this will ensure the next pageload will flush the remaining events, but not try to continue the recording.
+    if (this.isPersistenceEnabled()) {
+        // mark recording as expired instead of deleting it in case the page unloads mid-flush and doesn't make it to ingestion.
+        // this will ensure the next pageload will flush the remaining events, but not try to continue the recording.
+        return this.markActiveRecordingExpired();
+    } else {
+        return this.deleteActiveRecording();
+    }
+};
+
+RecordingRegistry.prototype.markActiveRecordingExpired = function () {
     return this.getActiveRecording()
         .then(function (serializedRecording) {
             if (serializedRecording) {
@@ -25614,11 +26496,25 @@ RecordingRegistry.prototype.clearActiveRecording = function () {
         .catch(this.handleError.bind(this));
 };
 
+RecordingRegistry.prototype.deleteActiveRecording = function () {
+    // avoid initializing IDB if this registry instance hasn't already written a recording
+    if (this.idb.isInitialized()) {
+        return this.idb.removeItem(this.mixpanelInstance.get_tab_id())
+            .catch(this.handleError.bind(this));
+    } else {
+        return PromisePolyfill.resolve();
+    }
+};
+
 /**
  * Flush any inactive recordings from the registry to minimize data loss.
  * The main idea here is that we can flush remaining rrweb events on the next page load if a tab is closed mid-batch.
  */
 RecordingRegistry.prototype.flushInactiveRecordings = function () {
+    if (!this.isPersistenceEnabled()) {
+        return PromisePolyfill.resolve([]);
+    }
+
     return this.idb.init()
         .then(function() {
             return this.idb.getAll();
@@ -25669,6 +26565,7 @@ var MixpanelRecorder = function(mixpanelInstance, rrwebRecord, sharedLockStorage
     this._flushInactivePromise = this.recordingRegistry.flushInactiveRecordings();
 
     this.activeRecording = null;
+    this.stopRecordingInProgress = false;
 };
 
 MixpanelRecorder.prototype.startRecording = function(options) {
@@ -25717,19 +26614,26 @@ MixpanelRecorder.prototype.startRecording = function(options) {
 };
 
 MixpanelRecorder.prototype.stopRecording = function() {
-    var stopPromise = this._stopCurrentRecording(false);
-    this.recordingRegistry.clearActiveRecording();
-    this.activeRecording = null;
-    return stopPromise;
+    // Prevents activeSerializedRecording from being reused when stopping the recording.
+    this.stopRecordingInProgress = true;
+    return this._stopCurrentRecording(false, true).then(function() {
+        return this.recordingRegistry.clearActiveRecording();
+    }.bind(this)).then(function() {
+        this.stopRecordingInProgress = false;
+    }.bind(this));
 };
 
 MixpanelRecorder.prototype.pauseRecording = function() {
     return this._stopCurrentRecording(false);
 };
 
-MixpanelRecorder.prototype._stopCurrentRecording = function(skipFlush) {
+MixpanelRecorder.prototype._stopCurrentRecording = function(skipFlush, disableActiveRecording) {
     if (this.activeRecording) {
-        return this.activeRecording.stopRecording(skipFlush);
+        var stopRecordingPromise = this.activeRecording.stopRecording(skipFlush);
+        if (disableActiveRecording) {
+            this.activeRecording = null;
+        }
+        return stopRecordingPromise;
     }
     return PromisePolyfill.resolve();
 };
@@ -25742,7 +26646,7 @@ MixpanelRecorder.prototype.resumeRecording = function (startNewIfInactive) {
 
     return this.recordingRegistry.getActiveRecording()
         .then(function (activeSerializedRecording) {
-            if (activeSerializedRecording) {
+            if (activeSerializedRecording && !this.stopRecordingInProgress) {
                 return this.startRecording({activeSerializedRecording: activeSerializedRecording});
             } else if (startNewIfInactive) {
                 return this.startRecording({shouldStopBatcher: false});
@@ -25784,11 +26688,17 @@ win['__mp_recorder'] = MixpanelRecorder;
 var EV_CHANGE = 'change';
 var EV_CLICK = 'click';
 var EV_HASHCHANGE = 'hashchange';
+var EV_INPUT = 'input';
+var EV_LOAD = 'load';
 var EV_MP_LOCATION_CHANGE = 'mp_locationchange';
 var EV_POPSTATE = 'popstate';
 // TODO scrollend isn't available in Safari: document or polyfill?
 var EV_SCROLLEND = 'scrollend';
+var EV_SCROLL = 'scroll';
+var EV_SELECT = 'select';
 var EV_SUBMIT = 'submit';
+var EV_TOGGLE = 'toggle';
+var EV_VISIBILITYCHANGE = 'visibilitychange';
 
 var CLICK_EVENT_PROPS = [
     'clientX', 'clientY',
@@ -25804,6 +26714,77 @@ var TRACKED_ATTRS = [
     'aria-label', 'aria-labelledby', 'aria-describedby',
     'href', 'name', 'role', 'title', 'type'
 ];
+
+var INTERACTIVE_ARIA_ROLES = {
+    'button': true,
+    'checkbox': true,
+    'combobox': true,
+    'grid': true,
+    'link': true,
+    'listbox': true,
+    'menu': true,
+    'menubar': true,
+    'menuitem': true,
+    'menuitemcheckbox': true,
+    'menuitemradio': true,
+    'navigation': true,
+    'option': true,
+    'radio': true,
+    'radiogroup': true,
+    'searchbox': true,
+    'slider': true,
+    'spinbutton': true,
+    'switch': true,
+    'tab': true,
+    'tablist': true,
+    'textbox': true,
+    'tree': true,
+    'treegrid': true,
+    'treeitem': true
+};
+
+var ALWAYS_NON_INTERACTIVE_TAGS = {
+    // Document metadata
+    'base': true,
+    'head': true,
+    'html': true,
+    'link': true,
+    'meta': true,
+    'script': true,
+    'style': true,
+    'title': true,
+    // Text formatting
+    'br': true,
+    'hr': true,
+    'wbr': true,
+    // Other
+    'noscript': true,
+    'picture': true,
+    'source': true,
+    'template': true,
+    'track': true
+};
+
+// Common container tags that need additional checks
+var TEXT_CONTAINER_TAGS = {
+    'article': true,
+    'div': true,
+    'h1': true,
+    'h2': true,
+    'h3': true,
+    'h4': true,
+    'h5': true,
+    'h6': true,
+    'p': true,
+    'section': true,
+    'span': true
+};
+
+var EVENT_HANDLER_ATTRIBUTES = [
+    'onclick', 'onmousedown', 'onmouseup', 'onpointerdown', 'onpointerup', 'ontouchend', 'ontouchstart'
+];
+
+var MAX_DEPTH = 5;
 
 var logger$1 = console_with_prefix('autocapture');
 
@@ -26172,6 +27153,10 @@ function minDOMApisSupported() {
     }
 }
 
+function weakSetSupported() {
+    return typeof WeakSet !== 'undefined';
+}
+
 /*
  * Check whether a DOM event should be "tracked" or if it may contain sensitive data
  * using a variety of heuristics.
@@ -26297,6 +27282,525 @@ function shouldTrackValue(value) {
     return true;
 }
 
+/**
+ * Creates a cross-browser compatible scroll end function with appropriate event listener.
+ * For browsers that support scrollend, returns the original function with scrollend event.
+ * For browsers without scrollend support, returns a debounced function that triggers
+ * 100ms after the last scroll event to simulate scrollend behavior.
+ * @param {Function} originalFunction - The function to call when scrolling ends
+ * @returns {Object} Object containing listener function and eventType string
+ * @returns {Function} returns.listener - The wrapped function to use as event listener
+ * @returns {string} returns.eventType - The event type to listen for ('scrollend' or 'scroll')
+ */
+function getPolyfillScrollEndFunction(originalFunction) {
+    var supportsScrollEnd = 'onscrollend' in win;
+    var polyfillFunction = safewrap(originalFunction);
+    var polyfillEvent = EV_SCROLLEND;
+    if (!supportsScrollEnd) {
+        // Polyfill for browsers without scrollend support: wait 100ms after the last scroll event
+        // https://developer.chrome.com/blog/scrollend-a-new-javascript-event
+        var scrollTimer = null;
+        var scrollDelayMs = 100;
+
+        polyfillFunction = safewrap(function() {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(originalFunction, scrollDelayMs);
+        });
+
+        polyfillEvent = EV_SCROLL;
+    }
+
+    return {
+        listener: polyfillFunction,
+        eventType: polyfillEvent
+    };
+}
+
+function hasInlineEventHandlers(element) {
+    for (var i = 0; i < EVENT_HANDLER_ATTRIBUTES.length; i++) {
+        if (element.hasAttribute(EVENT_HANDLER_ATTRIBUTES[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function hasInteractiveAriaRole(element) {
+    var role = element.getAttribute('role');
+    if (!role) return false;
+
+    // Handle invalid markup where multiple roles might be specified
+    // Only the first token is recognized per ARIA spec
+    var primaryRole = role.trim().split(/\s+/)[0].toLowerCase();
+
+    return INTERACTIVE_ARIA_ROLES[primaryRole];
+}
+
+function hasAnyInteractivityIndicators(element) {
+    var tagName = element.tagName.toLowerCase();
+
+    // Check for interactive HTML elements
+    if (tagName === 'button' ||
+        tagName === 'input' ||
+        tagName === 'select' ||
+        tagName === 'textarea' ||
+        tagName === 'details' ||
+        tagName === 'dialog') {
+        return true;
+    }
+
+    if (element.isContentEditable) {
+        return true;
+    }
+
+    if (element.onclick || element.onmousedown || element.onmouseup || element.ontouchstart || element.ontouchend) {
+        return true;
+    }
+
+    if (hasInlineEventHandlers(element)) {
+        return true;
+    }
+
+    if (hasInteractiveAriaRole(element)) {
+        return true;
+    }
+
+    if (tagName === 'a' && element.hasAttribute('href')) {
+        return true;
+    }
+
+    if (element.hasAttribute('tabindex')) {
+        return true;
+    }
+
+    return false;
+}
+
+
+function isDefinitelyNonInteractive(element) {
+    if (!element || !element.tagName) {
+        return true;
+    }
+
+    var tagName = element.tagName.toLowerCase();
+
+    // These tags are definitely non-interactive
+    if (ALWAYS_NON_INTERACTIVE_TAGS[tagName]) {
+        return true;
+    }
+
+    // For all other elements, we can only be certain they're non-interactive if they lack ALL indicators of interactivity
+    // Check for any signs of interactivity
+    if (hasAnyInteractivityIndicators(element)) {
+        return false;
+    }
+
+    // Check parent chain for interactive context
+    var parent = element.parentElement;
+    var depth = 0;
+
+    while (parent && depth < MAX_DEPTH) {
+        if (hasAnyInteractivityIndicators(parent)) {
+            return false; // Element is inside an interactive parent
+        }
+
+        if (parent.getRootNode && parent.getRootNode() !== document$1) {
+            var root = parent.getRootNode();
+            if (root.host && hasAnyInteractivityIndicators(root.host)) {
+                return false; // Inside an interactive shadow host
+            }
+        }
+
+        parent = parent.parentElement;
+        depth++;
+    }
+
+    // Pure text containers without any interactive context
+    if (TEXT_CONTAINER_TAGS[tagName]) {
+        // These are non-interactive ONLY if they have no interactive indicators (already checked as part of hasAnyInteractivityIndicators)
+        return true;
+    }
+
+    // Default: we can't be certain it's non-interactive
+    return false;
+}
+
+/** @const */ var DEFAULT_RAGE_CLICK_THRESHOLD_PX = 30;
+/** @const */ var DEFAULT_RAGE_CLICK_TIMEOUT_MS = 1000;
+/** @const */ var DEFAULT_RAGE_CLICK_CLICK_COUNT = 4;
+
+function RageClickTracker() {
+    this.clicks = [];
+}
+
+RageClickTracker.prototype.isRageClick = function(x, y, options) {
+    options = options || {};
+    var thresholdPx = options['threshold_px'] || DEFAULT_RAGE_CLICK_THRESHOLD_PX;
+    var timeoutMs = options['timeout_ms'] || DEFAULT_RAGE_CLICK_TIMEOUT_MS;
+    var clickCount = options['click_count'] || DEFAULT_RAGE_CLICK_CLICK_COUNT;
+    var timestamp = Date.now();
+
+    var lastClick = this.clicks[this.clicks.length - 1];
+    if (
+        lastClick &&
+        timestamp - lastClick.timestamp < timeoutMs &&
+        Math.sqrt(Math.pow(x - lastClick.x, 2) + Math.pow(y - lastClick.y, 2)) < thresholdPx
+    ) {
+        this.clicks.push({ x: x, y: y, timestamp: timestamp });
+        if (this.clicks.length >= clickCount) {
+            this.clicks = [];
+            return true;
+        }
+    } else {
+        this.clicks = [{ x: x, y: y, timestamp: timestamp }];
+    }
+    return false;
+};
+
+function ShadowDOMObserver(changeCallback, observerConfig) {
+    this.changeCallback = changeCallback || function() {};
+    this.observerConfig = observerConfig;
+
+    this.observedShadowRoots = null;
+    this.shadowObservers = [];
+}
+
+ShadowDOMObserver.prototype.getEventTarget = function(event) {
+    if (!this.observedShadowRoots) {
+        return;
+    }
+    var path = this.getComposedPath(event);
+    if (path && path.length) {
+        return path[0];
+    }
+
+    return event['target'] || event['srcElement'];
+};
+
+
+ShadowDOMObserver.prototype.getComposedPath = function(event) {
+    if ('composedPath' in event) {
+        return event['composedPath']();
+    }
+
+    return [];
+};
+ShadowDOMObserver.prototype.observeFromEvent = function(event) {
+    if (!this.observedShadowRoots) {
+        return;
+    }
+
+    var path = this.getComposedPath(event);
+
+    // Check each element in path for shadow roots
+    for (var i = 0; i < path.length; i++) {
+        var element = path[i];
+
+        if (element && element.shadowRoot) {
+            this.observeShadowRoot(element.shadowRoot);
+        }
+    }
+};
+
+
+ShadowDOMObserver.prototype.observeShadowRoot = function(shadowRoot) {
+    if (!this.observedShadowRoots || this.observedShadowRoots.has(shadowRoot)) {
+        return;
+    }
+
+    var self = this;
+
+    try {
+        this.observedShadowRoots.add(shadowRoot);
+
+        var observer = new window.MutationObserver(function() {
+            self.changeCallback();
+        });
+
+        observer.observe(shadowRoot, this.observerConfig);
+        this.shadowObservers.push(observer);
+    } catch (e) {
+        logger$1.critical('Error while observing shadow root', e);
+    }
+};
+
+
+ShadowDOMObserver.prototype.start = function() {
+    if (this.observedShadowRoots) {
+        return;
+    }
+
+    if (!weakSetSupported()) {
+        logger$1.critical('Shadow DOM observation unavailable: WeakSet not supported');
+        return;
+    }
+
+    this.observedShadowRoots = new WeakSet();
+};
+
+ShadowDOMObserver.prototype.stop = function() {
+    if (!this.observedShadowRoots) {
+        return;
+    }
+
+    for (var i = 0; i < this.shadowObservers.length; i++) {
+        try {
+            this.shadowObservers[i].disconnect();
+        } catch (e) {
+            logger$1.critical('Error while disconnecting shadow DOM observer', e);
+        }
+    }
+    this.shadowObservers = [];
+    this.observedShadowRoots = null;
+};
+
+/** @const */ var DEFAULT_DEAD_CLICK_TIMEOUT_MS = 500;
+/** @const */ var INTERACTION_EVENTS = [EV_CHANGE, EV_INPUT, EV_SUBMIT, EV_SELECT, EV_TOGGLE];
+/** @const */ var LAYOUT_EVENTS = [EV_SCROLLEND];
+/** @const */ var NAVIGATION_EVENTS = [EV_HASHCHANGE];
+/** @const */ var MUTATION_OBSERVER_CONFIG = {
+    characterData: true,
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style', 'class', 'hidden', 'checked', 'selected', 'value', 'display', 'visibility']
+};
+
+
+function DeadClickTracker(onDeadClickCallback) {
+    this.eventListeners = [];
+    this.mutationObserver = null;
+    this.shadowDOMObserver = null;
+
+    this.isTracking = false;
+    this.lastChangeEventTimestamp = 0;
+    this.pendingClicks = [];
+    this.onDeadClickCallback = onDeadClickCallback;
+    this.processingActive = false;
+    this.processingTimeout = null;
+}
+
+
+DeadClickTracker.prototype.addClick = function(event) {
+    var element = this.shadowDOMObserver && this.shadowDOMObserver.getEventTarget(event);
+
+    if (!element) {
+        element = event['target'] || event['srcElement'];
+    }
+
+    if (!element || isDefinitelyNonInteractive(element)) {
+        return false;
+    }
+
+    if (this.shadowDOMObserver) {
+        this.shadowDOMObserver.observeFromEvent(event);
+    }
+    this.pendingClicks.push({
+        element: element,
+        event: event,
+        timestamp: Date.now()
+    });
+    return true;
+};
+
+DeadClickTracker.prototype.trackClick = function(event, config) {
+    if (!this.isTracking) {
+        return false;
+    }
+
+    var added = this.addClick(event);
+    if (added) {
+        this.triggerProcessing(config);
+    }
+    return added;
+};
+
+DeadClickTracker.prototype.getDeadClicks = function(config) {
+    if (this.pendingClicks.length === 0) {
+        return [];
+    }
+
+    var timeoutMs = config['timeout_ms'];
+    var now = Date.now();
+    var clicksToEvaluate = this.pendingClicks.slice(); // Copy array
+    this.pendingClicks = []; // Clear original
+
+    var deadClicks = [];
+
+    for (var i = 0; i < clicksToEvaluate.length; i++) {
+        var click = clicksToEvaluate[i];
+
+        if (now - click.timestamp >= timeoutMs) {
+            // Click has exceeded timeout, check if it's dead by looking for changes after this specific click
+            if (!this.hasChangesAfter(click.timestamp)) {
+                deadClicks.push(click);
+            }
+        } else {
+            // Still pending - add back
+            this.pendingClicks.push(click);
+        }
+    }
+
+    return deadClicks;
+};
+
+DeadClickTracker.prototype.hasChangesAfter = function(timestamp) {
+    // 100ms tolerance for race condition between when we record the click and the change event
+    return this.lastChangeEventTimestamp >= (timestamp - 100);
+};
+
+DeadClickTracker.prototype.recordChangeEvent = function() {
+    this.lastChangeEventTimestamp = Date.now();
+};
+
+DeadClickTracker.prototype.triggerProcessing = function(config) {
+    // Prevent multiple concurrent processing chains
+    if (this.processingActive) {
+        return;
+    }
+    this.processingActive = true;
+    this.processRecursively(config);
+};
+
+DeadClickTracker.prototype.processRecursively = function(config) {
+    if (!this.isTracking || !this.onDeadClickCallback) {
+        this.processingActive = false;
+        return;
+    }
+
+    var timeoutMs = config['timeout_ms'];
+    var self = this;
+
+    this.processingTimeout = setTimeout(function() {
+        if (!self.processingActive) {
+            return;
+        }
+
+        var deadClicks = self.getDeadClicks(config);
+
+        for (var i = 0; i < deadClicks.length; i++) {
+            self.onDeadClickCallback(deadClicks[i].event);
+        }
+
+        if (self.pendingClicks.length > 0) {
+            self.processRecursively(config);
+        } else {
+            self.processingActive = false;
+        }
+    }, timeoutMs);
+};
+
+DeadClickTracker.prototype.startTracking = function() {
+    if (this.isTracking) {
+        return;
+    }
+
+    this.isTracking = true;
+
+    var self = this;
+
+    INTERACTION_EVENTS.forEach(function(event) {
+        var handler = function() {
+            self.recordChangeEvent();
+        };
+        document.addEventListener(event, handler, { capture: true, passive: true });
+        self.eventListeners.push({ target: document, event: event, handler: handler, options: { capture: true, passive: true } });
+    });
+    NAVIGATION_EVENTS.forEach(function(event) {
+        var handler = function() {
+            self.recordChangeEvent();
+        };
+        window.addEventListener(event, handler);
+        self.eventListeners.push({ target: window, event: event, handler: handler });
+    });
+    LAYOUT_EVENTS.forEach(function(event) {
+        var handler = function() {
+            self.recordChangeEvent();
+        };
+        window.addEventListener(event, handler, { passive: true });
+        self.eventListeners.push({ target: window, event: event, handler: handler, options: { passive: true } });
+    });
+    var selectionHandler = function() {
+        self.recordChangeEvent();
+    };
+    document.addEventListener('selectionchange', selectionHandler);
+    self.eventListeners.push({ target: document, event: 'selectionchange', handler: selectionHandler });
+
+    // Set up MutationObserver
+    if (window.MutationObserver) {
+        try {
+            this.mutationObserver = new window.MutationObserver(function() {
+                self.recordChangeEvent();
+            });
+
+            this.mutationObserver.observe(document.body || document.documentElement, MUTATION_OBSERVER_CONFIG);
+        } catch (e) {
+            logger$1.critical('Error while setting up mutation observer', e);
+        }
+    }
+
+    // Set up Shadow DOM observer
+    if (window.customElements) {
+        try {
+            this.shadowDOMObserver = new ShadowDOMObserver(
+                function() {
+                    self.recordChangeEvent();
+                },
+                MUTATION_OBSERVER_CONFIG
+            );
+            this.shadowDOMObserver.start();
+        } catch (e) {
+            logger$1.critical('Error while setting up shadow DOM observer', e);
+            this.shadowDOMObserver = null;
+        }
+    }
+};
+
+DeadClickTracker.prototype.stopTracking = function() {
+    if (!this.isTracking) {
+        return;
+    }
+
+    this.isTracking = false;
+    this.pendingClicks = [];
+    this.lastChangeEventTimestamp = 0;
+    this.processingActive = false;
+
+    if (this.processingTimeout) {
+        clearTimeout(this.processingTimeout);
+        this.processingTimeout = null;
+    }
+
+    // Remove all event listeners
+    for (var i = 0; i < this.eventListeners.length; i++) {
+        var listener = this.eventListeners[i];
+        try {
+            listener.target.removeEventListener(listener.event, listener.handler, listener.options);
+        } catch (e) {
+            logger$1.critical('Error while removing event listener', e);
+        }
+    }
+    this.eventListeners = [];
+
+    if (this.mutationObserver) {
+        try {
+            this.mutationObserver.disconnect();
+        } catch (e) {
+            logger$1.critical('Error while disconnecting mutation observer', e);
+        }
+        this.mutationObserver = null;
+    }
+
+    if (this.shadowDOMObserver) {
+        try {
+            this.shadowDOMObserver.stop();
+        } catch (e) {
+            logger$1.critical('Error while stopping shadow DOM observer', e);
+        }
+        this.shadowDOMObserver = null;
+    }
+};
+
 var AUTOCAPTURE_CONFIG_KEY = 'autocapture';
 var LEGACY_PAGEVIEW_CONFIG_KEY = 'track_pageview';
 
@@ -26316,9 +27820,12 @@ var CONFIG_CAPTURE_TEXT_CONTENT = 'capture_text_content';
 var CONFIG_SCROLL_CAPTURE_ALL = 'scroll_capture_all';
 var CONFIG_SCROLL_CHECKPOINTS = 'scroll_depth_percent_checkpoints';
 var CONFIG_TRACK_CLICK = 'click';
+var CONFIG_TRACK_DEAD_CLICK = 'dead_click';
 var CONFIG_TRACK_INPUT = 'input';
 var CONFIG_TRACK_PAGEVIEW = 'pageview';
+var CONFIG_TRACK_RAGE_CLICK = 'rage_click';
 var CONFIG_TRACK_SCROLL = 'scroll';
+var CONFIG_TRACK_PAGE_LEAVE = 'page_leave';
 var CONFIG_TRACK_SUBMIT = 'submit';
 
 var CONFIG_DEFAULTS$1 = {};
@@ -26333,9 +27840,12 @@ CONFIG_DEFAULTS$1[CONFIG_CAPTURE_TEXT_CONTENT] = false;
 CONFIG_DEFAULTS$1[CONFIG_SCROLL_CAPTURE_ALL] = false;
 CONFIG_DEFAULTS$1[CONFIG_SCROLL_CHECKPOINTS] = [25, 50, 75, 100];
 CONFIG_DEFAULTS$1[CONFIG_TRACK_CLICK] = true;
+CONFIG_DEFAULTS$1[CONFIG_TRACK_DEAD_CLICK] = true;
 CONFIG_DEFAULTS$1[CONFIG_TRACK_INPUT] = true;
 CONFIG_DEFAULTS$1[CONFIG_TRACK_PAGEVIEW] = PAGEVIEW_OPTION_FULL_URL;
+CONFIG_DEFAULTS$1[CONFIG_TRACK_RAGE_CLICK] = true;
 CONFIG_DEFAULTS$1[CONFIG_TRACK_SCROLL] = true;
+CONFIG_DEFAULTS$1[CONFIG_TRACK_PAGE_LEAVE] = false;
 CONFIG_DEFAULTS$1[CONFIG_TRACK_SUBMIT] = true;
 
 var DEFAULT_PROPS = {
@@ -26343,9 +27853,12 @@ var DEFAULT_PROPS = {
 };
 
 var MP_EV_CLICK = '$mp_click';
+var MP_EV_DEAD_CLICK = '$mp_dead_click';
 var MP_EV_INPUT = '$mp_input_change';
+var MP_EV_RAGE_CLICK = '$mp_rage_click';
 var MP_EV_SCROLL = '$mp_scroll';
 var MP_EV_SUBMIT = '$mp_submit';
+var MP_EV_PAGE_LEAVE = '$mp_page_leave';
 
 /**
  * Autocapture: manages automatic event tracking
@@ -26353,6 +27866,9 @@ var MP_EV_SUBMIT = '$mp_submit';
  */
 var Autocapture = function(mp) {
     this.mp = mp;
+    this.maxScrollViewDepth = 0;
+    this.hasTrackedScrollSession = false;
+    this.previousScrollHeight = 0;
 };
 
 Autocapture.prototype.init = function() {
@@ -26360,12 +27876,15 @@ Autocapture.prototype.init = function() {
         logger$1.critical('Autocapture unavailable: missing required DOM APIs');
         return;
     }
-
+    this.initPageListeners();
     this.initPageviewTracking();
     this.initClickTracking();
+    this.initDeadClickTracking();
     this.initInputTracking();
     this.initScrollTracking();
     this.initSubmitTracking();
+    this.initRageClickTracking();
+    this.initPageLeaveTracking();
 };
 
 Autocapture.prototype.getFullConfig = function() {
@@ -26444,6 +27963,12 @@ Autocapture.prototype.trackDomEvent = function(ev, mpEventName) {
         return;
     }
 
+    var isCapturedForHeatMap = this.mp.is_recording_heatmap_data() && (
+        (mpEventName === MP_EV_CLICK && !this.getConfig(CONFIG_TRACK_CLICK)) ||
+        (mpEventName === MP_EV_RAGE_CLICK && !this._getClickTrackingConfig(CONFIG_TRACK_RAGE_CLICK)) ||
+        (mpEventName === MP_EV_DEAD_CLICK && !this._getClickTrackingConfig(CONFIG_TRACK_DEAD_CLICK))
+    );
+
     var props = getPropsForDOMEvent(ev, {
         allowElementCallback: this.getConfig(CONFIG_ALLOW_ELEMENT_CALLBACK),
         allowSelectors: this.getConfig(CONFIG_ALLOW_SELECTORS),
@@ -26452,12 +27977,128 @@ Autocapture.prototype.trackDomEvent = function(ev, mpEventName) {
         blockSelectors: this.getConfig(CONFIG_BLOCK_SELECTORS),
         captureExtraAttrs: this.getConfig(CONFIG_CAPTURE_EXTRA_ATTRS),
         captureTextContent: this.getConfig(CONFIG_CAPTURE_TEXT_CONTENT),
-        capturedForHeatMap: mpEventName === MP_EV_CLICK && !this.getConfig(CONFIG_TRACK_CLICK) && this.mp.is_recording_heatmap_data(),
+        capturedForHeatMap: isCapturedForHeatMap,
     });
     if (props) {
         _.extend(props, DEFAULT_PROPS);
         this.mp.track(mpEventName, props);
     }
+};
+
+Autocapture.prototype.initPageListeners = function() {
+    win.removeEventListener(EV_POPSTATE, this.listenerPopstate);
+    win.removeEventListener(EV_HASHCHANGE, this.listenerHashchange);
+
+    if (!this.pageviewTrackingConfig() && !this.getConfig(CONFIG_TRACK_PAGE_LEAVE) && !this.mp.get_config('record_heatmap_data')) {
+        // These are all the configs that use these listeners
+        return;
+    }
+
+    this.listenerPopstate = function() {
+        win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
+    };
+    this.listenerHashchange = function() {
+        win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
+    };
+
+    win.addEventListener(EV_POPSTATE, this.listenerPopstate);
+    win.addEventListener(EV_HASHCHANGE, this.listenerHashchange);
+    var nativePushState = win.history.pushState;
+    if (typeof nativePushState === 'function') {
+        win.history.pushState = function(state, unused, url) {
+            nativePushState.call(win.history, state, unused, url);
+            win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
+        };
+    }
+    var nativeReplaceState = win.history.replaceState;
+    if (typeof nativeReplaceState === 'function') {
+        win.history.replaceState = function(state, unused, url) {
+            nativeReplaceState.call(win.history, state, unused, url);
+            win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
+        };
+    }
+};
+
+Autocapture.prototype._getClickTrackingConfig = function(configKey) {
+    var config = this.getConfig(configKey);
+
+    if (!config) {
+        return null; // click tracking disabled
+    }
+
+    if (config === true) {
+        return {}; // use defaults
+    }
+
+    if (typeof config === 'object') {
+        return config; // use custom configuration
+    }
+
+    return {}; // fallback to defaults for any other truthy value
+};
+
+Autocapture.prototype._trackPageLeave = function(ev, currentUrl, currentScrollHeight) {
+    if (this.hasTrackedScrollSession) {
+        // User has navigated away already ending their impression.
+        return;
+    }
+
+    if (!this.getConfig(CONFIG_TRACK_PAGE_LEAVE) && !this.mp.is_recording_heatmap_data()) {
+        return;
+    }
+
+    this.hasTrackedScrollSession = true;
+    var viewportHeight = Math.max(document$1.documentElement.clientHeight, win.innerHeight || 0);
+    var scrollPercentage = Math.round(Math.max(this.maxScrollViewDepth - viewportHeight, 0) / (currentScrollHeight - viewportHeight) * 100);
+    var foldLinePercentage = Math.round((viewportHeight / currentScrollHeight) * 100);
+    if (currentScrollHeight <= viewportHeight) {
+        // If the content fits within the viewport, consider it fully scrolled
+        scrollPercentage = 100;
+        foldLinePercentage = 100;
+    }
+
+    var props = _.extend({
+        '$max_scroll_view_depth': this.maxScrollViewDepth,
+        '$max_scroll_percentage': scrollPercentage,
+        '$fold_line_percentage': foldLinePercentage,
+        '$scroll_height':  currentScrollHeight,
+        '$event_type': ev.type,
+        '$current_url': currentUrl || _.info.currentUrl(),
+        '$viewportHeight': viewportHeight, // This is the fold line
+        '$viewportWidth':  Math.max(document$1.documentElement.clientWidth, win.innerWidth || 0),
+        '$captured_for_heatmap': this.mp.is_recording_heatmap_data()
+    }, DEFAULT_PROPS);
+
+    // Send with beacon transport to ensure event is sent before unload
+    this.mp.track(MP_EV_PAGE_LEAVE, props, {transport: 'sendBeacon'});
+};
+
+Autocapture.prototype._initScrollDepthTracking = function() {
+    win.removeEventListener(EV_SCROLL, this.listenerScrollDepth);
+    win.removeEventListener(EV_SCROLLEND, this.listenerScrollDepth);
+
+    if (!this.mp.get_config('record_heatmap_data')) {
+        return;
+    }
+
+    logger$1.log('Initializing scroll depth tracking');
+
+    this.maxScrollViewDepth = Math.max(document$1.documentElement.clientHeight, win.innerHeight || 0);
+
+    var updateScrollDepth = function() {
+        if (this.currentUrlBlocked()) {
+            return;
+        }
+        var scrollViewHeight = Math.max(document$1.documentElement.clientHeight, win.innerHeight || 0) + win.scrollY;
+        if (scrollViewHeight > this.maxScrollViewDepth) {
+            this.maxScrollViewDepth = scrollViewHeight;
+        }
+        this.previousScrollHeight = document$1.body.scrollHeight;
+    }.bind(this);
+
+    var scrollEndPolyfill = getPolyfillScrollEndFunction(updateScrollDepth);
+    this.listenerScrollDepth = scrollEndPolyfill.listener;
+    win.addEventListener(scrollEndPolyfill.eventType, this.listenerScrollDepth);
 };
 
 Autocapture.prototype.initClickTracking = function() {
@@ -26468,12 +28109,49 @@ Autocapture.prototype.initClickTracking = function() {
     }
     logger$1.log('Initializing click tracking');
 
-    this.listenerClick = win.addEventListener(EV_CLICK, function(ev) {
+    this.listenerClick = function(ev) {
         if (!this.getConfig(CONFIG_TRACK_CLICK) && !this.mp.is_recording_heatmap_data()) {
             return;
         }
         this.trackDomEvent(ev, MP_EV_CLICK);
-    }.bind(this));
+    }.bind(this);
+    win.addEventListener(EV_CLICK, this.listenerClick);
+};
+
+Autocapture.prototype.initDeadClickTracking = function() {
+    var deadClickConfig = this._getClickTrackingConfig(CONFIG_TRACK_DEAD_CLICK);
+
+    if (!deadClickConfig && !this.mp.get_config('record_heatmap_data')) {
+        this.stopDeadClickTracking();
+        return;
+    }
+
+    logger$1.log('Initializing dead click tracking');
+    if (!this._deadClickTracker) {
+        this._deadClickTracker = new DeadClickTracker(function(deadClickEvent) {
+            this.trackDomEvent(deadClickEvent, MP_EV_DEAD_CLICK);
+        }.bind(this));
+        this._deadClickTracker.startTracking();
+    }
+
+    if (!this.listenerDeadClick) {
+        this.listenerDeadClick = function(ev) {
+            var currentDeadClickConfig = this._getClickTrackingConfig(CONFIG_TRACK_DEAD_CLICK);
+            if (!currentDeadClickConfig && !this.mp.is_recording_heatmap_data()) {
+                return;
+            }
+            if (this.currentUrlBlocked()) {
+                return;
+            }
+            // Normalize config to ensure timeout_ms is always set
+            var normalizedConfig = currentDeadClickConfig || {};
+            if (!normalizedConfig['timeout_ms']) {
+                normalizedConfig['timeout_ms'] = DEFAULT_DEAD_CLICK_TIMEOUT_MS;
+            }
+            this._deadClickTracker.trackClick(ev, normalizedConfig);
+        }.bind(this);
+        win.addEventListener(EV_CLICK, this.listenerDeadClick);
+    }
 };
 
 Autocapture.prototype.initInputTracking = function() {
@@ -26484,17 +28162,16 @@ Autocapture.prototype.initInputTracking = function() {
     }
     logger$1.log('Initializing input tracking');
 
-    this.listenerChange = win.addEventListener(EV_CHANGE, function(ev) {
+    this.listenerChange = function(ev) {
         if (!this.getConfig(CONFIG_TRACK_INPUT)) {
             return;
         }
         this.trackDomEvent(ev, MP_EV_INPUT);
-    }.bind(this));
+    }.bind(this);
+    win.addEventListener(EV_CHANGE, this.listenerChange);
 };
 
 Autocapture.prototype.initPageviewTracking = function() {
-    win.removeEventListener(EV_POPSTATE, this.listenerPopstate);
-    win.removeEventListener(EV_HASHCHANGE, this.listenerHashchange);
     win.removeEventListener(EV_MP_LOCATION_CHANGE, this.listenerLocationchange);
 
     if (!this.pageviewTrackingConfig()) {
@@ -26511,27 +28188,7 @@ Autocapture.prototype.initPageviewTracking = function() {
         previousTrackedUrl = _.info.currentUrl();
     }
 
-    this.listenerPopstate = win.addEventListener(EV_POPSTATE, function() {
-        win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
-    });
-    this.listenerHashchange = win.addEventListener(EV_HASHCHANGE, function() {
-        win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
-    });
-    var nativePushState = win.history.pushState;
-    if (typeof nativePushState === 'function') {
-        win.history.pushState = function(state, unused, url) {
-            nativePushState.call(win.history, state, unused, url);
-            win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
-        };
-    }
-    var nativeReplaceState = win.history.replaceState;
-    if (typeof nativeReplaceState === 'function') {
-        win.history.replaceState = function(state, unused, url) {
-            nativeReplaceState.call(win.history, state, unused, url);
-            win.dispatchEvent(new Event(EV_MP_LOCATION_CHANGE));
-        };
-    }
-    this.listenerLocationchange = win.addEventListener(EV_MP_LOCATION_CHANGE, safewrap(function() {
+    this.listenerLocationchange = safewrap(function() {
         if (this.currentUrlBlocked()) {
             return;
         }
@@ -26558,11 +28215,44 @@ Autocapture.prototype.initPageviewTracking = function() {
                 logger$1.log('Path change: re-initializing scroll depth checkpoints');
             }
         }
-    }.bind(this)));
+    }.bind(this));
+    win.addEventListener(EV_MP_LOCATION_CHANGE, this.listenerLocationchange);
+};
+
+Autocapture.prototype.initRageClickTracking = function() {
+    win.removeEventListener(EV_CLICK, this.listenerRageClick);
+
+    var rageClickConfig = this._getClickTrackingConfig(CONFIG_TRACK_RAGE_CLICK);
+    if (!rageClickConfig && !this.mp.get_config('record_heatmap_data')) {
+        return;
+    }
+
+    logger$1.log('Initializing rage click tracking');
+    if (!this._rageClickTracker) {
+        this._rageClickTracker = new RageClickTracker();
+    }
+
+    this.listenerRageClick = function(ev) {
+        var currentRageClickConfig = this._getClickTrackingConfig(CONFIG_TRACK_RAGE_CLICK);
+        if (!currentRageClickConfig && !this.mp.is_recording_heatmap_data()) {
+            return;
+        }
+
+        if (this.currentUrlBlocked()) {
+            return;
+        }
+
+        if (this._rageClickTracker.isRageClick(ev['pageX'], ev['pageY'], currentRageClickConfig)) {
+            this.trackDomEvent(ev, MP_EV_RAGE_CLICK);
+        }
+    }.bind(this);
+    win.addEventListener(EV_CLICK, this.listenerRageClick);
 };
 
 Autocapture.prototype.initScrollTracking = function() {
     win.removeEventListener(EV_SCROLLEND, this.listenerScroll);
+    win.removeEventListener(EV_SCROLL, this.listenerScroll);
+
 
     if (!this.getConfig(CONFIG_TRACK_SCROLL)) {
         return;
@@ -26570,7 +28260,7 @@ Autocapture.prototype.initScrollTracking = function() {
     logger$1.log('Initializing scroll tracking');
     this.lastScrollCheckpoint = 0;
 
-    this.listenerScroll = win.addEventListener(EV_SCROLLEND, safewrap(function() {
+    var scrollTrackFunction = function() {
         if (!this.getConfig(CONFIG_TRACK_SCROLL)) {
             return;
         }
@@ -26609,7 +28299,11 @@ Autocapture.prototype.initScrollTracking = function() {
         if (shouldTrack) {
             this.mp.track(MP_EV_SCROLL, props);
         }
-    }.bind(this)));
+    }.bind(this);
+
+    var scrollEndPolyfill = getPolyfillScrollEndFunction(scrollTrackFunction);
+    this.listenerScroll = scrollEndPolyfill.listener;
+    win.addEventListener(scrollEndPolyfill.eventType, this.listenerScroll);
 };
 
 Autocapture.prototype.initSubmitTracking = function() {
@@ -26620,18 +28314,81 @@ Autocapture.prototype.initSubmitTracking = function() {
     }
     logger$1.log('Initializing submit tracking');
 
-    this.listenerSubmit = win.addEventListener(EV_SUBMIT, function(ev) {
+    this.listenerSubmit = function(ev) {
         if (!this.getConfig(CONFIG_TRACK_SUBMIT)) {
             return;
         }
         this.trackDomEvent(ev, MP_EV_SUBMIT);
+    }.bind(this);
+    win.addEventListener(EV_SUBMIT, this.listenerSubmit);
+};
+
+Autocapture.prototype.initPageLeaveTracking = function() {
+    // Capture page_leave both when the user navigates away from the page (visibilitychange) as well
+    // as when they navigate to a different page within the SPA (popstate/pushstate/hashchange).
+    document$1.removeEventListener(EV_VISIBILITYCHANGE, this.listenerPageLeaveVisibilitychange);
+    win.removeEventListener(EV_MP_LOCATION_CHANGE, this.listenerPageLeaveLocationchange);
+    win.removeEventListener(EV_LOAD, this.listenerPageLoad);
+
+    if (!this.getConfig(CONFIG_TRACK_PAGE_LEAVE) && !this.mp.get_config('record_heatmap_data')) {
+        return;
+    }
+
+    logger$1.log('Initializing page visibility tracking.');
+    this._initScrollDepthTracking();
+    var previousTrackedUrl = _.info.currentUrl();
+
+    // Initialize previousScrollHeight on `load` which handles async loading
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event
+    this.listenerPageLoad = function() {
+        this.previousScrollHeight = document$1.body.scrollHeight;
+    }.bind(this);
+    win.addEventListener(EV_LOAD, this.listenerPageLoad);
+
+    // Track page navigation events similar to how initPageviewTracking does it
+    this.listenerPageLeaveLocationchange = safewrap(function(ev) {
+        if (this.currentUrlBlocked()) {
+            return;
+        }
+
+        var currentUrl = _.info.currentUrl();
+        // Track all URL changes including query string or fragment changes as separate scroll sessions
+        var shouldTrack = currentUrl !== previousTrackedUrl;
+
+        if (shouldTrack) {
+            this._trackPageLeave(ev, previousTrackedUrl, this.previousScrollHeight);
+            previousTrackedUrl = currentUrl;
+            // Fragment navigation should call scroll(end) and trigger listener, don't add window.scrollY here.
+            this.maxScrollViewDepth = Math.max(document$1.documentElement.clientHeight, win.innerHeight || 0);
+            this.previousScrollHeight = document$1.body.scrollHeight;
+            this.hasTrackedScrollSession = false;
+        }
     }.bind(this));
+    win.addEventListener(EV_MP_LOCATION_CHANGE, this.listenerPageLeaveLocationchange);
+
+    this.listenerPageLeaveVisibilitychange = function(ev) {
+        if (document$1.hidden) {
+            this._trackPageLeave(ev, previousTrackedUrl, this.previousScrollHeight);
+        }
+    }.bind(this);
+    document$1.addEventListener(EV_VISIBILITYCHANGE, this.listenerPageLeaveVisibilitychange);
+};
+
+Autocapture.prototype.stopDeadClickTracking = function() {
+    if (this.listenerDeadClick) {
+        win.removeEventListener(EV_CLICK, this.listenerDeadClick);
+        this.listenerDeadClick = null;
+    }
+
+    if (this._deadClickTracker) {
+        this._deadClickTracker.stopTracking();
+        this._deadClickTracker = null;
+    }
 };
 
 // TODO integrate error_reporter from mixpanel instance
 safewrapClass(Autocapture);
 
-var fetch = win['fetch'];
 var logger = console_with_prefix('flags');
 
 var FLAGS_CONFIG_KEY = 'flags';
@@ -26645,13 +28402,16 @@ CONFIG_DEFAULTS[CONFIG_CONTEXT] = {};
  * @constructor
  */
 var FeatureFlagManager = function(initOptions) {
+    this.fetch = win['fetch'];
+    this.getFullApiRoute = initOptions.getFullApiRoute;
     this.getMpConfig = initOptions.getConfigFunc;
-    this.getDistinctId = initOptions.getDistinctIdFunc;
+    this.setMpConfig = initOptions.setConfigFunc;
+    this.getMpProperty = initOptions.getPropertyFunc;
     this.track = initOptions.trackingFunc;
 };
 
 FeatureFlagManager.prototype.init = function() {
-    if (!minApisSupported()) {
+    if (!this.minApisSupported()) {
         logger.critical('Feature Flags unavailable: missing minimum required APIs');
         return;
     }
@@ -26683,6 +28443,23 @@ FeatureFlagManager.prototype.isSystemEnabled = function() {
     return !!this.getMpConfig(FLAGS_CONFIG_KEY);
 };
 
+FeatureFlagManager.prototype.updateContext = function(newContext, options) {
+    if (!this.isSystemEnabled()) {
+        logger.critical('Feature Flags not enabled, cannot update context');
+        return Promise.resolve();
+    }
+
+    var ffConfig = this.getMpConfig(FLAGS_CONFIG_KEY);
+    if (!_.isObject(ffConfig)) {
+        ffConfig = {};
+    }
+    var oldContext = (options && options['replace']) ? {} : this.getConfig(CONFIG_CONTEXT);
+    ffConfig[CONFIG_CONTEXT] = _.extend({}, oldContext, newContext);
+
+    this.setMpConfig(FLAGS_CONFIG_KEY, ffConfig);
+    return this.fetchFlags();
+};
+
 FeatureFlagManager.prototype.areFlagsReady = function() {
     if (!this.isSystemEnabled()) {
         logger.error('Feature Flags not enabled');
@@ -26692,22 +28469,31 @@ FeatureFlagManager.prototype.areFlagsReady = function() {
 
 FeatureFlagManager.prototype.fetchFlags = function() {
     if (!this.isSystemEnabled()) {
-        return;
+        return Promise.resolve();
     }
 
-    var distinctId = this.getDistinctId();
+    var distinctId = this.getMpProperty('distinct_id');
+    var deviceId = this.getMpProperty('$device_id');
+    var traceparent = generateTraceparent();
     logger.log('Fetching flags for distinct ID: ' + distinctId);
-    var reqParams = {
-        'context': _.extend({'distinct_id': distinctId}, this.getConfig(CONFIG_CONTEXT))
-    };
-    this.fetchPromise = win['fetch'](this.getMpConfig('api_host') + '/' + this.getMpConfig('api_routes')['flags'], {
-        'method': 'POST',
+
+    var context = _.extend({'distinct_id': distinctId, 'device_id': deviceId}, this.getConfig(CONFIG_CONTEXT));
+    var searchParams = new URLSearchParams();
+    searchParams.set('context', JSON.stringify(context));
+    searchParams.set('token', this.getMpConfig('token'));
+    searchParams.set('mp_lib', 'web');
+    searchParams.set('$lib_version', Config.LIB_VERSION);
+    var url = this.getFullApiRoute() + '?' + searchParams.toString();
+
+    this._fetchInProgressStartTime = Date.now();
+    this.fetchPromise = this.fetch.call(win, url, {
+        'method': 'GET',
         'headers': {
             'Authorization': 'Basic ' + btoa(this.getMpConfig('token') + ':'),
-            'Content-Type': 'application/octet-stream'
-        },
-        'body': JSON.stringify(reqParams)
+            'traceparent': traceparent
+        }
     }).then(function(response) {
+        this.markFetchComplete();
         return response.json().then(function(responseBody) {
             var responseFlags = responseBody['flags'];
             if (!responseFlags) {
@@ -26717,14 +28503,35 @@ FeatureFlagManager.prototype.fetchFlags = function() {
             _.each(responseFlags, function(data, key) {
                 flags.set(key, {
                     'key': data['variant_key'],
-                    'value': data['variant_value']
+                    'value': data['variant_value'],
+                    'experiment_id': data['experiment_id'],
+                    'is_experiment_active': data['is_experiment_active'],
+                    'is_qa_tester': data['is_qa_tester']
                 });
             });
             this.flags = flags;
+            this._traceparent = traceparent;
         }.bind(this)).catch(function(error) {
+            this.markFetchComplete();
             logger.error(error);
-        });
-    }.bind(this)).catch(function() {});
+        }.bind(this));
+    }.bind(this)).catch(function(error) {
+        this.markFetchComplete();
+        logger.error(error);
+    }.bind(this));
+
+    return this.fetchPromise;
+};
+
+FeatureFlagManager.prototype.markFetchComplete = function() {
+    if (!this._fetchInProgressStartTime) {
+        logger.error('Fetch in progress started time not set, cannot mark fetch complete');
+        return;
+    }
+    this._fetchStartTime = this._fetchInProgressStartTime;
+    this._fetchCompleteTime = Date.now();
+    this._fetchLatency = this._fetchCompleteTime - this._fetchStartTime;
+    this._fetchInProgressStartTime = null;
 };
 
 FeatureFlagManager.prototype.getVariant = function(featureName, fallback) {
@@ -26800,19 +28607,36 @@ FeatureFlagManager.prototype.trackFeatureCheck = function(featureName, feature) 
         return;
     }
     this.trackedFeatures.add(featureName);
-    this.track('$experiment_started', {
+
+    var trackingProperties = {
         'Experiment name': featureName,
         'Variant name': feature['key'],
-        '$experiment_type': 'feature_flag'
-    });
+        '$experiment_type': 'feature_flag',
+        'Variant fetch start time': new Date(this._fetchStartTime).toISOString(),
+        'Variant fetch complete time': new Date(this._fetchCompleteTime).toISOString(),
+        'Variant fetch latency (ms)': this._fetchLatency,
+        'Variant fetch traceparent': this._traceparent,
+    };
+
+    if (feature['experiment_id'] !== 'undefined') {
+        trackingProperties['$experiment_id'] = feature['experiment_id'];
+    }
+    if (feature['is_experiment_active'] !== 'undefined') {
+        trackingProperties['$is_experiment_active'] = feature['is_experiment_active'];
+    }
+    if (feature['is_qa_tester'] !== 'undefined') {
+        trackingProperties['$is_qa_tester'] = feature['is_qa_tester'];
+    }
+
+    this.track('$experiment_started', trackingProperties);
 };
 
-function minApisSupported() {
-    return !!fetch &&
+FeatureFlagManager.prototype.minApisSupported = function() {
+    return !!this.fetch &&
       typeof Promise !== 'undefined' &&
       typeof Map !== 'undefined' &&
       typeof Set !== 'undefined';
-}
+};
 
 safewrapClass(FeatureFlagManager);
 
@@ -26823,6 +28647,7 @@ FeatureFlagManager.prototype['get_variant_value'] = FeatureFlagManager.prototype
 FeatureFlagManager.prototype['get_variant_value_sync'] = FeatureFlagManager.prototype.getVariantValueSync;
 FeatureFlagManager.prototype['is_enabled'] = FeatureFlagManager.prototype.isEnabled;
 FeatureFlagManager.prototype['is_enabled_sync'] = FeatureFlagManager.prototype.isEnabledSync;
+FeatureFlagManager.prototype['update_context'] = FeatureFlagManager.prototype.updateContext;
 
 // Deprecated method
 FeatureFlagManager.prototype['get_feature_data'] = FeatureFlagManager.prototype.getFeatureData;
@@ -27244,7 +29069,7 @@ MixpanelGroup.prototype._send_request = function(data, callback) {
     return this._mixpanel._track_or_batch({
         type: 'groups',
         data: date_encoded_data,
-        endpoint: this._get_config('api_host') + '/' +  this._get_config('api_routes')['groups'],
+        endpoint: this._mixpanel.get_api_host('groups') + '/' +  this._get_config('api_routes')['groups'],
         batcher: this._mixpanel.request_batchers.groups
     }, callback);
 };
@@ -27596,7 +29421,7 @@ MixpanelPeople.prototype._send_request = function(data, callback) {
     return this._mixpanel._track_or_batch({
         type: 'people',
         data: date_encoded_data,
-        endpoint: this._get_config('api_host') + '/' +  this._get_config('api_routes')['engage'],
+        endpoint: this._mixpanel.get_api_host('people') + '/' +  this._get_config('api_routes')['engage'],
         batcher: this._mixpanel.request_batchers.people
     }, callback);
 };
@@ -28233,6 +30058,7 @@ var DEFAULT_API_ROUTES = {
  */
 var DEFAULT_CONFIG = {
     'api_host':                          'https://api-js.mixpanel.com',
+    'api_hosts':                         {},
     'api_routes':                        DEFAULT_API_ROUTES,
     'api_extra_query_params':            {},
     'api_method':                        'POST',
@@ -28282,7 +30108,7 @@ var DEFAULT_CONFIG = {
     'batch_autostart':                   true,
     'hooks':                             {},
     'record_block_class':                new RegExp('^(mp-block|fs-exclude|amp-block|rr-block|ph-no-capture)$'),
-    'record_block_selector':             'img, video',
+    'record_block_selector':             'img, video, audio',
     'record_canvas':                     false,
     'record_collect_fonts':              false,
     'record_heatmap_data':               false,
@@ -28502,8 +30328,12 @@ MixpanelLib.prototype._init = function(token, config, name) {
     }
 
     this.flags = new FeatureFlagManager({
+        getFullApiRoute: _.bind(function() {
+            return this.get_api_host('flags') + '/' + this.get_config('api_routes')['flags'];
+        }, this),
         getConfigFunc: _.bind(this.get_config, this),
-        getDistinctIdFunc: _.bind(this.get_distinct_id, this),
+        setConfigFunc: _.bind(this.set_config, this),
+        getPropertyFunc: _.bind(this.get_property, this),
         trackingFunc: _.bind(this.track, this)
     });
     this.flags.init();
@@ -28521,7 +30351,9 @@ MixpanelLib.prototype._init = function(token, config, name) {
  * This is primarily used for session recording, where data must be isolated to the current tab.
  */
 MixpanelLib.prototype._init_tab_id = function() {
-    if (_.sessionStorage.is_supported()) {
+    if (this.get_config('disable_persistence')) {
+        console$1.log('Tab ID initialization skipped due to disable_persistence config');
+    } else if (_.sessionStorage.is_supported()) {
         try {
             var key_suffix = this.get_config('name') + '_' + this.get_config('token');
             var tab_id_key = 'mp_tab_id_' + key_suffix;
@@ -28555,6 +30387,11 @@ MixpanelLib.prototype.get_tab_id = function () {
 };
 
 MixpanelLib.prototype._should_load_recorder = function () {
+    if (this.get_config('disable_persistence')) {
+        console$1.log('Load recorder check skipped due to disable_persistence config');
+        return Promise.resolve(false);
+    }
+
     var recording_registry_idb = new IDBStorageWrapper(RECORDING_REGISTRY_STORE_NAME);
     var tab_id = this.get_tab_id();
     return recording_registry_idb.init()
@@ -28618,20 +30455,23 @@ MixpanelLib.prototype.start_session_recording = function () {
 
 MixpanelLib.prototype.stop_session_recording = function () {
     if (this._recorder) {
-        this._recorder['stopRecording']();
+        return this._recorder['stopRecording']();
     }
+    return Promise.resolve();
 };
 
 MixpanelLib.prototype.pause_session_recording = function () {
     if (this._recorder) {
-        this._recorder['pauseRecording']();
+        return this._recorder['pauseRecording']();
     }
+    return Promise.resolve();
 };
 
 MixpanelLib.prototype.resume_session_recording = function () {
     if (this._recorder) {
-        this._recorder['resumeRecording']();
+        return this._recorder['resumeRecording']();
     }
+    return Promise.resolve();
 };
 
 MixpanelLib.prototype.is_recording_heatmap_data = function () {
@@ -28986,11 +30826,10 @@ MixpanelLib.prototype.are_batchers_initialized = function() {
 
 MixpanelLib.prototype.get_batcher_configs = function() {
     var queue_prefix = '__mpq_' + this.get_config('token');
-    var api_routes = this.get_config('api_routes');
     this._batcher_configs = this._batcher_configs || {
-        events: {type: 'events', endpoint: '/' + api_routes['track'], queue_key: queue_prefix + '_ev'},
-        people: {type: 'people', endpoint: '/' + api_routes['engage'], queue_key: queue_prefix + '_pp'},
-        groups: {type: 'groups', endpoint: '/' + api_routes['groups'], queue_key: queue_prefix + '_gr'}
+        events: {type: 'events', api_name: 'track', queue_key: queue_prefix + '_ev'},
+        people: {type: 'people', api_name: 'engage', queue_key: queue_prefix + '_pp'},
+        groups: {type: 'groups', api_name: 'groups', queue_key: queue_prefix + '_gr'}
     };
     return this._batcher_configs;
 };
@@ -29004,8 +30843,9 @@ MixpanelLib.prototype.init_batchers = function() {
                     libConfig: this['config'],
                     errorReporter: this.get_config('error_reporter'),
                     sendRequestFunc: _.bind(function(data, options, cb) {
+                        var api_routes = this.get_config('api_routes');
                         this._send_request(
-                            this.get_config('api_host') + attrs.endpoint,
+                            this.get_api_host(attrs.api_name) + '/' + api_routes[attrs.api_name],
                             this._encode_data_for_request(data),
                             options,
                             this._prepare_callback(cb, data)
@@ -29231,7 +31071,7 @@ MixpanelLib.prototype.track = addOptOutCheckMixpanelLib(function(event_name, pro
     var ret = this._track_or_batch({
         type: 'events',
         data: data,
-        endpoint: this.get_config('api_host') + '/' + this.get_config('api_routes')['track'],
+        endpoint: this.get_api_host('events') + '/' + this.get_config('api_routes')['track'],
         batcher: this.request_batchers.events,
         should_send_immediately: should_send_immediately,
         send_request_options: options
@@ -29733,6 +31573,7 @@ MixpanelLib.prototype.identify = function(
  * Useful for clearing data when a user logs out.
  */
 MixpanelLib.prototype.reset = function() {
+    this.stop_session_recording();
     this['persistence'].clear();
     this._flags.identify_called = false;
     var uuid = _.UUID();
@@ -29740,7 +31581,6 @@ MixpanelLib.prototype.reset = function() {
         'distinct_id': DEVICE_ID_PREFIX + uuid,
         '$device_id': uuid
     }, '');
-    this.stop_session_recording();
     this._check_and_start_session_recording();
 };
 
@@ -30052,6 +31892,16 @@ MixpanelLib.prototype.get_property = function(property_name) {
     return this['persistence'].load_prop([property_name]);
 };
 
+/**
+ * Get the API host for a specific endpoint type, falling back to the default api_host if not specified
+ *
+ * @param {String} endpoint_type The type of endpoint (e.g., "events", "people", "groups")
+ * @returns {String} The API host to use for this endpoint
+ */
+MixpanelLib.prototype.get_api_host = function(endpoint_type) {
+    return this.get_config('api_hosts')[endpoint_type] || this.get_config('api_host');
+};
+
 MixpanelLib.prototype.toString = function() {
     var name = this.get_config('name');
     if (name !== PRIMARY_INSTANCE_NAME) {
@@ -30347,6 +32197,7 @@ MixpanelLib.prototype['alias']                              = MixpanelLib.protot
 MixpanelLib.prototype['name_tag']                           = MixpanelLib.prototype.name_tag;
 MixpanelLib.prototype['set_config']                         = MixpanelLib.prototype.set_config;
 MixpanelLib.prototype['get_config']                         = MixpanelLib.prototype.get_config;
+MixpanelLib.prototype['get_api_host']                       = MixpanelLib.prototype.get_api_host;
 MixpanelLib.prototype['get_property']                       = MixpanelLib.prototype.get_property;
 MixpanelLib.prototype['get_distinct_id']                    = MixpanelLib.prototype.get_distinct_id;
 MixpanelLib.prototype['toString']                           = MixpanelLib.prototype.toString;

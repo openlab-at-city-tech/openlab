@@ -40,7 +40,7 @@ const loadYouTubeAPI = () => {
 };
 (0, _frontendHandlers.register)({
   elementType: 'e-youtube',
-  uniqueId: 'e-youtube-handler',
+  id: 'e-youtube-handler',
   callback: ({
     element
   }) => {

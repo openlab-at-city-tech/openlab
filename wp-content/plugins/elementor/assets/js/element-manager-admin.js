@@ -192,10 +192,181 @@ var markNoticeViewed = exports.markNoticeViewed = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "../modules/element-manager/assets/js/app.js":
-/*!***************************************************!*\
-  !*** ../modules/element-manager/assets/js/app.js ***!
-  \***************************************************/
+/***/ "../modules/element-manager/assets/js/app-editor-one/App.js":
+/*!******************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/App.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.App = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _hooks = __webpack_require__(/*! ./hooks */ "../modules/element-manager/assets/js/app-editor-one/hooks/index.js");
+var _components = __webpack_require__(/*! ./components */ "../modules/element-manager/assets/js/app-editor-one/components/index.js");
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+var App = exports.App = function App() {
+  var _useState = (0, _react.useState)(false),
+    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+    isConfirmDialogOpen = _useState2[0],
+    setIsConfirmDialogOpen = _useState2[1];
+  var _useElementManager = (0, _hooks.useElementManager)(),
+    isLoading = _useElementManager.isLoading,
+    widgets = _useElementManager.widgets,
+    promotionWidgets = _useElementManager.promotionWidgets,
+    plugins = _useElementManager.plugins,
+    roles = _useElementManager.roles,
+    widgetsDisabled = _useElementManager.widgetsDisabled,
+    widgetsRoleRestrictions = _useElementManager.widgetsRoleRestrictions,
+    setWidgetsRoleRestrictions = _useElementManager.setWidgetsRoleRestrictions,
+    promotionData = _useElementManager.promotionData,
+    noticeData = _useElementManager.noticeData,
+    usageWidgets = _useElementManager.usageWidgets,
+    changeProgress = _useElementManager.changeProgress,
+    isSnackbarOpen = _useElementManager.isSnackbarOpen,
+    setIsSnackbarOpen = _useElementManager.setIsSnackbarOpen,
+    getWidgetUsage = _useElementManager.getWidgetUsage,
+    scanUsageElements = _useElementManager.scanUsageElements,
+    saveChanges = _useElementManager.saveChanges,
+    deactivateAllUnusedWidgets = _useElementManager.deactivateAllUnusedWidgets,
+    enableAllWidgets = _useElementManager.enableAllWidgets,
+    toggleWidget = _useElementManager.toggleWidget,
+    dismissNotice = _useElementManager.dismissNotice;
+  var _useWidgetFilters = (0, _hooks.useWidgetFilters)(widgets, widgetsDisabled, getWidgetUsage),
+    searchKeyword = _useWidgetFilters.searchKeyword,
+    setSearchKeyword = _useWidgetFilters.setSearchKeyword,
+    filterByPlugin = _useWidgetFilters.filterByPlugin,
+    setFilterByPlugin = _useWidgetFilters.setFilterByPlugin,
+    filterByStatus = _useWidgetFilters.filterByStatus,
+    setFilterByStatus = _useWidgetFilters.setFilterByStatus,
+    sortedAndFilteredWidgets = _useWidgetFilters.sortedAndFilteredWidgets,
+    getSortingIndicatorClasses = _useWidgetFilters.getSortingIndicatorClasses,
+    onSortingClicked = _useWidgetFilters.onSortingClicked,
+    setSortByUsage = _useWidgetFilters.setSortByUsage;
+  var handleScanUsage = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+    return _regenerator.default.wrap(function (_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 1;
+          return scanUsageElements();
+        case 1:
+          setSortByUsage();
+        case 2:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  })), [scanUsageElements, setSortByUsage]);
+  var handleSaveClick = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    return _regenerator.default.wrap(function (_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          setIsConfirmDialogOpen(false);
+          _context2.next = 1;
+          return saveChanges();
+        case 1:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  })), [saveChanges]);
+  if (isLoading) {
+    return /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+      justifyContent: "center",
+      sx: {
+        margin: 12
+      }
+    }, /*#__PURE__*/_react.default.createElement(_ui.CircularProgress, {
+      size: 80
+    }));
+  }
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    variant: "body2",
+    color: "text.secondary",
+    sx: {
+      marginBlockEnd: 2.5,
+      maxWidth: 800
+    }
+  }, (0, _i18n.__)('Here\'s where you can fine-tune Elementor to your workflow. Disable elements you don\'t use for a cleaner interface, more focused creative experience, and improved performance.', 'elementor'), ' ', /*#__PURE__*/_react.default.createElement(_ui.Link, {
+    href: "https://go.elementor.com/wp-dash-element-manager/",
+    rel: "noreferrer",
+    target: "_blank",
+    color: "info.light"
+  }, (0, _i18n.__)('Learn More', 'elementor'))), noticeData && !noticeData.is_viewed && /*#__PURE__*/_react.default.createElement(_components.NoticeAlert, {
+    onDismiss: dismissNotice
+  }), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_components.SearchFilters, {
+    searchKeyword: searchKeyword,
+    onSearchChange: setSearchKeyword,
+    filterByPlugin: filterByPlugin,
+    onPluginFilterChange: setFilterByPlugin,
+    filterByStatus: filterByStatus,
+    onStatusFilterChange: setFilterByStatus,
+    plugins: plugins,
+    usageIsLoading: usageWidgets.isLoading,
+    usageData: usageWidgets.data,
+    widgetsDisabledCount: widgetsDisabled.length,
+    onScanUsage: handleScanUsage,
+    onDeactivateUnused: deactivateAllUnusedWidgets,
+    onEnableAll: enableAllWidgets,
+    onSaveChanges: function onSaveChanges() {
+      return setIsConfirmDialogOpen(true);
+    },
+    isSaving: changeProgress.isSaving,
+    hasUnsavedChanges: changeProgress.isUnsavedChanges
+  }), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_components.WidgetsTable, {
+    widgets: sortedAndFilteredWidgets,
+    widgetsDisabled: widgetsDisabled,
+    widgetsRoleRestrictions: widgetsRoleRestrictions,
+    setWidgetsRoleRestrictions: setWidgetsRoleRestrictions,
+    roles: roles,
+    promotionWidgets: promotionWidgets,
+    promotionData: promotionData,
+    usageWidgets: usageWidgets,
+    getWidgetUsage: getWidgetUsage,
+    onScanUsage: handleScanUsage,
+    onToggleWidget: toggleWidget,
+    getSortingIndicatorClasses: getSortingIndicatorClasses,
+    onSortingClicked: onSortingClicked
+  })), /*#__PURE__*/_react.default.createElement(_components.PromotionWidgetsTable, {
+    widgets: promotionWidgets,
+    promotionData: promotionData
+  })), /*#__PURE__*/_react.default.createElement(_components.ConfirmDialog, {
+    isOpen: isConfirmDialogOpen,
+    onClose: function onClose() {
+      return setIsConfirmDialogOpen(false);
+    },
+    onConfirm: handleSaveClick
+  }), /*#__PURE__*/_react.default.createElement(_ui.Snackbar, {
+    open: isSnackbarOpen,
+    autoHideDuration: 6000,
+    onClose: function onClose() {
+      return setIsSnackbarOpen(false);
+    },
+    message: (0, _i18n.__)('We saved your changes.', 'elementor'),
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'center'
+    }
+  }));
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/ConfirmDialog.js":
+/*!***************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/ConfirmDialog.js ***!
+  \***************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -205,109 +376,1284 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.App = void 0;
+exports.ConfirmDialog = void 0;
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var ConfirmDialog = exports.ConfirmDialog = function ConfirmDialog(_ref) {
+  var isOpen = _ref.isOpen,
+    onClose = _ref.onClose,
+    onConfirm = _ref.onConfirm;
+  return /*#__PURE__*/_react.default.createElement(_ui.Dialog, {
+    open: isOpen,
+    onClose: onClose,
+    maxWidth: "sm"
+  }, /*#__PURE__*/_react.default.createElement(_ui.DialogTitle, null, (0, _i18n.__)('Sure you want to save these changes?', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.DialogContent, null, /*#__PURE__*/_react.default.createElement(_ui.DialogContentText, null, (0, _i18n.__)('Turning widgets off will hide them from the editor panel, and can potentially affect your layout or front-end.', 'elementor'), /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    component: "span",
+    sx: {
+      display: 'block',
+      mt: 2.5
+    }
+  }, (0, _i18n.__)('If you\'re adding widgets back in, enjoy them!', 'elementor')))), /*#__PURE__*/_react.default.createElement(_ui.DialogActions, null, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: "row",
+    gap: 2,
+    justifyContent: "flex-end"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Button, {
+    variant: "outlined",
+    color: "secondary",
+    onClick: onClose,
+    className: "e-id-elementor-element-manager-modal-button-cancel"
+  }, (0, _i18n.__)('Cancel', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.Button, {
+    variant: "contained",
+    onClick: onConfirm,
+    className: "e-id-elementor-element-manager-modal-button-save"
+  }, (0, _i18n.__)('Save', 'elementor')))));
+};
+ConfirmDialog.propTypes = {
+  isOpen: _propTypes.default.bool.isRequired,
+  onClose: _propTypes.default.func.isRequired,
+  onConfirm: _propTypes.default.func.isRequired
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/NoticeAlert.js":
+/*!*************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/NoticeAlert.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.NoticeAlert = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var NoticeAlert = exports.NoticeAlert = function NoticeAlert(_ref) {
+  var onDismiss = _ref.onDismiss;
+  return /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    sx: {
+      mb: 2
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Alert, {
+    severity: "warning",
+    onClose: onDismiss
+  }, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    component: "strong",
+    variant: "body2",
+    sx: {
+      fontWeight: 700
+    }
+  }, (0, _i18n.__)('Before you continue:', 'elementor')), ' ', (0, _i18n.__)('Deactivating widgets here will remove them from both the Elementor Editor and your website, which can cause changes to your overall layout, design and what visitors see.', 'elementor')));
+};
+NoticeAlert.propTypes = {
+  onDismiss: _propTypes.default.func.isRequired
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/PromotionWidgetsTable.js":
+/*!***********************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/PromotionWidgetsTable.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.PromotionWidgetsTable = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _icons = __webpack_require__(/*! @elementor/icons */ "@elementor/icons");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var _upgradeButton = __webpack_require__(/*! ../../upgrade-button */ "../modules/element-manager/assets/js/upgrade-button.js");
+var _RolePermissions = __webpack_require__(/*! ./RolePermissions */ "../modules/element-manager/assets/js/app-editor-one/components/RolePermissions.js");
+var PromotionWidgetsTable = exports.PromotionWidgetsTable = function PromotionWidgetsTable(_ref) {
+  var widgets = _ref.widgets,
+    promotionData = _ref.promotionData;
+  var elementManager = promotionData.element_manager;
+  if (!widgets.length) {
+    return null;
+  }
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    sx: {
+      mt: 5,
+      mb: 2.5
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    variant: "h6",
+    component: "h3"
+  }, (0, _i18n.__)('Elementor Pro Elements', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    variant: "body2",
+    component: "p"
+  }, (0, _i18n.__)('Unleash the full power of Elementor\'s features and web creation tools.', 'elementor'))), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_upgradeButton.UpgradeButton, {
+    href: elementManager.url,
+    text: elementManager.text,
+    className: "e-id-elementor-element-manager-button-upgrade-pro-elements"
+  })))), /*#__PURE__*/_react.default.createElement(_ui.TableContainer, {
+    component: _ui.Paper,
+    variant: "outlined"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Table, {
+    size: "small"
+  }, /*#__PURE__*/_react.default.createElement(_ui.TableHead, null, /*#__PURE__*/_react.default.createElement(_ui.TableRow, null, /*#__PURE__*/_react.default.createElement(_ui.TableCell, {
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(25)
+      };
+    }
+  }, (0, _i18n.__)('Element', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, {
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(10)
+      };
+    }
+  }, (0, _i18n.__)('Status', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, (0, _i18n.__)('Usage', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, (0, _i18n.__)('Plugin', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 1
+  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, (0, _i18n.__)('Permission', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Tooltip, {
+    placement: "top",
+    title: (0, _i18n.__)('Choose which role will have access to a specific widget.', 'elementor')
+  }, /*#__PURE__*/_react.default.createElement(_ui.IconButton, {
+    size: "small"
+  }, /*#__PURE__*/_react.default.createElement(_icons.HelpIcon, {
+    fontSize: "small"
+  })))))))), /*#__PURE__*/_react.default.createElement(_ui.TableBody, null, widgets.map(function (widget) {
+    return /*#__PURE__*/_react.default.createElement(_ui.TableRow, {
+      key: widget.name,
+      hover: true
+    }, /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.Box, {
+      sx: {
+        display: 'flex',
+        alignItems: 'center'
+      }
+    }, /*#__PURE__*/_react.default.createElement("i", {
+      style: {
+        marginInlineEnd: 8
+      },
+      className: widget.icon
+    }), widget.title)), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.Switch, {
+      checked: false,
+      disabled: true,
+      size: "small",
+      "data-id": "e-id-elementor-element-manager-toggle-".concat(widget.name)
+    })), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, (0, _i18n.__)('Elementor Pro', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_RolePermissions.EditButtonDisabled, {
+      widgetName: widget.name
+    })));
+  })))));
+};
+PromotionWidgetsTable.propTypes = {
+  widgets: _propTypes.default.arrayOf(_propTypes.default.shape({
+    name: _propTypes.default.string.isRequired,
+    title: _propTypes.default.string.isRequired,
+    icon: _propTypes.default.string
+  })).isRequired,
+  promotionData: _propTypes.default.shape({
+    element_manager: _propTypes.default.shape({
+      url: _propTypes.default.string,
+      text: _propTypes.default.string
+    })
+  }).isRequired
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/RolePermissions.js":
+/*!*****************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/RolePermissions.js ***!
+  \*****************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.RolePermissions = exports.EditButtonDisabled = void 0;
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var toggleRoleRestrictions = function toggleRoleRestrictions(widgetName, roleId, widgetsRoleRestrictions, setWidgetsRoleRestrictions) {
+  var widgetRoleRestrictions = (0, _toConsumableArray2.default)(widgetsRoleRestrictions[widgetName] || []);
+  if (widgetRoleRestrictions.includes(roleId)) {
+    widgetRoleRestrictions.splice(widgetRoleRestrictions.indexOf(roleId), 1);
+  } else {
+    widgetRoleRestrictions.push(roleId);
+  }
+  setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, widgetRoleRestrictions)));
+};
+var RolesList = function RolesList(_ref) {
+  var roles = _ref.roles,
+    widgetRoleRestrictions = _ref.widgetRoleRestrictions;
+  var rolesEnabled = roles.filter(function (role) {
+    return !widgetRoleRestrictions.includes(role.id);
+  });
+  if (!rolesEnabled.length) {
+    return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+      component: "span",
+      variant: "body2",
+      color: "text.primary"
+    }, "(", (0, _i18n.__)('Admin', 'elementor'), ")");
+  }
+  if (rolesEnabled.length === roles.length) {
+    return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+      component: "span",
+      variant: "body2",
+      color: "text.primary"
+    }, "(", (0, _i18n.__)('All Roles', 'elementor'), ")");
+  }
+  return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    component: "span",
+    variant: "body2",
+    color: "text.primary"
+  }, "(", rolesEnabled.map(function (role) {
+    return role.name;
+  }).join(', '), ")");
+};
+RolesList.propTypes = {
+  roles: _propTypes.default.arrayOf(_propTypes.default.shape({
+    id: _propTypes.default.string.isRequired,
+    name: _propTypes.default.string.isRequired
+  })).isRequired,
+  widgetRoleRestrictions: _propTypes.default.arrayOf(_propTypes.default.string).isRequired
+};
+var RolePermissions = exports.RolePermissions = function RolePermissions(_ref2) {
+  var roles = _ref2.roles,
+    widgetName = _ref2.widgetName,
+    widgetsRoleRestrictions = _ref2.widgetsRoleRestrictions,
+    setWidgetsRoleRestrictions = _ref2.setWidgetsRoleRestrictions;
+  var _useState = (0, _react.useState)(null),
+    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+    anchorEl = _useState2[0],
+    setAnchorEl = _useState2[1];
+  var isOpen = Boolean(anchorEl);
+  var widgetRoleRestrictions = widgetsRoleRestrictions[widgetName] || [];
+  var handleClick = (0, _react.useCallback)(function (event) {
+    setAnchorEl(event.currentTarget);
+  }, []);
+  var handleClose = (0, _react.useCallback)(function () {
+    setAnchorEl(null);
+  }, []);
+  var isAllChecked = roles.every(function (role) {
+    return !widgetRoleRestrictions.includes(role.id);
+  });
+  var isIndeterminate = !isAllChecked && roles.some(function (role) {
+    return !widgetRoleRestrictions.includes(role.id);
+  });
+  var handleAllChange = (0, _react.useCallback)(function (event) {
+    if (event.target.checked) {
+      setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, [])));
+    } else {
+      setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, roles.map(function (role) {
+        return role.id;
+      }))));
+    }
+  }, [widgetName, widgetsRoleRestrictions, setWidgetsRoleRestrictions, roles]);
+  return /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    sx: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 0.5
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Button, {
+    variant: "text",
+    color: "secondary",
+    size: "small",
+    onClick: handleClick,
+    "aria-expanded": isOpen,
+    "aria-haspopup": "true",
+    className: "e-id-elementor-element-manager-button-edit-permissions-".concat(widgetName)
+  }, (0, _i18n.__)('Edit', 'elementor')), /*#__PURE__*/_react.default.createElement(RolesList, {
+    roles: roles,
+    widgetRoleRestrictions: widgetRoleRestrictions
+  }), /*#__PURE__*/_react.default.createElement(_ui.Menu, {
+    anchorEl: anchorEl,
+    open: isOpen,
+    onClose: handleClose,
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'left'
+    },
+    transformOrigin: {
+      vertical: 'top',
+      horizontal: 'left'
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+    sx: {
+      py: 0.5
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.FormControlLabel, {
+    control: /*#__PURE__*/_react.default.createElement(_ui.Checkbox, {
+      checked: isAllChecked,
+      indeterminate: isIndeterminate,
+      onChange: handleAllChange,
+      size: "small",
+      color: "secondary"
+    }),
+    label: (0, _i18n.__)('All', 'elementor')
+  })), roles.map(function (role) {
+    return /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+      key: role.id,
+      sx: {
+        py: 0.5
+      }
+    }, /*#__PURE__*/_react.default.createElement(_ui.FormControlLabel, {
+      control: /*#__PURE__*/_react.default.createElement(_ui.Checkbox, {
+        color: "secondary",
+        checked: !widgetRoleRestrictions.includes(role.id),
+        onChange: function onChange() {
+          toggleRoleRestrictions(widgetName, role.id, widgetsRoleRestrictions, setWidgetsRoleRestrictions);
+        },
+        size: "small"
+      }),
+      label: role.name
+    }));
+  })));
+};
+RolePermissions.propTypes = {
+  roles: _propTypes.default.arrayOf(_propTypes.default.shape({
+    id: _propTypes.default.string.isRequired,
+    name: _propTypes.default.string.isRequired
+  })).isRequired,
+  widgetName: _propTypes.default.string.isRequired,
+  widgetsRoleRestrictions: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.array]).isRequired,
+  setWidgetsRoleRestrictions: _propTypes.default.func.isRequired
+};
+var EditButtonDisabled = exports.EditButtonDisabled = function EditButtonDisabled(_ref3) {
+  var _ref3$widgetName = _ref3.widgetName,
+    widgetName = _ref3$widgetName === void 0 ? 'unknown' : _ref3$widgetName;
+  return /*#__PURE__*/_react.default.createElement(_ui.Button, {
+    variant: "text",
+    color: "secondary",
+    size: "small",
+    disabled: true,
+    className: "e-id-elementor-element-manager-button-edit-permissions-".concat(widgetName)
+  }, (0, _i18n.__)('Edit', 'elementor'));
+};
+EditButtonDisabled.propTypes = {
+  widgetName: _propTypes.default.string
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/SearchFilters.js":
+/*!***************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/SearchFilters.js ***!
+  \***************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.SearchFilters = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var FIELD_HEIGHT = 28;
+var FONT_SIZE = 12;
+var ICON_SIZE = 16;
+var StyledTextField = (0, _ui.styled)(_ui.TextField)({
+  '& .MuiInputBase-root': {
+    height: FIELD_HEIGHT,
+    fontSize: FONT_SIZE
+  }
+});
+var StyledFormControl = (0, _ui.styled)(_ui.FormControl)({
+  '& .MuiInputBase-root': {
+    height: FIELD_HEIGHT,
+    fontSize: FONT_SIZE
+  },
+  '& .MuiSelect-icon': {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    top: 'calc(50% - 8px)'
+  }
+});
+var StyledButton = (0, _ui.styled)(_ui.Button)({
+  height: FIELD_HEIGHT,
+  fontSize: FONT_SIZE,
+  minWidth: 'auto',
+  whiteSpace: 'nowrap'
+});
+var SearchFilters = exports.SearchFilters = function SearchFilters(_ref) {
+  var searchKeyword = _ref.searchKeyword,
+    onSearchChange = _ref.onSearchChange,
+    filterByPlugin = _ref.filterByPlugin,
+    onPluginFilterChange = _ref.onPluginFilterChange,
+    filterByStatus = _ref.filterByStatus,
+    onStatusFilterChange = _ref.onStatusFilterChange,
+    plugins = _ref.plugins,
+    usageIsLoading = _ref.usageIsLoading,
+    usageData = _ref.usageData,
+    widgetsDisabledCount = _ref.widgetsDisabledCount,
+    onScanUsage = _ref.onScanUsage,
+    onDeactivateUnused = _ref.onDeactivateUnused,
+    onEnableAll = _ref.onEnableAll,
+    onSaveChanges = _ref.onSaveChanges,
+    isSaving = _ref.isSaving,
+    hasUnsavedChanges = _ref.hasUnsavedChanges;
+  return /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: {
+      xs: 'column',
+      sm: 'row'
+    },
+    alignItems: {
+      xs: 'stretch',
+      sm: 'flex-start'
+    },
+    gap: 1.5,
+    sx: function sx(theme) {
+      return {
+        position: 'sticky',
+        top: theme.spacing(10),
+        backgroundColor: 'var(--e-one-palette-background-default)',
+        zIndex: 10,
+        paddingBlock: 2,
+        paddingInline: 2,
+        boxShadow: 'rgba(0, 0, 0, 0.15) 0 5px 10px 0',
+        marginBottom: theme.spacing(1)
+      };
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: 1.5,
+    sx: {
+      flex: 1
+    }
+  }, /*#__PURE__*/_react.default.createElement(StyledTextField, {
+    color: "secondary",
+    value: searchKeyword,
+    size: "small",
+    placeholder: (0, _i18n.__)('Search', 'elementor'),
+    onChange: function onChange(e) {
+      return onSearchChange(e.target.value);
+    },
+    sx: function sx(theme) {
+      return {
+        minWidth: theme.spacing(14)
+      };
+    }
+  }), /*#__PURE__*/_react.default.createElement(StyledFormControl, {
+    size: "small",
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(20)
+      };
+    },
+    color: "secondary"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Select, {
+    placeholder: (0, _i18n.__)('Plugin', 'elementor'),
+    value: filterByPlugin,
+    onChange: function onChange(event) {
+      return onPluginFilterChange(event.target.value);
+    },
+    "data-id": "elementor-element-manager-select-filter-by-plugin",
+    displayEmpty: true,
+    renderValue: function renderValue(value) {
+      if ('' === value) {
+        return (0, _i18n.__)('All Plugins', 'elementor');
+      }
+      var selectedPlugin = plugins.find(function (p) {
+        return p.value === value;
+      });
+      return selectedPlugin ? selectedPlugin.label : value;
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+    value: ""
+  }, (0, _i18n.__)('All Plugins', 'elementor')), plugins.map(function (plugin) {
+    return /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+      key: plugin.value,
+      value: plugin.value
+    }, plugin.label);
+  }))), /*#__PURE__*/_react.default.createElement(StyledFormControl, {
+    size: "small",
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(20)
+      };
+    },
+    color: "secondary"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Select, {
+    value: filterByStatus,
+    onChange: function onChange(event) {
+      return onStatusFilterChange(event.target.value);
+    },
+    "data-id": "elementor-element-manager-select-filter-by-status",
+    placeholder: (0, _i18n.__)('Status', 'elementor')
+  }, /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+    value: "all"
+  }, (0, _i18n.__)('All Statuses', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+    value: "active"
+  }, (0, _i18n.__)('Active', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.MenuItem, {
+    value: "inactive"
+  }, (0, _i18n.__)('Inactive', 'elementor')))), /*#__PURE__*/_react.default.createElement(_ui.Divider, {
+    orientation: "vertical",
+    flexItem: true,
+    sx: {
+      height: FIELD_HEIGHT,
+      marginBlock: 0,
+      marginInline: 0.5,
+      alignSelf: 'center',
+      display: {
+        xs: 'none',
+        md: 'block'
+      }
+    }
+  }), /*#__PURE__*/_react.default.createElement(StyledButton, {
+    variant: "outlined",
+    color: "secondary",
+    size: "small",
+    disabled: usageIsLoading,
+    onClick: onScanUsage,
+    "data-id": "e-id-elementor-element-manager-button-scan-element-usage",
+    loading: usageIsLoading
+  }, (0, _i18n.__)('Scan Element Usage', 'elementor')), /*#__PURE__*/_react.default.createElement(StyledButton, {
+    variant: "outlined",
+    color: "secondary",
+    size: "small",
+    onClick: onDeactivateUnused,
+    disabled: null === usageData,
+    "data-id": "e-id-elementor-element-manager-button-deactivate-unused-elements"
+  }, (0, _i18n.__)('Deactivate Unused Elements', 'elementor')), /*#__PURE__*/_react.default.createElement(StyledButton, {
+    variant: "outlined",
+    color: "secondary",
+    size: "small",
+    disabled: !widgetsDisabledCount,
+    onClick: onEnableAll,
+    "data-id": "e-id-elementor-element-manager-button-enable-all"
+  }, (0, _i18n.__)('Enable All', 'elementor'))), /*#__PURE__*/_react.default.createElement(StyledButton, {
+    variant: "contained",
+    size: "small",
+    disabled: isSaving || !hasUnsavedChanges,
+    onClick: onSaveChanges,
+    "data-id": "e-id-elementor-element-manager-button-save-changes",
+    loading: isSaving,
+    sx: {
+      alignSelf: 'flex-start'
+    }
+  }, (0, _i18n.__)('Save Changes', 'elementor')));
+};
+SearchFilters.propTypes = {
+  searchKeyword: _propTypes.default.string.isRequired,
+  onSearchChange: _propTypes.default.func.isRequired,
+  filterByPlugin: _propTypes.default.string.isRequired,
+  onPluginFilterChange: _propTypes.default.func.isRequired,
+  filterByStatus: _propTypes.default.string.isRequired,
+  onStatusFilterChange: _propTypes.default.func.isRequired,
+  plugins: _propTypes.default.arrayOf(_propTypes.default.shape({
+    label: _propTypes.default.string.isRequired,
+    value: _propTypes.default.string.isRequired
+  })).isRequired,
+  usageIsLoading: _propTypes.default.bool,
+  usageData: _propTypes.default.object,
+  widgetsDisabledCount: _propTypes.default.number.isRequired,
+  onScanUsage: _propTypes.default.func.isRequired,
+  onDeactivateUnused: _propTypes.default.func.isRequired,
+  onEnableAll: _propTypes.default.func.isRequired,
+  onSaveChanges: _propTypes.default.func.isRequired,
+  isSaving: _propTypes.default.bool,
+  hasUnsavedChanges: _propTypes.default.bool
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/UsageTimesColumn.js":
+/*!******************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/UsageTimesColumn.js ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.UsageTimesColumn = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var UsageTimesColumn = exports.UsageTimesColumn = function UsageTimesColumn(_ref) {
+  var widgetName = _ref.widgetName,
+    usageData = _ref.usageData,
+    isLoading = _ref.isLoading,
+    getWidgetUsage = _ref.getWidgetUsage,
+    onScanClick = _ref.onScanClick;
+  if (null !== usageData) {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, getWidgetUsage(widgetName), " ", (0, _i18n.__)('times', 'elementor'));
+  }
+  if (isLoading) {
+    return /*#__PURE__*/_react.default.createElement(_ui.CircularProgress, {
+      color: "secondary",
+      size: 20
+    });
+  }
+  return /*#__PURE__*/_react.default.createElement(_ui.Button, {
+    onClick: onScanClick,
+    size: "small",
+    variant: "outlined",
+    color: "secondary",
+    className: "e-id-elementor-element-manager-button-show-usage",
+    sx: {
+      minWidth: function minWidth(theme) {
+        return theme.spacing(6);
+      },
+      height: 26
+    }
+  }, (0, _i18n.__)('Show', 'elementor'));
+};
+UsageTimesColumn.propTypes = {
+  widgetName: _propTypes.default.string.isRequired,
+  usageData: _propTypes.default.object,
+  isLoading: _propTypes.default.bool,
+  getWidgetUsage: _propTypes.default.func.isRequired,
+  onScanClick: _propTypes.default.func.isRequired
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/WidgetsTable.js":
+/*!**************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/WidgetsTable.js ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.WidgetsTable = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _icons = __webpack_require__(/*! @elementor/icons */ "@elementor/icons");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var _upgradeButton = __webpack_require__(/*! ../../upgrade-button */ "../modules/element-manager/assets/js/upgrade-button.js");
+var _RolePermissions = __webpack_require__(/*! ./RolePermissions */ "../modules/element-manager/assets/js/app-editor-one/components/RolePermissions.js");
+var _UsageTimesColumn = __webpack_require__(/*! ./UsageTimesColumn */ "../modules/element-manager/assets/js/app-editor-one/components/UsageTimesColumn.js");
+var StyledSwitch = (0, _ui.styled)(_ui.Switch)({
+  '& .MuiSwitch-track': {
+    backgroundColor: 'rgba(0, 0, 0, 0.12);'
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: '#000'
+  },
+  '& .MuiSwitch-switchBase:not(.Mui-checked) .MuiSwitch-thumb': {
+    backgroundColor: '#D5D8DC'
+  },
+  '& .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb': {
+    backgroundColor: '#fff'
+  }
+});
+var WidgetsTable = exports.WidgetsTable = function WidgetsTable(_ref) {
+  var widgets = _ref.widgets,
+    widgetsDisabled = _ref.widgetsDisabled,
+    widgetsRoleRestrictions = _ref.widgetsRoleRestrictions,
+    setWidgetsRoleRestrictions = _ref.setWidgetsRoleRestrictions,
+    roles = _ref.roles,
+    promotionWidgets = _ref.promotionWidgets,
+    promotionData = _ref.promotionData,
+    usageWidgets = _ref.usageWidgets,
+    getWidgetUsage = _ref.getWidgetUsage,
+    onScanUsage = _ref.onScanUsage,
+    onToggleWidget = _ref.onToggleWidget,
+    getSortingIndicatorClasses = _ref.getSortingIndicatorClasses,
+    onSortingClicked = _ref.onSortingClicked;
+  var managerPermissions = promotionData.manager_permissions;
+  var sortingClasses = getSortingIndicatorClasses('widget');
+  var isWidgetSorted = sortingClasses.includes('sorted');
+  var widgetSortDirection = sortingClasses.includes('asc') ? 'asc' : 'desc';
+  var usageSortingClasses = getSortingIndicatorClasses('usage');
+  var isUsageSorted = usageSortingClasses.includes('sorted');
+  var usageSortDirection = usageSortingClasses.includes('asc') ? 'asc' : 'desc';
+  if (!widgets.length) {
+    return /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+      color: "text.secondary"
+    }, (0, _i18n.__)('No elements found.', 'elementor'));
+  }
+  return /*#__PURE__*/_react.default.createElement(_ui.TableContainer, {
+    component: _ui.Paper,
+    variant: "outlined"
+  }, /*#__PURE__*/_react.default.createElement(_ui.Table, {
+    size: "small"
+  }, /*#__PURE__*/_react.default.createElement(_ui.TableHead, null, /*#__PURE__*/_react.default.createElement(_ui.TableRow, null, /*#__PURE__*/_react.default.createElement(_ui.TableCell, {
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(25)
+      };
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.TableSortLabel, {
+    active: isWidgetSorted,
+    direction: isWidgetSorted ? widgetSortDirection : 'asc',
+    onClick: function onClick() {
+      return onSortingClicked('widget');
+    },
+    "data-id": "e-id-elementor-element-manager-button-sort-by-element"
+  }, (0, _i18n.__)('Element', 'elementor'))), /*#__PURE__*/_react.default.createElement(_ui.TableCell, {
+    sx: function sx(theme) {
+      return {
+        width: theme.spacing(10)
+      };
+    }
+  }, (0, _i18n.__)('Status', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.TableSortLabel, {
+    active: isUsageSorted,
+    direction: isUsageSorted ? usageSortDirection : 'asc',
+    onClick: function onClick() {
+      return onSortingClicked('usage');
+    },
+    "data-id": "e-id-elementor-element-manager-button-sort-by-usage"
+  }, (0, _i18n.__)('Usage', 'elementor'))), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, (0, _i18n.__)('Plugin', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+    direction: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 1
+  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, (0, _i18n.__)('Permission', 'elementor')), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Tooltip, {
+    placement: "top",
+    title: (0, _i18n.__)('Choose which users will have access to each widget.', 'elementor')
+  }, /*#__PURE__*/_react.default.createElement(_ui.IconButton, {
+    size: "small"
+  }, /*#__PURE__*/_react.default.createElement(_icons.HelpIcon, {
+    fontSize: "small"
+  })))), null === widgetsRoleRestrictions && /*#__PURE__*/_react.default.createElement(_ui.Box, {
+    sx: {
+      marginInlineStart: 1
+    }
+  }, /*#__PURE__*/_react.default.createElement(_upgradeButton.UpgradeButton, {
+    href: promotionWidgets.length ? managerPermissions.pro.url : managerPermissions.advanced.url,
+    size: "small",
+    text: promotionWidgets.length ? managerPermissions.pro.text : managerPermissions.advanced.text,
+    className: "go-pro",
+    "data-id": "e-id-elementor-element-manager-button-upgrade-permissions"
+  })))))), /*#__PURE__*/_react.default.createElement(_ui.TableBody, null, widgets.map(function (widget) {
+    return /*#__PURE__*/_react.default.createElement(_ui.TableRow, {
+      key: widget.name,
+      "data-key-id": widget.name,
+      hover: true
+    }, /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_ui.Box, {
+      sx: {
+        display: 'flex',
+        alignItems: 'center'
+      }
+    }, /*#__PURE__*/_react.default.createElement("i", {
+      style: {
+        marginInlineEnd: 8,
+        marginInlineStart: 0,
+        display: 'inline-block'
+      },
+      className: widget.icon
+    }), widget.title)), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(StyledSwitch, {
+      color: "secondary",
+      checked: !widgetsDisabled.includes(widget.name),
+      onChange: function onChange(event, checked) {
+        return onToggleWidget(widget.name, checked);
+      },
+      size: "small",
+      "data-id": "e-id-elementor-element-manager-toggle-".concat(widget.name)
+    })), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, /*#__PURE__*/_react.default.createElement(_UsageTimesColumn.UsageTimesColumn, {
+      widgetName: widget.name,
+      usageData: usageWidgets.data,
+      isLoading: usageWidgets.isLoading,
+      getWidgetUsage: getWidgetUsage,
+      onScanClick: onScanUsage
+    })), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, widget.plugin), /*#__PURE__*/_react.default.createElement(_ui.TableCell, null, null !== widgetsRoleRestrictions && !widgetsDisabled.includes(widget.name) ? /*#__PURE__*/_react.default.createElement(_RolePermissions.RolePermissions, {
+      widgetName: widget.name,
+      roles: roles,
+      widgetsRoleRestrictions: widgetsRoleRestrictions,
+      setWidgetsRoleRestrictions: setWidgetsRoleRestrictions
+    }) : /*#__PURE__*/_react.default.createElement(_RolePermissions.EditButtonDisabled, null)));
+  }))));
+};
+var widgetShape = _propTypes.default.shape({
+  name: _propTypes.default.string.isRequired,
+  title: _propTypes.default.string.isRequired,
+  icon: _propTypes.default.string,
+  plugin: _propTypes.default.string
+});
+WidgetsTable.propTypes = {
+  widgets: _propTypes.default.arrayOf(widgetShape).isRequired,
+  widgetsDisabled: _propTypes.default.arrayOf(_propTypes.default.string).isRequired,
+  widgetsRoleRestrictions: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.array]),
+  setWidgetsRoleRestrictions: _propTypes.default.func.isRequired,
+  roles: _propTypes.default.array.isRequired,
+  promotionWidgets: _propTypes.default.arrayOf(widgetShape).isRequired,
+  promotionData: _propTypes.default.shape({
+    manager_permissions: _propTypes.default.shape({
+      pro: _propTypes.default.shape({
+        url: _propTypes.default.string,
+        text: _propTypes.default.string
+      }),
+      advanced: _propTypes.default.shape({
+        url: _propTypes.default.string,
+        text: _propTypes.default.string
+      })
+    })
+  }).isRequired,
+  usageWidgets: _propTypes.default.shape({
+    isLoading: _propTypes.default.bool,
+    data: _propTypes.default.object
+  }).isRequired,
+  getWidgetUsage: _propTypes.default.func.isRequired,
+  onScanUsage: _propTypes.default.func.isRequired,
+  onToggleWidget: _propTypes.default.func.isRequired,
+  getSortingIndicatorClasses: _propTypes.default.func.isRequired,
+  onSortingClicked: _propTypes.default.func.isRequired
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/components/index.js":
+/*!*******************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/components/index.js ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "ConfirmDialog", ({
+  enumerable: true,
+  get: function get() {
+    return _ConfirmDialog.ConfirmDialog;
+  }
+}));
+Object.defineProperty(exports, "EditButtonDisabled", ({
+  enumerable: true,
+  get: function get() {
+    return _RolePermissions.EditButtonDisabled;
+  }
+}));
+Object.defineProperty(exports, "NoticeAlert", ({
+  enumerable: true,
+  get: function get() {
+    return _NoticeAlert.NoticeAlert;
+  }
+}));
+Object.defineProperty(exports, "PromotionWidgetsTable", ({
+  enumerable: true,
+  get: function get() {
+    return _PromotionWidgetsTable.PromotionWidgetsTable;
+  }
+}));
+Object.defineProperty(exports, "RolePermissions", ({
+  enumerable: true,
+  get: function get() {
+    return _RolePermissions.RolePermissions;
+  }
+}));
+Object.defineProperty(exports, "SearchFilters", ({
+  enumerable: true,
+  get: function get() {
+    return _SearchFilters.SearchFilters;
+  }
+}));
+Object.defineProperty(exports, "UsageTimesColumn", ({
+  enumerable: true,
+  get: function get() {
+    return _UsageTimesColumn.UsageTimesColumn;
+  }
+}));
+Object.defineProperty(exports, "WidgetsTable", ({
+  enumerable: true,
+  get: function get() {
+    return _WidgetsTable.WidgetsTable;
+  }
+}));
+var _UsageTimesColumn = __webpack_require__(/*! ./UsageTimesColumn */ "../modules/element-manager/assets/js/app-editor-one/components/UsageTimesColumn.js");
+var _NoticeAlert = __webpack_require__(/*! ./NoticeAlert */ "../modules/element-manager/assets/js/app-editor-one/components/NoticeAlert.js");
+var _ConfirmDialog = __webpack_require__(/*! ./ConfirmDialog */ "../modules/element-manager/assets/js/app-editor-one/components/ConfirmDialog.js");
+var _SearchFilters = __webpack_require__(/*! ./SearchFilters */ "../modules/element-manager/assets/js/app-editor-one/components/SearchFilters.js");
+var _WidgetsTable = __webpack_require__(/*! ./WidgetsTable */ "../modules/element-manager/assets/js/app-editor-one/components/WidgetsTable.js");
+var _PromotionWidgetsTable = __webpack_require__(/*! ./PromotionWidgetsTable */ "../modules/element-manager/assets/js/app-editor-one/components/PromotionWidgetsTable.js");
+var _RolePermissions = __webpack_require__(/*! ./RolePermissions */ "../modules/element-manager/assets/js/app-editor-one/components/RolePermissions.js");
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/hooks/index.js":
+/*!**************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/hooks/index.js ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+Object.defineProperty(exports, "useElementManager", ({
+  enumerable: true,
+  get: function get() {
+    return _useElementManager.useElementManager;
+  }
+}));
+Object.defineProperty(exports, "useWidgetFilters", ({
+  enumerable: true,
+  get: function get() {
+    return _useWidgetFilters.useWidgetFilters;
+  }
+}));
+var _useElementManager = __webpack_require__(/*! ./useElementManager */ "../modules/element-manager/assets/js/app-editor-one/hooks/useElementManager.js");
+var _useWidgetFilters = __webpack_require__(/*! ./useWidgetFilters */ "../modules/element-manager/assets/js/app-editor-one/hooks/useWidgetFilters.js");
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/hooks/useElementManager.js":
+/*!**************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/hooks/useElementManager.js ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useElementManager = void 0;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ "../node_modules/@babel/runtime/helpers/toConsumableArray.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
-var _element = __webpack_require__(/*! @wordpress/element */ "../node_modules/@wordpress/element/build-module/index.js");
-var _components = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-var _upgradeButton = __webpack_require__(/*! ./upgrade-button */ "../modules/element-manager/assets/js/upgrade-button.js");
-var _api = __webpack_require__(/*! ./api */ "../modules/element-manager/assets/js/api.js");
-var _rolePermissions = __webpack_require__(/*! ./role-permissions */ "../modules/element-manager/assets/js/role-permissions.js");
+var _react = __webpack_require__(/*! react */ "react");
+var _api = __webpack_require__(/*! ../../api */ "../modules/element-manager/assets/js/api.js");
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; } /* eslint-disable react/prop-types */
-var App = exports.App = function App() {
-  var _useState = (0, _element.useState)(true),
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var useElementManager = exports.useElementManager = function useElementManager() {
+  var isInitialMount = (0, _react.useRef)(true);
+  var _useState = (0, _react.useState)(true),
     _useState2 = (0, _slicedToArray2.default)(_useState, 2),
     isLoading = _useState2[0],
     setIsLoading = _useState2[1];
-  var _useState3 = (0, _element.useState)(''),
+  var _useState3 = (0, _react.useState)([]),
     _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
-    searchKeyword = _useState4[0],
-    setSearchKeyword = _useState4[1];
-  var _useState5 = (0, _element.useState)([]),
+    widgets = _useState4[0],
+    setWidgets = _useState4[1];
+  var _useState5 = (0, _react.useState)([]),
     _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
-    widgets = _useState6[0],
-    setWidgets = _useState6[1];
-  var _useState7 = (0, _element.useState)([]),
+    promotionWidgets = _useState6[0],
+    setPromotionWidgets = _useState6[1];
+  var _useState7 = (0, _react.useState)([]),
     _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
-    promotionWidgets = _useState8[0],
-    setPromotionWidgets = _useState8[1];
-  var _useState9 = (0, _element.useState)([]),
+    plugins = _useState8[0],
+    setPlugins = _useState8[1];
+  var _useState9 = (0, _react.useState)([]),
     _useState0 = (0, _slicedToArray2.default)(_useState9, 2),
-    plugins = _useState0[0],
-    setPlugins = _useState0[1];
-  var _useState1 = (0, _element.useState)([]),
+    roles = _useState0[0],
+    setRoles = _useState0[1];
+  var _useState1 = (0, _react.useState)([]),
     _useState10 = (0, _slicedToArray2.default)(_useState1, 2),
-    roles = _useState10[0],
-    setRoles = _useState10[1];
-  var _useState11 = (0, _element.useState)({
+    widgetsDisabled = _useState10[0],
+    setWidgetsDisabled = _useState10[1];
+  var _useState11 = (0, _react.useState)(null),
+    _useState12 = (0, _slicedToArray2.default)(_useState11, 2),
+    widgetsRoleRestrictions = _useState12[0],
+    setWidgetsRoleRestrictions = _useState12[1];
+  var _useState13 = (0, _react.useState)([]),
+    _useState14 = (0, _slicedToArray2.default)(_useState13, 2),
+    promotionData = _useState14[0],
+    setPromotionData = _useState14[1];
+  var _useState15 = (0, _react.useState)(null),
+    _useState16 = (0, _slicedToArray2.default)(_useState15, 2),
+    noticeData = _useState16[0],
+    setNoticeData = _useState16[1];
+  var _useState17 = (0, _react.useState)({
       isLoading: false,
       data: null
     }),
-    _useState12 = (0, _slicedToArray2.default)(_useState11, 2),
-    usageWidgets = _useState12[0],
-    setUsageWidgets = _useState12[1];
-  var _useState13 = (0, _element.useState)([]),
-    _useState14 = (0, _slicedToArray2.default)(_useState13, 2),
-    widgetsDisabled = _useState14[0],
-    setWidgetsDisabled = _useState14[1];
-  var _useState15 = (0, _element.useState)('widget'),
-    _useState16 = (0, _slicedToArray2.default)(_useState15, 2),
-    sortingColumn = _useState16[0],
-    setSortingColumn = _useState16[1];
-  var _useState17 = (0, _element.useState)('asc'),
     _useState18 = (0, _slicedToArray2.default)(_useState17, 2),
-    sortingDirection = _useState18[0],
-    setSortingDirection = _useState18[1];
-  var _useState19 = (0, _element.useState)(''),
-    _useState20 = (0, _slicedToArray2.default)(_useState19, 2),
-    filterByPlugin = _useState20[0],
-    setFilterByPlugin = _useState20[1];
-  var _useState21 = (0, _element.useState)('all'),
-    _useState22 = (0, _slicedToArray2.default)(_useState21, 2),
-    filterByStatus = _useState22[0],
-    setFilterByStatus = _useState22[1];
-  var _useState23 = (0, _element.useState)({
+    usageWidgets = _useState18[0],
+    setUsageWidgets = _useState18[1];
+  var _useState19 = (0, _react.useState)({
       isSaving: false,
       isUnsavedChanges: false
     }),
-    _useState24 = (0, _slicedToArray2.default)(_useState23, 2),
-    changeProgress = _useState24[0],
-    setChangeProgress = _useState24[1];
-  var _useState25 = (0, _element.useState)(false),
-    _useState26 = (0, _slicedToArray2.default)(_useState25, 2),
-    isConfirmDialogOpen = _useState26[0],
-    setIsConfirmDialogOpen = _useState26[1];
-  var _useState27 = (0, _element.useState)(false),
-    _useState28 = (0, _slicedToArray2.default)(_useState27, 2),
-    isSnackbarOpen = _useState28[0],
-    setIsSnackbarOpen = _useState28[1];
-  var _useState29 = (0, _element.useState)(null),
-    _useState30 = (0, _slicedToArray2.default)(_useState29, 2),
-    noticeData = _useState30[0],
-    setNoticeData = _useState30[1];
-  var _useState31 = (0, _element.useState)(null),
-    _useState32 = (0, _slicedToArray2.default)(_useState31, 2),
-    widgetsRoleRestrictions = _useState32[0],
-    setWidgetsRoleRestrictions = _useState32[1];
-  var _useState33 = (0, _element.useState)([]),
-    _useState34 = (0, _slicedToArray2.default)(_useState33, 2),
-    promotionData = _useState34[0],
-    setPromotionData = _useState34[1];
-  var managerPermissions = promotionData.manager_permissions,
-    elementManager = promotionData.element_manager;
-  var getWidgetUsage = function getWidgetUsage(widgetName) {
+    _useState20 = (0, _slicedToArray2.default)(_useState19, 2),
+    changeProgress = _useState20[0],
+    setChangeProgress = _useState20[1];
+  var _useState21 = (0, _react.useState)(false),
+    _useState22 = (0, _slicedToArray2.default)(_useState21, 2),
+    isSnackbarOpen = _useState22[0],
+    setIsSnackbarOpen = _useState22[1];
+  var getWidgetUsage = (0, _react.useCallback)(function (widgetName) {
     if (!usageWidgets.data || !usageWidgets.data.hasOwnProperty(widgetName)) {
       return 0;
     }
     return usageWidgets.data[widgetName];
+  }, [usageWidgets.data]);
+  var scanUsageElements = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var data;
+    return _regenerator.default.wrap(function (_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          setUsageWidgets(function (prev) {
+            return _objectSpread(_objectSpread({}, prev), {}, {
+              isLoading: true
+            });
+          });
+          _context.next = 1;
+          return (0, _api.getUsageWidgets)();
+        case 1:
+          data = _context.sent;
+          setUsageWidgets({
+            data: data,
+            isLoading: false
+          });
+          return _context.abrupt("return", data);
+        case 2:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  })), []);
+  var saveChanges = (0, _react.useCallback)(/*#__PURE__*/(0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    return _regenerator.default.wrap(function (_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          setChangeProgress(function (prev) {
+            return _objectSpread(_objectSpread({}, prev), {}, {
+              isSaving: true
+            });
+          });
+          _context2.next = 1;
+          return (0, _api.saveDisabledWidgets)(widgetsDisabled, widgetsRoleRestrictions);
+        case 1:
+          setChangeProgress({
+            isSaving: false,
+            isUnsavedChanges: false
+          });
+          setIsSnackbarOpen(true);
+        case 2:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  })), [widgetsDisabled, widgetsRoleRestrictions]);
+  var deactivateAllUnusedWidgets = (0, _react.useCallback)(function () {
+    if (!usageWidgets.data) {
+      return;
+    }
+    var widgetsToDeactivate = widgets.filter(function (widget) {
+      return !usageWidgets.data.hasOwnProperty(widget.name) || widgetsDisabled.includes(widget.name);
+    });
+    setWidgetsDisabled(widgetsToDeactivate.map(function (widget) {
+      return widget.name;
+    }));
+  }, [widgets, usageWidgets.data, widgetsDisabled]);
+  var enableAllWidgets = (0, _react.useCallback)(function () {
+    setWidgetsDisabled([]);
+  }, []);
+  var toggleWidget = (0, _react.useCallback)(function (widgetName, isEnabled) {
+    if (isEnabled) {
+      setWidgetsDisabled(function (prev) {
+        return prev.filter(function (item) {
+          return item !== widgetName;
+        });
+      });
+    } else {
+      setWidgetsDisabled(function (prev) {
+        return [].concat((0, _toConsumableArray2.default)(prev), [widgetName]);
+      });
+    }
+  }, []);
+  var dismissNotice = (0, _react.useCallback)(function () {
+    if (noticeData) {
+      (0, _api.markNoticeViewed)(noticeData.notice_id, noticeData.nonce);
+      setNoticeData(function (prev) {
+        return _objectSpread(_objectSpread({}, prev), {}, {
+          is_viewed: true
+        });
+      });
+    }
+  }, [noticeData]);
+  (0, _react.useEffect)(function () {
+    var loadData = /*#__PURE__*/function () {
+      var _ref3 = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee3() {
+        var _appData$additional_d, _appData$additional_d2;
+        var appData, pluginsData;
+        return _regenerator.default.wrap(function (_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 1;
+              return (0, _api.getAdminAppData)();
+            case 1:
+              appData = _context3.sent;
+              setNoticeData(appData.notice_data);
+              setWidgetsDisabled(appData.disabled_elements);
+              setWidgets(appData.widgets);
+              setPromotionWidgets(appData.promotion_widgets);
+              setPromotionData(appData.promotion_data);
+              if ((_appData$additional_d = appData.additional_data) !== null && _appData$additional_d !== void 0 && _appData$additional_d.roles) {
+                setRoles(appData.additional_data.roles);
+              }
+              if ((_appData$additional_d2 = appData.additional_data) !== null && _appData$additional_d2 !== void 0 && _appData$additional_d2.role_restrictions) {
+                setWidgetsRoleRestrictions(appData.additional_data.role_restrictions);
+              }
+              pluginsData = appData.plugins.map(function (plugin) {
+                return {
+                  label: plugin,
+                  value: plugin
+                };
+              });
+              pluginsData.unshift({
+                label: 'All Plugins',
+                value: ''
+              });
+              setPlugins(pluginsData);
+              setIsLoading(false);
+              setChangeProgress(function (prev) {
+                return _objectSpread(_objectSpread({}, prev), {}, {
+                  isUnsavedChanges: false
+                });
+              });
+            case 2:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }));
+      return function loadData() {
+        return _ref3.apply(this, arguments);
+      };
+    }();
+    loadData();
+  }, []);
+  (0, _react.useEffect)(function () {
+    if (isLoading) {
+      return;
+    }
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    setChangeProgress(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, {
+        isUnsavedChanges: true
+      });
+    });
+  }, [widgetsDisabled, widgetsRoleRestrictions, isLoading]);
+  (0, _react.useEffect)(function () {
+    var handleBeforeUnload = function handleBeforeUnload(event) {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    if (changeProgress.isUnsavedChanges) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    } else {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    }
+    return function () {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [changeProgress.isUnsavedChanges]);
+  return {
+    isLoading: isLoading,
+    widgets: widgets,
+    promotionWidgets: promotionWidgets,
+    plugins: plugins,
+    roles: roles,
+    widgetsDisabled: widgetsDisabled,
+    widgetsRoleRestrictions: widgetsRoleRestrictions,
+    setWidgetsRoleRestrictions: setWidgetsRoleRestrictions,
+    promotionData: promotionData,
+    noticeData: noticeData,
+    usageWidgets: usageWidgets,
+    changeProgress: changeProgress,
+    isSnackbarOpen: isSnackbarOpen,
+    setIsSnackbarOpen: setIsSnackbarOpen,
+    getWidgetUsage: getWidgetUsage,
+    scanUsageElements: scanUsageElements,
+    saveChanges: saveChanges,
+    deactivateAllUnusedWidgets: deactivateAllUnusedWidgets,
+    enableAllWidgets: enableAllWidgets,
+    toggleWidget: toggleWidget,
+    dismissNotice: dismissNotice
   };
-  var sortedAndFilteredWidgets = (0, _element.useMemo)(function () {
+};
+
+/***/ }),
+
+/***/ "../modules/element-manager/assets/js/app-editor-one/hooks/useWidgetFilters.js":
+/*!*************************************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/hooks/useWidgetFilters.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.useWidgetFilters = void 0;
+var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _react = __webpack_require__(/*! react */ "react");
+var useWidgetFilters = exports.useWidgetFilters = function useWidgetFilters(widgets, widgetsDisabled, getWidgetUsage) {
+  var _useState = (0, _react.useState)(''),
+    _useState2 = (0, _slicedToArray2.default)(_useState, 2),
+    searchKeyword = _useState2[0],
+    setSearchKeyword = _useState2[1];
+  var _useState3 = (0, _react.useState)('widget'),
+    _useState4 = (0, _slicedToArray2.default)(_useState3, 2),
+    sortingColumn = _useState4[0],
+    setSortingColumn = _useState4[1];
+  var _useState5 = (0, _react.useState)('asc'),
+    _useState6 = (0, _slicedToArray2.default)(_useState5, 2),
+    sortingDirection = _useState6[0],
+    setSortingDirection = _useState6[1];
+  var _useState7 = (0, _react.useState)(''),
+    _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
+    filterByPlugin = _useState8[0],
+    setFilterByPlugin = _useState8[1];
+  var _useState9 = (0, _react.useState)('all'),
+    _useState0 = (0, _slicedToArray2.default)(_useState9, 2),
+    filterByStatus = _useState0[0],
+    setFilterByStatus = _useState0[1];
+  var sortedAndFilteredWidgets = (0, _react.useMemo)(function () {
     var filteredWidgets = widgets.filter(function (widget) {
       return widget.title.toLowerCase().includes(searchKeyword.toLowerCase());
     });
@@ -344,466 +1690,47 @@ var App = exports.App = function App() {
       return aValue > bValue ? -1 : 1;
     });
     return filteredWidgets;
-  }, [widgets, searchKeyword, sortingColumn, sortingDirection, filterByPlugin, usageWidgets, filterByStatus, widgetsDisabled]);
-  var getSortingIndicatorClasses = function getSortingIndicatorClasses(column) {
+  }, [widgets, searchKeyword, sortingColumn, sortingDirection, filterByPlugin, filterByStatus, widgetsDisabled, getWidgetUsage]);
+  var getSortingIndicatorClasses = (0, _react.useCallback)(function (column) {
     if (sortingColumn !== column) {
       return '';
     }
-    if ('asc' === sortingDirection) {
-      return 'sorted asc';
-    }
-    return 'sorted desc';
-  };
-  var onSortingClicked = function onSortingClicked(column) {
+    return 'asc' === sortingDirection ? 'sorted asc' : 'sorted desc';
+  }, [sortingColumn, sortingDirection]);
+  var onSortingClicked = (0, _react.useCallback)(function (column) {
     if (sortingColumn === column) {
-      if ('asc' === sortingDirection) {
-        setSortingDirection('desc');
-      } else {
-        setSortingDirection('asc');
-      }
+      setSortingDirection(function (prev) {
+        return 'asc' === prev ? 'desc' : 'asc';
+      });
     } else {
       setSortingColumn(column);
       setSortingDirection('asc');
     }
-  };
-  var onSaveClicked = /*#__PURE__*/function () {
-    var _ref = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-      return _regenerator.default.wrap(function (_context) {
-        while (1) switch (_context.prev = _context.next) {
-          case 0:
-            setIsConfirmDialogOpen(false);
-            setChangeProgress(_objectSpread(_objectSpread({}, changeProgress), {}, {
-              isSaving: true
-            }));
-            _context.next = 1;
-            return (0, _api.saveDisabledWidgets)(widgetsDisabled, widgetsRoleRestrictions);
-          case 1:
-            setChangeProgress(_objectSpread(_objectSpread({}, changeProgress), {}, {
-              isSaving: false,
-              isUnsavedChanges: false
-            }));
-            setIsSnackbarOpen(true);
-          case 2:
-          case "end":
-            return _context.stop();
-        }
-      }, _callee);
-    }));
-    return function onSaveClicked() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var deactivateAllUnusedWidgets = function deactivateAllUnusedWidgets() {
-    var widgetsToDeactivate = widgets.filter(function (widget) {
-      return !usageWidgets.data.hasOwnProperty(widget.name) || widgetsDisabled.includes(widget.name);
-    });
-    setWidgetsDisabled(widgetsToDeactivate.map(function (widget) {
-      return widget.name;
-    }));
-  };
-  var enableAllWidgets = function enableAllWidgets() {
-    setWidgetsDisabled([]);
-  };
-  var onScanUsageElementsClicked = /*#__PURE__*/function () {
-    var _ref2 = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var data;
-      return _regenerator.default.wrap(function (_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            setUsageWidgets(_objectSpread(_objectSpread({}, usageWidgets), {}, {
-              isLoading: true
-            }));
-            _context2.next = 1;
-            return (0, _api.getUsageWidgets)();
-          case 1:
-            data = _context2.sent;
-            setUsageWidgets({
-              data: data,
-              isLoading: false
-            });
-            setSortingColumn('usage');
-            setSortingDirection('desc');
-          case 2:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2);
-    }));
-    return function onScanUsageElementsClicked() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var UsageTimesColumn = function UsageTimesColumn(_ref3) {
-    var widgetName = _ref3.widgetName;
-    if (null !== usageWidgets.data) {
-      return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, getWidgetUsage(widgetName), " ", (0, _i18n.__)('times', 'elementor'));
-    }
-    if (usageWidgets.isLoading) {
-      return /*#__PURE__*/_react.default.createElement(_components.Spinner, null);
-    }
-    return /*#__PURE__*/_react.default.createElement(_components.Button, {
-      onClick: onScanUsageElementsClicked,
-      size: 'small',
-      variant: 'secondary'
-    }, (0, _i18n.__)('Show', 'elementor'));
-  };
-  (0, _element.useEffect)(function () {
-    var onLoading = /*#__PURE__*/function () {
-      var _ref4 = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee3() {
-        var _appData$additional_d, _appData$additional_d2;
-        var appData, pluginsData;
-        return _regenerator.default.wrap(function (_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 1;
-              return (0, _api.getAdminAppData)();
-            case 1:
-              appData = _context3.sent;
-              setNoticeData(appData.notice_data);
-              setWidgetsDisabled(appData.disabled_elements);
-              setWidgets(appData.widgets);
-              setPromotionWidgets(appData.promotion_widgets);
-              setPromotionData(appData.promotion_data);
-              if ((_appData$additional_d = appData.additional_data) !== null && _appData$additional_d !== void 0 && _appData$additional_d.roles) {
-                setRoles(appData.additional_data.roles);
-              }
-              if ((_appData$additional_d2 = appData.additional_data) !== null && _appData$additional_d2 !== void 0 && _appData$additional_d2.role_restrictions) {
-                setWidgetsRoleRestrictions(appData.additional_data.role_restrictions);
-              }
-              pluginsData = appData.plugins.map(function (plugin) {
-                return {
-                  label: plugin,
-                  value: plugin
-                };
-              });
-              pluginsData.unshift({
-                label: (0, _i18n.__)('All Plugins', 'elementor'),
-                value: ''
-              });
-              setPlugins(pluginsData);
-              setIsLoading(false);
-            case 2:
-            case "end":
-              return _context3.stop();
-          }
-        }, _callee3);
-      }));
-      return function onLoading() {
-        return _ref4.apply(this, arguments);
-      };
-    }();
-    onLoading();
+  }, [sortingColumn]);
+  var setSortByUsage = (0, _react.useCallback)(function () {
+    setSortingColumn('usage');
+    setSortingDirection('desc');
   }, []);
-  (0, _element.useEffect)(function () {
-    if (isLoading) {
-      return;
-    }
-    setChangeProgress(_objectSpread(_objectSpread({}, changeProgress), {}, {
-      isUnsavedChanges: true
-    }));
-  }, [widgetsDisabled, widgetsRoleRestrictions]);
-  (0, _element.useEffect)(function () {
-    var handleBeforeUnload = function handleBeforeUnload(event) {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-    if (changeProgress.isUnsavedChanges) {
-      window.addEventListener('beforeunload', handleBeforeUnload);
-    } else {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    }
-    return function () {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [changeProgress.isUnsavedChanges]);
-  if (isLoading) {
-    return /*#__PURE__*/_react.default.createElement(_components.Flex, {
-      justify: 'center',
-      style: {
-        margin: '100px'
-      }
-    }, /*#__PURE__*/_react.default.createElement(_components.Spinner, {
-      style: {
-        height: 'calc(4px * 20)',
-        width: 'calc(4px * 20)'
-      }
-    }));
-  }
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("p", {
-    style: {
-      marginBottom: '20px',
-      maxWidth: '800px'
-    }
-  }, (0, _i18n.__)('Here\'s where you can fine-tune Elementor to your workflow. Disable elements you don\'t use for a cleaner interface, more focused creative experience, and improved performance.', 'elementor'), ' ', /*#__PURE__*/_react.default.createElement("a", {
-    href: "https://go.elementor.com/wp-dash-element-manager/",
-    rel: 'noreferrer',
-    target: '_blank'
-  }, (0, _i18n.__)('Learn More', 'elementor'))), !noticeData.is_viewed && /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement(_components.Notice, {
-    onRemove: function onRemove() {
-      (0, _api.markNoticeViewed)(noticeData.notice_id, noticeData.nonce);
-      setNoticeData(_objectSpread(_objectSpread({}, noticeData), {}, {
-        is_viewed: true
-      }));
-    },
-    status: "warning"
-  }, /*#__PURE__*/_react.default.createElement("strong", null, (0, _i18n.__)('Before you continue:', 'elementor')), " ", (0, _i18n.__)('Deactivating widgets here will remove them from both the Elementor Editor and your website, which can cause changes to your overall layout, design and what visitors see.', 'elementor'))), /*#__PURE__*/_react.default.createElement(_components.Panel, null, /*#__PURE__*/_react.default.createElement(_components.PanelBody, null, /*#__PURE__*/_react.default.createElement(_components.Flex, {
-    style: {
-      position: 'sticky',
-      top: '32px',
-      background: 'rgb(255, 255, 255)',
-      zIndex: 10,
-      padding: '20px 16px',
-      boxShadow: 'rgba(0, 0, 0, 0.15) 0 5px 10px 0',
-      margin: '-16px -16px 24px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement(_components.Flex, {
-    align: 'center'
-  }, /*#__PURE__*/_react.default.createElement(_components.SearchControl, {
-    label: (0, _i18n.__)('Search widgets', 'elementor'),
-    value: searchKeyword,
-    size: 'compact',
-    style: {
-      height: '40px',
-      border: '1px solid rgba(30, 30, 30, 0.5)',
-      background: 'transparent'
-    },
-    __nextHasNoMarginBottom: true,
-    onChange: setSearchKeyword
-  }), /*#__PURE__*/_react.default.createElement(_components.FlexItem, {
-    style: {
-      maxWidth: '130px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.SelectControl, {
-    onChange: setFilterByPlugin,
-    size: '__unstable-large',
-    __nextHasNoMarginBottom: true,
-    options: plugins
-  })), /*#__PURE__*/_react.default.createElement(_components.FlexItem, {
-    style: {
-      maxWidth: '130px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.SelectControl, {
-    onChange: setFilterByStatus,
-    size: '__unstable-large',
-    __nextHasNoMarginBottom: true,
-    options: [{
-      label: (0, _i18n.__)('All Statuses', 'elementor'),
-      value: 'all'
-    }, {
-      label: (0, _i18n.__)('Active', 'elementor'),
-      value: 'active'
-    }, {
-      label: (0, _i18n.__)('Inactive', 'elementor'),
-      value: 'inactive'
-    }]
-  })), /*#__PURE__*/_react.default.createElement("hr", {
-    style: {
-      height: '30px',
-      margin: '0 5px',
-      borderWidth: '0 1px 0 0',
-      borderStyle: 'solid',
-      borderColor: 'rgba(30, 30, 30, 0.5)'
-    }
-  }), /*#__PURE__*/_react.default.createElement(_components.ButtonGroup, null, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: 'secondary',
-    style: {
-      marginInlineEnd: '10px'
-    },
-    disabled: usageWidgets.isLoading,
-    isBusy: usageWidgets.isLoading,
-    onClick: onScanUsageElementsClicked
-  }, (0, _i18n.__)('Scan Element Usage', 'elementor')), /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: 'secondary',
-    style: {
-      marginInlineEnd: '10px'
-    },
-    onClick: deactivateAllUnusedWidgets,
-    disabled: null === usageWidgets.data
-  }, (0, _i18n.__)('Deactivate Unused Elements', 'elementor')), /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: 'secondary',
-    disabled: !widgetsDisabled.length,
-    style: {
-      marginInlineEnd: '10px'
-    },
-    onClick: enableAllWidgets
-  }, (0, _i18n.__)('Enable All', 'elementor'))))), /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: "primary",
-    disabled: changeProgress.isSaving || !changeProgress.isUnsavedChanges,
-    isBusy: changeProgress.isSaving,
-    onClick: function onClick() {
-      setIsConfirmDialogOpen(true);
-    }
-  }, (0, _i18n.__)('Save Changes', 'elementor')))), /*#__PURE__*/_react.default.createElement(_components.PanelRow, null, !sortedAndFilteredWidgets.length ? /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (0, _i18n.__)('No elements found.', 'elementor')) : /*#__PURE__*/_react.default.createElement("table", {
-    className: 'wp-list-table widefat fixed striped table-view-list'
-  }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-    className: "manage-column sortable ".concat(getSortingIndicatorClasses('widget'))
-  }, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    href: '#',
-    onClick: function onClick(event) {
-      event.preventDefault();
-      onSortingClicked('widget');
-    }
-  }, /*#__PURE__*/_react.default.createElement("span", null, (0, _i18n.__)('Element', 'elementor')), /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicators"
-  }, /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicator asc",
-    "aria-hidden": "true"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicator desc",
-    "aria-hidden": "true"
-  })))), /*#__PURE__*/_react.default.createElement("th", null, (0, _i18n.__)('Status', 'elementor')), /*#__PURE__*/_react.default.createElement("th", {
-    className: "manage-column sortable ".concat(getSortingIndicatorClasses('usage'))
-  }, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    href: '#',
-    onClick: function onClick(event) {
-      event.preventDefault();
-      onSortingClicked('usage');
-    }
-  }, /*#__PURE__*/_react.default.createElement("span", null, (0, _i18n.__)('Usage', 'elementor')), /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicators"
-  }, /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicator asc",
-    "aria-hidden": "true"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    className: "sorting-indicator desc",
-    "aria-hidden": "true"
-  })))), /*#__PURE__*/_react.default.createElement("th", null, (0, _i18n.__)('Plugin', 'elementor')), /*#__PURE__*/_react.default.createElement("th", null, /*#__PURE__*/_react.default.createElement(_components.Flex, {
-    justify: 'flex-start',
-    gap: 0
-  }, /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, (0, _i18n.__)('Permission', 'elementor')), /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement(_components.Tooltip, {
-    placement: 'top',
-    delay: 100,
-    text: (0, _i18n.__)('Choose which users will have access to each widget.', 'elementor')
-  }, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    icon: 'info-outline',
-    iconSize: 16
-  }))), null === widgetsRoleRestrictions && /*#__PURE__*/_react.default.createElement(_components.FlexItem, {
-    style: {
-      marginInlineStart: '10px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_upgradeButton.UpgradeButton, {
-    href: promotionWidgets.length ? managerPermissions.pro.url : managerPermissions.advanced.url,
-    size: 'small',
-    text: promotionWidgets.length ? managerPermissions.pro.text : managerPermissions.advanced.text
-  })))))), /*#__PURE__*/_react.default.createElement("tbody", null, sortedAndFilteredWidgets.map(function (widget) {
-    return /*#__PURE__*/_react.default.createElement("tr", {
-      key: widget.name,
-      "data-key-id": widget.name
-    }, /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement("i", {
-      style: {
-        marginInlineEnd: '5px',
-        marginInlineStart: '0',
-        display: 'inline-block'
-      },
-      className: "".concat(widget.icon)
-    }), " ", widget.title), /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement(_components.ToggleControl, {
-      checked: !widgetsDisabled.includes(widget.name),
-      __nextHasNoMarginBottom: true,
-      onChange: function onChange() {
-        if (widgetsDisabled.includes(widget.name)) {
-          setWidgetsDisabled(widgetsDisabled.filter(function (item) {
-            return item !== widget.name;
-          }));
-        } else {
-          setWidgetsDisabled([].concat((0, _toConsumableArray2.default)(widgetsDisabled), [widget.name]));
-        }
-      }
-    })), /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement(UsageTimesColumn, {
-      widgetName: widget.name
-    })), /*#__PURE__*/_react.default.createElement("td", null, widget.plugin), /*#__PURE__*/_react.default.createElement("td", null, null !== widgetsRoleRestrictions && !widgetsDisabled.includes(widget.name) ? /*#__PURE__*/_react.default.createElement(_rolePermissions.RolePermissions, {
-      widgetName: widget.name,
-      roles: roles,
-      widgetsRoleRestrictions: widgetsRoleRestrictions,
-      setWidgetsRoleRestrictions: setWidgetsRoleRestrictions
-    }) : /*#__PURE__*/_react.default.createElement(_rolePermissions.EditButtonDisabled, null)));
-  })))), promotionWidgets.length > 0 && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_components.PanelRow, null, /*#__PURE__*/_react.default.createElement(_components.Flex, {
-    style: {
-      marginTop: '40px',
-      marginBottom: '20px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement("h3", null, (0, _i18n.__)('Elementor Pro Elements', 'elementor')), /*#__PURE__*/_react.default.createElement("p", null, (0, _i18n.__)('Unleash the full power of Elementor\'s features and web creation tools.', 'elementor'))), /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement(_upgradeButton.UpgradeButton, {
-    href: elementManager.url,
-    text: elementManager.text
-  })))), /*#__PURE__*/_react.default.createElement(_components.PanelRow, null, /*#__PURE__*/_react.default.createElement("table", {
-    className: 'wp-list-table widefat fixed striped table-view-list'
-  }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", {
-    className: "manage-column"
-  }, /*#__PURE__*/_react.default.createElement("span", null, (0, _i18n.__)('Element', 'elementor'))), /*#__PURE__*/_react.default.createElement("th", null, (0, _i18n.__)('Status', 'elementor')), /*#__PURE__*/_react.default.createElement("th", null, (0, _i18n.__)('Usage', 'elementor')), /*#__PURE__*/_react.default.createElement("th", null, (0, _i18n.__)('Plugin', 'elementor')), /*#__PURE__*/_react.default.createElement("th", null, /*#__PURE__*/_react.default.createElement(_components.Flex, {
-    justify: 'flex-start'
-  }, /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, (0, _i18n.__)('Permission', 'elementor')), /*#__PURE__*/_react.default.createElement(_components.FlexItem, null, /*#__PURE__*/_react.default.createElement(_components.Tooltip, {
-    placement: 'top',
-    delay: 100,
-    text: (0, _i18n.__)('Choose which role will have access to a specific widget.', 'elementor')
-  }, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    icon: 'info-outline'
-  }))))))), /*#__PURE__*/_react.default.createElement("tbody", null, promotionWidgets.map(function (widget) {
-    return /*#__PURE__*/_react.default.createElement("tr", {
-      key: widget.name
-    }, /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement("i", {
-      style: {
-        marginInlineEnd: '5px'
-      },
-      className: "".concat(widget.icon)
-    }), " ", widget.title), /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement(_components.ToggleControl, {
-      __nextHasNoMarginBottom: true,
-      checked: false,
-      disabled: true
-    })), /*#__PURE__*/_react.default.createElement("td", null), /*#__PURE__*/_react.default.createElement("td", null, (0, _i18n.__)('Elementor Pro', 'elementor')), /*#__PURE__*/_react.default.createElement("td", null, /*#__PURE__*/_react.default.createElement(_rolePermissions.EditButtonDisabled, null)));
-  }))))))), isConfirmDialogOpen && /*#__PURE__*/_react.default.createElement(_components.Modal, {
-    title: (0, _i18n.__)('Sure you want to save these changes?', 'elementor'),
-    size: 'small',
-    isDismissible: false,
-    onRequestClose: function onRequestClose() {
-      setIsConfirmDialogOpen(false);
-    }
-  }, /*#__PURE__*/_react.default.createElement("p", {
-    style: {
-      maxWidth: '400px',
-      marginBlockEnd: '30px',
-      marginBlockStart: '0'
-    }
-  }, (0, _i18n.__)('Turning widgets off will hide them from the editor panel, and can potentially affect your layout or front-end.', 'elementor'), /*#__PURE__*/_react.default.createElement("span", {
-    style: {
-      display: 'block',
-      marginTop: '20px'
-    }
-  }, (0, _i18n.__)('If you’re adding widgets back in, enjoy them!', 'elementor'))), /*#__PURE__*/_react.default.createElement(_components.ButtonGroup, {
-    style: {
-      display: 'flex',
-      justifyContent: 'flex-end',
-      gap: '30px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: 'link',
-    onClick: function onClick() {
-      setIsConfirmDialogOpen(false);
-    }
-  }, (0, _i18n.__)('Cancel', 'elementor')), /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: 'primary',
-    onClick: onSaveClicked
-  }, (0, _i18n.__)('Save', 'elementor')))), /*#__PURE__*/_react.default.createElement("div", {
-    style: {
-      position: 'fixed',
-      bottom: '40px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      display: isSnackbarOpen ? 'block' : 'none'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.Snackbar, {
-    isDismissible: true,
-    status: 'success',
-    onRemove: function onRemove() {
-      return setIsSnackbarOpen(false);
-    }
-  }, (0, _i18n.__)('We saved your changes.', 'elementor'))));
+  return {
+    searchKeyword: searchKeyword,
+    setSearchKeyword: setSearchKeyword,
+    filterByPlugin: filterByPlugin,
+    setFilterByPlugin: setFilterByPlugin,
+    filterByStatus: filterByStatus,
+    setFilterByStatus: setFilterByStatus,
+    sortedAndFilteredWidgets: sortedAndFilteredWidgets,
+    getSortingIndicatorClasses: getSortingIndicatorClasses,
+    onSortingClicked: onSortingClicked,
+    setSortByUsage: setSortByUsage
+  };
 };
 
 /***/ }),
 
-/***/ "../modules/element-manager/assets/js/role-permissions.js":
-/*!****************************************************************!*\
-  !*** ../modules/element-manager/assets/js/role-permissions.js ***!
-  \****************************************************************/
+/***/ "../modules/element-manager/assets/js/app-editor-one/index.js":
+/*!********************************************************************!*\
+  !*** ../modules/element-manager/assets/js/app-editor-one/index.js ***!
+  \********************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -813,119 +1740,18 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.RolePermissions = exports.EditButtonDisabled = void 0;
+exports.AppModern = void 0;
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
-var _components = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; } /* eslint-disable react/prop-types */
-var toggleRoleRestrictions = function toggleRoleRestrictions(widgetName, roleId, widgetsRoleRestrictions, setWidgetsRoleRestrictions) {
-  var widgetRoleRestrictions = widgetsRoleRestrictions[widgetName] || [];
-  if (widgetRoleRestrictions.includes(roleId)) {
-    widgetRoleRestrictions.splice(widgetRoleRestrictions.indexOf(roleId), 1);
-  } else {
-    widgetRoleRestrictions.push(roleId);
-  }
-
-  // TODO: Remove the object from the state if it's empty
-  setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, widgetRoleRestrictions)));
-};
-var RolesList = function RolesList(props) {
-  var roles = props.roles,
-    widgetRoleRestrictions = props.widgetRoleRestrictions;
-  var rolesEnables = roles.filter(function (role) {
-    return !widgetRoleRestrictions.includes(role.id);
-  });
-  if (!rolesEnables.length) {
-    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "(", (0, _i18n.__)('Admin', 'elementor'), ")");
-  }
-  if (rolesEnables.length === roles.length) {
-    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "(", (0, _i18n.__)('All Roles', 'elementor'), ")");
-  }
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, "(", rolesEnables.map(function (role) {
-    return role.name;
-  }).join(', '), ")");
-};
-var RolePermissions = exports.RolePermissions = function RolePermissions(props) {
-  var roles = props.roles,
-    widgetName = props.widgetName,
-    widgetsRoleRestrictions = props.widgetsRoleRestrictions,
-    setWidgetsRoleRestrictions = props.setWidgetsRoleRestrictions;
-  var widgetRoleRestrictions = widgetsRoleRestrictions[widgetName] || [];
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_components.Dropdown, {
-    className: 'my-container-class-name',
-    contentClassName: 'my-dropdown-content-classname',
-    popoverProps: {
-      placement: 'bottom-start'
-    },
-    renderToggle: function renderToggle(_ref) {
-      var isOpen = _ref.isOpen,
-        onToggle = _ref.onToggle;
-      return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_components.Button, {
-        variant: 'link',
-        onClick: onToggle,
-        "aria-expanded": isOpen,
-        style: {
-          textDecoration: 'none'
-        }
-      }, (0, _i18n.__)('Edit', 'elementor')), ' ', /*#__PURE__*/_react.default.createElement("span", {
-        style: {
-          color: 'var(--e-a-color-txt-muted)'
-        }
-      }, /*#__PURE__*/_react.default.createElement(RolesList, {
-        roles: roles,
-        widgetRoleRestrictions: widgetRoleRestrictions
-      })));
-    },
-    renderContent: function renderContent() {
-      var isAllChecked = roles.every(function (role) {
-        return !widgetRoleRestrictions.includes(role.id);
-      });
-      var isIndeterminate = !isAllChecked && roles.some(function (role) {
-        return !widgetRoleRestrictions.includes(role.id);
-      });
-      return /*#__PURE__*/_react.default.createElement("div", {
-        style: {
-          minWidth: '150px',
-          paddingInline: '10px',
-          paddingBlockStart: '10px'
-        }
-      }, /*#__PURE__*/_react.default.createElement(_components.CheckboxControl, {
-        checked: isAllChecked,
-        indeterminate: isIndeterminate,
-        label: 'All',
-        onChange: function onChange(value) {
-          if (value) {
-            setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, [])));
-          } else {
-            setWidgetsRoleRestrictions(_objectSpread(_objectSpread({}, widgetsRoleRestrictions), {}, (0, _defineProperty2.default)({}, widgetName, roles.map(function (role) {
-              return role.id;
-            }))));
-          }
-        }
-      }), roles.map(function (role) {
-        return /*#__PURE__*/_react.default.createElement("div", {
-          key: role.id
-        }, /*#__PURE__*/_react.default.createElement(_components.CheckboxControl, {
-          checked: !widgetRoleRestrictions.includes(role.id),
-          label: role.name,
-          onChange: function onChange() {
-            toggleRoleRestrictions(widgetName, role.id, widgetsRoleRestrictions, setWidgetsRoleRestrictions);
-          }
-        }));
-      }));
-    }
-  }));
-};
-var EditButtonDisabled = exports.EditButtonDisabled = function EditButtonDisabled() {
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_components.Button, {
-    variant: "link",
-    disabled: true,
-    style: {
-      textDecoration: 'none'
-    }
-  }, (0, _i18n.__)('Edit', 'elementor')));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _App = __webpack_require__(/*! ./App */ "../modules/element-manager/assets/js/app-editor-one/App.js");
+var AppModern = exports.AppModern = function AppModern() {
+  var _elementorCommon$conf;
+  var isRTL = typeof elementorCommon !== 'undefined' && (_elementorCommon$conf = elementorCommon.config) !== null && _elementorCommon$conf !== void 0 && _elementorCommon$conf.isRTL ? elementorCommon.config.isRTL : 'rtl' === document.documentElement.dir || document.body.classList.contains('rtl');
+  return /*#__PURE__*/_react.default.createElement(_ui.DirectionProvider, {
+    rtl: isRTL
+  }, /*#__PURE__*/_react.default.createElement(_ui.ThemeProvider, {
+    colorScheme: "light"
+  }, /*#__PURE__*/_react.default.createElement(_App.App, null)));
 };
 
 /***/ }),
@@ -947,15 +1773,21 @@ exports.UpgradeButton = void 0;
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
 var _components = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 var UpgradeButton = exports.UpgradeButton = function UpgradeButton(props) {
+  var trackingClass = props.className || 'e-id-elementor-element-manager-button-upgrade';
   return /*#__PURE__*/_react.default.createElement(_components.Button, (0, _extends2.default)({}, props, {
     variant: "primary",
     target: "_blank",
     rel: 'noreferrer',
     style: {
       background: 'var(--e-a-btn-bg-accent, #93003f)'
-    }
+    },
+    className: trackingClass
   }));
+};
+UpgradeButton.propTypes = {
+  className: _propTypes.default.string
 };
 
 /***/ }),
@@ -1365,19 +2197,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -2576,10 +3406,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   renderStyle: () => (/* binding */ renderStyle)
 /* harmony export */ });
 /* harmony import */ var is_plain_object__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-plain-object */ "../node_modules/is-plain-object/dist/is-plain-object.mjs");
-/* harmony import */ var change_case__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! change-case */ "../node_modules/param-case/dist.es2015/index.js");
-/* harmony import */ var _wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/escape-html */ "../node_modules/@wordpress/escape-html/build-module/index.js");
-/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./react */ "react");
-/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var change_case__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! change-case */ "../node_modules/param-case/dist.es2015/index.js");
+/* harmony import */ var _wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/escape-html */ "../node_modules/@wordpress/escape-html/build-module/index.js");
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./react */ "react");
+/* harmony import */ var _react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _raw_html__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./raw-html */ "../node_modules/@wordpress/element/build-module/raw-html.js");
 /**
  * Parts of this source were derived and modified from fast-react-render,
@@ -2630,8 +3460,8 @@ __webpack_require__.r(__webpack_exports__);
 const {
   Provider,
   Consumer
-} = (0,_react__WEBPACK_IMPORTED_MODULE_1__.createContext)(undefined);
-const ForwardRef = (0,_react__WEBPACK_IMPORTED_MODULE_1__.forwardRef)(() => {
+} = (0,_react__WEBPACK_IMPORTED_MODULE_3__.createContext)(undefined);
+const ForwardRef = (0,_react__WEBPACK_IMPORTED_MODULE_3__.forwardRef)(() => {
   return null;
 });
 
@@ -2799,7 +3629,7 @@ function getNormalAttributeName(attribute) {
   if (CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase]) {
     return CASE_SENSITIVE_SVG_ATTRIBUTES[attributeLowerCase];
   } else if (SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]) {
-    return (0,change_case__WEBPACK_IMPORTED_MODULE_2__.paramCase)(SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]);
+    return (0,change_case__WEBPACK_IMPORTED_MODULE_1__.paramCase)(SVG_ATTRIBUTE_WITH_DASHES_LIST[attributeLowerCase]);
   } else if (SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase]) {
     return SVG_ATTRIBUTES_WITH_COLONS[attributeLowerCase];
   }
@@ -2822,9 +3652,9 @@ function getNormalStylePropertyName(property) {
     return property;
   }
   if (hasPrefix(property, ['ms', 'O', 'Moz', 'Webkit'])) {
-    return '-' + (0,change_case__WEBPACK_IMPORTED_MODULE_2__.paramCase)(property);
+    return '-' + (0,change_case__WEBPACK_IMPORTED_MODULE_1__.paramCase)(property);
   }
-  return (0,change_case__WEBPACK_IMPORTED_MODULE_2__.paramCase)(property);
+  return (0,change_case__WEBPACK_IMPORTED_MODULE_1__.paramCase)(property);
 }
 
 /**
@@ -2861,7 +3691,7 @@ function renderElement(element, context, legacyContext = {}) {
   }
   switch (typeof element) {
     case 'string':
-      return (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__.escapeHTML)(element);
+      return (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.escapeHTML)(element);
     case 'number':
       return element.toString();
   }
@@ -2871,8 +3701,8 @@ function renderElement(element, context, legacyContext = {}) {
   } = /** @type {{type?: any, props?: any}} */
   element;
   switch (type) {
-    case _react__WEBPACK_IMPORTED_MODULE_1__.StrictMode:
-    case _react__WEBPACK_IMPORTED_MODULE_1__.Fragment:
+    case _react__WEBPACK_IMPORTED_MODULE_3__.StrictMode:
+    case _react__WEBPACK_IMPORTED_MODULE_3__.Fragment:
       return renderChildren(props.children, context, legacyContext);
     case _raw_html__WEBPACK_IMPORTED_MODULE_4__["default"]:
       const {
@@ -3001,7 +3831,7 @@ function renderAttributes(props) {
   let result = '';
   for (const key in props) {
     const attribute = getNormalAttributeName(key);
-    if (!(0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__.isValidAttributeName)(attribute)) {
+    if (!(0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.isValidAttributeName)(attribute)) {
       continue;
     }
     let value = getNormalAttributeValue(key, props[key]);
@@ -3035,7 +3865,7 @@ function renderAttributes(props) {
       continue;
     }
     if (typeof value === 'string') {
-      value = (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_3__.escapeAttribute)(value);
+      value = (0,_wordpress_escape_html__WEBPACK_IMPORTED_MODULE_2__.escapeAttribute)(value);
     }
     result += '="' + value + '"';
   }
@@ -3290,13 +4120,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   dotCase: () => (/* binding */ dotCase)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.mjs");
-/* harmony import */ var no_case__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! no-case */ "../node_modules/no-case/dist.es2015/index.js");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.mjs");
+/* harmony import */ var no_case__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! no-case */ "../node_modules/no-case/dist.es2015/index.js");
 
 
 function dotCase(input, options) {
     if (options === void 0) { options = {}; }
-    return (0,no_case__WEBPACK_IMPORTED_MODULE_0__.noCase)(input, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__assign)({ delimiter: "." }, options));
+    return (0,no_case__WEBPACK_IMPORTED_MODULE_1__.noCase)(input, (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__assign)({ delimiter: "." }, options));
 }
 //# sourceMappingURL=index.js.map
 
@@ -3460,6 +4290,107 @@ function replace(input, re, value) {
 
 /***/ }),
 
+/***/ "../node_modules/object-assign/index.js":
+/*!**********************************************!*\
+  !*** ../node_modules/object-assign/index.js ***!
+  \**********************************************/
+/***/ ((module) => {
+
+"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/param-case/dist.es2015/index.js":
 /*!*******************************************************!*\
   !*** ../node_modules/param-case/dist.es2015/index.js ***!
@@ -3471,15 +4402,1019 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   paramCase: () => (/* binding */ paramCase)
 /* harmony export */ });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.mjs");
-/* harmony import */ var dot_case__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dot-case */ "../node_modules/dot-case/dist.es2015/index.js");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.mjs");
+/* harmony import */ var dot_case__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dot-case */ "../node_modules/dot-case/dist.es2015/index.js");
 
 
 function paramCase(input, options) {
     if (options === void 0) { options = {}; }
-    return (0,dot_case__WEBPACK_IMPORTED_MODULE_0__.dotCase)(input, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__assign)({ delimiter: "-" }, options));
+    return (0,dot_case__WEBPACK_IMPORTED_MODULE_1__.dotCase)(input, (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__assign)({ delimiter: "-" }, options));
 }
 //# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/checkPropTypes.js":
+/*!****************************************************!*\
+  !*** ../node_modules/prop-types/checkPropTypes.js ***!
+  \****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var printWarning = function() {};
+
+if (true) {
+  var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "../node_modules/prop-types/lib/ReactPropTypesSecret.js");
+  var loggedTypeFailures = {};
+  var has = __webpack_require__(/*! ./lib/has */ "../node_modules/prop-types/lib/has.js");
+
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) { /**/ }
+  };
+}
+
+/**
+ * Assert that the values match with the type specs.
+ * Error messages are memorized and will only be shown once.
+ *
+ * @param {object} typeSpecs Map of name to a ReactPropType
+ * @param {object} values Runtime values that need to be type-checked
+ * @param {string} location e.g. "prop", "context", "child context"
+ * @param {string} componentName Name of the component for error messages.
+ * @param {?Function} getStack Returns the component stack.
+ * @private
+ */
+function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+  if (true) {
+    for (var typeSpecName in typeSpecs) {
+      if (has(typeSpecs, typeSpecName)) {
+        var error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          if (typeof typeSpecs[typeSpecName] !== 'function') {
+            var err = Error(
+              (componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' +
+              'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' +
+              'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.'
+            );
+            err.name = 'Invariant Violation';
+            throw err;
+          }
+          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+        } catch (ex) {
+          error = ex;
+        }
+        if (error && !(error instanceof Error)) {
+          printWarning(
+            (componentName || 'React class') + ': type specification of ' +
+            location + ' `' + typeSpecName + '` is invalid; the type checker ' +
+            'function must return `null` or an `Error` but returned a ' + typeof error + '. ' +
+            'You may have forgotten to pass an argument to the type checker ' +
+            'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' +
+            'shape all require an argument).'
+          );
+        }
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error.message] = true;
+
+          var stack = getStack ? getStack() : '';
+
+          printWarning(
+            'Failed ' + location + ' type: ' + error.message + (stack != null ? stack : '')
+          );
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Resets warning cache when testing.
+ *
+ * @private
+ */
+checkPropTypes.resetWarningCache = function() {
+  if (true) {
+    loggedTypeFailures = {};
+  }
+}
+
+module.exports = checkPropTypes;
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/factoryWithTypeCheckers.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/prop-types/factoryWithTypeCheckers.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var ReactIs = __webpack_require__(/*! react-is */ "../node_modules/prop-types/node_modules/react-is/index.js");
+var assign = __webpack_require__(/*! object-assign */ "../node_modules/object-assign/index.js");
+
+var ReactPropTypesSecret = __webpack_require__(/*! ./lib/ReactPropTypesSecret */ "../node_modules/prop-types/lib/ReactPropTypesSecret.js");
+var has = __webpack_require__(/*! ./lib/has */ "../node_modules/prop-types/lib/has.js");
+var checkPropTypes = __webpack_require__(/*! ./checkPropTypes */ "../node_modules/prop-types/checkPropTypes.js");
+
+var printWarning = function() {};
+
+if (true) {
+  printWarning = function(text) {
+    var message = 'Warning: ' + text;
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+}
+
+function emptyFunctionThatReturnsNull() {
+  return null;
+}
+
+module.exports = function(isValidElement, throwOnDirectAccess) {
+  /* global Symbol */
+  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+  /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */
+  function getIteratorFn(maybeIterable) {
+    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+    if (typeof iteratorFn === 'function') {
+      return iteratorFn;
+    }
+  }
+
+  /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */
+
+  var ANONYMOUS = '<<anonymous>>';
+
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bigint: createPrimitiveTypeChecker('bigint'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
+
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    elementType: createElementTypeTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker,
+  };
+
+  /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */
+  /*eslint-disable no-self-compare*/
+  function is(x, y) {
+    // SameValue algorithm
+    if (x === y) {
+      // Steps 1-5, 7-10
+      // Steps 6.b-6.e: +0 != -0
+      return x !== 0 || 1 / x === 1 / y;
+    } else {
+      // Step 6.a: NaN == NaN
+      return x !== x && y !== y;
+    }
+  }
+  /*eslint-enable no-self-compare*/
+
+  /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */
+  function PropTypeError(message, data) {
+    this.message = message;
+    this.data = data && typeof data === 'object' ? data: {};
+    this.stack = '';
+  }
+  // Make `instanceof Error` still work for returned errors.
+  PropTypeError.prototype = Error.prototype;
+
+  function createChainableTypeChecker(validate) {
+    if (true) {
+      var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
+    }
+    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          var err = new Error(
+            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+            'Use `PropTypes.checkPropTypes()` to call them. ' +
+            'Read more at http://fb.me/use-check-prop-types'
+          );
+          err.name = 'Invariant Violation';
+          throw err;
+        } else if ( true && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
+          var cacheKey = componentName + ':' + propName;
+          if (
+            !manualPropTypeCallCache[cacheKey] &&
+            // Avoid spamming the console because they are often not actionable except for lib authors
+            manualPropTypeWarningCount < 3
+          ) {
+            printWarning(
+              'You are manually calling a React.PropTypes validation ' +
+              'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' +
+              'and will throw in the standalone `prop-types` package. ' +
+              'You may be seeing this warning due to a third-party PropTypes ' +
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.'
+            );
+            manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
+          }
+        }
+      }
+      if (props[propName] == null) {
+        if (isRequired) {
+          if (props[propName] === null) {
+            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+          }
+          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+        }
+        return null;
+      } else {
+        return validate(props, propName, componentName, location, propFullName);
+      }
+    }
+
+    var chainedCheckType = checkType.bind(null, false);
+    chainedCheckType.isRequired = checkType.bind(null, true);
+
+    return chainedCheckType;
+  }
+
+  function createPrimitiveTypeChecker(expectedType) {
+    function validate(props, propName, componentName, location, propFullName, secret) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== expectedType) {
+        // `propValue` being instance of, say, date/regexp, pass the 'object'
+        // check, but we can offer a more precise error message here rather than
+        // 'of type `object`'.
+        var preciseType = getPreciseType(propValue);
+
+        return new PropTypeError(
+          'Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'),
+          {expectedType: expectedType}
+        );
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createAnyTypeChecker() {
+    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+  }
+
+  function createArrayOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+      }
+      var propValue = props[propName];
+      if (!Array.isArray(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+      }
+      for (var i = 0; i < propValue.length; i++) {
+        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+        if (error instanceof Error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!isValidElement(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!ReactIs.isValidElementType(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement type.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createInstanceTypeChecker(expectedClass) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!(props[propName] instanceof expectedClass)) {
+        var expectedClassName = expectedClass.name || ANONYMOUS;
+        var actualClassName = getClassName(props[propName]);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createEnumTypeChecker(expectedValues) {
+    if (!Array.isArray(expectedValues)) {
+      if (true) {
+        if (arguments.length > 1) {
+          printWarning(
+            'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
+            'A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).'
+          );
+        } else {
+          printWarning('Invalid argument supplied to oneOf, expected an array.');
+        }
+      }
+      return emptyFunctionThatReturnsNull;
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      for (var i = 0; i < expectedValues.length; i++) {
+        if (is(propValue, expectedValues[i])) {
+          return null;
+        }
+      }
+
+      var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+        var type = getPreciseType(value);
+        if (type === 'symbol') {
+          return String(value);
+        }
+        return value;
+      });
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + String(propValue) + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createObjectOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+      }
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+      }
+      for (var key in propValue) {
+        if (has(propValue, key)) {
+          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+          if (error instanceof Error) {
+            return error;
+          }
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createUnionTypeChecker(arrayOfTypeCheckers) {
+    if (!Array.isArray(arrayOfTypeCheckers)) {
+       true ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : 0;
+      return emptyFunctionThatReturnsNull;
+    }
+
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+      if (typeof checker !== 'function') {
+        printWarning(
+          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
+          'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.'
+        );
+        return emptyFunctionThatReturnsNull;
+      }
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var expectedTypes = [];
+      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+        var checker = arrayOfTypeCheckers[i];
+        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
+        if (checkerResult == null) {
+          return null;
+        }
+        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
+          expectedTypes.push(checkerResult.data.expectedType);
+        }
+      }
+      var expectedTypesMessage = (expectedTypes.length > 0) ? ', expected one of type [' + expectedTypes.join(', ') + ']': '';
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createNodeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!isNode(props[propName])) {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function invalidValidatorError(componentName, location, propFullName, key, type) {
+    return new PropTypeError(
+      (componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' +
+      'it must be a function, usually from the `prop-types` package, but received `' + type + '`.'
+    );
+  }
+
+  function createShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      for (var key in shapeTypes) {
+        var checker = shapeTypes[key];
+        if (typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      // We need to check all keys in case some are required but missing from props.
+      var allKeys = assign({}, props[propName], shapeTypes);
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+        if (has(shapeTypes, key) && typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
+        if (!checker) {
+          return new PropTypeError(
+            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
+            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
+            '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  ')
+          );
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function isNode(propValue) {
+    switch (typeof propValue) {
+      case 'number':
+      case 'string':
+      case 'undefined':
+        return true;
+      case 'boolean':
+        return !propValue;
+      case 'object':
+        if (Array.isArray(propValue)) {
+          return propValue.every(isNode);
+        }
+        if (propValue === null || isValidElement(propValue)) {
+          return true;
+        }
+
+        var iteratorFn = getIteratorFn(propValue);
+        if (iteratorFn) {
+          var iterator = iteratorFn.call(propValue);
+          var step;
+          if (iteratorFn !== propValue.entries) {
+            while (!(step = iterator.next()).done) {
+              if (!isNode(step.value)) {
+                return false;
+              }
+            }
+          } else {
+            // Iterator will provide entry [k,v] tuples rather than values.
+            while (!(step = iterator.next()).done) {
+              var entry = step.value;
+              if (entry) {
+                if (!isNode(entry[1])) {
+                  return false;
+                }
+              }
+            }
+          }
+        } else {
+          return false;
+        }
+
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  function isSymbol(propType, propValue) {
+    // Native Symbol.
+    if (propType === 'symbol') {
+      return true;
+    }
+
+    // falsy value can't be a Symbol
+    if (!propValue) {
+      return false;
+    }
+
+    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+    if (propValue['@@toStringTag'] === 'Symbol') {
+      return true;
+    }
+
+    // Fallback for non-spec compliant Symbols which are polyfilled.
+    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Equivalent of `typeof` but with special handling for array and regexp.
+  function getPropType(propValue) {
+    var propType = typeof propValue;
+    if (Array.isArray(propValue)) {
+      return 'array';
+    }
+    if (propValue instanceof RegExp) {
+      // Old webkits (at least until Android 4.0) return 'function' rather than
+      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+      // passes PropTypes.object.
+      return 'object';
+    }
+    if (isSymbol(propType, propValue)) {
+      return 'symbol';
+    }
+    return propType;
+  }
+
+  // This handles more types than `getPropType`. Only used for error messages.
+  // See `createPrimitiveTypeChecker`.
+  function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
+    var propType = getPropType(propValue);
+    if (propType === 'object') {
+      if (propValue instanceof Date) {
+        return 'date';
+      } else if (propValue instanceof RegExp) {
+        return 'regexp';
+      }
+    }
+    return propType;
+  }
+
+  // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+      default:
+        return type;
+    }
+  }
+
+  // Returns class name of the object, if any.
+  function getClassName(propValue) {
+    if (!propValue.constructor || !propValue.constructor.name) {
+      return ANONYMOUS;
+    }
+    return propValue.constructor.name;
+  }
+
+  ReactPropTypes.checkPropTypes = checkPropTypes;
+  ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/index.js":
+/*!*******************************************!*\
+  !*** ../node_modules/prop-types/index.js ***!
+  \*******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (true) {
+  var ReactIs = __webpack_require__(/*! react-is */ "../node_modules/prop-types/node_modules/react-is/index.js");
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(/*! ./factoryWithTypeCheckers */ "../node_modules/prop-types/factoryWithTypeCheckers.js")(ReactIs.isElement, throwOnDirectAccess);
+} else // removed by dead control flow
+{}
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/lib/ReactPropTypesSecret.js":
+/*!**************************************************************!*\
+  !*** ../node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
+  \**************************************************************/
+/***/ ((module) => {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/lib/has.js":
+/*!*********************************************!*\
+  !*** ../node_modules/prop-types/lib/has.js ***!
+  \*********************************************/
+/***/ ((module) => {
+
+module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js":
+/*!************************************************************************************!*\
+  !*** ../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+/** @license React v16.13.1
+ * react-is.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+
+
+if (true) {
+  (function() {
+'use strict';
+
+// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
+var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+// (unstable) APIs that have been removed. Can we remove the symbols?
+
+var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
+var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
+var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
+
+function isValidElementType(type) {
+  return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
+  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+}
+
+function typeOf(object) {
+  if (typeof object === 'object' && object !== null) {
+    var $$typeof = object.$$typeof;
+
+    switch ($$typeof) {
+      case REACT_ELEMENT_TYPE:
+        var type = object.type;
+
+        switch (type) {
+          case REACT_ASYNC_MODE_TYPE:
+          case REACT_CONCURRENT_MODE_TYPE:
+          case REACT_FRAGMENT_TYPE:
+          case REACT_PROFILER_TYPE:
+          case REACT_STRICT_MODE_TYPE:
+          case REACT_SUSPENSE_TYPE:
+            return type;
+
+          default:
+            var $$typeofType = type && type.$$typeof;
+
+            switch ($$typeofType) {
+              case REACT_CONTEXT_TYPE:
+              case REACT_FORWARD_REF_TYPE:
+              case REACT_LAZY_TYPE:
+              case REACT_MEMO_TYPE:
+              case REACT_PROVIDER_TYPE:
+                return $$typeofType;
+
+              default:
+                return $$typeof;
+            }
+
+        }
+
+      case REACT_PORTAL_TYPE:
+        return $$typeof;
+    }
+  }
+
+  return undefined;
+} // AsyncMode is deprecated along with isAsyncMode
+
+var AsyncMode = REACT_ASYNC_MODE_TYPE;
+var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+var ContextConsumer = REACT_CONTEXT_TYPE;
+var ContextProvider = REACT_PROVIDER_TYPE;
+var Element = REACT_ELEMENT_TYPE;
+var ForwardRef = REACT_FORWARD_REF_TYPE;
+var Fragment = REACT_FRAGMENT_TYPE;
+var Lazy = REACT_LAZY_TYPE;
+var Memo = REACT_MEMO_TYPE;
+var Portal = REACT_PORTAL_TYPE;
+var Profiler = REACT_PROFILER_TYPE;
+var StrictMode = REACT_STRICT_MODE_TYPE;
+var Suspense = REACT_SUSPENSE_TYPE;
+var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
+
+function isAsyncMode(object) {
+  {
+    if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+      hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
+
+      console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
+    }
+  }
+
+  return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+}
+function isConcurrentMode(object) {
+  return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+}
+function isContextConsumer(object) {
+  return typeOf(object) === REACT_CONTEXT_TYPE;
+}
+function isContextProvider(object) {
+  return typeOf(object) === REACT_PROVIDER_TYPE;
+}
+function isElement(object) {
+  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+}
+function isForwardRef(object) {
+  return typeOf(object) === REACT_FORWARD_REF_TYPE;
+}
+function isFragment(object) {
+  return typeOf(object) === REACT_FRAGMENT_TYPE;
+}
+function isLazy(object) {
+  return typeOf(object) === REACT_LAZY_TYPE;
+}
+function isMemo(object) {
+  return typeOf(object) === REACT_MEMO_TYPE;
+}
+function isPortal(object) {
+  return typeOf(object) === REACT_PORTAL_TYPE;
+}
+function isProfiler(object) {
+  return typeOf(object) === REACT_PROFILER_TYPE;
+}
+function isStrictMode(object) {
+  return typeOf(object) === REACT_STRICT_MODE_TYPE;
+}
+function isSuspense(object) {
+  return typeOf(object) === REACT_SUSPENSE_TYPE;
+}
+
+exports.AsyncMode = AsyncMode;
+exports.ConcurrentMode = ConcurrentMode;
+exports.ContextConsumer = ContextConsumer;
+exports.ContextProvider = ContextProvider;
+exports.Element = Element;
+exports.ForwardRef = ForwardRef;
+exports.Fragment = Fragment;
+exports.Lazy = Lazy;
+exports.Memo = Memo;
+exports.Portal = Portal;
+exports.Profiler = Profiler;
+exports.StrictMode = StrictMode;
+exports.Suspense = Suspense;
+exports.isAsyncMode = isAsyncMode;
+exports.isConcurrentMode = isConcurrentMode;
+exports.isContextConsumer = isContextConsumer;
+exports.isContextProvider = isContextProvider;
+exports.isElement = isElement;
+exports.isForwardRef = isForwardRef;
+exports.isFragment = isFragment;
+exports.isLazy = isLazy;
+exports.isMemo = isMemo;
+exports.isPortal = isPortal;
+exports.isProfiler = isProfiler;
+exports.isStrictMode = isStrictMode;
+exports.isSuspense = isSuspense;
+exports.isValidElementType = isValidElementType;
+exports.typeOf = typeOf;
+  })();
+}
+
+
+/***/ }),
+
+/***/ "../node_modules/prop-types/node_modules/react-is/index.js":
+/*!*****************************************************************!*\
+  !*** ../node_modules/prop-types/node_modules/react-is/index.js ***!
+  \*****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+if (false) // removed by dead control flow
+{} else {
+  module.exports = __webpack_require__(/*! ./cjs/react-is.development.js */ "../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js");
+}
+
 
 /***/ }),
 
@@ -3965,6 +5900,28 @@ function __rewriteRelativeImportExtension(path, preserveJsx) {
 
 /***/ }),
 
+/***/ "@elementor/icons":
+/*!************************************!*\
+  !*** external "elementorV2.icons" ***!
+  \************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = elementorV2.icons;
+
+/***/ }),
+
+/***/ "@elementor/ui":
+/*!*********************************!*\
+  !*** external "elementorV2.ui" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = elementorV2.ui;
+
+/***/ }),
+
 /***/ "@wordpress/components":
 /*!********************************!*\
   !*** external "wp.components" ***!
@@ -4101,12 +6058,14 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _element = __webpack_require__(/*! @wordpress/element */ "../node_modules/@wordpress/element/build-module/index.js");
 var _domReady = _interopRequireDefault(__webpack_require__(/*! @wordpress/dom-ready */ "@wordpress/dom-ready"));
-var _app = __webpack_require__(/*! ./app */ "../modules/element-manager/assets/js/app.js");
+var _appEditorOne = __webpack_require__(/*! ./app-editor-one */ "../modules/element-manager/assets/js/app-editor-one/index.js");
 (0, _domReady.default)(function () {
   var htmlOutput = document.getElementById('elementor-element-manager-wrap');
-  if (htmlOutput) {
-    (0, _element.render)(/*#__PURE__*/_react.default.createElement(_app.App, null), htmlOutput);
+  if (!htmlOutput) {
+    return;
   }
+  var root = (0, _element.createRoot)(htmlOutput);
+  root.render(/*#__PURE__*/_react.default.createElement(_appEditorOne.AppModern, null));
 });
 })();
 

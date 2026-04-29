@@ -6,6 +6,8 @@
 
 /*! ../../../../components/popover-grid-container */
 
+/*! ../../../../control-actions/control-actions */
+
 /*! ../../../bound-prop-context */
 
 /*! ../../../bound-prop-context/use-bound-prop */
@@ -28,17 +30,23 @@
 
 /*! ../../../components/control-repeater/items/item */
 
+/*! ../../../components/number-input */
+
 /*! ../../../components/popover-content */
 
 /*! ../../../components/popover-grid-container */
 
-/*! ../../../control-adornments/control-adornments */
+/*! ../../../components/repeater/repeater-header */
 
 /*! ../../../create-control */
 
 /*! ../../../env */
 
+/*! ../../../hooks/use-repeatable-control-context */
+
 /*! ../../../hooks/use-sync-external-state */
+
+/*! ../../../hooks/use-typing-buffer */
 
 /*! ../../../services/event-bus */
 
@@ -74,23 +82,37 @@
 
 /*! ../../components/popover-grid-container */
 
+/*! ../../components/repeater/repeater-header */
+
 /*! ../../control-actions/control-actions */
 
 /*! ../../control-adornments/control-adornments */
 
 /*! ../../create-control */
 
+/*! ../../hooks/use-size-value */
+
+/*! ../../hooks/use-typing-buffer */
+
 /*! ../../image-control */
 
 /*! ../../number-control */
+
+/*! ../../repeater/repeater-popover */
+
+/*! ../../repeater/repeater-tag */
+
+/*! ../../repeater/sortable */
 
 /*! ../../services/event-bus */
 
 /*! ../../size-control */
 
-/*! ../../sortable */
+/*! ../../sync/get-units */
 
 /*! ../../utils/size-control */
+
+/*! ../../utils/tracking */
 
 /*! ../api */
 
@@ -99,6 +121,10 @@
 /*! ../bound-prop-context */
 
 /*! ../bound-prop-context/use-bound-prop */
+
+/*! ../cjs/use-sync-external-store-shim.development.js */
+
+/*! ../cjs/use-sync-external-store-shim/with-selector.development.js */
 
 /*! ../color-control */
 
@@ -128,13 +154,15 @@
 
 /*! ../components/enable-unfiltered-modal */
 
-/*! ../components/floating-bar */
+/*! ../components/inline-editor */
 
 /*! ../components/number-input */
 
 /*! ../components/popover-content */
 
 /*! ../components/popover-grid-container */
+
+/*! ../components/repeater/repeater-header */
 
 /*! ../components/restricted-link-infotip */
 
@@ -153,6 +181,8 @@
 /*! ../control-actions/control-actions */
 
 /*! ../control-adornments/control-adornments */
+
+/*! ../control-repeater/locations */
 
 /*! ../create-control */
 
@@ -184,11 +214,19 @@
 
 /*! ../size-control/text-field-inner-selection */
 
+/*! ../sync/get-units */
+
 /*! ../utils */
 
 /*! ../utils/convert-toggle-options-to-atomic */
 
 /*! ../utils/escape-html-attr */
+
+/*! ../utils/inline-editing */
+
+/*! ../utils/is-extended-unit */
+
+/*! ../utils/resolve-size-value */
 
 /*! ../utils/size-control */
 
@@ -208,6 +246,10 @@
 
 /*! ./bound-prop-context */
 
+/*! ./chips-control */
+
+/*! ./cjs/react-jsx-runtime.development.js */
+
 /*! ./color-control */
 
 /*! ./components/control-form-label */
@@ -216,15 +258,29 @@
 
 /*! ./components/control-toggle-button-group */
 
-/*! ./components/floating-bar */
-
 /*! ./components/icon-buttons/clear-icon-button */
+
+/*! ./components/inline-editor */
+
+/*! ./components/inline-editor-toolbar */
 
 /*! ./components/item-selector */
 
+/*! ./components/number-input */
+
 /*! ./components/popover-content */
 
-/*! ./components/repeater */
+/*! ./components/popover-grid-container */
+
+/*! ./components/promotions/attributes-control */
+
+/*! ./components/promotions/display-conditions-control */
+
+/*! ./components/promotions/promotion-trigger */
+
+/*! ./components/repeater/repeater */
+
+/*! ./components/size/unstable-size-field */
 
 /*! ./conditional-tooltip */
 
@@ -248,8 +304,6 @@
 
 /*! ./control-repeater */
 
-/*! ./control-repeater/locations */
-
 /*! ./control-replacements */
 
 /*! ./controls/aspect-ratio-control */
@@ -258,7 +312,13 @@
 
 /*! ./controls/box-shadow-repeater-control */
 
+/*! ./controls/chips-control */
+
 /*! ./controls/color-control */
+
+/*! ./controls/date-time-control */
+
+/*! ./controls/email-form-action-control */
 
 /*! ./controls/equal-unequal-sizes-control */
 
@@ -273,6 +333,8 @@
 /*! ./controls/html-tag-control */
 
 /*! ./controls/image-control */
+
+/*! ./controls/inline-editing-control */
 
 /*! ./controls/key-value-control */
 
@@ -293,6 +355,10 @@
 /*! ./controls/select-control-wrapper */
 
 /*! ./controls/size-control */
+
+/*! ./controls/size-control/size-component */
+
+/*! ./controls/size-control/unstable-size-control */
 
 /*! ./controls/stroke-control */
 
@@ -315,6 +381,8 @@
 /*! ./controls/transition-control/transition-repeater-control */
 
 /*! ./controls/url-control */
+
+/*! ./controls/video-media-control */
 
 /*! ./create-control */
 
@@ -342,13 +410,25 @@
 
 /*! ./functions/skew */
 
-/*! ./header/header */
+/*! ./get-prop-type-settings */
+
+/*! ./has-size-value */
+
+/*! ./hooks/use-font-families */
+
+/*! ./hooks/use-size-unit-keyboard */
+
+/*! ./hooks/use-size-value */
 
 /*! ./hooks/use-sync-external-state */
+
+/*! ./hooks/use-typing-buffer */
 
 /*! ./image-media-control */
 
 /*! ./initial-values */
+
+/*! ./is-extended-unit */
 
 /*! ./item-context */
 
@@ -356,15 +436,23 @@
 
 /*! ./items/items-container */
 
+/*! ./promotion-trigger */
+
 /*! ./prop-context */
 
 /*! ./prop-key-context */
 
 /*! ./query-control */
 
-/*! ./scale-axis-row */
+/*! ./repeater-header */
 
-/*! ./section-content */
+/*! ./repeater-popover */
+
+/*! ./repeater-tag */
+
+/*! ./resolve-size-value */
+
+/*! ./scale-axis-row */
 
 /*! ./select-control */
 
@@ -372,11 +460,19 @@
 
 /*! ./single-size/single-size-item-label */
 
+/*! ./size-component */
+
 /*! ./size-control */
+
+/*! ./size-field */
 
 /*! ./sortable */
 
+/*! ./svg-media-control */
+
 /*! ./switch-control */
+
+/*! ./text-area-control */
 
 /*! ./text-control */
 
@@ -396,11 +492,41 @@
 
 /*! ./transition-selector */
 
+/*! ./ui/size-input */
+
+/*! ./ui/text-field-popover */
+
+/*! ./ui/unit-selector */
+
+/*! ./unit-select */
+
+/*! ./unstable-size-input */
+
+/*! ./url-popover */
+
 /*! ./use-background-tabs-history */
 
 /*! ./use-bound-prop */
 
 /*! ./use-transform-tabs-history */
+
+/*! ./utils/has-size-value */
+
+/*! ./utils/is-extended-unit */
+
+/*! ./utils/resolve-bound-prop-value */
+
+/*! ./utils/resolve-size-value */
+
+/*! ./utils/settings/get-default-unit */
+
+/*! ./utils/settings/get-size-units */
+
+/*! ./utils/should-nullify-value */
+
+/*! ./utils/size-control */
+
+/*! ./utils/tracking */
 
 /*! @elementor/editor-current-user */
 
@@ -412,15 +538,17 @@
 
 /*! @elementor/editor-ui */
 
+/*! @elementor/editor-v1-adapters */
+
 /*! @elementor/env */
+
+/*! @elementor/events */
 
 /*! @elementor/http-client */
 
 /*! @elementor/icons */
 
 /*! @elementor/locations */
-
-/*! @elementor/mixpanel */
 
 /*! @elementor/query */
 
@@ -432,13 +560,95 @@
 
 /*! @elementor/wp-media */
 
+/*! @tiptap/core */
+
+/*! @tiptap/core/jsx-runtime */
+
+/*! @tiptap/extension-bold */
+
+/*! @tiptap/extension-document */
+
+/*! @tiptap/extension-hard-break */
+
+/*! @tiptap/extension-heading */
+
+/*! @tiptap/extension-italic */
+
+/*! @tiptap/extension-link */
+
+/*! @tiptap/extension-paragraph */
+
+/*! @tiptap/extension-strike */
+
+/*! @tiptap/extension-subscript */
+
+/*! @tiptap/extension-superscript */
+
+/*! @tiptap/extension-text */
+
+/*! @tiptap/extension-underline */
+
+/*! @tiptap/pm/commands */
+
+/*! @tiptap/pm/keymap */
+
+/*! @tiptap/pm/model */
+
+/*! @tiptap/pm/schema-list */
+
+/*! @tiptap/pm/state */
+
+/*! @tiptap/pm/transform */
+
+/*! @tiptap/pm/view */
+
+/*! @tiptap/react */
+
 /*! @wordpress/i18n */
 
+/*! dayjs */
+
+/*! fast-equals */
+
+/*! linkifyjs */
+
+/*! orderedmap */
+
+/*! prosemirror-commands */
+
+/*! prosemirror-keymap */
+
+/*! prosemirror-model */
+
+/*! prosemirror-schema-list */
+
+/*! prosemirror-state */
+
+/*! prosemirror-transform */
+
+/*! prosemirror-view */
+
 /*! react */
+
+/*! react-dom */
+
+/*! react/jsx-runtime */
+
+/*! use-sync-external-store/shim */
+
+/*! use-sync-external-store/shim/index.js */
+
+/*! use-sync-external-store/shim/with-selector.js */
+
+/*! w3c-keyname */
 
 /*!**************************!*\
   !*** external ["React"] ***!
   \**************************/
+
+/*!*****************************!*\
+  !*** external ["ReactDOM"] ***!
+  \*****************************/
 
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
@@ -464,6 +674,14 @@
   !*** external ["elementorV2","utils"] ***!
   \****************************************/
 
+/*!*****************************************!*\
+  !*** ./node_modules/dayjs/dayjs.min.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** external ["elementorV2","events"] ***!
+  \*****************************************/
+
 /*!******************************************!*\
   !*** external ["elementorV2","session"] ***!
   \******************************************/
@@ -473,11 +691,15 @@
   \******************************************/
 
 /*!*******************************************!*\
-  !*** external ["elementorV2","editorUi"] ***!
+  !*** ./node_modules/react/jsx-runtime.js ***!
   \*******************************************/
 
 /*!*******************************************!*\
-  !*** external ["elementorV2","mixpanel"] ***!
+  !*** ./node_modules/w3c-keyname/index.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** external ["elementorV2","editorUi"] ***!
   \*******************************************/
 
 /*!********************************************!*\
@@ -492,17 +714,105 @@
   !*** external ["elementorV2","editorProps"] ***!
   \**********************************************/
 
+/*!***********************************************!*\
+  !*** ./node_modules/orderedmap/dist/index.js ***!
+  \***********************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/@tiptap/core/dist/index.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/linkifyjs/dist/linkify.mjs ***!
+  \*************************************************/
+
 /*!*************************************************!*\
   !*** external ["elementorV2","editorElements"] ***!
   \*************************************************/
+
+/*!**************************************************!*\
+  !*** ./node_modules/@tiptap/react/dist/index.js ***!
+  \**************************************************/
 
 /*!***************************************************!*\
   !*** external ["elementorV2","editorResponsive"] ***!
   \***************************************************/
 
+/*!***************************************************!*\
+  !*** external ["elementorV2","editorV1Adapters"] ***!
+  \***************************************************/
+
+/*!****************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/view/index.js ***!
+  \****************************************************/
+
+/*!****************************************************!*\
+  !*** ./node_modules/fast-equals/dist/es/index.mjs ***!
+  \****************************************************/
+
 /*!****************************************************!*\
   !*** external ["elementorV2","editorCurrentUser"] ***!
   \****************************************************/
+
+/*!*****************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/model/index.js ***!
+  \*****************************************************/
+
+/*!*****************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/state/index.js ***!
+  \*****************************************************/
+
+/*!*****************************************************!*\
+  !*** ./node_modules/prosemirror-view/dist/index.js ***!
+  \*****************************************************/
+
+/*!******************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/keymap/index.js ***!
+  \******************************************************/
+
+/*!******************************************************!*\
+  !*** ./node_modules/prosemirror-model/dist/index.js ***!
+  \******************************************************/
+
+/*!******************************************************!*\
+  !*** ./node_modules/prosemirror-state/dist/index.js ***!
+  \******************************************************/
+
+/*!*******************************************************!*\
+  !*** ./node_modules/prosemirror-keymap/dist/index.js ***!
+  \*******************************************************/
+
+/*!********************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/commands/index.js ***!
+  \********************************************************/
+
+/*!*********************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/transform/index.js ***!
+  \*********************************************************/
+
+/*!*********************************************************!*\
+  !*** ./node_modules/prosemirror-commands/dist/index.js ***!
+  \*********************************************************/
+
+/*!**********************************************************!*\
+  !*** ./node_modules/prosemirror-transform/dist/index.js ***!
+  \**********************************************************/
+
+/*!***********************************************************!*\
+  !*** ./node_modules/@tiptap/extension-bold/dist/index.js ***!
+  \***********************************************************/
+
+/*!***********************************************************!*\
+  !*** ./node_modules/@tiptap/extension-link/dist/index.js ***!
+  \***********************************************************/
+
+/*!***********************************************************!*\
+  !*** ./node_modules/@tiptap/extension-text/dist/index.js ***!
+  \***********************************************************/
+
+/*!***********************************************************!*\
+  !*** ./node_modules/@tiptap/pm/dist/schema-list/index.js ***!
+  \***********************************************************/
 
 /*!***********************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/api.ts ***!
@@ -512,9 +822,69 @@
   !*** ./packages/packages/libs/editor-controls/src/env.ts ***!
   \***********************************************************/
 
+/*!************************************************************!*\
+  !*** ./node_modules/prosemirror-schema-list/dist/index.js ***!
+  \************************************************************/
+
+/*!************************************************************!*\
+  !*** ./node_modules/use-sync-external-store/shim/index.js ***!
+  \************************************************************/
+
+/*!*************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-italic/dist/index.js ***!
+  \*************************************************************/
+
+/*!*************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-strike/dist/index.js ***!
+  \*************************************************************/
+
 /*!*************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/index.ts ***!
   \*************************************************************/
+
+/*!**************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-heading/dist/index.js ***!
+  \**************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-document/dist/index.js ***!
+  \***************************************************************/
+
+/*!****************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-paragraph/dist/index.js ***!
+  \****************************************************************/
+
+/*!****************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-subscript/dist/index.js ***!
+  \****************************************************************/
+
+/*!****************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-underline/dist/index.js ***!
+  \****************************************************************/
+
+/*!*****************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-hard-break/dist/index.js ***!
+  \*****************************************************************/
+
+/*!*****************************************************************!*\
+  !*** ./node_modules/react/cjs/react-jsx-runtime.development.js ***!
+  \*****************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/@tiptap/extension-superscript/dist/index.js ***!
+  \******************************************************************/
+
+/*!*******************************************************************!*\
+  !*** ./node_modules/@tiptap/core/dist/jsx-runtime/jsx-runtime.js ***!
+  \*******************************************************************/
+
+/*!********************************************************************!*\
+  !*** ./node_modules/use-sync-external-store/shim/with-selector.js ***!
+  \********************************************************************/
+
+/*!**********************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/utils/tracking.ts ***!
+  \**********************************************************************/
 
 /*!***********************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/create-control.tsx ***!
@@ -529,11 +899,11 @@
   \**************************************************************************/
 
 /*!****************************************************************************!*\
-  !*** ./packages/packages/libs/editor-controls/src/components/repeater.tsx ***!
+  !*** ./packages/packages/libs/editor-controls/src/hooks/use-size-value.ts ***!
   \****************************************************************************/
 
 /*!****************************************************************************!*\
-  !*** ./packages/packages/libs/editor-controls/src/components/sortable.tsx ***!
+  !*** ./packages/packages/libs/editor-controls/src/utils/inline-editing.ts ***!
   \****************************************************************************/
 
 /*!*****************************************************************************!*\
@@ -565,6 +935,14 @@
   \******************************************************************************/
 
 /*!*******************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/url-popover.tsx ***!
+  \*******************************************************************************/
+
+/*!*******************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/chips-control.tsx ***!
+  \*******************************************************************************/
+
+/*!*******************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/color-control.tsx ***!
   \*******************************************************************************/
 
@@ -576,16 +954,20 @@
   !*** ./packages/packages/libs/editor-controls/src/controls/query-control.tsx ***!
   \*******************************************************************************/
 
+/*!*******************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/hooks/use-font-families.ts ***!
+  \*******************************************************************************/
+
+/*!*******************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/hooks/use-typing-buffer.ts ***!
+  \*******************************************************************************/
+
 /*!********************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/bound-prop-context/index.ts ***!
   \********************************************************************************/
 
 /*!********************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/autocomplete.tsx ***!
-  \********************************************************************************/
-
-/*!********************************************************************************!*\
-  !*** ./packages/packages/libs/editor-controls/src/components/floating-bar.tsx ***!
   \********************************************************************************/
 
 /*!********************************************************************************!*\
@@ -621,6 +1003,10 @@
   \*********************************************************************************/
 
 /*!*********************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/inline-editor.tsx ***!
+  \*********************************************************************************/
+
+/*!*********************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/item-selector.tsx ***!
   \*********************************************************************************/
 
@@ -641,6 +1027,10 @@
   \***********************************************************************************/
 
 /*!***********************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/date-time-control.tsx ***!
+  \***********************************************************************************/
+
+/*!***********************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/key-value-control.tsx ***!
   \***********************************************************************************/
 
@@ -653,8 +1043,20 @@
   \***********************************************************************************/
 
 /*!************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/size/unit-select.tsx ***!
+  \************************************************************************************/
+
+/*!************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/repeatable-control.tsx ***!
   \************************************************************************************/
+
+/*!*************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/repeater/repeater.tsx ***!
+  \*************************************************************************************/
+
+/*!*************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/repeater/sortable.tsx ***!
+  \*************************************************************************************/
 
 /*!*************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/filter-control/utils.ts ***!
@@ -662,6 +1064,10 @@
 
 /*!*************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/image-media-control.tsx ***!
+  \*************************************************************************************/
+
+/*!*************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/video-media-control.tsx ***!
   \*************************************************************************************/
 
 /*!*************************************************************************************!*\
@@ -705,6 +1111,10 @@
   \****************************************************************************************/
 
 /*!****************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/inline-editing-control.tsx ***!
+  \****************************************************************************************/
+
+/*!****************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/select-control-wrapper.tsx ***!
   \****************************************************************************************/
 
@@ -722,6 +1132,18 @@
 
 /*!*****************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/index.ts ***!
+  \*****************************************************************************************/
+
+/*!*****************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/inline-editor-toolbar.tsx ***!
+  \*****************************************************************************************/
+
+/*!*****************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/repeater/repeater-tag.tsx ***!
+  \*****************************************************************************************/
+
+/*!*****************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/size-field.tsx ***!
   \*****************************************************************************************/
 
 /*!*****************************************************************************************!*\
@@ -745,6 +1167,10 @@
   \*******************************************************************************************/
 
 /*!*******************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/email-form-action-control.tsx ***!
+  \*******************************************************************************************/
+
+/*!*******************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/linked-dimensions-control.tsx ***!
   \*******************************************************************************************/
 
@@ -753,7 +1179,27 @@
   \********************************************************************************************/
 
 /*!********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/repeater/repeater-header.tsx ***!
+  \********************************************************************************************/
+
+/*!********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/size/unstable-size-field.tsx ***!
+  \********************************************************************************************/
+
+/*!********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/size/unstable-size-input.tsx ***!
+  \********************************************************************************************/
+
+/*!********************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/filter-control/filter-icon.tsx ***!
+  \********************************************************************************************/
+
+/*!********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/sync/get-units.ts ***!
+  \********************************************************************************************/
+
+/*!********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/ui/size-input.tsx ***!
   \********************************************************************************************/
 
 /*!********************************************************************************************!*\
@@ -762,6 +1208,10 @@
 
 /*!*********************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/locations.ts ***!
+  \*********************************************************************************************/
+
+/*!*********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/repeater/repeater-popover.tsx ***!
   \*********************************************************************************************/
 
 /*!*********************************************************************************************!*\
@@ -775,6 +1225,14 @@
 /*!*********************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/filter-control/filter-label.tsx ***!
   \*********************************************************************************************/
+
+/*!*********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/size-component.tsx ***!
+  \*********************************************************************************************/
+
+/*!**********************************************************************************************!*\
+  !*** ./node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.development.js ***!
+  \**********************************************************************************************/
 
 /*!**********************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/control-adornments/control-adornments.tsx ***!
@@ -797,20 +1255,28 @@
   \***********************************************************************************************/
 
 /*!***********************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/ui/unit-selector.tsx ***!
+  \***********************************************************************************************/
+
+/*!***********************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/utils/convert-toggle-options-to-atomic.tsx ***!
   \***********************************************************************************************/
+
+/*!************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/promotions/promotion-trigger.tsx ***!
+  \************************************************************************************************/
 
 /*!************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/control-actions/control-actions-context.tsx ***!
   \************************************************************************************************/
 
 /*!*************************************************************************************************!*\
-  !*** ./packages/packages/libs/editor-controls/src/controls/transform-control/initial-values.ts ***!
+  !*** ./packages/packages/libs/editor-controls/src/components/promotions/attributes-control.tsx ***!
   \*************************************************************************************************/
 
-/*!**************************************************************************************************!*\
-  !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/header/header.tsx ***!
-  \**************************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/transform-control/initial-values.ts ***!
+  \*************************************************************************************************/
 
 /*!**************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/icon-buttons/clear-icon-button.tsx ***!
@@ -818,6 +1284,14 @@
 
 /*!**************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/font-family-control/enqueue-font.tsx ***!
+  \**************************************************************************************************/
+
+/*!**************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/hooks/use-size-value.ts ***!
+  \**************************************************************************************************/
+
+/*!**************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/has-size-value.ts ***!
   \**************************************************************************************************/
 
 /*!**************************************************************************************************!*\
@@ -841,6 +1315,18 @@
   \***************************************************************************************************/
 
 /*!****************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/ui/text-field-popover.tsx ***!
+  \****************************************************************************************************/
+
+/*!****************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/unstable-size-control.tsx ***!
+  \****************************************************************************************************/
+
+/*!****************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/is-extended-unit.ts ***!
+  \****************************************************************************************************/
+
+/*!****************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/transform-control/functions/rotate.tsx ***!
   \****************************************************************************************************/
 
@@ -854,6 +1340,10 @@
 
 /*!******************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/control-adornments/control-adornments-context.tsx ***!
+  \******************************************************************************************************/
+
+/*!******************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/resolve-size-value.ts ***!
   \******************************************************************************************************/
 
 /*!******************************************************************************************************!*\
@@ -873,11 +1363,19 @@
   \********************************************************************************************************/
 
 /*!********************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/should-nullify-value.ts ***!
+  \********************************************************************************************************/
+
+/*!********************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/transition-control/transition-selector.tsx ***!
   \********************************************************************************************************/
 
 /*!*********************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/context/item-context.tsx ***!
+  \*********************************************************************************************************/
+
+/*!*********************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/components/promotions/display-conditions-control.tsx ***!
   \*********************************************************************************************************/
 
 /*!*********************************************************************************************************!*\
@@ -892,8 +1390,24 @@
   !*** ./packages/packages/libs/editor-controls/src/components/size-control/text-field-inner-selection.tsx ***!
   \***********************************************************************************************************/
 
+/*!***********************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/hooks/use-size-unit-keyboard.tsx ***!
+  \***********************************************************************************************************/
+
+/*!***********************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/settings/get-size-units.ts ***!
+  \***********************************************************************************************************/
+
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js ***!
+  \************************************************************************************************************/
+
 /*!************************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/items/edit-item-popover.tsx ***!
+  \************************************************************************************************************/
+
+/*!************************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/resolve-bound-prop-value.ts ***!
   \************************************************************************************************************/
 
 /*!************************************************************************************************************!*\
@@ -902,6 +1416,10 @@
 
 /*!*************************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/components/control-repeater/context/repeater-context.tsx ***!
+  \*************************************************************************************************************/
+
+/*!*************************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/settings/get-default-unit.ts ***!
   \*************************************************************************************************************/
 
 /*!**************************************************************************************************************!*\
@@ -942,6 +1460,10 @@
 
 /*!*******************************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/filter-control/single-size/single-size-item-label.tsx ***!
+  \*******************************************************************************************************************/
+
+/*!*******************************************************************************************************************!*\
+  !*** ./packages/packages/libs/editor-controls/src/controls/size-control/utils/settings/get-prop-type-settings.ts ***!
   \*******************************************************************************************************************/
 
 /*!********************************************************************************************************************!*\
@@ -991,3 +1513,33 @@
 /*!********************************************************************************************************************************************************************!*\
   !*** ./packages/packages/libs/editor-controls/src/controls/background-control/background-overlay/background-image-overlay/background-image-overlay-attachment.tsx ***!
   \********************************************************************************************************************************************************************/
+
+/**
+ * @license React
+ * react-jsx-runtime.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * use-sync-external-store-shim.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * use-sync-external-store-shim/with-selector.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */

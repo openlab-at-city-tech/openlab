@@ -2,10 +2,11 @@
 
 namespace Elementor\Modules\AtomicWidgets\DynamicTags;
 
-use Elementor\Modules\AtomicWidgets\Image\Placeholder_Image;
+use Elementor\Modules\AtomicWidgets\Utils\Image\Placeholder_Image;
 use Elementor\Modules\AtomicWidgets\PropDependencies\Manager as Dependency_Manager;
 use Elementor\Modules\AtomicWidgets\PropTypes\Base\Object_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Base\Plain_Prop_Type;
+use Elementor\Modules\AtomicWidgets\PropTypes\Date_Time_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Image_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\Boolean_Prop_Type;
 use Elementor\Modules\AtomicWidgets\PropTypes\Primitives\Number_Prop_Type;
@@ -28,21 +29,13 @@ class Dynamic_Tags_Converter {
 		switch ( $control_type ) {
 			case 'text':
 			case 'textarea':
-				$prop_type = String_Prop_Type::make()
-					->default( $control['default'] ?? null );
-				break;
-
 			case 'select':
 				$prop_type = String_Prop_Type::make()
 					->default( $control['default'] ?? null );
-
-				if ( ! isset( $control['collection_id'] ) || empty( $control['collection_id'] ) ) {
-					$prop_type->enum( array_keys( $control['options'] ?? [] ) );
-				}
 				break;
 
 			case 'date_time':
-				$prop_type = String_Prop_Type::make()
+				$prop_type = Date_Time_Prop_Type::make()
 					->default( $control['default'] ?? null );
 				break;
 

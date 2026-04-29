@@ -140,19 +140,12 @@ function AdminTopBar() {
   // Handle Top Bar visibility on initiation: Indicate that the admin top bar is visible and the page content needs to push down below the admin top bar for visibility.
   (0, _react.useEffect)(function () {
     var adminTopBarElement = document.querySelector('#e-admin-top-bar-root');
-    adminTopBarElement.classList.add('e-admin-top-bar--active');
+    adminTopBarElement === null || adminTopBarElement === void 0 || adminTopBarElement.classList.add('e-admin-top-bar--active');
+    adminTopBarElement === null || adminTopBarElement === void 0 || adminTopBarElement.classList.add('e-admin-top-bar--editor-one');
   }, []);
 
   // Handle the page title visibility in admin top bar.
   var pageTitleText = (0, _usePageTitle.usePageTitle)();
-
-  // Handle the action buttons visibility in admin top bar on initiation.
-  (0, _react.useEffect)(function () {
-    var actionButtonElements = document.querySelectorAll('.page-title-action');
-    actionButtonElements.forEach(function (actionButtonElement) {
-      actionButtonsRef.current.appendChild(actionButtonElement);
-    });
-  }, []);
   var finderAction = function finderAction() {
     $e.route('finder');
   };
@@ -271,7 +264,7 @@ function BarHeading(props) {
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "e-logo-wrapper"
   }, /*#__PURE__*/_react.default.createElement("i", {
-    className: "eicon-elementor",
+    className: "eicon-elementor-circle",
     "aria-hidden": "true"
   })), /*#__PURE__*/_react.default.createElement("span", {
     className: "e-admin-top-bar__heading-title"

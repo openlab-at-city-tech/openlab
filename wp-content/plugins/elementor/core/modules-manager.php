@@ -127,12 +127,17 @@ class Modules_Manager {
 			'atomic-widgets',
 			'global-classes',
 			'variables',
+			'design-system-sync',
 			'wc-product-editor',
 			'checklist',
 			'cloud-library',
 			'cloud-kit-library',
 			'atomic-opt-in',
 			'components',
+			'interactions',
+			'feedback',
+			'widget-creation',
+			'editor-one',
 		];
 	}
 

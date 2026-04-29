@@ -303,19 +303,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -638,9 +636,9 @@ module.exports = ReactDOM;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "4102e11512e21a92ba35.bundle.js";
-/******/ 			if (chunkId === "vendors-node_modules_styled-components_dist_styled-components_browser_esm_js-node_modules_bab-0097ba") return "a802b9aa6f4b87a294e5.bundle.js";
-/******/ 			if (chunkId === "styleguide-app") return "" + chunkId + ".77392704cadf8bc1ca69.bundle.js";
+/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "6a19e86dd8c1f9165dbe.bundle.js";
+/******/ 			if (chunkId === "vendors-node_modules_styled-components_dist_styled-components_browser_esm_js-node_modules_bab-0097ba") return "c13d205fa26f8af1ce7c.bundle.js";
+/******/ 			if (chunkId === "styleguide-app") return "" + chunkId + ".36ecabae74d9b87fc5a8.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -683,7 +681,6 @@ module.exports = ReactDOM;
 /******/ 				script = document.createElement('script');
 /******/ 		
 /******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}

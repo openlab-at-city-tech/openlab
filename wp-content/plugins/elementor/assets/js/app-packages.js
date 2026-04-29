@@ -579,7 +579,7 @@ function Header(props) {
   }, /*#__PURE__*/_react.default.createElement(TitleTag, (0, _extends2.default)({
     className: "eps-app__logo-title-wrapper"
   }, titleAttrs), /*#__PURE__*/_react.default.createElement("i", {
-    className: "eps-app__logo eicon-elementor"
+    className: "eps-app__logo eicon-elementor-circle"
   }), /*#__PURE__*/_react.default.createElement("h1", {
     className: "eps-app__title"
   }, props.title)), /*#__PURE__*/_react.default.createElement(_headerButtons.default, {
@@ -4081,6 +4081,62 @@ var htmlDecodeTextContent = exports.htmlDecodeTextContent = function htmlDecodeT
 
 /***/ }),
 
+/***/ "../app/modules/import-export/assets/js/shared/utils/is-valid-redirect-url.js":
+/*!************************************************************************************!*\
+  !*** ../app/modules/import-export/assets/js/shared/utils/is-valid-redirect-url.js ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = isValidRedirectUrl;
+function isValidRedirectUrl(url) {
+  try {
+    var parsedUrl = new URL(url);
+    return parsedUrl.hostname === window.location.hostname && ('http:' === parsedUrl.protocol || 'https:' === parsedUrl.protocol);
+  } catch (e) {
+    return false;
+  }
+}
+
+/***/ }),
+
+/***/ "../app/modules/import-export/assets/js/shared/utils/redirect.js":
+/*!***********************************************************************!*\
+  !*** ../app/modules/import-export/assets/js/shared/utils/redirect.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = safeRedirect;
+var _isValidRedirectUrl = _interopRequireDefault(__webpack_require__(/*! ./is-valid-redirect-url */ "../app/modules/import-export/assets/js/shared/utils/is-valid-redirect-url.js"));
+function safeRedirect(url) {
+  try {
+    if (url.startsWith('/')) {
+      url = window.location.origin + url;
+    }
+    var decodedUrl = decodeURIComponent(url);
+    if ((0, _isValidRedirectUrl.default)(decodedUrl)) {
+      window.location.href = decodedUrl;
+      return true;
+    }
+  } catch (e) {
+    return false;
+  }
+}
+
+/***/ }),
+
 /***/ "../app/modules/site-editor/assets/js/context/template-types.js":
 /*!**********************************************************************!*\
   !*** ../app/modules/site-editor/assets/js/context/template-types.js ***!
@@ -4796,27 +4852,42 @@ function Promotion() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Layout;
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _page = _interopRequireDefault(__webpack_require__(/*! elementor-app/layout/page */ "../app/assets/js/layout/page.js"));
 var _menu = _interopRequireDefault(__webpack_require__(/*! ../organisms/menu */ "../app/modules/site-editor/assets/js/organisms/menu.js"));
 var _templateTypes = _interopRequireDefault(__webpack_require__(/*! ../context/template-types */ "../app/modules/site-editor/assets/js/context/template-types.js"));
+var _useQueryParams = _interopRequireDefault(__webpack_require__(/*! elementor-app/hooks/use-query-params */ "../app/assets/js/hooks/use-query-params.js"));
+var _redirect = _interopRequireDefault(__webpack_require__(/*! ../../../../import-export/assets/js/shared/utils/redirect */ "../app/modules/import-export/assets/js/shared/utils/redirect.js"));
 __webpack_require__(/*! ./site-editor.scss */ "../app/modules/site-editor/assets/js/templates/site-editor.scss");
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function Layout(props) {
-  var _props$titleRedirectR;
-  var config = {
-    title: __('Theme Builder', 'elementor'),
-    titleRedirectRoute: (_props$titleRedirectR = props.titleRedirectRoute) !== null && _props$titleRedirectR !== void 0 ? _props$titleRedirectR : null,
-    headerButtons: props.headerButtons,
-    sidebar: /*#__PURE__*/_react.default.createElement(_menu.default, {
-      allPartsButton: props.allPartsButton,
-      promotion: props.promotion
-    }),
-    content: props.children
-  };
+  var _useQueryParams$getAl = (0, _useQueryParams.default)().getAll(),
+    returnTo = _useQueryParams$getAl.return_to;
+  var onClose = (0, _react.useCallback)(function () {
+    if (returnTo && (0, _redirect.default)(returnTo)) {
+      return;
+    }
+    window.top.location = elementorAppConfig.admin_url;
+  }, [returnTo]);
+  var config = (0, _react.useMemo)(function () {
+    var _props$titleRedirectR;
+    return {
+      title: __('Theme Builder', 'elementor'),
+      titleRedirectRoute: (_props$titleRedirectR = props.titleRedirectRoute) !== null && _props$titleRedirectR !== void 0 ? _props$titleRedirectR : null,
+      headerButtons: props.headerButtons,
+      sidebar: /*#__PURE__*/_react.default.createElement(_menu.default, {
+        allPartsButton: props.allPartsButton,
+        promotion: props.promotion
+      }),
+      content: props.children,
+      onClose: onClose
+    };
+  }, [props.titleRedirectRoute, props.headerButtons, props.allPartsButton, props.promotion, props.children, onClose]);
   return /*#__PURE__*/_react.default.createElement(_templateTypes.default, null, /*#__PURE__*/_react.default.createElement(_page.default, config));
 }
 Layout.propTypes = {
@@ -5422,19 +5493,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -5753,12 +5822,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Redirect: () => (/* binding */ Redirect),
 /* harmony export */   Router: () => (/* binding */ Router),
 /* harmony export */   ServerLocation: () => (/* binding */ ServerLocation),
-/* harmony export */   createHistory: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_5__.createHistory),
-/* harmony export */   createMemorySource: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_5__.createMemorySource),
-/* harmony export */   globalHistory: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_5__.globalHistory),
+/* harmony export */   createHistory: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_6__.createHistory),
+/* harmony export */   createMemorySource: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_6__.createMemorySource),
+/* harmony export */   globalHistory: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_6__.globalHistory),
 /* harmony export */   isRedirect: () => (/* binding */ isRedirect),
-/* harmony export */   matchPath: () => (/* reexport safe */ _lib_utils__WEBPACK_IMPORTED_MODULE_4__.match),
-/* harmony export */   navigate: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_5__.navigate),
+/* harmony export */   matchPath: () => (/* reexport safe */ _lib_utils__WEBPACK_IMPORTED_MODULE_5__.match),
+/* harmony export */   navigate: () => (/* reexport safe */ _lib_history__WEBPACK_IMPORTED_MODULE_6__.navigate),
 /* harmony export */   redirectTo: () => (/* binding */ redirectTo),
 /* harmony export */   useLocation: () => (/* binding */ useLocation),
 /* harmony export */   useMatch: () => (/* binding */ useMatch),
@@ -5767,15 +5836,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! invariant */ "../node_modules/invariant/browser.js");
-/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var create_react_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! create-react-context */ "../node_modules/create-react-context/lib/index.js");
-/* harmony import */ var create_react_context__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(create_react_context__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react_lifecycles_compat__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-lifecycles-compat */ "../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js");
-/* harmony import */ var _lib_utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/utils */ "../node_modules/@reach/router/es/lib/utils.js");
-/* harmony import */ var _lib_history__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/history */ "../node_modules/@reach/router/es/lib/history.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! invariant */ "../node_modules/invariant/browser.js");
+/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var create_react_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! create-react-context */ "../node_modules/create-react-context/lib/index.js");
+/* harmony import */ var create_react_context__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(create_react_context__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_lifecycles_compat__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-lifecycles-compat */ "../node_modules/react-lifecycles-compat/react-lifecycles-compat.es.js");
+/* harmony import */ var _lib_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/utils */ "../node_modules/@reach/router/es/lib/utils.js");
+/* harmony import */ var _lib_history__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib/history */ "../node_modules/@reach/router/es/lib/history.js");
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -5798,7 +5867,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 ////////////////////////////////////////////////////////////////////////////////
 
 var createNamedContext = function createNamedContext(name, defaultValue) {
-  var Ctx = create_react_context__WEBPACK_IMPORTED_MODULE_2___default()(defaultValue);
+  var Ctx = create_react_context__WEBPACK_IMPORTED_MODULE_3___default()(defaultValue);
   Ctx.displayName = name;
   return Ctx;
 };
@@ -5912,10 +5981,10 @@ var LocationProvider = function (_React$Component) {
 
 
 LocationProvider.defaultProps = {
-  history: _lib_history__WEBPACK_IMPORTED_MODULE_5__.globalHistory
+  history: _lib_history__WEBPACK_IMPORTED_MODULE_6__.globalHistory
 };
  true ? LocationProvider.propTypes = {
-  history: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().object).isRequired
+  history: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().object).isRequired
 } : 0;
 var ServerLocation = function ServerLocation(_ref2) {
   var url = _ref2.url,
@@ -6001,7 +6070,7 @@ var RouterImpl = function (_React$PureComponent) {
     var pathname = location.pathname;
 
 
-    var match = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.pick)(routes, pathname);
+    var match = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.pick)(routes, pathname);
 
     if (match) {
       var params = match.params,
@@ -6017,7 +6086,7 @@ var RouterImpl = function (_React$PureComponent) {
         uri: uri,
         location: location,
         navigate: function navigate(to, options) {
-          return _navigate2((0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(to, uri), options);
+          return _navigate2((0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(to, uri), options);
         }
       });
 
@@ -6200,7 +6269,7 @@ var FocusHandlerImpl = function (_React$Component2) {
   return FocusHandlerImpl;
 }((react__WEBPACK_IMPORTED_MODULE_0___default().Component));
 
-(0,react_lifecycles_compat__WEBPACK_IMPORTED_MODULE_3__.polyfill)(FocusHandlerImpl);
+(0,react_lifecycles_compat__WEBPACK_IMPORTED_MODULE_4__.polyfill)(FocusHandlerImpl);
 
 var k = function k() {};
 
@@ -6237,10 +6306,10 @@ var Link = forwardRef(function (_ref4, ref) {
               getProps = _props$getProps === undefined ? k : _props$getProps,
               anchorProps = _objectWithoutProperties(props, ["to", "state", "replace", "getProps"]);
 
-          var href = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(to, baseuri);
+          var href = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(to, baseuri);
           var encodedHref = encodeURI(href);
           var isCurrent = location.pathname === encodedHref;
-          var isPartiallyCurrent = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.startsWith)(location.pathname, encodedHref);
+          var isPartiallyCurrent = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.startsWith)(location.pathname, encodedHref);
 
           return react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", _extends({
             ref: ref || innerRef,
@@ -6257,7 +6326,7 @@ var Link = forwardRef(function (_ref4, ref) {
                       key = _location$state.key,
                       restState = _objectWithoutProperties(_location$state, ["key"]);
 
-                  shouldReplace = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.shallowCompare)(_extends({}, state), restState);
+                  shouldReplace = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.shallowCompare)(_extends({}, state), restState);
                 }
                 navigate(href, {
                   state: state,
@@ -6275,7 +6344,7 @@ var Link = forwardRef(function (_ref4, ref) {
 Link.displayName = "Link";
 
  true ? Link.propTypes = {
-  to: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().string).isRequired
+  to: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string).isRequired
 } : 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -6314,8 +6383,8 @@ var RedirectImpl = function (_React$Component3) {
         props = _objectWithoutProperties(_props3, ["navigate", "to", "from", "replace", "state", "noThrow", "baseuri"]);
 
     Promise.resolve().then(function () {
-      var resolvedTo = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(to, baseuri);
-      navigate((0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.insertParams)(resolvedTo, props), { replace: replace, state: state });
+      var resolvedTo = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(to, baseuri);
+      navigate((0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.insertParams)(resolvedTo, props), { replace: replace, state: state });
     });
   };
 
@@ -6330,8 +6399,8 @@ var RedirectImpl = function (_React$Component3) {
         baseuri = _props4.baseuri,
         props = _objectWithoutProperties(_props4, ["navigate", "to", "from", "replace", "state", "noThrow", "baseuri"]);
 
-    var resolvedTo = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(to, baseuri);
-    if (!noThrow) redirectTo((0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.insertParams)(resolvedTo, props));
+    var resolvedTo = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(to, baseuri);
+    if (!noThrow) redirectTo((0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.insertParams)(resolvedTo, props));
     return null;
   };
 
@@ -6356,8 +6425,8 @@ var Redirect = function Redirect(props) {
 };
 
  true ? Redirect.propTypes = {
-  from: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().string),
-  to: (prop_types__WEBPACK_IMPORTED_MODULE_6___default().string).isRequired
+  from: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string),
+  to: (prop_types__WEBPACK_IMPORTED_MODULE_1___default().string).isRequired
 } : 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -6376,8 +6445,8 @@ var Match = function Match(_ref8) {
           var navigate = _ref10.navigate,
               location = _ref10.location;
 
-          var resolvedPath = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(path, baseuri);
-          var result = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.match)(resolvedPath, location.pathname);
+          var resolvedPath = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(path, baseuri);
+          var result = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.match)(resolvedPath, location.pathname);
           return children({
             navigate: navigate,
             location: location,
@@ -6424,7 +6493,7 @@ var useParams = function useParams() {
 
   var location = useLocation();
 
-  var results = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.match)(context.basepath, location.pathname);
+  var results = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.match)(context.basepath, location.pathname);
 
   return results ? results.params : null;
 };
@@ -6441,8 +6510,8 @@ var useMatch = function useMatch(path) {
 
   var location = useLocation();
 
-  var resolvedPath = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.resolve)(path, context.baseuri);
-  var result = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.match)(resolvedPath, location.pathname);
+  var resolvedPath = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.resolve)(path, context.baseuri);
+  var result = (0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.match)(resolvedPath, location.pathname);
   return result ? _extends({}, result.params, {
     uri: result.uri,
     path: path
@@ -6464,11 +6533,11 @@ var createRoute = function createRoute(basepath) {
     if (element.type === (react__WEBPACK_IMPORTED_MODULE_0___default().Fragment) && element.props.children) {
       return react__WEBPACK_IMPORTED_MODULE_0___default().Children.map(element.props.children, createRoute(basepath));
     }
-    !(element.props.path || element.props.default || element.type === Redirect) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_1___default()(false, "<Router>: Children of <Router> must have a `path` or `default` prop, or be a `<Redirect>`. None found on element type `" + element.type + "`") : 0 : void 0;
+    !(element.props.path || element.props.default || element.type === Redirect) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_2___default()(false, "<Router>: Children of <Router> must have a `path` or `default` prop, or be a `<Redirect>`. None found on element type `" + element.type + "`") : 0 : void 0;
 
-    !!(element.type === Redirect && (!element.props.from || !element.props.to)) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_1___default()(false, "<Redirect from=\"" + element.props.from + "\" to=\"" + element.props.to + "\"/> requires both \"from\" and \"to\" props when inside a <Router>.") : 0 : void 0;
+    !!(element.type === Redirect && (!element.props.from || !element.props.to)) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_2___default()(false, "<Redirect from=\"" + element.props.from + "\" to=\"" + element.props.to + "\"/> requires both \"from\" and \"to\" props when inside a <Router>.") : 0 : void 0;
 
-    !!(element.type === Redirect && !(0,_lib_utils__WEBPACK_IMPORTED_MODULE_4__.validateRedirect)(element.props.from, element.props.to)) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_1___default()(false, "<Redirect from=\"" + element.props.from + " to=\"" + element.props.to + "\"/> has mismatched dynamic segments, ensure both paths have the exact same dynamic segments.") : 0 : void 0;
+    !!(element.type === Redirect && !(0,_lib_utils__WEBPACK_IMPORTED_MODULE_5__.validateRedirect)(element.props.from, element.props.to)) ?  true ? invariant__WEBPACK_IMPORTED_MODULE_2___default()(false, "<Redirect from=\"" + element.props.from + " to=\"" + element.props.to + "\"/> has mismatched dynamic segments, ensure both paths have the exact same dynamic segments.") : 0 : void 0;
 
     if (element.props.default) {
       return { value: element, default: true };

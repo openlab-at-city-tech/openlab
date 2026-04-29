@@ -124,7 +124,6 @@ var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
 var _objectWithoutProperties2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectWithoutProperties */ "../node_modules/@babel/runtime/helpers/objectWithoutProperties.js"));
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _icons = __webpack_require__(/*! @elementor/icons */ "@elementor/icons");
 var _excluded = ["children"],
   _excluded2 = ["children"],
   _excluded3 = ["children"],
@@ -146,7 +145,7 @@ var ContentList = exports.ContentList = function ContentList(_ref2) {
   return /*#__PURE__*/_react.default.createElement(_ui.Box, (0, _extends2.default)({
     component: "ul",
     sx: {
-      my: 0
+      listStyle: 'disc'
     }
   }, props), children);
 };
@@ -157,11 +156,7 @@ var ContentListItem = exports.ContentListItem = function ContentListItem(_ref3) 
   var children = _ref3.children,
     props = (0, _objectWithoutProperties2.default)(_ref3, _excluded3);
   return /*#__PURE__*/_react.default.createElement(TextNode, (0, _extends2.default)({
-    component: "li",
-    sx: {
-      listStyle: 'disc',
-      marginInlineStart: 3
-    }
+    component: "li"
   }, props), children);
 };
 ContentListItem.propTypes = {
@@ -173,10 +168,7 @@ var AdvantagesList = exports.AdvantagesList = function AdvantagesList(_ref4) {
   return /*#__PURE__*/_react.default.createElement(_ui.Box, (0, _extends2.default)({
     component: "ul",
     sx: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 0.5,
-      my: 0
+      marginInlineStart: 2
     }
   }, props), children);
 };
@@ -189,16 +181,10 @@ var AdvantagesListItem = exports.AdvantagesListItem = function AdvantagesListIte
   return /*#__PURE__*/_react.default.createElement(TextNode, (0, _extends2.default)({
     component: "li",
     sx: {
-      listStyle: 'none',
-      marginInlineStart: 0,
       lineHeight: '150%',
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: 0.5
+      listStyle: 'disc'
     }
-  }, props), /*#__PURE__*/_react.default.createElement(_icons.CheckIcon, {
-    fontSize: "small"
-  }), children);
+  }, props), children);
 };
 AdvantagesListItem.propTypes = {
   children: PropTypes.node
@@ -277,7 +263,7 @@ var Message = exports.Message = function Message(_ref) {
     autoHideDuration: 4000,
     anchorOrigin: {
       vertical: 'bottom',
-      horizontal: 'right'
+      horizontal: 'center'
     },
     onClose: onClose
   }, 'message' !== severity ? /*#__PURE__*/_react.default.createElement(_ui.Alert, {
@@ -340,28 +326,19 @@ var _DialogHeader = _interopRequireDefault(__webpack_require__(/*! @elementor/ui
 var _excluded = ["onClose", "onSubmit", "isEnrolled"];
 function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 var i18n = {
-  header: (0, _i18n.__)('Editor V4', 'elementor'),
-  chip: (0, _i18n.__)('Alpha', 'elementor'),
+  header: (0, _i18n.__)('Atomic Editor', 'elementor'),
   checkboxText: (0, _i18n.__)('I’ve read and understood.', 'elementor'),
   optIn: {
-    titleText: (0, _i18n.__)('You are about to enable Editor V4 features!', 'elementor'),
-    introText: (0, _i18n.__)('By activating, you’ll get early access to the next generation of Elementor’s Editor. This is your chance to explore new capabilities and help shape the future of Elementor! ', 'elementor'),
-    notesHeader: (0, _i18n.__)(' Important notes:', 'elementor'),
-    notes: {
-      alphaPrefix: (0, _i18n.__)('Editor V4 is currently in alpha, ', 'elementor'),
-      details: [(0, _i18n.__)('and development is still in progress. Do not use it on live sites - use a staging or development environment instead.', 'elementor'), (0, _i18n.__)('When you activate Editor V4, you’ll also be activating Containers, the Top Bar, and Nested Elements. You can turn them back off by going to WP Admin > Elementor > Settings > Features.', 'elementor')]
-    },
+    titleText: (0, _i18n.__)('You are about to enable Atomic Editor features!', 'elementor'),
+    introText: (0, _i18n.__)('By activating, you’ll get access to the next generation of Elementor’s Editor. This is your chance to explore new capabilities and help shape the future of Elementor! ', 'elementor'),
+    details: [(0, _i18n.__)('When you activate, you’ll also be activating Containers and Nested Elements. You can turn them back off by going to: WP Admin > Elementor > Settings > Features.', 'elementor')],
     activateButton: (0, _i18n.__)('Activate', 'elementor'),
     cancelButton: (0, _i18n.__)('Cancel', 'elementor')
   },
   optOut: {
-    titleText: (0, _i18n.__)('You’re deactivating Editor V4', 'elementor'),
-    introText: (0, _i18n.__)('We hope you enjoyed testing and building with these new features.', 'elementor'),
-    notesHeader: (0, _i18n.__)('Keep in mind:', 'elementor'),
-    notes: {
-      details: [(0, _i18n.__)('By deactivating, you’ll lose all Editor V4 features, and any content you created with V4-specific features will no longer be available or appear on your site.', 'elementor'), (0, _i18n.__)('Containers, the Top Bar, and Nested Elements will stay in their current status.', 'elementor')]
-    },
-    activateButton: (0, _i18n.__)('Deactivate V4', 'elementor'),
+    titleText: (0, _i18n.__)('You\'re about to lose all content created with Atomic features', 'elementor'),
+    details: [(0, _i18n.__)('By deactivating, you’ll lose all Atomic Elements, Classes and Variables. Any content you created with these features will no longer be available or appear on your site.', 'elementor'), (0, _i18n.__)('Containers and Nested Elements will stay in their current status.', 'elementor')],
+    activateButton: (0, _i18n.__)('Deactivate', 'elementor'),
     cancelButton: (0, _i18n.__)('Cancel', 'elementor')
   }
 };
@@ -387,37 +364,33 @@ var Terms = exports.Terms = function Terms(_ref) {
   var currentState = isEnrolled ? 'optOut' : 'optIn';
   return /*#__PURE__*/_react.default.createElement(_ui.Dialog, (0, _extends2.default)({}, props, {
     open: true,
-    onClose: onClose
-  }), /*#__PURE__*/_react.default.createElement(_DialogHeader.default, null, /*#__PURE__*/_react.default.createElement(_DialogHeaderGroup.default, null, /*#__PURE__*/_react.default.createElement(_ui.DialogTitle, null, i18n.header), /*#__PURE__*/_react.default.createElement(_ui.Chip, {
-    label: i18n.chip,
-    color: "secondary",
-    variant: "filled",
-    size: "small"
-  }))), /*#__PURE__*/_react.default.createElement(_ui.DialogContent, {
+    onClose: onClose,
+    maxWidth: "md"
+  }), /*#__PURE__*/_react.default.createElement(_DialogHeader.default, null, /*#__PURE__*/_react.default.createElement(_DialogHeaderGroup.default, null, /*#__PURE__*/_react.default.createElement(_ui.DialogTitle, null, i18n.header))), /*#__PURE__*/_react.default.createElement(_ui.DialogContent, {
     dividers: true
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     gap: 2.5
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
-    gap: 1
+    gap: 1.5,
+    sx: {
+      mx: 2,
+      maxWidth: '550px'
+    }
   }, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
     align: "center",
     variant: "h6"
-  }, i18n[currentState].titleText), /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
+  }, i18n[currentState].titleText), i18n[currentState].introText && /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
     align: "center",
-    variant: "body2"
-  }, i18n[currentState].introText)), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
-    gap: 1
-  }, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
-    variant: "body2"
-  }, i18n[currentState].notesHeader), /*#__PURE__*/_react.default.createElement(_optInContent.ContentList, null, /*#__PURE__*/_react.default.createElement(_optInContent.ContentListItem, {
-    variant: "body2"
-  }, !isEnrolled && /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
-    variant: "subtitle2",
-    component: "span"
-  }, i18n.optIn.notes.alphaPrefix), i18n[currentState].notes.details[0]), i18n[currentState].notes.details.slice(1).map(function (entry, index) {
+    variant: "body3"
+  }, i18n[currentState].introText)), /*#__PURE__*/_react.default.createElement(_ui.Stack, null, /*#__PURE__*/_react.default.createElement(_optInContent.ContentList, {
+    sx: {
+      mx: 3,
+      maxWidth: '550px'
+    }
+  }, i18n[currentState].details.map(function (entry, index) {
     return /*#__PURE__*/_react.default.createElement(_optInContent.ContentListItem, {
       key: index,
-      variant: "body2"
+      variant: "body3"
     }, entry);
   }))), /*#__PURE__*/_react.default.createElement(_ui.FormControlLabel, {
     control: /*#__PURE__*/_react.default.createElement(_ui.Checkbox, {
@@ -467,7 +440,6 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _icons = __webpack_require__(/*! @elementor/icons */ "@elementor/icons");
 var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 var _optInContent = __webpack_require__(/*! ./opt-in-content */ "../modules/atomic-opt-in/assets/js/opt-in-page/opt-in-content.js");
 var _optInImgPlaceholders = __webpack_require__(/*! ./opt-in-img-placeholders */ "../modules/atomic-opt-in/assets/js/opt-in-page/opt-in-img-placeholders.js");
@@ -487,14 +459,11 @@ var decodeHtmlUrl = function decodeHtmlUrl(html) {
 var OPT_IN_MSG = 'e-editor-v4-opt-in-message';
 var OPT_OUT_MSG = 'e-editor-v4-opt-out-message';
 var i18n = {
-  title: (0, _i18n.__)('The road to Editor V4', 'elementor'),
-  chip: (0, _i18n.__)('Alpha', 'elementor'),
-  welcomeText: (0, _i18n.__)('Welcome to a new era of web creation with Editor V4. It’s faster, more flexible, and built with a fresh approach to structure & styling.', 'elementor'),
-  advantagesHeader: (0, _i18n.__)('Here’s what’s inside the alpha version:', 'elementor'),
-  advantages: [(0, _i18n.__)('Unparalleled performance - Cleaner code & a lighter CSS footprint.', 'elementor'), (0, _i18n.__)('Professional tools at your fingertips - classes and states.', 'elementor'), (0, _i18n.__)('Consistent styling experience - A unified Style tab for all elements.', 'elementor'), (0, _i18n.__)('Fully responsive design - Customize any style property per screen.', 'elementor')],
+  title: (0, _i18n.__)('Activate Atomic Editor features', 'elementor'),
+  welcomeText: (0, _i18n.__)('The Atomic Editor presents a new generation of high-performance, flexible building blocks designed for less bloat and precise styling with a unified interface.', 'elementor'),
+  advantages: [[(0, _i18n.__)('Combine legacy widgets & new elements', 'elementor'), (0, _i18n.__)('Your current and new workflows work together on the same page.', 'elementor')], [(0, _i18n.__)('Build reusable design systems', 'elementor'), (0, _i18n.__)('Classes, Variables and Components give you a clear path for scale.', 'elementor')], [(0, _i18n.__)('Consistent styling experience', 'elementor'), (0, _i18n.__)('A unified Style tab for all Atomic Elements with full control over responsive design.', 'elementor')], [(0, _i18n.__)('Unparalleled performance', 'elementor'), (0, _i18n.__)('Cleaner code and a lighter CSS footprint with single-div wrappers.', 'elementor')]],
   andMore: (0, _i18n.__)('And much more!', 'elementor'),
   readMore: (0, _i18n.__)('Learn more', 'elementor'),
-  warning: (0, _i18n.__)('Editor V4 is still in alpha and should not be used on live sites yet.', 'elementor'),
   feedback: (0, _i18n.__)('We’d love your feedback!', 'elementor'),
   overToGithub: (0, _i18n.__)('Head over to Github', 'elementor'),
   tellUsWhy: (0, _i18n.__)('Tell us why', 'elementor'),
@@ -502,12 +471,12 @@ var i18n = {
   buttons: {
     tryOut: (0, _i18n.__)('Try out the new experience', 'elementor'),
     optIn: (0, _i18n.__)('Activate the new experience', 'elementor'),
-    optOut: (0, _i18n.__)('Deactivate V4', 'elementor')
+    optOut: (0, _i18n.__)('Deactivate', 'elementor')
   },
   messages: {
     optInSuccess: (0, _i18n.__)('Welcome! You’ve got the newest version of the editor.', 'elementor'),
     optOut: (0, _i18n.__)('You’ve deactivated the new Editor. Have feedback?', 'elementor'),
-    error: (0, _i18n.__)('Ouch, there was a glitch. Try activating V4 again soon.', 'elementor')
+    error: (0, _i18n.__)('Ouch, there was a glitch. Try activating again soon.', 'elementor')
   }
 };
 var optInLinks = {
@@ -610,36 +579,26 @@ var OptIn = exports.OptIn = function OptIn(_ref) {
     sx: {
       flex: 1,
       maxWidth: {
-        md: '507px',
+        md: '580px',
         sm: '600px'
       },
       gap: 2.5,
       mx: 'auto'
     }
-  }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
-    direction: "row",
-    alignItems: "center",
-    gap: 1
   }, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
     variant: "h4",
     width: "fit-content"
-  }, i18n.title), /*#__PURE__*/_react.default.createElement(_ui.Chip, {
-    size: "small",
-    color: "secondary",
-    variant: "filled",
-    label: i18n.chip
-  })), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
+  }, /*#__PURE__*/_react.default.createElement("span", null, i18n.title)), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     direction: "column",
-    gap: 3
-  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, null, i18n.welcomeText)), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, {
-    variant: "subtitle1",
+    gap: 1
+  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, null, i18n.welcomeText)), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_optInContent.AdvantagesList, {
     sx: {
-      mb: 1.5
+      gap: 0.5
     }
-  }, i18n.advantagesHeader), /*#__PURE__*/_react.default.createElement(_optInContent.AdvantagesList, null, i18n.advantages.map(function (entry, i) {
+  }, i18n.advantages.map(function (entry, i) {
     return /*#__PURE__*/_react.default.createElement(_optInContent.AdvantagesListItem, {
       key: i
-    }, entry);
+    }, /*#__PURE__*/_react.default.createElement("b", null, entry[0]), " - ", entry[1]);
   }), /*#__PURE__*/_react.default.createElement(_optInContent.AdvantagesListItem, {
     key: i18n.advantages.length
   }, i18n.andMore, " ", /*#__PURE__*/_react.default.createElement(_ui.Link, {
@@ -647,15 +606,6 @@ var OptIn = exports.OptIn = function OptIn(_ref) {
     href: optInLinks.readMoreUrl,
     target: "_blank"
   }, i18n.readMore))))), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
-    direction: "row",
-    alignItems: "self-start",
-    gap: 0.5,
-    sx: {
-      mb: 2.5
-    }
-  }, /*#__PURE__*/_react.default.createElement(_icons.AlertTriangleIcon, {
-    color: "action"
-  }), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_optInContent.TextNode, null, i18n.warning))), /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     direction: "column",
     width: "clamp(240px, max(340px, 75%), 340px)",
     maxWidth: "100%",
@@ -744,7 +694,16 @@ var OptIn = exports.OptIn = function OptIn(_ref) {
   }), optInMessage && /*#__PURE__*/_react.default.createElement(_optInMessage.Message, {
     onClose: function onClose() {
       return setOptInMessage('');
-    }
+    },
+    action: /*#__PURE__*/_react.default.createElement(_ui.Link, {
+      href: optInLinks.tryOutUrl,
+      color: "#FFFFFF",
+      sx: {
+        cursor: 'pointer',
+        textDecoration: 'none',
+        pl: 3
+      }
+    }, i18n.buttons.tryOut)
   }, optInMessage), optOutMessage && /*#__PURE__*/_react.default.createElement(_optInMessage.Message, {
     onClose: function onClose() {
       return setOptOutMessage('');
@@ -752,7 +711,7 @@ var OptIn = exports.OptIn = function OptIn(_ref) {
     action: /*#__PURE__*/_react.default.createElement(_ui.Link, {
       href: optInLinks.feedbackUrl,
       target: "_blank",
-      color: "inherit",
+      color: "#FFFFFF",
       sx: {
         cursor: 'pointer',
         textDecoration: 'none',
@@ -1182,19 +1141,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -1457,7 +1414,7 @@ try {
 /***/ ((module) => {
 
 "use strict";
-/*! @license DOMPurify 3.2.6 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.6/LICENSE */
+/*! @license DOMPurify 3.3.0 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.3.0/LICENSE */
 
 
 
@@ -1488,12 +1445,18 @@ if (!seal) {
   };
 }
 if (!apply) {
-  apply = function apply(fun, thisValue, args) {
-    return fun.apply(thisValue, args);
+  apply = function apply(func, thisArg) {
+    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      args[_key - 2] = arguments[_key];
+    }
+    return func.apply(thisArg, args);
   };
 }
 if (!construct) {
-  construct = function construct(Func, args) {
+  construct = function construct(Func) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
     return new Func(...args);
   };
 }
@@ -1522,8 +1485,8 @@ function unapply(func) {
     if (thisArg instanceof RegExp) {
       thisArg.lastIndex = 0;
     }
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+    for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      args[_key3 - 1] = arguments[_key3];
     }
     return apply(func, thisArg, args);
   };
@@ -1534,12 +1497,12 @@ function unapply(func) {
  * @param func - The constructor function to be wrapped and called.
  * @returns A new function that constructs an instance of the given constructor function with the provided arguments.
  */
-function unconstruct(func) {
+function unconstruct(Func) {
   return function () {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
     }
-    return construct(func, args);
+    return construct(Func, args);
   };
 }
 /**
@@ -1638,8 +1601,8 @@ function lookupGetter(object, prop) {
   return fallbackValue;
 }
 
-const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
-const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
+const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'search', 'section', 'select', 'shadow', 'slot', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
+const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'enterkeyhint', 'exportparts', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'inputmode', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'part', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
 const svgFilters = freeze(['feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feDropShadow', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence']);
 // List of SVG elements that are disallowed by default.
 // We still need to know them so that we can do namespace
@@ -1652,8 +1615,8 @@ const mathMl$1 = freeze(['math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mgly
 const mathMlDisallowed = freeze(['maction', 'maligngroup', 'malignmark', 'mlongdiv', 'mscarries', 'mscarry', 'msgroup', 'mstack', 'msline', 'msrow', 'semantics', 'annotation', 'annotation-xml', 'mprescripts', 'none']);
 const text = freeze(['#text']);
 
-const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
-const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
+const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'exportparts', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inert', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'part', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'slot', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
+const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'mask-type', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
 const mathMl = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
 const xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
 
@@ -1760,7 +1723,7 @@ const _createHooksMap = function _createHooksMap() {
 function createDOMPurify() {
   let window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
   const DOMPurify = root => createDOMPurify(root);
-  DOMPurify.version = '3.2.6';
+  DOMPurify.version = '3.3.0';
   DOMPurify.removed = [];
   if (!window || !window.document || window.document.nodeType !== NODE_TYPE.document || !window.Element) {
     // Not running in a browser, provide a factory function
@@ -1871,6 +1834,21 @@ function createDOMPurify() {
   let FORBID_TAGS = null;
   /* Explicitly forbidden attributes (overrides ALLOWED_ATTR/ADD_ATTR) */
   let FORBID_ATTR = null;
+  /* Config object to store ADD_TAGS/ADD_ATTR functions (when used as functions) */
+  const EXTRA_ELEMENT_HANDLING = Object.seal(create(null, {
+    tagCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    },
+    attributeCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    }
+  }));
   /* Decide if ARIA attributes are okay */
   let ALLOW_ARIA_ATTR = true;
   /* Decide if custom data attributes are okay */
@@ -2063,16 +2041,24 @@ function createDOMPurify() {
     }
     /* Merge configuration parameters */
     if (cfg.ADD_TAGS) {
-      if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
-        ALLOWED_TAGS = clone(ALLOWED_TAGS);
+      if (typeof cfg.ADD_TAGS === 'function') {
+        EXTRA_ELEMENT_HANDLING.tagCheck = cfg.ADD_TAGS;
+      } else {
+        if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
+          ALLOWED_TAGS = clone(ALLOWED_TAGS);
+        }
+        addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
       }
-      addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
     }
     if (cfg.ADD_ATTR) {
-      if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
-        ALLOWED_ATTR = clone(ALLOWED_ATTR);
+      if (typeof cfg.ADD_ATTR === 'function') {
+        EXTRA_ELEMENT_HANDLING.attributeCheck = cfg.ADD_ATTR;
+      } else {
+        if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
+          ALLOWED_ATTR = clone(ALLOWED_ATTR);
+        }
+        addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
       }
-      addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
     }
     if (cfg.ADD_URI_SAFE_ATTR) {
       addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR, transformCaseFunc);
@@ -2380,7 +2366,7 @@ function createDOMPurify() {
       return true;
     }
     /* Remove element if anything forbids its presence */
-    if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+    if (!(EXTRA_ELEMENT_HANDLING.tagCheck instanceof Function && EXTRA_ELEMENT_HANDLING.tagCheck(tagName)) && (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName])) {
       /* Check if we have a custom element to handle */
       if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
         if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
@@ -2452,12 +2438,12 @@ function createDOMPurify() {
         (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
         XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
         We don't need to check the value; it's always URI safe. */
-    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
+    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (EXTRA_ELEMENT_HANDLING.attributeCheck instanceof Function && EXTRA_ELEMENT_HANDLING.attributeCheck(lcName, lcTag)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
       if (
       // First condition does a very basic check if a) it's basically a valid custom element tagname AND
       // b) if the tagName passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
       // and c) if the attribute name passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.attributeNameCheck
-      _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)) ||
+      _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName, lcTag)) ||
       // Alternative, second condition checks if it's an `is`-attribute, AND
       // the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
       lcName === 'is' && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value))) ; else {
@@ -2536,7 +2522,12 @@ function createDOMPurify() {
         value = SANITIZE_NAMED_PROPS_PREFIX + value;
       }
       /* Work around a security issue with comments inside attributes */
-      if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title)/i, value)) {
+      if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title|textarea)/i, value)) {
+        _removeAttribute(name, currentNode);
+        continue;
+      }
+      /* Make sure we cannot easily use animated hrefs, even if animations are allowed */
+      if (lcName === 'attributename' && stringMatch(value, 'href')) {
         _removeAttribute(name, currentNode);
         continue;
       }

@@ -75,16 +75,6 @@ body.folded #e-admin-top-bar-root {
 #e-admin-top-bar-root.e-admin-top-bar--active {
   display: block;
 }
-#e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody #wpbody-content {
-  margin-block-start: 50px;
-}
-#e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody .wrap {
-  clear: both;
-  padding-block-start: 10px;
-}
-#e-admin-top-bar-root.e-admin-top-bar--active ~ #wpbody .wrap h1 {
-  display: none;
-}
 #e-admin-top-bar-root:not(.e-admin-top-bar--active) ~ #wpbody .wrap h1, #e-admin-top-bar-root:not(.e-admin-top-bar--active) ~ #wpbody .wrap .page-title-action {
   display: inline-block;
 }
@@ -120,9 +110,6 @@ body.folded #e-admin-top-bar-root {
   margin: 0 4px;
   line-height: normal;
 }
-#e-admin-top-bar-root ~ #wpbody .wrap h1, #e-admin-top-bar-root ~ #wpbody .wrap .page-title-action {
-  display: none;
-}
 
 @media screen and (max-width: 960px) {
   #e-admin-top-bar-root {
@@ -140,14 +127,14 @@ body.folded #e-admin-top-bar-root {
   }
 }
 @media (max-width: 768px) {
+  #e-admin-top-bar-root .e-admin-top-bar__main-area-buttons {
+    position: absolute;
+    top: calc(100% + 10px);
+  }
   #e-admin-top-bar-root {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-  #e-admin-top-bar-root .e-admin-top-bar__main-area-buttons {
-    position: absolute;
-    top: calc(100% + 10px);
   }
   #e-admin-top-bar-root .e-admin-top-bar__secondary-area .e-admin-top-bar__secondary-area-buttons {
     display: none;

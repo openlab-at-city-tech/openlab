@@ -259,7 +259,7 @@ class Widget_Social_Icons extends Widget_Base {
 					],
 					[
 						'social_icon' => [
-							'value' => 'fab fa-twitter',
+							'value' => 'fab fa-x-twitter',
 							'library' => 'fa-brands',
 						],
 					],
@@ -310,9 +310,6 @@ class Widget_Social_Icons extends Widget_Base {
 				],
 			]
 		);
-
-		$start = is_rtl() ? 'end' : 'start';
-		$end = is_rtl() ? 'start' : 'end';
 
 		$align_selector = Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' ) && ! $this->has_widget_inner_wrapper()
 			? '{{WRAPPER}}'
@@ -603,7 +600,7 @@ class Widget_Social_Icons extends Widget_Base {
 
 		$fallback_defaults = [
 			'fa fa-facebook',
-			'fa fa-twitter',
+			'fa fa-x-twitter',
 			'fa fa-google-plus',
 		];
 

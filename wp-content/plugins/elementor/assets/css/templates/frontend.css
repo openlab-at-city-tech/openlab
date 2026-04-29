@@ -39,15 +39,12 @@ body.rtl {
 }
 
 .e-logo-wrapper {
-  background: var(--e-a-bg-logo);
   display: inline-block;
-  padding: 0.75em;
-  border-radius: 50%;
   line-height: 1;
 }
 .e-logo-wrapper i {
-  color: var(--e-a-color-logo);
-  font-size: 1em;
+  color: var(--e-a-color-circle-logo);
+  font-size: 2.5em;
 }
 
 .elementor *, .elementor *:before, .elementor *:after {
@@ -153,6 +150,9 @@ body.rtl {
   }
 }
 
+.elementor-element.elementor-absolute, .elementor-element.elementor-fixed {
+  z-index: 1;
+}
 .elementor-element {
   --flex-direction: initial;
   --flex-wrap: initial;
@@ -170,9 +170,6 @@ body.rtl {
   flex-shrink: var(--flex-shrink);
   order: var(--order);
   align-self: var(--align-self);
-}
-.elementor-element.elementor-absolute, .elementor-element.elementor-fixed {
-  z-index: 1;
 }
 .elementor-element:where(.e-con-full, .elementor-widget) {
   flex-direction: var(--flex-direction);
@@ -385,8 +382,7 @@ body.rtl {
 }
 .elementor-section .elementor-container {
   display: flex;
-  margin-right: auto;
-  margin-left: auto;
+  margin-inline: auto;
   position: relative;
 }
 @media (max-width: ELEMENTOR_SCREEN_TABLET_MAX) {
@@ -449,10 +445,10 @@ body.rtl {
   position: relative;
 }
 .elementor-widget:not(:last-child) {
-  margin-bottom: var(--kit-widget-spacing, 20px);
+  margin-block-end: var(--kit-widget-spacing, 20px);
 }
 .elementor-widget:not(:last-child).elementor-widget__width-auto, .elementor-widget:not(:last-child).elementor-widget__width-initial, .elementor-widget:not(:last-child).elementor-absolute {
-  margin-bottom: 0;
+  margin-block-end: 0;
 }
 
 .elementor-column {
@@ -1049,11 +1045,11 @@ body.rtl {
   display: inline-block;
   width: 100%;
   word-spacing: var(--grid-column-gap);
-  margin-bottom: calc(-1 * var(--grid-row-gap));
+  margin-block-end: calc(-1 * var(--grid-row-gap));
 }
 .elementor-grid-0 .elementor-grid .elementor-grid-item {
   display: inline-block;
-  margin-bottom: var(--grid-row-gap);
+  margin-block-end: var(--grid-row-gap);
   word-break: break-word;
 }
 .elementor-grid-1 .elementor-grid {
@@ -1097,11 +1093,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-widescreen-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-widescreen-1 .elementor-grid {
@@ -1146,11 +1142,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-laptop-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-laptop-1 .elementor-grid {
@@ -1195,11 +1191,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-tablet_extra-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-tablet_extra-1 .elementor-grid {
@@ -1244,11 +1240,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-tablet-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-tablet-1 .elementor-grid {
@@ -1293,11 +1289,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-mobile_extra-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-mobile_extra-1 .elementor-grid {
@@ -1342,11 +1338,11 @@ body.rtl {
     display: inline-block;
     width: 100%;
     word-spacing: var(--grid-column-gap);
-    margin-bottom: calc(-1 * var(--grid-row-gap));
+    margin-block-end: calc(-1 * var(--grid-row-gap));
   }
   .elementor-grid-mobile-0 .elementor-grid .elementor-grid-item {
     display: inline-block;
-    margin-bottom: var(--grid-row-gap);
+    margin-block-end: var(--grid-row-gap);
     word-break: break-word;
   }
   .elementor-grid-mobile-1 .elementor-grid {
@@ -1473,12 +1469,6 @@ body.rtl {
   z-index: var(--z-index);
   overflow: var(--overflow);
   --flex-wrap-mobile: wrap;
-  margin-block-start: var(--margin-block-start);
-  margin-inline-end: var(--margin-inline-end);
-  margin-block-end: var(--margin-block-end);
-  margin-inline-start: var(--margin-inline-start);
-  padding-inline-start: var(--padding-inline-start);
-  padding-inline-end: var(--padding-inline-end);
 }
 .e-con:where(:not(.e-div-block-base)) {
   transition: background var(--background-transition, 0.3s), border var(--border-transition, 0.3s), box-shadow var(--border-transition, 0.3s), transform var(--e-con-transform-transition-duration, 0.4s);
@@ -1504,6 +1494,14 @@ body.rtl .e-con {
   --margin-inline-end: var(--margin-left);
   --border-inline-start-width: var(--border-right-width);
   --border-inline-end-width: var(--border-left-width);
+}
+.e-con {
+  margin-block-start: var(--margin-block-start);
+  margin-inline-end: var(--margin-inline-end);
+  margin-block-end: var(--margin-block-end);
+  margin-inline-start: var(--margin-inline-start);
+  padding-inline-start: var(--padding-inline-start);
+  padding-inline-end: var(--padding-inline-end);
 }
 .e-con.e-flex {
   --flex-direction: column;
@@ -1580,6 +1578,10 @@ body.rtl .e-con {
   --margin-left: auto;
   --margin-right: auto;
   max-width: min(100%, var(--width));
+}
+:is([data-widget_type="e-component.default"], [data-widget_type="e-component.default"] > .elementor-section-wrap) > .e-con {
+  --margin-right: 0px;
+  --margin-left: 0px;
 }
 .e-con .elementor-widget.elementor-widget {
   margin-block-end: 0;
@@ -1832,9 +1834,17 @@ body.rtl .e-con {
 .elementor-button-align-start .e-form__buttons {
   justify-content: flex-start;
 }
+[dir=rtl] .elementor-button-align-start .elementor-field-type-submit,
+[dir=rtl] .elementor-button-align-start .e-form__buttons {
+  justify-content: flex-end;
+}
 .elementor-button-align-end .elementor-field-type-submit,
 .elementor-button-align-end .e-form__buttons {
   justify-content: flex-end;
+}
+[dir=rtl] .elementor-button-align-end .elementor-field-type-submit,
+[dir=rtl] .elementor-button-align-end .e-form__buttons {
+  justify-content: flex-start;
 }
 .elementor-button-align-center .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-button-align-start .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-button-align-end .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button {
   flex-basis: initial;
@@ -1865,9 +1875,17 @@ body.rtl .e-con {
   .elementor-tablet-button-align-start .e-form__buttons {
     justify-content: flex-start;
   }
+  [dir=rtl] .elementor-tablet-button-align-start .elementor-field-type-submit,
+  [dir=rtl] .elementor-tablet-button-align-start .e-form__buttons {
+    justify-content: flex-end;
+  }
   .elementor-tablet-button-align-end .elementor-field-type-submit,
   .elementor-tablet-button-align-end .e-form__buttons {
     justify-content: flex-end;
+  }
+  [dir=rtl] .elementor-tablet-button-align-end .elementor-field-type-submit,
+  [dir=rtl] .elementor-tablet-button-align-end .e-form__buttons {
+    justify-content: flex-start;
   }
   .elementor-tablet-button-align-center .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-tablet-button-align-start .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-tablet-button-align-end .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button {
     flex-basis: initial;
@@ -1898,9 +1916,17 @@ body.rtl .e-con {
   .elementor-mobile-button-align-start .e-form__buttons {
     justify-content: flex-start;
   }
+  [dir=rtl] .elementor-mobile-button-align-start .elementor-field-type-submit,
+  [dir=rtl] .elementor-mobile-button-align-start .e-form__buttons {
+    justify-content: flex-end;
+  }
   .elementor-mobile-button-align-end .elementor-field-type-submit,
   .elementor-mobile-button-align-end .e-form__buttons {
     justify-content: flex-end;
+  }
+  [dir=rtl] .elementor-mobile-button-align-end .elementor-field-type-submit,
+  [dir=rtl] .elementor-mobile-button-align-end .e-form__buttons {
+    justify-content: flex-start;
   }
   .elementor-mobile-button-align-center .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-mobile-button-align-start .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button, .elementor-mobile-button-align-end .elementor-field-type-submit:not(.e-form__buttons__wrapper) .elementor-button {
     flex-basis: initial;

@@ -17027,19 +17027,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -21598,18 +21596,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   fromMarkdown: () => (/* binding */ fromMarkdown)
 /* harmony export */ });
 /* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
-/* harmony import */ var mdast_util_to_string__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! mdast-util-to-string */ "../node_modules/mdast-util-to-string/lib/index.js");
+/* harmony import */ var mdast_util_to_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mdast-util-to-string */ "../node_modules/mdast-util-to-string/lib/index.js");
 /* harmony import */ var micromark_lib_parse_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark/lib/parse.js */ "../node_modules/micromark/dev/lib/parse.js");
 /* harmony import */ var micromark_lib_preprocess_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark/lib/preprocess.js */ "../node_modules/micromark/dev/lib/preprocess.js");
-/* harmony import */ var micromark_lib_postprocess_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark/lib/postprocess.js */ "../node_modules/micromark/dev/lib/postprocess.js");
-/* harmony import */ var micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! micromark-util-decode-numeric-character-reference */ "../node_modules/micromark-util-decode-numeric-character-reference/dev/index.js");
-/* harmony import */ var micromark_util_decode_string__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-util-decode-string */ "../node_modules/micromark-util-decode-string/dev/index.js");
-/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
-/* harmony import */ var unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! unist-util-stringify-position */ "../node_modules/unist-util-stringify-position/lib/index.js");
+/* harmony import */ var micromark_lib_postprocess_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark/lib/postprocess.js */ "../node_modules/micromark/dev/lib/postprocess.js");
+/* harmony import */ var micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-decode-numeric-character-reference */ "../node_modules/micromark-util-decode-numeric-character-reference/dev/index.js");
+/* harmony import */ var micromark_util_decode_string__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-decode-string */ "../node_modules/micromark-util-decode-string/dev/index.js");
+/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
+/* harmony import */ var unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! unist-util-stringify-position */ "../node_modules/unist-util-stringify-position/lib/index.js");
 /**
  * @typedef {import('micromark-util-types').Encoding} Encoding
  * @typedef {import('micromark-util-types').Event} Event
@@ -21803,7 +21801,7 @@ const fromMarkdown =
       }
 
       return compiler(options)(
-        (0,micromark_lib_postprocess_js__WEBPACK_IMPORTED_MODULE_1__.postprocess)(
+        (0,micromark_lib_postprocess_js__WEBPACK_IMPORTED_MODULE_4__.postprocess)(
           (0,micromark_lib_parse_js__WEBPACK_IMPORTED_MODULE_2__.parse)(options).document().write((0,micromark_lib_preprocess_js__WEBPACK_IMPORTED_MODULE_3__.preprocess)()(value, encoding, true))
         )
       )
@@ -21953,8 +21951,8 @@ function compiler(options) {
       // We preprocess lists to add `listItem` tokens, and to infer whether
       // items the list itself are spread out.
       if (
-        events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listOrdered ||
-        events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered
+        events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listOrdered ||
+        events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listUnordered
       ) {
         if (events[index][0] === 'enter') {
           listStack.push(index)
@@ -22033,9 +22031,9 @@ function compiler(options) {
       const event = events[index]
 
       if (
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listOrdered ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuote
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listUnordered ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listOrdered ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.blockQuote
       ) {
         if (event[0] === 'enter') {
           containerBalance++
@@ -22044,7 +22042,7 @@ function compiler(options) {
         }
 
         atMarker = undefined
-      } else if (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEndingBlank) {
+      } else if (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.lineEndingBlank) {
         if (event[0] === 'enter') {
           if (
             listItem &&
@@ -22058,11 +22056,11 @@ function compiler(options) {
           atMarker = undefined
         }
       } else if (
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemValue ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemMarker ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix ||
-        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefixWhitespace
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.linePrefix ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemValue ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemMarker ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemPrefix ||
+        event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemPrefixWhitespace
       ) {
         // Empty.
       } else {
@@ -22072,11 +22070,11 @@ function compiler(options) {
       if (
         (!containerBalance &&
           event[0] === 'enter' &&
-          event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix) ||
+          event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemPrefix) ||
         (containerBalance === -1 &&
           event[0] === 'exit' &&
-          (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered ||
-            event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listOrdered))
+          (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listUnordered ||
+            event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listOrdered))
       ) {
         if (listItem) {
           let tailIndex = index
@@ -22086,24 +22084,24 @@ function compiler(options) {
             const tailEvent = events[tailIndex]
 
             if (
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding ||
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEndingBlank
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.lineEnding ||
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.lineEndingBlank
             ) {
               if (tailEvent[0] === 'exit') continue
 
               if (lineIndex) {
-                events[lineIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEndingBlank
+                events[lineIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.lineEndingBlank
                 listSpread = true
               }
 
-              tailEvent[1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding
+              tailEvent[1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.lineEnding
               lineIndex = tailIndex
             } else if (
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix ||
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefix ||
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefixWhitespace ||
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuoteMarker ||
-              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemIndent
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.linePrefix ||
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.blockQuotePrefix ||
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.blockQuotePrefixWhitespace ||
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.blockQuoteMarker ||
+              tailEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemIndent
             ) {
               // Empty
             } else {
@@ -22130,7 +22128,7 @@ function compiler(options) {
         }
 
         // Create a new list item.
-        if (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix) {
+        if (event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.listItemPrefix) {
           listItem = {
             type: 'listItem',
             _spread: false,
@@ -22283,7 +22281,7 @@ function compiler(options) {
         'Cannot close `' +
           token.type +
           '` (' +
-          (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_5__.stringifyPosition)({start: token.start, end: token.end}) +
+          (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_12__.stringifyPosition)({start: token.start, end: token.end}) +
           '): it’s not open'
       )
     } else if (open[0].type !== token.type) {
@@ -22306,7 +22304,7 @@ function compiler(options) {
    * @returns {string}
    */
   function resume() {
-    return (0,mdast_util_to_string__WEBPACK_IMPORTED_MODULE_6__.toString)(this.stack.pop())
+    return (0,mdast_util_to_string__WEBPACK_IMPORTED_MODULE_1__.toString)(this.stack.pop())
   }
 
   //
@@ -22332,7 +22330,7 @@ function compiler(options) {
       ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(ancestor.type === 'list', 'expected list on stack')
       ancestor.start = Number.parseInt(
         this.sliceSerialize(token),
-        micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_7__.constants.numericBaseDecimal
+        micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__.constants.numericBaseDecimal
       )
       setData('expectingFirstListItemValue')
     }
@@ -22411,7 +22409,7 @@ function compiler(options) {
     ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(node.type === 'definition', 'expected definition on stack')
 
     node.label = label
-    node.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_8__.normalizeIdentifier)(
+    node.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_7__.normalizeIdentifier)(
       this.sliceSerialize(token)
     ).toLowerCase()
   }
@@ -22486,7 +22484,7 @@ function compiler(options) {
     ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(node.type === 'heading', 'expected heading on stack')
 
     node.depth =
-      this.sliceSerialize(token).charCodeAt(0) === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_9__.codes.equalsTo ? 1 : 2
+      this.sliceSerialize(token).charCodeAt(0) === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.equalsTo ? 1 : 2
   }
 
   /**
@@ -22698,9 +22696,9 @@ function compiler(options) {
 
     // @ts-expect-error: stash this on the node, as it might become a reference
     // later.
-    ancestor.label = (0,micromark_util_decode_string__WEBPACK_IMPORTED_MODULE_10__.decodeString)(string)
+    ancestor.label = (0,micromark_util_decode_string__WEBPACK_IMPORTED_MODULE_6__.decodeString)(string)
     // @ts-expect-error: same as above.
-    ancestor.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_8__.normalizeIdentifier)(string).toLowerCase()
+    ancestor.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_7__.normalizeIdentifier)(string).toLowerCase()
   }
 
   /**
@@ -22802,7 +22800,7 @@ function compiler(options) {
     // later.
     node.label = label
     // @ts-expect-error: same as above.
-    node.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_8__.normalizeIdentifier)(
+    node.identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_7__.normalizeIdentifier)(
       this.sliceSerialize(token)
     ).toLowerCase()
     setData('referenceType', 'full')
@@ -22832,15 +22830,15 @@ function compiler(options) {
     let value
 
     if (type) {
-      value = (0,micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_11__.decodeNumericCharacterReference)(
+      value = (0,micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_5__.decodeNumericCharacterReference)(
         data,
-        type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarkerNumeric
-          ? micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_7__.constants.numericBaseDecimal
-          : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_7__.constants.numericBaseHexadecimal
+        type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.characterReferenceMarkerNumeric
+          ? micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__.constants.numericBaseDecimal
+          : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__.constants.numericBaseHexadecimal
       )
       setData('characterReferenceType')
     } else {
-      const result = (0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_12__.decodeNamedCharacterReference)(data)
+      const result = (0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_11__.decodeNamedCharacterReference)(data)
       ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(result !== false, 'expected reference to decode')
       value = result
     }
@@ -23057,11 +23055,11 @@ function defaultOnError(left, right) {
       'Cannot close `' +
         left.type +
         '` (' +
-        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_5__.stringifyPosition)({start: left.start, end: left.end}) +
+        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_12__.stringifyPosition)({start: left.start, end: left.end}) +
         '): a different token (`' +
         right.type +
         '`, ' +
-        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_5__.stringifyPosition)({start: right.start, end: right.end}) +
+        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_12__.stringifyPosition)({start: right.start, end: right.end}) +
         ') is open'
     )
   } else {
@@ -23069,7 +23067,7 @@ function defaultOnError(left, right) {
       'Cannot close document, a token (`' +
         right.type +
         '`, ' +
-        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_5__.stringifyPosition)({start: right.start, end: right.end}) +
+        (0,unist_util_stringify_position__WEBPACK_IMPORTED_MODULE_12__.stringifyPosition)({start: right.start, end: right.end}) +
         ') is still open'
     )
   }
@@ -23691,8 +23689,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   imageReference: () => (/* binding */ imageReference)
 /* harmony export */ });
-/* harmony import */ var micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-sanitize-uri */ "../node_modules/micromark-util-sanitize-uri/dev/index.js");
-/* harmony import */ var _revert_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../revert.js */ "../node_modules/mdast-util-to-hast/lib/revert.js");
+/* harmony import */ var micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-sanitize-uri */ "../node_modules/micromark-util-sanitize-uri/dev/index.js");
+/* harmony import */ var _revert_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../revert.js */ "../node_modules/mdast-util-to-hast/lib/revert.js");
 /**
  * @typedef {import('hast').ElementContent} ElementContent
  * @typedef {import('hast').Element} Element
@@ -23718,11 +23716,11 @@ function imageReference(state, node) {
   const def = state.definition(node.identifier)
 
   if (!def) {
-    return (0,_revert_js__WEBPACK_IMPORTED_MODULE_0__.revert)(state, node)
+    return (0,_revert_js__WEBPACK_IMPORTED_MODULE_1__.revert)(state, node)
   }
 
   /** @type {Properties} */
-  const properties = {src: (0,micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_1__.normalizeUri)(def.url || ''), alt: node.alt}
+  const properties = {src: (0,micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_0__.normalizeUri)(def.url || ''), alt: node.alt}
 
   if (def.title !== null && def.title !== undefined) {
     properties.title = def.title
@@ -23820,8 +23818,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _root_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./root.js */ "../node_modules/mdast-util-to-hast/lib/handlers/root.js");
 /* harmony import */ var _strong_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./strong.js */ "../node_modules/mdast-util-to-hast/lib/handlers/strong.js");
 /* harmony import */ var _table_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./table.js */ "../node_modules/mdast-util-to-hast/lib/handlers/table.js");
-/* harmony import */ var _table_row_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./table-row.js */ "../node_modules/mdast-util-to-hast/lib/handlers/table-row.js");
-/* harmony import */ var _table_cell_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./table-cell.js */ "../node_modules/mdast-util-to-hast/lib/handlers/table-cell.js");
+/* harmony import */ var _table_row_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./table-row.js */ "../node_modules/mdast-util-to-hast/lib/handlers/table-row.js");
+/* harmony import */ var _table_cell_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./table-cell.js */ "../node_modules/mdast-util-to-hast/lib/handlers/table-cell.js");
 /* harmony import */ var _text_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./text.js */ "../node_modules/mdast-util-to-hast/lib/handlers/text.js");
 /* harmony import */ var _thematic_break_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./thematic-break.js */ "../node_modules/mdast-util-to-hast/lib/handlers/thematic-break.js");
 
@@ -23873,8 +23871,8 @@ const handlers = {
   root: _root_js__WEBPACK_IMPORTED_MODULE_17__.root,
   strong: _strong_js__WEBPACK_IMPORTED_MODULE_18__.strong,
   table: _table_js__WEBPACK_IMPORTED_MODULE_19__.table,
-  tableCell: _table_cell_js__WEBPACK_IMPORTED_MODULE_20__.tableCell,
-  tableRow: _table_row_js__WEBPACK_IMPORTED_MODULE_21__.tableRow,
+  tableCell: _table_cell_js__WEBPACK_IMPORTED_MODULE_21__.tableCell,
+  tableRow: _table_row_js__WEBPACK_IMPORTED_MODULE_20__.tableRow,
   text: _text_js__WEBPACK_IMPORTED_MODULE_22__.text,
   thematicBreak: _thematic_break_js__WEBPACK_IMPORTED_MODULE_23__.thematicBreak,
   toml: ignore,
@@ -23950,8 +23948,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   linkReference: () => (/* binding */ linkReference)
 /* harmony export */ });
-/* harmony import */ var micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-sanitize-uri */ "../node_modules/micromark-util-sanitize-uri/dev/index.js");
-/* harmony import */ var _revert_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../revert.js */ "../node_modules/mdast-util-to-hast/lib/revert.js");
+/* harmony import */ var micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-sanitize-uri */ "../node_modules/micromark-util-sanitize-uri/dev/index.js");
+/* harmony import */ var _revert_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../revert.js */ "../node_modules/mdast-util-to-hast/lib/revert.js");
 /**
  * @typedef {import('hast').Element} Element
  * @typedef {import('hast').ElementContent} ElementContent
@@ -23977,11 +23975,11 @@ function linkReference(state, node) {
   const def = state.definition(node.identifier)
 
   if (!def) {
-    return (0,_revert_js__WEBPACK_IMPORTED_MODULE_0__.revert)(state, node)
+    return (0,_revert_js__WEBPACK_IMPORTED_MODULE_1__.revert)(state, node)
   }
 
   /** @type {Properties} */
-  const properties = {href: (0,micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_1__.normalizeUri)(def.url || '')}
+  const properties = {href: (0,micromark_util_sanitize_uri__WEBPACK_IMPORTED_MODULE_0__.normalizeUri)(def.url || '')}
 
   if (def.title !== null && def.title !== undefined) {
     properties.title = def.title
@@ -24690,8 +24688,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   toHast: () => (/* binding */ toHast)
 /* harmony export */ });
-/* harmony import */ var _footer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./footer.js */ "../node_modules/mdast-util-to-hast/lib/footer.js");
-/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./state.js */ "../node_modules/mdast-util-to-hast/lib/state.js");
+/* harmony import */ var _footer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./footer.js */ "../node_modules/mdast-util-to-hast/lib/footer.js");
+/* harmony import */ var _state_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./state.js */ "../node_modules/mdast-util-to-hast/lib/state.js");
 /**
  * @typedef {import('hast').Content} HastContent
  * @typedef {import('hast').Root} HastRoot
@@ -24789,9 +24787,9 @@ __webpack_require__.r(__webpack_exports__);
  */
 // To do: next major: always return a single `root`.
 function toHast(tree, options) {
-  const state = (0,_state_js__WEBPACK_IMPORTED_MODULE_0__.createState)(tree, options)
+  const state = (0,_state_js__WEBPACK_IMPORTED_MODULE_1__.createState)(tree, options)
   const node = state.one(tree, null)
-  const foot = (0,_footer_js__WEBPACK_IMPORTED_MODULE_1__.footer)(state)
+  const foot = (0,_footer_js__WEBPACK_IMPORTED_MODULE_0__.footer)(state)
 
   if (foot) {
     // @ts-expect-error If there’s a footer, there were definitions, meaning block
@@ -24896,11 +24894,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   one: () => (/* binding */ one),
 /* harmony export */   wrap: () => (/* binding */ wrap)
 /* harmony export */ });
-/* harmony import */ var unist_util_visit__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! unist-util-visit */ "../node_modules/unist-util-visit/lib/index.js");
-/* harmony import */ var unist_util_position__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! unist-util-position */ "../node_modules/unist-util-position/lib/index.js");
-/* harmony import */ var unist_util_generated__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! unist-util-generated */ "../node_modules/unist-util-generated/lib/index.js");
-/* harmony import */ var mdast_util_definitions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mdast-util-definitions */ "../node_modules/mdast-util-definitions/lib/index.js");
-/* harmony import */ var _handlers_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./handlers/index.js */ "../node_modules/mdast-util-to-hast/lib/handlers/index.js");
+/* harmony import */ var unist_util_visit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! unist-util-visit */ "../node_modules/unist-util-visit/lib/index.js");
+/* harmony import */ var unist_util_position__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! unist-util-position */ "../node_modules/unist-util-position/lib/index.js");
+/* harmony import */ var unist_util_generated__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! unist-util-generated */ "../node_modules/unist-util-generated/lib/index.js");
+/* harmony import */ var mdast_util_definitions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mdast-util-definitions */ "../node_modules/mdast-util-definitions/lib/index.js");
+/* harmony import */ var _handlers_index_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./handlers/index.js */ "../node_modules/mdast-util-to-hast/lib/handlers/index.js");
 /**
  * @typedef {import('hast').Content} HastContent
  * @typedef {import('hast').Element} HastElement
@@ -25113,11 +25111,11 @@ function createState(tree, options) {
   // To do: next major: move to `state.options`.
   state.passThrough = settings.passThrough
 
-  state.handlers = {..._handlers_index_js__WEBPACK_IMPORTED_MODULE_0__.handlers, ...settings.handlers}
+  state.handlers = {..._handlers_index_js__WEBPACK_IMPORTED_MODULE_4__.handlers, ...settings.handlers}
 
   // To do: next major: replace utility with `definitionById` object, so we
   // only walk once (as we need footnotes too).
-  state.definition = (0,mdast_util_definitions__WEBPACK_IMPORTED_MODULE_1__.definitions)(tree)
+  state.definition = (0,mdast_util_definitions__WEBPACK_IMPORTED_MODULE_3__.definitions)(tree)
   state.footnoteById = footnoteById
   /** @type {Array<string>} */
   state.footnoteOrder = []
@@ -25132,7 +25130,7 @@ function createState(tree, options) {
   // To do: next major: remove `augment`.
   state.augment = augment
 
-  ;(0,unist_util_visit__WEBPACK_IMPORTED_MODULE_2__.visit)(tree, 'footnoteDefinition', (definition) => {
+  ;(0,unist_util_visit__WEBPACK_IMPORTED_MODULE_0__.visit)(tree, 'footnoteDefinition', (definition) => {
     const id = String(definition.identifier).toUpperCase()
 
     // Mimick CM behavior of link definitions.
@@ -25185,9 +25183,9 @@ function createState(tree, options) {
     if (left) {
       const ctx = 'type' in left ? left : {position: left}
 
-      if (!(0,unist_util_generated__WEBPACK_IMPORTED_MODULE_3__.generated)(ctx)) {
+      if (!(0,unist_util_generated__WEBPACK_IMPORTED_MODULE_2__.generated)(ctx)) {
         // @ts-expect-error: fine.
-        right.position = {start: (0,unist_util_position__WEBPACK_IMPORTED_MODULE_4__.pointStart)(ctx), end: (0,unist_util_position__WEBPACK_IMPORTED_MODULE_4__.pointEnd)(ctx)}
+        right.position = {start: (0,unist_util_position__WEBPACK_IMPORTED_MODULE_1__.pointStart)(ctx), end: (0,unist_util_position__WEBPACK_IMPORTED_MODULE_1__.pointEnd)(ctx)}
       }
     }
 
@@ -25258,7 +25256,7 @@ function createState(tree, options) {
  *   Nothing.
  */
 function patch(from, to) {
-  if (from.position) to.position = (0,unist_util_position__WEBPACK_IMPORTED_MODULE_4__.position)(from)
+  if (from.position) to.position = (0,unist_util_position__WEBPACK_IMPORTED_MODULE_1__.position)(from)
 }
 
 /**
@@ -25616,13 +25614,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   attention: () => (/* binding */ attention)
 /* harmony export */ });
-/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
-/* harmony import */ var micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-classify-character */ "../node_modules/micromark-util-classify-character/dev/index.js");
-/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
+/* harmony import */ var micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-classify-character */ "../node_modules/micromark-util-classify-character/dev/index.js");
+/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -25729,22 +25727,22 @@ function resolveAllAttention(events, context) {
           movePoint(end, use)
 
           openingSequence = {
-            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.strongSequence : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.emphasisSequence,
+            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.strongSequence : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.emphasisSequence,
             start,
             end: Object.assign({}, events[open][1].end)
           }
           closingSequence = {
-            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.strongSequence : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.emphasisSequence,
+            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.strongSequence : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.emphasisSequence,
             start: Object.assign({}, events[index][1].start),
             end
           }
           text = {
-            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.strongText : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.emphasisText,
+            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.strongText : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.emphasisText,
             start: Object.assign({}, events[open][1].end),
             end: Object.assign({}, events[index][1].start)
           }
           group = {
-            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.strong : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.emphasis,
+            type: use > 1 ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.strong : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.emphasis,
             start: Object.assign({}, openingSequence.start),
             end: Object.assign({}, closingSequence.end)
           }
@@ -25756,14 +25754,14 @@ function resolveAllAttention(events, context) {
 
           // If there are more markers in the opening, add them before.
           if (events[open][1].end.offset - events[open][1].start.offset) {
-            nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(nextEvents, [
+            nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.push)(nextEvents, [
               ['enter', events[open][1], context],
               ['exit', events[open][1], context]
             ])
           }
 
           // Opening.
-          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(nextEvents, [
+          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.push)(nextEvents, [
             ['enter', group, context],
             ['enter', openingSequence, context],
             ['exit', openingSequence, context],
@@ -25771,15 +25769,15 @@ function resolveAllAttention(events, context) {
           ])
 
           // Always populated by defaults.
-          ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+          ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
             context.parser.constructs.insideSpan.null,
             'expected `insideSpan` to be populated'
           )
 
           // Between.
-          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(
+          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.push)(
             nextEvents,
-            (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__.resolveAll)(
+            (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_2__.resolveAll)(
               context.parser.constructs.insideSpan.null,
               events.slice(open + 1, index),
               context
@@ -25787,7 +25785,7 @@ function resolveAllAttention(events, context) {
           )
 
           // Closing.
-          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(nextEvents, [
+          nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.push)(nextEvents, [
             ['exit', text, context],
             ['enter', closingSequence, context],
             ['exit', closingSequence, context],
@@ -25797,7 +25795,7 @@ function resolveAllAttention(events, context) {
           // If there are more markers in the closing, add them after.
           if (events[index][1].end.offset - events[index][1].start.offset) {
             offset = 2
-            nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(nextEvents, [
+            nextEvents = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.push)(nextEvents, [
               ['enter', events[index][1], context],
               ['exit', events[index][1], context]
             ])
@@ -25805,7 +25803,7 @@ function resolveAllAttention(events, context) {
             offset = 0
           }
 
-          (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(events, open - 1, index - open + 3, nextEvents)
+          (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.splice)(events, open - 1, index - open + 3, nextEvents)
 
           index = open + nextEvents.length - offset - 2
           break
@@ -25833,7 +25831,7 @@ function resolveAllAttention(events, context) {
 function tokenizeAttention(effects, ok) {
   const attentionMarkers = this.parser.constructs.attentionMarkers.null
   const previous = this.previous
-  const before = (0,micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_4__.classifyCharacter)(previous)
+  const before = (0,micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_1__.classifyCharacter)(previous)
 
   /** @type {NonNullable<Code>} */
   let marker
@@ -25851,8 +25849,8 @@ function tokenizeAttention(effects, ok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.asterisk || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.underscore,
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.asterisk || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.underscore,
       'expected asterisk or underscore'
     )
     marker = code
@@ -25879,25 +25877,25 @@ function tokenizeAttention(effects, ok) {
     const token = effects.exit('attentionSequence')
 
     // To do: next major: move this to resolver, just like `markdown-rs`.
-    const after = (0,micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_4__.classifyCharacter)(code)
+    const after = (0,micromark_util_classify_character__WEBPACK_IMPORTED_MODULE_1__.classifyCharacter)(code)
 
     // Always populated by defaults.
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(attentionMarkers, 'expected `attentionMarkers` to be populated')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(attentionMarkers, 'expected `attentionMarkers` to be populated')
 
     const open =
       !after ||
-      (after === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_6__.constants.characterGroupPunctuation && before) ||
+      (after === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.characterGroupPunctuation && before) ||
       attentionMarkers.includes(code)
     const close =
       !before ||
-      (before === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_6__.constants.characterGroupPunctuation && after) ||
+      (before === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.characterGroupPunctuation && after) ||
       attentionMarkers.includes(previous)
 
     token._open = Boolean(
-      marker === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.asterisk ? open : open && (before || !close)
+      marker === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.asterisk ? open : open && (before || !close)
     )
     token._close = Boolean(
-      marker === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.asterisk ? close : close && (after || !open)
+      marker === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.asterisk ? close : close && (after || !open)
     )
     return ok(code)
   }
@@ -25933,11 +25931,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   autolink: () => (/* binding */ autolink)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -25976,12 +25974,12 @@ function tokenizeAutolink(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan, 'expected `<`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolink)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_4__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan, 'expected `<`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolink)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkProtocol)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkProtocol)
     return open
   }
 
@@ -25998,7 +25996,7 @@ function tokenizeAutolink(effects, ok, nok) {
    * @type {State}
    */
   function open(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code)) {
       effects.consume(code)
       return schemeOrEmailAtext
     }
@@ -26024,7 +26022,7 @@ function tokenizeAutolink(effects, ok, nok) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.plusSign ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dot ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code)
     ) {
       // Count the previous alphabetical from `open` too.
       size = 1
@@ -26058,8 +26056,8 @@ function tokenizeAutolink(effects, ok, nok) {
       (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.plusSign ||
         code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash ||
         code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dot ||
-        (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)) &&
-      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.autolinkSchemeSizeMax
+        (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code)) &&
+      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.autolinkSchemeSizeMax
     ) {
       effects.consume(code)
       return schemeInsideOrEmailAtext
@@ -26081,11 +26079,11 @@ function tokenizeAutolink(effects, ok, nok) {
    */
   function urlInside(code) {
     if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkProtocol)
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkProtocol)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolink)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolink)
       return ok
     }
 
@@ -26094,7 +26092,7 @@ function tokenizeAutolink(effects, ok, nok) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiControl)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiControl)(code)
     ) {
       return nok(code)
     }
@@ -26119,7 +26117,7 @@ function tokenizeAutolink(effects, ok, nok) {
       return emailAtSignOrDot
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAtext)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAtext)(code)) {
       effects.consume(code)
       return emailAtext
     }
@@ -26138,7 +26136,7 @@ function tokenizeAutolink(effects, ok, nok) {
    * @type {State}
    */
   function emailAtSignOrDot(code) {
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code) ? emailLabel(code) : nok(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code) ? emailLabel(code) : nok(code)
   }
 
   /**
@@ -26160,11 +26158,11 @@ function tokenizeAutolink(effects, ok, nok) {
 
     if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
       // Exit, then change the token type.
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkProtocol).type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkEmail
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkProtocol).type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkEmail
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolinkMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.autolink)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolinkMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.autolink)
       return ok
     }
 
@@ -26186,8 +26184,8 @@ function tokenizeAutolink(effects, ok, nok) {
   function emailValue(code) {
     // ASCII alphanumeric or `-`.
     if (
-      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)) &&
-      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.autolinkDomainSizeMax
+      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code)) &&
+      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.autolinkDomainSizeMax
     ) {
       const next = code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash ? emailValue : emailLabel
       effects.consume(code)
@@ -26212,10 +26210,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   blankLine: () => (/* binding */ blankLine)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -26253,8 +26251,8 @@ function tokenizeBlankLine(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_1__.factorySpace)(effects, after, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix)(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, after, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.linePrefix)(code)
       : after(code)
   }
 
@@ -26273,7 +26271,7 @@ function tokenizeBlankLine(effects, ok, nok) {
    * @type {State}
    */
   function after(code) {
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code) ? ok(code) : nok(code)
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code) ? ok(code) : nok(code)
   }
 }
 
@@ -26291,12 +26289,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   blockQuote: () => (/* binding */ blockQuote)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Exiter} Exiter
@@ -26340,20 +26338,20 @@ function tokenizeBlockQuoteStart(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan) {
       const state = self.containerState
 
-      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(state, 'expected `containerState` to be defined in container')
+      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(state, 'expected `containerState` to be defined in container')
 
       if (!state.open) {
-        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuote, {_container: true})
+        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuote, {_container: true})
         state.open = true
       }
 
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuotePrefix)
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuoteMarker)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefix)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuoteMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuoteMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuoteMarker)
       return after
     }
 
@@ -26371,15 +26369,15 @@ function tokenizeBlockQuoteStart(effects, ok, nok) {
    * @type {State}
    */
   function after(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuotePrefixWhitespace)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefixWhitespace)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuotePrefixWhitespace)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuotePrefix)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefixWhitespace)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefix)
       return ok
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuotePrefix)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuotePrefix)
     return ok(code)
   }
 }
@@ -26415,20 +26413,20 @@ function tokenizeBlockQuoteContinuation(effects, ok, nok) {
    * @type {State}
    */
   function contStart(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       // Always populated by defaults.
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
         self.parser.constructs.disable.null,
         'expected `disable.null` to be populated'
       )
 
-      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__.factorySpace)(
+      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
         effects,
         contBefore,
-        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
+        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
         self.parser.constructs.disable.null.includes('codeIndented')
           ? undefined
-          : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.tabSize
+          : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
       )(code)
     }
 
@@ -26455,7 +26453,7 @@ function tokenizeBlockQuoteContinuation(effects, ok, nok) {
 
 /** @type {Exiter} */
 function exit(effects) {
-  effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.blockQuote)
+  effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.blockQuote)
 }
 
 
@@ -26472,10 +26470,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   characterEscape: () => (/* binding */ characterEscape)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -26512,7 +26510,7 @@ function tokenizeCharacterEscape(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash, 'expected `\\`')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash, 'expected `\\`')
     effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterEscape)
     effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.escapeMarker)
     effects.consume(code)
@@ -26532,7 +26530,7 @@ function tokenizeCharacterEscape(effects, ok, nok) {
    */
   function inside(code) {
     // ASCII punctuation.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiPunctuation)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiPunctuation)(code)) {
       effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterEscapeValue)
       effects.consume(code)
       effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterEscapeValue)
@@ -26558,12 +26556,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   characterReference: () => (/* binding */ characterReference)
 /* harmony export */ });
-/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -26614,11 +26612,11 @@ function tokenizeCharacterReference(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.ampersand, 'expected `&`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReference)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.ampersand, 'expected `&`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReference)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarker)
     return open
   }
 
@@ -26638,16 +26636,16 @@ function tokenizeCharacterReference(effects, ok, nok) {
    * @type {State}
    */
   function open(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.numberSign) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarkerNumeric)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.numberSign) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarkerNumeric)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarkerNumeric)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarkerNumeric)
       return numeric
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceValue)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceValue)
     max = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.characterReferenceNamedSizeMax
-    test = micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlphanumeric
+    test = micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlphanumeric
     return value(code)
   }
 
@@ -26664,19 +26662,19 @@ function tokenizeCharacterReference(effects, ok, nok) {
    * @type {State}
    */
   function numeric(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.uppercaseX || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lowercaseX) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarkerHexadecimal)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.uppercaseX || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lowercaseX) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarkerHexadecimal)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarkerHexadecimal)
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceValue)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarkerHexadecimal)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceValue)
       max = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.characterReferenceHexadecimalSizeMax
-      test = micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiHexDigit
+      test = micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiHexDigit
       return value
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceValue)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceValue)
     max = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.characterReferenceDecimalSizeMax
-    test = micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiDigit
+    test = micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiDigit
     return value(code)
   }
 
@@ -26698,22 +26696,22 @@ function tokenizeCharacterReference(effects, ok, nok) {
    * @type {State}
    */
   function value(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.semicolon && size) {
-      const token = effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceValue)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.semicolon && size) {
+      const token = effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceValue)
 
       if (
-        test === micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlphanumeric &&
-        !(0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_5__.decodeNamedCharacterReference)(self.sliceSerialize(token))
+        test === micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlphanumeric &&
+        !(0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_0__.decodeNamedCharacterReference)(self.sliceSerialize(token))
       ) {
         return nok(code)
       }
 
       // To do: `markdown-rs` uses a different name:
       // `CharacterReferenceMarkerSemi`.
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarker)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReferenceMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterReference)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReferenceMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.characterReference)
       return ok
     }
 
@@ -26740,12 +26738,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   codeFenced: () => (/* binding */ codeFenced)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -26819,21 +26817,21 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function beforeSequenceOpen(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.tilde,
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.tilde,
       'expected `` ` `` or `~`'
     )
 
     const tail = self.events[self.events.length - 1]
     initialPrefix =
-      tail && tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix
+      tail && tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix
         ? tail[2].sliceSerialize(tail[1], true).length
         : 0
 
     marker = code
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFenced)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFence)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceSequence)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFenced)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFence)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceSequence)
     return sequenceOpen(code)
   }
 
@@ -26860,9 +26858,9 @@ function tokenizeCodeFenced(effects, ok, nok) {
       return nok(code)
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceSequence)
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(effects, infoBefore, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.whitespace)(code)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceSequence)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, infoBefore, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.whitespace)(code)
       : infoBefore(code)
   }
 
@@ -26879,15 +26877,15 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function infoBefore(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFence)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFence)
       return self.interrupt
         ? ok(code)
         : effects.check(nonLazyContinuation, atNonLazyBreak, after)(code)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceInfo)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceInfo)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
     return info(code)
   }
 
@@ -26904,19 +26902,19 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function info(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceInfo)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceInfo)
       return infoBefore(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceInfo)
-      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(effects, metaBefore, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.whitespace)(code)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceInfo)
+      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, metaBefore, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.whitespace)(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent && code === marker) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent && code === marker) {
       return nok(code)
     }
 
@@ -26937,12 +26935,12 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function metaBefore(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       return infoBefore(code)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceMeta)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceMeta)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
     return meta(code)
   }
 
@@ -26959,13 +26957,13 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function meta(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceMeta)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceMeta)
       return infoBefore(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent && code === marker) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent && code === marker) {
       return nok(code)
     }
 
@@ -26987,7 +26985,7 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function atNonLazyBreak(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code), 'expected eol')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
     return effects.attempt(closeStart, after, contentBefore)(code)
   }
 
@@ -27004,10 +27002,10 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function contentBefore(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code), 'expected eol')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     return contentStart
   }
 
@@ -27024,11 +27022,11 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function contentStart(code) {
-    return initialPrefix > 0 && (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(
+    return initialPrefix > 0 && (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
           effects,
           beforeContentChunk,
-          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
+          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
           initialPrefix + 1
         )(code)
       : beforeContentChunk(code)
@@ -27047,11 +27045,11 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function beforeContentChunk(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       return effects.check(nonLazyContinuation, atNonLazyBreak, after)(code)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFlowValue)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFlowValue)
     return contentChunk(code)
   }
 
@@ -27068,8 +27066,8 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function contentChunk(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFlowValue)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFlowValue)
       return beforeContentChunk(code)
     }
 
@@ -27090,7 +27088,7 @@ function tokenizeCodeFenced(effects, ok, nok) {
    * @type {State}
    */
   function after(code) {
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFenced)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFenced)
     return ok(code)
   }
 
@@ -27109,10 +27107,10 @@ function tokenizeCodeFenced(effects, ok, nok) {
      * @type {State}
      */
     function startBefore(code) {
-      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code), 'expected eol')
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       return start
     }
 
@@ -27130,18 +27128,18 @@ function tokenizeCodeFenced(effects, ok, nok) {
      */
     function start(code) {
       // Always populated by defaults.
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
         self.parser.constructs.disable.null,
         'expected `disable.null` to be populated'
       )
 
       // To do: `enter` here or in next state?
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFence)
-      return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
-        ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFence)
+      return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+        ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
             effects,
             beforeSequenceClose,
-            micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
+            micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
             self.parser.constructs.disable.null.includes('codeIndented')
               ? undefined
               : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
@@ -27163,7 +27161,7 @@ function tokenizeCodeFenced(effects, ok, nok) {
      */
     function beforeSequenceClose(code) {
       if (code === marker) {
-        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceSequence)
+        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceSequence)
         return sequenceClose(code)
       }
 
@@ -27190,9 +27188,9 @@ function tokenizeCodeFenced(effects, ok, nok) {
       }
 
       if (size >= sizeOpen) {
-        effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFenceSequence)
-        return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
-          ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(effects, sequenceCloseAfter, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.whitespace)(code)
+        effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFenceSequence)
+        return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+          ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, sequenceCloseAfter, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.whitespace)(code)
           : sequenceCloseAfter(code)
       }
 
@@ -27212,8 +27210,8 @@ function tokenizeCodeFenced(effects, ok, nok) {
      * @type {State}
      */
     function sequenceCloseAfter(code) {
-      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-        effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFencedFence)
+      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+        effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFencedFence)
         return ok(code)
       }
 
@@ -27237,14 +27235,14 @@ function tokenizeNonLazyContinuation(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code), 'expected eol')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     return lineStart
   }
 
@@ -27272,12 +27270,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   codeIndented: () => (/* binding */ codeIndented)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
 /* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -27325,15 +27323,15 @@ function tokenizeCodeIndented(effects, ok, nok) {
    */
   function start(code) {
     // To do: manually check if interrupting like `markdown-rs`.
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code))
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeIndented)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code))
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeIndented)
     // To do: use an improved `space_or_tab` function like `markdown-rs`,
     // so that we can drop the next state.
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__.factorySpace)(
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
       effects,
       afterPrefix,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
-      micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize + 1
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
+      micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize + 1
     )(code)
   }
 
@@ -27350,8 +27348,8 @@ function tokenizeCodeIndented(effects, ok, nok) {
   function afterPrefix(code) {
     const tail = self.events[self.events.length - 1]
     return tail &&
-      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix &&
-      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize
+      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix &&
+      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
       ? atBreak(code)
       : nok(code)
   }
@@ -27367,7 +27365,7 @@ function tokenizeCodeIndented(effects, ok, nok) {
    * @type {State}
    */
   function atBreak(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return after(code)
     }
 
@@ -27375,7 +27373,7 @@ function tokenizeCodeIndented(effects, ok, nok) {
       return effects.attempt(furtherStart, atBreak, after)(code)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFlowValue)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFlowValue)
     return inside(code)
   }
 
@@ -27390,8 +27388,8 @@ function tokenizeCodeIndented(effects, ok, nok) {
    * @type {State}
    */
   function inside(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeFlowValue)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeFlowValue)
       return atBreak(code)
     }
 
@@ -27401,7 +27399,7 @@ function tokenizeCodeIndented(effects, ok, nok) {
 
   /** @type {State} */
   function after(code) {
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeIndented)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.codeIndented)
     // To do: allow interrupting like `markdown-rs`.
     // Feel free to interrupt.
     // tokenizer.interrupt = false
@@ -27437,9 +27435,9 @@ function tokenizeFurtherStart(effects, ok, nok) {
     }
 
     if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       return furtherStart
     }
 
@@ -27449,11 +27447,11 @@ function tokenizeFurtherStart(effects, ok, nok) {
     //
     // To do: use an improved `space_or_tab` function like `markdown-rs`,
     // so that we can drop the next state.
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__.factorySpace)(
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
       effects,
       afterPrefix,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
-      micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize + 1
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
+      micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize + 1
     )(code)
   }
 
@@ -27470,8 +27468,8 @@ function tokenizeFurtherStart(effects, ok, nok) {
   function afterPrefix(code) {
     const tail = self.events[self.events.length - 1]
     return tail &&
-      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix &&
-      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize
+      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix &&
+      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
       ? ok(code)
       : (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)
       ? furtherStart(code)
@@ -27493,10 +27491,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   codeText: () => (/* binding */ codeText)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Previous} Previous
@@ -27532,19 +27530,19 @@ function resolveCodeText(events) {
 
   // If we start and end with an EOL or a space.
   if (
-    (events[headEnterIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding ||
+    (events[headEnterIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding ||
       events[headEnterIndex][1].type === 'space') &&
-    (events[tailExitIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding ||
+    (events[tailExitIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding ||
       events[tailExitIndex][1].type === 'space')
   ) {
     index = headEnterIndex
 
     // And we have data.
     while (++index < tailExitIndex) {
-      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextData) {
+      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextData) {
         // Then we have padding.
-        events[headEnterIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextPadding
-        events[tailExitIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextPadding
+        events[headEnterIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextPadding
+        events[tailExitIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextPadding
         headEnterIndex += 2
         tailExitIndex -= 2
         break
@@ -27560,15 +27558,15 @@ function resolveCodeText(events) {
     if (enter === undefined) {
       if (
         index !== tailExitIndex &&
-        events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding
+        events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding
       ) {
         enter = index
       }
     } else if (
       index === tailExitIndex ||
-      events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding
+      events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding
     ) {
-      events[enter][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextData
+      events[enter][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextData
 
       if (index !== enter + 2) {
         events[enter][1].end = events[index - 1][1].end
@@ -27591,8 +27589,8 @@ function resolveCodeText(events) {
 function previous(code) {
   // If there is a previous code, there will always be a tail.
   return (
-    code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent ||
-    this.events[this.events.length - 1][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.characterEscape
+    code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent ||
+    this.events[this.events.length - 1][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.characterEscape
   )
 }
 
@@ -27623,10 +27621,10 @@ function tokenizeCodeText(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent, 'expected `` ` ``')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(previous.call(self, self.previous), 'expected correct previous')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeText)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextSequence)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent, 'expected `` ` ``')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(previous.call(self, self.previous), 'expected correct previous')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeText)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextSequence)
     return sequenceOpen(code)
   }
 
@@ -27641,13 +27639,13 @@ function tokenizeCodeText(effects, ok, nok) {
    * @type {State}
    */
   function sequenceOpen(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent) {
       effects.consume(code)
       sizeOpen++
       return sequenceOpen
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextSequence)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextSequence)
     return between(code)
   }
 
@@ -27663,14 +27661,14 @@ function tokenizeCodeText(effects, ok, nok) {
    */
   function between(code) {
     // EOF.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
       return nok(code)
     }
 
     // To do: next major: don’t do spaces in resolve, but when compiling,
     // like `markdown-rs`.
     // Tabs don’t work, and virtual spaces don’t make sense.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.space) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space) {
       effects.enter('space')
       effects.consume(code)
       effects.exit('space')
@@ -27678,21 +27676,21 @@ function tokenizeCodeText(effects, ok, nok) {
     }
 
     // Closing fence? Could also be data.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent) {
-      token = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextSequence)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent) {
+      token = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextSequence)
       size = 0
       return sequenceClose(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
       return between
     }
 
     // Data.
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextData)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextData)
     return data(code)
   }
 
@@ -27708,12 +27706,12 @@ function tokenizeCodeText(effects, ok, nok) {
    */
   function data(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.space ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextData)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextData)
       return between(code)
     }
 
@@ -27733,7 +27731,7 @@ function tokenizeCodeText(effects, ok, nok) {
    */
   function sequenceClose(code) {
     // More.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent) {
       effects.consume(code)
       size++
       return sequenceClose
@@ -27741,13 +27739,13 @@ function tokenizeCodeText(effects, ok, nok) {
 
     // Done!
     if (size === sizeOpen) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextSequence)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeText)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextSequence)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeText)
       return ok(code)
     }
 
     // More or less accents: mark as data.
-    token.type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.codeTextData
+    token.type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.codeTextData
     return data(code)
   }
 }
@@ -27766,13 +27764,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   content: () => (/* binding */ content)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_subtokenize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-subtokenize */ "../node_modules/micromark-util-subtokenize/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_subtokenize__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-subtokenize */ "../node_modules/micromark-util-subtokenize/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Resolver} Resolver
@@ -27806,7 +27804,7 @@ const continuationConstruct = {tokenize: tokenizeContinuation, partial: true}
  * @type {Resolver}
  */
 function resolveContent(events) {
-  ;(0,micromark_util_subtokenize__WEBPACK_IMPORTED_MODULE_1__.subtokenize)(events)
+  ;(0,micromark_util_subtokenize__WEBPACK_IMPORTED_MODULE_2__.subtokenize)(events)
   return events
 }
 
@@ -27831,14 +27829,14 @@ function tokenizeContent(effects, ok) {
    * @type {State}
    */
   function chunkStart(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof && !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code),
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
+      code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof && !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code),
       'expected no eof or eol'
     )
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.content)
-    previous = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkContent, {
-      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.contentTypeContent
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.content)
+    previous = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkContent, {
+      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.contentTypeContent
     })
     return chunkInside(code)
   }
@@ -27854,13 +27852,13 @@ function tokenizeContent(effects, ok) {
    * @type {State}
    */
   function chunkInside(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof) {
       return contentEnd(code)
     }
 
     // To do: in `markdown-rs`, each line is parsed on its own, and everything
     // is stitched together resolving.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       return effects.check(
         continuationConstruct,
         contentContinue,
@@ -27879,8 +27877,8 @@ function tokenizeContent(effects, ok) {
    * @type {State}
    */
   function contentEnd(code) {
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkContent)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.content)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkContent)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.content)
     return ok(code)
   }
 
@@ -27890,12 +27888,12 @@ function tokenizeContent(effects, ok) {
    * @type {State}
    */
   function contentContinue(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code), 'expected eol')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkContent)
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(previous, 'expected previous token')
-    previous.next = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkContent, {
-      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.contentTypeContent,
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkContent)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(previous, 'expected previous token')
+    previous.next = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkContent, {
+      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.contentTypeContent,
       previous
     })
     previous = previous.next
@@ -27918,12 +27916,12 @@ function tokenizeContinuation(effects, ok, nok) {
    * @type {State}
    */
   function startLookahead(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code), 'expected a line ending')
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkContent)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected a line ending')
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkContent)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__.factorySpace)(effects, prefixed, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEnding)
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, prefixed, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.linePrefix)
   }
 
   /**
@@ -27932,12 +27930,12 @@ function tokenizeContinuation(effects, ok, nok) {
    * @type {State}
    */
   function prefixed(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       return nok(code)
     }
 
     // Always populated by defaults.
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       self.parser.constructs.disable.null,
       'expected `disable.null` to be populated'
     )
@@ -27947,8 +27945,8 @@ function tokenizeContinuation(effects, ok, nok) {
     if (
       !self.parser.constructs.disable.null.includes('codeIndented') &&
       tail &&
-      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix &&
-      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.tabSize
+      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.linePrefix &&
+      tail[2].sliceSerialize(tail[1], true).length >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize
     ) {
       return ok(code)
     }
@@ -27971,16 +27969,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   definition: () => (/* binding */ definition)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_destination__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-factory-destination */ "../node_modules/micromark-factory-destination/dev/index.js");
-/* harmony import */ var micromark_factory_label__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-label */ "../node_modules/micromark-factory-label/dev/index.js");
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_factory_title__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-factory-title */ "../node_modules/micromark-factory-title/dev/index.js");
-/* harmony import */ var micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-factory-whitespace */ "../node_modules/micromark-factory-whitespace/dev/index.js");
+/* harmony import */ var micromark_factory_destination__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-destination */ "../node_modules/micromark-factory-destination/dev/index.js");
+/* harmony import */ var micromark_factory_label__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-factory-label */ "../node_modules/micromark-factory-label/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_factory_title__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-title */ "../node_modules/micromark-factory-title/dev/index.js");
+/* harmony import */ var micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-factory-whitespace */ "../node_modules/micromark-factory-whitespace/dev/index.js");
 /* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -28030,7 +28028,7 @@ function tokenizeDefinition(effects, ok, nok) {
     // Do not interrupt paragraphs (but do follow definitions).
     // To do: do `interrupt` the way `markdown-rs` does.
     // To do: parse whitespace the way `markdown-rs` does.
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definition)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definition)
     return before(code)
   }
 
@@ -28046,16 +28044,16 @@ function tokenizeDefinition(effects, ok, nok) {
    */
   function before(code) {
     // To do: parse whitespace the way `markdown-rs` does.
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftSquareBracket, 'expected `[`')
-    return micromark_factory_label__WEBPACK_IMPORTED_MODULE_3__.factoryLabel.call(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_9__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_7__.codes.leftSquareBracket, 'expected `[`')
+    return micromark_factory_label__WEBPACK_IMPORTED_MODULE_1__.factoryLabel.call(
       self,
       effects,
       labelAfter,
       // Note: we don’t need to reset the way `markdown-rs` does.
       nok,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionLabel,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionLabelMarker,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionLabelString
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionLabel,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionLabelMarker,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionLabelString
     )(code)
   }
 
@@ -28070,14 +28068,14 @@ function tokenizeDefinition(effects, ok, nok) {
    * @type {State}
    */
   function labelAfter(code) {
-    identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_4__.normalizeIdentifier)(
+    identifier = (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_6__.normalizeIdentifier)(
       self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1)
     )
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionMarker)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_7__.codes.colon) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionMarker)
       return markerAfter
     }
 
@@ -28097,7 +28095,7 @@ function tokenizeDefinition(effects, ok, nok) {
   function markerAfter(code) {
     // Note: whitespace is optional.
     return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEndingOrSpace)(code)
-      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_6__.factoryWhitespace)(effects, destinationBefore)(code)
+      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_4__.factoryWhitespace)(effects, destinationBefore)(code)
       : destinationBefore(code)
   }
 
@@ -28112,16 +28110,16 @@ function tokenizeDefinition(effects, ok, nok) {
    * @type {State}
    */
   function destinationBefore(code) {
-    return (0,micromark_factory_destination__WEBPACK_IMPORTED_MODULE_7__.factoryDestination)(
+    return (0,micromark_factory_destination__WEBPACK_IMPORTED_MODULE_0__.factoryDestination)(
       effects,
       destinationAfter,
       // Note: we don’t need to reset the way `markdown-rs` does.
       nok,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionDestination,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionDestinationLiteral,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionDestinationLiteralMarker,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionDestinationRaw,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionDestinationString
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionDestination,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionDestinationLiteral,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionDestinationLiteralMarker,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionDestinationRaw,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionDestinationString
     )(code)
   }
 
@@ -28153,7 +28151,7 @@ function tokenizeDefinition(effects, ok, nok) {
    */
   function after(code) {
     return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_8__.factorySpace)(effects, afterWhitespace, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__.factorySpace)(effects, afterWhitespace, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.whitespace)(code)
       : afterWhitespace(code)
   }
 
@@ -28170,8 +28168,8 @@ function tokenizeDefinition(effects, ok, nok) {
    * @type {State}
    */
   function afterWhitespace(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definition)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_7__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definition)
 
       // Note: we don’t care about uniqueness.
       // It’s likely that that doesn’t happen very frequently.
@@ -28209,7 +28207,7 @@ function tokenizeTitleBefore(effects, ok, nok) {
    */
   function titleBefore(code) {
     return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEndingOrSpace)(code)
-      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_6__.factoryWhitespace)(effects, beforeMarker)(code)
+      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_4__.factoryWhitespace)(effects, beforeMarker)(code)
       : nok(code)
   }
 
@@ -28225,13 +28223,13 @@ function tokenizeTitleBefore(effects, ok, nok) {
    * @type {State}
    */
   function beforeMarker(code) {
-    return (0,micromark_factory_title__WEBPACK_IMPORTED_MODULE_9__.factoryTitle)(
+    return (0,micromark_factory_title__WEBPACK_IMPORTED_MODULE_3__.factoryTitle)(
       effects,
       titleAfter,
       nok,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionTitle,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionTitleMarker,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definitionTitleString
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionTitle,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionTitleMarker,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.definitionTitleString
     )(code)
   }
 
@@ -28247,10 +28245,10 @@ function tokenizeTitleBefore(effects, ok, nok) {
    */
   function titleAfter(code) {
     return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_8__.factorySpace)(
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__.factorySpace)(
           effects,
           titleAfterOptionalWhitespace,
-          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace
+          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_8__.types.whitespace
         )(code)
       : titleAfterOptionalWhitespace(code)
   }
@@ -28266,7 +28264,7 @@ function tokenizeTitleBefore(effects, ok, nok) {
    * @type {State}
    */
   function titleAfterOptionalWhitespace(code) {
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code) ? ok(code) : nok(code)
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_7__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code) ? ok(code) : nok(code)
   }
 }
 
@@ -28284,10 +28282,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   hardBreakEscape: () => (/* binding */ hardBreakEscape)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -28325,7 +28323,7 @@ function tokenizeHardBreakEscape(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash, 'expected `\\`')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash, 'expected `\\`')
     effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.hardBreakEscape)
     effects.consume(code)
     return after
@@ -28343,7 +28341,7 @@ function tokenizeHardBreakEscape(effects, ok, nok) {
    *  @type {State}
    */
   function after(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
       effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.hardBreakEscape)
       return ok(code)
     }
@@ -28366,13 +28364,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   headingAtx: () => (/* binding */ headingAtx)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Resolver} Resolver
@@ -28407,41 +28405,41 @@ function resolveHeadingAtx(events, context) {
   let text
 
   // Prefix whitespace, part of the opening.
-  if (events[contentStart][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace) {
+  if (events[contentStart][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.whitespace) {
     contentStart += 2
   }
 
   // Suffix whitespace, part of the closing.
   if (
     contentEnd - 2 > contentStart &&
-    events[contentEnd][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace
+    events[contentEnd][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.whitespace
   ) {
     contentEnd -= 2
   }
 
   if (
-    events[contentEnd][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingSequence &&
+    events[contentEnd][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingSequence &&
     (contentStart === contentEnd - 1 ||
       (contentEnd - 4 > contentStart &&
-        events[contentEnd - 2][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace))
+        events[contentEnd - 2][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.whitespace))
   ) {
     contentEnd -= contentStart + 1 === contentEnd ? 2 : 4
   }
 
   if (contentEnd > contentStart) {
     content = {
-      type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingText,
+      type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingText,
       start: events[contentStart][1].start,
       end: events[contentEnd][1].end
     }
     text = {
-      type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkText,
+      type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkText,
       start: events[contentStart][1].start,
       end: events[contentEnd][1].end,
-      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.contentTypeText
+      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.contentTypeText
     }
 
-    ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_3__.splice)(events, contentStart, contentEnd - contentStart + 1, [
+    ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(events, contentStart, contentEnd - contentStart + 1, [
       ['enter', content, context],
       ['enter', text, context],
       ['exit', text, context],
@@ -28473,7 +28471,7 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    */
   function start(code) {
     // To do: parse indent like `markdown-rs`.
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeading)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeading)
     return before(code)
   }
 
@@ -28488,8 +28486,8 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    * @type {State}
    */
   function before(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.numberSign, 'expected `#`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingSequence)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.numberSign, 'expected `#`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingSequence)
     return sequenceOpen(code)
   }
 
@@ -28505,16 +28503,16 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    */
   function sequenceOpen(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.numberSign &&
-      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.atxHeadingOpeningFenceSizeMax
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.numberSign &&
+      size++ < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.atxHeadingOpeningFenceSizeMax
     ) {
       effects.consume(code)
       return sequenceOpen
     }
 
     // Always at least one `#`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEndingOrSpace)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingSequence)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingSequence)
       return atBreak(code)
     }
 
@@ -28532,26 +28530,26 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    * @type {State}
    */
   function atBreak(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.numberSign) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingSequence)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.numberSign) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingSequence)
       return sequenceFurther(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeading)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeading)
       // To do: interrupt like `markdown-rs`.
       // // Feel free to interrupt.
       // tokenizer.interrupt = false
       return ok(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownSpace)(code)) {
-      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace)(code)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
+      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.whitespace)(code)
     }
 
     // To do: generate `data` tokens, add the `text` token later.
     // Needs edit map, see: `markdown.rs`.
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingText)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingText)
     return data(code)
   }
 
@@ -28568,12 +28566,12 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    * @type {State}
    */
   function sequenceFurther(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.numberSign) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.numberSign) {
       effects.consume(code)
       return sequenceFurther
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingSequence)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingSequence)
     return atBreak(code)
   }
 
@@ -28589,11 +28587,11 @@ function tokenizeHeadingAtx(effects, ok, nok) {
    */
   function data(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.numberSign ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEndingOrSpace)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.numberSign ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code)
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.atxHeadingText)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.atxHeadingText)
       return atBreak(code)
     }
 
@@ -28616,12 +28614,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   htmlFlow: () => (/* binding */ htmlFlow)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-html-tag-name */ "../node_modules/micromark-util-html-tag-name/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-html-tag-name */ "../node_modules/micromark-util-html-tag-name/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /* harmony import */ var _blank_line_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./blank-line.js */ "../node_modules/micromark-core-commonmark/dev/lib/blank-line.js");
 /**
  * @typedef {import('micromark-util-types').Code} Code
@@ -28662,13 +28660,13 @@ function resolveToHtmlFlow(events) {
   while (index--) {
     if (
       events[index][0] === 'enter' &&
-      events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlow
+      events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlow
     ) {
       break
     }
   }
 
-  if (index > 1 && events[index - 2][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix) {
+  if (index > 1 && events[index - 2][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix) {
     // Add the prefix start to the HTML token.
     events[index][1].start = events[index - 2][1].start
     // Add the prefix start to the HTML line token.
@@ -28725,9 +28723,9 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function before(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lessThan, 'expected `<`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlow)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlowData)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lessThan, 'expected `<`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlow)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlowData)
     effects.consume(code)
     return open
   }
@@ -28770,7 +28768,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
 
     // ASCII alphabetical.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code)) {
       effects.consume(code)
       // @ts-expect-error: not null.
       buffer = String.fromCharCode(code)
@@ -28809,7 +28807,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
 
     // ASCII alphabetical.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code)) {
       effects.consume(code)
       marker = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlDeclaration
       // // Do not form containers.
@@ -28880,7 +28878,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function tagCloseStart(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code)) {
       effects.consume(code)
       // @ts-expect-error: not null.
       buffer = String.fromCharCode(code)
@@ -28907,19 +28905,19 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEndingOrSpace)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEndingOrSpace)(code)
     ) {
       const slash = code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash
       const name = buffer.toLowerCase()
 
-      if (!slash && !closingTag && micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_5__.htmlRawNames.includes(name)) {
+      if (!slash && !closingTag && micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_1__.htmlRawNames.includes(name)) {
         marker = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlRaw
         // // Do not form containers.
         // tokenizer.concrete = true
         return self.interrupt ? ok(code) : continuation(code)
       }
 
-      if (micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_5__.htmlBlockNames.includes(buffer.toLowerCase())) {
+      if (micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_1__.htmlBlockNames.includes(buffer.toLowerCase())) {
         marker = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlBasic
 
         if (slash) {
@@ -28942,7 +28940,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
 
     // ASCII alphanumerical and `-`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlphanumeric)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code)) {
       effects.consume(code)
       buffer += String.fromCharCode(code)
       return tagName
@@ -28983,7 +28981,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function completeClosingTagAfter(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
       effects.consume(code)
       return completeClosingTagAfter
     }
@@ -29021,12 +29019,12 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
 
     // ASCII alphanumerical and `:` and `_`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlpha)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code)) {
       effects.consume(code)
       return completeAttributeName
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
       effects.consume(code)
       return completeAttributeNameBefore
     }
@@ -29055,7 +29053,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dot ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlphanumeric)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(code)
     ) {
       effects.consume(code)
       return completeAttributeName
@@ -29083,7 +29081,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       return completeAttributeValueBefore
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
       effects.consume(code)
       return completeAttributeNameAfter
     }
@@ -29121,7 +29119,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       return completeAttributeValueQuoted
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
       effects.consume(code)
       return completeAttributeValueBefore
     }
@@ -29148,7 +29146,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       return completeAttributeValueQuotedAfter
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
       return nok(code)
     }
 
@@ -29176,7 +29174,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.equalsTo ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEndingOrSpace)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEndingOrSpace)(code)
     ) {
       return completeAttributeNameAfter(code)
     }
@@ -29200,7 +29198,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     if (
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)
     ) {
       return completeAttributeNameBefore(code)
     }
@@ -29238,13 +29236,13 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function completeAfter(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
       // // Do not form containers.
       // tokenizer.concrete = true
       return continuation(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
       effects.consume(code)
       return completeAfter
     }
@@ -29289,10 +29287,10 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
 
     if (
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code) &&
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code) &&
       (marker === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlBasic || marker === micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlComplete)
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlowData)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlowData)
       return effects.check(
         blankLineBefore,
         continuationAfter,
@@ -29300,8 +29298,8 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       )(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlowData)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlowData)
       return continuationStart(code)
     }
 
@@ -29340,10 +29338,10 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function continuationStartNonLazy(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code))
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code))
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     return continuationBefore
   }
 
@@ -29359,11 +29357,11 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function continuationBefore(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
       return continuationStart(code)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlowData)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlowData)
     return continuation(code)
   }
 
@@ -29420,7 +29418,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan) {
       const name = buffer.toLowerCase()
 
-      if (micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_5__.htmlRawNames.includes(name)) {
+      if (micromark_util_html_tag_name__WEBPACK_IMPORTED_MODULE_1__.htmlRawNames.includes(name)) {
         effects.consume(code)
         return continuationClose
       }
@@ -29428,7 +29426,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       return continuation(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.asciiAlpha)(code) && buffer.length < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlRawSizeMax) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlpha)(code) && buffer.length < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.htmlRawSizeMax) {
       effects.consume(code)
       // @ts-expect-error: not null.
       buffer += String.fromCharCode(code)
@@ -29501,8 +29499,8 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function continuationClose(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlowData)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlowData)
       return continuationAfter(code)
     }
 
@@ -29521,7 +29519,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
    * @type {State}
    */
   function continuationAfter(code) {
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.htmlFlow)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlFlow)
     // // Feel free to interrupt.
     // tokenizer.interrupt = false
     // // No longer concrete.
@@ -29551,10 +29549,10 @@ function tokenizeNonLazyContinuationStart(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       return after
     }
 
@@ -29596,10 +29594,10 @@ function tokenizeBlankLineBefore(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code), 'expected a line ending')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code), 'expected a line ending')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     return effects.attempt(_blank_line_js__WEBPACK_IMPORTED_MODULE_6__.blankLine, ok, nok)
   }
 }
@@ -29618,12 +29616,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   htmlText: () => (/* binding */ htmlText)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -29668,9 +29666,9 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan, 'expected `<`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlText)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlTextData)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lessThan, 'expected `<`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlText)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlTextData)
     effects.consume(code)
     return open
   }
@@ -29690,23 +29688,23 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function open(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.exclamationMark) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.exclamationMark) {
       effects.consume(code)
       return declarationOpen
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.slash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash) {
       effects.consume(code)
       return tagCloseStart
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.questionMark) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.questionMark) {
       effects.consume(code)
       return instruction
     }
 
     // ASCII alphabetical.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlpha)(code)) {
       effects.consume(code)
       return tagOpen
     }
@@ -29729,18 +29727,18 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function declarationOpen(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash) {
       effects.consume(code)
       return commentOpenInside
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftSquareBracket) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftSquareBracket) {
       effects.consume(code)
       index = 0
       return cdataOpenInside
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlpha)(code)) {
       effects.consume(code)
       return declaration
     }
@@ -29759,7 +29757,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function commentOpenInside(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash) {
       effects.consume(code)
       return commentEnd
     }
@@ -29778,16 +29776,16 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function comment(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash) {
       effects.consume(code)
       return commentClose
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = comment
       return lineEndingBefore(code)
     }
@@ -29807,7 +29805,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function commentClose(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash) {
       effects.consume(code)
       return commentEnd
     }
@@ -29826,9 +29824,9 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function commentEnd(code) {
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan
       ? end(code)
-      : code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash
+      : code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash
       ? commentClose(code)
       : comment(code)
   }
@@ -29844,7 +29842,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function cdataOpenInside(code) {
-    const value = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.cdataOpeningString
+    const value = micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.cdataOpeningString
 
     if (code === value.charCodeAt(index++)) {
       effects.consume(code)
@@ -29865,16 +29863,16 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function cdata(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightSquareBracket) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.rightSquareBracket) {
       effects.consume(code)
       return cdataClose
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = cdata
       return lineEndingBefore(code)
     }
@@ -29894,7 +29892,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function cdataClose(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightSquareBracket) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.rightSquareBracket) {
       effects.consume(code)
       return cdataEnd
     }
@@ -29913,11 +29911,11 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function cdataEnd(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan) {
       return end(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightSquareBracket) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.rightSquareBracket) {
       effects.consume(code)
       return cdataEnd
     }
@@ -29936,11 +29934,11 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function declaration(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan) {
       return end(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = declaration
       return lineEndingBefore(code)
     }
@@ -29960,16 +29958,16 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function instruction(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.questionMark) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.questionMark) {
       effects.consume(code)
       return instructionClose
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = instruction
       return lineEndingBefore(code)
     }
@@ -29989,7 +29987,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function instructionClose(code) {
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ? end(code) : instruction(code)
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ? end(code) : instruction(code)
   }
 
   /**
@@ -30004,7 +30002,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagCloseStart(code) {
     // ASCII alphabetical.
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlpha)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlpha)(code)) {
       effects.consume(code)
       return tagClose
     }
@@ -30024,7 +30022,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagClose(code) {
     // ASCII alphanumerical and `-`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlphanumeric)(code)) {
       effects.consume(code)
       return tagClose
     }
@@ -30043,12 +30041,12 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function tagCloseBetween(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = tagCloseBetween
       return lineEndingBefore(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       effects.consume(code)
       return tagCloseBetween
     }
@@ -30068,15 +30066,15 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagOpen(code) {
     // ASCII alphanumerical and `-`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlphanumeric)(code)) {
       effects.consume(code)
       return tagOpen
     }
 
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.slash ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEndingOrSpace)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code)
     ) {
       return tagOpenBetween(code)
     }
@@ -30095,23 +30093,23 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function tagOpenBetween(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.slash) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash) {
       effects.consume(code)
       return end
     }
 
     // ASCII alphabetical and `:` and `_`.
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.colon || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.underscore || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlpha)(code)) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlpha)(code)) {
       effects.consume(code)
       return tagOpenAttributeName
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = tagOpenBetween
       return lineEndingBefore(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       effects.consume(code)
       return tagOpenBetween
     }
@@ -30132,11 +30130,11 @@ function tokenizeHtmlText(effects, ok, nok) {
   function tagOpenAttributeName(code) {
     // ASCII alphabetical and `-`, `.`, `:`, and `_`.
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dash ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.dot ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.colon ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.underscore ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiAlphanumeric)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dot ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.colon ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiAlphanumeric)(code)
     ) {
       effects.consume(code)
       return tagOpenAttributeName
@@ -30157,17 +30155,17 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function tagOpenAttributeNameAfter(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.equalsTo) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.equalsTo) {
       effects.consume(code)
       return tagOpenAttributeValueBefore
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = tagOpenAttributeNameAfter
       return lineEndingBefore(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       effects.consume(code)
       return tagOpenAttributeNameAfter
     }
@@ -30188,27 +30186,27 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagOpenAttributeValueBefore(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.equalsTo ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lessThan ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.equalsTo ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent
     ) {
       return nok(code)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.quotationMark || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.apostrophe) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.quotationMark || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.apostrophe) {
       effects.consume(code)
       marker = code
       return tagOpenAttributeValueQuoted
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = tagOpenAttributeValueBefore
       return lineEndingBefore(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       effects.consume(code)
       return tagOpenAttributeValueBefore
     }
@@ -30234,11 +30232,11 @@ function tokenizeHtmlText(effects, ok, nok) {
       return tagOpenAttributeValueQuotedAfter
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       returnState = tagOpenAttributeValueQuoted
       return lineEndingBefore(code)
     }
@@ -30259,20 +30257,20 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagOpenAttributeValueUnquoted(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.quotationMark ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.apostrophe ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.equalsTo ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.graveAccent
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.quotationMark ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.apostrophe ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lessThan ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.equalsTo ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.graveAccent
     ) {
       return nok(code)
     }
 
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.slash ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEndingOrSpace)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code)
     ) {
       return tagOpenBetween(code)
     }
@@ -30294,9 +30292,9 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function tagOpenAttributeValueQuotedAfter(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.slash ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEndingOrSpace)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.slash ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code)
     ) {
       return tagOpenBetween(code)
     }
@@ -30315,10 +30313,10 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function end(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.greaterThan) {
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlTextData)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlText)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlTextData)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlText)
       return ok
     }
 
@@ -30340,12 +30338,12 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function lineEndingBefore(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(returnState, 'expected return state')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code), 'expected eol')
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlTextData)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(returnState, 'expected return state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlTextData)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     return lineEndingAfter
   }
 
@@ -30365,18 +30363,18 @@ function tokenizeHtmlText(effects, ok, nok) {
    */
   function lineEndingAfter(code) {
     // Always populated by defaults.
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
       self.parser.constructs.disable.null,
       'expected `disable.null` to be populated'
     )
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
           effects,
           lineEndingAfterPrefix,
-          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix,
+          micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
           self.parser.constructs.disable.null.includes('codeIndented')
             ? undefined
-            : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize
+            : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
         )(code)
       : lineEndingAfterPrefix(code)
   }
@@ -30396,7 +30394,7 @@ function tokenizeHtmlText(effects, ok, nok) {
    * @type {State}
    */
   function lineEndingAfterPrefix(code) {
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.htmlTextData)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.htmlTextData)
     return returnState(code)
   }
 }
@@ -30415,18 +30413,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   labelEnd: () => (/* binding */ labelEnd)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_destination__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-factory-destination */ "../node_modules/micromark-factory-destination/dev/index.js");
-/* harmony import */ var micromark_factory_label__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! micromark-factory-label */ "../node_modules/micromark-factory-label/dev/index.js");
-/* harmony import */ var micromark_factory_title__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-factory-title */ "../node_modules/micromark-factory-title/dev/index.js");
-/* harmony import */ var micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-factory-whitespace */ "../node_modules/micromark-factory-whitespace/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
-/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
-/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_factory_destination__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-destination */ "../node_modules/micromark-factory-destination/dev/index.js");
+/* harmony import */ var micromark_factory_label__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-factory-label */ "../node_modules/micromark-factory-label/dev/index.js");
+/* harmony import */ var micromark_factory_title__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-factory-title */ "../node_modules/micromark-factory-title/dev/index.js");
+/* harmony import */ var micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-whitespace */ "../node_modules/micromark-factory-whitespace/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
+/* harmony import */ var micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-normalize-identifier */ "../node_modules/micromark-util-normalize-identifier/dev/index.js");
+/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').Event} Event
@@ -30473,13 +30471,13 @@ function resolveAllLabelEnd(events) {
     const token = events[index][1]
 
     if (
-      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage ||
-      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink ||
-      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelEnd
+      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelImage ||
+      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink ||
+      token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelEnd
     ) {
       // Remove the marker.
-      events.splice(index + 1, token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage ? 4 : 2)
-      token.type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.data
+      events.splice(index + 1, token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelImage ? 4 : 2)
+      token.type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.data
       index++
     }
   }
@@ -30507,52 +30505,52 @@ function resolveToLabelEnd(events, context) {
     if (open) {
       // If we see another link, or inactive link label, we’ve been here before.
       if (
-        token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.link ||
-        (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink && token._inactive)
+        token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.link ||
+        (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink && token._inactive)
       ) {
         break
       }
 
       // Mark other link openings as inactive, as we can’t have links in
       // links.
-      if (events[index][0] === 'enter' && token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink) {
+      if (events[index][0] === 'enter' && token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink) {
         token._inactive = true
       }
     } else if (close) {
       if (
         events[index][0] === 'enter' &&
-        (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage || token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink) &&
+        (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelImage || token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink) &&
         !token._balanced
       ) {
         open = index
 
-        if (token.type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink) {
+        if (token.type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink) {
           offset = 2
           break
         }
       }
-    } else if (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelEnd) {
+    } else if (token.type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelEnd) {
       close = index
     }
   }
 
-  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(open !== undefined, '`open` is supposed to be found')
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(close !== undefined, '`close` is supposed to be found')
+  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(open !== undefined, '`open` is supposed to be found')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(close !== undefined, '`close` is supposed to be found')
 
   const group = {
-    type: events[open][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.link : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.image,
+    type: events[open][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.link : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.image,
     start: Object.assign({}, events[open][1].start),
     end: Object.assign({}, events[events.length - 1][1].end)
   }
 
   const label = {
-    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.label,
+    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.label,
     start: Object.assign({}, events[open][1].start),
     end: Object.assign({}, events[close][1].end)
   }
 
   const text = {
-    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelText,
+    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelText,
     start: Object.assign({}, events[open + offset + 2][1].end),
     end: Object.assign({}, events[close - 2][1].start)
   }
@@ -30563,20 +30561,20 @@ function resolveToLabelEnd(events, context) {
   ]
 
   // Opening marker.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(media, events.slice(open + 1, open + offset + 3))
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(media, events.slice(open + 1, open + offset + 3))
 
   // Text open.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(media, [['enter', text, context]])
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(media, [['enter', text, context]])
 
   // Always populated by defaults.
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(
     context.parser.constructs.insideSpan.null,
     'expected `insideSpan.null` to be populated'
   )
   // Between.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(
     media,
-    (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__.resolveAll)(
+    (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_7__.resolveAll)(
       context.parser.constructs.insideSpan.null,
       events.slice(open + offset + 4, close - 3),
       context
@@ -30584,7 +30582,7 @@ function resolveToLabelEnd(events, context) {
   )
 
   // Text close, marker close, label close.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(media, [
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(media, [
     ['exit', text, context],
     events[close - 2],
     events[close - 1],
@@ -30592,12 +30590,12 @@ function resolveToLabelEnd(events, context) {
   ])
 
   // Reference, resource, or so.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(media, events.slice(close + 1))
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(media, events.slice(close + 1))
 
   // Media close.
-  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(media, [['exit', group, context]])
+  media = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.push)(media, [['exit', group, context]])
 
-  ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(events, open, events.length, media)
+  ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_5__.splice)(events, open, events.length, media)
 
   return events
 }
@@ -30617,8 +30615,8 @@ function tokenizeLabelEnd(effects, ok, nok) {
   // Find an opening.
   while (index--) {
     if (
-      (self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage ||
-        self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink) &&
+      (self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelImage ||
+        self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelLink) &&
       !self.events[index][1]._balanced
     ) {
       labelStart = self.events[index][1]
@@ -30644,7 +30642,7 @@ function tokenizeLabelEnd(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.rightSquareBracket, 'expected `]`')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.rightSquareBracket, 'expected `]`')
 
     // If there is not an okay opening.
     if (!labelStart) {
@@ -30665,15 +30663,15 @@ function tokenizeLabelEnd(effects, ok, nok) {
     }
 
     defined = self.parser.defined.includes(
-      (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_5__.normalizeIdentifier)(
+      (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_6__.normalizeIdentifier)(
         self.sliceSerialize({start: labelStart.end, end: self.now()})
       )
     )
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelEnd)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelEnd)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelEnd)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.labelEnd)
     return after
   }
 
@@ -30698,7 +30696,7 @@ function tokenizeLabelEnd(effects, ok, nok) {
     // an extension.
 
     // Resource (`[asd](fgh)`)?
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftParenthesis) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftParenthesis) {
       return effects.attempt(
         resourceConstruct,
         labelEndOk,
@@ -30707,7 +30705,7 @@ function tokenizeLabelEnd(effects, ok, nok) {
     }
 
     // Full (`[asd][fgh]`) or collapsed (`[asd][]`) reference?
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftSquareBracket) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftSquareBracket) {
       return effects.attempt(
         referenceFullConstruct,
         labelEndOk,
@@ -30802,11 +30800,11 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceStart(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftParenthesis, 'expected left paren')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resource)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftParenthesis, 'expected left paren')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resource)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceMarker)
     return resourceBefore
   }
 
@@ -30821,8 +30819,8 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceBefore(code) {
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_6__.markdownLineEndingOrSpace)(code)
-      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_7__.factoryWhitespace)(effects, resourceOpen)(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEndingOrSpace)(code)
+      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_3__.factoryWhitespace)(effects, resourceOpen)(code)
       : resourceOpen(code)
   }
 
@@ -30837,19 +30835,19 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceOpen(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.rightParenthesis) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.rightParenthesis) {
       return resourceEnd(code)
     }
 
-    return (0,micromark_factory_destination__WEBPACK_IMPORTED_MODULE_8__.factoryDestination)(
+    return (0,micromark_factory_destination__WEBPACK_IMPORTED_MODULE_0__.factoryDestination)(
       effects,
       resourceDestinationAfter,
       resourceDestinationMissing,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceDestination,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceDestinationLiteral,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceDestinationLiteralMarker,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceDestinationRaw,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceDestinationString,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceDestination,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceDestinationLiteral,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceDestinationLiteralMarker,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceDestinationRaw,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceDestinationString,
       micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_9__.constants.linkResourceDestinationBalanceMax
     )(code)
   }
@@ -30865,8 +30863,8 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceDestinationAfter(code) {
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_6__.markdownLineEndingOrSpace)(code)
-      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_7__.factoryWhitespace)(effects, resourceBetween)(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEndingOrSpace)(code)
+      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_3__.factoryWhitespace)(effects, resourceBetween)(code)
       : resourceEnd(code)
   }
 
@@ -30896,17 +30894,17 @@ function tokenizeResource(effects, ok, nok) {
    */
   function resourceBetween(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.quotationMark ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.apostrophe ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftParenthesis
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.quotationMark ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.apostrophe ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftParenthesis
     ) {
-      return (0,micromark_factory_title__WEBPACK_IMPORTED_MODULE_10__.factoryTitle)(
+      return (0,micromark_factory_title__WEBPACK_IMPORTED_MODULE_2__.factoryTitle)(
         effects,
         resourceTitleAfter,
         nok,
-        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceTitle,
-        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceTitleMarker,
-        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceTitleString
+        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceTitle,
+        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceTitleMarker,
+        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceTitleString
       )(code)
     }
 
@@ -30924,8 +30922,8 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceTitleAfter(code) {
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_6__.markdownLineEndingOrSpace)(code)
-      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_7__.factoryWhitespace)(effects, resourceEnd)(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEndingOrSpace)(code)
+      ? (0,micromark_factory_whitespace__WEBPACK_IMPORTED_MODULE_3__.factoryWhitespace)(effects, resourceEnd)(code)
       : resourceEnd(code)
   }
 
@@ -30940,11 +30938,11 @@ function tokenizeResource(effects, ok, nok) {
    * @type {State}
    */
   function resourceEnd(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.rightParenthesis) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceMarker)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.rightParenthesis) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resourceMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.resource)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resourceMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.resource)
       return ok
     }
 
@@ -30972,15 +30970,15 @@ function tokenizeReferenceFull(effects, ok, nok) {
    * @type {State}
    */
   function referenceFull(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftSquareBracket, 'expected left bracket')
-    return micromark_factory_label__WEBPACK_IMPORTED_MODULE_11__.factoryLabel.call(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftSquareBracket, 'expected left bracket')
+    return micromark_factory_label__WEBPACK_IMPORTED_MODULE_1__.factoryLabel.call(
       self,
       effects,
       referenceFullAfter,
       referenceFullMissing,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.reference,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceMarker,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceString
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.reference,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceMarker,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceString
     )(code)
   }
 
@@ -30996,7 +30994,7 @@ function tokenizeReferenceFull(effects, ok, nok) {
    */
   function referenceFullAfter(code) {
     return self.parser.defined.includes(
-      (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_5__.normalizeIdentifier)(
+      (0,micromark_util_normalize_identifier__WEBPACK_IMPORTED_MODULE_6__.normalizeIdentifier)(
         self.sliceSerialize(self.events[self.events.length - 1][1]).slice(1, -1)
       )
     )
@@ -31040,11 +31038,11 @@ function tokenizeReferenceCollapsed(effects, ok, nok) {
    */
   function referenceCollapsedStart(code) {
     // We only attempt a collapsed label if there’s a `[`.
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.leftSquareBracket, 'expected left bracket')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.reference)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_11__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.leftSquareBracket, 'expected left bracket')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.reference)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceMarker)
     return referenceCollapsedOpen
   }
 
@@ -31061,11 +31059,11 @@ function tokenizeReferenceCollapsed(effects, ok, nok) {
    *  @type {State}
    */
   function referenceCollapsedOpen(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.rightSquareBracket) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceMarker)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_8__.codes.rightSquareBracket) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.referenceMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.reference)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.referenceMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_10__.types.reference)
       return ok
     }
 
@@ -31087,10 +31085,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   labelStartImage: () => (/* binding */ labelStartImage)
 /* harmony export */ });
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
-/* harmony import */ var _label_end_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./label-end.js */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var _label_end_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./label-end.js */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -31107,7 +31105,7 @@ __webpack_require__.r(__webpack_exports__);
 const labelStartImage = {
   name: 'labelStartImage',
   tokenize: tokenizeLabelStartImage,
-  resolveAll: _label_end_js__WEBPACK_IMPORTED_MODULE_1__.labelEnd.resolveAll
+  resolveAll: _label_end_js__WEBPACK_IMPORTED_MODULE_3__.labelEnd.resolveAll
 }
 
 /**
@@ -31130,11 +31128,11 @@ function tokenizeLabelStartImage(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.exclamationMark, 'expected `!`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelImage)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelImageMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_2__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.exclamationMark, 'expected `!`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImageMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelImageMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImageMarker)
     return open
   }
 
@@ -31149,11 +31147,11 @@ function tokenizeLabelStartImage(effects, ok, nok) {
    * @type {State}
    */
   function open(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftSquareBracket) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelMarker)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftSquareBracket) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelMarker)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelImage)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelImage)
       return after
     }
 
@@ -31193,7 +31191,7 @@ function tokenizeLabelStartImage(effects, ok, nok) {
     // behavior isn’t.
     // Hidden footnotes hook.
     /* c8 ignore next 3 */
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.caret &&
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.caret &&
       '_hiddenFootnoteSupport' in self.parser.constructs
       ? nok(code)
       : ok(code)
@@ -31214,10 +31212,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   labelStartLink: () => (/* binding */ labelStartLink)
 /* harmony export */ });
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
-/* harmony import */ var _label_end_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./label-end.js */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var _label_end_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./label-end.js */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -31234,7 +31232,7 @@ __webpack_require__.r(__webpack_exports__);
 const labelStartLink = {
   name: 'labelStartLink',
   tokenize: tokenizeLabelStartLink,
-  resolveAll: _label_end_js__WEBPACK_IMPORTED_MODULE_1__.labelEnd.resolveAll
+  resolveAll: _label_end_js__WEBPACK_IMPORTED_MODULE_3__.labelEnd.resolveAll
 }
 
 /**
@@ -31257,12 +31255,12 @@ function tokenizeLabelStartLink(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftSquareBracket, 'expected `[`')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelLink)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelMarker)
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_2__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftSquareBracket, 'expected `[`')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelMarker)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.labelLink)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.labelLink)
     return after
   }
 
@@ -31272,7 +31270,7 @@ function tokenizeLabelStartLink(effects, ok, nok) {
     // remove.
     // Hidden footnotes hook.
     /* c8 ignore next 3 */
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.caret &&
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.caret &&
       '_hiddenFootnoteSupport' in self.parser.constructs
       ? nok(code)
       : ok(code)
@@ -31293,10 +31291,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   lineEnding: () => (/* binding */ lineEnding)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
 /* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').State} State
@@ -31321,11 +31319,11 @@ function tokenizeLineEnding(effects, ok) {
 
   /** @type {State} */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code), 'expected eol')
     effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
     effects.consume(code)
     effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__.factorySpace)(effects, ok, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix)
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, ok, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix)
   }
 }
 
@@ -31343,14 +31341,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   list: () => (/* binding */ list)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /* harmony import */ var _blank_line_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./blank-line.js */ "../node_modules/micromark-core-commonmark/dev/lib/blank-line.js");
-/* harmony import */ var _thematic_break_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./thematic-break.js */ "../node_modules/micromark-core-commonmark/dev/lib/thematic-break.js");
+/* harmony import */ var _thematic_break_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./thematic-break.js */ "../node_modules/micromark-core-commonmark/dev/lib/thematic-break.js");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -31398,7 +31396,7 @@ function tokenizeListStart(effects, ok, nok) {
   const self = this
   const tail = self.events[self.events.length - 1]
   let initialSize =
-    tail && tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix
+    tail && tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix
       ? tail[2].sliceSerialize(tail[1], true).length
       : 0
   let size = 0
@@ -31407,33 +31405,33 @@ function tokenizeListStart(effects, ok, nok) {
 
   /** @type {State} */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
     const kind =
       self.containerState.type ||
       (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.asterisk || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.plusSign || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash
-        ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listUnordered
-        : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listOrdered)
+        ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered
+        : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listOrdered)
 
     if (
-      kind === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listUnordered
+      kind === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered
         ? !self.containerState.marker || code === self.containerState.marker
-        : (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiDigit)(code)
+        : (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiDigit)(code)
     ) {
       if (!self.containerState.type) {
         self.containerState.type = kind
         effects.enter(kind, {_container: true})
       }
 
-      if (kind === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listUnordered) {
-        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefix)
+      if (kind === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listUnordered) {
+        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix)
         return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.asterisk || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash
-          ? effects.check(_thematic_break_js__WEBPACK_IMPORTED_MODULE_4__.thematicBreak, nok, atMarker)(code)
+          ? effects.check(_thematic_break_js__WEBPACK_IMPORTED_MODULE_7__.thematicBreak, nok, atMarker)(code)
           : atMarker(code)
       }
 
       if (!self.interrupt || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.digit1) {
-        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefix)
-        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemValue)
+        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix)
+        effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemValue)
         return inside(code)
       }
     }
@@ -31443,8 +31441,8 @@ function tokenizeListStart(effects, ok, nok) {
 
   /** @type {State} */
   function inside(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.asciiDigit)(code) && ++size < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.listItemValueSizeMax) {
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiDigit)(code) && ++size < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.listItemValueSizeMax) {
       effects.consume(code)
       return inside
     }
@@ -31455,7 +31453,7 @@ function tokenizeListStart(effects, ok, nok) {
         ? code === self.containerState.marker
         : code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.rightParenthesis || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dot)
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemValue)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemValue)
       return atMarker(code)
     }
 
@@ -31466,11 +31464,11 @@ function tokenizeListStart(effects, ok, nok) {
    * @type {State}
    **/
   function atMarker(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof, 'eof (`null`) is not a marker')
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemMarker)
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof, 'eof (`null`) is not a marker')
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemMarker)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemMarker)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemMarker)
     self.containerState.marker = self.containerState.marker || code
     return effects.check(
       _blank_line_js__WEBPACK_IMPORTED_MODULE_6__.blankLine,
@@ -31486,7 +31484,7 @@ function tokenizeListStart(effects, ok, nok) {
 
   /** @type {State} */
   function onBlank(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
     self.containerState.initialBlankLine = true
     initialSize++
     return endOfPrefix(code)
@@ -31494,10 +31492,10 @@ function tokenizeListStart(effects, ok, nok) {
 
   /** @type {State} */
   function otherPrefix(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefixWhitespace)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefixWhitespace)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefixWhitespace)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefixWhitespace)
       return endOfPrefix
     }
 
@@ -31506,10 +31504,10 @@ function tokenizeListStart(effects, ok, nok) {
 
   /** @type {State} */
   function endOfPrefix(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
     self.containerState.size =
       initialSize +
-      self.sliceSerialize(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefix), true).length
+      self.sliceSerialize(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefix), true).length
     return ok(code)
   }
 }
@@ -31521,33 +31519,33 @@ function tokenizeListStart(effects, ok, nok) {
 function tokenizeListContinuation(effects, ok, nok) {
   const self = this
 
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
   self.containerState._closeFlow = undefined
 
   return effects.check(_blank_line_js__WEBPACK_IMPORTED_MODULE_6__.blankLine, onBlank, notBlank)
 
   /** @type {State} */
   function onBlank(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(typeof self.containerState.size === 'number', 'expected size')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(typeof self.containerState.size === 'number', 'expected size')
     self.containerState.furtherBlankLines =
       self.containerState.furtherBlankLines ||
       self.containerState.initialBlankLine
 
     // We have a blank line.
     // Still, try to consume at most the items size.
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_7__.factorySpace)(
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
       effects,
       ok,
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemIndent,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemIndent,
       self.containerState.size + 1
     )(code)
   }
 
   /** @type {State} */
   function notBlank(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
-    if (self.containerState.furtherBlankLines || !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)) {
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
+    if (self.containerState.furtherBlankLines || !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
       self.containerState.furtherBlankLines = undefined
       self.containerState.initialBlankLine = undefined
       return notInCurrentItem(code)
@@ -31560,23 +31558,23 @@ function tokenizeListContinuation(effects, ok, nok) {
 
   /** @type {State} */
   function notInCurrentItem(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
     // While we do continue, we signal that the flow should be closed.
     self.containerState._closeFlow = true
     // As we’re closing flow, we’re no longer interrupting.
     self.interrupt = undefined
     // Always populated by defaults.
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
       self.parser.constructs.disable.null,
       'expected `disable.null` to be populated'
     )
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_7__.factorySpace)(
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
       effects,
       effects.attempt(list, ok, nok),
-      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix,
+      micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix,
       self.parser.constructs.disable.null.includes('codeIndented')
         ? undefined
-        : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.tabSize
+        : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize
     )(code)
   }
 }
@@ -31588,22 +31586,22 @@ function tokenizeListContinuation(effects, ok, nok) {
 function tokenizeIndent(effects, ok, nok) {
   const self = this
 
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(typeof self.containerState.size === 'number', 'expected size')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(typeof self.containerState.size === 'number', 'expected size')
 
-  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_7__.factorySpace)(
+  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
     effects,
     afterPrefix,
-    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemIndent,
+    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemIndent,
     self.containerState.size + 1
   )
 
   /** @type {State} */
   function afterPrefix(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(self.containerState, 'expected state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(self.containerState, 'expected state')
     const tail = self.events[self.events.length - 1]
     return tail &&
-      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemIndent &&
+      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemIndent &&
       tail[2].sliceSerialize(tail[1], true).length === self.containerState.size
       ? ok(code)
       : nok(code)
@@ -31615,8 +31613,8 @@ function tokenizeIndent(effects, ok, nok) {
  * @this {TokenizeContext}
  */
 function tokenizeListEnd(effects) {
-  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(this.containerState, 'expected state')
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(typeof this.containerState.type === 'string', 'expected type')
+  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(this.containerState, 'expected state')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(typeof this.containerState.type === 'string', 'expected type')
   effects.exit(this.containerState.type)
 }
 
@@ -31628,27 +31626,27 @@ function tokenizeListItemPrefixWhitespace(effects, ok, nok) {
   const self = this
 
   // Always populated by defaults.
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
     self.parser.constructs.disable.null,
     'expected `disable.null` to be populated'
   )
 
-  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_7__.factorySpace)(
+  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
     effects,
     afterPrefix,
-    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefixWhitespace,
+    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefixWhitespace,
     self.parser.constructs.disable.null.includes('codeIndented')
       ? undefined
-      : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.tabSize + 1
+      : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.tabSize + 1
   )
 
   /** @type {State} */
   function afterPrefix(code) {
     const tail = self.events[self.events.length - 1]
 
-    return !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code) &&
+    return !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code) &&
       tail &&
-      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefixWhitespace
+      tail[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.listItemPrefixWhitespace
       ? ok(code)
       : nok(code)
   }
@@ -31668,11 +31666,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   setextUnderline: () => (/* binding */ setextUnderline)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -31710,39 +31708,39 @@ function resolveToSetextUnderline(events, context) {
   // It’ll always exist: we don’t tokenize if it isn’t there.
   while (index--) {
     if (events[index][0] === 'enter') {
-      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.content) {
+      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.content) {
         content = index
         break
       }
 
-      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.paragraph) {
+      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.paragraph) {
         text = index
       }
     }
     // Exit
     else {
-      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.content) {
+      if (events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.content) {
         // Remove the content end (if needed we’ll add it later)
         events.splice(index, 1)
       }
 
-      if (!definition && events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.definition) {
+      if (!definition && events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.definition) {
         definition = index
       }
     }
   }
 
-  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(text !== undefined, 'expected a `text` index to be found')
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(content !== undefined, 'expected a `text` index to be found')
+  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_4__.ok)(text !== undefined, 'expected a `text` index to be found')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_4__.ok)(content !== undefined, 'expected a `text` index to be found')
 
   const heading = {
-    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeading,
+    type: micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeading,
     start: Object.assign({}, events[text][1].start),
     end: Object.assign({}, events[events.length - 1][1].end)
   }
 
   // Change the paragraph to setext heading text.
-  events[text][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeadingText
+  events[text][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeadingText
 
   // If we have definitions in the content, we’ll keep on having content,
   // but we need move it.
@@ -31787,7 +31785,7 @@ function tokenizeSetextUnderline(effects, ok, nok) {
     /** @type {boolean | undefined} */
     let paragraph
 
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_4__.ok)(
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.equalsTo,
       'expected `=` or `-`'
     )
@@ -31797,11 +31795,11 @@ function tokenizeSetextUnderline(effects, ok, nok) {
       // Skip enter/exit of line ending, line prefix, and content.
       // We can now either have a definition or a paragraph.
       if (
-        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding &&
-        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix &&
-        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.content
+        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineEnding &&
+        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.linePrefix &&
+        self.events[index][1].type !== micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.content
       ) {
-        paragraph = self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.paragraph
+        paragraph = self.events[index][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.paragraph
         break
       }
     }
@@ -31809,7 +31807,7 @@ function tokenizeSetextUnderline(effects, ok, nok) {
     // To do: handle lazy/pierce like `markdown-rs`.
     // To do: parse indent like `markdown-rs`.
     if (!self.parser.lazy[self.now().line] && (self.interrupt || paragraph)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeadingLine)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeadingLine)
       marker = code
       return before(code)
     }
@@ -31829,7 +31827,7 @@ function tokenizeSetextUnderline(effects, ok, nok) {
    * @type {State}
    */
   function before(code) {
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeadingLineSequence)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeadingLineSequence)
     return inside(code)
   }
 
@@ -31850,10 +31848,10 @@ function tokenizeSetextUnderline(effects, ok, nok) {
       return inside
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeadingLineSequence)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeadingLineSequence)
 
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__.factorySpace)(effects, after, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineSuffix)(code)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, after, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineSuffix)(code)
       : after(code)
   }
 
@@ -31869,8 +31867,8 @@ function tokenizeSetextUnderline(effects, ok, nok) {
    * @type {State}
    */
   function after(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.setextHeadingLine)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.setextHeadingLine)
       return ok(code)
     }
 
@@ -31892,12 +31890,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   thematicBreak: () => (/* binding */ thematicBreak)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Construct} Construct
@@ -31941,7 +31939,7 @@ function tokenizeThematicBreak(effects, ok, nok) {
    * @type {State}
    */
   function start(code) {
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.thematicBreak)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.thematicBreak)
     // To do: parse indent like `markdown-rs`.
     return before(code)
   }
@@ -31957,7 +31955,7 @@ function tokenizeThematicBreak(effects, ok, nok) {
    * @type {State}
    */
   function before(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.asterisk ||
         code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.dash ||
         code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.underscore,
@@ -31979,15 +31977,15 @@ function tokenizeThematicBreak(effects, ok, nok) {
    */
   function atBreak(code) {
     if (code === marker) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.thematicBreakSequence)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.thematicBreakSequence)
       return sequence(code)
     }
 
     if (
       size >= micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.thematicBreakMarkerCountMin &&
-      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownLineEnding)(code))
+      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code))
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.thematicBreak)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.thematicBreak)
       return ok(code)
     }
 
@@ -32011,9 +32009,9 @@ function tokenizeThematicBreak(effects, ok, nok) {
       return sequence
     }
 
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.thematicBreakSequence)
-    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_4__.markdownSpace)(code)
-      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_5__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.whitespace)(code)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.thematicBreakSequence)
+    return (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)
+      ? (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.whitespace)(code)
       : atBreak(code)
   }
 }
@@ -32032,10 +32030,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   factoryDestination: () => (/* binding */ factoryDestination)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
 /**
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
@@ -32114,7 +32112,7 @@ function factoryDestination(
    * @type {State}
    */
   function start(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lessThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan) {
       effects.enter(type)
       effects.enter(literalType)
       effects.enter(literalMarkerType)
@@ -32125,10 +32123,10 @@ function factoryDestination(
 
     // ASCII control, space, closing paren.
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.space ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightParenthesis ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiControl)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightParenthesis ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiControl)(code)
     ) {
       return nok(code)
     }
@@ -32136,7 +32134,7 @@ function factoryDestination(
     effects.enter(type)
     effects.enter(rawType)
     effects.enter(stringType)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.contentTypeString})
     return raw(code)
   }
 
@@ -32151,7 +32149,7 @@ function factoryDestination(
    * @type {State}
    */
   function enclosedBefore(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.greaterThan) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
       effects.enter(literalMarkerType)
       effects.consume(code)
       effects.exit(literalMarkerType)
@@ -32161,7 +32159,7 @@ function factoryDestination(
     }
 
     effects.enter(stringType)
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.contentTypeString})
     return enclosed(code)
   }
 
@@ -32176,22 +32174,22 @@ function factoryDestination(
    * @type {State}
    */
   function enclosed(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.greaterThan) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString)
       effects.exit(stringType)
       return enclosedBefore(code)
     }
 
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lessThan ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)
     ) {
       return nok(code)
     }
 
     effects.consume(code)
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash ? enclosedEscape : enclosed
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash ? enclosedEscape : enclosed
   }
 
   /**
@@ -32206,9 +32204,9 @@ function factoryDestination(
    */
   function enclosedEscape(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lessThan ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.greaterThan ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.lessThan ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.greaterThan ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash
     ) {
       effects.consume(code)
       return enclosed
@@ -32230,24 +32228,24 @@ function factoryDestination(
   function raw(code) {
     if (
       !balance &&
-      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof ||
-        code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightParenthesis ||
-        (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code))
+      (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+        code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightParenthesis ||
+        (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEndingOrSpace)(code))
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString)
       effects.exit(stringType)
       effects.exit(rawType)
       effects.exit(type)
       return ok(code)
     }
 
-    if (balance < limit && code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftParenthesis) {
+    if (balance < limit && code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftParenthesis) {
       effects.consume(code)
       balance++
       return raw
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightParenthesis) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightParenthesis) {
       effects.consume(code)
       balance--
       return raw
@@ -32257,16 +32255,16 @@ function factoryDestination(
     // Note: in `markdown-rs`, `\0` exists in codes, in `micromark-js` it
     // doesn’t.
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.space ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftParenthesis ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.asciiControl)(code)
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftParenthesis ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiControl)(code)
     ) {
       return nok(code)
     }
 
     effects.consume(code)
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash ? rawEscape : raw
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash ? rawEscape : raw
   }
 
   /**
@@ -32281,9 +32279,9 @@ function factoryDestination(
    */
   function rawEscape(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftParenthesis ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightParenthesis ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftParenthesis ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightParenthesis ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash
     ) {
       effects.consume(code)
       return raw
@@ -32307,11 +32305,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   factoryLabel: () => (/* binding */ factoryLabel)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
@@ -32376,7 +32374,7 @@ function factoryLabel(effects, ok, nok, type, markerType, stringType) {
    * @type {State}
    */
   function start(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftSquareBracket, 'expected `[`')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_4__.ok)(code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftSquareBracket, 'expected `[`')
     effects.enter(type)
     effects.enter(markerType)
     effects.consume(code)
@@ -32423,14 +32421,14 @@ function factoryLabel(effects, ok, nok, type, markerType, stringType) {
     }
 
     // To do: indent? Link chunks and EOLs together?
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineEnding)
       return atBreak
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.contentTypeString})
     return labelInside(code)
   }
 
@@ -32449,15 +32447,15 @@ function factoryLabel(effects, ok, nok, type, markerType, stringType) {
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.leftSquareBracket ||
       code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.rightSquareBracket ||
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code) ||
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code) ||
       size++ > micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.linkReferenceSizeMax
     ) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkString)
       return atBreak(code)
     }
 
     effects.consume(code)
-    if (!seen) seen = !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownSpace)(code)
+    if (!seen) seen = !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)
     return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.backslash ? labelEscape : labelInside
   }
 
@@ -32585,11 +32583,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   factoryTitle: () => (/* binding */ factoryTitle)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
 /* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').Effects} Effects
@@ -32653,15 +32651,15 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
    */
   function start(code) {
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.quotationMark ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.apostrophe ||
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftParenthesis
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.quotationMark ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.apostrophe ||
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftParenthesis
     ) {
       effects.enter(type)
       effects.enter(markerType)
       effects.consume(code)
       effects.exit(markerType)
-      marker = code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftParenthesis ? micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightParenthesis : code
+      marker = code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.leftParenthesis ? micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.rightParenthesis : code
       return begin
     }
 
@@ -32709,20 +32707,20 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
       return begin(marker)
     }
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       return nok(code)
     }
 
     // Note: blank lines can’t exist in content.
     if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       // To do: use `space_or_tab_eol_with_options`, connect.
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
-      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_3__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, atBreak, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix)
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.contentTypeString})
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString, {contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeString})
     return inside(code)
   }
 
@@ -32732,13 +32730,13 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
    * @type {State}
    */
   function inside(code) {
-    if (code === marker || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkString)
+    if (code === marker || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkString)
       return atBreak(code)
     }
 
     effects.consume(code)
-    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash ? escape : inside
+    return code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.backslash ? escape : inside
   }
 
   /**
@@ -32752,7 +32750,7 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
    * @type {State}
    */
   function escape(code) {
-    if (code === marker || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash) {
+    if (code === marker || code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.backslash) {
       effects.consume(code)
       return inside
     }
@@ -32775,9 +32773,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   factoryWhitespace: () => (/* binding */ factoryWhitespace)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
 /**
  * @typedef {import('micromark-util-types').Effects} Effects
  * @typedef {import('micromark-util-types').State} State
@@ -32813,19 +32811,19 @@ function factoryWhitespace(effects, ok) {
 
   /** @type {State} */
   function start(code) {
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEnding)(code)) {
-      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
+      effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding)
       seen = true
       return start
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownSpace)(code)) {
-      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__.factorySpace)(
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownSpace)(code)) {
+      return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
         effects,
         start,
-        seen ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineSuffix
+        seen ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.linePrefix : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineSuffix
       )(code)
     }
 
@@ -33259,8 +33257,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   classifyCharacter: () => (/* binding */ classifyCharacter)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
 /**
  * @typedef {import('micromark-util-types').Code} Code
@@ -33286,14 +33284,14 @@ __webpack_require__.r(__webpack_exports__);
  */
 function classifyCharacter(code) {
   if (
-    code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof ||
-    (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEndingOrSpace)(code) ||
-    (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.unicodeWhitespace)(code)
+    code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof ||
+    (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.markdownLineEndingOrSpace)(code) ||
+    (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.unicodeWhitespace)(code)
   ) {
     return micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.characterGroupWhitespace
   }
 
-  if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.unicodePunctuation)(code)) {
+  if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.unicodePunctuation)(code)) {
     return micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.characterGroupPunctuation
   }
 }
@@ -33525,10 +33523,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   decodeString: () => (/* binding */ decodeString)
 /* harmony export */ });
-/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
+/* harmony import */ var decode_named_character_reference__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! decode-named-character-reference */ "../node_modules/decode-named-character-reference/index.dom.js");
 /* harmony import */ var micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-decode-numeric-character-reference */ "../node_modules/micromark-util-decode-numeric-character-reference/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
 
 
 
@@ -33568,16 +33566,16 @@ function decode($0, $1, $2) {
   // Reference.
   const head = $2.charCodeAt(0)
 
-  if (head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.numberSign) {
+  if (head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.numberSign) {
     const head = $2.charCodeAt(1)
-    const hex = head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lowercaseX || head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.uppercaseX
+    const hex = head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lowercaseX || head === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.uppercaseX
     return (0,micromark_util_decode_numeric_character_reference__WEBPACK_IMPORTED_MODULE_1__.decodeNumericCharacterReference)(
       $2.slice(hex ? 2 : 1),
-      hex ? micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.numericBaseHexadecimal : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_2__.constants.numericBaseDecimal
+      hex ? micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.numericBaseHexadecimal : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.numericBaseDecimal
     )
   }
 
-  return (0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_3__.decodeNamedCharacterReference)($2) || $0
+  return (0,decode_named_character_reference__WEBPACK_IMPORTED_MODULE_0__.decodeNamedCharacterReference)($2) || $0
 }
 
 
@@ -33848,9 +33846,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   normalizeUri: () => (/* binding */ normalizeUri),
 /* harmony export */   sanitizeUri: () => (/* binding */ sanitizeUri)
 /* harmony export */ });
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_encode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-encode */ "../node_modules/micromark-util-encode/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_encode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-encode */ "../node_modules/micromark-util-encode/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/values.js */ "../node_modules/micromark-util-symbol/values.js");
 
 
@@ -33880,7 +33878,7 @@ __webpack_require__.r(__webpack_exports__);
  *   Sanitized URI.
  */
 function sanitizeUri(url, protocol) {
-  const value = (0,micromark_util_encode__WEBPACK_IMPORTED_MODULE_0__.encode)(normalizeUri(url || ''))
+  const value = (0,micromark_util_encode__WEBPACK_IMPORTED_MODULE_1__.encode)(normalizeUri(url || ''))
 
   if (!protocol) {
     return value
@@ -33932,9 +33930,9 @@ function normalizeUri(value) {
 
     // A correct percent encoded value.
     if (
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.percentSign &&
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_2__.asciiAlphanumeric)(value.charCodeAt(index + 1)) &&
-      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_2__.asciiAlphanumeric)(value.charCodeAt(index + 2))
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.percentSign &&
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(value.charCodeAt(index + 1)) &&
+      (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_0__.asciiAlphanumeric)(value.charCodeAt(index + 2))
     ) {
       skip = 2
     }
@@ -33992,10 +33990,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   subtokenize: () => (/* binding */ subtokenize)
 /* harmony export */ });
-/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Chunk} Chunk
  * @typedef {import('micromark-util-types').Event} Event
@@ -34045,30 +34043,30 @@ function subtokenize(events) {
     // is in the first content of a list item.
     if (
       index &&
-      event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow &&
-      events[index - 1][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.listItemPrefix
+      event[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkFlow &&
+      events[index - 1][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.listItemPrefix
     ) {
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(event[1]._tokenizer, 'expected `_tokenizer` on subtokens')
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(event[1]._tokenizer, 'expected `_tokenizer` on subtokens')
       subevents = event[1]._tokenizer.events
       otherIndex = 0
 
       if (
         otherIndex < subevents.length &&
-        subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEndingBlank
+        subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEndingBlank
       ) {
         otherIndex += 2
       }
 
       if (
         otherIndex < subevents.length &&
-        subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.content
+        subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.content
       ) {
         while (++otherIndex < subevents.length) {
-          if (subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.content) {
+          if (subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.content) {
             break
           }
 
-          if (subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkText) {
+          if (subevents[otherIndex][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.chunkText) {
             subevents[otherIndex][1]._isInFirstContentOfListItem = true
             otherIndex++
           }
@@ -34093,15 +34091,15 @@ function subtokenize(events) {
         otherEvent = events[otherIndex]
 
         if (
-          otherEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding ||
-          otherEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEndingBlank
+          otherEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding ||
+          otherEvent[1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEndingBlank
         ) {
           if (otherEvent[0] === 'enter') {
             if (lineIndex) {
-              events[lineIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEndingBlank
+              events[lineIndex][1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEndingBlank
             }
 
-            otherEvent[1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.lineEnding
+            otherEvent[1].type = micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineEnding
             lineIndex = otherIndex
           }
         } else {
@@ -34116,7 +34114,7 @@ function subtokenize(events) {
         // Switch container exit w/ line endings.
         parameters = events.slice(lineIndex, index)
         parameters.unshift(event)
-        ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(events, lineIndex, index - lineIndex + 1, parameters)
+        ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.splice)(events, lineIndex, index - lineIndex + 1, parameters)
       }
     }
   }
@@ -34137,7 +34135,7 @@ function subcontent(events, eventIndex) {
   let startPosition = eventIndex - 1
   /** @type {Array<number>} */
   const startPositions = []
-  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(token.contentType, 'expected `contentType` on subtokens')
+  ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(token.contentType, 'expected `contentType` on subtokens')
   const tokenizer =
     token._tokenizer || context.parser[token.contentType](token.start)
   const childEvents = tokenizer.events
@@ -34164,11 +34162,11 @@ function subcontent(events, eventIndex) {
       // Empty.
     }
 
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(
       !previous || current.previous === previous,
       'expected previous to match'
     )
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(!previous || previous.next === current, 'expected next to match')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(!previous || previous.next === current, 'expected next to match')
 
     startPositions.push(startPosition)
 
@@ -34176,7 +34174,7 @@ function subcontent(events, eventIndex) {
       stream = context.sliceStream(current)
 
       if (!current.next) {
-        stream.push(micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof)
+        stream.push(micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof)
       }
 
       if (previous) {
@@ -34211,7 +34209,7 @@ function subcontent(events, eventIndex) {
       childEvents[index][1].type === childEvents[index - 1][1].type &&
       childEvents[index][1].start.line !== childEvents[index][1].end.line
     ) {
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(current, 'expected a current token')
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(current, 'expected a current token')
       start = index + 1
       breaks.push(start)
       // Help GC.
@@ -34231,7 +34229,7 @@ function subcontent(events, eventIndex) {
     // Help GC.
     current._tokenizer = undefined
     current.previous = undefined
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(!current.next, 'expected no next token')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(!current.next, 'expected no next token')
   } else {
     breaks.pop()
   }
@@ -34243,9 +34241,9 @@ function subcontent(events, eventIndex) {
   while (index--) {
     const slice = childEvents.slice(breaks[index], breaks[index + 1])
     const start = startPositions.pop()
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(start !== undefined, 'expected a start position when splicing')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(start !== undefined, 'expected a start position when splicing')
     jumps.unshift([start, start + slice.length - 1])
-    ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(events, start, 2, slice)
+    ;(0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_0__.splice)(events, start, 2, slice)
   }
 
   index = -1
@@ -35104,27 +35102,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   string: () => (/* binding */ string),
 /* harmony export */   text: () => (/* binding */ text)
 /* harmony export */ });
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/list.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/attention.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/autolink.js");
 /* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/block-quote.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/definition.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-indented.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/heading-atx.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/thematic-break.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/setext-underline.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/html-flow.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-fenced.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/character-reference.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/character-escape.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/line-ending.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-start-image.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/attention.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/autolink.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/html-text.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-start-link.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/hard-break-escape.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-text.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/character-escape.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/character-reference.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-fenced.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-indented.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/code-text.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/definition.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/hard-break-escape.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/heading-atx.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/html-flow.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/html-text.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-end.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-start-image.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/label-start-link.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/line-ending.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/list.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/setext-underline.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/thematic-break.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var _initialize_text_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./initialize/text.js */ "../node_modules/micromark/dev/lib/initialize/text.js");
 /**
  * @typedef {import('micromark-util-types').Extension} Extension
@@ -35136,73 +35134,73 @@ __webpack_require__.r(__webpack_exports__);
 
 /** @satisfies {Extension['document']} */
 const document = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.plusSign]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.dash]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit0]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit1]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit2]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit3]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit4]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit5]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit6]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit7]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit8]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.digit9]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.list,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.greaterThan]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_2__.blockQuote
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.plusSign]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.dash]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit0]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit1]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit2]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit3]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit4]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit5]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit6]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit7]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit8]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.digit9]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.list,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.greaterThan]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_2__.blockQuote
 }
 
 /** @satisfies {Extension['contentInitial']} */
 const contentInitial = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__.definition
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.leftSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_8__.definition
 }
 
 /** @satisfies {Extension['flowInitial']} */
 const flowInitial = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.horizontalTab]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__.codeIndented,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.virtualSpace]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__.codeIndented,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.space]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__.codeIndented
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.horizontalTab]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.codeIndented,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.virtualSpace]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.codeIndented,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.space]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.codeIndented
 }
 
 /** @satisfies {Extension['flow']} */
 const flow = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.numberSign]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_5__.headingAtx,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.thematicBreak,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.dash]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_7__.setextUnderline, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.thematicBreak],
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lessThan]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_8__.htmlFlow,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.equalsTo]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_7__.setextUnderline,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.underscore]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_6__.thematicBreak,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.graveAccent]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_9__.codeFenced,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.tilde]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_9__.codeFenced
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.numberSign]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_10__.headingAtx,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__.thematicBreak,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.dash]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_18__.setextUnderline, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__.thematicBreak],
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.lessThan]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_11__.htmlFlow,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.equalsTo]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_18__.setextUnderline,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.underscore]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__.thematicBreak,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.graveAccent]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_5__.codeFenced,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.tilde]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_5__.codeFenced
 }
 
 /** @satisfies {Extension['string']} */
 const string = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.ampersand]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_10__.characterReference,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_11__.characterEscape
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.ampersand]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__.characterReference,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.backslash]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__.characterEscape
 }
 
 /** @satisfies {Extension['text']} */
 const text = {
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.carriageReturn]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__.lineEnding,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lineFeed]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__.lineEnding,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.carriageReturnLineFeed]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__.lineEnding,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.exclamationMark]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_13__.labelStartImage,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.ampersand]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_10__.characterReference,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__.attention,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.lessThan]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_15__.autolink, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__.htmlText],
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.leftSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_17__.labelStartLink,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.backslash]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_18__.hardBreakEscape, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_11__.characterEscape],
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.rightSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_19__.labelEnd,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.underscore]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__.attention,
-  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.graveAccent]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_20__.codeText
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.carriageReturn]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__.lineEnding,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.lineFeed]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__.lineEnding,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.carriageReturnLineFeed]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_16__.lineEnding,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.exclamationMark]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__.labelStartImage,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.ampersand]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_4__.characterReference,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.asterisk]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__.attention,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.lessThan]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.autolink, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_12__.htmlText],
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.leftSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_15__.labelStartLink,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.backslash]: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_9__.hardBreakEscape, micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__.characterEscape],
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.rightSquareBracket]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_13__.labelEnd,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.underscore]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__.attention,
+  [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.graveAccent]: micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_7__.codeText
 }
 
 /** @satisfies {Extension['insideSpan']} */
-const insideSpan = {null: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_14__.attention, _initialize_text_js__WEBPACK_IMPORTED_MODULE_21__.resolver]}
+const insideSpan = {null: [micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__.attention, _initialize_text_js__WEBPACK_IMPORTED_MODULE_21__.resolver]}
 
 /** @satisfies {Extension['attentionMarkers']} */
-const attentionMarkers = {null: [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.asterisk, micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.underscore]}
+const attentionMarkers = {null: [micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.asterisk, micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_20__.codes.underscore]}
 
 /** @satisfies {Extension['disable']} */
 const disable = {null: []}
@@ -35222,12 +35220,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createTokenizer: () => (/* binding */ createTokenizer)
 /* harmony export */ });
 /* harmony import */ var debug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! debug */ "../node_modules/debug/src/browser.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
-/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-symbol/values.js */ "../node_modules/micromark-util-symbol/values.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
+/* harmony import */ var micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-resolve-all */ "../node_modules/micromark-util-resolve-all/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/values.js */ "../node_modules/micromark-util-symbol/values.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Chunk} Chunk
  * @typedef {import('micromark-util-types').Code} Code
@@ -35319,8 +35317,8 @@ function createTokenizer(parser, initialize, from) {
    * @type {TokenizeContext}
    */
   const context = {
-    previous: micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof,
-    code: micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof,
+    previous: micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof,
+    code: micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof,
     containerState: {},
     events: [],
     parser,
@@ -35353,19 +35351,19 @@ function createTokenizer(parser, initialize, from) {
 
   /** @type {TokenizeContext['write']} */
   function write(slice) {
-    chunks = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_3__.push)(chunks, slice)
+    chunks = (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.push)(chunks, slice)
 
     main()
 
     // Exit if we’re not done, resolve might change stuff.
-    if (chunks[chunks.length - 1] !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
+    if (chunks[chunks.length - 1] !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof) {
       return []
     }
 
     addResult(initialize, 0)
 
     // Otherwise, resolve, and exit.
-    context.events = (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_4__.resolveAll)(resolveAllConstructs, context.events, context)
+    context.events = (0,micromark_util_resolve_all__WEBPACK_IMPORTED_MODULE_3__.resolveAll)(resolveAllConstructs, context.events, context)
 
     return context.events
   }
@@ -35446,25 +35444,25 @@ function createTokenizer(parser, initialize, from) {
    * @returns {void}
    */
   function go(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(consumed === true, 'expected character to be consumed')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(consumed === true, 'expected character to be consumed')
     consumed = undefined
     debug('main: passing `%s` to %s', code, state && state.name)
     expectedCode = code
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(typeof state === 'function', 'expected state')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(typeof state === 'function', 'expected state')
     state = state(code)
   }
 
   /** @type {Effects['consume']} */
   function consume(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(code === expectedCode, 'expected given code to equal expected code')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(code === expectedCode, 'expected given code to equal expected code')
 
     debug('consume: `%s`', code)
 
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       consumed === undefined,
       'expected code to not have been consumed: this might be because `return x(code)` instead of `return x` was used'
     )
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       code === null
         ? context.events.length === 0 ||
             context.events[context.events.length - 1][0] === 'exit'
@@ -35472,13 +35470,13 @@ function createTokenizer(parser, initialize, from) {
       'expected last token to be open'
     )
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       point.line++
       point.column = 1
-      point.offset += code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.carriageReturnLineFeed ? 2 : 1
+      point.offset += code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.carriageReturnLineFeed ? 2 : 1
       accountForPotentialSkip()
       debug('position: after eol: `%j`', point)
-    } else if (code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.virtualSpace) {
+    } else if (code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.virtualSpace) {
       point.column++
       point.offset++
     }
@@ -35513,8 +35511,8 @@ function createTokenizer(parser, initialize, from) {
     token.type = type
     token.start = now()
 
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(typeof type === 'string', 'expected string type')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(type.length > 0, 'expected non-empty string')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(typeof type === 'string', 'expected string type')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(type.length > 0, 'expected non-empty string')
     debug('enter: `%s`', type)
 
     context.events.push(['enter', token, context])
@@ -35526,16 +35524,16 @@ function createTokenizer(parser, initialize, from) {
 
   /** @type {Effects['exit']} */
   function exit(type) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(typeof type === 'string', 'expected string type')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(type.length > 0, 'expected non-empty string')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(typeof type === 'string', 'expected string type')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(type.length > 0, 'expected non-empty string')
 
     const token = stack.pop()
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(token, 'cannot close w/o open tokens')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(token, 'cannot close w/o open tokens')
     token.end = now()
 
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(type === token.type, 'expected exit token to match current token')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(type === token.type, 'expected exit token to match current token')
 
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       !(
         token.start._index === token.end._index &&
         token.start._bufferIndex === token.end._bufferIndex
@@ -35638,7 +35636,7 @@ function createTokenizer(parser, initialize, from) {
         constructIndex = 0
 
         if (list.length === 0) {
-          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(bogusState, 'expected `bogusState` to be given')
+          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(bogusState, 'expected `bogusState` to be given')
           return bogusState
         }
 
@@ -35668,7 +35666,7 @@ function createTokenizer(parser, initialize, from) {
           }
 
           // Always populated by defaults.
-          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(
+          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
             context.parser.constructs.disable.null,
             'expected `disable.null` to be populated'
           )
@@ -35694,7 +35692,7 @@ function createTokenizer(parser, initialize, from) {
 
       /** @type {State} */
       function ok(code) {
-        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(code === expectedCode, 'expected code')
+        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(code === expectedCode, 'expected code')
         consumed = true
         onreturn(currentConstruct, info)
         return returnState
@@ -35702,7 +35700,7 @@ function createTokenizer(parser, initialize, from) {
 
       /** @type {State} */
       function nok(code) {
-        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(code === expectedCode, 'expected code')
+        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(code === expectedCode, 'expected code')
         consumed = true
         info.restore()
 
@@ -35726,7 +35724,7 @@ function createTokenizer(parser, initialize, from) {
     }
 
     if (construct.resolve) {
-      (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_3__.splice)(
+      (0,micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__.splice)(
         context.events,
         from,
         context.events.length - from,
@@ -35738,7 +35736,7 @@ function createTokenizer(parser, initialize, from) {
       context.events = construct.resolveTo(context.events, context)
     }
 
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       construct.partial ||
         context.events.length === 0 ||
         context.events[context.events.length - 1][0] === 'exit',
@@ -35806,8 +35804,8 @@ function sliceChunks(chunks, token) {
   let view
 
   if (startIndex === endIndex) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(endBufferIndex > -1, 'expected non-negative end buffer index')
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(startBufferIndex > -1, 'expected non-negative start buffer index')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(endBufferIndex > -1, 'expected non-negative end buffer index')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(startBufferIndex > -1, 'expected non-negative start buffer index')
     // @ts-expect-error `_bufferIndex` is used on string chunks.
     view = [chunks[startIndex].slice(startBufferIndex, endBufferIndex)]
   } else {
@@ -35818,7 +35816,7 @@ function sliceChunks(chunks, token) {
       if (typeof head === 'string') {
         view[0] = head.slice(startBufferIndex)
       } else {
-        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(startBufferIndex === 0, 'expected `startBufferIndex` to be `0`')
+        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(startBufferIndex === 0, 'expected `startBufferIndex` to be `0`')
         view.shift()
       }
     }
@@ -35855,45 +35853,45 @@ function serializeChunks(chunks, expandTabs) {
       value = chunk
     } else
       switch (chunk) {
-        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.carriageReturn: {
-          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.cr
+        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.carriageReturn: {
+          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.cr
 
           break
         }
 
-        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.lineFeed: {
-          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.lf
+        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.lineFeed: {
+          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.lf
 
           break
         }
 
-        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.carriageReturnLineFeed: {
-          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.cr + micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.lf
+        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.carriageReturnLineFeed: {
+          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.cr + micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.lf
 
           break
         }
 
-        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.horizontalTab: {
-          value = expandTabs ? micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.space : micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.ht
+        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.horizontalTab: {
+          value = expandTabs ? micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.space : micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.ht
 
           break
         }
 
-        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.virtualSpace: {
+        case micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.virtualSpace: {
           if (!expandTabs && atTab) continue
-          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_6__.values.space
+          value = micromark_util_symbol_values_js__WEBPACK_IMPORTED_MODULE_5__.values.space
 
           break
         }
 
         default: {
-          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_1__.ok)(typeof chunk === 'number', 'expected number')
+          (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(typeof chunk === 'number', 'expected number')
           // Currently only replacement character.
           value = String.fromCharCode(chunk)
         }
       }
 
-    atTab = chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.horizontalTab
+    atTab = chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.horizontalTab
     result.push(value)
   }
 
@@ -35914,12 +35912,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   content: () => (/* binding */ content)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
  * @typedef {import('micromark-util-types').Initializer} Initializer
@@ -35955,36 +35953,36 @@ function initializeContent(effects) {
 
   /** @type {State} */
   function afterContentStartConstruct(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_2__.markdownLineEnding)(code),
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code),
       'expected eol or eof'
     )
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
       effects.consume(code)
       return
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineEnding)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.lineEnding)
-    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_4__.factorySpace)(effects, contentStart, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.linePrefix)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+    return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(effects, contentStart, micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix)
   }
 
   /** @type {State} */
   function paragraphInitial(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof && !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_2__.markdownLineEnding)(code),
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_5__.ok)(
+      code !== micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof && !(0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code),
       'expected anything other than a line ending or EOF'
     )
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.paragraph)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.paragraph)
     return lineStart(code)
   }
 
   /** @type {State} */
   function lineStart(code) {
-    const token = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkText, {
-      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_5__.constants.contentTypeText,
+    const token = effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkText, {
+      contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.contentTypeText,
       previous
     })
 
@@ -35999,16 +35997,16 @@ function initializeContent(effects) {
 
   /** @type {State} */
   function data(code) {
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkText)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.paragraph)
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_2__.codes.eof) {
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkText)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.paragraph)
       effects.consume(code)
       return
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_2__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       effects.consume(code)
-      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_3__.types.chunkText)
+      effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.chunkText)
       return lineStart
     }
 
@@ -36032,13 +36030,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   document: () => (/* binding */ document)
 /* harmony export */ });
-/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
 /* harmony import */ var micromark_util_chunked__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-chunked */ "../node_modules/micromark-util-chunked/dev/index.js");
 /* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
 /* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Construct} Construct
  * @typedef {import('micromark-util-types').ContainerState} ContainerState
@@ -36102,7 +36100,7 @@ function initializeDocument(effects) {
     if (continued < stack.length) {
       const item = stack[continued]
       self.containerState = item[1]
-      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
         item[0].continuation,
         'expected `continuation` to be defined on container construct'
       )
@@ -36119,7 +36117,7 @@ function initializeDocument(effects) {
 
   /** @type {State} */
   function documentContinue(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       self.containerState,
       'expected `containerState` to be defined after continuation'
     )
@@ -36147,14 +36145,14 @@ function initializeDocument(effects) {
       while (indexBeforeFlow--) {
         if (
           self.events[indexBeforeFlow][0] === 'exit' &&
-          self.events[indexBeforeFlow][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow
+          self.events[indexBeforeFlow][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkFlow
         ) {
           point = self.events[indexBeforeFlow][1].end
           break
         }
       }
 
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(point, 'could not find previous flow chunk')
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(point, 'could not find previous flow chunk')
 
       exitContainers(continued)
 
@@ -36251,11 +36249,11 @@ function initializeDocument(effects) {
 
   /** @type {State} */
   function containerContinue(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       self.currentConstruct,
       'expected `currentConstruct` to be defined on tokenizer'
     )
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       self.containerState,
       'expected `containerState` to be defined on tokenizer'
     )
@@ -36275,7 +36273,7 @@ function initializeDocument(effects) {
     }
 
     childFlow = childFlow || self.parser.flow(self.now())
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow, {
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkFlow, {
       contentType: micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.contentTypeFlow,
       previous: childToken,
       _tokenizer: childFlow
@@ -36287,15 +36285,15 @@ function initializeDocument(effects) {
   /** @type {State} */
   function flowContinue(code) {
     if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof) {
-      writeToChild(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow), true)
+      writeToChild(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkFlow), true)
       exitContainers(0)
       effects.consume(code)
       return
     }
 
-    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_5__.markdownLineEnding)(code)) {
+    if ((0,micromark_util_character__WEBPACK_IMPORTED_MODULE_1__.markdownLineEnding)(code)) {
       effects.consume(code)
-      writeToChild(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow))
+      writeToChild(effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkFlow))
       // Get ready for the next line.
       continued = 0
       self.interrupt = undefined
@@ -36312,7 +36310,7 @@ function initializeDocument(effects) {
    * @returns {void}
    */
   function writeToChild(token, eof) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(childFlow, 'expected `childFlow` to be defined when continuing')
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(childFlow, 'expected `childFlow` to be defined when continuing')
     const stream = self.sliceStream(token)
     if (eof) stream.push(null)
     token.previous = childToken
@@ -36385,7 +36383,7 @@ function initializeDocument(effects) {
       while (indexBeforeFlow--) {
         if (
           self.events[indexBeforeFlow][0] === 'exit' &&
-          self.events[indexBeforeFlow][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.chunkFlow
+          self.events[indexBeforeFlow][1].type === micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.chunkFlow
         ) {
           if (seen) {
             point = self.events[indexBeforeFlow][1].end
@@ -36396,7 +36394,7 @@ function initializeDocument(effects) {
         }
       }
 
-      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(point, 'could not find previous flow chunk')
+      (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(point, 'could not find previous flow chunk')
 
       exitContainers(continued)
 
@@ -36432,7 +36430,7 @@ function initializeDocument(effects) {
     while (index-- > size) {
       const entry = stack[index]
       self.containerState = entry[1]
-      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+      ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
         entry[0].exit,
         'expected `exit` to be defined on container construct'
       )
@@ -36443,11 +36441,11 @@ function initializeDocument(effects) {
   }
 
   function closeFlow() {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
       self.containerState,
       'expected `containerState` to be defined when closing flow'
     )
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(childFlow, 'expected `childFlow` to be defined when closing it')
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(childFlow, 'expected `childFlow` to be defined when closing it')
     childFlow.write([micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_3__.codes.eof])
     childToken = undefined
     childFlow = undefined
@@ -36461,14 +36459,14 @@ function initializeDocument(effects) {
  */
 function tokenizeContainer(effects, ok, nok) {
   // Always populated by defaults.
-  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
+  (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
     this.parser.constructs.disable.null,
     'expected `disable.null` to be populated'
   )
-  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_6__.factorySpace)(
+  return (0,micromark_factory_space__WEBPACK_IMPORTED_MODULE_0__.factorySpace)(
     effects,
     effects.attempt(this.parser.constructs.document, ok, nok),
-    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_1__.types.linePrefix,
+    micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.linePrefix,
     this.parser.constructs.disable.null.includes('codeIndented')
       ? undefined
       : micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_4__.constants.tabSize
@@ -36489,13 +36487,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   flow: () => (/* binding */ flow)
 /* harmony export */ });
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/blank-line.js");
-/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/content.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/blank-line.js");
+/* harmony import */ var micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-core-commonmark */ "../node_modules/micromark-core-commonmark/dev/lib/content.js");
 /* harmony import */ var micromark_factory_space__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-factory-space */ "../node_modules/micromark-factory-space/dev/index.js");
-/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var micromark_util_character__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-character */ "../node_modules/micromark-util-character/dev/index.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
  * @typedef {import('micromark-util-types').Initializer} Initializer
@@ -36521,7 +36519,7 @@ function initializeFlow(effects) {
   const self = this
   const initial = effects.attempt(
     // Try to parse a blank line.
-    micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.blankLine,
+    micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_0__.blankLine,
     atBlankEnding,
     // Try to parse initial flow (essentially, only code).
     effects.attempt(
@@ -36532,9 +36530,9 @@ function initializeFlow(effects) {
         effects.attempt(
           this.parser.constructs.flow,
           afterConstruct,
-          effects.attempt(micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_3__.content, afterConstruct)
+          effects.attempt(micromark_core_commonmark__WEBPACK_IMPORTED_MODULE_1__.content, afterConstruct)
         ),
-        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.linePrefix
+        micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.linePrefix
       )
     )
   )
@@ -36543,38 +36541,38 @@ function initializeFlow(effects) {
 
   /** @type {State} */
   function atBlankEnding(code) {
-    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_6__.markdownLineEnding)(code),
+    ;(0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code),
       'expected eol or eof'
     )
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof) {
       effects.consume(code)
       return
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEndingBlank)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEndingBlank)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEndingBlank)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEndingBlank)
     self.currentConstruct = undefined
     return initial
   }
 
   /** @type {State} */
   function afterConstruct(code) {
-    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(
-      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_6__.markdownLineEnding)(code),
+    (0,uvu_assert__WEBPACK_IMPORTED_MODULE_6__.ok)(
+      code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof || (0,micromark_util_character__WEBPACK_IMPORTED_MODULE_3__.markdownLineEnding)(code),
       'expected eol or eof'
     )
 
-    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_5__.codes.eof) {
+    if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_4__.codes.eof) {
       effects.consume(code)
       return
     }
 
-    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+    effects.enter(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEnding)
     effects.consume(code)
-    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_4__.types.lineEnding)
+    effects.exit(micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_5__.types.lineEnding)
     self.currentConstruct = undefined
     return initial
   }
@@ -36596,10 +36594,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   string: () => (/* binding */ string),
 /* harmony export */   text: () => (/* binding */ text)
 /* harmony export */ });
-/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
-/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
+/* harmony import */ var micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-symbol/codes.js */ "../node_modules/micromark-util-symbol/codes.js");
+/* harmony import */ var micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! micromark-util-symbol/constants.js */ "../node_modules/micromark-util-symbol/constants.js");
 /* harmony import */ var micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! micromark-util-symbol/types.js */ "../node_modules/micromark-util-symbol/types.js");
-/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
+/* harmony import */ var uvu_assert__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uvu/assert */ "../node_modules/uvu/assert/index.mjs");
 /**
  * @typedef {import('micromark-util-types').Code} Code
  * @typedef {import('micromark-util-types').InitialConstruct} InitialConstruct
@@ -36648,7 +36646,7 @@ function initializeFactory(field) {
 
     /** @type {State} */
     function notText(code) {
-      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof) {
         effects.consume(code)
         return
       }
@@ -36675,7 +36673,7 @@ function initializeFactory(field) {
      * @returns {boolean}
      */
     function atBreak(code) {
-      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.eof) {
+      if (code === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.eof) {
         return true
       }
 
@@ -36684,7 +36682,7 @@ function initializeFactory(field) {
 
       if (list) {
         // Always populated by defaults.
-        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_0__.ok)(Array.isArray(list), 'expected `disable.null` to be populated')
+        (0,uvu_assert__WEBPACK_IMPORTED_MODULE_3__.ok)(Array.isArray(list), 'expected `disable.null` to be populated')
 
         while (++index < list.length) {
           const item = list[index]
@@ -36770,7 +36768,7 @@ function resolveAllLineSuffixes(events, context) {
         if (typeof chunk === 'string') {
           bufferIndex = chunk.length
 
-          while (chunk.charCodeAt(bufferIndex - 1) === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.space) {
+          while (chunk.charCodeAt(bufferIndex - 1) === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.space) {
             size++
             bufferIndex--
           }
@@ -36779,10 +36777,10 @@ function resolveAllLineSuffixes(events, context) {
           bufferIndex = -1
         }
         // Number
-        else if (chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.horizontalTab) {
+        else if (chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.horizontalTab) {
           tabs = true
           size++
-        } else if (chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_1__.codes.virtualSpace) {
+        } else if (chunk === micromark_util_symbol_codes_js__WEBPACK_IMPORTED_MODULE_0__.codes.virtualSpace) {
           // Empty
         } else {
           // Replacement character, exit.
@@ -36796,7 +36794,7 @@ function resolveAllLineSuffixes(events, context) {
           type:
             eventIndex === events.length ||
             tabs ||
-            size < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_3__.constants.hardBreakPrefixSizeMin
+            size < micromark_util_symbol_constants_js__WEBPACK_IMPORTED_MODULE_1__.constants.hardBreakPrefixSizeMin
               ? micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.lineSuffix
               : micromark_util_symbol_types_js__WEBPACK_IMPORTED_MODULE_2__.types.hardBreakTrailing,
           start: {
@@ -36848,12 +36846,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   parse: () => (/* binding */ parse)
 /* harmony export */ });
 /* harmony import */ var micromark_util_combine_extensions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! micromark-util-combine-extensions */ "../node_modules/micromark-util-combine-extensions/index.js");
-/* harmony import */ var _initialize_content_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./initialize/content.js */ "../node_modules/micromark/dev/lib/initialize/content.js");
-/* harmony import */ var _initialize_document_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./initialize/document.js */ "../node_modules/micromark/dev/lib/initialize/document.js");
-/* harmony import */ var _initialize_flow_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./initialize/flow.js */ "../node_modules/micromark/dev/lib/initialize/flow.js");
-/* harmony import */ var _initialize_text_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./initialize/text.js */ "../node_modules/micromark/dev/lib/initialize/text.js");
-/* harmony import */ var _create_tokenizer_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./create-tokenizer.js */ "../node_modules/micromark/dev/lib/create-tokenizer.js");
-/* harmony import */ var _constructs_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constructs.js */ "../node_modules/micromark/dev/lib/constructs.js");
+/* harmony import */ var _initialize_content_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./initialize/content.js */ "../node_modules/micromark/dev/lib/initialize/content.js");
+/* harmony import */ var _initialize_document_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./initialize/document.js */ "../node_modules/micromark/dev/lib/initialize/document.js");
+/* harmony import */ var _initialize_flow_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./initialize/flow.js */ "../node_modules/micromark/dev/lib/initialize/flow.js");
+/* harmony import */ var _initialize_text_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./initialize/text.js */ "../node_modules/micromark/dev/lib/initialize/text.js");
+/* harmony import */ var _create_tokenizer_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./create-tokenizer.js */ "../node_modules/micromark/dev/lib/create-tokenizer.js");
+/* harmony import */ var _constructs_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./constructs.js */ "../node_modules/micromark/dev/lib/constructs.js");
 /**
  * @typedef {import('micromark-util-types').Create} Create
  * @typedef {import('micromark-util-types').FullNormalizedExtension} FullNormalizedExtension
@@ -36877,7 +36875,7 @@ __webpack_require__.r(__webpack_exports__);
 function parse(options) {
   const settings = options || {}
   const constructs = /** @type {FullNormalizedExtension} */ (
-    (0,micromark_util_combine_extensions__WEBPACK_IMPORTED_MODULE_0__.combineExtensions)([_constructs_js__WEBPACK_IMPORTED_MODULE_1__, ...(settings.extensions || [])])
+    (0,micromark_util_combine_extensions__WEBPACK_IMPORTED_MODULE_0__.combineExtensions)([_constructs_js__WEBPACK_IMPORTED_MODULE_6__, ...(settings.extensions || [])])
   )
 
   /** @type {ParseContext} */
@@ -36885,11 +36883,11 @@ function parse(options) {
     defined: [],
     lazy: {},
     constructs,
-    content: create(_initialize_content_js__WEBPACK_IMPORTED_MODULE_2__.content),
-    document: create(_initialize_document_js__WEBPACK_IMPORTED_MODULE_3__.document),
-    flow: create(_initialize_flow_js__WEBPACK_IMPORTED_MODULE_4__.flow),
-    string: create(_initialize_text_js__WEBPACK_IMPORTED_MODULE_5__.string),
-    text: create(_initialize_text_js__WEBPACK_IMPORTED_MODULE_5__.text)
+    content: create(_initialize_content_js__WEBPACK_IMPORTED_MODULE_1__.content),
+    document: create(_initialize_document_js__WEBPACK_IMPORTED_MODULE_2__.document),
+    flow: create(_initialize_flow_js__WEBPACK_IMPORTED_MODULE_3__.flow),
+    string: create(_initialize_text_js__WEBPACK_IMPORTED_MODULE_4__.string),
+    text: create(_initialize_text_js__WEBPACK_IMPORTED_MODULE_4__.text)
   }
 
   return parser
@@ -36901,7 +36899,7 @@ function parse(options) {
     return creator
     /** @type {Create} */
     function creator(from) {
-      return (0,_create_tokenizer_js__WEBPACK_IMPORTED_MODULE_6__.createTokenizer)(parser, initial, from)
+      return (0,_create_tokenizer_js__WEBPACK_IMPORTED_MODULE_5__.createTokenizer)(parser, initial, from)
     }
   }
 }
@@ -38379,22 +38377,22 @@ if (false) // removed by dead control flow
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   find: () => (/* reexport safe */ _lib_find_js__WEBPACK_IMPORTED_MODULE_0__.find),
-/* harmony export */   hastToReact: () => (/* reexport safe */ _lib_hast_to_react_js__WEBPACK_IMPORTED_MODULE_1__.hastToReact),
+/* harmony export */   find: () => (/* reexport safe */ _lib_find_js__WEBPACK_IMPORTED_MODULE_7__.find),
+/* harmony export */   hastToReact: () => (/* reexport safe */ _lib_hast_to_react_js__WEBPACK_IMPORTED_MODULE_8__.hastToReact),
 /* harmony export */   html: () => (/* binding */ html),
-/* harmony export */   normalize: () => (/* reexport safe */ _lib_normalize_js__WEBPACK_IMPORTED_MODULE_2__.normalize),
+/* harmony export */   normalize: () => (/* reexport safe */ _lib_normalize_js__WEBPACK_IMPORTED_MODULE_9__.normalize),
 /* harmony export */   svg: () => (/* binding */ svg)
 /* harmony export */ });
-/* harmony import */ var _lib_util_merge_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lib/util/merge.js */ "../node_modules/property-information/lib/util/merge.js");
-/* harmony import */ var _lib_xlink_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/xlink.js */ "../node_modules/property-information/lib/xlink.js");
-/* harmony import */ var _lib_xml_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/xml.js */ "../node_modules/property-information/lib/xml.js");
-/* harmony import */ var _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib/xmlns.js */ "../node_modules/property-information/lib/xmlns.js");
-/* harmony import */ var _lib_aria_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./lib/aria.js */ "../node_modules/property-information/lib/aria.js");
-/* harmony import */ var _lib_html_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./lib/html.js */ "../node_modules/property-information/lib/html.js");
-/* harmony import */ var _lib_svg_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./lib/svg.js */ "../node_modules/property-information/lib/svg.js");
-/* harmony import */ var _lib_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/find.js */ "../node_modules/property-information/lib/find.js");
-/* harmony import */ var _lib_hast_to_react_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/hast-to-react.js */ "../node_modules/property-information/lib/hast-to-react.js");
-/* harmony import */ var _lib_normalize_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib/normalize.js */ "../node_modules/property-information/lib/normalize.js");
+/* harmony import */ var _lib_util_merge_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/util/merge.js */ "../node_modules/property-information/lib/util/merge.js");
+/* harmony import */ var _lib_xlink_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/xlink.js */ "../node_modules/property-information/lib/xlink.js");
+/* harmony import */ var _lib_xml_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib/xml.js */ "../node_modules/property-information/lib/xml.js");
+/* harmony import */ var _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lib/xmlns.js */ "../node_modules/property-information/lib/xmlns.js");
+/* harmony import */ var _lib_aria_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/aria.js */ "../node_modules/property-information/lib/aria.js");
+/* harmony import */ var _lib_html_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./lib/html.js */ "../node_modules/property-information/lib/html.js");
+/* harmony import */ var _lib_svg_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./lib/svg.js */ "../node_modules/property-information/lib/svg.js");
+/* harmony import */ var _lib_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./lib/find.js */ "../node_modules/property-information/lib/find.js");
+/* harmony import */ var _lib_hast_to_react_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./lib/hast-to-react.js */ "../node_modules/property-information/lib/hast-to-react.js");
+/* harmony import */ var _lib_normalize_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./lib/normalize.js */ "../node_modules/property-information/lib/normalize.js");
 /**
  * @typedef {import('./lib/util/info.js').Info} Info
  * @typedef {import('./lib/util/schema.js').Schema} Schema
@@ -38411,8 +38409,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const html = (0,_lib_util_merge_js__WEBPACK_IMPORTED_MODULE_3__.merge)([_lib_xml_js__WEBPACK_IMPORTED_MODULE_4__.xml, _lib_xlink_js__WEBPACK_IMPORTED_MODULE_5__.xlink, _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_6__.xmlns, _lib_aria_js__WEBPACK_IMPORTED_MODULE_7__.aria, _lib_html_js__WEBPACK_IMPORTED_MODULE_8__.html], 'html')
-const svg = (0,_lib_util_merge_js__WEBPACK_IMPORTED_MODULE_3__.merge)([_lib_xml_js__WEBPACK_IMPORTED_MODULE_4__.xml, _lib_xlink_js__WEBPACK_IMPORTED_MODULE_5__.xlink, _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_6__.xmlns, _lib_aria_js__WEBPACK_IMPORTED_MODULE_7__.aria, _lib_svg_js__WEBPACK_IMPORTED_MODULE_9__.svg], 'svg')
+const html = (0,_lib_util_merge_js__WEBPACK_IMPORTED_MODULE_0__.merge)([_lib_xml_js__WEBPACK_IMPORTED_MODULE_2__.xml, _lib_xlink_js__WEBPACK_IMPORTED_MODULE_1__.xlink, _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_3__.xmlns, _lib_aria_js__WEBPACK_IMPORTED_MODULE_4__.aria, _lib_html_js__WEBPACK_IMPORTED_MODULE_5__.html], 'html')
+const svg = (0,_lib_util_merge_js__WEBPACK_IMPORTED_MODULE_0__.merge)([_lib_xml_js__WEBPACK_IMPORTED_MODULE_2__.xml, _lib_xlink_js__WEBPACK_IMPORTED_MODULE_1__.xlink, _lib_xmlns_js__WEBPACK_IMPORTED_MODULE_3__.xmlns, _lib_aria_js__WEBPACK_IMPORTED_MODULE_4__.aria, _lib_svg_js__WEBPACK_IMPORTED_MODULE_6__.svg], 'svg')
 
 
 /***/ }),
@@ -38428,63 +38426,63 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   aria: () => (/* binding */ aria)
 /* harmony export */ });
-/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
-/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
+/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
+/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
 
 
 
-const aria = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
+const aria = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_1__.create)({
   transform(_, prop) {
     return prop === 'role' ? prop : 'aria-' + prop.slice(4).toLowerCase()
   },
   properties: {
     ariaActiveDescendant: null,
-    ariaAtomic: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
+    ariaAtomic: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     ariaAutoComplete: null,
-    ariaBusy: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaChecked: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaColCount: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaColIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaColSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaControls: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
+    ariaBusy: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaChecked: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaColCount: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaColIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaColSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaControls: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     ariaCurrent: null,
-    ariaDescribedBy: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
+    ariaDescribedBy: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     ariaDetails: null,
-    ariaDisabled: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaDropEffect: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
+    ariaDisabled: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaDropEffect: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     ariaErrorMessage: null,
-    ariaExpanded: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaFlowTo: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
-    ariaGrabbed: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
+    ariaExpanded: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaFlowTo: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    ariaGrabbed: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     ariaHasPopup: null,
-    ariaHidden: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
+    ariaHidden: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     ariaInvalid: null,
     ariaKeyShortcuts: null,
     ariaLabel: null,
-    ariaLabelledBy: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
-    ariaLevel: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
+    ariaLabelledBy: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    ariaLevel: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     ariaLive: null,
-    ariaModal: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaMultiLine: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaMultiSelectable: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
+    ariaModal: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaMultiLine: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaMultiSelectable: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     ariaOrientation: null,
-    ariaOwns: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
+    ariaOwns: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     ariaPlaceholder: null,
-    ariaPosInSet: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaPressed: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaReadOnly: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
+    ariaPosInSet: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaPressed: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaReadOnly: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     ariaRelevant: null,
-    ariaRequired: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaRoleDescription: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.spaceSeparated,
-    ariaRowCount: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaRowIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaRowSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaSelected: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.booleanish,
-    ariaSetSize: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
+    ariaRequired: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaRoleDescription: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    ariaRowCount: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaRowIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaRowSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaSelected: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    ariaSetSize: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     ariaSort: null,
-    ariaValueMax: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaValueMin: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
-    ariaValueNow: _util_types_js__WEBPACK_IMPORTED_MODULE_1__.number,
+    ariaValueMax: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaValueMin: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    ariaValueNow: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     ariaValueText: null,
     role: null
   }
@@ -38505,8 +38503,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   find: () => (/* binding */ find)
 /* harmony export */ });
 /* harmony import */ var _normalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./normalize.js */ "../node_modules/property-information/lib/normalize.js");
-/* harmony import */ var _util_defined_info_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/defined-info.js */ "../node_modules/property-information/lib/util/defined-info.js");
-/* harmony import */ var _util_info_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/info.js */ "../node_modules/property-information/lib/util/info.js");
+/* harmony import */ var _util_defined_info_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/defined-info.js */ "../node_modules/property-information/lib/util/defined-info.js");
+/* harmony import */ var _util_info_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/info.js */ "../node_modules/property-information/lib/util/info.js");
 /**
  * @typedef {import('./util/schema.js').Schema} Schema
  */
@@ -38527,7 +38525,7 @@ const cap = /[A-Z]/g
 function find(schema, value) {
   const normal = (0,_normalize_js__WEBPACK_IMPORTED_MODULE_0__.normalize)(value)
   let prop = value
-  let Type = _util_info_js__WEBPACK_IMPORTED_MODULE_1__.Info
+  let Type = _util_info_js__WEBPACK_IMPORTED_MODULE_2__.Info
 
   if (normal in schema.normal) {
     return schema.property[schema.normal[normal]]
@@ -38554,7 +38552,7 @@ function find(schema, value) {
       }
     }
 
-    Type = _util_defined_info_js__WEBPACK_IMPORTED_MODULE_2__.DefinedInfo
+    Type = _util_defined_info_js__WEBPACK_IMPORTED_MODULE_1__.DefinedInfo
   }
 
   return new Type(prop, value)
@@ -38633,14 +38631,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   html: () => (/* binding */ html)
 /* harmony export */ });
-/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
-/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
-/* harmony import */ var _util_case_insensitive_transform_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/case-insensitive-transform.js */ "../node_modules/property-information/lib/util/case-insensitive-transform.js");
+/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
+/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
+/* harmony import */ var _util_case_insensitive_transform_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/case-insensitive-transform.js */ "../node_modules/property-information/lib/util/case-insensitive-transform.js");
 
 
 
 
-const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
+const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_1__.create)({
   space: 'html',
   attributes: {
     acceptcharset: 'accept-charset',
@@ -38648,50 +38646,50 @@ const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     htmlfor: 'for',
     httpequiv: 'http-equiv'
   },
-  transform: _util_case_insensitive_transform_js__WEBPACK_IMPORTED_MODULE_1__.caseInsensitiveTransform,
+  transform: _util_case_insensitive_transform_js__WEBPACK_IMPORTED_MODULE_2__.caseInsensitiveTransform,
   mustUseProperty: ['checked', 'multiple', 'muted', 'selected'],
   properties: {
     // Standard Properties.
     abbr: null,
-    accept: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaSeparated,
-    acceptCharset: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    accessKey: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    accept: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaSeparated,
+    acceptCharset: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    accessKey: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     action: null,
     allow: null,
-    allowFullScreen: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    allowPaymentRequest: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    allowUserMedia: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    allowFullScreen: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    allowPaymentRequest: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    allowUserMedia: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     alt: null,
     as: null,
-    async: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    async: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     autoCapitalize: null,
-    autoComplete: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    autoFocus: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    autoPlay: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    blocking: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    autoComplete: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    autoFocus: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    autoPlay: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    blocking: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     capture: null,
     charSet: null,
-    checked: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    checked: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     cite: null,
-    className: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    cols: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    className: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    cols: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     colSpan: null,
     content: null,
-    contentEditable: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.booleanish,
-    controls: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    controlsList: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    coords: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number | _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaSeparated,
+    contentEditable: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    controls: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    controlsList: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    coords: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number | _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaSeparated,
     crossOrigin: null,
     data: null,
     dateTime: null,
     decoding: null,
-    default: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    defer: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    default: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    defer: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     dir: null,
     dirName: null,
-    disabled: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    download: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.overloadedBoolean,
-    draggable: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.booleanish,
+    disabled: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    download: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.overloadedBoolean,
+    draggable: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     encType: null,
     enterKeyHint: null,
     fetchPriority: null,
@@ -38699,50 +38697,50 @@ const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     formAction: null,
     formEncType: null,
     formMethod: null,
-    formNoValidate: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    formNoValidate: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     formTarget: null,
-    headers: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    height: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    hidden: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    high: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    headers: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    height: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    hidden: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    high: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     href: null,
     hrefLang: null,
-    htmlFor: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    httpEquiv: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    htmlFor: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    httpEquiv: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     id: null,
     imageSizes: null,
     imageSrcSet: null,
-    inert: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    inert: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     inputMode: null,
     integrity: null,
     is: null,
-    isMap: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    isMap: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     itemId: null,
-    itemProp: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    itemRef: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    itemScope: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    itemType: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    itemProp: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    itemRef: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    itemScope: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    itemType: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     kind: null,
     label: null,
     lang: null,
     language: null,
     list: null,
     loading: null,
-    loop: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    low: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    loop: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    low: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     manifest: null,
     max: null,
-    maxLength: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    maxLength: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     media: null,
     method: null,
     min: null,
-    minLength: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    multiple: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    muted: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    minLength: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    multiple: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    muted: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     name: null,
     nonce: null,
-    noModule: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    noValidate: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    noModule: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    noValidate: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     onAbort: null,
     onAfterPrint: null,
     onAuxClick: null,
@@ -38831,54 +38829,54 @@ const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     onVolumeChange: null,
     onWaiting: null,
     onWheel: null,
-    open: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    optimum: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    open: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    optimum: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     pattern: null,
-    ping: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    ping: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     placeholder: null,
-    playsInline: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    playsInline: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     popover: null,
     popoverTarget: null,
     popoverTargetAction: null,
     poster: null,
     preload: null,
-    readOnly: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    readOnly: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     referrerPolicy: null,
-    rel: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
-    required: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    reversed: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    rows: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    rowSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    sandbox: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    rel: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
+    required: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    reversed: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    rows: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    rowSpan: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    sandbox: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     scope: null,
-    scoped: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    seamless: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    selected: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    shadowRootClonable: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    shadowRootDelegatesFocus: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    scoped: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    seamless: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    selected: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    shadowRootClonable: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    shadowRootDelegatesFocus: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     shadowRootMode: null,
     shape: null,
-    size: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    size: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     sizes: null,
     slot: null,
-    span: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    spellCheck: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.booleanish,
+    span: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    spellCheck: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
     src: null,
     srcDoc: null,
     srcLang: null,
     srcSet: null,
-    start: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    start: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     step: null,
     style: null,
-    tabIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    tabIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     target: null,
     title: null,
     translate: null,
     type: null,
-    typeMustMatch: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    typeMustMatch: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     useMap: null,
-    value: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.booleanish,
-    width: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    value: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish,
+    width: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     wrap: null,
     writingSuggestions: null,
 
@@ -38886,13 +38884,13 @@ const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     // See: https://html.spec.whatwg.org/#other-elements,-attributes-and-apis
     align: null, // Several. Use CSS `text-align` instead,
     aLink: null, // `<body>`. Use CSS `a:active {color}` instead
-    archive: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated, // `<object>`. List of URIs to archives
+    archive: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated, // `<object>`. List of URIs to archives
     axis: null, // `<td>` and `<th>`. Use `scope` on `<th>`
     background: null, // `<body>`. Use CSS `background-image` instead
     bgColor: null, // `<body>` and table elements. Use CSS `background-color` instead
-    border: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<table>`. Use CSS `border-width` instead,
+    border: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<table>`. Use CSS `border-width` instead,
     borderColor: null, // `<table>`. Use CSS `border-color` instead,
-    bottomMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
+    bottomMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
     cellPadding: null, // `<table>`
     cellSpacing: null, // `<table>`
     char: null, // Several table elements. When `align=char`, sets the character to align on
@@ -38903,50 +38901,50 @@ const html = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     codeBase: null, // `<object>`
     codeType: null, // `<object>`
     color: null, // `<font>` and `<hr>`. Use CSS instead
-    compact: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // Lists. Use CSS to reduce space between items instead
-    declare: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // `<object>`
+    compact: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // Lists. Use CSS to reduce space between items instead
+    declare: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // `<object>`
     event: null, // `<script>`
     face: null, // `<font>`. Use CSS instead
     frame: null, // `<table>`
     frameBorder: null, // `<iframe>`. Use CSS `border` instead
-    hSpace: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<img>` and `<object>`
-    leftMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
+    hSpace: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<img>` and `<object>`
+    leftMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
     link: null, // `<body>`. Use CSS `a:link {color: *}` instead
     longDesc: null, // `<frame>`, `<iframe>`, and `<img>`. Use an `<a>`
     lowSrc: null, // `<img>`. Use a `<picture>`
-    marginHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
-    marginWidth: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
-    noResize: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // `<frame>`
-    noHref: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // `<area>`. Use no href instead of an explicit `nohref`
-    noShade: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // `<hr>`. Use background-color and height instead of borders
-    noWrap: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean, // `<td>` and `<th>`
+    marginHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
+    marginWidth: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
+    noResize: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // `<frame>`
+    noHref: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // `<area>`. Use no href instead of an explicit `nohref`
+    noShade: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // `<hr>`. Use background-color and height instead of borders
+    noWrap: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean, // `<td>` and `<th>`
     object: null, // `<applet>`
     profile: null, // `<head>`
     prompt: null, // `<isindex>`
     rev: null, // `<link>`
-    rightMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
+    rightMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
     rules: null, // `<table>`
     scheme: null, // `<meta>`
-    scrolling: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.booleanish, // `<frame>`. Use overflow in the child context
+    scrolling: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.booleanish, // `<frame>`. Use overflow in the child context
     standby: null, // `<object>`
     summary: null, // `<table>`
     text: null, // `<body>`. Use CSS `color` instead
-    topMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<body>`
+    topMargin: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<body>`
     valueType: null, // `<param>`
     version: null, // `<html>`. Use a doctype.
     vAlign: null, // Several. Use CSS `vertical-align` instead
     vLink: null, // `<body>`. Use CSS `a:visited {color}` instead
-    vSpace: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number, // `<img>` and `<object>`
+    vSpace: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number, // `<img>` and `<object>`
 
     // Non-standard Properties.
     allowTransparency: null,
     autoCorrect: null,
     autoSave: null,
-    disablePictureInPicture: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
-    disableRemotePlayback: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    disablePictureInPicture: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
+    disableRemotePlayback: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     prefix: null,
     property: null,
-    results: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    results: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     security: null,
     unselectable: null
   }
@@ -38988,14 +38986,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   svg: () => (/* binding */ svg)
 /* harmony export */ });
-/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
-/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
-/* harmony import */ var _util_case_sensitive_transform_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/case-sensitive-transform.js */ "../node_modules/property-information/lib/util/case-sensitive-transform.js");
+/* harmony import */ var _util_types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/types.js */ "../node_modules/property-information/lib/util/types.js");
+/* harmony import */ var _util_create_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/create.js */ "../node_modules/property-information/lib/util/create.js");
+/* harmony import */ var _util_case_sensitive_transform_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./util/case-sensitive-transform.js */ "../node_modules/property-information/lib/util/case-sensitive-transform.js");
 
 
 
 
-const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
+const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_1__.create)({
   space: 'svg',
   attributes: {
     accentHeight: 'accent-height',
@@ -39172,31 +39170,31 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     playbackOrder: 'playbackorder',
     timelineBegin: 'timelinebegin'
   },
-  transform: _util_case_sensitive_transform_js__WEBPACK_IMPORTED_MODULE_1__.caseSensitiveTransform,
+  transform: _util_case_sensitive_transform_js__WEBPACK_IMPORTED_MODULE_2__.caseSensitiveTransform,
   properties: {
-    about: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    accentHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    about: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    accentHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     accumulate: null,
     additive: null,
     alignmentBaseline: null,
-    alphabetic: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    amplitude: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    alphabetic: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    amplitude: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     arabicForm: null,
-    ascent: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    ascent: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     attributeName: null,
     attributeType: null,
-    azimuth: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    azimuth: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     bandwidth: null,
     baselineShift: null,
     baseFrequency: null,
     baseProfile: null,
     bbox: null,
     begin: null,
-    bias: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    bias: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     by: null,
     calcMode: null,
-    capHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    className: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    capHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    className: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     clip: null,
     clipPath: null,
     clipPathUnits: null,
@@ -39216,26 +39214,26 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     d: null,
     dataType: null,
     defaultAction: null,
-    descent: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    diffuseConstant: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    descent: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    diffuseConstant: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     direction: null,
     display: null,
     dur: null,
-    divisor: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    divisor: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     dominantBaseline: null,
-    download: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.boolean,
+    download: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.boolean,
     dx: null,
     dy: null,
     edgeMode: null,
     editable: null,
-    elevation: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    elevation: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     enableBackground: null,
     end: null,
     event: null,
-    exponent: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    exponent: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     externalResourcesRequired: null,
     fill: null,
-    fillOpacity: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    fillOpacity: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     fillRule: null,
     filter: null,
     filterRes: null,
@@ -39256,37 +39254,37 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     from: null,
     fx: null,
     fy: null,
-    g1: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaSeparated,
-    g2: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaSeparated,
-    glyphName: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaSeparated,
+    g1: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaSeparated,
+    g2: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaSeparated,
+    glyphName: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaSeparated,
     glyphOrientationHorizontal: null,
     glyphOrientationVertical: null,
     glyphRef: null,
     gradientTransform: null,
     gradientUnits: null,
     handler: null,
-    hanging: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    hanging: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     hatchContentUnits: null,
     hatchUnits: null,
     height: null,
     href: null,
     hrefLang: null,
-    horizAdvX: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    horizOriginX: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    horizOriginY: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    horizAdvX: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    horizOriginX: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    horizOriginY: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     id: null,
-    ideographic: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    ideographic: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     imageRendering: null,
     initialVisibility: null,
     in: null,
     in2: null,
-    intercept: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    k: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    k1: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    k2: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    k3: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    k4: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    kernelMatrix: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    intercept: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    k: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    k1: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    k2: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    k3: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    k4: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    kernelMatrix: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     kernelUnitLength: null,
     keyPoints: null, // SEMI_COLON_SEPARATED
     keySplines: null, // SEMI_COLON_SEPARATED
@@ -39296,7 +39294,7 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     lengthAdjust: null,
     letterSpacing: null,
     lightingColor: null,
-    limitingConeAngle: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    limitingConeAngle: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     local: null,
     markerEnd: null,
     markerMid: null,
@@ -39312,7 +39310,7 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     media: null,
     mediaCharacterEncoding: null,
     mediaContentEncodings: null,
-    mediaSize: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    mediaSize: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     mediaTime: null,
     method: null,
     min: null,
@@ -39418,43 +39416,43 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     origin: null,
     overflow: null,
     overlay: null,
-    overlinePosition: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    overlineThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    overlinePosition: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    overlineThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     paintOrder: null,
     panose1: null,
     path: null,
-    pathLength: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    pathLength: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     patternContentUnits: null,
     patternTransform: null,
     patternUnits: null,
     phase: null,
-    ping: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.spaceSeparated,
+    ping: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.spaceSeparated,
     pitch: null,
     playbackOrder: null,
     pointerEvents: null,
     points: null,
-    pointsAtX: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    pointsAtY: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    pointsAtZ: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    pointsAtX: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    pointsAtY: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    pointsAtZ: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     preserveAlpha: null,
     preserveAspectRatio: null,
     primitiveUnits: null,
     propagate: null,
-    property: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    property: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     r: null,
     radius: null,
     referrerPolicy: null,
     refX: null,
     refY: null,
-    rel: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    rev: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    rel: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    rev: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     renderingIntent: null,
     repeatCount: null,
     repeatDur: null,
-    requiredExtensions: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    requiredFeatures: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    requiredFonts: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    requiredFormats: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    requiredExtensions: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    requiredFeatures: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    requiredFonts: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    requiredFormats: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     resource: null,
     restart: null,
     result: null,
@@ -39467,8 +39465,8 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     side: null,
     slope: null,
     snapshotTime: null,
-    specularConstant: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    specularExponent: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    specularConstant: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    specularExponent: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     spreadMethod: null,
     spacing: null,
     startOffset: null,
@@ -39478,30 +39476,30 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     stitchTiles: null,
     stopColor: null,
     stopOpacity: null,
-    strikethroughPosition: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    strikethroughThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    strikethroughPosition: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    strikethroughThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     string: null,
     stroke: null,
-    strokeDashArray: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    strokeDashArray: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     strokeDashOffset: null,
     strokeLineCap: null,
     strokeLineJoin: null,
-    strokeMiterLimit: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    strokeOpacity: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    strokeMiterLimit: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    strokeOpacity: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     strokeWidth: null,
     style: null,
-    surfaceScale: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    surfaceScale: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     syncBehavior: null,
     syncBehaviorDefault: null,
     syncMaster: null,
     syncTolerance: null,
     syncToleranceDefault: null,
-    systemLanguage: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
-    tabIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    systemLanguage: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
+    tabIndex: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     tableValues: null,
     target: null,
-    targetX: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    targetY: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    targetX: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    targetY: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     textAnchor: null,
     textDecoration: null,
     textRendering: null,
@@ -39510,28 +39508,28 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     title: null,
     transformBehavior: null,
     type: null,
-    typeOf: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.commaOrSpaceSeparated,
+    typeOf: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.commaOrSpaceSeparated,
     to: null,
     transform: null,
     transformOrigin: null,
     u1: null,
     u2: null,
-    underlinePosition: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    underlineThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    underlinePosition: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    underlineThickness: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     unicode: null,
     unicodeBidi: null,
     unicodeRange: null,
-    unitsPerEm: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    unitsPerEm: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     values: null,
-    vAlphabetic: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    vMathematical: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    vAlphabetic: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    vMathematical: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     vectorEffect: null,
-    vHanging: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    vIdeographic: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    vHanging: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    vIdeographic: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     version: null,
-    vertAdvY: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    vertOriginX: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
-    vertOriginY: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    vertAdvY: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    vertOriginX: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
+    vertOriginY: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     viewBox: null,
     viewTarget: null,
     visibility: null,
@@ -39543,7 +39541,7 @@ const svg = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
     x1: null,
     x2: null,
     xChannelSelector: null,
-    xHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_2__.number,
+    xHeight: _util_types_js__WEBPACK_IMPORTED_MODULE_0__.number,
     y: null,
     y1: null,
     y2: null,
@@ -39616,9 +39614,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   create: () => (/* binding */ create)
 /* harmony export */ });
-/* harmony import */ var _normalize_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../normalize.js */ "../node_modules/property-information/lib/normalize.js");
-/* harmony import */ var _schema_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./schema.js */ "../node_modules/property-information/lib/util/schema.js");
-/* harmony import */ var _defined_info_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defined-info.js */ "../node_modules/property-information/lib/util/defined-info.js");
+/* harmony import */ var _normalize_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../normalize.js */ "../node_modules/property-information/lib/normalize.js");
+/* harmony import */ var _schema_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./schema.js */ "../node_modules/property-information/lib/util/schema.js");
+/* harmony import */ var _defined_info_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./defined-info.js */ "../node_modules/property-information/lib/util/defined-info.js");
 /**
  * @typedef {import('./schema.js').Properties} Properties
  * @typedef {import('./schema.js').Normal} Normal
@@ -39654,7 +39652,7 @@ function create(definition) {
   for (prop in definition.properties) {
     if (own.call(definition.properties, prop)) {
       const value = definition.properties[prop]
-      const info = new _defined_info_js__WEBPACK_IMPORTED_MODULE_0__.DefinedInfo(
+      const info = new _defined_info_js__WEBPACK_IMPORTED_MODULE_2__.DefinedInfo(
         prop,
         definition.transform(definition.attributes || {}, prop),
         value,
@@ -39670,12 +39668,12 @@ function create(definition) {
 
       property[prop] = info
 
-      normal[(0,_normalize_js__WEBPACK_IMPORTED_MODULE_1__.normalize)(prop)] = prop
-      normal[(0,_normalize_js__WEBPACK_IMPORTED_MODULE_1__.normalize)(info.attribute)] = prop
+      normal[(0,_normalize_js__WEBPACK_IMPORTED_MODULE_0__.normalize)(prop)] = prop
+      normal[(0,_normalize_js__WEBPACK_IMPORTED_MODULE_0__.normalize)(info.attribute)] = prop
     }
   }
 
-  return new _schema_js__WEBPACK_IMPORTED_MODULE_2__.Schema(property, normal, definition.space)
+  return new _schema_js__WEBPACK_IMPORTED_MODULE_1__.Schema(property, normal, definition.space)
 }
 
 
@@ -39692,16 +39690,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   DefinedInfo: () => (/* binding */ DefinedInfo)
 /* harmony export */ });
-/* harmony import */ var _info_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./info.js */ "../node_modules/property-information/lib/util/info.js");
-/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./types.js */ "../node_modules/property-information/lib/util/types.js");
+/* harmony import */ var _info_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./info.js */ "../node_modules/property-information/lib/util/info.js");
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./types.js */ "../node_modules/property-information/lib/util/types.js");
 
 
 
 /** @type {Array<keyof types>} */
 // @ts-expect-error: hush.
-const checks = Object.keys(_types_js__WEBPACK_IMPORTED_MODULE_0__)
+const checks = Object.keys(_types_js__WEBPACK_IMPORTED_MODULE_1__)
 
-class DefinedInfo extends _info_js__WEBPACK_IMPORTED_MODULE_1__.Info {
+class DefinedInfo extends _info_js__WEBPACK_IMPORTED_MODULE_0__.Info {
   /**
    * @constructor
    * @param {string} property
@@ -39719,7 +39717,7 @@ class DefinedInfo extends _info_js__WEBPACK_IMPORTED_MODULE_1__.Info {
     if (typeof mask === 'number') {
       while (++index < checks.length) {
         const check = checks[index]
-        mark(this, checks[index], (mask & _types_js__WEBPACK_IMPORTED_MODULE_0__[check]) === _types_js__WEBPACK_IMPORTED_MODULE_0__[check])
+        mark(this, checks[index], (mask & _types_js__WEBPACK_IMPORTED_MODULE_1__[check]) === _types_js__WEBPACK_IMPORTED_MODULE_1__[check])
       }
     }
   }
@@ -40003,8 +40001,8 @@ const xmlns = (0,_util_create_js__WEBPACK_IMPORTED_MODULE_0__.create)({
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 var e=__webpack_require__(/*! react */ "react");function r(e){return e&&"object"==typeof e&&"default"in e?e:{default:e}}var t=r(e);function o(){return(o=Object.assign||function(e){for(var r=1;r<arguments.length;r++){var t=arguments[r];for(var o in t)Object.prototype.hasOwnProperty.call(t,o)&&(e[o]=t[o])}return e}).apply(this,arguments)}function n(e,r){if(null==e)return{};var t,o,n={},a=Object.keys(e);for(o=0;o<a.length;o++)r.indexOf(t=a[o])>=0||(n[t]=e[t]);return n}function a(r){var t=e.useRef(r),o=e.useRef(function(e){t.current&&t.current(e)});return t.current=r,o.current}var l=function(e,r,t){return void 0===r&&(r=0),void 0===t&&(t=1),e>t?t:e<r?r:e},u=function(e){return"touches"in e},c=function(e){return e&&e.ownerDocument.defaultView||self},s=function(e,r,t){var o=e.getBoundingClientRect(),n=u(r)?function(e,r){for(var t=0;t<e.length;t++)if(e[t].identifier===r)return e[t];return e[0]}(r.touches,t):r;return{left:l((n.pageX-(o.left+c(e).pageXOffset))/o.width),top:l((n.pageY-(o.top+c(e).pageYOffset))/o.height)}},f=function(e){!u(e)&&e.preventDefault()},i=t.default.memo(function(r){var l=r.onMove,i=r.onKey,d=n(r,["onMove","onKey"]),v=e.useRef(null),h=a(l),g=a(i),m=e.useRef(null),p=e.useRef(!1),b=e.useMemo(function(){var e=function(e){f(e),(u(e)?e.touches.length>0:e.buttons>0)&&v.current?h(s(v.current,e,m.current)):t(!1)},r=function(){return t(!1)};function t(t){var o=p.current,n=c(v.current),a=t?n.addEventListener:n.removeEventListener;a(o?"touchmove":"mousemove",e),a(o?"touchend":"mouseup",r)}return[function(e){var r=e.nativeEvent,o=v.current;if(o&&(f(r),!function(e,r){return r&&!u(e)}(r,p.current)&&o)){if(u(r)){p.current=!0;var n=r.changedTouches||[];n.length&&(m.current=n[0].identifier)}o.focus(),h(s(o,r,m.current)),t(!0)}},function(e){var r=e.which||e.keyCode;r<37||r>40||(e.preventDefault(),g({left:39===r?.05:37===r?-.05:0,top:40===r?.05:38===r?-.05:0}))},t]},[g,h]),_=b[0],C=b[1],x=b[2];return e.useEffect(function(){return x},[x]),t.default.createElement("div",o({},d,{onTouchStart:_,onMouseDown:_,className:"react-colorful__interactive",ref:v,onKeyDown:C,tabIndex:0,role:"slider"}))}),d=function(e){return e.filter(Boolean).join(" ")},v=function(e){var r=e.color,o=e.left,n=e.top,a=void 0===n?.5:n,l=d(["react-colorful__pointer",e.className]);return t.default.createElement("div",{className:l,style:{top:100*a+"%",left:100*o+"%"}},t.default.createElement("div",{className:"react-colorful__pointer-fill",style:{backgroundColor:r}}))},h=function(e,r,t){return void 0===r&&(r=0),void 0===t&&(t=Math.pow(10,r)),Math.round(t*e)/t},g={grad:.9,turn:360,rad:360/(2*Math.PI)},m=function(e){return S(p(e))},p=function(e){return"#"===e[0]&&(e=e.substring(1)),e.length<6?{r:parseInt(e[0]+e[0],16),g:parseInt(e[1]+e[1],16),b:parseInt(e[2]+e[2],16),a:4===e.length?h(parseInt(e[3]+e[3],16)/255,2):1}:{r:parseInt(e.substring(0,2),16),g:parseInt(e.substring(2,4),16),b:parseInt(e.substring(4,6),16),a:8===e.length?h(parseInt(e.substring(6,8),16)/255,2):1}},b=function(e,r){return void 0===r&&(r="deg"),Number(e)*(g[r]||1)},_=function(e){var r=/hsla?\(?\s*(-?\d*\.?\d+)(deg|rad|grad|turn)?[,\s]+(-?\d*\.?\d+)%?[,\s]+(-?\d*\.?\d+)%?,?\s*[/\s]*(-?\d*\.?\d+)?(%)?\s*\)?/i.exec(e);return r?x({h:b(r[1],r[2]),s:Number(r[3]),l:Number(r[4]),a:void 0===r[5]?1:Number(r[5])/(r[6]?100:1)}):{h:0,s:0,v:0,a:1}},C=_,x=function(e){var r=e.s,t=e.l;return{h:e.h,s:(r*=(t<50?t:100-t)/100)>0?2*r/(t+r)*100:0,v:t+r,a:e.a}},E=function(e){return I(N(e))},H=function(e){var r=e.s,t=e.v,o=e.a,n=(200-r)*t/100;return{h:h(e.h),s:h(n>0&&n<200?r*t/100/(n<=100?n:200-n)*100:0),l:h(n/2),a:h(o,2)}},M=function(e){var r=H(e);return"hsl("+r.h+", "+r.s+"%, "+r.l+"%)"},k=function(e){var r=H(e);return"hsla("+r.h+", "+r.s+"%, "+r.l+"%, "+r.a+")"},N=function(e){var r=e.h,t=e.s,o=e.v,n=e.a;r=r/360*6,t/=100,o/=100;var a=Math.floor(r),l=o*(1-t),u=o*(1-(r-a)*t),c=o*(1-(1-r+a)*t),s=a%6;return{r:h(255*[o,u,l,l,c,o][s]),g:h(255*[c,o,o,u,l,l][s]),b:h(255*[l,l,c,o,o,u][s]),a:h(n,2)}},w=function(e){var r=/hsva?\(?\s*(-?\d*\.?\d+)(deg|rad|grad|turn)?[,\s]+(-?\d*\.?\d+)%?[,\s]+(-?\d*\.?\d+)%?,?\s*[/\s]*(-?\d*\.?\d+)?(%)?\s*\)?/i.exec(e);return r?O({h:b(r[1],r[2]),s:Number(r[3]),v:Number(r[4]),a:void 0===r[5]?1:Number(r[5])/(r[6]?100:1)}):{h:0,s:0,v:0,a:1}},y=w,q=function(e){var r=/rgba?\(?\s*(-?\d*\.?\d+)(%)?[,\s]+(-?\d*\.?\d+)(%)?[,\s]+(-?\d*\.?\d+)(%)?,?\s*[/\s]*(-?\d*\.?\d+)?(%)?\s*\)?/i.exec(e);return r?S({r:Number(r[1])/(r[2]?100/255:1),g:Number(r[3])/(r[4]?100/255:1),b:Number(r[5])/(r[6]?100/255:1),a:void 0===r[7]?1:Number(r[7])/(r[8]?100:1)}):{h:0,s:0,v:0,a:1}},P=q,R=function(e){var r=e.toString(16);return r.length<2?"0"+r:r},I=function(e){var r=e.r,t=e.g,o=e.b,n=e.a,a=n<1?R(h(255*n)):"";return"#"+R(r)+R(t)+R(o)+a},S=function(e){var r=e.r,t=e.g,o=e.b,n=e.a,a=Math.max(r,t,o),l=a-Math.min(r,t,o),u=l?a===r?(t-o)/l:a===t?2+(o-r)/l:4+(r-t)/l:0;return{h:h(60*(u<0?u+6:u)),s:h(a?l/a*100:0),v:h(a/255*100),a:n}},O=function(e){return{h:h(e.h),s:h(e.s),v:h(e.v),a:h(e.a,2)}},j=t.default.memo(function(e){var r=e.hue,o=e.onChange,n=d(["react-colorful__hue",e.className]);return t.default.createElement("div",{className:n},t.default.createElement(i,{onMove:function(e){o({h:360*e.left})},onKey:function(e){o({h:l(r+360*e.left,0,360)})},"aria-label":"Hue","aria-valuenow":h(r),"aria-valuemax":"360","aria-valuemin":"0"},t.default.createElement(v,{className:"react-colorful__hue-pointer",left:r/360,color:M({h:r,s:100,v:100,a:1})})))}),z=t.default.memo(function(e){var r=e.hsva,o=e.onChange,n={backgroundColor:M({h:r.h,s:100,v:100,a:1})};return t.default.createElement("div",{className:"react-colorful__saturation",style:n},t.default.createElement(i,{onMove:function(e){o({s:100*e.left,v:100-100*e.top})},onKey:function(e){o({s:l(r.s+100*e.left,0,100),v:l(r.v-100*e.top,0,100)})},"aria-label":"Color","aria-valuetext":"Saturation "+h(r.s)+"%, Brightness "+h(r.v)+"%"},t.default.createElement(v,{className:"react-colorful__saturation-pointer",top:1-r.v/100,left:r.s/100,color:M(r)})))}),B=function(e,r){if(e===r)return!0;for(var t in e)if(e[t]!==r[t])return!1;return!0},D=function(e,r){return e.replace(/\s/g,"")===r.replace(/\s/g,"")},K=function(e,r){return e.toLowerCase()===r.toLowerCase()||B(p(e),p(r))};function L(r,t,o){var n=a(o),l=e.useState(function(){return r.toHsva(t)}),u=l[0],c=l[1],s=e.useRef({color:t,hsva:u});e.useEffect(function(){if(!r.equal(t,s.current.color)){var e=r.toHsva(t);s.current={hsva:e,color:t},c(e)}},[t,r]),e.useEffect(function(){var e;B(u,s.current.hsva)||r.equal(e=r.fromHsva(u),s.current.color)||(s.current={hsva:u,color:e},n(e))},[u,r,n]);var f=e.useCallback(function(e){c(function(r){return Object.assign({},r,e)})},[]);return[u,f]}var A,T="undefined"!=typeof window?e.useLayoutEffect:e.useEffect,F=function(){return A||( true?__webpack_require__.nc:0)},X=new Map,Y=function(e){T(function(){var r=e.current?e.current.ownerDocument:document;if(void 0!==r&&!X.has(r)){var t=r.createElement("style");t.innerHTML='.react-colorful{position:relative;display:flex;flex-direction:column;width:200px;height:200px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default}.react-colorful__saturation{position:relative;flex-grow:1;border-color:transparent;border-bottom:12px solid #000;border-radius:8px 8px 0 0;background-image:linear-gradient(0deg,#000,transparent),linear-gradient(90deg,#fff,hsla(0,0%,100%,0))}.react-colorful__alpha-gradient,.react-colorful__pointer-fill{content:"";position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none;border-radius:inherit}.react-colorful__alpha-gradient,.react-colorful__saturation{box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}.react-colorful__alpha,.react-colorful__hue{position:relative;height:24px}.react-colorful__hue{background:linear-gradient(90deg,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red)}.react-colorful__last-control{border-radius:0 0 8px 8px}.react-colorful__interactive{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:inherit;outline:none;touch-action:none}.react-colorful__pointer{position:absolute;z-index:1;box-sizing:border-box;width:28px;height:28px;transform:translate(-50%,-50%);background-color:#fff;border:2px solid #fff;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.2)}.react-colorful__interactive:focus .react-colorful__pointer{transform:translate(-50%,-50%) scale(1.1)}.react-colorful__alpha,.react-colorful__alpha-pointer{background-color:#fff;background-image:url(\'data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill-opacity=".05"><path d="M8 0h8v8H8zM0 8h8v8H0z"/></svg>\')}.react-colorful__saturation-pointer{z-index:3}.react-colorful__hue-pointer{z-index:2}',X.set(r,t);var o=F();o&&t.setAttribute("nonce",o),r.head.appendChild(t)}},[])},V=function(r){var a=r.className,l=r.colorModel,u=r.color,c=void 0===u?l.defaultColor:u,s=r.onChange,f=n(r,["className","colorModel","color","onChange"]),i=e.useRef(null);Y(i);var v=L(l,c,s),h=v[0],g=v[1],m=d(["react-colorful",a]);return t.default.createElement("div",o({},f,{ref:i,className:m}),t.default.createElement(z,{hsva:h,onChange:g}),t.default.createElement(j,{hue:h.h,onChange:g,className:"react-colorful__last-control"}))},$={defaultColor:"000",toHsva:m,fromHsva:function(e){return E({h:e.h,s:e.s,v:e.v,a:1})},equal:K},G=function(e){var r=e.className,o=e.hsva,n=e.onChange,a={backgroundImage:"linear-gradient(90deg, "+k(Object.assign({},o,{a:0}))+", "+k(Object.assign({},o,{a:1}))+")"},u=d(["react-colorful__alpha",r]),c=h(100*o.a);return t.default.createElement("div",{className:u},t.default.createElement("div",{className:"react-colorful__alpha-gradient",style:a}),t.default.createElement(i,{onMove:function(e){n({a:e.left})},onKey:function(e){n({a:l(o.a+e.left)})},"aria-label":"Alpha","aria-valuetext":c+"%","aria-valuenow":c,"aria-valuemin":"0","aria-valuemax":"100"},t.default.createElement(v,{className:"react-colorful__alpha-pointer",left:o.a,color:k(o)})))},J=function(r){var a=r.className,l=r.colorModel,u=r.color,c=void 0===u?l.defaultColor:u,s=r.onChange,f=n(r,["className","colorModel","color","onChange"]),i=e.useRef(null);Y(i);var v=L(l,c,s),h=v[0],g=v[1],m=d(["react-colorful",a]);return t.default.createElement("div",o({},f,{ref:i,className:m}),t.default.createElement(z,{hsva:h,onChange:g}),t.default.createElement(j,{hue:h.h,onChange:g}),t.default.createElement(G,{hsva:h,onChange:g,className:"react-colorful__last-control"}))},Q={defaultColor:"0001",toHsva:m,fromHsva:E,equal:K},U={defaultColor:{h:0,s:0,l:0,a:1},toHsva:x,fromHsva:H,equal:B},W={defaultColor:"hsla(0, 0%, 0%, 1)",toHsva:_,fromHsva:k,equal:D},Z={defaultColor:{h:0,s:0,l:0},toHsva:function(e){return x({h:e.h,s:e.s,l:e.l,a:1})},fromHsva:function(e){return{h:(r=H(e)).h,s:r.s,l:r.l};// removed by dead control flow
-{ var r; }},equal:B},ee={defaultColor:"hsl(0, 0%, 0%)",toHsva:C,fromHsva:M,equal:D},re={defaultColor:{h:0,s:0,v:0,a:1},toHsva:function(e){return e},fromHsva:O,equal:B},te={defaultColor:"hsva(0, 0%, 0%, 1)",toHsva:w,fromHsva:function(e){var r=O(e);return"hsva("+r.h+", "+r.s+"%, "+r.v+"%, "+r.a+")"},equal:D},oe={defaultColor:{h:0,s:0,v:0},toHsva:function(e){return{h:e.h,s:e.s,v:e.v,a:1}},fromHsva:function(e){var r=O(e);return{h:r.h,s:r.s,v:r.v}},equal:B},ne={defaultColor:"hsv(0, 0%, 0%)",toHsva:y,fromHsva:function(e){var r=O(e);return"hsv("+r.h+", "+r.s+"%, "+r.v+"%)"},equal:D},ae={defaultColor:{r:0,g:0,b:0,a:1},toHsva:S,fromHsva:N,equal:B},le={defaultColor:"rgba(0, 0, 0, 1)",toHsva:q,fromHsva:function(e){var r=N(e);return"rgba("+r.r+", "+r.g+", "+r.b+", "+r.a+")"},equal:D},ue={defaultColor:{r:0,g:0,b:0},toHsva:function(e){return S({r:e.r,g:e.g,b:e.b,a:1})},fromHsva:function(e){return{r:(r=N(e)).r,g:r.g,b:r.b};// removed by dead control flow
-{ var r; }},equal:B},ce={defaultColor:"rgb(0, 0, 0)",toHsva:P,fromHsva:function(e){var r=N(e);return"rgb("+r.r+", "+r.g+", "+r.b+")"},equal:D},se=/^#?([0-9A-F]{3,8})$/i,fe=function(r){var l=r.color,u=void 0===l?"":l,c=r.onChange,s=r.onBlur,f=r.escape,i=r.validate,d=r.format,v=r.process,h=n(r,["color","onChange","onBlur","escape","validate","format","process"]),g=e.useState(function(){return f(u)}),m=g[0],p=g[1],b=a(c),_=a(s),C=e.useCallback(function(e){var r=f(e.target.value);p(r),i(r)&&b(v?v(r):r)},[f,v,i,b]),x=e.useCallback(function(e){i(e.target.value)||p(f(u)),_(e)},[u,f,i,_]);return e.useEffect(function(){p(f(u))},[u,f]),t.default.createElement("input",o({},h,{value:d?d(m):m,spellCheck:"false",onChange:C,onBlur:x}))},ie=function(e){return"#"+e};exports.HexAlphaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:Q}))},exports.HexColorInput=function(r){var a=r.prefixed,l=r.alpha,u=n(r,["prefixed","alpha"]),c=e.useCallback(function(e){return e.replace(/([^0-9A-F]+)/gi,"").substring(0,l?8:6)},[l]),s=e.useCallback(function(e){return function(e,r){var t=se.exec(e),o=t?t[1].length:0;return 3===o||6===o||!!r&&4===o||!!r&&8===o}(e,l)},[l]);return t.default.createElement(fe,o({},u,{escape:c,format:a?ie:void 0,process:ie,validate:s}))},exports.HexColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:$}))},exports.HslColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:Z}))},exports.HslStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ee}))},exports.HslaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:U}))},exports.HslaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:W}))},exports.HsvColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:oe}))},exports.HsvStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ne}))},exports.HsvaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:re}))},exports.HsvaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:te}))},exports.RgbColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ue}))},exports.RgbStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ce}))},exports.RgbaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:ae}))},exports.RgbaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:le}))},exports.setNonce=function(e){A=e};
+ var r; },equal:B},ee={defaultColor:"hsl(0, 0%, 0%)",toHsva:C,fromHsva:M,equal:D},re={defaultColor:{h:0,s:0,v:0,a:1},toHsva:function(e){return e},fromHsva:O,equal:B},te={defaultColor:"hsva(0, 0%, 0%, 1)",toHsva:w,fromHsva:function(e){var r=O(e);return"hsva("+r.h+", "+r.s+"%, "+r.v+"%, "+r.a+")"},equal:D},oe={defaultColor:{h:0,s:0,v:0},toHsva:function(e){return{h:e.h,s:e.s,v:e.v,a:1}},fromHsva:function(e){var r=O(e);return{h:r.h,s:r.s,v:r.v}},equal:B},ne={defaultColor:"hsv(0, 0%, 0%)",toHsva:y,fromHsva:function(e){var r=O(e);return"hsv("+r.h+", "+r.s+"%, "+r.v+"%)"},equal:D},ae={defaultColor:{r:0,g:0,b:0,a:1},toHsva:S,fromHsva:N,equal:B},le={defaultColor:"rgba(0, 0, 0, 1)",toHsva:q,fromHsva:function(e){var r=N(e);return"rgba("+r.r+", "+r.g+", "+r.b+", "+r.a+")"},equal:D},ue={defaultColor:{r:0,g:0,b:0},toHsva:function(e){return S({r:e.r,g:e.g,b:e.b,a:1})},fromHsva:function(e){return{r:(r=N(e)).r,g:r.g,b:r.b};// removed by dead control flow
+ var r; },equal:B},ce={defaultColor:"rgb(0, 0, 0)",toHsva:P,fromHsva:function(e){var r=N(e);return"rgb("+r.r+", "+r.g+", "+r.b+")"},equal:D},se=/^#?([0-9A-F]{3,8})$/i,fe=function(r){var l=r.color,u=void 0===l?"":l,c=r.onChange,s=r.onBlur,f=r.escape,i=r.validate,d=r.format,v=r.process,h=n(r,["color","onChange","onBlur","escape","validate","format","process"]),g=e.useState(function(){return f(u)}),m=g[0],p=g[1],b=a(c),_=a(s),C=e.useCallback(function(e){var r=f(e.target.value);p(r),i(r)&&b(v?v(r):r)},[f,v,i,b]),x=e.useCallback(function(e){i(e.target.value)||p(f(u)),_(e)},[u,f,i,_]);return e.useEffect(function(){p(f(u))},[u,f]),t.default.createElement("input",o({},h,{value:d?d(m):m,spellCheck:"false",onChange:C,onBlur:x}))},ie=function(e){return"#"+e};exports.HexAlphaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:Q}))},exports.HexColorInput=function(r){var a=r.prefixed,l=r.alpha,u=n(r,["prefixed","alpha"]),c=e.useCallback(function(e){return e.replace(/([^0-9A-F]+)/gi,"").substring(0,l?8:6)},[l]),s=e.useCallback(function(e){return function(e,r){var t=se.exec(e),o=t?t[1].length:0;return 3===o||6===o||!!r&&4===o||!!r&&8===o}(e,l)},[l]);return t.default.createElement(fe,o({},u,{escape:c,format:a?ie:void 0,process:ie,validate:s}))},exports.HexColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:$}))},exports.HslColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:Z}))},exports.HslStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ee}))},exports.HslaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:U}))},exports.HslaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:W}))},exports.HsvColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:oe}))},exports.HsvStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ne}))},exports.HsvaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:re}))},exports.HsvaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:te}))},exports.RgbColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ue}))},exports.RgbStringColorPicker=function(e){return t.default.createElement(V,o({},e,{colorModel:ce}))},exports.RgbaColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:ae}))},exports.RgbaStringColorPicker=function(e){return t.default.createElement(J,o({},e,{colorModel:le}))},exports.setNonce=function(e){A=e};
 //# sourceMappingURL=index.js.map
 
 
@@ -40066,19 +40064,18 @@ exports["default"] = void 0;
 var React = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 var _reactDom = _interopRequireDefault(__webpack_require__(/*! react-dom */ "react-dom"));
-var _clsx = _interopRequireDefault(__webpack_require__(/*! clsx */ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js"));
+var _clsx = __webpack_require__(/*! clsx */ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.js");
 var _domFns = __webpack_require__(/*! ./utils/domFns */ "../node_modules/react-draggable/build/cjs/utils/domFns.js");
 var _positionFns = __webpack_require__(/*! ./utils/positionFns */ "../node_modules/react-draggable/build/cjs/utils/positionFns.js");
 var _shims = __webpack_require__(/*! ./utils/shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _DraggableCore = _interopRequireDefault(__webpack_require__(/*! ./DraggableCore */ "../node_modules/react-draggable/build/cjs/DraggableCore.js"));
 var _log = _interopRequireDefault(__webpack_require__(/*! ./utils/log */ "../node_modules/react-draggable/build/cjs/utils/log.js"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } /*:: import type {ControlPosition, PositionOffsetControlPosition, DraggableCoreProps, DraggableCoreDefaultProps} from './DraggableCore';*/
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } /*:: import type {ControlPosition, PositionOffsetControlPosition, DraggableCoreProps, DraggableCoreDefaultProps} from './DraggableCore';*/
 /*:: import type {Bounds, DraggableEventHandler} from './utils/types';*/
 /*:: import type {Element as ReactElement} from 'react';*/
 /*:: type DraggableState = {
@@ -40251,16 +40248,17 @@ class Draggable extends React.Component /*:: <DraggableProps, DraggableState>*/{
     }
   }
   componentWillUnmount() {
-    this.setState({
-      dragging: false
-    }); // prevents invariant if unmounted while dragging
+    if (this.state.dragging) {
+      this.setState({
+        dragging: false
+      }); // prevents invariant if unmounted while dragging
+    }
   }
 
   // React Strict Mode compatibility: if `nodeRef` is passed, we will use it instead of trying to find
   // the underlying DOM node ourselves. See the README for more information.
   findDOMNode() /*: ?HTMLElement*/{
-    var _this$props$nodeRef$c, _this$props;
-    return (_this$props$nodeRef$c = (_this$props = this.props) === null || _this$props === void 0 || (_this$props = _this$props.nodeRef) === null || _this$props === void 0 ? void 0 : _this$props.current) !== null && _this$props$nodeRef$c !== void 0 ? _this$props$nodeRef$c : _reactDom.default.findDOMNode(this);
+    return this.props?.nodeRef?.current ?? _reactDom.default.findDOMNode(this);
   }
   render() /*: ReactElement<any>*/{
     const {
@@ -40302,7 +40300,7 @@ class Draggable extends React.Component /*:: <DraggableProps, DraggableState>*/{
     }
 
     // Mark with class while dragging
-    const className = (0, _clsx.default)(children.props.className || '', defaultClassName, {
+    const className = (0, _clsx.clsx)(children.props.className || '', defaultClassName, {
       [defaultClassNameDragging]: this.state.dragging,
       [defaultClassNameDragged]: this.state.dragged
     });
@@ -40469,12 +40467,11 @@ var _domFns = __webpack_require__(/*! ./utils/domFns */ "../node_modules/react-d
 var _positionFns = __webpack_require__(/*! ./utils/positionFns */ "../node_modules/react-draggable/build/cjs/utils/positionFns.js");
 var _shims = __webpack_require__(/*! ./utils/shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _log = _interopRequireDefault(__webpack_require__(/*! ./utils/log */ "../node_modules/react-draggable/build/cjs/utils/log.js"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /*:: import type {EventHandler, MouseTouchEvent} from './utils/types';*/
 /*:: import type {Element as ReactElement} from 'react';*/
 // Simple abstraction for dragging events names.
@@ -40504,6 +40501,7 @@ let dragEventFor = eventsFor.mouse;
 /*:: export type PositionOffsetControlPosition = {x: number|string, y: number|string};*/
 /*:: export type DraggableCoreDefaultProps = {
   allowAnyClick: boolean,
+  allowMobileScroll: boolean,
   disabled: boolean,
   enableUserSelectHack: boolean,
   onStart: DraggableEventHandler,
@@ -40560,7 +40558,7 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
 
       // Prevent scrolling on mobile devices, like ipad/iphone.
       // Important that this is after handle/cancel.
-      if (e.type === 'touchstart') e.preventDefault();
+      if (e.type === 'touchstart' && !this.props.allowMobileScroll) e.preventDefault();
 
       // Set touch identifier in component state if this is a touch event. This allows us to
       // distinguish between individual touches on multitouch screens by identifying which
@@ -40665,7 +40663,7 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
       const thisNode = this.findDOMNode();
       if (thisNode) {
         // Remove user-select hack
-        if (this.props.enableUserSelectHack) (0, _domFns.removeUserSelectStyles)(thisNode.ownerDocument);
+        if (this.props.enableUserSelectHack) (0, _domFns.scheduleRemoveUserSelectStyles)(thisNode.ownerDocument);
       }
       (0, _log.default)('DraggableCore: handleDragStop: %j', coreEvent);
 
@@ -40728,15 +40726,14 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
       (0, _domFns.removeEvent)(thisNode, eventsFor.touch.start, this.onTouchStart, {
         passive: false
       });
-      if (this.props.enableUserSelectHack) (0, _domFns.removeUserSelectStyles)(ownerDocument);
+      if (this.props.enableUserSelectHack) (0, _domFns.scheduleRemoveUserSelectStyles)(ownerDocument);
     }
   }
 
   // React Strict Mode compatibility: if `nodeRef` is passed, we will use it instead of trying to find
   // the underlying DOM node ourselves. See the README for more information.
   findDOMNode() /*: ?HTMLElement*/{
-    var _this$props, _this$props2;
-    return (_this$props = this.props) !== null && _this$props !== void 0 && _this$props.nodeRef ? (_this$props2 = this.props) === null || _this$props2 === void 0 || (_this$props2 = _this$props2.nodeRef) === null || _this$props2 === void 0 ? void 0 : _this$props2.current : _reactDom.default.findDOMNode(this);
+    return this.props?.nodeRef ? this.props?.nodeRef?.current : _reactDom.default.findDOMNode(this);
   }
   render() /*: React.Element<any>*/{
     // Reuse the child provided
@@ -40763,6 +40760,14 @@ _defineProperty(DraggableCore, "propTypes", {
    * Defaults to `false`.
    */
   allowAnyClick: _propTypes.default.bool,
+  /**
+   * `allowMobileScroll` turns off cancellation of the 'touchstart' event
+   * on mobile devices. Only enable this if you are having trouble with click
+   * events. Prefer using 'handle' / 'cancel' instead.
+   *
+   * Defaults to `false`.
+   */
+  allowMobileScroll: _propTypes.default.bool,
   children: _propTypes.default.node.isRequired,
   /**
    * `disabled`, if true, stops the <Draggable> from dragging. All handlers,
@@ -40882,6 +40887,7 @@ _defineProperty(DraggableCore, "propTypes", {
 _defineProperty(DraggableCore, "defaultProps", {
   allowAnyClick: false,
   // by default only accept left click
+  allowMobileScroll: false,
   disabled: false,
   enableUserSelectHack: true,
   onStart: function () {},
@@ -40945,11 +40951,10 @@ exports.outerHeight = outerHeight;
 exports.outerWidth = outerWidth;
 exports.removeClassName = removeClassName;
 exports.removeEvent = removeEvent;
-exports.removeUserSelectStyles = removeUserSelectStyles;
+exports.scheduleRemoveUserSelectStyles = scheduleRemoveUserSelectStyles;
 var _shims = __webpack_require__(/*! ./shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _getPrefix = _interopRequireWildcard(__webpack_require__(/*! ./getPrefix */ "../node_modules/react-draggable/build/cjs/utils/getPrefix.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 /*:: import type {ControlPosition, PositionOffsetControlPosition, MouseTouchEvent} from './types';*/
 let matchesSelectorFunc = '';
 function matchesSelector(el /*: Node*/, selector /*: string*/) /*: boolean*/{
@@ -41075,11 +41080,11 @@ function getTranslation(_ref /*:: */, positionOffset /*: PositionOffsetControlPo
     x,
     y
   } /*: ControlPosition*/ = _ref /*: ControlPosition*/;
-  let translation = "translate(".concat(x).concat(unitSuffix, ",").concat(y).concat(unitSuffix, ")");
+  let translation = `translate(${x}${unitSuffix},${y}${unitSuffix})`;
   if (positionOffset) {
-    const defaultX = "".concat(typeof positionOffset.x === 'string' ? positionOffset.x : positionOffset.x + unitSuffix);
-    const defaultY = "".concat(typeof positionOffset.y === 'string' ? positionOffset.y : positionOffset.y + unitSuffix);
-    translation = "translate(".concat(defaultX, ", ").concat(defaultY, ")") + translation;
+    const defaultX = `${typeof positionOffset.x === 'string' ? positionOffset.x : positionOffset.x + unitSuffix}`;
+    const defaultY = `${typeof positionOffset.y === 'string' ? positionOffset.y : positionOffset.y + unitSuffix}`;
+    translation = `translate(${defaultX}, ${defaultY})` + translation;
   }
   return translation;
 }
@@ -41109,6 +41114,16 @@ function addUserSelectStyles(doc /*: ?Document*/) {
   }
   if (doc.body) addClassName(doc.body, 'react-draggable-transparent-selection');
 }
+function scheduleRemoveUserSelectStyles(doc /*: ?Document*/) {
+  // Prevent a possible "forced reflow"
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(() => {
+      removeUserSelectStyles(doc);
+    });
+  } else {
+    removeUserSelectStyles(doc);
+  }
+}
 function removeUserSelectStyles(doc /*: ?Document*/) {
   if (!doc) return;
   try {
@@ -41133,8 +41148,8 @@ function addClassName(el /*: HTMLElement*/, className /*: string*/) {
   if (el.classList) {
     el.classList.add(className);
   } else {
-    if (!el.className.match(new RegExp("(?:^|\\s)".concat(className, "(?!\\S)")))) {
-      el.className += " ".concat(className);
+    if (!el.className.match(new RegExp(`(?:^|\\s)${className}(?!\\S)`))) {
+      el.className += ` ${className}`;
     }
   }
 }
@@ -41142,7 +41157,7 @@ function removeClassName(el /*: HTMLElement*/, className /*: string*/) {
   if (el.classList) {
     el.classList.remove(className);
   } else {
-    el.className = el.className.replace(new RegExp("(?:^|\\s)".concat(className, "(?!\\S)"), 'g'), '');
+    el.className = el.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`, 'g'), '');
   }
 }
 
@@ -41166,7 +41181,6 @@ exports["default"] = void 0;
 exports.getPrefix = getPrefix;
 const prefixes = ['Moz', 'Webkit', 'O', 'ms'];
 function getPrefix() /*: string*/{
-  var _window$document;
   let prop /*: string*/ = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'transform';
   // Ensure we're running in an environment where there is actually a global
   // `window` obj
@@ -41174,7 +41188,7 @@ function getPrefix() /*: string*/{
 
   // If we're in a pseudo-browser server-side environment, this access
   // path may not exist, so bail out if it doesn't.
-  const style = (_window$document = window.document) === null || _window$document === void 0 || (_window$document = _window$document.documentElement) === null || _window$document === void 0 ? void 0 : _window$document.style;
+  const style = window.document?.documentElement?.style;
   if (!style) return '';
   if (prop in style) return '';
   for (let i = 0; i < prefixes.length; i++) {
@@ -41183,10 +41197,10 @@ function getPrefix() /*: string*/{
   return '';
 }
 function browserPrefixToKey(prop /*: string*/, prefix /*: string*/) /*: string*/{
-  return prefix ? "".concat(prefix).concat(kebabToTitleCase(prop)) : prop;
+  return prefix ? `${prefix}${kebabToTitleCase(prop)}` : prop;
 }
 function browserPrefixToStyle(prop /*: string*/, prefix /*: string*/) /*: string*/{
-  return prefix ? "-".concat(prefix.toLowerCase(), "-").concat(prop) : prop;
+  return prefix ? `-${prefix.toLowerCase()}-${prop}` : prop;
 }
 function kebabToTitleCase(str /*: string*/) /*: string*/{
   let out = '';
@@ -41275,7 +41289,12 @@ function getBoundPosition(draggable /*: Draggable*/, x /*: number*/, y /*: numbe
     if (bounds === 'parent') {
       boundNode = node.parentNode;
     } else {
-      boundNode = ownerDocument.querySelector(bounds);
+      // Flow assigns the wrong return type (Node) for getRootNode(),
+      // so we cast it to one of the correct types (Element).
+      // The others are Document and ShadowRoot.
+      // All three implement querySelector() so it's safe to call.
+      const rootNode = ((node.getRootNode() /*: any*/) /*: Element*/);
+      boundNode = rootNode.querySelector(bounds);
     }
     if (!(boundNode instanceof ownerWindow.HTMLElement)) {
       throw new Error('Bounds selector "' + bounds + '" could not find an element.');
@@ -41421,25 +41440,19 @@ function int(a /*: string*/) /*: number*/{
 }
 function dontSetMe(props /*: Object*/, propName /*: string*/, componentName /*: string*/) /*: ?Error*/{
   if (props[propName]) {
-    return new Error("Invalid prop ".concat(propName, " passed to ").concat(componentName, " - do not set this, set it on the child."));
+    return new Error(`Invalid prop ${propName} passed to ${componentName} - do not set this, set it on the child.`);
   }
 }
 
 /***/ }),
 
-/***/ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js":
-/*!************************************************************************!*\
-  !*** ../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/react-draggable/node_modules/clsx/dist/clsx.js ***!
+  \**********************************************************************/
+/***/ ((module) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   clsx: () => (/* binding */ clsx),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clsx);
+function r(e){var o,t,f="";if("string"==typeof e||"number"==typeof e)f+=e;else if("object"==typeof e)if(Array.isArray(e)){var n=e.length;for(o=0;o<n;o++)e[o]&&(t=r(e[o]))&&(f&&(f+=" "),f+=t)}else for(t in e)e[t]&&(f&&(f+=" "),f+=t);return f}function e(){for(var e,o,t=0,f="",n=arguments.length;t<n;t++)(e=arguments[t])&&(o=r(e))&&(f&&(f+=" "),f+=o);return f}module.exports=e,module.exports.clsx=e;
 
 /***/ }),
 
@@ -42051,14 +42064,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react_is__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-is */ "../node_modules/react-is/index.js");
-/* harmony import */ var hast_util_whitespace__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! hast-util-whitespace */ "../node_modules/hast-util-whitespace/index.js");
-/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/index.js");
-/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/lib/find.js");
-/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/lib/hast-to-react.js");
-/* harmony import */ var space_separated_tokens__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! space-separated-tokens */ "../node_modules/space-separated-tokens/index.js");
+/* harmony import */ var hast_util_whitespace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! hast-util-whitespace */ "../node_modules/hast-util-whitespace/index.js");
+/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/index.js");
+/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/lib/find.js");
+/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/lib/hast-to-react.js");
+/* harmony import */ var space_separated_tokens__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! space-separated-tokens */ "../node_modules/space-separated-tokens/index.js");
 /* harmony import */ var comma_separated_tokens__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! comma-separated-tokens */ "../node_modules/comma-separated-tokens/index.js");
-/* harmony import */ var style_to_object__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! style-to-object */ "../node_modules/style-to-object/index.mjs");
-/* harmony import */ var _uri_transformer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./uri-transformer.js */ "../node_modules/react-markdown/lib/uri-transformer.js");
+/* harmony import */ var style_to_object__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! style-to-object */ "../node_modules/style-to-object/index.mjs");
+/* harmony import */ var _uri_transformer_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./uri-transformer.js */ "../node_modules/react-markdown/lib/uri-transformer.js");
 /**
  * @template T
  * @typedef {import('react').ComponentType<T>} ComponentType<T>
@@ -42203,7 +42216,7 @@ function childrenToReact(context, node) {
       if (
         node.type !== 'element' ||
         !tableElements.has(node.tagName) ||
-        !(0,hast_util_whitespace__WEBPACK_IMPORTED_MODULE_3__.whitespace)(child)
+        !(0,hast_util_whitespace__WEBPACK_IMPORTED_MODULE_2__.whitespace)(child)
       ) {
         children.push(child.value)
       }
@@ -42226,7 +42239,7 @@ function toReact(context, node, index, parent) {
   const options = context.options
   const transform =
     options.transformLinkUri === undefined
-      ? _uri_transformer_js__WEBPACK_IMPORTED_MODULE_4__.uriTransformer
+      ? _uri_transformer_js__WEBPACK_IMPORTED_MODULE_9__.uriTransformer
       : options.transformLinkUri
   const parentSchema = context.schema
   /** @type {ReactMarkdownNames} */
@@ -42239,7 +42252,7 @@ function toReact(context, node, index, parent) {
   let property
 
   if (parentSchema.space === 'html' && name === 'svg') {
-    schema = property_information__WEBPACK_IMPORTED_MODULE_5__.svg
+    schema = property_information__WEBPACK_IMPORTED_MODULE_3__.svg
     context.schema = schema
   }
 
@@ -42429,7 +42442,7 @@ function getElementsBeforeCount(parent, node) {
  * @param {Context} ctx
  */
 function addProperty(props, prop, value, ctx) {
-  const info = (0,property_information__WEBPACK_IMPORTED_MODULE_6__.find)(ctx.schema, prop)
+  const info = (0,property_information__WEBPACK_IMPORTED_MODULE_4__.find)(ctx.schema, prop)
   let result = value
 
   // Ignore nullish and `NaN` values.
@@ -42441,7 +42454,7 @@ function addProperty(props, prop, value, ctx) {
   // Accept `array`.
   // Most props are space-separated.
   if (Array.isArray(result)) {
-    result = info.commaSeparated ? (0,comma_separated_tokens__WEBPACK_IMPORTED_MODULE_7__.stringify)(result) : (0,space_separated_tokens__WEBPACK_IMPORTED_MODULE_8__.stringify)(result)
+    result = info.commaSeparated ? (0,comma_separated_tokens__WEBPACK_IMPORTED_MODULE_7__.stringify)(result) : (0,space_separated_tokens__WEBPACK_IMPORTED_MODULE_6__.stringify)(result)
   }
 
   if (info.property === 'style' && typeof result === 'string') {
@@ -42450,8 +42463,8 @@ function addProperty(props, prop, value, ctx) {
 
   if (info.space && info.property) {
     props[
-      own.call(property_information__WEBPACK_IMPORTED_MODULE_9__.hastToReact, info.property)
-        ? property_information__WEBPACK_IMPORTED_MODULE_9__.hastToReact[info.property]
+      own.call(property_information__WEBPACK_IMPORTED_MODULE_5__.hastToReact, info.property)
+        ? property_information__WEBPACK_IMPORTED_MODULE_5__.hastToReact[info.property]
         : info.property
     ] = result
   } else if (info.attribute) {
@@ -42468,7 +42481,7 @@ function parseStyle(value) {
   const result = {}
 
   try {
-    ;(0,style_to_object__WEBPACK_IMPORTED_MODULE_2__["default"])(value, iterator)
+    ;(0,style_to_object__WEBPACK_IMPORTED_MODULE_8__["default"])(value, iterator)
   } catch {
     // Silent.
   }
@@ -42526,14 +42539,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   ReactMarkdown: () => (/* binding */ ReactMarkdown)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var vfile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vfile */ "../node_modules/vfile/lib/index.js");
-/* harmony import */ var unified__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! unified */ "../node_modules/unified/lib/index.js");
-/* harmony import */ var remark_parse__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! remark-parse */ "../node_modules/remark-parse/lib/index.js");
-/* harmony import */ var remark_rehype__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! remark-rehype */ "../node_modules/remark-rehype/lib/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/index.js");
-/* harmony import */ var _rehype_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./rehype-filter.js */ "../node_modules/react-markdown/lib/rehype-filter.js");
-/* harmony import */ var _ast_to_react_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ast-to-react.js */ "../node_modules/react-markdown/lib/ast-to-react.js");
+/* harmony import */ var vfile__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vfile */ "../node_modules/vfile/lib/index.js");
+/* harmony import */ var unified__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! unified */ "../node_modules/unified/lib/index.js");
+/* harmony import */ var remark_parse__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! remark-parse */ "../node_modules/remark-parse/lib/index.js");
+/* harmony import */ var remark_rehype__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! remark-rehype */ "../node_modules/remark-rehype/lib/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
+/* harmony import */ var property_information__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! property-information */ "../node_modules/property-information/index.js");
+/* harmony import */ var _rehype_filter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./rehype-filter.js */ "../node_modules/react-markdown/lib/rehype-filter.js");
+/* harmony import */ var _ast_to_react_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ast-to-react.js */ "../node_modules/react-markdown/lib/ast-to-react.js");
 /**
  * @typedef {import('react').ReactNode} ReactNode
  * @typedef {import('react').ReactElement<{}>} ReactElement
@@ -42619,17 +42632,17 @@ function ReactMarkdown(options) {
     }
   }
 
-  const processor = (0,unified__WEBPACK_IMPORTED_MODULE_1__.unified)()
-    .use(remark_parse__WEBPACK_IMPORTED_MODULE_2__["default"])
+  const processor = (0,unified__WEBPACK_IMPORTED_MODULE_2__.unified)()
+    .use(remark_parse__WEBPACK_IMPORTED_MODULE_3__["default"])
     .use(options.remarkPlugins || [])
-    .use(remark_rehype__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    .use(remark_rehype__WEBPACK_IMPORTED_MODULE_4__["default"], {
       ...options.remarkRehypeOptions,
       allowDangerousHtml: true
     })
     .use(options.rehypePlugins || [])
-    .use(_rehype_filter_js__WEBPACK_IMPORTED_MODULE_4__["default"], options)
+    .use(_rehype_filter_js__WEBPACK_IMPORTED_MODULE_7__["default"], options)
 
-  const file = new vfile__WEBPACK_IMPORTED_MODULE_5__.VFile()
+  const file = new vfile__WEBPACK_IMPORTED_MODULE_1__.VFile()
 
   if (typeof options.children === 'string') {
     file.value = options.children
@@ -42649,7 +42662,7 @@ function ReactMarkdown(options) {
   let result = react__WEBPACK_IMPORTED_MODULE_0__.createElement(
     react__WEBPACK_IMPORTED_MODULE_0__.Fragment,
     {},
-    (0,_ast_to_react_js__WEBPACK_IMPORTED_MODULE_6__.childrenToReact)({options, schema: property_information__WEBPACK_IMPORTED_MODULE_7__.html, listDepth: 0}, hastNode)
+    (0,_ast_to_react_js__WEBPACK_IMPORTED_MODULE_8__.childrenToReact)({options, schema: property_information__WEBPACK_IMPORTED_MODULE_6__.html, listDepth: 0}, hastNode)
   )
 
   if (options.className) {
@@ -42661,62 +42674,62 @@ function ReactMarkdown(options) {
 
 ReactMarkdown.propTypes = {
   // Core options:
-  children: prop_types__WEBPACK_IMPORTED_MODULE_8__.string,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_5__.string,
   // Layout options:
-  className: prop_types__WEBPACK_IMPORTED_MODULE_8__.string,
+  className: prop_types__WEBPACK_IMPORTED_MODULE_5__.string,
   // Filter options:
-  allowElement: prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-  allowedElements: prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_8__.string),
-  disallowedElements: prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_8__.string),
-  unwrapDisallowed: prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
+  allowElement: prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+  allowedElements: prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_5__.string),
+  disallowedElements: prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_5__.string),
+  unwrapDisallowed: prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
   // Plugin options:
-  remarkPlugins: prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
-    prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.object,
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
-        prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.string,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.object,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
+  remarkPlugins: prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
+    prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.object,
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
+        prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.string,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.object,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
             // prettier-ignore
             // type-coverage:ignore-next-line
-            prop_types__WEBPACK_IMPORTED_MODULE_8__.any
+            prop_types__WEBPACK_IMPORTED_MODULE_5__.any
           )
         ])
       )
     ])
   ),
-  rehypePlugins: prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
-    prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.object,
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-      prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
-        prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.string,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.object,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-          prop_types__WEBPACK_IMPORTED_MODULE_8__.arrayOf(
+  rehypePlugins: prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
+    prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.object,
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+      prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
+        prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.string,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.object,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+          prop_types__WEBPACK_IMPORTED_MODULE_5__.arrayOf(
             // prettier-ignore
             // type-coverage:ignore-next-line
-            prop_types__WEBPACK_IMPORTED_MODULE_8__.any
+            prop_types__WEBPACK_IMPORTED_MODULE_5__.any
           )
         ])
       )
     ])
   ),
   // Transform options:
-  sourcePos: prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-  rawSourcePos: prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-  skipHtml: prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-  includeElementIndex: prop_types__WEBPACK_IMPORTED_MODULE_8__.bool,
-  transformLinkUri: prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_8__.func, prop_types__WEBPACK_IMPORTED_MODULE_8__.bool]),
-  linkTarget: prop_types__WEBPACK_IMPORTED_MODULE_8__.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_8__.func, prop_types__WEBPACK_IMPORTED_MODULE_8__.string]),
-  transformImageUri: prop_types__WEBPACK_IMPORTED_MODULE_8__.func,
-  components: prop_types__WEBPACK_IMPORTED_MODULE_8__.object
+  sourcePos: prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+  rawSourcePos: prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+  skipHtml: prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+  includeElementIndex: prop_types__WEBPACK_IMPORTED_MODULE_5__.bool,
+  transformLinkUri: prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_5__.func, prop_types__WEBPACK_IMPORTED_MODULE_5__.bool]),
+  linkTarget: prop_types__WEBPACK_IMPORTED_MODULE_5__.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_5__.func, prop_types__WEBPACK_IMPORTED_MODULE_5__.string]),
+  transformImageUri: prop_types__WEBPACK_IMPORTED_MODULE_5__.func,
+  components: prop_types__WEBPACK_IMPORTED_MODULE_5__.object
 }
 
 
@@ -45022,11 +45035,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   unified: () => (/* binding */ unified)
 /* harmony export */ });
-/* harmony import */ var bail__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! bail */ "../node_modules/bail/index.js");
-/* harmony import */ var is_buffer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-buffer */ "../node_modules/unified/node_modules/is-buffer/index.js");
-/* harmony import */ var extend__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! extend */ "../node_modules/extend/index.js");
-/* harmony import */ var is_plain_obj__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! is-plain-obj */ "../node_modules/is-plain-obj/index.js");
-/* harmony import */ var trough__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! trough */ "../node_modules/trough/lib/index.js");
+/* harmony import */ var bail__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bail */ "../node_modules/bail/index.js");
+/* harmony import */ var is_buffer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! is-buffer */ "../node_modules/unified/node_modules/is-buffer/index.js");
+/* harmony import */ var extend__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! extend */ "../node_modules/extend/index.js");
+/* harmony import */ var is_plain_obj__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! is-plain-obj */ "../node_modules/is-plain-obj/index.js");
+/* harmony import */ var trough__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! trough */ "../node_modules/trough/lib/index.js");
 /* harmony import */ var vfile__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vfile */ "../node_modules/vfile/lib/index.js");
 /**
  * @typedef {import('unist').Node} Node
@@ -45065,7 +45078,7 @@ const own = {}.hasOwnProperty
  * @returns {Processor}
  */
 function base() {
-  const transformers = (0,trough__WEBPACK_IMPORTED_MODULE_3__.trough)()
+  const transformers = (0,trough__WEBPACK_IMPORTED_MODULE_4__.trough)()
   /** @type {Processor['attachers']} */
   const attachers = []
   /** @type {Record<string, unknown>} */
@@ -45111,7 +45124,7 @@ function base() {
       destination.use(...attachers[index])
     }
 
-    destination.data(extend__WEBPACK_IMPORTED_MODULE_1__(true, {}, namespace))
+    destination.data(extend__WEBPACK_IMPORTED_MODULE_2__(true, {}, namespace))
 
     return destination
   }
@@ -45275,8 +45288,8 @@ function base() {
       }
 
       if (entry) {
-        if ((0,is_plain_obj__WEBPACK_IMPORTED_MODULE_2__["default"])(entry[1]) && (0,is_plain_obj__WEBPACK_IMPORTED_MODULE_2__["default"])(value)) {
-          value = extend__WEBPACK_IMPORTED_MODULE_1__(true, entry[1], value)
+        if ((0,is_plain_obj__WEBPACK_IMPORTED_MODULE_3__["default"])(entry[1]) && (0,is_plain_obj__WEBPACK_IMPORTED_MODULE_3__["default"])(value)) {
+          value = extend__WEBPACK_IMPORTED_MODULE_2__(true, entry[1], value)
         }
 
         entry[1] = value
@@ -45390,7 +45403,7 @@ function base() {
      * @returns {void}
      */
     function done(error, tree) {
-      ;(0,bail__WEBPACK_IMPORTED_MODULE_4__.bail)(error)
+      ;(0,bail__WEBPACK_IMPORTED_MODULE_0__.bail)(error)
       result = tree
       complete = true
     }
@@ -45480,7 +45493,7 @@ function base() {
      */
     function done(error) {
       complete = true
-      ;(0,bail__WEBPACK_IMPORTED_MODULE_4__.bail)(error)
+      ;(0,bail__WEBPACK_IMPORTED_MODULE_0__.bail)(error)
     }
   }
 }
@@ -45577,7 +45590,7 @@ function assertUnfrozen(name, frozen) {
 function assertNode(node) {
   // `isPlainObj` unfortunately uses `any` instead of `unknown`.
   // type-coverage:ignore-next-line
-  if (!(0,is_plain_obj__WEBPACK_IMPORTED_MODULE_2__["default"])(node) || typeof node.type !== 'string') {
+  if (!(0,is_plain_obj__WEBPACK_IMPORTED_MODULE_3__["default"])(node) || typeof node.type !== 'string') {
     throw new TypeError('Expected node, got `' + node + '`')
     // Fine.
   }
@@ -45625,7 +45638,7 @@ function looksLikeAVFile(value) {
  * @returns {value is VFileValue}
  */
 function looksLikeAVFileValue(value) {
-  return typeof value === 'string' || is_buffer__WEBPACK_IMPORTED_MODULE_0__(value)
+  return typeof value === 'string' || is_buffer__WEBPACK_IMPORTED_MODULE_1__(value)
 }
 
 
@@ -47514,21 +47527,95 @@ function isURL(url, options) {
   url = split.shift();
   split = url.split('?');
   url = split.shift();
-  split = url.split('://');
-  if (split.length > 1) {
-    protocol = split.shift().toLowerCase();
+
+  // Replaced the 'split("://")' logic with a regex to match the protocol.
+  // This correctly identifies schemes like `javascript:` which don't use `//`.
+  // However, we need to be careful not to confuse authentication credentials (user:password@host)
+  // with protocols. A colon before an @ symbol might be part of auth, not a protocol separator.
+  var protocol_match = url.match(/^([a-z][a-z0-9+\-.]*):/i);
+  var had_explicit_protocol = false;
+  var cleanUpProtocol = function cleanUpProtocol(potential_protocol) {
+    had_explicit_protocol = true;
+    protocol = potential_protocol.toLowerCase();
     if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
+      // The identified protocol is not in the allowed list.
       return false;
+    }
+
+    // Remove the protocol from the URL string.
+    return url.substring(protocol_match[0].length);
+  };
+  if (protocol_match) {
+    var potential_protocol = protocol_match[1];
+    var after_colon = url.substring(protocol_match[0].length);
+
+    // Check if what follows looks like authentication credentials (user:password@host)
+    // rather than a protocol. This happens when:
+    // 1. There's no `//` after the colon (protocols like `http://` have this)
+    // 2. There's an `@` symbol before any `/`
+    // 3. The part before `@` contains only valid auth characters (alphanumeric, -, _, ., %, :)
+    var starts_with_slashes = after_colon.slice(0, 2) === '//';
+    if (!starts_with_slashes) {
+      var first_slash_position = after_colon.indexOf('/');
+      var before_slash = first_slash_position === -1 ? after_colon : after_colon.substring(0, first_slash_position);
+      var at_position = before_slash.indexOf('@');
+      if (at_position !== -1) {
+        var before_at = before_slash.substring(0, at_position);
+        var valid_auth_regex = /^[a-zA-Z0-9\-_.%:]*$/;
+        var is_valid_auth = valid_auth_regex.test(before_at);
+        if (is_valid_auth) {
+          // This looks like authentication (e.g., user:password@host), not a protocol
+          if (options.require_protocol) {
+            return false;
+          }
+
+          // Don't consume the colon; let the auth parsing handle it later
+        } else {
+          // This looks like a malicious protocol (e.g., javascript:alert();@host)
+          url = cleanUpProtocol(potential_protocol);
+          if (url === false) {
+            return false;
+          }
+        }
+      } else {
+        // No @ symbol found. Check if this could be a port number instead of a protocol.
+        // If what's after the colon is numeric (or starts with a digit and contains only
+        // valid port characters until a path separator), it's likely hostname:port, not a protocol.
+        var looks_like_port = /^[0-9]/.test(after_colon);
+        if (looks_like_port) {
+          // This looks like hostname:port, not a protocol
+          if (options.require_protocol) {
+            return false;
+          }
+          // Don't consume anything; let it be parsed as hostname:port
+        } else {
+          // This is definitely a protocol
+          url = cleanUpProtocol(potential_protocol);
+          if (url === false) {
+            return false;
+          }
+        }
+      }
+    } else {
+      // Starts with '//', this is definitely a protocol like http://
+      url = cleanUpProtocol(potential_protocol);
+      if (url === false) {
+        return false;
+      }
     }
   } else if (options.require_protocol) {
     return false;
-  } else if (url.slice(0, 2) === '//') {
-    if (!options.allow_protocol_relative_urls) {
+  }
+
+  // Handle leading '//' only as protocol-relative when there was NO explicit protocol.
+  // If there was an explicit protocol, '//' is the normal separator
+  // and should be stripped unconditionally.
+  if (url.slice(0, 2) === '//') {
+    if (!had_explicit_protocol && !options.allow_protocol_relative_urls) {
       return false;
     }
-    split[0] = url.slice(2);
+    url = url.slice(2);
   }
-  url = split.join('://');
   if (url === '') {
     return false;
   }
@@ -47955,11 +48042,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   VFile: () => (/* binding */ VFile)
 /* harmony export */ });
 /* harmony import */ var is_buffer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! is-buffer */ "../node_modules/vfile/node_modules/is-buffer/index.js");
-/* harmony import */ var vfile_message__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vfile-message */ "../node_modules/vfile-message/lib/index.js");
-/* harmony import */ var _minpath_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./minpath.js */ "../node_modules/vfile/lib/minpath.browser.js");
-/* harmony import */ var _minproc_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./minproc.js */ "../node_modules/vfile/lib/minproc.browser.js");
-/* harmony import */ var _minurl_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./minurl.js */ "../node_modules/vfile/lib/minurl.shared.js");
-/* harmony import */ var _minurl_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./minurl.js */ "../node_modules/vfile/lib/minurl.browser.js");
+/* harmony import */ var vfile_message__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vfile-message */ "../node_modules/vfile-message/lib/index.js");
+/* harmony import */ var _minpath_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./minpath.js */ "../node_modules/vfile/lib/minpath.browser.js");
+/* harmony import */ var _minproc_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./minproc.js */ "../node_modules/vfile/lib/minproc.browser.js");
+/* harmony import */ var _minurl_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./minurl.js */ "../node_modules/vfile/lib/minurl.shared.js");
+/* harmony import */ var _minurl_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./minurl.js */ "../node_modules/vfile/lib/minurl.browser.js");
 /**
  * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Position} Position
@@ -48091,7 +48178,7 @@ class VFile {
       options = {}
     } else if (typeof value === 'string' || buffer(value)) {
       options = {value}
-    } else if ((0,_minurl_js__WEBPACK_IMPORTED_MODULE_1__.isUrl)(value)) {
+    } else if ((0,_minurl_js__WEBPACK_IMPORTED_MODULE_4__.isUrl)(value)) {
       options = {path: value}
     } else {
       options = value
@@ -48128,7 +48215,7 @@ class VFile {
      *
      * @type {string}
      */
-    this.cwd = _minproc_js__WEBPACK_IMPORTED_MODULE_2__.proc.cwd()
+    this.cwd = _minproc_js__WEBPACK_IMPORTED_MODULE_3__.proc.cwd()
 
     /* eslint-disable no-unused-expressions */
     /**
@@ -48221,8 +48308,8 @@ class VFile {
    * @param {string | URL} path
    */
   set path(path) {
-    if ((0,_minurl_js__WEBPACK_IMPORTED_MODULE_1__.isUrl)(path)) {
-      path = (0,_minurl_js__WEBPACK_IMPORTED_MODULE_3__.urlToPath)(path)
+    if ((0,_minurl_js__WEBPACK_IMPORTED_MODULE_4__.isUrl)(path)) {
+      path = (0,_minurl_js__WEBPACK_IMPORTED_MODULE_5__.urlToPath)(path)
     }
 
     assertNonEmpty(path, 'path')
@@ -48236,7 +48323,7 @@ class VFile {
    * Get the parent path (example: `'~'`).
    */
   get dirname() {
-    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.dirname(this.path) : undefined
+    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.dirname(this.path) : undefined
   }
 
   /**
@@ -48246,14 +48333,14 @@ class VFile {
    */
   set dirname(dirname) {
     assertPath(this.basename, 'dirname')
-    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.join(dirname || '', this.basename)
+    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.join(dirname || '', this.basename)
   }
 
   /**
    * Get the basename (including extname) (example: `'index.min.js'`).
    */
   get basename() {
-    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.basename(this.path) : undefined
+    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.basename(this.path) : undefined
   }
 
   /**
@@ -48266,14 +48353,14 @@ class VFile {
   set basename(basename) {
     assertNonEmpty(basename, 'basename')
     assertPart(basename, 'basename')
-    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.join(this.dirname || '', basename)
+    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.join(this.dirname || '', basename)
   }
 
   /**
    * Get the extname (including dot) (example: `'.js'`).
    */
   get extname() {
-    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.extname(this.path) : undefined
+    return typeof this.path === 'string' ? _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.extname(this.path) : undefined
   }
 
   /**
@@ -48297,7 +48384,7 @@ class VFile {
       }
     }
 
-    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.join(this.dirname, this.stem + (extname || ''))
+    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.join(this.dirname, this.stem + (extname || ''))
   }
 
   /**
@@ -48305,7 +48392,7 @@ class VFile {
    */
   get stem() {
     return typeof this.path === 'string'
-      ? _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.basename(this.path, this.extname)
+      ? _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.basename(this.path, this.extname)
       : undefined
   }
 
@@ -48319,7 +48406,7 @@ class VFile {
   set stem(stem) {
     assertNonEmpty(stem, 'stem')
     assertPart(stem, 'stem')
-    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.join(this.dirname || '', stem + (this.extname || ''))
+    this.path = _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.join(this.dirname || '', stem + (this.extname || ''))
   }
 
   /**
@@ -48352,7 +48439,7 @@ class VFile {
    *   Message.
    */
   message(reason, place, origin) {
-    const message = new vfile_message__WEBPACK_IMPORTED_MODULE_5__.VFileMessage(reason, place, origin)
+    const message = new vfile_message__WEBPACK_IMPORTED_MODULE_1__.VFileMessage(reason, place, origin)
 
     if (this.path) {
       message.name = this.path + ':' + message.name
@@ -48430,9 +48517,9 @@ class VFile {
  *   Nothing.
  */
 function assertPart(part, name) {
-  if (part && part.includes(_minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.sep)) {
+  if (part && part.includes(_minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.sep)) {
     throw new Error(
-      '`' + name + '` cannot be a path: did not expect `' + _minpath_js__WEBPACK_IMPORTED_MODULE_4__.path.sep + '`'
+      '`' + name + '` cannot be a path: did not expect `' + _minpath_js__WEBPACK_IMPORTED_MODULE_2__.path.sep + '`'
     )
   }
 }

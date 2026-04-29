@@ -1,9 +1,18 @@
 {% if settings.image.src is not empty %}
 	{% set id_attribute = settings._cssid is not empty ? 'id=' ~ settings._cssid | e('html_attr') : '' %}	
-	{% if settings.link.href %}
-		<a href="{{ settings.link.href }}" class="{{ base_styles['link-base'] }}" target="{{ settings.link.target }}">
+	{% set has_link = settings.link and settings.link.attributes is not empty %}
+	{% if has_link %}
+		<{{ settings.link.tag | e('html_tag') }}
+			{{ settings.link.attributes | raw }}
+			class="{{ base_styles['link-base'] }}"
+			data-interaction-id="{{ interaction_id }}"
+		>
 	{% endif %}
-	<img class="{{ base_styles['base'] }} {{ settings.classes | join(' ') }}" {{ id_attribute }} {{ settings.attributes | raw }}
+	<img class="{{ base_styles['base'] }} {{ settings.classes | join(' ') }}" 
+		{% if not settings.link.href %}
+			data-interaction-id="{{ interaction_id }}" 
+		{% endif %} 
+		{{ id_attribute }} {{ settings.attributes | raw }}
 		{% for attr, value in settings.image %}
 			{% if attr == 'src' %}
 				src="{{ value | e('full_url') }}"
@@ -12,7 +21,7 @@
 			{% endif %}
 		{% endfor %}
 	/>
-	{% if settings.link.href %}
-		</a>
+	{% if has_link %}
+		</{{ settings.link.tag | e('html_tag') }}>
 	{% endif %}
 {% endif %}

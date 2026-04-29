@@ -5,6 +5,7 @@ namespace Elementor\Core\Common\Modules\EventsManager;
 use Elementor\Core\Base\Module as BaseModule;
 use Elementor\Core\Common\Modules\Connect\Apps\Base_App;
 use Elementor\Core\Experiments\Manager as Experiments_Manager;
+use Elementor\Includes\EditorAssetsAPI;
 use Elementor\Utils;
 use Elementor\Plugin;
 use Elementor\Tracker;
@@ -17,6 +18,8 @@ class Module extends BaseModule {
 
 	const EXPERIMENT_NAME = 'editor_events';
 
+	const REMOTE_MIXPANEL_CONFIG_URL = 'https://assets.elementor.com/mixpanel/v1/mixpanel.json';
+
 	public function get_name() {
 		return 'events-manager';
 	}
@@ -26,6 +29,15 @@ class Module extends BaseModule {
 			Tracker::is_allow_track() &&
 			! Tracker::has_terms_changed( '2025-07-07' ) &&
 			Plugin::$instance->experiments->is_feature_active( self::EXPERIMENT_NAME );
+
+		$is_flags_enabled = false;
+
+		if ( $can_send_events ) {
+			$mixpanel_config = self::get_remote_mixpanel_config();
+			$is_flags_enabled = EditorAssetsAPI::has_valid_nested_array( $mixpanel_config, [ 0 ] )
+				? (bool) ( $mixpanel_config[0]['flags'] ?? false )
+				: false;
+		}
 
 		$settings = [
 			'can_send_events' => $can_send_events,
@@ -38,6 +50,7 @@ class Module extends BaseModule {
 			'subscription_id' => self::get_subscription_id(),
 			'subscription' => self::get_subscription(),
 			'token' => ELEMENTOR_EDITOR_EVENTS_MIXPANEL_TOKEN,
+			'flags_enabled' => $is_flags_enabled,
 		];
 
 		return $settings;
@@ -75,5 +88,15 @@ class Module extends BaseModule {
 		}
 
 		return json_decode( $license_data['value'], true );
+	}
+
+	private static function get_remote_mixpanel_config() {
+		$editor_assets_api = new EditorAssetsAPI( [
+			EditorAssetsAPI::ASSETS_DATA_URL => static::REMOTE_MIXPANEL_CONFIG_URL,
+			EditorAssetsAPI::ASSETS_DATA_TRANSIENT_KEY => '_elementor_mixpanel_config',
+			EditorAssetsAPI::ASSETS_DATA_KEY => 'mixpanel',
+		] );
+
+		return $editor_assets_api->get_assets_data();
 	}
 }

@@ -80,7 +80,8 @@ var AppsEventTracking = exports.AppsEventTracking = /*#__PURE__*/function () {
   return (0, _createClass2.default)(AppsEventTracking, null, [{
     key: "dispatchEvent",
     value: function dispatchEvent(eventName, payload) {
-      return elementorCommon.eventsManager.dispatchEvent(eventName, payload);
+      var _window$elementorComm, _window$elementorComm2;
+      return (_window$elementorComm = window.elementorCommon) === null || _window$elementorComm === void 0 || (_window$elementorComm = _window$elementorComm.eventsManager) === null || _window$elementorComm === void 0 || (_window$elementorComm2 = _window$elementorComm.dispatchEvent) === null || _window$elementorComm2 === void 0 ? void 0 : _window$elementorComm2.call(_window$elementorComm, eventName, payload);
     }
   }, {
     key: "sendPageViewsWebsiteTemplates",
@@ -229,18 +230,64 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var eventsConfig = {
+  appTypes: {
+    editor: 'editor',
+    wpAdmin: 'wpadmin'
+  },
+  targetTypes: {
+    dropdownItem: 'dropdown_item',
+    button: 'button',
+    tab: 'tab',
+    toggle: 'toggle',
+    searchInput: 'search_input',
+    searchResult: 'search_result',
+    buttons: 'buttons',
+    searchWidget: 'search_widget'
+  },
+  interactionResults: {
+    actionSelected: 'action_selected',
+    navigate: 'navigate',
+    create: 'create',
+    sessionEnd: 'session_end',
+    tabChanged: 'tab_changed',
+    assetInserted: 'asset_inserted',
+    assetFavorite: 'asset_favorite',
+    aiGenerate: 'ai_generate',
+    resultsUpdated: 'results_updated',
+    noResults: 'no_results',
+    selected: 'selected',
+    promotionViewed: 'promotion_viewed',
+    upgradeNow: 'upgrade_now'
+  },
+  targetNames: {
+    publishDropdown: {
+      saveDraft: 'save_draft',
+      saveAsTemplate: 'save_as_template',
+      viewPage: 'view_page',
+      copyAndShare: 'copy_and_share'
+    },
+    pageList: {
+      addNewPage: 'add_new_page'
+    }
+  },
   triggers: {
     click: 'Click',
+    rightClick: 'Right Click',
+    doubleClick: 'Double Click',
     accordionClick: 'Accordion Click',
     toggleClick: 'Toggle Click',
     dropdownClick: 'Click Dropdown',
     editorLoaded: 'Editor Loaded',
     visible: 'Visible',
-    pageLoaded: 'Page Loaded'
+    pageLoaded: 'Page Loaded',
+    typing: 'Typing',
+    tabSelect: 'Tab Select',
+    insert: 'Insert'
   },
   locations: {
     widgetPanel: 'Widget Panel',
     topBar: 'Top Bar',
+    sidebar: 'Sidebar',
     elementorEditor: 'Elementor Editor',
     templatesLibrary: {
       library: 'Templates Library'
@@ -252,7 +299,15 @@ var eventsConfig = {
       cloudKitLibrary: 'Cloud Kit Library'
     },
     variables: 'Variables Panel',
-    admin: 'WP admin'
+    variablesManager: 'Variables Manager',
+    admin: 'WP admin',
+    structurePanel: 'Structure Panel',
+    canvas: 'Canvas',
+    leftPanel: 'Left Panel',
+    elementorLibrary: 'Elementor Library',
+    components: {
+      instanceEditingPanel: 'Instance Editing Panel'
+    }
   },
   secondaryLocations: {
     layout: 'Layout Section',
@@ -325,7 +380,16 @@ var eventsConfig = {
     admin: {
       pluginToolsTab: 'plugin_tools_tab',
       pluginWebsiteTemplatesTab: 'plugin_website_templates_tab'
-    }
+    },
+    componentsTab: 'Components Tab',
+    canvasElement: 'Canvas Element',
+    publishDropdown: 'Publish Dropdown',
+    pageListDropdown: 'Page List Dropdown',
+    emptyBox: 'Empty Box',
+    searchBar: 'Search Bar',
+    finderResults: 'Finder Results',
+    libraryTabs: 'Library Tabs',
+    assetCard: 'Asset Card'
   },
   elements: {
     accordionSection: 'Accordion section',
@@ -389,7 +453,66 @@ var eventsConfig = {
       open: 'open_variables_popover',
       add: 'add_new_variable',
       connect: 'connect_variable',
-      save: 'save_new_variable'
+      save: 'save_new_variable',
+      openManager: 'open_variables_manager',
+      saveChanges: 'save_variables_changes',
+      delete: 'delete_variable',
+      variableSyncToV3: 'variable_sync_to_v3'
+    },
+    components: {
+      createClicked: 'component_create_clicked',
+      createCancelled: 'component_creation_cancelled',
+      created: 'component_created',
+      instanceAdded: 'component_instance_added',
+      edited: 'component_edited',
+      propertiesPanelOpened: 'component_properties_panel_opened',
+      propertiesGroupCreated: 'component_properties_group_created',
+      propertyExposed: 'component_property_exposed',
+      propertyRemoved: 'component_property_removed',
+      detached: 'component_detached'
+    },
+    global_classes: {
+      classApplied: 'class_applied',
+      classRemoved: 'class_removed',
+      classManagerFilterCleared: 'class_manager_filter_cleared',
+      classDeleted: 'class_deleted',
+      classPublishConflict: 'class_publish_conflict',
+      classRenamed: 'class_renamed',
+      classCreated: 'class_created',
+      classManagerSearched: 'class_manager_searched',
+      classManagerFiltersOpened: 'class_manager_filters_opened',
+      classManagerOpened: 'class_manager_opened',
+      classManagerReorder: 'class_manager_reorder',
+      classManagerFilterUsed: 'class_manager_filter_used',
+      classUsageLocate: 'class_usage_locate',
+      classUsageHovered: 'class_usage_hovered',
+      classStyled: 'class_styled',
+      classStateClicked: 'class_state_clicked',
+      classUsageClicked: 'class_usage_clicked',
+      classDuplicate: 'class_duplicate',
+      classSyncToV3PopupShown: 'class_sync_to_v3_popup_shown',
+      classSyncToV3: 'class_sync_to_v3',
+      classSyncToV3PopupClick: 'class_sync_to_v3_popup_click'
+    },
+    editorOne: {
+      topBarPublishDropdown: 'top_bar_publish_dropdown',
+      topBarPageList: 'top_bar_page_list',
+      siteSettingsSession: 'site_settings_session',
+      eLibraryNav: 'e_library_nav',
+      eLibraryInsert: 'e_library_insert',
+      eLibraryFavorite: 'e_library_favorite',
+      eLibraryGenerateAi: 'e_library_generate_ai',
+      finderSearchInput: 'finder_search_input',
+      finderResultSelect: 'finder_result_select',
+      canvasEmptyBoxAction: 'canvas_empty_box_action',
+      widgetPanelSearch: 'widget_panel_search'
+    },
+    interactions: {
+      created: 'interactions_created'
+    },
+    promotions: {
+      viewPromotion: 'view_promotion',
+      upgradePromotionClick: 'upgrade_promotion_click'
     }
   }
 };
@@ -1279,19 +1402,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;

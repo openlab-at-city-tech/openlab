@@ -8,7 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 return [
 	'handle' => 'elementor-v2-menus',
 	'deps' => [
+		'elementor-v2-editor-ui',
 		'elementor-v2-locations',
+		'elementor-v2-ui',
+		'elementor-v2-utils',
 		'react',
 	],
 ];

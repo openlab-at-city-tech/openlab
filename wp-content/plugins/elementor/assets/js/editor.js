@@ -1033,7 +1033,7 @@ var Widget = exports.Widget = /*#__PURE__*/function (_MediaParser) {
      */
     function () {
       var _parse = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-        var file, container, _t, _t2, _t3, _t4, _t5, _t6;
+        var file, container, _t, _t2, _t3, _t4, _t5;
         return _regenerator.default.wrap(function (_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -1052,11 +1052,10 @@ var Widget = exports.Widget = /*#__PURE__*/function (_MediaParser) {
               _t5 = {
                 image: _t4
               };
-              _t6 = {
+              container = _t.createElementContainer.call(_t, {
                 widgetType: 'image',
                 settings: _t5
-              };
-              container = _t.createElementContainer.call(_t, _t6);
+              });
               this.upload(file).then(function (_ref) {
                 var data = _ref.data;
                 $e.internal('document/elements/set-settings', {
@@ -1405,7 +1404,7 @@ var Widget = exports.Widget = /*#__PURE__*/function (_MediaParser) {
      */
     function () {
       var _parse = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-        var file, container, _t, _t2, _t3, _t4, _t5, _t6;
+        var file, container, _t, _t2, _t3, _t4, _t5;
         return _regenerator.default.wrap(function (_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -1425,11 +1424,10 @@ var Widget = exports.Widget = /*#__PURE__*/function (_MediaParser) {
                 video_type: 'hosted',
                 hosted_url: _t4
               };
-              _t6 = {
+              container = _t.createElementContainer.call(_t, {
                 widgetType: 'video',
                 settings: _t5
-              };
-              container = _t.createElementContainer.call(_t, _t6);
+              });
               this.upload(file).then(function (_ref) {
                 var data = _ref.data;
                 $e.internal('document/elements/set-settings', {
@@ -4022,6 +4020,12 @@ var Document = exports["default"] = /*#__PURE__*/function () {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+Object.defineProperty(exports, "ClearDynamicTagsCache", ({
+  enumerable: true,
+  get: function get() {
+    return _clearDynamicTagsCache.ClearDynamicTagsCache;
+  }
+}));
 Object.defineProperty(exports, "RemoveActiveDocumentQueryParam", ({
   enumerable: true,
   get: function get() {
@@ -4060,6 +4064,7 @@ Object.defineProperty(exports, "SwitchToActiveTab", ({
 }));
 var _removeActiveDocumentQueryParam = __webpack_require__(/*! ./ui/close/remove-active-document-query-param */ "../assets/dev/js/editor/components/documents/hooks/ui/close/remove-active-document-query-param.js");
 var _setActiveDocumentQueryParam = __webpack_require__(/*! ./ui/open/set-active-document-query-param */ "../assets/dev/js/editor/components/documents/hooks/ui/open/set-active-document-query-param.js");
+var _clearDynamicTagsCache = __webpack_require__(/*! ./ui/open/clear-dynamic-tags-cache */ "../assets/dev/js/editor/components/documents/hooks/ui/open/clear-dynamic-tags-cache.js");
 var _switchToActiveDocument = __webpack_require__(/*! ./ui/attach-preview/switch-to-active-document */ "../assets/dev/js/editor/components/documents/hooks/ui/attach-preview/switch-to-active-document.js");
 var _switchToActiveTab = __webpack_require__(/*! ./ui/switch/switch-to-active-tab */ "../assets/dev/js/editor/components/documents/hooks/ui/switch/switch-to-active-tab.js");
 var _removeActiveTabQueryParam = __webpack_require__(/*! ./ui/close/remove-active-tab-query-param */ "../assets/dev/js/editor/components/documents/hooks/ui/close/remove-active-tab-query-param.js");
@@ -4328,6 +4333,54 @@ var RemoveActiveTabQueryParam = exports.RemoveActiveTabQueryParam = /*#__PURE__*
   }]);
 }($e.modules.hookUI.After);
 var _default = exports["default"] = RemoveActiveTabQueryParam;
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/components/documents/hooks/ui/open/clear-dynamic-tags-cache.js":
+/*!**********************************************************************************************!*\
+  !*** ../assets/dev/js/editor/components/documents/hooks/ui/open/clear-dynamic-tags-cache.js ***!
+  \**********************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.ClearDynamicTagsCache = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+var ClearDynamicTagsCache = exports.ClearDynamicTagsCache = /*#__PURE__*/function (_$e$modules$hookUI$Be) {
+  function ClearDynamicTagsCache() {
+    (0, _classCallCheck2.default)(this, ClearDynamicTagsCache);
+    return _callSuper(this, ClearDynamicTagsCache, arguments);
+  }
+  (0, _inherits2.default)(ClearDynamicTagsCache, _$e$modules$hookUI$Be);
+  return (0, _createClass2.default)(ClearDynamicTagsCache, [{
+    key: "getCommand",
+    value: function getCommand() {
+      return 'editor/documents/open';
+    }
+  }, {
+    key: "getId",
+    value: function getId() {
+      return 'clear-dynamic-tags-cache-on-document-open';
+    }
+  }, {
+    key: "apply",
+    value: function apply() {
+      elementor.dynamicTags.cleanCache();
+    }
+  }]);
+}($e.modules.hookUI.Before);
+var _default = exports["default"] = ClearDynamicTagsCache;
 
 /***/ }),
 
@@ -7899,6 +7952,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _readOnlyError2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/readOnlyError */ "../node_modules/@babel/runtime/helpers/readOnlyError.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
@@ -7911,7 +7966,9 @@ var _componentModalBase = _interopRequireDefault(__webpack_require__(/*! element
 var commands = _interopRequireWildcard(__webpack_require__(/*! ./commands/ */ "../assets/dev/js/editor/components/template-library/commands/index.js"));
 var commandsData = _interopRequireWildcard(__webpack_require__(/*! ./commands-data/ */ "../assets/dev/js/editor/components/template-library/commands-data/index.js"));
 var _constants = __webpack_require__(/*! ./constants */ "../assets/dev/js/editor/components/template-library/constants.js");
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+var _globalStylesDialog = __webpack_require__(/*! ./views/parts/global-styles-dialog */ "../assets/dev/js/editor/components/template-library/views/parts/global-styles-dialog.js");
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t3 in e) "default" !== _t3 && {}.hasOwnProperty.call(e, _t3) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t3)) && (i.get || i.set) ? o(f, _t3, i) : f[_t3] = e[_t3]); return f; })(e, t); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
@@ -8038,14 +8095,41 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
     value: function renderTab(tab) {
       var currentTab = this.tabs[tab];
       var filter = currentTab.getFilter ? currentTab.getFilter() : currentTab.filter;
+      this.trackLibraryNavigation(tab, currentTab.title);
       this.currentTab = tab;
       this.manager.setScreen(filter);
     }
   }, {
+    key: "trackLibraryNavigation",
+    value: function trackLibraryNavigation(tab, tabTitle) {
+      _editorOneEvents.EditorOneEventManager.sendELibraryNav(tabTitle || tab);
+    }
+  }, {
     key: "activateTab",
     value: function activateTab(tab) {
+      var _this$manager;
       $e.routes.saveState('library');
       _superPropGet(Component, "activateTab", this, 3)([tab]);
+
+      // Update ARIA attributes for accessibility
+      var $tabsWrapper = jQuery(this.getTabsWrapperSelector());
+      var $tabs = $tabsWrapper.find('[role="tab"]');
+      var $activeTab = $tabs.filter("[data-tab=\"".concat(tab, "\"]"));
+      var $templatesContainer = (_this$manager = this.manager) === null || _this$manager === void 0 || (_this$manager = _this$manager.layout) === null || _this$manager === void 0 || (_this$manager = _this$manager.modalContent) === null || _this$manager === void 0 || (_this$manager = _this$manager.currentView) === null || _this$manager === void 0 ? void 0 : _this$manager.$childViewContainer;
+      $tabs.attr({
+        'aria-selected': 'false',
+        tabindex: '-1'
+      });
+      $activeTab.attr({
+        'aria-selected': 'true',
+        tabindex: '0'
+      });
+      if ($templatesContainer !== null && $templatesContainer !== void 0 && $templatesContainer.length) {
+        $templatesContainer.attr({
+          role: 'tabpanel',
+          'aria-labelledby': "tab-".concat(tab)
+        });
+      }
     }
   }, {
     key: "open",
@@ -8081,14 +8165,27 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
     value: function insertTemplate(args) {
       var _this2 = this;
       this.downloadTemplate(args, function (data, callbackParams) {
+        var _model$get, _elementor$config$lib;
+        var model = callbackParams.model;
+        var source = (_model$get = model.get('source')) !== null && _model$get !== void 0 ? _model$get : 'local';
+        var templateType = model.get('type');
+        var templateTitle = model.get('title');
+        var templateId = model.get('template_id');
+        var baseTier = (_elementor$config$lib = elementor.config.library_connect) === null || _elementor$config$lib === void 0 ? void 0 : _elementor$config$lib.base_access_tier;
+        var templateTier = model.get('accessTier');
         $e.run('document/elements/import', {
-          model: callbackParams.model,
+          model: model,
           data: data,
           options: callbackParams.importOptions,
           onAfter: function onAfter() {
-            var _callbackParams$model;
             _this2.manager.eventManager.sendTemplateInsertedEvent({
-              library_type: (_callbackParams$model = callbackParams.model.get('source')) !== null && _callbackParams$model !== void 0 ? _callbackParams$model : 'local'
+              library_type: source
+            });
+            _editorOneEvents.EditorOneEventManager.sendELibraryInsert({
+              assetId: templateId,
+              assetName: templateTitle,
+              libraryType: templateType || source,
+              proRequired: baseTier !== templateTier
             });
           }
         });
@@ -8105,29 +8202,68 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
       if (autoImportSettings) {
         withPageSettings = true;
       }
-      if (null === withPageSettings && model.get('hasPageSettings')) {
-        var insertTemplateHandler = this.getImportSettingsDialog();
-        insertTemplateHandler.showImportDialog(model);
-        return;
-      }
       this.manager.layout.showLoadingView();
+      var shouldFetchPageSettings = null === withPageSettings ? model.get('hasPageSettings') : withPageSettings;
       this.manager.requestTemplateContent(model.get('source'), model.get('template_id'), {
         data: {
-          with_page_settings: withPageSettings
+          with_page_settings: shouldFetchPageSettings
         },
-        success: function success(data) {
-          // Clone the `modalConfig.importOptions` because it deleted during the closing.
-          var importOptions = jQuery.extend({}, _this3.manager.modalConfig.importOptions);
-          importOptions.withPageSettings = withPageSettings;
-
-          // Hide for next open.
-          _this3.manager.layout.hideLoadingView();
-          _this3.manager.layout.hideModal();
-          callback(data, {
-            model: model,
-            importOptions: importOptions
-          });
-        },
+        success: function () {
+          var _success = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee(data) {
+            var processedData, globalStylesResult, importOptions, insertTemplateHandler, _t;
+            return _regenerator.default.wrap(function (_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _this3.manager.layout.hideLoadingView();
+                  processedData = data;
+                  if (!_this3.manager.hasGlobalStyles(data)) {
+                    _context.next = 4;
+                    break;
+                  }
+                  _context.prev = 1;
+                  _context.next = 2;
+                  return _this3.processGlobalStylesImport(data);
+                case 2:
+                  globalStylesResult = _context.sent;
+                  processedData = globalStylesResult.data;
+                  withPageSettings = globalStylesResult.withPageSettings;
+                  _context.next = 4;
+                  break;
+                case 3:
+                  _context.prev = 3;
+                  _t = _context["catch"](1);
+                  return _context.abrupt("return");
+                case 4:
+                  if (!_this3.manager.hasGlobalStyles(data) && null === withPageSettings) {
+                    withPageSettings = false;
+                  }
+                  importOptions = jQuery.extend({}, _this3.manager.modalConfig.importOptions);
+                  importOptions.withPageSettings = withPageSettings;
+                  if (!(null === withPageSettings && model.get('hasPageSettings'))) {
+                    _context.next = 5;
+                    break;
+                  }
+                  insertTemplateHandler = _this3.getImportSettingsDialog();
+                  insertTemplateHandler.showImportDialogWithData(model, processedData, importOptions, callback);
+                  return _context.abrupt("return");
+                case 5:
+                  _this3.manager.layout.hideModal();
+                  _this3.showFlatteningWarningIfNeeded(processedData);
+                  callback(processedData, {
+                    model: model,
+                    importOptions: importOptions
+                  });
+                case 6:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, null, [[1, 3]]);
+          }));
+          function success(_x) {
+            return _success.apply(this, arguments);
+          }
+          return success;
+        }(),
         error: function error(data) {
           _this3.manager.showErrorDialog(data);
         },
@@ -8137,9 +8273,76 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
       });
     }
   }, {
+    key: "processGlobalStylesImport",
+    value: function () {
+      var _processGlobalStylesImport = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2(data) {
+        var _yield$showGlobalStyl, mode, result, processedData, _t2;
+        return _regenerator.default.wrap(function (_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 1;
+              return (0, _globalStylesDialog.showGlobalStylesDialog)();
+            case 1:
+              _yield$showGlobalStyl = _context2.sent;
+              mode = _yield$showGlobalStyl.mode;
+              this.manager.layout.showLoadingView();
+              _context2.prev = 2;
+              _context2.next = 3;
+              return new Promise(function (resolve, reject) {
+                elementorCommon.ajax.addRequest('process_global_styles', {
+                  data: {
+                    content: JSON.stringify(data.content),
+                    import_mode: mode,
+                    global_classes: data.global_classes ? JSON.stringify(data.global_classes) : null,
+                    global_variables: data.global_variables ? JSON.stringify(data.global_variables) : null
+                  },
+                  success: resolve,
+                  error: reject
+                });
+              });
+            case 3:
+              result = _context2.sent;
+              processedData = _objectSpread(_objectSpread({}, data), {}, {
+                content: result.content,
+                flattened_classes_count: result.flattened_classes_count || 0,
+                flattened_variables_count: result.flattened_variables_count || 0
+              });
+              if (result.updated_global_classes || result.updated_global_variables) {
+                window.dispatchEvent(new CustomEvent('elementor/global-styles/imported', {
+                  detail: {
+                    global_classes: result.updated_global_classes,
+                    global_variables: result.updated_global_variables
+                  }
+                }));
+              }
+              return _context2.abrupt("return", {
+                data: processedData,
+                withPageSettings: 'match_site' === mode
+              });
+            case 4:
+              _context2.prev = 4;
+              _t2 = _context2["catch"](2);
+              this.manager.showErrorDialog(_t2);
+              throw _t2;
+            case 5:
+              _context2.prev = 5;
+              this.manager.layout.hideLoadingView();
+              return _context2.finish(5);
+            case 6:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2, this, [[2, 4, 5, 6]]);
+      }));
+      function processGlobalStylesImport(_x2) {
+        return _processGlobalStylesImport.apply(this, arguments);
+      }
+      return processGlobalStylesImport;
+    }()
+  }, {
     key: "getImportSettingsDialog",
     value: function getImportSettingsDialog() {
-      // Moved from ./behaviors/insert-template.js
+      var self = this;
       var InsertTemplateHandler = {
         dialog: null,
         showImportDialog: function showImportDialog(model) {
@@ -8166,6 +8369,34 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
                   library_type: model.get('source')
                 });
               }
+            });
+          };
+          dialog.show();
+        },
+        showImportDialogWithData: function showImportDialogWithData(model, data, importOptions, callback) {
+          var dialog = InsertTemplateHandler.getDialog(model);
+          dialog.onConfirm = function () {
+            importOptions.withPageSettings = true;
+            elementor.templates.eventManager.sendInsertApplySettingsEvent({
+              apply_modal_result: 'apply',
+              library_type: model.get('source')
+            });
+            self.manager.layout.hideModal();
+            callback(data, {
+              model: model,
+              importOptions: importOptions
+            });
+          };
+          dialog.onCancel = function () {
+            importOptions.withPageSettings = false;
+            elementor.templates.eventManager.sendInsertApplySettingsEvent({
+              apply_modal_result: "don't apply",
+              library_type: model.get('source')
+            });
+            self.manager.layout.hideModal();
+            callback(data, {
+              model: model,
+              importOptions: importOptions
             });
           };
           dialog.show();
@@ -8209,6 +8440,26 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentModalBase)
         $e.run('library/open');
         location.hash = '';
       }
+    }
+  }, {
+    key: "showFlatteningWarningIfNeeded",
+    value: function showFlatteningWarningIfNeeded(result) {
+      var flattenedClassesCount = result.flattened_classes_count || 0;
+      var flattenedVariablesCount = result.flattened_variables_count || 0;
+      if (0 === flattenedClassesCount && 0 === flattenedVariablesCount) {
+        return;
+      }
+      var message;
+      if (flattenedClassesCount > 0 && flattenedVariablesCount > 0) {
+        message = __('Some styles were added as static values because the style limits were reached.', 'elementor');
+      } else if (flattenedClassesCount > 0) {
+        message = __('Some styles were added as static values because the class limit was reached.', 'elementor');
+      } else {
+        message = __('Some styles were added as static values because the variable limit was reached.', 'elementor');
+      }
+      elementor.notifications.showToast({
+        message: message
+      });
     }
   }]);
 }(_componentModalBase.default);
@@ -8264,7 +8515,9 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.EventManager = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -8285,13 +8538,57 @@ var EVENTS_MAP = {
   INSERT_APPLY_SETTINGS: 'insert_apply_settings',
   UPGRADE_CLICKED: 'upgrade_clicked',
   PAGE_VIEWED: 'page_viewed',
-  DELETION_UNDO: 'deletion_undo'
+  DELETION_UNDO: 'deletion_undo',
+  CT_BADGE_HOVER: 'ct_badge_hover'
+};
+var CLOUD_TEMPLATES_EXPERIMENTS = {
+  SAVE_TEMPLATE: 'save-template-cloud'
 };
 var EventManager = exports.EventManager = /*#__PURE__*/function () {
   function EventManager() {
     (0, _classCallCheck2.default)(this, EventManager);
   }
   return (0, _createClass2.default)(EventManager, [{
+    key: "getExperimentVariant",
+    value: function () {
+      var _getExperimentVariant = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee(experimentName) {
+        var _elementorCommon, _elementorCommon2;
+        return _regenerator.default.wrap(function (_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if ((_elementorCommon = elementorCommon) !== null && _elementorCommon !== void 0 && _elementorCommon.eventsManager) {
+                _context.next = 1;
+                break;
+              }
+              return _context.abrupt("return", 'control');
+            case 1:
+              return _context.abrupt("return", ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.eventsManager) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.getExperimentVariant(experimentName, 'control')) || 'control');
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      function getExperimentVariant(_x) {
+        return _getExperimentVariant.apply(this, arguments);
+      }
+      return getExperimentVariant;
+    }()
+  }, {
+    key: "getSaveTemplateExperimentVariant",
+    value: function getSaveTemplateExperimentVariant() {
+      return this.getExperimentVariant(CLOUD_TEMPLATES_EXPERIMENTS.SAVE_TEMPLATE);
+    }
+  }, {
+    key: "startSaveTemplateExperiment",
+    value: function startSaveTemplateExperiment(variant) {
+      var _elementorCommon3, _elementorCommon4;
+      if (!((_elementorCommon3 = elementorCommon) !== null && _elementorCommon3 !== void 0 && _elementorCommon3.eventsManager)) {
+        return;
+      }
+      return (_elementorCommon4 = elementorCommon) === null || _elementorCommon4 === void 0 || (_elementorCommon4 = _elementorCommon4.eventsManager) === null || _elementorCommon4 === void 0 ? void 0 : _elementorCommon4.startExperiment(CLOUD_TEMPLATES_EXPERIMENTS.SAVE_TEMPLATE, variant);
+    }
+  }, {
     key: "sendEvent",
     value: function sendEvent(eventName, data) {
       return elementorCommon.eventsManager.dispatchEvent(eventName, data);
@@ -8424,6 +8721,15 @@ var EventManager = exports.EventManager = /*#__PURE__*/function () {
     value: function sendDeletionUndoEvent(data) {
       return this.sendEvent(EVENTS_MAP.DELETION_UNDO, _objectSpread({}, data));
     }
+  }, {
+    key: "sendCTBadgeEvent",
+    value: function sendCTBadgeEvent(data) {
+      return this.sendEvent(EVENTS_MAP.CT_BADGE_HOVER, {
+        ct_badge_hover_position: data.ct_badge_hover_position,
+        ct_badge_type: data.ct_badge_type,
+        ct_position_state: data.ct_position_state
+      });
+    }
   }]);
 }();
 
@@ -8466,6 +8772,18 @@ var TemplateLibraryManager = function TemplateLibraryManager() {
     viewKey = 'view',
     bulkSelectedItems = new Set(),
     lastDeletedItems = new Set();
+  var variantsConfig = {
+    control: {
+      saveBtnText: __('Save', 'elementor'),
+      saveDialogDescription: sprintf(/* Translators: 1: Opening bold tag, 2: Closing bold tag.  2: Line break tag. 4: Opening bold tag, 5: Closing bold tag. */
+      __("You can save it to %1$sCloud Templates%2$s to reuse across any of your Elementor sites at any time%3$sor to %4$sSite Templates%5$s so it's always ready when editing this website.", 'elementor'), '<b>', '</b>', '<br>', '<b>', '</b>')
+    },
+    B: {
+      saveBtnText: __('Save page', 'elementor'),
+      saveDialogDescription: sprintf(/* Translators: 1: Opening bold tag, 2: Closing bold tag. 3: Opening bold tag, 4: Closing bold tag. */
+      __('Store your design in %1$sCloud Templates%2$s for future Elementor projects. Or save it to %3$sSite Templates%4$s, to reuse anywhere on this site.', 'elementor'), '<b>', '</b>', '<b>', '</b>')
+    }
+  };
   var deleteDialog,
     errorDialog,
     templatesCollection,
@@ -8479,25 +8797,28 @@ var TemplateLibraryManager = function TemplateLibraryManager() {
     },
     bulkSelectedItemsTypes = [];
   var registerDefaultTemplateTypes = function registerDefaultTemplateTypes() {
-    var data = self.getDefaultTemplateTypeData();
-    var elements = Object.entries(elementor.getConfig().elements).reduce(function (acc, _ref) {
-      var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
-        type = _ref2[0],
-        element = _ref2[1];
-      if (!(element !== null && element !== void 0 && element.atomic_props_schema)) {
+    self.getDefaultTemplateTypeData().then(function (data) {
+      var elements = Object.entries(elementor.getConfig().elements).reduce(function (acc, _ref) {
+        var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
+          type = _ref2[0],
+          element = _ref2[1];
+        if (!(element !== null && element !== void 0 && element.atomic_props_schema)) {
+          return acc;
+        }
+        acc[type] = element.title;
         return acc;
-      }
-      acc[type] = element.title;
-      return acc;
-    }, {});
-    var translationMap = _objectSpread(_objectSpread({
-      page: __('Page', 'elementor'),
-      section: __('Section', 'elementor'),
-      container: __('Container', 'elementor')
-    }, elements), {}, (0, _defineProperty2.default)({}, elementor.config.document.type, elementor.config.document.panel.title));
-    jQuery.each(translationMap, function (type, title) {
-      var safeData = jQuery.extend(true, {}, data, self.getDefaultTemplateTypeSafeData(title));
-      self.registerTemplateType(type, safeData);
+      }, {});
+      var translationMap = _objectSpread(_objectSpread({
+        page: __('Page', 'elementor'),
+        section: __('Section', 'elementor'),
+        container: __('Container', 'elementor')
+      }, elements), {}, (0, _defineProperty2.default)({}, elementor.config.document.type, elementor.config.document.panel.title));
+      jQuery.each(translationMap, function (type, title) {
+        self.getDefaultTemplateTypeSafeData(title, type).then(function (defaultTemplateData) {
+          var safeData = jQuery.extend(true, {}, data, defaultTemplateData);
+          self.registerTemplateType(type, safeData);
+        });
+      });
     });
   };
   var registerDefaultFilterTerms = function registerDefaultFilterTerms() {
@@ -8562,57 +8883,93 @@ var TemplateLibraryManager = function TemplateLibraryManager() {
     document.addEventListener('keydown', this.handleKeydown);
   };
   this.getDefaultTemplateTypeData = function () {
-    return {
-      saveDialog: {
-        icon: '<i class="eicon-library-upload" aria-hidden="true"></i>',
-        canSaveToCloud: true,
-        saveBtnText: __('Save', 'elementor')
-      },
-      moveDialog: {
-        description: __('Alternatively, you can copy the template.', 'elementor'),
-        icon: '<i class="eicon-library-move" aria-hidden="true"></i>',
-        canSaveToCloud: true,
-        saveBtnText: __('Move', 'elementor')
-      },
-      copyDialog: {
-        description: __('Alternatively, you can move the template.', 'elementor'),
-        icon: '<i class="eicon-library-copy" aria-hidden="true"></i>',
-        canSaveToCloud: true,
-        saveBtnText: __('Copy', 'elementor')
-      },
-      bulkMoveDialog: {
-        description: __('Alternatively, you can copy the templates.', 'elementor'),
-        title: __('Move templates to a different location', 'elementor'),
-        icon: '<i class="eicon-library-move" aria-hidden="true"></i>',
-        canSaveToCloud: true,
-        saveBtnText: __('Move', 'elementor')
-      },
-      bulkCopyDialog: {
-        description: __('Alternatively, you can move the templates.', 'elementor'),
-        title: __('Copy templates to a different location', 'elementor'),
-        icon: '<i class="eicon-library-copy" aria-hidden="true"></i>',
-        canSaveToCloud: true,
-        saveBtnText: __('Copy', 'elementor')
-      }
-    };
+    return this.eventManager.getSaveTemplateExperimentVariant().then(function (experimentVariant) {
+      var _variantsConfig$exper;
+      return {
+        saveDialog: {
+          icon: '<i class="eicon-library-upload" aria-hidden="true"></i>',
+          canSaveToCloud: true,
+          saveBtnText: (_variantsConfig$exper = variantsConfig[experimentVariant]) === null || _variantsConfig$exper === void 0 ? void 0 : _variantsConfig$exper.saveBtnText
+        },
+        moveDialog: {
+          description: __('Alternatively, you can copy the template.', 'elementor'),
+          icon: '<i class="eicon-library-move" aria-hidden="true"></i>',
+          canSaveToCloud: true,
+          saveBtnText: __('Move', 'elementor'),
+          nameLabel: '',
+          namePlaceholder: ''
+        },
+        copyDialog: {
+          description: __('Alternatively, you can move the template.', 'elementor'),
+          icon: '<i class="eicon-library-copy" aria-hidden="true"></i>',
+          canSaveToCloud: true,
+          saveBtnText: __('Copy', 'elementor'),
+          nameLabel: '',
+          namePlaceholder: ''
+        },
+        bulkMoveDialog: {
+          description: __('Alternatively, you can copy the templates.', 'elementor'),
+          title: __('Move templates to a different location', 'elementor'),
+          icon: '<i class="eicon-library-move" aria-hidden="true"></i>',
+          canSaveToCloud: true,
+          saveBtnText: __('Move', 'elementor'),
+          nameLabel: '',
+          namePlaceholder: ''
+        },
+        bulkCopyDialog: {
+          description: __('Alternatively, you can move the templates.', 'elementor'),
+          title: __('Copy templates to a different location', 'elementor'),
+          icon: '<i class="eicon-library-copy" aria-hidden="true"></i>',
+          canSaveToCloud: true,
+          saveBtnText: __('Copy', 'elementor'),
+          nameLabel: '',
+          namePlaceholder: ''
+        }
+      };
+    });
   };
-  this.getDefaultTemplateTypeSafeData = function (title) {
-    return {
-      saveDialog: {
-        description: sprintf(/* Translators: 1: Opening bold tag, 2: Closing bold tag.  2: Line break tag. 4: Opening bold tag, 5: Closing bold tag. */
-        __('You can save it to %1$sCloud Templates%2$s to reuse across any of your Elementor sites at any time%3$sor to %4$sSite Templates%5$s so it’s always ready when editing this website.', 'elementor'), '<b>', '</b>', '<br>', '<b>', '</b>'),
-        /* Translators: %s: Template type. */
-        title: sprintf(__('Save this %s to your library', 'elementor'), title)
-      },
-      moveDialog: {
-        /* Translators: %s: Template type. */
-        title: sprintf(__('Move your %s to a different location', 'elementor'), title)
-      },
-      copyDialog: {
-        /* Translators: %s: Template type. */
-        title: sprintf(__('Copy your %s to a different location', 'elementor'), title)
-      }
-    };
+  this.getDefaultTemplateTypeSafeData = function (title, type) {
+    return this.eventManager.getSaveTemplateExperimentVariant().then(function (experimentVariant) {
+      var _variantsConfig$exper2;
+      var isPageType = 'page' === type;
+
+      /* Translators: %s: Template type. */
+      var nameLabel = sprintf(__('%s name', 'elementor'), title);
+      var namePlaceholder = isPageType ? __('Type the page name here', 'elementor') : __('Give your template a name', 'elementor');
+      return {
+        saveDialog: {
+          description: ((_variantsConfig$exper2 = variantsConfig[experimentVariant]) === null || _variantsConfig$exper2 === void 0 ? void 0 : _variantsConfig$exper2.saveDialogDescription) || '',
+          /* Translators: %s: Template type. */
+          title: sprintf(__('Save this %s to your library', 'elementor'), title),
+          nameLabel: nameLabel,
+          namePlaceholder: namePlaceholder,
+          /* Translators: %s: Template type. */
+          saveLocationLabel: sprintf(__('Where would you like to save this %s?', 'elementor'), title)
+        },
+        moveDialog: {
+          /* Translators: %s: Template type. */
+          title: sprintf(__('Move your %s to a different location', 'elementor'), title),
+          /* Translators: %s: Template type. */
+          saveLocationLabel: sprintf(__('Where would you like to move this %s?', 'elementor'), title),
+          nameLabel: nameLabel,
+          namePlaceholder: namePlaceholder
+        },
+        copyDialog: {
+          /* Translators: %s: Template type. */
+          title: sprintf(__('Copy your %s to a different location', 'elementor'), title),
+          /* Translators: %s: Template type. */
+          saveLocationLabel: sprintf(__('Where would you like to cppy this %s?', 'elementor'), title),
+          nameLabel: nameLabel,
+          namePlaceholder: namePlaceholder
+        },
+        bulkMoveDialog: {
+          saveLocationLabel: __('Where would you like to move selected templates?', 'elementor')
+        },
+        bulkCopyDialog: {
+          saveLocationLabel: __('Where would you like to copy selected templates?', 'elementor')
+        }
+      };
+    });
   };
   this.isSelectAllShortcut = function (event) {
     return (event.metaKey || event.ctrlKey) && 'a' === event.key;
@@ -8702,6 +9059,17 @@ var TemplateLibraryManager = function TemplateLibraryManager() {
             options.onSuccess(response);
           }
           self.layout.updateViewCollection(self.filterTemplates());
+          var buttons = 'cloud' === source ? [{
+            name: 'undo_bulk',
+            text: __('Undo', 'elementor'),
+            callback: function callback() {
+              self.onUndoDelete();
+            }
+          }] : null;
+          elementor.notifications.showToast({
+            message: "1 item deleted successfully",
+            buttons: buttons
+          });
           self.triggerQuotaUpdate();
           self.resetBulkActionBar();
           self.eventManager.sendItemDeletedEvent({
@@ -9093,6 +9461,22 @@ var TemplateLibraryManager = function TemplateLibraryManager() {
       jQuery.extend(true, options, ajaxOptions);
     }
     return elementorCommon.ajax.addRequest('get_template_data', options);
+  };
+  this.hasGlobalStyles = function (templateData) {
+    var _templateData$global_, _templateData$global_2;
+    var hasClasses = ((_templateData$global_ = templateData.global_classes) === null || _templateData$global_ === void 0 ? void 0 : _templateData$global_.items) && Object.keys(templateData.global_classes.items).length > 0;
+    var hasVariables = ((_templateData$global_2 = templateData.global_variables) === null || _templateData$global_2 === void 0 ? void 0 : _templateData$global_2.data) && Object.keys(templateData.global_variables.data).length > 0;
+    return hasClasses || hasVariables;
+  };
+  this.syncGlobalStylesBeforeSave = function () {
+    var promises = [];
+    var event = new CustomEvent('elementor/global-styles/before-save', {
+      detail: {
+        promises: promises
+      }
+    });
+    window.dispatchEvent(event);
+    return Promise.allSettled(promises);
   };
   this.markAsFavorite = function (templateModel, favorite) {
     this.clearLastRemovedItems();
@@ -9635,11 +10019,22 @@ var TemplateLibraryHeaderActionsView = __webpack_require__(/*! elementor-templat
   TemplateLibraryHeaderBackView = __webpack_require__(/*! elementor-templates/views/parts/header-parts/back */ "../assets/dev/js/editor/components/template-library/views/parts/header-parts/back.js"),
   TemplateLibraryCollectionView = __webpack_require__(/*! elementor-templates/views/parts/templates */ "../assets/dev/js/editor/components/template-library/views/parts/templates.js"),
   TemplateLibrarySaveTemplateView = __webpack_require__(/*! elementor-templates/views/parts/save-template */ "../assets/dev/js/editor/components/template-library/views/parts/save-template.js"),
+  TemplateLibrarySaveTemplateVariantBView = __webpack_require__(/*! elementor-templates/views/parts/save-template-variant-b */ "../assets/dev/js/editor/components/template-library/views/parts/save-template-variant-b.js"),
   TemplateLibraryImportView = __webpack_require__(/*! elementor-templates/views/parts/import */ "../assets/dev/js/editor/components/template-library/views/parts/import.js"),
   TemplateLibraryConnectView = __webpack_require__(/*! elementor-templates/views/parts/connect */ "../assets/dev/js/editor/components/template-library/views/parts/connect.js"),
   TemplateLibraryCloudStateView = __webpack_require__(/*! elementor-templates/views/parts/cloud-states */ "../assets/dev/js/editor/components/template-library/views/parts/cloud-states.js"),
   TemplateLibraryPreviewView = __webpack_require__(/*! elementor-templates/views/parts/preview */ "../assets/dev/js/editor/components/template-library/views/parts/preview.js"),
   TemplateLibraryNavigationContainerView = __webpack_require__(/*! elementor-templates/views/parts/navigation-container */ "../assets/dev/js/editor/components/template-library/views/parts/navigation-container.js");
+function resolveSaveTemplateByVariant(variant) {
+  switch (variant) {
+    case 'B':
+      return TemplateLibrarySaveTemplateVariantBView;
+    case 'control':
+    case 'A':
+    default:
+      return TemplateLibrarySaveTemplateView;
+  }
+}
 module.exports = elementorModules.common.views.modal.Layout.extend({
   getModalOptions: function getModalOptions() {
     var _window$elementor$con, _window;
@@ -9653,6 +10048,46 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
         ignore: '.dialog-widget-content, .dialog-buttons-undo_bulk_delete, .dialog-buttons-template_after_save, #elementor-library--infotip__dialog, #elementor-template-library-rename-dialog, #elementor-template-library-delete-dialog'
       }
     };
+  },
+  initModal: function initModal() {
+    var _this = this;
+    elementorModules.common.views.modal.Layout.prototype.initModal.call(this);
+    var $widget = this.modal.getElements('widget');
+    if ($widget.length && 'true' === $widget.attr('aria-modal')) {
+      $widget.attr('role', 'dialog');
+    }
+
+    // Move focus inside the modal when it opens (WAI-ARIA dialog pattern)
+    this.modal.on('show', function () {
+      var $modalWidget = _this.modal.getElements('widget');
+      if ($modalWidget.length) {
+        $modalWidget.trigger('focus');
+      }
+    });
+
+    // Focus trap: keep Tab/Shift+Tab cycling within the modal (WAI-ARIA dialog pattern)
+    if ($widget.length) {
+      $widget.on('keydown', function (event) {
+        if ('Tab' !== event.key) {
+          return;
+        }
+        var $focusable = $widget.find('a[href], button, input, select, textarea, [tabindex]').filter(':visible').not('[tabindex="-1"], [disabled]');
+        if (!$focusable.length) {
+          return;
+        }
+        var $first = $focusable.first();
+        var $last = $focusable.last();
+        if (event.shiftKey) {
+          if ($first[0] === event.target || $widget[0] === event.target) {
+            event.preventDefault();
+            $last.trigger('focus');
+          }
+        } else if ($last[0] === event.target) {
+          event.preventDefault();
+          $first.trigger('focus');
+        }
+      });
+    }
   },
   getLogoOptions: function getLogoOptions() {
     return {
@@ -9696,14 +10131,55 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     this.showLogo();
   },
   showTemplatesView: function showTemplatesView(templatesCollection) {
+    var prevView = this.modalContent.currentView;
+    var shouldRestoreFocus = prevView && prevView._restoreFocusToSourceFilter;
+    var isInitialOpen = !prevView;
     this.modalContent.show(new TemplateLibraryCollectionView({
       collection: templatesCollection
     }));
+    this.syncTabpanelAriaLabelledby();
+    if (shouldRestoreFocus) {
+      var newView = this.modalContent.currentView;
+      if (newView && newView.ui.selectSourceFilter) {
+        var $selected = newView.ui.selectSourceFilter.filter('[aria-checked="true"]');
+        if ($selected.length) {
+          $selected.trigger('focus');
+        }
+      }
+    } else if (isInitialOpen) {
+      this.focusFirstElement();
+    }
+  },
+  syncTabpanelAriaLabelledby: function syncTabpanelAriaLabelledby() {
+    var _$e$components$get, _this$modalContent$cu;
+    var activeTab = (_$e$components$get = $e.components.get('library')) === null || _$e$components$get === void 0 ? void 0 : _$e$components$get.currentTab;
+    var $container = (_this$modalContent$cu = this.modalContent.currentView) === null || _this$modalContent$cu === void 0 ? void 0 : _this$modalContent$cu.$childViewContainer;
+    if (activeTab && $container !== null && $container !== void 0 && $container.length) {
+      $container.attr('aria-labelledby', "tab-".concat(activeTab));
+    }
+  },
+  focusFirstElement: function focusFirstElement() {
+    var $widget = this.modal.getElements('widget');
+    if (!$widget.length) {
+      return;
+    }
+    var $firstFocusable = $widget.find('button, a, input, select, [tabindex="0"]').filter(':visible').first();
+    if ($firstFocusable.length) {
+      $firstFocusable.trigger('focus');
+    } else {
+      $widget.attr('tabindex', '-1').trigger('focus');
+    }
   },
   updateViewCollection: function updateViewCollection(models) {
     var _TemplateLibraryNavig;
     this.modalContent.currentView.collection.reset(models);
     this.modalContent.currentView.ui.navigationContainer.html((_TemplateLibraryNavig = new TemplateLibraryNavigationContainerView().render()) === null || _TemplateLibraryNavig === void 0 ? void 0 : _TemplateLibraryNavig.el);
+
+    // Restore focus within the modal after re-render to prevent focus escaping to BODY
+    var $widget = this.modal.getElements('widget');
+    if ($widget.length && !$widget[0].contains($widget[0].ownerDocument.activeElement)) {
+      this.focusFirstElement();
+    }
   },
   addTemplates: function addTemplates(models) {
     this.modalContent.currentView.collection.add(models, {
@@ -9725,16 +10201,35 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     this.modalContent.show(new TemplateLibraryCloudStateView());
   },
   showSaveTemplateView: function showSaveTemplateView(elementModel) {
-    var context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _constants.SAVE_CONTEXTS.SAVE;
-    var headerView = this.getHeaderView();
-    headerView.menuArea.reset();
-    if (_constants.SAVE_CONTEXTS.SAVE !== context) {
-      headerView.logoArea.show(new TemplateLibraryHeaderBackView());
-    }
-    this.modalContent.show(new TemplateLibrarySaveTemplateView({
-      model: elementModel,
-      context: context
-    }));
+    var _arguments = arguments,
+      _this2 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var context, headerView, experimentVariant, SaveTemplateView;
+      return _regenerator.default.wrap(function (_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            context = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : _constants.SAVE_CONTEXTS.SAVE;
+            headerView = _this2.getHeaderView();
+            headerView.menuArea.reset();
+            if (_constants.SAVE_CONTEXTS.SAVE !== context) {
+              headerView.logoArea.show(new TemplateLibraryHeaderBackView());
+            }
+            _context.next = 1;
+            return elementor.templates.eventManager.getSaveTemplateExperimentVariant();
+          case 1:
+            experimentVariant = _context.sent;
+            SaveTemplateView = resolveSaveTemplateByVariant(experimentVariant);
+            elementor.templates.eventManager.startSaveTemplateExperiment(experimentVariant);
+            _this2.modalContent.show(new SaveTemplateView({
+              model: elementModel,
+              context: context
+            }));
+          case 2:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }))();
   },
   showPreviewView: function showPreviewView(templateModel) {
     this.modalContent.show(new TemplateLibraryPreviewView({
@@ -9748,23 +10243,23 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     headerView.logoArea.show(new TemplateLibraryHeaderBackView());
   },
   showFolderView: function showFolderView(elementModel) {
-    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-      return _regenerator.default.wrap(function (_context) {
-        while (1) switch (_context.prev = _context.next) {
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      return _regenerator.default.wrap(function (_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            _context.prev = 0;
+            _context2.prev = 0;
             elementor.templates.layout.showLoadingView();
-            _context.next = 1;
+            _context2.next = 1;
             return elementor.templates.getFolderTemplates(elementModel);
           case 1:
-            _context.prev = 1;
+            _context2.prev = 1;
             elementor.templates.layout.hideLoadingView();
-            return _context.finish(1);
+            return _context2.finish(1);
           case 2:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
-      }, _callee, null, [[0,, 1, 2]]);
+      }, _callee2, null, [[0,, 1, 2]]);
     }))();
   },
   createScreenshotIframe: function createScreenshotIframe(previewUrl) {
@@ -9790,7 +10285,12 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     var _elementor$templates$;
     var selectedCount = (_elementor$templates$ = elementor.templates.getBulkSelectionItems().size) !== null && _elementor$templates$ !== void 0 ? _elementor$templates$ : 0;
     var display = 0 === selectedCount ? 'none' : 'flex';
-    this.modalContent.currentView.ui.bulkSelectedCount.html("".concat(selectedCount, " Selected"));
+    var countText = "".concat(selectedCount, " Selected");
+    var announcementText = 0 === selectedCount ? '' : "".concat(selectedCount, " ").concat(1 === selectedCount ? __('template', 'elementor') : __('templates', 'elementor'), " ").concat(__('selected. Bulk actions available.', 'elementor'));
+    this.modalContent.currentView.ui.bulkSelectedCount.html(countText);
+    if (announcementText && this.modalContent.currentView.ui.bulkSelectedCount.length) {
+      this.modalContent.currentView.ui.bulkSelectedCount.attr('aria-label', announcementText);
+    }
     this.modalContent.currentView.ui.bulkSelectionActionBar.css('display', display);
 
     // TODO: Temporary fix until the bulk action bar will be as separate view.
@@ -9811,8 +10311,8 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
     return 'list' === elementor.templates.getViewSelection();
   },
   resetSortingUI: function resetSortingUI() {
-    var _this$modalContent$cu;
-    Array.from(((_this$modalContent$cu = this.modalContent.currentView.ui) === null || _this$modalContent$cu === void 0 ? void 0 : _this$modalContent$cu.orderInputs) || []).forEach(function (input) {
+    var _this$modalContent$cu2;
+    Array.from(((_this$modalContent$cu2 = this.modalContent.currentView.ui) === null || _this$modalContent$cu2 === void 0 ? void 0 : _this$modalContent$cu2.orderInputs) || []).forEach(function (input) {
       input.checked = false;
     });
   }
@@ -9830,16 +10330,20 @@ module.exports = elementorModules.common.views.modal.Layout.extend({
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 module.exports = Marionette.ItemView.extend({
+  tagName: 'main',
   template: '#tmpl-elementor-template-library-connect-states',
   id: 'elementor-template-library-connect-states',
   ui: {
-    connect: '#elementor-template-library-connect__button',
     selectSourceFilter: '.elementor-template-library-filter-select-source .source-option',
     title: '.elementor-template-library-blank-title',
     message: '.elementor-template-library-blank-message',
     icon: '.elementor-template-library-blank-icon',
-    button: '.elementor-template-library-cloud-empty__button'
+    button: '.elementor-template-library-cloud-empty__button',
+    cloudBadge: '.elementor-template-library-connect-states-badge .source-option-badge.cloud-badge'
   },
   events: {
     'click @ui.selectSourceFilter': 'onSelectSourceFilterChange',
@@ -9853,7 +10357,7 @@ module.exports = Marionette.ItemView.extend({
         title: (_elementorAppConfig$c = (_elementorAppConfig = elementorAppConfig) === null || _elementorAppConfig === void 0 || (_elementorAppConfig = _elementorAppConfig['cloud-library']) === null || _elementorAppConfig === void 0 ? void 0 : _elementorAppConfig.library_connect_title_copy) !== null && _elementorAppConfig$c !== void 0 ? _elementorAppConfig$c : __('Connect to your Elementor account', 'elementor'),
         message: (_elementorAppConfig$c2 = (_elementorAppConfig2 = elementorAppConfig) === null || _elementorAppConfig2 === void 0 || (_elementorAppConfig2 = _elementorAppConfig2['cloud-library']) === null || _elementorAppConfig2 === void 0 ? void 0 : _elementorAppConfig2.library_connect_sub_title_copy) !== null && _elementorAppConfig$c2 !== void 0 ? _elementorAppConfig$c2 : __('Then you can find all your templates in one convenient library.', 'elementor'),
         icon: defaultIcon,
-        button: "<a class=\"elementor-button e-primary\" href=\"".concat((_elementorAppConfig3 = elementorAppConfig) === null || _elementorAppConfig3 === void 0 || (_elementorAppConfig3 = _elementorAppConfig3['cloud-library']) === null || _elementorAppConfig3 === void 0 ? void 0 : _elementorAppConfig3.library_connect_url, "\" target=\"_blank\">").concat((_elementorAppConfig$c3 = (_elementorAppConfig4 = elementorAppConfig) === null || _elementorAppConfig4 === void 0 || (_elementorAppConfig4 = _elementorAppConfig4['cloud-library']) === null || _elementorAppConfig4 === void 0 ? void 0 : _elementorAppConfig4.library_connect_button_copy) !== null && _elementorAppConfig$c3 !== void 0 ? _elementorAppConfig$c3 : __('Connect', 'elementor'), "</a>")
+        button: "<a class=\"elementor-button e-primary connect-button\" href=\"".concat((_elementorAppConfig3 = elementorAppConfig) === null || _elementorAppConfig3 === void 0 || (_elementorAppConfig3 = _elementorAppConfig3['cloud-library']) === null || _elementorAppConfig3 === void 0 ? void 0 : _elementorAppConfig3.library_connect_url, "\" target=\"_blank\">").concat((_elementorAppConfig$c3 = (_elementorAppConfig4 = elementorAppConfig) === null || _elementorAppConfig4 === void 0 || (_elementorAppConfig4 = _elementorAppConfig4['cloud-library']) === null || _elementorAppConfig4 === void 0 ? void 0 : _elementorAppConfig4.library_connect_button_copy) !== null && _elementorAppConfig$c3 !== void 0 ? _elementorAppConfig$c3 : __('Connect', 'elementor'), "</a>")
       },
       connectedNoQuota: {
         title: __('It’s time to level up', 'elementor'),
@@ -9885,10 +10389,37 @@ module.exports = Marionette.ItemView.extend({
     var _elementor$templates$;
     this.updateTemplateMarkup();
     this.handleElementorConnect();
+    this.handleCloudBadge();
     (_elementor$templates$ = elementor.templates.layout.getHeaderView()) === null || _elementor$templates$ === void 0 || (_elementor$templates$ = _elementor$templates$.tools) === null || _elementor$templates$ === void 0 || (_elementor$templates$ = _elementor$templates$.$el[0]) === null || _elementor$templates$ === void 0 || (_elementor$templates$ = _elementor$templates$.classList) === null || _elementor$templates$ === void 0 || _elementor$templates$.add('e-hidden-disabled');
     elementor.templates.eventManager.sendPageViewEvent({
       location: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.cloudTabUpgrade
     });
+  },
+  handleCloudBadge: function handleCloudBadge() {
+    var _this = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var _this$ui$cloudBadge;
+      var experimentVariant;
+      return _regenerator.default.wrap(function (_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            if ((_this$ui$cloudBadge = _this.ui.cloudBadge) !== null && _this$ui$cloudBadge !== void 0 && _this$ui$cloudBadge.length) {
+              _context.next = 1;
+              break;
+            }
+            return _context.abrupt("return");
+          case 1:
+            _context.next = 2;
+            return elementor.templates.eventManager.getSaveTemplateExperimentVariant();
+          case 2:
+            experimentVariant = _context.sent;
+            _this.ui.cloudBadge.toggle('B' === experimentVariant);
+          case 3:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }))();
   },
   updateTemplateMarkup: function updateTemplateMarkup() {
     var modeStrings = this.modesStrings()[this.getCurrentMode()];
@@ -9898,13 +10429,21 @@ module.exports = Marionette.ItemView.extend({
     this.ui.icon.html(modeStrings.icon);
   },
   handleElementorConnect: function handleElementorConnect() {
-    this.ui.connect.elementorConnect({
+    var $connectButton = this.$el.find('.connect-button');
+    if (!$connectButton.length) {
+      return;
+    }
+    $connectButton.elementorConnect({
+      popup: {
+        width: 726,
+        height: 534
+      },
       success: function success() {
         elementor.config.library_connect.is_connected = true;
-        $e.run('library/close');
         elementor.notifications.showToast({
           message: __('Connected successfully.', 'elementor')
         });
+        $e.routes.refreshContainer('library');
       },
       error: function error() {
         elementor.config.library_connect.is_connected = false;
@@ -9939,6 +10478,7 @@ module.exports = Marionette.ItemView.extend({
 
 
 module.exports = Marionette.ItemView.extend({
+  tagName: 'main',
   template: '#tmpl-elementor-template-library-connect',
   id: 'elementor-template-library-connect',
   ui: {
@@ -10018,7 +10558,9 @@ module.exports = Marionette.ItemView.extend({
     var data = this.model.toJSON();
     return {
       'data-id': data.template_id,
-      'data-value': data.title
+      'data-value': data.title,
+      role: 'option',
+      tabindex: '-1'
     };
   },
   render: function render() {
@@ -10044,8 +10586,103 @@ module.exports = Marionette.CollectionView.extend({
   tagName: 'ul',
   className: 'folder-list',
   childView: FolderItemView,
-  emptyView: EmptyView
+  emptyView: EmptyView,
+  attributes: {
+    role: 'listbox',
+    'aria-label': 'Folders'
+  }
 });
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/components/template-library/views/parts/global-styles-dialog.js":
+/*!***********************************************************************************************!*\
+  !*** ../assets/dev/js/editor/components/template-library/views/parts/global-styles-dialog.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+exports.showGlobalStylesDialog = showGlobalStylesDialog;
+function showGlobalStylesDialog() {
+  return new Promise(function (resolve, reject) {
+    var settled = false;
+    var dialog = elementorCommon.dialogsManager.createWidget('lightbox', {
+      id: 'elementor-global-styles-dialog',
+      headerMessage: '',
+      message: wp.template('elementor-global-styles-dialog')(),
+      position: {
+        my: 'center',
+        at: 'center'
+      },
+      hide: {
+        onBackgroundClick: false
+      },
+      onShow: function onShow() {
+        setupDialogEventListeners(dialog, function (payload) {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          resolve(payload);
+          dialog.hide();
+        }, function (error) {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          reject(error);
+          dialog.hide();
+        });
+      },
+      onHide: function onHide() {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        reject(new Error('Dialog closed'));
+      }
+    });
+    dialog.show();
+  });
+}
+function setupDialogEventListeners(dialog, resolve, reject) {
+  var $content = dialog.getElements('message');
+  var $matchRadio = $content.find('#elementor-global-styles-match');
+  var $keepRadio = $content.find('#elementor-global-styles-keep');
+  var $createCheckbox = $content.find('#elementor-global-styles-create');
+  var $checkboxContainer = $content.find('.elementor-global-styles-dialog__checkbox-container');
+  var $insertBtn = $content.find('#elementor-global-styles-insert');
+  var $cancelBtn = $content.find('#elementor-global-styles-cancel');
+  $matchRadio.off('.elementorGlobalStyles').on('change.elementorGlobalStyles', function () {
+    $checkboxContainer.hide();
+  });
+  $keepRadio.off('.elementorGlobalStyles').on('change.elementorGlobalStyles', function () {
+    $checkboxContainer.show();
+  });
+  $insertBtn.off('.elementorGlobalStyles').on('click.elementorGlobalStyles', function () {
+    var mode;
+    if ($matchRadio.is(':checked')) {
+      mode = 'match_site';
+    } else if ($createCheckbox.is(':checked')) {
+      mode = 'keep_create';
+    } else {
+      mode = 'keep_flatten';
+    }
+    resolve({
+      mode: mode
+    });
+  });
+  $cancelBtn.off('.elementorGlobalStyles').on('click.elementorGlobalStyles', function () {
+    reject(new Error('User cancelled'));
+  });
+}
+var _default = exports["default"] = showGlobalStylesDialog;
 
 /***/ }),
 
@@ -10062,9 +10699,12 @@ module.exports = Marionette.ItemView.extend({
   template: '#tmpl-elementor-template-library-header-actions',
   id: 'elementor-template-library-header-actions',
   ui: {
-    import: '#elementor-template-library-header-import i',
-    sync: '#elementor-template-library-header-sync i',
-    save: '#elementor-template-library-header-save i'
+    import: '#elementor-template-library-header-import',
+    importIcon: '#elementor-template-library-header-import i',
+    sync: '#elementor-template-library-header-sync',
+    syncIcon: '#elementor-template-library-header-sync i',
+    save: '#elementor-template-library-header-save',
+    saveIcon: '#elementor-template-library-header-save i'
   },
   events: {
     'click @ui.import': 'onImportClick',
@@ -10081,10 +10721,10 @@ module.exports = Marionette.ItemView.extend({
   },
   onSyncClick: function onSyncClick() {
     var self = this;
-    self.ui.sync.addClass('eicon-animation-spin');
+    self.ui.syncIcon.addClass('eicon-animation-spin');
     elementor.templates.requestLibraryData({
       onUpdate: function onUpdate() {
-        self.ui.sync.removeClass('eicon-animation-spin');
+        self.ui.syncIcon.removeClass('eicon-animation-spin');
         $e.routes.refreshContainer('library');
       },
       forceUpdate: true,
@@ -10111,7 +10751,7 @@ module.exports = Marionette.ItemView.extend({
   template: '#tmpl-elementor-template-library-header-back',
   id: 'elementor-template-library-header-preview-back',
   events: {
-    click: 'onClick'
+    'click .elementor-template-library-header-back-button': 'onClick'
   },
   onClick: function onClick() {
     $e.routes.restoreState('library');
@@ -10124,18 +10764,64 @@ module.exports = Marionette.ItemView.extend({
 /*!********************************************************************************************!*\
   !*** ../assets/dev/js/editor/components/template-library/views/parts/header-parts/menu.js ***!
   \********************************************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
+var _keyboardNav = __webpack_require__(/*! elementor-editor-utils/keyboard-nav */ "../assets/dev/js/editor/utils/keyboard-nav.js");
 module.exports = Marionette.ItemView.extend({
   template: '#tmpl-elementor-template-library-header-menu',
   id: 'elementor-template-library-header-menu',
+  ui: {
+    tabs: '[role="tab"]'
+  },
+  events: {
+    'keydown @ui.tabs': 'onTabKeyDown'
+  },
   templateHelpers: function templateHelpers() {
     return {
       tabs: $e.components.get('library').getTabs()
     };
+  },
+  attributes: function attributes() {
+    return {
+      role: 'tablist',
+      'aria-label': __('Library sections', 'elementor')
+    };
+  },
+  onTabKeyDown: function onTabKeyDown(event) {
+    (0, _keyboardNav.rovingTabindex)({
+      event: event,
+      $items: this.ui.tabs,
+      orientation: 'horizontal',
+      onActivate: function onActivate() {
+        // Tabs activate on arrow navigation, not Enter/Space.
+      }
+    });
+
+    // After rovingTabindex moves focus to the new tab, activate it.
+    // activateTab triggers a re-render, so we must re-query the DOM afterwards.
+    var $focused = jQuery(event.currentTarget.ownerDocument.activeElement);
+    var targetTabName = $focused.data('tab');
+    if (!targetTabName) {
+      return;
+    }
+    var libraryComponent = $e.components.get('library');
+    if (!libraryComponent) {
+      return;
+    }
+    try {
+      libraryComponent.activateTab(targetTabName);
+      var $tabAfterRerender = jQuery("#elementor-template-library-header-menu [data-tab=\"".concat(targetTabName, "\"]"));
+      if ($tabAfterRerender.length) {
+        $tabAfterRerender.trigger('focus');
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Tab activation failed:', error);
+    }
   }
 });
 
@@ -10179,8 +10865,10 @@ var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../../../../utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 var _jsonUploadWarningMessage = __webpack_require__(/*! elementor-utils/json-upload-warning-message */ "../assets/dev/js/utils/json-upload-warning-message.js");
+var _globalStylesDialog = __webpack_require__(/*! ./global-styles-dialog */ "../assets/dev/js/editor/components/template-library/views/parts/global-styles-dialog.js");
 var TemplateLibraryImportView;
 TemplateLibraryImportView = Marionette.ItemView.extend({
+  tagName: 'main',
   template: '#tmpl-elementor-template-library-import',
   id: 'elementor-template-library-import',
   ui: {
@@ -10211,7 +10899,7 @@ TemplateLibraryImportView = Marionette.ItemView.extend({
   importTemplate: function importTemplate(fileName, fileData) {
     var _this2 = this;
     return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var layout, activeSource, enableUnfilteredFilesModal;
+      var layout, activeSource, jsonContent, _yield$showGlobalStyl, mode, enableUnfilteredFilesModal, _t, _t2;
       return _regenerator.default.wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -10260,6 +10948,37 @@ TemplateLibraryImportView = Marionette.ItemView.extend({
               IntroductionClass: window.elementorModules.editor.utils.Introduction
             });
           case 1:
+            if (!fileName.endsWith('.json')) {
+              _context.next = 8;
+              break;
+            }
+            _context.prev = 2;
+            jsonContent = JSON.parse(atob(fileData));
+            if (!elementor.templates.hasGlobalStyles(jsonContent)) {
+              _context.next = 6;
+              break;
+            }
+            _context.prev = 3;
+            _context.next = 4;
+            return (0, _globalStylesDialog.showGlobalStylesDialog)();
+          case 4:
+            _yield$showGlobalStyl = _context.sent;
+            mode = _yield$showGlobalStyl.mode;
+            _this2.options.data.import_mode = mode;
+            _context.next = 6;
+            break;
+          case 5:
+            _context.prev = 5;
+            _t = _context["catch"](3);
+            return _context.abrupt("return");
+          case 6:
+            _context.next = 8;
+            break;
+          case 7:
+            _context.prev = 7;
+            _t2 = _context["catch"](2);
+            console.warn('Failed to parse template JSON for global styles check:', _t2); // eslint-disable-line no-console
+          case 8:
             if (!elementorCommon.config.filesUpload.unfilteredFiles) {
               enableUnfilteredFilesModal = _filesUploadHandler.default.getUnfilteredFilesNotEnabledImportTemplateDialog(function () {
                 return _this2.sendImportRequest();
@@ -10268,11 +10987,11 @@ TemplateLibraryImportView = Marionette.ItemView.extend({
             } else {
               _this2.sendImportRequest();
             }
-          case 2:
+          case 9:
           case "end":
             return _context.stop();
         }
-      }, _callee);
+      }, _callee, null, [[2, 7], [3, 5]]);
     }))();
   },
   sendImportRequest: function sendImportRequest() {
@@ -10369,6 +11088,7 @@ module.exports = Marionette.ItemView.extend({
 
 var TemplateLibraryPreviewView;
 TemplateLibraryPreviewView = Marionette.ItemView.extend({
+  tagName: 'main',
   template: '#tmpl-elementor-template-library-preview',
   id: 'elementor-template-library-preview',
   ui: {
@@ -10379,6 +11099,144 @@ TemplateLibraryPreviewView = Marionette.ItemView.extend({
   }
 });
 module.exports = TemplateLibraryPreviewView;
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/components/template-library/views/parts/save-template-variant-b.js":
+/*!**************************************************************************************************!*\
+  !*** ../assets/dev/js/editor/components/template-library/views/parts/save-template-variant-b.js ***!
+  \**************************************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+/* provided dependency */ var sprintf = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["sprintf"];
+
+
+var TemplateLibrarySaveTemplateView = __webpack_require__(/*! ./save-template */ "../assets/dev/js/editor/components/template-library/views/parts/save-template.js");
+var TemplateLibrarySaveTemplateVariantBView = TemplateLibrarySaveTemplateView.extend({
+  id: 'elementor-template-library-save-template-variant-b',
+  template: '#tmpl-elementor-template-library-save-template-variant-b',
+  ui: function ui() {
+    return _.extend(TemplateLibrarySaveTemplateView.prototype.ui.apply(this, arguments), {
+      selectFolderLink: '.select-folder-link',
+      cloudAccountBadge: '.cloud-account-badge',
+      siteAccountBadge: '.site-account-badge',
+      connect: '#elementor-template-library-connect__badge-variant-b'
+    });
+  },
+  events: function events() {
+    return _.extend(TemplateLibrarySaveTemplateView.prototype.events.apply(this, arguments), {
+      'click @ui.selectFolderLink': 'onEllipsisIconClick',
+      'mouseenter @ui.upgradeBadge': 'showInfoTip',
+      'mouseenter @ui.cloudAccountBadge': 'showCloudAccountBadgeTooltip',
+      'mouseenter @ui.siteAccountBadge': 'showSiteAccountBadgeTooltip',
+      'mouseleave @ui.cloudAccountBadge': 'hideCloudAccountBadgeTooltip',
+      'mouseleave @ui.siteAccountBadge': 'hideSiteAccountBadgeTooltip',
+      'mouseleave @ui.upgradeBadge': 'hideInfoTip'
+    });
+  },
+  getConnectInfoTipPosition: function getConnectInfoTipPosition() {
+    return 'top-50';
+  },
+  addVariantClass: function addVariantClass($widget) {
+    return $widget.addClass('variant-b');
+  },
+  showInfoTip: function showInfoTip() {
+    if (this.infoTipDialog) {
+      this.infoTipDialog.hide();
+    }
+    var message = elementor.templates.hasCloudLibraryQuota() ? __('Upgrade your subscription to get more space and reuse saved assets across all your sites.', 'elementor') : __('Upgrade your subscription to access Cloud Templates and reuse saved assets across all your sites.', 'elementor');
+    this.infoTipDialog = elementor.dialogsManager.createWidget('buttons', {
+      id: 'elementor-library--infotip__dialog',
+      effects: {
+        show: 'show',
+        hide: 'hide'
+      },
+      position: {
+        of: this.ui.upgradeBadge,
+        at: 'top-50'
+      }
+    }).setMessage(message);
+    this.infoTipDialog.getElements('header').remove();
+    this.infoTipDialog.getElements('buttonsWrapper').remove();
+    this.infoTipDialog.getElements('widget').addClass('variant-b');
+    this.infoTipDialog.show();
+    this.sendCTBadgeEvent('cloud');
+  },
+  showCloudAccountBadgeTooltip: function showCloudAccountBadgeTooltip() {
+    if (this.cloudAccountBadgeDialog) {
+      this.cloudAccountBadgeDialog.hide();
+    }
+    var emailReplacement = elementor.config.library_connect.is_connected ? elementor.config.library_connect.user_email : __('connected', 'elementor');
+    /* Translators: %s: User's email. */
+    var message = sprintf(__('Only %s Elementor account can access Cloud Templates from any connected site.', 'elementor'), emailReplacement);
+    this.cloudAccountBadgeDialog = elementor.dialogsManager.createWidget('buttons', {
+      id: 'elementor-library--cloud-upgrade__dialog',
+      effects: {
+        show: 'show',
+        hide: 'hide'
+      },
+      position: {
+        of: this.ui.cloudAccountBadge,
+        at: 'top-55'
+      }
+    }).setMessage(message);
+    this.cloudAccountBadgeDialog.getElements('widget').addClass('variant-b');
+    this.cloudAccountBadgeDialog.getElements('header').remove();
+    this.cloudAccountBadgeDialog.getElements('buttonsWrapper').remove();
+    this.cloudAccountBadgeDialog.show();
+  },
+  hideCloudAccountBadgeTooltip: function hideCloudAccountBadgeTooltip() {
+    if (this.cloudAccountBadgeDialog) {
+      this.cloudAccountBadgeDialog.hide();
+    }
+  },
+  showSiteAccountBadgeTooltip: function showSiteAccountBadgeTooltip() {
+    if (this.siteAccountBadgeDialog) {
+      this.siteAccountBadgeDialog.hide();
+    }
+    var message = __('Authorized users on this site can access Site Templates.', 'elementor');
+    this.siteAccountBadgeDialog = elementor.dialogsManager.createWidget('buttons', {
+      id: 'elementor-library--site-info__dialog',
+      effects: {
+        show: 'show',
+        hide: 'hide'
+      },
+      position: {
+        of: this.ui.siteAccountBadge,
+        at: 'top-35'
+      }
+    }).setMessage(message);
+    this.siteAccountBadgeDialog.getElements('widget').addClass('variant-b');
+    this.siteAccountBadgeDialog.getElements('header').remove();
+    this.siteAccountBadgeDialog.getElements('buttonsWrapper').remove();
+    this.siteAccountBadgeDialog.show();
+    this.sendCTBadgeEvent('site');
+  },
+  hideSiteAccountBadgeTooltip: function hideSiteAccountBadgeTooltip() {
+    if (this.siteAccountBadgeDialog) {
+      this.siteAccountBadgeDialog.hide();
+    }
+  },
+  sendCTBadgeEvent: function sendCTBadgeEvent(badgeType) {
+    elementor.templates.eventManager.sendCTBadgeEvent({
+      ct_badge_hover_position: this.getOption('context'),
+      ct_badge_type: badgeType,
+      ct_position_state: this.getPositionState()
+    });
+  },
+  getPositionState: function getPositionState() {
+    if (!elementor.config.library_connect.is_connected) {
+      return 'connect';
+    }
+    if (!elementor.templates.hasCloudLibraryQuota() || this.cloudMaxCapacityReached()) {
+      return 'upgrade';
+    }
+    return 'eligible';
+  }
+});
+module.exports = TemplateLibrarySaveTemplateVariantBView;
 
 /***/ }),
 
@@ -10395,48 +11253,58 @@ module.exports = TemplateLibraryPreviewView;
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _constants = __webpack_require__(/*! ./../../constants */ "../assets/dev/js/editor/components/template-library/constants.js");
+var _keyboardNav = __webpack_require__(/*! elementor-editor-utils/keyboard-nav */ "../assets/dev/js/editor/utils/keyboard-nav.js");
 var TemplateLibraryTemplateModel = __webpack_require__(/*! elementor-templates/models/template */ "../assets/dev/js/editor/components/template-library/models/template.js");
 var TemplateLibraryCollection = __webpack_require__(/*! elementor-templates/collections/templates */ "../assets/dev/js/editor/components/template-library/collections/templates.js");
 var FolderCollectionView = __webpack_require__(/*! ./folders/folders-list */ "../assets/dev/js/editor/components/template-library/views/parts/folders/folders-list.js");
 var LOAD_MORE_ID = 0;
 var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
+  tagName: 'main',
   id: 'elementor-template-library-save-template',
   template: '#tmpl-elementor-template-library-save-template',
-  ui: {
-    form: '#elementor-template-library-save-template-form',
-    submitButton: '#elementor-template-library-save-template-submit',
-    ellipsisIcon: '.cloud-library-form-inputs .ellipsis-container',
-    foldersList: '.cloud-folder-selection-dropdown ul',
-    foldersDropdown: '.cloud-folder-selection-dropdown',
-    foldersListContainer: '.cloud-folder-selection-dropdown-list',
-    removeFolderSelection: '.source-selections .selected-folder i',
-    selectedFolder: '.selected-folder',
-    selectedFolderText: '.selected-folder-text',
-    hiddenInputSelectedFolder: '#parentId',
-    templateNameInput: '#elementor-template-library-save-template-name',
-    localInput: '.source-selections-input.local',
-    cloudInput: '.source-selections-input.cloud',
-    sourceSelectionCheckboxes: '.source-selections-input input[type="checkbox"]',
-    infoIcon: '.source-selections-input.cloud .eicon-info',
-    connect: '#elementor-template-library-connect__badge',
-    connectBadge: '.source-selections-input.cloud .connect-badge',
-    cloudFormInputs: '.cloud-library-form-inputs',
-    upgradeBadge: '.source-selections-input.cloud upgrade-badge'
+  ui: function ui() {
+    return {
+      form: '#elementor-template-library-save-template-form',
+      submitButton: '#elementor-template-library-save-template-submit',
+      ellipsisIcon: '.cloud-library-form-inputs .ellipsis-container',
+      foldersList: '.cloud-folder-selection-dropdown ul',
+      foldersDropdown: '.cloud-folder-selection-dropdown',
+      foldersListContainer: '.cloud-folder-selection-dropdown-list',
+      removeFolderSelection: '.source-selections .selected-folder i',
+      selectedFolder: '.selected-folder',
+      selectedFolderText: '.selected-folder-text',
+      hiddenInputSelectedFolder: '#parentId',
+      templateNameInput: '#elementor-template-library-save-template-name',
+      localInput: '.source-selections-input.local',
+      cloudInput: '.source-selections-input.cloud',
+      sourceSelectionCheckboxes: '.source-selections-input input[type="checkbox"]',
+      infoIcon: '.source-selections-input.cloud .eicon-info',
+      connect: '#elementor-template-library-connect__badge',
+      connectBadge: '.source-selections-input.cloud .connect-badge',
+      cloudFormInputs: '.cloud-library-form-inputs',
+      upgradeBadge: '.source-selections-input.cloud .upgrade-badge'
+    };
   },
-  events: {
-    'submit @ui.form': 'onFormSubmit',
-    'click @ui.ellipsisIcon': 'onEllipsisIconClick',
-    'click @ui.foldersList': 'onFoldersListClick',
-    'click @ui.removeFolderSelection': 'onRemoveFolderSelectionClick',
-    'click @ui.selectedFolderText': 'onSelectedFolderTextClick',
-    'click @ui.upgradeBadge': 'onUpgradeBadgeClicked',
-    'change @ui.sourceSelectionCheckboxes': 'handleSourceSelectionChange',
-    'mouseenter @ui.infoIcon': 'showInfoTip',
-    'mouseenter @ui.connect': 'showConnectInfoTip',
-    'input @ui.templateNameInput': 'onTemplateNameInputChange'
+  events: function events() {
+    return {
+      'submit @ui.form': 'onFormSubmit',
+      'click @ui.ellipsisIcon': 'onEllipsisIconClick',
+      'keydown @ui.ellipsisIcon': 'onEllipsisIconKeyDown',
+      'click @ui.foldersList': 'onFoldersListClick',
+      'keydown @ui.foldersListContainer': 'onFoldersListKeyDown',
+      'click @ui.removeFolderSelection': 'onRemoveFolderSelectionClick',
+      'click @ui.selectedFolderText': 'onSelectedFolderTextClick',
+      'click @ui.upgradeBadge': 'onUpgradeBadgeClicked',
+      'change @ui.sourceSelectionCheckboxes': 'handleSourceSelectionChange',
+      'mouseenter @ui.infoIcon': 'showInfoTip',
+      'mouseleave @ui.infoIcon': 'hideInfoTip',
+      'mouseenter @ui.connectBadge': 'showConnectInfoTip',
+      'mouseleave @ui.connectBadge': 'hideConnectInfoTip',
+      'input @ui.templateNameInput': 'onTemplateNameInputChange'
+    };
   },
   onRender: function onRender() {
     var _elementorAppConfig$c,
@@ -10455,6 +11323,9 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     } else {
       this.handleOnRender();
     }
+  },
+  onDestroy: function onDestroy() {
+    this.unbindDocumentClickHandler();
   },
   handleOnRender: function handleOnRender() {
     var _this2 = this;
@@ -10483,6 +11354,7 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     if (!elementor.config.library_connect.is_connected) {
       this.handleElementorConnect();
     }
+    this.bindDocumentClickHandler();
   },
   cloudMaxCapacityReached: function cloudMaxCapacityReached() {
     var _elementorAppConfig$c2, _elementorAppConfig$c3, _elementorAppConfig$c4, _elementorAppConfig$c5;
@@ -10552,25 +11424,124 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
       saveContext = this.getOption('context');
     return templateType["".concat(saveContext, "Dialog")];
   },
-  onFormSubmit: function onFormSubmit(event) {
-    var _this$templateHelpers3;
-    event.preventDefault();
-    var formData = this.ui.form.elementorSerializeObject(),
-      JSONParams = {
-        remove: ['default']
-      };
-    formData.parentTitle = formData.parentId ? this.ui.selectedFolderText.html() : '';
-    formData.content = this.model ? [this.model.toJSON(JSONParams)] : elementor.elements.toJSON(JSONParams);
-    this.updateSourceSelections(formData);
-    if (!(formData !== null && formData !== void 0 && formData.source) && (_this$templateHelpers3 = this.templateHelpers()) !== null && _this$templateHelpers3 !== void 0 && _this$templateHelpers3.canSaveToCloud) {
-      this.showEmptySourceErrorDialog();
+  onEllipsisIconKeyDown: function onEllipsisIconKeyDown(event) {
+    if ('Escape' === event.key) {
+      event.preventDefault();
+      if (this.ui.foldersDropdown.is(':visible')) {
+        this.hideFoldersDropdown();
+        (0, _keyboardNav.suppressEscapeKeyUp)(event);
+      }
       return;
     }
-    this.ui.submitButton.addClass('elementor-button-state');
-    this.updateSaveContext(formData);
-    this.updateToastConfig(formData);
-    this.updateSourceState(formData);
-    elementor.templates.saveTemplate(this.getSaveType(), formData);
+    if ('Tab' === event.key && !event.shiftKey || 'ArrowDown' === event.key) {
+      if (this.ui.foldersDropdown.is(':visible')) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.focusFirstFolderItem();
+      }
+    }
+  },
+  onFoldersListKeyDown: function onFoldersListKeyDown(event) {
+    if ('Escape' === event.key) {
+      event.preventDefault();
+      this.hideFoldersDropdown();
+      this.ui.ellipsisIcon.trigger('focus');
+      (0, _keyboardNav.suppressEscapeKeyUp)(event);
+      return;
+    }
+    if ('Tab' === event.key) {
+      this.handleFolderTab(event);
+      return;
+    }
+    var $items = this.getFolderItems();
+    (0, _keyboardNav.rovingTabindex)({
+      event: event,
+      $items: $items,
+      orientation: 'vertical',
+      homeEnd: false,
+      onActivate: function onActivate(e, $item) {
+        e.stopPropagation();
+        $item.trigger('click');
+      }
+    });
+    event.stopPropagation();
+  },
+  handleFolderTab: function handleFolderTab(event) {
+    var $items = this.getFolderItems();
+    var currentIndex = $items.index(event.target);
+    if (event.shiftKey) {
+      if (currentIndex <= 0) {
+        // Close dropdown and let the browser naturally move focus backwards.
+        this.hideFoldersDropdown();
+        this.ui.ellipsisIcon.trigger('focus');
+      } else {
+        event.preventDefault();
+        event.stopPropagation();
+        $items.eq(currentIndex - 1).trigger('focus');
+      }
+      return;
+    }
+    if (currentIndex < $items.length - 1) {
+      event.preventDefault();
+      event.stopPropagation();
+      $items.eq(currentIndex + 1).trigger('focus');
+    } else {
+      // Close dropdown and let the browser naturally advance focus forward.
+      this.hideFoldersDropdown();
+      this.ui.ellipsisIcon.trigger('focus');
+    }
+  },
+  updateEllipsisAriaExpanded: function updateEllipsisAriaExpanded(expanded) {
+    this.ui.ellipsisIcon.attr('aria-expanded', expanded ? 'true' : 'false');
+  },
+  onFormSubmit: function onFormSubmit(event) {
+    var _this3 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var _this3$templateHelper;
+      var formData, JSONParams, _t;
+      return _regenerator.default.wrap(function (_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            event.preventDefault();
+            formData = _this3.ui.form.elementorSerializeObject(), JSONParams = {
+              remove: ['default']
+            };
+            formData.parentTitle = formData.parentId ? _this3.ui.selectedFolderText.html() : '';
+            formData.content = _this3.model ? [_this3.model.toJSON(JSONParams)] : elementor.elements.toJSON(JSONParams);
+            _this3.updateSourceSelections(formData);
+            if (!(!(formData !== null && formData !== void 0 && formData.source) && (_this3$templateHelper = _this3.templateHelpers()) !== null && _this3$templateHelper !== void 0 && _this3$templateHelper.canSaveToCloud)) {
+              _context.next = 1;
+              break;
+            }
+            _this3.showEmptySourceErrorDialog();
+            return _context.abrupt("return");
+          case 1:
+            _this3.ui.submitButton.addClass('elementor-button-state');
+            _this3.updateSaveContext(formData);
+            _this3.updateToastConfig(formData);
+            _this3.updateSourceState(formData);
+            _context.prev = 2;
+            _context.next = 3;
+            return $e.run('document/save/auto', {
+              force: true
+            });
+          case 3:
+            _context.next = 5;
+            break;
+          case 4:
+            _context.prev = 4;
+            _t = _context["catch"](2);
+          case 5:
+            _context.next = 6;
+            return elementor.templates.syncGlobalStylesBeforeSave();
+          case 6:
+            elementor.templates.saveTemplate(_this3.getSaveType(), formData);
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[2, 4]]);
+    }))();
   },
   updateSourceSelections: function updateSourceSelections(formData) {
     var selectedSources = ['cloud', 'local'].filter(function (type) {
@@ -10657,13 +11628,13 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     return sprintf(__('%1$s %2$s.', 'elementor'), title ? "\"".concat(title, "\"") : __('Template', 'elementor'), action);
   },
   getToastButtons: function getToastButtons(lastSource, parentId, parentTitle) {
-    var _this3 = this;
+    var _this4 = this;
     var parsedParentId = parseInt(parentId, 10) || null;
     return [{
       name: 'template_after_save',
       text: __('View', 'elementor'),
       callback: function callback() {
-        return _this3.navigateToSavedSource(lastSource, parsedParentId, parentTitle);
+        return _this4.navigateToSavedSource(lastSource, parsedParentId, parentTitle);
       }
     }];
   },
@@ -10690,49 +11661,70 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     }
     if (!this.ui.foldersDropdown.is(':visible')) {
       this.ui.foldersDropdown.show();
+    } else {
+      this.hideFoldersDropdown();
     }
   },
   onEllipsisIconClick: function onEllipsisIconClick() {
-    var _this4 = this;
-    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-      return _regenerator.default.wrap(function (_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _this5 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      return _regenerator.default.wrap(function (_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            if (!_this4.ui.foldersDropdown.is(':visible')) {
-              _context.next = 1;
+            if (!_this5.ui.foldersDropdown.is(':visible')) {
+              _context2.next = 1;
               break;
             }
-            _this4.ui.foldersDropdown.hide();
-            return _context.abrupt("return");
+            _this5.hideFoldersDropdown();
+            _this5.updateEllipsisAriaExpanded(false);
+            return _context2.abrupt("return");
           case 1:
-            _this4.ui.foldersDropdown.show();
-            if (_this4.folderCollectionView) {
-              _context.next = 4;
+            _this5.ui.foldersDropdown.show();
+            _this5.updateEllipsisAriaExpanded(true);
+            if (_this5.folderCollectionView) {
+              _context2.next = 5;
               break;
             }
-            _this4.folderCollectionView = new FolderCollectionView({
+            _this5.folderCollectionView = new FolderCollectionView({
               collection: new TemplateLibraryCollection()
             });
-            _this4.addSpinner();
-            _this4.renderFolderDropdown();
-            _context.prev = 2;
-            _context.next = 3;
-            return _this4.fetchFolders();
+            _this5.addSpinner();
+            _this5.renderFolderDropdown();
+            _context2.prev = 2;
+            _context2.next = 3;
+            return _this5.fetchFolders();
           case 3:
-            _context.prev = 3;
-            _this4.removeSpinner();
-            _this4.disableSelectedFolder();
-            return _context.finish(3);
+            _context2.prev = 3;
+            _this5.removeSpinner();
+            _this5.disableSelectedFolder();
+            _this5.focusFirstFolderItem();
+            return _context2.finish(3);
           case 4:
+            _context2.next = 6;
+            break;
+          case 5:
+            _this5.focusFirstFolderItem();
+          case 6:
             elementor.templates.eventManager.sendPageViewEvent({
               location: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.saveModalSelectFolder
             });
-          case 5:
+          case 7:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
-      }, _callee, null, [[2,, 3, 4]]);
+      }, _callee2, null, [[2,, 3, 4]]);
     }))();
+  },
+  getFolderItems: function getFolderItems() {
+    // Must query the DOM fresh because the folder list is rendered dynamically
+    // after the view's initial render, so this.ui.foldersList may be stale.
+    return this.$('.cloud-folder-selection-dropdown ul li:visible');
+  },
+  focusFirstFolderItem: function focusFirstFolderItem() {
+    var $firstItem = this.getFolderItems().first();
+    if ($firstItem.length) {
+      $firstItem.trigger('focus');
+    }
   },
   renderFolderDropdown: function renderFolderDropdown() {
     var _this$folderCollectio;
@@ -10754,18 +11746,18 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     }
   },
   fetchFolders: function fetchFolders() {
-    var _this5 = this;
+    var _this6 = this;
     return new Promise(function (resolve) {
-      var offset = _this5.folderCollectionView.collection.length - 1;
+      var offset = _this6.folderCollectionView.collection.length - 1;
       var ajaxOptions = {
         data: {
           source: 'cloud',
           offset: offset
         },
         success: function success(response) {
-          _this5.folderCollectionView.collection.add(response === null || response === void 0 ? void 0 : response.templates);
-          if (_this5.shouldAddLoadMoreItem(response)) {
-            _this5.addLoadMoreItem();
+          _this6.folderCollectionView.collection.add(response === null || response === void 0 ? void 0 : response.templates);
+          if (_this6.shouldAddLoadMoreItem(response)) {
+            _this6.addLoadMoreItem();
           }
           resolve(response);
         },
@@ -10804,7 +11796,7 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
   },
   handleFolderSelected: function handleFolderSelected(id, value) {
     this.highlightSelectedFolder(id);
-    this.ui.foldersDropdown.hide();
+    this.hideFoldersDropdown();
     this.ui.ellipsisIcon.hide();
     this.ui.selectedFolderText.html(value);
     this.ui.selectedFolder.show();
@@ -10825,29 +11817,29 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     this.ui.selectedFolder.hide();
     this.ui.ellipsisIcon.show();
     this.ui.hiddenInputSelectedFolder.val('');
-    this.ui.foldersDropdown.hide();
+    this.hideFoldersDropdown();
   },
   loadMoreFolders: function loadMoreFolders() {
-    var _this6 = this;
-    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      return _regenerator.default.wrap(function (_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+    var _this7 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      return _regenerator.default.wrap(function (_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _this6.removeLoadMoreItem();
-            _this6.addSpinner();
-            _context2.prev = 1;
-            _context2.next = 2;
-            return _this6.fetchFolders();
+            _this7.removeLoadMoreItem();
+            _this7.addSpinner();
+            _context3.prev = 1;
+            _context3.next = 2;
+            return _this7.fetchFolders();
           case 2:
-            _context2.prev = 2;
-            _this6.removeSpinner();
-            _this6.disableSelectedFolder();
-            return _context2.finish(2);
+            _context3.prev = 2;
+            _this7.removeSpinner();
+            _this7.disableSelectedFolder();
+            return _context3.finish(2);
           case 3:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
-      }, _callee2, null, [[1,, 2, 3]]);
+      }, _callee3, null, [[1,, 2, 3]]);
     }))();
   },
   shouldAddLoadMoreItem: function shouldAddLoadMoreItem(response) {
@@ -10872,13 +11864,13 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     this.maybeEnableSaveButton();
   },
   maybeAllowOnlyOneCheckboxToBeChecked: function maybeAllowOnlyOneCheckboxToBeChecked(event) {
-    var _this7 = this;
+    var _this8 = this;
     if (this.moreThanOneCheckboxCanBeChecked()) {
       return;
     }
     var selectedCheckbox = event.currentTarget;
     this.ui.sourceSelectionCheckboxes.each(function (_, checkbox) {
-      var wrapper = _this7.$(checkbox).closest('.source-selections-input');
+      var wrapper = _this8.$(checkbox).closest('.source-selections-input');
       if (checkbox !== selectedCheckbox) {
         if (selectedCheckbox.checked) {
           wrapper.addClass('disabled');
@@ -10893,7 +11885,7 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     return _constants.SAVE_CONTEXTS.SAVE === this.getOption('context') || 'cloud' !== elementor.templates.getFilter('source');
   },
   showInfoTip: function showInfoTip() {
-    var _this8 = this;
+    var _this9 = this;
     if (this.infoTipDialog) {
       this.infoTipDialog.hide();
     }
@@ -10915,11 +11907,19 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
       classes: '',
       callback: function callback() {
         open(goLink, '_blank');
-        _this8.onUpgradeBadgeClicked();
+        _this9.onUpgradeBadgeClicked();
       }
     });
     this.infoTipDialog.getElements('header').remove();
     this.infoTipDialog.show();
+  },
+  hideInfoTip: function hideInfoTip() {
+    if (this.infoTipDialog) {
+      this.infoTipDialog.hide();
+    }
+  },
+  getConnectInfoTipPosition: function getConnectInfoTipPosition() {
+    return 'top+80';
   },
   showConnectInfoTip: function showConnectInfoTip() {
     if (this.connectInfoTipDialog) {
@@ -10933,12 +11933,21 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
       },
       position: {
         of: this.ui.connectBadge,
-        at: 'top+80'
+        at: this.getConnectInfoTipPosition()
       }
     }).setMessage(__('To access the Cloud Templates Library you must have an active Elementor Pro subscription', 'elementor') + ' <i>' + __('and', 'elementor') + '</i> ' + __('connect your site.', 'elementor'));
     this.connectInfoTipDialog.getElements('header').remove();
     this.connectInfoTipDialog.getElements('buttonsWrapper').remove();
+    this.addVariantClass(this.connectInfoTipDialog.getElements('widget'));
     this.connectInfoTipDialog.show();
+  },
+  addVariantClass: function addVariantClass() {
+    return '';
+  },
+  hideConnectInfoTip: function hideConnectInfoTip() {
+    if (this.connectInfoTipDialog) {
+      this.connectInfoTipDialog.hide();
+    }
   },
   handleElementorConnect: function handleElementorConnect() {
     elementor.templates.eventManager.sendPageViewEvent({
@@ -10964,6 +11973,33 @@ var TemplateLibrarySaveTemplateView = Marionette.ItemView.extend({
     this.ui.submitButton.toggleClass('e-primary', !shouldDisableSubmitButton);
     this.ui.submitButton.prop('disabled', shouldDisableSubmitButton);
   },
+  hideFoldersDropdown: function hideFoldersDropdown() {
+    this.ui.foldersDropdown.hide();
+    this.updateEllipsisAriaExpanded(false);
+  },
+  bindDocumentClickHandler: function bindDocumentClickHandler() {
+    this.documentClickHandler = this.hideDropdownIfClickOutside.bind(this);
+    elementor.templates.layout.modalContent.$el.on('click', this.documentClickHandler);
+  },
+  unbindDocumentClickHandler: function unbindDocumentClickHandler() {
+    if (!this.documentClickHandler) {
+      return;
+    }
+    elementor.templates.layout.modalContent.$el.off('click', this.documentClickHandler);
+    this.documentClickHandler = null;
+  },
+  hideDropdownIfClickOutside: function hideDropdownIfClickOutside(event) {
+    if (!this.ui.foldersDropdown.is(':visible')) {
+      return;
+    }
+    var target = jQuery(event.target);
+    var isClickInsideDropdown = target.closest(this.ui.foldersDropdown).length > 0;
+    var isClickOnEllipsisIcon = target.closest(this.ui.ellipsisIcon).length > 0;
+    var isClickOnSelectedFolderText = target.closest(this.ui.selectedFolderText).length > 0;
+    if (!isClickInsideDropdown && !isClickOnEllipsisIcon && !isClickOnSelectedFolderText) {
+      this.hideFoldersDropdown();
+    }
+  },
   onUpgradeBadgeClicked: function onUpgradeBadgeClicked() {
     var upgradePosition = elementor.templates.hasCloudLibraryQuota() ? 'save to-max' : 'save to-free';
     elementor.templates.eventManager.sendUpgradeClickedEvent({
@@ -10987,6 +12023,7 @@ module.exports = TemplateLibrarySaveTemplateView;
 
 
 var TemplateLibraryTemplatesEmptyView = Marionette.ItemView.extend({
+  tagName: 'main',
   id: 'elementor-template-library-templates-empty',
   template: '#tmpl-elementor-template-library-templates-empty',
   ui: {
@@ -11086,11 +12123,13 @@ var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/inte
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _select = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/select2.js */ "../assets/dev/js/editor/utils/select2.js"));
+var _keyboardNav = __webpack_require__(/*! elementor-editor-utils/keyboard-nav */ "../assets/dev/js/editor/utils/keyboard-nav.js");
 var _constants = __webpack_require__(/*! ./../../constants */ "../assets/dev/js/editor/components/template-library/constants.js");
 var TemplateLibraryTemplateLocalView = __webpack_require__(/*! elementor-templates/views/template/local */ "../assets/dev/js/editor/components/template-library/views/template/local.js");
 var TemplateLibraryTemplateRemoteView = __webpack_require__(/*! elementor-templates/views/template/remote */ "../assets/dev/js/editor/components/template-library/views/template/remote.js");
 var TemplateLibraryTemplateCloudView = __webpack_require__(/*! elementor-templates/views/template/cloud */ "../assets/dev/js/editor/components/template-library/views/template/cloud.js");
 var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
+  tagName: 'main',
   template: '#tmpl-elementor-template-library-templates',
   id: 'elementor-template-library-templates',
   childViewContainer: '#elementor-template-library-templates-container',
@@ -11107,13 +12146,14 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     orderLabels: 'label.elementor-template-library-order-label',
     searchInputIcon: '#elementor-template-library-filter-text-wrapper i',
     loadMoreAnchor: '#elementor-template-library-load-more-anchor',
+    sourceFilterRadiogroup: '.elementor-template-library-filter-select-source',
     selectSourceFilter: '.elementor-template-library-filter-select-source .source-option',
     addNewFolder: '#elementor-template-library-add-new-folder',
     addNewFolderDivider: '.elementor-template-library-filter-toolbar-side-actions .divider',
     selectGridView: '#elementor-template-library-view-grid',
     selectListView: '#elementor-template-library-view-list',
     bulkSelectionActionBar: '.bulk-selection-action-bar',
-    bulkActionBarDelete: '.bulk-selection-action-bar .bulk-delete i',
+    bulkActionBarDelete: '.bulk-selection-action-bar .bulk-delete',
     bulkSelectedCount: '.bulk-selection-action-bar .selected-count',
     bulkSelectAllCheckbox: '#bulk-select-all',
     clearBulkSelections: '.bulk-selection-action-bar .clear-bulk-selections',
@@ -11124,7 +12164,13 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     quotaValue: '.quota-progress-container .quota-progress-bar-value',
     quotaWarning: '.quota-progress-container .progress-bar-container .quota-warning',
     quotaUpgrade: '.quota-progress-container .progress-bar-container .quota-warning a',
-    navigationContainer: '#elementor-template-library-navigation-container'
+    quotaStatus: '#elementor-template-library-quota-status',
+    navigationContainer: '#elementor-template-library-navigation-container',
+    sourceOptionBadges: '.source-option-badge.variant-b-only',
+    cloudBadge: '.source-option-badge.cloud-badge',
+    siteBadge: '.source-option-badge.site-badge',
+    sortStatus: '#elementor-template-library-sort-status',
+    loadStatus: '#elementor-template-library-load-status'
   },
   events: {
     'input @ui.textFilter': 'onTextFilterInput',
@@ -11132,6 +12178,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     'change @ui.myFavoritesFilter': 'onMyFavoritesFilterChange',
     'mousedown @ui.orderLabels': 'onOrderLabelsClick',
     'click @ui.selectSourceFilter': 'onSelectSourceFilterChange',
+    'keydown @ui.selectSourceFilter': 'onSelectSourceFilterKeyDown',
     'click @ui.addNewFolder': 'onCreateNewFolderClick',
     'click @ui.selectGridView': 'onSelectGridViewClick',
     'click @ui.selectListView': 'onSelectListViewClick',
@@ -11142,7 +12189,11 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     'click @ui.bulkMove': 'onClickBulkMove',
     'click @ui.bulkActionBarDelete': 'onBulkDeleteClick',
     'click @ui.bulkCopy': 'onClickBulkCopy',
-    'click @ui.quotaUpgrade': 'onQuotaUpgradeClicked'
+    'click @ui.quotaUpgrade': 'onQuotaUpgradeClicked',
+    'mouseenter @ui.cloudBadge': 'showCloudBadgeTooltip',
+    'mouseenter @ui.siteBadge': 'showSiteBadgeTooltip',
+    'mouseleave @ui.cloudBadge': 'hideCloudBadgeTooltip',
+    'mouseleave @ui.siteBadge': 'hideSiteBadgeTooltip'
   },
   className: 'no-bulk-selections',
   resetQuotaBarStyles: function resetQuotaBarStyles() {
@@ -11172,6 +12223,18 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     var quotaState = this.resolveQuotaState(value);
     this.handleQuotaWarning(quotaState, value);
     this.setQuotaBarStyles(quotaState);
+    if (this.ui.quota.length) {
+      this.ui.quota.attr({
+        'aria-valuenow': value
+      });
+    }
+    if (quota && this.ui.quotaStatus.length) {
+      // Translators: %1$s: current usage number, %2$s: threshold number
+      var statusText = sprintf(
+      // Translators: %1$s: current usage number, %2$s: threshold number
+      __('%1$s of %2$s templates used', 'elementor'), quota.currentUsage.toLocaleString(), quota.threshold.toLocaleString());
+      this.ui.quotaStatus.text(statusText);
+    }
   },
   resolveQuotaState: function resolveQuotaState(value) {
     if (value < 80) {
@@ -11193,6 +12256,13 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     } else {
       document.querySelectorAll('.bulk-selected-item').forEach(function (item) {
         item.classList.remove('bulk-selected-item');
+        item.setAttribute('aria-selected', 'false');
+        item.setAttribute('tabindex', '-1');
+        var checkbox = item.querySelector('.bulk-selection-item-checkbox');
+        if (checkbox) {
+          checkbox.checked = false;
+          checkbox.setAttribute('aria-checked', 'false');
+        }
       });
     }
   },
@@ -11207,6 +12277,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
   updateBulkSelectedItems: function updateBulkSelectedItems(isChecked) {
     document.querySelectorAll('.bulk-selection-item-checkbox').forEach(function (checkbox) {
       checkbox.checked = isChecked;
+      checkbox.setAttribute('aria-checked', String(isChecked));
       var templateId = checkbox.dataset.template_id;
       var type = checkbox.dataset.type;
       var parentDiv = checkbox.closest('.elementor-template-library-template');
@@ -11216,6 +12287,10 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
       } else {
         elementor.templates.removeBulkSelectionItem(templateId, type);
         parentDiv === null || parentDiv === void 0 || parentDiv.classList.remove('bulk-selected-item');
+      }
+      if (parentDiv) {
+        parentDiv.setAttribute('aria-selected', String(isChecked));
+        parentDiv.setAttribute('tabindex', isChecked ? '0' : '-1');
       }
     });
   },
@@ -11266,7 +12341,10 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
   initialize: function initialize() {
     this.handleQuotaBar = this.handleQuotaBar.bind(this);
     this.handleQuotaUpdate = this.handleQuotaUpdate.bind(this);
+    this.handleSourceFilterChange = this.handleSourceFilterChange.bind(this);
     this.listenTo(elementor.channels.templates, 'filter:change', this._renderChildren);
+    this.listenTo(elementor.channels.templates, 'filter:change', this.handleSourceOptionBadges);
+    this.listenTo(elementor.channels.templates, 'filter:change', this.handleSourceFilterChange);
     this.listenTo(elementor.channels.templates, 'quota:updated', this.handleQuotaUpdate);
     this.debouncedSearchTemplates = _.debounce(this.searchTemplates, 300);
   },
@@ -11279,6 +12357,27 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
         _this2.handleQuotaBar();
       });
     }
+  },
+  handleSourceFilterChange: function handleSourceFilterChange(filterName) {
+    if ('source' === filterName) {
+      var _elementor$templates$2;
+      var activeSource = (_elementor$templates$2 = elementor.templates.getFilter('source')) !== null && _elementor$templates$2 !== void 0 ? _elementor$templates$2 : 'local';
+      this.updateSourceFilterAriaAttributes(activeSource);
+    }
+  },
+  updateSourceFilterAriaAttributes: function updateSourceFilterAriaAttributes(selectedSource) {
+    if (!this.ui.selectSourceFilter.length) {
+      return;
+    }
+    this.ui.selectSourceFilter.each(function () {
+      var $option = jQuery(this),
+        source = $option.data('source'),
+        isSelected = source === selectedSource;
+      $option.attr({
+        'aria-checked': isSelected ? 'true' : 'false',
+        tabindex: isSelected ? '0' : '-1'
+      });
+    });
   },
   filter: function filter(childModel) {
     var activeSource = elementor.templates.getFilter('source');
@@ -11318,8 +12417,30 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     }
     this.collection.comparator = comparator;
     this.collection.sort();
+    this.announceSortStatus(by, reverseOrder);
+  },
+  announceSortStatus: function announceSortStatus(by, reverseOrder) {
+    var orderLabels = {
+      title: __('Name', 'elementor'),
+      type: __('Type', 'elementor'),
+      author: __('Created By', 'elementor'),
+      date: __('Creation Date', 'elementor')
+    };
+    var orderDirection = reverseOrder ? __('descending', 'elementor') : __('ascending', 'elementor');
+    var sortLabel = orderLabels[by] || by;
+    var message = __('Sorted by', 'elementor') + ' ' + sortLabel + ', ' + orderDirection;
+    if (this.ui.sortStatus.length) {
+      this.ui.sortStatus.text(message);
+    }
+  },
+  announceLoadStatus: function announceLoadStatus(count) {
+    var message = count + ' ' + __('more templates loaded', 'elementor');
+    if (this.ui.loadStatus.length) {
+      this.ui.loadStatus.text(message);
+    }
   },
   handleCloudOrder: function handleCloudOrder(by, reverseOrder) {
+    var _this3 = this;
     elementor.templates.setFilter('orderby', by);
     elementor.templates.setFilter('order', reverseOrder ? 'desc' : 'asc');
     this.onClearBulkSelections();
@@ -11328,6 +12449,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     elementor.templates.loadMore({
       onUpdate: function onUpdate() {
         elementor.templates.layout.hideLoadingView();
+        _this3.announceSortStatus(by, reverseOrder);
       },
       search: this.ui.textFilter.val(),
       refresh: true
@@ -11400,6 +12522,52 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
       this.removeScrollListener();
     }
   },
+  shouldShowVariantB: function shouldShowVariantB() {
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var experimentVariant;
+      return _regenerator.default.wrap(function (_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 1;
+            return elementor.templates.eventManager.getSaveTemplateExperimentVariant();
+          case 1:
+            experimentVariant = _context.sent;
+            return _context.abrupt("return", 'B' === experimentVariant);
+          case 2:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }))();
+  },
+  handleSourceOptionBadges: function handleSourceOptionBadges() {
+    var _this4 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var shouldShow, activeSource;
+      return _regenerator.default.wrap(function (_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 1;
+            return _this4.shouldShowVariantB();
+          case 1:
+            shouldShow = _context2.sent;
+            if (shouldShow) {
+              _context2.next = 2;
+              break;
+            }
+            _this4.ui.sourceOptionBadges.hide();
+            return _context2.abrupt("return");
+          case 2:
+            activeSource = elementor.templates.getFilter('source');
+            _this4.$('.source-option-badge.site-badge').toggle('local' === activeSource);
+            _this4.$('.source-option-badge.cloud-badge').toggle('cloud' === activeSource);
+          case 3:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }))();
+  },
   onRender: function onRender() {
     elementor.templates.clearBulkSelectionItems();
     var activeSource = elementor.templates.getFilter('source');
@@ -11420,6 +12588,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
         location: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.siteTab
       });
     }
+    this.handleSourceOptionBadges();
   },
   onRenderCollection: function onRenderCollection() {
     this.addSourceData();
@@ -11433,6 +12602,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
       this.addViewData();
       this.handleQuotaUpdate();
     }
+    this.handleSourceOptionBadges();
   },
   onBeforeRenderEmpty: function onBeforeRenderEmpty() {
     this.addSourceData();
@@ -11450,27 +12620,27 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
     elementor.templates.setFilter('text', this.ui.textFilter.val());
   },
   searchTemplates: function searchTemplates(source) {
-    var _this3 = this;
-    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-      return _regenerator.default.wrap(function (_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _this5 = this;
+    return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      return _regenerator.default.wrap(function (_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _this3.showLoadingSpinner();
-            _context.prev = 1;
-            _context.next = 2;
+            _this5.showLoadingSpinner();
+            _context3.prev = 1;
+            _context3.next = 2;
             return elementor.templates.searchTemplates({
               source: source,
-              search: _this3.ui.textFilter.val()
+              search: _this5.ui.textFilter.val()
             });
           case 2:
-            _context.prev = 2;
-            _this3.showSearchIcon();
-            return _context.finish(2);
+            _context3.prev = 2;
+            _this5.showSearchIcon();
+            return _context3.finish(2);
           case 3:
           case "end":
-            return _context.stop();
+            return _context3.stop();
         }
-      }, _callee, null, [[1,, 2, 3]]);
+      }, _callee3, null, [[1,, 2, 3]]);
     }))();
   },
   showLoadingSpinner: function showLoadingSpinner() {
@@ -11486,6 +12656,23 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
   },
   onSelectSourceFilterChange: function onSelectSourceFilterChange(event) {
     elementor.templates.onSelectSourceFilterChange(event);
+  },
+  onSelectSourceFilterKeyDown: function onSelectSourceFilterKeyDown(event) {
+    var _this6 = this;
+    var handled = (0, _keyboardNav.rovingTabindex)({
+      event: event,
+      $items: this.ui.selectSourceFilter,
+      orientation: 'both',
+      activateOnFocus: true,
+      homeEnd: false,
+      onActivate: function onActivate(e, $item) {
+        _this6._restoreFocusToSourceFilter = true;
+        $item.trigger('click');
+      }
+    });
+    if (handled) {
+      this._restoreFocusToSourceFilter = true;
+    }
   },
   onSelectGridViewClick: function onSelectGridViewClick() {
     elementor.templates.onSelectViewChange('grid');
@@ -11510,7 +12697,7 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
   },
   handleLoadMore: function handleLoadMore() {
     var _elementor,
-      _this4 = this;
+      _this7 = this;
     if (this.removeScrollListener) {
       this.removeScrollListener();
     }
@@ -11524,18 +12711,62 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
       if (scrollPercentage < 90 || !canLoadMore) {
         return;
       }
-      _this4.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
+      _this7.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
       elementor.templates.layout.selectAllCheckboxMinus();
+      var previousCount = _this7.collection.length;
       elementor.templates.loadMore({
         onUpdate: function onUpdate() {
-          _this4.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
+          _this7.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
+          var newCount = _this7.collection.length;
+          var loadedCount = newCount - previousCount;
+          if (loadedCount > 0) {
+            _this7.announceLoadStatus(loadedCount);
+          }
         },
-        search: _this4.ui.textFilter.val()
+        search: _this7.ui.textFilter.val()
       });
     };
     scrollableContainer.on('scroll', listener);
+
+    // QA #13: Also trigger load-more when keyboard focus reaches the last few items
+    var focusListener = function focusListener(event) {
+      var canLoadMore = elementor.templates.canLoadMore() && !elementor.templates.isLoading();
+      if (!canLoadMore) {
+        return;
+      }
+      if (!_this7.$childViewContainer || !_this7.$childViewContainer.length) {
+        return;
+      }
+      var $children = _this7.$childViewContainer.children();
+      var totalChildren = $children.length;
+      if (totalChildren < 2) {
+        return;
+      }
+
+      // Check if focus target is within one of the last 2 template items
+      var $target = jQuery(event.target);
+      var focusedIndex = $children.index($target.closest($children));
+      if (focusedIndex >= totalChildren - 2) {
+        _this7.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
+        elementor.templates.layout.selectAllCheckboxMinus();
+        var previousCount = _this7.collection.length;
+        elementor.templates.loadMore({
+          onUpdate: function onUpdate() {
+            _this7.ui.loadMoreAnchor.toggleClass('elementor-visibility-hidden');
+            var newCount = _this7.collection.length;
+            var loadedCount = newCount - previousCount;
+            if (loadedCount > 0) {
+              _this7.announceLoadStatus(loadedCount);
+            }
+          },
+          search: _this7.ui.textFilter.val()
+        });
+      }
+    };
+    scrollableContainer.on('focusin', focusListener);
     this.removeScrollListener = function () {
-      return scrollableContainer.off('scroll', listener);
+      scrollableContainer.off('scroll', listener);
+      scrollableContainer.off('focusin', focusListener);
     };
   },
   onCreateNewFolderClick: function onCreateNewFolderClick() {
@@ -11601,6 +12832,60 @@ var TemplateLibraryCollectionView = Marionette.CompositeView.extend({
       secondaryLocation: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.quotaBar,
       upgrade_position: "quota bar ".concat(value ? value + '%' : '')
     });
+  },
+  showCloudBadgeTooltip: function showCloudBadgeTooltip() {
+    if (this.cloudBadgeDialog) {
+      this.cloudBadgeDialog.hide();
+    }
+    var emailReplacement = elementor.config.library_connect.is_connected ? elementor.config.library_connect.user_email : __('connected', 'elementor');
+    /* Translators: %s: User's email. */
+    var message = sprintf(__('Only %s Elementor account can access Cloud Templates from any connected site.', 'elementor'), emailReplacement);
+    this.cloudBadgeDialog = elementor.dialogsManager.createWidget('buttons', {
+      id: 'elementor-library--cloud-upgrade__dialog',
+      effects: {
+        show: 'show',
+        hide: 'hide'
+      },
+      position: {
+        of: this.ui.cloudBadge,
+        at: 'top-50'
+      }
+    }).setMessage(message);
+    this.cloudBadgeDialog.getElements('widget').addClass('variant-b');
+    this.cloudBadgeDialog.getElements('header').remove();
+    this.cloudBadgeDialog.getElements('buttonsWrapper').remove();
+    this.cloudBadgeDialog.show();
+  },
+  hideCloudBadgeTooltip: function hideCloudBadgeTooltip() {
+    if (this.cloudBadgeDialog) {
+      this.cloudBadgeDialog.hide();
+    }
+  },
+  showSiteBadgeTooltip: function showSiteBadgeTooltip() {
+    if (this.siteBadgeDialog) {
+      this.siteBadgeDialog.hide();
+    }
+    var message = __('Authorized users on this site can access Site Templates.', 'elementor');
+    this.siteBadgeDialog = elementor.dialogsManager.createWidget('buttons', {
+      id: 'elementor-library--site-info__dialog',
+      effects: {
+        show: 'show',
+        hide: 'hide'
+      },
+      position: {
+        of: this.ui.siteBadge,
+        at: 'top-35'
+      }
+    }).setMessage(message);
+    this.siteBadgeDialog.getElements('widget').addClass('variant-b');
+    this.siteBadgeDialog.getElements('header').remove();
+    this.siteBadgeDialog.getElements('buttonsWrapper').remove();
+    this.siteBadgeDialog.show();
+  },
+  hideSiteBadgeTooltip: function hideSiteBadgeTooltip() {
+    if (this.siteBadgeDialog) {
+      this.siteBadgeDialog.hide();
+    }
   }
 });
 module.exports = TemplateLibraryCollectionView;
@@ -11705,18 +12990,49 @@ TemplateLibraryTemplateCloudView = TemplateLibraryTemplateLocalView.extend({
       return {
         'data-template_id': data.template_id,
         'data-type': data.type,
-        'data-status': data.status
+        'data-status': data.status,
+        tabindex: '0',
+        'aria-label': data.title || ''
       };
     }
   },
   ui: function ui() {
     return _.extend(TemplateLibraryTemplateLocalView.prototype.ui.apply(this, arguments), {
-      previewImg: '.elementor-template-library-template-thumbnail img'
+      previewImg: '.elementor-template-library-template-thumbnail img',
+      insertButton: '.elementor-template-library-template-insert'
+    });
+  },
+  events: function events() {
+    return _.extend(TemplateLibraryTemplateLocalView.prototype.events.apply(this, arguments), {
+      keydown: 'onGridCardKeyDown'
     });
   },
   modelEvents: _.extend({}, TemplateLibraryTemplateLocalView.prototype.modelEvents, {
     'change:preview_url': 'onPreviewUrlChange'
   }),
+  onGridCardKeyDown: function onGridCardKeyDown(event) {
+    if ('grid' !== elementor.templates.getViewSelection()) {
+      return;
+    }
+
+    // Only handle keydown events directly on the card element itself, not on children
+    if (event.target !== this.el) {
+      return;
+    }
+    if ('Enter' === event.key || ' ' === event.key) {
+      event.preventDefault();
+      if ('FOLDER' === this.model.get('subType')) {
+        $e.route('library/view-folder', {
+          model: this.model,
+          onAfter: function onAfter() {
+            elementor.templates.resetBulkActionBar();
+          }
+        });
+      } else {
+        this.handleGridViewItemSingleClick();
+      }
+    }
+  },
   onRender: function onRender() {
     var previewUrl = this.model.get('preview_url');
     if (this.shouldGeneratePreview()) {
@@ -11832,12 +13148,14 @@ module.exports = TemplateLibraryTemplateCloudView;
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _constants = __webpack_require__(/*! ./../../constants */ "../assets/dev/js/editor/components/template-library/constants.js");
+var _keyboardNav = __webpack_require__(/*! elementor-editor-utils/keyboard-nav */ "../assets/dev/js/editor/utils/keyboard-nav.js");
 var TemplateLibraryTemplateView = __webpack_require__(/*! elementor-templates/views/template/base */ "../assets/dev/js/editor/components/template-library/views/template/base.js");
 var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
   template: '#tmpl-elementor-template-library-template-local',
@@ -11862,6 +13180,8 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
       'change @ui.bulkSelectionItemCheckbox': 'onSelectBulkSelectionItemCheckbox',
       'click @ui.deleteButton': 'onDeleteButtonClick',
       'click @ui.toggleMore': 'onToggleMoreClick',
+      'keydown @ui.toggleMore': 'onToggleMoreKeyDown',
+      'keydown @ui.morePopup': 'onMenuKeyDown',
       'click @ui.renameButton': 'onRenameClick',
       'click @ui.moveButton': 'onMoveClick',
       'click @ui.copyButton': 'onCopyClick',
@@ -11870,6 +13190,137 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
   },
   modelEvents: {
     'change:title': 'onTitleChange'
+  },
+  onRender: function onRender() {
+    var _this = this;
+    if (this.ui.toggleMore.length) {
+      this.ui.toggleMore.attr({
+        'aria-haspopup': 'menu',
+        'aria-expanded': 'false'
+      });
+    }
+    if (this.ui.bulkSelectionItemCheckbox.length) {
+      this.updateRowSelectionAttributes();
+    }
+
+    // Set up click-outside handler to close context menu
+    if (this.ui.morePopup && this.ui.morePopup.length) {
+      this._onDocumentClick = function (e) {
+        if ('true' !== _this.ui.toggleMore.attr('aria-expanded')) {
+          return;
+        }
+        if (!_this.ui.toggleMore[0].contains(e.target) && !_this.ui.morePopup[0].contains(e.target)) {
+          _this.closeContextMenu();
+        }
+      };
+      jQuery(document).on('click', this._onDocumentClick);
+
+      // Set tabindex on menu items for keyboard focus
+      this.ui.morePopup.find('button, a').attr('tabindex', '-1');
+    }
+  },
+  onBeforeDestroy: function onBeforeDestroy() {
+    if (this._onDocumentClick) {
+      jQuery(document).off('click', this._onDocumentClick);
+    }
+  },
+  openContextMenu: function openContextMenu() {
+    this.handleLockedTemplate();
+    this.ui.toggleMore.attr('aria-expanded', 'true');
+    this.ui.morePopup.show();
+    elementor.templates.eventManager.sendPageViewEvent({
+      location: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.morePopup
+    });
+  },
+  closeContextMenu: function closeContextMenu() {
+    this.ui.toggleMore.attr('aria-expanded', 'false');
+    this.ui.morePopup.hide();
+  },
+  getMenuItems: function getMenuItems() {
+    return this.ui.morePopup.find('button:visible, a:visible');
+  },
+  onToggleMoreKeyDown: function onToggleMoreKeyDown(event) {
+    if ('Escape' === event.key) {
+      event.preventDefault();
+      if ('true' === this.ui.toggleMore.attr('aria-expanded')) {
+        this.closeContextMenu();
+        (0, _keyboardNav.suppressEscapeKeyUp)(event);
+      }
+      return;
+    }
+    if ('ArrowDown' === event.key || 'Enter' === event.key || ' ' === event.key) {
+      event.preventDefault();
+      event.stopPropagation();
+      if ('true' !== this.ui.toggleMore.attr('aria-expanded')) {
+        this.openContextMenu();
+      }
+      var $items = this.getMenuItems();
+      if ($items.length) {
+        $items.first().trigger('focus');
+      }
+    }
+  },
+  onMenuKeyDown: function onMenuKeyDown(event) {
+    if ('Escape' === event.key) {
+      event.preventDefault();
+      this.closeContextMenu();
+      this.ui.toggleMore.trigger('focus');
+      (0, _keyboardNav.suppressEscapeKeyUp)(event);
+      return;
+    }
+    if ('Tab' === event.key) {
+      this.handleMenuTab(event);
+      return;
+    }
+    var $items = this.getMenuItems();
+    (0, _keyboardNav.rovingTabindex)({
+      event: event,
+      $items: $items,
+      orientation: 'vertical',
+      homeEnd: true
+    });
+    event.stopPropagation();
+  },
+  handleMenuTab: function handleMenuTab(event) {
+    var $items = this.getMenuItems();
+    var currentIndex = $items.index(event.target);
+    if (event.shiftKey) {
+      if (currentIndex <= 0) {
+        // Close menu and let the browser naturally move focus backwards.
+        this.closeContextMenu();
+        this.ui.toggleMore.trigger('focus');
+      } else {
+        event.preventDefault();
+        event.stopPropagation();
+        $items.eq(currentIndex - 1).trigger('focus');
+      }
+      return;
+    }
+    if (currentIndex < $items.length - 1) {
+      event.preventDefault();
+      event.stopPropagation();
+      $items.eq(currentIndex + 1).trigger('focus');
+    } else {
+      // Close menu and let the browser naturally advance focus forward.
+      this.closeContextMenu();
+      this.ui.toggleMore.trigger('focus');
+    }
+  },
+  updateRowSelectionAttributes: function updateRowSelectionAttributes() {
+    var isChecked = this.ui.bulkSelectionItemCheckbox.prop('checked');
+    var isSelected = this.$el.hasClass('bulk-selected-item');
+    this.ui.bulkSelectionItemCheckbox.attr('aria-checked', isChecked);
+    if (isSelected) {
+      this.$el.attr({
+        'aria-selected': 'true',
+        tabindex: '0'
+      });
+    } else {
+      this.$el.attr({
+        'aria-selected': 'false',
+        tabindex: '-1'
+      });
+    }
   },
   handleLockedTemplate: function handleLockedTemplate() {
     var isLocked = this.model.isLocked();
@@ -11881,9 +13332,13 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
   onTitleChange: function onTitleChange() {
     var title = _.escape(this.model.get('title'));
     this.ui.titleCell.text(title);
+    if (this.ui.bulkSelectionItemCheckbox.length) {
+      var ariaLabel = __('Select template', 'elementor') + ' ' + title;
+      this.ui.bulkSelectionItemCheckbox.attr('aria-label', ariaLabel);
+    }
   },
   handleItemClicked: function handleItemClicked(event) {
-    var _this = this;
+    var _this2 = this;
     if (event.target.closest('.bulk-selection-item-checkbox')) {
       return; // Ignore clicks from checkbox
     }
@@ -11901,7 +13356,7 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
     } else {
       state.timeoutId = setTimeout(function () {
         state.timeoutId = null;
-        _this.handleItemSingleClick();
+        _this2.handleItemSingleClick();
       }, state.delay);
     }
   },
@@ -11916,6 +13371,9 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
   },
   onDeleteButtonClick: function onDeleteButtonClick(event) {
     event.stopPropagation();
+
+    // Close the context menu before opening the delete confirmation dialog
+    this.closeContextMenu();
     var toggleMoreIcon = this.ui.toggleMoreIcon;
     elementor.templates.deleteTemplate(this.model, {
       onConfirm: function onConfirm() {
@@ -11926,7 +13384,19 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
   onToggleMoreClick: function onToggleMoreClick(event) {
     event.stopPropagation();
     this.handleLockedTemplate();
-    this.ui.morePopup.show();
+    var isExpanded = 'true' === this.ui.toggleMore.attr('aria-expanded');
+    this.ui.toggleMore.attr('aria-expanded', !isExpanded);
+    if (isExpanded) {
+      this.ui.morePopup.hide();
+    } else {
+      this.ui.morePopup.show();
+
+      // Focus the first visible menu item when opening via click
+      var $items = this.getMenuItems();
+      if ($items.length) {
+        $items.first().trigger('focus');
+      }
+    }
     elementor.templates.eventManager.sendPageViewEvent({
       location: elementorCommon.eventsManager.config.secondaryLocations.templateLibrary.morePopup
     });
@@ -11936,34 +13406,41 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
     open(this.model.get('url'), '_blank');
   },
   onRenameClick: function onRenameClick(event) {
-    var _this2 = this;
+    var _this3 = this;
     return (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
       return _regenerator.default.wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             event.stopPropagation();
-            if (!_this2.model.isLocked()) {
+            if (!_this3.model.isLocked()) {
               _context.next = 1;
               break;
             }
             return _context.abrupt("return");
           case 1:
-            _context.prev = 1;
-            _context.next = 2;
-            return elementor.templates.renameTemplate(_this2.model, {
+            // Close the context menu before opening rename dialog
+            _this3.closeContextMenu();
+            _context.prev = 2;
+            _context.next = 3;
+            return elementor.templates.renameTemplate(_this3.model, {
               onConfirm: function onConfirm() {
-                return _this2.showToggleMoreLoader();
+                return _this3.showToggleMoreLoader();
               }
             });
-          case 2:
-            _context.prev = 2;
-            _this2.hideToggleMoreLoader();
-            return _context.finish(2);
           case 3:
+            _context.prev = 3;
+            _this3.hideToggleMoreLoader();
+
+            // Restore focus to the toggle button after rename completes
+            if (_this3.ui.toggleMore && _this3.ui.toggleMore.length) {
+              _this3.ui.toggleMore.trigger('focus');
+            }
+            return _context.finish(3);
+          case 4:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1,, 2, 3]]);
+      }, _callee, null, [[2,, 3, 4]]);
     }))();
   },
   onMoveClick: function onMoveClick() {
@@ -12006,6 +13483,7 @@ var TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend({
       elementor.templates.removeBulkSelectionItem(event.target.dataset.template_id, event.target.dataset.type);
       this.$el.removeClass('bulk-selected-item');
     }
+    this.updateRowSelectionAttributes();
     elementor.templates.layout.handleBulkActionBarUi();
   }
 });
@@ -12022,10 +13500,17 @@ module.exports = TemplateLibraryTemplateLocalView;
 "use strict";
 
 
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 var TemplateLibraryTemplateView = __webpack_require__(/*! elementor-templates/views/template/base */ "../assets/dev/js/editor/components/template-library/views/template/base.js"),
   TemplateLibraryTemplateRemoteView;
 TemplateLibraryTemplateRemoteView = TemplateLibraryTemplateView.extend({
   template: '#tmpl-elementor-template-library-template-remote',
+  attributes: function attributes() {
+    return jQuery.extend(TemplateLibraryTemplateView.prototype.attributes.apply(this, arguments), {
+      tabindex: '0',
+      'aria-label': this.model.get('title') || ''
+    });
+  },
   ui: function ui() {
     return jQuery.extend(TemplateLibraryTemplateView.prototype.ui.apply(this, arguments), {
       favoriteCheckbox: '.elementor-template-library-template-favorite-input'
@@ -12043,9 +13528,19 @@ TemplateLibraryTemplateRemoteView = TemplateLibraryTemplateView.extend({
     });
   },
   onFavoriteCheckboxChange: function onFavoriteCheckboxChange() {
+    var _elementor$config$lib;
     var isFavorite = this.ui.favoriteCheckbox[0].checked;
     this.model.set('favorite', isFavorite);
     elementor.templates.markAsFavorite(this.model, isFavorite);
+    var baseTier = (_elementor$config$lib = elementor.config.library_connect) === null || _elementor$config$lib === void 0 ? void 0 : _elementor$config$lib.base_access_tier;
+    var templateTier = this.model.get('accessTier');
+    _editorOneEvents.EditorOneEventManager.sendELibraryFavorite({
+      assetId: this.model.get('template_id'),
+      assetName: this.model.get('title'),
+      libraryType: this.model.get('type') || this.model.get('source'),
+      isFavorite: isFavorite,
+      proRequired: baseTier !== templateTier
+    });
     if (!isFavorite && elementor.templates.getFilter('favorite')) {
       elementor.channels.templates.trigger('filter:change');
     }
@@ -13965,9 +15460,16 @@ var _default = exports["default"] = /*#__PURE__*/function (_ControlBaseDataView)
         }).html(_.escape(globalData.title)),
         $colorHex = jQuery('<span>', {
           class: 'e-global__color-hex'
-        }).html(globalData.value);
+        }).text(globalData.value);
       $color.append($colorPreview, $colorTitle, $colorHex);
       return $color;
+    }
+  }, {
+    key: "createHeaderItemMarkup",
+    value: function createHeaderItemMarkup(text) {
+      return jQuery('<div>', {
+        class: 'e-global__group-header'
+      }).text(text);
     }
   }, {
     key: "createColorPreviewBox",
@@ -14013,12 +15515,27 @@ var _default = exports["default"] = /*#__PURE__*/function (_ControlBaseDataView)
     key: "buildGlobalsList",
     value: function buildGlobalsList(globalColors, $globalPreviewItemsContainer) {
       var _this4 = this;
+      var v4Colors = [];
+      var v3Colors = [];
       Object.values(globalColors).forEach(function (color) {
         if (!color.value) {
           return;
         }
-        var $color = _this4.createGlobalItemMarkup(color);
-        $globalPreviewItemsContainer.append($color);
+        if ('v4' === color.group) {
+          v4Colors.push(color);
+        } else {
+          v3Colors.push(color);
+        }
+      });
+      if (v4Colors.length) {
+        $globalPreviewItemsContainer.append(this.createHeaderItemMarkup(__('Atomic Variables', 'elementor')));
+        v4Colors.forEach(function (color) {
+          $globalPreviewItemsContainer.append(_this4.createGlobalItemMarkup(color));
+        });
+        $globalPreviewItemsContainer.append(this.createHeaderItemMarkup(__('Global Colors', 'elementor')));
+      }
+      v3Colors.forEach(function (color) {
+        $globalPreviewItemsContainer.append(_this4.createGlobalItemMarkup(color));
       });
     }
   }, {
@@ -14682,15 +16199,23 @@ ControlMediaItemView = ControlBaseDataView.extend({
     elementor.config.user.dismissed_editor_notices.push(eventName);
   },
   onPromotionAction: function onPromotionAction(event) {
-    var _JSON$parse = JSON.parse(event.target.closest('button').dataset.settings),
-      _JSON$parse$action_ur = _JSON$parse.action_url,
-      actionURL = _JSON$parse$action_ur === void 0 ? null : _JSON$parse$action_ur;
+    var settings = {};
+    try {
+      settings = JSON.parse(event.target.closest('button').dataset.settings);
+    } catch (e) {
+      // Do nothing.
+    }
+    var _settings = settings,
+      _settings$action_url = _settings.action_url,
+      actionURL = _settings$action_url === void 0 ? null : _settings$action_url,
+      _settings$source = _settings.source,
+      source = _settings$source === void 0 ? 'io-editor-gallery-install' : _settings$source;
     if (actionURL) {
       window.open(actionURL, '_blank');
     }
     elementorCommon.ajax.addRequest('elementor_image_optimization_campaign', {
       data: {
-        source: 'io-editor-gallery-install'
+        source: source
       }
     });
     this.hidePromotion();
@@ -15550,13 +17075,21 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     this.dismissPromotion(this.getDismissPromotionEventName());
   },
   onPromotionAction: function onPromotionAction(event) {
-    var _JSON$parse = JSON.parse(event.target.closest('button').dataset.settings),
-      _JSON$parse$action_ur = _JSON$parse.action_url,
-      actionURL = _JSON$parse$action_ur === void 0 ? null : _JSON$parse$action_ur;
+    var settings = {};
+    try {
+      settings = JSON.parse(event.target.closest('button').dataset.settings);
+    } catch (e) {
+      // Do nothing.
+    }
+    var _settings = settings,
+      _settings$action_url = _settings.action_url,
+      actionURL = _settings$action_url === void 0 ? null : _settings$action_url,
+      _settings$source = _settings.source,
+      source = _settings$source === void 0 ? 'io-editor-image-install' : _settings$source;
     if (actionURL) {
       window.open(actionURL, '_blank');
     }
-    this.hidePromotion();
+    this.hidePromotion(null, source);
   },
   dismissPromotion: function dismissPromotion(eventName) {
     this.hidePromotion(eventName);
@@ -15570,6 +17103,7 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
   },
   hidePromotion: function hidePromotion() {
     var eventName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    var source = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'io-editor-image-install';
     var $promotions = this.ui.promotions;
     $promotions.hide();
     if (!eventName) {
@@ -15577,7 +17111,7 @@ ControlMediaItemView = ControlMultipleBaseItemView.extend({
     }
     elementorCommon.ajax.addRequest('elementor_image_optimization_campaign', {
       data: {
-        source: 'io-editor-image-install'
+        source: source
       }
     });
 
@@ -16075,6 +17609,20 @@ var ControlPopoverStarterView = exports["default"] = /*#__PURE__*/function (_Con
       return $message;
     }
   }, {
+    key: "createHeaderItemMarkup",
+    value: function createHeaderItemMarkup(text) {
+      return jQuery('<div>', {
+        class: 'e-global__group-header'
+      }).text(text);
+    }
+  }, {
+    key: "createDividerMarkup",
+    value: function createDividerMarkup() {
+      return jQuery('<div>', {
+        class: 'e-global__group-divider'
+      });
+    }
+  }, {
     key: "getGlobalsList",
     value: function () {
       var _getGlobalsList = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -16102,12 +17650,30 @@ var ControlPopoverStarterView = exports["default"] = /*#__PURE__*/function (_Con
     key: "buildGlobalsList",
     value: function buildGlobalsList(globalTypographies, $globalPreviewItemsContainer) {
       var _this3 = this;
+      var v4Typographies = [];
+      var v3Typographies = [];
       Object.values(globalTypographies).forEach(function (typography) {
-        // Only build markup if the typography is valid.
-        if (typography) {
-          var $typographyPreview = _this3.createGlobalItemMarkup(typography);
-          $globalPreviewItemsContainer.append($typographyPreview);
+        if (!typography) {
+          return;
         }
+        if ('v4' === typography.group) {
+          v4Typographies.push(typography);
+        } else {
+          v3Typographies.push(typography);
+        }
+      });
+      if (v4Typographies.length) {
+        $globalPreviewItemsContainer.append(this.createHeaderItemMarkup(__('Atomic Classes', 'elementor')));
+        v4Typographies.forEach(function (typography) {
+          $globalPreviewItemsContainer.append(_this3.createGlobalItemMarkup(typography));
+        });
+        if (v3Typographies.length) {
+          $globalPreviewItemsContainer.append(this.createDividerMarkup());
+          $globalPreviewItemsContainer.append(this.createHeaderItemMarkup(__('Global Fonts', 'elementor')));
+        }
+      }
+      v3Typographies.forEach(function (typography) {
+        $globalPreviewItemsContainer.append(_this3.createGlobalItemMarkup(typography));
       });
     }
   }, {
@@ -17762,6 +19328,11 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentBase) {
     value: function refreshGlobalData() {
       $e.data.deleteCache($e.components.get('globals'), 'globals/index');
     }
+  }, {
+    key: "populateGlobalData",
+    value: function populateGlobalData() {
+      $e.data.get('globals/index');
+    }
   }]);
 }(_componentBase.default);
 
@@ -19036,6 +20607,7 @@ var Delete = exports.Delete = /*#__PURE__*/function (_$e$modules$editor$do) {
             }
           });
         }
+        _this.dispatchDeleteEvent(container, args.callerName);
         _this.deselectRecursive(container.model.get('id'));
         container.model.destroy();
         container.panel.refresh();
@@ -19044,6 +20616,39 @@ var Delete = exports.Delete = /*#__PURE__*/function (_$e$modules$editor$do) {
         return containers[0];
       }
       return containers;
+    }
+  }, {
+    key: "dispatchDeleteEvent",
+    value: function dispatchDeleteEvent(container, callerName) {
+      try {
+        var _elementorCommon, _container$model$get, _container$model$get2, _container$parent$mod, _container$parent, _container$parent2;
+        if (!((_elementorCommon = elementorCommon) !== null && _elementorCommon !== void 0 && (_elementorCommon = _elementorCommon.eventsManager) !== null && _elementorCommon !== void 0 && _elementorCommon.dispatchEvent)) {
+          return;
+        }
+        var elType = (_container$model$get = container.model.get('elType')) !== null && _container$model$get !== void 0 ? _container$model$get : '';
+        var widgetType = (_container$model$get2 = container.model.get('widgetType')) !== null && _container$model$get2 !== void 0 ? _container$model$get2 : '';
+        var widgetName = 'widget' === elType ? widgetType : elType;
+        var parentWidgetType = (_container$parent$mod = (_container$parent = container.parent) === null || _container$parent === void 0 || (_container$parent = _container$parent.model) === null || _container$parent === void 0 ? void 0 : _container$parent.get('widgetType')) !== null && _container$parent$mod !== void 0 ? _container$parent$mod : '';
+        var parentType = parentWidgetType || ((_container$parent2 = container.parent) === null || _container$parent2 === void 0 ? void 0 : _container$parent2.type) || '';
+        var eventData = {
+          app_type: 'editor',
+          window_name: 'editor',
+          interaction_type: 'click',
+          target_type: elType,
+          target_name: 'delete',
+          interaction_result: "".concat(elType, "_deleted"),
+          target_location: 'canvas',
+          location_l1: parentType,
+          location_l2: widgetName,
+          interaction_description: "user_deleted_".concat(widgetName, "_from_canvas")
+        };
+        if (callerName) {
+          eventData.trigger = callerName;
+        }
+        elementorCommon.eventsManager.dispatchEvent('delete_element', eventData);
+      } catch (_unused) {
+        // Silently fail — analytics should never break production functionality.
+      }
     }
   }, {
     key: "deselectRecursive",
@@ -19511,6 +21116,12 @@ Object.defineProperty(exports, "PasteArea", ({
     return _pasteArea.PasteArea;
   }
 }));
+Object.defineProperty(exports, "PasteInteractions", ({
+  enumerable: true,
+  get: function get() {
+    return _pasteInteractions.PasteInteractions;
+  }
+}));
 Object.defineProperty(exports, "PasteStyle", ({
   enumerable: true,
   get: function get() {
@@ -19564,6 +21175,7 @@ var _empty = __webpack_require__(/*! ./empty */ "../assets/dev/js/editor/documen
 var _import = __webpack_require__(/*! ./import */ "../assets/dev/js/editor/document/elements/commands/import.js");
 var _paste = __webpack_require__(/*! ./paste */ "../assets/dev/js/editor/document/elements/commands/paste.js");
 var _pasteArea = __webpack_require__(/*! ./paste-area */ "../assets/dev/js/editor/document/elements/commands/paste-area.js");
+var _pasteInteractions = __webpack_require__(/*! ./paste-interactions */ "../assets/dev/js/editor/document/elements/commands/paste-interactions.js");
 var _move = __webpack_require__(/*! ./move */ "../assets/dev/js/editor/document/elements/commands/move.js");
 var _pasteStyle = __webpack_require__(/*! ./paste-style */ "../assets/dev/js/editor/document/elements/commands/paste-style.js");
 var _resetSettings = __webpack_require__(/*! ./reset-settings */ "../assets/dev/js/editor/document/elements/commands/reset-settings.js");
@@ -19802,6 +21414,53 @@ var _default = exports["default"] = PasteArea;
 
 /***/ }),
 
+/***/ "../assets/dev/js/editor/document/elements/commands/paste-interactions.js":
+/*!********************************************************************************!*\
+  !*** ../assets/dev/js/editor/document/elements/commands/paste-interactions.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.PasteInteractions = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+var PasteInteractions = exports.PasteInteractions = /*#__PURE__*/function (_$e$modules$editor$Co) {
+  function PasteInteractions() {
+    (0, _classCallCheck2.default)(this, PasteInteractions);
+    return _callSuper(this, PasteInteractions, arguments);
+  }
+  (0, _inherits2.default)(PasteInteractions, _$e$modules$editor$Co);
+  return (0, _createClass2.default)(PasteInteractions, [{
+    key: "validateArgs",
+    value: function validateArgs(args) {
+      this.requireContainer(args);
+      var _args$storageKey = args.storageKey,
+        storageKey = _args$storageKey === void 0 ? 'clipboard' : _args$storageKey;
+      var storageData = elementorCommon.storage.get(storageKey);
+      this.requireArgumentType('storageData', 'object', {
+        storageData: storageData
+      });
+    }
+  }, {
+    key: "apply",
+    value: function apply() {}
+  }]);
+}($e.modules.editor.CommandContainerBase);
+var _default = exports["default"] = PasteInteractions;
+
+/***/ }),
+
 /***/ "../assets/dev/js/editor/document/elements/commands/paste-style.js":
 /*!*************************************************************************!*\
   !*** ../assets/dev/js/editor/document/elements/commands/paste-style.js ***!
@@ -20002,6 +21661,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _containerHelper = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/container-helper */ "../assets/dev/js/editor/utils/container-helper.js"));
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var Paste = exports.Paste = /*#__PURE__*/function (_$e$modules$editor$do) {
@@ -20121,6 +21781,8 @@ var Paste = exports.Paste = /*#__PURE__*/function (_$e$modules$editor$do) {
         data.forEach(function (model) {
           switch (model.elType) {
             case 'container':
+            case 'e-flexbox':
+            case 'e-div-block':
               {
                 // Push the cloned container to the 'document'.
                 result.push(_this.pasteTo([targetContainer], [model], {
@@ -20178,11 +21840,23 @@ var Paste = exports.Paste = /*#__PURE__*/function (_$e$modules$editor$do) {
               {
                 // The 'default' case is widget.
                 var target;
+                var isAtomic = elementor.helpers.isAtomicWidget(model);
                 if ('section' === targetContainer.model.get('elType')) {
                   // On trying to paste widget on section, the paste should be at the first column.
                   target = [targetContainer.view.children.findByIndex(0).getContainer()];
                 } else if ('container' === targetContainer.model.get('elType')) {
                   target = [targetContainer];
+                } else if (isAtomic) {
+                  var options = {
+                    at: createNewElementAtTheBottomOfThePage ? ++index : index,
+                    useHistory: false
+                  };
+                  target = _containerHelper.default.createContainerFromModel({
+                    elType: _containerHelper.default.V4_DEFAULT_CONTAINER_TYPE
+                  }, targetContainer, {
+                    options: options
+                  });
+                  target = [target];
                 } else if (elementorCommon.config.experimentalFeatures.container) {
                   // If the container experiment is active, create a new wrapper container.
                   target = $e.run('document/elements/create', {
@@ -26185,6 +27859,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Save = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
@@ -26200,61 +27876,81 @@ var Save = exports.Save = /*#__PURE__*/function (_$e$modules$CommandIn) {
   (0, _inherits2.default)(Save, _$e$modules$CommandIn);
   return (0, _createClass2.default)(Save, [{
     key: "apply",
-    value: function apply(args) {
-      var _this = this;
-      var _args$status = args.status,
-        status = _args$status === void 0 ? 'draft' : _args$status,
-        _args$force = args.force,
-        force = _args$force === void 0 ? false : _args$force,
-        _args$onSuccess = args.onSuccess,
-        onSuccess = _args$onSuccess === void 0 ? null : _args$onSuccess,
-        _args$document = args.document,
-        document = _args$document === void 0 ? elementor.documents.getCurrent() : _args$document;
-      if (!force && document.editor.isSaving) {
-        return jQuery.Deferred().reject('Document already in save progress');
-      }
-      var container = document.container,
-        settings = container.settings.toJSON({
-          remove: ['default']
-        }),
-        oldStatus = container.settings.get('post_status');
-      this.addPersistentSettingsToPayload(settings, container);
+    value: function () {
+      var _apply = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee(args) {
+        var _elementorCommon$conf,
+          _this = this;
+        var _args$status, status, _args$force, force, _args$onSuccess, onSuccess, _args$document, document, container, _elementorCommon$__be, _elementorCommon, settings, oldStatus, elements, successArgs, deferred;
+        return _regenerator.default.wrap(function (_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _args$status = args.status, status = _args$status === void 0 ? 'draft' : _args$status, _args$force = args.force, force = _args$force === void 0 ? false : _args$force, _args$onSuccess = args.onSuccess, onSuccess = _args$onSuccess === void 0 ? null : _args$onSuccess, _args$document = args.document, document = _args$document === void 0 ? elementor.documents.getCurrent() : _args$document;
+              if (!(!force && document.editor.isSaving)) {
+                _context.next = 1;
+                break;
+              }
+              return _context.abrupt("return", jQuery.Deferred().reject('Document already in save progress'));
+            case 1:
+              container = document.container;
+              if (!((_elementorCommon$conf = elementorCommon.config.experimentalFeatures) !== null && _elementorCommon$conf !== void 0 && _elementorCommon$conf.e_components)) {
+                _context.next = 2;
+                break;
+              }
+              _context.next = 2;
+              return (_elementorCommon$__be = (_elementorCommon = elementorCommon).__beforeSave) === null || _elementorCommon$__be === void 0 ? void 0 : _elementorCommon$__be.call(_elementorCommon, {
+                container: container,
+                status: status
+              });
+            case 2:
+              settings = container.settings.toJSON({
+                remove: ['default']
+              });
+              oldStatus = container.settings.get('post_status');
+              this.addPersistentSettingsToPayload(settings, container);
 
-      // TODO: Remove - Backwards compatibility.
-      elementor.saver.trigger('before:save', args).trigger('before:save:' + status, args);
-      document.editor.isSaving = true;
-      document.editor.isChangedDuringSave = false;
-      settings.post_status = status;
-      var elements = [];
-      if (elementor.config.document.panel.has_elements) {
-        elements = container.model.get('elements').toJSON({
-          remove: ['default', 'editSettings', 'defaultEditSettings']
-        });
+              // TODO: Remove - Backwards compatibility.
+              elementor.saver.trigger('before:save', args).trigger('before:save:' + status, args);
+              document.editor.isSaving = true;
+              document.editor.isChangedDuringSave = false;
+              settings.post_status = status;
+              elements = [];
+              if (elementor.config.document.panel.has_elements) {
+                elements = container.model.get('elements').toJSON({
+                  remove: ['default', 'editSettings', 'defaultEditSettings']
+                });
+              }
+              successArgs = {
+                status: status,
+                oldStatus: oldStatus,
+                elements: elements,
+                document: document,
+                currentHistoryId: document.history.currentItem.get('id')
+              };
+              deferred = elementorCommon.ajax.addRequest('save_builder', {
+                data: {
+                  status: status,
+                  elements: elements,
+                  settings: settings
+                },
+                error: function error(data) {
+                  return _this.onSaveError(data, status, document);
+                }
+              }).then(function (data) {
+                return _this.onSaveSuccess(data, successArgs, onSuccess);
+              }); // TODO: Remove - Backwards compatibility
+              elementor.saver.trigger('save', args);
+              return _context.abrupt("return", deferred);
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, this);
+      }));
+      function apply(_x) {
+        return _apply.apply(this, arguments);
       }
-      var successArgs = {
-        status: status,
-        oldStatus: oldStatus,
-        elements: elements,
-        document: document,
-        currentHistoryId: document.history.currentItem.get('id')
-      };
-      var deferred = elementorCommon.ajax.addRequest('save_builder', {
-        data: {
-          status: status,
-          elements: elements,
-          settings: settings
-        },
-        error: function error(data) {
-          return _this.onSaveError(data, status, document);
-        }
-      }).then(function (data) {
-        return _this.onSaveSuccess(data, successArgs, onSuccess);
-      });
-
-      // TODO: Remove - Backwards compatibility
-      elementor.saver.trigger('save', args);
-      return deferred;
-    }
+      return apply;
+    }()
   }, {
     key: "onSaveSuccess",
     value: function onSaveSuccess(data, args) {
@@ -27345,7 +29041,8 @@ var Delete = exports.Delete = /*#__PURE__*/function (_$e$modules$CommandBa) {
       var selectedElements = elementor.selection.getElements();
       if (selectedElements.length) {
         return $e.run('document/elements/delete', {
-          containers: selectedElements
+          containers: selectedElements,
+          callerName: 'keyboard'
         });
       }
       return false;
@@ -27724,10 +29421,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "../node_modules/@babel/runtime/regenerator/index.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _typeof2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "../node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
@@ -27770,7 +29465,7 @@ var elementTypes = _interopRequireWildcard(__webpack_require__(/*! ./elements/ty
 var hints = _interopRequireWildcard(__webpack_require__(/*! ./hints */ "../assets/dev/js/editor/hints/index.js"));
 var _elementBase = _interopRequireDefault(__webpack_require__(/*! ./elements/types/base/element-base */ "../assets/dev/js/editor/elements/types/base/element-base.js"));
 var _fontVariables = __webpack_require__(/*! ./utils/font-variables */ "../assets/dev/js/editor/utils/font-variables.js");
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof3(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t2 in e) "default" !== _t2 && {}.hasOwnProperty.call(e, _t2) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t2)) && (i.get || i.set) ? o(f, _t2, i) : f[_t2] = e[_t2]); return f; })(e, t); }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof3(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
@@ -28130,7 +29825,8 @@ var EditorBase = exports["default"] = /*#__PURE__*/function (_Marionette$Applica
   }, {
     key: "getPreviewContainer",
     value: function getPreviewContainer() {
-      return this.getPreviewView().getContainer();
+      var _this$getPreviewView;
+      return (_this$getPreviewView = this.getPreviewView()) === null || _this$getPreviewView === void 0 ? void 0 : _this$getPreviewView.getContainer();
     }
   }, {
     key: "getContainer",
@@ -28139,6 +29835,20 @@ var EditorBase = exports["default"] = /*#__PURE__*/function (_Marionette$Applica
         return this.getPreviewContainer();
       }
       return $e.components.get('document').utils.findContainerById(id);
+    }
+  }, {
+    key: "getContainerByKeyValue",
+    value: function getContainerByKeyValue(args) {
+      var _view$0$getContainer, _view$;
+      var key = args.key,
+        value = args.value,
+        _args$parent = args.parent,
+        parent = _args$parent === void 0 ? this.getPreviewView() : _args$parent;
+      if (this.getPreviewContainer().model.get(key) === value) {
+        return this.getPreviewContainer();
+      }
+      var view = $e.components.get('document').utils.findViewRecursive(parent.children, key, value, false);
+      return (_view$0$getContainer = view === null || view === void 0 || (_view$ = view[0]) === null || _view$ === void 0 ? void 0 : _view$.getContainer()) !== null && _view$0$getContainer !== void 0 ? _view$0$getContainer : null;
     }
   }, {
     key: "initComponents",
@@ -28835,49 +30545,6 @@ var EditorBase = exports["default"] = /*#__PURE__*/function (_Marionette$Applica
       return ElementorConfig;
     }
   }, {
-    key: "checkAndLoadPostOnboardingTracking",
-    value: function () {
-      var _checkAndLoadPostOnboardingTracking = (0, _asyncToGenerator2.default)(/*#__PURE__*/_regenerator.default.mark(function _callee() {
-        var onboardingStartTime, siteStarterChoice, editorLoadTracked, hasOnboardingData, _yield$import, PostOnboardingTracking, _t;
-        return _regenerator.default.wrap(function (_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              onboardingStartTime = localStorage.getItem('elementor_onboarding_start_time');
-              siteStarterChoice = localStorage.getItem('elementor_onboarding_s4_site_starter_choice');
-              editorLoadTracked = localStorage.getItem('elementor_onboarding_editor_load_tracked');
-              hasOnboardingData = onboardingStartTime || siteStarterChoice || editorLoadTracked;
-              if (hasOnboardingData) {
-                _context.next = 1;
-                break;
-              }
-              return _context.abrupt("return");
-            case 1:
-              _context.next = 2;
-              return Promise.all(/*! import() */[__webpack_require__.e("app_modules_onboarding_assets_js_utils_modules_post-onboarding-tracker_js"), __webpack_require__.e("assets_dev_js_editor_utils_post-onboarding-tracking_js")]).then(__webpack_require__.bind(__webpack_require__, /*! ./utils/post-onboarding-tracking */ "../assets/dev/js/editor/utils/post-onboarding-tracking.js"));
-            case 2:
-              _yield$import = _context.sent;
-              PostOnboardingTracking = _yield$import.default;
-              PostOnboardingTracking.checkAndSendEditorLoadedFromOnboarding();
-              _context.next = 4;
-              break;
-            case 3:
-              _context.prev = 3;
-              _t = _context["catch"](0);
-              // eslint-disable-next-line no-console
-              console.warn('Failed to load post-onboarding tracking:', _t);
-            case 4:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee, null, [[0, 3]]);
-      }));
-      function checkAndLoadPostOnboardingTracking() {
-        return _checkAndLoadPostOnboardingTracking.apply(this, arguments);
-      }
-      return checkAndLoadPostOnboardingTracking;
-    }()
-  }, {
     key: "onStart",
     value: function onStart() {
       var _this8 = this;
@@ -28904,7 +30571,6 @@ var EditorBase = exports["default"] = /*#__PURE__*/function (_Marionette$Applica
       this.addBackgroundClickArea(document);
       this.addDeprecatedConfigProperties();
       _events.default.dispatch(elementorCommon.elements.$window, 'elementor/loaded', null, 'elementor:loaded');
-      this.checkAndLoadPostOnboardingTracking();
       $e.run('editor/documents/open', {
         id: this.config.initial_document.id
       }).then(function () {
@@ -29742,7 +31408,8 @@ ElementModel = _baseElementModel.default.extend({
     settings: {},
     defaultEditSettings: {
       defaultEditRoute: 'content'
-    }
+    },
+    interactions: {}
   },
   remoteRender: false,
   _htmlCache: null,
@@ -30803,6 +32470,24 @@ BaseElementView = BaseContainer.extend({
           });
         }
       }, {
+        name: 'pasteInteractions',
+        title: __('Paste interactions', 'elementor'),
+        isEnabled: function isEnabled() {
+          var clipboard = elementorCommon.storage.get('clipboard');
+          if (!clipboard) {
+            return false;
+          }
+          var elements = elementor.selection.getElements(_this2.getContainer());
+          return elements.length > 0 && elements.every(function (c) {
+            return elementor.helpers.isAtomicWidget(c.model);
+          });
+        },
+        callback: function callback() {
+          $e.run('document/elements/paste-interactions', {
+            containers: elementor.selection.getElements(_this2.getContainer())
+          });
+        }
+      }, {
         name: 'pasteArea',
         icon: 'eicon-import-export',
         title: __('Paste from other site', 'elementor'),
@@ -30850,7 +32535,8 @@ BaseElementView = BaseContainer.extend({
         shortcut: '⌦',
         callback: function callback() {
           return $e.run('document/elements/delete', {
-            containers: elementor.selection.getElements(_this2.getContainer())
+            containers: elementor.selection.getElements(_this2.getContainer()),
+            callerName: 'context_menu'
           });
         },
         isEnabled: function isEnabled() {
@@ -30887,6 +32573,9 @@ BaseElementView = BaseContainer.extend({
   getHandlesOverlay: function getHandlesOverlay() {
     var elementType = this.getElementType();
     if (!elementor.userCan('design') && elementType !== 'widget') {
+      return;
+    }
+    if (!this.getContainer().isEditable()) {
       return;
     }
     var isElement = (0, _elementTypes.getAllElementTypes)().includes(elementType);
@@ -31679,7 +33368,8 @@ BaseElementView = BaseContainer.extend({
     event.stopPropagation();
     this.handleAnchorClick(event);
     $e.run('document/elements/delete', {
-      container: this.getContainer()
+      container: this.getContainer(),
+      callerName: 'remove_button'
     });
   },
   handleAnchorClick: function handleAnchorClick(event) {
@@ -31762,6 +33452,9 @@ BaseElementView = BaseContainer.extend({
 
     // Init the draggable only for Containers and their children.
     if (!this.$el.hasClass('.e-con') && !this.$el.parents('.e-con').length) {
+      return;
+    }
+    if (!this.getContainer().isEditable()) {
       return;
     }
     this.getDomElement().html5Draggable({
@@ -32061,6 +33754,7 @@ module.exports = Marionette.Behavior.extend({
     return this.contextMenu;
   },
   onContextMenu: function onContextMenu(event) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     if ($e.shortcuts.isControlEvent(event)) {
       return;
     }
@@ -32078,10 +33772,13 @@ module.exports = Marionette.Behavior.extend({
     if (this.view._parent) {
       this.view._parent.triggerMethod('toggleSortMode', false);
     }
-    this.getContextMenu().show(event);
+    var location = options.location || elementorCommon.eventsManager.config.locations.canvas;
+    this.getContextMenu().show(event, {
+      location: location
+    });
     elementor.channels.editor.reply('contextMenu:targetView', this.view);
   },
-  onRequestContextMenu: function onRequestContextMenu(event) {
+  onRequestContextMenu: function onRequestContextMenu(event, options) {
     var modal = this.getContextMenu().getModal(),
       iframe = modal.getSettings('iframe'),
       toolsGroup = _.findWhere(this.contextMenu.getSettings('groups'), {
@@ -32089,7 +33786,7 @@ module.exports = Marionette.Behavior.extend({
       });
     toolsGroup.isVisible = false;
     modal.setSettings('iframe', null);
-    this.onContextMenu(event);
+    this.onContextMenu(event, options);
     toolsGroup.isVisible = true;
     modal.setSettings('iframe', iframe);
   },
@@ -33895,16 +35592,22 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = EmptyComponent;
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+
 function EmptyComponent() {
+  var handleClick = function handleClick() {
+    _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+      targetName: 'add_container'
+    });
+    $e.route('panel/elements/categories');
+  };
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "elementor-first-add"
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "elementor-icon eicon-plus",
-    onClick: function onClick() {
-      return $e.route('panel/elements/categories');
-    }
+    onClick: handleClick
   }));
 }
 
@@ -34935,6 +36638,60 @@ var _default = exports["default"] = Close;
 
 /***/ }),
 
+/***/ "../assets/dev/js/editor/regions/navigator/commands/expand-all.js":
+/*!************************************************************************!*\
+  !*** ../assets/dev/js/editor/regions/navigator/commands/expand-all.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.ExpandAll = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+var ExpandAll = exports.ExpandAll = /*#__PURE__*/function (_$e$modules$CommandBa) {
+  function ExpandAll() {
+    (0, _classCallCheck2.default)(this, ExpandAll);
+    return _callSuper(this, ExpandAll, arguments);
+  }
+  (0, _inherits2.default)(ExpandAll, _$e$modules$CommandBa);
+  return (0, _createClass2.default)(ExpandAll, [{
+    key: "apply",
+    value: function apply() {
+      if (this.component.isOpen) {
+        this.expandAllElements();
+      } else {
+        this.openNavigator();
+      }
+    }
+  }, {
+    key: "openNavigator",
+    value: function openNavigator() {
+      $e.run('navigator/open', {
+        expandAllElements: true
+      });
+    }
+  }, {
+    key: "expandAllElements",
+    value: function expandAllElements() {
+      this.component.manager.currentView.elements.currentView.recursiveChildInvoke('toggleList', true);
+    }
+  }]);
+}($e.modules.CommandBase);
+var _default = exports["default"] = ExpandAll;
+
+/***/ }),
+
 /***/ "../assets/dev/js/editor/regions/navigator/commands/index.js":
 /*!*******************************************************************!*\
   !*** ../assets/dev/js/editor/regions/navigator/commands/index.js ***!
@@ -34953,6 +36710,12 @@ Object.defineProperty(exports, "Close", ({
     return _close.Close;
   }
 }));
+Object.defineProperty(exports, "ExpandAll", ({
+  enumerable: true,
+  get: function get() {
+    return _expandAll.ExpandAll;
+  }
+}));
 Object.defineProperty(exports, "Open", ({
   enumerable: true,
   get: function get() {
@@ -34966,6 +36729,7 @@ Object.defineProperty(exports, "Toggle", ({
   }
 }));
 var _close = __webpack_require__(/*! ./close */ "../assets/dev/js/editor/regions/navigator/commands/close.js");
+var _expandAll = __webpack_require__(/*! ./expand-all */ "../assets/dev/js/editor/regions/navigator/commands/expand-all.js");
 var _open = __webpack_require__(/*! ./open */ "../assets/dev/js/editor/regions/navigator/commands/open.js");
 var _toggle = __webpack_require__(/*! ./toggle */ "../assets/dev/js/editor/regions/navigator/commands/toggle.js");
 
@@ -35000,8 +36764,8 @@ var Open = exports.Open = /*#__PURE__*/function (_$e$modules$CommandBa) {
   (0, _inherits2.default)(Open, _$e$modules$CommandBa);
   return (0, _createClass2.default)(Open, [{
     key: "apply",
-    value: function apply() {
-      $e.route(this.component.getNamespace());
+    value: function apply(args) {
+      $e.route(this.component.getNamespace(), args);
     }
   }]);
 }($e.modules.CommandBase);
@@ -35117,8 +36881,12 @@ var Component = exports["default"] = /*#__PURE__*/function (_ComponentBase) {
     key: "open",
     value: function open(args) {
       var _args$model = args.model,
-        model = _args$model === void 0 ? false : _args$model;
-      this.manager.open(model);
+        model = _args$model === void 0 ? false : _args$model,
+        _args$expandAllElemen = args.expandAllElements,
+        expandAllElements = _args$expandAllElemen === void 0 ? false : _args$expandAllElemen;
+      this.manager.open(model, {
+        expandAllElements: expandAllElements
+      });
       return true;
     }
   }, {
@@ -35325,6 +37093,12 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$Composite
       this.childViewContainer = '.elementor-navigator__elements';
       this.listenTo(this.model, 'change', this.onModelChange).listenTo(this.model.get('settings'), 'change', this.onModelSettingsChange);
       this.listenTo(this.model, 'change:editor_settings', this.onModelEditorSettingsChange);
+      this.listenTo(this.model, 'title_external_change', this.onTitleExternalChange);
+    }
+  }, {
+    key: "onTitleExternalChange",
+    value: function onTitleExternalChange() {
+      this.ui.title.text(this.model.getTitle());
     }
   }, {
     key: "onModelEditorSettingsChange",
@@ -35590,6 +37364,7 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$Composite
       this.ui.item.css('padding-inline-start', this.getIndent() + 'px');
       this.toggleHiddenClass();
       this.renderIndicators();
+      this.syncNavigatorStructureState();
     }
   }, {
     key: "onModelChange",
@@ -35622,6 +37397,14 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$Composite
       });
     }
   }, {
+    key: "syncNavigatorStructureState",
+    value: function syncNavigatorStructureState() {
+      if (this.isNavigatorContainer()) {
+        return;
+      }
+      this.$el.toggleClass('elementor-navigator__element--has-children', !!this.hasChildren());
+    }
+  }, {
     key: "onItemPress",
     value: function onItemPress(event) {
       var ENTER_KEY = 13,
@@ -35637,6 +37420,12 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$Composite
   }, {
     key: "onItemClick",
     value: function onItemClick(event) {
+      window.dispatchEvent(new CustomEvent('elementor/navigator/item/click', {
+        detail: {
+          id: this.model.get('id'),
+          type: this.model.get('elType')
+        }
+      }));
       this.model.trigger('request:edit', {
         append: event.ctrlKey || event.metaKey,
         scrollIntoView: true
@@ -35736,7 +37525,9 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$Composite
   }, {
     key: "onContextMenu",
     value: function onContextMenu(event) {
-      this.model.trigger('request:contextmenu', event);
+      this.model.trigger('request:contextmenu', event, {
+        location: elementorCommon.eventsManager.config.locations.structurePanel
+      });
     }
   }, {
     key: "onEditRequest",
@@ -36011,7 +37802,7 @@ var _default = exports["default"] = /*#__PURE__*/function (_BaseRegion) {
     }
   }, {
     key: "open",
-    value: function open(model) {
+    value: function open(model, options) {
       this.$el.show();
       this.setSize();
       if (this.storage.docked) {
@@ -36019,6 +37810,9 @@ var _default = exports["default"] = /*#__PURE__*/function (_BaseRegion) {
       }
       if (model) {
         model.trigger('request:edit');
+      }
+      if (options !== null && options !== void 0 && options.expandAllElements) {
+        this.currentView.elements.currentView.recursiveChildInvoke('toggleList', true);
       }
       this.saveStorage('visible', true);
       this.ensurePosition();
@@ -36176,7 +37970,7 @@ var _default = exports["default"] = /*#__PURE__*/function (_BaseRegion) {
     value: function onDocumentLoaded(document) {
       if (document.config.panel.has_elements) {
         this.initLayout();
-        if (false !== this.storage.visible) {
+        if (false !== this.storage.visible && !elementor.config.starter) {
           $e.route('navigator');
         }
       }
@@ -37840,9 +39634,13 @@ var PanelElementsCategoriesCollection = __webpack_require__(/*! ./collections/ca
   PanelElementsElementsCollection = __webpack_require__(/*! ./collections/elements */ "../assets/dev/js/editor/regions/panel/pages/elements/collections/elements.js"),
   PanelElementsCategoriesView = __webpack_require__(/*! ./views/categories */ "../assets/dev/js/editor/regions/panel/pages/elements/views/categories.js"),
   PanelElementsElementsView = elementor.modules.layouts.panel.pages.elements.views.Elements,
-  PanelElementsSearchView = __webpack_require__(/*! ./views/search */ "../assets/dev/js/editor/regions/panel/pages/elements/views/search.js"),
   PanelElementsGlobalView = __webpack_require__(/*! ./views/global */ "../assets/dev/js/editor/regions/panel/pages/elements/views/global.js"),
+  PanelElementsSearchView = __webpack_require__(/*! ./views/search */ "../assets/dev/js/editor/regions/panel/pages/elements/views/search.js"),
+  PanelElementsWidgetCreationView = __webpack_require__(/*! ./views/widget-creation */ "../assets/dev/js/editor/regions/panel/pages/elements/views/widget-creation.js"),
   PanelElementsLayoutView;
+function elementorIsAngieIframeInDocument() {
+  return !!document.querySelector('iframe[src*="angie/"]');
+}
 PanelElementsLayoutView = Marionette.LayoutView.extend({
   template: '#tmpl-elementor-panel-elements',
   id: 'elementor-panel-page-elements',
@@ -37851,6 +39649,7 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
   },
   regions: {
     elements: '#elementor-panel-elements-wrapper',
+    widgetCreation: '#elementor-panel-elements-widget-creation-area',
     search: '#elementor-panel-elements-search-area',
     notice: '#elementor-panel-elements-notice-area'
   },
@@ -37926,6 +39725,16 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
         icon: widget.icon,
         categories: JSON.parse(widget.categories),
         editable: false
+      });
+    });
+    jQuery.each(elementor.config.atomicFormPromotionWidgets || [], function (index, widget) {
+      elementsCollection.add({
+        name: widget.name,
+        title: widget.title,
+        icon: widget.icon,
+        categories: JSON.parse(widget.categories),
+        editable: false,
+        atomicFormPromotion: true
       });
     });
     if (elementor.config.integrationWidgets) {
@@ -38052,10 +39861,39 @@ PanelElementsLayoutView = Marionette.LayoutView.extend({
     this.search.currentView.ui.input.trigger('focus');
   },
   onChildviewChildrenRender: function onChildviewChildrenRender() {
+    this.updateWidgetCreation();
     elementor.getPanelView().updateScrollbar();
   },
   onChildviewSearchChangeInput: function onChildviewSearchChangeInput(child) {
     this.changeFilter(child.ui.input.val(), 'search');
+  },
+  updateWidgetCreation: function updateWidgetCreation() {
+    var filterValue = elementor.channels.panelElements.request('filter:value');
+    if (!filterValue) {
+      this.widgetCreation.empty();
+      return;
+    }
+    var isAngiePresent = elementorIsAngieIframeInDocument();
+    var isAdministrator = elementor.config.user.is_administrator;
+    if (!isAngiePresent && !isAdministrator) {
+      this.widgetCreation.empty();
+      return;
+    }
+    var elementsView = this.elements.currentView;
+    if (!elementsView || !(elementsView instanceof PanelElementsElementsView)) {
+      this.widgetCreation.empty();
+      return;
+    }
+    var emptyResults = 0 === elementsView.children.length;
+    var widgetCreationView = new PanelElementsWidgetCreationView({
+      emptyResults: emptyResults,
+      searchTerm: filterValue
+    });
+    if (!widgetCreationView.hasTemplate()) {
+      this.widgetCreation.empty();
+      return;
+    }
+    this.widgetCreation.show(widgetCreationView);
   },
   onDestroy: function onDestroy() {
     elementor.channels.panelElements.reply('filter:value', null);
@@ -38241,7 +40079,7 @@ module.exports = Marionette.ItemView.extend({
   template: '#tmpl-elementor-element-library-element',
   className: function className() {
     var className = 'elementor-element-wrapper';
-    if (!this.isEditable()) {
+    if (!this.isEditable() && !this.isAtomicFormPromotion()) {
       className += ' elementor-element--promotion';
     }
     if (this.isIntegration()) {
@@ -38277,6 +40115,9 @@ module.exports = Marionette.ItemView.extend({
   isIntegration: function isIntegration() {
     return !!this.model.get('integration');
   },
+  isAtomicFormPromotion: function isAtomicFormPromotion() {
+    return !!this.model.get('atomicFormPromotion');
+  },
   onRender: function onRender() {
     var _this = this;
     if (!elementor.userCan('design') || !this.isEditable()) {
@@ -38297,7 +40138,16 @@ module.exports = Marionette.ItemView.extend({
       groups: ['elementor-element']
     });
   },
-  onMouseDown: function onMouseDown() {
+  onMouseDown: function onMouseDown(event) {
+    if (this.isAtomicFormPromotion()) {
+      event.stopPropagation();
+      document.dispatchEvent(new CustomEvent('atomic-form-promotion:open', {
+        detail: {
+          target: this.el
+        }
+      }));
+      return;
+    }
     var title = this.model.get('title'),
       widgetType = this.model.get('name') || this.model.get('widgetType'),
       isIntegration = this.isIntegration(),
@@ -38526,10 +40376,13 @@ module.exports = Marionette.ItemView.extend({
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _localizedValueStore = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/localized-value-store */ "../assets/dev/js/editor/utils/localized-value-store.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
+var WIDGET_PANEL_SEARCH_DEBOUNCE_MS = 2000;
 var PanelElementsSearchView = Marionette.ItemView.extend({
   template: '#tmpl-elementor-panel-element-search',
   localizedValue: '',
   localizedValueStore: new _localizedValueStore.default(),
+  debouncedTrackSearch: null,
   tagName: 'search',
   id: 'elementor-panel-elements-search-wrapper',
   ui: {
@@ -38540,8 +40393,26 @@ var PanelElementsSearchView = Marionette.ItemView.extend({
     // Used to capture the ctrl+V
     'input @ui.input': 'onInputChanged' // Will capture the context menu paste
   },
+  initialize: function initialize() {
+    this.debouncedTrackSearch = (0, _editorOneEvents.createDebouncedWidgetPanelSearch)(WIDGET_PANEL_SEARCH_DEBOUNCE_MS);
+  },
   clearInput: function clearInput() {
     this.ui.input.val('');
+  },
+  getVisibleWidgetsCount: function getVisibleWidgetsCount() {
+    var $widgetsContainer = jQuery('#elementor-panel-elements');
+    return $widgetsContainer.find('.elementor-element:visible').length;
+  },
+  trackWidgetSearch: function trackWidgetSearch() {
+    var _this = this;
+    var userInput = this.ui.input.val();
+    if (!userInput) {
+      return;
+    }
+    setTimeout(function () {
+      var resultsCount = _this.getVisibleWidgetsCount();
+      _this.debouncedTrackSearch(resultsCount, userInput);
+    }, 100);
   },
   onInputChanged: function onInputChanged(event) {
     var ESC_KEY = 27;
@@ -38549,12 +40420,66 @@ var PanelElementsSearchView = Marionette.ItemView.extend({
       this.clearInput();
     }
     this.localizedValue = this.localizedValueStore.appendAndParseLocalizedData(event);
-    // Broadcast the localized value.
     elementor.channels.panelElements.reply('filter:localized', this.localizedValue);
     this.triggerMethod('search:change:input');
+    this.trackWidgetSearch();
+  },
+  onDestroy: function onDestroy() {
+    var _this$debouncedTrackS;
+    if ((_this$debouncedTrackS = this.debouncedTrackSearch) !== null && _this$debouncedTrackS !== void 0 && _this$debouncedTrackS.cancel) {
+      this.debouncedTrackSearch.cancel();
+    }
   }
 });
 module.exports = PanelElementsSearchView;
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/regions/panel/pages/elements/views/widget-creation.js":
+/*!*************************************************************************************!*\
+  !*** ../assets/dev/js/editor/regions/panel/pages/elements/views/widget-creation.js ***!
+  \*************************************************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+var PanelElementsWidgetCreationView;
+var TEMPLATES = {
+  EMPTY_STATE: '#tmpl-elementor-panel-elements-widget-creation-empty-state',
+  SEARCH_FOOTER: '#tmpl-elementor-panel-elements-widget-creation-search-footer'
+};
+var prompt = "Create a widget for me.\nGoal: [What should this widget help me accomplish?]\nPlacement: [Where will I see it in the editor/UI?]\nHow it should work: ";
+PanelElementsWidgetCreationView = Marionette.ItemView.extend({
+  getTemplate: function getTemplate() {
+    return this.options.emptyResults ? TEMPLATES.EMPTY_STATE : TEMPLATES.SEARCH_FOOTER;
+  },
+  className: function className() {
+    var baseClass = 'elementor-panel-elements-widget-creation';
+    var modifierClass = this.options.emptyResults ? "".concat(baseClass, "--empty-state") : "".concat(baseClass, "--search-footer");
+    return "".concat(baseClass, " ").concat(modifierClass);
+  },
+  templateHelpers: function templateHelpers() {
+    return {
+      searchTerm: this.options.searchTerm || ''
+    };
+  },
+  hasTemplate: function hasTemplate() {
+    return !!jQuery(this.getTemplate()).length;
+  },
+  events: {
+    'click .elementor-panel-elements-widget-creation__cta': 'onCtaClick'
+  },
+  onCtaClick: function onCtaClick() {
+    window.dispatchEvent(new CustomEvent('elementor/editor/create-widget', {
+      detail: {
+        prompt: prompt,
+        entry_point: 'search_widget'
+      }
+    }));
+  }
+});
+module.exports = PanelElementsWidgetCreationView;
 
 /***/ }),
 
@@ -39732,6 +41657,15 @@ var ContainerHelper = exports.ContainerHelper = /*#__PURE__*/function () {
         container: container
       });
     }
+  }, {
+    key: "createContainerFromModel",
+    value: function createContainerFromModel(model, target) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      return $e.run('document/elements/create', _objectSpread({
+        model: model,
+        container: target
+      }, options));
+    }
   }]);
 }();
 _ContainerHelper = ContainerHelper;
@@ -39742,6 +41676,7 @@ _ContainerHelper = ContainerHelper;
 (0, _defineProperty2.default)(ContainerHelper, "DIRECTION_COLUMN_REVERSED", 'column-reverse');
 (0, _defineProperty2.default)(ContainerHelper, "DIRECTION_DEFAULT", _ContainerHelper.DIRECTION_COLUMN);
 (0, _defineProperty2.default)(ContainerHelper, "CONTAINER_TYPE_GRID", 'grid');
+(0, _defineProperty2.default)(ContainerHelper, "V4_DEFAULT_CONTAINER_TYPE", 'e-flexbox');
 var _default = exports["default"] = ContainerHelper;
 
 /***/ }),
@@ -39757,6 +41692,7 @@ var _default = exports["default"] = ContainerHelper;
 
 module.exports = elementorModules.Module.extend({
   openMenuEvent: null,
+  location: null,
   getDefaultSettings: function getDefaultSettings() {
     return {
       context: 'preview',
@@ -39771,6 +41707,7 @@ module.exports = elementorModules.Module.extend({
         itemShortcut: 'elementor-context-menu-list__item__shortcut',
         iconShortcut: 'elementor-context-menu-list__item__icon',
         itemDisabled: 'elementor-context-menu-list__item--disabled',
+        itemHasShortcutAction: 'elementor-context-menu-list__item--has-shortcut-action',
         divider: 'elementor-context-menu-list__divider',
         hidden: 'elementor-hidden',
         promotionLink: 'elementor-context-menu-list__item__shortcut--link-fullwidth'
@@ -39848,6 +41785,9 @@ module.exports = elementorModules.Module.extend({
   toggleActionUsability: function toggleActionUsability(action, state) {
     this.maybeAddPromotionLink(action);
     action.$item.toggleClass(this.getSettings('classes.itemDisabled'), !state);
+    if (action.hasShortcutAction) {
+      action.$item.toggleClass(this.getSettings('classes.itemHasShortcutAction'), !state);
+    }
   },
   maybeAddPromotionLink: function maybeAddPromotionLink(action) {
     if (this.shouldAddPromotionLink(action)) {
@@ -39887,7 +41827,11 @@ module.exports = elementorModules.Module.extend({
     if (!this.isActionEnabled(action) || !this.isActionVisible(action)) {
       return;
     }
-    action.callback(this.openMenuEvent);
+    action.callback(this.openMenuEvent, {
+      location: this.location,
+      secondaryLocation: elementorCommon.eventsManager.config.secondaryLocations.contextMenu,
+      trigger: elementorCommon.eventsManager.config.triggers.rightClick
+    });
     this.getModal().hide();
   },
   initModal: function initModal() {
@@ -39915,9 +41859,11 @@ module.exports = elementorModules.Module.extend({
     };
   },
   show: function show(event) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var self = this,
       modal = self.getModal();
     this.openMenuEvent = event;
+    this.location = options.location;
     modal.setSettings('position', {
       of: event
     });
@@ -40460,6 +42406,390 @@ ControlsCSSParser = elementorModules.ViewModule.extend({
   }
 });
 module.exports = ControlsCSSParser;
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/utils/editor-one-events.js":
+/*!**********************************************************!*\
+  !*** ../assets/dev/js/editor/utils/editor-one-events.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.createDebouncedWidgetPanelSearch = exports.createDebouncedFinderSearch = exports.EditorOneEventManager = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var EditorOneEventManager = exports.EditorOneEventManager = /*#__PURE__*/function () {
+  function EditorOneEventManager() {
+    (0, _classCallCheck2.default)(this, EditorOneEventManager);
+  }
+  return (0, _createClass2.default)(EditorOneEventManager, null, [{
+    key: "getEventsManager",
+    value: function getEventsManager() {
+      var _elementorCommon;
+      return (_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.eventsManager;
+    }
+  }, {
+    key: "getConfig",
+    value: function getConfig() {
+      var _this$getEventsManage;
+      return (_this$getEventsManage = this.getEventsManager()) === null || _this$getEventsManage === void 0 ? void 0 : _this$getEventsManage.config;
+    }
+  }, {
+    key: "canSendEvents",
+    value: function canSendEvents() {
+      var _elementorCommon2;
+      return ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.config) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.editor_events) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.can_send_events) || false;
+    }
+  }, {
+    key: "isEventsManagerAvailable",
+    value: function isEventsManagerAvailable() {
+      var eventsManager = this.getEventsManager();
+      return eventsManager && 'function' === typeof eventsManager.dispatchEvent;
+    }
+  }, {
+    key: "dispatchEvent",
+    value: function dispatchEvent(eventName, payload) {
+      if (!this.isEventsManagerAvailable() || !this.canSendEvents()) {
+        return false;
+      }
+      try {
+        return this.getEventsManager().dispatchEvent(eventName, payload);
+      } catch (error) {
+        return false;
+      }
+    }
+  }, {
+    key: "toLowerSnake",
+    value: function toLowerSnake(value) {
+      if (!value || 'string' !== typeof value) {
+        return value;
+      }
+      return value.replace(/\s+/g, '_').toLowerCase();
+    }
+  }, {
+    key: "decodeHtmlEntities",
+    value: function decodeHtmlEntities(text) {
+      if (!text || 'string' !== typeof text) {
+        return text;
+      }
+      var doc = new DOMParser().parseFromString(text, 'text/html');
+      return doc.body.textContent || text;
+    }
+  }, {
+    key: "isInEditorContext",
+    value: function isInEditorContext() {
+      var _window$elementor;
+      return 'undefined' !== typeof window.elementor && !!((_window$elementor = window.elementor) !== null && _window$elementor !== void 0 && _window$elementor.documents);
+    }
+  }, {
+    key: "getFinderContext",
+    value: function getFinderContext() {
+      var _config$appTypes, _config$appTypes2, _config$locations, _config$locations2;
+      var config = this.getConfig();
+      var isEditor = this.isInEditorContext();
+      return {
+        windowName: isEditor ? config === null || config === void 0 || (_config$appTypes = config.appTypes) === null || _config$appTypes === void 0 ? void 0 : _config$appTypes.editor : config === null || config === void 0 || (_config$appTypes2 = config.appTypes) === null || _config$appTypes2 === void 0 ? void 0 : _config$appTypes2.wpAdmin,
+        targetLocation: this.toLowerSnake(isEditor ? config === null || config === void 0 || (_config$locations = config.locations) === null || _config$locations === void 0 ? void 0 : _config$locations.topBar : config === null || config === void 0 || (_config$locations2 = config.locations) === null || _config$locations2 === void 0 ? void 0 : _config$locations2.sidebar)
+      };
+    }
+  }, {
+    key: "createBasePayload",
+    value: function createBasePayload() {
+      var _config$appTypes$edit, _config$appTypes3, _config$appTypes$edit2, _config$appTypes4;
+      var overrides = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var config = this.getConfig();
+      return _objectSpread({
+        app_type: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : 'editor',
+        window_name: (_config$appTypes$edit2 = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.editor) !== null && _config$appTypes$edit2 !== void 0 ? _config$appTypes$edit2 : 'editor'
+      }, overrides);
+    }
+  }, {
+    key: "sendTopBarPublishDropdown",
+    value: function sendTopBarPublishDropdown(targetName) {
+      var _config$names, _config$triggers, _config$targetTypes, _config$interactionRe, _config$locations3, _config$secondaryLoca, _config$targetTypes2;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names = config.names) === null || _config$names === void 0 || (_config$names = _config$names.editorOne) === null || _config$names === void 0 ? void 0 : _config$names.topBarPublishDropdown, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers = config.triggers) === null || _config$triggers === void 0 ? void 0 : _config$triggers.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes = config.targetTypes) === null || _config$targetTypes === void 0 ? void 0 : _config$targetTypes.dropdownItem,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe = config.interactionResults) === null || _config$interactionRe === void 0 ? void 0 : _config$interactionRe.actionSelected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations3 = config.locations) === null || _config$locations3 === void 0 ? void 0 : _config$locations3.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca = config.secondaryLocations) === null || _config$secondaryLoca === void 0 ? void 0 : _config$secondaryLoca.publishDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes2 = config.targetTypes) === null || _config$targetTypes2 === void 0 ? void 0 : _config$targetTypes2.dropdownItem,
+        interaction_description: 'User selected an action from the publish dropdown'
+      }));
+    }
+  }, {
+    key: "sendTopBarPageList",
+    value: function sendTopBarPageList(targetName) {
+      var _config$names2, _config$triggers2, _config$targetTypes3, _config$interactionRe2, _config$interactionRe3, _config$locations4, _config$secondaryLoca2, _config$targetTypes4;
+      var isCreate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names2 = config.names) === null || _config$names2 === void 0 || (_config$names2 = _config$names2.editorOne) === null || _config$names2 === void 0 ? void 0 : _config$names2.topBarPageList, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers2 = config.triggers) === null || _config$triggers2 === void 0 ? void 0 : _config$triggers2.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes3 = config.targetTypes) === null || _config$targetTypes3 === void 0 ? void 0 : _config$targetTypes3.dropdownItem,
+        target_name: targetName,
+        interaction_result: isCreate ? config === null || config === void 0 || (_config$interactionRe2 = config.interactionResults) === null || _config$interactionRe2 === void 0 ? void 0 : _config$interactionRe2.create : config === null || config === void 0 || (_config$interactionRe3 = config.interactionResults) === null || _config$interactionRe3 === void 0 ? void 0 : _config$interactionRe3.navigate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations4 = config.locations) === null || _config$locations4 === void 0 ? void 0 : _config$locations4.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca2 = config.secondaryLocations) === null || _config$secondaryLoca2 === void 0 ? void 0 : _config$secondaryLoca2.pageListDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes4 = config.targetTypes) === null || _config$targetTypes4 === void 0 ? void 0 : _config$targetTypes4.dropdownItem,
+        interaction_description: 'User selected an action from the page list dropdown'
+      }));
+    }
+  }, {
+    key: "sendSiteSettingsSession",
+    value: function sendSiteSettingsSession(_ref) {
+      var _config$names3, _config$triggers3, _config$interactionRe4, _config$locations5, _config$secondaryLoca3;
+      var targetType = _ref.targetType,
+        _ref$visitedItems = _ref.visitedItems,
+        visitedItems = _ref$visitedItems === void 0 ? [] : _ref$visitedItems,
+        _ref$savedItems = _ref.savedItems,
+        savedItems = _ref$savedItems === void 0 ? [] : _ref$savedItems,
+        state = _ref.state;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names3 = config.names) === null || _config$names3 === void 0 || (_config$names3 = _config$names3.editorOne) === null || _config$names3 === void 0 ? void 0 : _config$names3.siteSettingsSession, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers3 = config.triggers) === null || _config$triggers3 === void 0 ? void 0 : _config$triggers3.click),
+        target_type: targetType,
+        target_name: 'site_settings',
+        interaction_result: config === null || config === void 0 || (_config$interactionRe4 = config.interactionResults) === null || _config$interactionRe4 === void 0 ? void 0 : _config$interactionRe4.sessionEnd,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations5 = config.locations) === null || _config$locations5 === void 0 ? void 0 : _config$locations5.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca3 = config.secondaryLocations) === null || _config$secondaryLoca3 === void 0 ? void 0 : _config$secondaryLoca3.siteSettings),
+        interaction_description: 'Records areas visited as part of the site setting session',
+        metadata: {
+          visited_items: visitedItems,
+          saved_items: savedItems
+        },
+        state: state
+      }));
+    }
+  }, {
+    key: "sendELibraryNav",
+    value: function sendELibraryNav(tabName) {
+      var _config$names4, _config$triggers4, _config$targetTypes5, _config$interactionRe5, _config$locations6, _config$secondaryLoca4;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names4 = config.names) === null || _config$names4 === void 0 || (_config$names4 = _config$names4.editorOne) === null || _config$names4 === void 0 ? void 0 : _config$names4.eLibraryNav, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers4 = config.triggers) === null || _config$triggers4 === void 0 ? void 0 : _config$triggers4.tabSelect),
+        target_type: config === null || config === void 0 || (_config$targetTypes5 = config.targetTypes) === null || _config$targetTypes5 === void 0 ? void 0 : _config$targetTypes5.tab,
+        target_name: this.toLowerSnake(tabName),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe5 = config.interactionResults) === null || _config$interactionRe5 === void 0 ? void 0 : _config$interactionRe5.tabChanged,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations6 = config.locations) === null || _config$locations6 === void 0 ? void 0 : _config$locations6.elementorLibrary),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca4 = config.secondaryLocations) === null || _config$secondaryLoca4 === void 0 ? void 0 : _config$secondaryLoca4.libraryTabs),
+        interaction_description: 'User navigates within elementor library'
+      }));
+    }
+  }, {
+    key: "sendELibraryInsert",
+    value: function sendELibraryInsert(_ref2) {
+      var _config$triggers5, _config$targetTypes6, _config$interactionRe6, _config$locations7, _config$secondaryLoca5, _config$names5;
+      var assetId = _ref2.assetId,
+        assetName = _ref2.assetName,
+        libraryType = _ref2.libraryType,
+        _ref2$proRequired = _ref2.proRequired,
+        proRequired = _ref2$proRequired === void 0 ? false : _ref2$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers5 = config.triggers) === null || _config$triggers5 === void 0 ? void 0 : _config$triggers5.insert),
+        target_type: config === null || config === void 0 || (_config$targetTypes6 = config.targetTypes) === null || _config$targetTypes6 === void 0 ? void 0 : _config$targetTypes6.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe6 = config.interactionResults) === null || _config$interactionRe6 === void 0 ? void 0 : _config$interactionRe6.assetInserted,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations7 = config.locations) === null || _config$locations7 === void 0 ? void 0 : _config$locations7.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca5 = config.secondaryLocations) === null || _config$secondaryLoca5 === void 0 ? void 0 : _config$secondaryLoca5.assetCard),
+        interaction_description: 'User inserts block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names5 = config.names) === null || _config$names5 === void 0 || (_config$names5 = _config$names5.editorOne) === null || _config$names5 === void 0 ? void 0 : _config$names5.eLibraryInsert, payload);
+    }
+  }, {
+    key: "sendELibraryFavorite",
+    value: function sendELibraryFavorite(_ref3) {
+      var _config$triggers6, _config$targetTypes7, _config$interactionRe7, _config$locations8, _config$secondaryLoca6, _config$names6;
+      var assetId = _ref3.assetId,
+        assetName = _ref3.assetName,
+        libraryType = _ref3.libraryType,
+        isFavorite = _ref3.isFavorite,
+        _ref3$proRequired = _ref3.proRequired,
+        proRequired = _ref3$proRequired === void 0 ? false : _ref3$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers6 = config.triggers) === null || _config$triggers6 === void 0 ? void 0 : _config$triggers6.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes7 = config.targetTypes) === null || _config$targetTypes7 === void 0 ? void 0 : _config$targetTypes7.toggle,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe7 = config.interactionResults) === null || _config$interactionRe7 === void 0 ? void 0 : _config$interactionRe7.assetFavorite,
+        target_value: Boolean(isFavorite),
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations8 = config.locations) === null || _config$locations8 === void 0 ? void 0 : _config$locations8.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca6 = config.secondaryLocations) === null || _config$secondaryLoca6 === void 0 ? void 0 : _config$secondaryLoca6.assetCard),
+        interaction_description: 'User favorite block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names6 = config.names) === null || _config$names6 === void 0 || (_config$names6 = _config$names6.editorOne) === null || _config$names6 === void 0 ? void 0 : _config$names6.eLibraryFavorite, payload);
+    }
+  }, {
+    key: "sendELibraryGenerateAi",
+    value: function sendELibraryGenerateAi(_ref4) {
+      var _config$names7, _config$triggers7, _config$targetTypes8, _config$interactionRe8, _config$locations9, _config$secondaryLoca7;
+      var assetId = _ref4.assetId,
+        assetName = _ref4.assetName,
+        libraryType = _ref4.libraryType;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names7 = config.names) === null || _config$names7 === void 0 || (_config$names7 = _config$names7.editorOne) === null || _config$names7 === void 0 ? void 0 : _config$names7.eLibraryGenerateAi, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers7 = config.triggers) === null || _config$triggers7 === void 0 ? void 0 : _config$triggers7.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes8 = config.targetTypes) === null || _config$targetTypes8 === void 0 ? void 0 : _config$targetTypes8.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe8 = config.interactionResults) === null || _config$interactionRe8 === void 0 ? void 0 : _config$interactionRe8.aiGenerate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations9 = config.locations) === null || _config$locations9 === void 0 ? void 0 : _config$locations9.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca7 = config.secondaryLocations) === null || _config$secondaryLoca7 === void 0 ? void 0 : _config$secondaryLoca7.assetCard),
+        interaction_description: 'User generated block/page based on a library asset',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      }));
+    }
+  }, {
+    key: "sendFinderSearchInput",
+    value: function sendFinderSearchInput(_ref5) {
+      var _config$triggers8, _config$targetTypes9, _config$interactionRe9, _config$interactionRe0, _config$secondaryLoca8, _config$names8;
+      var resultsCount = _ref5.resultsCount,
+        _ref5$searchTerm = _ref5.searchTerm,
+        searchTerm = _ref5$searchTerm === void 0 ? null : _ref5$searchTerm;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var finderContext = this.getFinderContext();
+      var payload = this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers8 = config.triggers) === null || _config$triggers8 === void 0 ? void 0 : _config$triggers8.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes9 = config.targetTypes) === null || _config$targetTypes9 === void 0 ? void 0 : _config$targetTypes9.searchInput,
+        target_name: 'finder',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe9 = config.interactionResults) === null || _config$interactionRe9 === void 0 ? void 0 : _config$interactionRe9.resultsUpdated : config === null || config === void 0 || (_config$interactionRe0 = config.interactionResults) === null || _config$interactionRe0 === void 0 ? void 0 : _config$interactionRe0.noResults,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca8 = config.secondaryLocations) === null || _config$secondaryLoca8 === void 0 ? void 0 : _config$secondaryLoca8.finder),
+        interaction_description: 'Finder search input, follows debounce behavior',
+        metadata: {
+          results_count: resultsCount
+        }
+      });
+      if (!hasResults && searchTerm) {
+        payload.metadata.search_term = searchTerm;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names8 = config.names) === null || _config$names8 === void 0 || (_config$names8 = _config$names8.editorOne) === null || _config$names8 === void 0 ? void 0 : _config$names8.finderSearchInput, payload);
+    }
+  }, {
+    key: "sendFinderResultSelect",
+    value: function sendFinderResultSelect(choice) {
+      var _config$names9, _config$triggers9, _config$targetTypes0, _config$interactionRe1, _config$secondaryLoca9, _config$secondaryLoca0;
+      var config = this.getConfig();
+      var finderContext = this.getFinderContext();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names9 = config.names) === null || _config$names9 === void 0 || (_config$names9 = _config$names9.editorOne) === null || _config$names9 === void 0 ? void 0 : _config$names9.finderResultSelect, this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers9 = config.triggers) === null || _config$triggers9 === void 0 ? void 0 : _config$triggers9.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes0 = config.targetTypes) === null || _config$targetTypes0 === void 0 ? void 0 : _config$targetTypes0.searchResult,
+        target_name: choice,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe1 = config.interactionResults) === null || _config$interactionRe1 === void 0 ? void 0 : _config$interactionRe1.selected,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca9 = config.secondaryLocations) === null || _config$secondaryLoca9 === void 0 ? void 0 : _config$secondaryLoca9.finder),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca0 = config.secondaryLocations) === null || _config$secondaryLoca0 === void 0 ? void 0 : _config$secondaryLoca0.finderResults),
+        interaction_description: 'Finder search results was selected'
+      }));
+    }
+  }, {
+    key: "sendCanvasEmptyBoxAction",
+    value: function sendCanvasEmptyBoxAction(_ref6) {
+      var _config$triggers0, _config$targetTypes1, _config$interactionRe10, _config$locations0, _config$secondaryLoca1, _config$names0;
+      var targetName = _ref6.targetName,
+        _ref6$metadata = _ref6.metadata,
+        metadata = _ref6$metadata === void 0 ? {} : _ref6$metadata,
+        _ref6$containerCreate = _ref6.containerCreated,
+        containerCreated = _ref6$containerCreate === void 0 ? null : _ref6$containerCreate;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers0 = config.triggers) === null || _config$triggers0 === void 0 ? void 0 : _config$triggers0.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes1 = config.targetTypes) === null || _config$targetTypes1 === void 0 ? void 0 : _config$targetTypes1.buttons,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe10 = config.interactionResults) === null || _config$interactionRe10 === void 0 ? void 0 : _config$interactionRe10.selected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations0 = config.locations) === null || _config$locations0 === void 0 ? void 0 : _config$locations0.canvas),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca1 = config.secondaryLocations) === null || _config$secondaryLoca1 === void 0 ? void 0 : _config$secondaryLoca1.emptyBox),
+        interaction_description: 'Empty box on canvas actions'
+      });
+      if (Object.keys(metadata).length > 0) {
+        payload.metadata = metadata;
+      }
+      if (containerCreated !== null) {
+        payload.state = containerCreated;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names0 = config.names) === null || _config$names0 === void 0 || (_config$names0 = _config$names0.editorOne) === null || _config$names0 === void 0 ? void 0 : _config$names0.canvasEmptyBoxAction, payload);
+    }
+  }, {
+    key: "sendWidgetPanelSearch",
+    value: function sendWidgetPanelSearch(_ref7) {
+      var _config$triggers1, _config$targetTypes10, _config$interactionRe11, _config$interactionRe12, _config$locations1, _config$locations10, _config$secondaryLoca10, _config$names1;
+      var resultsCount = _ref7.resultsCount,
+        _ref7$userInput = _ref7.userInput,
+        userInput = _ref7$userInput === void 0 ? null : _ref7$userInput;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers1 = config.triggers) === null || _config$triggers1 === void 0 ? void 0 : _config$triggers1.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes10 = config.targetTypes) === null || _config$targetTypes10 === void 0 ? void 0 : _config$targetTypes10.searchWidget,
+        target_name: 'search_widget',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe11 = config.interactionResults) === null || _config$interactionRe11 === void 0 ? void 0 : _config$interactionRe11.resultsUpdated : config === null || config === void 0 || (_config$interactionRe12 = config.interactionResults) === null || _config$interactionRe12 === void 0 ? void 0 : _config$interactionRe12.noResults,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations1 = config.locations) === null || _config$locations1 === void 0 ? void 0 : _config$locations1.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$locations10 = config.locations) === null || _config$locations10 === void 0 ? void 0 : _config$locations10.widgetPanel),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca10 = config.secondaryLocations) === null || _config$secondaryLoca10 === void 0 ? void 0 : _config$secondaryLoca10.searchBar),
+        interaction_description: 'Widget search input, follows debounce behavior'
+      });
+      if (!hasResults && userInput) {
+        payload.metadata = {
+          user_input: userInput
+        };
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names1 = config.names) === null || _config$names1 === void 0 || (_config$names1 = _config$names1.editorOne) === null || _config$names1 === void 0 ? void 0 : _config$names1.widgetPanelSearch, payload);
+    }
+  }]);
+}();
+var createDebouncedFinderSearch = exports.createDebouncedFinderSearch = function createDebouncedFinderSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 300;
+  return _.debounce(function (resultsCount, searchTerm) {
+    EditorOneEventManager.sendFinderSearchInput({
+      resultsCount: resultsCount,
+      searchTerm: searchTerm
+    });
+  }, delay);
+};
+var createDebouncedWidgetPanelSearch = exports.createDebouncedWidgetPanelSearch = function createDebouncedWidgetPanelSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2000;
+  return _.debounce(function (resultsCount, userInput) {
+    EditorOneEventManager.sendWidgetPanelSearch({
+      resultsCount: resultsCount,
+      userInput: userInput
+    });
+  }, delay);
+};
+var _default = exports["default"] = EditorOneEventManager;
 
 /***/ }),
 
@@ -41518,7 +43848,10 @@ module.exports = {
     return this.getAtomicElementTypes().includes(elType);
   },
   getWidgetCache: function getWidgetCache(model) {
-    var elementType = 'widget' === model.get('elType') ? model.get('widgetType') : model.get('elType');
+    var isModel = model && 'function' === typeof model.get;
+    var elType = isModel ? model.get('elType') : model === null || model === void 0 ? void 0 : model.elType;
+    var widgetType = isModel ? model.get('widgetType') : model === null || model === void 0 ? void 0 : model.widgetType;
+    var elementType = 'widget' === elType ? widgetType : elType;
     return elementor.widgetsCache[elementType];
   },
   isAtomicWidget: function isAtomicWidget(model) {
@@ -41701,8 +44034,8 @@ var _default = exports["default"] = function _default(object, constructors) {
     _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _constructor = _step.value;
-      if (object.constructor.name === _constructor.prototype[Symbol.toStringTag]) {
+      var constructor = _step.value;
+      if (object.constructor.name === constructor.prototype[Symbol.toStringTag]) {
         return true;
       }
     }
@@ -41713,6 +44046,130 @@ var _default = exports["default"] = function _default(object, constructors) {
   }
   return false;
 };
+
+/***/ }),
+
+/***/ "../assets/dev/js/editor/utils/keyboard-nav.js":
+/*!*****************************************************!*\
+  !*** ../assets/dev/js/editor/utils/keyboard-nav.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.rovingTabindex = rovingTabindex;
+exports.suppressEscapeKeyUp = suppressEscapeKeyUp;
+/**
+ * Handles arrow-key roving tabindex navigation within a group.
+ *
+ * @param {Object}       options
+ * @param {jQuery.Event} options.event                      - The keydown event
+ * @param {jQuery}       options.$items                     - All navigable items
+ * @param {string}       [options.orientation='horizontal'] - 'horizontal' | 'vertical' | 'both'
+ * @param {boolean}      [options.wrap=true]                - Wrap at boundaries
+ * @param {boolean}      [options.activateOnFocus=false]    - Trigger click on arrow navigation
+ * @param {Function}     [options.onActivate]               - Callback when Enter/Space pressed
+ * @param {boolean}      [options.homeEnd=true]             - Support Home/End keys
+ * @return {boolean} Whether the event was handled
+ */
+function rovingTabindex(_ref) {
+  var event = _ref.event,
+    $items = _ref.$items,
+    _ref$orientation = _ref.orientation,
+    orientation = _ref$orientation === void 0 ? 'horizontal' : _ref$orientation,
+    _ref$wrap = _ref.wrap,
+    wrap = _ref$wrap === void 0 ? true : _ref$wrap,
+    _ref$activateOnFocus = _ref.activateOnFocus,
+    activateOnFocus = _ref$activateOnFocus === void 0 ? false : _ref$activateOnFocus,
+    onActivate = _ref.onActivate,
+    _ref$homeEnd = _ref.homeEnd,
+    homeEnd = _ref$homeEnd === void 0 ? true : _ref$homeEnd;
+  // Use event.currentTarget when the event is bound directly to items,
+  // fall back to event.target when the event is bound to a container.
+  var current = $items.index(event.currentTarget) !== -1 ? event.currentTarget : event.target;
+  var currentIndex = $items.index(current);
+  var targetIndex = currentIndex;
+  var isHorizontal = 'horizontal' === orientation || 'both' === orientation;
+  var isVertical = 'vertical' === orientation || 'both' === orientation;
+  switch (event.key) {
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      if ('ArrowLeft' === event.key && !isHorizontal || 'ArrowUp' === event.key && !isVertical) {
+        return false;
+      }
+      event.preventDefault();
+      if (currentIndex > 0) {
+        targetIndex = currentIndex - 1;
+      } else {
+        targetIndex = wrap ? $items.length - 1 : currentIndex;
+      }
+      break;
+    case 'ArrowRight':
+    case 'ArrowDown':
+      if ('ArrowRight' === event.key && !isHorizontal || 'ArrowDown' === event.key && !isVertical) {
+        return false;
+      }
+      event.preventDefault();
+      if (currentIndex < $items.length - 1) {
+        targetIndex = currentIndex + 1;
+      } else {
+        targetIndex = wrap ? 0 : currentIndex;
+      }
+      break;
+    case 'Home':
+      if (!homeEnd) {
+        return false;
+      }
+      event.preventDefault();
+      targetIndex = 0;
+      break;
+    case 'End':
+      if (!homeEnd) {
+        return false;
+      }
+      event.preventDefault();
+      targetIndex = $items.length - 1;
+      break;
+    case 'Enter':
+    case ' ':
+      event.preventDefault();
+      if (onActivate) {
+        onActivate(event, $items.eq(currentIndex));
+      }
+      return true;
+    default:
+      return false;
+  }
+  if (targetIndex !== currentIndex) {
+    $items.attr('tabindex', '-1');
+    $items.eq(targetIndex).attr('tabindex', '0').trigger('focus');
+    if (activateOnFocus) {
+      $items.eq(targetIndex).trigger('click');
+    }
+  }
+  return true;
+}
+
+/**
+ * Prevents Escape keydown from propagating to close the modal,
+ * and suppresses the subsequent keyup event.
+ *
+ * @param {KeyboardEvent} event - The keydown event
+ */
+function suppressEscapeKeyUp(event) {
+  event.stopPropagation();
+  var _handler = function handler(e) {
+    if ('Escape' === e.key) {
+      e.stopImmediatePropagation();
+    }
+    window.removeEventListener('keyup', _handler, true);
+  };
+  window.addEventListener('keyup', _handler, true);
+}
 
 /***/ }),
 
@@ -42619,6 +45076,7 @@ var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/h
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _containerHelper = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/container-helper */ "../assets/dev/js/editor/utils/container-helper.js"));
 var _environment = _interopRequireDefault(__webpack_require__(/*! elementor-common/utils/environment */ "../core/common/assets/js/utils/environment.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
@@ -42800,6 +45258,9 @@ var AddSectionBase = /*#__PURE__*/function (_Marionette$ItemView) {
   }, {
     key: "onAddTemplateButtonClick",
     value: function onAddTemplateButtonClick() {
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'e_library'
+      });
       $e.run('library/open', this.getTemplatesModalOptions());
     }
   }, {
@@ -42837,6 +45298,14 @@ var AddSectionBase = /*#__PURE__*/function (_Marionette$ItemView) {
       var selectedStructure = event.currentTarget.dataset.structure,
         parsedStructure = elementor.presetsFactory.getParsedGridStructure(selectedStructure),
         isAddedAboveAnotherContainer = !!this.options.at || 0 === this.options.at;
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'add_container',
+        metadata: {
+          container_type: 'grid',
+          structure_type: selectedStructure
+        },
+        containerCreated: true
+      });
       var newContainer = _containerHelper.default.createContainer({
         container_type: _containerHelper.default.CONTAINER_TYPE_GRID,
         grid_columns_grid: {
@@ -42893,7 +45362,16 @@ var AddSectionBase = /*#__PURE__*/function (_Marionette$ItemView) {
     key: "onFlexPresetSelected",
     value: function onFlexPresetSelected(e) {
       this.closeSelectPresets();
-      return _containerHelper.default.createContainerFromPreset(e.currentTarget.dataset.preset, elementor.getPreviewContainer(), this.options);
+      var preset = e.currentTarget.dataset.preset;
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'add_container',
+        metadata: {
+          container_type: 'flexbox',
+          structure_type: preset
+        },
+        containerCreated: true
+      });
+      return _containerHelper.default.createContainerFromPreset(preset, elementor.getPreviewContainer(), this.options);
     }
   }, {
     key: "onDropping",
@@ -42944,6 +45422,7 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../assets/dev/js/editor/views/add-section/base.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var AddSectionView = exports["default"] = /*#__PURE__*/function (_BaseAddSectionView) {
@@ -42960,6 +45439,10 @@ var AddSectionView = exports["default"] = /*#__PURE__*/function (_BaseAddSection
   }, {
     key: "onCloseButtonClick",
     value: function onCloseButtonClick() {
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'close',
+        containerCreated: false
+      });
       this.closeSelectPresets();
     }
   }]);
@@ -42988,6 +45471,7 @@ var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/get */ "../node_modules/@babel/runtime/helpers/get.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../assets/dev/js/editor/views/add-section/base.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 function _superPropGet(t, o, e, r) { var p = (0, _get2.default)((0, _getPrototypeOf2.default)(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
@@ -43019,6 +45503,10 @@ var AddSectionView = /*#__PURE__*/function (_BaseAddSectionView) {
   }, {
     key: "onCloseButtonClick",
     value: function onCloseButtonClick() {
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'close',
+        containerCreated: false
+      });
       this.fadeToDeath();
     }
   }, {
@@ -43076,6 +45564,7 @@ var _default = exports["default"] = AddSectionView;
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _containerHelper = _interopRequireDefault(__webpack_require__(/*! elementor-editor-utils/container-helper */ "../assets/dev/js/editor/utils/container-helper.js"));
 /**
  * @typedef {import('elementor/assets/lib/backbone/backbone.marionette')} Marionette
  * @name BaseContainer
@@ -43151,11 +45640,14 @@ module.exports = Marionette.CompositeView.extend({
     if (options.edit && elementor.documents.getCurrent().history.getActive()) {
       // Ensure container is created. TODO: Open editor via UI hook after `document/elements/create`.
       newView.getContainer();
-      newModel.trigger('request:edit', {
-        scrollIntoView: options.scrollIntoView
-      });
+      newView._openEditingPanel(options);
     }
     return newView;
+  },
+  _openEditingPanel: function _openEditingPanel(options) {
+    this.model.trigger('request:edit', {
+      scrollIntoView: options.scrollIntoView
+    });
   },
   createElementFromContainer: function createElementFromContainer(container) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -43190,24 +45682,7 @@ module.exports = Marionette.CompositeView.extend({
     }
     var container = this.getContainer();
     if (options.shouldWrap) {
-      var containerExperiment = elementorCommon.config.experimentalFeatures.container;
-      container = $e.run('document/elements/create', {
-        model: {
-          elType: containerExperiment ? 'container' : 'section'
-        },
-        container: container,
-        columns: Number(!containerExperiment),
-        options: {
-          at: options.at,
-          scrollIntoView: options.scrollIntoView,
-          useHistory: useHistory
-        }
-      });
-
-      // Since wrapping an element with container doesn't produce a column, we shouldn't try to access it.
-      if (!containerExperiment) {
-        container = container.view.children.findByIndex(0).getContainer();
-      }
+      container = this.getWrappingContainer(container, model, options);
     }
 
     // Create the element in column.
@@ -43222,6 +45697,38 @@ module.exports = Marionette.CompositeView.extend({
       });
     }
     return widget;
+  },
+  getWrappingContainer: function getWrappingContainer(container, model, settings) {
+    var _settings$useHistory;
+    var isAtomic = elementor.helpers.isAtomicWidget(model);
+    var options = {
+      at: settings.at,
+      scrollIntoView: settings.scrollIntoView,
+      useHistory: (_settings$useHistory = settings === null || settings === void 0 ? void 0 : settings.useHistory) !== null && _settings$useHistory !== void 0 ? _settings$useHistory : true
+    };
+    if (isAtomic) {
+      return _containerHelper.default.createContainerFromModel({
+        elType: _containerHelper.default.V4_DEFAULT_CONTAINER_TYPE
+      }, container, {
+        options: options
+      });
+    }
+    return this.getV3Container(container, options);
+  },
+  getV3Container: function getV3Container(container, options) {
+    var isContainerExperimentActive = elementorCommon.config.experimentalFeatures.container;
+    container = _containerHelper.default.createContainerFromModel({
+      elType: isContainerExperimentActive ? 'container' : 'section'
+    }, container, {
+      columns: Number(!isContainerExperimentActive),
+      options: options
+    });
+
+    // Since wrapping an element with container doesn't produce a column, we shouldn't try to access it.
+    if (!isContainerExperimentActive) {
+      container = container.view.children.findByIndex(0).getContainer();
+    }
+    return container;
   },
   onDrop: function onDrop(event, options) {
     var _elementor$channels$p, _elementorCommon;
@@ -43486,6 +45993,7 @@ var ControlsPopover = exports["default"] = /*#__PURE__*/function () {
     key: "onResetButtonClick",
     value: function onResetButtonClick() {
       this.$popover.hide();
+      this.$popover.trigger('hide');
       var groupControlName = this.child.model.get('groupPrefix') + 'typography',
         args = {
           container: this.child.options.container,
@@ -43825,10 +46333,11 @@ var Preview = BaseSectionsContainerView.extend({
     }];
   },
   createElementFromModel: function createElementFromModel(model) {
+    var _model$widgetType;
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var wrappedElementTypes = ['widget', 'section', 'column'];
     return BaseSectionsContainerView.prototype.createElementFromModel.call(this, model, _objectSpread(_objectSpread({}, options), {}, {
-      shouldWrap: wrappedElementTypes.includes(model.elType)
+      shouldWrap: wrappedElementTypes.includes(model.elType) && !((_model$widgetType = model.widgetType) !== null && _model$widgetType !== void 0 && _model$widgetType.startsWith('e-form-'))
     }));
   },
   addElementFromPanel: function addElementFromPanel(options) {
@@ -43875,6 +46384,52 @@ var Preview = BaseSectionsContainerView.extend({
   }
 });
 module.exports = Preview;
+
+/***/ }),
+
+/***/ "../assets/dev/js/frontend/utils/filter-unknown-elements.js":
+/*!******************************************************************!*\
+  !*** ../assets/dev/js/frontend/utils/filter-unknown-elements.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.filterUnknownElements = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var filterUnknownElements = exports.filterUnknownElements = function filterUnknownElements(data) {
+  var _data$elements;
+  if (data !== null && data !== void 0 && (_data$elements = data.elements) !== null && _data$elements !== void 0 && _data$elements.length) {
+    return _objectSpread(_objectSpread({}, data), {}, {
+      elements: filterChildren(data.elements)
+    });
+  }
+  return data;
+};
+function filterChildren(elements) {
+  return elements.reduce(function (acc, element) {
+    var _element$widgetType, _element$elements;
+    if (!element) {
+      return acc;
+    }
+    var isKnownType = elementor.elementsManager.getElementTypeClass((_element$widgetType = element.widgetType) !== null && _element$widgetType !== void 0 ? _element$widgetType : element.elType);
+    if (!isKnownType) {
+      return acc;
+    }
+    var processedElement = (_element$elements = element.elements) !== null && _element$elements !== void 0 && _element$elements.length ? _objectSpread(_objectSpread({}, element), {}, {
+      elements: filterChildren(element.elements)
+    }) : element;
+    acc.push(processedElement);
+    return acc;
+  }, []);
+}
 
 /***/ }),
 
@@ -44975,8 +47530,15 @@ module.exports = elementorModules.Module.extend({
         }
       },
       button: {
-        tag: 'div'
+        tag: 'button'
       }
+    });
+
+    // Add role="status" and aria-live for screen reader announcement
+    toast.getElements('widget').attr({
+      role: 'status',
+      'aria-live': 'polite',
+      'aria-atomic': 'true'
     });
     this.getToast = function () {
       return toast;
@@ -44986,6 +47548,8 @@ module.exports = elementorModules.Module.extend({
     var toast = this.getToast();
     toast.setMessage(options.message);
     toast.getElements('buttonsWrapper').empty();
+    toast.focusedButton = null;
+    toast.buttons = [];
     var isPositionValid = this.isPositionValid(options === null || options === void 0 ? void 0 : options.position);
     if (!isPositionValid) {
       this.positionToWindow();
@@ -45213,6 +47777,11 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$LayoutVie
   }
   (0, _inherits2.default)(_default, _Marionette$LayoutVie);
   return (0, _createClass2.default)(_default, [{
+    key: "tagName",
+    value: function tagName() {
+      return 'header';
+    }
+  }, {
     key: "className",
     value: function className() {
       return 'elementor-templates-modal__header';
@@ -45580,6 +48149,7 @@ var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*!
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
@@ -45623,8 +48193,44 @@ var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
       return $e.routes.back('panel');
     }
   }, {
+    key: "markSessionSaved",
+    value: function markSessionSaved() {
+      var globalComponent = this.component;
+      if (!globalComponent) {
+        return;
+      }
+      globalComponent.siteSettingsSession.hasSaved = true;
+      var currentTab = globalComponent.currentTab;
+      var activeSection = null;
+      try {
+        var _panelView$getCurrent, _currentPage$content;
+        var panelView = elementor.getPanelView();
+        var currentPage = panelView === null || panelView === void 0 || (_panelView$getCurrent = panelView.getCurrentPageView) === null || _panelView$getCurrent === void 0 ? void 0 : _panelView$getCurrent.call(panelView);
+        var contentView = currentPage === null || currentPage === void 0 || (_currentPage$content = currentPage.content) === null || _currentPage$content === void 0 ? void 0 : _currentPage$content.currentView;
+        activeSection = (contentView === null || contentView === void 0 ? void 0 : contentView.activeSection) || null;
+      } catch (e) {}
+      var savedItem = activeSection ? "".concat(currentTab, " - ").concat(activeSection) : currentTab;
+      if (savedItem) {
+        globalComponent.trackSavedItem(savedItem);
+      }
+    }
+  }, {
+    key: "trackSiteSettingsSession",
+    value: function trackSiteSettingsSession(targetType, state) {
+      var _this$component$getSi, _this$component, _this$component$reset, _this$component2;
+      var sessionData = ((_this$component$getSi = (_this$component = this.component).getSiteSettingsSessionData) === null || _this$component$getSi === void 0 ? void 0 : _this$component$getSi.call(_this$component)) || {};
+      _editorOneEvents.EditorOneEventManager.sendSiteSettingsSession({
+        targetType: targetType,
+        visitedItems: sessionData.visitedItems || [],
+        savedItems: sessionData.savedItems || [],
+        state: state
+      });
+      (_this$component$reset = (_this$component2 = this.component).resetSiteSettingsSession) === null || _this$component$reset === void 0 || _this$component$reset.call(_this$component2);
+    }
+  }, {
     key: "getCloseConfirmDialog",
     value: function getCloseConfirmDialog(event) {
+      var _this2 = this;
       if (!this.confirmDialog) {
         var modalOptions = {
           id: 'elementor-kit-warn-on-close',
@@ -45639,6 +48245,7 @@ var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
             cancel: __('Cancel', 'elementor')
           },
           onConfirm: function onConfirm() {
+            _this2.trackSiteSettingsSession('back', 'discard');
             $e.run('panel/global/close');
           }
         };
@@ -45663,14 +48270,15 @@ var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
   }, {
     key: "resolveChanges",
     value: function resolveChanges() {
-      var _this2 = this;
+      var _this3 = this;
       return new Promise(function (resolve) {
-        _this2.getUnsavedChangesDialog(resolve).show();
+        _this3.getUnsavedChangesDialog(resolve).show();
       });
     }
   }, {
     key: "getUnsavedChangesDialog",
     value: function getUnsavedChangesDialog(resolve) {
+      var _this4 = this;
       if (!this.document) {
         resolve();
         return;
@@ -45690,7 +48298,9 @@ var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
             cancel: __('Discard', 'elementor')
           },
           onConfirm: function onConfirm() {
+            _this4.markSessionSaved();
             $e.run('document/save/update').then(function () {
+              _this4.trackSiteSettingsSession('save', 'saved');
               resolve();
             });
           },
@@ -45698,6 +48308,7 @@ var Back = exports.Back = /*#__PURE__*/function (_$e$modules$CommandBa) {
             $e.run('document/save/discard', {
               document: document
             }).then(function () {
+              _this4.trackSiteSettingsSession('back', 'discard');
               resolve();
             });
           }
@@ -45734,6 +48345,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var Close = exports.Close = /*#__PURE__*/function (_$e$modules$CommandBa) {
@@ -45745,20 +48357,34 @@ var Close = exports.Close = /*#__PURE__*/function (_$e$modules$CommandBa) {
   return (0, _createClass2.default)(Close, [{
     key: "apply",
     value: function apply(args) {
-      var _this = this;
+      var _this$component$getSi2,
+        _this$component3,
+        _this = this;
       var mode = args.mode;
 
-      // The kit is opened directly.
+      // The kit is opened directly — no document switch needed, safe to track immediately.
       if (elementor.config.initial_document.id === parseInt(elementor.config.kit_id)) {
+        var _this$component$siteS, _this$component$getSi, _this$component, _this$component$reset, _this$component2;
+        var hasSaved = ((_this$component$siteS = this.component.siteSettingsSession) === null || _this$component$siteS === void 0 ? void 0 : _this$component$siteS.hasSaved) || false;
+        var sessionData = ((_this$component$getSi = (_this$component = this.component).getSiteSettingsSessionData) === null || _this$component$getSi === void 0 ? void 0 : _this$component$getSi.call(_this$component)) || {};
+        _editorOneEvents.EditorOneEventManager.sendSiteSettingsSession({
+          targetType: 'close',
+          visitedItems: sessionData.visitedItems || [],
+          savedItems: sessionData.savedItems || [],
+          state: hasSaved ? 'saved' : 'discard'
+        });
+        (_this$component$reset = (_this$component2 = this.component).resetSiteSettingsSession) === null || _this$component$reset === void 0 || _this$component$reset.call(_this$component2);
         return $e.run('panel/global/exit');
       }
+
+      // Capture session data before the switch (it may be reset during onClose).
+      var sessionSnapshot = ((_this$component$getSi2 = (_this$component3 = this.component).getSiteSettingsSessionData) === null || _this$component$getSi2 === void 0 ? void 0 : _this$component$getSi2.call(_this$component3)) || {};
       $e.internal('panel/state-loading');
       return $e.run('editor/documents/switch', {
         mode: mode,
         id: elementor.config.initial_document.id,
         onClose: function onClose(document) {
           if (document.isDraft()) {
-            // Restore published style.
             elementor.toggleDocumentCssFiles(document, true);
             elementor.settings.page.destroyControlsCSS();
           }
@@ -45768,7 +48394,24 @@ var Close = exports.Close = /*#__PURE__*/function (_$e$modules$CommandBa) {
           // The kit shouldn't be cached for next open. (it may be changed via create colors/typography).
           elementor.documents.invalidateCache(elementor.config.kit_id);
         }
-      }).finally(function () {
+      }).then(function () {
+        var _sessionSnapshot$visi, _this$component$siteS2, _this$component$reset2, _this$component4;
+        // Skip if session was already tracked and reset (e.g. by back.js dialog).
+        if (!((_sessionSnapshot$visi = sessionSnapshot.visitedItems) !== null && _sessionSnapshot$visi !== void 0 && _sessionSnapshot$visi.length)) {
+          return;
+        }
+
+        // Re-read hasSaved in case a save happened during the switch (e.g. "Save & leave").
+        var hasSaved = sessionSnapshot.hasSaved || ((_this$component$siteS2 = _this.component.siteSettingsSession) === null || _this$component$siteS2 === void 0 ? void 0 : _this$component$siteS2.hasSaved) || false;
+        var state = hasSaved ? 'saved' : 'discard';
+        _editorOneEvents.EditorOneEventManager.sendSiteSettingsSession({
+          targetType: 'close',
+          visitedItems: sessionSnapshot.visitedItems,
+          savedItems: sessionSnapshot.savedItems || [],
+          state: state
+        });
+        (_this$component$reset2 = (_this$component4 = _this.component).resetSiteSettingsSession) === null || _this$component$reset2 === void 0 || _this$component$reset2.call(_this$component4);
+      }).catch(function () {}).finally(function () {
         return $e.internal('panel/state-ready');
       });
     }
@@ -45948,6 +48591,8 @@ var commands = _interopRequireWildcard(__webpack_require__(/*! ./commands/ */ ".
 var _repeater = _interopRequireDefault(__webpack_require__(/*! ./repeater */ "../core/kits/assets/js/repeater.js"));
 var _componentBase = _interopRequireDefault(__webpack_require__(/*! elementor-editor/component-base */ "../assets/dev/js/editor/component-base.js"));
 function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 function _superPropGet(t, o, e, r) { var p = (0, _get2.default)((0, _getPrototypeOf2.default)(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
@@ -45960,6 +48605,11 @@ var _default = exports["default"] = /*#__PURE__*/function (_ComponentBase) {
     }
     _this = _callSuper(this, _default, [].concat(args));
     (0, _defineProperty2.default)(_this, "pages", {});
+    (0, _defineProperty2.default)(_this, "siteSettingsSession", {
+      visitedItems: [],
+      savedItems: [],
+      hasSaved: false
+    });
     return _this;
   }
   (0, _inherits2.default)(_default, _ComponentBase);
@@ -46023,11 +48673,39 @@ var _default = exports["default"] = /*#__PURE__*/function (_ComponentBase) {
     key: "renderTab",
     value: function renderTab(tab, args) {
       if (tab !== this.currentTab) {
-        // Prevent re-rendering the same tab (with just different args).
         this.currentTab = tab;
+        this.trackVisitedTab(tab);
         elementor.getPanelView().setPage('kit_settings').content.currentView.activateTab(tab);
       }
       this.activateControl(args.activeControl);
+    }
+  }, {
+    key: "trackVisitedTab",
+    value: function trackVisitedTab(tabName) {
+      if (tabName && !this.siteSettingsSession.visitedItems.includes(tabName)) {
+        this.siteSettingsSession.visitedItems.push(tabName);
+      }
+    }
+  }, {
+    key: "trackSavedItem",
+    value: function trackSavedItem(itemName) {
+      if (itemName && !this.siteSettingsSession.savedItems.includes(itemName)) {
+        this.siteSettingsSession.savedItems.push(itemName);
+      }
+    }
+  }, {
+    key: "getSiteSettingsSessionData",
+    value: function getSiteSettingsSessionData() {
+      return _objectSpread({}, this.siteSettingsSession);
+    }
+  }, {
+    key: "resetSiteSettingsSession",
+    value: function resetSiteSettingsSession() {
+      this.siteSettingsSession = {
+        visitedItems: [],
+        savedItems: [],
+        hasSaved: false
+      };
     }
   }]);
 }(_componentBase.default);
@@ -47253,6 +49931,8 @@ var KitAfterSave = exports.KitAfterSave = /*#__PURE__*/function (_After) {
   }, {
     key: "apply",
     value: function apply(args) {
+      this.trackSiteSettingsSave();
+
       // On save clear cache of all edited documents and dynamic tags.
       // This is needed because when returning to the editor after saving the kit, it was still displaying the old data.
       this.clearDocumentCache();
@@ -47287,6 +49967,28 @@ var KitAfterSave = exports.KitAfterSave = /*#__PURE__*/function (_After) {
         });
         reloadConfirm.show();
       }
+    }
+  }, {
+    key: "trackSiteSettingsSave",
+    value: function trackSiteSettingsSave() {
+      var globalComponent = $e.components.get('panel/global');
+      if (!globalComponent) {
+        return;
+      }
+      var currentTab = globalComponent.currentTab;
+      var activeSection = null;
+      try {
+        var _panelView$getCurrent, _currentPage$content;
+        var panelView = elementor.getPanelView();
+        var currentPage = panelView === null || panelView === void 0 || (_panelView$getCurrent = panelView.getCurrentPageView) === null || _panelView$getCurrent === void 0 ? void 0 : _panelView$getCurrent.call(panelView);
+        var contentView = currentPage === null || currentPage === void 0 || (_currentPage$content = currentPage.content) === null || _currentPage$content === void 0 ? void 0 : _currentPage$content.currentView;
+        activeSection = (contentView === null || contentView === void 0 ? void 0 : contentView.activeSection) || null;
+      } catch (e) {}
+      var savedItem = activeSection ? "".concat(currentTab, " - ").concat(activeSection) : currentTab;
+      if (savedItem) {
+        globalComponent.trackSavedItem(savedItem);
+      }
+      globalComponent.siteSettingsSession.hasSaved = true;
     }
   }, {
     key: "clearDocumentCache",
@@ -47740,6 +50442,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 function _superPropGet(t, o, e, r) { var p = (0, _get2.default)((0, _getPrototypeOf2.default)(1 & r ? t.prototype : t), o, e); return 2 & r && "function" == typeof p ? function (t) { return p.apply(e, t); } : p; }
+var V4_GROUP = 'v4';
 var Manager = exports["default"] = /*#__PURE__*/function (_elementorModules$edi) {
   function Manager() {
     var _this;
@@ -47879,6 +50582,9 @@ var Manager = exports["default"] = /*#__PURE__*/function (_elementorModules$edi)
         var data = _ref.data;
         if (data.colors) {
           Object.values(data.colors).forEach(function (item) {
+            if ('v4' === item.group) {
+              return;
+            }
             var controls = elementor.config.kit_config.design_system_controls.colors,
               values = {
                 _id: item.id,
@@ -47889,6 +50595,9 @@ var Manager = exports["default"] = /*#__PURE__*/function (_elementorModules$edi)
         }
         if (data.typography) {
           Object.values(data.typography).forEach(function (item) {
+            if (V4_GROUP === item.group) {
+              return;
+            }
             var controls = elementor.config.kit_config.design_system_controls.typography,
               values = _objectSpread({
                 _id: item.id
@@ -48658,11 +51367,14 @@ var TemplatesModule = exports["default"] = /*#__PURE__*/function (_elementorModu
   }, {
     key: "registerTemplateTypes",
     value: function registerTemplateTypes() {
-      var _elementor;
-      var templateTypesData = elementor.templates.getDefaultTemplateTypeData();
-      jQuery.each((_elementor = elementor) === null || _elementor === void 0 || (_elementor = _elementor.config) === null || _elementor === void 0 || (_elementor = _elementor.library) === null || _elementor === void 0 ? void 0 : _elementor.doc_types, function (type, title) {
-        var safeData = jQuery.extend(true, {}, templateTypesData, elementor.templates.getDefaultTemplateTypeSafeData(title));
-        elementor.templates.registerTemplateType(type, safeData);
+      elementor.templates.getDefaultTemplateTypeData().then(function (templateTypesData) {
+        var _elementor;
+        jQuery.each((_elementor = elementor) === null || _elementor === void 0 || (_elementor = _elementor.config) === null || _elementor === void 0 || (_elementor = _elementor.library) === null || _elementor === void 0 ? void 0 : _elementor.doc_types, function (type, title) {
+          elementor.templates.getDefaultTemplateTypeSafeData(title).then(function (defaultData) {
+            var safeData = jQuery.extend(true, {}, templateTypesData, defaultData);
+            elementor.templates.registerTemplateType(type, safeData);
+          });
+        });
       });
     }
   }]);
@@ -52481,12 +55193,17 @@ var _default = exports["default"] = /*#__PURE__*/function (_Marionette$ItemView)
 /*!***********************************************************!*\
   !*** ../modules/history/assets/js/revisions/panel/tab.js ***!
   \***********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
-module.exports = Marionette.CompositeView.extend({
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _filterUnknownElements = __webpack_require__(/*! elementor-frontend-utils/filter-unknown-elements */ "../assets/dev/js/frontend/utils/filter-unknown-elements.js");
+var _default = exports["default"] = Marionette.CompositeView.extend({
   id: 'elementor-panel-revisions',
   template: '#tmpl-elementor-panel-revisions',
   childView: __webpack_require__(/*! ./view */ "../modules/history/assets/js/revisions/panel/view.js"),
@@ -52513,10 +55230,11 @@ module.exports = Marionette.CompositeView.extend({
     var _this = this;
     this.document.revisions.getRevisionDataAsync(revisionView.model.get('id'), {
       success: function success(data) {
+        var sanitizedData = (0, _filterUnknownElements.filterUnknownElements)(data);
         if (_this.document.config.panel.has_elements) {
-          _this.document.revisions.setEditorData(data.elements);
+          _this.document.revisions.setEditorData(sanitizedData.elements);
         }
-        elementor.settings.page.model.set(data.settings);
+        elementor.settings.page.model.set(sanitizedData.settings);
         _this.setRevisionsButtonsActive(true);
         revisionView.$el.removeClass('elementor-revision-item-loading');
         _this.enterReviewMode();
@@ -56451,19 +59169,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -56893,14 +59609,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   MiddlewareArray: () => (/* binding */ MiddlewareArray),
 /* harmony export */   SHOULD_AUTOBATCH: () => (/* binding */ SHOULD_AUTOBATCH),
 /* harmony export */   TaskAbortError: () => (/* binding */ TaskAbortError),
-/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.__DO_NOT_USE__ActionTypes),
+/* harmony export */   __DO_NOT_USE__ActionTypes: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.__DO_NOT_USE__ActionTypes),
 /* harmony export */   addListener: () => (/* binding */ addListener),
-/* harmony export */   applyMiddleware: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware),
+/* harmony export */   applyMiddleware: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.applyMiddleware),
 /* harmony export */   autoBatchEnhancer: () => (/* binding */ autoBatchEnhancer),
-/* harmony export */   bindActionCreators: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.bindActionCreators),
+/* harmony export */   bindActionCreators: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.bindActionCreators),
 /* harmony export */   clearAllListeners: () => (/* binding */ clearAllListeners),
-/* harmony export */   combineReducers: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers),
-/* harmony export */   compose: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.compose),
+/* harmony export */   combineReducers: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.combineReducers),
+/* harmony export */   compose: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.compose),
 /* harmony export */   configureStore: () => (/* binding */ configureStore),
 /* harmony export */   createAction: () => (/* binding */ createAction),
 /* harmony export */   createActionCreatorInvariantMiddleware: () => (/* binding */ createActionCreatorInvariantMiddleware),
@@ -56909,15 +59625,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   createEntityAdapter: () => (/* binding */ createEntityAdapter),
 /* harmony export */   createImmutableStateInvariantMiddleware: () => (/* binding */ createImmutableStateInvariantMiddleware),
 /* harmony export */   createListenerMiddleware: () => (/* binding */ createListenerMiddleware),
-/* harmony export */   createNextState: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   createNextState: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__["default"]),
 /* harmony export */   createReducer: () => (/* binding */ createReducer),
-/* harmony export */   createSelector: () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector),
+/* harmony export */   createSelector: () => (/* reexport safe */ reselect__WEBPACK_IMPORTED_MODULE_2__.createSelector),
 /* harmony export */   createSerializableStateInvariantMiddleware: () => (/* binding */ createSerializableStateInvariantMiddleware),
 /* harmony export */   createSlice: () => (/* binding */ createSlice),
-/* harmony export */   createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.createStore),
-/* harmony export */   current: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.current),
+/* harmony export */   createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.createStore),
+/* harmony export */   current: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.current),
 /* harmony export */   findNonSerializableValue: () => (/* binding */ findNonSerializableValue),
-/* harmony export */   freeze: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.freeze),
+/* harmony export */   freeze: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.freeze),
 /* harmony export */   getDefaultMiddleware: () => (/* binding */ getDefaultMiddleware),
 /* harmony export */   getType: () => (/* binding */ getType),
 /* harmony export */   isAction: () => (/* binding */ isAction),
@@ -56925,7 +59641,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isAllOf: () => (/* binding */ isAllOf),
 /* harmony export */   isAnyOf: () => (/* binding */ isAnyOf),
 /* harmony export */   isAsyncThunkAction: () => (/* binding */ isAsyncThunkAction),
-/* harmony export */   isDraft: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.isDraft),
+/* harmony export */   isDraft: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.isDraft),
 /* harmony export */   isFluxStandardAction: () => (/* binding */ isFSA),
 /* harmony export */   isFulfilled: () => (/* binding */ isFulfilled),
 /* harmony export */   isImmutableDefault: () => (/* binding */ isImmutableDefault),
@@ -56934,17 +59650,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isPlainObject: () => (/* binding */ isPlainObject),
 /* harmony export */   isRejected: () => (/* binding */ isRejected),
 /* harmony export */   isRejectedWithValue: () => (/* binding */ isRejectedWithValue),
-/* harmony export */   legacy_createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_0__.legacy_createStore),
+/* harmony export */   legacy_createStore: () => (/* reexport safe */ redux__WEBPACK_IMPORTED_MODULE_1__.legacy_createStore),
 /* harmony export */   miniSerializeError: () => (/* binding */ miniSerializeError),
 /* harmony export */   nanoid: () => (/* binding */ nanoid),
-/* harmony export */   original: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_2__.original),
+/* harmony export */   original: () => (/* reexport safe */ immer__WEBPACK_IMPORTED_MODULE_0__.original),
 /* harmony export */   prepareAutoBatched: () => (/* binding */ prepareAutoBatched),
 /* harmony export */   removeListener: () => (/* binding */ removeListener),
 /* harmony export */   unwrapResult: () => (/* binding */ unwrapResult)
 /* harmony export */ });
-/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! immer */ "../node_modules/immer/dist/immer.esm.mjs");
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
-/* harmony import */ var reselect__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
+/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! immer */ "../node_modules/immer/dist/immer.esm.mjs");
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux */ "../node_modules/redux/es/redux.js");
+/* harmony import */ var reselect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! reselect */ "../node_modules/reselect/es/index.js");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-thunk */ "../node_modules/redux-thunk/es/index.js");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -57048,13 +59764,13 @@ var createDraftSafeSelector = function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
     }
-    var selector = reselect__WEBPACK_IMPORTED_MODULE_1__.createSelector.apply(void 0, args);
+    var selector = reselect__WEBPACK_IMPORTED_MODULE_2__.createSelector.apply(void 0, args);
     var wrappedSelector = function (value) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             rest[_i - 1] = arguments[_i];
         }
-        return selector.apply(void 0, __spreadArray([(0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(value) ? (0,immer__WEBPACK_IMPORTED_MODULE_2__.current)(value) : value], rest));
+        return selector.apply(void 0, __spreadArray([(0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(value) ? (0,immer__WEBPACK_IMPORTED_MODULE_0__.current)(value) : value], rest));
     };
     return wrappedSelector;
 };
@@ -57066,8 +59782,8 @@ var composeWithDevTools = typeof window !== "undefined" && window.__REDUX_DEVTOO
     if (arguments.length === 0)
         return void 0;
     if (typeof arguments[0] === "object")
-        return redux__WEBPACK_IMPORTED_MODULE_0__.compose;
-    return redux__WEBPACK_IMPORTED_MODULE_0__.compose.apply(null, arguments);
+        return redux__WEBPACK_IMPORTED_MODULE_1__.compose;
+    return redux__WEBPACK_IMPORTED_MODULE_1__.compose.apply(null, arguments);
 };
 var devToolsEnhancer = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__ : function () {
     return function (noop2) {
@@ -57247,7 +59963,7 @@ var EnhancerArray = /** @class */ (function (_super) {
     return EnhancerArray;
 }(Array));
 function freezeDraftable(val) {
-    return (0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraftable)(val) ? (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(val, function () {
+    return (0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraftable)(val) ? (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(val, function () {
     }) : val;
 }
 // src/immutableStateInvariantMiddleware.ts
@@ -57551,7 +60267,7 @@ function configureStore(options) {
         rootReducer = reducer;
     }
     else if (isPlainObject(reducer)) {
-        rootReducer = (0,redux__WEBPACK_IMPORTED_MODULE_0__.combineReducers)(reducer);
+        rootReducer = (0,redux__WEBPACK_IMPORTED_MODULE_1__.combineReducers)(reducer);
     }
     else {
         throw new Error('"reducer" is a required argument, and must be a function or an object of functions that can be passed to combineReducers');
@@ -57566,8 +60282,8 @@ function configureStore(options) {
     if (!IS_PRODUCTION && finalMiddleware.some(function (item) { return typeof item !== "function"; })) {
         throw new Error("each middleware provided to configureStore must be a function");
     }
-    var middlewareEnhancer = redux__WEBPACK_IMPORTED_MODULE_0__.applyMiddleware.apply(void 0, finalMiddleware);
-    var finalCompose = redux__WEBPACK_IMPORTED_MODULE_0__.compose;
+    var middlewareEnhancer = redux__WEBPACK_IMPORTED_MODULE_1__.applyMiddleware.apply(void 0, finalMiddleware);
+    var finalCompose = redux__WEBPACK_IMPORTED_MODULE_1__.compose;
     if (devTools) {
         finalCompose = composeWithDevTools(__spreadValues({
             trace: !IS_PRODUCTION
@@ -57582,7 +60298,7 @@ function configureStore(options) {
         storeEnhancers = enhancers(defaultEnhancers);
     }
     var composedEnhancer = finalCompose.apply(void 0, storeEnhancers);
-    return (0,redux__WEBPACK_IMPORTED_MODULE_0__.createStore)(rootReducer, preloadedState, composedEnhancer);
+    return (0,redux__WEBPACK_IMPORTED_MODULE_1__.createStore)(rootReducer, preloadedState, composedEnhancer);
 }
 // src/createReducer.ts
 
@@ -57673,7 +60389,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
         }
         return caseReducers.reduce(function (previousState, caseReducer) {
             if (caseReducer) {
-                if ((0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(previousState)) {
+                if ((0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(previousState)) {
                     var draft = previousState;
                     var result = caseReducer(draft, action);
                     if (result === void 0) {
@@ -57681,7 +60397,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
                     }
                     return result;
                 }
-                else if (!(0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraftable)(previousState)) {
+                else if (!(0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraftable)(previousState)) {
                     var result = caseReducer(previousState, action);
                     if (result === void 0) {
                         if (previousState === null) {
@@ -57692,7 +60408,7 @@ function createReducer(initialState, mapOrBuilderCallback, actionMatchers, defau
                     return result;
                 }
                 else {
-                    return (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(previousState, function (draft) {
+                    return (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(previousState, function (draft) {
                         return caseReducer(draft, action);
                     });
                 }
@@ -57845,12 +60561,12 @@ function createStateOperator(mutator) {
                 mutator(arg, draft);
             }
         };
-        if ((0,immer__WEBPACK_IMPORTED_MODULE_2__.isDraft)(state)) {
+        if ((0,immer__WEBPACK_IMPORTED_MODULE_0__.isDraft)(state)) {
             runMutator(state);
             return state;
         }
         else {
-            return (0,immer__WEBPACK_IMPORTED_MODULE_2__["default"])(state, runMutator);
+            return (0,immer__WEBPACK_IMPORTED_MODULE_0__["default"])(state, runMutator);
         }
     };
 }
@@ -58959,7 +61675,7 @@ var autoBatchEnhancer = function (options) {
     }; };
 };
 // src/index.ts
-(0,immer__WEBPACK_IMPORTED_MODULE_2__.enableES5)();
+(0,immer__WEBPACK_IMPORTED_MODULE_0__.enableES5)();
 
 //# sourceMappingURL=redux-toolkit.esm.js.map
 
@@ -58972,7 +61688,7 @@ var autoBatchEnhancer = function (options) {
 /***/ ((module) => {
 
 "use strict";
-/*! @license DOMPurify 3.2.6 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.2.6/LICENSE */
+/*! @license DOMPurify 3.3.0 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.3.0/LICENSE */
 
 
 
@@ -59003,12 +61719,18 @@ if (!seal) {
   };
 }
 if (!apply) {
-  apply = function apply(fun, thisValue, args) {
-    return fun.apply(thisValue, args);
+  apply = function apply(func, thisArg) {
+    for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+      args[_key - 2] = arguments[_key];
+    }
+    return func.apply(thisArg, args);
   };
 }
 if (!construct) {
-  construct = function construct(Func, args) {
+  construct = function construct(Func) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
     return new Func(...args);
   };
 }
@@ -59037,8 +61759,8 @@ function unapply(func) {
     if (thisArg instanceof RegExp) {
       thisArg.lastIndex = 0;
     }
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
+    for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      args[_key3 - 1] = arguments[_key3];
     }
     return apply(func, thisArg, args);
   };
@@ -59049,12 +61771,12 @@ function unapply(func) {
  * @param func - The constructor function to be wrapped and called.
  * @returns A new function that constructs an instance of the given constructor function with the provided arguments.
  */
-function unconstruct(func) {
+function unconstruct(Func) {
   return function () {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
+    for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+      args[_key4] = arguments[_key4];
     }
-    return construct(func, args);
+    return construct(Func, args);
   };
 }
 /**
@@ -59153,8 +61875,8 @@ function lookupGetter(object, prop) {
   return fallbackValue;
 }
 
-const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'section', 'select', 'shadow', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
-const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
+const html$1 = freeze(['a', 'abbr', 'acronym', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'big', 'blink', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'content', 'data', 'datalist', 'dd', 'decorator', 'del', 'details', 'dfn', 'dialog', 'dir', 'div', 'dl', 'dt', 'element', 'em', 'fieldset', 'figcaption', 'figure', 'font', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'img', 'input', 'ins', 'kbd', 'label', 'legend', 'li', 'main', 'map', 'mark', 'marquee', 'menu', 'menuitem', 'meter', 'nav', 'nobr', 'ol', 'optgroup', 'option', 'output', 'p', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'search', 'section', 'select', 'shadow', 'slot', 'small', 'source', 'spacer', 'span', 'strike', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'tr', 'track', 'tt', 'u', 'ul', 'var', 'video', 'wbr']);
+const svg$1 = freeze(['svg', 'a', 'altglyph', 'altglyphdef', 'altglyphitem', 'animatecolor', 'animatemotion', 'animatetransform', 'circle', 'clippath', 'defs', 'desc', 'ellipse', 'enterkeyhint', 'exportparts', 'filter', 'font', 'g', 'glyph', 'glyphref', 'hkern', 'image', 'inputmode', 'line', 'lineargradient', 'marker', 'mask', 'metadata', 'mpath', 'part', 'path', 'pattern', 'polygon', 'polyline', 'radialgradient', 'rect', 'stop', 'style', 'switch', 'symbol', 'text', 'textpath', 'title', 'tref', 'tspan', 'view', 'vkern']);
 const svgFilters = freeze(['feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feDropShadow', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence']);
 // List of SVG elements that are disallowed by default.
 // We still need to know them so that we can do namespace
@@ -59167,8 +61889,8 @@ const mathMl$1 = freeze(['math', 'menclose', 'merror', 'mfenced', 'mfrac', 'mgly
 const mathMlDisallowed = freeze(['maction', 'maligngroup', 'malignmark', 'mlongdiv', 'mscarries', 'mscarry', 'msgroup', 'mstack', 'msline', 'msrow', 'semantics', 'annotation', 'annotation-xml', 'mprescripts', 'none']);
 const text = freeze(['#text']);
 
-const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
-const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
+const html = freeze(['accept', 'action', 'align', 'alt', 'autocapitalize', 'autocomplete', 'autopictureinpicture', 'autoplay', 'background', 'bgcolor', 'border', 'capture', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'clear', 'color', 'cols', 'colspan', 'controls', 'controlslist', 'coords', 'crossorigin', 'datetime', 'decoding', 'default', 'dir', 'disabled', 'disablepictureinpicture', 'disableremoteplayback', 'download', 'draggable', 'enctype', 'enterkeyhint', 'exportparts', 'face', 'for', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'id', 'inert', 'inputmode', 'integrity', 'ismap', 'kind', 'label', 'lang', 'list', 'loading', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'minlength', 'multiple', 'muted', 'name', 'nonce', 'noshade', 'novalidate', 'nowrap', 'open', 'optimum', 'part', 'pattern', 'placeholder', 'playsinline', 'popover', 'popovertarget', 'popovertargetaction', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'rev', 'reversed', 'role', 'rows', 'rowspan', 'spellcheck', 'scope', 'selected', 'shape', 'size', 'sizes', 'slot', 'span', 'srclang', 'start', 'src', 'srcset', 'step', 'style', 'summary', 'tabindex', 'title', 'translate', 'type', 'usemap', 'valign', 'value', 'width', 'wrap', 'xmlns', 'slot']);
+const svg = freeze(['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'amplitude', 'ascent', 'attributename', 'attributetype', 'azimuth', 'basefrequency', 'baseline-shift', 'begin', 'bias', 'by', 'class', 'clip', 'clippathunits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'cx', 'cy', 'd', 'dx', 'dy', 'diffuseconstant', 'direction', 'display', 'divisor', 'dur', 'edgemode', 'elevation', 'end', 'exponent', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterunits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyphref', 'gradientunits', 'gradienttransform', 'height', 'href', 'id', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kerning', 'keypoints', 'keysplines', 'keytimes', 'lang', 'lengthadjust', 'letter-spacing', 'kernelmatrix', 'kernelunitlength', 'lighting-color', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits', 'maskunits', 'max', 'mask', 'mask-type', 'media', 'method', 'mode', 'min', 'name', 'numoctaves', 'offset', 'operator', 'opacity', 'order', 'orient', 'orientation', 'origin', 'overflow', 'paint-order', 'path', 'pathlength', 'patterncontentunits', 'patterntransform', 'patternunits', 'points', 'preservealpha', 'preserveaspectratio', 'primitiveunits', 'r', 'rx', 'ry', 'radius', 'refx', 'refy', 'repeatcount', 'repeatdur', 'restart', 'result', 'rotate', 'scale', 'seed', 'shape-rendering', 'slope', 'specularconstant', 'specularexponent', 'spreadmethod', 'startoffset', 'stddeviation', 'stitchtiles', 'stop-color', 'stop-opacity', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke', 'stroke-width', 'style', 'surfacescale', 'systemlanguage', 'tabindex', 'tablevalues', 'targetx', 'targety', 'transform', 'transform-origin', 'text-anchor', 'text-decoration', 'text-rendering', 'textlength', 'type', 'u1', 'u2', 'unicode', 'values', 'viewbox', 'visibility', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'width', 'word-spacing', 'wrap', 'writing-mode', 'xchannelselector', 'ychannelselector', 'x', 'x1', 'x2', 'xmlns', 'y', 'y1', 'y2', 'z', 'zoomandpan']);
 const mathMl = freeze(['accent', 'accentunder', 'align', 'bevelled', 'close', 'columnsalign', 'columnlines', 'columnspan', 'denomalign', 'depth', 'dir', 'display', 'displaystyle', 'encoding', 'fence', 'frame', 'height', 'href', 'id', 'largeop', 'length', 'linethickness', 'lspace', 'lquote', 'mathbackground', 'mathcolor', 'mathsize', 'mathvariant', 'maxsize', 'minsize', 'movablelimits', 'notation', 'numalign', 'open', 'rowalign', 'rowlines', 'rowspacing', 'rowspan', 'rspace', 'rquote', 'scriptlevel', 'scriptminsize', 'scriptsizemultiplier', 'selection', 'separator', 'separators', 'stretchy', 'subscriptshift', 'supscriptshift', 'symmetric', 'voffset', 'width', 'xmlns']);
 const xml = freeze(['xlink:href', 'xml:id', 'xlink:title', 'xml:space', 'xmlns:xlink']);
 
@@ -59275,7 +61997,7 @@ const _createHooksMap = function _createHooksMap() {
 function createDOMPurify() {
   let window = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : getGlobal();
   const DOMPurify = root => createDOMPurify(root);
-  DOMPurify.version = '3.2.6';
+  DOMPurify.version = '3.3.0';
   DOMPurify.removed = [];
   if (!window || !window.document || window.document.nodeType !== NODE_TYPE.document || !window.Element) {
     // Not running in a browser, provide a factory function
@@ -59386,6 +62108,21 @@ function createDOMPurify() {
   let FORBID_TAGS = null;
   /* Explicitly forbidden attributes (overrides ALLOWED_ATTR/ADD_ATTR) */
   let FORBID_ATTR = null;
+  /* Config object to store ADD_TAGS/ADD_ATTR functions (when used as functions) */
+  const EXTRA_ELEMENT_HANDLING = Object.seal(create(null, {
+    tagCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    },
+    attributeCheck: {
+      writable: true,
+      configurable: false,
+      enumerable: true,
+      value: null
+    }
+  }));
   /* Decide if ARIA attributes are okay */
   let ALLOW_ARIA_ATTR = true;
   /* Decide if custom data attributes are okay */
@@ -59578,16 +62315,24 @@ function createDOMPurify() {
     }
     /* Merge configuration parameters */
     if (cfg.ADD_TAGS) {
-      if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
-        ALLOWED_TAGS = clone(ALLOWED_TAGS);
+      if (typeof cfg.ADD_TAGS === 'function') {
+        EXTRA_ELEMENT_HANDLING.tagCheck = cfg.ADD_TAGS;
+      } else {
+        if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
+          ALLOWED_TAGS = clone(ALLOWED_TAGS);
+        }
+        addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
       }
-      addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
     }
     if (cfg.ADD_ATTR) {
-      if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
-        ALLOWED_ATTR = clone(ALLOWED_ATTR);
+      if (typeof cfg.ADD_ATTR === 'function') {
+        EXTRA_ELEMENT_HANDLING.attributeCheck = cfg.ADD_ATTR;
+      } else {
+        if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
+          ALLOWED_ATTR = clone(ALLOWED_ATTR);
+        }
+        addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
       }
-      addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
     }
     if (cfg.ADD_URI_SAFE_ATTR) {
       addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR, transformCaseFunc);
@@ -59895,7 +62640,7 @@ function createDOMPurify() {
       return true;
     }
     /* Remove element if anything forbids its presence */
-    if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
+    if (!(EXTRA_ELEMENT_HANDLING.tagCheck instanceof Function && EXTRA_ELEMENT_HANDLING.tagCheck(tagName)) && (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName])) {
       /* Check if we have a custom element to handle */
       if (!FORBID_TAGS[tagName] && _isBasicCustomElement(tagName)) {
         if (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, tagName)) {
@@ -59967,12 +62712,12 @@ function createDOMPurify() {
         (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
         XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
         We don't need to check the value; it's always URI safe. */
-    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
+    if (ALLOW_DATA_ATTR && !FORBID_ATTR[lcName] && regExpTest(DATA_ATTR, lcName)) ; else if (ALLOW_ARIA_ATTR && regExpTest(ARIA_ATTR, lcName)) ; else if (EXTRA_ELEMENT_HANDLING.attributeCheck instanceof Function && EXTRA_ELEMENT_HANDLING.attributeCheck(lcName, lcTag)) ; else if (!ALLOWED_ATTR[lcName] || FORBID_ATTR[lcName]) {
       if (
       // First condition does a very basic check if a) it's basically a valid custom element tagname AND
       // b) if the tagName passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
       // and c) if the attribute name passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.attributeNameCheck
-      _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)) ||
+      _isBasicCustomElement(lcTag) && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag)) && (CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName) || CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName, lcTag)) ||
       // Alternative, second condition checks if it's an `is`-attribute, AND
       // the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
       lcName === 'is' && CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements && (CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp && regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value) || CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function && CUSTOM_ELEMENT_HANDLING.tagNameCheck(value))) ; else {
@@ -60051,7 +62796,12 @@ function createDOMPurify() {
         value = SANITIZE_NAMED_PROPS_PREFIX + value;
       }
       /* Work around a security issue with comments inside attributes */
-      if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title)/i, value)) {
+      if (SAFE_FOR_XML && regExpTest(/((--!?|])>)|<\/(style|title|textarea)/i, value)) {
+        _removeAttribute(name, currentNode);
+        continue;
+      }
+      /* Make sure we cannot easily use animated hrefs, even if animations are allowed */
+      if (lcName === 'attributename' && stringMatch(value, 'href')) {
         _removeAttribute(name, currentNode);
         continue;
       }
@@ -60357,7 +63107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   setUseProxies: () => (/* binding */ vn)
 /* harmony export */ });
 function n(n){for(var r=arguments.length,t=Array(r>1?r-1:0),e=1;e<r;e++)t[e-1]=arguments[e];if(true){var i=Y[n],o=i?"function"==typeof i?i.apply(null,t):i:"unknown error nr: "+n;throw Error("[Immer] "+o)}// removed by dead control flow
-{}}function r(n){return!!n&&!!n[Q]}function t(n){var r;return!!n&&(function(n){if(!n||"object"!=typeof n)return!1;var r=Object.getPrototypeOf(n);if(null===r)return!0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z}(n)||Array.isArray(n)||!!n[L]||!!(null===(r=n.constructor)||void 0===r?void 0:r[L])||s(n)||v(n))}function e(t){return r(t)||n(23,t),t[Q].t}function i(n,r,t){void 0===t&&(t=!1),0===o(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n)})):n.forEach((function(t,e){return r(e,t,n)}))}function o(n){var r=n[Q];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s(n)?2:v(n)?3:0}function u(n,r){return 2===o(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a(n,r){return 2===o(n)?n.get(r):n[r]}function f(n,r,t){var e=o(n);2===e?n.set(r,t):3===e?n.add(t):n[r]=t}function c(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s(n){return X&&n instanceof Map}function v(n){return q&&n instanceof Set}function p(n){return n.o||n.t}function l(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]})}return Object.create(Object.getPrototypeOf(n),r)}function d(n,e){return void 0===e&&(e=!1),y(n)||r(n)||!t(n)||(o(n)>1&&(n.set=n.add=n.clear=n.delete=h),Object.freeze(n),e&&i(n,(function(n,r){return d(r,!0)}),!0)),n}function h(){n(2)}function y(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b(r){var t=tn[r];return t||n(18,r),t}function m(n,r){tn[n]||(tn[n]=r)}function _(){return false||U||n(0),U}function j(n,r){r&&(b("Patches"),n.u=[],n.s=[],n.v=r)}function g(n){O(n),n.p.forEach(S),n.p=null}function O(n){n===U&&(U=n.l)}function w(n){return U={p:[],l:U,h:n,m:!0,_:0}}function S(n){var r=n[Q];0===r.i||1===r.i?r.j():r.g=!0}function P(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.O||b("ES5").S(e,r,o),o?(i[Q].P&&(g(e),n(4)),t(r)&&(r=M(e,r),e.l||x(e,r)),e.u&&b("Patches").M(i[Q].t,r,e.u,e.s)):r=M(e,i,[]),g(e),e.u&&e.v(e.u,e.s),r!==H?r:void 0}function M(n,r,t){if(y(r))return r;var e=r[Q];if(!e)return i(r,(function(i,o){return A(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l(e.k):e.o,u=o,a=!1;3===e.i&&(u=new Set(o),o.clear(),a=!0),i(u,(function(r,i){return A(n,e,o,r,i,t,a)})),x(n,o,!1),t&&n.u&&b("Patches").N(e,t,n.u,n.s)}return e.o}function A(e,i,o,a,c,s,v){if( true&&c===o&&n(5),r(c)){var p=M(e,c,s&&i&&3!==i.i&&!u(i.R,a)?s.concat(a):void 0);if(f(o,a,p),!r(p))return;e.m=!1}else v&&o.add(c);if(t(c)&&!y(c)){if(!e.h.D&&e._<1)return;M(e,c),i&&i.A.l||x(e,c)}}function x(n,r,t){void 0===t&&(t=!1),!n.l&&n.h.D&&n.m&&d(r,t)}function z(n,r){var t=n[Q];return(t?p(t):n)[r]}function I(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t)}}function k(n){n.P||(n.P=!0,n.l&&k(n.l))}function E(n){n.o||(n.o=l(n.t))}function N(n,r,t){var e=s(r)?b("MapSet").F(r,t):v(r)?b("MapSet").T(r,t):n.O?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b("ES5").J(r,t);return(t?t.A:_()).p.push(e),e}function R(e){return r(e)||n(22,e),function n(r){if(!t(r))return r;var e,u=r[Q],c=o(r);if(u){if(!u.P&&(u.i<4||!b("ES5").K(u)))return u.t;u.I=!0,e=D(r,c),u.I=!1}else e=D(r,c);return i(e,(function(r,t){u&&a(u.t,r)===t||f(e,r,n(t))})),3===c?new Set(e):e}(e)}function D(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l(n)}function F(){function t(n,r){var t=s[n];return t?t.enumerable=r:s[n]=t={configurable:!0,enumerable:r,get:function(){var r=this[Q];return true&&f(r),en.get(r,n)},set:function(r){var t=this[Q]; true&&f(t),en.set(t,n,r)}},t}function e(n){for(var r=n.length-1;r>=0;r--){var t=n[r][Q];if(!t.P)switch(t.i){case 5:a(t)&&k(t);break;case 4:o(t)&&k(t)}}}function o(n){for(var r=n.t,t=n.k,e=nn(t),i=e.length-1;i>=0;i--){var o=e[i];if(o!==Q){var a=r[o];if(void 0===a&&!u(r,o))return!0;var f=t[o],s=f&&f[Q];if(s?s.t!==a:!c(f,a))return!0}}var v=!!r[Q];return e.length!==nn(r).length+(v?0:1)}function a(n){var r=n.k;if(r.length!==n.t.length)return!0;var t=Object.getOwnPropertyDescriptor(r,r.length-1);if(t&&!t.get)return!0;for(var e=0;e<r.length;e++)if(!r.hasOwnProperty(e))return!0;return!1}function f(r){r.g&&n(3,JSON.stringify(p(r)))}var s={};m("ES5",{J:function(n,r){var e=Array.isArray(n),i=function(n,r){if(n){for(var e=Array(r.length),i=0;i<r.length;i++)Object.defineProperty(e,""+i,t(i,!0));return e}var o=rn(r);delete o[Q];for(var u=nn(o),a=0;a<u.length;a++){var f=u[a];o[f]=t(f,n||!!o[f].enumerable)}return Object.create(Object.getPrototypeOf(r),o)}(e,n),o={i:e?5:4,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:i,o:null,g:!1,C:!1};return Object.defineProperty(i,Q,{value:o,writable:!0}),i},S:function(n,t,o){o?r(t)&&t[Q].A===n&&e(n.p):(n.u&&function n(r){if(r&&"object"==typeof r){var t=r[Q];if(t){var e=t.t,o=t.k,f=t.R,c=t.i;if(4===c)i(o,(function(r){r!==Q&&(void 0!==e[r]||u(e,r)?f[r]||n(o[r]):(f[r]=!0,k(t)))})),i(e,(function(n){void 0!==o[n]||u(o,n)||(f[n]=!1,k(t))}));else if(5===c){if(a(t)&&(k(t),f.length=!0),o.length<e.length)for(var s=o.length;s<e.length;s++)f[s]=!1;else for(var v=e.length;v<o.length;v++)f[v]=!0;for(var p=Math.min(o.length,e.length),l=0;l<p;l++)o.hasOwnProperty(l)||(f[l]=!0),void 0===f[l]&&n(o[l])}}}}(n.p[0]),e(n.p))},K:function(n){return 4===n.i?o(n):a(n)}})}function T(){function e(n){if(!t(n))return n;if(Array.isArray(n))return n.map(e);if(s(n))return new Map(Array.from(n.entries()).map((function(n){return[n[0],e(n[1])]})));if(v(n))return new Set(Array.from(n).map(e));var r=Object.create(Object.getPrototypeOf(n));for(var i in n)r[i]=e(n[i]);return u(n,L)&&(r[L]=n[L]),r}function f(n){return r(n)?e(n):n}var c="add";m("Patches",{$:function(r,t){return t.forEach((function(t){for(var i=t.path,u=t.op,f=r,s=0;s<i.length-1;s++){var v=o(f),p=i[s];"string"!=typeof p&&"number"!=typeof p&&(p=""+p),0!==v&&1!==v||"__proto__"!==p&&"constructor"!==p||n(24),"function"==typeof f&&"prototype"===p&&n(24),"object"!=typeof(f=a(f,p))&&n(15,i.join("/"))}var l=o(f),d=e(t.value),h=i[i.length-1];switch(u){case"replace":switch(l){case 2:return f.set(h,d);case 3:n(16);default:return f[h]=d}case c:switch(l){case 1:return"-"===h?f.push(d):f.splice(h,0,d);case 2:return f.set(h,d);case 3:return f.add(d);default:return f[h]=d}case"remove":switch(l){case 1:return f.splice(h,1);case 2:return f.delete(h);case 3:return f.delete(t.value);default:return delete f[h]}default:n(17,u)}})),r},N:function(n,r,t,e){switch(n.i){case 0:case 4:case 2:return function(n,r,t,e){var o=n.t,s=n.o;i(n.R,(function(n,i){var v=a(o,n),p=a(s,n),l=i?u(o,n)?"replace":c:"remove";if(v!==p||"replace"!==l){var d=r.concat(n);t.push("remove"===l?{op:l,path:d}:{op:l,path:d,value:p}),e.push(l===c?{op:"remove",path:d}:"remove"===l?{op:c,path:d,value:f(v)}:{op:"replace",path:d,value:f(v)})}}))}(n,r,t,e);case 5:case 1:return function(n,r,t,e){var i=n.t,o=n.R,u=n.o;if(u.length<i.length){var a=[u,i];i=a[0],u=a[1];var s=[e,t];t=s[0],e=s[1]}for(var v=0;v<i.length;v++)if(o[v]&&u[v]!==i[v]){var p=r.concat([v]);t.push({op:"replace",path:p,value:f(u[v])}),e.push({op:"replace",path:p,value:f(i[v])})}for(var l=i.length;l<u.length;l++){var d=r.concat([l]);t.push({op:c,path:d,value:f(u[l])})}i.length<u.length&&e.push({op:"replace",path:r.concat(["length"]),value:i.length})}(n,r,t,e);case 3:return function(n,r,t,e){var i=n.t,o=n.o,u=0;i.forEach((function(n){if(!o.has(n)){var i=r.concat([u]);t.push({op:"remove",path:i,value:n}),e.unshift({op:c,path:i,value:n})}u++})),u=0,o.forEach((function(n){if(!i.has(n)){var o=r.concat([u]);t.push({op:c,path:o,value:n}),e.unshift({op:"remove",path:o,value:n})}u++}))}(n,r,t,e)}},M:function(n,r,t,e){t.push({op:"replace",path:[],value:r===H?void 0:r}),e.push({op:"replace",path:[],value:n})}})}function C(){function r(n,r){function t(){this.constructor=n}a(n,r),n.prototype=(t.prototype=r.prototype,new t)}function e(n){n.o||(n.R=new Map,n.o=new Map(n.t))}function o(n){n.o||(n.o=new Set,n.t.forEach((function(r){if(t(r)){var e=N(n.A.h,r,n);n.p.set(r,e),n.o.add(e)}else n.o.add(r)})))}function u(r){r.g&&n(3,JSON.stringify(p(r)))}var a=function(n,r){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,r){n.__proto__=r}||function(n,r){for(var t in r)r.hasOwnProperty(t)&&(n[t]=r[t])})(n,r)},f=function(){function n(n,r){return this[Q]={i:2,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,R:void 0,t:n,k:this,C:!1,g:!1},this}r(n,Map);var o=n.prototype;return Object.defineProperty(o,"size",{get:function(){return p(this[Q]).size}}),o.has=function(n){return p(this[Q]).has(n)},o.set=function(n,r){var t=this[Q];return u(t),p(t).has(n)&&p(t).get(n)===r||(e(t),k(t),t.R.set(n,!0),t.o.set(n,r),t.R.set(n,!0)),this},o.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),e(r),k(r),r.t.has(n)?r.R.set(n,!1):r.R.delete(n),r.o.delete(n),!0},o.clear=function(){var n=this[Q];u(n),p(n).size&&(e(n),k(n),n.R=new Map,i(n.t,(function(r){n.R.set(r,!1)})),n.o.clear())},o.forEach=function(n,r){var t=this;p(this[Q]).forEach((function(e,i){n.call(r,t.get(i),i,t)}))},o.get=function(n){var r=this[Q];u(r);var i=p(r).get(n);if(r.I||!t(i))return i;if(i!==r.t.get(n))return i;var o=N(r.A.h,i,r);return e(r),r.o.set(n,o),o},o.keys=function(){return p(this[Q]).keys()},o.values=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.values()},n.next=function(){var n=t.next();return n.done?n:{done:!1,value:r.get(n.value)}},n},o.entries=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.entries()},n.next=function(){var n=t.next();if(n.done)return n;var e=r.get(n.value);return{done:!1,value:[n.value,e]}},n},o[V]=function(){return this.entries()},n}(),c=function(){function n(n,r){return this[Q]={i:3,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,t:n,k:this,p:new Map,g:!1,C:!1},this}r(n,Set);var t=n.prototype;return Object.defineProperty(t,"size",{get:function(){return p(this[Q]).size}}),t.has=function(n){var r=this[Q];return u(r),r.o?!!r.o.has(n)||!(!r.p.has(n)||!r.o.has(r.p.get(n))):r.t.has(n)},t.add=function(n){var r=this[Q];return u(r),this.has(n)||(o(r),k(r),r.o.add(n)),this},t.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),o(r),k(r),r.o.delete(n)||!!r.p.has(n)&&r.o.delete(r.p.get(n))},t.clear=function(){var n=this[Q];u(n),p(n).size&&(o(n),k(n),n.o.clear())},t.values=function(){var n=this[Q];return u(n),o(n),n.o.values()},t.entries=function(){var n=this[Q];return u(n),o(n),n.o.entries()},t.keys=function(){return this.values()},t[V]=function(){return this.values()},t.forEach=function(n,r){for(var t=this.values(),e=t.next();!e.done;)n.call(r,e.value,e.value,this),e=t.next()},n}();m("MapSet",{F:function(n,r){return new f(n,r)},T:function(n,r){return new c(n,r)}})}function J(){F(),C(),T()}function K(n){return n}function $(n){return n}var G,U,W="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X="undefined"!=typeof Map,q="undefined"!=typeof Set,B="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H=W?Symbol.for("immer-nothing"):((G={})["immer-nothing"]=!0,G),L=W?Symbol.for("immer-draftable"):"__$immer_draftable",Q=W?Symbol.for("immer-state"):"__$immer_state",V="undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator",Y={0:"Illegal state",1:"Immer drafts cannot have computed properties",2:"This object has been frozen and should not be mutated",3:function(n){return"Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? "+n},4:"An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",5:"Immer forbids circular references",6:"The first or second argument to `produce` must be a function",7:"The third argument to `produce` must be a function or undefined",8:"First argument to `createDraft` must be a plain object, an array, or an immerable object",9:"First argument to `finishDraft` must be a draft returned by `createDraft`",10:"The given draft is already finalized",11:"Object.defineProperty() cannot be used on an Immer draft",12:"Object.setPrototypeOf() cannot be used on an Immer draft",13:"Immer only supports deleting array indices",14:"Immer only supports setting array indices and the 'length' property",15:function(n){return"Cannot apply patch, path doesn't resolve: "+n},16:'Sets cannot have "replace" patches.',17:function(n){return"Unsupported patch operation: "+n},18:function(n){return"The plugin for '"+n+"' has not been loaded into Immer. To enable the plugin, import and call `enable"+n+"()` when initializing your application."},20:"Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",21:function(n){return"produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '"+n+"'"},22:function(n){return"'current' expects a draft, got: "+n},23:function(n){return"'original' expects a draft, got: "+n},24:"Patching reserved attributes like __proto__, prototype and constructor is not allowed"},Z=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t)})),r},tn={},en={get:function(n,r){if(r===Q)return n;var e=p(n);if(!u(e,r))return function(n,r,t){var e,i=I(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t(i)?i:i===z(n.t,r)?(E(n),n.o[r]=N(n.A.h,i,n)):i},has:function(n,r){return r in p(n)},ownKeys:function(n){return Reflect.ownKeys(p(n))},set:function(n,r,t){var e=I(p(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z(p(n),r),o=null==i?void 0:i[Q];if(o&&o.t===t)return n.o[r]=t,n.R[r]=!1,!0;if(c(t,i)&&(void 0!==t||u(n.t,r)))return!0;E(n),k(n)}return n.o[r]===t&&(void 0!==t||r in n.o)||Number.isNaN(t)&&Number.isNaN(n.o[r])||(n.o[r]=t,n.R[r]=!0),!0},deleteProperty:function(n,r){return void 0!==z(n.t,r)||r in n.t?(n.R[r]=!1,E(n),k(n)):delete n.R[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n(11)},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n(12)}},on={};i(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)}})),on.deleteProperty=function(r,t){return true&&isNaN(parseInt(t))&&n(13),on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return true&&"length"!==t&&isNaN(parseInt(t))&&n(14),en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.O=B,this.D=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return(t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n(6),void 0!==o&&"function"!=typeof o&&n(7),t(r)){var c=w(e),s=N(e,r,void 0),v=!0;try{f=i(s),v=!1}finally{v?g(c):O(c)}return"undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j(c,o),P(n,c)}),(function(n){throw g(c),n})):(j(c,o),P(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H&&(f=void 0),e.D&&d(f,!0),o){var p=[],l=[];b("Patches").M(r,f,p,l),o(p,l)}return f}n(21,r)},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r}));return"undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return[n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze)}var i=e.prototype;return i.createDraft=function(e){t(e)||n(8),r(e)&&(e=R(e));var i=w(this),o=N(this,e,void 0);return o[Q].C=!0,O(i),o},i.finishDraft=function(r,t){var e=r&&r[Q]; true&&(e&&e.C||n(9),e.I&&n(10));var i=e.A;return j(i,t),P(void 0,i)},i.setAutoFreeze=function(n){this.D=n},i.setUseProxies=function(r){r&&!B&&n(20),this.O=r},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b("Patches").$;return r(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce,cn=an.produceWithPatches.bind(an),sn=an.setAutoFreeze.bind(an),vn=an.setUseProxies.bind(an),pn=an.applyPatches.bind(an),ln=an.createDraft.bind(an),dn=an.finishDraft.bind(an);/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fn);
+}function r(n){return!!n&&!!n[Q]}function t(n){var r;return!!n&&(function(n){if(!n||"object"!=typeof n)return!1;var r=Object.getPrototypeOf(n);if(null===r)return!0;var t=Object.hasOwnProperty.call(r,"constructor")&&r.constructor;return t===Object||"function"==typeof t&&Function.toString.call(t)===Z}(n)||Array.isArray(n)||!!n[L]||!!(null===(r=n.constructor)||void 0===r?void 0:r[L])||s(n)||v(n))}function e(t){return r(t)||n(23,t),t[Q].t}function i(n,r,t){void 0===t&&(t=!1),0===o(n)?(t?Object.keys:nn)(n).forEach((function(e){t&&"symbol"==typeof e||r(e,n[e],n)})):n.forEach((function(t,e){return r(e,t,n)}))}function o(n){var r=n[Q];return r?r.i>3?r.i-4:r.i:Array.isArray(n)?1:s(n)?2:v(n)?3:0}function u(n,r){return 2===o(n)?n.has(r):Object.prototype.hasOwnProperty.call(n,r)}function a(n,r){return 2===o(n)?n.get(r):n[r]}function f(n,r,t){var e=o(n);2===e?n.set(r,t):3===e?n.add(t):n[r]=t}function c(n,r){return n===r?0!==n||1/n==1/r:n!=n&&r!=r}function s(n){return X&&n instanceof Map}function v(n){return q&&n instanceof Set}function p(n){return n.o||n.t}function l(n){if(Array.isArray(n))return Array.prototype.slice.call(n);var r=rn(n);delete r[Q];for(var t=nn(r),e=0;e<t.length;e++){var i=t[e],o=r[i];!1===o.writable&&(o.writable=!0,o.configurable=!0),(o.get||o.set)&&(r[i]={configurable:!0,writable:!0,enumerable:o.enumerable,value:n[i]})}return Object.create(Object.getPrototypeOf(n),r)}function d(n,e){return void 0===e&&(e=!1),y(n)||r(n)||!t(n)||(o(n)>1&&(n.set=n.add=n.clear=n.delete=h),Object.freeze(n),e&&i(n,(function(n,r){return d(r,!0)}),!0)),n}function h(){n(2)}function y(n){return null==n||"object"!=typeof n||Object.isFrozen(n)}function b(r){var t=tn[r];return t||n(18,r),t}function m(n,r){tn[n]||(tn[n]=r)}function _(){return false||U||n(0),U}function j(n,r){r&&(b("Patches"),n.u=[],n.s=[],n.v=r)}function g(n){O(n),n.p.forEach(S),n.p=null}function O(n){n===U&&(U=n.l)}function w(n){return U={p:[],l:U,h:n,m:!0,_:0}}function S(n){var r=n[Q];0===r.i||1===r.i?r.j():r.g=!0}function P(r,e){e._=e.p.length;var i=e.p[0],o=void 0!==r&&r!==i;return e.h.O||b("ES5").S(e,r,o),o?(i[Q].P&&(g(e),n(4)),t(r)&&(r=M(e,r),e.l||x(e,r)),e.u&&b("Patches").M(i[Q].t,r,e.u,e.s)):r=M(e,i,[]),g(e),e.u&&e.v(e.u,e.s),r!==H?r:void 0}function M(n,r,t){if(y(r))return r;var e=r[Q];if(!e)return i(r,(function(i,o){return A(n,e,r,i,o,t)}),!0),r;if(e.A!==n)return r;if(!e.P)return x(n,e.t,!0),e.t;if(!e.I){e.I=!0,e.A._--;var o=4===e.i||5===e.i?e.o=l(e.k):e.o,u=o,a=!1;3===e.i&&(u=new Set(o),o.clear(),a=!0),i(u,(function(r,i){return A(n,e,o,r,i,t,a)})),x(n,o,!1),t&&n.u&&b("Patches").N(e,t,n.u,n.s)}return e.o}function A(e,i,o,a,c,s,v){if( true&&c===o&&n(5),r(c)){var p=M(e,c,s&&i&&3!==i.i&&!u(i.R,a)?s.concat(a):void 0);if(f(o,a,p),!r(p))return;e.m=!1}else v&&o.add(c);if(t(c)&&!y(c)){if(!e.h.D&&e._<1)return;M(e,c),i&&i.A.l||x(e,c)}}function x(n,r,t){void 0===t&&(t=!1),!n.l&&n.h.D&&n.m&&d(r,t)}function z(n,r){var t=n[Q];return(t?p(t):n)[r]}function I(n,r){if(r in n)for(var t=Object.getPrototypeOf(n);t;){var e=Object.getOwnPropertyDescriptor(t,r);if(e)return e;t=Object.getPrototypeOf(t)}}function k(n){n.P||(n.P=!0,n.l&&k(n.l))}function E(n){n.o||(n.o=l(n.t))}function N(n,r,t){var e=s(r)?b("MapSet").F(r,t):v(r)?b("MapSet").T(r,t):n.O?function(n,r){var t=Array.isArray(n),e={i:t?1:0,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:null,o:null,j:null,C:!1},i=e,o=en;t&&(i=[e],o=on);var u=Proxy.revocable(i,o),a=u.revoke,f=u.proxy;return e.k=f,e.j=a,f}(r,t):b("ES5").J(r,t);return(t?t.A:_()).p.push(e),e}function R(e){return r(e)||n(22,e),function n(r){if(!t(r))return r;var e,u=r[Q],c=o(r);if(u){if(!u.P&&(u.i<4||!b("ES5").K(u)))return u.t;u.I=!0,e=D(r,c),u.I=!1}else e=D(r,c);return i(e,(function(r,t){u&&a(u.t,r)===t||f(e,r,n(t))})),3===c?new Set(e):e}(e)}function D(n,r){switch(r){case 2:return new Map(n);case 3:return Array.from(n)}return l(n)}function F(){function t(n,r){var t=s[n];return t?t.enumerable=r:s[n]=t={configurable:!0,enumerable:r,get:function(){var r=this[Q];return true&&f(r),en.get(r,n)},set:function(r){var t=this[Q]; true&&f(t),en.set(t,n,r)}},t}function e(n){for(var r=n.length-1;r>=0;r--){var t=n[r][Q];if(!t.P)switch(t.i){case 5:a(t)&&k(t);break;case 4:o(t)&&k(t)}}}function o(n){for(var r=n.t,t=n.k,e=nn(t),i=e.length-1;i>=0;i--){var o=e[i];if(o!==Q){var a=r[o];if(void 0===a&&!u(r,o))return!0;var f=t[o],s=f&&f[Q];if(s?s.t!==a:!c(f,a))return!0}}var v=!!r[Q];return e.length!==nn(r).length+(v?0:1)}function a(n){var r=n.k;if(r.length!==n.t.length)return!0;var t=Object.getOwnPropertyDescriptor(r,r.length-1);if(t&&!t.get)return!0;for(var e=0;e<r.length;e++)if(!r.hasOwnProperty(e))return!0;return!1}function f(r){r.g&&n(3,JSON.stringify(p(r)))}var s={};m("ES5",{J:function(n,r){var e=Array.isArray(n),i=function(n,r){if(n){for(var e=Array(r.length),i=0;i<r.length;i++)Object.defineProperty(e,""+i,t(i,!0));return e}var o=rn(r);delete o[Q];for(var u=nn(o),a=0;a<u.length;a++){var f=u[a];o[f]=t(f,n||!!o[f].enumerable)}return Object.create(Object.getPrototypeOf(r),o)}(e,n),o={i:e?5:4,A:r?r.A:_(),P:!1,I:!1,R:{},l:r,t:n,k:i,o:null,g:!1,C:!1};return Object.defineProperty(i,Q,{value:o,writable:!0}),i},S:function(n,t,o){o?r(t)&&t[Q].A===n&&e(n.p):(n.u&&function n(r){if(r&&"object"==typeof r){var t=r[Q];if(t){var e=t.t,o=t.k,f=t.R,c=t.i;if(4===c)i(o,(function(r){r!==Q&&(void 0!==e[r]||u(e,r)?f[r]||n(o[r]):(f[r]=!0,k(t)))})),i(e,(function(n){void 0!==o[n]||u(o,n)||(f[n]=!1,k(t))}));else if(5===c){if(a(t)&&(k(t),f.length=!0),o.length<e.length)for(var s=o.length;s<e.length;s++)f[s]=!1;else for(var v=e.length;v<o.length;v++)f[v]=!0;for(var p=Math.min(o.length,e.length),l=0;l<p;l++)o.hasOwnProperty(l)||(f[l]=!0),void 0===f[l]&&n(o[l])}}}}(n.p[0]),e(n.p))},K:function(n){return 4===n.i?o(n):a(n)}})}function T(){function e(n){if(!t(n))return n;if(Array.isArray(n))return n.map(e);if(s(n))return new Map(Array.from(n.entries()).map((function(n){return[n[0],e(n[1])]})));if(v(n))return new Set(Array.from(n).map(e));var r=Object.create(Object.getPrototypeOf(n));for(var i in n)r[i]=e(n[i]);return u(n,L)&&(r[L]=n[L]),r}function f(n){return r(n)?e(n):n}var c="add";m("Patches",{$:function(r,t){return t.forEach((function(t){for(var i=t.path,u=t.op,f=r,s=0;s<i.length-1;s++){var v=o(f),p=i[s];"string"!=typeof p&&"number"!=typeof p&&(p=""+p),0!==v&&1!==v||"__proto__"!==p&&"constructor"!==p||n(24),"function"==typeof f&&"prototype"===p&&n(24),"object"!=typeof(f=a(f,p))&&n(15,i.join("/"))}var l=o(f),d=e(t.value),h=i[i.length-1];switch(u){case"replace":switch(l){case 2:return f.set(h,d);case 3:n(16);default:return f[h]=d}case c:switch(l){case 1:return"-"===h?f.push(d):f.splice(h,0,d);case 2:return f.set(h,d);case 3:return f.add(d);default:return f[h]=d}case"remove":switch(l){case 1:return f.splice(h,1);case 2:return f.delete(h);case 3:return f.delete(t.value);default:return delete f[h]}default:n(17,u)}})),r},N:function(n,r,t,e){switch(n.i){case 0:case 4:case 2:return function(n,r,t,e){var o=n.t,s=n.o;i(n.R,(function(n,i){var v=a(o,n),p=a(s,n),l=i?u(o,n)?"replace":c:"remove";if(v!==p||"replace"!==l){var d=r.concat(n);t.push("remove"===l?{op:l,path:d}:{op:l,path:d,value:p}),e.push(l===c?{op:"remove",path:d}:"remove"===l?{op:c,path:d,value:f(v)}:{op:"replace",path:d,value:f(v)})}}))}(n,r,t,e);case 5:case 1:return function(n,r,t,e){var i=n.t,o=n.R,u=n.o;if(u.length<i.length){var a=[u,i];i=a[0],u=a[1];var s=[e,t];t=s[0],e=s[1]}for(var v=0;v<i.length;v++)if(o[v]&&u[v]!==i[v]){var p=r.concat([v]);t.push({op:"replace",path:p,value:f(u[v])}),e.push({op:"replace",path:p,value:f(i[v])})}for(var l=i.length;l<u.length;l++){var d=r.concat([l]);t.push({op:c,path:d,value:f(u[l])})}i.length<u.length&&e.push({op:"replace",path:r.concat(["length"]),value:i.length})}(n,r,t,e);case 3:return function(n,r,t,e){var i=n.t,o=n.o,u=0;i.forEach((function(n){if(!o.has(n)){var i=r.concat([u]);t.push({op:"remove",path:i,value:n}),e.unshift({op:c,path:i,value:n})}u++})),u=0,o.forEach((function(n){if(!i.has(n)){var o=r.concat([u]);t.push({op:c,path:o,value:n}),e.unshift({op:"remove",path:o,value:n})}u++}))}(n,r,t,e)}},M:function(n,r,t,e){t.push({op:"replace",path:[],value:r===H?void 0:r}),e.push({op:"replace",path:[],value:n})}})}function C(){function r(n,r){function t(){this.constructor=n}a(n,r),n.prototype=(t.prototype=r.prototype,new t)}function e(n){n.o||(n.R=new Map,n.o=new Map(n.t))}function o(n){n.o||(n.o=new Set,n.t.forEach((function(r){if(t(r)){var e=N(n.A.h,r,n);n.p.set(r,e),n.o.add(e)}else n.o.add(r)})))}function u(r){r.g&&n(3,JSON.stringify(p(r)))}var a=function(n,r){return(a=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,r){n.__proto__=r}||function(n,r){for(var t in r)r.hasOwnProperty(t)&&(n[t]=r[t])})(n,r)},f=function(){function n(n,r){return this[Q]={i:2,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,R:void 0,t:n,k:this,C:!1,g:!1},this}r(n,Map);var o=n.prototype;return Object.defineProperty(o,"size",{get:function(){return p(this[Q]).size}}),o.has=function(n){return p(this[Q]).has(n)},o.set=function(n,r){var t=this[Q];return u(t),p(t).has(n)&&p(t).get(n)===r||(e(t),k(t),t.R.set(n,!0),t.o.set(n,r),t.R.set(n,!0)),this},o.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),e(r),k(r),r.t.has(n)?r.R.set(n,!1):r.R.delete(n),r.o.delete(n),!0},o.clear=function(){var n=this[Q];u(n),p(n).size&&(e(n),k(n),n.R=new Map,i(n.t,(function(r){n.R.set(r,!1)})),n.o.clear())},o.forEach=function(n,r){var t=this;p(this[Q]).forEach((function(e,i){n.call(r,t.get(i),i,t)}))},o.get=function(n){var r=this[Q];u(r);var i=p(r).get(n);if(r.I||!t(i))return i;if(i!==r.t.get(n))return i;var o=N(r.A.h,i,r);return e(r),r.o.set(n,o),o},o.keys=function(){return p(this[Q]).keys()},o.values=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.values()},n.next=function(){var n=t.next();return n.done?n:{done:!1,value:r.get(n.value)}},n},o.entries=function(){var n,r=this,t=this.keys();return(n={})[V]=function(){return r.entries()},n.next=function(){var n=t.next();if(n.done)return n;var e=r.get(n.value);return{done:!1,value:[n.value,e]}},n},o[V]=function(){return this.entries()},n}(),c=function(){function n(n,r){return this[Q]={i:3,l:r,A:r?r.A:_(),P:!1,I:!1,o:void 0,t:n,k:this,p:new Map,g:!1,C:!1},this}r(n,Set);var t=n.prototype;return Object.defineProperty(t,"size",{get:function(){return p(this[Q]).size}}),t.has=function(n){var r=this[Q];return u(r),r.o?!!r.o.has(n)||!(!r.p.has(n)||!r.o.has(r.p.get(n))):r.t.has(n)},t.add=function(n){var r=this[Q];return u(r),this.has(n)||(o(r),k(r),r.o.add(n)),this},t.delete=function(n){if(!this.has(n))return!1;var r=this[Q];return u(r),o(r),k(r),r.o.delete(n)||!!r.p.has(n)&&r.o.delete(r.p.get(n))},t.clear=function(){var n=this[Q];u(n),p(n).size&&(o(n),k(n),n.o.clear())},t.values=function(){var n=this[Q];return u(n),o(n),n.o.values()},t.entries=function(){var n=this[Q];return u(n),o(n),n.o.entries()},t.keys=function(){return this.values()},t[V]=function(){return this.values()},t.forEach=function(n,r){for(var t=this.values(),e=t.next();!e.done;)n.call(r,e.value,e.value,this),e=t.next()},n}();m("MapSet",{F:function(n,r){return new f(n,r)},T:function(n,r){return new c(n,r)}})}function J(){F(),C(),T()}function K(n){return n}function $(n){return n}var G,U,W="undefined"!=typeof Symbol&&"symbol"==typeof Symbol("x"),X="undefined"!=typeof Map,q="undefined"!=typeof Set,B="undefined"!=typeof Proxy&&void 0!==Proxy.revocable&&"undefined"!=typeof Reflect,H=W?Symbol.for("immer-nothing"):((G={})["immer-nothing"]=!0,G),L=W?Symbol.for("immer-draftable"):"__$immer_draftable",Q=W?Symbol.for("immer-state"):"__$immer_state",V="undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator",Y={0:"Illegal state",1:"Immer drafts cannot have computed properties",2:"This object has been frozen and should not be mutated",3:function(n){return"Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? "+n},4:"An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",5:"Immer forbids circular references",6:"The first or second argument to `produce` must be a function",7:"The third argument to `produce` must be a function or undefined",8:"First argument to `createDraft` must be a plain object, an array, or an immerable object",9:"First argument to `finishDraft` must be a draft returned by `createDraft`",10:"The given draft is already finalized",11:"Object.defineProperty() cannot be used on an Immer draft",12:"Object.setPrototypeOf() cannot be used on an Immer draft",13:"Immer only supports deleting array indices",14:"Immer only supports setting array indices and the 'length' property",15:function(n){return"Cannot apply patch, path doesn't resolve: "+n},16:'Sets cannot have "replace" patches.',17:function(n){return"Unsupported patch operation: "+n},18:function(n){return"The plugin for '"+n+"' has not been loaded into Immer. To enable the plugin, import and call `enable"+n+"()` when initializing your application."},20:"Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",21:function(n){return"produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '"+n+"'"},22:function(n){return"'current' expects a draft, got: "+n},23:function(n){return"'original' expects a draft, got: "+n},24:"Patching reserved attributes like __proto__, prototype and constructor is not allowed"},Z=""+Object.prototype.constructor,nn="undefined"!=typeof Reflect&&Reflect.ownKeys?Reflect.ownKeys:void 0!==Object.getOwnPropertySymbols?function(n){return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n))}:Object.getOwnPropertyNames,rn=Object.getOwnPropertyDescriptors||function(n){var r={};return nn(n).forEach((function(t){r[t]=Object.getOwnPropertyDescriptor(n,t)})),r},tn={},en={get:function(n,r){if(r===Q)return n;var e=p(n);if(!u(e,r))return function(n,r,t){var e,i=I(r,t);return i?"value"in i?i.value:null===(e=i.get)||void 0===e?void 0:e.call(n.k):void 0}(n,e,r);var i=e[r];return n.I||!t(i)?i:i===z(n.t,r)?(E(n),n.o[r]=N(n.A.h,i,n)):i},has:function(n,r){return r in p(n)},ownKeys:function(n){return Reflect.ownKeys(p(n))},set:function(n,r,t){var e=I(p(n),r);if(null==e?void 0:e.set)return e.set.call(n.k,t),!0;if(!n.P){var i=z(p(n),r),o=null==i?void 0:i[Q];if(o&&o.t===t)return n.o[r]=t,n.R[r]=!1,!0;if(c(t,i)&&(void 0!==t||u(n.t,r)))return!0;E(n),k(n)}return n.o[r]===t&&(void 0!==t||r in n.o)||Number.isNaN(t)&&Number.isNaN(n.o[r])||(n.o[r]=t,n.R[r]=!0),!0},deleteProperty:function(n,r){return void 0!==z(n.t,r)||r in n.t?(n.R[r]=!1,E(n),k(n)):delete n.R[r],n.o&&delete n.o[r],!0},getOwnPropertyDescriptor:function(n,r){var t=p(n),e=Reflect.getOwnPropertyDescriptor(t,r);return e?{writable:!0,configurable:1!==n.i||"length"!==r,enumerable:e.enumerable,value:t[r]}:e},defineProperty:function(){n(11)},getPrototypeOf:function(n){return Object.getPrototypeOf(n.t)},setPrototypeOf:function(){n(12)}},on={};i(en,(function(n,r){on[n]=function(){return arguments[0]=arguments[0][0],r.apply(this,arguments)}})),on.deleteProperty=function(r,t){return true&&isNaN(parseInt(t))&&n(13),on.set.call(this,r,t,void 0)},on.set=function(r,t,e){return true&&"length"!==t&&isNaN(parseInt(t))&&n(14),en.set.call(this,r[0],t,e,r[0])};var un=function(){function e(r){var e=this;this.O=B,this.D=!0,this.produce=function(r,i,o){if("function"==typeof r&&"function"!=typeof i){var u=i;i=r;var a=e;return function(n){var r=this;void 0===n&&(n=u);for(var t=arguments.length,e=Array(t>1?t-1:0),o=1;o<t;o++)e[o-1]=arguments[o];return a.produce(n,(function(n){var t;return(t=i).call.apply(t,[r,n].concat(e))}))}}var f;if("function"!=typeof i&&n(6),void 0!==o&&"function"!=typeof o&&n(7),t(r)){var c=w(e),s=N(e,r,void 0),v=!0;try{f=i(s),v=!1}finally{v?g(c):O(c)}return"undefined"!=typeof Promise&&f instanceof Promise?f.then((function(n){return j(c,o),P(n,c)}),(function(n){throw g(c),n})):(j(c,o),P(f,c))}if(!r||"object"!=typeof r){if(void 0===(f=i(r))&&(f=r),f===H&&(f=void 0),e.D&&d(f,!0),o){var p=[],l=[];b("Patches").M(r,f,p,l),o(p,l)}return f}n(21,r)},this.produceWithPatches=function(n,r){if("function"==typeof n)return function(r){for(var t=arguments.length,i=Array(t>1?t-1:0),o=1;o<t;o++)i[o-1]=arguments[o];return e.produceWithPatches(r,(function(r){return n.apply(void 0,[r].concat(i))}))};var t,i,o=e.produce(n,r,(function(n,r){t=n,i=r}));return"undefined"!=typeof Promise&&o instanceof Promise?o.then((function(n){return[n,t,i]})):[o,t,i]},"boolean"==typeof(null==r?void 0:r.useProxies)&&this.setUseProxies(r.useProxies),"boolean"==typeof(null==r?void 0:r.autoFreeze)&&this.setAutoFreeze(r.autoFreeze)}var i=e.prototype;return i.createDraft=function(e){t(e)||n(8),r(e)&&(e=R(e));var i=w(this),o=N(this,e,void 0);return o[Q].C=!0,O(i),o},i.finishDraft=function(r,t){var e=r&&r[Q]; true&&(e&&e.C||n(9),e.I&&n(10));var i=e.A;return j(i,t),P(void 0,i)},i.setAutoFreeze=function(n){this.D=n},i.setUseProxies=function(r){r&&!B&&n(20),this.O=r},i.applyPatches=function(n,t){var e;for(e=t.length-1;e>=0;e--){var i=t[e];if(0===i.path.length&&"replace"===i.op){n=i.value;break}}e>-1&&(t=t.slice(e+1));var o=b("Patches").$;return r(n)?o(n,t):this.produce(n,(function(n){return o(n,t)}))},e}(),an=new un,fn=an.produce,cn=an.produceWithPatches.bind(an),sn=an.setAutoFreeze.bind(an),vn=an.setUseProxies.bind(an),pn=an.applyPatches.bind(an),ln=an.createDraft.bind(an),dn=an.finishDraft.bind(an);/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (fn);
 //# sourceMappingURL=immer.esm.js.map
 
 
@@ -62789,9 +65539,6 @@ module.exports = ReactDOM;
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
@@ -62802,31 +65549,6 @@ module.exports = ReactDOM;
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/ensure chunk */
-/******/ 	(() => {
-/******/ 		__webpack_require__.f = {};
-/******/ 		// This file contains only the entry chunk.
-/******/ 		// The chunk loading function for additional chunks
-/******/ 		__webpack_require__.e = (chunkId) => {
-/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
-/******/ 				__webpack_require__.f[key](chunkId, promises);
-/******/ 				return promises;
-/******/ 			}, []));
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/get javascript chunk filename */
-/******/ 	(() => {
-/******/ 		// This function allow to reference async chunks
-/******/ 		__webpack_require__.u = (chunkId) => {
-/******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "app_modules_onboarding_assets_js_utils_modules_post-onboarding-tracker_js") return "476658b095f7fe3d4745.bundle.js";
-/******/ 			if (chunkId === "assets_dev_js_editor_utils_post-onboarding-tracking_js") return "ef3edd287b253495c7d6.bundle.js";
-/******/ 			// return url for filenames based on template
-/******/ 			return undefined;
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -62847,52 +65569,6 @@ module.exports = ReactDOM;
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/load script */
-/******/ 	(() => {
-/******/ 		var inProgress = {};
-/******/ 		var dataWebpackPrefix = "elementor:";
-/******/ 		// loadScript function to load a script via script tag
-/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
-/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
-/******/ 			var script, needAttach;
-/******/ 			if(key !== undefined) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				for(var i = 0; i < scripts.length; i++) {
-/******/ 					var s = scripts[i];
-/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
-/******/ 				}
-/******/ 			}
-/******/ 			if(!script) {
-/******/ 				needAttach = true;
-/******/ 				script = document.createElement('script');
-/******/ 		
-/******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
-/******/ 		
-/******/ 				script.src = url;
-/******/ 			}
-/******/ 			inProgress[url] = [done];
-/******/ 			var onScriptComplete = (prev, event) => {
-/******/ 				// avoid mem leaks in IE.
-/******/ 				script.onerror = script.onload = null;
-/******/ 				clearTimeout(timeout);
-/******/ 				var doneFns = inProgress[url];
-/******/ 				delete inProgress[url];
-/******/ 				script.parentNode && script.parentNode.removeChild(script);
-/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
-/******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
-/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
-/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
-/******/ 			needAttach && document.head.appendChild(script);
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -62902,119 +65578,6 @@ module.exports = ReactDOM;
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript && document.currentScript.tagName.toUpperCase() === 'SCRIPT')
-/******/ 				scriptUrl = document.currentScript.src;
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) {
-/******/ 					var i = scripts.length - 1;
-/******/ 					while (i > -1 && (!scriptUrl || !/^http(s?):/.test(scriptUrl))) scriptUrl = scripts[i--].src;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/^blob:/, "").replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"editor": 0
-/******/ 		};
-/******/ 		
-/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
-/******/ 				// JSONP chunk loading for javascript
-/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
-/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
-/******/ 		
-/******/ 					// a Promise means "currently loading".
-/******/ 					if(installedChunkData) {
-/******/ 						promises.push(installedChunkData[2]);
-/******/ 					} else {
-/******/ 						if(true) { // all chunks have JS
-/******/ 							// setup Promise in chunk cache
-/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
-/******/ 							promises.push(installedChunkData[2] = promise);
-/******/ 		
-/******/ 							// start chunk loading
-/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-/******/ 							// create error before stack unwound to get useful stacktrace later
-/******/ 							var error = new Error();
-/******/ 							var loadingEnded = (event) => {
-/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
-/******/ 									installedChunkData = installedChunks[chunkId];
-/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
-/******/ 									if(installedChunkData) {
-/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 										var realSrc = event && event.target && event.target.src;
-/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 										error.name = 'ChunkLoadError';
-/******/ 										error.type = errorType;
-/******/ 										error.request = realSrc;
-/******/ 										installedChunkData[1](error);
-/******/ 									}
-/******/ 								}
-/******/ 							};
-/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						}
-/******/ 					}
-/******/ 				}
-/******/ 		};
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no on chunks loaded
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 		
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkelementor"] = self["webpackChunkelementor"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
 /************************************************************************/

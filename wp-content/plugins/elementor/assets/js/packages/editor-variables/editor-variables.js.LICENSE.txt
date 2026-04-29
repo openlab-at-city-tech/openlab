@@ -6,6 +6,8 @@
 
 /*! ../../../hooks/use-prop-variables */
 
+/*! ../../../hooks/use-quota-permissions */
+
 /*! ../../../hooks/use-variable-bound-prop */
 
 /*! ../../../service */
@@ -14,11 +16,21 @@
 
 /*! ../../../utils/unlink-variable */
 
+/*! ../../../utils/variables-to-list */
+
 /*! ../../../variables-registry/variable-type-registry */
 
 /*! ../../context/variable-selection-popover.context */
 
+/*! ../../fields/label-field */
+
 /*! ../../hooks/use-permissions */
+
+/*! ../../hooks/use-quota-permissions */
+
+/*! ../../ui/variable-promotion-chip */
+
+/*! ../../utils/tracking */
 
 /*! ../../utils/validations */
 
@@ -54,6 +66,8 @@
 
 /*! ../hooks/use-prop-variables */
 
+/*! ../hooks/use-quota-permissions */
+
 /*! ../hooks/use-variable-bound-prop */
 
 /*! ../mismatch-variable-alert */
@@ -65,8 +79,6 @@
 /*! ../service */
 
 /*! ../style-variables-repository */
-
-/*! ../sync/get-canvas-iframe-document */
 
 /*! ../tags/assigned-tag */
 
@@ -82,11 +94,17 @@
 
 /*! ../ui/no-search-results */
 
+/*! ../ui/variable-promotion-chip */
+
 /*! ../utils/filter-by-search */
 
 /*! ../utils/tracking */
 
 /*! ../utils/validations */
+
+/*! ../utils/variables-to-list */
+
+/*! ../variable-editable-cell */
 
 /*! ../variables-registry/variable-type-registry */
 
@@ -98,6 +116,12 @@
 
 /*! ./components/fields/font-field */
 
+/*! ./components/global-styles-import-listener */
+
+/*! ./components/open-panel-from-event */
+
+/*! ./components/open-panel-from-url */
+
 /*! ./components/ui/color-indicator */
 
 /*! ./components/variables-manager/variables-manager-panel */
@@ -108,11 +132,7 @@
 
 /*! ./create-style-variables-repository */
 
-/*! ./create-variable-tool */
-
 /*! ./create-variable-type-registry */
-
-/*! ./delete-variable-tool */
 
 /*! ./fields/label-field */
 
@@ -122,17 +142,23 @@
 
 /*! ./hooks/use-prop-variable-action */
 
+/*! ./hooks/use-prop-variables */
+
 /*! ./hooks/use-variables-manager-state */
 
 /*! ./init */
 
-/*! ./list-variables-tool */
+/*! ./manage-variable-tool */
 
 /*! ./mcp */
+
+/*! ./mcp/variables-resource */
 
 /*! ./prop-types/color-variable-prop-type */
 
 /*! ./prop-types/font-variable-prop-type */
+
+/*! ./prop-types/size-variable-prop-type */
 
 /*! ./register-variable-types */
 
@@ -146,7 +172,7 @@
 
 /*! ./style-variables-repository */
 
-/*! ./sync/enqueue-font */
+/*! ./transformers/empty-transformer */
 
 /*! ./ui/color-indicator */
 
@@ -164,13 +190,13 @@
 
 /*! ./ui/styled-menu-list */
 
-/*! ./ui/variable-edit-menu */
-
 /*! ./ui/variable-table-cell */
 
-/*! ./update-variable-tool */
+/*! ./ui/variable-table-row */
 
 /*! ./use-prop-variables */
+
+/*! ./utils/llm-propvalue-label-resolver */
 
 /*! ./utils/resolve-css-variable */
 
@@ -178,7 +204,9 @@
 
 /*! ./variable-edit */
 
-/*! ./variable-editable-cell */
+/*! ./variable-edit-menu */
+
+/*! ./variable-table-cell */
 
 /*! ./variables-manager-create-menu */
 
@@ -187,6 +215,8 @@
 /*! ./variables-manager/variables-manager-panel */
 
 /*! ./variables-registry/variable-type-registry */
+
+/*! ./variables-resource */
 
 /*! ./variables-selection */
 
@@ -198,8 +228,6 @@
 
 /*! @elementor/editor-current-user */
 
-/*! @elementor/editor-editing-panel */
-
 /*! @elementor/editor-mcp */
 
 /*! @elementor/editor-panels */
@@ -210,15 +238,19 @@
 
 /*! @elementor/editor-v1-adapters */
 
+/*! @elementor/events */
+
 /*! @elementor/http-client */
 
 /*! @elementor/icons */
 
-/*! @elementor/mixpanel */
+/*! @elementor/menus */
 
 /*! @elementor/schema */
 
 /*! @elementor/ui */
+
+/*! @elementor/utils */
 
 /*! @wordpress/i18n */
 
@@ -240,8 +272,20 @@
   !*** external ["elementorV2","icons"] ***!
   \****************************************/
 
+/*!****************************************!*\
+  !*** external ["elementorV2","menus"] ***!
+  \****************************************/
+
+/*!****************************************!*\
+  !*** external ["elementorV2","utils"] ***!
+  \****************************************/
+
 /*!*****************************************!*\
   !*** external ["elementorV2","editor"] ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** external ["elementorV2","events"] ***!
   \*****************************************/
 
 /*!*****************************************!*\
@@ -250,10 +294,6 @@
 
 /*!*******************************************!*\
   !*** external ["elementorV2","editorUi"] ***!
-  \*******************************************/
-
-/*!*******************************************!*\
-  !*** external ["elementorV2","mixpanel"] ***!
   \*******************************************/
 
 /*!********************************************!*\
@@ -288,10 +328,6 @@
   !*** external ["elementorV2","editorCurrentUser"] ***!
   \****************************************************/
 
-/*!*****************************************************!*\
-  !*** external ["elementorV2","editorEditingPanel"] ***!
-  \*****************************************************/
-
 /*!************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/api.ts ***!
   \************************************************************/
@@ -325,10 +361,6 @@
   \*************************************************************************/
 
 /*!**************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/sync/enqueue-font.ts ***!
-  \**************************************************************************/
-
-/*!**************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/utils/validations.ts ***!
   \**************************************************************************/
 
@@ -345,6 +377,10 @@
   \******************************************************************************/
 
 /*!*******************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/mcp/variables-resource.ts ***!
+  \*******************************************************************************/
+
+/*!*******************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/utils/filter-by-search.ts ***!
   \*******************************************************************************/
 
@@ -353,7 +389,7 @@
   \********************************************************************************/
 
 /*!********************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/mcp/list-variables-tool.ts ***!
+  !*** ./packages/packages/core/editor-variables/src/utils/variables-to-list.ts ***!
   \********************************************************************************/
 
 /*!*********************************************************************************!*\
@@ -361,15 +397,7 @@
   \*********************************************************************************/
 
 /*!*********************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/mcp/create-variable-tool.ts ***!
-  \*********************************************************************************/
-
-/*!*********************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/mcp/delete-variable-tool.ts ***!
-  \*********************************************************************************/
-
-/*!*********************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/mcp/update-variable-tool.ts ***!
+  !*** ./packages/packages/core/editor-variables/src/mcp/manage-variable-tool.ts ***!
   \*********************************************************************************/
 
 /*!*********************************************************************************!*\
@@ -395,6 +423,10 @@
 /*!***********************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/style-variables-repository.ts ***!
   \***********************************************************************************/
+
+/*!************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/hooks/use-quota-permissions.ts ***!
+  \************************************************************************************/
 
 /*!*************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/components/variable-restore.tsx ***!
@@ -429,6 +461,10 @@
   \***************************************************************************************/
 
 /*!****************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/components/open-panel-from-url.tsx ***!
+  \****************************************************************************************/
+
+/*!****************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/components/ui/styled-menu-list.tsx ***!
   \****************************************************************************************/
 
@@ -441,7 +477,7 @@
   \****************************************************************************************/
 
 /*!****************************************************************************************!*\
-  !*** ./packages/packages/core/editor-variables/src/sync/get-canvas-iframe-document.ts ***!
+  !*** ./packages/packages/core/editor-variables/src/transformers/empty-transformer.tsx ***!
   \****************************************************************************************/
 
 /*!*****************************************************************************************!*\
@@ -457,6 +493,10 @@
   \*****************************************************************************************/
 
 /*!******************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/components/open-panel-from-event.tsx ***!
+  \******************************************************************************************/
+
+/*!******************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/create-style-variables-repository.ts ***!
   \******************************************************************************************/
 
@@ -466,6 +506,14 @@
 
 /*!*******************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/prop-types/font-variable-prop-type.ts ***!
+  \*******************************************************************************************/
+
+/*!*******************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/prop-types/size-variable-prop-type.ts ***!
+  \*******************************************************************************************/
+
+/*!*******************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/utils/llm-propvalue-label-resolver.ts ***!
   \*******************************************************************************************/
 
 /*!********************************************************************************************!*\
@@ -490,6 +538,10 @@
 
 /*!***********************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/components/ui/mismatch-variable-alert.tsx ***!
+  \***********************************************************************************************/
+
+/*!***********************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/components/ui/variable-promotion-chip.tsx ***!
   \***********************************************************************************************/
 
 /*!***********************************************************************************************!*\
@@ -521,6 +573,10 @@
   \*************************************************************************************************/
 
 /*!**************************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/components/global-styles-import-listener.tsx ***!
+  \**************************************************************************************************/
+
+/*!**************************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/components/ui/delete-confirmation-dialog.tsx ***!
   \**************************************************************************************************/
 
@@ -550,6 +606,10 @@
 
 /*!************************************************************************************************************!*\
   !*** ./packages/packages/core/editor-variables/src/components/variables-manager/ui/variable-edit-menu.tsx ***!
+  \************************************************************************************************************/
+
+/*!************************************************************************************************************!*\
+  !*** ./packages/packages/core/editor-variables/src/components/variables-manager/ui/variable-table-row.tsx ***!
   \************************************************************************************************************/
 
 /*!*************************************************************************************************************!*\

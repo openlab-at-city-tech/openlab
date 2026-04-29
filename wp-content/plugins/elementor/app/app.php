@@ -14,6 +14,9 @@ use Elementor\Utils;
 use Elementor\Core\Utils\Promotions\Filtered_Promotions_Manager;
 use Elementor\Core\Utils\Assets_Config_Provider;
 use Elementor\Core\Utils\Collection;
+use Elementor\Core\Utils\Assets_Translation_Loader;
+use Elementor\Modules\EditorOne\Classes\Menu_Data_Provider;
+use Elementor\App\AdminMenuItems\Editor_One_Theme_Builder_Menu;
 
 use Elementor\App\Modules\ImportExport\Module as ImportExportModule;
 use Elementor\App\Modules\KitLibrary\Module as KitLibraryModule;
@@ -47,8 +50,8 @@ class App extends BaseApp {
 		return admin_url( 'admin.php?page=' . self::PAGE_ID . '&ver=' . ELEMENTOR_VERSION );
 	}
 
-	private function register_admin_menu( Admin_Menu_Manager $admin_menu ) {
-		$admin_menu->register( static::PAGE_ID, new Theme_Builder_Menu_Item() );
+	private function register_editor_one_menu( Menu_Data_Provider $menu_data_provider ) {
+		$menu_data_provider->register_menu( new Editor_One_Theme_Builder_Menu() );
 	}
 
 	public function fix_submenu( $menu ) {
@@ -166,7 +169,7 @@ class App extends BaseApp {
 				return ELEMENTOR_ASSETS_PATH . "js/packages/{$name}/{$name}.asset.php";
 			} );
 
-		Collection::make( [ 'ui', 'icons' ] )
+		Collection::make( [ 'ui', 'icons', 'store', 'query', 'utils', 'events', 'onboarding' ] )
 			->each( function( $package ) use ( $assets_config_provider ) {
 				$suffix = Utils::is_script_debug() ? '' : '.min';
 				$config = $assets_config_provider->load( $package )->get( $package );
@@ -253,6 +256,7 @@ class App extends BaseApp {
 				'wp-i18n',
 				'elementor-v2-ui',
 				'elementor-v2-icons',
+				'elementor-v2-onboarding',
 				'react',
 				'react-dom',
 				'select2',
@@ -263,8 +267,7 @@ class App extends BaseApp {
 
 		$this->enqueue_dark_theme_detection_script();
 
-		wp_set_script_translations( 'elementor-app-packages', 'elementor' );
-		wp_set_script_translations( 'elementor-app', 'elementor' );
+		Assets_Translation_Loader::for_handles( [ 'elementor-app-packages', 'elementor-app' ], 'elementor' );
 
 		$this->print_config();
 	}
@@ -290,6 +293,8 @@ class App extends BaseApp {
 			'description' => esc_html__( 'Enhanced import/export for website templates. Selectively include site content, templates, and settings with advanced granular control.', 'elementor' ),
 			'release_status' => ExperimentsManager::RELEASE_STATUS_BETA,
 			'default' => ExperimentsManager::STATE_ACTIVE,
+			'hidden' => true,
+			'mutable' => false,
 		] );
 	}
 
@@ -311,9 +316,9 @@ class App extends BaseApp {
 
 		$this->add_component( 'onboarding', new OnboardingModule() );
 
-		add_action( 'elementor/admin/menu/register', function ( Admin_Menu_Manager $admin_menu ) {
-			$this->register_admin_menu( $admin_menu );
-		}, Source_Local::ADMIN_MENU_PRIORITY + 10 );
+		add_action( 'elementor/editor-one/menu/register', function ( Menu_Data_Provider $menu_data_provider ) {
+			$this->register_editor_one_menu( $menu_data_provider );
+		} );
 
 		// Happens after WP plugin page validation.
 		add_filter( 'add_menu_classes', [ $this, 'fix_submenu' ] );

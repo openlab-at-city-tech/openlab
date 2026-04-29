@@ -13,6 +13,7 @@ return [
 		'elementor-v2-editor-panels',
 		'elementor-v2-editor-v1-adapters',
 		'elementor-v2-env',
+		'elementor-v2-events',
 		'elementor-v2-icons',
 		'elementor-v2-query',
 		'elementor-v2-ui',

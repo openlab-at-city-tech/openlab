@@ -238,10 +238,10 @@ module.exports = React;
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_module_js") return "471f5dab6676072462a8.bundle.js";
-/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "4102e11512e21a92ba35.bundle.js";
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_nested-element-types-base_js") return "152f977e0c1304a3b0db.bundle.js";
-/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_views_view_js") return "e5d6feb1b1d6cf52126f.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_module_js") return "3d410a099008411bb011.bundle.js";
+/******/ 			if (chunkId === "vendors-node_modules_prop-types_index_js-node_modules_babel_runtime_helpers_slicedToArray_js") return "6a19e86dd8c1f9165dbe.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_nested-element-types-base_js") return "9b97a73ee8fdc5fb7dc3.bundle.js";
+/******/ 			if (chunkId === "modules_nested-elements_assets_js_editor_views_view_js") return "197583acd246fea0e25d.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -284,7 +284,6 @@ module.exports = React;
 /******/ 				script = document.createElement('script');
 /******/ 		
 /******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}

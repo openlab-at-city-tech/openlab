@@ -1,3 +1,11 @@
 __( 'Clear', 'elementor' );
 __( "Don't show this again", 'elementor' );
+__( 'Got it introduction', 'elementor' );
 __( 'Got it', 'elementor' );
+__( 'Upgrade Now', 'elementor' );
+__( "Don't show this again", 'elementor' );
+__( 'Not now', 'elementor' );
+__( 'Delete', 'elementor' );
+__( 'Show less', 'elementor' );
+__( 'Show more', 'elementor' );
+__( 'Upgrade now', 'elementor' );

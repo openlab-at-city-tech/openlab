@@ -1,6 +1,390 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "../assets/dev/js/editor/utils/editor-one-events.js":
+/*!**********************************************************!*\
+  !*** ../assets/dev/js/editor/utils/editor-one-events.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = exports.createDebouncedWidgetPanelSearch = exports.createDebouncedFinderSearch = exports.EditorOneEventManager = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2.default)(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+var EditorOneEventManager = exports.EditorOneEventManager = /*#__PURE__*/function () {
+  function EditorOneEventManager() {
+    (0, _classCallCheck2.default)(this, EditorOneEventManager);
+  }
+  return (0, _createClass2.default)(EditorOneEventManager, null, [{
+    key: "getEventsManager",
+    value: function getEventsManager() {
+      var _elementorCommon;
+      return (_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.eventsManager;
+    }
+  }, {
+    key: "getConfig",
+    value: function getConfig() {
+      var _this$getEventsManage;
+      return (_this$getEventsManage = this.getEventsManager()) === null || _this$getEventsManage === void 0 ? void 0 : _this$getEventsManage.config;
+    }
+  }, {
+    key: "canSendEvents",
+    value: function canSendEvents() {
+      var _elementorCommon2;
+      return ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.config) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.editor_events) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.can_send_events) || false;
+    }
+  }, {
+    key: "isEventsManagerAvailable",
+    value: function isEventsManagerAvailable() {
+      var eventsManager = this.getEventsManager();
+      return eventsManager && 'function' === typeof eventsManager.dispatchEvent;
+    }
+  }, {
+    key: "dispatchEvent",
+    value: function dispatchEvent(eventName, payload) {
+      if (!this.isEventsManagerAvailable() || !this.canSendEvents()) {
+        return false;
+      }
+      try {
+        return this.getEventsManager().dispatchEvent(eventName, payload);
+      } catch (error) {
+        return false;
+      }
+    }
+  }, {
+    key: "toLowerSnake",
+    value: function toLowerSnake(value) {
+      if (!value || 'string' !== typeof value) {
+        return value;
+      }
+      return value.replace(/\s+/g, '_').toLowerCase();
+    }
+  }, {
+    key: "decodeHtmlEntities",
+    value: function decodeHtmlEntities(text) {
+      if (!text || 'string' !== typeof text) {
+        return text;
+      }
+      var doc = new DOMParser().parseFromString(text, 'text/html');
+      return doc.body.textContent || text;
+    }
+  }, {
+    key: "isInEditorContext",
+    value: function isInEditorContext() {
+      var _window$elementor;
+      return 'undefined' !== typeof window.elementor && !!((_window$elementor = window.elementor) !== null && _window$elementor !== void 0 && _window$elementor.documents);
+    }
+  }, {
+    key: "getFinderContext",
+    value: function getFinderContext() {
+      var _config$appTypes, _config$appTypes2, _config$locations, _config$locations2;
+      var config = this.getConfig();
+      var isEditor = this.isInEditorContext();
+      return {
+        windowName: isEditor ? config === null || config === void 0 || (_config$appTypes = config.appTypes) === null || _config$appTypes === void 0 ? void 0 : _config$appTypes.editor : config === null || config === void 0 || (_config$appTypes2 = config.appTypes) === null || _config$appTypes2 === void 0 ? void 0 : _config$appTypes2.wpAdmin,
+        targetLocation: this.toLowerSnake(isEditor ? config === null || config === void 0 || (_config$locations = config.locations) === null || _config$locations === void 0 ? void 0 : _config$locations.topBar : config === null || config === void 0 || (_config$locations2 = config.locations) === null || _config$locations2 === void 0 ? void 0 : _config$locations2.sidebar)
+      };
+    }
+  }, {
+    key: "createBasePayload",
+    value: function createBasePayload() {
+      var _config$appTypes$edit, _config$appTypes3, _config$appTypes$edit2, _config$appTypes4;
+      var overrides = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var config = this.getConfig();
+      return _objectSpread({
+        app_type: (_config$appTypes$edit = config === null || config === void 0 || (_config$appTypes3 = config.appTypes) === null || _config$appTypes3 === void 0 ? void 0 : _config$appTypes3.editor) !== null && _config$appTypes$edit !== void 0 ? _config$appTypes$edit : 'editor',
+        window_name: (_config$appTypes$edit2 = config === null || config === void 0 || (_config$appTypes4 = config.appTypes) === null || _config$appTypes4 === void 0 ? void 0 : _config$appTypes4.editor) !== null && _config$appTypes$edit2 !== void 0 ? _config$appTypes$edit2 : 'editor'
+      }, overrides);
+    }
+  }, {
+    key: "sendTopBarPublishDropdown",
+    value: function sendTopBarPublishDropdown(targetName) {
+      var _config$names, _config$triggers, _config$targetTypes, _config$interactionRe, _config$locations3, _config$secondaryLoca, _config$targetTypes2;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names = config.names) === null || _config$names === void 0 || (_config$names = _config$names.editorOne) === null || _config$names === void 0 ? void 0 : _config$names.topBarPublishDropdown, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers = config.triggers) === null || _config$triggers === void 0 ? void 0 : _config$triggers.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes = config.targetTypes) === null || _config$targetTypes === void 0 ? void 0 : _config$targetTypes.dropdownItem,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe = config.interactionResults) === null || _config$interactionRe === void 0 ? void 0 : _config$interactionRe.actionSelected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations3 = config.locations) === null || _config$locations3 === void 0 ? void 0 : _config$locations3.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca = config.secondaryLocations) === null || _config$secondaryLoca === void 0 ? void 0 : _config$secondaryLoca.publishDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes2 = config.targetTypes) === null || _config$targetTypes2 === void 0 ? void 0 : _config$targetTypes2.dropdownItem,
+        interaction_description: 'User selected an action from the publish dropdown'
+      }));
+    }
+  }, {
+    key: "sendTopBarPageList",
+    value: function sendTopBarPageList(targetName) {
+      var _config$names2, _config$triggers2, _config$targetTypes3, _config$interactionRe2, _config$interactionRe3, _config$locations4, _config$secondaryLoca2, _config$targetTypes4;
+      var isCreate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names2 = config.names) === null || _config$names2 === void 0 || (_config$names2 = _config$names2.editorOne) === null || _config$names2 === void 0 ? void 0 : _config$names2.topBarPageList, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers2 = config.triggers) === null || _config$triggers2 === void 0 ? void 0 : _config$triggers2.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes3 = config.targetTypes) === null || _config$targetTypes3 === void 0 ? void 0 : _config$targetTypes3.dropdownItem,
+        target_name: targetName,
+        interaction_result: isCreate ? config === null || config === void 0 || (_config$interactionRe2 = config.interactionResults) === null || _config$interactionRe2 === void 0 ? void 0 : _config$interactionRe2.create : config === null || config === void 0 || (_config$interactionRe3 = config.interactionResults) === null || _config$interactionRe3 === void 0 ? void 0 : _config$interactionRe3.navigate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations4 = config.locations) === null || _config$locations4 === void 0 ? void 0 : _config$locations4.topBar),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca2 = config.secondaryLocations) === null || _config$secondaryLoca2 === void 0 ? void 0 : _config$secondaryLoca2.pageListDropdown),
+        location_l2: config === null || config === void 0 || (_config$targetTypes4 = config.targetTypes) === null || _config$targetTypes4 === void 0 ? void 0 : _config$targetTypes4.dropdownItem,
+        interaction_description: 'User selected an action from the page list dropdown'
+      }));
+    }
+  }, {
+    key: "sendSiteSettingsSession",
+    value: function sendSiteSettingsSession(_ref) {
+      var _config$names3, _config$triggers3, _config$interactionRe4, _config$locations5, _config$secondaryLoca3;
+      var targetType = _ref.targetType,
+        _ref$visitedItems = _ref.visitedItems,
+        visitedItems = _ref$visitedItems === void 0 ? [] : _ref$visitedItems,
+        _ref$savedItems = _ref.savedItems,
+        savedItems = _ref$savedItems === void 0 ? [] : _ref$savedItems,
+        state = _ref.state;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names3 = config.names) === null || _config$names3 === void 0 || (_config$names3 = _config$names3.editorOne) === null || _config$names3 === void 0 ? void 0 : _config$names3.siteSettingsSession, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers3 = config.triggers) === null || _config$triggers3 === void 0 ? void 0 : _config$triggers3.click),
+        target_type: targetType,
+        target_name: 'site_settings',
+        interaction_result: config === null || config === void 0 || (_config$interactionRe4 = config.interactionResults) === null || _config$interactionRe4 === void 0 ? void 0 : _config$interactionRe4.sessionEnd,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations5 = config.locations) === null || _config$locations5 === void 0 ? void 0 : _config$locations5.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca3 = config.secondaryLocations) === null || _config$secondaryLoca3 === void 0 ? void 0 : _config$secondaryLoca3.siteSettings),
+        interaction_description: 'Records areas visited as part of the site setting session',
+        metadata: {
+          visited_items: visitedItems,
+          saved_items: savedItems
+        },
+        state: state
+      }));
+    }
+  }, {
+    key: "sendELibraryNav",
+    value: function sendELibraryNav(tabName) {
+      var _config$names4, _config$triggers4, _config$targetTypes5, _config$interactionRe5, _config$locations6, _config$secondaryLoca4;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names4 = config.names) === null || _config$names4 === void 0 || (_config$names4 = _config$names4.editorOne) === null || _config$names4 === void 0 ? void 0 : _config$names4.eLibraryNav, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers4 = config.triggers) === null || _config$triggers4 === void 0 ? void 0 : _config$triggers4.tabSelect),
+        target_type: config === null || config === void 0 || (_config$targetTypes5 = config.targetTypes) === null || _config$targetTypes5 === void 0 ? void 0 : _config$targetTypes5.tab,
+        target_name: this.toLowerSnake(tabName),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe5 = config.interactionResults) === null || _config$interactionRe5 === void 0 ? void 0 : _config$interactionRe5.tabChanged,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations6 = config.locations) === null || _config$locations6 === void 0 ? void 0 : _config$locations6.elementorLibrary),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca4 = config.secondaryLocations) === null || _config$secondaryLoca4 === void 0 ? void 0 : _config$secondaryLoca4.libraryTabs),
+        interaction_description: 'User navigates within elementor library'
+      }));
+    }
+  }, {
+    key: "sendELibraryInsert",
+    value: function sendELibraryInsert(_ref2) {
+      var _config$triggers5, _config$targetTypes6, _config$interactionRe6, _config$locations7, _config$secondaryLoca5, _config$names5;
+      var assetId = _ref2.assetId,
+        assetName = _ref2.assetName,
+        libraryType = _ref2.libraryType,
+        _ref2$proRequired = _ref2.proRequired,
+        proRequired = _ref2$proRequired === void 0 ? false : _ref2$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers5 = config.triggers) === null || _config$triggers5 === void 0 ? void 0 : _config$triggers5.insert),
+        target_type: config === null || config === void 0 || (_config$targetTypes6 = config.targetTypes) === null || _config$targetTypes6 === void 0 ? void 0 : _config$targetTypes6.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe6 = config.interactionResults) === null || _config$interactionRe6 === void 0 ? void 0 : _config$interactionRe6.assetInserted,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations7 = config.locations) === null || _config$locations7 === void 0 ? void 0 : _config$locations7.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca5 = config.secondaryLocations) === null || _config$secondaryLoca5 === void 0 ? void 0 : _config$secondaryLoca5.assetCard),
+        interaction_description: 'User inserts block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names5 = config.names) === null || _config$names5 === void 0 || (_config$names5 = _config$names5.editorOne) === null || _config$names5 === void 0 ? void 0 : _config$names5.eLibraryInsert, payload);
+    }
+  }, {
+    key: "sendELibraryFavorite",
+    value: function sendELibraryFavorite(_ref3) {
+      var _config$triggers6, _config$targetTypes7, _config$interactionRe7, _config$locations8, _config$secondaryLoca6, _config$names6;
+      var assetId = _ref3.assetId,
+        assetName = _ref3.assetName,
+        libraryType = _ref3.libraryType,
+        isFavorite = _ref3.isFavorite,
+        _ref3$proRequired = _ref3.proRequired,
+        proRequired = _ref3$proRequired === void 0 ? false : _ref3$proRequired;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers6 = config.triggers) === null || _config$triggers6 === void 0 ? void 0 : _config$triggers6.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes7 = config.targetTypes) === null || _config$targetTypes7 === void 0 ? void 0 : _config$targetTypes7.toggle,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe7 = config.interactionResults) === null || _config$interactionRe7 === void 0 ? void 0 : _config$interactionRe7.assetFavorite,
+        target_value: Boolean(isFavorite),
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations8 = config.locations) === null || _config$locations8 === void 0 ? void 0 : _config$locations8.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca6 = config.secondaryLocations) === null || _config$secondaryLoca6 === void 0 ? void 0 : _config$secondaryLoca6.assetCard),
+        interaction_description: 'User favorite block/pages from elementor library',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      });
+      if (proRequired) {
+        payload.state = 'pro_plan_required';
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names6 = config.names) === null || _config$names6 === void 0 || (_config$names6 = _config$names6.editorOne) === null || _config$names6 === void 0 ? void 0 : _config$names6.eLibraryFavorite, payload);
+    }
+  }, {
+    key: "sendELibraryGenerateAi",
+    value: function sendELibraryGenerateAi(_ref4) {
+      var _config$names7, _config$triggers7, _config$targetTypes8, _config$interactionRe8, _config$locations9, _config$secondaryLoca7;
+      var assetId = _ref4.assetId,
+        assetName = _ref4.assetName,
+        libraryType = _ref4.libraryType;
+      var config = this.getConfig();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names7 = config.names) === null || _config$names7 === void 0 || (_config$names7 = _config$names7.editorOne) === null || _config$names7 === void 0 ? void 0 : _config$names7.eLibraryGenerateAi, this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers7 = config.triggers) === null || _config$triggers7 === void 0 ? void 0 : _config$triggers7.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes8 = config.targetTypes) === null || _config$targetTypes8 === void 0 ? void 0 : _config$targetTypes8.button,
+        target_name: String(assetId),
+        interaction_result: config === null || config === void 0 || (_config$interactionRe8 = config.interactionResults) === null || _config$interactionRe8 === void 0 ? void 0 : _config$interactionRe8.aiGenerate,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations9 = config.locations) === null || _config$locations9 === void 0 ? void 0 : _config$locations9.elementorLibrary),
+        location_l1: this.toLowerSnake(libraryType),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca7 = config.secondaryLocations) === null || _config$secondaryLoca7 === void 0 ? void 0 : _config$secondaryLoca7.assetCard),
+        interaction_description: 'User generated block/page based on a library asset',
+        metadata: {
+          template_id: String(assetId),
+          template_name: this.decodeHtmlEntities(assetName) || ''
+        }
+      }));
+    }
+  }, {
+    key: "sendFinderSearchInput",
+    value: function sendFinderSearchInput(_ref5) {
+      var _config$triggers8, _config$targetTypes9, _config$interactionRe9, _config$interactionRe0, _config$secondaryLoca8, _config$names8;
+      var resultsCount = _ref5.resultsCount,
+        _ref5$searchTerm = _ref5.searchTerm,
+        searchTerm = _ref5$searchTerm === void 0 ? null : _ref5$searchTerm;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var finderContext = this.getFinderContext();
+      var payload = this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers8 = config.triggers) === null || _config$triggers8 === void 0 ? void 0 : _config$triggers8.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes9 = config.targetTypes) === null || _config$targetTypes9 === void 0 ? void 0 : _config$targetTypes9.searchInput,
+        target_name: 'finder',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe9 = config.interactionResults) === null || _config$interactionRe9 === void 0 ? void 0 : _config$interactionRe9.resultsUpdated : config === null || config === void 0 || (_config$interactionRe0 = config.interactionResults) === null || _config$interactionRe0 === void 0 ? void 0 : _config$interactionRe0.noResults,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca8 = config.secondaryLocations) === null || _config$secondaryLoca8 === void 0 ? void 0 : _config$secondaryLoca8.finder),
+        interaction_description: 'Finder search input, follows debounce behavior',
+        metadata: {
+          results_count: resultsCount
+        }
+      });
+      if (!hasResults && searchTerm) {
+        payload.metadata.search_term = searchTerm;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names8 = config.names) === null || _config$names8 === void 0 || (_config$names8 = _config$names8.editorOne) === null || _config$names8 === void 0 ? void 0 : _config$names8.finderSearchInput, payload);
+    }
+  }, {
+    key: "sendFinderResultSelect",
+    value: function sendFinderResultSelect(choice) {
+      var _config$names9, _config$triggers9, _config$targetTypes0, _config$interactionRe1, _config$secondaryLoca9, _config$secondaryLoca0;
+      var config = this.getConfig();
+      var finderContext = this.getFinderContext();
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names9 = config.names) === null || _config$names9 === void 0 || (_config$names9 = _config$names9.editorOne) === null || _config$names9 === void 0 ? void 0 : _config$names9.finderResultSelect, this.createBasePayload({
+        window_name: finderContext.windowName,
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers9 = config.triggers) === null || _config$triggers9 === void 0 ? void 0 : _config$triggers9.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes0 = config.targetTypes) === null || _config$targetTypes0 === void 0 ? void 0 : _config$targetTypes0.searchResult,
+        target_name: choice,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe1 = config.interactionResults) === null || _config$interactionRe1 === void 0 ? void 0 : _config$interactionRe1.selected,
+        target_location: finderContext.targetLocation,
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca9 = config.secondaryLocations) === null || _config$secondaryLoca9 === void 0 ? void 0 : _config$secondaryLoca9.finder),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca0 = config.secondaryLocations) === null || _config$secondaryLoca0 === void 0 ? void 0 : _config$secondaryLoca0.finderResults),
+        interaction_description: 'Finder search results was selected'
+      }));
+    }
+  }, {
+    key: "sendCanvasEmptyBoxAction",
+    value: function sendCanvasEmptyBoxAction(_ref6) {
+      var _config$triggers0, _config$targetTypes1, _config$interactionRe10, _config$locations0, _config$secondaryLoca1, _config$names0;
+      var targetName = _ref6.targetName,
+        _ref6$metadata = _ref6.metadata,
+        metadata = _ref6$metadata === void 0 ? {} : _ref6$metadata,
+        _ref6$containerCreate = _ref6.containerCreated,
+        containerCreated = _ref6$containerCreate === void 0 ? null : _ref6$containerCreate;
+      var config = this.getConfig();
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers0 = config.triggers) === null || _config$triggers0 === void 0 ? void 0 : _config$triggers0.click),
+        target_type: config === null || config === void 0 || (_config$targetTypes1 = config.targetTypes) === null || _config$targetTypes1 === void 0 ? void 0 : _config$targetTypes1.buttons,
+        target_name: targetName,
+        interaction_result: config === null || config === void 0 || (_config$interactionRe10 = config.interactionResults) === null || _config$interactionRe10 === void 0 ? void 0 : _config$interactionRe10.selected,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations0 = config.locations) === null || _config$locations0 === void 0 ? void 0 : _config$locations0.canvas),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca1 = config.secondaryLocations) === null || _config$secondaryLoca1 === void 0 ? void 0 : _config$secondaryLoca1.emptyBox),
+        interaction_description: 'Empty box on canvas actions'
+      });
+      if (Object.keys(metadata).length > 0) {
+        payload.metadata = metadata;
+      }
+      if (containerCreated !== null) {
+        payload.state = containerCreated;
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names0 = config.names) === null || _config$names0 === void 0 || (_config$names0 = _config$names0.editorOne) === null || _config$names0 === void 0 ? void 0 : _config$names0.canvasEmptyBoxAction, payload);
+    }
+  }, {
+    key: "sendWidgetPanelSearch",
+    value: function sendWidgetPanelSearch(_ref7) {
+      var _config$triggers1, _config$targetTypes10, _config$interactionRe11, _config$interactionRe12, _config$locations1, _config$locations10, _config$secondaryLoca10, _config$names1;
+      var resultsCount = _ref7.resultsCount,
+        _ref7$userInput = _ref7.userInput,
+        userInput = _ref7$userInput === void 0 ? null : _ref7$userInput;
+      var config = this.getConfig();
+      var hasResults = resultsCount > 0;
+      var payload = this.createBasePayload({
+        interaction_type: this.toLowerSnake(config === null || config === void 0 || (_config$triggers1 = config.triggers) === null || _config$triggers1 === void 0 ? void 0 : _config$triggers1.typing),
+        target_type: config === null || config === void 0 || (_config$targetTypes10 = config.targetTypes) === null || _config$targetTypes10 === void 0 ? void 0 : _config$targetTypes10.searchWidget,
+        target_name: 'search_widget',
+        interaction_result: hasResults ? config === null || config === void 0 || (_config$interactionRe11 = config.interactionResults) === null || _config$interactionRe11 === void 0 ? void 0 : _config$interactionRe11.resultsUpdated : config === null || config === void 0 || (_config$interactionRe12 = config.interactionResults) === null || _config$interactionRe12 === void 0 ? void 0 : _config$interactionRe12.noResults,
+        target_location: this.toLowerSnake(config === null || config === void 0 || (_config$locations1 = config.locations) === null || _config$locations1 === void 0 ? void 0 : _config$locations1.leftPanel),
+        location_l1: this.toLowerSnake(config === null || config === void 0 || (_config$locations10 = config.locations) === null || _config$locations10 === void 0 ? void 0 : _config$locations10.widgetPanel),
+        location_l2: this.toLowerSnake(config === null || config === void 0 || (_config$secondaryLoca10 = config.secondaryLocations) === null || _config$secondaryLoca10 === void 0 ? void 0 : _config$secondaryLoca10.searchBar),
+        interaction_description: 'Widget search input, follows debounce behavior'
+      });
+      if (!hasResults && userInput) {
+        payload.metadata = {
+          user_input: userInput
+        };
+      }
+      return this.dispatchEvent(config === null || config === void 0 || (_config$names1 = config.names) === null || _config$names1 === void 0 || (_config$names1 = _config$names1.editorOne) === null || _config$names1 === void 0 ? void 0 : _config$names1.widgetPanelSearch, payload);
+    }
+  }]);
+}();
+var createDebouncedFinderSearch = exports.createDebouncedFinderSearch = function createDebouncedFinderSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 300;
+  return _.debounce(function (resultsCount, searchTerm) {
+    EditorOneEventManager.sendFinderSearchInput({
+      resultsCount: resultsCount,
+      searchTerm: searchTerm
+    });
+  }, delay);
+};
+var createDebouncedWidgetPanelSearch = exports.createDebouncedWidgetPanelSearch = function createDebouncedWidgetPanelSearch() {
+  var delay = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 2000;
+  return _.debounce(function (resultsCount, userInput) {
+    EditorOneEventManager.sendWidgetPanelSearch({
+      resultsCount: resultsCount,
+      userInput: userInput
+    });
+  }, delay);
+};
+var _default = exports["default"] = EditorOneEventManager;
+
+/***/ }),
+
 /***/ "../assets/dev/js/utils/react.js":
 /*!***************************************!*\
   !*** ../assets/dev/js/utils/react.js ***!
@@ -77,6 +461,7 @@ var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 var _editorIntegration = __webpack_require__(/*! ./utils/editor-integration */ "../modules/ai/assets/js/editor/utils/editor-integration.js");
 var _config = __webpack_require__(/*! ./pages/form-layout/context/config */ "../modules/ai/assets/js/editor/pages/form-layout/context/config.js");
+var _editorOneEvents = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js");
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var AiLayoutBehavior = exports["default"] = /*#__PURE__*/function (_Marionette$Behavior) {
@@ -110,6 +495,9 @@ var AiLayoutBehavior = exports["default"] = /*#__PURE__*/function (_Marionette$B
     key: "onAiButtonClick",
     value: function onAiButtonClick(e) {
       e.stopPropagation();
+      _editorOneEvents.EditorOneEventManager.sendCanvasEmptyBoxAction({
+        targetName: 'generate_with_ai'
+      });
       window.elementorAiCurrentContext = this.getOption('context');
       (0, _editorIntegration.renderLayoutApp)({
         parentContainer: elementor.getPreviewContainer(),
@@ -2144,6 +2532,8 @@ var _require3 = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n"),
 var _require4 = __webpack_require__(/*! ../../pages/form-layout/components/attachments */ "../modules/ai/assets/js/editor/pages/form-layout/components/attachments.js"),
   ATTACHMENT_TYPE_JSON = _require4.ATTACHMENT_TYPE_JSON,
   ELEMENTOR_LIBRARY_SOURCE = _require4.ELEMENTOR_LIBRARY_SOURCE;
+var _require5 = __webpack_require__(/*! elementor-editor-utils/editor-one-events */ "../assets/dev/js/editor/utils/editor-one-events.js"),
+  EditorOneEventManager = _require5.EditorOneEventManager;
 var ApplyTemplateForAiBehavior;
 ApplyTemplateForAiBehavior = Marionette.Behavior.extend({
   ui: {
@@ -2154,11 +2544,19 @@ ApplyTemplateForAiBehavior = Marionette.Behavior.extend({
     'click @ui.applyButton': 'onApplyButtonClick',
     'click @ui.generateVariation': 'onGenerateVariationClick'
   },
+  trackAiGenerate: function trackAiGenerate(model) {
+    EditorOneEventManager.sendELibraryGenerateAi({
+      assetId: model.get('template_id'),
+      assetName: model.get('title'),
+      libraryType: model.get('type') || model.get('source')
+    });
+  },
   onGenerateVariationClick: function onGenerateVariationClick() {
     var _libraryComponent$man;
     var args = {
       model: this.view.model
     };
+    this.trackAiGenerate(this.view.model);
     var libraryComponent = $e.components.get('library');
     var at = (_libraryComponent$man = libraryComponent.manager.modalConfig) === null || _libraryComponent$man === void 0 || (_libraryComponent$man = _libraryComponent$man.importOptions) === null || _libraryComponent$man === void 0 ? void 0 : _libraryComponent$man.at;
     libraryComponent.downloadTemplate(args, function (data) {
@@ -2191,6 +2589,7 @@ ApplyTemplateForAiBehavior = Marionette.Behavior.extend({
     var args = {
       model: this.view.model
     };
+    this.trackAiGenerate(this.view.model);
     this.ui.applyButton.addClass('elementor-disabled');
     var activeSource = args.model.get('source');
 
@@ -6395,19 +6794,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -9002,19 +9399,18 @@ exports["default"] = void 0;
 var React = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 var _reactDom = _interopRequireDefault(__webpack_require__(/*! react-dom */ "react-dom"));
-var _clsx = _interopRequireDefault(__webpack_require__(/*! clsx */ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js"));
+var _clsx = __webpack_require__(/*! clsx */ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.js");
 var _domFns = __webpack_require__(/*! ./utils/domFns */ "../node_modules/react-draggable/build/cjs/utils/domFns.js");
 var _positionFns = __webpack_require__(/*! ./utils/positionFns */ "../node_modules/react-draggable/build/cjs/utils/positionFns.js");
 var _shims = __webpack_require__(/*! ./utils/shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _DraggableCore = _interopRequireDefault(__webpack_require__(/*! ./DraggableCore */ "../node_modules/react-draggable/build/cjs/DraggableCore.js"));
 var _log = _interopRequireDefault(__webpack_require__(/*! ./utils/log */ "../node_modules/react-draggable/build/cjs/utils/log.js"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } /*:: import type {ControlPosition, PositionOffsetControlPosition, DraggableCoreProps, DraggableCoreDefaultProps} from './DraggableCore';*/
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); } /*:: import type {ControlPosition, PositionOffsetControlPosition, DraggableCoreProps, DraggableCoreDefaultProps} from './DraggableCore';*/
 /*:: import type {Bounds, DraggableEventHandler} from './utils/types';*/
 /*:: import type {Element as ReactElement} from 'react';*/
 /*:: type DraggableState = {
@@ -9187,16 +9583,17 @@ class Draggable extends React.Component /*:: <DraggableProps, DraggableState>*/{
     }
   }
   componentWillUnmount() {
-    this.setState({
-      dragging: false
-    }); // prevents invariant if unmounted while dragging
+    if (this.state.dragging) {
+      this.setState({
+        dragging: false
+      }); // prevents invariant if unmounted while dragging
+    }
   }
 
   // React Strict Mode compatibility: if `nodeRef` is passed, we will use it instead of trying to find
   // the underlying DOM node ourselves. See the README for more information.
   findDOMNode() /*: ?HTMLElement*/{
-    var _this$props$nodeRef$c, _this$props;
-    return (_this$props$nodeRef$c = (_this$props = this.props) === null || _this$props === void 0 || (_this$props = _this$props.nodeRef) === null || _this$props === void 0 ? void 0 : _this$props.current) !== null && _this$props$nodeRef$c !== void 0 ? _this$props$nodeRef$c : _reactDom.default.findDOMNode(this);
+    return this.props?.nodeRef?.current ?? _reactDom.default.findDOMNode(this);
   }
   render() /*: ReactElement<any>*/{
     const {
@@ -9238,7 +9635,7 @@ class Draggable extends React.Component /*:: <DraggableProps, DraggableState>*/{
     }
 
     // Mark with class while dragging
-    const className = (0, _clsx.default)(children.props.className || '', defaultClassName, {
+    const className = (0, _clsx.clsx)(children.props.className || '', defaultClassName, {
       [defaultClassNameDragging]: this.state.dragging,
       [defaultClassNameDragged]: this.state.dragged
     });
@@ -9405,12 +9802,11 @@ var _domFns = __webpack_require__(/*! ./utils/domFns */ "../node_modules/react-d
 var _positionFns = __webpack_require__(/*! ./utils/positionFns */ "../node_modules/react-draggable/build/cjs/utils/positionFns.js");
 var _shims = __webpack_require__(/*! ./utils/shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _log = _interopRequireDefault(__webpack_require__(/*! ./utils/log */ "../node_modules/react-draggable/build/cjs/utils/log.js"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return typeof key === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (typeof input !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (typeof res !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == typeof i ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != typeof t || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != typeof i) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /*:: import type {EventHandler, MouseTouchEvent} from './utils/types';*/
 /*:: import type {Element as ReactElement} from 'react';*/
 // Simple abstraction for dragging events names.
@@ -9440,6 +9836,7 @@ let dragEventFor = eventsFor.mouse;
 /*:: export type PositionOffsetControlPosition = {x: number|string, y: number|string};*/
 /*:: export type DraggableCoreDefaultProps = {
   allowAnyClick: boolean,
+  allowMobileScroll: boolean,
   disabled: boolean,
   enableUserSelectHack: boolean,
   onStart: DraggableEventHandler,
@@ -9496,7 +9893,7 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
 
       // Prevent scrolling on mobile devices, like ipad/iphone.
       // Important that this is after handle/cancel.
-      if (e.type === 'touchstart') e.preventDefault();
+      if (e.type === 'touchstart' && !this.props.allowMobileScroll) e.preventDefault();
 
       // Set touch identifier in component state if this is a touch event. This allows us to
       // distinguish between individual touches on multitouch screens by identifying which
@@ -9601,7 +9998,7 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
       const thisNode = this.findDOMNode();
       if (thisNode) {
         // Remove user-select hack
-        if (this.props.enableUserSelectHack) (0, _domFns.removeUserSelectStyles)(thisNode.ownerDocument);
+        if (this.props.enableUserSelectHack) (0, _domFns.scheduleRemoveUserSelectStyles)(thisNode.ownerDocument);
       }
       (0, _log.default)('DraggableCore: handleDragStop: %j', coreEvent);
 
@@ -9664,15 +10061,14 @@ class DraggableCore extends React.Component /*:: <DraggableCoreProps>*/{
       (0, _domFns.removeEvent)(thisNode, eventsFor.touch.start, this.onTouchStart, {
         passive: false
       });
-      if (this.props.enableUserSelectHack) (0, _domFns.removeUserSelectStyles)(ownerDocument);
+      if (this.props.enableUserSelectHack) (0, _domFns.scheduleRemoveUserSelectStyles)(ownerDocument);
     }
   }
 
   // React Strict Mode compatibility: if `nodeRef` is passed, we will use it instead of trying to find
   // the underlying DOM node ourselves. See the README for more information.
   findDOMNode() /*: ?HTMLElement*/{
-    var _this$props, _this$props2;
-    return (_this$props = this.props) !== null && _this$props !== void 0 && _this$props.nodeRef ? (_this$props2 = this.props) === null || _this$props2 === void 0 || (_this$props2 = _this$props2.nodeRef) === null || _this$props2 === void 0 ? void 0 : _this$props2.current : _reactDom.default.findDOMNode(this);
+    return this.props?.nodeRef ? this.props?.nodeRef?.current : _reactDom.default.findDOMNode(this);
   }
   render() /*: React.Element<any>*/{
     // Reuse the child provided
@@ -9699,6 +10095,14 @@ _defineProperty(DraggableCore, "propTypes", {
    * Defaults to `false`.
    */
   allowAnyClick: _propTypes.default.bool,
+  /**
+   * `allowMobileScroll` turns off cancellation of the 'touchstart' event
+   * on mobile devices. Only enable this if you are having trouble with click
+   * events. Prefer using 'handle' / 'cancel' instead.
+   *
+   * Defaults to `false`.
+   */
+  allowMobileScroll: _propTypes.default.bool,
   children: _propTypes.default.node.isRequired,
   /**
    * `disabled`, if true, stops the <Draggable> from dragging. All handlers,
@@ -9818,6 +10222,7 @@ _defineProperty(DraggableCore, "propTypes", {
 _defineProperty(DraggableCore, "defaultProps", {
   allowAnyClick: false,
   // by default only accept left click
+  allowMobileScroll: false,
   disabled: false,
   enableUserSelectHack: true,
   onStart: function () {},
@@ -9881,11 +10286,10 @@ exports.outerHeight = outerHeight;
 exports.outerWidth = outerWidth;
 exports.removeClassName = removeClassName;
 exports.removeEvent = removeEvent;
-exports.removeUserSelectStyles = removeUserSelectStyles;
+exports.scheduleRemoveUserSelectStyles = scheduleRemoveUserSelectStyles;
 var _shims = __webpack_require__(/*! ./shims */ "../node_modules/react-draggable/build/cjs/utils/shims.js");
 var _getPrefix = _interopRequireWildcard(__webpack_require__(/*! ./getPrefix */ "../node_modules/react-draggable/build/cjs/utils/getPrefix.js"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function (e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != typeof e && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (const t in e) "default" !== t && {}.hasOwnProperty.call(e, t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, t)) && (i.get || i.set) ? o(f, t, i) : f[t] = e[t]); return f; })(e, t); }
 /*:: import type {ControlPosition, PositionOffsetControlPosition, MouseTouchEvent} from './types';*/
 let matchesSelectorFunc = '';
 function matchesSelector(el /*: Node*/, selector /*: string*/) /*: boolean*/{
@@ -10011,11 +10415,11 @@ function getTranslation(_ref /*:: */, positionOffset /*: PositionOffsetControlPo
     x,
     y
   } /*: ControlPosition*/ = _ref /*: ControlPosition*/;
-  let translation = "translate(".concat(x).concat(unitSuffix, ",").concat(y).concat(unitSuffix, ")");
+  let translation = `translate(${x}${unitSuffix},${y}${unitSuffix})`;
   if (positionOffset) {
-    const defaultX = "".concat(typeof positionOffset.x === 'string' ? positionOffset.x : positionOffset.x + unitSuffix);
-    const defaultY = "".concat(typeof positionOffset.y === 'string' ? positionOffset.y : positionOffset.y + unitSuffix);
-    translation = "translate(".concat(defaultX, ", ").concat(defaultY, ")") + translation;
+    const defaultX = `${typeof positionOffset.x === 'string' ? positionOffset.x : positionOffset.x + unitSuffix}`;
+    const defaultY = `${typeof positionOffset.y === 'string' ? positionOffset.y : positionOffset.y + unitSuffix}`;
+    translation = `translate(${defaultX}, ${defaultY})` + translation;
   }
   return translation;
 }
@@ -10045,6 +10449,16 @@ function addUserSelectStyles(doc /*: ?Document*/) {
   }
   if (doc.body) addClassName(doc.body, 'react-draggable-transparent-selection');
 }
+function scheduleRemoveUserSelectStyles(doc /*: ?Document*/) {
+  // Prevent a possible "forced reflow"
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(() => {
+      removeUserSelectStyles(doc);
+    });
+  } else {
+    removeUserSelectStyles(doc);
+  }
+}
 function removeUserSelectStyles(doc /*: ?Document*/) {
   if (!doc) return;
   try {
@@ -10069,8 +10483,8 @@ function addClassName(el /*: HTMLElement*/, className /*: string*/) {
   if (el.classList) {
     el.classList.add(className);
   } else {
-    if (!el.className.match(new RegExp("(?:^|\\s)".concat(className, "(?!\\S)")))) {
-      el.className += " ".concat(className);
+    if (!el.className.match(new RegExp(`(?:^|\\s)${className}(?!\\S)`))) {
+      el.className += ` ${className}`;
     }
   }
 }
@@ -10078,7 +10492,7 @@ function removeClassName(el /*: HTMLElement*/, className /*: string*/) {
   if (el.classList) {
     el.classList.remove(className);
   } else {
-    el.className = el.className.replace(new RegExp("(?:^|\\s)".concat(className, "(?!\\S)"), 'g'), '');
+    el.className = el.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`, 'g'), '');
   }
 }
 
@@ -10102,7 +10516,6 @@ exports["default"] = void 0;
 exports.getPrefix = getPrefix;
 const prefixes = ['Moz', 'Webkit', 'O', 'ms'];
 function getPrefix() /*: string*/{
-  var _window$document;
   let prop /*: string*/ = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'transform';
   // Ensure we're running in an environment where there is actually a global
   // `window` obj
@@ -10110,7 +10523,7 @@ function getPrefix() /*: string*/{
 
   // If we're in a pseudo-browser server-side environment, this access
   // path may not exist, so bail out if it doesn't.
-  const style = (_window$document = window.document) === null || _window$document === void 0 || (_window$document = _window$document.documentElement) === null || _window$document === void 0 ? void 0 : _window$document.style;
+  const style = window.document?.documentElement?.style;
   if (!style) return '';
   if (prop in style) return '';
   for (let i = 0; i < prefixes.length; i++) {
@@ -10119,10 +10532,10 @@ function getPrefix() /*: string*/{
   return '';
 }
 function browserPrefixToKey(prop /*: string*/, prefix /*: string*/) /*: string*/{
-  return prefix ? "".concat(prefix).concat(kebabToTitleCase(prop)) : prop;
+  return prefix ? `${prefix}${kebabToTitleCase(prop)}` : prop;
 }
 function browserPrefixToStyle(prop /*: string*/, prefix /*: string*/) /*: string*/{
-  return prefix ? "-".concat(prefix.toLowerCase(), "-").concat(prop) : prop;
+  return prefix ? `-${prefix.toLowerCase()}-${prop}` : prop;
 }
 function kebabToTitleCase(str /*: string*/) /*: string*/{
   let out = '';
@@ -10211,7 +10624,12 @@ function getBoundPosition(draggable /*: Draggable*/, x /*: number*/, y /*: numbe
     if (bounds === 'parent') {
       boundNode = node.parentNode;
     } else {
-      boundNode = ownerDocument.querySelector(bounds);
+      // Flow assigns the wrong return type (Node) for getRootNode(),
+      // so we cast it to one of the correct types (Element).
+      // The others are Document and ShadowRoot.
+      // All three implement querySelector() so it's safe to call.
+      const rootNode = ((node.getRootNode() /*: any*/) /*: Element*/);
+      boundNode = rootNode.querySelector(bounds);
     }
     if (!(boundNode instanceof ownerWindow.HTMLElement)) {
       throw new Error('Bounds selector "' + bounds + '" could not find an element.');
@@ -10357,25 +10775,19 @@ function int(a /*: string*/) /*: number*/{
 }
 function dontSetMe(props /*: Object*/, propName /*: string*/, componentName /*: string*/) /*: ?Error*/{
   if (props[propName]) {
-    return new Error("Invalid prop ".concat(propName, " passed to ").concat(componentName, " - do not set this, set it on the child."));
+    return new Error(`Invalid prop ${propName} passed to ${componentName} - do not set this, set it on the child.`);
   }
 }
 
 /***/ }),
 
-/***/ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js":
-/*!************************************************************************!*\
-  !*** ../node_modules/react-draggable/node_modules/clsx/dist/clsx.m.js ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "../node_modules/react-draggable/node_modules/clsx/dist/clsx.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/react-draggable/node_modules/clsx/dist/clsx.js ***!
+  \**********************************************************************/
+/***/ ((module) => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   clsx: () => (/* binding */ clsx),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clsx);
+function r(e){var o,t,f="";if("string"==typeof e||"number"==typeof e)f+=e;else if("object"==typeof e)if(Array.isArray(e)){var n=e.length;for(o=0;o<n;o++)e[o]&&(t=r(e[o]))&&(f&&(f+=" "),f+=t)}else for(t in e)e[t]&&(f&&(f+=" "),f+=t);return f}function e(){for(var e,o,t=0,f="",n=arguments.length;t<n;t++)(e=arguments[t])&&(o=r(e))&&(f&&(f+=" "),f+=o);return f}module.exports=e,module.exports.clsx=e;
 
 /***/ }),
 
@@ -10635,21 +11047,95 @@ function isURL(url, options) {
   url = split.shift();
   split = url.split('?');
   url = split.shift();
-  split = url.split('://');
-  if (split.length > 1) {
-    protocol = split.shift().toLowerCase();
+
+  // Replaced the 'split("://")' logic with a regex to match the protocol.
+  // This correctly identifies schemes like `javascript:` which don't use `//`.
+  // However, we need to be careful not to confuse authentication credentials (user:password@host)
+  // with protocols. A colon before an @ symbol might be part of auth, not a protocol separator.
+  var protocol_match = url.match(/^([a-z][a-z0-9+\-.]*):/i);
+  var had_explicit_protocol = false;
+  var cleanUpProtocol = function cleanUpProtocol(potential_protocol) {
+    had_explicit_protocol = true;
+    protocol = potential_protocol.toLowerCase();
     if (options.require_valid_protocol && options.protocols.indexOf(protocol) === -1) {
+      // The identified protocol is not in the allowed list.
       return false;
+    }
+
+    // Remove the protocol from the URL string.
+    return url.substring(protocol_match[0].length);
+  };
+  if (protocol_match) {
+    var potential_protocol = protocol_match[1];
+    var after_colon = url.substring(protocol_match[0].length);
+
+    // Check if what follows looks like authentication credentials (user:password@host)
+    // rather than a protocol. This happens when:
+    // 1. There's no `//` after the colon (protocols like `http://` have this)
+    // 2. There's an `@` symbol before any `/`
+    // 3. The part before `@` contains only valid auth characters (alphanumeric, -, _, ., %, :)
+    var starts_with_slashes = after_colon.slice(0, 2) === '//';
+    if (!starts_with_slashes) {
+      var first_slash_position = after_colon.indexOf('/');
+      var before_slash = first_slash_position === -1 ? after_colon : after_colon.substring(0, first_slash_position);
+      var at_position = before_slash.indexOf('@');
+      if (at_position !== -1) {
+        var before_at = before_slash.substring(0, at_position);
+        var valid_auth_regex = /^[a-zA-Z0-9\-_.%:]*$/;
+        var is_valid_auth = valid_auth_regex.test(before_at);
+        if (is_valid_auth) {
+          // This looks like authentication (e.g., user:password@host), not a protocol
+          if (options.require_protocol) {
+            return false;
+          }
+
+          // Don't consume the colon; let the auth parsing handle it later
+        } else {
+          // This looks like a malicious protocol (e.g., javascript:alert();@host)
+          url = cleanUpProtocol(potential_protocol);
+          if (url === false) {
+            return false;
+          }
+        }
+      } else {
+        // No @ symbol found. Check if this could be a port number instead of a protocol.
+        // If what's after the colon is numeric (or starts with a digit and contains only
+        // valid port characters until a path separator), it's likely hostname:port, not a protocol.
+        var looks_like_port = /^[0-9]/.test(after_colon);
+        if (looks_like_port) {
+          // This looks like hostname:port, not a protocol
+          if (options.require_protocol) {
+            return false;
+          }
+          // Don't consume anything; let it be parsed as hostname:port
+        } else {
+          // This is definitely a protocol
+          url = cleanUpProtocol(potential_protocol);
+          if (url === false) {
+            return false;
+          }
+        }
+      }
+    } else {
+      // Starts with '//', this is definitely a protocol like http://
+      url = cleanUpProtocol(potential_protocol);
+      if (url === false) {
+        return false;
+      }
     }
   } else if (options.require_protocol) {
     return false;
-  } else if (url.slice(0, 2) === '//') {
-    if (!options.allow_protocol_relative_urls) {
+  }
+
+  // Handle leading '//' only as protocol-relative when there was NO explicit protocol.
+  // If there was an explicit protocol, '//' is the normal separator
+  // and should be stripped unconditionally.
+  if (url.slice(0, 2) === '//') {
+    if (!had_explicit_protocol && !options.allow_protocol_relative_urls) {
       return false;
     }
-    split[0] = url.slice(2);
+    url = url.slice(2);
   }
-  url = split.join('://');
   if (url === '') {
     return false;
   }

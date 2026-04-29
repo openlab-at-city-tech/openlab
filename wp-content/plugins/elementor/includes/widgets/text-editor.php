@@ -258,22 +258,27 @@ class Widget_Text_Editor extends Widget_Base {
 				'label' => esc_html__( 'Alignment', 'elementor' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
-					'left' => [
-						'title' => esc_html__( 'Left', 'elementor' ),
+					'start' => [
+						'title' => esc_html__( 'Start', 'elementor' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
 						'title' => esc_html__( 'Center', 'elementor' ),
 						'icon' => 'eicon-text-align-center',
 					],
-					'right' => [
-						'title' => esc_html__( 'Right', 'elementor' ),
+					'end' => [
+						'title' => esc_html__( 'End', 'elementor' ),
 						'icon' => 'eicon-text-align-right',
 					],
 					'justify' => [
 						'title' => esc_html__( 'Justified', 'elementor' ),
 						'icon' => 'eicon-text-align-justify',
 					],
+				],
+				'classes' => 'elementor-control-start-end',
+				'selectors_dictionary' => [
+					'left' => is_rtl() ? 'end' : 'start',
+					'right' => is_rtl() ? 'start' : 'end',
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => 'text-align: {{VALUE}};',
@@ -601,8 +606,9 @@ class Widget_Text_Editor extends Widget_Base {
 		<?php if ( $should_render_inline_editing ) { ?>
 			<div <?php $this->print_render_attribute_string( 'editor' ); ?>>
 		<?php } ?>
-		<?php // PHPCS - the main text of a widget should not be escaped.
-				echo $editor_content; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php // PHPCS - DO NOT REMOVE THIS ECHO - THE MAIN TEXT OF A WIDGET SHOULD NOT BE ESCAPED!
+			echo $editor_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
 		<?php if ( $should_render_inline_editing ) { ?>
 			</div>
 		<?php } ?>

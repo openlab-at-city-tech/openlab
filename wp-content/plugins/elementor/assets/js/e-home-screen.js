@@ -1,6 +1,337 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "../app/assets/js/event-track/dashboard/action-controls.js":
+/*!*****************************************************************!*\
+  !*** ../app/assets/js/event-track/dashboard/action-controls.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _wpDashboardTracking = _interopRequireWildcard(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
+var _utils = __webpack_require__(/*! ./utils */ "../app/assets/js/event-track/dashboard/utils.js");
+var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
+function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+var EXCLUDED_SELECTORS = {
+  ADMIN_MENU: '#adminmenu',
+  TOP_BAR: '.e-admin-top-bar',
+  TOP_BAR_EDITOR_ONE: '#editor-one-top-bar',
+  WP_ADMIN_BAR: '#wpadminbar',
+  SUBMENU: '.wp-submenu',
+  PROMO_PAGE: '.e-feature-promotion',
+  PROMO_BLANK_STATE: '.elementor-blank_state',
+  APP: '.e-app',
+  SIDEBAR_NAVIGATION: '#editor-one-sidebar-navigation',
+  FLYOUT_MENU: '.elementor-submenu-flyout'
+};
+var ActionControlTracking = /*#__PURE__*/function (_BaseTracking) {
+  function ActionControlTracking() {
+    (0, _classCallCheck2.default)(this, ActionControlTracking);
+    return _callSuper(this, ActionControlTracking, arguments);
+  }
+  (0, _inherits2.default)(ActionControlTracking, _BaseTracking);
+  return (0, _createClass2.default)(ActionControlTracking, null, [{
+    key: "init",
+    value: function init() {
+      if (!_utils.DashboardUtils.isElementorPage()) {
+        return;
+      }
+      this.attachDelegatedHandlers();
+      this.addTrackingAttributesToFilterButtons();
+      this.initializeLinkDataIds();
+    }
+  }, {
+    key: "initializeLinkDataIds",
+    value: function initializeLinkDataIds() {
+      var _this = this;
+      var initializeLinks = function initializeLinks() {
+        var links = document.querySelectorAll('a[href]');
+        links.forEach(function (link) {
+          if (_this.isExcludedElement(link) || _this.isNavigationLink(link) || link.hasAttribute('data-id')) {
+            return;
+          }
+          var href = link.getAttribute('href');
+          if (!href) {
+            return;
+          }
+          var cleanedHref = _this.removeNonceFromUrl(href);
+          if (cleanedHref) {
+            link.setAttribute('data-id', cleanedHref);
+          }
+        });
+      };
+      if ('loading' === document.readyState) {
+        document.addEventListener('DOMContentLoaded', initializeLinks);
+      } else {
+        initializeLinks();
+      }
+    }
+  }, {
+    key: "addTrackingAttributesToFilterButtons",
+    value: function addTrackingAttributesToFilterButtons() {
+      var body = document.body;
+      if (!body) {
+        return;
+      }
+      var screenPrefix = '';
+      switch (true) {
+        case body.classList.contains('post-type-elementor_library'):
+          screenPrefix = 'elementor_library-library';
+          break;
+        case body.classList.contains('post-type-e-floating-buttons'):
+          screenPrefix = 'e-floating-buttons';
+          break;
+        default:
+          return;
+      }
+      var addDataIdToListTableButtons = function addDataIdToListTableButtons() {
+        var buttonConfigs = [{
+          id: 'post-query-submit',
+          suffix: 'filter'
+        }, {
+          id: 'search-submit',
+          suffix: 'search'
+        }, {
+          id: 'doaction',
+          suffix: 'apply'
+        }, {
+          id: 'doaction2',
+          suffix: 'apply-bottom'
+        }];
+        buttonConfigs.forEach(function (config) {
+          var button = document.getElementById(config.id);
+          if (!button || button.hasAttribute('data-id')) {
+            return;
+          }
+          button.setAttribute('data-id', "".concat(screenPrefix, "-button-").concat(config.suffix));
+        });
+      };
+      if ('loading' === document.readyState) {
+        document.addEventListener('DOMContentLoaded', addDataIdToListTableButtons);
+      } else {
+        addDataIdToListTableButtons();
+      }
+    }
+  }, {
+    key: "isExcludedElement",
+    value: function isExcludedElement(element) {
+      for (var _i = 0, _Object$values = Object.values(EXCLUDED_SELECTORS); _i < _Object$values.length; _i++) {
+        var selector = _Object$values[_i];
+        if (element.closest(selector)) {
+          return true;
+        }
+      }
+      if (element.classList.contains('go-pro')) {
+        return true;
+      }
+      return false;
+    }
+  }, {
+    key: "attachDelegatedHandlers",
+    value: function attachDelegatedHandlers() {
+      var _this2 = this;
+      var FILTER_BUTTON_IDS = ['search-submit', 'post-query-submit'];
+      this.addEventListenerTracked(document, 'click', function (event) {
+        var _event$target;
+        var base = event.target && 1 === event.target.nodeType ? event.target : (_event$target = event.target) === null || _event$target === void 0 ? void 0 : _event$target.parentElement;
+        if (!base) {
+          return;
+        }
+        var toggle = base.closest('.elementor-role-toggle');
+        if (toggle && !_this2.isExcludedElement(toggle)) {
+          _this2.trackControl(toggle, _wpDashboardTracking.CONTROL_TYPES.TOGGLE);
+          return;
+        }
+        var button = base.closest('button, input[type="submit"], input[type="button"], .button, .e-btn');
+        if (button && !_this2.isExcludedElement(button)) {
+          if (FILTER_BUTTON_IDS.includes(button.id)) {
+            _this2.trackControl(button, _wpDashboardTracking.CONTROL_TYPES.FILTER);
+            return;
+          }
+          _this2.trackControl(button, _wpDashboardTracking.CONTROL_TYPES.BUTTON);
+          return;
+        }
+        var link = base.closest('a');
+        if (link && !_this2.isExcludedElement(link) && !_this2.isNavigationLink(link)) {
+          _this2.trackControl(link, _wpDashboardTracking.CONTROL_TYPES.LINK);
+        }
+      }, {
+        capture: false
+      });
+      this.addEventListenerTracked(document, 'change', function (event) {
+        var _event$target2;
+        var base = event.target && 1 === event.target.nodeType ? event.target : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : _event$target2.parentElement;
+        if (!base) {
+          return;
+        }
+        var toggle = null;
+        if (_wpDashboardTracking.default.isEditorOneActive()) {
+          toggle = base.closest('.MuiSwitch-switchBase');
+        } else {
+          toggle = base.closest('.components-toggle-control');
+        }
+        if (toggle && !_this2.isExcludedElement(toggle)) {
+          _this2.trackControl(toggle, _wpDashboardTracking.CONTROL_TYPES.TOGGLE);
+          return;
+        }
+        var checkbox = base.closest('input[type="checkbox"]');
+        if (checkbox && !_this2.isExcludedElement(checkbox)) {
+          _this2.trackControl(checkbox, _wpDashboardTracking.CONTROL_TYPES.CHECKBOX);
+          return;
+        }
+        var radio = base.closest('input[type="radio"]');
+        if (radio && !_this2.isExcludedElement(radio)) {
+          _this2.trackControl(radio, _wpDashboardTracking.CONTROL_TYPES.RADIO);
+          return;
+        }
+        var select = base.closest('select');
+        if (select && !_this2.isExcludedElement(select)) {
+          _this2.trackControl(select, _wpDashboardTracking.CONTROL_TYPES.SELECT);
+        }
+      });
+    }
+  }, {
+    key: "isNavigationLink",
+    value: function isNavigationLink(link) {
+      var href = link.getAttribute('href');
+      if (!href) {
+        return false;
+      }
+      if (href.startsWith('#') && href.includes('tab')) {
+        return true;
+      }
+      if (link.classList.contains('nav-tab')) {
+        return true;
+      }
+      var isInNavigation = link.closest('.wp-submenu, #adminmenu, .e-admin-top-bar, #wpadminbar');
+      return !!isInNavigation;
+    }
+  }, {
+    key: "trackControl",
+    value: function trackControl(element, controlType) {
+      var controlIdentifier = this.extractControlIdentifier(element, controlType);
+      if (!controlIdentifier) {
+        return;
+      }
+      _wpDashboardTracking.default.trackActionControl(controlIdentifier, controlType);
+    }
+  }, {
+    key: "extractControlIdentifier",
+    value: function extractControlIdentifier(element, controlType) {
+      if (_wpDashboardTracking.CONTROL_TYPES.RADIO === controlType) {
+        var name = element.getAttribute('name');
+        var value = element.value || element.getAttribute('value');
+        if (name && value) {
+          return "".concat(name, "-").concat(value);
+        }
+        if (name) {
+          return name;
+        }
+      }
+      if (_wpDashboardTracking.CONTROL_TYPES.SELECT === controlType) {
+        var _name = element.getAttribute('name');
+        if (_name) {
+          return _name;
+        }
+      }
+      if (_wpDashboardTracking.CONTROL_TYPES.CHECKBOX === controlType) {
+        var _name2 = element.getAttribute('name');
+        if (_name2) {
+          var checkboxesWithSameName = document.querySelectorAll("input[type=\"checkbox\"][name=\"".concat(CSS.escape(_name2), "\"]"));
+          if (checkboxesWithSameName.length > 1) {
+            var _value = element.value || element.getAttribute('value');
+            if (_value) {
+              return "".concat(_name2, "-").concat(_value);
+            }
+          }
+          return _name2;
+        }
+      }
+      if (_wpDashboardTracking.CONTROL_TYPES.LINK === controlType) {
+        var dataId = element.getAttribute('data-id');
+        if (dataId) {
+          return dataId;
+        }
+        var href = element.getAttribute('href');
+        if (href) {
+          return this.removeNonceFromUrl(href);
+        }
+      }
+      if (_wpDashboardTracking.CONTROL_TYPES.BUTTON === controlType || _wpDashboardTracking.CONTROL_TYPES.TOGGLE === controlType || _wpDashboardTracking.CONTROL_TYPES.FILTER === controlType) {
+        var _dataId = element.getAttribute('data-id');
+        if (_dataId) {
+          return _dataId;
+        }
+        var classIdMatch = this.extractClassId(element);
+        if (classIdMatch) {
+          return classIdMatch;
+        }
+      }
+      return '';
+    }
+  }, {
+    key: "extractClassId",
+    value: function extractClassId(element) {
+      var classes = element.className;
+      if (!classes || 'string' !== typeof classes) {
+        return '';
+      }
+      var classList = classes.split(' ');
+      var _iterator = _createForOfIteratorHelper(classList),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var cls = _step.value;
+          if (cls.startsWith('e-id-')) {
+            return cls.substring(5);
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+      return '';
+    }
+  }, {
+    key: "removeNonceFromUrl",
+    value: function removeNonceFromUrl(url) {
+      try {
+        var urlObj = new URL(url, window.location.origin);
+        urlObj.searchParams.delete('_wpnonce');
+        var postParam = urlObj.searchParams.get('post');
+        if (postParam !== null && /^[0-9]+$/.test(postParam)) {
+          urlObj.searchParams.delete('post');
+        }
+        return urlObj.pathname + urlObj.search + urlObj.hash;
+      } catch (e) {
+        return url;
+      }
+    }
+  }]);
+}(_baseTracking.default);
+var _default = exports["default"] = ActionControlTracking;
+
+/***/ }),
+
 /***/ "../app/assets/js/event-track/dashboard/base-tracking.js":
 /*!***************************************************************!*\
   !*** ../app/assets/js/event-track/dashboard/base-tracking.js ***!
@@ -192,11 +523,13 @@ function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.
 var ELEMENTOR_MENU_SELECTORS = {
   ELEMENTOR_TOP_LEVEL: 'li#toplevel_page_elementor',
   TEMPLATES_TOP_LEVEL: 'li#menu-posts-elementor_library',
+  ELEMENTOR_HOME_TOP_LEVEL: 'li#toplevel_page_elementor-home',
   ADMIN_MENU: '#adminmenu',
   TOP_LEVEL_LINK: '.wp-menu-name',
   SUBMENU_CONTAINER: '.wp-submenu',
   SUBMENU_ITEM: '.wp-submenu li a',
-  SUBMENU_ITEM_TOP_LEVEL: '.wp-has-submenu'
+  SUBMENU_ITEM_TOP_LEVEL: '.wp-has-submenu',
+  SIDEBAR_NAVIGATION: '#editor-one-sidebar-navigation'
 };
 var NavigationTracking = /*#__PURE__*/function (_BaseTracking) {
   function NavigationTracking() {
@@ -207,17 +540,13 @@ var NavigationTracking = /*#__PURE__*/function (_BaseTracking) {
   return (0, _createClass2.default)(NavigationTracking, null, [{
     key: "init",
     value: function init() {
-      this.attachElementorMenuTracking();
-      this.attachTemplatesMenuTracking();
-    }
-  }, {
-    key: "attachElementorMenuTracking",
-    value: function attachElementorMenuTracking() {
-      var elementorMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_TOP_LEVEL);
-      if (!elementorMenu) {
-        return;
+      if (_wpDashboardTracking.default.isEditorOneActive()) {
+        this.attachSidebarNavigationTracking();
+        this.attachElementorHomeMenuTracking();
+      } else {
+        this.attachElementorMenuTracking();
+        this.attachTemplatesMenuTracking();
       }
-      this.attachMenuTracking(elementorMenu, 'Elementor');
     }
   }, {
     key: "attachTemplatesMenuTracking",
@@ -229,11 +558,47 @@ var NavigationTracking = /*#__PURE__*/function (_BaseTracking) {
       this.attachMenuTracking(templatesMenu, 'Templates');
     }
   }, {
+    key: "attachElementorHomeMenuTracking",
+    value: function attachElementorHomeMenuTracking() {
+      var elementorHomeMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_HOME_TOP_LEVEL);
+      if (!elementorHomeMenu) {
+        return;
+      }
+      this.attachMenuTracking(elementorHomeMenu, 'Elementor');
+    }
+  }, {
+    key: "attachElementorMenuTracking",
+    value: function attachElementorMenuTracking() {
+      var elementorMenu = document.querySelector(ELEMENTOR_MENU_SELECTORS.ELEMENTOR_TOP_LEVEL);
+      if (!elementorMenu) {
+        return;
+      }
+      this.attachMenuTracking(elementorMenu, 'Elementor');
+    }
+  }, {
+    key: "attachSidebarNavigationTracking",
+    value: function attachSidebarNavigationTracking() {
+      var sidebar = document.querySelector(ELEMENTOR_MENU_SELECTORS.SIDEBAR_NAVIGATION);
+      if (sidebar) {
+        this.attachSidebarClickListener(sidebar);
+      }
+    }
+  }, {
+    key: "attachSidebarClickListener",
+    value: function attachSidebarClickListener(sidebar) {
+      var _this = this;
+      this.addEventListenerTracked(sidebar, 'click', function (event) {
+        _this.handleSidebarClick(event);
+      }, {
+        capture: true
+      });
+    }
+  }, {
     key: "attachMenuTracking",
     value: function attachMenuTracking(menuElement, menuName) {
-      var _this = this;
+      var _this2 = this;
       this.addEventListenerTracked(menuElement, 'click', function (event) {
-        _this.handleMenuClick(event, menuName);
+        _this2.handleMenuClick(event, menuName);
       });
     }
   }, {
@@ -249,6 +614,43 @@ var NavigationTracking = /*#__PURE__*/function (_BaseTracking) {
       _wpDashboardTracking.default.trackNavClicked(itemId, isTopLevel ? null : menuName, area);
     }
   }, {
+    key: "handleSidebarClick",
+    value: function handleSidebarClick(event) {
+      var clickedElement = event.target.closest('a, button, [role="button"]');
+      if (!clickedElement) {
+        return;
+      }
+      var itemId = this.extractSidebarItemId(clickedElement);
+      _wpDashboardTracking.default.trackNavClicked(itemId, null, _wpDashboardTracking.NAV_AREAS.SIDEBAR_MENU);
+    }
+  }, {
+    key: "extractSidebarItemId",
+    value: function extractSidebarItemId(element) {
+      var paragraph = element.querySelector('p');
+      if (paragraph) {
+        return paragraph.textContent.trim();
+      }
+      var textContent = element.textContent.trim();
+      if (textContent) {
+        return textContent;
+      }
+      return 'unknown';
+    }
+  }, {
+    key: "extractPageFromUrl",
+    value: function extractPageFromUrl(href) {
+      var urlParams = new URLSearchParams(href.split('?')[1] || '');
+      var page = urlParams.get('page');
+      if (page) {
+        return page;
+      }
+      var postType = urlParams.get('post_type');
+      if (postType) {
+        return postType;
+      }
+      return 'unknown';
+    }
+  }, {
     key: "extractItemId",
     value: function extractItemId(link) {
       var textContent = link.textContent.trim();
@@ -257,19 +659,11 @@ var NavigationTracking = /*#__PURE__*/function (_BaseTracking) {
       }
       var href = link.getAttribute('href');
       if (href) {
-        var urlParams = new URLSearchParams(href.split('?')[1] || '');
-        var page = urlParams.get('page');
-        var postType = urlParams.get('post_type');
-        if (page) {
-          return page;
-        }
-        if (postType) {
-          return postType;
-        }
+        return this.extractPageFromUrl(href);
       }
-      var id = link.getAttribute('id');
-      if (id) {
-        return id;
+      var linkId = link.getAttribute('id');
+      if (linkId) {
+        return linkId;
       }
       return 'unknown';
     }
@@ -514,7 +908,7 @@ var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracki
 function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 var PROMO_SELECTORS = {
-  PROMO_PAGE: '.e-feature-promotion, .elementor-settings-form-page',
+  PROMO_PAGE: '.e-feature-promotion, .elementor-settings-form-page, #elementor-element-manager-wrap',
   PROMO_BLANK_STATE: '.elementor-blank_state',
   CTA_BUTTON: '.go-pro',
   TITLE: 'h3'
@@ -867,171 +1261,6 @@ var _default = exports["default"] = ScreenViewTracking;
 
 /***/ }),
 
-/***/ "../app/assets/js/event-track/dashboard/top-bar.js":
-/*!*********************************************************!*\
-  !*** ../app/assets/js/event-track/dashboard/top-bar.js ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
-var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
-var _wpDashboardTracking = _interopRequireWildcard(__webpack_require__(/*! ../wp-dashboard-tracking */ "../app/assets/js/event-track/wp-dashboard-tracking.js"));
-var _baseTracking = _interopRequireDefault(__webpack_require__(/*! ./base-tracking */ "../app/assets/js/event-track/dashboard/base-tracking.js"));
-function _interopRequireWildcard(e, t) { if ("function" == typeof WeakMap) var r = new WeakMap(), n = new WeakMap(); return (_interopRequireWildcard = function _interopRequireWildcard(e, t) { if (!t && e && e.__esModule) return e; var o, i, f = { __proto__: null, default: e }; if (null === e || "object" != _typeof(e) && "function" != typeof e) return f; if (o = t ? n : r) { if (o.has(e)) return o.get(e); o.set(e, f); } for (var _t in e) "default" !== _t && {}.hasOwnProperty.call(e, _t) && ((i = (o = Object.defineProperty) && Object.getOwnPropertyDescriptor(e, _t)) && (i.get || i.set) ? o(f, _t, i) : f[_t] = e[_t]); return f; })(e, t); }
-function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2.default)(o), (0, _possibleConstructorReturn2.default)(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2.default)(t).constructor) : o.apply(t, e)); }
-function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
-var TOP_BAR_SELECTORS = {
-  TOP_BAR_ROOT: '.e-admin-top-bar',
-  BAR_BUTTON: '.e-admin-top-bar__bar-button',
-  BUTTON_TITLE: '.e-admin-top-bar__bar-button-title',
-  MAIN_AREA: '.e-admin-top-bar__main-area',
-  SECONDARY_AREA: '.e-admin-top-bar__secondary-area'
-};
-var TopBarTracking = /*#__PURE__*/function (_BaseTracking) {
-  function TopBarTracking() {
-    (0, _classCallCheck2.default)(this, TopBarTracking);
-    return _callSuper(this, TopBarTracking, arguments);
-  }
-  (0, _inherits2.default)(TopBarTracking, _BaseTracking);
-  return (0, _createClass2.default)(TopBarTracking, null, [{
-    key: "init",
-    value: function init() {
-      this.waitForTopBar();
-    }
-  }, {
-    key: "waitForTopBar",
-    value: function waitForTopBar() {
-      var _this = this;
-      var topBar = document.querySelector(TOP_BAR_SELECTORS.TOP_BAR_ROOT);
-      if (topBar) {
-        this.attachTopBarTracking(topBar);
-        return;
-      }
-      var observer = this.addObserver(document.body, {
-        childList: true,
-        subtree: true
-      }, function () {
-        var foundTopBar = document.querySelector(TOP_BAR_SELECTORS.TOP_BAR_ROOT);
-        if (foundTopBar) {
-          _this.attachTopBarTracking(foundTopBar);
-          observer.disconnect();
-          clearTimeout(timeoutId);
-        }
-      });
-      var timeoutId = setTimeout(function () {
-        observer.disconnect();
-      }, 10000);
-    }
-  }, {
-    key: "attachTopBarTracking",
-    value: function attachTopBarTracking(topBar) {
-      var _this2 = this;
-      var buttons = topBar.querySelectorAll(TOP_BAR_SELECTORS.BAR_BUTTON);
-      buttons.forEach(function (button) {
-        _this2.addEventListenerTracked(button, 'click', function (event) {
-          _this2.handleTopBarClick(event);
-        });
-      });
-      this.observeTopBarChanges(topBar);
-    }
-  }, {
-    key: "observeTopBarChanges",
-    value: function observeTopBarChanges(topBar) {
-      var _this3 = this;
-      this.addObserver(topBar, {
-        childList: true,
-        subtree: true
-      }, function (mutations) {
-        mutations.forEach(function (mutation) {
-          if ('childList' === mutation.type) {
-            mutation.addedNodes.forEach(function (node) {
-              if (1 === node.nodeType) {
-                if (node.matches && node.matches(TOP_BAR_SELECTORS.BAR_BUTTON)) {
-                  _this3.addEventListenerTracked(node, 'click', function (event) {
-                    _this3.handleTopBarClick(event);
-                  });
-                } else {
-                  var buttons = node.querySelectorAll ? node.querySelectorAll(TOP_BAR_SELECTORS.BAR_BUTTON) : [];
-                  buttons.forEach(function (button) {
-                    _this3.addEventListenerTracked(button, 'click', function (event) {
-                      _this3.handleTopBarClick(event);
-                    });
-                  });
-                }
-              }
-            });
-          }
-        });
-      });
-    }
-  }, {
-    key: "handleTopBarClick",
-    value: function handleTopBarClick(event) {
-      var button = event.currentTarget;
-      var itemId = this.extractItemId(button);
-      _wpDashboardTracking.default.trackNavClicked(itemId, null, _wpDashboardTracking.NAV_AREAS.TOP_BAR);
-    }
-  }, {
-    key: "extractItemId",
-    value: function extractItemId(button) {
-      var titleElement = button.querySelector(TOP_BAR_SELECTORS.BUTTON_TITLE);
-      if (titleElement && titleElement.textContent.trim()) {
-        return titleElement.textContent.trim();
-      }
-      var textContent = button.textContent.trim();
-      if (textContent) {
-        return textContent;
-      }
-      var href = button.getAttribute('href');
-      if (href) {
-        var urlParams = new URLSearchParams(href.split('?')[1] || '');
-        var page = urlParams.get('page');
-        if (page) {
-          return page;
-        }
-        if (href.includes('/wp-admin/')) {
-          var pathParts = href.split('/wp-admin/')[1];
-          if (pathParts) {
-            return pathParts.split('?')[0];
-          }
-        }
-        try {
-          var url = new URL(href, window.location.origin);
-          return url.pathname.split('/').filter(Boolean).pop() || url.hostname;
-        } catch (error) {
-          return href;
-        }
-      }
-      var dataInfo = button.getAttribute('data-info');
-      if (dataInfo) {
-        return dataInfo;
-      }
-      var classes = button.className.split(' ').filter(function (cls) {
-        return cls && 'e-admin-top-bar__bar-button' !== cls;
-      });
-      if (classes.length > 0) {
-        return classes.join('-');
-      }
-      return 'unknown-top-bar-button';
-    }
-  }]);
-}(_baseTracking.default);
-var _default = exports["default"] = TopBarTracking;
-
-/***/ }),
-
 /***/ "../app/assets/js/event-track/dashboard/utils.js":
 /*!*******************************************************!*\
   !*** ../app/assets/js/event-track/dashboard/utils.js ***!
@@ -1087,8 +1316,8 @@ var _navigation = _interopRequireDefault(__webpack_require__(/*! ./dashboard/nav
 var _pluginActions = _interopRequireDefault(__webpack_require__(/*! ./dashboard/plugin-actions */ "../app/assets/js/event-track/dashboard/plugin-actions.js"));
 var _promotion = _interopRequireDefault(__webpack_require__(/*! ./dashboard/promotion */ "../app/assets/js/event-track/dashboard/promotion.js"));
 var _screenView = _interopRequireDefault(__webpack_require__(/*! ./dashboard/screen-view */ "../app/assets/js/event-track/dashboard/screen-view.js"));
-var _topBar = _interopRequireDefault(__webpack_require__(/*! ./dashboard/top-bar */ "../app/assets/js/event-track/dashboard/top-bar.js"));
 var _menuPromotion = _interopRequireDefault(__webpack_require__(/*! ./dashboard/menu-promotion */ "../app/assets/js/event-track/dashboard/menu-promotion.js"));
+var _actionControls = _interopRequireDefault(__webpack_require__(/*! ./dashboard/action-controls */ "../app/assets/js/event-track/dashboard/action-controls.js"));
 var SESSION_TIMEOUT_MINUTES = 30;
 var MINUTE_MS = 60 * 1000;
 var SESSION_TIMEOUT = SESSION_TIMEOUT_MINUTES * MINUTE_MS;
@@ -1101,13 +1330,15 @@ var CONTROL_TYPES = exports.CONTROL_TYPES = {
   RADIO: 'radio',
   LINK: 'link',
   SELECT: 'select',
-  TOGGLE: 'toggle'
+  TOGGLE: 'toggle',
+  FILTER: 'filter'
 };
 var NAV_AREAS = exports.NAV_AREAS = {
   LEFT_MENU: 'left_menu',
   SUBMENU: 'submenu',
   HOVER_MENU: 'hover_menu',
-  TOP_BAR: 'top_bar'
+  TOP_BAR: 'top_bar',
+  SIDEBAR_MENU: 'sidebar'
 };
 var SCREEN_TYPES = exports.SCREEN_TYPES = {
   TAB: 'tab',
@@ -1119,6 +1350,11 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
     (0, _classCallCheck2.default)(this, WpDashboardTracking);
   }
   return (0, _createClass2.default)(WpDashboardTracking, null, [{
+    key: "getElementorCommon",
+    value: function getElementorCommon() {
+      return window.elementorCommon;
+    }
+  }, {
     key: "init",
     value: function init() {
       if (this.initialized) {
@@ -1149,6 +1385,13 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
       }
       this.processPendingNavClick();
       this.saveSessionToStorage();
+    }
+  }, {
+    key: "isEditorOneActive",
+    value: function isEditorOneActive() {
+      var _elementorCommon$conf, _elementorCommon$conf2;
+      var elementorCommon = this.getElementorCommon();
+      return (_elementorCommon$conf = elementorCommon === null || elementorCommon === void 0 || (_elementorCommon$conf2 = elementorCommon.config) === null || _elementorCommon$conf2 === void 0 || (_elementorCommon$conf2 = _elementorCommon$conf2.editor_events) === null || _elementorCommon$conf2 === void 0 ? void 0 : _elementorCommon$conf2.isEditorOneActive) !== null && _elementorCommon$conf !== void 0 ? _elementorCommon$conf : false;
     }
   }, {
     key: "processPendingNavClick",
@@ -1204,24 +1447,27 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
   }, {
     key: "isEventsManagerAvailable",
     value: function isEventsManagerAvailable() {
-      var _elementorCommon;
-      return ((_elementorCommon = elementorCommon) === null || _elementorCommon === void 0 ? void 0 : _elementorCommon.eventsManager) && 'function' === typeof elementorCommon.eventsManager.dispatchEvent;
+      var elementorCommon = this.getElementorCommon();
+      return (elementorCommon === null || elementorCommon === void 0 ? void 0 : elementorCommon.eventsManager) && 'function' === typeof elementorCommon.eventsManager.dispatchEvent;
     }
   }, {
     key: "canSendEvents",
     value: function canSendEvents() {
-      var _elementorCommon2;
-      return ((_elementorCommon2 = elementorCommon) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.config) === null || _elementorCommon2 === void 0 || (_elementorCommon2 = _elementorCommon2.editor_events) === null || _elementorCommon2 === void 0 ? void 0 : _elementorCommon2.can_send_events) || false;
+      var _elementorCommon$conf3, _elementorCommon$conf4;
+      var elementorCommon = this.getElementorCommon();
+      return (_elementorCommon$conf3 = elementorCommon === null || elementorCommon === void 0 || (_elementorCommon$conf4 = elementorCommon.config) === null || _elementorCommon$conf4 === void 0 || (_elementorCommon$conf4 = _elementorCommon$conf4.editor_events) === null || _elementorCommon$conf4 === void 0 ? void 0 : _elementorCommon$conf4.can_send_events) !== null && _elementorCommon$conf3 !== void 0 ? _elementorCommon$conf3 : false;
     }
   }, {
     key: "dispatchEvent",
     value: function dispatchEvent(eventName) {
+      var _elementorCommon$even;
       var properties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
       if (!this.isEventsManagerAvailable() || !this.canSendEvents()) {
         return;
       }
-      elementorCommon.eventsManager.dispatchEvent(eventName, properties, options);
+      var elementorCommon = this.getElementorCommon();
+      elementorCommon === null || elementorCommon === void 0 || (_elementorCommon$even = elementorCommon.eventsManager) === null || _elementorCommon$even === void 0 || _elementorCommon$even.dispatchEvent(eventName, properties, options);
     }
   }, {
     key: "updateActivity",
@@ -1258,7 +1504,7 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
         var page = params.get('page');
         var postType = params.get('post_type');
         var action = params.get('action');
-        var elementorPages = ['elementor', 'go_knowledge_base_site', 'e-form-submissions'];
+        var elementorPages = ['elementor-home', 'e-form-submissions'];
         var elementorPostTypes = ['elementor_library', 'e-floating-buttons'];
         return page && elementorPages.some(function (p) {
           return page.includes(p);
@@ -1309,6 +1555,10 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
           } else if (_this2.isElementorPage(link.href)) {
             _this2.isNavigatingToElementor = true;
           }
+        }
+        var isSidebar = event.target.closest('#editor-one-sidebar-navigation');
+        if (isSidebar) {
+          _this2.isNavigatingToElementor = true;
         }
       };
       var handleFormSubmit = function handleFormSubmit(event) {
@@ -1451,10 +1701,10 @@ var WpDashboardTracking = exports["default"] = /*#__PURE__*/function () {
         document.removeEventListener(type, handler, true);
       });
       this.navigationListeners = [];
-      _topBar.default.destroy();
       _screenView.default.destroy();
       _promotion.default.destroy();
       _menuPromotion.default.destroy();
+      _actionControls.default.destroy();
       this.initialized = false;
     }
   }]);
@@ -1477,10 +1727,10 @@ window.addEventListener('elementor/admin/init', function () {
   _navigation.default.init();
   if (isElementorPage) {
     WpDashboardTracking.init();
-    _topBar.default.init();
     _screenView.default.init();
     _promotion.default.init();
     _menuPromotion.default.init();
+    _actionControls.default.init();
   }
 });
 window.addEventListener('beforeunload', function () {
@@ -1540,123 +1790,6 @@ function render(app, domElement) {
 }
 var _default = exports["default"] = {
   render: render
-};
-
-/***/ }),
-
-/***/ "../modules/home/assets/js/components/addons-section.js":
-/*!**************************************************************!*\
-  !*** ../modules/home/assets/js/components/addons-section.js ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-var _objectDestructuringEmpty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/objectDestructuringEmpty */ "../node_modules/@babel/runtime/helpers/objectDestructuringEmpty.js"));
-var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _List = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/List */ "@elementor/ui/List"));
-var _Link = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Link */ "@elementor/ui/Link"));
-var _Button = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Button */ "@elementor/ui/Button"));
-var _Card = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Card */ "@elementor/ui/Card"));
-var _CardActions = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/CardActions */ "@elementor/ui/CardActions"));
-var _CardContent = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/CardContent */ "@elementor/ui/CardContent"));
-var _CardMedia = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/CardMedia */ "@elementor/ui/CardMedia"));
-var _promoTracking = __webpack_require__(/*! ../utils/promo-tracking */ "../modules/home/assets/js/utils/promo-tracking.js");
-var Addons = function Addons(_ref) {
-  var props = (0, _extends2.default)({}, ((0, _objectDestructuringEmpty2.default)(_ref), _ref));
-  var domain = props.adminUrl.replace('wp-admin/', '');
-  var addonsArray = props.addonsData.repeater;
-  var cardsPerRow = 3 === addonsArray.length ? 3 : 2;
-  var handleAddonClick = function handleAddonClick(title, url) {
-    (0, _promoTracking.trackPromoClick)(title, url, (0, _promoTracking.getHomeScreenPath)('addons'));
-  };
-  return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
-    elevation: 0,
-    sx: {
-      p: 3,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 2
-    }
-  }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
-    variant: "h6"
-  }, props.addonsData.header.title), /*#__PURE__*/_react.default.createElement(_ui.Typography, {
-    variant: "body2",
-    color: "text.secondary"
-  }, props.addonsData.header.description)), /*#__PURE__*/_react.default.createElement(_List.default, {
-    sx: {
-      display: 'grid',
-      gridTemplateColumns: {
-        md: "repeat(".concat(cardsPerRow, ", 1fr)"),
-        xs: 'repeat(1, 1fr)'
-      },
-      gap: 2
-    }
-  }, addonsArray.map(function (item) {
-    var linkTarget = item.hasOwnProperty('target') ? item.target : '_blank';
-    return /*#__PURE__*/_react.default.createElement(_Card.default, {
-      key: item.title,
-      elevation: 0,
-      sx: {
-        display: 'flex',
-        border: 1,
-        borderRadius: 1,
-        borderColor: 'action.focus'
-      }
-    }, /*#__PURE__*/_react.default.createElement(_CardContent.default, {
-      sx: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        gap: 3,
-        p: 3
-      }
-    }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_CardMedia.default, {
-      image: item.image,
-      sx: {
-        height: '58px',
-        width: '58px',
-        mb: 2
-      }
-    }), /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
-      variant: "subtitle2"
-    }, item.title), /*#__PURE__*/_react.default.createElement(_ui.Typography, {
-      variant: "body2",
-      color: "text.secondary"
-    }, item.description))), /*#__PURE__*/_react.default.createElement(_CardActions.default, {
-      sx: {
-        p: 0
-      }
-    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
-      variant: "outlined",
-      size: "small",
-      color: "promotion",
-      href: item.url,
-      target: linkTarget,
-      onClick: function onClick() {
-        return handleAddonClick(item.title, item.url);
-      }
-    }, item.button_label))));
-  })), /*#__PURE__*/_react.default.createElement(_Link.default, {
-    variant: "body2",
-    color: "info.main",
-    underline: "none",
-    href: "".concat(domain).concat(props.addonsData.footer.file_path)
-  }, props.addonsData.footer.label));
-};
-var _default = exports["default"] = Addons;
-Addons.propTypes = {
-  addonsData: PropTypes.object.isRequired,
-  adminUrl: PropTypes.string.isRequired
 };
 
 /***/ }),
@@ -1827,12 +1960,17 @@ var CreateWithAIBanner = function CreateWithAIBanner(_ref) {
       display: 'flex',
       flexDirection: 'column',
       py: 3,
-      px: 4,
+      px: {
+        xs: 3,
+        md: 4
+      },
       gap: 2,
       backgroundImage: "url(".concat(backgroundImage, ")"),
       backgroundSize: 'cover',
       backgroundPosition: 'right center',
-      backgroundRepeat: 'no-repeat'
+      backgroundRepeat: 'no-repeat',
+      borderRadius: 1,
+      border: '1px solid rgba(0, 0, 0, 0.12)'
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     gap: 1,
@@ -1903,17 +2041,37 @@ var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
 var _List = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/List */ "@elementor/ui/List"));
 var _ListItemButton = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/ListItemButton */ "@elementor/ui/ListItemButton"));
 var _ListItemText = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/ListItemText */ "@elementor/ui/ListItemText"));
-var _Divider = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Divider */ "@elementor/ui/Divider"));
 var ExternalLinksSection = function ExternalLinksSection(_ref) {
   var props = (0, _extends2.default)({}, ((0, _objectDestructuringEmpty2.default)(_ref), _ref));
   return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
     elevation: 0,
     sx: {
-      px: 3
+      py: 3,
+      px: {
+        xs: 3,
+        md: 4
+      },
+      borderRadius: 1,
+      border: '1px solid rgba(0, 0, 0, 0.12)'
     }
-  }, /*#__PURE__*/_react.default.createElement(_List.default, null, props.externalLinksData.map(function (item, index) {
+  }, /*#__PURE__*/_react.default.createElement(_List.default, {
+    sx: {
+      display: 'flex',
+      flexDirection: {
+        xs: 'column',
+        sm: 'row'
+      },
+      rowGap: 2,
+      columnGap: 7.5,
+      flexWrap: 'wrap'
+    }
+  }, props.externalLinksData.map(function (item) {
     return /*#__PURE__*/_react.default.createElement(_ui.Box, {
-      key: item.label
+      key: item.label,
+      sx: {
+        display: 'flex',
+        alignItems: 'center'
+      }
     }, /*#__PURE__*/_react.default.createElement(_ListItemButton.default, {
       href: item.url,
       target: "_blank",
@@ -1923,7 +2081,7 @@ var ExternalLinksSection = function ExternalLinksSection(_ref) {
         },
         gap: 2,
         px: 0,
-        py: 2
+        py: 0
       }
     }, /*#__PURE__*/_react.default.createElement(_ui.Box, {
       component: "img",
@@ -1936,7 +2094,7 @@ var ExternalLinksSection = function ExternalLinksSection(_ref) {
         color: 'text.secondary'
       },
       primary: item.label
-    })), index < props.externalLinksData.length - 1 && /*#__PURE__*/_react.default.createElement(_Divider.default, null));
+    })));
   })));
 };
 var _default = exports["default"] = ExternalLinksSection;
@@ -2040,7 +2198,6 @@ GetStartedListItem.propTypes = {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -2053,16 +2210,25 @@ var _objectDestructuringEmpty2 = _interopRequireDefault(__webpack_require__(/*! 
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
 var _List = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/List */ "@elementor/ui/List"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
 var _getStartedListItem = _interopRequireDefault(__webpack_require__(/*! ./get-started-list-item */ "../modules/home/assets/js/components/get-started-list-item.js"));
 var GetStarted = function GetStarted(_ref) {
   var props = (0, _extends2.default)({}, ((0, _objectDestructuringEmpty2.default)(_ref), _ref));
+  var hasSidebarPromotion = props.homeScreenData.hasOwnProperty('sidebar_promotion_variants');
+  var mdGridColumns = hasSidebarPromotion ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)';
   return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
     elevation: 0,
     sx: {
-      p: 3,
+      py: 3,
+      px: {
+        xs: 3,
+        md: 4
+      },
       display: 'flex',
       flexDirection: 'column',
-      gap: 2
+      gap: 2,
+      borderRadius: 1,
+      border: '1px solid rgba(0, 0, 0, 0.12)'
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
     variant: "h6"
@@ -2073,7 +2239,8 @@ var GetStarted = function GetStarted(_ref) {
     sx: {
       display: 'grid',
       gridTemplateColumns: {
-        md: 'repeat(4, 1fr)',
+        xl: 'repeat(4, 1fr)',
+        md: mdGridColumns,
         xs: 'repeat(2, 1fr)'
       },
       columnGap: {
@@ -2093,9 +2260,58 @@ var GetStarted = function GetStarted(_ref) {
 };
 var _default = exports["default"] = GetStarted;
 GetStarted.propTypes = {
-  getStartedData: PropTypes.object.isRequired,
-  adminUrl: PropTypes.string.isRequired
+  getStartedData: _propTypes.default.object.isRequired,
+  adminUrl: _propTypes.default.string.isRequired,
+  homeScreenData: _propTypes.default.object.isRequired
 };
+
+/***/ }),
+
+/***/ "../modules/home/assets/js/components/header-section.js":
+/*!**************************************************************!*\
+  !*** ../modules/home/assets/js/components/header-section.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _Typography = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Typography */ "@elementor/ui/Typography"));
+var _Button = _interopRequireDefault(__webpack_require__(/*! @elementor/ui/Button */ "@elementor/ui/Button"));
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var HeaderSection = function HeaderSection(props) {
+  return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
+    elevation: 0,
+    sx: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      pt: 2.5
+    }
+  }, /*#__PURE__*/_react.default.createElement(_Typography.default, {
+    variant: "h5"
+  }, (0, _i18n.__)('Quick Start', 'elementor')), /*#__PURE__*/_react.default.createElement(_Button.default, {
+    variant: "contained",
+    size: "medium",
+    color: "primary",
+    href: props.editWebsiteUrl,
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, (0, _i18n.__)('Edit site', 'elementor')));
+};
+HeaderSection.propTypes = {
+  editWebsiteUrl: _propTypes.default.string.isRequired
+};
+var _default = exports["default"] = HeaderSection;
 
 /***/ }),
 
@@ -2116,35 +2332,34 @@ Object.defineProperty(exports, "__esModule", ({
 exports["default"] = void 0;
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _headerSection = _interopRequireDefault(__webpack_require__(/*! ./header-section */ "../modules/home/assets/js/components/header-section.js"));
 var _topSection = _interopRequireDefault(__webpack_require__(/*! ./top-section */ "../modules/home/assets/js/components/top-section.js"));
 var _sidebarPromotion = _interopRequireDefault(__webpack_require__(/*! ./sidebar-promotion */ "../modules/home/assets/js/components/sidebar-promotion.js"));
-var _addonsSection = _interopRequireDefault(__webpack_require__(/*! ./addons-section */ "../modules/home/assets/js/components/addons-section.js"));
 var _externalLinksSection = _interopRequireDefault(__webpack_require__(/*! ./external-links-section */ "../modules/home/assets/js/components/external-links-section.js"));
 var _getStartedSection = _interopRequireDefault(__webpack_require__(/*! ./get-started-section */ "../modules/home/assets/js/components/get-started-section.js"));
 var _createWithAiBanner = _interopRequireDefault(__webpack_require__(/*! ./create-with-ai-banner */ "../modules/home/assets/js/components/create-with-ai-banner.js"));
-var HomeScreen = function HomeScreen(props) {
+var _loadFallbackMessage = _interopRequireDefault(__webpack_require__(/*! ./load-fallback-message */ "../modules/home/assets/js/components/load-fallback-message.js"));
+var EditorScreen = function EditorScreen(props) {
+  var _props$homeScreenData;
+  if (!((_props$homeScreenData = props.homeScreenData) !== null && _props$homeScreenData !== void 0 && _props$homeScreenData.get_started)) {
+    return /*#__PURE__*/_react.default.createElement(_loadFallbackMessage.default, null);
+  }
   var hasSidebarPromotion = props.homeScreenData.hasOwnProperty('sidebar_promotion_variants');
-  return /*#__PURE__*/ /*  Box wrapper around the Container is needed to neutralize wp-content area left-padding */_react.default.createElement(_ui.Box, {
-    sx: {
-      pr: 1
-    }
-  }, /*#__PURE__*/_react.default.createElement(_ui.Container, {
+  return /*#__PURE__*/ /*  Box wrapper around the Container is needed to neutralize wp-content area left-padding */_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Container, {
     disableGutters: true,
     maxWidth: "lg",
     sx: {
       display: 'flex',
       flexDirection: 'column',
-      gap: {
-        xs: 1,
-        md: 3
-      },
-      pt: {
-        xs: 2,
-        md: 6
-      },
-      pb: 2
+      gap: 2.5,
+      px: {
+        xs: 1.5,
+        md: 4
+      }
     }
-  }, props.homeScreenData.top_with_licences && /*#__PURE__*/_react.default.createElement(_topSection.default, {
+  }, /*#__PURE__*/_react.default.createElement(_headerSection.default, {
+    editWebsiteUrl: props.homeScreenData.edit_website_url
+  }), props.homeScreenData.top_with_licences && /*#__PURE__*/_react.default.createElement(_topSection.default, {
     topData: props.homeScreenData.top_with_licences,
     buttonCtaUrl: props.homeScreenData.button_cta_url
   }), /*#__PURE__*/_react.default.createElement(_ui.Box, {
@@ -2155,22 +2370,22 @@ var HomeScreen = function HomeScreen(props) {
         sm: 'row'
       },
       justifyContent: 'space-between',
-      gap: 3
+      gap: 2.5
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     sx: {
       flex: 1,
-      gap: 3
+      gap: 2.5
     }
   }, props.homeScreenData.create_with_ai && /*#__PURE__*/_react.default.createElement(_createWithAiBanner.default, {
     createWithAIData: props.homeScreenData.create_with_ai
   }), /*#__PURE__*/_react.default.createElement(_getStartedSection.default, {
     getStartedData: props.homeScreenData.get_started,
-    adminUrl: props.adminUrl
-  }), /*#__PURE__*/_react.default.createElement(_addonsSection.default, {
-    addonsData: props.homeScreenData.add_ons,
-    adminUrl: props.adminUrl
-  })), /*#__PURE__*/_react.default.createElement(_ui.Container, {
+    adminUrl: props.adminUrl,
+    homeScreenData: props.homeScreenData
+  }), /*#__PURE__*/_react.default.createElement(_externalLinksSection.default, {
+    externalLinksData: props.homeScreenData.external_links
+  })), hasSidebarPromotion && /*#__PURE__*/_react.default.createElement(_ui.Container, {
     maxWidth: "xs",
     disableGutters: true,
     sx: {
@@ -2179,19 +2394,61 @@ var HomeScreen = function HomeScreen(props) {
       },
       display: 'flex',
       flexDirection: 'column',
-      gap: 3
+      gap: 2.5
     }
-  }, hasSidebarPromotion && /*#__PURE__*/_react.default.createElement(_sidebarPromotion.default, {
+  }, /*#__PURE__*/_react.default.createElement(_sidebarPromotion.default, {
     sideData: props.homeScreenData.sidebar_promotion_variants
-  }), /*#__PURE__*/_react.default.createElement(_externalLinksSection.default, {
-    externalLinksData: props.homeScreenData.external_links
   })))));
 };
-HomeScreen.propTypes = {
+EditorScreen.propTypes = {
   homeScreenData: PropTypes.object,
   adminUrl: PropTypes.string
 };
-var _default = exports["default"] = HomeScreen;
+var _default = exports["default"] = EditorScreen;
+
+/***/ }),
+
+/***/ "../modules/home/assets/js/components/load-fallback-message.js":
+/*!*********************************************************************!*\
+  !*** ../modules/home/assets/js/components/load-fallback-message.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
+var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+var LoadFallbackMessage = function LoadFallbackMessage() {
+  return /*#__PURE__*/_react.default.createElement(_ui.Box, null, /*#__PURE__*/_react.default.createElement(_ui.Container, {
+    disableGutters: true,
+    maxWidth: "lg",
+    sx: {
+      px: 4,
+      pt: 4
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Paper, {
+    elevation: 0,
+    sx: {
+      py: 4,
+      px: 4,
+      borderRadius: 1,
+      border: 1,
+      borderColor: 'divider',
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/_react.default.createElement(_ui.Typography, {
+    variant: "body1",
+    color: "text.secondary"
+  }, (0, _i18n.__)("We couldn't load this content right now. Please try again later.", 'elementor')))));
+};
+var _default = exports["default"] = LoadFallbackMessage;
 
 /***/ }),
 
@@ -2223,7 +2480,8 @@ var SidebarBanner = function SidebarBanner(_ref) {
   return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
     elevation: 0,
     sx: {
-      overflow: 'hidden'
+      overflow: 'hidden',
+      borderRadius: 1
     }
   }, /*#__PURE__*/_react.default.createElement(_Link.default, {
     target: "_blank",
@@ -2292,7 +2550,8 @@ var SidebarDefault = function SidebarDefault(_ref) {
   return /*#__PURE__*/_react.default.createElement(_ui.Paper, {
     elevation: 0,
     sx: {
-      p: 3
+      p: 3,
+      borderRadius: 1
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     gap: 1.5,
@@ -2439,10 +2698,7 @@ var TopSection = function TopSection(_ref) {
         sm: 'row'
       },
       justifyContent: 'space-between',
-      py: {
-        xs: 3,
-        md: 3
-      },
+      py: 3,
       px: {
         xs: 3,
         md: 4
@@ -2450,8 +2706,11 @@ var TopSection = function TopSection(_ref) {
       gap: {
         xs: 2,
         sm: 3,
-        lg: 22
-      }
+        lg: 10,
+        xl: 22
+      },
+      borderRadius: 1,
+      border: '1px solid rgba(0, 0, 0, 0.12)'
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Stack, {
     gap: 3,
@@ -4162,50 +4421,6 @@ module.exports = elementorV2.ui['Button'];
 
 /***/ }),
 
-/***/ "@elementor/ui/Card":
-/*!*****************************************!*\
-  !*** external "elementorV2.ui['Card']" ***!
-  \*****************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = elementorV2.ui['Card'];
-
-/***/ }),
-
-/***/ "@elementor/ui/CardActions":
-/*!************************************************!*\
-  !*** external "elementorV2.ui['CardActions']" ***!
-  \************************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = elementorV2.ui['CardActions'];
-
-/***/ }),
-
-/***/ "@elementor/ui/CardContent":
-/*!************************************************!*\
-  !*** external "elementorV2.ui['CardContent']" ***!
-  \************************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = elementorV2.ui['CardContent'];
-
-/***/ }),
-
-/***/ "@elementor/ui/CardMedia":
-/*!**********************************************!*\
-  !*** external "elementorV2.ui['CardMedia']" ***!
-  \**********************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = elementorV2.ui['CardMedia'];
-
-/***/ }),
-
 /***/ "@elementor/ui/Dialog":
 /*!*******************************************!*\
   !*** external "elementorV2.ui['Dialog']" ***!
@@ -4280,17 +4495,6 @@ module.exports = elementorV2.ui['DialogHeaderGroup'];
 
 "use strict";
 module.exports = elementorV2.ui['DialogTitle'];
-
-/***/ }),
-
-/***/ "@elementor/ui/Divider":
-/*!********************************************!*\
-  !*** external "elementorV2.ui['Divider']" ***!
-  \********************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = elementorV2.ui['Divider'];
 
 /***/ }),
 

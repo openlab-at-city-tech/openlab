@@ -410,8 +410,8 @@ var _default = exports["default"] = function _default(object, constructors) {
     _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _constructor = _step.value;
-      if (object.constructor.name === _constructor.prototype[Symbol.toStringTag]) {
+      var constructor = _step.value;
+      if (object.constructor.name === constructor.prototype[Symbol.toStringTag]) {
         return true;
       }
     }

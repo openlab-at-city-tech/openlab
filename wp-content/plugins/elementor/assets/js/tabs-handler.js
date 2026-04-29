@@ -1,51 +1,146 @@
 "use strict";
 (self["webpackChunkelementorFrontend"] = self["webpackChunkelementorFrontend"] || []).push([["tabs-handler"],{
 
-/***/ "../modules/atomic-widgets/elements/atomic-tabs/atomic-tabs-handler.js":
-/*!*****************************************************************************!*\
-  !*** ../modules/atomic-widgets/elements/atomic-tabs/atomic-tabs-handler.js ***!
-  \*****************************************************************************/
+/***/ "../modules/atomic-widgets/elements/atomic-tabs/handlers/atomic-tabs-handler.js":
+/*!**************************************************************************************!*\
+  !*** ../modules/atomic-widgets/elements/atomic-tabs/handlers/atomic-tabs-handler.js ***!
+  \**************************************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 
 
-__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
-__webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "../node_modules/core-js/modules/esnext.iterator.for-each.js");
 var _frontendHandlers = __webpack_require__(/*! @elementor/frontend-handlers */ "@elementor/frontend-handlers");
+var _alpinejs = __webpack_require__(/*! @elementor/alpinejs */ "@elementor/alpinejs");
+var _utils = __webpack_require__(/*! ./utils */ "../modules/atomic-widgets/elements/atomic-tabs/handlers/utils.js");
+const SELECTED_CLASS = 'e--selected';
 (0, _frontendHandlers.register)({
   elementType: 'e-tabs',
-  uniqueId: 'e-tabs-handler',
+  id: 'e-tabs-handler',
   callback: ({
     element,
-    signal
+    settings
   }) => {
-    const tabs = element.querySelectorAll('[data-element_type="e-tab"]');
-    const tabPanels = element.querySelectorAll('[data-element_type="e-tab-panel"]');
-    const setActiveTab = id => {
-      tabPanels.forEach(tabPanel => {
-        const activeTab = tabPanel.getAttribute('data-tab-id') === id;
-        if (activeTab) {
-          tabPanel.style.removeProperty('display');
-          tabPanel.removeAttribute('hidden');
-          return;
+    const tabsId = element.dataset.id;
+    _alpinejs.Alpine.data(`eTabs${tabsId}`, () => ({
+      activeTab: settings['default-active-tab'],
+      navigateTabs({
+        key,
+        target: tab
+      }) {
+        const nextTab = (0, _utils.getNextTab)(key, tab);
+        nextTab.focus();
+      },
+      tab: {
+        ':id'() {
+          const index = (0, _utils.getIndex)(this.$el, _utils.TAB_ELEMENT_TYPE);
+          return (0, _utils.getTabId)(tabsId, index);
+        },
+        '@click'() {
+          const id = this.$el.id;
+          this.activeTab = id;
+        },
+        '@keydown.arrow-right.prevent'(event) {
+          this.navigateTabs(event);
+        },
+        '@keydown.arrow-left.prevent'(event) {
+          this.navigateTabs(event);
+        },
+        ':class'() {
+          const id = this.$el.id;
+          return {
+            [SELECTED_CLASS]: this.activeTab === id
+          };
+        },
+        ':aria-selected'() {
+          const id = this.$el.id;
+          return this.activeTab === id ? 'true' : 'false';
+        },
+        ':tabindex'() {
+          const id = this.$el.id;
+          return this.activeTab === id ? '0' : '-1';
+        },
+        ':aria-controls'() {
+          const index = (0, _utils.getIndex)(this.$el, _utils.TAB_ELEMENT_TYPE);
+          return (0, _utils.getTabContentId)(tabsId, index);
         }
-        tabPanel.style.display = 'none';
-        tabPanel.setAttribute('hidden', 'true');
-      });
-    };
-    const defaultActiveTab = element.getAttribute('data-active-tab');
-    setActiveTab(defaultActiveTab);
-    tabs.forEach(tab => {
-      const clickHandler = () => {
-        const tabId = tab.getAttribute('data-id');
-        setActiveTab(tabId);
-      };
-      tab.addEventListener('click', clickHandler, {
-        signal
-      });
-    });
+      },
+      tabContent: {
+        ':aria-labelledby'() {
+          const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
+          return (0, _utils.getTabId)(tabsId, index);
+        },
+        'x-show'() {
+          const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
+          const tabId = (0, _utils.getTabId)(tabsId, index);
+          const isActive = this.activeTab === tabId;
+          this.$nextTick(() => {
+            this.$el.classList.toggle(SELECTED_CLASS, isActive);
+          });
+          return isActive;
+        },
+        ':id'() {
+          const index = (0, _utils.getIndex)(this.$el, _utils.TAB_CONTENT_ELEMENT_TYPE);
+          return (0, _utils.getTabContentId)(tabsId, index);
+        }
+      }
+    }));
   }
 });
+
+/***/ }),
+
+/***/ "../modules/atomic-widgets/elements/atomic-tabs/handlers/utils.js":
+/*!************************************************************************!*\
+  !*** ../modules/atomic-widgets/elements/atomic-tabs/handlers/utils.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getTabId = exports.getTabContentId = exports.getNextTab = exports.getIndex = exports.getChildren = exports.TAB_ELEMENT_TYPE = exports.TAB_CONTENT_ELEMENT_TYPE = exports.TABS_MENU_ELEMENT_TYPE = exports.TABS_CONTENT_AREA_ELEMENT_TYPE = void 0;
+__webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "../node_modules/core-js/modules/esnext.iterator.constructor.js");
+__webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "../node_modules/core-js/modules/esnext.iterator.filter.js");
+const TAB_ELEMENT_TYPE = exports.TAB_ELEMENT_TYPE = 'e-tab';
+const TAB_CONTENT_ELEMENT_TYPE = exports.TAB_CONTENT_ELEMENT_TYPE = 'e-tab-content';
+const TABS_CONTENT_AREA_ELEMENT_TYPE = exports.TABS_CONTENT_AREA_ELEMENT_TYPE = 'e-tabs-content-area';
+const TABS_MENU_ELEMENT_TYPE = exports.TABS_MENU_ELEMENT_TYPE = 'e-tabs-menu';
+const NAVIGATE_UP_KEYS = ['ArrowUp', 'ArrowLeft'];
+const NAVIGATE_DOWN_KEYS = ['ArrowDown', 'ArrowRight'];
+const getTabId = (tabsId, tabIndex) => {
+  return `${tabsId}-tab-${tabIndex}`;
+};
+exports.getTabId = getTabId;
+const getTabContentId = (tabsId, tabIndex) => {
+  return `${tabsId}-tab-content-${tabIndex}`;
+};
+exports.getTabContentId = getTabContentId;
+const getChildren = (el, elementType) => {
+  const parent = el.parentElement;
+  return Array.from(parent.children).filter(child => {
+    return child.dataset.element_type === elementType;
+  });
+};
+exports.getChildren = getChildren;
+const getIndex = (el, elementType) => {
+  const children = getChildren(el, elementType);
+  return children.indexOf(el);
+};
+exports.getIndex = getIndex;
+const getNextTab = (key, tab) => {
+  const tabs = getChildren(tab, TAB_ELEMENT_TYPE);
+  const tabsLength = tabs.length;
+  const currentIndex = getIndex(tab, TAB_ELEMENT_TYPE);
+  if (NAVIGATE_DOWN_KEYS.includes(key)) {
+    return tabs[(currentIndex + 1) % tabsLength];
+  }
+  if (NAVIGATE_UP_KEYS.includes(key)) {
+    return tabs[(currentIndex - 1 + tabsLength) % tabsLength];
+  }
+};
+exports.getNextTab = getNextTab;
 
 /***/ }),
 
@@ -154,6 +249,28 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/call-with-safe-iteration-closing.js":
+/*!*****************************************************************************!*\
+  !*** ../node_modules/core-js/internals/call-with-safe-iteration-closing.js ***!
+  \*****************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+
+// call something on iterator step with safe closing on error
+module.exports = function (iterator, fn, value, ENTRIES) {
+  try {
+    return ENTRIES ? fn(anObject(value)[0], value[1]) : fn(value);
+  } catch (error) {
+    iteratorClose(iterator, 'throw', error);
+  }
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/classof-raw.js":
 /*!********************************************************!*\
   !*** ../node_modules/core-js/internals/classof-raw.js ***!
@@ -168,46 +285,6 @@ var stringSlice = uncurryThis(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/classof.js":
-/*!****************************************************!*\
-  !*** ../node_modules/core-js/internals/classof.js ***!
-  \****************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var TO_STRING_TAG_SUPPORT = __webpack_require__(/*! ../internals/to-string-tag-support */ "../node_modules/core-js/internals/to-string-tag-support.js");
-var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
-var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "../node_modules/core-js/internals/classof-raw.js");
-var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
-
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var $Object = Object;
-
-// ES3 wrong here
-var CORRECT_ARGUMENTS = classofRaw(function () { return arguments; }()) === 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (error) { /* empty */ }
-};
-
-// getting tag from ES6+ `Object.prototype.toString`
-module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
-  var O, tag, result;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (tag = tryGet(O = $Object(it), TO_STRING_TAG)) == 'string' ? tag
-    // builtinTag case
-    : CORRECT_ARGUMENTS ? classofRaw(O)
-    // ES3 arguments fallback
-    : (result = classofRaw(O)) === 'Object' && isCallable(O.callee) ? 'Arguments' : result;
 };
 
 
@@ -255,6 +332,22 @@ module.exports = !fails(function () {
   // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
   return Object.getPrototypeOf(new F()) !== F.prototype;
 });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/create-iter-result-object.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/core-js/internals/create-iter-result-object.js ***!
+  \**********************************************************************/
+/***/ ((module) => {
+
+
+// `CreateIterResultObject` abstract operation
+// https://tc39.es/ecma262/#sec-createiterresultobject
+module.exports = function (value, done) {
+  return { value: value, done: done };
+};
 
 
 /***/ }),
@@ -370,6 +463,23 @@ module.exports = function (O, key, value, options) {
       writable: !options.nonWritable
     });
   } return O;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/define-built-ins.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/core-js/internals/define-built-ins.js ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var defineBuiltIn = __webpack_require__(/*! ../internals/define-built-in */ "../node_modules/core-js/internals/define-built-in.js");
+
+module.exports = function (target, src, options) {
+  for (var key in src) defineBuiltIn(target, key, src[key], options);
+  return target;
 };
 
 
@@ -596,30 +706,6 @@ module.exports = function (exec) {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/function-bind-context.js":
-/*!******************************************************************!*\
-  !*** ../node_modules/core-js/internals/function-bind-context.js ***!
-  \******************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "../node_modules/core-js/internals/function-uncurry-this-clause.js");
-var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
-var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
-
-var bind = uncurryThis(uncurryThis.bind);
-
-// optional / simple context binding
-module.exports = function (fn, that) {
-  aCallable(fn);
-  return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function (/* ...args */) {
-    return fn.apply(that, arguments);
-  };
-};
-
-
-/***/ }),
-
 /***/ "../node_modules/core-js/internals/function-bind-native.js":
 /*!*****************************************************************!*\
   !*** ../node_modules/core-js/internals/function-bind-native.js ***!
@@ -685,26 +771,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/function-uncurry-this-clause.js":
-/*!*************************************************************************!*\
-  !*** ../node_modules/core-js/internals/function-uncurry-this-clause.js ***!
-  \*************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "../node_modules/core-js/internals/classof-raw.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
-
-module.exports = function (fn) {
-  // Nashorn bug:
-  //   https://github.com/zloirock/core-js/issues/1128
-  //   https://github.com/zloirock/core-js/issues/1130
-  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
-};
-
-
-/***/ }),
-
 /***/ "../node_modules/core-js/internals/function-uncurry-this.js":
 /*!******************************************************************!*\
   !*** ../node_modules/core-js/internals/function-uncurry-this.js ***!
@@ -757,61 +823,13 @@ module.exports = function (namespace, method) {
 
 
 // `GetIteratorDirect(obj)` abstract operation
-// https://tc39.es/proposal-iterator-helpers/#sec-getiteratordirect
+// https://tc39.es/ecma262/#sec-getiteratordirect
 module.exports = function (obj) {
   return {
     iterator: obj,
     next: obj.next,
     done: false
   };
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/get-iterator-method.js":
-/*!****************************************************************!*\
-  !*** ../node_modules/core-js/internals/get-iterator-method.js ***!
-  \****************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var classof = __webpack_require__(/*! ../internals/classof */ "../node_modules/core-js/internals/classof.js");
-var getMethod = __webpack_require__(/*! ../internals/get-method */ "../node_modules/core-js/internals/get-method.js");
-var isNullOrUndefined = __webpack_require__(/*! ../internals/is-null-or-undefined */ "../node_modules/core-js/internals/is-null-or-undefined.js");
-var Iterators = __webpack_require__(/*! ../internals/iterators */ "../node_modules/core-js/internals/iterators.js");
-var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
-
-var ITERATOR = wellKnownSymbol('iterator');
-
-module.exports = function (it) {
-  if (!isNullOrUndefined(it)) return getMethod(it, ITERATOR)
-    || getMethod(it, '@@iterator')
-    || Iterators[classof(it)];
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/get-iterator.js":
-/*!*********************************************************!*\
-  !*** ../node_modules/core-js/internals/get-iterator.js ***!
-  \*********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
-var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
-var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
-var tryToString = __webpack_require__(/*! ../internals/try-to-string */ "../node_modules/core-js/internals/try-to-string.js");
-var getIteratorMethod = __webpack_require__(/*! ../internals/get-iterator-method */ "../node_modules/core-js/internals/get-iterator-method.js");
-
-var $TypeError = TypeError;
-
-module.exports = function (argument, usingIterator) {
-  var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-  if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
-  throw new $TypeError(tryToString(argument) + ' is not iterable');
 };
 
 
@@ -1065,27 +1083,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/is-array-iterator-method.js":
-/*!*********************************************************************!*\
-  !*** ../node_modules/core-js/internals/is-array-iterator-method.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
-var Iterators = __webpack_require__(/*! ../internals/iterators */ "../node_modules/core-js/internals/iterators.js");
-
-var ITERATOR = wellKnownSymbol('iterator');
-var ArrayPrototype = Array.prototype;
-
-// check on default Array iterator
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayPrototype[ITERATOR] === it);
-};
-
-
-/***/ }),
-
 /***/ "../node_modules/core-js/internals/is-callable.js":
 /*!********************************************************!*\
   !*** ../node_modules/core-js/internals/is-callable.js ***!
@@ -1209,80 +1206,27 @@ module.exports = USE_SYMBOL_AS_UID ? function (it) {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/iterate.js":
-/*!****************************************************!*\
-  !*** ../node_modules/core-js/internals/iterate.js ***!
-  \****************************************************/
+/***/ "../node_modules/core-js/internals/iterator-close-all.js":
+/*!***************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-close-all.js ***!
+  \***************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 
-var bind = __webpack_require__(/*! ../internals/function-bind-context */ "../node_modules/core-js/internals/function-bind-context.js");
-var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
-var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
-var tryToString = __webpack_require__(/*! ../internals/try-to-string */ "../node_modules/core-js/internals/try-to-string.js");
-var isArrayIteratorMethod = __webpack_require__(/*! ../internals/is-array-iterator-method */ "../node_modules/core-js/internals/is-array-iterator-method.js");
-var lengthOfArrayLike = __webpack_require__(/*! ../internals/length-of-array-like */ "../node_modules/core-js/internals/length-of-array-like.js");
-var isPrototypeOf = __webpack_require__(/*! ../internals/object-is-prototype-of */ "../node_modules/core-js/internals/object-is-prototype-of.js");
-var getIterator = __webpack_require__(/*! ../internals/get-iterator */ "../node_modules/core-js/internals/get-iterator.js");
-var getIteratorMethod = __webpack_require__(/*! ../internals/get-iterator-method */ "../node_modules/core-js/internals/get-iterator-method.js");
 var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
 
-var $TypeError = TypeError;
-
-var Result = function (stopped, result) {
-  this.stopped = stopped;
-  this.result = result;
-};
-
-var ResultPrototype = Result.prototype;
-
-module.exports = function (iterable, unboundFunction, options) {
-  var that = options && options.that;
-  var AS_ENTRIES = !!(options && options.AS_ENTRIES);
-  var IS_RECORD = !!(options && options.IS_RECORD);
-  var IS_ITERATOR = !!(options && options.IS_ITERATOR);
-  var INTERRUPTED = !!(options && options.INTERRUPTED);
-  var fn = bind(unboundFunction, that);
-  var iterator, iterFn, index, length, result, next, step;
-
-  var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal');
-    return new Result(true, condition);
-  };
-
-  var callFn = function (value) {
-    if (AS_ENTRIES) {
-      anObject(value);
-      return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
-    } return INTERRUPTED ? fn(value, stop) : fn(value);
-  };
-
-  if (IS_RECORD) {
-    iterator = iterable.iterator;
-  } else if (IS_ITERATOR) {
-    iterator = iterable;
-  } else {
-    iterFn = getIteratorMethod(iterable);
-    if (!iterFn) throw new $TypeError(tryToString(iterable) + ' is not iterable');
-    // optimisation for array iterators
-    if (isArrayIteratorMethod(iterFn)) {
-      for (index = 0, length = lengthOfArrayLike(iterable); length > index; index++) {
-        result = callFn(iterable[index]);
-        if (result && isPrototypeOf(ResultPrototype, result)) return result;
-      } return new Result(false);
-    }
-    iterator = getIterator(iterable, iterFn);
-  }
-
-  next = IS_RECORD ? iterable.next : iterator.next;
-  while (!(step = call(next, iterator)).done) {
+module.exports = function (iters, kind, value) {
+  for (var i = iters.length - 1; i >= 0; i--) {
+    if (iters[i] === undefined) continue;
     try {
-      result = callFn(step.value);
+      value = iteratorClose(iters[i].iterator, kind, value);
     } catch (error) {
-      iteratorClose(iterator, 'throw', error);
+      kind = 'throw';
+      value = error;
     }
-    if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
-  } return new Result(false);
+  }
+  if (kind === 'throw') throw value;
+  return value;
 };
 
 
@@ -1317,6 +1261,124 @@ module.exports = function (iterator, kind, value) {
   if (innerError) throw innerResult;
   anObject(innerResult);
   return value;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/iterator-create-proxy.js":
+/*!******************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-create-proxy.js ***!
+  \******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
+var create = __webpack_require__(/*! ../internals/object-create */ "../node_modules/core-js/internals/object-create.js");
+var createNonEnumerableProperty = __webpack_require__(/*! ../internals/create-non-enumerable-property */ "../node_modules/core-js/internals/create-non-enumerable-property.js");
+var defineBuiltIns = __webpack_require__(/*! ../internals/define-built-ins */ "../node_modules/core-js/internals/define-built-ins.js");
+var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
+var InternalStateModule = __webpack_require__(/*! ../internals/internal-state */ "../node_modules/core-js/internals/internal-state.js");
+var getMethod = __webpack_require__(/*! ../internals/get-method */ "../node_modules/core-js/internals/get-method.js");
+var IteratorPrototype = (__webpack_require__(/*! ../internals/iterators-core */ "../node_modules/core-js/internals/iterators-core.js").IteratorPrototype);
+var createIterResultObject = __webpack_require__(/*! ../internals/create-iter-result-object */ "../node_modules/core-js/internals/create-iter-result-object.js");
+var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorCloseAll = __webpack_require__(/*! ../internals/iterator-close-all */ "../node_modules/core-js/internals/iterator-close-all.js");
+
+var TO_STRING_TAG = wellKnownSymbol('toStringTag');
+var ITERATOR_HELPER = 'IteratorHelper';
+var WRAP_FOR_VALID_ITERATOR = 'WrapForValidIterator';
+var NORMAL = 'normal';
+var THROW = 'throw';
+var setInternalState = InternalStateModule.set;
+
+var createIteratorProxyPrototype = function (IS_ITERATOR) {
+  var getInternalState = InternalStateModule.getterFor(IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER);
+
+  return defineBuiltIns(create(IteratorPrototype), {
+    next: function next() {
+      var state = getInternalState(this);
+      // for simplification:
+      //   for `%WrapForValidIteratorPrototype%.next` or with `state.returnHandlerResult` our `nextHandler` returns `IterResultObject`
+      //   for `%IteratorHelperPrototype%.next` - just a value
+      if (IS_ITERATOR) return state.nextHandler();
+      if (state.done) return createIterResultObject(undefined, true);
+      try {
+        var result = state.nextHandler();
+        return state.returnHandlerResult ? result : createIterResultObject(result, state.done);
+      } catch (error) {
+        state.done = true;
+        throw error;
+      }
+    },
+    'return': function () {
+      var state = getInternalState(this);
+      var iterator = state.iterator;
+      state.done = true;
+      if (IS_ITERATOR) {
+        var returnMethod = getMethod(iterator, 'return');
+        return returnMethod ? call(returnMethod, iterator) : createIterResultObject(undefined, true);
+      }
+      if (state.inner) try {
+        iteratorClose(state.inner.iterator, NORMAL);
+      } catch (error) {
+        return iteratorClose(iterator, THROW, error);
+      }
+      if (state.openIters) try {
+        iteratorCloseAll(state.openIters, NORMAL);
+      } catch (error) {
+        return iteratorClose(iterator, THROW, error);
+      }
+      if (iterator) iteratorClose(iterator, NORMAL);
+      return createIterResultObject(undefined, true);
+    }
+  });
+};
+
+var WrapForValidIteratorPrototype = createIteratorProxyPrototype(true);
+var IteratorHelperPrototype = createIteratorProxyPrototype(false);
+
+createNonEnumerableProperty(IteratorHelperPrototype, TO_STRING_TAG, 'Iterator Helper');
+
+module.exports = function (nextHandler, IS_ITERATOR, RETURN_HANDLER_RESULT) {
+  var IteratorProxy = function Iterator(record, state) {
+    if (state) {
+      state.iterator = record.iterator;
+      state.next = record.next;
+    } else state = record;
+    state.type = IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER;
+    state.returnHandlerResult = !!RETURN_HANDLER_RESULT;
+    state.nextHandler = nextHandler;
+    state.counter = 0;
+    state.done = false;
+    setInternalState(this, state);
+  };
+
+  IteratorProxy.prototype = IS_ITERATOR ? WrapForValidIteratorPrototype : IteratorHelperPrototype;
+
+  return IteratorProxy;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js":
+/*!***************************************************************************************!*\
+  !*** ../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js ***!
+  \***************************************************************************************/
+/***/ ((module) => {
+
+
+// Should throw an error on invalid iterator
+// https://issues.chromium.org/issues/336839115
+module.exports = function (methodName, argument) {
+  // eslint-disable-next-line es/no-iterator -- required for testing
+  var method = typeof Iterator == 'function' && Iterator.prototype[methodName];
+  if (method) try {
+    method.call({ next: null }, argument).next();
+  } catch (error) {
+    return true;
+  }
 };
 
 
@@ -1410,18 +1472,6 @@ module.exports = {
   IteratorPrototype: IteratorPrototype,
   BUGGY_SAFARI_ITERATORS: BUGGY_SAFARI_ITERATORS
 };
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/iterators.js":
-/*!******************************************************!*\
-  !*** ../node_modules/core-js/internals/iterators.js ***!
-  \******************************************************/
-/***/ ((module) => {
-
-
-module.exports = {};
 
 
 /***/ }),
@@ -2005,10 +2055,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.43.0',
+  version: '3.46.0',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.43.0/LICENSE',
+  copyright: '© 2014-2025 Denis Pushkarev (zloirock.ru), 2025 CoreJS Company (core-js.io)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.46.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2218,25 +2268,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/internals/to-string-tag-support.js":
-/*!******************************************************************!*\
-  !*** ../node_modules/core-js/internals/to-string-tag-support.js ***!
-  \******************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-
-var wellKnownSymbol = __webpack_require__(/*! ../internals/well-known-symbol */ "../node_modules/core-js/internals/well-known-symbol.js");
-
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var test = {};
-
-test[TO_STRING_TAG] = 'z';
-
-module.exports = String(test) === '[object z]';
-
-
-/***/ }),
-
 /***/ "../node_modules/core-js/internals/try-to-string.js":
 /*!**********************************************************!*\
   !*** ../node_modules/core-js/internals/try-to-string.js ***!
@@ -2438,42 +2469,61 @@ $({ global: true, constructor: true, forced: FORCED }, {
 
 /***/ }),
 
-/***/ "../node_modules/core-js/modules/es.iterator.for-each.js":
-/*!***************************************************************!*\
-  !*** ../node_modules/core-js/modules/es.iterator.for-each.js ***!
-  \***************************************************************/
+/***/ "../node_modules/core-js/modules/es.iterator.filter.js":
+/*!*************************************************************!*\
+  !*** ../node_modules/core-js/modules/es.iterator.filter.js ***!
+  \*************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 
 var $ = __webpack_require__(/*! ../internals/export */ "../node_modules/core-js/internals/export.js");
 var call = __webpack_require__(/*! ../internals/function-call */ "../node_modules/core-js/internals/function-call.js");
-var iterate = __webpack_require__(/*! ../internals/iterate */ "../node_modules/core-js/internals/iterate.js");
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
 var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_modules/core-js/internals/an-object.js");
 var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "../node_modules/core-js/internals/get-iterator-direct.js");
+var createIteratorProxy = __webpack_require__(/*! ../internals/iterator-create-proxy */ "../node_modules/core-js/internals/iterator-create-proxy.js");
+var callWithSafeIterationClosing = __webpack_require__(/*! ../internals/call-with-safe-iteration-closing */ "../node_modules/core-js/internals/call-with-safe-iteration-closing.js");
+var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
 var iteratorClose = __webpack_require__(/*! ../internals/iterator-close */ "../node_modules/core-js/internals/iterator-close.js");
+var iteratorHelperThrowsOnInvalidIterator = __webpack_require__(/*! ../internals/iterator-helper-throws-on-invalid-iterator */ "../node_modules/core-js/internals/iterator-helper-throws-on-invalid-iterator.js");
 var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(/*! ../internals/iterator-helper-without-closing-on-early-error */ "../node_modules/core-js/internals/iterator-helper-without-closing-on-early-error.js");
 
-var forEachWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('forEach', TypeError);
+var FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR = !IS_PURE && !iteratorHelperThrowsOnInvalidIterator('filter', function () { /* empty */ });
+var filterWithoutClosingOnEarlyError = !IS_PURE && !FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR
+  && iteratorHelperWithoutClosingOnEarlyError('filter', TypeError);
 
-// `Iterator.prototype.forEach` method
-// https://tc39.es/ecma262/#sec-iterator.prototype.foreach
-$({ target: 'Iterator', proto: true, real: true, forced: forEachWithoutClosingOnEarlyError }, {
-  forEach: function forEach(fn) {
+var FORCED = IS_PURE || FILTER_WITHOUT_THROWING_ON_INVALID_ITERATOR || filterWithoutClosingOnEarlyError;
+
+var IteratorProxy = createIteratorProxy(function () {
+  var iterator = this.iterator;
+  var predicate = this.predicate;
+  var next = this.next;
+  var result, done, value;
+  while (true) {
+    result = anObject(call(next, iterator));
+    done = this.done = !!result.done;
+    if (done) return;
+    value = result.value;
+    if (callWithSafeIterationClosing(iterator, predicate, [value, this.counter++], true)) return value;
+  }
+});
+
+// `Iterator.prototype.filter` method
+// https://tc39.es/ecma262/#sec-iterator.prototype.filter
+$({ target: 'Iterator', proto: true, real: true, forced: FORCED }, {
+  filter: function filter(predicate) {
     anObject(this);
     try {
-      aCallable(fn);
+      aCallable(predicate);
     } catch (error) {
       iteratorClose(this, 'throw', error);
     }
 
-    if (forEachWithoutClosingOnEarlyError) return call(forEachWithoutClosingOnEarlyError, this, fn);
+    if (filterWithoutClosingOnEarlyError) return call(filterWithoutClosingOnEarlyError, this, predicate);
 
-    var record = getIteratorDirect(this);
-    var counter = 0;
-    iterate(record, function (value) {
-      fn(value, counter++);
-    }, { IS_RECORD: true });
+    return new IteratorProxy(getIteratorDirect(this), {
+      predicate: predicate
+    });
   }
 });
 
@@ -2493,16 +2543,26 @@ __webpack_require__(/*! ../modules/es.iterator.constructor */ "../node_modules/c
 
 /***/ }),
 
-/***/ "../node_modules/core-js/modules/esnext.iterator.for-each.js":
-/*!*******************************************************************!*\
-  !*** ../node_modules/core-js/modules/esnext.iterator.for-each.js ***!
-  \*******************************************************************/
+/***/ "../node_modules/core-js/modules/esnext.iterator.filter.js":
+/*!*****************************************************************!*\
+  !*** ../node_modules/core-js/modules/esnext.iterator.filter.js ***!
+  \*****************************************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 
 // TODO: Remove from `core-js@4`
-__webpack_require__(/*! ../modules/es.iterator.for-each */ "../node_modules/core-js/modules/es.iterator.for-each.js");
+__webpack_require__(/*! ../modules/es.iterator.filter */ "../node_modules/core-js/modules/es.iterator.filter.js");
 
+
+/***/ }),
+
+/***/ "@elementor/alpinejs":
+/*!***************************************!*\
+  !*** external "elementorV2.alpinejs" ***!
+  \***************************************/
+/***/ ((module) => {
+
+module.exports = elementorV2.alpinejs;
 
 /***/ }),
 
@@ -2519,7 +2579,7 @@ module.exports = elementorV2.frontendHandlers;
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ var __webpack_exports__ = (__webpack_exec__("../modules/atomic-widgets/elements/atomic-tabs/atomic-tabs-handler.js"));
+/******/ var __webpack_exports__ = (__webpack_exec__("../modules/atomic-widgets/elements/atomic-tabs/handlers/atomic-tabs-handler.js"));
 /******/ }
 ]);
 //# sourceMappingURL=tabs-handler.js.map

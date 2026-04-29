@@ -19,6 +19,7 @@ use Elementor\App\Modules\ImportExportCustomization\Runners\Import\Taxonomies;
 use Elementor\App\Modules\ImportExportCustomization\Runners\Import\Templates;
 use Elementor\App\Modules\ImportExportCustomization\Runners\Import\Wp_Content;
 use Elementor\App\Modules\ImportExportCustomization\Module;
+use Elementor\App\Modules\ImportExportCustomization\Runners\Import\Floating_Elements;
 
 class Import {
 	const MANIFEST_ERROR_KEY = 'manifest-error';
@@ -262,6 +263,7 @@ class Import {
 		$this->register( new Taxonomies() );
 		$this->register( new Elementor_Content() );
 		$this->register( new Wp_Content() );
+		$this->register( new Floating_Elements() );
 	}
 
 	/**

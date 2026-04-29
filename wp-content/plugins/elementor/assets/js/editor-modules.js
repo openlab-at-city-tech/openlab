@@ -528,7 +528,8 @@ var Container = exports["default"] = /*#__PURE__*/function (_ArgsObject) {
   }, {
     key: "isEditable",
     value: function isEditable() {
-      return 'edit' === elementor.channels.dataEditMode.request('activeMode') && 'open' === this.document.editor.status;
+      var _this$model, _this$model$get, _this$model$get$get;
+      return 'edit' === elementor.channels.dataEditMode.request('activeMode') && 'open' === this.document.editor.status && !((_this$model = this.model) !== null && _this$model !== void 0 && (_this$model$get = _this$model.get) !== null && _this$model$get !== void 0 && (_this$model$get = _this$model$get.call(_this$model, 'editSettings')) !== null && _this$model$get !== void 0 && (_this$model$get$get = _this$model$get.get) !== null && _this$model$get$get !== void 0 && _this$model$get$get.call(_this$model$get, 'inactive'));
     }
   }, {
     key: "isDesignable",
@@ -1316,8 +1317,8 @@ var _default = exports["default"] = function _default(object, constructors) {
     _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var _constructor = _step.value;
-      if (object.constructor.name === _constructor.prototype[Symbol.toStringTag]) {
+      var constructor = _step.value;
+      if (object.constructor.name === constructor.prototype[Symbol.toStringTag]) {
         return true;
       }
     }
@@ -1450,6 +1451,7 @@ var ControlsPopover = exports["default"] = /*#__PURE__*/function () {
     key: "onResetButtonClick",
     value: function onResetButtonClick() {
       this.$popover.hide();
+      this.$popover.trigger('hide');
       var groupControlName = this.child.model.get('groupPrefix') + 'typography',
         args = {
           container: this.child.options.container,
@@ -2590,19 +2592,17 @@ function _regeneratorDefine(e, r, n, t) {
     i = 0;
   }
   module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    if (r) i ? i(e, r, {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
       value: n,
       enumerable: !t,
       configurable: !t,
       writable: !t
-    }) : e[r] = n;else {
-      var o = function o(r, n) {
-        _regeneratorDefine(e, r, function (e) {
-          return this._invoke(r, n, e);
-        });
-      };
-      o("next", 0), o("throw", 1), o("return", 2);
-    }
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
   }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
 }
 module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;

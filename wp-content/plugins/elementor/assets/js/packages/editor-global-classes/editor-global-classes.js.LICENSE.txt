@@ -1,6 +1,10 @@
 /*! ../../../../hooks/use-filtered-css-class-usage */
 
+/*! ../../../../utils/tracking */
+
 /*! ../../../hooks/use-css-class-usage-by-id */
+
+/*! ../../../utils/tracking */
 
 /*! ../../context */
 
@@ -24,6 +28,8 @@
 
 /*! ../../store */
 
+/*! ../../utils/tracking */
+
 /*! ../api */
 
 /*! ../components/css-class-usage/types */
@@ -32,7 +38,11 @@
 
 /*! ../css-class-usage/components */
 
+/*! ../errors */
+
 /*! ../global-classes-styles-provider */
+
+/*! ../save-global-classes */
 
 /*! ../search-and-filter/components/filter/active-filters */
 
@@ -48,6 +58,8 @@
 
 /*! ../store */
 
+/*! ../utils/tracking */
+
 /*! ./api */
 
 /*! ./capabilities */
@@ -58,6 +70,10 @@
 
 /*! ./class-manager-panel */
 
+/*! ./class-manager/class-manager-panel */
+
+/*! ./classes-resource */
+
 /*! ./clear-icon-button */
 
 /*! ./components/class-manager/class-manager-button */
@@ -67,6 +83,10 @@
 /*! ./components/class-manager/duplicate-label-dialog */
 
 /*! ./components/convert-local-class-to-global-class */
+
+/*! ./components/global-styles-import-listener */
+
+/*! ./components/open-panel-from-url */
 
 /*! ./components/populate-store */
 
@@ -88,6 +108,8 @@
 
 /*! ./global-classes-styles-provider */
 
+/*! ./hooks/use-prefetch-css-class-usage */
+
 /*! ./init */
 
 /*! ./mcp-apply-unapply-global-classes */
@@ -96,6 +118,10 @@
 
 /*! ./mcp-integration */
 
+/*! ./mcp-integration/classes-resource */
+
+/*! ./mcp-manage-global-classes */
+
 /*! ./not-found */
 
 /*! ./panel-interactions */
@@ -103,6 +129,8 @@
 /*! ./save-global-classes */
 
 /*! ./sortable */
+
+/*! ./start-sync-to-v3-modal */
 
 /*! ./store */
 
@@ -118,7 +146,11 @@
 
 /*! ./utils/snapshot-history */
 
+/*! ./utils/tracking */
+
 /*! @elementor/editor */
+
+/*! @elementor/editor-canvas */
 
 /*! @elementor/editor-current-user */
 
@@ -139,6 +171,8 @@
 /*! @elementor/editor-ui */
 
 /*! @elementor/editor-v1-adapters */
+
+/*! @elementor/events */
 
 /*! @elementor/http-client */
 
@@ -191,6 +225,10 @@
   \*****************************************/
 
 /*!*****************************************!*\
+  !*** external ["elementorV2","events"] ***!
+  \*****************************************/
+
+/*!*****************************************!*\
   !*** external ["elementorV2","schema"] ***!
   \*****************************************/
 
@@ -209,6 +247,10 @@
 /*!**********************************************!*\
   !*** external ["elementorV2","editorProps"] ***!
   \**********************************************/
+
+/*!***********************************************!*\
+  !*** external ["elementorV2","editorCanvas"] ***!
+  \***********************************************/
 
 /*!***********************************************!*\
   !*** external ["elementorV2","editorPanels"] ***!
@@ -261,6 +303,10 @@
 /*!**************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/capabilities.ts ***!
   \**************************************************************************/
+
+/*!****************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/utils/tracking.ts ***!
+  \****************************************************************************/
 
 /*!*******************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/hooks/use-filters.ts ***!
@@ -319,6 +365,10 @@
   \********************************************************************************************/
 
 /*!*********************************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/components/open-panel-from-url.tsx ***!
+  \*********************************************************************************************/
+
+/*!*********************************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/hooks/use-css-class-usage-by-id.ts ***!
   \*********************************************************************************************/
 
@@ -328,6 +378,10 @@
 
 /*!**********************************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/components/css-class-usage/utils.ts ***!
+  \**********************************************************************************************/
+
+/*!**********************************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/mcp-integration/classes-resource.ts ***!
   \**********************************************************************************************/
 
 /*!************************************************************************************************!*\
@@ -357,6 +411,14 @@
 /*!***************************************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/components/search-and-filter/context.tsx ***!
   \***************************************************************************************************/
+
+/*!*******************************************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/components/global-styles-import-listener.tsx ***!
+  \*******************************************************************************************************/
+
+/*!*******************************************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/mcp-integration/mcp-manage-global-classes.ts ***!
+  \*******************************************************************************************************/
 
 /*!*********************************************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/components/class-manager/panel-interactions.ts ***!
@@ -388,6 +450,10 @@
 
 /*!**************************************************************************************************************!*\
   !*** ./packages/packages/core/editor-global-classes/src/components/class-manager/duplicate-label-dialog.tsx ***!
+  \**************************************************************************************************************/
+
+/*!**************************************************************************************************************!*\
+  !*** ./packages/packages/core/editor-global-classes/src/components/class-manager/start-sync-to-v3-modal.tsx ***!
   \**************************************************************************************************************/
 
 /*!**************************************************************************************************************!*\

@@ -1,12 +1,15 @@
 {% if settings.paragraph is not empty %}
 	{% set id_attribute = settings._cssid is not empty ? 'id=' ~ settings._cssid | e('html_attr') : '' %}
-		<p class="{{ settings.classes | merge( [ base_styles.base ] ) | join(' ') }}" {{ id_attribute }} {{ settings.attributes | raw }}>
-				{% if settings.link.href %}
-						<a href="{{ settings.link.href }}" target="{{ settings.link.target }}" class="{{ base_styles['link-base'] }}">
-								{{ settings.paragraph }}
-						</a>
-				{% else %}
-						{{ settings.paragraph }}
-				{% endif %}
-		</p>
+		<{{ settings.tag | e('html_tag') }} class="{{ settings.classes | merge( [ base_styles.base ] ) | join(' ') }}" data-interaction-id="{{ interaction_id }}" {{ id_attribute }} {{ settings.attributes | raw }}>
+			{% if settings.link and settings.link.attributes is not empty %}
+				<{{ settings.link.tag | e('html_tag') }}
+					{{ settings.link.attributes | raw }}
+					class="{{ base_styles['link-base'] }}"
+				>
+						{{ settings.paragraph | striptags(allowed_tags) | raw }}
+				</{{ settings.link.tag | e('html_tag') }}>
+			{% else %}
+					{{ settings.paragraph | striptags('<b><strong><sup><sub><s><em><u><ul><ol><li><blockquote><a><del><span><br>') | raw }}
+			{% endif %}
+		</{{ settings.tag | e('html_tag') }}>
 {% endif %}

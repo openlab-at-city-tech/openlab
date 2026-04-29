@@ -39,15 +39,12 @@ body.rtl {
 }
 
 .e-logo-wrapper {
-  background: var(--e-a-bg-logo);
   display: inline-block;
-  padding: 0.75em;
-  border-radius: 50%;
   line-height: 1;
 }
 .e-logo-wrapper i {
-  color: var(--e-a-color-logo);
-  font-size: 1em;
+  color: var(--e-a-color-circle-logo);
+  font-size: 2.5em;
 }
 
 .elementor-control-unit-1 {
@@ -532,6 +529,8 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   margin-block-start: 0;
 }
 
+.elementor-control-start-end .eicon-text-align-left,
+.elementor-control-start-end .eicon-text-align-right,
 .elementor-control-start-end .eicon-h-align-left,
 .elementor-control-start-end .eicon-h-align-right {
   scale: calc(1 * var(--direction-multiplier)) 1;
@@ -1644,6 +1643,17 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
 .e-global__preview-items-container::-webkit-scrollbar-thumb {
   background-color: #BABFC5;
   border-radius: 10px;
+}
+.e-global__group-header {
+  padding: 12px 20px 5px;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--e-a-color-txt-muted);
+}
+.e-global__group-divider {
+  height: 1px;
+  background-color: var(--e-a-border-color);
+  margin: 10px 20px;
 }
 .e-global__manage-button {
   font-weight: 500;
@@ -2977,11 +2987,14 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   --e-p-border-global:	#5EEAD4;
   --e-p-border-global-hover:	#1DDDBF;
   --e-p-border-global-invert:	#0C0D0E;
+  --e-p-border-global-element:	#5EEAD4;
 }
 
 .elementor-editor-active .elementor-add-section {
   all: initial;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   max-width: 1160px;
   position: relative;
   margin-inline: auto;
@@ -3472,16 +3485,20 @@ body.elementor-editor-active .elementor.elementor-edit-mode .elementor-element.e
 
 [class^=eicon-flex], [class*=" eicon-flex"] {
   transition: 0.3s all;
-  --is-ltr: 0;
-  --is-rtl: 1;
-  --rotation-direction: calc(var(--is-ltr) - var(--is-rtl));
 }
 [class^=eicon-flex].eicon-inline, [class*=" eicon-flex"].eicon-inline {
   max-height: 1em;
   max-width: 1em;
 }
+[class^=eicon-flex], [class*=" eicon-flex"] {
+  --is-ltr: 0;
+  --is-rtl: 1;
+}
 [class^=eicon-flex]:is(.eicon-justify-start-h, .eicon-justify-end-h), [class*=" eicon-flex"]:is(.eicon-justify-start-h, .eicon-justify-end-h) {
   --rotation-direction: calc(var(--is-ltr) + var(--is-rtl));
+}
+[class^=eicon-flex], [class*=" eicon-flex"] {
+  --rotation-direction: calc(var(--is-ltr) - var(--is-rtl));
 }
 :is(.e-ui-state--document-direction-mode__column, .e-ui-state--document-direction-mode__column-reverse) [class^=eicon-flex]:not(.eicon-wrap):not(.eicon-nowrap):not(.eicon-grow), :is(.e-ui-state--document-direction-mode__column, .e-ui-state--document-direction-mode__column-reverse) [class*=" eicon-flex"]:not(.eicon-wrap):not(.eicon-nowrap):not(.eicon-grow) {
   transform: rotate(calc(var(--rotation-direction) * 90deg));
@@ -3821,6 +3838,18 @@ html.elementor-html {
 .elementor-editor-preview .elementor-widget-empty {
   display: none;
 }
+.elementor-editor-preview :where(.elementor-edit-area-active) .elementor-element-overlay,
+.elementor-editor-preview :where(.elementor-edit-area-active) .elementor-empty,
+.elementor-editor-preview :where(.elementor-edit-area-active) .elementor-empty-view,
+.elementor-editor-preview :where(.elementor-edit-area-active) .elementor-widget-empty {
+  display: revert;
+}
+.elementor-editor-preview :where(.elementor-edit-area-active.elementor-widget-e-component) > .elementor-section-wrap > :first-child > .elementor-element-overlay::after {
+  outline-color: var(--e-p-border-global-element);
+}
+.elementor-editor-preview :where(.elementor-edit-area-active.elementor-widget-e-component) > .elementor-section-wrap > :first-child.elementor-element-editable > .elementor-element-overlay::after {
+  outline-offset: -1px;
+}
 
 .e-preview--show-hidden-elements[data-elementor-device-mode=widescreen] .elementor-edit-area-active .elementor-hidden-widescreen,
 .e-preview--show-hidden-elements[data-elementor-device-mode=desktop] .elementor-edit-area-active .elementor-hidden-desktop,
@@ -3919,6 +3948,13 @@ html.elementor-html {
 }
 
 .e-youtube-base iframe {
+  pointer-events: none;
+}
+
+.elementor-widget-e-component[data-atomic].elementor-edit-area-active > * > * {
+  pointer-events: initial;
+}
+.elementor-widget-e-component[data-atomic]:not(.elementor-edit-area-active) > * > * {
   pointer-events: none;
 }
 
