@@ -1,9 +1,9 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 5.1.3
+Stable tag: 5.1.4
 Tags: FontAwesome, icon, svg icon, iconfont, webfont
 Requires at least: 5.8
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -190,6 +190,12 @@ If you're using the Icon Chooser, you'll need to use a Pro Kit. (The CDN can onl
 
 
 == Changelog ==
+= 5.1.4 =
+
+* Update the icon chooser package. This is only for compatibility with other tools that may be
+  loaded on a page that also use the icon chooser package. It does not change how the icon chooser
+  functions in this plugin.
+
 = 5.1.3 =
 
 * Resolve a compatibility conflict with Toolset Types in the classic editor.
