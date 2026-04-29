@@ -3,9 +3,9 @@ Contributors: fernandobt, zymeth25
 Donate Link: http://picandocodigo.net/programacion/wordpress/list-category-posts-wordpress-plugin-english/#support
 Tags: list, categories, posts, cms
 Requires at least: 3.3
-Tested up to: 6.8.3
+Tested up to: 6.9.1
 Requires PHP: 5.6
-Stable tag: 0.93.1
+Stable tag: 0.95.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -242,6 +242,18 @@ Template system has changed. Custom templates should be stored in WordPress them
 == Changelog ==
 
 See [CHANGELOG.md](https://github.com/picandocodigo/List-Category-Posts/blob/master/CHANGELOG.md) for full Changelog.
+
+= 0.95.0 =
+
+* Bugfix: Removes double slash in pagination code. Fixes https://github.com/picandocodigo/List-Category-Posts/issues/531.
+* Addresses potential security vulnerability CVE-2026-3005
+* Bugfix: lcp_title_limit corrupts multibyte characters in fallback path. Fixes https://github.com/picandocodigo/List-Category-Posts/issues/549. Thanks @jmingau for the report and fix!
+
+= 0.94.0 =
+
+* Addresses CVE-2026-0553.
+* Addresses potential debug warning: `Undefined array key QUERY_STRING`. Report: https://wordpress.org/support/topic/php-8-4-issue-2/
+* Escapes html for thumbnail class.
 
 = 0.93.1 =
 

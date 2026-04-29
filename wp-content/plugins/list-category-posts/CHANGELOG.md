@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.95.0
+
+* Bugfix: Removes double slash in pagination code. Fixes [#531](https://github.com/picandocodigo/List-Category-Posts/issues/531).
+* Addresses potential security vulnerability CVE-2026-3005
+* Bugfix: lcp_title_limit corrupts multibyte characters in fallback path. Fixes [#549](https://github.com/picandocodigo/List-Category-Posts/issues/549). Thanks @jmingau for the report and fix!
+
+## 0.94.0
+
+* Addresses CVE-2026-0553.
+* Addresses potential debug warning: `Undefined array key QUERY_STRING`. Report: https://wordpress.org/support/topic/php-8-4-issue-2/
+* Escapes html for thumbnail class.
+
 ## 0.93.1
 
 * Fixes a bug with `post_status` introduced in `sanitize_status`. Thanks Galen Charlton (@gmcharlt) for the catch and fix!
