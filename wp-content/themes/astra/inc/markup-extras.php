@@ -1520,7 +1520,7 @@ if ( ! function_exists( 'astra_header_break_point' ) ) {
 	 *
 	 * @since 1.4.0 Added Mobile Header Breakpoint option from customizer.
 	 * @since 1.0.0
-	 * @return number
+	 * @return int
 	 */
 	function astra_header_break_point() {
 		$mobile_header_brakpoint = true === Astra_Builder_Helper::$is_header_footer_builder_active ? astra_get_tablet_breakpoint() : astra_get_option( 'mobile-header-breakpoint', 921 );
@@ -1696,25 +1696,25 @@ if ( ! function_exists( 'astra_comment_form_default_fields_markup' ) ) {
 		$fields['author'] = '<div class="ast-comment-formwrap ast-row">
 			<p class="comment-form-author ' . astra_attr( 'comment-form-grid-class' ) . '">
 				<label for="author" class="screen-reader-text">' . esc_html( $name_label ) . '</label>
-				<input id="author" name="author" type="text" 
-					value="' . esc_attr( $commenter['comment_author'] ) . '" 
-					placeholder="' . esc_attr( $name_label ) . '" 
+				<input id="author" name="author" type="text"
+					value="' . esc_attr( $commenter['comment_author'] ) . '"
+					placeholder="' . esc_attr( $name_label ) . '"
 					size="30"' . $aria_req . ' autocomplete="name" />
 			</p>';
 
 		$fields['email'] = '<p class="comment-form-email ' . astra_attr( 'comment-form-grid-class' ) . '">
 			<label for="email" class="screen-reader-text">' . esc_html( $email_label ) . '</label>
-			<input id="email" name="email" type="text" 
-				value="' . esc_attr( $commenter['comment_author_email'] ) . '" 
-				placeholder="' . esc_attr( $email_label ) . '" 
+			<input id="email" name="email" type="text"
+				value="' . esc_attr( $commenter['comment_author_email'] ) . '"
+				placeholder="' . esc_attr( $email_label ) . '"
 				size="30"' . $aria_req . ' autocomplete="email" />
 		</p>';
 
 		$fields['url'] = '<p class="comment-form-url ' . astra_attr( 'comment-form-grid-class' ) . '">
 			<label for="url" class="screen-reader-text">' . esc_html( $website_label ) . '</label>
-			<input id="url" name="url" type="text" 
-				value="' . esc_url( $commenter['comment_author_url'] ) . '" 
-				placeholder="' . esc_attr( $website_label ) . '" 
+			<input id="url" name="url" type="text"
+				value="' . esc_url( $commenter['comment_author_url'] ) . '"
+				placeholder="' . esc_attr( $website_label ) . '"
 				size="30" autocomplete="url" />
 		</p>
 		</div>';
@@ -2015,6 +2015,7 @@ if ( ! function_exists( 'astra_get_post_thumbnail' ) ) {
 					if ( ! $check_is_singular ) {
 						$output .= apply_filters( 'astra_blog_post_featured_image_link_after', '</a>' );
 					}
+					$output .= apply_filters( 'astra_blog_post_thumb_img_content_after', '' );
 					$output .= '</div>';
 				}
 			}

@@ -96,6 +96,10 @@ class Astra_Admin_Ajax {
 				'self_hosted_gfonts'    => 'bool',
 				'preload_local_fonts'   => 'bool',
 				'use_old_header_footer' => 'bool',
+				'show_learn_tab'        => 'bool',
+				'enable_abilities'      => 'bool',
+				'enable_edit_abilities' => 'bool',
+				'enable_mcp_server'     => 'bool',
 			)
 		);
 	}
@@ -108,10 +112,6 @@ class Astra_Admin_Ajax {
 	public function disable_astra_pro_notices() {
 
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
 
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
@@ -127,7 +127,7 @@ class Astra_Admin_Ajax {
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( esc_html__( 'You don\'t have the access', 'astra' ) );
+			wp_send_json_error( $response_data );
 		}
 
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -149,10 +149,6 @@ class Astra_Admin_Ajax {
 
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
-
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
 			wp_send_json_error( $response_data );
@@ -163,6 +159,10 @@ class Astra_Admin_Ajax {
 		 */
 		if ( ! check_ajax_referer( 'astra_update_admin_setting', 'security', false ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'nonce' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( $response_data );
 		}
 
@@ -192,10 +192,6 @@ class Astra_Admin_Ajax {
 
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
-
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
 			wp_send_json_error( $response_data );
@@ -206,6 +202,10 @@ class Astra_Admin_Ajax {
 		 */
 		if ( ! check_ajax_referer( 'astra_update_admin_setting', 'security', false ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'nonce' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( $response_data );
 		}
 
@@ -228,10 +228,10 @@ class Astra_Admin_Ajax {
 				/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$sub_option_value = $val;
 			}
+
+			Astra_API_Init::update_admin_settings_option( $sub_option_key, $sub_option_value );
 		}
 		// @codingStandardsIgnoreEnd
-
-		Astra_API_Init::update_admin_settings_option( $sub_option_key, $sub_option_value );
 
 		$response_data = array(
 			'message' => esc_html__( 'Successfully saved data!', 'astra' ),
@@ -249,10 +249,6 @@ class Astra_Admin_Ajax {
 	public function astra_analytics_optin_status() {
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
-
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
 			wp_send_json_error( $response_data );
@@ -264,8 +260,12 @@ class Astra_Admin_Ajax {
 			wp_send_json_error( $response_data );
 		}
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( $response_data );
+		}
+
 		$opt_in = filter_input( INPUT_POST, 'value', FILTER_VALIDATE_BOOLEAN ) ? 'yes' : 'no';
-		update_site_option( 'astra_analytics_optin', $opt_in );
+		update_site_option( 'astra_usage_optin', $opt_in );
 
 		$response_data = array(
 			'message' => esc_html__( 'Successfully saved data!', 'astra' ),
@@ -302,6 +302,11 @@ class Astra_Admin_Ajax {
 	public function required_plugin_install() {
 
 		check_ajax_referer( 'updates', '_ajax_nonce' );
+
+		// Verify user has permission to install plugins.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( array( 'message' => $this->get_error_msg( 'permission' ) ) );
+		}
 
 		// Fetching the plugin slug from the AJAX request.
 		// @psalm-suppress PossiblyInvalidArgument
@@ -344,10 +349,6 @@ class Astra_Admin_Ajax {
 
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
-
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
 			wp_send_json_error( $response_data );
@@ -358,6 +359,10 @@ class Astra_Admin_Ajax {
 		 */
 		if ( ! check_ajax_referer( 'astra_plugin_manager_nonce', 'security', false ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'nonce' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( $response_data );
 		}
 
@@ -415,10 +420,6 @@ class Astra_Admin_Ajax {
 
 		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( $response_data );
-		}
-
 		if ( empty( $_POST ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
 			wp_send_json_error( $response_data );
@@ -429,6 +430,10 @@ class Astra_Admin_Ajax {
 		 */
 		if ( ! check_ajax_referer( 'astra_plugin_manager_nonce', 'security', false ) ) {
 			$response_data = array( 'message' => $this->get_error_msg( 'nonce' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( $response_data );
 		}
 
@@ -473,6 +478,8 @@ class Astra_Admin_Ajax {
 	 * @return void
 	 */
 	public function load_google_fonts() {
+		check_ajax_referer( 'astra_customizer_nonce', 'nonce' );
+
 		if ( ! current_user_can( 'customize' ) ) {
 			wp_send_json_error(
 				array(
@@ -481,8 +488,6 @@ class Astra_Admin_Ajax {
 				)
 			);
 		}
-
-		check_ajax_referer( 'astra_customizer_nonce', 'nonce' );
 
 		$google_fonts = Astra_Font_Families::get_google_fonts();
 		$custom_fonts = Astra_Font_Families::get_custom_fonts();

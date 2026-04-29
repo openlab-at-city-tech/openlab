@@ -119,6 +119,12 @@ if ( ! class_exists( 'Astra_Theme_Background_Updater' ) ) {
 			'4.11.12' => array(
 				'astra_theme_background_updater_4_11_12',
 			),
+			'4.12.0'  => array(
+				'astra_theme_background_updater_4_12_0',
+			),
+			'4.12.2'  => array(
+				'astra_theme_background_updater_4_12_2',
+			),
 		);
 
 		/**
@@ -268,7 +274,7 @@ if ( ! class_exists( 'Astra_Theme_Background_Updater' ) ) {
 		 * @since 2.1.3
 		 * @return array
 		 */
-		public function get_db_update_callbacks() {
+		public static function get_db_update_callbacks() {
 			return self::$db_updates;
 		}
 
@@ -407,7 +413,7 @@ if ( ! class_exists( 'Astra_Theme_Background_Updater' ) ) {
 
 			delete_transient( 'astra-addon-db-migrated' );
 
-			do_action( 'astra_theme_update_after' );
+			do_action( 'astra_theme_update_after', $saved_version );
 		}
 	}
 }

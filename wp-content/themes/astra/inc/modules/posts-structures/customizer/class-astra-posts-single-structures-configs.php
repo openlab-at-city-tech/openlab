@@ -1,6 +1,6 @@
 <?php
 /**
- * Posts Strctures Options for our theme.
+ * Posts Structures Options for our theme.
  *
  * @package     Astra
  * @link        https://www.brainstormforce.com
@@ -18,7 +18,7 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
 }
 
 /**
- * Register Posts Strctures Customizer Configurations.
+ * Register Posts Structures Customizer Configurations.
  *
  * @since 4.0.0
  */
@@ -224,7 +224,7 @@ class Astra_Posts_Single_Structures_Configs extends Astra_Customizer_Config_Base
 	}
 
 	/**
-	 * Register Posts Strctures Customizer Configurations.
+	 * Register Posts Structures Customizer Configurations.
 	 *
 	 * @param Array                $configurations Astra Customizer Configurations.
 	 * @param WP_Customize_Manager $wp_customize instance of WP_Customize_Manager.

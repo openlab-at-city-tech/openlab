@@ -105,10 +105,10 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) {
 				'ast-menu-toggle',
 				array(
 					'aria-expanded' => 'false',
-					'aria-label'    => 'Toggle menu',
+					'aria-label'    => __( 'Toggle Menu', 'astra' ),
 				),
 				$item
-			) . '><span class="screen-reader-text">' . esc_html__( 'Menu Toggle', 'astra' ) . '</span>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';
+			) . '>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';
 
 			return $item_output;
 		}

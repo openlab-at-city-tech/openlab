@@ -106,22 +106,36 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 			// Learn More link if Astra Pro is not activated.
 			if ( astra_showcase_upgrade_notices() ) {
 
-				$_configs[] =
-
-					/**
-					 * Option: Learn More about Contant Typography
-					 */
-					array(
-						'name'     => ASTRA_THEME_SETTINGS . '[llms-button-link]',
-						'type'     => 'control',
-						'control'  => 'ast-button-link',
-						'section'  => $section,
-						'priority' => 999,
-						'title'    => __( 'View Astra Pro Features', 'astra' ),
-						'url'      => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'lifterlms' ),
-						'settings' => array(),
-						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
-					);
+				$_configs[] = array(
+					'name'     => ASTRA_THEME_SETTINGS . '[llms-upgrade-link]',
+					'type'     => 'control',
+					'control'  => 'ast-upgrade',
+					'campaign' => 'lifterlms',
+					'section'  => $section,
+					'priority' => 999,
+					'default'  => '',
+					'context'  => array(),
+					'title'    => __( 'Running Online Courses?', 'astra' ),
+					'description' => __( 'Optimize your LMS for conversion & retention with Business Toolkit!', 'astra' ),
+					'choices'  => array(
+						'one'   => array(
+							'title' => __( 'Automate management workflows with OttoKit', 'astra' ),
+						),
+						'two'   => array(
+							'title' => __( 'Ready-to-use course website templates', 'astra' ),
+						),
+						'three' => array(
+							'title' => __( 'Distraction-free high-converting checkout', 'astra' ),
+						),
+						'four'  => array(
+							'title' => __( 'Structured course & lesson pages', 'astra' ),
+						),
+						'five'  => array(
+							'title' => __( 'Improved student engagement', 'astra' ),
+						),
+					),
+					'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
+				);
 
 			}
 

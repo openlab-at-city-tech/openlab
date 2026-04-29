@@ -559,7 +559,7 @@ class Astra_WP_Editor_CSS {
 			),
 
 			// Gutenberg button compatibility for default styling.
-			':where(.editor-styles-wrapper .wp-block-button:not(.is-style-outline)) :is(div, button).wp-block-button__link, .block-editor-writing-flow .wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button, .block-editor-writing-flow .wp-block-file .wp-block-file__button, .editor-styles-wrapper button.wc-block-components-button' => array(
+			':where(.editor-styles-wrapper .wp-block-button:not(.is-style-outline)) :is(div, button, a).wp-block-button__link, .block-editor-writing-flow .wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button, .block-editor-writing-flow .wp-block-file .wp-block-file__button, .editor-styles-wrapper button.wc-block-components-button' => array(
 				'border-style'               => $theme_btn_top_border || $theme_btn_right_border || $theme_btn_left_border || $theme_btn_bottom_border ? 'solid' : '',
 				'border-top-width'           => $theme_btn_top_border,
 				'border-right-width'         => $theme_btn_right_border,
@@ -623,7 +623,7 @@ class Astra_WP_Editor_CSS {
 		}
 
 		if ( Astra_Dynamic_CSS::astra_4_6_0_compatibility() && astra_get_option( 'single-content-images-shadow', false ) ) {
-			$desktop_css['.wp-block-image img'] = array(
+			$desktop_css[':where(.post-type-post) .wp-block-image img'] = array(
 				'box-shadow'         => '0 0 30px 0 rgba(0,0,0,.15)',
 				'-webkit-box-shadow' => '0 0 30px 0 rgba(0,0,0,.15)',
 				'-moz-box-shadow'    => '0 0 30px 0 rgba(0,0,0,.15)',
@@ -673,7 +673,7 @@ class Astra_WP_Editor_CSS {
 
 		if ( $is_dark_palette ) {
 			$desktop_css['.astra-dark-mode-enable #learndash_lessons, .astra-dark-mode-enable #learndash_quizzes, .astra-dark-mode-enable #learndash_profile, .astra-dark-mode-enable #learndash_lesson_topics_list > div, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item .ld-table-list-title a, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-name, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-header a, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item-preview a'] = array(
-				'background' => 'var( --ast-global-color-primary, --ast-global-color-4 )',
+				'background' => 'var( --ast-global-color-primary, var(--ast-global-color-4) )',
 				'color'      => 'var(--ast-global-color-2)',
 			);
 			$desktop_css['.astra-dark-mode-enable #learndash_lessons #lesson_heading, .astra-dark-mode-enable #learndash_profile .learndash_profile_heading, .astra-dark-mode-enable #learndash_quizzes #quiz_heading, .astra-dark-mode-enable #learndash_lesson_topics_list div > strong '] = array(
@@ -684,12 +684,12 @@ class Astra_WP_Editor_CSS {
 				'color' => 'var(--ast-global-color-0)',
 			);
 			$desktop_css['.astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-footer '] = array(
-				'background'   => 'var( --ast-global-color-primary, --ast-global-color-4 )',
+				'background'   => 'var( --ast-global-color-primary, var(--ast-global-color-4) )',
 				'color'        => 'var(--ast-global-color-2)',
 				'border-color' => 'var(--ast-border-color)',
 			);
 			$desktop_css['.astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-list-item-expanded .ld-progress, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-list-item-expanded:before '] = array(
-				'background' => 'var( --ast-global-color-alternate-background, --ast-global-color-6 )',
+				'background' => 'var( --ast-global-color-alternate-background, var(--ast-global-color-6) )',
 			);
 			$desktop_css[' html.astra-dark-mode-enable :where(.editor-styles-wrapper) ']               = array(
 				'color' => 'var(--ast-global-color-2)',

@@ -214,6 +214,10 @@ if ( ! function_exists( 'astra_blog_post_thumbnail_and_title_order' ) ) {
 
 					// Blog Categories.
 					case 'category':
+						$should_skip_category = apply_filters( 'astra_skip_blog_archive_category', false );
+						if ( $should_skip_category ) {
+							break;
+						}
 						do_action( 'astra_blog_archive_category_before' );
 						// @codingStandardsIgnoreStart
 						/**

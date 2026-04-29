@@ -143,7 +143,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$archive_post_meta_font_size  = astra_get_option( 'font-size-post-meta' );
 			$archive_post_tax_font_size   = astra_get_option( 'font-size-post-tax' );
 			$archive_cards_radius         = astra_get_option( 'post-card-border-radius' );
-			$archive_cards_overlay        = astra_get_option( 'post-card-featured-overlay' );
+			$content_background_overlay   = astra_get_option( 'post-card-background-overlay' );
 
 			$heading_h1_font_size = astra_get_option( 'font-size-h1' );
 			$heading_h2_font_size = astra_get_option( 'font-size-h2' );
@@ -585,16 +585,16 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'--ast-global-color-secondary'         => $color_palette_reorganize ? 'var(--ast-global-color-5)' : 'var(--ast-global-color-4)',
 					'--ast-global-color-alternate-background' => $color_palette_reorganize ? 'var(--ast-global-color-6)' : 'var(--ast-global-color-7)',
 					'--ast-global-color-subtle-background' => $color_palette_reorganize ? 'var(--ast-global-color-7)' : 'var(--ast-global-color-6)',
-					'--ast-bg-style-guide'                 => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#F8FAFC',
+					'--ast-bg-style-guide'                 => 'var( --ast-global-color-secondary, var(--ast-global-color-5) )',
 					'--ast-shadow-style-guide'             => $is_dark_palette ? '0px 0px 4px 0 #ffffff57' : '0px 0px 4px 0 #00000057',
-					'--ast-global-dark-bg-style'           => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fff',
-					'--ast-global-dark-lfs'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
-					'--ast-widget-bg-color'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fafafa',
-					'--ast-wc-container-head-bg-color'     => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
-					'--ast-title-layout-bg'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#eeeeee',
+					'--ast-global-dark-bg-style'           => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#fff',
+					'--ast-global-dark-lfs'                => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#fbfbfb',
+					'--ast-widget-bg-color'                => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#fafafa',
+					'--ast-wc-container-head-bg-color'     => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#fbfbfb',
+					'--ast-title-layout-bg'                => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#eeeeee',
 					'--ast-search-border-color'            => $is_dark_palette ? 'var(--ast-border-color)' : '#e7e7e7',
-					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
-					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
+					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, var(--ast-global-color-4) )' : '#e6e6e6',
+					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, var(--ast-global-color-4) )' : '#e6e6e6',
 					'--ast-gallery-block-color'            => $is_dark_palette ? 'var(--ast-global-color-2)' : '#000',
 					'--srfm-color-input-label'             => 'var(--ast-global-color-2)',
 				),
@@ -820,9 +820,6 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.ast-search-menu-icon form.search-form' => array(
 					'padding-right' => '0',
 				),
-				'.ast-search-menu-icon.slide-search input.search-field' => array(
-					'width' => Astra_Builder_Helper::$is_header_footer_builder_active ? '0' : '',
-				),
 				'.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-form, .ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-field:focus' => array(
 					'transition'   => 'all 0.2s',
 					'border-color' => astra_get_option( 'site-accessibility-highlight-input-color' ),
@@ -830,17 +827,23 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				'.search-form input.search-field:focus'  => array(
 					'outline' => 'none', // Making highlight by border that's why making outline none.
 				),
+
+				'.ast-mobile-header-content .ast-builder-layout-element:not(.ast-builder-menu):not(.ast-header-divider-element), .ast-mobile-popup-content .ast-builder-layout-element:not(.ast-builder-menu):not(.ast-header-divider-element)' => array(
+					'padding' => '15px 20px',
+				),
 			);
 
 			if ( 'blog-layout-6' === $blog_layout ) {
-				$css_output['.ast-blog-layout-6-grid .ast-article-inner .post-thumb::after'] = array(
-					'content'    => '""',
-					'background' => $archive_cards_overlay,
-					'position'   => 'absolute',
-					'top'        => '0',
-					'right'      => '0',
-					'bottom'     => '0',
-					'left'       => '0',
+				$css_output['.ast-blog-layout-6-grid .ast-article-inner .post-thumb::after'] = array_merge(
+					array(
+						'content'  => '""',
+						'position' => 'absolute',
+						'top'      => '0',
+						'right'    => '0',
+						'bottom'   => '0',
+						'left'     => '0',
+					),
+					astra_get_background_obj( $content_background_overlay ),
 				);
 			}
 
@@ -848,7 +851,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$css_output['.ast-search-menu-icon .search-form button.search-submit:focus, .ast-theme-transparent-header .ast-header-search .ast-dropdown-active .ast-icon, .ast-theme-transparent-header .ast-inline-search .search-field:focus .ast-icon'] = array(
 					'color' => 'var(--ast-global-color-1)',
 				);
-				$css_output['.ast-header-search .slide-search .search-form'] = array(
+				$css_output['.ast-desktop .ast-header-search .slide-search .search-form'] = array(
 					'border' => '2px solid var(--ast-global-color-0)',
 				);
 
@@ -957,7 +960,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Accessibility options.
 			$enable_site_accessibility        = astra_get_option( 'site-accessibility-toggle', false );
-			$html_selectors_focus_visible     = astra_parse_selector( '.ast-search-menu-icon.slide-search a:focus-visible:focus-visible, .astra-search-icon:focus-visible, #close:focus-visible, a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible, #close:focus-visible, .button.search-submit:focus-visible, #search_submit:focus, .normal-search:focus-visible, .ast-header-account-wrap:focus-visible, .woocommerce .ast-on-card-button.ast-quick-view-trigger:focus, .astra-cart-drawer-close:focus, .ast-single-variation:focus, .ast-woocommerce-product-gallery__image:focus, .ast-button:focus, .woocommerce-product-gallery--with-images [data-controls="prev"]:focus-visible, .woocommerce-product-gallery--with-images [data-controls="next"]:focus-visible', 'wc' );
+			$html_selectors_focus_visible     = astra_parse_selector( '.ast-search-menu-icon.slide-search a:focus-visible:focus-visible, .astra-search-icon:focus-visible, #close:focus-visible, a:focus-visible, .ast-menu-toggle:focus-visible, .site .skip-link:focus-visible, .wp-block-loginout input:focus-visible, .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper, .ast-header-navigation-arrow:focus-visible, .woocommerce .wc-proceed-to-checkout > .checkout-button:focus-visible, .woocommerce .woocommerce-MyAccount-navigation ul li a:focus-visible, .ast-orders-table__row .ast-orders-table__cell:focus-visible, .woocommerce .woocommerce-order-details .order-again > .button:focus-visible, .woocommerce .woocommerce-message a.button.wc-forward:focus-visible, .woocommerce #minus_qty:focus-visible, .woocommerce #plus_qty:focus-visible, a#ast-apply-coupon:focus-visible, .woocommerce .woocommerce-info a:focus-visible, .woocommerce .astra-shop-summary-wrap a:focus-visible, .woocommerce a.wc-forward:focus-visible, #ast-apply-coupon:focus-visible, .woocommerce-js .woocommerce-mini-cart-item a.remove:focus-visible, #close:focus-visible, .button.search-submit:focus-visible, #search_submit:focus, .normal-search:focus-visible, .ast-header-account-wrap:focus-visible, .woocommerce .ast-on-card-button.ast-quick-view-trigger:focus, .astra-cart-drawer-close:focus, .ast-single-variation:focus, .ast-woocommerce-product-gallery__image:focus, .ast-button:focus, .woocommerce-product-gallery--with-images [data-controls="prev"]:focus-visible, .woocommerce-product-gallery--with-images [data-controls="next"]:focus-visible, .ast-builder-button-wrap:has(.ast-custom-button-link:focus), .ast-builder-button-wrap .ast-custom-button-link:focus', 'wc' );
 			$html_selectors_focus_only_inputs = astra_parse_selector( 'input:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="reset"]:focus, input[type="search"]:focus, input[type="number"]:focus, textarea:focus, .wp-block-search__input:focus, [data-section="section-header-mobile-trigger"] .ast-button-wrap .ast-mobile-menu-trigger-minimal:focus, .ast-mobile-popup-drawer.active .menu-toggle-close:focus, .woocommerce-ordering select.orderby:focus, #ast-scroll-top:focus, #coupon_code:focus, .woocommerce-page #comment:focus, .woocommerce #reviews #respond input#submit:focus, .woocommerce a.add_to_cart_button:focus, .woocommerce .button.single_add_to_cart_button:focus, .woocommerce .woocommerce-cart-form button:focus, .woocommerce .woocommerce-cart-form__cart-item .quantity .qty:focus, .woocommerce .woocommerce-billing-fields .woocommerce-billing-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce #order_comments:focus, .woocommerce #place_order:focus, .woocommerce .woocommerce-address-fields .woocommerce-address-fields__field-wrapper .woocommerce-input-wrapper > .input-text:focus, .woocommerce .woocommerce-MyAccount-content form button:focus, .woocommerce .woocommerce-MyAccount-content .woocommerce-EditAccountForm .woocommerce-form-row .woocommerce-Input.input-text:focus, .woocommerce .ast-woocommerce-container .woocommerce-pagination ul.page-numbers li a:focus, body #content .woocommerce form .form-row .select2-container--default .select2-selection--single:focus, #ast-coupon-code:focus, .woocommerce.woocommerce-js .quantity input[type=number]:focus, .woocommerce-js .woocommerce-mini-cart-item .quantity input[type=number]:focus, .woocommerce p#ast-coupon-trigger:focus', 'wc' );
 
 			if ( $enable_site_accessibility ) {
@@ -1033,7 +1036,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				// Reduced specificity so that it does not override customizer background color option.
 				$css_output['.ast-header-search .slide-search .search-field'] = array(
-					'background-color' => '(--ast-global-dark-bg-style)', // Referred by main.css.
+					'background-color' => 'var(--ast-global-dark-bg-style)', // Referred by main.css.
 				);
 			}
 
@@ -2431,7 +2434,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					);
 				} else {
 					if ( is_single() && astra_get_option( 'single-content-images-shadow', false ) ) {
-						$default_layout_update_css['.ast-article-single img'] = array(
+						$default_layout_update_css['.ast-article-single figure, .ast-article-single img:not(figure img)'] = array(
 							'box-shadow'         => '0 0 30px 0 rgba(0,0,0,.15)',
 							'-webkit-box-shadow' => '0 0 30px 0 rgba(0,0,0,.15)',
 							'-moz-box-shadow'    => '0 0 30px 0 rgba(0,0,0,.15)',
@@ -4281,7 +4284,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						),
 					);
 
-					if ( ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) && ( 1 === astra_get_option( 'blog-grid' ) ) ) {
+					if ( ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) && ( 1 === $blog_grid ) ) {
 						$blog_layout_cover_css[ $bl_selector . ' .ast-archive-post' ] = array(
 							'position' => 'relative',
 						);
@@ -6138,7 +6141,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'border-width' => '1px',
 					'border-style' => 'solid',
 					'border-color' => 'var(--ast-border-color)',
-					'background'   => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
+					'background'   => 'var( --ast-global-color-secondary, var(--ast-global-color-5) )',
 				),
 				'input[type="text"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type=reset]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus, textarea:focus' => array(
 					'border-color' => 'var(--ast-global-color-0, #046BD2)',
@@ -6147,7 +6150,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'color'        => 'var(--ast-form-input-focus-text, #475569)',
 				),
 				'label, legend'           => array(
-					'color'       => '#111827',
+					'color'       => 'var(--ast-global-color-2, #111827 )',
 					'font-size'   => '14px',
 					'font-style'  => 'normal',
 					'font-weight' => '500',
@@ -6165,7 +6168,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
 				),
 				':root'                   => array(
-					'--ast-comment-inputs-background' => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#FFF',
+					'--ast-comment-inputs-background' => $is_dark_palette ? 'var( --ast-global-color-secondary, var(--ast-global-color-5) )' : '#FFF',
 				),
 				'::placeholder'           => array(
 					'color' => 'var(--ast-form-field-color, #9CA3AF)',

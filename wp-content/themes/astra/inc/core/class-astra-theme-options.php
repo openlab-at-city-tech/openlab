@@ -262,7 +262,10 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'tablet-unit'  => 'px',
 						'mobile-unit'  => 'px',
 					),
-					'post-card-featured-overlay'           => '',
+					'post-card-background-overlay'         => array(
+						'background-type'  => '',
+						'background-color' => astra_get_option( 'post-card-featured-overlay' ), // fetch from old option.
+					),
 					'blog-category-style'                  => 'default',
 					'blog-tag-style'                       => 'default',
 					'blog-post-meta-divider-type'          => '/',
@@ -945,10 +948,26 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 		 * Update theme static option array.
 		 */
 		public static function refresh() {
+			// Resolve defaults in the site locale, not the admin user's locale.
+			// This prevents admin-language strings from leaking into frontend defaults
+			// when the admin and site languages differ (e.g., WPML setups).
+			$site_locale = get_option( 'WPLANG' ) ?: 'en_US';
+			$switched    = false;
+
+			if ( determine_locale() !== $site_locale ) {
+				$switched       = switch_to_locale( $site_locale );
+				self::$defaults = null;
+			}
+
 			self::$db_options = wp_parse_args(
 				self::get_db_options(),
 				self::defaults()
 			);
+
+			if ( $switched ) {
+				restore_previous_locale();
+				self::$defaults = null;
+			}
 		}
 
 		/**

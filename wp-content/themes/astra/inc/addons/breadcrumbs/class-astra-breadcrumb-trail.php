@@ -696,14 +696,25 @@ class Astra_Breadcrumb_Trail {
 		global $wp_rewrite;
 
 		// Get some taxonomy and term variables.
-		$term           = get_queried_object();
-		$taxonomy       = get_taxonomy( $term->taxonomy );
+		$term = get_queried_object();
+
+		// Bail early if queried object is not a valid taxonomy term.
+		if ( ! $term instanceof WP_Term ) {
+			return;
+		}
+
+		$taxonomy = get_taxonomy( $term->taxonomy );
+
+		if ( ! $taxonomy ) {
+			return;
+		}
+
 		$done_post_type = false;
 
 		// If there are rewrite rules for the taxonomy.
 		if ( false !== $taxonomy->rewrite ) {
 
-			// If 'with_front' is true, dd $wp_rewrite->front to the trail.
+			// If 'with_front' is true, add $wp_rewrite->front to the trail.
 			if ( $taxonomy->rewrite['with_front'] && $wp_rewrite->front ) {
 				$this->add_rewrite_front_items();
 			}
@@ -756,7 +767,7 @@ class Astra_Breadcrumb_Trail {
 		}
 
 		// If there's a single post type for the taxonomy, use it.
-		if ( false === $done_post_type && 1 === count( $taxonomy->object_type ) && post_type_exists( $taxonomy->object_type[0] ) ) {
+		if ( false === $done_post_type && ! empty( $taxonomy->object_type ) && 1 === count( $taxonomy->object_type ) && post_type_exists( $taxonomy->object_type[0] ) ) {
 
 			// If the post type is 'post'.
 			if ( 'post' === $taxonomy->object_type[0] ) {
@@ -1218,7 +1229,8 @@ class Astra_Breadcrumb_Trail {
 				$this->add_term_parents( $term->parent, $taxonomy );
 			}
 			// Add the category archive link to the trail.
-			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $term->name );
+			$translated_name = $this->get_translated_term_name( $term );
+			$this->items[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $translated_name );
 		}
 	}
 
@@ -1299,9 +1311,14 @@ class Astra_Breadcrumb_Trail {
 
 			// Get the parent term.
 			$term = get_term( $term_id, $taxonomy );
-
 			// Add the formatted term link to the array of parent terms.
-			$parents[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $term->name );
+			if ( ! $term instanceof WP_Term ) {
+				break;
+			}
+
+			$translated_name = $this->get_translated_term_name( $term );
+
+			$parents[] = sprintf( '<a href="%s">%s</a>', esc_url( get_term_link( $term, $taxonomy ) ), $translated_name );
 
 			// Set the parent term's parent as the parent ID.
 			$term_id = $term->parent;
@@ -1372,4 +1389,45 @@ class Astra_Breadcrumb_Trail {
 			}
 		}
 	}
+
+	/**
+	 * Get translated term name based on the current language context.
+	 * Supports WPML and Polylang translation plugins.
+	 *
+	 * @since  4.12.0
+	 * @param  object $term The term object.
+	 * @return string The translated term name.
+	 */
+	protected function get_translated_term_name( $term ) {
+		$translated_name = $term->name;
+
+		if ( function_exists( 'icl_object_id' ) && function_exists( 'icl_get_current_language' ) ) {
+			$current_lang = icl_get_current_language();
+			$translated_term_id = icl_object_id( $term->term_id, $term->taxonomy, false, $current_lang );
+
+			if ( $translated_term_id && $translated_term_id !== $term->term_id ) {
+				$translated_term = get_term( $translated_term_id, $term->taxonomy );
+				if ( $translated_term instanceof WP_Term ) {
+					$translated_name = $translated_term->name;
+				}
+			}
+		}
+		elseif ( function_exists( 'pll_get_term' ) && function_exists( 'pll_current_language' ) ) {
+			$current_lang = pll_current_language();
+			$translated_term_id = pll_get_term( $term->term_id, $current_lang );
+
+			if ( $translated_term_id && $translated_term_id !== $term->term_id ) {
+				$translated_term = get_term( $translated_term_id, $term->taxonomy );
+				if ( $translated_term instanceof WP_Term ) {
+					$translated_name = $translated_term->name;
+				}
+			}
+		}
+
+		/** @psalm-suppress TooManyArguments - WordPress apply_filters accepts variable arguments */
+		$translated_name = apply_filters( 'astra_breadcrumb_translated_term_name', $translated_name, $term );
+
+		return esc_html( $translated_name );
+	}
+
 }

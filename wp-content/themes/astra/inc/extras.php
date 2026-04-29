@@ -461,7 +461,7 @@ function astra_get_theme_author_details() {
  * @return string The menu item.
  */
 function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
-	$role = 'application';
+	$role = 'button';
 	$icon = '';
 
 	/**
@@ -506,7 +506,16 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 
 	if ( $load_svg_menu_icons || ( defined( 'ASTRA_EXT_VER' ) && ! Astra_Ext_Extension::is_active( 'nav-menu' ) ) ) {
 		// Assign icons to only those menu which are registered by Astra.
-		$icon = Astra_Icons::get_icons( 'arrow' );
+		$icon = wp_kses(
+			/**
+			 * Filter to modify the submenu arrow icon SVG markup.
+			 *
+			 * @param string $icon SVG icon markup.
+			 * @since 4.12.1
+			 */
+			apply_filters( 'astra_mobile_nav_submenu_items_arrow_icon', Astra_Icons::get_icons( 'arrow' ) ),
+			Astra_Icons::allowed_svg_args()
+		);
 	}
 
 	// Dropdown svg arrow for submenu for non Astra registered menu's
@@ -1485,6 +1494,16 @@ function astra_get_blog_posts_per_page() {
  * @since 4.6.0
  */
 function astra_remote_docs_data() {
+	/**
+	 * Filter to disable docs loading.
+	 *
+	 * @param bool $disable_docs True to disable, false to enable.
+	 * @since 4.12.2
+	 */
+	if ( apply_filters( 'astra_disable_docs', true ) ) {
+		return false;
+	}
+
 	$astra_docs_instance = astra_docs_loader_instance( ASTRA_WEBSITE_BASE_URL . '/wp-json/powerful-docs/v1/get-docs', 'astra-docs' );
 	return json_decode( $astra_docs_instance->get_remote_data() );
 }

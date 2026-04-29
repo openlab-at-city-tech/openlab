@@ -80,6 +80,11 @@ if ( ! class_exists( 'Astra_Edd_Container_Configs' ) ) {
 				),
 			);
 
+			// Upgrade nudge if Astra Pro is not activated.
+			if ( astra_showcase_upgrade_notices() ) {
+				$_configs[] = Astra_Customizer_Register_Edd_Section::get_upgrade_nudge_config( 'ast-edd-general-pro-items', 'section-edd-general' );
+			}
+
 			return array_merge( $configurations, $_configs );
 		}
 	}

@@ -74,7 +74,7 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 				),
 			);
 
-			$ignore_single_for_posttypes  = array( 'post', 'product' );
+			$ignore_single_for_posttypes  = array( 'post', 'product', 'buddypress' );
 			$ignore_archive_for_posttypes = array( 'post', 'product' );
 
 			/**

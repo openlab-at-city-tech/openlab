@@ -75,6 +75,8 @@ class Astra_Menu {
 
 		add_action( 'admin_menu', array( $this, 'setup_menu' ) );
 		add_action( 'admin_init', array( $this, 'settings_admin_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_pricing_intent_script' ) );
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_pricing_intent_script' ) );
 
 		add_filter( 'install_plugins_tabs', array( $this, 'add_astra_woo_suggestions_link' ), 1 );
 		add_action( 'install_plugins_pre_astra-woo', array( $this, 'update_plugin_suggestions_tab_link' ) );
@@ -146,6 +148,58 @@ class Astra_Menu {
 	}
 
 	/**
+	 * Enqueue an inline script that sets a sessionStorage flag whenever
+	 * the user opens any wpastra.com/pricing link — via window.open() or a plain anchor.
+	 * Skipped when Astra Pro is already active (no nudge needed).
+	 *
+	 * Hooked to admin_enqueue_scripts (restricted to Astra dashboard and post editor pages)
+	 * and customize_controls_enqueue_scripts for Customizer coverage.
+	 *
+	 * @since 4.13.0
+	 * @return void
+	 */
+	public function enqueue_pricing_intent_script() {
+		if ( defined( 'ASTRA_EXT_VER' ) ) {
+			return;
+		}
+
+		$script = <<<'JS'
+(function () {
+	const KEY = 'astraPricingVisited';
+	const PATTERN = 'wpastra.com/pricing';
+
+	function markPricingIntent() {
+		const expires = new Date( Date.now() + 86400000 ).toUTCString();
+		document.cookie = KEY + '=1; expires=' + expires + '; path=/; SameSite=Strict';
+		window.dispatchEvent( new CustomEvent( 'astraPricingIntent' ) );
+	}
+
+	/* Intercept window.open() calls */
+	const _open = window.open;
+	window.open = function ( url ) {
+		if ( url && url.indexOf( PATTERN ) !== -1 ) {
+			markPricingIntent();
+		}
+		return _open.apply( this, arguments );
+	};
+
+	/* Intercept anchor clicks (capture phase catches React synthetic events too) */
+	document.addEventListener( 'click', function ( e ) {
+		const el = e.target && e.target.closest( 'a[href]' );
+		if ( el && el.href && el.href.indexOf( PATTERN ) !== -1 ) {
+			markPricingIntent();
+		}
+	}, true );
+}());
+JS;
+
+		// Attach to a guaranteed-present handle so WordPress always outputs the inline script.
+		// customize-controls is available on the customizer page; jquery covers all admin pages.
+		$handle = doing_action( 'customize_controls_enqueue_scripts' ) ? 'customize-controls' : 'jquery';
+		wp_add_inline_script( $handle, $script );
+	}
+
+	/**
 	 * Add submenu to admin menu.
 	 *
 	 * @since 4.0.0
@@ -211,13 +265,36 @@ class Astra_Menu {
 					$capability,
 					'admin.php?page=' . self::$plugin_slug . '&path=woocommerce'
 				);
-			} elseif ( ASTRA_THEME_ORG_VERSION && ! $this->spectra_has_top_level_menu() ) {
+			}
+			// elseif ( ASTRA_THEME_ORG_VERSION && ! $this->spectra_has_top_level_menu() ) {
+			// add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page -- Taken the menu on top level
+			// self::$plugin_slug,
+			// 'Spectra',
+			// 'Spectra',
+			// $capability,
+			// $this->get_spectra_page_admin_link()
+			// );
+			// }
+		}
+
+		$admin_settings = get_option( 'astra_admin_settings', array() );
+		$show_learn_tab = isset( $admin_settings['show_learn_tab'] ) ? $admin_settings['show_learn_tab'] : true;
+
+		// Add Learn submenu with incomplete chapters count if there are any incomplete chapters and the Learn tab is enabled.
+		if ( false !== $show_learn_tab && is_callable( 'Astra_Learn::get_incomplete_chapters_count' ) ) {
+			$incomplete_count = Astra_Learn::get_incomplete_chapters_count();
+			if ( $incomplete_count > 0 ) {
+				$learn_menu_title = __( 'Learn', 'astra' ) . sprintf(
+					' <span class="awaiting-mod count-%1$d"><span class="pending-count">%1$d</span></span>',
+					$incomplete_count
+				);
+
 				add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page -- Taken the menu on top level
 					self::$plugin_slug,
-					'Spectra',
-					'Spectra',
+					__( 'Learn', 'astra' ),
+					$learn_menu_title,
 					$capability,
-					$this->get_spectra_page_admin_link()
+					'admin.php?page=' . self::$plugin_slug . '&path=learn'
 				);
 			}
 		}
@@ -318,6 +395,17 @@ class Astra_Menu {
 			'admin_url'               => admin_url( 'admin.php' ),
 			'home_slug'               => self::$plugin_slug,
 			'upgrade_url'             => astra_get_upgrade_url( 'dashboard' ),
+			'license_account_url'     => add_query_arg(
+				array(
+					'utm_source'   => 'astra',
+					'utm_medium'   => 'dashboard',
+					'utm_campaign' => 'upgrade',
+				),
+				is_callable( array( 'BSF_UTM_Analytics', 'get_utm_ready_link' ) )
+					? remove_query_arg( 'bsf', BSF_UTM_Analytics::get_utm_ready_link( 'https://store.brainstormforce.com/account/', 'astra' ) )
+					: 'https://store.brainstormforce.com/account/?utm_source=free-theme'
+			),
+			'license_help_url'        => astra_get_pro_url( '/docs/activate-astra-pro-addon-license/', 'free-theme', 'dashboard', 'upgrade' ),
 			'customize_url'           => admin_url( 'customize.php' ),
 			'astra_base_url'          => admin_url( 'admin.php?page=' . self::$plugin_slug ),
 			'logo_url'                => apply_filters( 'astra_admin_menu_icon', ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ),
@@ -351,10 +439,17 @@ class Astra_Menu {
 				'whatsNewFeedUrl'        => esc_url( ASTRA_WEBSITE_BASE_URL . '/whats-new/feed/' ),
 			),
 			/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			'astra_cta_btn_url'       => ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'dashboard', 'unlock-pro-features-CTA' ) : 'https://woocommerce.com/products/astra-pro/',
+			'astra_cta_btn_url'       => astra_get_pro_url( '/pricing/', 'free-theme', 'dashboard', 'unlock-pro-features-CTA' ),
+			/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			'is_woo_market_zip'       => ! ASTRA_THEME_ORG_VERSION,
 			/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			'plugin_configuring_text' => esc_html__( 'Configuring', 'astra' ),
 			'bsfUsageTrackingUrl'     => 'https://store.brainstormforce.com/usage-tracking/?utm_source=astra&utm_medium=dashboard&utm_campaign=usage_tracking',
+			'rest_url'                => rest_url(),
+			'current_username'        => wp_get_current_user()->user_login,
+			'application_passwords_url' => admin_url( 'profile.php#application-passwords-section' ),
+			'is_mcp_adapter_active'   => class_exists( 'WP\MCP\Plugin' ),
+			'site_builder_url'        => esc_url( admin_url( 'admin.php?page=theme-builder-free' ) ),
 		);
 
 		$this->settings_app_scripts( apply_filters( 'astra_react_admin_localize', $localize ) );
@@ -813,69 +908,20 @@ class Astra_Menu {
 			),
 		);
 
-		if ( ! $under_useful_plugins ) {
-			$extensions[] = array(
-				'title'       => 'OttoKit: WordPress Automation',
-				'subtitle'    => __( 'Connect your WordPress plugins, WooCommerce sites, apps, and websites for powerful automations.', 'astra' ),
-				'status'      => self::get_plugin_status( 'suretriggers/suretriggers.php' ),
-				'slug'        => 'suretriggers',
-				'path'        => 'suretriggers/suretriggers.php',
-				'redirection' => admin_url( 'admin.php?page=suretriggers' ),
-				'ratings'     => '(60+)',
-				'activations' => '1,00,000 +',
-				'logoPath'    => array(
-					'internal_icon' => true,
-					'icon_path'     => 'ottokit',
-				),
-			);
-		}
-
-		$extensions[] = array(
-			'title'       => 'Spectra: Blocks Builder',
-			'subtitle'    => $under_useful_plugins ? __( 'Free WordPress Page Builder.', 'astra' ) : __( 'Power-up block editor with advanced blocks for faster and effortlessly website creation.', 'astra' ),
-			'status'      => self::get_plugin_status( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ),
-			'slug'        => 'ultimate-addons-for-gutenberg',
-			'path'        => 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
-			'redirection' => admin_url( 'options-general.php?page=spectra' ),
-			'ratings'     => '(1500+)',
-			'activations' => '1,000,000 +',
-			'logoPath'    => array(
-				'internal_icon' => false,
-				'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon-256x256.gif',
-			),
-		);
-
 		$extensions[] = array(
 			'title'       => 'Modern Cart for WooCommerce',
 			'subtitle'    => $under_useful_plugins ? __( 'Modern Cart: A smarter way to sell', 'astra' ) : __( 'Say goodbye to slow checkouts – boost sales with a smooth, hassle-free experience.', 'astra' ),
-			'status'      => 'visit',
-			'slug'        => '',
-			'path'        => '',
-			'redirection' => esc_url( 'https://cartflows.com/modern-cart-for-woocommerce/?utm_source=cross_promotions&utm_medium=referral&utm_campaign=astra_dashboard' ),
+			'status'      => self::get_plugin_status( 'modern-cart/modern-cart.php' ),
+			'slug'        => 'modern-cart',
+			'path'        => 'modern-cart/modern-cart.php',
+			'redirection' => admin_url( 'admin.php?page=moderncart_settings' ),
 			'ratings'     => '(25+)',
-			'activations' => '100 +',
+			'activations' => '10,000 +',
 			'logoPath'    => array(
 				'internal_icon' => true,
 				'icon_path'     => 'moderncart',
 			),
 		);
-
-		if ( ! $under_useful_plugins ) {
-			$extensions[] = array(
-				'title'       => 'PayPal Payments For WooCommerce',
-				'subtitle'    => __( 'PayPal Payments For WooCommerce simplifies and secures PayPal transactions on your store.', 'astra' ),
-				'status'      => self::get_plugin_status( 'checkout-paypal-woo/checkout-paypal-woo.php' ),
-				'slug'        => 'checkout-paypal-woo',
-				'path'        => 'checkout-paypal-woo/checkout-paypal-woo.php',
-				'redirection' => admin_url( 'admin.php?page=wc-settings&tab=cppw_api_settings' ),
-				'ratings'     => '(2)',
-				'activations' => '6,000 +',
-				'logoPath'    => array(
-					'internal_icon' => false,
-					'icon_path'     => 'https://ps.w.org/checkout-paypal-woo/assets/icon-128x128.jpg',
-				),
-			);
-		}
 
 		$extensions[] = array(
 			'title'       => 'Cart Abandonment Recovery',

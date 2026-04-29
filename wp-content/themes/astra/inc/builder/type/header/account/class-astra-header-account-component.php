@@ -28,8 +28,6 @@ if ( ! class_exists( 'Astra_Header_Account_Component' ) ) {
 		public function __construct() {
 
 			// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
-			require_once ASTRA_HEADER_ACCOUNT_DIR . '/class-astra-header-account-component-loader.php';
-
 			// Include front end files.
 			if ( ! is_admin() || Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
 				require_once ASTRA_HEADER_ACCOUNT_DIR . '/dynamic-css/dynamic.css.php';

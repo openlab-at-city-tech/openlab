@@ -1,6 +1,6 @@
 <?php
 /**
- * Post Strctures Extension
+ * Post Structures Extension
  *
  * @package Astra
  * @since 4.0.0
@@ -14,7 +14,7 @@ define( 'ASTRA_THEME_POST_STRUCTURE_DIR', ASTRA_THEME_DIR . 'inc/modules/posts-s
 define( 'ASTRA_THEME_POST_STRUCTURE_URI', ASTRA_THEME_URI . 'inc/modules/posts-structures/' );
 
 /**
- * Post Strctures Initial Setup
+ * Post Structures Initial Setup
  *
  * @since 4.0.0
  */

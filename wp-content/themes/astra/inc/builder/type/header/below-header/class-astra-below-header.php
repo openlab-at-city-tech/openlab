@@ -26,8 +26,6 @@ class Astra_Below_Header {
 	public function __construct() {
 
 		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
-		require_once ASTRA_BELOW_HEADER_DIR . '/class-astra-below-header-loader.php';
-
 		// Include front end files.
 		if ( ! is_admin() || Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
 			require_once ASTRA_BELOW_HEADER_DIR . '/dynamic-css/dynamic.css.php';

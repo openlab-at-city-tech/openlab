@@ -231,7 +231,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 			if ( get_post_meta( get_the_ID(), '_llms_display_reviews', true ) ) {
 				?>
 				<div id="old_reviews">
-				<h3><?php echo apply_filters( 'lifterlms_reviews_section_title', _e( 'What Others Have Said', 'astra' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h3>
+				<h3><?php echo esc_html( apply_filters( 'lifterlms_reviews_section_title', __( 'What Others Have Said', 'astra' ) ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h3>
 				<?php
 				$args = array(
 					'posts_per_page'   => get_post_meta( get_the_ID(), '_llms_num_reviews', true ), // phpcs:ignore WPThemeReview.CoreFunctionality.PostsPerPage.posts_per_page_posts_per_page, WordPress.WP.PostsPerPage.posts_per_page_posts_per_page
@@ -255,15 +255,29 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 					$styles = apply_filters( 'llms_review_custom_styles', $styles ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				}
 
+				// Sanitize custom CSS: extract CSS from <style> tags if present, strip dangerous tags, wrap in <style>.
+				// Handles both: plain CSS and CSS wrapped in <style> tags.
+				$custom_css = isset( $styles['custom-css'] ) ? $styles['custom-css'] : '';
+
+				// Extract content from <style> tags if the value is wrapped in them.
+				if ( ! empty( $custom_css ) && preg_match( '/<style[^>]*>(.*?)<\/style>/si', $custom_css, $matches ) ) {
+					$custom_css = $matches[1];
+				}
+
+				// Strip any remaining HTML/script tags from the extracted CSS.
+				$custom_css = wp_strip_all_tags( $custom_css );
+
 				foreach ( $posts_array as $post ) {
-					echo $styles['custom-css']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					if ( ! empty( $custom_css ) ) {
+						echo '<style>' . $custom_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS sanitized via wp_strip_all_tags above.
+					}
 
 					?>
 					<div class="llms_review" style="background-color:<?php echo esc_attr( $styles['background-color'] ); ?>;">
 						<h5 style="color:<?php echo esc_attr( $styles['title-color'] ); ?>;"><strong><?php echo esc_html( get_the_title( $post->ID ) ); ?></strong></h5>
 						<?php /* translators: 1 Author Name. */ ?>
 						<h6 style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo esc_html( sprintf( __( 'By: %s', 'astra' ), get_the_author_meta( 'display_name', get_post_field( 'post_author', $post->ID ) ) ) ); ?></h6>
-						<p style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo get_post_field( 'post_content', $post->ID ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+						<p style="color:<?php echo esc_attr( $styles['text-color'] ); ?>;"><?php echo wp_kses_post( get_post_field( 'post_content', $post->ID ) ); ?></p>
 					</div>
 					<?php
 				}
@@ -299,7 +313,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 				if ( get_post_meta( get_the_ID(), '_llms_multiple_reviews_disabled', true ) && $posts_array ) {
 					?>
 					<div id="thank_you_box">
-						<h2><?php echo apply_filters( 'llms_review_thank_you_text', __( 'Thank you for your review!', 'astra' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h2>
+						<h2><?php echo esc_html( apply_filters( 'llms_review_thank_you_text', __( 'Thank you for your review!', 'astra' ) ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h2>
 					</div>
 					<?php
 				} else {
@@ -311,13 +325,13 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 						<h5 style="color:red; display:none" id="review_title_error"><?php esc_html_e( 'Review Title is required.', 'astra' ); ?></h5>
 						<textarea name="review_text" placeholder="<?php esc_attr_e( 'Review Text', 'astra' ); ?>" id="review_text"></textarea>
 						<h5 style="color:red; display:none" id="review_text_error"><?php esc_html_e( 'Review Text is required.', 'astra' ); ?></h5>
-						<?php wp_nonce_field( 'submit_review', 'submit_review_nonce_code' ); ?>
+						<?php wp_nonce_field( 'llms-review', 'llms_review_nonce' ); ?>
 						<input name="action" value="submit_review" type="hidden">
 						<input name="post_ID" value="<?php /** @psalm-suppress InvalidScalarArgument */ echo esc_attr( $post_id ); ?>" type="hidden" id="post_ID">
 						<input type="submit" class="button" value="<?php esc_attr_e( 'Leave Review', 'astra' ); ?>" id="llms_review_submit_button">
 					</div>
 					<div id="thank_you_box" style="display:none;">
-						<h2><?php echo apply_filters( 'llms_review_thank_you_text', __( 'Thank you for your review!', 'astra' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h2>
+						<h2><?php echo esc_html( apply_filters( 'llms_review_thank_you_text', __( 'Thank you for your review!', 'astra' ) ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound ?></h2>
 					</div>
 					<?php
 				}

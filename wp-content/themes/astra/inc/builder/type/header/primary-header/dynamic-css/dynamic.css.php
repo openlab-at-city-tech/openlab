@@ -44,7 +44,7 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 		'.ast-mobile-header-wrap .ast-primary-header-bar, .ast-primary-header-bar .site-primary-header-wrap' => array(
 			'min-height' => astra_get_css_value( $hb_header_height_desktop, 'px' ),
 		),
-		'.ast-desktop .ast-primary-header-bar .main-header-menu > .menu-item' => array(
+		'.ast-desktop:not(:has(.ast-header-sticked)) .ast-primary-header-bar .main-header-menu > .menu-item' => array(
 			'line-height' => astra_get_css_value( $hb_header_height_desktop, 'px' ),
 		),
 	);

@@ -55,6 +55,14 @@ class Astra_Related_Posts_Markup {
 	 */
 	public function astra_related_posts_markup() {
 		if ( astra_target_rules_for_related_posts() ) {
+			$disable_related_posts = get_post_meta( absint( astra_get_post_id() ), 'ast-disable-related-posts', true );
+			$disable_related_posts = apply_filters( 'astra_disable_related_posts', $disable_related_posts );
+
+			// Return early if disabled for this post.
+			if ( 'disabled' === $disable_related_posts ) {
+				return;
+			}
+
 			$this->astra_get_related_posts();
 		}
 	}
@@ -122,25 +130,27 @@ class Astra_Related_Posts_Markup {
 							echo '<div class="customizer-item-block-preview customizer-navigate-on-focus ast-single-related-posts-container ' . esc_attr( $module_container_width ) . '" data-section="ast-sub-section-related-posts" data-type="section">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							Astra_Builder_UI_Controller::render_customizer_edit_button( 'row-editor-shortcut' );
 						} else {
-							echo '<div class="ast-single-related-posts-container ' . esc_attr( $module_container_width ) . '">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo '<div class="ast-single-related-posts-container ' . esc_attr( $module_container_width ) . '">';
 						}
 
 						do_action( 'astra_related_posts_title_before' );
 
 						if ( '' !== $related_posts_title ) {
-							echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								'astra_related_posts_title',
-								sprintf(
-									'<div class="ast-related-posts-title-section"> <%1$s class="ast-related-posts-title"> %2$s </%1$s> </div>',
-									apply_filters( 'astra_related_posts_box_heading_tag', 'h2' ),
-									$related_posts_title
+							echo wp_kses_post(
+								apply_filters(
+									'astra_related_posts_title',
+									sprintf(
+										'<div class="ast-related-posts-title-section"> <%1$s class="ast-related-posts-title"> %2$s </%1$s> </div>',
+										tag_escape( apply_filters( 'astra_related_posts_box_heading_tag', 'h2' ) ),
+										esc_html( $related_posts_title )
+									)
 								)
 							);
 						}
 
 						do_action( 'astra_related_posts_title_after' );
 
-						echo '<div class="ast-related-posts-wrapper">'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo '<div class="ast-related-posts-wrapper">';
 
 						$related_posts_section_loaded = true;
 					}

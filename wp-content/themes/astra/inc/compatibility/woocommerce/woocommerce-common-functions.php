@@ -55,9 +55,8 @@ if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) {
 				$product_categories = html_entity_decode( wp_strip_all_tags( $product_categories ), ENT_COMPAT );
 				if ( $product_categories ) {
 					list( $parent_cat ) = explode( ';', $product_categories );
-					echo apply_filters( 'astra_woo_shop_product_categories', esc_html( $parent_cat ), get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo wp_kses_post( apply_filters( 'astra_woo_shop_product_categories', esc_html( $parent_cat ), get_the_ID() ) );
 				}
-
 				?>
 			</span>
 			<?php
@@ -341,24 +340,7 @@ function astra_cart_color_default_icon_old_header() {
  * @since 3.9.2
  */
 function astra_add_to_cart_quantity_btn_enabled() {
-	$is_enabled = astra_get_option( 'single-product-plus-minus-button' );
-
-	// If on single product page, check if product is sold individually
-	if ( $is_enabled && is_product() ) {
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		/** @psalm-suppress InvalidGlobal */
-		global $product;
-
-		if ( ! $product instanceof WC_Product ) {
-			$product = wc_get_product( get_the_ID() );
-		}
-
-		if ( $product instanceof WC_Product && $product->is_sold_individually() ) {
-			$is_enabled = false;
-		}
-	}
-
-	return apply_filters( 'astra_add_to_cart_quantity_btn_enabled', $is_enabled );
+	return apply_filters( 'astra_add_to_cart_quantity_btn_enabled', astra_get_option( 'single-product-plus-minus-button' ) );
 }
 
 /**

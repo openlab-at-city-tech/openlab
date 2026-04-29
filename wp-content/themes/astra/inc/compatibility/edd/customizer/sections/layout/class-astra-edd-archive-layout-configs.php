@@ -239,26 +239,9 @@ if ( ! class_exists( 'Astra_Edd_Archive_Layout_Configs' ) ) {
 				),
 			);
 
-			// Learn More link if Astra Pro is not activated.
+			// Upgrade nudge if Astra Pro is not activated.
 			if ( astra_showcase_upgrade_notices() ) {
-
-				$_configs[] =
-
-					/**
-					 * Option: Learn More about Contant Typography
-					 */
-					array(
-						'name'     => ASTRA_THEME_SETTINGS . '[edd-product-archive-button-link]',
-						'type'     => 'control',
-						'control'  => 'ast-button-link',
-						'section'  => 'section-edd-archive',
-						'priority' => 999,
-						'title'    => __( 'View Astra Pro Features', 'astra' ),
-						'url'      => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'edd' ),
-						'settings' => array(),
-						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
-					);
-
+				$_configs[] = Astra_Customizer_Register_Edd_Section::get_upgrade_nudge_config( 'ast-edd-pro-items', 'section-edd-archive' );
 			}
 
 			return array_merge( $configurations, $_configs );

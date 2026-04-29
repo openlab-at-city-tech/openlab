@@ -503,6 +503,9 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 				margin: revert;
 				' . $lists_padding . '
 			}
+			.entry-content ul.wc-block-product-template{
+				padding: 0;
+			}
 		';
 	}
 

@@ -1,11 +1,15 @@
 <?php
 /**
- * Register customizer Aspra Pro Section.
+ * Register customizer Astra Pro Section.
  *
  * @package   Astra
  * @link      https://wpastra.com/
  * @since     Astra 1.0.10
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
 
 if ( ! class_exists( 'Astra_Pro_Upgrade_Link_Configs' ) ) {
 
@@ -28,7 +32,7 @@ if ( ! class_exists( 'Astra_Pro_Upgrade_Link_Configs' ) ) {
 					'name'             => 'astra-pro',
 					'type'             => 'section',
 					'ast_type'         => 'astra-pro',
-					'title'            => esc_html__( 'More Options Available in Astra Pro!', 'astra' ),
+					'title'            => esc_html__( 'More Options Available in Toolkit', 'astra' ),
 					'pro_url'          => astra_get_upgrade_url( 'pricing' ),
 					'priority'         => 1,
 					'section_callback' => 'Astra_Pro_Customizer',

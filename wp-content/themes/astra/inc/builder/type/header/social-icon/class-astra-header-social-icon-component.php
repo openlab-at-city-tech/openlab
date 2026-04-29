@@ -26,8 +26,6 @@ class Astra_Header_Social_Icon_Component {
 	public function __construct() {
 
 		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
-		require_once ASTRA_HEADER_SOCIAL_ICON_DIR . '/class-astra-header-social-icon-component-loader.php';
-
 		// Include front end files.
 		if ( ! is_admin() || Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
 			require_once ASTRA_HEADER_SOCIAL_ICON_DIR . '/dynamic-css/dynamic.css.php';

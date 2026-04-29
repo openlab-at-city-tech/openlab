@@ -396,22 +396,27 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 			);
 
 			if ( isset( $val['desktop'] ) ) {
-				$spacing['desktop'] = array_map( 'self::check_numberic_values', $val['desktop'] );
+				$spacing['desktop'] = array_map( array( self::class, 'check_numberic_values' ), $val['desktop'] );
 
-				$spacing['tablet'] = array_map( 'self::check_numberic_values', $val['tablet'] );
+				$spacing['tablet'] = array_map( array( self::class, 'check_numberic_values' ), $val['tablet'] );
 
-				$spacing['mobile'] = array_map( 'self::check_numberic_values', $val['mobile'] );
+				$spacing['mobile'] = array_map( array( self::class, 'check_numberic_values' ), $val['mobile'] );
+
+				$allowed_units = array( '', 'px', 'em', 'rem', '%' );
 
 				if ( isset( $val['desktop-unit'] ) ) {
-					$spacing['desktop-unit'] = $val['desktop-unit'];
+					$desktop_unit            = sanitize_text_field( $val['desktop-unit'] );
+					$spacing['desktop-unit'] = in_array( $desktop_unit, $allowed_units, true ) ? $desktop_unit : 'px';
 				}
 
 				if ( isset( $val['tablet-unit'] ) ) {
-					$spacing['tablet-unit'] = $val['tablet-unit'];
+					$tablet_unit            = sanitize_text_field( $val['tablet-unit'] );
+					$spacing['tablet-unit'] = in_array( $tablet_unit, $allowed_units, true ) ? $tablet_unit : 'px';
 				}
 
 				if ( isset( $val['mobile-unit'] ) ) {
-					$spacing['mobile-unit'] = $val['mobile-unit'];
+					$mobile_unit            = sanitize_text_field( $val['mobile-unit'] );
+					$spacing['mobile-unit'] = in_array( $mobile_unit, $allowed_units, true ) ? $mobile_unit : 'px';
 				}
 
 				return $spacing;
@@ -749,6 +754,26 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 		}
 
 		/**
+		 * Sanitize a CSS property value for safe inline style output.
+		 *
+		 * Strips HTML tags, extra whitespace, and CSS structure characters
+		 * ({, }, ;) that could allow property breakout in a <style> block.
+		 *
+		 * @since 4.12.5
+		 * @param  string $value Raw CSS property value.
+		 * @return string        Sanitized value safe for inline CSS context.
+		 */
+		public static function sanitize_css_value( $value ) {
+			return preg_replace_callback(
+				'/[{};]/',
+				static function () {
+					return '';
+				},
+				sanitize_text_field( $value )
+			);
+		}
+
+		/**
 		 * Sanitize Background Obj
 		 *
 		 * @param  mixed $bg_obj setting input.
@@ -779,7 +804,10 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 
 						if ( 'background-image' === $key ) {
 							$out_bg_obj[ $key ] = esc_url_raw( $bg_obj[ $key ] );
+						} elseif ( 'overlay-gradient' === $key ) {
+							$out_bg_obj[ $key ] = self::sanitize_css_value( $bg_obj[ $key ] );
 						} else {
+							/** @psalm-suppress PossiblyUndefinedStringArrayOffset -- Key existence confirmed by isset check above. */
 							$out_bg_obj[ $key ] = esc_attr( $bg_obj[ $key ] );
 						}
 					}
@@ -895,8 +923,9 @@ if ( ! class_exists( 'Astra_Customizer_Sanitizes' ) ) {
 				foreach ( $bg as $key => $value ) {
 					if ( 'background-image' === $key ) {
 						$out_bg_obj[ $device ] [ $key ] = esc_url_raw( $value );
-					}
-					if ( 'background-media' === $key ) {
+					} elseif ( 'overlay-gradient' === $key ) {
+						$out_bg_obj[ $device ] [ $key ] = self::sanitize_css_value( $value );
+					} elseif ( 'background-media' === $key ) {
 						$out_bg_obj[ $device ] [ $key ] = floatval( $value );
 					} else {
 						$out_bg_obj[ $device ] [ $key ] = esc_attr( $value );

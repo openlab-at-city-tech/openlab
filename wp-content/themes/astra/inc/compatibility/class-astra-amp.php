@@ -741,9 +741,6 @@ if ( ! class_exists( 'Astra_AMP' ) ) {
 						'text-align'              => 'center',
 						'padding-bottom'          => '0',
 					),
-					'.ast-safari-browser-less-than-11.ast-woocommerce-cart-menu.ast-header-break-point .header-main-layout-2 .main-header-container' => array(
-						'display' => 'flex',
-					),
 				);
 
 				// Tablet CSS.

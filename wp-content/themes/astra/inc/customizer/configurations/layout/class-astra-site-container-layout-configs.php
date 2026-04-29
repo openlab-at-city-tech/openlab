@@ -169,7 +169,7 @@ if ( ! class_exists( 'Astra_Site_Container_Layout_Configs' ) ) {
 						'section'  => 'section-container-layout',
 						'default'  => '',
 						'priority' => 999,
-						'title'    => __( 'Use containers to their maximum potential with Astra Pro', 'astra' ),
+						'title'    => __( 'Use containers to their maximum potential', 'astra' ),
 						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 					),
 				);

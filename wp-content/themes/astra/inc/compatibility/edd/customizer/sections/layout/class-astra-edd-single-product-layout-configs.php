@@ -44,6 +44,11 @@ if ( ! class_exists( 'Astra_Edd_Single_Product_Layout_Configs' ) ) {
 				),
 			);
 
+			// Upgrade nudge if Astra Pro is not activated.
+			if ( astra_showcase_upgrade_notices() ) {
+				$_configs[] = Astra_Customizer_Register_Edd_Section::get_upgrade_nudge_config( 'ast-edd-single-pro-items', 'section-edd-single' );
+			}
+
 			return array_merge( $configurations, $_configs );
 		}
 	}

@@ -36,7 +36,7 @@ class Astra_Memory_Limit_Notice {
 	}
 
 	/**
-	 * Add memory notice using Astra_Notices system
+	 * Add memory notice using BSF_Admin_Notices system
 	 */
 	public function add_memory_notice() {
 		$notice_data = $this->get_memory_notice_data();
@@ -46,7 +46,7 @@ class Astra_Memory_Limit_Notice {
 			return;
 		}
 
-		// Add notice using Astra_Notices system.
+		// Add notice using BSF_Admin_Notices system.
 		$this->display_memory_notice( $notice_data );
 	}
 
@@ -150,7 +150,7 @@ class Astra_Memory_Limit_Notice {
 	}
 
 	/**
-	 * Register memory notice with Astra_Notices system
+	 * Register memory notice with BSF_Admin_Notices system
 	 *
 	 * @param array $notice_data Array containing memory data and notice type.
 	 */
@@ -180,7 +180,7 @@ class Astra_Memory_Limit_Notice {
 			'class'               => 'astra-memory-notice',
 		);
 
-		Astra_Notices::add_notice( $notice_args );
+		BSF_Admin_Notices::add_notice( $notice_args );
 	}
 
 	/**

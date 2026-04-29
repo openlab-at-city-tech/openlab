@@ -1,7 +1,7 @@
 {
   "customizer-settings": {
     "astra-settings": {
-      "theme-auto-version": "4.11.15",
+      "theme-auto-version": "4.13.1",
       "blog-single-post-structure": [
         "single-image",
         "single-title-meta"
@@ -468,8 +468,8 @@
       "mobile-header-toggle-btn-style": "minimal",
       "hide-custom-menu-mobile": 1,
       "mobile-header-toggle-target": "icon",
-      "load-google-fonts-locally": false,
-      "preload-local-fonts": false,
+      "load-google-fonts-locally": true,
+      "preload-local-fonts": true,
       "enable-scroll-to-id": true,
       "enable-related-posts": false,
       "related-posts-title": "Related Posts",

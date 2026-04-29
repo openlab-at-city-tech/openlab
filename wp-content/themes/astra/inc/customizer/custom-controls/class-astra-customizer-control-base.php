@@ -50,7 +50,7 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 			$file_rtl    = is_rtl() ? '-rtl' : '';
 			$css_uri     = ASTRA_THEME_URI . 'inc/customizer/custom-controls/assets/css/' . $dir_name . '/';
-			$js_uri      = ASTRA_THEME_URI . 'inc/customizer/custom-controls/assets/js/unminified/';
+			$js_uri      = ASTRA_THEME_URI . 'inc/customizer/custom-controls/assets/js/' . $dir_name . '/';
 
 			wp_enqueue_style( 'astra-custom-control-style' . $file_rtl, $css_uri . 'custom-controls' . $file_prefix . $file_rtl . '.css', null, ASTRA_THEME_VERSION );
 
@@ -62,7 +62,7 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 				'jquery-ui-sortable',
 			);
 
-			wp_enqueue_script( 'astra-custom-control-plain-script', $js_uri . 'custom-controls-plain.js', $custom_controls_plain_deps, ASTRA_THEME_VERSION, true );
+			wp_enqueue_script( 'astra-custom-control-plain-script', $js_uri . 'custom-controls-plain' . $file_prefix . '.js', $custom_controls_plain_deps, ASTRA_THEME_VERSION, true );
 
 			// Enqueue Customizer React.JS script.
 			$custom_controls_react_deps = array(
@@ -77,6 +77,17 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 
 			wp_enqueue_script( 'astra-custom-control-script', ASTRA_THEME_URI . 'inc/customizer/extend-custom-controls/build/index.js', $custom_controls_react_deps, ASTRA_THEME_VERSION, true );
 			wp_set_script_translations( 'astra-custom-control-script', 'astra' );
+
+			// Icon libraries (svgs.json ~1.3 MB, ast-social-icons.json ~1.3 MB) are lazy-loaded
+			// via fetch() in the JS icon-loader module instead of being bundled into the JS build.
+			wp_localize_script(
+				'astra-custom-control-script',
+				'astraIconsConfig',
+				array(
+					'svgUrl'    => ASTRA_THEME_URI . 'assets/svg/svgs.json',
+					'socialUrl' => ASTRA_THEME_URI . 'assets/svg/ast-social-icons.json',
+				)
+			);
 
 			/**
 			 * Had to go this route because the default context check

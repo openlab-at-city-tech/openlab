@@ -79,6 +79,7 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 			}
 			// @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 
+			add_action( 'customize_preview_init', array( $this, 'enqueue_preview_bundle' ), 110 );
 			add_action( 'wp', array( $this, 'load_markup' ), 100 );
 
 			add_filter( 'astra_quick_settings', array( $this, 'quick_settings' ) );
@@ -174,6 +175,136 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 					}
 				}
 			}
+		}
+
+		/**
+		 * Enqueue the bundled builder components preview script and localize all data.
+		 * Replaces 25 individual script enqueues with one HTTP request.
+		 *
+		 * @since 4.13.0
+		 */
+		public function enqueue_preview_bundle() {
+			/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$dir_name = SCRIPT_DEBUG ? 'unminified' : 'minified';
+			/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
+
+			$bundle_handle   = 'ahfb-builder-customizer-preview';
+			$component_limit = defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : 0;
+
+			wp_enqueue_script(
+				$bundle_handle,
+				ASTRA_THEME_URI . 'inc/builder/type/assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js',
+				array( 'customize-preview', 'astra-customizer-preview-js' ),
+				ASTRA_THEME_VERSION,
+				true
+			);
+
+			// Breakpoints.
+			wp_localize_script(
+				$bundle_handle,
+				'astraBuilderPreview',
+				array(
+					'tablet_break_point' => astra_get_tablet_breakpoint(),
+					'mobile_break_point' => astra_get_mobile_breakpoint(),
+				)
+			);
+
+			// Primary header.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderPrimaryHeaderData',
+				array(
+					'header_break_point' => astra_header_break_point(),
+				)
+			);
+
+			// Primary footer.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderPrimaryFooterData',
+				array(
+					'footer_content_width' => astra_get_option( 'site-content-width' ),
+				)
+			);
+
+			// Header button.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderButtonData',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_header_button,
+				)
+			);
+
+			// Footer button.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderFooterButtonData',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_footer_button,
+				)
+			);
+
+			// Header HTML.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderHTMLData',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_header_html,
+				)
+			);
+
+			// Footer HTML — uses a separate variable to avoid conflict with header HTML component_limit.
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderFooterHTMLData',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_footer_html,
+				)
+			);
+
+			// Header menu.
+			/** @psalm-suppress UndefinedClass */
+			$nav_menu_enabled = defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'nav-menu' ) ? true : false;
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderMenuData',
+				array(
+					'component_limit'  => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_header_menu,
+					'nav_menu_enabled' => $nav_menu_enabled,
+				)
+			);
+
+			// Widget (header + footer share variable).
+			wp_localize_script(
+				$bundle_handle,
+				'AstraBuilderWidgetData',
+				array(
+					'header_widget_count' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_header_widgets,
+					'footer_widget_count' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_footer_widgets,
+					'is_flex_based_css'   => Astra_Builder_Helper::apply_flex_based_css(),
+					'has_block_editor'    => astra_has_widgets_block_editor(),
+				)
+			);
+
+			// Header social icons.
+			wp_localize_script(
+				$bundle_handle,
+				'astraBuilderHeaderSocial',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_header_social_icons,
+				)
+			);
+
+			// Footer social icons.
+			wp_localize_script(
+				$bundle_handle,
+				'astraBuilderFooterSocial',
+				array(
+					'component_limit' => $component_limit ? $component_limit : Astra_Builder_Helper::$num_of_footer_social_icons,
+				)
+			);
 		}
 
 		/**

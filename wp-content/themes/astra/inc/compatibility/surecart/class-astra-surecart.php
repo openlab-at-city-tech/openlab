@@ -50,6 +50,7 @@ class Astra_SureCart {
 		add_filter( 'astra_page_layout', array( $this, 'sc_shop_sidebar_layout' ) );
 		add_filter( 'astra_get_content_layout', array( $this, 'sc_shop_content_layout' ) );
 		add_action( 'wp', array( $this, 'remove_navigation_for_sc_product' ) );
+		add_action( 'astra_theme_dynamic_css', array( $this, 'surecart_compatibility_dynamic_css' ) );
 
 		// Boxed layout support.
 		add_filter( 'astra_is_content_layout_boxed', array( $this, 'sc_shop_content_boxed_layout' ) );
@@ -59,6 +60,37 @@ class Astra_SureCart {
 		add_filter( 'astra_archive_post_title', array( $this, 'customize_surecart_archive_title_area' ), 10, 2 );
 		add_filter( 'astra_single_post_title', array( $this, 'customize_surecart_single_title_area' ), 10, 2 );
 		add_action( 'admin_bar_menu', array( $this, 'customize_admin_bar' ), 999 );
+	}
+
+	/**
+	 * SureCart Compatibility Dynamic CSS
+	 *
+	 * @param string $dynamic_css Astra Dynamic CSS.
+	 * @since 4.11.16
+	 */
+	public function surecart_compatibility_dynamic_css( $dynamic_css ) {
+		// Check if SureCart single product page.
+		if ( is_singular( 'sc_product' ) ) {
+			$dynamic_css .= <<<CSS
+			/**
+			* Reset padding for blocks when body has surecart class to avoid conflicts
+			*/
+			body[class*="surecart-"] .entry-content > .wp-block-group {
+				padding: 0;
+			}
+
+			/**
+			* Reset margin adjustments for alignwide on smaller screens when body has surecart class
+			*/
+			@media (max-width: 1200px) {
+				body[class*="surecart-"].ast-separate-container .entry-content[data-ast-blocks-layout] > .alignwide {
+					margin: 0 auto;
+				}
+			}
+			CSS;
+		}
+
+		return $dynamic_css;
 	}
 
 	/**

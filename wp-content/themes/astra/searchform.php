@@ -20,12 +20,15 @@ $astra_search_input_value       = isset( $args['input_value'] ) ? $args['input_v
 // Check if live search is enabled & accordingly disabling browser search suggestion.
 $live_search       = astra_get_option( 'live-search' );
 $autocomplete_attr = $live_search ? 'autocomplete="off"' : '';
-
+$search_id         = 'search-field';
+if ( did_action( 'astra_sticky_header_markup' ) > 0 ) {
+	$search_id .= '-sticky';
+}
 ?>
 <form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 	<label for="search-field">
 		<span class="screen-reader-text"><?php echo esc_html__( 'Search for:', 'astra' ); ?></span>
-		<input type="search" id="search-field" class="search-field" <?php echo esc_attr( $autocomplete_attr ); ?> <?php echo esc_attr( $astra_search_data_attrs ); ?> placeholder="<?php echo esc_attr( $astra_search_input_placeholder ); ?>" value="<?php echo esc_attr( $astra_search_input_value ); ?>" name="s" tabindex="-1">
+		<input type="search" id="<?php echo esc_attr( $search_id ); ?>" class="search-field" <?php echo esc_attr( $autocomplete_attr ); ?> <?php echo esc_attr( $astra_search_data_attrs ); ?> placeholder="<?php echo esc_attr( $astra_search_input_placeholder ); ?>" value="<?php echo esc_attr( $astra_search_input_value ); ?>" name="s" tabindex="-1">
 		<?php if ( class_exists( 'Astra_Icons' ) && Astra_Icons::is_svg_icons() ) { ?>
 			<button class="search-submit ast-search-submit" aria-label="<?php echo esc_attr__( 'Search Submit', 'astra' ); ?>">
 				<span hidden><?php echo esc_html__( 'Search', 'astra' ); ?></span>

@@ -65,9 +65,6 @@ if ( ! class_exists( 'Astra_Admin_Loader' ) ) {
 			require_once ASTRA_THEME_ADMIN_DIR . 'includes/class-astra-menu.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound -- Not a template file so loading in a normal way.
 
 			require_once ASTRA_THEME_ADMIN_DIR . 'includes/class-astra-theme-builder-free.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound -- Not a template file so loading in a normal way.
-
-			/* BSF Analytics */
-			require_once ASTRA_THEME_ADMIN_DIR . 'class-astra-bsf-analytics.php';
 		}
 	}
 }

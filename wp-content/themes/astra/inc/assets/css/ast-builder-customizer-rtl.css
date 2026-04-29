@@ -2054,7 +2054,7 @@ button.components-button.ahfb-sorter-item-expand {
 	visibility: visible;
 }
 .rtl #astra-reset.button {
-	margin-right: 45px;
+	margin-right: 100px;
 }
 .rtl .customize-control-ast-builder .components-popover[data-x-axis="right"] .components-popover__content {
 	left: unset;

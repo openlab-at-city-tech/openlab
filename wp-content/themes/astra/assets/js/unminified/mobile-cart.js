@@ -343,6 +343,12 @@
 			});
 		});
 
+		// Listen for WooCommerce block-based add-to-cart (used by "Hand-picked Products" and "Products by Category" blocks).
+		// These blocks use the Store API (/wc/store/v1) and fire wc-blocks_added_to_cart instead of the classic added_to_cart event.
+		$(document.body).on('wc-blocks_added_to_cart', function () {
+			$(document.body).trigger('astra_refresh_cart_fragments');
+		});
+
 		// Triggering the 'astra_refresh_cart_fragments' event to refresh the cart fragments on page load.
 		$(document.body).trigger('astra_refresh_cart_fragments');
 	});

@@ -4,7 +4,6 @@
  * @return {array} The inline CSS class.
  */
 
-import astIcons from "../../../assets/svg/ast-social-icons"
 import parseSVG from "./ast-parse-svg"
 import React from 'react';
 
@@ -12,7 +11,9 @@ function renderSVG ( svg ) {
 
 	svg = parseSVG( svg )
 
-	var fontAwesome = astIcons[svg]
+	// Social icons are lazy-loaded; read from window global set by ensureSocialIcons().
+	const socialIcons = window.astraSocialIcons || {};
+	const fontAwesome = socialIcons[svg]
 
 	if ( "undefined" != typeof fontAwesome ) {
 

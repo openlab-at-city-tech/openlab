@@ -770,7 +770,14 @@ if ( ! function_exists( 'astra_get_post_id' ) ) {
 
 			if ( is_home() ) {
 				$post_id = get_option( 'page_for_posts' );
-			} elseif ( function_exists( 'is_shop' ) && is_shop() && function_exists( 'wc_get_page_id' ) ) {
+			} elseif (
+				function_exists( 'wc_get_page_id' ) &&
+				(
+					( function_exists( 'is_shop' ) && is_shop() ) ||
+					( function_exists( 'is_product_category' ) && is_product_category() ) ||
+					( function_exists( 'is_product_tag' ) && is_product_tag() )
+				)
+			) {
 				$post_id = wc_get_page_id( 'shop' );
 			} elseif ( is_archive() ) {
 				global $wp_query;
@@ -984,7 +991,7 @@ if ( ! function_exists( 'astra_the_search_page_title' ) ) {
 				/* translators: 1: search title, 2: search string */
 				'%1$s %2$s',
 				astra_get_i18n_option( 'section-search-page-title-custom-title', _x( '%astra%', 'Search Page Title: Heading - Text', 'astra' ) ),
-				'<span>' . get_search_query() . '</span>'
+				'<span>' . esc_html( get_search_query( false ) ) . '</span>'
 			)
 		);
 
@@ -1357,6 +1364,11 @@ if ( ! function_exists( 'astra_get_pro_url' ) ) {
 	 * @return mixed
 	 */
 	function astra_get_pro_url( $path, $source = '', $medium = '', $campaign = '' ) {
+
+		if ( '/pricing/' === $path && ! ASTRA_THEME_ORG_VERSION ) {
+			return 'https://woocommerce.com/products/astra-pro/';
+		}
+
 		$url           = esc_url( ASTRA_WEBSITE_BASE_URL . $path );
 		$astra_pro_url = trailingslashit( $url );
 
@@ -1604,7 +1616,34 @@ if ( ! function_exists( 'astra_is_white_labelled' ) ) {
  * @return string
  */
 function astra_get_fonts_display_property() {
-	return apply_filters( 'astra_fonts_display_property', 'fallback' );
+	return apply_filters( 'astra_fonts_display_property', 'swap' );
+}
+
+/**
+ * Sanitize background meta object for post meta storage.
+ *
+ * @since 4.12.4
+ * @param mixed $meta_value The background meta value to sanitize.
+ * @return array Sanitized background meta.
+ */
+function astra_sanitize_background_meta( $meta_value ) {
+	if ( ! is_array( $meta_value ) ) {
+		return array();
+	}
+
+	$devices   = array( 'desktop', 'tablet', 'mobile' );
+	$sanitized = array();
+
+	foreach ( $devices as $device ) {
+		if ( ! isset( $meta_value[ $device ] ) || ! is_array( $meta_value[ $device ] ) ) {
+			continue;
+		}
+		foreach ( $meta_value[ $device ] as $key => $value ) {
+			$sanitized[ $device ][ $key ] = sanitize_text_field( $value );
+		}
+	}
+
+	return $sanitized;
 }
 
 /**
@@ -1622,11 +1661,11 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 		return;
 	}
 
-	$bg_obj      = $bg_obj_res[ $device ];
-	$bg_img      = isset( $bg_obj['background-image'] ) ? $bg_obj['background-image'] : '';
-	$bg_tab_img  = isset( $bg_obj_res['tablet']['background-image'] ) ? $bg_obj_res['tablet']['background-image'] : '';
-	$bg_desk_img = isset( $bg_obj_res['desktop']['background-image'] ) ? $bg_obj_res['desktop']['background-image'] : '';
-	$bg_color    = isset( $bg_obj['background-color'] ) ? $bg_obj['background-color'] : '';
+	$bg_obj      = isset( $bg_obj_res[ $device ] ) ? $bg_obj_res[ $device ] : array();
+	$bg_img      = isset( $bg_obj['background-image'] ) ? esc_attr( $bg_obj['background-image'] ) : '';
+	$bg_tab_img  = isset( $bg_obj_res['tablet']['background-image'] ) ? esc_attr( $bg_obj_res['tablet']['background-image'] ) : '';
+	$bg_desk_img = isset( $bg_obj_res['desktop']['background-image'] ) ? esc_attr( $bg_obj_res['desktop']['background-image'] ) : '';
+	$bg_color    = isset( $bg_obj['background-color'] ) ? esc_attr( $bg_obj['background-color'] ) : '';
 	$tablet_css  = isset( $bg_obj_res['tablet']['background-image'] ) && $bg_obj_res['tablet']['background-image'] ? true : false;
 	$desktop_css = isset( $bg_obj_res['desktop']['background-image'] ) && $bg_obj_res['desktop']['background-image'] ? true : false;
 
@@ -1667,9 +1706,9 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$overlay_type = isset( $bg_obj['overlay-type'] ) ? $bg_obj['overlay-type'] : 'none';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$overlay_color = isset( $bg_obj['overlay-color'] ) ? $bg_obj['overlay-color'] : '';
+				$overlay_color = isset( $bg_obj['overlay-color'] ) ? esc_attr( $bg_obj['overlay-color'] ) : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$overlay_grad = isset( $bg_obj['overlay-gradient'] ) ? $bg_obj['overlay-gradient'] : '';
+				$overlay_grad = isset( $bg_obj['overlay-gradient'] ) ? esc_attr( $bg_obj['overlay-gradient'] ) : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$overlay_opacity = isset( $bg_obj['overlay-opacity'] ) ? $bg_obj['overlay-opacity'] : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
@@ -1706,7 +1745,7 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 				break;
 
 			case 'gradient':
-				if ( isset( $bg_color ) ) {
+				if ( '' !== $bg_color ) {
 					$gen_bg_css['background-image'] = $bg_color;
 				}
 				break;

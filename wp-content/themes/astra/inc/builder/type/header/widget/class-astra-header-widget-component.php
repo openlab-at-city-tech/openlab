@@ -26,8 +26,6 @@ class Astra_Header_Widget_Component {
 	public function __construct() {
 
 		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
-		require_once ASTRA_BUILDER_HEADER_WIDGET_DIR . '/class-astra-header-widget-component-loader.php';
-
 		// Include front end files.
 		if ( ! is_admin() || Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
 			require_once ASTRA_BUILDER_HEADER_WIDGET_DIR . '/dynamic-css/dynamic.css.php';

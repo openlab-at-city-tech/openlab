@@ -115,12 +115,19 @@ final class Astra_Fonts {
 			return;
 		}
 
+		$is_self_hosted = Astra_API_Init::get_admin_settings_option( 'self_hosted_gfonts', false );
+
+		// Add preconnect resource hints for Google Fonts when not using self-hosted fonts.
+		if ( ! $is_self_hosted && ! is_admin() ) {
+			add_filter( 'wp_resource_hints', array( self::class, 'preconnect_google_fonts' ), 10, 2 );
+		}
+
 		/**
 		 * Support self hosted Google Fonts.
 		 *
 		 * @since 3.6.0
 		 */
-		if ( Astra_API_Init::get_admin_settings_option( 'self_hosted_gfonts', false ) && ! is_customize_preview() && ! is_admin() ) {
+		if ( $is_self_hosted && ! is_customize_preview() && ! is_admin() ) {
 			if ( Astra_API_Init::get_admin_settings_option( 'preload_local_fonts', false ) ) {
 				astra_load_preload_local_fonts( $google_font_url );
 			}
@@ -128,6 +135,35 @@ final class Astra_Fonts {
 		} else {
 			wp_enqueue_style( 'astra-google-fonts', $google_font_url, array(), ASTRA_THEME_VERSION, 'all' );
 		}
+	}
+
+	/**
+	 * Add preconnect resource hints for Google Fonts.
+	 *
+	 * Uses the wp_resource_hints filter (fires at wp_head priority 2) to add
+	 * preconnect hints for fonts.googleapis.com and fonts.gstatic.com when
+	 * Google Fonts are loaded remotely (not self-hosted).
+	 *
+	 * @since 4.12.6
+	 * @param array  $urls          URLs to print for resource hints.
+	 * @param string $relation_type The relation type the URLs are printed for (dns-prefetch, preconnect, etc).
+	 * @return array Modified URLs array.
+	 */
+	public static function preconnect_google_fonts( $urls, $relation_type ) {
+		if ( 'preconnect' !== $relation_type ) {
+			return $urls;
+		}
+
+		$urls[] = array(
+			'href' => 'https://fonts.googleapis.com',
+		);
+
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+
+		return $urls;
 	}
 
 	/**

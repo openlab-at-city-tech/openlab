@@ -83,7 +83,7 @@ class Astra_Posts_Archive_Structures_Configs extends Astra_Customizer_Config_Bas
 
 		$reveal_effect = array();
 		/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) && ! ( 'post' === $post_type || 'product' === $post_type ) ) {
+		if ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) && ! ( 'post' === $post_type || 'product' === $post_type || 'buddypress' === $post_type ) ) {
 			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$reveal_effect = array(
 				'name'     => ASTRA_THEME_SETTINGS . '[archive-' . $post_type . '-ast-reveal-effect]',

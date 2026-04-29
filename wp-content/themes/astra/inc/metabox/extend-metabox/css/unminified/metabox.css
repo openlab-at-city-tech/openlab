@@ -308,25 +308,40 @@ td.ast-advanced-hook-row-heading {
 }
 
 .ast-pro-upgrade-cta-wrapper {
-    padding: 20px;
+    padding: 16px;
     text-align: center;
-	display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-}
-p.ast-upgrade-description {
-    margin: 0;
-}
-a.ast-pro-upgrade-link {
-    color: #0284C7;
-    display: block;
+    gap: 12px;
+    box-sizing: border-box;
     width: 100%;
+}
+.ast-pro-upgrade-cta-wrapper img {
+    width: 40px;
+    height: 40px;
+    display: block;
+}
+.ast-pro-upgrade-cta-wrapper p.ast-upgrade-description {
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #1e1e1e;
+}
+.ast-pro-upgrade-cta-wrapper a.ast-pro-upgrade-link {
+    color: #0284C7;
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
     text-decoration: none;
-    padding: 8px;
+    padding: 8px 16px;
     border: 1px solid #0284C7;
-    border-radius: 2px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 .ast-sub-section-title {

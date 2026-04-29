@@ -497,16 +497,21 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 					),
 				),
 
+				/**
+				 * Option: Background Overlay
+				 * Location: Custom Post Types > Blog / Archive > Design
+				 */
 				array(
-					'name'      => ASTRA_THEME_SETTINGS . '[post-card-featured-overlay]',
-					'default'   => astra_get_option( 'post-card-featured-overlay' ),
-					'type'      => 'control',
-					'control'   => 'ast-color',
-					'section'   => 'section-blog',
-					'priority'  => 2.5,
-					'title'     => __( 'Background Overlay', 'astra' ),
-					'transport' => 'postMessage',
-					'context'   => array(
+					'name'        => ASTRA_THEME_SETTINGS . '[post-card-background-overlay]',
+					'default'     => astra_get_option( 'post-card-background-overlay' ),
+					'type'        => 'control',
+					'control'     => 'ast-background',
+					'allow_image' => false,
+					'section'     => 'section-blog',
+					'priority'    => 2.5,
+					'title'       => __( 'Background Overlay', 'astra' ),
+					'transport'   => 'refresh',
+					'context'     => array(
 						Astra_Builder_Helper::$design_tab_config,
 						'relation' => 'AND',
 						array(

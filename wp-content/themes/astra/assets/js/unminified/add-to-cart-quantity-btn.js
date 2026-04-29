@@ -16,12 +16,12 @@ const astraminiCarttargetNodes = document.querySelectorAll(".ast-site-header-car
 astraminiCarttargetNodes.forEach(function(astraminiCarttargetNode) {
     if (astraminiCarttargetNode != null) {
         const config = { attributes: false, childList: true, subtree: true };
-    
+
         const astraMinicartObserver = () => {
             astrawpWooQuantityButtons();
             quantityInput();
         };
-    
+
         const observer = new MutationObserver(astraMinicartObserver);
         observer.observe(astraminiCarttargetNode, config);
     }
@@ -32,7 +32,7 @@ astraminiCarttargetNodes.forEach(function(astraminiCarttargetNode) {
  * hence the need to use jQuery
 */
 jQuery( function( $ ) {
-    $( document.body ).on( 'wc_fragments_refreshed', function() {
+    $( document.body ).on( 'wc_fragments_refreshed woosq_loaded', function() {
         astrawpWooQuantityButtons();
         quantityInput();
     });
@@ -72,18 +72,12 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
 
         if ( $quantityBoxes && 'date' !== $quantityBoxes.getAttribute( 'type' ) && 'hidden' !== $quantityBoxes.getAttribute( 'type' ) ) {
 
-            // Skip adding buttons if max quantity is 1 (sold individually)
-            var $maxQuantity = $quantityBoxes.getAttribute( 'max' );
-            if ( $maxQuantity && parseFloat( $maxQuantity ) === 1 ) {
-                continue;
-            }
-
             // Add plus and minus icons.
             $qty_parent = $quantityBoxes.parentElement;
 
             // Remove existing plus and minus placeholders.
             document.querySelectorAll( '.ast-qty-placeholder' )?.forEach( ( placeholder ) => placeholder?.remove() );
-            
+
             $qty_parent.classList.add( 'buttons_added' );
 
             const minusBtn = `<span class="screen-reader-text">${ astra_qty_btn.minus_qty }</span><a href="javascript:void(0)" id="minus_qty-${ i }" class="minus %s">-</a>`;
@@ -203,7 +197,7 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
                             update_cart_btn[btn].click();
                         }
                     }
-                    
+
                     const quantity = $quantityBox.value;
                     const itemHash = $quantityBox.getAttribute('name').replace(/cart\[([\w]+)\]\[qty\]/g, '$1');
 
@@ -247,7 +241,7 @@ function sendAjaxQuantityRequest(currentTarget, quantity, itemHash ) {
                     setTimeout(() => {
                         miniCart.classList.remove('ajax-mini-cart-qty-loading');
                     }, 500);
-                   
+
 
                     if ( typeof wc_add_to_cart_params === 'undefined' ) {
                         return;

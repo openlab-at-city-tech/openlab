@@ -22,16 +22,20 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <div class="wp-block-buttons"><!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#">Make a Website</a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons --></div><figure class="wp-block-media-text__media"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/hero-img.svg" alt="" class="wp-image-118 size-full"/></figure></div>
+<!-- /wp:buttons --></div><figure class="wp-block-media-text__media"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/hero-img.svg" alt="" class="wp-image-118 size-full" width="512" height="444" loading="eager" fetchpriority="high" decoding="async"/></figure></div>
 <!-- /wp:media-text --></div>
 <!-- /wp:group --></div></div>
 <!-- /wp:cover -->
 
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"bottom":"0px"}}},"backgroundColor":"ast-global-color-5","layout":{"inherit":false,"contentSize":"1200px","type":"constrained"}} -->
-<div class="wp-block-group alignfull has-ast-global-color-5-background-color has-background" style="padding-bottom:0px"><!-- wp:columns {"verticalAlignment":"top","style":{"spacing":{"blockGap":"40px"}}} -->
+<div class="wp-block-group alignfull has-ast-global-color-5-background-color has-background" style="padding-bottom:0px"><!-- wp:heading {"className":"screen-reader-text"} -->
+<h2 class="screen-reader-text">What We Offer</h2>
+<!-- /wp:heading -->
+
+<!-- wp:columns {"verticalAlignment":"top","style":{"spacing":{"blockGap":"40px"}}} -->
 <div class="wp-block-columns are-vertically-aligned-top"><!-- wp:column {"verticalAlignment":"top","style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":134,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/building.svg" alt="" class="wp-image-134"/></figure>
+<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":134,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/building.svg" alt="" class="wp-image-134" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"textAlign":"left","level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -44,8 +48,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"verticalAlignment":"top","style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":135,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/shopping-bag.svg" alt="" class="wp-image-135"/></figure>
+<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":135,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/shopping-bag.svg" alt="" class="wp-image-135" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"textAlign":"left","level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -58,8 +62,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"verticalAlignment":"top","style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":136,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/blog.svg" alt="" class="wp-image-136"/></figure>
+<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":136,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/blog.svg" alt="" class="wp-image-136" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"textAlign":"left","level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -72,8 +76,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"verticalAlignment":"top","style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":137,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/portfolio.svg" alt="" class="wp-image-137"/></figure>
+<div class="wp-block-column is-vertically-aligned-top"><!-- wp:image {"id":137,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/portfolio.svg" alt="" class="wp-image-137" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"textAlign":"left","level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -94,8 +98,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 
 <!-- wp:columns {"style":{"spacing":{"margin":{"top":"50px"}}}} -->
 <div class="wp-block-columns" style="margin-top:50px"><!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":230,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/branding.jpg" alt="" class="wp-image-230"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":230,"width":480,"height":600,"sizeSlug":"full","linkDestination":"none"} -->
+<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/branding.jpg" alt="" class="wp-image-230" width="480" height="600" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -108,8 +112,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":232,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/graphic.jpg" alt="" class="wp-image-232"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":232,"width":480,"height":600,"sizeSlug":"full","linkDestination":"none"} -->
+<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/graphic.jpg" alt="" class="wp-image-232" width="480" height="600" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -122,8 +126,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":231,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/web.jpg" alt="" class="wp-image-231"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":231,"width":480,"height":600,"sizeSlug":"full","linkDestination":"none"} -->
+<figure class="wp-block-image size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/web.jpg" alt="" class="wp-image-231" width="480" height="600" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -151,21 +155,21 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- wp:paragraph -->
 <p>Nibh egestas dictumst cursus est turpis quis tincidunt pulvinar maecenas eget massa vel, ante nam blandit egestas enim id quis sit maecenas id nunc tempus auctor orci, enim imperdiet proin nibh mattis.</p>
 <!-- /wp:paragraph --></div>
-<!-- /wp:group --></div><figure class="wp-block-media-text__media"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/about-us.jpg" alt="" class="wp-image-237 size-full"/></figure></div>
+<!-- /wp:group --></div><figure class="wp-block-media-text__media"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/about-us.jpg" alt="" class="wp-image-237 size-full" width="600" height="480" loading="lazy" decoding="async"/></figure></div>
 <!-- /wp:media-text --></div>
 <!-- /wp:group -->
 
 <!-- wp:group {"align":"full","backgroundColor":"ast-global-color-4","layout":{"inherit":false,"contentSize":"800px","type":"constrained"}} -->
-<div class="wp-block-group alignfull has-ast-global-color-4-background-color has-background" id="reviews"><!-- wp:image {"align":"center","id":235,"sizeSlug":"full","linkDestination":"none"} -->
-<figure class="wp-block-image aligncenter size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/avatar.png" alt="" class="wp-image-235"/></figure>
+<div class="wp-block-group alignfull has-ast-global-color-4-background-color has-background" id="reviews"><!-- wp:image {"align":"center","id":235,"width":64,"height":64,"sizeSlug":"full","linkDestination":"none"} -->
+<figure class="wp-block-image aligncenter size-full"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/avatar.png" alt="" class="wp-image-235" width="64" height="64" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
-<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"22px","lineHeight":1.6}}} -->
-<p class="has-text-align-center" style="font-size:22px;line-height:1.6">“The best part is that Astra comes with hundreds of professionally designed templates for just about every industry, makes it super easy for non-techy users to build a website.”</p>
+<!-- wp:paragraph {“align”:”center”,”style”:{“typography”:{“fontSize”:”22px”,”lineHeight”:1.6}},”textColor”:”ast-global-color-2”} -->
+<p class=”has-text-align-center has-ast-global-color-2-color has-text-color” style=”font-size:22px;line-height:1.6”>”The best part is that Astra comes with hundreds of professionally designed templates for just about every industry, makes it super easy for non-techy users to build a website.”</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"align":"center"} -->
-<p class="has-text-align-center"><strong>Wade Warren</strong></p>
+<!-- wp:paragraph {"align":"center","textColor":"ast-global-color-2"} -->
+<p class="has-text-align-center has-ast-global-color-2-color has-text-color"><strong>Wade Warren</strong></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -176,8 +180,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 
 <!-- wp:columns {"style":{"spacing":{"blockGap":"80px","margin":{"top":"60px"}}}} -->
 <div class="wp-block-columns" style="margin-top:60px"><!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":162,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/passionate.svg" alt="" class="wp-image-162"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":162,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/passionate.svg" alt="" class="wp-image-162" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -190,8 +194,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":163,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/professional.svg" alt="" class="wp-image-163"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":163,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/professional.svg" alt="" class="wp-image-163" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->
@@ -204,8 +208,8 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:column -->
 
 <!-- wp:column {"style":{"spacing":{"blockGap":"8px"}}} -->
-<div class="wp-block-column"><!-- wp:image {"id":164,"sizeSlug":"large","linkDestination":"none"} -->
-<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/support.svg" alt="" class="wp-image-164"/></figure>
+<div class="wp-block-column"><!-- wp:image {"id":164,"width":48,"height":48,"sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large"><img src="' . trailingslashit( get_template_directory_uri() ) . 'inc/assets/images/starter-content/support.svg" alt="" class="wp-image-164" width="48" height="48" loading="lazy" decoding="async"/></figure>
 <!-- /wp:image -->
 
 <!-- wp:heading {"level":3,"style":{"spacing":{"margin":{"top":"16px"}}}} -->

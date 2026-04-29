@@ -118,8 +118,11 @@ if ( ! class_exists( 'Astra_Elementor_Pro' ) ) {
 		 * @return bool true iF Elementor Editor is loaded, false If Elementor Editor is not loaded.
 		 */
 		public function is_elementor_editor() {
-			if ( ( isset( $_REQUEST['action'] ) && 'elementor' === $_REQUEST['action'] ) || isset( $_REQUEST['elementor-preview'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				return true;
+			// Only trust Elementor editor request parameters for authenticated users with editing capabilities.
+			if ( is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
+				if ( ( isset( $_REQUEST['action'] ) && 'elementor' === $_REQUEST['action'] ) || isset( $_REQUEST['elementor-preview'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					return true;
+				}
 			}
 
 			return false;

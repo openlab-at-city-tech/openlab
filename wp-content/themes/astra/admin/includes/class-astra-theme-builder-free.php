@@ -50,7 +50,6 @@ if ( ! class_exists( 'Astra_Theme_Builder_Free' ) ) {
 		public function __construct() {
 			$is_astra_addon_active = defined( 'ASTRA_EXT_VER' );
 			if ( ! $is_astra_addon_active ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'theme_builder_admin_enqueue_scripts' ) );
 				add_action( 'admin_body_class', array( $this, 'admin_body_class' ) );
 				add_action( 'admin_menu', array( $this, 'setup_menu' ) );
 				add_action( 'admin_init', array( $this, 'astra_theme_builder_disable_notices' ) );
@@ -128,6 +127,7 @@ if ( ! class_exists( 'Astra_Theme_Builder_Free' ) ) {
 		 * @return void
 		 */
 		public function render_theme_builder() {
+			$this->theme_builder_admin_enqueue_scripts();
 			?>
 				<div class="ast-tb-menu-page-wrapper">
 					<div id="ast-tb-menu-page">

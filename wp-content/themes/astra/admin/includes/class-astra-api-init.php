@@ -102,6 +102,49 @@ class Astra_API_Init extends WP_REST_Controller {
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
 		);
+
+		// Register learn chapters route.
+		register_rest_route(
+			$this->namespace,
+			'get-learn-chapters',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_learn_chapters' ),
+					'permission_callback' => array( $this, 'get_permissions_check' ),
+					'args'                => array(),
+				),
+			)
+		);
+
+		// Register save learn progress route.
+		register_rest_route(
+			$this->namespace,
+			'update-learn-progress',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'save_learn_progress' ),
+					'permission_callback' => array( $this, 'get_permissions_check' ),
+					'args'                => array(
+						'chapterId' => array(
+							'required'          => true,
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+						'stepId'    => array(
+							'required'          => true,
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+						'completed' => array(
+							'required' => true,
+							'type'     => 'boolean',
+						),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -122,11 +165,80 @@ class Astra_API_Init extends WP_REST_Controller {
 				'preload_local_fonts'   => self::get_admin_settings_option( 'preload_local_fonts', false ),
 				'use_old_header_footer' => astra_get_option( 'is-header-footer-builder', false ),
 				'use_upgrade_notices'   => astra_showcase_upgrade_notices(),
-				'analytics_enabled'     => get_option( 'astra_analytics_optin', 'no' ) === 'yes',
+				'analytics_enabled'     => get_option( 'astra_usage_optin', 'no' ) === 'yes',
+				'show_learn_tab'        => self::get_admin_settings_option( 'show_learn_tab', true ),
+				'enable_abilities'      => self::get_admin_settings_option( 'enable_abilities', false ),
+				'enable_edit_abilities' => self::get_admin_settings_option( 'enable_edit_abilities', true ),
+				'enable_mcp_server'     => self::get_admin_settings_option( 'enable_mcp_server', false ),
 			)
 		);
 
 		return wp_parse_args( $db_option, $defaults );
+	}
+
+	/**
+	 * Get learn chapters data.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return array Learn chapters data.
+	 *
+	 * @since 4.8.7
+	 */
+	public function get_learn_chapters( $request ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		if ( ! is_callable( 'Astra_Learn::get_learn_chapters' ) ) {
+			return array();
+		}
+
+		// Use Astra_Learn helper to get chapters with progress.
+		return Astra_Learn::get_learn_chapters();
+	}
+
+	/**
+	 * Save learn progress.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+	 *
+	 * @since 4.8.7
+	 */
+	public function save_learn_progress( $request ) {
+		$chapter_id = $request->get_param( 'chapterId' );
+		$step_id    = $request->get_param( 'stepId' );
+		$completed  = $request->get_param( 'completed' );
+
+		// Get current progress.
+		$user_id        = get_current_user_id();
+		$saved_progress = get_user_meta( $user_id, 'astra_learn_progress', true );
+		if ( ! is_array( $saved_progress ) ) {
+			$saved_progress = array();
+		}
+
+		// Initialize chapter array if it doesn't exist.
+		if ( ! isset( $saved_progress[ $chapter_id ] ) || ! is_array( $saved_progress[ $chapter_id ] ) ) {
+			$saved_progress[ $chapter_id ] = array();
+		}
+
+		// Update progress for this step in nested format.
+		$saved_progress[ $chapter_id ][ $step_id ] = (bool) $completed;
+
+		// Save to user meta.
+		update_user_meta( $user_id, 'astra_learn_progress', $saved_progress );
+
+		/**
+		 * Fires after learn progress is saved.
+		 *
+		 * @param array $saved_progress Full progress data for the user.
+		 * @since 4.12.7
+		 */
+		do_action( 'astra_learn_progress_saved', $saved_progress );
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Progress saved successfully.', 'astra' ),
+			),
+			200
+		);
 	}
 
 	/**

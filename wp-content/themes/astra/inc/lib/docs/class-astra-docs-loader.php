@@ -6,6 +6,10 @@
  * @since 4.6.0
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Process Docs from locally.
  */

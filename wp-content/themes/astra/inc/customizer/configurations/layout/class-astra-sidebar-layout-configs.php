@@ -153,7 +153,7 @@ if ( ! class_exists( 'Astra_Sidebar_Layout_Configs' ) ) {
 					'section'  => 'section-sidebars',
 					'default'  => '',
 					'priority' => 999,
-					'title'    => __( 'Make sidebars work harder to engage with Astra Pro', 'astra' ),
+					'title'    => __( 'Get advanced sidebar controls', 'astra' ),
 					'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 				);
 			}

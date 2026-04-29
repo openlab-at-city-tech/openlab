@@ -290,12 +290,12 @@ class Astra_Posts_Structure_Loader {
 		$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 		/** @psalm-suppress RedundantCondition */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
-		wp_enqueue_script( 'astra-post-strctures-customizer-preview', ASTRA_THEME_POST_STRUCTURE_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
+		wp_enqueue_script( 'astra-post-structures-customizer-preview', ASTRA_THEME_POST_STRUCTURE_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 		// Localize variables for further JS.
 		wp_localize_script(
-			'astra-post-strctures-customizer-preview',
-			'AstraPostStrcturesData',
+			'astra-post-structures-customizer-preview',
+			'AstraPostStructuresData',
 			array(
 				'post_types'           => self::get_supported_post_types(),
 				'special_pages'        => self::get_special_page_types(),

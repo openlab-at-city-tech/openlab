@@ -9,8 +9,8 @@
  */
 
 function astra_dynamic_build_css( addon, control, css_property, selector, unitSupport = false ) {
-	var tablet_break_point    = AstraPostStrcturesData.tablet_break_point || 768,
-		mobile_break_point    = AstraPostStrcturesData.mobile_break_point || 544,
+	var tablet_break_point    = AstraPostStructuresData.tablet_break_point || 768,
+		mobile_break_point    = AstraPostStructuresData.mobile_break_point || 544,
 		unitSuffix = unitSupport || '';
 
 	wp.customize( control, function( value ) {
@@ -60,12 +60,12 @@ function astra_refresh_customizer( control ) {
 
 ( function( $ ) {
 
-	var postTypesCount = AstraPostStrcturesData.post_types.length || false,
-		postTypes = AstraPostStrcturesData.post_types || [],
-		specialsTypesCount = AstraPostStrcturesData.special_pages.length || false,
-		specialsTypes = AstraPostStrcturesData.special_pages || [],
-		tablet_break_point    = AstraPostStrcturesData.tablet_break_point || 768,
-		mobile_break_point    = AstraPostStrcturesData.mobile_break_point || 544;
+	var postTypesCount = AstraPostStructuresData.post_types.length || false,
+		postTypes = AstraPostStructuresData.post_types || [],
+		specialsTypesCount = AstraPostStructuresData.special_pages.length || false,
+		specialsTypes = AstraPostStructuresData.special_pages || [],
+		tablet_break_point    = AstraPostStructuresData.tablet_break_point || 768,
+		mobile_break_point    = AstraPostStructuresData.mobile_break_point || 544;
 
 	/**
 	 * For single layouts.
@@ -74,7 +74,7 @@ function astra_refresh_customizer( control ) {
 		var postType = postTypes[ index ],
 			layoutType = ( undefined !== wp.customize( 'astra-settings[ast-dynamic-single-' + postType + '-layout]' ) ) ? wp.customize( 'astra-settings[ast-dynamic-single-' + postType + '-layout]' ).get() : 'both';
 
-		let exclude_attribute = AstraPostStrcturesData.enabled_related_post ? ':not(.related-entry-header)' : '';
+		let exclude_attribute = AstraPostStructuresData.enabled_related_post ? ':not(.related-entry-header)' : '';
 
 		let selector = '';
 		if( 'layout-2' === layoutType ) {

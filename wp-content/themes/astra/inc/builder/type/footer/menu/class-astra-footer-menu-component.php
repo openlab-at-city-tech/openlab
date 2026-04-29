@@ -26,8 +26,6 @@ class Astra_Footer_Menu_Component {
 	public function __construct() {
 
 		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
-		require_once ASTRA_BUILDER_FOOTER_MENU_DIR . '/class-astra-footer-menu-component-loader.php';
-
 		// Include front end files.
 		if ( ! is_admin() || Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
 			require_once ASTRA_BUILDER_FOOTER_MENU_DIR . '/dynamic-css/dynamic.css.php';

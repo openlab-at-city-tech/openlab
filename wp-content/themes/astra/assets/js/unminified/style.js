@@ -1,5 +1,5 @@
 /**
- * File navigation.js
+ * File style.js
  *
  * Handles toggling the navigation menu for small screens and enables tab
  * support for dropdown menus.
@@ -15,22 +15,6 @@
  * @return {Array}           The parent elements.
  */
 var astraGetParents = function ( elem, selector ) {
-
-	// Element.matches() polyfill.
-	if ( ! Element.prototype.matches) {
-		Element.prototype.matches =
-			Element.prototype.matchesSelector ||
-			Element.prototype.mozMatchesSelector ||
-			Element.prototype.msMatchesSelector ||
-			Element.prototype.oMatchesSelector ||
-			Element.prototype.webkitMatchesSelector ||
-			function(s) {
-				var matches = (this.document || this.ownerDocument).querySelectorAll( s ),
-					i = matches.length;
-				while (--i >= 0 && matches.item( i ) !== this) {}
-				return i > -1;
-			};
-	}
 
 	// Setup parents array.
 	var parents = [];
@@ -50,17 +34,6 @@ var astraGetParents = function ( elem, selector ) {
 	return parents;
 };
 
-/**
- * Deprecated: Get all of an element's parent elements up the DOM tree
- *
- * @param  {Node}   elem     The element.
- * @param  {String} selector Selector to match against [optional].
- * @return {Array}           The parent elements.
- */
-var getParents = function ( elem, selector ) {
-	console.warn( 'getParents() function has been deprecated since version 2.5.0 or above of Astra Theme and will be removed in the future. Use astraGetParents() instead.' );
-	astraGetParents( elem, selector );
-}
 
 /**
  * Toggle Class funtion
@@ -77,31 +50,6 @@ var astraToggleClass = function ( el, className ) {
 	}
 };
 
-/**
- * Deprecated: Toggle Class funtion
- *
- * @param  {Node}   elem     The element.
- * @param  {String} selector Selector to match against [optional].
- * @return {Array}           The parent elements.
- */
-var toggleClass = function ( el, className ) {
-	console.warn( 'toggleClass() function has been deprecated since version 2.5.0 or above of Astra Theme and will be removed in the future. Use astraToggleClass() instead.' );
-	astraToggleClass( el, className );
-};
-
-// CustomEvent() constructor functionality in Internet Explorer 9 and higher.
-(function () {
-
-	if (typeof window.CustomEvent === "function") return false;
-	function CustomEvent(event, params) {
-		params = params || { bubbles: false, cancelable: false, detail: undefined };
-		var evt = document.createEvent('CustomEvent');
-		evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-		return evt;
-	}
-	CustomEvent.prototype = window.Event.prototype;
-	window.CustomEvent = CustomEvent;
-})();
 
 /**
  * Trigget custom JS Event.
@@ -404,30 +352,6 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	});
 
 
-	var get_browser = function () {
-	    var ua = navigator.userAgent,tem,M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-	    if(/trident/i.test(M[1])) {
-	        tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-	        return;
-	    }
-	    if( 'Chrome'  === M[1] ) {
-	        tem = ua.match(/\bOPR|Edge\/(\d+)/)
-	        if(tem != null)   {
-	        	return;
-	        	}
-	        }
-	    M = M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
-	    if((tem = ua.match(/version\/(\d+)/i)) != null) {
-	    	M.splice(1,1,tem[1]);
-	    }
-
-	    var bodyElement = document.body;
-	    if( 'Safari' === M[0] && M[1] < 11 ) {
-		   bodyElement.classList.add( "ast-safari-browser-less-than-11" );
-	    }
-	}
-
-	get_browser();
 
 	/* Search Script */
 	var SearchIcons = document.getElementsByClassName( 'astra-search-icon' );
@@ -469,7 +393,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	/* Hide Dropdown on body click*/
 	document.body.onclick = function( event ) {
 		if ( typeof event.target.classList !==  'undefined' ) {
-			if ( ! event.target.classList.contains( 'ast-search-menu-icon' ) && astraGetParents( event.target, '.ast-search-menu-icon' ).length === 0 && astraGetParents( event.target, '.ast-search-icon' ).length === 0  ) {
+			if ( ! event.target.classList.contains( 'ast-search-menu-icon' ) && ! event.target.closest( '.ast-search-menu-icon' ) && ! event.target.closest( '.ast-search-icon' )  ) {
 				var dropdownSearchWrap = document.getElementsByClassName( 'ast-search-menu-icon' );
 				for (var i = 0; i < dropdownSearchWrap.length; i++) {
 					dropdownSearchWrap[i].classList.remove( 'ast-dropdown-active' );

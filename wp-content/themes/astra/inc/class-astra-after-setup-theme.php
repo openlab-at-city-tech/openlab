@@ -150,13 +150,12 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 				add_editor_style( 'assets/css/' . $dir_name . '/editor-style' . $file_prefix . '.css' );
 			}
 
-			if ( apply_filters( 'astra_fullwidth_oembed', false ) ) {
-				// Filters the oEmbed process to run the responsive_oembed_wrapper() function.
+			if ( apply_filters( 'astra_fullwidth_oembed', true ) ) {
+				// Filters the oEmbed process to run the responsive_oembed_wrapper() function - Fixes the legacy classic editor embeds.
 				add_filter( 'embed_oembed_html', array( $this, 'responsive_oembed_wrapper' ), 10, 3 );
-			} else {
-				// Enable support for responsive embedded content.
-				add_theme_support( 'responsive-embeds' );
 			}
+			// Enable support for responsive embedded content.
+			add_theme_support( 'responsive-embeds' );
 
 			// WooCommerce.
 			add_theme_support( 'woocommerce' );
@@ -310,6 +309,11 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 		 * @return string       Updated embed markup.
 		 */
 		public function responsive_oembed_wrapper( $html, $url, $attr, $core_yt_block = false ) {
+			// Only process in the_content filter for classic (non-Gutenberg) content.
+			if ( ! doing_filter( 'the_content' ) || has_blocks() ) {
+				return $html;
+			}
+
 			$add_astra_oembed_wrapper = apply_filters( 'astra_responsive_oembed_wrapper_enable', true );
 			$ast_embed_wrapper_class  = apply_filters( 'astra_embed_wrapper_class', '' );
 

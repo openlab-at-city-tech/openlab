@@ -1,5 +1,92 @@
 *** Astra Changelog ***
 
+2026-04-27 - version 4.13.1
+* Fix: Mini-cart not refreshing after add-to-cart on WooCommerce "Hand-picked Products" and "Products by Category" blocks.
+* Fix: Customizer strings reverting to admin language on the frontend when using different languages for Admin and Frontend with WPML.
+* Fix: Elementor compatibility CSS overriding Astra customizer toggle button color and background settings on Elementor pages.
+* Fix: Nested submenu hover styles bleeding up to parent menu items.
+* Fix: Header and content flicker (FOUC) on mobile with inline Logo + Site Title + Tagline header layout.
+
+2026-04-16 - version 4.13.0
+* New: Introduced MCP (Model Context Protocol) settings and Abilities API for AI-powered theme management. (https://wpastra.com/docs/astra-mcp/)
+* Improvement: Customizer performance overhaul — faster load times, smoother live preview, and fewer HTTP requests for a lighter, more responsive editing experience.
+* Improvement: Disabled Astra command palette search icon in admin bar for WordPress 7.0+ as it ships a built-in command palette.
+
+2026-04-08 - version 4.12.7
+* Fix: Astra global button styles not applying to Spectra v2 Infobox buttons in the Gutenberg editor.
+* Fix: Product Catalog Add to Cart action affecting Single Product Add to Cart behavior.
+* Fix: PHP fatal error in breadcrumb trail on PHP 8.0+ when taxonomy data is invalid or modified by third-party plugins.
+* Fix: Missing `var()` wrapper on CSS custom property fallbacks in dynamic CSS causing invalid fallback values for dark mode, search fields, header/footer builder, and editor styles.
+
+2026-03-24 - version 4.12.6
+* Improvement: Performance - Removed legacy browser polyfills, optimized asset loading, and reduced frontend payload for improved Core Web Vitals.
+* Improvement: Improved submenu toggle keyboard accessibility for better WCAG compliance.
+* Fix: Header height CSS rule conflicting with sticky header shrink effect when used with "Hide When Scrolling Down" option.
+* Fix: EDD Add to Cart button appearing twice on archive pages.
+
+2026-03-16 - version 4.12.5
+* Fix: LifterLMS course review submission not working due to nonce mismatch.
+* Security: Strengthen theme security and harden against potential vulnerabilities.
+
+2026-03-10 - version 4.12.4
+* New: Added a "Show Learn Tab" toggle in Dashboard Settings to allow users to show or hide the Learn tab from the Astra Dashboard navigation.
+* Improvement: Refined the WooCommerce section UI in the Astra Dashboard with improved layout, hero feature dividers, and better navigation visibility.
+* Improvement: Enhanced submenu accessibility by automatically closing the previous submenu when a new menu item receives focus, ensuring better keyboard navigation.
+* Improvement: Added the filter to allow disabling Astra meta settings on the Elementor editor.
+* Improvement: Ensured all SureCart dark mode styles correctly use the .astra-dark-mode-enable prefix when file generation is enabled.
+* Fix: Scoped WooCommerce quantity CSS to prevent conflicts with third-party number fields (e.g., Ninja Forms).
+* Fix: Resolved invalid meta key registration for excluded post types during REST API requests.
+* Fix: Resolved unwanted spacing in Off-Canvas Menu appearing in certain edge cases.
+* Security: Fixed Stored Cross-Site Scripting via post background meta fields. (Props - Wordfence)
+
+2026-02-06 - version 4.12.3
+* Fix: Resolved WP admin bar search icons styling issues.
+
+2026-02-05 - version 4.12.2
+* Improvement: Enhanced menu dropdown accessibility by aligning aria-expanded usage with supported ARIA roles, resolving Lighthouse audit warnings.
+* Fix: Resolved an issue where the search element was not clickable in the off-canvas view on mobile and tablet devices.
+
+2026-01-21 - version 4.12.1
+* Improvement: Added the astra_mobile_nav_submenu_items_arrow_icon filter to customize the mobile submenu arrow icon.
+* Improvement: Replaced the static color for form label and legend elements with a global variable-based color for better consistency and customization.
+* Improvement: Removed extra padding applied to the WooCommerce Product Collection block.
+* Fix: Resolved the hover layout issue on the “Enroll in this Course” button.
+* Fix: Resolved a menu padding glitch when using the Cambria font via Custom Adobe Fonts.
+* Fix: Resolved an issue with the Customizer Reset button display in RTL mode.
+
+2026-01-06 - version 4.12.0
+* New: Integrated Astra Customizer panels with the WordPress Command Palette, enabling instant access via the Cmd + K / Ctrl + K keyboard shortcut.
+* New: Introduced a Learn tab with step-by-step guides to help users master website customization and configuration.
+* Improvement: Enhanced the Blog Cover Layout’s Background Overlay option with gradient support for greater design flexibility and improved control rendering.
+* Improvement: Resolved an issue with the WooCommerce product filter in the flyout sidebar.
+* Improvement: Improved center alignment on the WooCommerce Coming Soon page.
+* Improvement: Improved breadcrumb translation logic to correctly handle CPT archive base slugs across different languages.
+* Fix: Resolved an issue where the Astra Meta Settings icon was not working in the Elementor editor.
+* Fix: Fixed the 'flexibility is not defined' JavaScript error when using optimization plugins such as WP Rocket.
+* Fix: Typography settings now correctly display REM units when REM is selected, instead of showing PX.
+* Fix: Fixed an issue where the button focus outline border was not visible.
+
+2025-12-16 - version 4.11.18
+* Improvement: Added support for the BuddyPress plugin.
+* Improvement: Resolved duplicate ID issue in the search form markup when the sticky header is active.
+* Improvement: Updated the CSS selector from .woocommerce-js to .woocommerce to prevent unintended styling on non-WooCommerce pages.
+* Improvement: Fixed embed aspect ratio issues in the Classic Editor.
+* Improvement: Enhanced dark color compatibility in the Style Guide.
+* Fix: Resolved an issue where the close icon was not displaying correctly when using change_cart_close_icon, which caused broken HTML.
+* Fix: Resolved an issue where products without ratings were incorrectly displaying empty star ratings.
+
+2025-12-08 - version 4.11.17
+* New: Added a new “Disable Related Posts” option in the single post meta settings to hide related posts for specific posts.
+* Improvement: Full Width Container now applies correctly on WooCommerce Product Category and Tag pages.
+* Improvement: Added translations for ARIA labels to improve accessibility and removed redundant screen reader text.
+* Improvement: Added Email Customizer Pro compatibility check and extensible filter to prevent customizer conflicts.
+* Improvement: Enhanced Header/Footer Builder widgets popover positioning to ensure they remain fully visible within the viewport.
+* Improvement: Resolved alignment issue with product single in SureCart.
+* Fix: Resolved an issue where quantity plus/minus buttons glitched for products with stock quantity of 1 or less.
+
+2025-12-02 - version 4.11.16
+* Improvement: Compatibility with WordPress 6.9.
+
 2025-11-11 - version 4.11.15
 * Fix: Astra theme was throwing a ReactDOM console warning in the Customizer.
 
@@ -228,7 +315,7 @@
 * Improvement: Conversion of 'px' to 'rem' is now working for responsive devices heading as well.
 * Improvement: WooCommerce – Display the product thumbnail image on catalog pages instead of the original image when the "Swap Image" option is enabled for Product Image Hover Style.
 * Compatibility with WordPress 6.7.
-* Fix: Gravity forms select2 fields stylings overridden by theme style. 
+* Fix: Gravity forms select2 fields stylings overridden by theme style.
 * Fix: Alignment issue of Spectra boxed container with Astra.
 * Fix: String Translations not working correctly for Astra Customizer settings.
 * Fix: Featured image not displaying on the shop page with Layout 2, while it works on product category archives.

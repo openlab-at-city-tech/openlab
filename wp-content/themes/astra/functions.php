@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define Constants
  */
-define( 'ASTRA_THEME_VERSION', '4.11.15' );
+define( 'ASTRA_THEME_VERSION', '4.13.1' );
 define( 'ASTRA_THEME_SETTINGS', 'astra-settings' );
 define( 'ASTRA_THEME_DIR', trailingslashit( get_template_directory() ) );
 define( 'ASTRA_THEME_URI', trailingslashit( esc_url( get_template_directory_uri() ) ) );
@@ -25,7 +25,7 @@ define( 'ASTRA_THEME_ORG_VERSION', file_exists( ASTRA_THEME_DIR . 'inc/w-org-ver
  * Minimum Version requirement of the Astra Pro addon.
  * This constant will be used to display the notice asking user to update the Astra addon to the version defined below.
  */
-define( 'ASTRA_EXT_MIN_VER', '4.11.6' );
+define( 'ASTRA_EXT_MIN_VER', '4.12.0' );
 
 /**
  * Load in-house compatibility.
@@ -43,12 +43,6 @@ require_once ASTRA_THEME_DIR . 'inc/core/common-functions.php';
 require_once ASTRA_THEME_DIR . 'inc/core/class-astra-icons.php';
 
 define( 'ASTRA_WEBSITE_BASE_URL', 'https://wpastra.com' );
-
-/**
- * Deprecate constants in future versions as they are no longer used in the codebase.
- */
-define( 'ASTRA_PRO_UPGRADE_URL', ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'dashboard', 'upgrade' ) : 'https://woocommerce.com/products/astra-pro/' );
-define( 'ASTRA_PRO_CUSTOMIZER_UPGRADE_URL', ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'upgrade' ) : 'https://woocommerce.com/products/astra-pro/' );
 
 /**
  * Update theme
@@ -75,6 +69,7 @@ require_once ASTRA_THEME_DIR . 'inc/core/class-astra-walker-page.php';
 require_once ASTRA_THEME_DIR . 'inc/core/class-astra-enqueue-scripts.php';
 require_once ASTRA_THEME_DIR . 'inc/core/class-gutenberg-editor-css.php';
 require_once ASTRA_THEME_DIR . 'inc/core/class-astra-wp-editor-css.php';
+require_once ASTRA_THEME_DIR . 'inc/core/class-astra-command-palette.php';
 require_once ASTRA_THEME_DIR . 'inc/dynamic-css/block-editor-compatibility.php';
 require_once ASTRA_THEME_DIR . 'inc/dynamic-css/inline-on-mobile.php';
 require_once ASTRA_THEME_DIR . 'inc/dynamic-css/content-background.php';
@@ -128,6 +123,7 @@ require_once ASTRA_THEME_DIR . 'inc/core/class-astra-admin-helper.php';
 require_once ASTRA_THEME_DIR . 'inc/schema/class-astra-schema.php';
 
 /* Setup API */
+require_once ASTRA_THEME_DIR . 'admin/includes/class-astra-learn.php';
 require_once ASTRA_THEME_DIR . 'admin/includes/class-astra-api-init.php';
 
 if ( is_admin() ) {
@@ -136,8 +132,13 @@ if ( is_admin() ) {
 	 */
 	require_once ASTRA_THEME_DIR . 'inc/core/class-astra-admin-settings.php';
 	require_once ASTRA_THEME_DIR . 'admin/class-astra-admin-loader.php';
-	require_once ASTRA_THEME_DIR . 'inc/lib/astra-notices/class-astra-notices.php';
+	require_once ASTRA_THEME_DIR . 'inc/lib/astra-notices/class-bsf-admin-notices.php';
 }
+
+/**
+ * BSF Analytics.
+ */
+require_once ASTRA_THEME_DIR . 'admin/class-astra-bsf-analytics.php';
 
 /**
  * Metabox additions.
@@ -179,6 +180,7 @@ require_once ASTRA_THEME_DIR . 'inc/compatibility/class-astra-amp.php';
 require_once ASTRA_THEME_DIR . 'inc/compatibility/class-astra-yoast-seo.php';
 require_once ASTRA_THEME_DIR . 'inc/compatibility/surecart/class-astra-surecart.php';
 require_once ASTRA_THEME_DIR . 'inc/compatibility/class-astra-starter-content.php';
+require_once ASTRA_THEME_DIR . 'inc/compatibility/class-astra-buddypress.php';
 require_once ASTRA_THEME_DIR . 'inc/addons/transparent-header/class-astra-ext-transparent-header.php';
 require_once ASTRA_THEME_DIR . 'inc/addons/breadcrumbs/class-astra-breadcrumbs.php';
 require_once ASTRA_THEME_DIR . 'inc/addons/scroll-to-top/class-astra-scroll-to-top.php';
@@ -198,6 +200,11 @@ if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 }
 
 require_once ASTRA_THEME_DIR . 'inc/core/markup/class-astra-markup.php';
+
+/**
+ * Abilities API integration.
+ */
+require_once ASTRA_THEME_DIR . 'inc/abilities/bootstrap.php';
 
 /**
  * Load deprecated functions

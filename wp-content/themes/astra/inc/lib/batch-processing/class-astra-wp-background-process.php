@@ -5,6 +5,10 @@
  * @package WP-Background-Processing
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 
 	/**

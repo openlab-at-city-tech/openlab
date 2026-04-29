@@ -8,6 +8,10 @@
  * @since 3.6.0
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Download webfonts locally.
  */
