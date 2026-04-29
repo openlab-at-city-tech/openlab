@@ -1,5 +1,20 @@
 # Changelog
 
+### [6.15.20] 2026-04-08
+
+* Fix - Make SSR respect AJAX pagination so direct page URLs no longer return 404s. [TEC-5754]
+* Fix - Prevent 404 errors for paginated TEC list view requests on MariaDB. [TEC-5056]
+* Fix - Rewrite the day view URL to query-param form and fall back to the default view when day view is disabled, preventing a 404 after a page refresh. [TEC-5765]
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.15.19] 2026-04-07
+
+* Tweak - Added filters: `tec_events_views_v2_url_allowed_query_args`
+* Security - Ensure Venues and Organizers linked to an event, are still honoring their individual capabilities. [SVUL-61]
+* Security - Strengthen capability checks for categories and terms. [SVUL-64]
+* Security - Tighten capability checks and server-side validation for Event Aggregator scheduled import edits. [SVUL-63]
+* Language - 2 new strings added, 20 updated, 0 fuzzied, and 0 obsoleted.
+
 ### [6.15.18] 2026-03-25
 
 * Fix - Add `is_array` verification to guard against non-array values passed by Elementor in some contexts. [TEC-5762]
