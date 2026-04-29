@@ -63,19 +63,46 @@ class Settings {
 		wp_enqueue_script( 'select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array( 'jquery' ), '4.1.0' );
 
 		// Enqueue admin CSS
-		wp_enqueue_style( 'dkpdf-admin-css', plugins_url( 'dk-pdf/assets/css/admin.css' ), array(), '1.0.0' );
+		wp_enqueue_style( 'dkpdf-admin-css', plugins_url( 'dk-pdf/build/admin-style.css' ), array(), '1.0.0' );
 
-		wp_register_script( 'dkpdf' . '-settings-js', plugins_url( 'dk-pdf/assets/js/settings-admin.js' ), array(
-			'farbtastic',
-			'jquery',
-			'select2'
-		), '1.0.0' );
+		$settings_asset_file = include plugin_dir_path( dirname( __DIR__ ) ) . 'build/admin-settings.asset.php';
+		$settings_dependencies = isset( $settings_asset_file['dependencies'] ) ? array_merge( array( 'farbtastic', 'select2' ), $settings_asset_file['dependencies'] ) : array( 'farbtastic', 'select2' );
+		$settings_version = isset( $settings_asset_file['version'] ) ? $settings_asset_file['version'] : '1.0.0';
+
+		wp_register_script( 'dkpdf' . '-settings-js', plugins_url( 'dk-pdf/build/admin-settings.js' ), $settings_dependencies, $settings_version, true );
 		wp_enqueue_script( 'dkpdf' . '-settings-js' );
+
+		// Enqueue Font Manager script
+		$font_manager_asset_file = include plugin_dir_path( dirname( __DIR__ ) ) . 'build/admin-font-manager.asset.php';
+		$font_manager_dependencies = isset( $font_manager_asset_file['dependencies'] ) ? $font_manager_asset_file['dependencies'] : array();
+		$font_manager_version = isset( $font_manager_asset_file['version'] ) ? $font_manager_asset_file['version'] : '1.0.0';
+
+		wp_register_script( 'dkpdf-font-manager-js', plugins_url( 'dk-pdf/build/admin-font-manager.js' ), $font_manager_dependencies, $font_manager_version, true );
+		wp_enqueue_script( 'dkpdf-font-manager-js' );
 
 		// Localize script for AJAX
 		wp_localize_script( 'dkpdf' . '-settings-js', 'dkpdf_ajax', array(
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce' => wp_create_nonce( 'dkpdf_ajax_nonce' )
+			'nonce' => wp_create_nonce( 'dkpdf_ajax_nonce' ),
+			'i18n' => array(
+				'manage_fonts' => __( 'Manage Fonts', 'dkpdf' ),
+				'close' => __( 'Close', 'dkpdf' ),
+				'upload_font' => __( 'Upload Font', 'dkpdf' ),
+				'uploading' => __( 'Uploading...', 'dkpdf' ),
+				'loading' => __( 'Loading', 'dkpdf' ),
+				'delete' => __( 'Delete', 'dkpdf' ),
+				'active' => __( 'Active', 'dkpdf' ),
+				'core' => __( 'Core', 'dkpdf' ),
+				'custom' => __( 'Custom', 'dkpdf' ),
+				'no_fonts' => __( 'No fonts available.', 'dkpdf' ),
+				'only_ttf_files' => __( 'Only TTF font files are supported.', 'dkpdf' ),
+				'upload_failed' => __( 'Failed to upload font.', 'dkpdf' ),
+				'delete_failed' => __( 'Failed to delete font.', 'dkpdf' ),
+				'error_loading_fonts' => __( 'Failed to load fonts.', 'dkpdf' ),
+				'cannot_delete_active' => __( 'Cannot delete the currently selected font', 'dkpdf' ),
+				'confirm_delete_core' => __( 'Are you sure you want to delete the core font "%s"? You can reinstall it later using the "Install Core Fonts" button.', 'dkpdf' ),
+				'confirm_delete_custom' => __( 'Are you sure you want to delete the custom font "%s"? This action cannot be undone.', 'dkpdf' ),
+			)
 		) );
 	}
 
@@ -91,6 +118,36 @@ class Settings {
 		array_push( $links, $settings_link );
 
 		return $links;
+	}
+
+	/**
+	 * Get default value for a field by field ID
+	 *
+	 * @param string $field_id The field ID (with or without prefix)
+	 * @return mixed The default value or empty string if not found
+	 */
+	private function get_field_default_value( string $field_id ) {
+		// Remove prefix if present
+		$field_id_without_prefix = str_replace( $this->base, '', $field_id );
+
+		foreach ( $this->settings as $section ) {
+			if ( ! isset( $section['fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $section['fields'] as $field ) {
+				if ( ! isset( $field['id'] ) ) {
+					continue;
+				}
+
+				// Check both with and without prefix
+				if ( $field['id'] === $field_id || $field['id'] === $field_id_without_prefix ) {
+					return $field['default'] ?? '';
+				}
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -167,6 +224,51 @@ class Settings {
 			'title'       => __( 'PDF Setup', 'dkpdfg' ),
 			'description' => '',
 			'fields'      => array(
+				array(
+					'id'          => 'load_theme_css',
+					'label'       => __( 'Load theme CSS in PDF', 'dkpdf' ),
+					'description' => __( 'Include the current theme stylesheet in PDF templates, when enabled it overrides default font.', 'dkpdf' ),
+					'type'        => 'checkbox',
+					'default'     => 'on'
+				),
+				array(
+					'id'          => 'default_font',
+					'label'       => __( 'Default font', 'dkpdf' ),
+					'description' => '',
+					'type'        => 'font_selector',
+					'default'     => 'DejaVuSans'
+				),
+				array(
+					'id'          => 'core_fonts_installer',
+					'label'       => __( 'Core fonts', 'dkpdf' ),
+					'description' => sprintf(
+						__( 'Recommended for Arabic, Hebrew, Indic and CJK languages support. Fonts will be downloaded from %s repository.', 'dkpdf' ),
+						'<a href="https://github.com/Dinamiko/mpdf-ttfonts" target="_blank" rel="noopener noreferrer">mpdf-ttfonts GitHub</a>'
+					),
+					'type'        => 'core_fonts_installer',
+					'default'     => ''
+				),
+				array(
+					'id'          => 'auto_language_detection',
+					'label'       => __( 'Auto language detection', 'dkpdf' ),
+					'description' => __( 'Automatically detect text language and use appropriate fonts. Works best with core fonts installed.', 'dkpdf' ),
+					'type'        => 'checkbox',
+					'default'     => ''
+				),
+				array(
+					'id'          => 'enable_rtl',
+					'label'       => __( 'Enable RTL', 'dkpdf' ),
+					'description' => __( 'Enable right-to-left document direction, this affects text alignment, page layout, and table ordering.', 'dkpdf' ),
+					'type'        => 'checkbox',
+					'default'     => ''
+				),
+				array(
+					'id'          => 'custom_fonts_manager',
+					'label'       => __( 'Custom fonts', 'dkpdf' ),
+					'description' => __( 'Upload and manage your own TTF font families.', 'dkpdf' ),
+					'type'        => 'custom_fonts_manager',
+					'default'     => ''
+				),
 				array(
 					'id'          => 'page_orientation',
 					'label'       => __( 'Page orientation', 'dkpdfg' ),
@@ -337,7 +439,7 @@ class Settings {
 		$settings['pdf_templates'] = array(
 			'title'       => __( 'PDF Templates', 'dkpdf' ),
 			'description' => sprintf(
-				__( 'Select a set of PDF templates, by default the Legacy set (the templates in the root of templates folder) is selected. All templates can be %1$soverridden%2$s in your theme or child theme.', 'dkpdf' ),
+				__( 'All templates can be %1$soverridden%2$s in your theme or child theme.', 'dkpdf' ),
 				'<a href="https://dinamiko.dev/docs/how-to-use-dk-pdf-templates-in-your-theme/" target="_blank">',
 				'</a>'
 			),
@@ -348,7 +450,7 @@ class Settings {
 					'description' => '',
 					'type'        => 'select',
 					'options'     => array( '' => 'Legacy', 'default/' => 'Default' ),
-					'default'     => array(),
+					'default'     => 'default/',
 				),
 				array(
 					'id'          => 'post_display',
@@ -458,7 +560,7 @@ class Settings {
 		}
 
 		// Custom Fields settings - only show when not using legacy templates
-		$selected_template = get_option( 'dkpdf_selected_template' );
+		$selected_template = get_option( 'dkpdf_selected_template', 'default/' );
 		$selected_post_types = get_option( 'dkpdf_pdfbutton_post_types', array() );
 
 		if ( ! empty( $selected_template ) ) {
@@ -534,7 +636,8 @@ class Settings {
 					// Check dependency before registering the field
 					$should_register = true;
 					if ( isset( $field['depends_on'] ) ) {
-						$dependency_value = get_option( $field['depends_on'] );
+						$default_value = $this->get_field_default_value( $field['depends_on'] );
+						$dependency_value = get_option( $field['depends_on'], $default_value );
 						if ( empty( $dependency_value ) ) {
 							$should_register = false;
 						}

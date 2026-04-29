@@ -2,9 +2,9 @@
 Contributors: dinamiko
 Tags: pdf, wordpress pdf generator, pdf generator, woocommerce pdf, post to pdf
 Requires at least: 3.9.6
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 8.0
-Stable tag: 2.2.0
+Stable tag: 2.3.1
 License: MIT
 
 DK PDF allows your site visitors generate PDF files from WordPress posts, pages, custom post types and WooCommerce products using a button.
@@ -23,7 +23,9 @@ Generate stunning, brand-consistent PDF files from your WordPress posts, pages, 
 
 * **Multi-Content Generation**: Create PDFs from posts, pages, custom post types, taxonomies, WooCommerce products, shop and categories
 * **Selective Content Display**: Choose exactly what appears in your PDFs - featured images, post dates, authors, categories, and more
-* **Custom Fields Support**: see [documentation](https://dinamiko.dev/docs/custom-fields/)
+* **Custom Fields Support**: Add custom fields including Advanced Custom Fields, see [documentation](https://dinamiko.dev/docs/custom-fields/)
+* **Custom Font Manager**: Upload and manage custom .ttf fonts to match your brand typography in generated PDFs: see [documentation](https://dinamiko.dev/docs/dk-pdf-fonts-user-guide/)
+* **Multi-Language Support**: Core fonts management for Arabic, Hebrew, Indic, and CJK languages ensuring proper character rendering
 * **Button Visibility by User Role**: Control which WordPress user roles can see and generate PDFs, see [documentation](https://dinamiko.dev/docs/pdf-button-visibility-by-role/)
 * **WooCommerce Integration**: Include product details like prices, SKUs, categories, and more
 * **Header & Footer Control**: Add logo, custom text, and branding elements to headers and footers
@@ -64,8 +66,21 @@ Installing "DK PDF" can be done either by searching for "DK PDF" via the "Plugin
 10. WooCommerce Shop PDF
 11. Disable PDF Button Metabox
 12. Custom Fields support
+13. Custom Fonts Manager
 
 == Changelog ==
+
+= 2.3.1 =
+- Fix - Server-Side Request Forgery by sanitizing external URLs from content, and configuring mPDF to restrict external resource fetching.
+
+= 2.3.0 =
+- Enhancement - Add custom font manager for uploading and managing custom .ttf fonts in PDF generation.
+- Enhancement - Add core fonts management, recommended for Arabic, Hebrew, Indic and CJK languages support.
+
+= 2.2.1 =
+- Enhancement - Display custom fields in WooCommerce product PDF.
+- Fix - Fatal error when generating PDFs for posts with non-publish status.
+- Fix - Respect 'shortcode only' position setting on WooCommerce and WordPress archive pages.
 
 = 2.2.0 =
 - Enhancement - Add button visibility by role.

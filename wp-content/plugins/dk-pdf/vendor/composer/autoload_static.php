@@ -7,15 +7,15 @@ namespace Composer\Autoload;
 class ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70
 {
     public static $prefixLengthsPsr4 = array (
-        'P' => 
+        'P' =>
         array (
             'Psr\\Container\\' => 14,
         ),
-        'I' => 
+        'I' =>
         array (
             'Inpsyde\\Modularity\\' => 19,
         ),
-        'D' => 
+        'D' =>
         array (
             'Dinamiko\\DKPDF\\Vendor\\' => 22,
             'Dinamiko\\DKPDF\\' => 15,
@@ -23,19 +23,19 @@ class ComposerStaticInitf3a6b1fa721fd093bef49f869cd08b70
     );
 
     public static $prefixDirsPsr4 = array (
-        'Psr\\Container\\' => 
+        'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Inpsyde\\Modularity\\' => 
+        'Inpsyde\\Modularity\\' =>
         array (
             0 => __DIR__ . '/..' . '/inpsyde/modularity/src',
         ),
-        'Dinamiko\\DKPDF\\Vendor\\' => 
+        'Dinamiko\\DKPDF\\Vendor\\' =>
         array (
             0 => __DIR__ . '/../..' . '/lib/packages',
         ),
-        'Dinamiko\\DKPDF\\' => 
+        'Dinamiko\\DKPDF\\' =>
         array (
             0 => __DIR__ . '/../..' . '/modules',
         ),

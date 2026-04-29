@@ -26,7 +26,9 @@ class FieldRenderer {
 
 		// Check dependency - if this field depends on another field and that field is empty, return empty
 		if ( isset( $field['depends_on'] ) ) {
-			$dependency_value = get_option( $field['depends_on'] );
+			// For selected_template field, use 'default/' as the default value
+			$default_value = ( $field['depends_on'] === 'dkpdf_selected_template' ) ? 'default/' : '';
+			$dependency_value = get_option( $field['depends_on'], $default_value );
 			if ( empty( $dependency_value ) ) {
 				// Return empty if dependency value is not set
 				if ( ! $echo ) {
@@ -159,6 +161,22 @@ class FieldRenderer {
 
 			case 'color':
 				$html = $this->render_color_field( $field, $data, $option_name );
+				break;
+
+			case 'font_downloader':
+				$html = $this->render_font_downloader_field( $field );
+				break;
+
+			case 'font_selector':
+				$html = $this->render_font_selector_field( $field, $data, $option_name );
+				break;
+
+			case 'core_fonts_installer':
+				$html = $this->render_core_fonts_installer_field( $field );
+				break;
+
+			case 'custom_fonts_manager':
+				$html = $this->render_custom_fonts_manager_field( $field );
 				break;
 		}
 
@@ -462,6 +480,14 @@ class FieldRenderer {
 				}
 				break;
 
+			case 'core_fonts_installer':
+				// Description is rendered within the field itself
+				break;
+
+			case 'custom_fonts_manager':
+				// Description is rendered within the field itself
+				break;
+
 			default:
 				if ( ! $post ) {
 					$html .= '<label for="' . esc_attr( $field['id'] ) . '">' . "\n";
@@ -585,5 +611,254 @@ class FieldRenderer {
 	 */
 	private function get_placeholder( array $field ): string {
 		return $field['placeholder'] ?? '';
+	}
+
+	/**
+	 * Get list of installed fonts from fonts directory
+	 *
+	 * @param string $fonts_dir Path to fonts directory
+	 * @return array Array of font files with display names
+	 */
+	private function get_installed_fonts( string $fonts_dir ): array {
+		$fonts = array();
+
+		// Get all .ttf files from fonts directory (case-insensitive)
+		$font_files = array_merge(
+			glob( $fonts_dir . '/*.ttf' ) ?: array(),
+			glob( $fonts_dir . '/*.TTF' ) ?: array()
+		);
+
+		if ( empty( $font_files ) ) {
+			return $fonts;
+		}
+
+		foreach ( $font_files as $font_file ) {
+			// Remove extension (case-insensitive) to get filename
+			$filename = preg_replace( '/\.ttf$/i', '', basename( $font_file ) );
+
+			// Convert filename to display name (e.g., DejaVuSans-Bold -> DejaVu Sans Bold)
+			$display_name = $this->format_font_name( $filename );
+
+			// Use filename without extension as the key
+			$fonts[ $filename ] = $display_name;
+		}
+
+		// Sort fonts alphabetically by display name
+		asort( $fonts );
+
+		return $fonts;
+	}
+
+	/**
+	 * Format font filename to display name
+	 *
+	 * @param string $filename Font filename without extension
+	 * @return string Formatted display name
+	 */
+	private function format_font_name( string $filename ): string {
+		// Replace hyphens with spaces
+		$name = str_replace( '-', ' ', $filename );
+
+		// Add spaces before uppercase letters (for camelCase)
+		$name = preg_replace( '/(?<!^)(?=[A-Z])/', ' ', $name );
+
+		return $name;
+	}
+
+	/**
+	 * Render font downloader field
+	 *
+	 * @param array $field Field configuration
+	 * @return string Field HTML
+	 */
+	private function render_font_downloader_field( array $field ): string {
+		// Get services from container
+		$container = \Dinamiko\DKPDF\Container::get_container();
+		$fontDownloader = $container->get( 'admin.font_downloader' );
+		$fontManager = $container->get( 'admin.font_manager' );
+
+		$fontsInstalled = $fontDownloader->areFontsInstalled();
+
+		// Show font selector when fonts are installed
+		if ( $fontsInstalled ) {
+			// Get font families from FontManager
+			$font_families = $fontManager->listFonts();
+
+			// Get saved font selection
+			$selected_font = get_option( 'dkpdf_font_downloader', 'DejaVuSans' );
+
+			$html = '<div class="dkpdf-font-selector-wrapper">';
+			$html .= '<select name="dkpdf_font_downloader" id="dkpdf_font_downloader" class="regular-text">';
+
+			// Only show complete families (those with Regular variant)
+			foreach ( $font_families as $family ) {
+				if ( ! isset( $family['complete'] ) || ! $family['complete'] ) {
+					continue; // Skip incomplete families
+				}
+
+				$font_key = $family['key'] ?? $family['name'] ?? '';
+				$family_name = $family['family_name'] ?? $family['name'] ?? '';
+
+				// Check if this family is selected
+				$is_selected = ( $selected_font === $font_key ) ||
+				               ( $selected_font === $family_name ) ||
+				               ( isset( $family['selected'] ) && $family['selected'] );
+
+				$selected = $is_selected ? ' selected="selected"' : '';
+
+				$html .= sprintf(
+					'<option value="%s"%s>%s</option>',
+					esc_attr( $font_key ),
+					$selected,
+					esc_html( $this->format_font_name( $family_name ) )
+				);
+			}
+
+			$html .= '</select>';
+			$html .= '<button type="button" id="dkpdf-manage-fonts" class="button button-secondary" style="margin-left: 10px;">';
+			$html .= esc_html__( 'Manage Fonts', 'dkpdf' );
+			$html .= '</button>';
+			$html .= '</div>';
+
+			return $html;
+		}
+
+		// Show download UI when fonts are not installed
+		$html = '<div class="dkpdf-fonts-not-installed">';
+		$html .= '<button type="button" id="dkpdf-download-fonts" class="button button-secondary">';
+		$html .= esc_html__( 'Install Core Fonts', 'dkpdf' );
+		$html .= '</button>';
+		$html .= '<p class="description">';
+		$html .= esc_html__( 'Install core PDF fonts for RTL and Unicode language support.', 'dkpdf' );
+		$html .= '</p>';
+		$html .= '<div id="dkpdf-download-progress" style="display:none;">';
+		$html .= '<div class="dkpdf-progress-bar">';
+		$html .= '<div class="dkpdf-progress-fill"></div>';
+		$html .= '</div>';
+		$html .= '<p class="dkpdf-progress-text">0%</p>';
+		$html .= '</div>';
+		$html .= '<div id="dkpdf-download-status"></div>';
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	private function render_font_selector_field( array $field, $data, string $option_name ): string {
+		// Get services from container
+		$container = \Dinamiko\DKPDF\Container::get_container();
+		$fontManager = $container->get( 'admin.font_manager' );
+
+		// Get available fonts
+		$font_families = $fontManager->listFonts();
+
+		// Separate core and custom fonts
+		$core_fonts = array_filter( $font_families, function( $font ) {
+			return ( $font['type'] ?? '' ) === 'core';
+		} );
+
+		$custom_fonts = array_filter( $font_families, function( $font ) {
+			return ( $font['type'] ?? '' ) === 'custom';
+		} );
+
+		$core_count = count( $core_fonts );
+		$custom_count = count( $custom_fonts );
+		$total_count = $core_count + $custom_count;
+
+		// Get saved font selection
+		$value = $data ?? $field['default'] ?? 'DejaVuSans';
+
+		$html = '<select id="dkpdf_' . esc_attr( $field['id'] ) . '" name="' . esc_attr( $option_name ) . '" class="regular-text"';
+
+		if ( $total_count === 0 ) {
+			$html .= ' disabled';
+		}
+
+		$html .= '>';
+
+		if ( $total_count === 0 ) {
+			$html .= '<option value="">' . esc_html__( 'No fonts available', 'dkpdf' ) . '</option>';
+		} else {
+			// Show custom fonts first, then core fonts
+			$font_lists = array( $custom_fonts, $core_fonts );
+
+			foreach ( $font_lists as $font_list ) {
+				foreach ( $font_list as $family ) {
+					// Only show complete families (those with Regular variant)
+					if ( ! isset( $family['complete'] ) || ! $family['complete'] ) {
+						continue; // Skip incomplete families
+					}
+
+					$font_key = $family['key'] ?? $family['name'] ?? '';
+					$family_name = $family['family_name'] ?? $family['name'] ?? '';
+
+					// Check if this family is selected
+					$is_selected = ( $value === $font_key ) ||
+					               ( $value === $family_name ) ||
+					               ( isset( $family['selected'] ) && $family['selected'] );
+
+					$selected = $is_selected ? ' selected="selected"' : '';
+
+					$html .= sprintf(
+						'<option value="%s"%s>%s</option>',
+						esc_attr( $font_key ),
+						$selected,
+						esc_html( $this->format_font_name( $family_name ) )
+					);
+				}
+			}
+		}
+
+		$html .= '</select>';
+
+		return $html;
+	}
+
+	private function render_core_fonts_installer_field( array $field ): string {
+		// Get services from container
+		$container = \Dinamiko\DKPDF\Container::get_container();
+		$fontDownloader = $container->get( 'admin.font_downloader' );
+
+		$fontsInstalled = $fontDownloader->areFontsInstalled();
+
+		if ( $fontsInstalled ) {
+			// Show installed status
+			$html = '<p class="dkpdf-core-fonts-status">';
+			$html .= '<span class="dashicons dashicons-yes-alt" style="color: #46b450; vertical-align: middle;"></span> ';
+			$html .= esc_html__( 'Core fonts installed', 'dkpdf' );
+			$html .= '</p>';
+		} else {
+			// Show install button
+			$html = '<button type="button" id="dkpdf-download-fonts" class="button button-secondary" style="display: block; margin-bottom: 8px;">';
+			$html .= esc_html__( 'Install Core Fonts', 'dkpdf' );
+			$html .= '</button>';
+
+			// Add description below button
+			if ( isset( $field['description'] ) && $field['description'] !== '' ) {
+				$html .= '<span class="description">' . wp_kses_post( $field['description'] ) . '</span>';
+			}
+
+			$html .= '<div id="dkpdf-download-progress" style="display:none;">';
+			$html .= '<div class="dkpdf-progress-bar">';
+			$html .= '<div class="dkpdf-progress-fill"></div>';
+			$html .= '</div>';
+			$html .= '<p class="dkpdf-progress-text">0%</p>';
+			$html .= '</div>';
+			$html .= '<div id="dkpdf-download-status"></div>';
+		}
+
+		return $html;
+	}
+
+	private function render_custom_fonts_manager_field( array $field ): string {
+		$html = '<button type="button" id="dkpdf-manage-fonts" class="button button-secondary" style="display: block; margin-bottom: 8px;">';
+		$html .= esc_html__( 'Manage Custom Fonts', 'dkpdf' );
+		$html .= '</button>';
+
+		// Add description below button
+		if ( isset( $field['description'] ) && $field['description'] !== '' ) {
+			$html .= '<span class="description">' . wp_kses_post( $field['description'] ) . '</span>';
+		}
+
+		return $html;
 	}
 }

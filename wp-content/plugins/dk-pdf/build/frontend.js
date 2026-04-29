@@ -1,0 +1,1 @@
+(()=>{class t{constructor(){this.init()}init(){}}"loading"===document.readyState?document.addEventListener("DOMContentLoaded",()=>{new t}):new t})();
