@@ -80,7 +80,12 @@ function add_group_menu_item_classic( $group_id = 0, $menu_id = null ) {
 		return false;
 	}
 
-	$group      = groups_get_group( $group_id );
+	// Don't add this item for portfolios.
+	$group_type = openlab_get_group_type( $group_id );
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
+
 	$group_type = ucfirst( groups_get_groupmeta( $group_id, 'wds_group_type' ) );
 
 	wp_update_nav_menu_item(
@@ -127,6 +132,12 @@ function get_primary_wp_navigation_id() {
  * @return void
  */
 function add_group_menu_item_block( $group_id = 0 ) {
+	// Don't add this item for portfolios.
+	$group_type = openlab_get_group_type( $group_id );
+	if ( 'portfolio' === $group_type ) {
+		return;
+	}
+
 	$navigation_post_id = get_primary_wp_navigation_id();
 	if ( empty( $navigation_post_id ) ) {
 		return;
