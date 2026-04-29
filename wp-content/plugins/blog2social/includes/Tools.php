@@ -1,4 +1,10 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+ */
 
 class B2S_Tools {
 
@@ -286,7 +292,12 @@ class B2S_Tools {
         if ($type == 'faq_postformats') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/4/131/en/social-media-post-formats-_-the-differences-between-image-post-and-link-post.html' : 'https://www.blog2social.com/de/faq/content/4/131/de/social-media-postformate-_-die-unterschiede-zwischen-bild_beitraegen-und-link_beitraegen.html';
         }
-
+        if($type == 'faq_first_comment') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1281' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1275';
+        }
+        if($type == 'faq_woocommerce_product_sharing') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1269' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1263';
+        }
         if ($type == 'browser_extension') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/webapp/extension/' : 'https://www.blog2social.com/de/webapp/extension/';
         }
@@ -555,7 +566,9 @@ class B2S_Tools {
         if ($type == "post_templates") {
             return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/4/150/de/wie-kann-ich-die-beitragsvorlagen-fuer-meine-social_media_posts-nutzen.html?highlight=beitragsvorlagen' : 'https://www.blog2social.com/en/faq/content/4/152/en/how-to-use-post-templates-for-social-media-posts.html';
         }
-
+        if($type == "post_templates_without_highlight") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/4/150/de/wie-kann-ich-die-beitragsvorlagen-fuer-meine-social_media_posts-nutzen.html' : 'https://www.blog2social.com/en/faq/content/4/152/en/how-to-use-post-templates-for-social-media-posts.html';
+        }
         if ($type == "addon_apps") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network_app&token=' . B2S_PLUGIN_TOKEN;
         }
@@ -593,7 +606,13 @@ class B2S_Tools {
         if ($type == 'tiktok_branded_confirmation') {
             return 'https://www.tiktok.com/legal/page/global/bc-policy/en';
         }
+        if ($type == 'assistini_website') {
+            return ($lang == 'de') ? 'https://assistini.com/de/' : 'https://assistini.com/en/';
+        }
 
+        if($type == "faq_ai_templates") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1276' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1282';
+        }
         return false;
     }
 
@@ -842,5 +861,404 @@ class B2S_Tools {
     public static function getPrePostDetails($client_user_network_id = 0) {
         $details = B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getPrePostDetails', 'token' => B2S_PLUGIN_TOKEN, 'plugin_version' => B2S_PLUGIN_VERSION, 'client_user_network_id' => $client_user_network_id));
         return $details;
+    }
+
+    public static function isCommentAllowed($networkId, $networkType) {
+
+        if(!defined('B2S_PLUGIN_NETWORK_ALLOW_COMMENT')) {
+            return false;
+        }
+
+        $allowComment = unserialize(B2S_PLUGIN_NETWORK_ALLOW_COMMENT);
+        
+        // If network ID is a key with an array value, only those types in the array are allowed
+        if (isset($allowComment[$networkId]) && is_array($allowComment[$networkId])) {
+            return in_array($networkType, $allowComment[$networkId]);
+        }
+        
+        // If it's just a number in the array, all types are allowed
+        if (in_array($networkId, $allowComment)) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public static function getAssistiniAllowEmoji($networkId) {
+       $allowNoEmoji = array(9, 13, 14, 15, 16, 21, 35, 36, 37, 42); 
+       return !in_array($networkId, $allowNoEmoji);
+    }
+
+    public static function getAssistiniAllowHashtags($networkId) {
+        $allowHashtags = array(1, 2, 3, 6, 12, 17, 21, 37, 43, 45);
+        return in_array($networkId, $allowHashtags);
+    }
+
+    public static function getAssistiniTemplateValues(){
+
+        global $wpdb;
+
+        $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
+
+        $storedTemplate = $options->_getOption('assistini_template_values');
+        if (is_array($storedTemplate) && isset($storedTemplate['last_stored']) && isset($storedTemplate['values']) && defined('HOUR_IN_SECONDS') && (time() - (int) $storedTemplate['last_stored']) < HOUR_IN_SECONDS) {
+            return $storedTemplate['values'];
+        }
+
+        if ($wpdb->get_var($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->prefix}b2s_user_tool` WHERE `blog_user_id` = %d AND `tool_id` = 1", (int) B2S_PLUGIN_BLOG_USER_ID))) {
+            $sqlResult = $wpdb->get_row($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->prefix}b2s_user_tool` WHERE `blog_user_id` = %d AND `tool_id` = 1", (int) B2S_PLUGIN_BLOG_USER_ID));
+            
+            if (isset($sqlResult->id) && (int) $sqlResult->id > 0 && isset($sqlResult->access_token) && !empty($sqlResult->access_token)){
+
+                $postData = array(
+                    'action' => 'assGetTemplateValues', 
+                    'access_token' => sanitize_text_field($sqlResult->access_token)
+                );
+        
+                $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData), true);
+
+                $storeTemplate= array(
+                    'last_stored'=> time(),
+                    'values' => $result
+                );
+
+                $options->_setOption('assistini_template_values', $storeTemplate);
+                return $result;
+            }
+        }
+
+        return false;
+        
+    }
+
+    public static function getAssistiniPostGoal() {
+        return array(
+            'traffic' => __('Traffic', 'blog2social'),
+            'awareness' => __('Awareness', 'blog2social'),
+            'engagement' => __('Engagement', 'blog2social'),
+            'conversion' => __('Conversion', 'blog2social'),
+            'event' => __('Event', 'blog2social'),
+            'recruiting' => __('Recruiting', 'blog2social'),
+        );
+    }
+
+    public static function getAssistiniPointOfView() {
+        return array(
+            'neutral' => __('Neutral', 'blog2social'),
+            '1st-person' => __('1st Person (I, We)', 'blog2social'),
+            '2nd-person' => __('2nd Person (You, informal)', 'blog2social'),
+            '2nd-person-she' => __('2nd Person (You, formal)', 'blog2social'),
+            '3rd-person' => __('3rd Person (He, She, It, They)', 'blog2social')
+        );
+    }
+    public static function getAssistiniLength() {
+        return array(
+            'short' => __('Short', 'blog2social'),
+            'medium' => __('Medium', 'blog2social'),
+            'long' => __('Long', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniAnswerInLanguage() {
+        return array(
+            'auto' => __('Auto', 'blog2social'),
+            'en_GB' => __('English (United Kingdom)', 'blog2social'),
+            'en_US' => __('English (United States)', 'blog2social'),
+            'en_AU' => __('English (Australia)', 'blog2social'),
+            'en_CA' => __('English (Canada)', 'blog2social'),
+            'de_DE' => __('German', 'blog2social'),
+            'de_AT' => __('German (Austria)', 'blog2social'),
+            'de_CH' => __('German (Switzerland)', 'blog2social'),
+            'fr_FR' => __('French', 'blog2social'),
+            'fr_CA' => __('French (Canada)', 'blog2social'),
+            'es_ES' => __('Spanish', 'blog2social'),
+            'es_MX' => __('Spanish (Mexico)', 'blog2social'),
+            'it_IT' => __('Italian', 'blog2social'),
+            'pt_PT' => __('Portuguese', 'blog2social'),
+            'pt_BR' => __('Portuguese (Brazil)', 'blog2social'),
+            'zh_CN' => __('Chinese (Simplified)', 'blog2social'),
+            'zh_TW' => __('Chinese (Traditional)', 'blog2social'),
+            'ja_JP' => __('Japanese', 'blog2social'),
+            'ko_KR' => __('Korean', 'blog2social'),
+            'ru_RU' => __('Russian', 'blog2social'),
+            'ar_SA' => __('Arabic', 'blog2social'),
+            'ar_EG' => __('Arabic (Egypt)', 'blog2social'),
+            'hi_IN' => __('Hindi', 'blog2social'),
+            'nl_NL' => __('Dutch', 'blog2social'),
+            'tr_TR' => __('Turkish', 'blog2social'),
+            'pl_PL' => __('Polish', 'blog2social'),
+            'sv_SE' => __('Swedish', 'blog2social'),
+            'fi_FI' => __('Finnish', 'blog2social'),
+            'da_DK' => __('Danish', 'blog2social'),
+            'no_NO' => __('Norwegian Bokmål', 'blog2social'),
+            'el_GR' => __('Greek', 'blog2social'),
+            'cs_CZ' => __('Czech', 'blog2social'),
+            'th_TH' => __('Thai', 'blog2social'),
+            'he_IL' => __('Hebrew', 'blog2social'),
+            'hu_HU' => __('Hungarian', 'blog2social'),
+            'id_ID' => __('Indonesian', 'blog2social'),
+            'ro_RO' => __('Romanian', 'blog2social'),
+            'uk_UA' => __('Ukrainian', 'blog2social'),
+            'vi_VN' => __('Vietnamese', 'blog2social'),
+            'af_ZA' => __('Afrikaans', 'blog2social'),
+            'az_AZ' => __('Azerbaijani', 'blog2social'),
+            'be_BY' => __('Belarusian', 'blog2social'),
+            'bn_BD' => __('Bengali', 'blog2social'),
+            'bg_BG' => __('Bulgarian', 'blog2social'),
+            'ca_ES' => __('Catalan', 'blog2social'),
+            'et_EE' => __('Estonian', 'blog2social'),
+            'is_IS' => __('Icelandic', 'blog2social'),
+            'lv_LV' => __('Latvian', 'blog2social'),
+            'lt_LT' => __('Lithuanian', 'blog2social'),
+            'mk_MK' => __('Macedonian', 'blog2social'),
+            'ms_MY' => __('Malay', 'blog2social'),
+            'fa_IR' => __('Persian', 'blog2social'),
+            'sk_SK' => __('Slovak', 'blog2social'),
+            'sl_SI' => __('Slovenian', 'blog2social'),
+            'cy_GB' => __('Welsh', 'blog2social'),
+            'zu_ZA' => __('Zulu', 'blog2social'),
+        );
+    }
+    
+
+    public static function getAssistiniCtaType() {
+        return array(
+            'none' => __('None', 'blog2social'),
+            'learn_more' => __('Learn more', 'blog2social'),
+            'read_now' => __('Read now', 'blog2social'),
+            'try_now' => __('Try now', 'blog2social'),
+            'comment_question' => __('Comment question', 'blog2social'),
+            'save_share' => __('Save or share', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniTextForm() {
+        return array(
+            'plain_text' => __('Plain Text', 'blog2social'),
+            'bullet_points' => __('Bullet points', 'blog2social'),
+            'short_paragraphs' => __('Short paragraphs', 'blog2social'),
+            'question_at_end' => __('Question at the end', 'blog2social'),
+            'hook_at_start' => __('Hook at the start', 'blog2social'),
+            'storytelling' => __('Storytelling', 'blog2social'),
+            'mini_cta_integrated' => __('Mini CTA integrated', 'blog2social'),
+        );
+    }
+
+    public static function getAssistiniFormOfAddress() {
+        return array(
+            'you_informal' => __('You (informal)', 'blog2social'),
+            'you_formal' => __('You (formal)', 'blog2social'),
+            'no_direct_address' => __('No direct address', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniEmojis() {
+        return array(
+            'none' => __('None', 'blog2social'),
+            'subtle' => __('Subtle', 'blog2social'),
+            'normal' => __('Normal', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniWritingStyle() {
+        return array(
+            'neutral' => __('Neutral', 'blog2social'),
+            'casual' => __('Casual', 'blog2social'),
+            'professional' => __('Professional', 'blog2social'),
+            'marketing_driven' => __('Marketing-driven', 'blog2social'),
+            'editorial' => __('Editorial', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniGenerateHashtags() {
+        return array(
+            'none' => __('No hashtags', 'blog2social'),
+            'from_ai' => __('From AI', 'blog2social')
+        );
+    }
+
+    public static function getAssistiniTone() {
+        return array(
+            'neutral' => __('Neutral', 'blog2social'),
+            'friendly' => __('Friendly', 'blog2social'),
+            'helpful' => __('Helpful', 'blog2social'),
+            'informative' => __('Informative', 'blog2social'),
+            'aggressive' => __('Aggressive', 'blog2social'),
+            'professional' => __('Professional', 'blog2social'),
+            'formal' => __('Formal', 'blog2social'),
+            'informal' => __('Informal', 'blog2social'),
+            'conversational' => __('Conversational', 'blog2social'),
+            'persuasive' => __('Persuasive', 'blog2social'),
+            'witty' => __('Witty', 'blog2social'),
+            'descriptive' => __('Descriptive', 'blog2social'),
+            'expository' => __('Expository', 'blog2social'),
+            'humorous' => __('Humorous', 'blog2social'),
+            'inspirational' => __('Inspirational', 'blog2social'),
+            'funny' => __('Funny', 'blog2social'),
+            'poetic' => __('Poetic', 'blog2social'),
+            'technical' => __('Technical', 'blog2social'),
+            'argumentative' => __('Argumentative', 'blog2social'),
+            'instructional' => __('Instructional', 'blog2social'),
+            'sarcastic' => __('Sarcastic', 'blog2social'),
+            'urgent' => __('Urgent', 'blog2social'),
+            'optimistic' => __('Optimistic', 'blog2social')
+        );
+    }
+
+    public static function getAiTemplateDefaults() {
+        return array(
+            'enabled' => 0,
+            'content_goal_enabled' => 1,
+            'tone_language_enabled' => 1,
+            'hashtags_keywords_enabled' => 1,
+            'content_length_output_enabled' => 1,
+            'answer_in_language' => 'auto',
+            'ai_instruction' => '',
+            'post_goal' => 'traffic',
+            'cta_type' => 'none',
+            'tone' => 'neutral',
+            'content_focus' => 50,
+            'point_of_view' => 'neutral',
+            'text_form' => 'plain_text',
+            'form_of_address' => 'no_direct_address',
+            'emojis' => 'normal',
+            'writing_style' => 'neutral',
+            'generate_hashtags' => 'from_ai',
+            'hashtags_count' => 1,
+            'use_keywords' => '',
+            'keyword_strength' => 50,
+            'text_length' => 'medium',
+            'text_depth' => 50
+        );
+    }
+
+    public static function getAiTemplateSchema($schema, $networkType, $networkId = 0) {
+        $defaults = self::getAiTemplateDefaults();
+        if (!isset($schema[$networkType]['ai_template']) || !is_array($schema[$networkType]['ai_template'])) {
+            return $defaults;
+        }
+
+        return self::normalizeAiTemplateSettings($schema[$networkType]['ai_template'], $defaults, (int) $networkId, $networkType);
+    }
+
+    public static function normalizeAiTemplateSettings($template, $defaults = array(), $networkId = 0, $networkType = null) {
+        if (!is_array($template)) {
+            return is_array($defaults) && !empty($defaults) ? $defaults : self::getAiTemplateDefaults();
+        }
+
+        $normalized = array_merge((is_array($defaults) && !empty($defaults) ? $defaults : self::getAiTemplateDefaults()), $template);
+
+        $answerLanguageOptions = array_keys(self::getAssistiniAnswerInLanguage());
+        if (!isset($normalized['answer_in_language']) || !in_array($normalized['answer_in_language'], $answerLanguageOptions, true)) {
+            $normalized['answer_in_language'] = 'auto';
+        }
+
+        $normalized['content_focus'] = max(1, min(100, (int) $normalized['content_focus']));
+        $normalized['keyword_strength'] = max(1, min(100, (int) $normalized['keyword_strength']));
+        $normalized['text_depth'] = max(1, min(100, (int) $normalized['text_depth']));
+        $normalized['hashtags_count'] = max(0, (int) $normalized['hashtags_count']);
+        $normalized['content_goal_enabled'] = ((isset($normalized['content_goal_enabled']) && (int) $normalized['content_goal_enabled'] === 0) ? 0 : 1);
+        $normalized['tone_language_enabled'] = ((isset($normalized['tone_language_enabled']) && (int) $normalized['tone_language_enabled'] === 0) ? 0 : 1);
+        $normalized['hashtags_keywords_enabled'] = ((isset($normalized['hashtags_keywords_enabled']) && (int) $normalized['hashtags_keywords_enabled'] === 0) ? 0 : 1);
+        $normalized['content_length_output_enabled'] = ((isset($normalized['content_length_output_enabled']) && (int) $normalized['content_length_output_enabled'] === 0) ? 0 : 1);
+
+        if ((int) $networkId > 0) {
+            $defaultHashtagLimit = self::getAssistiniTemplateDefaultMaxKeywords();
+            $resolvedFromValues = false;
+            if ($networkType !== null) {
+                $assistiniValues = self::getAssistiniTemplateValues();
+                if (is_array($assistiniValues) && isset($assistiniValues['data']['networks'][$networkId]['network_type'][$networkType])) {
+                    $networkTemplateValues = $assistiniValues['data']['networks'][$networkId]['network_type'][$networkType];
+                    $resolvedFromValues = true;
+                    if (!(isset($networkTemplateValues['allow_emojis']) && (int) $networkTemplateValues['allow_emojis'] === 1)) {
+                        $normalized['emojis'] = 'none';
+                    }
+                    if (isset($networkTemplateValues['hashtags']) && (int) $networkTemplateValues['hashtags'] === 1) {
+                        $hashTagLimit = isset($networkTemplateValues['hashtag_limit']) && (int) $networkTemplateValues['hashtag_limit'] > 0 ? (int) $networkTemplateValues['hashtag_limit'] : $defaultHashtagLimit;
+                        $normalized['hashtags_count'] = max(0, min($hashTagLimit, (int) $normalized['hashtags_count']));
+                    } else {
+                        $normalized['generate_hashtags'] = 'none';
+                        $normalized['hashtags_count'] = 0;
+                    }
+                }
+            }
+            //Backup Values if request failed
+            if (!$resolvedFromValues) {
+                if (!self::getAssistiniAllowEmoji((int) $networkId)) {
+                    $normalized['emojis'] = 'none';
+                }
+                if (!self::getAssistiniAllowHashtags((int) $networkId)) {
+                    $normalized['generate_hashtags'] = 'none';
+                    $normalized['hashtags_count'] = 0;
+                } else {
+                    $normalized['hashtags_count'] = max(0, min($defaultHashtagLimit, (int) $normalized['hashtags_count']));
+                }
+            }
+        }
+
+        return $normalized;
+    }
+
+    public static function getAiTemplateDbSchema($blogUserId, $networkId, $typeId) {
+        if ((int) $blogUserId <= 0 || (int) $networkId <= 0 || (int) $typeId < 0) {
+            return false;
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'b2s_ai_template';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) != $table) {
+            return false;
+        }
+
+        $row = $wpdb->get_row($wpdb->prepare(
+            "SELECT `payload` FROM `{$table}` WHERE `blog_user_id` = %d AND `network_id` = %d AND `type_id` = %d LIMIT 1",
+            (int) $blogUserId,
+            (int) $networkId,
+            (int) $typeId
+        ));
+
+        if (!is_object($row) || !isset($row->payload) || empty($row->payload)) {
+            return false;
+        }
+
+        $payload = json_decode((string) $row->payload, true);
+        if (!is_array($payload) || empty($payload)) {
+            return false;
+        }
+
+        return self::normalizeAiTemplateSettings($payload, self::getAiTemplateDefaults(), (int) $networkId, (int) $typeId);
+    }
+
+    public static function filterAiTemplateDataToSend($template) {
+        
+        if (!is_array($template) || empty($template)) {
+            return array();
+        }
+
+        $filtered = $template;
+        $groupFieldMap = array(
+            'content_goal_enabled' => array('post_goal', 'cta_type', 'tone', 'content_focus', 'point_of_view'),
+            'tone_language_enabled' => array('text_form', 'form_of_address', 'emojis', 'writing_style'),
+            'hashtags_keywords_enabled' => array('generate_hashtags', 'hashtags_count', 'use_keywords', 'keyword_strength'),
+            'content_length_output_enabled' => array('text_length', 'text_depth')
+        );
+
+        foreach ($groupFieldMap as $groupToggle => $groupFields) {
+            if (isset($filtered[$groupToggle]) && (int) $filtered[$groupToggle] === 0) {
+                foreach ($groupFields as $fieldKey) {
+                    unset($filtered[$fieldKey]);
+                }
+            }
+        }
+
+        return $filtered;
+    }
+
+    public static function getAssistiniTemplateDefaultMaxKeywords() {
+        return 30;
+    }
+
+    public static function getAiTemplateMaxPromptCharacters() {
+        return 1000;
     }
 }

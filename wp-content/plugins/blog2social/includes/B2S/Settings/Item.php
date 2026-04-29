@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Settings_Item {
 
     private $settings = array();
@@ -146,11 +150,11 @@ class B2S_Settings_Item {
         $content .= '<br>';
         $content .= '<div class="' . ( (B2S_PLUGIN_ADMIN) ? "" : "b2s-disabled-div") . '">';
         $content .= '<h4>' . esc_html__('Meta Tags Settings for Posts and Pages', 'blog2social') . '</h4>';
-        $content .= '<input type="checkbox" value="' . esc_attr($og_isChecked) . '" name="b2s_og_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_active" ' . (($og_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_og_active"> ' . esc_html__('Add Open Graph meta tags to your shared posts or pages, required by Facebook and other social networks to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="og" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($og_isChecked) . '" name="b2s_og_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_active" ' . (($og_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_og_active"> ' . esc_html__('Add Open Graph meta tags to your shared posts or pages, required by Facebook and other social networks to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="og" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '<br>';
-        $content .= '<input type="checkbox" value="' . esc_attr($card_isChecked) . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add Twitter Card meta tags to your shared posts or pages, required by Twitter to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($card_isChecked) . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add Twitter Card meta tags to your shared posts or pages, required by Twitter to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '<br>';
-        $content .= '<input type="checkbox" value="' . esc_attr($oembed_isChecked) . '" name="b2s_oembed_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_oembed_active" ' . (($oembed_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_oEmbed_active"> ' . esc_html__('Add oEmbed tags', 'blog2social') . ' <a href="#" class="b2s-load-info-meta-tag-modal b2s-info-btn del-padding-left" data-meta-type="oEmbed" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($oembed_isChecked) . '" name="b2s_oembed_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_oembed_active" ' . (($oembed_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_oEmbed_active"> ' . esc_html__('Add oEmbed tags', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="oEmbed" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '</div>';
         $content .= '<button class="btn btn-primary pull-right" type="submit" ' . (B2S_PLUGIN_ADMIN ? '' : 'disabled="true"') . '>' . esc_html__('save', 'blog2social') . '</button>';
         $content .= '<div class="clearfix"></div><hr>';

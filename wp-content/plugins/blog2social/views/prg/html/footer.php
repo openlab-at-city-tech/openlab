@@ -1,3 +1,8 @@
+<?php 
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <!--Footer Start-->
 <div class="b2s-footer">
     <div class="pull-left hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">

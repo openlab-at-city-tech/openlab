@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_AutoPost_Item {
 
     private $options;
     private $postTypesData;
     private $postCategoriesData;
+    private $postTagsData;
     private $postTaxonomiesData;
     private $networkAuthData = array();
     private $networkAutoPostData;
@@ -17,6 +22,7 @@ class B2S_AutoPost_Item {
         $this->options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
         $this->postTypesData = get_post_types(array('public' => true));
         $this->postCategoriesData = get_categories(array('public' => true));
+        $this->postTagsData = get_tags(array('hide_empty' => false));
         $this->postTaxonomiesData = get_taxonomies(array('public' => true));
     }
 
@@ -96,6 +102,7 @@ class B2S_AutoPost_Item {
             $content .= '</div>';
             $content .= '<br>';
             $content .= '<div class="alert alert-danger b2s-auto-post-error" data-error-reason="no-post-type" style="display:none;">' . esc_html__('Please select a post type', 'blog2social') . '</div>';
+            $content .= '<p class="b2s-bold">' . esc_html__('Select the content types (posts, pages, custom post types) that will be automatically shared when newly published.', 'blog2social') . '</p>';
             $content .= '<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
             $content .= '<div class="col-xs-12 col-md-2">';
             $content .= '<label class="b2s-auto-post-publish-label">' . esc_html__('new posts', 'blog2social') . '</label>';
@@ -106,6 +113,7 @@ class B2S_AutoPost_Item {
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<br>';
+            $content .= '<p class="b2s-bold">' . esc_html__('Define which content types will be automatically re-shared on social media when updated.', 'blog2social') . '</p>';
             $content .= '<div class="row ' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
             $content .= '<div class="col-md-12"><div class="panel panel-group b2s-auto-post-own-update-warning" style="display: none;"><div class="panel-body"><span class="glyphicon glyphicon-exclamation-sign glyphicon-warning"></span> ' . esc_html__('By enabling this feature your previously published social media posts will be sent again to your selected social media channels as soon as the post is updated.', 'blog2social') . '</div></div></div>';
             $content .= '<div class"clearfix"></div>';
@@ -122,7 +130,10 @@ class B2S_AutoPost_Item {
             $content .= "</div>";
             $content .= '<div class="b2s-auto-post-area">';
             $content .= '<br>';
-
+            $content .= '<p class="b2s-bold">' . esc_html__('Filter which WordPress categories should trigger the Auto-Poster.', 'blog2social') . '</p>';
+            $content .= $this->getChosenPostCategoriesData($optionAutoPost);
+            $content .= '<p class="b2s-bold">' . esc_html__('Define which tags are used as an additional filter for the Auto-Poster.', 'blog2social') . '</p>';
+            $content .= $this->getChosenPostTagsData($optionAutoPost);
             $content .= '<p class="b2s-bold">' . esc_html__('Select to auto-post immediately after publishing or with a delay', 'blog2social') . '</p>';
             $content .= '<input id="b2s-auto-post-time-now" name="b2s-auto-post-delay-state" ' . (((isset($optionAutoPost['delay_state']) && (int) $optionAutoPost['delay_state'] == 0) || !isset($optionAutoPost['delay_state'])) ? 'checked' : '') . ' value="0" type="radio"><label for="b2s-auto-post-time-now"> ' . esc_html__('immediately', 'blog2social') . '</label><br>';
             $content .= '<input id="b2s-auto-post-time-delay" name="b2s-auto-post-delay-state" value="1" ' . ((isset($optionAutoPost['delay_state']) && (int) $optionAutoPost['delay_state'] == 1) ? 'checked' : '') . ' type="radio"><label for="b2s-auto-post-time-delay"> ' . esc_html__('publish with a delay of', 'blog2social');
@@ -419,8 +430,8 @@ class B2S_AutoPost_Item {
             $html .= '</p>';
             $html .= '<select name="b2s-import-auto-post-taxonomies-data[]" data-placeholder="' . esc_html__('Select Taxonomies', 'blog2social') . '" class="b2s-import-auto-post-taxonomies" multiple>';
 
-            $catSelected = (isset($data['post_categories']) && is_array($data['post_categories'])) ? $data['post_categories'] : array();
 
+            $taxSelected = (isset($data['post_taxonomies']) && is_array($data['post_taxonomies'])) ? $data['post_taxonomies'] : array();
             $customTaxonomies = array();
             foreach ($this->postTaxonomiesData as $tax) {
                 if (!in_array($tax, array('category', 'post_tag'))) {
@@ -433,11 +444,53 @@ class B2S_AutoPost_Item {
                 }
             }
             foreach ($customTaxonomies as $k => $v) {
-                $selItem = (in_array($v->term_id, $catSelected)) ? 'selected' : '';
+                $selItem = (in_array($v->term_id, $taxSelected)) ? 'selected' : '';
                 $html .= '<option ' . $selItem . ' value="' . esc_attr($v->term_id) . '">' . esc_html($v->name) . '</option>';
             }
 
             $html .= '</select>';
+        }
+        return $html;
+    }
+
+    private function getChosenPostCategoriesData($data = array()) {
+
+        $html = '';
+        if (is_array($this->postCategoriesData) && !empty($this->postCategoriesData)) {
+            $includeChecked = (!isset($data['categories_state']) || (int) $data['categories_state'] == 0) ? 'checked' : '';
+            $excludeChecked = (isset($data['categories_state']) && (int) $data['categories_state'] == 1) ? 'checked' : '';
+            $html .= '<input id="b2s-auto-post-categories-state-include" name="b2s-auto-post-categories-state" value="0" ' . $includeChecked . ' type="radio" class="b2s-auto-post-state"><label class="padding-bottom-3" for="b2s-auto-post-categories-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
+            $html .= '<input id="b2s-auto-post-categories-state-exclude" name="b2s-auto-post-categories-state" value="1" ' . $excludeChecked . ' type="radio" class="b2s-auto-post-state"><label class="padding-bottom-3" for="b2s-auto-post-categories-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label><br>';
+            $html .= '<select name="b2s-auto-post-categories-data[]" data-placeholder="' . esc_html__('Select Post Categories', 'blog2social') . '" class="b2s-auto-post-categories" multiple>';
+
+            $selected_categories = (isset($data['categories_data']) && is_array($data['categories_data'])) ? $data['categories_data'] : array();
+            foreach ($this->postCategoriesData as $cat) {
+                $selected = in_array($cat->term_taxonomy_id, $selected_categories) ? 'selected' : '';
+                $html .= '<option value="' . esc_attr($cat->term_taxonomy_id) . '" ' . $selected . '>' . esc_html($cat->name) . '</option>';
+            }
+
+            $html .= '</select><br><br>';
+        }
+        return $html;
+    }
+
+    private function getChosenPostTagsData($data = array()) {
+
+        $html = '';
+        if (is_array($this->postTagsData) && !empty($this->postTagsData)) {
+            $includeChecked = (!isset($data['tags_state']) || (int) $data['tags_state'] == 0) ? 'checked' : '';
+            $excludeChecked = (isset($data['tags_state']) && (int) $data['tags_state'] == 1) ? 'checked' : '';
+            $html .= '<input id="b2s-auto-post-tags-state-include" name="b2s-auto-post-tags-state" value="0" ' . $includeChecked . ' type="radio" class="b2s-auto-post-state"><label class="padding-bottom-3" for="b2s-auto-post-tags-state-include">' . esc_html__('Include (Post only...)', 'blog2social') . '</label> ';
+            $html .= '<input id="b2s-auto-post-tags-state-exclude" name="b2s-auto-post-tags-state" value="1" ' . $excludeChecked . ' type="radio" class="b2s-auto-post-state"><label class="padding-bottom-3" for="b2s-auto-post-tags-state-exclude">' . esc_html__('Exclude (Do no post ...)', 'blog2social') . '</label><br>';
+            $html .= '<select name="b2s-auto-post-tags-data[]" data-placeholder="' . esc_html__('Select Post Tags', 'blog2social') . '" class="b2s-auto-post-tags" multiple>';
+
+            $selected_tags = (isset($data['tags_data']) && is_array($data['tags_data'])) ? $data['tags_data'] : array();
+            foreach ($this->postTagsData as $tag) {
+                $selected = in_array($tag->term_taxonomy_id, $selected_tags) ? 'selected' : '';
+                $html .= '<option value="' . esc_attr($tag->term_taxonomy_id) . '" ' . $selected . '>' . esc_html($tag->name) . '</option>';
+            }
+
+            $html .= '</select><br><br>';
         }
         return $html;
     }

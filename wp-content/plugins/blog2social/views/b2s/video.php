@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 /* Data */
 $userLang = strtolower(substr(get_locale(), 0, 2));

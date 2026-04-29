@@ -1,3 +1,13 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
+?>
+
 <!--Footer Start-->
 <div class="b2s-footer">
     <div class="pull-left hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">
@@ -21,7 +31,7 @@
 <?php if (sanitize_text_field(wp_unslash(isset($_GET['page'])? $_GET['page'] : "")) != 'blog2social-calendar') { ?>
 
     <?php
-        $modalNames= array("b2sPreFeatureAutoPosterModal", "b2sPreFeatureReshareModal", "b2sProFeatureUserAppsModal", "b2sPreFeatureEditAndDeleteModal", "b2sPreFeatureScheduleModal", "b2sPreFeatureBestTimesModal", "b2sBestTimesInfoModal");
+        $modalNames= array("b2sPreFeatureAutoPosterModal", "b2sPreFeatureReshareModal", "b2sProFeatureUserAppsModal", "b2sPreFeatureEditAndDeleteModal", "b2sPreFeatureScheduleModal", "b2sPreFeatureBestTimesModal", "b2sBestTimesInfoModal", "b2sInfoMetaTagModal");
         include (B2S_PLUGIN_DIR . 'views/b2s/partials/general-modal.php');
 
     ?>
@@ -390,180 +400,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="b2s-info-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-info-meta-tag-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">
-                    <div class="meta-title modal-meta-content" data-meta-origin="settings" style="display: none;">
-                        <?php esc_html_e('Social Meta Tags Settings', 'blog2social') ?>
-                    </div>
-                    <div class="meta-title modal-meta-content" data-meta-origin="ship" style="display: none;">
-                        <?php esc_html_e('Important information about editing the meta tags', 'blog2social'); ?>
-                    </div>
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="meta-body modal-meta-content" data-meta-type="og" data-meta-origin="settings" style="display: none;">
-                    <?php esc_html_e('Facebook has changed its policy for posting link posts via plugins or web applications. Facebook does no longer display the featured or selected image for your blog post, but only images defined in the Open Graph (OG) Meta Tags of your blog post. If you have not defined any OG Meta Tags, Facebook displays a random image from your blog post or blog site. If you have defined an image in your blog post OG Meta Tags that does not meet the image size requirements, Facebook also does not displayed your selected image, but a random image. Please make sure that your image meets the image size requirements for Facebook.', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('With Blog2Social you can select a featured image or any image you select to be displayed with your link post. Blog2Social will automatically write the required parameter in the OG Meta Tags of your blog post, so that your selected image will be displayed with your link post. If you don\'t want Blog2Social to do that, because you have defined your own OG meta tags, please uncheck this box. Please note that you cannot select a specific image for your link post without OG meta tags.', 'blog2social') ?>
-                </div>
-                <div class="meta-body modal-meta-content" data-meta-type="card" data-meta-origin="settings" style="display: none;">
-                    <?php esc_html_e('Twitter has changed its policy for posting link posts via plugins or web applications. Twitter does no longer display the featured or selected image for your blog post, but only images defined in the Twitter Card Meta Tags of your blog post. If you have not defined any Twitter Card Meta Tags, Twitter displays a random image from your blog post or blog site. If you have defined an image in your blog post Twitter Card Meta Tags that does not meet the image size requirements, Twitter displays a white space for the image of your link post. Please make sure that your image meets the image size requirements for Twitter.', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('With Blog2Social you can select a featured image or any image you select to be displayed with your link post. Blog2Social will automatically write the required parameter in the Twitter Card meta tags of your blog post, so that your selected image will be displayed with your link post. If you don\'t want Blog2Social to do that, because you have defined your own Twitter Card meta tags, please uncheck this box. Please note that you cannot select a specific image for your link post without Twitter Card meta tags.', 'blog2social') ?>
-                </div>
-                <div class="meta-body modal-meta-content" data-meta-type="oEmbed" data-meta-origin="settings" style="display: none;">
-                    <?php esc_html_e('To display your link preview, LinkedIn uses the image set in the oEmbed tags in meta data of your post. WordPress automatically sets your featured image as your preferred image in the oEmbed tags. If you would like to change your image on LinkedIn without changing your featured image, you can uncheck the “Add oEmbed tags” box.', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('If LinkedIn can’t find the oEmbed tag in your data, it will use the OG (Open Graph) meta tags instead.', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('With Blog2Social you can select a featured image or any image you select to be displayed with your link post. Blog2Social will automatically write the required parameter in the OG Meta Tags of your post, so that your selected image will be displayed with your link post. We recommend an image size between 667x523 and 1000x1000 Pixels. Please make sure that the "Add Open Graph meta tags" box is checked, if you uncheck the oEmbed tags. If both settings are unchecked, make sure to use another plugin to set your OG tags, otherwise the social networks will display no image or a random image in your post.', 'blog2social') ?>
-                </div>
-                <div class="meta-body modal-meta-content" data-meta-type="og" data-meta-origin="ship" style="display: none;">
-                    <?php esc_html_e('What are meta tags?', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('With the help of the meta tags you can decide, how the preview of your link post looks like on social media. You can edit the following fields to change the look:', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <b>- <?php esc_html_e('Image', 'blog2social') ?></b><br>
-                    <b>- <?php esc_html_e('Title', 'blog2social') ?></b><br>
-                    <b>- <?php esc_html_e('Description', 'blog2social') ?></b><br>
-                    <br>
-                    <?php esc_html_e('Blog2Social automatically writes this information into the Open Graph (OG) tags as the image, title and description of your WordPress post.', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('Please note:', 'blog2social') ?><br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('If you use other plugins for setting meta tags, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply and share your changes, please make sure you have <a target="_blank" href="%s">activated meta tag settings for Blog2Social only</a> and disable all meta tag settings in your other plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('If this post has been previously shared or scheduled, your current changes will also affect the appearance of previously shared or scheduled posts, as the networks will always pull the latest information from the open graph meta tags and automatically update any existing posts.', 'blog2social') ?><br>
-                    <br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('Your changes will not be applied to your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                    <br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">meta tag checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('yoast_warning_og_guide'))),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                </div>
-                <div class="meta-body modal-meta-content" data-meta-type="card" data-meta-origin="ship" style="display: none;">
-                    <?php esc_html_e('What are Twitter Cards?', 'blog2social') ?>
-                    <br>
-                    <?php esc_html_e('The Twitter Cards define the look of your preview of your link post on Twitter. By editing the Twitter Card tags you can change the following parameters to change the look:', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <b>- <?php esc_html_e('Image', 'blog2social') ?></b><br>
-                    <b>- <?php esc_html_e('Title', 'blog2social') ?></b><br>
-                    <b>- <?php esc_html_e('Description', 'blog2social') ?></b><br>
-                    <br>
-                    <?php esc_html_e('Blog2Social automatically writes this information into the Twitter Card tags as the image, title and description of your WordPress post.', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('Please note:', 'blog2social') ?><br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('If you use other plugins for setting Twitter Cards, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply your changes, please make sure you have <a target="_blank" href="%s">activated Twitter Card settings for Blog2Social only</a> and disable all Twitter Card settings in your other  plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('If this post was previously shared or scheduled, your current changes will also affect the look of previously shared or scheduled posts, as Twitter will always pull the most up-to-date information from the Twitter Card tags. If this post has already been shared, it may take up to 7 days for Twitter to update your current changes.', 'blog2social') ?><br>
-                    <br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('Your changes will not affect your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                    <br>
-                    <br>
-                    <?php echo wp_kses(sprintf(
-                        // translators: %s is a link
-                        __('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">Twitter Card guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_card_guide'))),
-                        array('a' => 
-                            array('target' => array(), 
-                            'href' => array())
-                            )
-                        );
-                    ?>
-                </div>
-
-                <?php if (B2S_PLUGIN_USER_VERSION == 0) {
-                    ?>
-                    <br>
-                    <hr>               
-                    <h4><?php esc_html_e('You want to change the image, title and description for your post?', 'blog2social'); ?></h4>
-                    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Share on multiple profiles, pages and groups', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-post and auto-schedule new and updated blog posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your posts at the best times on each network', 'blog2social') ?><br>  
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Manager: use predefined best time scheduler to auto-schedule your social media posts', 'blog2social') ?><br>  
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your post for one time, multiple times or recurrently', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule and re-share old posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select link format or image format for your posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
-                    <br>
-                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('upgrade_version')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
-                    <br>
-                    <center>
-                        <?php echo wp_kses(sprintf(
-                            // translators: %s is a link
-                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
-                            array('a' => 
-                                array('target' => array(), 
-                                'href' => array())
-                                )
-                            );
-                            ?>
-                    </center>
-                    <?php
-                }
-                ?>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="b2s-info-change-meta-tag-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-change-meta-tag-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -616,7 +452,8 @@
                     array(
                         'a' => array(
                             'target' => array(), 
-                            'href' => array(),
+                            'href' => array()
+                        ),
                         'div' => array(
                             'class' => array()
                         ),
@@ -630,7 +467,6 @@
                         'li' => array(
                             'class' => array()
                         )
-                    )
                     )
                 ); ?>
             </div>

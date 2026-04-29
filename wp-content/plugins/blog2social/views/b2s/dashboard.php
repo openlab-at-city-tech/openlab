@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 $b2sSiteUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/');
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
@@ -227,6 +234,7 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                                 <li><span class="b2s-font-bold"><?php esc_html_e("Automated publishing", "blog2social"); ?></span>: <?php esc_html_e("Save time and maintain consistency", "blog2social"); ?></li>
                                                 <li><span class="b2s-font-bold"><?php esc_html_e("Customizable templates", "blog2social"); ?></span>: <?php esc_html_e("Tailored posts for every platform", "blog2social"); ?></li>
                                                 <li><span class="b2s-font-bold"><?php esc_html_e("Flexible settings", "blog2social"); ?></span>: <?php esc_html_e("Efficient management for teams and accounts", "blog2social"); ?></li>
+                                                <li><span class="b2s-font-bold"><?php esc_html_e("Video Addon", "blog2social"); ?></span>: <?php esc_html_e("Share video files on up to 12 networks", "blog2social"); ?></li>
                                             </ul>
                                             <p><?php esc_html_e("Get started now – free and without obligation!", "blog2social"); ?></p>
                                             <br>

@@ -2,6 +2,10 @@
 
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Item.php');
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Calendar_Filter {
 
     private $items = [];

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Dashboard_Activity{
     
     public function __construct() {}

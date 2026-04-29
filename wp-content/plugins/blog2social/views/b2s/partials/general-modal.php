@@ -1,4 +1,10 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
 
 require_once (B2S_PLUGIN_DIR . '/includes/B2S/View/Modal/General.php');      
 $allowed_tags = array(
@@ -42,7 +48,12 @@ $allowed_tags = array(
     'span' => array(
         'class' => true,
         'style' => true,
-    )
+    ),
+    'br' => array(),
+    'hr' => array(
+        'style' => true,
+        'class' => true,
+    ),
 );
 
 $modal= new B2S_View_Modal_General();

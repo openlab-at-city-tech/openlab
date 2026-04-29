@@ -9,6 +9,8 @@ jQuery(window).on("load", function () {
     jQuery(".b2s-import-auto-post-categories").chosen();
     jQuery(".b2s-import-auto-post-taxonomies").chosen();
     jQuery(".b2s-auto-post-assign-user").chosen();
+    jQuery(".b2s-auto-post-categories").chosen();
+    jQuery(".b2s-auto-post-tags").chosen();
 
     jQuery('.b2s-network-item-auth-list[data-network-count="true"]').each(function () {
         jQuery('.b2s-network-auth-count-current[data-network-id="' + jQuery(this).attr("data-network-id") + '"]').text(jQuery(this).children('li').length);
@@ -226,7 +228,7 @@ jQuery(document).on('click', '#b2s-auto-post-settings-btn', function () {
         }
         if (jQuery('#b2s-auto-post-profil-data-' + jQuery('#b2s-auto-post-profil-dropdown').val()).val() == "") {
             submit = false;
-            //jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').show();
+            jQuery('.b2s-auto-post-error[data-error-reason="no-auth-in-mandant"]').show();
         }
     }
 

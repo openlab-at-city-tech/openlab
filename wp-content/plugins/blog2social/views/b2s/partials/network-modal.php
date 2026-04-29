@@ -1,4 +1,10 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
 
 require_once (B2S_PLUGIN_DIR . '/includes/B2S/View/Modal/Network.php');      
 

@@ -42,7 +42,12 @@ class B2S_Changelog {
                         }
                         $content .= '<ul class="b2s-changelog-list">';
                         foreach ($value as $entry) {
-                            $content .= '<li>' . esc_html($entry, 'blog2social') . '</li>';
+                            $content .= '<li>' . wp_kses($entry, array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                )
+                            )) . '</li>';
                         }
                         $content .= '</ul>';
                     }

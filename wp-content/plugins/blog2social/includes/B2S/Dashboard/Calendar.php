@@ -2,6 +2,10 @@
 
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Dashboard_Calendar {
 
     public function __construct() {

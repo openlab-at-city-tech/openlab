@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Ship_Save {
 
     public $postData;
@@ -465,6 +469,7 @@ class B2S_Ship_Save {
     }
 
     public function saveSchedDetails($data, $schedData, $relayData = array()) {
+
         global $wpdb;
 
         $shipdays = array();
@@ -537,13 +542,35 @@ class B2S_Ship_Save {
                         $data['multi_images'] = json_encode($multi_images);
                     }
 
-
-
-
                     //content
                     if (isset($schedData['sched_content'][$key]) && !empty($schedData['sched_content'][$key])) {
                         $serializeData['content'] = $schedData['sched_content'][$key];
                     }
+
+                    if(isset($serializeData['comment'])){
+                        unset($serializeData['comment']);
+                    }
+                  
+                    //post preview + sched count
+                    if (isset($schedData['sched_comment'][$key])){
+                        $serializeData['comment'] = $schedData['sched_comment'][$key];
+                    } else if(isset($data['comment'])) { //Update Edit Post
+                        $serializeData['comment'] = $data['comment'];
+                    }
+
+                    if(isset($serializeData['share_as_story'])){
+                        unset($serializeData['share_as_story']);
+                    }
+
+                    //post preview + sched count
+                    if(isset($schedData['share_as_story'][$key])){
+                        if((int)$schedData['share_as_story'][$key] ===1){
+                             $serializeData['share_as_story'] = 1;
+                        } 
+                    }else if(isset($data['share_as_story'])){//Update Edit Post
+                        $serializeData['share_as_story'] = $data['share_as_story'];
+                    }
+
                     //Update - calendar edit function
                     if (isset($data['sched_details_id'])) {
                         $wpdb->update($wpdb->prefix . 'b2s_posts_sched_details', array(
@@ -555,6 +582,14 @@ class B2S_Ship_Save {
                     } else {
                         $wpdb->insert($wpdb->prefix . 'b2s_posts_sched_details', array('sched_data' => serialize($serializeData), 'image_url' => $data['image_url']), array('%s', '%s'));
                         $schedDetailsId = $wpdb->insert_id;
+                    }
+
+                    unset($serializeData['tags']);
+
+                    if(isset($schedData['sched_tags'][$key]) && !empty($schedData['sched_tags'][$key])){
+                        $serializeData['tags'] = $schedData['sched_tags'][$key];
+                    } else if(isset($data['tags']) && !empty($data['tags'])){ //Update Edit Post
+                        $serializeData['tags'] = $data['tags'];
                     }
 
                     $sendTime = strtotime($date . ' ' . $schedData['time'][$key]);

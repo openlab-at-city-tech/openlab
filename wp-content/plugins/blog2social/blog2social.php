@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 /*
  * Plugin Name: Blog2Social: Social Media Auto Post & Scheduler
@@ -7,15 +10,19 @@
  * Author: Blog2Social, miaadenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 8.7.1
+ * Version: 8.9.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
- * Tested up to: 6.8    
+ * Tested up to: 6.9
  * Author URI: https://www.blog2social.com
  * License: GPLv3
  */
 
-define('B2S_PLUGIN_VERSION', '871');
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+ */
+
+define('B2S_PLUGIN_VERSION', '890');
 define('B2S_PLUGIN_LANGUAGE', serialize(array('de_DE', 'en_US')));
 define('B2S_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('B2S_PLUGIN_URL', plugin_dir_url(__FILE__));

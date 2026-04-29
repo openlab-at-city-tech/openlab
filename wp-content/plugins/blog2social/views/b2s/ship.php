@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Ship/Navbar.php';
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Ship/Image.php';
@@ -16,7 +23,9 @@ $selProfile = isset($_GET['profile']) ? (int) $_GET['profile'] : 0;
 $selImg = (isset($_GET['img']) && !empty($_GET['img'])) ? base64_decode(sanitize_text_field(wp_unslash($_GET['img']))) : '';
 $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : false;
 $exPostFormat = (isset($_GET['postFormat']) && $_GET['postFormat'] == '1') ? 1 : ((isset($_GET['postFormat']) && $_GET['postFormat'] == '2') ? 2 : 0);
-$postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
+$postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0 || $exPostFormat == 1) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
+
+$ignoreTemplate = (isset($_GET['ignoreTemplate']))? (int)$_GET['ignoreTemplate'] :0;
 $postStatus = array('publish' => esc_html__('published', 'blog2social'), 'pending' => esc_html__('draft', 'blog2social'), 'future' => esc_html__('scheduled', 'blog2social'));
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
@@ -41,7 +50,7 @@ if (isset($_GET['postId']) && (int) $_GET['postId'] > 0) {
         $draftDate = (isset($sqlResult->last_save_date) && !empty($sqlResult->last_save_date)) ? $sqlResult->last_save_date : '';
         $draftId = (isset($sqlResult->id) && !empty($sqlResult->id)) ? $sqlResult->id : '';
 
-        if (!empty($draftData) && !empty($draftId)) {
+        if (!empty($draftData) && !empty($draftId) && isset($_GET['type']) && $_GET['type'] == 'draft') {
             $isDraft = true;
         }
     }
@@ -66,6 +75,7 @@ if ($wpdb->get_var($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->pre
 
 $navbar = new B2S_Ship_Navbar();
 $mandantData = $navbar->getData();
+$maxInputVars = ini_get('max_input_vars');
 ?>
 <div class="b2s-container">
     <?php
@@ -123,6 +133,8 @@ $mandantData = $navbar->getData();
                             }
                         } else {
                             $videoMeta = wp_read_video_metadata(get_attached_file($postData->ID));
+                            $filesize=isset($videoMeta['filesize']) ? $videoMeta['filesize'] : "";
+                            $length=isset($videoMeta['length']) ? $videoMeta['length'] : "";
                             ?>
                             <div class="info">
                                 <video id="b2sVideoPreview" controls height="73" poster="#" autobuffer="true" class="pull-left">
@@ -133,8 +145,8 @@ $mandantData = $navbar->getData();
                                     <b><?php esc_html_e('Video', 'blog2social') ?>:</b> <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?><br>
                                     <b><?php esc_html_e('Type', 'blog2social') ?> :</b> <?php
                                     echo esc_html($postData->post_mime_type, 'blog2social') . ' | ' .
-                                    esc_html__('Size', 'blog2social') . ': ' . esc_html(size_format($videoMeta['filesize']), 'blog2social') . ' | ' . esc_html__('Length', 'blog2social') .
-                                    ':' . esc_html($videoMeta['length'], 'blog2social') . esc_html__('s', 'blog2social');
+                                    esc_html__('Size', 'blog2social') . ': ' . esc_html(size_format($filesize), 'blog2social') . ' | ' . esc_html__('Length', 'blog2social') .
+                                    ':' . esc_html($length, 'blog2social') . esc_html__('s', 'blog2social');
                                     ?>
                                     <br>
                                     <?php
@@ -323,7 +335,7 @@ $mandantData = $navbar->getData();
                                                     <a href="#" class="btn btn-primary btn-sm b2s-network-setting-save b2s-loading-area-save-profile-change">
                                                         <?php esc_html_e('Save network selection', 'blog2social') ?>
                                                     </a>
-                                                    <a href="#" class="btn btn-link btn-sm hidden-sm b2s-network-setting-save b2s-network-setting-save-btn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
+                                                    <a href="#" class="btn btn-link btn-sm hidden-sm b2s-network-setting-save b2sNetworkSettingSaveModal"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -376,6 +388,7 @@ $mandantData = $navbar->getData();
                                     <?php } else { ?>
 
                                         <form id="b2sNetworkSent" method="post">
+                                            <input type="hidden" id="max_input_vars" value="<?php echo esc_attr($maxInputVars); ?>">
                                             <div class="b2s-post-area col-md-9 del-padding-left">
                                                 <div class="b2s-empty-area" style="display:none;">
                                                     <div class="panel panel-group text-center">
@@ -557,36 +570,6 @@ $mandantData = $navbar->getData();
                                     </div>
                                 </div>
                             </div>
-                            <div id="b2s-network-setting-save" class="modal fade" role="dialog" aria-labelledby="b2s-network-setting-save" aria-hidden="true" data-backdrop="false"  style="display:none;">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-network-setting-save">&times;</button>
-                                            <h4 class="modal-title"><?php esc_html_e('Save network selection', 'blog2social') ?></h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            <?php esc_html_e('You can save your current network selection. This network selection will be loaded automatically next time you open the social media post editor via "Site & Blog Content" ->"Share on Social Media" or "Social Media Posts" ->"Customize & Schedule".', 'blog2social') ?>
-                                            <br><br>
-                                            <?php esc_html_e('Your saved networks will be activated for your schedule (green checkmark) in the right side navigation. You can  select or deselect social network accounts at any time by clicking on them or connect new social networks on the "+ Add more" icon on top of the navigation bar.', 'blog2social') ?>
-                                            <br><br>
-                                            <?php esc_html_e('This allows you to adjust your network selection at any time and save it by clicking on "Save network selection".', 'blog2social') ?>
-                                            <br><br>
-                                            <span class="b2s-bold"><?php esc_html_e('Note: ', 'blog2social') ?></span><?php echo wp_kses(sprintf(
-                                                // translators: %s is a link
-                                                __('To define and save more network selections for your posting purposes, you can use the option "Multiple Network collections" (Premium feature) to define <a href="%s" target="_blank">multiple network collections in the social networks section</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_mandant_collection'))),
-                                                array(
-                                                    'a' => array(
-                                                        'href' => array(),
-                                                        'target' => array(),
-                                                    ),
-                                                ));
-                                             ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
                             <div id="b2s-network-sched-post-info" class="modal fade" role="dialog" aria-labelledby="b2s-network-sched-post-info" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -637,7 +620,7 @@ $mandantData = $navbar->getData();
                                 </div>
                             </div>
 
-                            <div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                            <div id="b2s-network-select-image" class="modal" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -1019,6 +1002,24 @@ $mandantData = $navbar->getData();
                                 </div>
                             </div>
 
+                            <div class="modal fade" id="b2sAiSettingsUnsavedModal" tabindex="-1" role="dialog" aria-labelledby="b2sAiSettingsUnsavedModal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 2000;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAiSettingsUnsavedModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Unsaved Template Changes', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php esc_html_e('You have unsaved template changes. Would you like to save them?', 'blog2social') ?>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default b2s-ai-unsaved-skip-btn"><?php esc_html_e('Skip', 'blog2social') ?></button>
+                                            <button type="button" class="btn btn-primary b2s-ai-unsaved-save-btn"><?php esc_html_e('Save', 'blog2social') ?></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="b2sImageZoomModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2sImageZoomModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -1050,7 +1051,7 @@ $mandantData = $navbar->getData();
                             <input type="hidden" id="selSchedDate" value="<?php echo esc_attr($selSchedDate); ?>">
                             <input type="hidden" id="selProfile" value="<?php echo esc_attr($selProfile); ?>">   
                             <input type="hidden" id="b2sPostType" value="<?php echo (isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? 'ex' : ''; ?>">
-                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
+                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? (($exPostFormat == 0 || $exPostFormat == 1) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
                             <input type="hidden" id="b2sPortalImagePath" value="<?php echo esc_url(plugins_url('/assets/images/portale/', B2S_PLUGIN_FILE)); ?>">
                             <input type="hidden" id="b2sTosXingGroupCrosspostingLimit" value="<?php echo esc_attr($tosCrossPosting[19][2]); ?>">
                             <input type="hidden" id="b2sServerUrl" value="<?php echo esc_url(B2S_PLUGIN_SERVER_URL); ?>">
@@ -1071,6 +1072,8 @@ $mandantData = $navbar->getData();
                             <input type="hidden" id="b2sIsDraft" value="<?php echo ($isDraft) ? '1' : '0' ?>">
                             <input type="hidden" id="b2sIsVideo" value="<?php echo ($isVideo) ? '1' : '0' ?>">
                             <input type="hidden" id="b2sExPostFormat" value="<?php echo esc_attr($exPostFormat); ?>">
+                            <input type="hidden" id="b2sIgnoreTemplate" value="<?php echo esc_attr($ignoreTemplate); ?>">
+                            <input type="hidden" id="b2sUserVersion" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
 
                             <?php
                             echo wp_kses($settingsItem->setNetworkSettingsHtml(), array(
@@ -1172,7 +1175,7 @@ $mandantData = $navbar->getData();
                             </div>
 
 
-                            <div class="modal fade b2s-info-share-as-story-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-share-as-story-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                            <div class="modal fade b2s-info-share-as-story-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-share-as-story-modal" aria-hidden="true" data-backdrop="false"  style="display:none; z-index: 2000;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -1185,11 +1188,200 @@ $mandantData = $navbar->getData();
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content custom-edit-template-modal-width">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-edit-template" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-1" alt="Facebook" src="<?php echo esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-2" alt="Twitter" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-3" alt="LinkedIn" src="<?php echo esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-4" alt="Tumblr" src="<?php echo esc_url(plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-6" alt="Pinterest" src="<?php echo esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-7" alt="Flickr" src="<?php echo esc_url(plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-9" alt="Diigo" src="<?php echo esc_url(plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-11" alt="Medium" src="<?php echo esc_url(plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-12" alt="Instagram" src="<?php echo esc_url(plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-14" alt="Torial" src="<?php echo esc_url(plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-15" alt="Reddit" src="<?php echo esc_url(plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-16" alt="Bloglovin" src="<?php echo esc_url(plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-17" alt="VKontakte" src="<?php echo esc_url(plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-18" alt="Google Business Profile" src="<?php echo esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-19" alt="Xing" src="<?php echo esc_url(plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-24" alt="Telegram" src="<?php echo esc_url(plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-25" alt="Blogger" src="<?php echo esc_url(plugins_url('/assets/images/portale/25_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-26" alt="Ravelry" src="<?php echo esc_url(plugins_url('/assets/images/portale/26_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-27" alt="Instapaper" src="<?php echo esc_url(plugins_url('/assets/images/portale/27_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-32" alt="Youtube" src="<?php echo esc_url(plugins_url('/assets/images/portale/32_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-35" alt="Vimeo" src="<?php echo esc_url(plugins_url('/assets/images/portale/35_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-36" alt="TikTok" src="<?php echo esc_url(plugins_url('/assets/images/portale/36_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-38" alt="Mastodon" src="<?php echo esc_url(plugins_url('/assets/images/portale/38_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-39" alt="Discord" src="<?php echo esc_url(plugins_url('/assets/images/portale/39_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-42" alt="Humhub" src="<?php echo esc_url(plugins_url('/assets/images/portale/42_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-43" alt="Bluesky" src="<?php echo esc_url(plugins_url('/assets/images/portale/43_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-44" alt="Threads" src="<?php echo esc_url(plugins_url('/assets/images/portale/44_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-45" alt="X" src="<?php echo esc_url(plugins_url('/assets/images/portale/45_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-46" alt="Band" src="<?php echo esc_url(plugins_url('/assets/images/portale/46_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="row b2s-loading-area width-100">
+                                            <br>
+                                            <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
+                                            <div class="clearfix"></div>
+                                            <?php esc_html_e('Loading...', 'blog2social') ?>
+                                        </div>
+                                        <div class="alert alert-danger b2s-edit-template-user-upgrade-required" style="display: none;"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e("Upgrade of your B2S User Version is required for this feature.", 'blog2social'); ?></div>
+                                        <div class="modal-body b2s-edit-template-content">
+
+                                        </div>
+                                        <div class="modal-footer b2s-edit-template-footer">
+                                            <button class="btn btn-primary btn-sm b2s-edit-template-save-btn"><?php esc_html_e('save', 'blog2social'); ?></button>
+                                            <input type="hidden" value="" id="b2s-edit-template-network-id">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sInfoNetwork18" tabindex="-1" role="dialog"  aria-labelledby="b2sInfoNetwork18" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoNetwork18" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Google Business Profile', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php esc_html_e('Blog2Social uses the official Google Business Profile API to share your content on your business listing. You can connect Google Business Profile listings with up to nine different locations to Blog2Social and you can choose which location you want to share your content on.', 'blog2social'); ?>
+                                            <br>
+                                            <br>
+                                            <?php esc_html_e('Google currently allows access to the API for all companies with up to 9 locations in their Google Business Profile Listings. However, Google plans to extend the API for companies with more than 9 locations in their Google Business Profile listings.', 'blog2social'); ?>
+                                            <br>
+                                            <br>
+                                            <a href="https://developers.google.com/my-business/content/posts-data#faqs" target="_blank"><?php esc_html_e('Learn more', 'blog2social'); ?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoNoCache" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Instant Caching for Link Posts', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php esc_html_e('Please enable this feature, if you are using varnish caching (HTTP accelerator to relieve your website). Blog2Social will add a "no-cache=1" parameter to the post URL of your link posts to ensure that the network always pulls the current meta data of your blog post.', 'blog2social') ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sInfoFormat" tabindex="-1" role="dialog" aria-labelledby="b2sInfoFormat" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoFormat" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Choose your Post Format', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="b2sInfoFormatText" data-network-id="1">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="2">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="3">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="12">
+                                                <?php esc_html_e('Decide in wich form you want to post your Content. Either as image with frame, or as image cut out.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="43">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="44">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                            <div class="b2sInfoFormatText" data-network-id="45">
+                                                <?php esc_html_e('Decide in which post format you want to post your content: Link post or image post.', 'blog2social') ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sInfoContent" tabindex="-1" role="dialog" aria-labelledby="b2sInfoContent" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoContent" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Post Content', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php esc_html_e('Edit the content of your post. Move elements by drag and drop into the textarea and customize them as you like.', 'blog2social') ?>
+                                            <div class="b2s-template-placeholder-legend">
+                                                <br/>
+                                                <p class="b2s-bold"><?php esc_html_e('Legend', 'blog2social'); ?>:</p>
+                                                <p>
+                                                    <span class="b2s-bold">{TITLE}</span> - <?php esc_html_e('The title of your post', 'blog2social') ?> <br>
+                                                    <span class="b2s-bold">{EXCERPT}</span> - <?php esc_html_e('The summary of your post (you define it in the side menu of your post).', 'blog2social') ?> <br>
+                                                    <span class="b2s-bold">{CONTENT}</span> - <?php esc_html_e('The content of your post', 'blog2social') ?> <br>
+                                                    <span class="b2s-bold">{KEYWORDS}</span> - <?php esc_html_e('The tags you have set in your post.', 'blog2social') ?> <br>
+                                                    <span class="b2s-bold">{AUTHOR}</span> - <?php esc_html_e('The name of the post author.', 'blog2social') ?> <br>
+                                                    <?php
+                                                    if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
+                                                        ?>
+                                                        <span class="b2s-bold">{PRICE}</span> - <?php esc_html_e('This is the actual current price of the product used by WooCommerce.', 'blog2social') ?> <br>
+                                                        <span class="b2s-bold">{REGULAR_PRICE}</span> - <?php esc_html_e('This is the original price of the product used by WooCommerce, before any discounts or sales.', 'blog2social') ?> <br>
+                                                        <span class="b2s-bold">{SALE_PRICE}</span> - <?php esc_html_e('This is the discounted price of the product used by WooCommerce you may set for a sale period.', 'blog2social') ?> <br>
+                                                        <?php
+                                                    }
+                                                    ?>
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sInfoCharacterLimit" tabindex="-1" role="dialog" aria-labelledby="b2sInfoCharacterLimit" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoCharacterLimit" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Character limit', 'blog2social') ?> (CONTENT, EXCERPT)</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="b2s-info-character-limit-text"><?php esc_html_e('Define the character limit for the variables "EXCERPT" and "CONTENT" individually. Your text will be shortened after the last comma, period, or space character within your character limit.', 'blog2social') ?></div>
+                                            <div class="b2s-info-character-limit-text"><?php esc_html_e('An "EXCERPT" will only be added to your social media post if you have added a manual excerpt in the excerpt editing box of the Gutenberg side menu (document settings) of your post.', 'blog2social') ?></div>
+                                            <div class="b2s-info-character-limit-text"><?php esc_html_e('"TITLES" and "KEYWORDS" (Hashtags) are not shortened. If you select the "TITLE" and "KEYWORD" variables for your social media posts, the character limit you define for the "EXCERPT" and/or "CONTENT" variables will be applied within the remaining available character limit of the social network.', 'blog2social') ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sMaxInputVarsModal" tabindex="-1" role="dialog" aria-labelledby="b2sMaxInputVarsModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sMaxInputVarsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title"><?php esc_html_e('Input limit exceeded', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div><?php esc_html_e('The number of form fields in this request exceeds your current server limit (max_input_vars =', 'blog2social') ?> <span class="b2s-max-input-vars-value"></span><?php esc_html_e(')', 'blog2social') ?></div>
+                                            <div><?php esc_html_e('Please increase this value in your PHP configuration or reduce the number of selected networks for shipping.', 'blog2social') ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <?php
                      
                                 include (B2S_PLUGIN_DIR . 'views/b2s/partials/network-modal.php');     
                                 
-                                $modalNames= array("b2sPreFeatureNetworksModal", "b2sProFeatureNetworksModal", "b2sProFeatureMultiImageModal", "b2sPreFeaturePostFormatModal", "b2sBusinessFeatureNetworksModal", "b2sPreFeatureScheduleModal");
+                                $modalNames= array("b2sPreFeatureNetworksModal", "b2sProFeatureNetworksModal", "b2sProFeatureMultiImageModal", "b2sPreFeaturePostFormatModal", "b2sBusinessFeatureNetworksModal", "b2sPreFeatureScheduleModal","b2sProFeatureEditTemplateModal","b2sNetworkSettingSaveModal","b2sProFeatureAddCommentModal");
                                 include (B2S_PLUGIN_DIR . 'views/b2s/partials/general-modal.php');    
                                                  
                             ?>

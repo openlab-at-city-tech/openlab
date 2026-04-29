@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
 
 class B2S_Onboarding_Item {
 
@@ -101,7 +104,7 @@ class B2S_Onboarding_Item {
     }
 
 
-    private function getStep(){
+    public function getStep(){
 
         //what happens if someone does premium before posting?
 

@@ -1,6 +1,10 @@
 <?php
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Save.php');
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Calendar_Save extends B2S_Ship_Save {
     private $b2s_id = null;
 

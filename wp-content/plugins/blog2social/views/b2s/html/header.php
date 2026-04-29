@@ -1,5 +1,12 @@
 <!--Header-->
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 $curPageTitle = get_admin_page_title();
 $wpUserData = wp_get_current_user();
 $meta = B2S_Meta::getInstance();
@@ -53,21 +60,24 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 
 <!--Info System-->
 <?php if (version_compare(phpversion(), '5.5.3', '<')) { ?>
-    <div class="panel panel-group">
+    <div class="panel panel-group b2s-header-notice">
         <div class="panel-body">
+            <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
             <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e("To use all features of Blog2Social, PHP version 5.5.3 or higher is required. Our support assists you as of PHP version 5.5.3. See also:", "blog2social"); ?>
             <a href="admin.php?page=blog2social-support#b2s-support-check-system"><?php esc_html_e('Blog2Social Troubleshooting-Tool', 'blog2social'); ?></a>
         </div>
     </div>
 <?php } ?>
-<div class="panel panel-group b2s-heartbeat-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-heartbeat-fail" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('WordPress uses heartbeats by default, Blog2Social as well. Please enable heartbeats for using Blog2Social! See also:', 'blog2social'); ?>
         <a href="admin.php?page=blog2social-support#b2s-support-check-system"><?php esc_html_e('Blog2Social Troubleshooting-Tool', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-server-connection-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-server-connection-fail" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> 
         <?php echo wp_kses(sprintf(
                // translators: %s is a link
@@ -83,40 +93,65 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 
     </div>
 </div>
-<div class="panel panel-group b2s-nonce-check-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-nonce-check-fail" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('WordPress session timeout: For security reasons, WordPress will let your session expire automatically if your site has been inactive for a while. Please reload this page to go on with your current action.', 'blog2social'); ?>
     </div>
 </div>
 
-<!--Info Mail Update -->
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-mail-update-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-left-border-danger b2s-no-permission b2s-no-permission-author" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo esc_html_e('To execute this function, you need author permissions or a higher role. Please contact your administrator for access.', 'blog2social'); ?>
+    </div>
+</div>
+<div class="panel panel-group b2s-header-notice b2s-left-border-danger b2s-no-permission b2s-no-permission-editor" style="display:none;">
+    <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo esc_html_e('To execute this function, you need editor permissions or a higher role. Please contact your administrator for access.', 'blog2social'); ?>
+    </div>
+</div>
+<div class="panel panel-group b2s-header-notice b2s-left-border-danger b2s-no-permission b2s-no-permission-administrator" style="display:none;">
+    <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo esc_html_e('To execute this function, you need administrator permissions. Please contact your administrator for access.', 'blog2social'); ?>
+    </div>
+</div>
+
+<!--Info Mail Update -->
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-mail-update-success" style="display:none;">
+    <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Thank you. You\'ll now receive the blog updates from Blog2Social.', 'blog2social'); ?>
     </div>
 </div>
 
 <!--Info Auto Post-->
-<div class="panel panel-group b2s-auto-posting" style="display: <?php echo esc_attr($autoPostLimit); ?>;">
+<div class="panel panel-group b2s-header-notice b2s-auto-posting" style="display: <?php echo esc_attr($autoPostLimit); ?>;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Autoposter limit has been reached', 'blog2social') ?> <br> <?php esc_html_e('Your daily limit for posting automatically has been reached.', 'blog2social'); ?>
     </div>
 </div>
 
 <!--Info Meta Tags -->
-<div class="panel panel-group b2s-clear-meta-tags b2s-clear-meta-tags-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-clear-meta-tags b2s-clear-meta-tags-success" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('You have deleted all meta data for posts and pages successfully.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-clear-meta-tags b2s-clear-meta-tags-error" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-clear-meta-tags b2s-clear-meta-tags-error" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The page and post meta data could not be removed.', 'blog2social'); ?>
     </div>
 </div>
 
-<div class="panel panel-group b2s-meta-tags-yoast b2s-meta-tags-success" style="display:<?php echo esc_attr($showYoast); ?>;">
+<div class="panel panel-group b2s-header-notice b2s-meta-tags-yoast b2s-meta-tags-success" style="display:<?php echo esc_attr($showYoast); ?>;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('How to use plugin settings for meta tags', 'blog2social'); ?>
         <br>
         <?php esc_html_e('Please make sure that you only use one plugin for setting meta tags so that the networks can display the link preview of your post correctly.', 'blog2social'); ?>
@@ -135,34 +170,39 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
     </div>
 </div>
 
-<div class="panel panel-group b2s-meta-tags-aioseop b2s-meta-tags-danger" style="display:<?php echo esc_attr($showAioseop); ?>;">
+<div class="panel panel-group b2s-header-notice b2s-meta-tags-aioseop b2s-meta-tags-danger" style="display:<?php echo esc_attr($showAioseop); ?>;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('You currently have both Blog2Social Social Meta Tags and All in One SEO Pack plugins active. To make sure that your Social Meta Tags are set correctly, please deactivate All in One Seo Social Meta settings. If they are already deactivated, you can ignore this message.', 'blog2social'); ?>
     </div>
 </div>
 
-<div class="panel panel-group b2s-meta-tags-webdados b2s-meta-tags-danger" style="display:<?php echo esc_attr($showWebdaos); ?>;">
+<div class="panel panel-group b2s-header-notice b2s-meta-tags-webdados b2s-meta-tags-danger" style="display:<?php echo esc_attr($showWebdaos); ?>;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Blog2Social has detected another plugin that is setting Social Meta tags for your blog posts. To ensure that your Social Meta tags are set correctly for your social media posts shared with Blog2Social, please deactivate the Facebook Open Graph and Twitter Card Tags settings in your other plugins.', 'blog2social'); ?>
     </div>
 </div>
 
 <!--Info-Post-->
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-post-remove-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-post-remove-fail" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('This entry could not be removed. It\'s not yours!', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-post-remove-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-post-remove-success" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('This entry was removed successfully.', 'blog2social'); ?>
     </div>
 </div>
 
 <?php if (isset($_GET['origin']) && sanitize_text_field(wp_unslash($_GET['origin'])) == 'publish_post' && isset($_GET['deletePostStatus']) && isset($_GET["deletedPostsNumber"])) { ?>
 
-    <div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-all-posts-delete-success">
+    <div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-all-posts-delete-success">
         <div class="panel-body">
+            <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
             <?php
             if (sanitize_text_field(wp_unslash($_GET['deletePostStatus'])) == 'success') {
 
@@ -189,14 +229,16 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 
 
 <?php } ?>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-post-edit-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-post-edit-success" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('This post was edited successfully.', 'blog2social'); ?>
     </div>
 </div>
 <?php if (isset($_GET['origin']) && sanitize_text_field(wp_unslash($_GET['origin'])) == 'save_post' && isset($_GET['postStatus'])) { ?>
-    <div class="panel panel-group b2s-network-auth-info">
+    <div class="panel panel-group b2s-header-notice b2s-network-auth-info">
         <div class="panel-body">
+            <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
             <span class="glyphicon glyphicon-ok glyphicon-success"></span>
             <?php
             if (sanitize_text_field(wp_unslash($_GET['postStatus'])) == 'future') {
@@ -209,67 +251,73 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
     </div>
 <?php } ?>
 
-<div class="b2s-trail-tracking" style="display: none;">
-    <img height="1" width="1" style="border-style:none;" id="b2s-trail-tracking-src" alt="b2s-trail-tracking"/>
-</div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-post-draft-saved-success" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-post-draft-saved-success" style="display: none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Saved as draft', 'blog2social'); ?>
-        <button class="close b2s-network-auth-info-close"><span aria-hidden="true">×</span></button>
+        <button class="close b2s-warning-close"><span aria-hidden="true">×</span></button>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-post-draft-saved-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-post-draft-saved-fail" style="display: none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Could not save draft', 'blog2social'); ?>
-        <button class="close b2s-network-auth-info-close"><span aria-hidden="true">×</span></button>
+        <button class="close b2s-warning-close"><span aria-hidden="true">×</span></button>
     </div>
 </div>
 
 <!--Info-Network-->
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-network-auth-success" style="display: none">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-network-auth-success" style="display: none">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your authorization was successful.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-network-add-mandant-success" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-network-add-mandant-success" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your profile was saved successful.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-network-add-mandant-error" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-network-add-mandant-error" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your profile could not be saved.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-network-remove-fail" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-network-remove-fail" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your authorization could not be removed.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-network-remove-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-network-remove-success" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your authorization has been removed successfully.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-feedback-success" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-feedback-success" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Thank you! Your feedback has been received.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-feedback-fail" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-feedback-fail" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your feedback could not be delivered.', 'blog2social'); ?>
     </div>
 </div>
 
 <!-- user apps -->
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-generic-error" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-generic-error" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your app could not be saved. Please try again.', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-premium" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-permission-premium" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo wp_kses(sprintf(
                // translators: %s is a link
             __('To connect more Twitter apps with your Twitter accounts, please upgrade your current Blog2Social license or get a Twitter app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('addon_apps'))),
@@ -281,8 +329,9 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-free" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-permission-free" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo wp_kses(sprintf(
             // translators: %s is a link
             __('You have no more open app slots for this network. <a href="%s">Upgrade to a premium license to purchase additional slots.</a>',  'blog2social'), esc_url(B2S_Tools::getSupportLink('upgrade_version'))),
@@ -294,18 +343,21 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-success" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-success" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app was saved successfully.', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-edit-success" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-edit-success" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app was updated successfully.', 'blog2social'); ?></a>
     </div>
 </div>
-<div class="panel panel-group b2s-user-app-alert b2s-user-apps-delete-success" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-user-app-alert b2s-user-apps-delete-success" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your app has been removed successfully.', 'blog2social'); ?></a>
     </div>
 </div>
@@ -313,23 +365,27 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 
 
 <!-- Info-Settings-->
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-settings-user-success" style="display:<?php echo (isset($_GET['b2s-settings-user-success']) ? 'block' : 'none'); ?>;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-settings-user-success" style="display:<?php echo (isset($_GET['b2s-settings-user-success']) ? 'block' : 'none'); ?>;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your settings were successfully saved.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-settings-user-error" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-settings-user-error" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your settings could not be saved.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-danger b2s-settings-user-error-no-auth-selected" style="display:none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-danger b2s-settings-user-error-no-auth-selected" style="display:none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your settings could not be saved, because you have auto-posting enabled but no social networks selected.', 'blog2social'); ?>
     </div>
 </div>
-<div class="panel panel-group b2s-network-auth-info b2s-left-border-success b2s-ship-settings-save" style="display: none;">
+<div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-ship-settings-save" style="display: none;">
     <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Your settings were successfully saved.', 'blog2social'); ?>
     </div>
 </div>
@@ -339,7 +395,7 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
     if (B2S_Rating::is_visible()) {
         ?>
-        <div class="panel panel-group b2s-notice">
+        <div class="panel panel-group b2s-header-notice b2s-notice">
             <div class="panel-body">
                 <h2 style="margin-top:0;font-size:20px;"><?php esc_html_e('RATE IT!', 'blog2social'); ?></h2>
                 <p> <?php echo wp_kses(sprintf(
@@ -377,7 +433,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
         $onboardingval = $optionsOnboarding->_getOption('onboarding_active');
         if ($onboardingval != 1) {
             ?>
-            <div class="panel panel-group b2s-trail-premium-info-area b2s-notice">
+            <div class="panel panel-group b2s-header-notice b2s-trail-premium-info-area b2s-notice">
                 <div class="panel-body">
                     <div class="b2s-hide-premium-message b2s-close"><i class="glyphicon glyphicon-remove"></i></div>
                     <h2 style="margin-top:0;font-size:20px;"><?php esc_html_e('Start your free 30-day-Premium-trial', 'blog2social'); ?></h2>
@@ -397,7 +453,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
     ?>
 
     <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > strtotime(gmdate('Y-m-d H:i:s')) && !get_option('B2S_HIDE_TRAIL_MESSAGE') && (isset($_GET['page']) && in_array($_GET['page'], array("blog2social", "blog2social-post", "blog2social-sched", "blog2social-publish", "blog2social-calendar")))) { ?>
-        <div class="panel panel-group b2s-trail-premium-info-area b2s-notice">
+        <div class="panel panel-group b2s-header-notice b2s-trail-premium-info-area b2s-notice">
             <div class="panel-body">
                 <div class="b2s-hide-trail-message b2s-close"><i class="glyphicon glyphicon-remove"></i></div>
                 <h2 style="margin-top:0;font-size:20px;">
@@ -419,7 +475,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
     <?php } ?>
 
     <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < strtotime(gmdate('Y-m-d H:i:s')) && !get_option('B2S_HIDE_TRAIL_ENDED') && (isset($_GET['page']) && in_array($_GET['page'], array("blog2social", "blog2social-post", "blog2social-sched", "blog2social-publish", "blog2social-calendar")))) { ?>
-        <div class="panel panel-group b2s-trail-premium-info-area b2s-notice">
+        <div class="panel panel-group b2s-header-notice b2s-trail-premium-info-area b2s-notice">
             <div class="panel-body">
                 <div class="b2s-hide-trail-ended-modal b2s-close"><i class="glyphicon glyphicon-remove"></i></div>
                 <h2 style="margin-top:0;font-size:20px;">
@@ -440,7 +496,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 <?php } ?>
 
 <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) <= strtotime(gmdate('Y-m-d H:i:s')) && $hide7DayTrail) { ?>
-    <div class="panel panel-group b2s-notice">
+    <div class="panel panel-group b2s-header-notice b2s-notice">
         <div class="panel-body">
             <h2 style="margin-top:0;font-size:20px;"><?php esc_html_e('Your free Premium trial ends soon. ', 'blog2social'); ?></h2>
             <p> <?php esc_html_e("Keep your current settings and access to more automated scheduling and sharing options and upgrade to Blog2Social Premium.", 'blog2social'); ?>
@@ -769,80 +825,6 @@ if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], un
     </div>
 </div>
 
-<div class="modal fade" id="b2sAssSettingsModal" class="b2sAssSettingsModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssSettingsModal" aria-hidden="true" data-backdrop="false" style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header b2s-modal-border-none">
-                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssSettingsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body b2s-pt-0">
-                <div class="b2s-d-flex b2s-pb-2">
-                    <img class="b2s-pr-1 b2s-ass-img-settings" src="<?php echo esc_url(plugins_url('/assets/images/ass/pr-automatisierung.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini Settings">
-                    <div>
-                        <h2><?php esc_html_e('AI Settings', 'blog2social') ?></h2>
-                        <p><?php esc_html_e('Set up your AI assistant.', 'blog2social') ?></p>
-                        <div class="b2s-pt-1">
-                            <input type="checkbox" id="b2s-ass-settings-checkbox-1" />
-                            <label for="b2s-ass-settings-checkbox-1"><?php esc_html_e('Apply post templates', 'blog2social') ?></label>
-                            <br>
-                            <input type="checkbox" id="b2s-ass-settings-checkbox-2" />
-                            <label for="b2s-ass-settings-checkbox-2"><?php esc_html_e('Exclude emojis', 'blog2social') ?></label>
-                            <br>
-                            <input type="checkbox" id="b2s-ass-settings-checkbox-3" />
-                            <label for="b2s-ass-settings-checkbox-3"><?php esc_html_e('Generate Hashtags', 'blog2social') ?></label>
-                            <div id="b2s-ass-settings-checkbox-3-conditional-text" hidden><?php  esc_html_e('(is defined in post templates)', 'blog2social') ?></div>
-                            <div class="form-check form-switch" style="margin-top:6px; display: flex; align-items: flex-start; gap: 8px;">
-                                <input class="form-check-input b2s-ass-settings-checkbox-4" type="checkbox" id="b2s-ass-settings-checkbox-4" checked>
-                                <div>
-                                    <label class="form-check-label toggle-label-b2s-ass-settings-checkbox-4-displayed-content" for="b2s-ass-settings-checkbox-4" id="toggle-label-b2s-ass-settings-checkbox-4-displayed-content"><?php esc_html_e('Displayed content', 'blog2social')?></label>
-                                    <label class="form-check-label toggle-label-b2s-ass-settings-checkbox-4-original-content" for="b2s-ass-settings-checkbox-4" id="toggle-label-b2s-ass-settings-checkbox-4-original-content" style="display:none;"><?php esc_html_e('Original Blog Post', 'blog2social')?></label>
-                                    <div class="b2s-ass-settings-checkbox-4-displayed-content-checked" class="mt-4">
-                                        <?php 
-                                            $bold_part = __('displayed content', 'blog2social'); 
-                                            /* translators: %s is bold text */
-                                            $rest_text = __('This is the %1$s, such as a summary or an edited version of the blog post.', 'blog2social');
-                                            $full_text = sprintf(
-                                                esc_html($rest_text),                  
-                                                sprintf('<strong>%s</strong>', esc_html($bold_part)) 
-                                            );
-                                            printf(
-                                                wp_kses($full_text, array(
-                                                    'p'      => array(),
-                                                    'strong' => array(),
-                                                ))
-                                            );
-                                        ?>
-                                    </div>
-                                    <div class="b2s-ass-settings-checkbox-4-original-content-checked" style="display:none;" class="mt-4">
-                                    <?php  
-                                            $bold_part = __('original blog post', 'blog2social'); 
-                                            /* translators: %s is bold text */
-                                            $rest_text = __('This is the %1$s in full length with all original sections, paragraphs, and formatting.', 'blog2social');
-                                            $full_text = sprintf(
-                                                esc_html($rest_text),                  
-                                                sprintf('<strong>%s</strong>', esc_html($bold_part)) 
-                                            );
-                                            printf(
-                                                wp_kses($full_text, array(
-                                                    'p'      => array(),
-                                                    'strong' => array(),
-                                                ))
-                                            );
-                                        ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="b2s-d-flex-end"> 
-                    <button id="b2s-ass-settings-save-btn" class="btn b2s-ass-btn"><?php esc_html_e('Save', 'blog2social') ?></button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="b2sAssErrorModal" class="b2sAssErrorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssErrorModal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog">

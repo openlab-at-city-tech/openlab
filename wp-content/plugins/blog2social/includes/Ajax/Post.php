@@ -1,4 +1,10 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+ */
 
 class Ajax_Post {
 
@@ -52,6 +58,7 @@ class Ajax_Post {
         add_action("wp_ajax_b2s_move_user_auth_to_profile", array($this, 'moveUserAuthToProfile'));
         add_action("wp_ajax_b2s_assign_network_user_auth", array($this, 'assignNetworkUserAuth'));
         add_action("wp_ajax_b2s_save_post_template", array($this, 'savePostTemplate'));
+        add_action("wp_ajax_b2s_save_ai_post_template", array($this, 'saveAiPostTemplate'));
         add_action("wp_ajax_b2s_load_default_post_template", array($this, 'loadDefaultPostTemplate'));
         add_action('wp_ajax_b2s_save_draft_data', array($this, 'saveDraftData'));
         add_action('wp_ajax_b2s_delete_user_draft', array($this, 'deleteDraft'));
@@ -158,11 +165,32 @@ class Ajax_Post {
             wp_die();
         }
 
+        // JM 2026/02/12 Security Patch. Check if a user can edit the post, as this action leads to an insert/update in wp_posts
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+        if (isset($_POST['b2s-draft-id']) && !empty($_POST['b2s-draft-id'])) {
+            if (!current_user_can('edit_post', (int) $_POST['b2s-draft-id'])) {
+                echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+                wp_die();
+            }
+        }
+
+        $optionallink = '';
+
         //save as blog post
         if (isset($_POST['postFormat'])) {
             if ((int) $_POST['postFormat'] == 1) { //Imagepost
+               
+                if (isset($_POST['b2s-instant-sharing-input-image-link-optional']) && !empty($_POST['b2s-instant-sharing-input-image-link-optional'])) {
+                    $optionallink = esc_url_raw(wp_unslash($_POST['b2s-instant-sharing-input-image-link-optional']));
+                }
                 if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
                     $data = array('title' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                    if (!empty($optionallink)) {
+                        $data['url'] = $optionallink;
+                    }
                 } else {
                     echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                     wp_die();
@@ -175,8 +203,15 @@ class Ajax_Post {
                     wp_die();
                 }
             } else {
+  
+                if(isset($_POST['b2s-instant-sharing-input-text-link-optional']) && !empty($_POST['b2s-instant-sharing-input-text-link-optional']) ){
+                    $optionallink = sanitize_textarea_field(wp_unslash($_POST['b2s-instant-sharing-input-text-link-optional']));
+                }
                 if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
                     $data = array('title' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                    if (!empty($optionallink)) {
+                        $data['url'] = $optionallink;
+                    }
                 } else {
                     echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                     wp_die();
@@ -233,24 +268,38 @@ class Ajax_Post {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
-
+    
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+    
+        $optionalLink = '';
         //save as blog post
         if (isset($_POST['postFormat'])) {
-
+      
             $applyPostTemplates =isset($_POST['apply_post_templates']) ? true: false;
             $b2sExPostFormat="";
             $title = "";
             if ((int) $_POST['postFormat'] == 1) { //Imagepost
+            
                 $b2sExPostFormat="image";
 
                 if (isset($_POST['b2s-instant-sharing-input-title_image']) && !empty($_POST['b2s-instant-sharing-input-title_image'])) {
                     $title = sanitize_textarea_field(wp_unslash($_POST['b2s-instant-sharing-input-title_image']));
                 }
+             
+                if (isset($_POST['b2s-instant-sharing-input-image-link-optional']) && !empty($_POST['b2s-instant-sharing-input-image-link-optional'])) {
+                    $optionalLink = esc_url_raw(wp_unslash($_POST['b2s-instant-sharing-input-image-link-optional']));
+                }
+
                 if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
                     if (!empty($title)) {
                         $data = array('title' => sanitize_textarea_field(wp_unslash($title)), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                    
                     } else {
                         $data = array('title' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                       
                     }
                 } else {
                     echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
@@ -265,7 +314,12 @@ class Ajax_Post {
                     wp_die();
                 }
             } else {
-                $b2sExPostFormat="text";                
+
+                $b2sExPostFormat="text";    
+
+                if (isset($_POST['b2s-instant-sharing-input-text-link-optional']) && !empty($_POST['b2s-instant-sharing-input-text-link-optional'])) {
+                    $optionalLink = esc_url_raw(wp_unslash($_POST['b2s-instant-sharing-input-text-link-optional']));
+                }   
                 //Textpost
                 if (isset($_POST['b2s-instant-sharing-input-title_text']) && !empty($_POST['b2s-instant-sharing-input-title_text'])) {
                     $title = sanitize_textarea_field(wp_unslash($_POST['b2s-instant-sharing-input-title_text']));
@@ -281,6 +335,7 @@ class Ajax_Post {
                     wp_die();
                 }
             }
+
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/Save.php');
 
             $curation = new B2S_Curation_Save($data);
@@ -299,8 +354,8 @@ class Ajax_Post {
                             //TOS Twitter 032018 - none multiple Accounts - User select once
                             $selectedTwitterProfile = (isset($_POST['twitter_select']) && !empty($_POST['twitter_select'])) ? (int) $_POST['twitter_select'] : '';
                             require_once (B2S_PLUGIN_DIR . 'includes/B2S/QuickPost.php');
-                            $quickPost = new B2S_QuickPost($data['content'], $data['title']);
-
+                            $quickPost = new B2S_QuickPost($data['content'], isset($data['title']) ? $data['title'] : '', $optionalLink, isset($data['url']) ? $data['url'] : '');
+                            
                             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only unsanitized in if condition
                             $imageUrl = (!empty($_POST['image_url'])) ? esc_url_raw(trim(urldecode(wp_unslash($_POST['image_url'])))) : "";
                             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only unsanitized in if condition
@@ -391,7 +446,7 @@ class Ajax_Post {
                                         $_POST['postFormat'] = ((int) $_POST['postFormat'] == 2) ? '1' : sanitize_text_field(wp_unslash($_POST['postFormat']));
                                         
                                         if($applyPostTemplates){
-                                            
+                                       
                                             $networkKind = isset($value->networkKind) ? (int) $value->networkKind : 0;
                                             $shareData= $quickPost->prepareShareDataFromTemplate($value->networkAuthId, $value->networkId, $value->networkType, sanitize_text_field(wp_unslash($_POST['postFormat'])), $networkKind);
                                        
@@ -527,16 +582,38 @@ class Ajax_Post {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
+        
+        // JM 2026/02/05 Security Patch. Check if a user can edit the post, as this action leads to an insert/update in wp_posts
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+    
+        if (isset($_POST['b2s-draft-id']) && !empty($_POST['b2s-draft-id'])) {
+            if (!current_user_can('edit_post', (int) $_POST['b2s-draft-id'])) {
+                echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+                wp_die();
+            }
+        }
 
+        $optionalLink = '';
+        
         if (isset($_POST['postFormat'])) {
             if ((int) $_POST['postFormat'] == 1) { //Imagepost
                 $title = "";
                 if (isset($_POST['b2s-instant-sharing-input-title_image'])) {
                     $title = sanitize_textarea_field(wp_unslash($_POST['b2s-instant-sharing-input-title_image']));
                 }
+               
+                if (isset($_POST['b2s-instant-sharing-input-image-link-optional']) && !empty($_POST['b2s-instant-sharing-input-image-link-optional'])) {
+                    $optionalLink = esc_url_raw(wp_unslash($_POST['b2s-instant-sharing-input-image-link-optional']));
+                }
                 if (isset($_POST['image_id']) && !empty($_POST['image_id']) && isset($_POST['comment_image']) && !empty($_POST['comment_image'])) {
 
                     $data = array('title' => !empty($title) ? $title : "", 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_image'])), 'image_id' => (int) $_POST['image_id'], 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                    if (!empty($optionalLink)) {
+                        $data['url'] = $optionalLink;
+                    }
                     $imgUrl = (isset($_POST['image_url']) && !empty($_POST['image_url'])) ? esc_url_raw(wp_unslash($_POST['image_url'])) : '';
                 } else {
                     echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
@@ -556,7 +633,13 @@ class Ajax_Post {
                     $title = sanitize_textarea_field(wp_unslash($_POST['b2s-instant-sharing-input-title_text']));
                 }
                 if (isset($_POST['comment_text']) && !empty($_POST['comment_text'])) {
+                    if (isset($_POST['b2s-instant-sharing-input-text-link-optional']) && !empty($_POST['b2s-instant-sharing-input-text-link-optional'])) {
+                        $optionalLink = esc_url_raw(wp_unslash($_POST['b2s-instant-sharing-input-text-link-optional']));
+                    }
                     $data = array('title' => !empty($title) ? $title : "", 'content' => sanitize_textarea_field(wp_unslash($_POST['comment_text'])), 'author_id' => B2S_PLUGIN_BLOG_USER_ID);
+                    if (!empty($optionalLink)) {
+                        $data['url'] = $optionalLink;
+                    }
                 } else {
                     echo json_encode(array('result' => false, 'error' => 'NO_DATA'));
                     wp_die();
@@ -586,6 +669,11 @@ class Ajax_Post {
                 if (isset($imgUrl) && !empty($imgUrl)) {
                     $redirect_url .= '&img=' . base64_encode($imgUrl);
                 }
+            
+                $ignoreTemplate = (isset($_POST['apply_post_templates']) && sanitize_text_field(wp_unslash($_POST['apply_post_templates'])) == 1) ? 0 : 1;
+     
+                $redirect_url .= '&ignoreTemplate=' . $ignoreTemplate;
+                
                 if (isset($_POST['postFormat'])) {
                     if (sanitize_text_field(wp_unslash($_POST['postFormat'])) == '0') {
                         $redirect_url .= '&postFormat=0';
@@ -593,6 +681,7 @@ class Ajax_Post {
                         $redirect_url .= '&postFormat=1';
                     }
                 }
+
                 echo json_encode(array('result' => true, 'redirect' => $redirect_url));
                 wp_die();
             }
@@ -744,7 +833,12 @@ class Ajax_Post {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
-
+    
+        if(!current_user_can('edit_others_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_editor'));
+            wp_die();
+        }
+    
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Save.php');
         $post = $_POST;
         $metaOg = false;
@@ -804,6 +898,26 @@ class Ajax_Post {
                         $meta->setMeta('og_image', trim(esc_url_raw($data['image_url'])));
                         $meta->setMeta('og_image_alt', '');
                     }
+                 
+                    //If there add WooCommerce Product data
+                    if (class_exists('WooCommerce') && function_exists('wc_get_product') && function_exists('get_woocommerce_currency')) {
+                        $wc_product = wc_get_product((int) $post['post_id']);
+
+                        if ($wc_product !== false) {
+                      
+                            $price = $wc_product->get_price();
+                            $currency = get_woocommerce_currency();
+              
+                            if (!empty($price) && !empty($currency)) {
+                                $meta->setMeta('og:type', sanitize_text_field('product'));
+                                $meta->setMeta('og:price:amount', sanitize_text_field((string)$price)); // cast to string
+                                $meta->setMeta('og:price:currency', sanitize_text_field($currency));
+                                $availability = $wc_product->is_in_stock() ? 'instock' : 'oos';
+                                $meta->setMeta('product:availability', sanitize_text_field($availability));
+                            }
+                        }
+                    }
+
                     $meta->updateMeta((int) $post['post_id']);
                     global $wpdb;
                     //NO User input in statement
@@ -896,13 +1010,12 @@ class Ajax_Post {
                 $share_settings['mode'] = 0;
             }
 
-            /*
-              //Test um Tumblr umzustellen
-              if($data['network_id'] == 4 ){
-              $share_settings=1;
-              }
-             */
-
+            $comment= '';
+    
+            if (isset($data['has_comment'][-1]) && !empty($data['has_comment'][-1]) && (int) $data['has_comment'][-1] === 1) {
+                $comment = (isset($data['sched_comment'][-1]) && !empty($data['sched_comment'][-1])) ? sanitize_text_field($data['sched_comment'][-1]) : '';
+            }
+           
             $sendData = array("board" => isset($data['board']) ? sanitize_text_field($data['board']) : '',
                 "status_privacy" => isset($data['status_privacy']) ? sanitize_text_field($data['status_privacy']) : '',
                 "group" => isset($data['group']) ? sanitize_text_field($data['group']) : '',
@@ -928,11 +1041,12 @@ class Ajax_Post {
                 'user_timezone' => isset($post['user_timezone']) ? (int) $post['user_timezone'] : 0,
                 'publish_date' => isset($post['publish_date']) ? wp_date('Y-m-d H:i:s', strtotime(sanitize_text_field(wp_unslash($post['publish_date']))), new DateTimeZone(date_default_timezone_get())) : wp_date('Y-m-d H:i:s', current_time('timestamp'), new DateTimeZone(date_default_timezone_get())),
                 'frame_color' => ((isset($data['frame_color']) && !empty($data['frame_color'])) ? sanitize_text_field($data['frame_color']) : '#ffffff'),
-                'share_as_story' => (isset($data['share_as_story']) && (int) $data['share_as_story'] == 1) ? (int) $data['share_as_story'] : 0,
+                'share_as_story' => (isset($data['share_as_story'][-1]) && (int) $data['share_as_story'][-1] === 1) ? (int) $data['share_as_story'][-1] : 0,
                 'video_upload_api_share' => 1, //since 7.3.1
-                'share_settings' => $share_settings
+                'share_settings' => $share_settings,
+                'comment' => $comment
             );
-
+    
             if (isset($post['is_video']) && (int) $post['is_video'] == 0) {
                 if ((isset($data['post_format']) && (int) $data['post_format'] == 1) || (int) $data['network_id'] == 12 || (int) $data['network_id'] == 36) { //Case IG + TK
                     $multi_images = array();
@@ -1006,10 +1120,30 @@ class Ajax_Post {
                     }
                     //mode: schedule custom once
                 } else if (isset($data['releaseSelect']) && (int) $data['releaseSelect'] == 1 && isset($data['date'][0]) && isset($data['time'][0])) {
+               
+                $schedComments = array();
+                if (isset($data['sched_comment']) && is_array($data['sched_comment'])) {
+                    foreach ($data['sched_comment'] as $schedKey => $schedComment) {
+                        if($schedKey >= 0){ 
+                            $schedComments[$schedKey] =  isset($data['has_comment'][$schedKey]) && (int) $data['has_comment'][$schedKey] === 1 && !empty($schedComment) ?  sanitize_text_field($schedComment) : "";         
+                        }
+                    }
+                }
+    
+                $share_as_stories = array();
+                if (isset($data['share_as_story']) && is_array($data['share_as_story'])) {
+                    foreach ($data['share_as_story'] as $schedKey => $shareAsStory) {
+                        if($schedKey >= 0){ 
+                            $share_as_stories[$schedKey] = (int) $shareAsStory === 1 ? 1 : 0;         
+                        }
+                    }
+                }                
                     $schedData = array(
                         'date' => isset($data['date']) ? $data['date'] : array(),
                         'time' => isset($data['time']) ? $data['time'] : array(),
                         'sched_content' => isset($data['sched_content']) ? $data['sched_content'] : array(),
+                        'sched_comment' => $schedComments,
+                        'share_as_story' => $share_as_stories,
                         'sched_image_url' => isset($data['sched_image_url']) ? $data['sched_image_url'] : array(),
                         'image_alt_text' => isset($data['image_alt_text']) ? $data['image_alt_text'] : "",
                         'sched_multi_image_1' => isset($data['sched_multi_image_1']) ? $data['sched_multi_image_1'] : array(),
@@ -1116,8 +1250,13 @@ class Ajax_Post {
 
     public function saveSocialMetaTags() {
 
-        if (!current_user_can('administrator') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+        
+        if(!current_user_can('manage_options')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_administrator'));
             wp_die();
         }
 
@@ -1155,8 +1294,13 @@ class Ajax_Post {
 
     public function resetSocialMetaTags() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+        
+        if(!current_user_can('manage_options')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_administrator'));
             wp_die();
         }
 
@@ -1333,6 +1477,14 @@ class Ajax_Post {
         // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only unsanitized in if condition
         $update = isset($_POST['b2s-settings-auto-post-update']) && is_array($_POST['b2s-settings-auto-post-update']) ? B2S_Tools::sanitize_array(wp_unslash($_POST['b2s-settings-auto-post-update'])) : array();
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only unsanitized in if condition
+        $categories_data = isset($_POST['b2s-auto-post-categories-data']) && is_array($_POST['b2s-auto-post-categories-data']) ? B2S_Tools::sanitize_array(wp_unslash($_POST['b2s-auto-post-categories-data'])) : array();
+        $categories_state = isset($_POST['b2s-auto-post-categories-state']) ? (int) $_POST['b2s-auto-post-categories-state'] : 0;
+        
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only unsanitized in if condition
+        $tags_data = isset($_POST['b2s-auto-post-tags-data']) && is_array($_POST['b2s-auto-post-tags-data']) ? B2S_Tools::sanitize_array(wp_unslash($_POST['b2s-auto-post-tags-data'])) : array();
+        $tags_state = isset($_POST['b2s-auto-post-tags-state']) ? (int) $_POST['b2s-auto-post-tags-state'] : 0;
+
         $echo = isset($_POST['b2s-auto-post-echo-setting']) ? (int) $_POST['b2s-auto-post-echo-setting'] : 0;
         $echoSetting = isset($_POST['b2s-auto-post-echo-dropdown']) ? (int) $_POST['b2s-auto-post-echo-dropdown'] : 0;
         $importTemplateSetting = isset($_POST['b2s-auto-post-import-template-setting']) ? (int) $_POST['b2s-auto-post-import-template-setting'] : 0;
@@ -1433,7 +1585,7 @@ class Ajax_Post {
             }
         }
 
-        $auto_post = array('active' => $active, 'profile' => $profile, 'twitter' => $twitter, 'publish' => $publish, 'update' => $update, 'assignUser' => $assignUser, 'echo' => (($echo > 0) ? $echoSetting : 0), 'import_template' => $importTemplateSetting, 'delay' => $delay, 'delay_state' => $delaySetting);
+        $auto_post = array('active' => $active, 'profile' => $profile, 'twitter' => $twitter, 'publish' => $publish, 'update' => $update, 'assignUser' => $assignUser, 'echo' => (($echo > 0) ? $echoSetting : 0), 'import_template' => $importTemplateSetting, 'delay' => $delay, 'delay_state' => $delaySetting, 'categories_state' => $categories_state, 'categories_data' => $categories_data, 'tags_state' => $tags_state, 'tags_data' => $tags_data);
         $options->_setOption('auto_post', $auto_post);
         echo json_encode(array('result' => true));
         wp_die();
@@ -1799,6 +1951,11 @@ class Ajax_Post {
             wp_die();
         }
 
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+
         require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
 
         if (isset($_POST['postId']) && !empty($_POST['postId'])) {
@@ -1842,6 +1999,11 @@ class Ajax_Post {
             wp_die();
         }
 
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+
         require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
         if (isset($_POST['postId']) && !empty($_POST['postId'])) {
             $postIds = explode(',', sanitize_text_field(wp_unslash($_POST['postId'])));
@@ -1865,7 +2027,7 @@ class Ajax_Post {
         if (isset($_POST['postId']) && !empty($_POST['postId']) && (int) $_POST['postId'] > 0) {
      
             if(!current_user_can('delete_post', (int) $_POST['postId'])){ 
-                echo wp_json_encode(array('result' => false, 'error' => 'permission')); 
+                echo wp_json_encode(array('result' => false, 'error' => 'permission_editor')); 
                 wp_die(); 
             }
 
@@ -2011,11 +2173,16 @@ class Ajax_Post {
 
     public function updateApprovePost() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
+        if(!current_user_can('edit_others_posts')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_editor'));
+            wp_die();
+        }
+        
         //post_id
         if (isset($_POST['post_id']) && is_numeric($_POST['post_id']) && (int) $_POST['post_id'] > 0) {
             global $wpdb;
@@ -2038,11 +2205,16 @@ class Ajax_Post {
 
     public function b2sCalendarMovePost() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
-
+        
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_author'));
+            wp_die();
+        }
+    
         global $wpdb;
         if (isset($_POST['b2s_id']) && is_numeric($_POST['b2s_id']) && isset($_POST['sched_date']) && is_string($_POST['sched_date']) && isset($_POST['user_timezone'])) {
 //since V4.9.1 Instant Share Approve - Facebook Profile
@@ -2091,11 +2263,16 @@ class Ajax_Post {
 
     public function deleteUserSchedPost() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
+        if(!current_user_can('edit_others_posts')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_editor'));
+            wp_die();
+        }
+        
         require_once (B2S_PLUGIN_DIR . '/includes/B2S/Post/Tools.php');
 
         if (isset($_POST['postId']) && !empty($_POST['postId'])) {
@@ -2129,8 +2306,13 @@ class Ajax_Post {
 
     public function b2sDeletePost() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        if(!current_user_can('edit_others_posts')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_editor'));
             wp_die();
         }
 
@@ -2175,6 +2357,11 @@ class Ajax_Post {
             wp_die();
         }
 
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_author'));
+            wp_die();
+        }
+        
         global $wpdb;
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Save.php');
 
@@ -2223,9 +2410,13 @@ class Ajax_Post {
             } else {
 
                 foreach ($post['b2s'] as $networkAuthId => $data) {
-                    if (!isset($data['url']) || !isset($data['content']) || !isset($data['network_id'])) {
+                   
+                    if (!isset($data['network_id'])) {
                         continue;
                     }
+
+                    $data['url'] = (isset($data['url']) && !empty($data['url'])) ? $data['url'] : '';
+                    $data['content'] = (isset($data['content']) && !empty($data['content'])) ? $data['content'] : '';
 
                     if ((int) $data['network_id'] == 1 || (int) $data['network_id'] == 3 || (int) $data['network_id'] == 19) {
                         $linkNoCache = B2S_Tools::getNoCacheData(B2S_PLUGIN_BLOG_USER_ID);
@@ -2233,8 +2424,8 @@ class Ajax_Post {
                             $defaultPostData['no_cache'] = $linkNoCache[$data['network_id']];
                         }
                     }
-
-//Change/Set MetaTags
+       
+                    //Change/Set MetaTags
                     if (in_array((int) $data['network_id'], json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og']) && $metaOg == false && (int) $post['post_id'] > 0 && isset($data['post_format']) && (int) $data['post_format'] == 0 && isset($post['change_og_meta']) && (int) $post['change_og_meta'] == 1) {  //LinkPost
                         $metaOg = true;
                         $meta = B2S_Meta::getInstance();
@@ -2282,7 +2473,12 @@ class Ajax_Post {
                         }
                         $meta->updateMeta((int) $post['post_id']);
                     }
-
+                    
+                    $comment = '';
+                    if(isset($data['has_comment'][-1]) && (int)$data['has_comment'][-1] == 1){
+                        $comment = isset($data['sched_comment'][-1]) && !empty($data['sched_comment'][-1]) ? sanitize_textarea_field($data['sched_comment'][-1]) : '';
+                    }
+                
                     $sendData = array("board" => isset($data['board']) ? sanitize_text_field($data['board']) : '',
                         "group" => isset($data['group']) ? sanitize_text_field($data['group']) : '',
                         "custom_title" => isset($data['custom_title']) ? sanitize_text_field($data['custom_title']) : '',
@@ -2290,6 +2486,7 @@ class Ajax_Post {
                         'url' => isset($data['url']) ? htmlspecialchars_decode(esc_url_raw($data['url'])) : '',
                         'image_url' => isset($data['image_url']) ? trim(esc_url_raw($data['image_url'])) : '',
                         'tags' => isset($data['tags']) ? $data['tags'] : array(),
+                        'share_as_story' => (isset($data['share_as_story']) && (int) $data['share_as_story'] == 1) ? (int) $data['share_as_story'] : 0,
                         'network_id' => isset($data['network_id']) ? (int) $data['network_id'] : '',
                         'network_type' => isset($data['network_type']) ? (int) $data['network_type'] : '',
                         'network_tos_group_id' => (isset($data['network_tos_group_id']) && !empty($data['network_tos_group_id'])) ? sanitize_text_field($data['network_tos_group_id']) : '',
@@ -2299,6 +2496,7 @@ class Ajax_Post {
                         'network_display_name' => isset($data['network_display_name']) ? sanitize_text_field($data['network_display_name']) : '',
                         'network_auth_id' => (int) $networkAuthId,
                         'post_format' => isset($data['post_format']) ? (int) $data['post_format'] : '',
+                        'comment' => $comment,
                         'post_for_approve' => isset($post['post_for_approve']) ? (int) $post['post_for_approve'] : 0,
                         'user_timezone' => isset($post['user_timezone']) ? (int) $post['user_timezone'] : 0,
                         'sched_details_id' => isset($post['sched_details_id']) ? (int) $post['sched_details_id'] : null,
@@ -2654,9 +2852,35 @@ class Ajax_Post {
                     if (in_array((int) $_POST['networkId'], unserialize(B2S_PLUGIN_ALLOW_ADD_LINK))) {
                         $new_template[$type]['addLink'] = ((isset($data['addLink']) && $data['addLink'] == 'false') ? false : true);
                     }
+                    if ((int) $_POST['networkId'] == 1) {
+                        $new_template[$type]['share_as_story'] = (((int) $type === 1 && isset($data['format']) && (int) $data['format'] === 1 && isset($data['share_as_story']) && (int) $data['share_as_story'] === 1) ? 1 : 0);
+                    }
+                    if ((int) $_POST['networkId'] == 12) {
+                        $new_template[$type]['share_as_story'] = ((isset($data['share_as_story']) && (int) $data['share_as_story'] === 1) ? 1 : 0);
+                    }
                     if ((int) $_POST['networkId'] == 12) {
                         $new_template[$type]['shuffleHashtags'] = ((isset($data['shuffleHashtags']) && $data['shuffleHashtags'] == 'true') ? true : false);
                         $new_template[$type]['frameColor'] = ((isset($data['frameColor']) && !empty($data['frameColor'])) ? $data['frameColor'] : '#ffffff');
+                    }
+                    // Save default comment for networks that support comments
+                    if (B2S_Tools::isCommentAllowed((int) $_POST['networkId'], $type) && defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION >= 2) {
+                        $new_template[$type]['comment'] = (isset($data['comment'])) ? sanitize_textarea_field($data['comment']) : '';
+                        
+                        // Save comment character limits
+                        if (isset($data['comment_range_max']) && isset($data['comment_excerpt_range_max'])) {
+                            $comment_limit = ((isset($default_template[(int) $_POST['networkId']][$type]['short_comment']['limit'])) ? $default_template[(int) $_POST['networkId']][$type]['short_comment']['limit'] : 0);
+                            $comment_range_max = ((int) $comment_limit != 0 && (int) $data['comment_range_max'] > (int) $comment_limit) ? (int) $comment_limit : (int) $data['comment_range_max'];
+                            $comment_excerpt_range_max = ((int) $comment_limit != 0 && (int) $data['comment_excerpt_range_max'] > (int) $comment_limit) ? (int) $comment_limit : (int) $data['comment_excerpt_range_max'];
+                            
+                            $new_template[$type]['short_comment'] = array(
+                                'active' => 0,
+                                'range_min' => ((isset($default_template[(int) $_POST['networkId']][$type]['short_comment']['range_max']) && $comment_range_max >= (int) $default_template[(int) $_POST['networkId']][$type]['short_comment']['range_max']) ? (int) $default_template[(int) $_POST['networkId']][$type]['short_comment']['range_min'] : ($comment_range_max / 2)),
+                                'range_max' => $comment_range_max,
+                                'excerpt_range_min' => ((isset($default_template[(int) $_POST['networkId']][$type]['short_comment']['excerpt_range_max']) && $comment_excerpt_range_max >= (int) $default_template[(int) $_POST['networkId']][$type]['short_comment']['excerpt_range_max']) ? (int) $default_template[(int) $_POST['networkId']][$type]['short_comment']['excerpt_range_min'] : ($comment_range_max / 2)),
+                                'excerpt_range_max' => $comment_excerpt_range_max,
+                                'limit' => $comment_limit
+                            );
+                        }
                     }
                 }
 
@@ -2686,6 +2910,113 @@ class Ajax_Post {
         wp_die();
     }
 
+    public function saveAiPostTemplate() {
+
+        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+            echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        if(B2S_PLUGIN_USER_VERSION <1){
+            echo json_encode(array('result' => false, 'error' => 'version'));
+            wp_die();
+        }
+
+        if(!current_user_can('edit_posts')) {
+            echo json_encode(array('result' => false, 'error' => 'permission_author'));
+            wp_die();
+        }
+
+        $networkId = (isset($_POST['networkId']) ? (int) $_POST['networkId'] : 0);
+        $typeId = (isset($_POST['typeId']) ? (int) $_POST['typeId'] : -1);
+        if ($networkId <= 0 || $typeId < 0) {
+            echo json_encode(array('result' => false));
+            wp_die();
+        }
+
+        if (!isset($_POST['payload']) || !is_array($_POST['payload'])) {
+            echo json_encode(array('result' => false));
+            wp_die();
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'b2s_ai_template';
+        if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) != $table) {
+            echo json_encode(array('result' => false));
+            wp_die();
+        }
+
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+        $payload = B2S_Tools::sanitize_array_textarea(wp_unslash($_POST['payload']));
+
+        $safePayload = array(
+            'enabled' => (isset($payload['enabled']) && (int) $payload['enabled'] === 1) ? 1 : 0,
+            'content_goal_enabled' => (isset($payload['content_goal_enabled']) && (int) $payload['content_goal_enabled'] === 1) ? 1 : 0,
+            'tone_language_enabled' => (isset($payload['tone_language_enabled']) && (int) $payload['tone_language_enabled'] === 1) ? 1 : 0,
+            'hashtags_keywords_enabled' => (isset($payload['hashtags_keywords_enabled']) && (int) $payload['hashtags_keywords_enabled'] === 1) ? 1 : 0,
+            'content_length_output_enabled' => (isset($payload['content_length_output_enabled']) && (int) $payload['content_length_output_enabled'] === 1) ? 1 : 0,
+            'answer_in_language' => isset($payload['answer_in_language']) ? sanitize_text_field($payload['answer_in_language']) : 'auto',
+            'ai_instruction' => isset($payload['ai_instruction']) ? sanitize_textarea_field($payload['ai_instruction']) : '',
+            'post_goal' => isset($payload['post_goal']) ? sanitize_key($payload['post_goal']) : 'traffic',
+            'cta_type' => isset($payload['cta_type']) ? sanitize_key($payload['cta_type']) : 'none',
+            'point_of_view' => isset($payload['point_of_view']) ? sanitize_key($payload['point_of_view']) : 'neutral',
+            'tone' => isset($payload['tone']) ? sanitize_key($payload['tone']) : 'friendly',
+            'content_focus' => isset($payload['content_focus']) ? max(1, min(100, (int) $payload['content_focus'])) : 50,
+            'text_form' => isset($payload['text_form']) ? sanitize_key($payload['text_form']) : 'default',
+            'form_of_address' => isset($payload['form_of_address']) ? sanitize_key($payload['form_of_address']) : 'neutral',
+            'emojis' => isset($payload['emojis']) ? sanitize_key($payload['emojis']) : 'auto',
+            'writing_style' => isset($payload['writing_style']) ? sanitize_key($payload['writing_style']) : 'default',
+            'generate_hashtags' => isset($payload['generate_hashtags']) ? sanitize_key($payload['generate_hashtags']) : 'none',
+            'hashtags_count' => isset($payload['hashtags_count']) ? max(0, (int) $payload['hashtags_count']) : 0,
+            'use_keywords' => isset($payload['use_keywords']) ? sanitize_text_field($payload['use_keywords']) : '',
+            'keyword_strength' => isset($payload['keyword_strength']) ? max(1, min(100, (int) $payload['keyword_strength'])) : 50,
+            'text_length' => isset($payload['text_length']) ? sanitize_key($payload['text_length']) : 'medium',
+            'text_depth' => isset($payload['text_depth']) ? max(1, min(100, (int) $payload['text_depth'])) : 50,
+        );
+
+        $jsonPayload = wp_json_encode($safePayload);
+
+        if ($jsonPayload === false) {
+            echo json_encode(array('result' => false));
+            wp_die();
+        }
+
+        $entryCount = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM `{$table}` WHERE `blog_user_id` = %d AND `network_id` = %d AND `type_id` = %d",
+            (int) B2S_PLUGIN_BLOG_USER_ID,
+            $networkId,
+            $typeId
+        ));
+
+        if ($entryCount > 0) {
+            $result = $wpdb->update(
+                $table,
+                array('payload' => $jsonPayload),
+                array(
+                    'blog_user_id' => (int) B2S_PLUGIN_BLOG_USER_ID,
+                    'network_id' => $networkId,
+                    'type_id' => $typeId
+                ),
+                array('%s'),
+                array('%d', '%d', '%d')
+            );
+        } else {
+            $result = $wpdb->insert(
+                $table,
+                array(
+                    'blog_user_id' => (int) B2S_PLUGIN_BLOG_USER_ID,
+                    'network_id' => $networkId,
+                    'type_id' => $typeId,
+                    'payload' => $jsonPayload
+                ),
+                array('%d', '%d', '%d', '%s')
+            );
+        }
+
+        echo json_encode(array('result' => ($result !== false)));
+        wp_die();
+    }
+
     public function loadDefaultPostTemplate() {
 
         if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
@@ -2711,7 +3042,12 @@ class Ajax_Post {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
-
+        
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+    
         if (isset($_POST['post_id']) && (int) $_POST['post_id'] > 0) {
             global $wpdb;
             if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
@@ -2740,6 +3076,11 @@ class Ajax_Post {
 
         if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
             wp_die();
         }
 
@@ -2882,7 +3223,12 @@ class Ajax_Post {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
-
+        
+        if(!current_user_can('edit_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_author'));
+            wp_die();
+        }
+    
         if (isset($_POST['b2s-re-post-profil-dropdown']) && (int) $_POST['b2s-re-post-profil-dropdown'] >= 0 && isset($_POST['b2s-re-post-profil-data-' . sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-dropdown']))]) && !empty($_POST['b2s-re-post-profil-data-' . sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-dropdown']))])) {
             $networkData = json_decode(base64_decode(sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-data-' . sanitize_text_field(wp_unslash($_POST['b2s-re-post-profil-dropdown']))]))));
             if ($networkData !== false && is_array($networkData) && !empty($networkData)) {
@@ -3211,6 +3557,11 @@ class Ajax_Post {
 
         if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        if(!current_user_can('edit_others_posts')){
+            echo wp_json_encode(array('result' => false,'error'  => 'permission_editor'));
             wp_die();
         }
 
@@ -3598,17 +3949,23 @@ class Ajax_Post {
         }
 
         $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID, 'B2S_PLUGIN_USER_TOOL');
-        $toolData = array(
-            'account' => array(
-                'words_open' => isset($_POST['ass_words_open']) ? (int) $_POST['ass_words_open'] : 0,
-                'words_total' => isset($_POST['ass_words_total']) ? (int) $_POST['ass_words_total'] : 0,
-            ),
-            'settings' => array(
+        $toolData = $options->_getOption(1);
+        if (!is_array($toolData)) {
+            $toolData = array();
+        }
+        // Always update account info from the fresh login response
+        $toolData['account'] = array(
+            'words_open' => isset($_POST['ass_words_open']) ? (int) $_POST['ass_words_open'] : 0,
+            'words_total' => isset($_POST['ass_words_total']) ? (int) $_POST['ass_words_total'] : 0,
+        );
+        // Only apply default settings on first-time login; preserve existing user settings
+        if (!isset($toolData['settings']) || !is_array($toolData['settings'])) {
+            $toolData['settings'] = array(
                 'post_template' => true,
                 'deactivate_emojis' => false,
                 'generate_hashtags' => true
-            ),
-        );
+            );
+        }
         $options->_setOption(1, $toolData);
         echo json_encode(array('result' => true));
         wp_die();
@@ -3666,9 +4023,9 @@ class Ajax_Post {
                         $postText = sanitize_text_field(B2S_Util::prepareContent((int) $_POST['post_id'], $postData->post_content, $postUrl, false, false, $postLang)); // only content
                     }
                 }
-
+               
                 if (empty($postText)) {
-                    echo json_encode(array('result' => false, 'error' => 'no_content'));
+                    echo json_encode(array('result' => false, 'error' => '3100')); //No content error
                     wp_die();
                 }
 
@@ -3694,10 +4051,43 @@ class Ajax_Post {
                     'allow_emojis' => $allowEmojis,
                     'allow_html' => $allowHtml
                 );
-                if (isset($_POST['post_format']) && (int) $_POST['post_format'] >= 0) {
-                    $postData['post_type'] = (int) $_POST['post_format'];
+                
+                $aiTemplateSettings = array();
+
+                if (isset($_POST['ai_template_settings'])) {
+                    // In preview/test mode, use current form values if they are sent.
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized below
+                    $requestTemplate = wp_unslash($_POST['ai_template_settings']);
+                    if (is_string($requestTemplate) && !empty($requestTemplate)) {
+                        $decodedTemplate = json_decode($requestTemplate, true);
+                        if (is_array($decodedTemplate)) {
+                            $requestTemplate = $decodedTemplate;
+                        }
+                    }
+
+                    if (is_array($requestTemplate) && !empty($requestTemplate)) {
+                        $requestTemplate = B2S_Tools::sanitize_array($requestTemplate);
+                        $aiTemplateSettings = B2S_Tools::normalizeAiTemplateSettings($requestTemplate, B2S_Tools::getAiTemplateDefaults(), (int) $networkId, (int) $networkType);
+                    }
                 }
 
+                // If no live values were sent (e.g. non-test/default flow), use stored template settings.
+                if (!is_array($aiTemplateSettings) || empty($aiTemplateSettings)) {
+                    $aiTemplateSettings = B2S_Tools::getAiTemplateDbSchema((int) B2S_PLUGIN_BLOG_USER_ID, (int) $networkId, (int) $networkType);
+                }
+
+                if (is_array($aiTemplateSettings) && !empty($aiTemplateSettings)) {
+                    $postData['ai_template_settings'] = B2S_Tools::filterAiTemplateDataToSend($aiTemplateSettings);
+                }
+
+                if (isset($_POST['post_format']) && (int) $_POST['post_format'] >= 0) {
+                    $postData['post_type'] = (int) $_POST['post_format'];
+                }     
+
+                if(isset($postData['ai_template_settings']) && B2S_PLUGIN_USER_VERSION<1){
+                    $postData['ai_template_settings']['enabled'] = 0; //Always disable advanced settings for free users if they are set from e.g. previous version
+                }
+            
                 $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $postData), true);
 
                 if (is_array($result) && !empty($result)) {

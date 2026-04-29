@@ -1,3 +1,8 @@
+<?php 
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <!--Form-->
 <div class="col-md-6 del-padding-left">
     <div class="panel panel-group ">

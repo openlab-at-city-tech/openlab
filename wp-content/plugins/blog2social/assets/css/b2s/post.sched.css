@@ -249,7 +249,7 @@ textarea.form-control {
     padding: 0 1px 3px !important;
 }
 
-.b2s-load-info-meta-tag-modal{
+.b2sInfoMetaTagModal{
     margin-top: 8px !important;
     display: block !important;
     margin-right: auto !important;
@@ -556,5 +556,102 @@ input[type="radio"] {
 
 .b2s-settings-checked-new{
     border: 2px solid #79B331 !important
+}
+
+/* First Comment Field Styles */
+/* Bootstrap-like Toggle Switch */
+.b2s-toggle-comment-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    min-width: 100%;
+}
+
+.b2s-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 18px;
+    margin-right: 8px;
+    margin-bottom: 0;
+}
+
+.b2s-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.b2s-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .3s;
+    border-radius: 18px;
+}
+
+.b2s-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked + .b2s-toggle-slider {
+    background-color: #337ab7;
+}
+
+input:focus + .b2s-toggle-slider {
+    box-shadow: 0 0 1px #337ab7;
+}
+
+input:checked + .b2s-toggle-slider:before {
+    transform: translateX(18px);
+}
+
+input:disabled + .b2s-toggle-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.b2s-toggle-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+}
+.b2s-toggle-comment-info{
+    padding-left: 3px;
+}
+.b2s-post-item-details-item-comment-area {
+    display: none;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #4267B2;
+    border-radius: 4px;
+}
+
+.b2s-post-item-details-item-comment-area label {
+    font-size: 12px;
+    color: #65676b;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.b2s-post-item-details-item-comment-input {
+    resize: vertical;
+    min-height: 60px;
+    font-size: 13px;
 }
 

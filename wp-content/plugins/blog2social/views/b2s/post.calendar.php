@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 /* Data */
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
@@ -405,7 +412,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 <?php
 
-    $modalNames = array("b2sPreFeatureScheduleModal");
+    $modalNames = array("b2sPreFeatureScheduleModal", "b2sInfoMetaTagModal");
     include (B2S_PLUGIN_DIR . 'views/b2s/partials/general-modal.php');
     
 ?>

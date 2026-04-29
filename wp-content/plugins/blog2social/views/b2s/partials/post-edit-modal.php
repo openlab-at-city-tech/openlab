@@ -76,6 +76,10 @@
                                     'data-network-count' => array(),
                                     'aria-hidden' => array(),
                                 ),
+                                'label' => array(
+                                    'class' => array(),
+                                    'for' => array(),
+                                ),
                                 'button' => array(
                                     'type' => array(),
                                     'class' => array(),
@@ -107,6 +111,8 @@
                                     'placeholder' => array(),
                                     'data-network-count' => array(),
                                     'data-image-count' => array(),
+                                    'checked' => array(),
+                                    'id' => array(),
                                 ),
                                 'textarea' => array(
                                     'class' => array(),

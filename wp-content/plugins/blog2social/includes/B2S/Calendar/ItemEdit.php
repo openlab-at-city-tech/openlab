@@ -1,6 +1,10 @@
 <?php
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Ship/Item.php');
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Calendar_ItemEdit extends B2S_Ship_Item {
 
     private $calenderItem = null;

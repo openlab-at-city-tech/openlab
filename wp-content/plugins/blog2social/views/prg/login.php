@@ -1,4 +1,9 @@
-<?php wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce'); ?>
+<?php 
+if (!defined('ABSPATH')) {
+    exit;
+}
+wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce'); 
+?>
 <div class="b2s-container">
     <div class="col-md-offset-3 col-lg-offset-4 col-md-6 col-lg-4 col-xs-12">
         <div class="panel panel-group">

@@ -178,6 +178,10 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
                     jQuery('.b2s-nonce-check-fail').show();
                     return false;
                 }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
+                    return false;
+                }
                 if (data.error == 'no_content') {
                     jQuery('.b2s-re-post-no-content').show();
                     return false;
@@ -378,6 +382,9 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function () 
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
+                }
                 jQuery('.b2s-post-remove-fail').show();
             }
             wp.heartbeat.connectNow();
@@ -443,6 +450,9 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                }
+                if (data.error == 'permission_editor') {
+                    jQuery('.b2s-no-permission-editor').show();
                 }
                 jQuery('.b2s-post-remove-fail').show();
             }
@@ -536,7 +546,7 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
             jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
-            jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
+            jQuery('.b2sInfoMetaTagModal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
             if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val() == 0) {
                 jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + network_auth_id + '"]').hide();
                 jQuery('.b2s-image-remove-btn[data-network-auth-id="' + network_auth_id + '"]').hide();
@@ -915,7 +925,7 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
             jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
-            jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
+            jQuery('.b2sInfoMetaTagModal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
             if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val() == 0) {
                 jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + network_auth_id + '"]').hide();
                 jQuery('.b2s-image-remove-btn[data-network-auth-id="' + network_auth_id + '"]').hide();
@@ -1075,6 +1085,11 @@ function renderCalender() {
                     'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
                 },
                 success: function (data) {
+                    if (data && data.result === false && data.error == 'permission_author') {
+                        jQuery('.b2s-no-permission-author').show();
+                        revertFunc();
+                        return;
+                    }
                     refreshCalender();
                     wp.heartbeat.connectNow();
                 }

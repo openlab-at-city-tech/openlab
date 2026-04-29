@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_View_Modal_General {
 
     private $title = '';
@@ -7,6 +11,7 @@ class B2S_View_Modal_General {
     private $smallSubline = '';
     private $listItems = array();
     private $midtext = '';
+    private $addTopline = false;
     private $bottomText = '';
     private $backgroundImage = '';
     private $buttonText = '';
@@ -24,6 +29,8 @@ class B2S_View_Modal_General {
     private $buttonExtraMarginTop = 0;
     private $buttonExtraPaddingBottom = 0;
     private $numberListItems = false;
+    private $noTopMargin = false;
+    private $hrGradient = false;
     private $name = '';
     private $networkId = 0;
     private $content = array();
@@ -294,6 +301,96 @@ class B2S_View_Modal_General {
                     "numberListItems" => true
                 )
             ),
+            "b2sInfoMetaTagModal" => array(
+                0 => array(
+                    "title" => esc_html__('Edit Social Media Preview', 'blog2social'),
+                    "subline" => esc_html__('This is how your post appears on social media', 'blog2social'),
+                    "midtext" => esc_html__('Adjust how your post is displayed across networks:', 'blog2social'),
+                    "addTopline" => true,
+                    "hrGradient" => true,
+                    "bottomText" => wp_kses(sprintf(
+                        // translators: %1$s is a heading, %2$s is an explanation, %3$s is a call to action
+                        __('<strong>%1$s</strong><br>%2$s<br><br>%3$s', 'blog2social'),
+                        'Important to know',
+                        'Blog2Social automatically writes these meta tags into the Open Graph (OG) tags of your WordPress post. This ensures that users see the exact preview you define.',
+                        'If your preview does not appear the way you set it, click here:'
+                    ), array('br' => array(), 'strong' => array()) ),
+                    "textColor" => 'b2s-color-dark-grey',
+                    "backgroundColor" => 'b2s-bg-color-white',
+                    "buttonColor" => 'b2s-bg-color-white',
+                    "redirectUrl" =>B2S_Tools::getSupportLink('yoast_warning_og_guide'),
+                    "buttonText" => esc_html__('You can find the FAQ with all solutions here', 'blog2social'),
+                    "buttonTextColor" => 'b2s-color-green',
+                    "noTopMargin" => true,
+                    "listitems" => array(
+                        esc_html__('Post image', 'blog2social'),
+                        esc_html__('Title', 'blog2social'),
+                        esc_html__('Description', 'blog2social'),
+                    ),
+                )
+            ),
+            "b2sNetworkSettingSaveModal" => array(
+                0 => array(
+                    "title" => esc_html__('Save network selection', 'blog2social'),
+                    "subline" => esc_html__('Remember your network selection for future posts', 'blog2social'),
+                    "midtext" => esc_html__('Save your current network selection so it will be automatically preselected the next time you open the Social Media Editor. How it works:', 'blog2social'),
+                    "addTopline" => true,
+                    "hrGradient" => true,
+                    "bottomText" => wp_kses(sprintf(
+                        // translators: %1$s is a heading, %2$s is an explanation, %3$s is an explanation
+                        __('<strong>%1$s</strong><br>%2$s<br><br>%3$s', 'blog2social'),
+                        'Note',
+                        'If you want to create multiple network groups, use the option "Define network groupings"',
+                        'In the Free version, one group (“My Profile”) is available. Starting from the Pro version, you can define multiple groups freely and use them flexibly.'
+                    ), array('br' => array(), 'strong' => array()) ),
+                    "textColor" => 'b2s-color-dark-grey',
+                    "backgroundColor" => 'b2s-bg-color-white',
+                    "buttonColor" => 'b2s-bg-color-white',
+                    "redirectUrl" =>B2S_Tools::getSupportLink('network_mandant_collection'),
+                    "buttonText" => esc_html__('Click here for more information', 'blog2social'),
+                    "buttonTextColor" => 'b2s-color-green',
+                    "noTopMargin" => true,
+                    "listitems" => array(
+                        esc_html__('Your saved networks appear in the right sidebar and are active (green checkmark).', 'blog2social'),
+                        esc_html__('You can activate or deactivate networks at any time.', 'blog2social'),
+                        esc_html__('Use “+ Add more” to connect additional networks.', 'blog2social'),
+                    ),
+                )
+            ),
+            "b2sProFeatureAddCommentModal" => array(
+                0 => array(
+                    "title" => esc_html__('Feature Info (from PRO)', 'blog2social'),
+                    "subline" => esc_html__('Increase engagement with the first comment', 'blog2social'),
+                    "midtext" => wp_kses(sprintf(
+                        // translators: %1$s is a feature, %2$s is a heading, %3$s is an explanation
+                        __('With Blog2Social, starting from <strong>%1$s</strong>, you can automatically add a first comment below your social media post. This helps you guide attention and increase reach and interactions.<br><br><strong>%2$s</strong><br>The first comment can be automatically filled with <strong>%3$s</strong>, such as:', 'blog2social'),
+                        'PRO',
+                        'What makes it special:',
+                        'WordPress content'
+                    ), array('strong' => array(), 'br' => array()) ),
+                    esc_html__('With Blog2Social, starting from <strong>PRO</strong>, you can automatically add a first comment below your social media post.This helps you guide attention and increase reach and interactions.', 'blog2social'),
+                    "backgroundImage" => '/assets/images/advertising-modal/bg-comment.png',
+                    "hrGradient" => true,
+                    "bottomText" => wp_kses(sprintf(
+                        // translators: %1$s is a feature, %2$s is a feature, %3$s is a feature
+                        __('The comment is automatically applied to <strong>%1$s</strong>, <strong>%2$s</strong>, and shown directly in the <strong>%3$s</strong>.', 'blog2social'),
+                        'auto-posting',
+                        'resharing',
+                        'post preview'
+                    ), array('br' => array(), 'strong' => array()) ),
+                    "backgroundColor" => 'b2s-color-white',
+                    "textColor" => 'b2s-color-dark-grey',
+                    "backgroundColor" => 'b2s-bg-color-white',
+                    "redirectUrl" => B2S_Tools::getSupportLink('upgrade_version'),
+                    "buttonText" => esc_html__('Upgrade Blog2Social', 'blog2social'),
+                    "buttonExtraMarginTop" => 6.5,
+                    "listitems" => array(
+                        esc_html__('Post title or excerpt', 'blog2social'),
+                        esc_html__('URL or keywords', 'blog2social'),
+                        esc_html__('Custom text elements from your post template', 'blog2social'),
+                    ),
+                )
+            ),
         );
     }
 
@@ -311,6 +408,7 @@ class B2S_View_Modal_General {
                 $this->subline = isset($this->content[$this->name][$this->networkId]['subline']) ? $this->content[$this->name][$this->networkId]['subline'] : '';
                 $this->smallSubline = isset($this->content[$this->name][$this->networkId]['smallsubline']) ? $this->content[$this->name][$this->networkId]['smallsubline'] : '';
                 $this->midtext = isset($this->content[$this->name][$this->networkId]['midtext']) ? $this->content[$this->name][$this->networkId]['midtext'] : '';
+                $this->addTopline = isset($this->content[$this->name][$this->networkId]['addTopline']) ? $this->content[$this->name][$this->networkId]['addTopline'] : false;
                 $this->bottomText = isset($this->content[$this->name][$this->networkId]['bottomText']) ? $this->content[$this->name][$this->networkId]['bottomText'] : '';
                 $this->backgroundImage = isset($this->content[$this->name][$this->networkId]['backgroundImage']) ? $this->content[$this->name][$this->networkId]['backgroundImage'] : '';
                 $this->textColor = isset($this->content[$this->name][$this->networkId]['textColor']) ? $this->content[$this->name][$this->networkId]['textColor'] : $this->defaultTextColor;
@@ -324,6 +422,8 @@ class B2S_View_Modal_General {
                 $this->buttonExtraPaddingBottom = isset($this->content[$this->name][$this->networkId]['buttonExtraPaddingBottom']) ? $this->content[$this->name][$this->networkId]['buttonExtraPaddingBottom'] : 0;
                 $this->backgroundColor = isset($this->content[$this->name][$this->networkId]['backgroundColor']) ? $this->content[$this->name][$this->networkId]['backgroundColor'] : $this->defaultbackgroundColor;
                 $this->numberListItems = isset($this->content[$this->name][$this->networkId]['numberListItems']) ? $this->content[$this->name][$this->networkId]['numberListItems'] : false;
+                $this->noTopMargin = isset($this->content[$this->name][$this->networkId]['noTopMargin']) ? $this->content[$this->name][$this->networkId]['noTopMargin'] : false;
+                $this->hrGradient = isset($this->content[$this->name][$this->networkId]['hrGradient']) ? $this->content[$this->name][$this->networkId]['hrGradient'] : false;
             }
         }
     }
@@ -365,8 +465,12 @@ class B2S_View_Modal_General {
             $content .= '<strong><p class="modal-advertising-smallsubline">' . esc_html($this->smallSubline) . '</p></strong>';
         }
 
-        $content .= '<hr class="hr-advertising-left">';
-        $content .= '<p class="modal-advertising-midtext">' . esc_html($this->midtext) . '</p>';
+        $hrLeftClass = 'hr-advertising-left';
+        if ($this->hrGradient) {
+            $hrLeftClass .= ' hr-advertising-gradient';
+        }
+        $content .= '<hr class="' . esc_attr($hrLeftClass) . '">';
+        $content .= '<p class="modal-advertising-midtext">' . wp_kses($this->midtext, array('strong' => array(), 'br' => array())) . '</p>';
         $content .= wp_kses(
             $this->getListHtml(),
             [
@@ -374,14 +478,27 @@ class B2S_View_Modal_General {
                 'li' => [],
             ]
         );
-        $content .= '<p>' . esc_html($this->bottomText) . '</p>';
+        
+        if ($this->addTopline) {
+            $hrClass = 'hr-advertising-top';
+            if ($this->hrGradient) {
+                $hrClass .= ' hr-advertising-gradient';
+            }
+            $content .= '<hr class="' . esc_attr($hrClass) . '">';
+        }
+        
+        $content .= '<p>' . wp_kses($this->bottomText, array(
+            'strong' => array(),
+            'br' => array(),
+        )) . '</p>';
         $buttonStyle = '';
 
         if ($this->buttonExtraMarginTop != 0) {
             $buttonStyle = 'style="margin-bottom: ' . esc_attr($this->buttonExtraMarginTop) . 'rem!important;"';
         }
 
-        $content .= '<div style="margin-top: 20px;">';
+        $content .= '<div ' . ($this->noTopMargin ? '' : 'style="margin-top: 20px;"') . '>';
+
         $content .= '<a ' . $buttonStyle .
                     ' href="' . esc_url($this->redirectUrl) . '" class="b2s-advertise-upgrade-btn btn ' .
                     esc_attr($this->buttonTextColor) . ' ' . esc_attr($this->buttonColor) . '">' .
@@ -391,6 +508,7 @@ class B2S_View_Modal_General {
         if ($this->buttonExtraPaddingBottom != 0) {
             $content .= '<div style="padding-bottom: ' . esc_attr($this->buttonExtraPaddingBottom) . 'rem!important;"></div>';
         }
+
         $content .= '</div>'; 
         $content .= '</div>';     
         $content .= '</div>';         

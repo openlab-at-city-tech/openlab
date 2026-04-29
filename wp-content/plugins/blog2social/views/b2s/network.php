@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Network/Item.php';
 require_once B2S_PLUGIN_DIR . 'includes/Tools.php';
@@ -246,6 +253,24 @@ $networkData = $networkItem->getData();
 </div>
 <input type="hidden" id="lang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 
+<div class="modal fade" id="b2sAiSettingsUnsavedModal" tabindex="-1" role="dialog" aria-labelledby="b2sAiSettingsUnsavedModal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 2000;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAiSettingsUnsavedModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Unsaved Template Changes', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php esc_html_e('You have unsaved template changes. Would you like to save them?', 'blog2social') ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default b2s-ai-unsaved-skip-btn"><?php esc_html_e('Skip', 'blog2social') ?></button>
+                <button type="button" class="btn btn-primary b2s-ai-unsaved-save-btn"><?php esc_html_e('Save', 'blog2social') ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="b2s-network-add-mandant" tabindex="-1" role="dialog" aria-labelledby="b2s-network-add-mandant" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -381,7 +406,7 @@ $networkData = $networkItem->getData();
 
 <div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content custom-edit-template-modal-width">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-edit-template" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-1" alt="Facebook" src="<?php echo esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
@@ -403,7 +428,17 @@ $networkData = $networkItem->getData();
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-25" alt="Blogger" src="<?php echo esc_url(plugins_url('/assets/images/portale/25_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-26" alt="Ravelry" src="<?php echo esc_url(plugins_url('/assets/images/portale/26_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-27" alt="Instapaper" src="<?php echo esc_url(plugins_url('/assets/images/portale/27_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
-                <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4> <?php echo ((B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__('SMART', 'blog2social') . '</span>' : '') ?>
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-32" alt="Youtube" src="<?php echo esc_url(plugins_url('/assets/images/portale/32_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-35" alt="Vimeo" src="<?php echo esc_url(plugins_url('/assets/images/portale/35_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-36" alt="TikTok" src="<?php echo esc_url(plugins_url('/assets/images/portale/36_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-38" alt="Mastodon" src="<?php echo esc_url(plugins_url('/assets/images/portale/38_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-39" alt="Discord" src="<?php echo esc_url(plugins_url('/assets/images/portale/39_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-42" alt="Humhub" src="<?php echo esc_url(plugins_url('/assets/images/portale/42_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-43" alt="Bluesky" src="<?php echo esc_url(plugins_url('/assets/images/portale/43_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-44" alt="Threads" src="<?php echo esc_url(plugins_url('/assets/images/portale/44_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-45" alt="X" src="<?php echo esc_url(plugins_url('/assets/images/portale/45_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-46" alt="Band" src="<?php echo esc_url(plugins_url('/assets/images/portale/46_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4>
             </div>
             <div class="row b2s-loading-area width-100">
                 <br>
@@ -489,7 +524,16 @@ $networkData = $networkItem->getData();
                         <span class="b2s-bold">{CONTENT}</span> - <?php esc_html_e('The content of your post', 'blog2social') ?> <br>
                         <span class="b2s-bold">{KEYWORDS}</span> - <?php esc_html_e('The tags you have set in your post.', 'blog2social') ?> <br>
                         <span class="b2s-bold">{AUTHOR}</span> - <?php esc_html_e('The name of the post author.', 'blog2social') ?> <br>
-                        <span class="b2s-bold">{PRICE}</span> - <?php esc_html_e('The price of your product, if you have installed WooCommerce on your website/ blog.', 'blog2social') ?> <br>
+                        <?php    
+                        if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
+                         ?>
+                            <span class="b2s-bold">{PRICE}</span> - <?php esc_html_e('This is the actual current price of the product used by WooCommerce.', 'blog2social') ?> <br>
+                            <span class="b2s-bold">{REGULAR_PRICE}</span> - <?php esc_html_e('This is the original price of the product used by WooCommerce, before any discounts or sales.', 'blog2social') ?> <br>
+                            <span class="b2s-bold">{SALE_PRICE}</span> - <?php esc_html_e('This is the discounted price of the product used by WooCommerce you may set for a sale period.', 'blog2social') ?> <br>
+                        <?php   
+                        }
+                        ?>
+                                
                     </p>
                 </div>
             </div>
@@ -513,6 +557,20 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
+<div class="modal fade b2s-info-share-as-story-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-share-as-story-modal" aria-hidden="true" data-backdrop="false"  style="display:none; z-index: 2000;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-info-share-as-story-modal">&times;</button>
+                <h4 class="modal-title"><?php esc_html_e("Share as Story", "blog2social") ?></h4>
+            </div>
+            <div class="modal-body">
+                <p><?php esc_html_e('In an Instagram or Facebook story, you can share photos and videos for a short time. The story can be accessed via the profile picture and disappears from the profile after 24 hours.', 'blog2social') ?></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="b2s-edit-network-auth-settings" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-network-auth-settings" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -528,13 +586,15 @@ $networkData = $networkItem->getData();
             </div>
             <div class="modal-body">
                 <div class="b2s-network-auth-settings-content">
-                    <?php if (B2S_PLUGIN_USER_VERSION >= 3) { ?>
-                        <div  style="display: none;" class="b2-share-settings">
-                            <div class=""><h4><?php esc_html_e('Share Settings', 'blog2social') ?></h4></div>
-                            <div class= "b2-share-settings-content">
-
-                            </div>
+                    <?php if (B2S_PLUGIN_USER_VERSION >= 2) { ?>
+                    <div  style="display: none;" class="b2-share-settings">
+                        <div class=""><h4><?php esc_html_e('Share Settings', 'blog2social') ?></h4></div>
+                        <div class= "b2-share-settings-content">
                         </div>
+                    </div>
+                    <?php } 
+                    ?>
+                    <?php if (B2S_PLUGIN_USER_VERSION >= 3) { ?>
                         <div class="row">
                             <div class="col-md-12 b2s-text-bold"><h4><?php esc_html_e('URL Parameters', 'blog2social') ?></h4></div>
                             <div class="col-md-12"><div class="alert alert-danger b2s-url-parameter-error" data-error-reason="save" style="display:none;"><span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The parameters could not be saved. Please try again.', 'blog2social') ?></div></div>

@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <div class="b2s-dashboard-multi-widget" data-position="0">
     <h5 class="b2s-dashboard-h5"></h5>
     <div class="b2s-dashboard-multi-widget-inner">

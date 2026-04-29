@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 $getPage = sanitize_text_field(wp_unslash(isset($_GET['page'])? $_GET['page'] : ""));
 $getType = (isset($_GET['type']) && !empty($_GET['type'])) ? sanitize_text_field(wp_unslash($_GET['type'])) : 'link';
 $isPremiumInfo = (B2S_PLUGIN_USER_VERSION == 0) ? 'b2s-btn-disabled' : '';

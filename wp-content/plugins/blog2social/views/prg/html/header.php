@@ -1,5 +1,14 @@
 <!--Header-->
-<?php $prgInfo = get_option('B2S_PLUGIN_PRG_' . B2S_PLUGIN_BLOG_USER_ID);?>
+<?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
+ $prgInfo = get_option('B2S_PLUGIN_PRG_' . B2S_PLUGIN_BLOG_USER_ID);
+ ?>
 <div class="col-md-12 del-padding-left">
     <div class="col-md-9 del-padding-left del-padding-right">
 <?php if (isset($_GET['prgLogout'])) { ?>

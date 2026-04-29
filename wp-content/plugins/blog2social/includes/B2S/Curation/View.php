@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Curation_View {
 
     public function __construct() {
@@ -100,7 +104,7 @@ class B2S_Curation_View {
         }
         $content .='</div>';
         $content .='<div class="b2s-curation-post-form-apply-post-templates">';
-        $content .='<input class="b2s-curation-post-form-apply-post-templates-checkbox" name="apply_post_templates" type="checkbox"><label>' . esc_html__('Apply Post Templates', 'blog2social') . '</label>';
+        $content .='<input class="b2s-curation-post-form-apply-post-templates-checkbox" value="1" name="apply_post_templates" type="checkbox"><label>' . esc_html__('Apply Post Templates', 'blog2social') . '</label>';
         $content .='</div>';
         $content .='<br>';
         $content .='<div class="row">';

@@ -64,6 +64,10 @@ jQuery('.b2sSaveSocialMetaTagsSettings').validate({
                     if (data.error == 'nonce') {
                         jQuery('.b2s-nonce-check-fail').show();
                     }
+                    if (data.error == 'permission_administrator') {
+                        jQuery('.b2s-no-permission-administrator').show();
+                        return false;
+                    }
                     jQuery('.b2s-settings-user-error').show();
                 }
             }
@@ -99,6 +103,10 @@ jQuery(document).on('click', '.b2sClearSocialMetaTags', function () {
             if (data.result == true) {
                 jQuery('.b2s-clear-meta-tags-success').show();
             } else {
+                if(data.error == 'permission_administrator') {
+                    jQuery('.b2s-no-permission-administrator').show();
+                    return false;
+                }
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }

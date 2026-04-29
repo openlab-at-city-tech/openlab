@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
+
 class B2S_Api_Network_Pinterest {
    
     public $cookie = array();

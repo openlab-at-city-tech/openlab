@@ -1,4 +1,11 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+
 $b2sLastVersion = get_option('b2s_plugin_version');
 $customizeArea = B2S_System::customizeArea();
 $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';

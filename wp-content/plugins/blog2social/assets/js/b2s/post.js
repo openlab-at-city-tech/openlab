@@ -1,5 +1,186 @@
 jQuery.noConflict();
 
+function updateToggleCommentValue($toggle) {
+    if (!$toggle || $toggle.length === 0) {
+        return;
+    }
+    $toggle.each(function () {
+        var $item = jQuery(this);
+        $item.val($item.is(':checked') ? '1' : '0');
+    });
+}
+
+function applyShareAsStoryState($checkbox, isChecked) {
+    if (!$checkbox || $checkbox.length === 0) {
+        return;
+    }
+
+    if (isChecked) {
+
+        if (jQuery('#is_video').val() == 1 && $checkbox.attr('data-network-id') == 1) {
+
+            jQuery('#b2s\\[' + $checkbox.attr('data-network-auth-id') + '\\]\\[isReelCB\\]').prop('checked', false);
+
+        }
+
+        if ($checkbox.attr('data-network-count') >= 0) {
+
+            jQuery('.b2s-post-item-details-item-message-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').children().not('.b2s-post-item-details-item-message-area-sched').hide();
+            jQuery('.b2s-post-item-details-item-url-input[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').parent().hide();
+            jQuery('.b2s-multi-image-area[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').hide();
+        } else {
+
+            jQuery('.b2s-post-item-details-item-message-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').first().hide();
+            jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').parent().hide();
+            jQuery('.b2s-multi-image-area[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').hide();
+            jQuery('.b2s-post-original-area[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').hide();
+        }
+
+        jQuery('.b2s-post-item-details-item-message-input[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').attr('required', false);
+        // hide assistini buttons
+        hideAssButtons($checkbox.attr('data-network-auth-id'), $checkbox.attr('data-network-count'));
+
+        // Stories cannot be commented: hide and disable comment area
+        var authId = $checkbox.attr('data-network-auth-id');
+        var networkId = $checkbox.attr('data-network-id');
+        var networkCount = $checkbox.attr('data-network-count');
+
+        // Only for Instagram (12) and Facebook (1) in video mode
+        if (networkId == 12 || networkId == 1) {
+            var commentArea = jQuery('.b2s-comment-area-' + authId + '[data-network-count="' + networkCount + '"]');
+            var toggleBtn = jQuery('.b2s-toggle-comment[data-network-auth-id="' + authId + '"][data-network-count="' + networkCount + '"]');
+            var commentInput = commentArea.find('.b2s-post-item-details-item-comment-input');
+
+            // Hide comment area if visible
+            if (commentArea.is(':visible')) {
+                commentArea.slideUp(300);
+            }
+
+            // Leave comment input enabled
+
+            // Grey out and disable toggle switch
+            toggleBtn.prop('disabled', true);
+            toggleBtn.prop('checked', false);
+            updateToggleCommentValue(toggleBtn);
+            toggleBtn.attr('data-disabled-by-story', 'true');
+        }
+    } else {
+
+        if ($checkbox.attr('data-network-count') >= 0) {
+
+            jQuery('.b2s-post-item-details-item-message-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').show();
+            jQuery('.b2s-post-item-details-item-message-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').children().not('.b2s-post-item-textarea-loader').show();
+            jQuery('.b2s-post-item-details-item-url-input[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').parent().show();
+            jQuery('.b2s-multi-image-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').show();
+        } else {
+            jQuery('.b2s-post-item-details-item-message-area[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').first().show();
+            jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').parent().show();
+            jQuery('.b2s-multi-image-area[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').show();
+            jQuery('.b2s-post-original-area[data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').show();
+        }
+        jQuery('.b2s-post-item-details-item-message-input[data-network-count="' + $checkbox.attr('data-network-count') + '"][data-network-auth-id="' + $checkbox.attr('data-network-auth-id') + '"]').attr('required', true);
+        // show assistini buttons
+        showAssButtons($checkbox.attr('data-network-auth-id'), $checkbox.attr('data-network-count'));
+
+        // Re-enable comment area when story is unchecked
+        var authId = $checkbox.attr('data-network-auth-id');
+        var networkId = $checkbox.attr('data-network-id');
+        var networkCount = $checkbox.attr('data-network-count');
+
+        if (networkId == 12 || networkId == 1) {
+            var commentArea = jQuery('.b2s-comment-area-' + authId + '[data-network-count="' + networkCount + '"]');
+            var toggleBtn = jQuery('.b2s-toggle-comment[data-network-auth-id="' + authId + '"][data-network-count="' + networkCount + '"]');
+            var commentInput = commentArea.find('.b2s-post-item-details-item-comment-input');
+
+            // Re-enable if it was disabled by story
+            if (toggleBtn.attr('data-disabled-by-story') == 'true') {
+                toggleBtn.removeAttr('data-disabled-by-story');
+
+                // Re-enable toggle switch
+                toggleBtn.prop('disabled', false);
+
+                // If there's a comment value, check the toggle and show comment area
+                if (commentInput.val() && commentInput.val().trim() !== '') {
+                    if (!commentArea.is(':visible')) {
+                        commentArea.slideDown(300);
+                        toggleBtn.prop('checked', true);
+                        updateToggleCommentValue(toggleBtn);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Toggle First Comment Field
+jQuery(document).on('change', '.b2s-toggle-comment', function (e) {
+    var authId = jQuery(this).data('network-auth-id');
+    var networkCount = jQuery(this).data('network-count');
+    var commentArea = jQuery('.b2s-comment-area-' + authId + '[data-network-count="' + networkCount + '"]');
+    var isChecked = jQuery(this).is(':checked');
+
+    // Check if toggle is disabled by story or thread
+    if (jQuery(this).attr('data-disabled-by-story') == 'true' || jQuery(this).attr('data-disabled-by-thread') == 'true') {
+        e.preventDefault();
+        return false;
+    }
+
+    updateToggleCommentValue(jQuery(this));
+
+    // Toggle the comment area visibility
+    if (isChecked) {
+        commentArea.slideDown(300);
+        var commentTextarea = jQuery('.b2s-post-item-details-item-comment-input[data-network-auth-id="' + authId + '"][data-network-count="' + networkCount + '"]');
+
+        // When comment is enabled, uncheck and grey out story button
+        var networkId = commentArea.attr('data-network-id');
+        if (jQuery('#is_video').val() == 1 && (networkId == 12 || networkId == 1)) {
+            var storyCheckbox = jQuery('.b2s-post-item-option-share-as-story[data-network-auth-id="' + authId + '"][data-network-count="-1"]');
+
+            if (storyCheckbox.prop('checked')) {
+                storyCheckbox.prop('checked', false);
+                // Trigger the story unchecked logic to show other fields
+                storyCheckbox.trigger('click'); // This will uncheck it
+                storyCheckbox.prop('checked', false); // Make sure it stays unchecked
+            }
+
+            // Grey out story option
+            var storyContainer = storyCheckbox.closest('.b2s-share-as-story-fields');
+            storyContainer.css({
+                'opacity': '0.5',
+                'pointer-events': 'none'
+            });
+            storyContainer.attr('data-disabled-by-comment', 'true');
+            storyCheckbox.attr('data-disabled-by-comment', 'true');
+        }
+
+    } else {
+        // Re-enable story button when comment is hidden (toggle unchecked)
+        commentArea.slideUp(300);
+        var commentTextarea = jQuery('.b2s-post-item-details-item-comment-input[data-network-auth-id="' + authId + '"][data-network-count="' + networkCount + '"]');
+        var networkId = commentArea.attr('data-network-id');
+        if (jQuery('#is_video').val() == 1 && (networkId == 12 || networkId == 1)) {
+            var storyCheckbox = jQuery('.b2s-post-item-option-share-as-story[data-network-auth-id="' + authId + '"][data-network-count="-1"]');
+            var storyContainer = storyCheckbox.closest('.b2s-share-as-story-fields');
+
+            if (storyContainer.attr('data-disabled-by-comment') == 'true') {
+                storyContainer.css({
+                    'opacity': '1',
+                    'pointer-events': 'auto'
+                });
+                storyContainer.removeAttr('data-disabled-by-comment');
+                storyCheckbox.removeAttr('data-disabled-by-comment');
+            }
+        }
+
+    }
+});
+
+jQuery(document).on('click', '.b2s-post-item-option-share-as-story', function () {
+    applyShareAsStoryState(jQuery(this), jQuery(this).prop('checked'));
+    return true;
+});
+
 jQuery(window).on("load", function () {
 
     if (typeof wp.heartbeat !== "undefined") {
@@ -681,6 +862,9 @@ jQuery(document).on('click', '.b2s-approve-delete-confirm-btn', function () {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
+                }
                 jQuery('.b2s-post-remove-fail').show();
             }
             wp.heartbeat.connectNow();
@@ -747,6 +931,9 @@ jQuery(document).on('click', '.b2s-publish-delete-confirm-btn', function () {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
+                }
                 jQuery('.b2s-post-remove-fail').show();
             }
             wp.heartbeat.connectNow();
@@ -795,6 +982,9 @@ jQuery(document).on('click', '.b2s-all-posts-delete-confirm-btn', function () {
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
                 }
                 jQuery('.b2s-post-remove-fail').show();
             }
@@ -849,6 +1039,9 @@ jQuery(document).on('click', '.b2s-all-sched-posts-delete-confirm-btn', function
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                }
+                if (data.error == 'permission_editor') {
+                    jQuery('.b2s-no-permission-editor').show();
                 }
                 jQuery('.b2s-post-remove-fail').show();
             }
@@ -946,7 +1139,7 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
             jQuery('.b2s-post-item-details-preview-title[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-preview-desc[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
             jQuery('.b2s-post-item-details-item-url-input[data-network-auth-id="' + network_auth_id + '"]').prop("readonly", true);
-            jQuery('.b2s-load-info-meta-tag-modal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
+            jQuery('.b2sInfoMetaTagModal[data-network-auth-id="' + network_auth_id + '"]').attr("style", "display:none !important");
             if (jQuery('.b2s-post-item-details-post-format[data-network-auth-id="' + network_auth_id + '"]').val() == 0) {
                 jQuery('.b2s-select-image-modal-open[data-network-auth-id="' + network_auth_id + '"]').hide();
                 jQuery('.b2s-image-remove-btn[data-network-auth-id="' + network_auth_id + '"]').hide();
@@ -1003,6 +1196,9 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
         checkSchedDateTime(network_auth_id);
     });
     init();
+    jQuery('.b2s-post-item-option-share-as-story:checked').each(function () {
+        applyShareAsStoryState(jQuery(this), true);
+    });
 
     //is relay post?
     if (relay_primary_post_id > 0) {
@@ -1226,6 +1422,9 @@ jQuery(document).on('click', '.b2s-draft-delete-confirm-btn', function () {
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
+                }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
                 }
                 jQuery('.b2s-post-remove-fail').show();
             }
@@ -1539,6 +1738,70 @@ jQuery(document).on('click', '.b2s-add-multi-image', function () {
     jQuery('#b2s-network-select-image').modal('show');
 });
 
+jQuery(document).on('click', '.ad-tag-btn', function (e) {
+    e.preventDefault();
+    var networkAuthId = jQuery(this).attr('data-network-auth-id');
+    if (networkAuthId) {
+        addTag(networkAuthId);
+    }
+});
+
+jQuery(document).on('click', '.remove-tag-btn', function (e) {
+    e.preventDefault();
+    var networkAuthId = jQuery(this).attr('data-network-auth-id');
+    if (networkAuthId) {
+        removeTag(networkAuthId);
+    }
+});
+
+function removeAllTags(networkAuthId) {
+    jQuery('.b2s-post-item-details-tag-input-elem[data-network-auth-id="' + networkAuthId + '"]').remove();
+    updateTagButtons(networkAuthId);
+}
+
+function addTagwithContent(networkAuthId, content) {
+    var selector = ".b2s-post-item-details-tag-input-elem[data-network-auth-id='" + networkAuthId + "']";
+    var container = jQuery(".b2s-post-item-details-tag-input[data-network-auth-id='" + networkAuthId + "']");
+
+    if (jQuery(selector).length > 0) {
+        jQuery(selector).last().after('<input class="form-control b2s-post-item-details-tag-input-elem" data-network-auth-id="' + networkAuthId + '" value="' + content + '" name="b2s[' + networkAuthId + '][tags][]">');
+    } else {
+        container.append('<input class="form-control b2s-post-item-details-tag-input-elem" data-network-auth-id="' + networkAuthId + '" value="' + content + '" name="b2s[' + networkAuthId + '][tags][]">');
+    }
+
+    updateTagButtons(networkAuthId);
+}
+
+function addTag(networkAuthId) {
+    var selector = ".b2s-post-item-details-tag-input-elem[data-network-auth-id='" + networkAuthId + "']";
+    jQuery(selector).last().after('<input class="form-control b2s-post-item-details-tag-input-elem" data-network-auth-id="' + networkAuthId + '" value="" name="b2s[' + networkAuthId + '][tags][]">');
+    updateTagButtons(networkAuthId);
+}
+
+function removeTag(networkAuthId) {
+    var selector = ".b2s-post-item-details-tag-input-elem[data-network-auth-id='" + networkAuthId + "']";
+    jQuery(selector).last().remove();
+    updateTagButtons(networkAuthId);
+}
+
+function updateTagButtons(networkAuthId) {
+    var selector = ".b2s-post-item-details-tag-input-elem[data-network-auth-id='" + networkAuthId + "']";
+    var count = jQuery(selector).length;
+    if (count > 1) {
+        jQuery(".remove-tag-btn[data-network-auth-id='" + networkAuthId + "'").show();
+    } else {
+        jQuery(".remove-tag-btn[data-network-auth-id='" + networkAuthId + "'").hide();
+    }
+    var limit = jQuery(".b2s-post-item-details-tag-limit[data-network-auth-id='" + networkAuthId + "']").val();
+    if (typeof limit !== typeof undefined && limit !== false && limit !== '') {
+        if (count >= limit) {
+            jQuery(".ad-tag-btn[data-network-auth-id='" + networkAuthId + "'").hide();
+        } else {
+            jQuery(".ad-tag-btn[data-network-auth-id='" + networkAuthId + "'").show();
+        }
+    }
+}
+
 jQuery(document).on('click', '.b2s-repost-multi', function () {
     var checkboxes = jQuery('.checkboxes[data-blog-post-id="' + jQuery(this).attr('data-blog-post-id') + '"]:checked');
     if (checkboxes.length > 0) {
@@ -1671,3 +1934,4 @@ jQuery(document).on('click', '.b2s-post-notice-delete-all-confirm-btn', function
         }
     });
 });
+

@@ -1,5 +1,13 @@
 <!--after Install-->
-<?php wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce'); ?>
+<?php 
+if (!defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+ */
+wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce'); 
+?>
 <div class="b2s-container">
     <div class="col-xs-12 col-md-offset-4 col-md-4">
         <div class="panel panel-group">

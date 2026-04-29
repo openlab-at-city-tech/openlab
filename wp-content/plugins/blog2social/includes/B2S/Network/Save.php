@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Network_Save {
 
     public static function saveUserMandant($mandantName, $allow_delete = true, $assignToken = false) {

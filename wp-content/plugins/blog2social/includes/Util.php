@@ -448,8 +448,13 @@ class B2S_Util {
                     }
                 }
             }
+
             return $tempContent;
         }
+        
+        //Convert HTML Linebreaks, if still there
+        $prepareContent = preg_replace('/<\s*\/?\s*br\s*\/?\s*>/', "\n", $prepareContent);
+
         return preg_replace('/(?:[ \t]*(?:\n|\r\n?)){3,}/', "\n\n", trim(wp_strip_all_tags($prepareContent)));
     }
 

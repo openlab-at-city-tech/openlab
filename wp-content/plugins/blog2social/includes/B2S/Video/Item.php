@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Video_Item {
 
     public function __construct() {
@@ -10,6 +14,9 @@ class B2S_Video_Item {
         $postData = get_post((int) $attachment_id);
         $videoMeta = wp_read_video_metadata(get_attached_file((int) $attachment_id));
         $videoUrl = wp_get_attachment_url((int) $attachment_id);
+
+        $filesize=isset($videoMeta['filesize']) ? $videoMeta['filesize'] : "";
+        $length=isset($videoMeta['length']) ? $videoMeta['length'] : "";
 
         $videoAddonDetails = false;
         if (defined('B2S_PLUGIN_ADDON_VIDEO')) {
@@ -22,7 +29,7 @@ class B2S_Video_Item {
         $shareVideoBtn = '<button class="b2s-share-video-file btn btn-primary" disabled><i class="glyphicon glyphicon-ban-circle"></i> ' . esc_html__('Share on video networks', 'blog2social') . '</button>';
 
         if ($videoAddonDetails !== false) {
-            if (isset($videoAddonDetails['volume_open']) && ($videoAddonDetails['volume_open'] >= round($videoMeta['filesize'] / 1024))) {
+            if (isset($videoAddonDetails['volume_open']) && ($videoAddonDetails['volume_open'] >= round($filesize / 1024))) {
                 $shareVideoBtn = '<a class="b2s-share-video-file btn btn-primary" href="admin.php?page=blog2social-ship&isVideo=1&postId=' . esc_attr((int) $attachment_id) . '" data-file-url="' . esc_attr($postData->guid) . '" data-attachment-id="' . esc_attr((int) $attachment_id) . '">' . esc_html__('Share on video networks', 'blog2social') . '</a>';
             } else {
                 $notice = '<span class="glyphicon glyphicon-warning-sign"></span> <b>' . esc_html__('Video size exceeds your data volume to share on networks', 'blog2social') . '</b></br>';
@@ -36,8 +43,8 @@ class B2S_Video_Item {
                                                     <div class="pull-left media-nav">' . $notice . '
                                                             <strong><a target="_blank" href="' . esc_url($postData->guid) . '">' . $postData->post_title . '</a></strong>
                                                                 <span class="info hidden-xs">(' . esc_html__('Format', 'blog2social') . ': ' . esc_html($postData->post_mime_type) . ', ' .
-                esc_html__('Size', 'blog2social') . ': ' . esc_html(size_format($videoMeta['filesize'])) . ', ' . esc_html__('Length', 'blog2social') .
-                ':' . esc_html($videoMeta['length']) . esc_html__('s', 'blog2social') . ')</span>
+                esc_html__('Size', 'blog2social') . ': ' . esc_html(size_format($filesize)) . ', ' . esc_html__('Length', 'blog2social') .
+                ':' . esc_html($length) . esc_html__('s', 'blog2social') . ')</span>
                                                         <span class="pull-right">
                                                             ' . $shareVideoBtn . '
                                                             <button class="b2s-show-video-uploads btn btn-primary" disabled data-file-url="' . esc_attr($videoUrl) . '" data-attachment-id="' . esc_attr((int) $attachment_id) . '"><i class="glyphicon glyphicon-ban-circle"></i> ' . esc_html__('Details', 'blog2social') . '</button>

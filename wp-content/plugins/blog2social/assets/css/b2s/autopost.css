@@ -87,3 +87,15 @@ ul.chosen-choices {
 .toggle-off, .toggle-on {
     line-height: 1.2em !important;
 }
+
+.b2s-auto-post-categories-state-include,
+.b2s-auto-post-categories-state-exclude,
+.b2s-auto-post-tags-state-include,
+.b2s-auto-post-tags-state-exclude {
+    margin-right: 5px!important;
+    margin-bottom: 10px!important;
+}
+.b2s-auto-post-state{
+    margin-right: 3px!important;
+    margin-bottom: 4px!important;
+}

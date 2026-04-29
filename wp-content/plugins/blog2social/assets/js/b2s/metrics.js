@@ -321,6 +321,9 @@ jQuery(document).on('click', '.b2s-publish-delete-confirm-btn', function () {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 }
+                if (data.error == 'permission_author') {
+                    jQuery('.b2s-no-permission-author').show();
+                }
                 jQuery('.b2s-post-remove-fail').show();
             }
             wp.heartbeat.connectNow();

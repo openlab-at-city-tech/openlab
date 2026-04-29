@@ -3,6 +3,10 @@
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/ItemEdit.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Calendar_Item {
 
     private $sched_date = null;
@@ -35,10 +39,14 @@ class B2S_Calendar_Item {
     private $errorTextList = null;
     private $post_id = null;
     private $display_post_format=null;
+    private $comment = null;
+    private $tags = null;
+    private $share_as_story = 0;
 
     public function __construct(\StdClass $data = null) {
         $this->errorTextList = unserialize(B2S_PLUGIN_NETWORK_ERROR);
         if (isset($data)) {
+           
             $this->setSchedData($data->sched_data)
                     ->setSchedDate($data->sched_date)
                     ->setNetworkId($data->network_id)
@@ -58,7 +66,10 @@ class B2S_Calendar_Item {
                     ->setPostForRelay($data->post_for_relay)
                     ->setPostForApprove($data->post_for_approve)
                     ->setPublishLink($data->publish_link)
-                    ->setB2SExPostFormat($data->display_post_format);
+                    ->setB2SExPostFormat($data->display_post_format)
+                    ->setComment($data->sched_data)
+                    ->setTags($data->sched_data)
+                    ->setShareAsStory($data->sched_data);
 
             if ($data->network_id == 1 || $data->network_id == 2 || $data->network_id == 3 || $data->network_id == 4 || $data->network_id == 12 || $data->network_id == 17 || $data->network_id == 19 || $data->network_id == 24 || $data->network_id == 45) {
                 $this->setPostFormat();
@@ -87,6 +98,56 @@ class B2S_Calendar_Item {
     }
     public function getB2SExpostFormat() {
         return $this->display_post_format;
+    }
+    
+    public function setComment($sched_data) {
+        if (is_string($sched_data)) {
+            $data = unserialize($sched_data);
+            if (is_array($data) && isset($data['comment'])) {
+                $this->comment = $data['comment'];
+            }
+        }
+        return $this;
+    }
+    
+    public function getComment() {
+        return $this->comment;
+    }
+
+    public function setTags($sched_data) {
+        if (is_string($sched_data)) {
+            $data = unserialize($sched_data);
+            if (is_array($data) && isset($data['tags'])) {
+                if (is_array($data['tags'])) {
+                    $this->tags = $data['tags'];
+                } else if (is_string($data['tags'])) {
+                    $decoded_tags = json_decode($data['tags'], true);
+                    if (is_array($decoded_tags)) {
+                        $this->tags = $decoded_tags;
+                    }
+                }
+            }
+        }
+        return $this;
+    }
+
+    public function getTags() {
+        return $this->tags;
+    }
+
+    public function setShareAsStory($sched_data) {
+        $this->share_as_story = 0;
+        if (is_string($sched_data)) {
+            $data = unserialize($sched_data);
+            if (is_array($data) && isset($data['share_as_story'])) {
+                $this->share_as_story = (int) $data['share_as_story'];
+            }
+        }
+        return $this;
+    }
+
+    public function getShareAsStory() {
+        return $this->share_as_story;
     }
     public function setPublishLink($value) {
         $this->publish_link = trim($value);
@@ -630,7 +691,13 @@ class B2S_Calendar_Item {
      */
     public function ship_item() {
         if (is_null($this->ship_item)) {
-            $this->ship_item = new B2S_Calendar_ItemEdit($this->getPostId());
+         
+            $videoMode= false;
+            if($this->getPostType() == "attachment"){
+                $videoMode = true;
+            }
+
+            $this->ship_item = new B2S_Calendar_ItemEdit($this->getPostId(), "en","","",0,$videoMode);
 
             $sched_data = $this->getSchedData();
             if (is_array($sched_data)) {
@@ -660,9 +727,13 @@ class B2S_Calendar_Item {
             'post_for_relay' => $this->getPostForRelay(),
             'post_for_approve' => $this->getPostForApprove(),
             'post_format' => $this->getPostFormat(),
+            'comment' => $this->getComment(),
+            'tags' => $this->getTags(),
+            'share_as_story' => $this->getShareAsStory(),
             'view' => $view,
             'networkTosGroupId' => '',
-            'networkKind' => 0);
+            'networkKind' => 0
+        );
 
         return $this->ship_item()->getItemHtml((object) $itemData, false);
     }

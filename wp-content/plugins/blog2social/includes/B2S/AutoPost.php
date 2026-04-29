@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ABSPATH')) {
+    exit;
+}
 class B2S_AutoPost {
 
     private $title;
@@ -22,8 +24,9 @@ class B2S_AutoPost {
     private $default_template;
     private $echo;
     private $delay;
+    private $blogUserId;
 
-    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0, $echo = 0, $delay = 0) {
+    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0, $echo = 0, $delay = 0) {       
         $this->postId = $postId;
         $this->blogPostData = $blogPostData;
         $this->current_user_date = $current_user_date;
@@ -34,6 +37,7 @@ class B2S_AutoPost {
         $this->contentHtml = B2S_Util::prepareContent($postId, $content, $url, '<p><h1><h2><br><i><b><a><img>', true, $b2sPostLang);
         $this->url = $url;
         $this->userVersion = defined("B2S_PLUGIN_USER_VERSION") ? B2S_PLUGIN_USER_VERSION : (int) $userVersion;
+        $this->blogUserId = defined('B2S_PLUGIN_BLOG_USER_ID') ? B2S_PLUGIN_BLOG_USER_ID : (int) $blogPostData['blog_user_id'];
         $this->imageUrl = $imageUrl;
         $this->keywords = $keywords;
         $this->optionPostFormat = $optionPostFormat;
@@ -47,7 +51,6 @@ class B2S_AutoPost {
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0, $networkKind = 0) {
 
-     
         if ((int) $networkId > 0 && (int) $networkAuthId > 0) {
             $postData = array('content' => '', 'custom_title' => '', 'tags' => array(), 'network_auth_id' => (int) $networkAuthId);
 
@@ -56,7 +59,7 @@ class B2S_AutoPost {
             } else {
                 $tempOptionPostFormat = $this->optionPostFormat;
             }
-
+         
             //V6.5.5 - Xing Pages => Two diferend kinds
             if ($networkId == 19 && $networkType == 1) {
                 if (!isset($tempOptionPostFormat[$networkId][$networkType]['short_text'][0]['limit'])) {
@@ -92,7 +95,7 @@ class B2S_AutoPost {
             $postData['share_settings'] = array('mode' => 0); //share as draft - tiktok
             
             if ($networkId == 36) {
-                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+                $options = new B2S_Options($this->blogUserId);
                 $optionsShareSettings = $options->_getOption("share_settings");
                 //is directly?
                 if (isset($optionsShareSettings[$networkAuthId]["share_as_draft"]) && $optionsShareSettings[$networkAuthId]["share_as_draft"] == false) {
@@ -115,6 +118,11 @@ class B2S_AutoPost {
                 }
 
                 $postData['custom_title'] = wp_strip_all_tags($this->title);
+            }
+
+            //Share as story (form Version 8.8.0 manageable in Post Templates)             
+            if($this->userVersion >= 1 && isset($tempOptionPostFormat[$networkId][$networkType]['share_as_story']) && (int) $tempOptionPostFormat[$networkId][$networkType]['share_as_story'] === 1) {
+                $postData['share_as_story'] = 1;
             }
 
             //PostFormat
@@ -176,17 +184,39 @@ class B2S_AutoPost {
                     $postData['content'] = preg_replace("/\{AUTHOR\}/", "", $postData['content']);
                 }
 
+                // JM: Prices in Autopost might not have an immediate effect because woocommerce updates prices via its own hook which runs at priority 10. The b2sHook runs at 1 and should not be changed to make sure Yoast e.g. are overriden
                 if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
                     $wc_product = wc_get_product($this->postId);
                     if ($wc_product != false) {
+
+                        // Current price (already existing)
                         $price = $wc_product->get_price();
-                        if ($price != false && !empty($price)) {
+
+                        if (!empty($price)) {
                             $postData['content'] = stripslashes(preg_replace("/\{PRICE\}/", addcslashes($price, "\\$"), $postData['content']));
+                        }
+
+                        // Regular price
+                        $regular_price = $wc_product->get_regular_price();
+                        if (!empty($regular_price)) {
+                            $postData['content'] = stripslashes(preg_replace("/\{REGULAR_PRICE\}/", addcslashes($regular_price, "\\$"), $postData['content']));
+                        }
+
+                        // Sale price (if any)
+                        $sale_price = $wc_product->get_sale_price();
+                        if (!empty($sale_price)) {
+                            $postData['content'] = stripslashes(preg_replace("/\{SALE_PRICE\}/", addcslashes($sale_price, "\\$"), $postData['content']));
                         }
                     }
                 }
-                $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
 
+                $postData['content'] = preg_replace("/\{PRICE\}/", "", $postData['content']);
+                $postData['content'] = preg_replace("/\{REGULAR_PRICE\}/", "", $postData['content']);
+                $postData['content'] = preg_replace("/\{SALE_PRICE\}/", "", $postData['content']);
+                
+                //Replace URL from template
+                $postData['content'] = preg_replace("/\{URL\}/", addcslashes($this->url, "\\$"), $postData['content']);
+                
                 $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
                 if (is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
                     foreach ($taxonomieReplacements as $taxonomie => $replacement) {
@@ -340,6 +370,11 @@ class B2S_AutoPost {
                 }
             }
 
+            // Process comment from template if version, network and type are allowed and comment given
+            if ($this->userVersion >= 2 && B2S_Tools::isCommentAllowed($networkId, $networkType) && isset($tempOptionPostFormat[$networkId][$networkType]['comment']) && !empty($tempOptionPostFormat[$networkId][$networkType]['comment'])) {
+                $postData['comment'] = $this->getCommentByTemplate($tempOptionPostFormat[$networkId][$networkType], $networkId, $networkType);
+            }
+
             return $postData;
         }
         return false;
@@ -372,6 +407,123 @@ class B2S_AutoPost {
         } else {
             return '';
         }
+    }
+
+    private function getCommentByTemplate($post_template, $networkId, $networkType) {
+        // Get comment text from template
+        $comment = isset($post_template['comment']) && !empty($post_template['comment']) ? $post_template['comment'] : '';
+        
+        if (empty($comment)) {
+            return '';
+        }
+        
+        // Get range settings for comment from short_comment or fallback to short_text
+        $content_min = 0;
+        $content_max = 0;
+        $excerpt_min = 0;
+        $excerpt_max = 0;
+        $limit = 0;
+        
+        if (isset($post_template['short_comment'])) {
+            $content_min = (isset($post_template['short_comment']['range_min'])) ? $post_template['short_comment']['range_min'] : 0;
+            $content_max = (isset($post_template['short_comment']['range_max'])) ? $post_template['short_comment']['range_max'] : 0;
+            $excerpt_min = (isset($post_template['short_comment']['excerpt_range_min'])) ? $post_template['short_comment']['excerpt_range_min'] : 0;
+            $excerpt_max = (isset($post_template['short_comment']['excerpt_range_max'])) ? $post_template['short_comment']['excerpt_range_max'] : 0;
+            $limit = (isset($post_template['short_comment']['limit'])) ? $post_template['short_comment']['limit'] : 0;
+        } else if (isset($this->default_template[$networkId][$networkType]['short_comment'])) {
+            $content_min = (isset($this->default_template[$networkId][$networkType]['short_comment']['range_min'])) ? $this->default_template[$networkId][$networkType]['short_comment']['range_min'] : 0;
+            $content_max = (isset($this->default_template[$networkId][$networkType]['short_comment']['range_max'])) ? $this->default_template[$networkId][$networkType]['short_comment']['range_max'] : 0;
+            $excerpt_min = (isset($this->default_template[$networkId][$networkType]['short_comment']['excerpt_range_min'])) ? $this->default_template[$networkId][$networkType]['short_comment']['excerpt_range_min'] : 0;
+            $excerpt_max = (isset($this->default_template[$networkId][$networkType]['short_comment']['excerpt_range_max'])) ? $this->default_template[$networkId][$networkType]['short_comment']['excerpt_range_max'] : 0;
+            $limit = (isset($this->default_template[$networkId][$networkType]['short_comment']['limit'])) ? $this->default_template[$networkId][$networkType]['short_comment']['limit'] : 0;
+        }
+        
+        // Process placeholders in comment
+        $hook_filter = new B2S_Hook_Filter();
+        
+        // Replace {CONTENT}
+        if (strpos($comment, "{CONTENT}") !== false) {
+            $preContent = addcslashes(B2S_Util::getExcerpt($this->content, (int) $content_min, (int) $content_max), "\\$");
+            $comment = preg_replace("/\{CONTENT\}/", $preContent, $comment);
+        }
+        
+        // Replace {TITLE}
+        if (strpos($comment, "{TITLE}") !== false) {
+            $title = sanitize_text_field($this->title);
+            $comment = preg_replace("/\{TITLE\}/", addcslashes($title, "\\$"), $comment);
+        }
+        
+        // Replace {EXCERPT}
+        if (strpos($comment, "{EXCERPT}") !== false) {
+            $excerpt = (isset($this->excerpt) && !empty($this->excerpt)) ? addcslashes(B2S_Util::getExcerpt($this->excerpt, (int) $excerpt_min, (int) $excerpt_max), "\\$") : '';
+            $comment = preg_replace("/\{EXCERPT\}/", $excerpt, $comment);
+        }
+        
+        // Replace {KEYWORDS}
+        if (strpos($comment, "{KEYWORDS}") !== false) {
+            if ($this->default_template != false && isset($this->default_template[$networkId][$networkType]['disableKeywords']) && $this->default_template[$networkId][$networkType]['disableKeywords'] == true) {
+                $comment = preg_replace("/\{KEYWORDS\}/", '', $comment);
+            } else {
+                $hashtags = ($this->allowHashTag) ? $this->getHashTagsString("", -1, false) : '';
+                $comment = preg_replace("/\{KEYWORDS\}/", addcslashes($hashtags, "\\$"), $comment);
+            }
+        }
+        
+        // Replace {AUTHOR}
+        if (strpos($comment, "{AUTHOR}") !== false) {
+            $authorId = get_post_field('post_author', $this->postId);
+            if (isset($authorId) && !empty($authorId) && (int) $authorId > 0) {
+                $author_name = $hook_filter->get_wp_user_post_author_display_name((int) $authorId);
+                $comment = stripslashes(preg_replace("/\{AUTHOR\}/", addcslashes($author_name, "\\$"), $comment));
+            } else {
+                $comment = preg_replace("/\{AUTHOR\}/", "", $comment);
+            }
+        }
+        
+        // Replace {URL}
+        if (strpos($comment, "{URL}") !== false) {
+            $comment = preg_replace("/\{URL\}/", addcslashes($this->url, "\\$"), $comment);
+        }
+        
+        // Replace WooCommerce price placeholders
+        if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
+            $wc_product = wc_get_product($this->postId);
+            if ($wc_product != false) {
+                $price = $wc_product->get_price();
+                if (!empty($price)) {
+                    $comment = stripslashes(preg_replace("/\{PRICE\}/", addcslashes($price, "\\$"), $comment));
+                }
+                
+                $regular_price = $wc_product->get_regular_price();
+                if (!empty($regular_price)) {
+                    $comment = stripslashes(preg_replace("/\{REGULAR_PRICE\}/", addcslashes($regular_price, "\\$"), $comment));
+                }
+                
+                $sale_price = $wc_product->get_sale_price();
+                if (!empty($sale_price)) {
+                    $comment = stripslashes(preg_replace("/\{SALE_PRICE\}/", addcslashes($sale_price, "\\$"), $comment));
+                }
+            }
+        }
+        
+        $comment = preg_replace("/\{PRICE\}/", "", $comment);
+        $comment = preg_replace("/\{REGULAR_PRICE\}/", "", $comment);
+        $comment = preg_replace("/\{SALE_PRICE\}/", "", $comment);
+        
+        // Replace custom taxonomies
+        $taxonomieReplacements = $hook_filter->get_posting_template_set_taxonomies(array(), $this->postId);
+        if (is_array($taxonomieReplacements) && !empty($taxonomieReplacements)) {
+            foreach ($taxonomieReplacements as $taxonomie => $replacement) {
+                $comment = preg_replace("/\{" . $taxonomie . "\}/", $replacement, $comment);
+            }
+        }
+        
+        // Apply character limit if set
+        if (isset($limit) && (int) $limit > 0) {
+            $comment = B2S_Util::getExcerpt($comment, 0, $limit);
+        }
+        
+        return $comment;
     }
 
     public function saveShareData($shareData = array(), $network_id = 0, $network_type = 0, $network_auth_id = 0, $shareApprove = 0, $network_display_name = '') {
@@ -441,7 +593,7 @@ class B2S_AutoPost {
                 'network_type' => (int) $network_type,
                 'network_auth_id' => (int) $network_auth_id,
                 'network_display_name' => $network_display_name,
-                'owner_blog_user_id' => B2S_PLUGIN_BLOG_USER_ID),
+                'owner_blog_user_id' => (int) $this->blogUserId),
                     array('%d', '%d', '%d', '%s', '%d'));
             $networkDetailsId = $wpdb->insert_id;
         }

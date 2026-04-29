@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Post_Tools {
 
     public static function updateUserSchedTimePost($post_id, $date, $time, $timezone) {

@@ -1,5 +1,9 @@
 <?php
-//case:36
+
+/**
+ * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
+ */
+
 class B2S_Settings_Share{
     
     private $networkId=0;
@@ -37,8 +41,14 @@ class B2S_Settings_Share{
             
             $prepostDetails = json_decode(B2S_Tools::getPrePostDetails($this->networkAuthId), true);
             $this->prepostDetails = $prepostDetails;
+
+            $commentDisabled= false;
+            $duetDisabled= false;
+            $stitchDisabled= false;
+            $privacyLevelOptions = array();
+
             if(isset($prepostDetails['prepostsettings']['data']) && !empty($prepostDetails['prepostsettings']['data'])){
-                
+               
                 $data= $prepostDetails['prepostsettings']['data'];
                 $commentDisabled= isset($data['comment_disabled'])? $data['comment_disabled'] : false;
                 $duetDisabled= isset($data['duet_disabled'])? $data['duet_disabled'] : false;
@@ -165,7 +175,7 @@ class B2S_Settings_Share{
         }
 
         if(!$preview){
-            $content .= '<button class="btn btn-sm btn-primary pull-right b2s-share-settings-save-btn" data-network-auth-id="'.$this->networkAuthId.'" data-network-id="'.$this->networkId.'">speichern</button>';
+            $content .= '<button class="btn btn-sm btn-primary pull-right b2s-share-settings-save-btn" data-network-auth-id="'.$this->networkAuthId.'" data-network-id="'.$this->networkId.'">'.esc_html__('save', 'blog2social').'</button>';
         }
 
         $content.='</div>';
